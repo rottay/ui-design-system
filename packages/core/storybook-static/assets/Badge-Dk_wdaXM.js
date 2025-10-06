@@ -1,0 +1,1 @@
+import{j as s}from"./iframe-Dz2LC5nm.js";import{B as a}from"./index-7Swwaeny.js";const e=o=>s.jsx(a,{...o});e.displayName="Badge";e.__docgenInfo={description:"",methods:[],displayName:"Badge",composes:["AntBadgeProps"]};export{e as B};

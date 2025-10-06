@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(pnpm install:*)",
+      "Bash(npm install)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npx tsc:*)",
+      "Bash(Select-Object FullName)",
+      "Bash(for file in */*.stories.tsx)",
+      "Bash(grep:*)",
+      "Bash(done)",
+      "Bash(find:*)",
+      "Bash(awk:*)",
+      "Bash(dir:*)",
+      "Bash(xcopy:*)",
+      "Bash(tree:*)",
+      "Bash(for dir in */)",
+      "Bash(do echo \"=== $dir%/ ===\")",
+      "Bash(ls:*)",
+      "Bash(npx vite:*)",
+      "Bash(yarn storybook:*)",
+      "Bash(kill-port:*)",
+      "Bash(yarn typecheck)",
+      "Bash(yarn next:free:*)",
+      "Bash(npm run typecheck:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

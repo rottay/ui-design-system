@@ -1,0 +1,1 @@
+import{j as a}from"./iframe-Dz2LC5nm.js";import{M as d}from"./index-4MEfMcrw.js";const o=s=>a.jsx(d,{...s});o.displayName="Modal";o.__docgenInfo={description:"",methods:[],displayName:"Modal",composes:["AntModalProps"]};export{o as M};
