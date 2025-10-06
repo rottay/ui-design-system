@@ -1,0 +1,27 @@
+{
+  "name": "designsystem-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn workspace design-system-dashboard dev",
+    "build": "yarn workspace @designsystem/core build",
+    "build:all": "yarn workspaces run build",
+    "dev:core": "yarn workspace @designsystem/core dev",
+    "preview": "yarn workspace design-system-dashboard preview",
+    "storybook": "yarn workspace @designsystem/core storybook",
+    "build-storybook": "yarn workspace @designsystem/core build-storybook",
+    "typecheck": "yarn workspaces run typecheck",
+    "typecheck:core": "yarn workspace @designsystem/core typecheck",
+    "typecheck:dashboard": "yarn workspace design-system-dashboard typecheck",
+    "next:free": "kill-port 3000 && kill-port 6006 && kill-port 6007"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "kill-port": "^2.0.1"
+  }
+}

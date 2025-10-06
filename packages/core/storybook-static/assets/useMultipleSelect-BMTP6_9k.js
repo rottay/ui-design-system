@@ -1,0 +1,1 @@
+import{r}from"./iframe-Dz2LC5nm.js";function v(p){const[n,a]=r.useState(null);return[r.useCallback((t,h,l)=>{const o=n??t,x=Math.min(o||0,t),c=Math.max(o||0,t),u=h.slice(x,c+1).map(e=>p(e)),d=u.some(e=>!l.has(e)),s=[];return u.forEach(e=>{d?(l.has(e)||s.push(e),l.add(e)):(l.delete(e),s.push(e))}),a(d?c:null),s},[n]),t=>{a(t)}]}export{v as u};
