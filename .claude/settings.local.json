@@ -35,7 +35,8 @@
       "Bash(npm view:*)",
       "Read(//c/Users/Emmanuel/Github/bithire/**)",
       "Bash(cat:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npm version:*)"
     ],
     "deny": [],
     "ask": []
