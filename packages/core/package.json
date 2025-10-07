@@ -1,5 +1,5 @@
 {
-  "name": "@designsystem/core",
+  "name": "@es-rottay/designsystem-core",
   "version": "0.1.0",
   "description": "Multi-theme design system based on Ant Design",
   "type": "module",
@@ -46,6 +46,14 @@
     "vite": "^5.0.0",
     "vite-plugin-dts": "^3.7.0"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rottay/desing-system.git"
+  },
   "keywords": [
     "design-system",
     "react",
@@ -53,5 +61,6 @@
     "theme",
     "ui-components"
   ],
+  "author": "Emmanuel Rottay",
   "license": "MIT"
 }
