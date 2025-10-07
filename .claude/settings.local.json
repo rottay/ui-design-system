@@ -24,7 +24,18 @@
       "Bash(kill-port:*)",
       "Bash(yarn typecheck)",
       "Bash(yarn next:free:*)",
-      "Bash(npm run typecheck:*)"
+      "Bash(npm run typecheck:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nchore: configure GitHub Packages publishing\n\n- Add publishConfig with private access to package.json\n- Add repository information\n- Create .npmrc for GitHub Packages authentication\n- Add GitHub Actions workflow for automated publishing\n- Update .gitignore to exclude .npmrc\n- Add comprehensive publishing guide\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push:*)",
+      "Bash(echo $env:GITHUB_TOKEN)",
+      "Bash(npm publish:*)",
+      "Bash(Select-Object -Last 50)",
+      "Read(//c/Users/Emmanuel/AppData/Local/npm-cache/_logs/**)",
+      "Bash(npm view:*)",
+      "Read(//c/Users/Emmanuel/Github/bithire/**)",
+      "Bash(cat:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []
