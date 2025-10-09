@@ -1,11 +1,37 @@
 import type { TemplateConfig } from './types';
 
 /**
- * Template Spotify - Dark Theme (solo Button para MVP)
+ * Template Spotify - Dark Theme
+ * Basado en el sistema de diseño de Spotify
  */
 export const spotifyTemplate: TemplateConfig = {
   token: {
+    // Colors
     colorPrimary: '#1DB954', // Verde Spotify
+    colorInfo: '#509BF5',
+    colorSuccess: '#1DB954',
+    colorError: '#E22134',
+    colorWarning: '#FFA500',
+
+    // Backgrounds
+    colorBgContainer: '#121212',
+    colorBgElevated: '#181818',
+    colorBgLayout: '#000000',
+
+    // Text
+    colorText: '#FFFFFF',
+    colorTextSecondary: '#B3B3B3',
+    colorTextTertiary: '#6A6A6A',
+    colorTextQuaternary: '#535353',
+
+    // Borders
+    colorBorder: '#282828',
+    colorBorderSecondary: '#404040',
+
+    // Typography
+    borderRadius: 8,
+    fontFamily: 'Circular Std, -apple-system, BlinkMacSystemFont, Roboto, sans-serif',
+    fontSize: 14,
   },
   components: {
     Button: {
@@ -14,6 +40,57 @@ export const spotifyTemplate: TemplateConfig = {
       fontWeight: 700,
       primaryShadow: 'none',
       defaultShadow: 'none',
+    },
+    // Display Components
+    Avatar: {
+      containerSize: 40,
+      borderRadius: 50,
+    },
+    Badge: {
+      dotSize: 8,
+      fontSize: 12,
+    },
+    Calendar: {
+      fullBg: '#121212',
+      itemActiveBg: 'rgba(29, 185, 84, 0.2)',
+    },
+    Card: {
+      borderRadius: 8,
+      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
+      headerBg: '#181818',
+    },
+    Collapse: {
+      headerBg: '#181818',
+      contentBg: '#121212',
+      borderRadius: 8,
+    },
+    Descriptions: {
+      labelBg: '#181818',
+      itemPaddingBottom: 16,
+    },
+    Table: {
+      headerBg: '#181818',
+      headerBorderRadius: 8,
+      rowHoverBg: 'rgba(29, 185, 84, 0.1)',
+    },
+    Tag: {
+      borderRadiusSM: 4,
+      defaultBg: 'rgba(29, 185, 84, 0.2)',
+    },
+    Timeline: {
+      tailColor: '#282828',
+      dotBorderWidth: 2,
+    },
+    Statistic: {
+      contentFontSize: 24,
+      titleFontSize: 14,
+    },
+    List: {
+      itemPadding: '12px 0',
+    },
+    Tree: {
+      nodeHoverBg: 'rgba(29, 185, 84, 0.1)',
+      nodeSelectedBg: '#1DB954',
     },
     // Feedback Components
     Alert: {
@@ -119,10 +196,11 @@ export const spotifyTemplate: TemplateConfig = {
     // Layout Components
     Layout: {
       headerBg: '#000000',
-      bodyBg: '#FFFFFF',
-      footerBg: '#F7F7F7',
+      bodyBg: '#121212',
+      footerBg: '#181818',
       siderBg: '#000000',
       triggerBg: '#1DB954',
+      headerPadding: '0 32px',
     },
     Divider: {
       orientationMargin: 0.05,

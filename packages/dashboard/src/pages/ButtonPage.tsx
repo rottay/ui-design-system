@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Space } from '@designsystem/core';
+import { Button, Space } from '@es-rottay/designsystem-core';
 
 export const ButtonPage: React.FC = () => {
   return (

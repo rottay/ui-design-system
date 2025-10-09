@@ -4,7 +4,7 @@ import {
   Skeleton, Spin, Result, Modal, Message, Button, Notification,
   Rate, Typography, Tree, Table, QRCode, Image, List,
   Descriptions, Collapse, Carousel, Calendar
-} from '@designsystem/core';
+} from '@es-rottay/designsystem-core';
 
 const { Title, Text, Paragraph } = Typography;
 
