@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Avatar, Space } from '@designsystem/core';
+import { Badge, Avatar, Space } from '@es-rottay/designsystem-core';
 
 export const BadgePage: React.FC = () => {
   return (

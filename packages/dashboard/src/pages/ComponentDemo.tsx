@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import * as Components from '@designsystem/core';
+import * as Components from '@es-rottay/designsystem-core';
 import { Space, Typography, Divider, Row, Col } from 'antd';
 
 const { Title, Paragraph, Text } = Typography;

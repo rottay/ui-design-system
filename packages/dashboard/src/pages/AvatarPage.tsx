@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Space } from '@designsystem/core';
+import { Avatar, Space } from '@es-rottay/designsystem-core';
 
 export const AvatarPage: React.FC = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Space } from '@designsystem/core';
+import { Alert, Space } from '@es-rottay/designsystem-core';
 
 export const AlertPage: React.FC = () => {
   return (

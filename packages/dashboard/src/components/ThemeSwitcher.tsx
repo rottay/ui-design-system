@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, Space, Typography } from 'antd';
-import { useTheme } from '@designsystem/core';
-import type { TemplateName } from '@designsystem/core';
+import { useTheme } from '@es-rottay/designsystem-core';
+import type { TemplateName } from '@es-rottay/designsystem-core';
 
 const { Text } = Typography;
 
