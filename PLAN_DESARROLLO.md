@@ -221,39 +221,225 @@ Se implementarán 8 temas predefinidos que transformarán completamente el look 
 
 ---
 
-### 🔵 Step 4: Componentes Customs (Composiciones)
+### 🔵 Step 4: Componentes Avanzados & Utilidades
 
-**Objetivo:** Crear componentes de alto nivel que combinen primitivos.
+**Objetivo:** Expandir el design system con componentes compuestos, hooks, tokens y utilidades.
 
-#### Componentes a Crear:
+#### 4.1 Componentes Compuestos/Patterns (Nivel 2)
 
-1. **SearchableTable**
+**Componentes de Datos:**
+1. **DataTable**
    - [ ] Tabla con buscador integrado
    - [ ] Filtros por columna
-   - [ ] Paginación
+   - [ ] Paginación avanzada
    - [ ] Export a CSV/Excel
-
-2. **FormCard**
-   - [ ] Card con formulario
-   - [ ] Validación integrada
-   - [ ] Estados de loading
-   - [ ] Actions footer
-
-3. **DataGrid**
-   - [ ] Grid avanzado con sorting
+   - [ ] Sorting multi-columna
    - [ ] Inline editing
-   - [ ] Bulk actions
-   - [ ] Row selection
+
+2. **FormBuilder**
+   - [ ] Constructor de formularios dinámicos
+   - [ ] Validación integrada (Zod/Yup)
+   - [ ] Estados de loading/error/success
+   - [ ] Multi-step forms
+   - [ ] Auto-save draft
+
+**Componentes de Layout:**
+3. **PageHeader**
+   - [ ] Breadcrumbs integrados
+   - [ ] Title + subtitle
+   - [ ] Action buttons area
+   - [ ] Tabs support
+   - [ ] Back button
 
 4. **DashboardLayout**
    - [ ] Layout completo con sidebar
-   - [ ] Breadcrumbs
    - [ ] Header con user menu
+   - [ ] Responsive (mobile drawer)
+   - [ ] Breadcrumbs automáticos
+   - [ ] Footer configurable
+
+5. **AuthLayout**
+   - [ ] Login/Signup pre-construidos
+   - [ ] Reset password flow
+   - [ ] Social login buttons
+   - [ ] Ilustraciones/background
    - [ ] Responsive
 
+**Componentes de Feedback:**
+6. **EmptyState**
+   - [ ] Ilustraciones predefinidas
+   - [ ] Multiple variants (no-data, error, search, etc.)
+   - [ ] CTAs integrados
+   - [ ] Customizable
+
+7. **DashboardCard**
+   - [ ] Card con estadísticas
+   - [ ] Gráficos integrados (opcional)
+   - [ ] Trend indicators
+   - [ ] Loading states
+
+8. **SearchableSelect**
+   - [ ] Select con búsqueda optimizada
+   - [ ] Infinite scroll
+   - [ ] Multi-select avanzado
+   - [ ] Tags custom
+
+#### 4.2 Hooks Utilitarios
+
+**Performance Hooks:**
+- [ ] `useDebounce(value, delay)` - Debouncing de valores
+- [ ] `useThrottle(callback, delay)` - Throttling de funciones
+- [ ] `useMemoCompare(value, compare)` - Memoización con comparador custom
+
+**UI Hooks:**
+- [ ] `useMediaQuery(query)` - Responsive breakpoints
+- [ ] `useClickOutside(ref, callback)` - Detectar clicks fuera
+- [ ] `useToggle(initialValue)` - Toggle de estados booleanos
+- [ ] `useHover(ref)` - Detectar hover
+- [ ] `useFocus(ref)` - Detectar focus
+- [ ] `useWindowSize()` - Dimensiones de ventana
+
+**Storage Hooks:**
+- [ ] `useLocalStorage(key, initialValue)` - Persistencia local
+- [ ] `useSessionStorage(key, initialValue)` - Persistencia de sesión
+- [ ] `useCookie(key, initialValue)` - Manejo de cookies
+
+**Utility Hooks:**
+- [ ] `useClipboard()` - Copy/paste
+- [ ] `usePrevious(value)` - Valor anterior de state
+- [ ] `useUpdateEffect(effect, deps)` - Effect solo en updates
+- [ ] `useDebugValue(value, formatter)` - Debug en DevTools
+- [ ] `useIsomorphicLayoutEffect()` - SSR-safe layoutEffect
+
+#### 4.3 Design Tokens como Constantes
+
+**Tokens de Color:**
+```typescript
+// packages/core/src/tokens/colors.ts
+- [ ] Colors primarios por tema
+- [ ] Colors semánticos (success, error, warning, info)
+- [ ] Neutral palette (50-900)
+- [ ] Alpha variants
+```
+
+**Tokens de Espaciado:**
+```typescript
+// packages/core/src/tokens/spacing.ts
+- [ ] Spacing scale (xs, sm, md, lg, xl, 2xl, etc.)
+- [ ] Padding utilities
+- [ ] Margin utilities
+- [ ] Gap utilities
+```
+
+**Tokens de Tipografía:**
+```typescript
+// packages/core/src/tokens/typography.ts
+- [ ] Font families por tema
+- [ ] Font sizes (xs - 5xl)
+- [ ] Line heights
+- [ ] Font weights (light, regular, medium, bold, etc.)
+- [ ] Letter spacing
+```
+
+**Otros Tokens:**
+```typescript
+- [ ] Border radius scale
+- [ ] Shadows (elevation system)
+- [ ] Z-index scale
+- [ ] Breakpoints
+- [ ] Transitions/durations
+```
+
+#### 4.4 Sistema de Iconos
+
+- [ ] Elegir librería base (Lucide, Heroicons, Phosphor, o custom)
+- [ ] Wrapper component `<Icon>` con sizing consistente
+- [ ] Sizing presets (xs, sm, md, lg, xl)
+- [ ] Color inheritance
+- [ ] Loading/spin states
+- [ ] Exportar iconos más comunes
+
+#### 4.5 Animaciones/Transiciones
+
+**Framer Motion Integration (opcional):**
+- [ ] Transition presets por tema
+- [ ] Fade, Slide, Scale variants
+- [ ] Stagger animations
+- [ ] Page transitions
+- [ ] Loading states animados
+- [ ] Skeleton loaders personalizados por tema
+
+**CSS Animations:**
+- [ ] Keyframes básicos
+- [ ] Easing curves
+- [ ] Duration constants
+
+#### 4.6 Utilidades de Accesibilidad
+
+**Componentes A11y:**
+- [ ] `<VisuallyHidden>` - Ocultar visualmente pero mantener para SR
+- [ ] `<FocusTrap>` - Trap de focus para modals
+- [ ] `<KeyboardShortcuts>` - Gestor de atajos
+- [ ] `<ScreenReaderOnly>` - Contenido solo para SR
+- [ ] `<SkipLink>` - Links de navegación rápida
+
+**Hooks A11y:**
+- [ ] `useA11yAnnouncement(message)` - Live regions
+- [ ] `useFocusManagement()` - Gestión de focus
+- [ ] `useAriaLabel()` - ARIA labels dinámicos
+
+#### 4.7 CSS Utilities/Helpers
+
+**ClassName Utilities:**
+- [ ] `cn()` / `clsx()` utility - Merge classNames
+- [ ] Conditional className helper
+- [ ] Variant composer
+
+**Responsive Utilities:**
+- [ ] Responsive visibility helpers
+- [ ] Display utilities (hide-on-mobile, etc.)
+- [ ] Spacing responsive utilities
+
+**Flex/Grid Shortcuts:**
+- [ ] `<FlexCenter>`, `<FlexBetween>`, etc.
+- [ ] Quick grid layouts
+- [ ] Container queries (cuando estén disponibles)
+
+#### 4.8 Layout Patterns
+
+**Pre-built Layouts:**
+- [ ] `<PageLayout>` - Header + Sidebar + Content + Footer
+- [ ] `<DashboardLayout>` - Dashboard típico
+- [ ] `<AuthLayout>` - Login/Signup pages
+- [ ] `<LandingLayout>` - Landing pages
+- [ ] `<Container>` - Content container con max-width
+- [ ] `<Section>` - Section wrapper con spacing
+
+#### 4.9 Testing Utilities
+
+**Test Helpers:**
+- [ ] `renderWithTheme(component, theme)` - Render con provider
+- [ ] `mockThemeContext()` - Mock del theme context
+- [ ] Mock data generators
+- [ ] Factory functions para componentes
+
+**Testing Setup:**
+- [ ] Custom render function
+- [ ] Provider wrappers
+- [ ] Mock theme config
+- [ ] Testing utilities export
+
 #### Criterios de Completitud:
-- ✅ 4-6 componentes customs
-- ✅ Documentación y ejemplos
+- ✅ 8-10 componentes compuestos funcionando
+- ✅ 15+ hooks utilitarios
+- ✅ Design Tokens exportados
+- ✅ Sistema de iconos integrado
+- ✅ Animaciones básicas
+- ✅ Utilidades A11y
+- ✅ CSS utilities
+- ✅ 4+ layout patterns
+- ✅ Testing utilities completos
+- ✅ Documentación exhaustiva de todo
 - ✅ Stories completas
 - ✅ Type-safe con TypeScript
 
@@ -416,16 +602,25 @@ npm run preview
 2. **Theme switcher en dashboard**
 3. **Mejorar componentes principales** (Button, Input, Typography)
 4. **Agregar 2-3 temas más**
+5. **Design Tokens exportables** (colors, spacing, typography)
 
 ### 🟢 MEDIO (cuando lo anterior esté)
-5. **Storybook completo con todos los componentes**
-6. **Tests básicos**
-7. **Documentación mejorada**
+6. **Storybook completo con todos los componentes**
+7. **Hooks utilitarios básicos** (useMediaQuery, useLocalStorage, useDebounce)
+8. **Sistema de iconos** (elegir e integrar librería)
+9. **Tests básicos**
+10. **Documentación mejorada**
 
-### 🔵 BAJO (futuro)
-8. **Componentes customs**
-9. **Publicación a npm**
-10. **CI/CD completo**
+### 🔵 BAJO (futuro cercano)
+11. **Componentes compuestos** (DataTable, FormBuilder, PageHeader)
+12. **Layout patterns** (PageLayout, DashboardLayout, AuthLayout)
+13. **Animaciones y transiciones**
+14. **Utilidades de accesibilidad**
+
+### ⚪ MUY BAJO (futuro lejano)
+15. **Testing utilities completos**
+16. **Publicación a npm**
+17. **CI/CD completo**
 
 ---
 
@@ -556,18 +751,104 @@ export const useTheme = () => {
 
 ---
 
-## 📅 Timeline Estimado
+## 📦 Resumen de Elementos del Design System
 
-- **Step 1.5 (Temas):** 1-2 semanas
-- **Step 2 (Más temas + switcher):** 2-3 semanas
-- **Step 3 (8 temas completos):** 2-3 semanas
-- **Step 4 (Componentes customs):** 3-4 semanas
-- **Step 5 (Testing & publicación):** 2-3 semanas
+### ✅ Ya Implementado
+1. **63 Componentes Primitivos** (wrappers de Ant Design)
+2. **Infraestructura** (monorepo, build, TypeScript)
+3. **Dashboard básico** (showcase sin theme switcher)
+4. **Storybook configurado**
 
-**Total estimado:** 10-15 semanas para proyecto completo
+### 🔴 Elementos Críticos Pendientes
+1. **Sistema de Temas** (8 temas: Spotify, Facebook, GitHub, etc.)
+2. **ThemeProvider funcional** con Context API
+3. **Hook useTheme** para cambio dinámico
+4. **Theme switcher UI** en dashboard
+
+### 🟡 Elementos Importantes a Agregar
+5. **Design Tokens exportables**
+   - Colors, spacing, typography, shadows, etc.
+   - Consumibles independientemente de componentes
+
+6. **Hooks Utilitarios** (15+ hooks)
+   - Performance: useDebounce, useThrottle
+   - UI: useMediaQuery, useToggle, useClickOutside
+   - Storage: useLocalStorage, useSessionStorage
+   - Utilities: useClipboard, usePrevious
+
+7. **Sistema de Iconos**
+   - Wrapper de Lucide/Heroicons/Phosphor
+   - Sizing y theming consistente
+
+### 🟢 Componentes Compuestos (Nivel 2)
+8. **DataTable** - Tabla completa con búsqueda, filtros, export
+9. **FormBuilder** - Constructor de forms con validación
+10. **PageHeader** - Header con breadcrumbs y actions
+11. **DashboardLayout** - Layout completo pre-construido
+12. **AuthLayout** - Login/Signup pre-construidos
+13. **EmptyState** - Estados vacíos con ilustraciones
+14. **DashboardCard** - Cards con estadísticas
+15. **SearchableSelect** - Select avanzado
+
+### 🔵 Funcionalidades Avanzadas
+16. **Animaciones/Transiciones**
+    - Framer Motion integration (opcional)
+    - Transition presets por tema
+
+17. **Utilidades de Accesibilidad**
+    - VisuallyHidden, FocusTrap, SkipLink
+    - Hooks A11y
+
+18. **CSS Utilities**
+    - className utilities (clsx/cn)
+    - Responsive helpers
+    - Flex/Grid shortcuts
+
+19. **Layout Patterns**
+    - PageLayout, Container, Section
+    - Pre-built layouts
+
+20. **Testing Utilities**
+    - renderWithTheme
+    - Mock generators
+    - Custom test helpers
+
+### 📊 Total de Elementos
+- **Componentes Primitivos:** 63 (implementados)
+- **Componentes Compuestos:** 8+ (pendiente)
+- **Hooks Utilitarios:** 15+ (pendiente)
+- **Temas:** 8 (pendiente)
+- **Design Tokens:** Completo (pendiente)
+- **Sistema de Iconos:** 1 (pendiente)
+- **Utilidades A11y:** 5+ componentes + hooks (pendiente)
+- **CSS/Layout Utilities:** Múltiples (pendiente)
+- **Testing Utilities:** Suite completa (pendiente)
 
 ---
 
-**Fecha de Actualización**: 2025-10-05
-**Versión**: 2.0
+## 📅 Timeline Estimado Actualizado
+
+### Fase 1: Core (6-8 semanas)
+- **Step 1.5 (Sistema de Temas):** 1-2 semanas
+- **Step 2 (4 temas + switcher):** 2-3 semanas
+- **Step 3 (8 temas + tokens):** 2-3 semanas
+
+### Fase 2: Extensiones (8-10 semanas)
+- **Step 4.1 (Hooks utilitarios):** 1-2 semanas
+- **Step 4.2 (Sistema de iconos + animaciones):** 1-2 semanas
+- **Step 4.3 (Componentes compuestos):** 3-4 semanas
+- **Step 4.4 (Utilidades A11y + CSS):** 2 semanas
+
+### Fase 3: Producción (3-4 semanas)
+- **Step 5 (Testing completo):** 1-2 semanas
+- **Step 5 (Documentación + publicación):** 1 semana
+- **Step 5 (CI/CD):** 1 semana
+
+**Total estimado:** 17-22 semanas (~4-5 meses) para proyecto completo con todas las funcionalidades
+
+---
+
+**Fecha de Actualización**: 2025-10-09
+**Versión**: 3.0
 **Estado**: Step 1 completado (infraestructura), Step 1.5 pendiente (temas) ❌
+**Nota**: Versión 3.0 incluye expansión completa del roadmap con hooks, tokens, componentes compuestos, utilidades A11y, sistema de iconos, animaciones y testing utilities.
