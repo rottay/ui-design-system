@@ -29,7 +29,8 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "antd": "^5.21.0"
+    "antd": "^5.21.0",
+    "lucide-react": "^0.545.0"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^9.1.10",
