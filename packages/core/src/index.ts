@@ -18,3 +18,7 @@ export type { TemplateName, TemplateConfig } from './themes/types';
 export * from './tokens';
 export { tokens } from './tokens';
 export type { DesignTokens, TokenCategory, TokenThemeName } from './tokens';
+
+// Icons (Icon component only, icons imported from /icons subpath)
+export { Icon } from './icons/Icon';
+export type { IconProps, IconSize } from './icons/Icon';

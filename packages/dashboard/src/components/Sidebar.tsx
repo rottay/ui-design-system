@@ -20,6 +20,12 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    title: 'Icons',
+    items: [
+      { path: '/icons', label: 'Icon System' },
+    ],
+  },
+  {
     title: 'Display (17)',
     items: [
       { path: '/display/avatar', label: 'Avatar' },
