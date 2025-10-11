@@ -4,7 +4,7 @@
 
 **Nombre:** Design System Multi-Tema
 **Versión Actual:** 0.1.4
-**Estado:** Step 1.5 Completado ✅ (Sistema de Temas Funcional)
+**Estado:** ✅ **Phase 4 COMPLETADA** - Sistema de temas funcional con 8 temas + Componentes Composite Theme-Aware
 **Tipo:** Librería React reutilizable basada en Ant Design
 **Objetivo:** Sistema de diseño modular con múltiples temas predefinidos para proyectos Next.js
 
@@ -15,134 +15,15 @@
 ### Concepto Principal
 El proyecto es un **design system como librería NPM** que proporciona componentes UI reutilizables con sistema de temas intercambiables. Está construido como un wrapper sobre Ant Design que permite aplicar diferentes estilos visuales completos (8 temas predefinidos) manteniendo la misma API.
 
-### Objetivos del Proyecto
-1. **Componentes Primitivos (Nivel 1):** Wrappers de componentes Ant Design con estilos customizados
-2. **Componentes Customs (Nivel 2):** Composiciones de primitivos (SearchableTable, FormCard, etc.) - Fase 2
-3. **8 Temas Visuales:** Spotify, Facebook, GitHub, Slack, Notion, Linear, Netflix, Base/Default
-4. **Dashboard/Showcase:** App estilo Storybook para demostración
-5. **Librería Compilable:** Exportable como paquete npm compatible con Next.js
+### ✅ Lo que ESTÁ COMPLETO
 
----
-
-## 📂 Estructura del Proyecto
-
-```
-designSystem/
-├── packages/
-│   ├── core/                              # Librería principal (Design System)
-│   │   ├── .storybook/                    # Configuración Storybook
-│   │   │   ├── main.ts
-│   │   │   └── preview.tsx
-│   │   ├── src/
-│   │   │   ├── components/
-│   │   │   │   ├── Display/               # Componentes de visualización
-│   │   │   │   │   ├── Avatar/
-│   │   │   │   │   ├── Badge/
-│   │   │   │   │   ├── Calendar/
-│   │   │   │   │   ├── Carousel/
-│   │   │   │   │   ├── Collapse/
-│   │   │   │   │   ├── Descriptions/
-│   │   │   │   │   ├── Empty/
-│   │   │   │   │   ├── Image/
-│   │   │   │   │   ├── List/
-│   │   │   │   │   ├── QRCode/
-│   │   │   │   │   ├── Statistic/
-│   │   │   │   │   ├── Table/
-│   │   │   │   │   ├── Tag/
-│   │   │   │   │   ├── Timeline/
-│   │   │   │   │   ├── Tree/
-│   │   │   │   │   └── Typography/
-│   │   │   │   ├── Feedback/              # Componentes de feedback
-│   │   │   │   │   ├── Alert/
-│   │   │   │   │   ├── Message/
-│   │   │   │   │   ├── Modal/
-│   │   │   │   │   ├── Notification/
-│   │   │   │   │   ├── Progress/
-│   │   │   │   │   ├── Rate/
-│   │   │   │   │   ├── Result/
-│   │   │   │   │   ├── Skeleton/
-│   │   │   │   │   └── Spin/
-│   │   │   │   ├── Inputs/                # Componentes de entrada
-│   │   │   │   │   ├── AutoComplete/
-│   │   │   │   │   ├── Cascader/
-│   │   │   │   │   ├── Checkbox/
-│   │   │   │   │   ├── ColorPicker/
-│   │   │   │   │   ├── DatePicker/
-│   │   │   │   │   ├── Form/
-│   │   │   │   │   ├── Input/
-│   │   │   │   │   ├── InputNumber/
-│   │   │   │   │   ├── Mentions/
-│   │   │   │   │   ├── Radio/
-│   │   │   │   │   ├── Select/
-│   │   │   │   │   ├── Slider/
-│   │   │   │   │   ├── Switch/
-│   │   │   │   │   ├── TimePicker/
-│   │   │   │   │   ├── Transfer/
-│   │   │   │   │   ├── TreeSelect/
-│   │   │   │   │   └── Upload/
-│   │   │   │   ├── Layout/                # Componentes de layout
-│   │   │   │   │   ├── Card/
-│   │   │   │   │   ├── Container/
-│   │   │   │   │   ├── Divider/
-│   │   │   │   │   ├── Flex/
-│   │   │   │   │   ├── Grid/
-│   │   │   │   │   ├── Layout/
-│   │   │   │   │   ├── Space/
-│   │   │   │   │   ├── Splitter/
-│   │   │   │   │   └── Stack/
-│   │   │   │   ├── Navigation/            # Componentes de navegación
-│   │   │   │   │   ├── Affix/
-│   │   │   │   │   ├── Anchor/
-│   │   │   │   │   ├── BackTop/
-│   │   │   │   │   ├── Breadcrumb/
-│   │   │   │   │   ├── Button/            # ✅ Componente principal implementado
-│   │   │   │   │   ├── FloatButton/
-│   │   │   │   │   ├── Menu/
-│   │   │   │   │   ├── Pagination/
-│   │   │   │   │   ├── Segmented/
-│   │   │   │   │   ├── Steps/
-│   │   │   │   │   └── Tabs/
-│   │   │   │   ├── Overlay/               # Componentes overlay
-│   │   │   │   └── index.ts
-│   │   │   ├── providers/
-│   │   │   │   ├── ThemeProvider.tsx      # Provider de temas (actualmente básico)
-│   │   │   │   └── index.ts
-│   │   │   ├── themes/                    # Sistema de temas (pendiente implementación completa)
-│   │   │   └── index.ts                   # Export principal
-│   │   ├── dist/                          # Output del build
-│   │   │   ├── index.js                   # ESM bundle
-│   │   │   ├── index.cjs                  # CommonJS bundle
-│   │   │   └── index.d.ts                 # TypeScript definitions
-│   │   ├── package.json
-│   │   ├── tsconfig.json
-│   │   └── vite.config.ts
-│   │
-│   └── dashboard/                         # Showcase/Demo App
-│       ├── src/
-│       │   ├── components/
-│       │   │   ├── Layout.tsx
-│       │   │   └── Sidebar.tsx
-│       │   ├── pages/
-│       │   │   ├── Overview.tsx
-│       │   │   ├── ButtonPage.tsx
-│       │   │   ├── AlertPage.tsx
-│       │   │   ├── AvatarPage.tsx
-│       │   │   ├── BadgePage.tsx
-│       │   │   └── ComponentPage.tsx
-│       │   ├── App.tsx
-│       │   └── main.tsx
-│       ├── package.json
-│       ├── tsconfig.json
-│       └── vite.config.ts
-│
-├── node_modules/
-├── package.json                           # Root workspace config
-├── pnpm-workspace.yaml
-├── README.md
-├── PLAN_DESARROLLO.md
-├── STEP1_COMPLETADO.md
-└── claude.md                              # Este archivo
-```
+1. ✅ **Componentes Primitivos (63):** Wrappers básicos de Ant Design
+2. ✅ **Componentes Composite (8):** AuthLayout, DashboardCard, DashboardLayout, DataTable, EmptyState, FormBuilder, PageHeader, SearchableSelect - TODOS con estilos theme-aware
+3. ✅ **8 Temas Funcionales:** Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base
+4. ✅ **Dashboard/Showcase:** App funcional con demos de todos los componentes
+5. ✅ **Storybook:** 8 stories completas para componentes composite
+6. ✅ **Persistencia:** localStorage para guardar tema seleccionado
+7. ✅ **Librería Compilable:** Build funcionando (ESM + CJS + TypeScript definitions)
 
 ---
 
@@ -158,144 +39,108 @@ designSystem/
 ### Herramientas de Desarrollo
 - **Bundler:** Vite (library mode)
 - **Type Generation:** vite-plugin-dts 3.7.0
-- **Testing:** Storybook 9.1.10 (configurado)
+- **Documentation:** Storybook 9.1.10
 - **Dashboard:** Vite + React Router DOM 7.9.3
 
 ---
 
-## 📦 Configuración de Workspaces
+## 🎨 Sistema de Componentes Composite
 
-### Root package.json
-```json
-{
-  "workspaces": ["packages/*"],
-  "scripts": {
-    "dev": "npm run dev --workspace=design-system-dashboard",
-    "build": "npm run build --workspace=@designsystem/core",
-    "build:all": "npm run build --workspaces",
-    "dev:core": "npm run dev --workspace=@designsystem/core",
-    "preview": "npm run preview --workspace=design-system-dashboard"
-  }
-}
-```
+### 8 Componentes Theme-Aware (100% Completos)
 
-### @designsystem/core package.json
-```json
-{
-  "name": "@designsystem/core",
-  "version": "0.1.0",
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
-    }
-  }
-}
-```
+#### 1. **AuthLayout**
+- Layout para páginas de autenticación
+- Backgrounds theme-specific: Spotify (#121212), Stripe (#FAFAFA), Notion (#FFFFFF), Linear (#F9FAFB)
+- BorderRadius adaptativo: Spotify (8px), Stripe (6px), Notion (3px), Linear (12px)
+- **File:** `packages/core/src/composite/AuthLayout/`
 
----
+#### 2. **DashboardCard**
+- Cards para dashboards con estadísticas y trends
+- Icon sizes por tema: Spotify (64px), Stripe (56px), Notion (48px)
+- Font sizes adaptativos: Spotify (32px bold), Stripe (28px), Notion (26px)
+- **File:** `packages/core/src/composite/DashboardCard/`
 
-## 🎨 Sistema de Componentes
+#### 3. **DashboardLayout**
+- Layout completo para dashboards con sidebar y header
+- Header heights: Spotify (72px), Stripe (64px), Notion (60px)
+- Sidebar widths: Spotify/Linear (240px), Stripe (220px), Notion (200px)
+- **File:** `packages/core/src/composite/DashboardLayout/`
 
-### Patrón de Implementación
-Cada componente sigue esta estructura:
+#### 4. **DataTable**
+- Tabla con búsqueda, selección y acciones
+- Selection badge con estilos por tema
+- **File:** `packages/core/src/composite/DataTable/`
 
-```
-ComponentName/
-├── ComponentName.tsx          # Implementación del componente
-├── ComponentName.stories.tsx  # Stories de Storybook
-├── types.ts                   # TypeScript types
-└── index.ts                   # Re-exports
-```
+#### 5. **EmptyState**
+- Estados vacíos con 6 variantes (no-data, no-results, error, 404, offline, maintenance)
+- Icon sizes adaptativos por tema
+- **File:** `packages/core/src/composite/EmptyState/`
 
-### Ejemplo de Componente (Button)
-```tsx
-// Button.tsx
-import React from 'react';
-import { Button as AntButton } from 'antd';
-import type { ButtonProps } from './types';
+#### 6. **FormBuilder**
+- Constructor de formularios dinámicos desde JSON
+- Container styles por tema
+- Label typography adaptativa
+- **File:** `packages/core/src/composite/FormBuilder/`
 
-export const Button: React.FC<ButtonProps> = ({
-  fullWidth = false,
-  style,
-  ...rest
-}) => {
-  return (
-    <AntButton
-      style={{
-        width: fullWidth ? '100%' : undefined,
-        ...style,
-      }}
-      {...rest}
-    />
-  );
-};
+#### 7. **PageHeader**
+- Headers de página con breadcrumbs, acciones y tabs
+- Title sizes: Spotify (32px), Stripe (28px), Notion (26px), Linear (30px)
+- Avatar sizes adaptativos
+- **File:** `packages/core/src/composite/PageHeader/`
 
-Button.displayName = 'Button';
-```
-
-### Categorías de Componentes
-
-#### ✅ Display (17 componentes)
-- Avatar, Badge, Calendar, Carousel, Collapse
-- Descriptions, Empty, Image, List, QRCode
-- Statistic, Table, Tag, Timeline, Tree, Typography
-
-#### ✅ Feedback (9 componentes)
-- Alert, Message, Modal, Notification, Progress
-- Rate, Result, Skeleton, Spin
-
-#### ✅ Inputs (17 componentes)
-- AutoComplete, Cascader, Checkbox, ColorPicker
-- DatePicker, Form, Input, InputNumber, Mentions
-- Radio, Select, Slider, Switch, TimePicker
-- Transfer, TreeSelect, Upload
-
-#### ✅ Layout (9 componentes)
-- Card, Container, Divider, Flex, Grid
-- Layout, Space, Splitter, Stack
-
-#### ✅ Navigation (11 componentes)
-- Affix, Anchor, BackTop, Breadcrumb, Button
-- FloatButton, Menu, Pagination, Segmented, Steps, Tabs
-
-#### ⏳ Overlay (pendiente)
-- Drawer, Popconfirm, Popover, Tooltip, etc.
+#### 8. **SearchableSelect**
+- Select con búsqueda y debouncing
+- BorderRadius por tema
+- **File:** `packages/core/src/composite/SearchableSelect/`
 
 ---
 
-## 🎭 Sistema de Temas
+## 🎭 Sistema de Temas - COMPLETAMENTE IMPLEMENTADO
 
-### ✅ Estado Actual - COMPLETAMENTE IMPLEMENTADO
-- ✅ **ThemeProvider funcional** con Context API
-- ✅ **8 Temas implementados:** Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base
-- ✅ **Hook useTheme** para cambio dinámico de temas
-- ✅ **ThemeSwitcher UI** integrado en dashboard
-- ✅ **Cambio de temas en tiempo real** funcionando
+### ✅ 8 Temas Funcionales
 
-### ThemeProvider Actual (FUNCIONAL ✅)
+| Tema | Color Primary | Background | BorderRadius | Estado |
+|------|--------------|------------|--------------|---------|
+| **Spotify** | #1DB954 (Verde) | #121212 (Dark) | 8px | ✅ Completo |
+| **Stripe** | #635BFF (Violeta) | #FAFAFA (Light) | 6px | ✅ Completo |
+| **Airbnb** | #FF5A5F (Coral) | #FFFFFF (White) | 8px | ✅ Completo |
+| **Slack** | #611F69 (Púrpura) | #FFFFFF (White) | 4px | ✅ Completo |
+| **Notion** | #000000 (Negro) | #FFFFFF (White) | 3px | ✅ Completo |
+| **Linear** | #5E6AD2 (Azul) | #F9FAFB (Gray) | 12px | ✅ Completo |
+| **Vercel** | #000000 (Negro) | #FAFAFA (Light) | 8px | ✅ Completo |
+| **Base** | #1890ff (Azul) | #FFFFFF (White) | 6px | ✅ Completo |
+
+### ThemeProvider - Funcional ✅
+
 ```tsx
 // packages/core/src/providers/ThemeProvider.tsx
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { ConfigProvider } from 'antd';
 import { templates } from '../themes';
-import type { TemplateName } from '../themes/types';
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
   defaultTemplate = 'base',
 }) => {
-  const [template, setTemplate] = useState<TemplateName>(defaultTemplate);
-  const themeConfig = templates[template];
+  // Inicializa desde localStorage con fallback
+  const [template, setTemplate] = useState<TemplateName>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('designsystem-theme');
+      if (saved && templates[saved]) return saved as TemplateName;
+    }
+    return defaultTemplate;
+  });
+
+  // Guarda en localStorage automáticamente
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('designsystem-theme', template);
+    }
+  }, [template]);
 
   return (
     <ThemeContext.Provider value={{ template, setTemplate }}>
-      <ConfigProvider theme={themeConfig}>
+      <ConfigProvider theme={templates[template]}>
         {children}
       </ConfigProvider>
     </ThemeContext.Provider>
@@ -303,107 +148,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 };
 ```
 
-### ✅ Arquitectura de Temas Implementada
+### useTheme Hook - Funcional ✅
 
-#### 1. Tipos de Temas
-```typescript
-// packages/core/src/themes/types.ts
-export type ThemeName =
-  | 'spotify'    // Verde #1DB954, dark
-  | 'facebook'   // Azul #1877F2, light
-  | 'github'     // Gris oscuro, dark/light
-  | 'slack'      // Púrpura #611F69
-  | 'notion'     // Beige/gris suave
-  | 'linear'     // Azul/púrpura gradiente
-  | 'netflix'    // Rojo #E50914, dark
-  | 'base';      // Default
-
-export interface ThemeConfig {
-  token: {
-    colorPrimary: string;
-    colorBgContainer: string;
-    colorBgElevated: string;
-    colorText: string;
-    colorTextSecondary: string;
-    colorBorder: string;
-    fontFamily: string;
-    borderRadius: number;
-    // ... más tokens de Ant Design
-  };
-  components?: {
-    Button?: {
-      borderRadius?: number;
-      controlHeight?: number;
-      fontWeight?: number;
-    };
-    Input?: { /* config */ };
-    // ... más componentes
-  };
-}
-```
-
-#### 2. Tema Spotify (Ejemplo a implementar)
-```typescript
-// packages/core/src/themes/spotify.ts
-export const spotifyTheme: ThemeConfig = {
-  token: {
-    colorPrimary: '#1DB954',           // Verde Spotify
-    colorBgContainer: '#121212',       // Background dark
-    colorBgElevated: '#181818',        // Superficies elevadas
-    colorText: '#FFFFFF',              // Texto principal
-    colorTextSecondary: '#B3B3B3',     // Texto secundario
-    colorBorder: '#282828',            // Bordes
-    fontFamily: 'Circular Std, -apple-system, sans-serif',
-    borderRadius: 8,
-  },
-  components: {
-    Button: {
-      borderRadius: 500,               // Botones completamente redondos
-      controlHeight: 48,
-      fontWeight: 700,
-    },
-    Input: {
-      borderRadius: 4,
-      controlHeight: 40,
-    },
-  },
-};
-```
-
-#### 3. ThemeProvider con Context (A implementar)
-```typescript
-// packages/core/src/providers/ThemeProvider.tsx
-import React, { createContext, useState } from 'react';
-import { ConfigProvider } from 'antd';
-import { themes } from '../themes';
-import type { ThemeName } from '../themes/types';
-
-interface ThemeContextType {
-  theme: ThemeName;
-  setTheme: (theme: ThemeName) => void;
-}
-
-const ThemeContext = createContext<ThemeContextType | null>(null);
-
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({
-  children,
-  defaultTheme = 'spotify'
-}) => {
-  const [theme, setTheme] = useState<ThemeName>(defaultTheme);
-  const themeConfig = themes[theme];
-
-  return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      <ConfigProvider theme={themeConfig}>
-        {children}
-      </ConfigProvider>
-    </ThemeContext.Provider>
-  );
-};
-```
-
-#### 4. Hook useTheme (A implementar)
-```typescript
+```tsx
 // packages/core/src/hooks/useTheme.ts
 import { useContext } from 'react';
 import { ThemeContext } from '../providers/ThemeProvider';
@@ -413,24 +160,7 @@ export const useTheme = () => {
   if (!context) {
     throw new Error('useTheme must be used within ThemeProvider');
   }
-  return context;
-};
-```
-
-#### 5. Index de Temas (A implementar)
-```typescript
-// packages/core/src/themes/index.ts
-export * from './types';
-export { spotifyTheme } from './spotify';
-export { facebookTheme } from './facebook';
-export { githubTheme } from './github';
-// ... más temas
-
-export const themes = {
-  spotify: spotifyTheme,
-  facebook: facebookTheme,
-  github: githubTheme,
-  // ...
+  return context; // { template, setTemplate }
 };
 ```
 
@@ -440,14 +170,11 @@ export const themes = {
 
 ### Desarrollo
 ```bash
-# Dashboard de demostración (Puerto 3000)
+# Dashboard de demostración (Puerto 3000-3004)
 npm run dev
 
-# Desarrollo del core (watch mode)
-npm run dev:core
-
-# Storybook
-npm run storybook --workspace=@designsystem/core
+# Storybook (Puerto 6006)
+npm run storybook --workspace=@es-rottay/designsystem-core
 ```
 
 ### Build
@@ -455,83 +182,64 @@ npm run storybook --workspace=@designsystem/core
 # Build de la librería core
 npm run build
 
-# Build de todos los workspaces
-npm run build:all
-
-# Build específico de Storybook
-npm run build-storybook --workspace=@designsystem/core
-```
-
-### Preview
-```bash
-# Preview del dashboard
-npm run preview
+# Output: dist/index.js (175KB ESM), dist/index.cjs (120KB CJS)
 ```
 
 ---
 
 ## 📊 Estado de Implementación
 
-### ✅ Step 1 - COMPLETADO
+### ✅ Phase 1 - COMPLETADO
 - [x] Monorepo configurado (npm workspaces)
-- [x] Estructura de carpetas completa
-- [x] 63 Componentes primitivos
-- [x] ThemeProvider básico
-- [x] Dashboard con rutas y navegación
-- [x] Build configurado (ESM + CJS)
-- [x] TypeScript types generados
+- [x] 63 Componentes primitivos (Display, Feedback, Inputs, Layout, Navigation)
+- [x] Build system (ESM + CJS + TypeScript)
+- [x] Dashboard básico
 - [x] Storybook configurado
-- [x] Documentación completa
 
-### ✅ Step 1.5 - COMPLETADO
-- [x] Sistema completo de temas implementado
-- [x] 8 Temas funcionales (Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base)
+### ✅ Phase 2 - COMPLETADO
+- [x] Sistema de temas con 8 temas funcionales
 - [x] ThemeProvider con Context API
-- [x] Hook useTheme
-- [x] Theme switcher en dashboard
-- [x] Cambio dinámico de temas funcionando
-- [x] Exports actualizados
-- [x] Build funcionando (53.76 kB ESM, 37.24 kB CJS)
+- [x] Persistencia en localStorage
+- [x] useTheme hook
+- [x] ThemeSwitcher UI
 
-### 📝 Step 2 - PLANIFICADO
-- [ ] Mejorar temas existentes con más tokens
-- [ ] Añadir persistencia de tema (localStorage)
-- [ ] Mejorar Storybook con addon de temas
+### ✅ Phase 3 - COMPLETADO
+- [x] 8 Componentes composite implementados
+- [x] TODOS con estilos theme-aware (backgrounds, borders, shadows, padding, typography)
+- [x] 8 Stories completas en Storybook
 
-### 🔮 Step 3 - FUTURO
-- [ ] Todos los wrappers de Ant Design
-- [ ] 8 temas completos
-- [ ] Sistema de theming dinámico avanzado
+### ✅ Phase 4 - COMPLETADO
+- [x] Dashboard actualizado con componentes composite
+- [x] Página "AllComposites" mostrando todos los componentes
+- [x] 3 páginas demo (AuthLayout, DataTable, EmptyState)
+- [x] Overview con DashboardCards y PageHeader
+- [x] ThemeSwitcher integrado en sidebar
 
-### 🎯 Step 4 - FUTURO
-- [ ] Componentes customs (SearchableTable, FormCard)
-- [ ] Composiciones complejas
-
-### 🧪 Step 5 - FUTURO
-- [ ] Tests unitarios
+### 🎯 Phase 5 - PENDIENTE (Opcional)
+- [ ] Actualizar README.md
+- [ ] Tests unitarios con Vitest
 - [ ] Publicación a npm
-- [ ] CI/CD
+- [ ] CI/CD con GitHub Actions
 
 ---
 
 ## 🔌 Uso de la Librería
 
-### Instalación (cuando esté publicada)
+### Instalación (local, aún no publicada)
 ```bash
-npm install @designsystem/core
-# o
-pnpm add @designsystem/core
+# En tu proyecto Next.js
+npm install file:../path/to/designsystem/packages/core
 ```
 
 ### Setup en Next.js (App Router)
 ```tsx
 // app/providers.tsx
 'use client';
-import { ThemeProvider } from '@designsystem/core';
+import { ThemeProvider } from '@es-rottay/designsystem-core';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider defaultTheme="spotify">
+    <ThemeProvider defaultTemplate="spotify">
       {children}
     </ThemeProvider>
   );
@@ -551,342 +259,175 @@ export default function RootLayout({ children }) {
 }
 ```
 
-### Setup en Next.js (Pages Router)
+### Usar Componentes
 ```tsx
-// pages/_app.tsx
-import { ThemeProvider } from '@designsystem/core';
+import {
+  DashboardCard,
+  PageHeader,
+  useTheme
+} from '@es-rottay/designsystem-core';
+import { Users } from 'lucide-react';
 
-export default function App({ Component, pageProps }) {
+export default function Dashboard() {
+  const { template, setTemplate } = useTheme();
+
   return (
-    <ThemeProvider defaultTheme="spotify">
-      <Component {...pageProps} />
-    </ThemeProvider>
-  );
-}
-```
+    <div>
+      <PageHeader title="Mi Dashboard" />
 
-### Uso de Componentes
-```tsx
-import { Button, Avatar, Badge } from '@designsystem/core';
+      <DashboardCard
+        title="Usuarios Activos"
+        value="2,350"
+        trend={{ direction: 'up', value: 8.2 }}
+        icon={<Users size={24} />}
+        color="success"
+      />
 
-export default function MyComponent() {
-  return (
-    <>
-      <Button type="primary" fullWidth>Click me</Button>
-      <Avatar src="/avatar.jpg" size={64} />
-      <Badge count={5}>Notifications</Badge>
-    </>
+      <button onClick={() => setTemplate('spotify')}>
+        Cambiar a Spotify
+      </button>
+    </div>
   );
 }
 ```
 
 ---
 
-## 🔍 Exports Actuales
+## 📦 Exports Actuales
 
 ```typescript
-// De packages/core/src/index.ts
-export * from './components';  // Todos los componentes
+// packages/core/src/index.ts
+export * from './components';  // 63 componentes primitivos
+export * from './composite';   // 8 componentes composite
 export * from './providers';   // ThemeProvider
+export * from './hooks';       // useTheme
+export * from './themes';      // templates, type definitions
 ```
 
-### Componentes Exportados
+### Componentes Composite Exportados
 ```typescript
-// Display
-export { Avatar, Badge, Calendar, Carousel, Collapse,
-         Descriptions, Empty, Image, List, QRCode,
-         Statistic, Table, Tag, Timeline, Tree, Typography }
+export {
+  AuthLayout,
+  DashboardCard,
+  DashboardLayout,
+  DataTable,
+  EmptyState,
+  FormBuilder,
+  PageHeader,
+  SearchableSelect,
+}
 
-// Feedback
-export { Alert, Message, Modal, Notification, Progress,
-         Rate, Result, Skeleton, Spin }
-
-// Inputs
-export { AutoComplete, Cascader, Checkbox, ColorPicker,
-         DatePicker, Form, Input, InputNumber, Mentions,
-         Radio, Select, Slider, Switch, TimePicker,
-         Transfer, TreeSelect, Upload }
-
-// Layout
-export { Card, Container, Divider, Flex, Grid,
-         Layout, Space, Splitter, Stack }
-
-// Navigation
-export { Affix, Anchor, BackTop, Breadcrumb, Button,
-         FloatButton, Menu, Pagination, Segmented, Steps, Tabs }
-
-// Providers
-export { ThemeProvider }
-```
-
----
-
-## 🏗️ Build Configuration
-
-### Vite Config (Library Mode)
-```typescript
-// packages/core/vite.config.ts
-export default defineConfig({
-  plugins: [
-    react(),
-    dts({
-      include: ['src/**/*'],
-      insertTypesEntry: true,
-    }),
-  ],
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'DesignSystem',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
-    },
-    rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'antd'],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'jsxRuntime',
-          antd: 'antd',
-        },
-      },
-    },
-    sourcemap: true,
-    minify: 'esbuild',
-  },
-});
-```
-
-### Output del Build
-```
-dist/
-├── index.js          # ESM bundle (~2.65 kB gzip: 1.28 kB)
-├── index.cjs         # CommonJS bundle (~1.89 kB gzip: 0.98 kB)
-├── index.d.ts        # TypeScript definitions
-└── *.map             # Source maps
+export type {
+  AuthLayoutProps,
+  DashboardCardProps,
+  DashboardLayoutProps,
+  DataTableProps,
+  EmptyStateProps,
+  FormBuilderProps,
+  PageHeaderProps,
+  SearchableSelectProps,
+}
 ```
 
 ---
 
 ## 📚 Dashboard/Showcase
 
-### Rutas Implementadas
-```typescript
-// packages/dashboard/src/App.tsx
-const routes = {
-  '/': Overview,
-  '/button': ButtonPage,
-  '/avatar': AvatarPage,
-  '/badge': BadgePage,
-  '/alert': AlertPage,
-  // ... más rutas para cada componente
-};
+### Páginas Implementadas
+
+| Ruta | Componente | Descripción |
+|------|-----------|-------------|
+| `/` | Overview | DashboardCards + PageHeader + instrucciones |
+| `/composite/all` | AllComposites | TODOS los componentes composite en una página |
+| `/composite/auth-layout` | AuthLayoutDemo | 3 variantes de AuthLayout |
+| `/composite/data-table` | DataTableDemo | DataTable con búsqueda y selección |
+| `/composite/empty-state` | EmptyStateDemo | 6 variantes de EmptyState |
+| `/icons` | IconsPage | Galería de iconos |
+| `/:category/:component` | ComponentDemo | Demos dinámicos de primitivos |
+
+### ThemeSwitcher
+- Ubicación: Sidebar superior
+- 8 temas disponibles
+- Persistencia automática en localStorage
+
+---
+
+## 🏗️ Build Output
+
+```bash
+npm run build --workspace=@es-rottay/designsystem-core
+
+# Output:
+# ✓ dist/index.js     175.83 kB │ gzip: 39.47 kB
+# ✓ dist/index.cjs    120.87 kB │ gzip: 33.16 kB
+# ✓ dist/index.d.ts   TypeScript definitions
 ```
 
-### Estructura del Dashboard
-- **Layout:** Sidebar + Content area
-- **Sidebar:** Navegación por categorías de componentes
-- **Pages:** Ejemplos interactivos de cada componente
-- **Theme:** Actualmente usa ThemeProvider básico
-
 ---
 
-## 🐛 Issues Conocidos
+## 💡 Diferencias Visuales por Tema
 
-### ✅ RESUELTOS
-1. ~~**Sistema de temas NO implementado**~~ → **RESUELTO ✅**
-   - ✅ Directorio `themes/` con 8 temas completos
-   - ✅ ThemeProvider funcional con Context API
-   - ✅ Hook `useTheme` implementado
-   - ✅ Archivos de configuración de temas completos
+### Spotify (Dark, Bold)
+- Background: `#121212` (negro oscuro)
+- BorderRadius: `8px`
+- Shadows: Intensas `0 4px 12px rgba(0,0,0,0.4)`
+- Typography: `32px`, `fontWeight 700`
+- Icons: `64px` (grandes)
 
-2. ~~**Dashboard sin theme switcher**~~ → **RESUELTO ✅**
-   - ✅ ThemeSwitcher UI implementado
-   - ✅ Selector de 8 temas disponible
-   - ⏳ Persistencia en localStorage (pendiente)
+### Stripe (Professional, Light)
+- Background: `#FAFAFA` (gris claro)
+- BorderRadius: `6px`
+- Shadows: Sutiles `0 2px 8px rgba(0,0,0,0.08)`
+- Typography: `28px`, `fontWeight 600`
+- Icons: `56px` (medianos)
 
-### 🟡 MEDIOS
-3. **Componentes son re-exports básicos**
-   - La mayoría son re-exports directos: `export { Input } from 'antd'`
-   - Responden a temas vía ConfigProvider
-   - Podrían beneficiarse de wrappers custom
+### Notion (Minimal, Square)
+- Background: `#FFFFFF` (blanco)
+- BorderRadius: `3px` (muy cuadrado)
+- Shadows: Signature `rgba(15,15,15,0.05) 0px 0px 0px 1px`
+- Typography: `26px`, `fontWeight 700`
+- Icons: `48px` (pequeños)
 
-4. **Falta documentación de componentes**
-   - Storybook configurado pero muchas stories incompletas
-   - Falta documentación de props custom
-   - Falta ejemplos de uso con temas
-
----
-
-## 🔜 Próximos Pasos Recomendados
-
-### 🔴 CRÍTICO - Step 1.5: Sistema de Temas (HACER PRIMERO)
-**Objetivo:** Implementar el corazón del proyecto - el sistema de temas
-
-**Tareas específicas:**
-1. **Crear tipos de temas**
-   - Archivo: `packages/core/src/themes/types.ts`
-   - Definir `ThemeName` type union
-   - Definir `ThemeConfig` interface con Design Tokens
-
-2. **Implementar tema Spotify**
-   - Archivo: `packages/core/src/themes/spotify.ts`
-   - Configurar todos los Design Tokens
-   - Configurar component tokens (Button, Input, etc.)
-
-3. **Actualizar ThemeProvider**
-   - Archivo: `packages/core/src/providers/ThemeProvider.tsx`
-   - Implementar Context API
-   - Agregar estado de tema
-   - Integrar con ConfigProvider de Ant Design
-
-4. **Crear hook useTheme**
-   - Archivo: `packages/core/src/hooks/useTheme.ts`
-   - Hook para acceder al tema actual
-   - Función `setTheme()` para cambiar tema
-
-5. **Crear index de temas**
-   - Archivo: `packages/core/src/themes/index.ts`
-   - Exportar todos los temas
-   - Crear objeto `themes` con todos los temas
-
-6. **Actualizar exports principales**
-   - Exportar desde `packages/core/src/hooks/index.ts`
-   - Exportar desde `packages/core/src/index.ts`
-
-**Criterio de éxito:**
-- ✅ Tema Spotify funcional
-- ✅ `useTheme` permite cambiar tema en runtime
-- ✅ Al menos 5 componentes responden al tema
-
----
-
-### 🟡 ALTO - Step 2: Theme Switcher + Más Temas
-1. **Theme switcher en dashboard**
-   - Componente selector de temas
-   - Persistencia en localStorage
-
-2. **Implementar 3 temas más:**
-   - Facebook (azul #1877F2, light)
-   - GitHub (gris oscuro, dark)
-   - Netflix (rojo #E50914, dark)
-
-3. **Mejorar componentes principales:**
-   - Button, Input, Typography con wrappers propios
-   - Agregar props custom útiles
-
----
-
-### 🟢 MEDIO - Step 3: Temas Completos
-1. **4 temas restantes:**
-   - Slack, Notion, Linear, Base
-
-2. **Storybook completo:**
-   - Stories para todos los componentes
-   - Addon de temas
-   - Documentación en MDX
-
----
-
-### 🔵 BAJO - Testing & Publicación
-1. **Testing:**
-   - Unit tests con Vitest
-   - Coverage > 80%
-
-2. **CI/CD:**
-   - GitHub Actions
-   - Publicación a npm
-
----
-
-## 💡 Notas para Desarrollo
-
-### Patrones a Seguir
-1. **Todos los componentes deben:**
-   - Tener su propio wrapper (no solo re-export)
-   - Ser theme-aware
-   - Tener TypeScript types completos
-   - Incluir displayName
-   - Tener .stories.tsx
-
-2. **Sistema de temas debe:**
-   - Usar Design Tokens de Ant Design 5
-   - Permitir override a nivel de componente
-   - Ser type-safe
-   - Soportar cambio dinámico
-
-3. **Build debe generar:**
-   - ESM y CJS bundles
-   - TypeScript definitions
-   - Source maps
-   - Tree-shakeable output
-
-### Convenciones
-- **Nombres de componentes:** PascalCase
-- **Props interfaces:** `ComponentNameProps`
-- **Archivos de temas:** `themeName.ts` (ej: `spotify.ts`)
-- **Stories:** `ComponentName.stories.tsx`
-
----
-
-## 📖 Referencias Útiles
-
-### Documentación
-- [Ant Design 5 Docs](https://ant.design/components/overview)
-- [Ant Design Theme Editor](https://ant.design/theme-editor)
-- [Storybook React Docs](https://storybook.js.org/docs/react)
-- [Vite Library Mode](https://vitejs.dev/guide/build.html#library-mode)
-
-### Archivos Clave del Proyecto
-- `PLAN_DESARROLLO.md` - Plan completo del proyecto
-- `STEP1_COMPLETADO.md` - Checklist del Step 1
-- `README.md` - Documentación de usuario
-- `packages/core/src/index.ts` - Punto de entrada de exports
-- `packages/core/vite.config.ts` - Configuración de build
-- `.storybook/main.ts` - Configuración de Storybook
+### Linear (Modern, Rounded)
+- Background: `#F9FAFB` (gris moderno)
+- BorderRadius: `12px` (muy redondeado)
+- Shadows: Mínimas `0 1px 2px rgba(0,0,0,0.05)`
+- Typography: `30px`, `fontWeight 600`
+- Icons: `64px` (grandes)
 
 ---
 
 ## 🎯 Resumen Ejecutivo
 
-**Estado Actual:**
-- ✅ **Step 1 (Infraestructura):** COMPLETADO - Monorepo, 63 componentes, build system, dashboard, Storybook
-- ✅ **Step 1.5 (Temas):** COMPLETADO - Sistema de temas FUNCIONAL ✨
+**Estado Actual: FASE 4 COMPLETADA ✅**
 
-**Logro Principal:**
-El proyecto ahora tiene su característica diferenciadora funcionando: **8 temas intercambiables en tiempo real** (Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base). Los componentes responden a cambios de tema dinámicamente.
+✅ **Sistema de temas funcional** - 8 temas completos con persistencia
+✅ **Componentes composite theme-aware** - 8/8 con estilos específicos por tema
+✅ **Dashboard showcase completo** - Múltiples páginas demo funcionales
+✅ **Build funcionando** - ESM + CJS + TypeScript definitions
+✅ **Storybook completo** - 8 stories para componentes composite
 
-**Próximo Paso:**
-Step 2 - Mejorar temas existentes, agregar persistencia (localStorage), expandir tokens de diseño
+**Listo para:**
+- ✅ Uso en proyectos Next.js (local install)
+- ✅ Demos y presentaciones
+- ✅ Documentación visual (Storybook)
 
-**Arquitectura:**
-Base sólida con sistema de temas funcional. ThemeProvider + useTheme hook + 8 temas completos.
-
-**Uso Actual:**
-La librería funciona en Next.js CON sistema de temas personalizable. Los usuarios pueden cambiar entre 8 estilos visuales diferentes en runtime.
-
----
-
-## 🤖 Agentes Personalizados Disponibles
-
-### `componentes-agent`
-- **Uso:** Crear/modificar componentes primitivos
-- **Especialidad:** React + TypeScript + Ant Design + Sistema de temas
-- **Archivo:** `.claude/agents/componentes-agent.md`
-
-### `storybook-agent`
-- **Uso:** Crear stories para documentación
-- **Especialidad:** Storybook + CSF3 + Ant Design
-- **Archivo:** `.claude/agents/storybook-agent.md`
-
-**Invocar agentes con:**
-```typescript
-Task tool → subagent_type: "componentes-agent" o "storybook-agent"
-```
+**Siguiente paso opcional:**
+- Publicar a npm
+- Tests unitarios
+- CI/CD
 
 ---
 
-*Última actualización: 2025-10-09*
-*Versión del documento: 3.0*
-*Cambio principal: Step 1.5 completado - Sistema de temas funcional con 8 temas*
+## 📖 Referencias
+
+- [Ant Design 5 Docs](https://ant.design/components/overview)
+- [Ant Design Theme Editor](https://ant.design/theme-editor)
+- [Storybook](https://storybook.js.org)
+- [Vite Library Mode](https://vitejs.dev/guide/build.html#library-mode)
+
+---
+
+*Última actualización: 2025-10-11*
+*Versión: 4.0*
+*Estado: Phase 4 COMPLETADA - Sistema completamente funcional*
