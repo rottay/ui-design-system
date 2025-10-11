@@ -26,6 +26,15 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    title: '🎨 Composite (Theme-Aware)',
+    items: [
+      { path: '/composite/all', label: '✨ Ver TODOS los Composite' },
+      { path: '/composite/auth-layout', label: 'AuthLayout' },
+      { path: '/composite/data-table', label: 'DataTable' },
+      { path: '/composite/empty-state', label: 'EmptyState' },
+    ],
+  },
+  {
     title: 'Display (17)',
     items: [
       { path: '/display/avatar', label: 'Avatar' },

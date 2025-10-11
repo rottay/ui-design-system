@@ -34,7 +34,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const GridItem = ({ children, color = '#1890ff' }: { children: React.ReactNode; color?: string }) => (
+const GridItem = ({
+  children,
+  color = '#1890ff',
+  style
+}: {
+  children: React.ReactNode;
+  color?: string;
+  style?: React.CSSProperties;
+}) => (
   <div
     style={{
       backgroundColor: color,
@@ -43,6 +51,7 @@ const GridItem = ({ children, color = '#1890ff' }: { children: React.ReactNode; 
       borderRadius: '8px',
       textAlign: 'center',
       fontWeight: 600,
+      ...style,
     }}
   >
     {children}

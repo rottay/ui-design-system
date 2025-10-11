@@ -4,6 +4,8 @@ import { Sidebar } from './components/Sidebar';
 import { Overview } from './pages/Overview';
 import { ComponentDemo } from './pages/ComponentDemo';
 import IconsPage from './pages/IconsPage';
+import { AuthLayoutDemo, DataTableDemo, EmptyStateDemo } from './pages/composite';
+import { AllComposites } from './pages/AllComposites';
 
 function App() {
   return (
@@ -15,6 +17,12 @@ function App() {
 
           {/* Icons Gallery */}
           <Route path="/icons" element={<IconsPage />} />
+
+          {/* Composite Components */}
+          <Route path="/composite/all" element={<AllComposites />} />
+          <Route path="/composite/auth-layout" element={<AuthLayoutDemo />} />
+          <Route path="/composite/data-table" element={<DataTableDemo />} />
+          <Route path="/composite/empty-state" element={<EmptyStateDemo />} />
 
           {/* Rutas dinámicas por categoría */}
           <Route path="/:category/:component" element={<ComponentDemo />} />

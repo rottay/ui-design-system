@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Tour } from 'antd';
+import { Tour, theme } from 'antd';
 import type { TourProps, TourStepProps } from 'antd';
 
 export interface GuidedTourStep extends Omit<TourStepProps, 'target'> {
@@ -36,6 +36,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
   onChange,
   ...tourProps
 }) => {
+  const { token } = theme.useToken();
   const [internalOpen, setInternalOpen] = useState(autoStart);
   const [_current, setCurrent] = useState(0);
 
@@ -77,7 +78,7 @@ export const GuidedTour: React.FC<GuidedTourProps> = ({
       target: validTarget as HTMLElement | (() => HTMLElement) | (() => null) | null | undefined,
       title: showProgress ? (
         <div>
-          <div style={{ fontSize: '12px', color: '#999', marginBottom: '4px' }}>
+          <div style={{ fontSize: '12px', color: token.colorTextSecondary, marginBottom: '4px' }}>
             Step {index + 1} of {steps.length}
           </div>
           {step.title}
