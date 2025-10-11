@@ -2,8 +2,13 @@ import React from 'react';
 import { Avatar as AntAvatar } from 'antd';
 import type { AvatarProps } from './types';
 
-export const Avatar: React.FC<AvatarProps> = (props) => {
+const AvatarComponent: React.FC<AvatarProps> = (props) => {
   return <AntAvatar {...props} />;
 };
 
-Avatar.displayName = 'Avatar';
+AvatarComponent.displayName = 'Avatar';
+
+// Export Avatar with all its subcomponents
+export const Avatar = Object.assign(AvatarComponent, {
+  Group: AntAvatar.Group,
+});
