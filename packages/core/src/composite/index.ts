@@ -45,3 +45,23 @@ export type { DataTableProps, DataTableColumn } from './DataTable';
 // FormBuilder
 export { FormBuilder } from './FormBuilder';
 export type { FormBuilderProps, FormField, FieldType, SelectOption } from './FormBuilder';
+
+// Sidebar
+export { Sidebar } from './Sidebar';
+export type { SidebarProps, SidebarItem, SidebarGroup } from './Sidebar';
+
+// FileUploader
+export { FileUploader } from './FileUploader';
+export type { FileUploaderProps, UploadedFile } from './FileUploader';
+
+// UserMenu
+export { UserMenu } from './UserMenu';
+export type { UserMenuProps, UserInfo, UserMenuItem } from './UserMenu';
+
+// SearchBar
+export { SearchBar } from './SearchBar';
+export type { SearchBarProps, SearchResult } from './SearchBar';
+
+// NotificationCenter
+export { NotificationCenter } from './NotificationCenter';
+export type { NotificationCenterProps, Notification } from './NotificationCenter';

@@ -6,6 +6,7 @@ import { ComponentDemo } from './pages/ComponentDemo';
 import IconsPage from './pages/IconsPage';
 import { AuthLayoutDemo, DataTableDemo, EmptyStateDemo } from './pages/composite';
 import { AllComposites } from './pages/AllComposites';
+import { NewComposites } from './pages/NewComposites';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
 
           {/* Composite Components */}
           <Route path="/composite/all" element={<AllComposites />} />
+          <Route path="/composite/new" element={<NewComposites />} />
           <Route path="/composite/auth-layout" element={<AuthLayoutDemo />} />
           <Route path="/composite/data-table" element={<DataTableDemo />} />
           <Route path="/composite/empty-state" element={<EmptyStateDemo />} />

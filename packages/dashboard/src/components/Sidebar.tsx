@@ -29,6 +29,7 @@ const navGroups: NavGroup[] = [
     title: '🎨 Composite (Theme-Aware)',
     items: [
       { path: '/composite/all', label: '✨ Ver TODOS los Composite' },
+      { path: '/composite/new', label: '🆕 5 Nuevos Componentes' },
       { path: '/composite/auth-layout', label: 'AuthLayout' },
       { path: '/composite/data-table', label: 'DataTable' },
       { path: '/composite/empty-state', label: 'EmptyState' },
