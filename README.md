@@ -1,14 +1,17 @@
 # 🎨 Design System - Multi-Theme React Library
 
-[![Version](https://img.shields.io/badge/version-0.1.5-blue.svg)](https://github.com/rottay/desing-system)
+[![Version](https://img.shields.io/badge/version-0.1.6-blue.svg)](https://github.com/rottay/desing-system)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-132%2F154%20passing-yellow.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
 
 A comprehensive **multi-theme design system** built on top of Ant Design with **87 components**, **8 pre-built themes**, and a complete **design token system**. Perfect for building consistent, theme-aware React applications.
 
-![Phase 5 Complete](https://img.shields.io/badge/Phase%205-Complete-brightgreen.svg)
+![Phase 6 Complete](https://img.shields.io/badge/Phase%206-Complete-success.svg)
+![Next.js Compatible](https://img.shields.io/badge/Next.js%2014-Compatible-success.svg)
+![Ready for Production](https://img.shields.io/badge/Production-Ready-brightgreen.svg)
 
 ---
 

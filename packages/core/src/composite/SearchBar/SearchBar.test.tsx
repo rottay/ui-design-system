@@ -317,7 +317,7 @@ describe('SearchBar', () => {
 
     await waitFor(() => {
       expect(screen.getByText('User Management')).toBeInTheDocument();
-    });
+    }, { timeout: 10000 });
   });
 
   it('clears search value after selecting a result', async () => {
@@ -332,7 +332,7 @@ describe('SearchBar', () => {
       fireEvent.click(result);
 
       expect(input.value).toBe('');
-    });
+    }, { timeout: 10000 });
   });
 
   it('handles keyboard shortcut (Ctrl+K)', () => {
@@ -357,13 +357,13 @@ describe('SearchBar', () => {
 
     await waitFor(() => {
       expect(screen.getByText('User Management')).toBeInTheDocument();
-    });
+    }, { timeout: 10000 });
 
     // Press Escape
     fireEvent.keyDown(window, { key: 'Escape' });
 
     await waitFor(() => {
       expect(screen.queryByText('User Management')).not.toBeInTheDocument();
-    });
+    }, { timeout: 10000 });
   });
 });

@@ -1,0 +1,52 @@
+# Source files
+packages/dashboard
+packages/*/src/**/*.test.ts
+packages/*/src/**/*.test.tsx
+packages/*/src/**/*.stories.tsx
+*.test.ts
+*.test.tsx
+*.stories.tsx
+
+# Build artifacts
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Development
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Storybook
+.storybook
+storybook-static
+
+# Testing
+coverage
+.vitest
+
+# Documentation (keep minimal)
+CLAUDE.md
+IMPLEMENTACION_TEMPLATES.md
+PLAN_DESARROLLO.md
+STEP1_COMPLETADO.md
+PHASE_6_COMPLETION_SUMMARY.md
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github
+
+# Misc
+node_modules
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
