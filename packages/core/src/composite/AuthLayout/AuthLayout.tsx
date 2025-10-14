@@ -72,7 +72,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
           borderRadius: 8,
           border: `2px solid ${token.colorBorder}`,
-          padding: 40,
         };
       case 'stripe':
         return {
@@ -81,7 +80,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
           borderRadius: 6,
           border: '1px solid rgba(0, 0, 0, 0.08)',
-          padding: 32,
         };
       case 'notion':
         return {
@@ -89,7 +87,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           background: '#FFFFFF',
           boxShadow: 'rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px',
           borderRadius: 3,
-          padding: 28,
         };
       case 'linear':
         return {
@@ -98,7 +95,6 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.08)',
           borderRadius: 12,
           border: '1px solid rgba(0, 0, 0, 0.08)',
-          padding: 40,
         };
       default:
         return {
@@ -106,6 +102,22 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           background: token.colorBgContainer,
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
         };
+    }
+  };
+
+  // Theme-specific body padding
+  const getCardBodyPadding = (): number => {
+    switch (template) {
+      case 'spotify':
+        return 40;
+      case 'stripe':
+        return 32;
+      case 'notion':
+        return 28;
+      case 'linear':
+        return 40;
+      default:
+        return 32;
     }
   };
 
@@ -237,7 +249,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
       )}
 
       {/* Form Container */}
-      <Card style={getCardStyles()} styles={{ body: { padding: 0 } }}>
+      <Card style={getCardStyles()} styles={{ body: { padding: getCardBodyPadding() } }}>
         {/* Logo */}
         {logoSrc && (
           <div

@@ -32,7 +32,9 @@ const navGroups: NavGroup[] = [
       { path: '/composite/new', label: '🆕 5 Nuevos Componentes' },
       { path: '/composite/auth-layout', label: 'AuthLayout' },
       { path: '/composite/data-table', label: 'DataTable' },
+      { path: '/composite/enhanced-data-table', label: '🚀 Enhanced DataTable' },
       { path: '/composite/empty-state', label: 'EmptyState' },
+      { path: '/composite/toast', label: 'Toast System' },
     ],
   },
   {

@@ -10,13 +10,30 @@ export type FieldType =
   | 'checkbox'
   | 'radio'
   | 'date'
-  | 'switch';
+  | 'switch'
+  | 'section'; // NEW: For visual grouping
 
 export interface SelectOption {
   label: string;
   value: string | number;
   disabled?: boolean;
 }
+
+// NEW: Conditional visibility configuration
+export interface FieldDependency {
+  /** Field name to depend on */
+  field: string;
+  /** Expected value */
+  value: any;
+  /** Condition type */
+  condition?: 'equals' | 'notEquals' | 'contains' | 'greaterThan' | 'lessThan';
+}
+
+// NEW: Custom validator function
+export type CustomValidator = (
+  value: any,
+  allValues: Record<string, any>
+) => Promise<void> | void;
 
 export interface FormField {
   name: string;
@@ -30,6 +47,32 @@ export interface FormField {
   disabled?: boolean;
   hidden?: boolean;
   tooltip?: string;
+
+  // NEW: Multi-column layout
+  /** Number of columns this field should span (1-4) */
+  colSpan?: 1 | 2 | 3 | 4;
+
+  // NEW: Conditional visibility
+  /** Simple dependency configuration */
+  dependsOn?: FieldDependency;
+  /** Complex visibility function */
+  visibleWhen?: (values: Record<string, any>) => boolean;
+
+  // NEW: Field dependencies
+  /** Array of field names this field depends on for updates */
+  dependencies?: string[];
+
+  // NEW: Custom validation
+  /** Custom validator function */
+  customValidator?: CustomValidator;
+  /** Validation trigger */
+  validateTrigger?: 'onChange' | 'onBlur' | 'onSubmit';
+
+  // NEW: Section-specific props
+  /** Section title (for type: 'section') */
+  title?: string;
+  /** Section description (for type: 'section') */
+  description?: string;
 }
 
 export interface FormBuilderProps {
@@ -68,4 +111,22 @@ export interface FormBuilderProps {
 
   /** Wrapper column span (for horizontal layout) */
   wrapperCol?: { span: number };
+
+  // NEW: Multi-column layout
+  /** Number of columns in the form grid (1-4) */
+  columns?: 1 | 2 | 3 | 4;
+
+  /** Gap between columns in pixels */
+  columnGap?: number;
+
+  /** Gap between rows in pixels */
+  rowGap?: number;
+
+  // NEW: Field change callback
+  /** Callback when any field value changes */
+  onFieldChange?: (
+    changedField: string,
+    value: any,
+    allValues: Record<string, any>
+  ) => void;
 }

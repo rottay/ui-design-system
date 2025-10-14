@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Form,
   Input,
@@ -12,24 +12,32 @@ import {
   Space,
   Tooltip,
   theme,
+  Row,
+  Col,
+  Divider,
+  Typography,
 } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { useTheme } from '../../hooks/useTheme';
-import type { FormBuilderProps, FormField } from './types';
+import type { FormBuilderProps, FormField, FieldDependency } from './types';
 
 const { TextArea } = Input;
+const { Title, Text } = Typography;
 
 /**
  * FormBuilder Component
  *
- * Dynamic form generator from JSON schema.
- * Supports validation, multiple field types, and conditional rendering.
+ * Advanced dynamic form generator from JSON schema.
+ * Supports validation, multiple field types, conditional rendering, multi-column layouts,
+ * field dependencies, custom validation, and field grouping/sections.
  *
  * @example
  * ```tsx
  * <FormBuilder
  *   fields={fields}
+ *   columns={2}
  *   onSubmit={(values) => console.log(values)}
+ *   onFieldChange={(field, value, allValues) => console.log(field, value)}
  * />
  * ```
  */
@@ -46,15 +54,85 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
   layout = 'vertical',
   labelCol,
   wrapperCol,
+  columns = 1,
+  columnGap = 16,
+  rowGap = 0,
+  onFieldChange,
 }) => {
   const { token } = theme.useToken();
   const { template } = useTheme();
   const [internalForm] = Form.useForm();
   const form = externalForm || internalForm;
 
+  // Watch form values for field change callback
+  const formValues = Form.useWatch([], form);
+
+  useEffect(() => {
+    if (onFieldChange && formValues) {
+      // Trigger callback when any field changes
+      Object.keys(formValues).forEach((field) => {
+        if (formValues[field] !== undefined) {
+          onFieldChange(field, formValues[field], formValues);
+        }
+      });
+    }
+  }, [formValues, onFieldChange]);
+
   const handleFinish = async (values: Record<string, any>) => {
     if (onSubmit) {
       await onSubmit(values);
+    }
+  };
+
+  /**
+   * Check if a field should be visible based on dependencies
+   */
+  const checkFieldVisibility = (
+    field: FormField,
+    values: Record<string, any>
+  ): boolean => {
+    // Check visibleWhen function
+    if (field.visibleWhen) {
+      return field.visibleWhen(values);
+    }
+
+    // Check dependsOn configuration
+    if (field.dependsOn) {
+      return checkDependency(field.dependsOn, values);
+    }
+
+    return true;
+  };
+
+  /**
+   * Evaluate dependency condition
+   */
+  const checkDependency = (
+    dep: FieldDependency,
+    values: Record<string, any>
+  ): boolean => {
+    const fieldValue = values[dep.field];
+    const { value, condition = 'equals' } = dep;
+
+    switch (condition) {
+      case 'equals':
+        return fieldValue === value;
+      case 'notEquals':
+        return fieldValue !== value;
+      case 'contains':
+        if (Array.isArray(fieldValue)) {
+          return fieldValue.includes(value);
+        }
+        if (typeof fieldValue === 'string') {
+          return fieldValue.includes(value);
+        }
+        return false;
+      case 'greaterThan':
+        return Number(fieldValue) > Number(value);
+      case 'lessThan':
+        return Number(fieldValue) < Number(value);
+      default:
+        return true;
     }
   };
 
@@ -139,13 +217,89 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
     }
   };
 
-  const renderField = (field: FormField) => {
+  /**
+   * Render section/group divider
+   */
+  const renderSection = (field: FormField) => {
+    const sectionStyles: React.CSSProperties = {
+      marginTop: 32,
+      marginBottom: 16,
+    };
+
+    switch (template) {
+      case 'spotify':
+        return (
+          <div key={field.name} style={sectionStyles}>
+            <Title level={4} style={{ marginBottom: 8, fontWeight: 700 }}>
+              {field.title}
+            </Title>
+            {field.description && (
+              <Text type="secondary" style={{ fontSize: 14 }}>
+                {field.description}
+              </Text>
+            )}
+            <Divider style={{ marginTop: 16, marginBottom: 24 }} />
+          </div>
+        );
+      case 'notion':
+        return (
+          <div key={field.name} style={sectionStyles}>
+            <Title level={5} style={{ marginBottom: 4, fontWeight: 700 }}>
+              {field.title}
+            </Title>
+            {field.description && (
+              <Text type="secondary" style={{ fontSize: 13 }}>
+                {field.description}
+              </Text>
+            )}
+            <Divider style={{ marginTop: 12, marginBottom: 16 }} />
+          </div>
+        );
+      default:
+        return (
+          <div key={field.name} style={sectionStyles}>
+            <Title level={4} style={{ marginBottom: 8 }}>
+              {field.title}
+            </Title>
+            {field.description && (
+              <Text type="secondary">{field.description}</Text>
+            )}
+            <Divider style={{ marginTop: 16, marginBottom: 20 }} />
+          </div>
+        );
+    }
+  };
+
+  const renderField = (field: FormField, values: Record<string, any> = {}) => {
     if (field.hidden) return null;
 
-    // Build rules
+    // Handle section type
+    if (field.type === 'section') {
+      return renderSection(field);
+    }
+
+    // Check conditional visibility
+    if (!checkFieldVisibility(field, values)) {
+      return null;
+    }
+
+    // Build rules with custom validator
     const rules = field.rules || [];
     if (field.required && !rules.some((r) => 'required' in r)) {
       rules.push({ required: true, message: `${field.label} is required` });
+    }
+
+    // Add custom validator
+    if (field.customValidator) {
+      rules.push({
+        validator: async (_, value) => {
+          try {
+            await field.customValidator!(value, values);
+          } catch (error) {
+            throw error;
+          }
+        },
+      });
     }
 
     // Label with tooltip
@@ -258,7 +412,20 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
         );
     }
 
-    return (
+    // Calculate column span for grid layout
+    const colSpan = field.colSpan || 1;
+    const spanValue = Math.floor(24 / columns) * colSpan;
+
+    // Collect dependencies for Form.Item
+    const dependencies: string[] = [];
+    if (field.dependsOn) {
+      dependencies.push(field.dependsOn.field);
+    }
+    if (field.dependencies) {
+      dependencies.push(...field.dependencies);
+    }
+
+    const formItem = (
       <Form.Item
         key={field.name}
         name={field.name}
@@ -266,10 +433,23 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
         rules={rules}
         initialValue={field.defaultValue}
         valuePropName={field.type === 'switch' ? 'checked' : 'value'}
+        dependencies={dependencies.length > 0 ? dependencies : undefined}
+        validateTrigger={field.validateTrigger || 'onChange'}
       >
         {fieldComponent}
       </Form.Item>
     );
+
+    // Wrap in Col if using grid layout
+    if (columns > 1) {
+      return (
+        <Col key={field.name} span={spanValue}>
+          {formItem}
+        </Col>
+      );
+    }
+
+    return formItem;
   };
 
   return (
@@ -282,7 +462,23 @@ export const FormBuilder: React.FC<FormBuilderProps> = ({
         labelCol={labelCol}
         wrapperCol={wrapperCol}
       >
-        {fields.map((field) => renderField(field))}
+        {columns > 1 ? (
+          <Row gutter={[columnGap, rowGap]}>
+            <Form.Item noStyle shouldUpdate>
+              {({ getFieldsValue }) => {
+                const values = getFieldsValue();
+                return <>{fields.map((field) => renderField(field, values))}</>;
+              }}
+            </Form.Item>
+          </Row>
+        ) : (
+          <Form.Item noStyle shouldUpdate>
+            {({ getFieldsValue }) => {
+              const values = getFieldsValue();
+              return <>{fields.map((field) => renderField(field, values))}</>;
+            }}
+          </Form.Item>
+        )}
 
         {(showSubmit || showReset) && (
           <Form.Item style={{ marginBottom: 0, marginTop: 8 }}>
