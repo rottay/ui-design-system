@@ -112,3 +112,39 @@ export type {
   SkeletonSize,
 } from './composite/SkeletonLoader';
 export type { BottomSheetProps } from './composite/BottomSheet';
+
+// DaisyUI Components
+export { DaisyButton, DaisyCard, DaisyBadge, DaisyAlert } from './daisyui';
+export type {
+  DaisyButtonProps,
+  DaisyButtonVariant,
+  DaisyButtonSize,
+  DaisyButtonShape,
+  DaisyCardProps,
+  DaisyCardVariant,
+  DaisyCardImagePosition,
+  DaisyBadgeProps,
+  DaisyBadgeVariant,
+  DaisyBadgeSize,
+  DaisyAlertProps,
+  DaisyAlertVariant,
+} from './daisyui';
+
+// HeroUI Components - UX-enhanced components from HeroUI
+export { Kbd } from './components/HeroUI/Kbd';
+export { Chip } from './components/HeroUI/Chip';
+export { ScrollShadow } from './components/HeroUI/ScrollShadow';
+export type { KbdProps } from './components/HeroUI/Kbd';
+export type {
+  ChipProps,
+  ChipVariant,
+  ChipColor,
+  ChipSize,
+  ChipRadius,
+} from './components/HeroUI/Chip';
+export type {
+  ScrollShadowProps,
+  ScrollShadowOrientation,
+  ScrollShadowSize,
+  ScrollShadowVisibility,
+} from './components/HeroUI/ScrollShadow';

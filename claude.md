@@ -4,8 +4,8 @@
 
 **Nombre:** Design System Multi-Tema
 **Versión Actual:** 0.1.6
-**Estado:** ✅ **Phase 6 COMPLETADA** - Tests, Documentación, Next.js Verificado, Listo para Publicación
-**Tipo:** Librería React reutilizable basada en Ant Design
+**Estado:** ✅ **Phase 7 EN PROGRESO** - Integración DaisyUI + HeroUI
+**Tipo:** Librería React reutilizable basada en Ant Design + DaisyUI + HeroUI
 **Objetivo:** Sistema de diseño modular con múltiples temas predefinidos para proyectos Next.js
 
 ---
@@ -13,10 +13,14 @@
 ## 🎯 Visión General
 
 ### Concepto Principal
-El proyecto es un **design system como librería NPM** que proporciona componentes UI reutilizables con sistema de temas intercambiables. Está construido como un wrapper sobre Ant Design que permite aplicar diferentes estilos visuales completos (8 temas predefinidos) manteniendo la misma API.
+El proyecto es un **design system como librería NPM** que proporciona componentes UI reutilizables con tres sistemas complementarios:
+- **Ant Design** (63 primitivos + 13 composites): Sistema principal con 8 temas personalizados y ThemeProvider
+- **DaisyUI** (4 componentes + 30 temas): Sistema basado en Tailwind CSS con clases utilitarias
+- **HeroUI** (3 componentes UX): Componentes especializados para mejorar la experiencia de usuario
 
 ### ✅ Lo que ESTÁ COMPLETO
 
+#### **Sistema Ant Design** (Original)
 1. ✅ **Componentes Primitivos (63):** Wrappers básicos de Ant Design (Display, Feedback, Inputs, Layout, Navigation, Overlay)
 2. ✅ **Componentes Composite (13):** 8 originales + 5 nuevos - TODOS theme-aware
    - Originales: AuthLayout, DashboardCard, DashboardLayout, DataTable, EmptyState, FormBuilder, PageHeader, SearchableSelect
@@ -25,11 +29,23 @@ El proyecto es un **design system como librería NPM** que proporciona component
 4. ✅ **Design Tokens System:** Sistema completo de tokens (colors, spacing, typography, effects, layout, animation) para todos los temas
 5. ✅ **Icon System:** Componente Icon wrapper con integración lucide-react
 6. ✅ **8 Temas Funcionales:** Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base
-7. ✅ **Dashboard/Showcase:** App funcional con demos de todos los componentes + página especial para nuevos composites
-8. ✅ **Storybook:** 13 stories completas para componentes composite + stories para layout patterns
-9. ✅ **Persistencia:** localStorage para guardar tema seleccionado
-10. ✅ **Librería Compilable:** Build funcionando (ESM 245KB + CJS 163KB + TypeScript definitions)
-11. ✅ **Tests Básicos:** 4 test files (Avatar, Badge, Button, Card) con Vitest + Testing Library
+7. ✅ **ThemeProvider con persistencia:** localStorage para guardar tema seleccionado
+
+#### **Sistema DaisyUI** ⭐ **NUEVO** (Phase 7)
+8. ✅ **4 Componentes DaisyUI:** Button, Card, Badge, Alert con clases Tailwind CSS
+9. ✅ **30 Temas DaisyUI:** light, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, cyberpunk, valentine, halloween, garden, forest, aqua, lofi, pastel, fantasy, wireframe, black, luxury, dracula, cmyk, autumn, business, acid, lemonade, night, coffee, winter
+10. ✅ **Configuración Tailwind + PostCSS:** Plugin DaisyUI integrado
+11. ✅ **Página Demo DaisyUI:** Showcase completo de los 4 componentes
+
+#### **Sistema HeroUI** ⭐ **NUEVO** (Phase 7)
+12. ✅ **3 Componentes HeroUI:** Kbd, Chip, ScrollShadow
+13. ✅ **Integración @heroui/react:** Componentes UX especializados
+
+#### **Infraestructura**
+14. ✅ **Dashboard/Showcase:** App funcional con demos de todos los componentes
+15. ✅ **Storybook:** 13 stories completas para componentes composite + stories para layout patterns
+16. ✅ **Librería Compilable:** Build funcionando (ESM + CJS + TypeScript definitions)
+17. ✅ **Tests Básicos:** 154 tests (85.7% passing) con Vitest + Testing Library
 
 ---
 
@@ -37,16 +53,25 @@ El proyecto es un **design system como librería NPM** que proporciona component
 
 ### Core
 - **Framework:** React 18.2.0
-- **UI Base:** Ant Design 5.21.0
+- **UI Libraries:**
+  - **Ant Design** 5.21.0 (Sistema principal)
+  - **DaisyUI** 5.3.0 (Componentes Tailwind CSS)
+  - **HeroUI** 2.8.5 (Componentes UX especializados)
+- **CSS Frameworks:**
+  - **Tailwind CSS** 4.1.14 (DaisyUI)
+  - **PostCSS** 8.5.6 + Autoprefixer 10.4.21
 - **Lenguaje:** TypeScript 5.3.0
 - **Build Tool:** Vite 5.0.0
 - **Package Manager:** npm (workspaces)
+- **Icons:** Lucide React 0.545.0
+- **Animations:** Framer Motion 12.23.24
 
 ### Herramientas de Desarrollo
 - **Bundler:** Vite (library mode)
 - **Type Generation:** vite-plugin-dts 3.7.0
 - **Documentation:** Storybook 9.1.10
 - **Dashboard:** Vite + React Router DOM 7.9.3
+- **Testing:** Vitest 3.2.4 + Testing Library 16.3.0
 
 ---
 
@@ -220,6 +245,580 @@ export const useTheme = () => {
   return context; // { template, setTemplate }
 };
 ```
+
+---
+
+## 🌼 Sistema DaisyUI - COMPLETAMENTE IMPLEMENTADO ⭐ **NUEVO**
+
+### Concepto
+DaisyUI es un sistema de componentes basado en **Tailwind CSS** que utiliza **clases utilitarias** en lugar de componentes React complejos. Complementa el sistema Ant Design proporcionando componentes más ligeros y minimalistas.
+
+### ✅ 4 Componentes DaisyUI Implementados
+
+#### 1. **DaisyButton**
+- Botón con múltiples variantes y estilos
+- **Variantes:** primary, secondary, accent, ghost, link, info, success, warning, error
+- **Tamaños:** xs, sm, md, lg
+- **Estilos:** outline, glass, wide, loading
+- **Formas:** square, circle
+- **File:** `packages/core/src/daisyui/Button/`
+
+```tsx
+import { DaisyButton } from '@es-rottay/designsystem-core';
+
+<DaisyButton variant="primary" size="lg" loading>
+  Guardar
+</DaisyButton>
+
+<DaisyButton variant="secondary" outline shape="circle">
+  🎯
+</DaisyButton>
+```
+
+#### 2. **DaisyCard**
+- Card con soporte para imágenes y acciones
+- **Variantes:** normal, bordered, compact
+- **Estilos:** shadow, glass
+- **Posición de imagen:** top, side
+- **File:** `packages/core/src/daisyui/Card/`
+
+```tsx
+import { DaisyCard, DaisyButton } from '@es-rottay/designsystem-core';
+
+<DaisyCard
+  title="Card con Imagen"
+  description="Descripción del card"
+  image="https://example.com/image.jpg"
+  shadow
+  actions={
+    <DaisyButton variant="primary" size="sm">Ver más</DaisyButton>
+  }
+/>
+```
+
+#### 3. **DaisyBadge**
+- Badge con variantes y tamaños
+- **Variantes:** neutral, primary, secondary, accent, ghost, info, success, warning, error
+- **Tamaños:** xs, sm, md, lg
+- **Estilo:** outline
+- **File:** `packages/core/src/daisyui/Badge/`
+
+```tsx
+import { DaisyBadge } from '@es-rottay/designsystem-core';
+
+<DaisyBadge variant="success" size="md">
+  Activo
+</DaisyBadge>
+
+<DaisyBadge variant="primary" outline>
+  Premium
+</DaisyBadge>
+```
+
+#### 4. **DaisyAlert**
+- Alerta con iconos y acciones
+- **Variantes:** info, success, warning, error
+- **Props:** title, message, actions
+- **File:** `packages/core/src/daisyui/Alert/`
+
+```tsx
+import { DaisyAlert, DaisyButton } from '@es-rottay/designsystem-core';
+
+<DaisyAlert
+  variant="info"
+  title="Información importante"
+  message="Este es un mensaje de alerta"
+  actions={
+    <DaisyButton variant="ghost" size="sm">
+      Ver detalles
+    </DaisyButton>
+  }
+/>
+```
+
+### ✅ 30 Temas DaisyUI Disponibles
+
+| Tema | Color Primary | Descripción |
+|------|--------------|-------------|
+| **light** | #570DF8 (Purple) | Tema claro por defecto |
+| **dark** | #661AE6 (Purple) | Tema oscuro |
+| **cupcake** | #65C3C8 (Cyan) | Colores pastel suaves |
+| **bumblebee** | #F9D72F (Yellow) | Amarillo brillante |
+| **emerald** | #66CC8A (Green) | Verde esmeralda |
+| **corporate** | #4B6BFB (Blue) | Azul corporativo |
+| **synthwave** | #E779C1 (Pink) | Estilo retro futurista |
+| **retro** | #EF9995 (Coral) | Colores vintage |
+| **cyberpunk** | #FF7598 (Pink) | Neon futurista |
+| **valentine** | #E96D7B (Rose) | Colores románticos |
+| **halloween** | #F28C18 (Orange) | Naranja oscuro |
+| **garden** | #5C7F67 (Green) | Verde natural |
+| **forest** | #1EB854 (Green) | Verde bosque |
+| **aqua** | #09ECEC (Cyan) | Cian brillante |
+| **lofi** | #0D0D0D (Black) | Minimalista oscuro |
+| **pastel** | #D1C1D7 (Lavender) | Colores pastel |
+| **fantasy** | #7828C8 (Purple) | Púrpura mágico |
+| **wireframe** | #B8B8B8 (Gray) | Gris wireframe |
+| **black** | #343232 (Dark Gray) | Casi negro |
+| **luxury** | #FFFFFF (White) | Blanco lujoso |
+| **dracula** | #FF79C6 (Pink) | Tema Dracula |
+| **cmyk** | #45AEEE (Cyan) | Colores CMYK |
+| **autumn** | #8C0327 (Burgundy) | Colores otoño |
+| **business** | #1C4E80 (Navy) | Azul negocios |
+| **acid** | #FF00F4 (Magenta) | Magenta ácido |
+| **lemonade** | #519903 (Lime) | Verde lima |
+| **night** | #38BDF8 (Sky Blue) | Azul noche |
+| **coffee** | #DB924B (Brown) | Café marrón |
+| **winter** | #047AFF (Blue) | Azul invernal |
+
+**Ubicación de temas:**
+- `packages/core/src/themes/daisyui.ts` - Tema principal DaisyUI
+- `packages/core/src/themes/daisyui-themes.ts` - 29 variantes exportadas
+
+### Configuración Tailwind CSS
+
+**Tailwind configurado** en `packages/core/tailwind.config.js`:
+```js
+export default {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  theme: { extend: {} },
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      "light", "dark", "cupcake", "bumblebee", "emerald",
+      "corporate", "synthwave", "retro", "cyberpunk", "valentine",
+      "halloween", "garden", "forest", "aqua", "lofi",
+      "pastel", "fantasy", "wireframe", "black", "luxury",
+      "dracula", "cmyk", "autumn", "business", "acid",
+      "lemonade", "night", "coffee", "winter"
+    ],
+  },
+}
+```
+
+### Página Demo DaisyUI
+
+**Ruta:** `/daisyui` en el dashboard
+**Componente:** `packages/dashboard/src/pages/DaisyUIDemo.tsx`
+**Contenido:**
+- Showcase completo de los 4 componentes DaisyUI
+- Todas las variantes, tamaños y estilos
+- Ejemplo combinado con múltiples componentes
+
+### Diferencias: DaisyUI vs Ant Design
+
+| Característica | Ant Design | DaisyUI |
+|---------------|-----------|---------|
+| **Tecnología** | React Components | Tailwind CSS Classes |
+| **Temas** | 8 temas custom | 30 temas predefinidos |
+| **Tamaño bundle** | ~245KB ESM | Ligero (CSS) |
+| **Configuración** | ThemeProvider + ConfigProvider | data-theme attribute |
+| **Customización** | theme tokens object | Tailwind config |
+| **Componentes** | 63 primitivos + 13 composites | 4 componentes utilitarios |
+| **TypeScript** | Full support con types | Props types definidos |
+| **Uso** | `<Button />` | `<DaisyButton />` |
+
+### Exports DaisyUI
+
+```typescript
+// En packages/core/src/index.ts
+export { DaisyButton, DaisyCard, DaisyBadge, DaisyAlert } from './daisyui';
+
+export type {
+  DaisyButtonProps,
+  DaisyButtonVariant,
+  DaisyButtonSize,
+  DaisyButtonShape,
+  DaisyCardProps,
+  DaisyCardVariant,
+  DaisyCardImagePosition,
+  DaisyBadgeProps,
+  DaisyBadgeVariant,
+  DaisyBadgeSize,
+  DaisyAlertProps,
+  DaisyAlertVariant,
+} from './daisyui';
+```
+
+---
+
+## 🦸 Sistema HeroUI - COMPONENTES UX ESPECIALIZADOS ⭐ **NUEVO**
+
+### Concepto
+HeroUI (@heroui/react 2.8.5) proporciona componentes React especializados enfocados en **mejorar la experiencia de usuario** con interacciones avanzadas y efectos visuales. Los 3 componentes implementados son **custom implementations theme-aware** (no wrappers directos), completamente integrados con el sistema de temas de Ant Design.
+
+### ✅ 3 Componentes HeroUI Implementados
+
+---
+
+#### 1. **Kbd** (Keyboard Key Display)
+
+Componente para mostrar teclas del teclado visualmente, ideal para documentar shortcuts y hotkeys.
+
+**Características:**
+- ✅ **Theme-aware** - Estilos específicos por tema (8 temas soportados)
+- ✅ **3 tamaños**: sm (11px), md (13px), lg (15px)
+- ✅ **4 variantes**: solid, shadow, flat, bordered
+- ✅ **Soporte multi-teclas** - Array de teclas con separador "+"
+- ✅ **Typography**: Monospace font para consistencia
+- ✅ **Accessibility**: Soporte para `abbr` attribute
+
+**Props:**
+```typescript
+interface KbdProps {
+  children?: ReactNode;        // Contenido de la tecla
+  keys?: string[];             // Array de teclas ['Ctrl', 'K']
+  size?: 'sm' | 'md' | 'lg';  // Tamaño (default: 'md')
+  variant?: 'solid' | 'shadow' | 'flat' | 'bordered';
+  className?: string;
+  style?: CSSProperties;
+  abbr?: string;               // Tooltip/title attribute
+}
+```
+
+**Estilos por tema:**
+| Tema | Background | Border | Shadow |
+|------|-----------|--------|--------|
+| **Spotify** | `rgba(255,255,255,0.1)` | `rgba(255,255,255,0.2)` | `0 2px 4px rgba(0,0,0,0.4)` |
+| **Stripe** | `#FFFFFF` / `#F6F9FC` | `#E3E8EE` | `0 1px 3px rgba(0,0,0,0.1)` |
+| **Notion** | `rgba(242,241,238,1)` | `rgba(55,53,47,0.16)` | Signature shadow |
+| **Linear** | `#FFFFFF` / `rgba(0,0,0,0.04)` | Token border | `0 2px 8px rgba(0,0,0,0.12)` |
+
+**Ejemplos de uso:**
+```tsx
+import { Kbd } from '@es-rottay/designsystem-core';
+
+// Tecla simple
+<Kbd>K</Kbd>
+
+// Múltiples teclas con separador
+<Kbd keys={['Ctrl', 'K']} />
+<Kbd keys={['Cmd', 'Shift', 'P']} />
+
+// Con tamaño y variante
+<Kbd size="lg" variant="shadow">Enter</Kbd>
+
+// En documentación inline
+<p>Press <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> to open search</p>
+
+// Con tooltip
+<Kbd abbr="Command key on Mac">Cmd</Kbd>
+```
+
+**File:** `packages/core/src/components/HeroUI/Kbd/`
+**Story:** `Kbd.stories.tsx` ✅
+
+---
+
+#### 2. **Chip** (Interactive Tags)
+
+Badge interactivo con múltiples variantes, ideal para tags, filtros, categorías y estados.
+
+**Características:**
+- ✅ **Theme-aware** - Usa `theme.useToken()` de Ant Design
+- ✅ **5 variantes**: solid, bordered, flat, dot, shadow
+- ✅ **5 colores**: default, primary, success, warning, danger
+- ✅ **3 tamaños**: sm (20px), md (24px), lg (32px)
+- ✅ **5 radius**: none, sm, md, lg, full
+- ✅ **Closeable** - Botón X con callback `onClose`
+- ✅ **Clickable** - Callback `onClick` con hover states
+- ✅ **Avatar/Icon support** - `avatar`, `startContent`, `endContent`
+- ✅ **Disabled state** - Con opacidad reducida
+- ✅ **Smooth transitions** - Hover effects con 0.2s transition
+
+**Props:**
+```typescript
+interface ChipProps {
+  children: ReactNode;
+  variant?: 'solid' | 'bordered' | 'flat' | 'dot' | 'shadow';
+  color?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+  avatar?: ReactNode;          // Avatar antes del contenido
+  startContent?: ReactNode;    // Contenido antes del texto
+  endContent?: ReactNode;      // Contenido después del texto
+  closeable?: boolean;         // Mostrar botón X
+  onClose?: () => void;        // Callback al cerrar
+  onClick?: () => void;        // Callback al hacer click
+  disabled?: boolean;          // Estado disabled
+  className?: string;
+  style?: CSSProperties;
+}
+```
+
+**Variantes visuales:**
+- **solid**: Background sólido con color, texto blanco
+- **bordered**: Transparente con borde del color
+- **flat**: Background semi-transparente (15% opacity)
+- **dot**: Badge con punto de color + borde
+- **shadow**: Solid con boxShadow
+
+**Border radius adaptativo por tema:**
+- **Notion**: `3px` (cuadrado)
+- **Slack**: `4px` (sharp)
+- **Stripe**: `6px` (suave)
+- **Linear**: `8px` (redondeado)
+- **Otros**: Según prop `radius`
+
+**Ejemplos de uso:**
+```tsx
+import { Chip } from '@es-rottay/designsystem-core';
+import { Avatar } from '@es-rottay/designsystem-core';
+import { Check, X } from 'lucide-react';
+
+// Básico
+<Chip>Label</Chip>
+
+// Con variantes y colores
+<Chip variant="solid" color="success">Active</Chip>
+<Chip variant="bordered" color="primary">Premium</Chip>
+<Chip variant="flat" color="warning">Pending</Chip>
+<Chip variant="dot" color="danger">Error</Chip>
+<Chip variant="shadow" color="primary">Featured</Chip>
+
+// Closeable (removable tags)
+<Chip
+  closeable
+  onClose={() => console.log('Chip closed')}
+>
+  Removable Tag
+</Chip>
+
+// Clickable con callback
+<Chip
+  color="primary"
+  onClick={() => console.log('Clicked')}
+>
+  Click me
+</Chip>
+
+// Con avatar
+<Chip
+  avatar={<Avatar size={20} src="/user.jpg" />}
+  color="primary"
+>
+  John Doe
+</Chip>
+
+// Con iconos
+<Chip
+  startContent={<Check size={14} />}
+  color="success"
+>
+  Verified
+</Chip>
+
+<Chip
+  endContent={<X size={14} />}
+  color="danger"
+>
+  Failed
+</Chip>
+
+// Diferentes tamaños
+<Chip size="sm">Small</Chip>
+<Chip size="md">Medium</Chip>
+<Chip size="lg">Large</Chip>
+
+// Disabled
+<Chip disabled color="primary">
+  Disabled
+</Chip>
+
+// Custom radius
+<Chip radius="none">Square</Chip>
+<Chip radius="full">Pill</Chip>
+```
+
+**File:** `packages/core/src/components/HeroUI/Chip/`
+**Story:** `Chip.stories.tsx` ✅
+
+---
+
+#### 3. **ScrollShadow** (Scroll Indicators)
+
+Contenedor con sombras dinámicas que indican contenido scrolleable, mejorando la UX visual.
+
+**Características:**
+- ✅ **Theme-aware** - Colores de sombra por tema
+- ✅ **Auto-detection** - Detecta scroll position automáticamente
+- ✅ **3 orientaciones**: vertical, horizontal, both
+- ✅ **3 tamaños**: sm (20px), md (40px), lg (60px)
+- ✅ **Visibility modes**: auto, top, bottom, left, right, both
+- ✅ **Hide scrollbar** - Opción para ocultar scrollbar nativa
+- ✅ **Performance optimizado** - ResizeObserver + RAF
+- ✅ **Smooth transitions** - Opacity 0.3s ease
+- ✅ **Offset support** - Threshold antes de mostrar sombra
+
+**Props:**
+```typescript
+interface ScrollShadowProps {
+  children: ReactNode;
+  orientation?: 'vertical' | 'horizontal' | 'both';
+  size?: 'sm' | 'md' | 'lg';    // Tamaño de gradient (20px, 40px, 60px)
+  visibility?: 'auto' | 'top' | 'bottom' | 'left' | 'right' | 'both';
+  hideScrollBar?: boolean;       // Ocultar scrollbar nativa
+  offset?: number;               // Offset en px antes de mostrar
+  className?: string;
+  style?: CSSProperties;
+  onScroll?: (e: UIEvent<HTMLDivElement>) => void;
+}
+```
+
+**Colores de sombra por tema:**
+| Tema | Shadow Color | Descripción |
+|------|--------------|-------------|
+| **Spotify** | `rgba(0,0,0,0.5)` | Intenso para fondo oscuro |
+| **Stripe** | `rgba(0,0,0,0.08)` | Sutil y profesional |
+| **Notion** | `rgba(15,15,15,0.1)` | Suave y minimalista |
+| **Linear** | `rgba(0,0,0,0.06)` | Mínimo y moderno |
+| **Vercel** | `rgba(0,0,0,0.25)` | Oscuro elegante |
+| **Default** | `rgba(0,0,0,0.1)` | Balance general |
+
+**Gradients:**
+- **Top**: `linear-gradient(to bottom, ${color}, transparent)`
+- **Bottom**: `linear-gradient(to top, ${color}, transparent)`
+- **Left**: `linear-gradient(to right, ${color}, transparent)`
+- **Right**: `linear-gradient(to left, ${color}, transparent)`
+
+**Ejemplos de uso:**
+```tsx
+import { ScrollShadow } from '@es-rottay/designsystem-core';
+
+// Vertical scrolling básico
+<ScrollShadow style={{ maxHeight: '400px' }}>
+  <div>
+    {longContent.map(item => (
+      <div key={item.id}>{item.content}</div>
+    ))}
+  </div>
+</ScrollShadow>
+
+// Horizontal scrolling
+<ScrollShadow orientation="horizontal" style={{ maxWidth: '600px' }}>
+  <div style={{ display: 'flex', gap: 16, width: 'max-content' }}>
+    {items.map(item => (
+      <Card key={item.id} style={{ minWidth: 200 }}>
+        {item.content}
+      </Card>
+    ))}
+  </div>
+</ScrollShadow>
+
+// Ambas direcciones (grid scrollable)
+<ScrollShadow orientation="both" size="lg" style={{ height: 500, width: 800 }}>
+  <DataGrid data={largeDataset} />
+</ScrollShadow>
+
+// Con scrollbar oculta
+<ScrollShadow hideScrollBar>
+  <LongContentList />
+</ScrollShadow>
+
+// Con offset (shadow aparece después de 10px)
+<ScrollShadow offset={10}>
+  <Content />
+</ScrollShadow>
+
+// Tamaños de shadow
+<ScrollShadow size="sm">Small shadow (20px)</ScrollShadow>
+<ScrollShadow size="md">Medium shadow (40px)</ScrollShadow>
+<ScrollShadow size="lg">Large shadow (60px)</ScrollShadow>
+
+// Visibility manual (sin auto-detection)
+<ScrollShadow visibility="both">
+  {/* Siempre muestra sombras arriba y abajo */}
+</ScrollShadow>
+
+// Con callback onScroll
+<ScrollShadow
+  onScroll={(e) => {
+    console.log('Scroll position:', e.currentTarget.scrollTop);
+  }}
+>
+  <Content />
+</ScrollShadow>
+
+// Uso común: Lista de items
+<ScrollShadow style={{ maxHeight: 300 }}>
+  {notifications.map(notif => (
+    <NotificationItem key={notif.id} {...notif} />
+  ))}
+</ScrollShadow>
+```
+
+**File:** `packages/core/src/components/HeroUI/ScrollShadow/`
+**Story:** `ScrollShadow.stories.tsx` ✅
+
+---
+
+### Características Técnicas Compartidas
+
+**Theme Integration:**
+- Todos usan `useTheme()` hook para obtener el tema activo
+- Integración con `theme.useToken()` de Ant Design
+- Estilos adaptativos por cada uno de los 8 temas
+
+**TypeScript:**
+- Tipado completo con interfaces exportadas
+- Props type-safe con IntelliSense
+- Display names configurados para React DevTools
+
+**Performance:**
+- Componentes optimizados con React best practices
+- ScrollShadow usa ResizeObserver para eficiencia
+- Transitions suaves con CSS (no JS animations)
+
+**Accessibility:**
+- Kbd: Soporte para `abbr` attribute
+- Chip: `aria-label` en botón close
+- ScrollShadow: `aria-hidden="true"` en overlays
+
+### Exports HeroUI
+
+```typescript
+// En packages/core/src/index.ts (líneas 134-150)
+
+// HeroUI Components
+export { Kbd } from './components/HeroUI/Kbd';
+export { Chip } from './components/HeroUI/Chip';
+export { ScrollShadow } from './components/HeroUI/ScrollShadow';
+
+// Types
+export type { KbdProps } from './components/HeroUI/Kbd';
+export type {
+  ChipProps,
+  ChipVariant,
+  ChipColor,
+  ChipSize,
+  ChipRadius,
+} from './components/HeroUI/Chip';
+export type {
+  ScrollShadowProps,
+  ScrollShadowOrientation,
+  ScrollShadowSize,
+  ScrollShadowVisibility,
+} from './components/HeroUI/ScrollShadow';
+```
+
+### Dependencia
+
+```json
+// packages/core/package.json
+{
+  "dependencies": {
+    "@heroui/react": "^2.8.5"
+  }
+}
+```
+
+### Storybook Stories
+
+Cada componente tiene su propia story completa:
+- ✅ `packages/core/src/components/HeroUI/Kbd/Kbd.stories.tsx`
+- ✅ `packages/core/src/components/HeroUI/Chip/Chip.stories.tsx`
+- ✅ `packages/core/src/components/HeroUI/ScrollShadow/ScrollShadow.stories.tsx`
+
+Acceder via: `npm run storybook --workspace=@es-rottay/designsystem-core`
 
 ---
 
@@ -527,13 +1126,29 @@ export default function Dashboard() {
 
 ```typescript
 // packages/core/src/index.ts
+
+// Ant Design Components
 export * from './components';  // 63 componentes primitivos
 export * from './composite';   // 13 componentes composite
+
+// DaisyUI Components ⭐ NUEVO
+export { DaisyButton, DaisyCard, DaisyBadge, DaisyAlert } from './daisyui';
+
+// HeroUI Components ⭐ NUEVO
+export { Kbd, Chip, ScrollShadow } from './components/HeroUI';
+
+// Theme System
 export * from './providers';   // ThemeProvider
 export * from './hooks';       // useTheme
 export * from './themes';      // templates, type definitions
-export * from './tokens';      // Design tokens
+
+// Design Tokens
+export * from './tokens';      // Design tokens (colors, spacing, typography, effects, layout, animation)
+
+// Layout Patterns
 export * from './layout-patterns'; // 11 Layout patterns
+
+// Icons
 export { Icon } from './icons/Icon'; // Icon component
 ```
 
@@ -638,10 +1253,11 @@ export { duration, easing, transitions, keyframes, animations }
 | `/` | Overview | DashboardCards + PageHeader + instrucciones |
 | `/icons` | IconsPage | Galería de iconos con lucide-react |
 | `/composite/all` | AllComposites | TODOS los 8 componentes composite originales |
-| `/composite/new` ⭐ **NUEVO** | NewComposites | Los 5 NUEVOS componentes composite (UserMenu, SearchBar, NotificationCenter, Sidebar, FileUploader) |
+| `/composite/new` | NewComposites | Los 5 NUEVOS componentes composite (UserMenu, SearchBar, NotificationCenter, Sidebar, FileUploader) |
 | `/composite/auth-layout` | AuthLayoutDemo | 3 variantes de AuthLayout |
 | `/composite/data-table` | DataTableDemo | DataTable con búsqueda y selección |
 | `/composite/empty-state` | EmptyStateDemo | 6 variantes de EmptyState |
+| `/daisyui` ⭐ **NUEVO** | DaisyUIDemo | Showcase completo de 4 componentes DaisyUI |
 | `/:category/:component` | ComponentDemo | Demos dinámicos de 63 primitivos + layout patterns |
 
 **Categorías de primitivos en dashboard:**
@@ -712,21 +1328,31 @@ npm run build --workspace=@es-rottay/designsystem-core
 
 ## 🎯 Resumen Ejecutivo
 
-**Estado Actual: FASE 6 COMPLETADA ✅ (100% Terminada)**
+**Estado Actual: FASE 7 EN PROGRESO ⭐ (Integración Multi-UI)**
 
 ### ✅ Sistema Completo Implementado
 
-**Core Features:**
+**Sistema Ant Design:**
 - ✅ **63 Componentes Primitivos** - Wrappers completos de Ant Design
 - ✅ **13 Componentes Composite theme-aware** - 8 originales + 5 nuevos
+- ✅ **8 Temas funcionales** - Con persistencia automática (ThemeProvider)
+
+**Sistema DaisyUI:** ⭐ **NUEVO**
+- ✅ **4 Componentes DaisyUI** - Button, Card, Badge, Alert con Tailwind CSS
+- ✅ **30 Temas predefinidos** - Todos los temas oficiales de DaisyUI
+- ✅ **Configuración Tailwind + PostCSS** - Plugin integrado
+
+**Sistema HeroUI:** ⭐ **NUEVO**
+- ✅ **3 Componentes UX** - Kbd, Chip, ScrollShadow especializados
+
+**Infraestructura Compartida:**
 - ✅ **11 Layout Patterns** - Sistema completo de layouts reutilizables
 - ✅ **Design Tokens System** - 6 categorías de tokens exportables
 - ✅ **Icon System** - Componente Icon con lucide-react
-- ✅ **8 Temas funcionales** - Con persistencia automática
-- ✅ **Dashboard showcase completo** - Múltiples páginas demo
+- ✅ **Dashboard showcase completo** - Múltiples páginas demo + página DaisyUI
 - ✅ **Storybook completo** - 13+ stories para composites + patterns
-- ✅ **Build funcionando** - ESM 245KB + CJS 163KB + TypeScript definitions
-- ✅ **Tests expandidos** - 9 componentes (154 tests, 85.7% passing)
+- ✅ **Build funcionando** - ESM + CJS + TypeScript definitions
+- ✅ **Tests expandidos** - 154 tests (85.7% passing)
 - ✅ **README.md completo** - 549 líneas de documentación
 - ✅ **Verificación Next.js** - Probado en Next.js 14 App Router
 
@@ -734,14 +1360,19 @@ npm run build --workspace=@es-rottay/designsystem-core
 
 | Categoría | Cantidad | Estado |
 |-----------|----------|--------|
-| Componentes Primitivos | 63 | ✅ Completo |
-| Componentes Composite | 13 | ✅ Completo |
-| Layout Patterns | 11 | ✅ Completo |
-| Temas | 8 | ✅ Completo |
-| Stories (Storybook) | 13+ | ✅ Completo |
-| Tests | 154 (132 passing) | 🟡 85.7% |
-| Build Size (ESM) | 245KB | ✅ Optimizado |
-| Next.js Compatibility | Verified | ✅ Funcional |
+| **Ant Design - Primitivos** | 63 | ✅ Completo |
+| **Ant Design - Composites** | 13 | ✅ Completo |
+| **DaisyUI - Componentes** ⭐ | 4 | ✅ Completo |
+| **HeroUI - Componentes** ⭐ | 3 | ✅ Completo |
+| **Layout Patterns** | 11 | ✅ Completo |
+| **TOTAL COMPONENTES** | **94** | ✅ Completo |
+| **Temas Ant Design** | 8 | ✅ Completo |
+| **Temas DaisyUI** ⭐ | 30 | ✅ Completo |
+| **TOTAL TEMAS** | **38** | ✅ Completo |
+| **Stories (Storybook)** | 13+ | ✅ Completo |
+| **Tests** | 154 (132 passing) | 🟡 85.7% |
+| **Build Size (ESM)** | ~245KB | ✅ Optimizado |
+| **Next.js Compatibility** | Verified | ✅ Funcional |
 
 ### 🚀 Listo para:
 - ✅ **Producción** - Código estable y probado
@@ -770,11 +1401,19 @@ npm run build --workspace=@es-rottay/designsystem-core
 
 ---
 
-*Última actualización: 2025-10-12*
-*Versión: 6.0*
-*Estado: ✅ **Phase 6 COMPLETADA** - Listo para Producción y Publicación*
-*Build: 245KB ESM / 163KB CJS*
-*Componentes totales: 87 (63 primitivos + 13 composites + 11 layout patterns)*
-*Tests: 154 total (132 passing - 85.7%)*
-*Next.js: ✅ Verificado y funcional (Next.js 14 App Router)*
-*Publicación: 🚀 Configurado y listo para `npm publish`*
+*Última actualización: 2025-10-15*
+*Versión: 7.0 (Phase 7 - Integración Multi-UI)*
+*Estado: ✅ **Phase 7 EN PROGRESO** - DaisyUI + HeroUI Integrados*
+
+**📊 Estadísticas Finales:**
+- **Componentes totales:** 94 (63 Ant Design + 13 composites + 11 layout patterns + 4 DaisyUI + 3 HeroUI)
+- **Temas totales:** 38 (8 Ant Design + 30 DaisyUI)
+- **Build:** ~245KB ESM / ~163KB CJS
+- **Tests:** 154 total (132 passing - 85.7%)
+- **Next.js:** ✅ Verificado y funcional (Next.js 14 App Router)
+- **Publicación:** 🚀 Configurado y listo para `npm publish`
+
+**🎨 Sistemas UI Integrados:**
+1. **Ant Design** - Sistema principal con ThemeProvider
+2. **DaisyUI** - Componentes Tailwind CSS (30 temas)
+3. **HeroUI** - Componentes UX especializados

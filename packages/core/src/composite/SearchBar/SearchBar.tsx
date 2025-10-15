@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Spin, Empty, theme } from 'antd';
-import { Search, Clock, Command } from 'lucide-react';
+import { Search, Clock } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
+import { Kbd } from '../../components/HeroUI/Kbd';
+import { ScrollShadow } from '../../components/HeroUI/ScrollShadow';
 import type { SearchBarProps, SearchResult } from './types';
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -138,8 +140,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           background: '#282828',
           borderRadius: 8,
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
-          maxHeight: 400,
-          overflowY: 'auto',
           zIndex: 1000,
         };
       case 'stripe':
@@ -153,8 +153,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           borderRadius: 8,
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.12)',
           border: `1px solid ${token.colorBorder}`,
-          maxHeight: 400,
-          overflowY: 'auto',
           zIndex: 1000,
         };
       case 'notion':
@@ -167,8 +165,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           background: '#FFFFFF',
           borderRadius: 3,
           boxShadow: 'rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px',
-          maxHeight: 400,
-          overflowY: 'auto',
           zIndex: 1000,
         };
       case 'linear':
@@ -182,8 +178,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           borderRadius: 12,
           boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
           border: `1px solid ${token.colorBorder}`,
-          maxHeight: 400,
-          overflowY: 'auto',
           zIndex: 1000,
         };
       default:
@@ -196,8 +190,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           background: token.colorBgElevated,
           borderRadius: 8,
           boxShadow: token.boxShadow,
-          maxHeight: 400,
-          overflowY: 'auto',
           zIndex: 1000,
         };
     }
@@ -224,21 +216,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         prefix={<Search size={18} style={{ color: token.colorTextSecondary }} />}
         suffix={
           showShortcut && !isFocused ? (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-                padding: '2px 8px',
-                background: token.colorBgTextHover,
-                borderRadius: 4,
-                fontSize: 12,
-                color: token.colorTextSecondary,
-              }}
-            >
-              <Command size={12} />
-              <span>{shortcutKey}</span>
-            </div>
+            <Kbd keys={['Ctrl', shortcutKey]} size="sm" />
           ) : null
         }
         placeholder={placeholder}
@@ -258,26 +236,27 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       />
 
       {isOpen && (
-        <div style={getResultsPanelStyles()}>
-          {loading ? (
-            <div style={{ padding: 32, textAlign: 'center' }}>
-              <Spin />
-            </div>
-          ) : showRecent ? (
-            <div style={{ padding: 8 }}>
-              <div
-                style={{
-                  padding: '8px 12px',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: token.colorTextSecondary,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                }}
-              >
-                Recent Searches
+        <div style={{ ...getResultsPanelStyles(), overflow: 'hidden' }}>
+          <ScrollShadow style={{ maxHeight: 400 }}>
+            {loading ? (
+              <div style={{ padding: 32, textAlign: 'center' }}>
+                <Spin />
               </div>
-              {recentSearches.map((search, index) => (
+            ) : showRecent ? (
+              <div style={{ padding: 8 }}>
+                <div
+                  style={{
+                    padding: '8px 12px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    color: token.colorTextSecondary,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                  }}
+                >
+                  Recent Searches
+                </div>
+                {recentSearches.map((search, index) => (
                 <div
                   key={index}
                   onClick={() => handleSearch(search)}
@@ -372,6 +351,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               />
             </div>
           ) : null}
+          </ScrollShadow>
         </div>
       )}
     </div>

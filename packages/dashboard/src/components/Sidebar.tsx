@@ -26,6 +26,12 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    title: '🌸 DaisyUI (Tailwind)',
+    items: [
+      { path: '/daisyui', label: '🎨 DaisyUI Components' },
+    ],
+  },
+  {
     title: '🎨 Composite (Theme-Aware)',
     items: [
       { path: '/composite/all', label: '✨ Ver TODOS los Composite' },
