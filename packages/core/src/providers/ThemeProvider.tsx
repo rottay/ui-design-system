@@ -65,6 +65,21 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     }
   }, [template]);
 
+  // Aplicar data-theme para DaisyUI
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Si el tema es de DaisyUI, aplicar el atributo data-theme
+      if (template.startsWith('daisyui-')) {
+        // Remover el prefijo 'daisyui-' para obtener el nombre del tema
+        const daisyThemeName = template.replace('daisyui-', '');
+        document.documentElement.setAttribute('data-theme', daisyThemeName);
+      } else {
+        // Si no es DaisyUI, remover el atributo
+        document.documentElement.removeAttribute('data-theme');
+      }
+    }
+  }, [template]);
+
   const themeConfig = templates[template];
 
   const contextValue = {

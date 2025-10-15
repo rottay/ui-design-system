@@ -10,6 +10,7 @@ import { AllComposites } from './pages/AllComposites';
 import { NewComposites } from './pages/NewComposites';
 import { EnhancedDataTableDemo } from './pages/EnhancedDataTableDemo';
 import { ToastDemo } from './pages/ToastDemo';
+import { DaisyUIDemo } from './pages/DaisyUIDemo';
 
 function App() {
   return (
@@ -31,6 +32,9 @@ function App() {
             <Route path="/composite/enhanced-data-table" element={<EnhancedDataTableDemo />} />
             <Route path="/composite/empty-state" element={<EmptyStateDemo />} />
             <Route path="/composite/toast" element={<ToastDemo />} />
+
+            {/* DaisyUI Components */}
+            <Route path="/daisyui" element={<DaisyUIDemo />} />
 
             {/* Rutas dinámicas por categoría */}
             <Route path="/:category/:component" element={<ComponentDemo />} />
