@@ -38,7 +38,7 @@ El proyecto es un **design system como librería NPM** que proporciona component
 11. ✅ **Página Demo DaisyUI:** Showcase completo de los 4 componentes
 
 #### **Sistema HeroUI** ⭐ **NUEVO** (Phase 7)
-12. ✅ **3 Componentes HeroUI:** Kbd, Chip, ScrollShadow
+12. ✅ **8 Componentes HeroUI:** Kbd, Chip, ScrollShadow, Drawer, Toast, Snippet, User, Autocomplete
 13. ✅ **Integración @heroui/react:** Componentes UX especializados
 
 #### **Infraestructura**
@@ -444,9 +444,9 @@ export type {
 ## 🦸 Sistema HeroUI - COMPONENTES UX ESPECIALIZADOS ⭐ **NUEVO**
 
 ### Concepto
-HeroUI (@heroui/react 2.8.5) proporciona componentes React especializados enfocados en **mejorar la experiencia de usuario** con interacciones avanzadas y efectos visuales. Los 3 componentes implementados son **custom implementations theme-aware** (no wrappers directos), completamente integrados con el sistema de temas de Ant Design.
+HeroUI (@heroui/react 2.8.5) proporciona componentes React especializados enfocados en **mejorar la experiencia de usuario** con interacciones avanzadas y efectos visuales. Los 8 componentes implementados son **custom implementations theme-aware** (no wrappers directos), completamente integrados con el sistema de temas de Ant Design.
 
-### ✅ 3 Componentes HeroUI Implementados
+### ✅ 8 Componentes HeroUI Implementados
 
 ---
 
@@ -1363,9 +1363,9 @@ npm run build --workspace=@es-rottay/designsystem-core
 | **Ant Design - Primitivos** | 63 | ✅ Completo |
 | **Ant Design - Composites** | 13 | ✅ Completo |
 | **DaisyUI - Componentes** ⭐ | 4 | ✅ Completo |
-| **HeroUI - Componentes** ⭐ | 3 | ✅ Completo |
+| **HeroUI - Componentes** ⭐ | 8 | ✅ Completo |
 | **Layout Patterns** | 11 | ✅ Completo |
-| **TOTAL COMPONENTES** | **94** | ✅ Completo |
+| **TOTAL COMPONENTES** | **99** | ✅ Completo |
 | **Temas Ant Design** | 8 | ✅ Completo |
 | **Temas DaisyUI** ⭐ | 30 | ✅ Completo |
 | **TOTAL TEMAS** | **38** | ✅ Completo |
@@ -1406,7 +1406,7 @@ npm run build --workspace=@es-rottay/designsystem-core
 *Estado: ✅ **Phase 7 EN PROGRESO** - DaisyUI + HeroUI Integrados*
 
 **📊 Estadísticas Finales:**
-- **Componentes totales:** 94 (63 Ant Design + 13 composites + 11 layout patterns + 4 DaisyUI + 3 HeroUI)
+- **Componentes totales:** 99 (63 Ant Design + 13 composites + 11 layout patterns + 4 DaisyUI + 8 HeroUI)
 - **Temas totales:** 38 (8 Ant Design + 30 DaisyUI)
 - **Build:** ~245KB ESM / ~163KB CJS
 - **Tests:** 154 total (132 passing - 85.7%)

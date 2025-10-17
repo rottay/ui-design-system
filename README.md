@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://reactjs.org/)
 
-A comprehensive **multi-theme design system** built on **Ant Design + DaisyUI + HeroUI** with **94 components**, **38 pre-built themes** (8 Ant Design + 30 DaisyUI), and a complete **design token system**. Perfect for building consistent, theme-aware React applications with multiple UI frameworks.
+A comprehensive **multi-theme design system** built on **Ant Design + DaisyUI + HeroUI** with **101 components**, **38 pre-built themes** (8 Ant Design + 30 DaisyUI), and a complete **design token system**. Perfect for building consistent, theme-aware React applications with multiple UI frameworks.
 
 ![Phase 7 In Progress](https://img.shields.io/badge/Phase%207-In%20Progress-blue.svg)
 ![Multi-UI System](https://img.shields.io/badge/Multi--UI-Ant%20Design%20%2B%20DaisyUI%20%2B%20HeroUI-purple.svg)
@@ -27,12 +27,12 @@ A comprehensive **multi-theme design system** built on **Ant Design + DaisyUI + 
 - **8 Ant Design Themes** - Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base
 - **30 DaisyUI Themes** - light, dark, cupcake, bumblebee, emerald, corporate, synthwave, retro, and 22 more!
 
-### 🧩 94 Total Components
+### 🧩 101 Total Components
 - 63 Ant Design primitives (Display, Feedback, Inputs, Layout, Navigation)
 - 13 Composite components (Dashboard, Auth, Tables, Forms, etc.)
 - 11 Layout patterns (HStack, Grid, Section, AspectRatio, etc.)
 - 4 DaisyUI components (Button, Card, Badge, Alert)
-- 3 HeroUI components (Kbd, Chip, ScrollShadow)
+- 10 HeroUI components (Kbd, Chip, ScrollShadow, Drawer, Toast, Snippet, User, Autocomplete)
 
 ### 🎨 Complete Design System
 - **Design Token System** - 6 categories: colors, spacing, typography, effects, layout, animation
@@ -582,13 +582,20 @@ Lightweight components built with Tailwind CSS classes:
 3. **DaisyBadge** - Badge with 9 variants, 4 sizes, outline style
 4. **DaisyAlert** - Alert with 4 variants, title, message, and action buttons
 
-### HeroUI Components (3) 🆕
+### HeroUI Components (10) 🆕
 
 Enhanced UX components from HeroUI, fully theme-aware:
 
 1. **Kbd** - Visual keyboard key display for shortcuts (e.g., `Ctrl + K`)
 2. **Chip** - Interactive tags with close buttons, avatars, and click actions
 3. **ScrollShadow** - Automatic shadows for scrollable content
+4. **Drawer** ⭐ - Slide-out panel from any side (top/bottom/left/right)
+5. **Toast** ⭐ - Notification toast system with queue and positioning
+6. **Snippet** ⭐ - Code snippet display with copy-to-clipboard
+7. **User** ⭐ - User profile display with avatar, name, and description
+8. **Autocomplete** ⭐ - Input with autocomplete suggestions
+
+⭐ = New in Phase 7
 
 ### Design Tokens
 
@@ -771,7 +778,7 @@ See [LICENSE](LICENSE) for more information.
 | Metric | Value |
 |--------|-------|
 | **UI Systems** | 3 (Ant Design + DaisyUI + HeroUI) |
-| **Total Components** | 94 (63 Ant + 13 composites + 11 patterns + 4 DaisyUI + 3 HeroUI) |
+| **Total Components** | 101 (63 Ant + 13 composites + 11 patterns + 4 DaisyUI + 10 HeroUI) |
 | **Ant Design Themes** | 8 (Spotify, Stripe, Airbnb, Slack, Notion, Linear, Vercel, Base) |
 | **DaisyUI Themes** | 30 (light, dark, cupcake, bumblebee, and 26 more) |
 | **Total Themes** | 38 |

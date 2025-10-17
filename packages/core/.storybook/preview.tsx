@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react-vite'
 import { ThemeProvider } from '../src/providers/ThemeProvider';
 import type { TemplateName } from '../src/themes/types';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const preview: Preview = {
   // Global types para el toolbar
@@ -151,18 +151,13 @@ const preview: Preview = {
   },
 
   decorators: [
-    (Story, context) => {
-      const theme = context.globals.theme as TemplateName || 'base';
-
-      // El key fuerza re-mount cuando cambia el tema
-      return (
-        <ThemeProvider key={theme} defaultTemplate={theme}>
-          <div style={{ padding: '20px' }}>
-            <Story />
-          </div>
-        </ThemeProvider>
-      );
-    },
+    (Story) => (
+      <ThemeProvider defaultTemplate="base">
+        <div style={{ padding: '20px' }}>
+          <Story />
+        </div>
+      </ThemeProvider>
+    ),
   ],
 };
 
