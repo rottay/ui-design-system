@@ -134,6 +134,11 @@ export type {
 export { Kbd } from './components/HeroUI/Kbd';
 export { Chip } from './components/HeroUI/Chip';
 export { ScrollShadow } from './components/HeroUI/ScrollShadow';
+export { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter } from './components/HeroUI/Drawer';
+export { ToastProvider as HeroUIToastProvider, useToast as useHeroUIToast } from './components/HeroUI/Toast';
+export { Snippet } from './components/HeroUI/Snippet';
+export { User } from './components/HeroUI/User';
+export { Autocomplete } from './components/HeroUI/Autocomplete';
 export type { KbdProps } from './components/HeroUI/Kbd';
 export type {
   ChipProps,
@@ -148,3 +153,28 @@ export type {
   ScrollShadowSize,
   ScrollShadowVisibility,
 } from './components/HeroUI/ScrollShadow';
+export type {
+  DrawerProps,
+  DrawerContentProps,
+  DrawerHeaderProps,
+  DrawerBodyProps,
+  DrawerFooterProps,
+  DrawerSize,
+  DrawerPlacement,
+  DrawerRadius,
+  DrawerBackdrop,
+} from './components/HeroUI/Drawer';
+export type {
+  ToastData as HeroUIToastData,
+  ToastOptions as HeroUIToastOptions,
+  ToastContextValue as HeroUIToastContextValue,
+  ToastProviderProps as HeroUIToastProviderProps,
+  ToastComponentProps as HeroUIToastComponentProps,
+  ToastVariant as HeroUIToastVariant,
+  ToastPosition as HeroUIToastPosition,
+  ToastDuration as HeroUIToastDuration,
+  ToastAction as HeroUIToastAction,
+} from './components/HeroUI/Toast';
+export type { SnippetProps, SnippetVariant, SnippetColor, SnippetSize } from './components/HeroUI/Snippet';
+export type { UserProps } from './components/HeroUI/User';
+export type { AutocompleteProps, AutocompleteOption } from './components/HeroUI/Autocomplete';
