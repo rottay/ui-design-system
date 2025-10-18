@@ -54,6 +54,13 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     return defaultTemplate;
   });
 
+  // Sincronizar con defaultTemplate cuando cambia desde afuera (ej: Storybook)
+  useEffect(() => {
+    if (defaultTemplate && defaultTemplate !== template) {
+      setTemplate(defaultTemplate);
+    }
+  }, [defaultTemplate]);
+
   // Guardar en localStorage cuando cambia el tema
   useEffect(() => {
     if (typeof window !== 'undefined') {
