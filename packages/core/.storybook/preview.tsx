@@ -8,11 +8,12 @@ const preview: Preview = {
   globalTypes: {
     theme: {
       name: 'Theme',
-      description: 'Template del design system',
+      description: 'Design system theme (affects ALL components)',
       defaultValue: 'base',
       toolbar: {
         icon: 'paintbrush',
         items: [
+          // Ant Design Themes (8)
           { value: 'base', title: 'Base', icon: 'circle' },
           { value: 'spotify', title: 'Spotify', icon: 'graphline' },
           { value: 'stripe', title: 'Stripe', icon: 'lightning' },
@@ -21,6 +22,36 @@ const preview: Preview = {
           { value: 'notion', title: 'Notion', icon: 'document' },
           { value: 'linear', title: 'Linear', icon: 'dashboard' },
           { value: 'vercel', title: 'Vercel', icon: 'contrast' },
+          // DaisyUI Themes (30)
+          { value: 'daisyui-light', title: 'DaisyUI: Light', icon: 'sun' },
+          { value: 'daisyui-dark', title: 'DaisyUI: Dark', icon: 'moon' },
+          { value: 'daisyui-cupcake', title: 'DaisyUI: Cupcake', icon: 'heart' },
+          { value: 'daisyui-bumblebee', title: 'DaisyUI: Bumblebee', icon: 'star' },
+          { value: 'daisyui-emerald', title: 'DaisyUI: Emerald', icon: 'circle' },
+          { value: 'daisyui-corporate', title: 'DaisyUI: Corporate', icon: 'bookmark' },
+          { value: 'daisyui-synthwave', title: 'DaisyUI: Synthwave', icon: 'lightning' },
+          { value: 'daisyui-retro', title: 'DaisyUI: Retro', icon: 'camera' },
+          { value: 'daisyui-cyberpunk', title: 'DaisyUI: Cyberpunk', icon: 'eye' },
+          { value: 'daisyui-valentine', title: 'DaisyUI: Valentine', icon: 'hearthollow' },
+          { value: 'daisyui-halloween', title: 'DaisyUI: Halloween', icon: 'beaker' },
+          { value: 'daisyui-garden', title: 'DaisyUI: Garden', icon: 'grow' },
+          { value: 'daisyui-forest', title: 'DaisyUI: Forest', icon: 'component' },
+          { value: 'daisyui-aqua', title: 'DaisyUI: Aqua', icon: 'drop' },
+          { value: 'daisyui-lofi', title: 'DaisyUI: Lofi', icon: 'calendar' },
+          { value: 'daisyui-pastel', title: 'DaisyUI: Pastel', icon: 'paintbrush' },
+          { value: 'daisyui-fantasy', title: 'DaisyUI: Fantasy', icon: 'starhollow' },
+          { value: 'daisyui-wireframe', title: 'DaisyUI: Wireframe', icon: 'outline' },
+          { value: 'daisyui-black', title: 'DaisyUI: Black', icon: 'circlehollow' },
+          { value: 'daisyui-luxury', title: 'DaisyUI: Luxury', icon: 'diamond' },
+          { value: 'daisyui-dracula', title: 'DaisyUI: Dracula', icon: 'bookmark' },
+          { value: 'daisyui-cmyk', title: 'DaisyUI: CMYK', icon: 'photo' },
+          { value: 'daisyui-autumn', title: 'DaisyUI: Autumn', icon: 'book' },
+          { value: 'daisyui-business', title: 'DaisyUI: Business', icon: 'graphbar' },
+          { value: 'daisyui-acid', title: 'DaisyUI: Acid', icon: 'lightning' },
+          { value: 'daisyui-lemonade', title: 'DaisyUI: Lemonade', icon: 'contrast' },
+          { value: 'daisyui-night', title: 'DaisyUI: Night', icon: 'moon' },
+          { value: 'daisyui-coffee', title: 'DaisyUI: Coffee', icon: 'contrast' },
+          { value: 'daisyui-winter', title: 'DaisyUI: Winter', icon: 'snowflake' },
         ],
         showName: true,
         dynamicTitle: true,
@@ -151,13 +182,24 @@ const preview: Preview = {
   },
 
   decorators: [
-    (Story) => (
-      <ThemeProvider defaultTemplate="base">
-        <div style={{ padding: '20px' }}>
-          <Story />
-        </div>
-      </ThemeProvider>
-    ),
+    (Story, context) => {
+      const selectedTheme = (context.globals.theme || 'base') as TemplateName;
+
+      // Extract DaisyUI theme name from template
+      // If theme is "daisyui-light", daisyTheme becomes "light"
+      // If theme is "spotify", daisyTheme becomes "light" (default)
+      const daisyTheme = selectedTheme.startsWith('daisyui-')
+        ? selectedTheme.replace('daisyui-', '')
+        : 'light';
+
+      return (
+        <ThemeProvider defaultTemplate={selectedTheme}>
+          <div data-theme={daisyTheme} style={{ padding: '20px' }}>
+            <Story />
+          </div>
+        </ThemeProvider>
+      );
+    },
   ],
 };
 
