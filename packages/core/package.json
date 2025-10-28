@@ -1,6 +1,6 @@
 {
   "name": "@es-rottay/designsystem-core",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "Multi-theme design system based on Ant Design with 87 components, 8 themes, and complete design tokens",
   "type": "module",
   "main": "./dist/index.cjs",
