@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import * as Components from '@es-rottay/designsystem-core';
 import { Space, Typography, Divider, Row, Col } from 'antd';
@@ -60,7 +60,7 @@ function renderComponentExamples(component: string) {
     Avatar, Badge, Tag, Calendar, Carousel, Collapse, Descriptions, Empty,
     Image, List, QRCode, Statistic, Table, Timeline, Tree, Typography,
     // Feedback
-    Alert, Progress, Result, Skeleton, Spin,
+    Alert, Progress, Result, Skeleton, Spin, Drawer, Modal, Notification, Message,
     // Layout
     Card, Container, Divider, Space, Flex, Layout, Splitter, Stack
   } = Components;
@@ -697,32 +697,16 @@ function renderComponentExamples(component: string) {
 
     // ===== FEEDBACK COMPONENTS =====
     case 'drawer':
-      return (
-        <ExampleSection title="Drawer">
-          <Alert message="El componente Drawer requiere interacción para mostrarse" type="info" />
-        </ExampleSection>
-      );
+      return <DrawerExample />;
 
     case 'message':
-      return (
-        <ExampleSection title="Message">
-          <Alert message="El componente Message se muestra mediante métodos imperativos" type="info" />
-        </ExampleSection>
-      );
+      return <MessageExample />;
 
     case 'modal':
-      return (
-        <ExampleSection title="Modal">
-          <Alert message="El componente Modal requiere interacción para mostrarse" type="info" />
-        </ExampleSection>
-      );
+      return <ModalExample />;
 
     case 'notification':
-      return (
-        <ExampleSection title="Notification">
-          <Alert message="El componente Notification se muestra mediante métodos imperativos" type="info" />
-        </ExampleSection>
-      );
+      return <NotificationExample />;
 
     case 'result':
       return (
@@ -1223,6 +1207,166 @@ function renderComponentExamples(component: string) {
         </ExampleSection>
       );
   }
+}
+
+// ===== Interactive Example Components =====
+
+function DrawerExample() {
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState<'top' | 'right' | 'bottom' | 'left'>('right');
+  const { Drawer, Button, Space, Radio } = Components;
+
+  return (
+    <>
+      <ExampleSection title="Drawer Interactivo">
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <div>
+            <Text style={{ marginRight: '8px' }}>Placement:</Text>
+            <Radio.Group value={placement} onChange={(e) => setPlacement(e.target.value)}>
+              <Radio value="top">Top</Radio>
+              <Radio value="right">Right</Radio>
+              <Radio value="bottom">Bottom</Radio>
+              <Radio value="left">Left</Radio>
+            </Radio.Group>
+          </div>
+          <Button type="primary" onClick={() => setOpen(true)}>
+            Open Drawer
+          </Button>
+        </Space>
+      </ExampleSection>
+
+      {Drawer && (
+        <Drawer
+          title="Basic Drawer"
+          placement={placement}
+          onClose={() => setOpen(false)}
+          open={open}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Drawer>
+      )}
+    </>
+  );
+}
+
+function ModalExample() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { Modal, Button, Space } = Components;
+
+  const showConfirm = () => {
+    Modal?.confirm({
+      title: 'Do you want to delete these items?',
+      content: 'This action cannot be undone',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
+  const showSuccess = () => {
+    Modal?.success({
+      content: 'Operation completed successfully!',
+    });
+  };
+
+  const showError = () => {
+    Modal?.error({
+      title: 'This is an error message',
+      content: 'Something went wrong',
+    });
+  };
+
+  return (
+    <>
+      <ExampleSection title="Modal Básico">
+        <Space wrap>
+          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+            Open Modal
+          </Button>
+          <Button onClick={showConfirm}>Confirm</Button>
+          <Button onClick={showSuccess}>Success</Button>
+          <Button onClick={showError}>Error</Button>
+        </Space>
+      </ExampleSection>
+
+      {Modal && (
+        <Modal
+          title="Basic Modal"
+          open={isModalOpen}
+          onOk={() => setIsModalOpen(false)}
+          onCancel={() => setIsModalOpen(false)}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
+      )}
+    </>
+  );
+}
+
+function MessageExample() {
+  const { message, Button, Space } = Components;
+
+  const showSuccess = () => {
+    message?.success('This is a success message');
+  };
+
+  const showError = () => {
+    message?.error('This is an error message');
+  };
+
+  const showWarning = () => {
+    message?.warning('This is a warning message');
+  };
+
+  const showInfo = () => {
+    message?.info('This is an info message');
+  };
+
+  const showLoading = () => {
+    message?.loading('Action in progress..', 2.5);
+  };
+
+  return (
+    <ExampleSection title="Message Tipos">
+      <Space wrap>
+        <Button onClick={showSuccess}>Success</Button>
+        <Button onClick={showError}>Error</Button>
+        <Button onClick={showWarning}>Warning</Button>
+        <Button onClick={showInfo}>Info</Button>
+        <Button onClick={showLoading}>Loading</Button>
+      </Space>
+    </ExampleSection>
+  );
+}
+
+function NotificationExample() {
+  const { notification, Button, Space } = Components;
+
+  const openNotification = (type: 'success' | 'info' | 'warning' | 'error') => {
+    notification?.[type]({
+      message: `${type.charAt(0).toUpperCase() + type.slice(1)} Notification`,
+      description: 'This is the content of the notification. This is the content of the notification.',
+      placement: 'topRight',
+    });
+  };
+
+  return (
+    <ExampleSection title="Notification Tipos">
+      <Space wrap>
+        <Button onClick={() => openNotification('success')}>Success</Button>
+        <Button onClick={() => openNotification('info')}>Info</Button>
+        <Button onClick={() => openNotification('warning')}>Warning</Button>
+        <Button onClick={() => openNotification('error')}>Error</Button>
+      </Space>
+    </ExampleSection>
+  );
 }
 
 // Componente helper para secciones de ejemplos
