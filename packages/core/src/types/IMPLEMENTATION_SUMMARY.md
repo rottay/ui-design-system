@@ -242,7 +242,7 @@ const MyComponent: React.FC<MyComponentProps> = ({
   className,
   style,
 }) => {
-  // Implementation with all composed functionality
+  // Implementation with all custom functionality
 };
 ```
 

@@ -2,9 +2,24 @@
  * Avatar - Apollo Engine (Pure HTML/CSS)
  */
 
-import React from 'react';
-import type { AvatarProps } from '../types';
-import { AVATAR_DEFAULTS, SIZE_MAP } from '../types';
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import type { AvatarProps } from '../../types';
+import { AVATAR_DEFAULTS, SIZE_MAP } from '../../types';
+
+/**
+ * Generates initials from name or alt text
+ */
+function getInitials(name?: string, alt?: string): string {
+  const text = name || alt || '';
+  const parts = text.trim().split(/\s+/);
+
+  if (parts.length === 0) return '';
+  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+
+  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+}
 
 export default function ApolloAvatar(props: AvatarProps): React.ReactElement {
   const {
@@ -12,34 +27,119 @@ export default function ApolloAvatar(props: AvatarProps): React.ReactElement {
     alt,
     size = AVATAR_DEFAULTS.size,
     shape = AVATAR_DEFAULTS.shape,
-    icon,
+    variant = AVATAR_DEFAULTS.variant,
+    name,
+    initials,
+    status,
     children,
     onClick,
+    onError,
+    onLoad,
+    backgroundColor,
+    textColor,
+    ring,
+    ringColor,
+    bordered,
     className,
     style,
   } = props;
 
-  const sizeValue = SIZE_MAP[size!];
-  
+  const [imageError, setImageError] = useState(false);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [src]);
+
+  const handleError = () => {
+    setImageError(true);
+    onError?.(new Error('Failed to load image'));
+  };
+
+  const handleLoad = () => {
+    onLoad?.();
+  };
+
+  const sizeValue = SIZE_MAP[size];
+  const displayInitials = initials || getInitials(name, alt);
+
+  // Variant color mapping
+  const variantColors = {
+    default: { bg: '#f0f0f0', color: '#333333' },
+    primary: { bg: '#e6f7ff', color: '#0066cc' },
+    secondary: { bg: '#f0f0ff', color: '#6b6bd4' },
+    success: { bg: '#f6ffed', color: '#22c55e' },
+    warning: { bg: '#fffbe6', color: '#f59e0b' },
+    error: { bg: '#fff1f0', color: '#ef4444' },
+    gradient: { bg: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: '#ffffff' },
+  };
+
+  const colors = variantColors[variant] || variantColors.default;
+
   const containerStyle: React.CSSProperties = {
+    position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: sizeValue,
     height: sizeValue,
-    borderRadius: shape === 'circle' ? '50%' : '8px',
+    borderRadius: shape === 'circle' ? '50%' : shape === 'square' ? '0' : '8px',
     overflow: 'hidden',
-    backgroundColor: 'var(--color-neutral-200, #e5e5e5)',
-    color: 'var(--color-neutral-600, #525252)',
+    background: backgroundColor || colors.bg,
+    color: textColor || colors.color,
     fontSize: sizeValue * 0.4,
     fontWeight: 500,
     cursor: onClick ? 'pointer' : undefined,
+    border: bordered ? '2px solid rgba(0,0,0,0.1)' : 'none',
+    outline: ring ? `2px solid ${ringColor || '#0066cc'}` : 'none',
+    outlineOffset: ring ? '2px' : '0',
+    transition: 'all 0.2s ease-in-out',
     ...style,
   };
 
+  const imageStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  };
+
+  const statusColors = {
+    online: '#52c41a',
+    offline: '#d9d9d9',
+    away: '#faad14',
+    busy: '#ff4d4f',
+  };
+
+  const statusStyle: React.CSSProperties = status ? {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: Math.max(sizeValue * 0.25, 8),
+    height: Math.max(sizeValue * 0.25, 8),
+    borderRadius: '50%',
+    backgroundColor: statusColors[status],
+    border: '2px solid white',
+    transform: 'translate(15%, 15%)',
+  } : {};
+
   return (
     <div className={className} style={containerStyle} onClick={onClick}>
-      {src ? <img src={src} alt={alt || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : (icon || children)}
+      {src && !imageError ? (
+        <img
+          src={src}
+          alt={alt || name || 'avatar'}
+          style={imageStyle}
+          onError={handleError}
+          onLoad={handleLoad}
+        />
+      ) : (
+        <span style={{ userSelect: 'none' }}>
+          {displayInitials || children}
+        </span>
+      )}
+
+      {status && <span style={statusStyle} />}
     </div>
   );
 }
+
+ApolloAvatar.displayName = 'ApolloAvatar';

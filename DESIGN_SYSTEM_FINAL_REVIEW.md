@@ -14,9 +14,29 @@
 |------|--------|-------------|------------------|
 | **Wave 0** | ✅ COMPLETO | CSS Tokens, Types, Icons, i18n | 2025-12-24 |
 | **Wave 1** | ✅ COMPLETO | Engine Override, Error Boundary, Hooks, ThemeProvider | 2025-12-25 |
-| **Wave 2** | ⏳ PENDIENTE | Avatar Template, Rename composed→custom, Responsive hooks | - |
+| **Wave 2** | ✅ COMPLETO | Avatar Template, Rename composed→custom, Responsive hooks | 2025-12-25 |
 | **Wave 3** | ⏳ PENDIENTE | All Primitives (using Avatar template) | - |
 | **Wave 4** | ⏳ PENDIENTE | Tests, Storybook, Performance, Barrel exports | - |
+
+### Wave 2 - Tareas Completadas:
+
+| Agente | Tarea | Estado | Archivos Clave |
+|--------|-------|--------|----------------|
+| I | Avatar Complete (Template) | ✅ | `primitives/display/Avatar/{base,engines,compound}/index.tsx` |
+| J | Rename composed → custom | ✅ | `components/custom/`, `stories/custom/` |
+| K | Responsive Hooks | ✅ | `system/hooks/responsive/{useMediaQuery,useBreakpoints,useResponsiveValue}/index.ts` |
+
+**Resumen Wave 2:**
+- ✅ Avatar completo como template (11 archivos, ~1000 líneas)
+- ✅ 3 engines implementados: Titan (Ant Design), Hermes (DaisyUI), Apollo (Headless)
+- ✅ Compound components: Avatar.Group, Avatar.Badge, Avatar.Fallback
+- ✅ Carpeta "composed" renombrada a "custom" con imports actualizados
+- ✅ useMediaQuery SSR-safe con soporte legacy browsers
+- ✅ useBreakpoints con 7 flags (isMobile, isTablet, isDesktop, etc.)
+- ✅ useResponsiveValue genérico para valores por breakpoint
+- ✅ Documentación completa (~33KB de docs para responsive hooks)
+
+---
 
 ### Wave 1 - Tareas Completadas:
 
