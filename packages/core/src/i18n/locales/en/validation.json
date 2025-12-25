@@ -1,0 +1,45 @@
+{
+  "required": "This field is required",
+  "email": "Must be a valid email",
+  "url": "Must be a valid URL",
+  "min_length": "Must be at least {min} characters",
+  "max_length": "Must be at most {max} characters",
+  "min_value": "Minimum value is {min}",
+  "max_value": "Maximum value is {max}",
+  "pattern": "Invalid format",
+  "number": "Must be a number",
+  "integer": "Must be an integer",
+  "positive": "Must be a positive number",
+  "negative": "Must be a negative number",
+  "date": "Must be a valid date",
+  "time": "Must be a valid time",
+  "datetime": "Must be a valid date and time",
+  "phone": "Must be a valid phone number",
+  "postal_code": "Must be a valid postal code",
+  "password": {
+    "min_length": "Password must be at least {min} characters",
+    "uppercase": "Must contain at least one uppercase letter",
+    "lowercase": "Must contain at least one lowercase letter",
+    "number": "Must contain at least one number",
+    "special": "Must contain at least one special character",
+    "match": "Passwords must match"
+  },
+  "file": {
+    "max_size": "File must not exceed {size}",
+    "min_size": "File must be at least {size}",
+    "type": "File type not allowed",
+    "required": "Must select a file"
+  },
+  "array": {
+    "min_items": "Must have at least {min} items",
+    "max_items": "Must have at most {max} items",
+    "unique": "Items must be unique"
+  },
+  "custom": {
+    "alphanumeric": "Only letters and numbers allowed",
+    "alpha": "Only letters allowed",
+    "numeric": "Only numbers allowed",
+    "no_spaces": "Spaces not allowed",
+    "no_special_chars": "Special characters not allowed"
+  }
+}

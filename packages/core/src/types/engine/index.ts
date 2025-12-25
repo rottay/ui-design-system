@@ -1,0 +1,105 @@
+import type { ComponentType } from 'react';
+
+/**
+ * Nombres de engines disponibles en el sistema Rottay.
+ * - titan: Ant Design (enterprise, feature-rich)
+ * - hermes: DaisyUI/Tailwind (lightweight, utility-first)
+ * - apollo: Vanilla HTML/CSS (minimal, accessible)
+ * - athena: Pluggable custom implementations
+ */
+export type EngineName = 'titan' | 'hermes' | 'apollo' | 'athena';
+
+/**
+ * Props que permiten seleccionar el engine de renderizado.
+ */
+export interface EngineAwareProps {
+  /**
+   * Engine de UI a usar para este componente.
+   * Si no se especifica, usa el engine del EngineProvider más cercano.
+   * @default 'titan'
+   */
+  engine?: EngineName;
+}
+
+/**
+ * Configuración de engine por componente.
+ */
+export interface EngineConfig<P = unknown> {
+  /** Nombre del engine */
+  name: EngineName;
+  /** Componente React para este engine */
+  component: ComponentType<P>;
+  /** Si está disponible (puede no estar instalada la dependencia) */
+  available: boolean;
+}
+
+/**
+ * Metadata de capacidades de un engine.
+ */
+export interface EngineCapabilities {
+  /** Si soporta temas */
+  theming: boolean;
+  /** Si soporta animaciones */
+  animations: boolean;
+  /** Si soporta accesibilidad avanzada */
+  accessibility: boolean;
+  /** Si tiene bundle size optimizado */
+  lightweight: boolean;
+  /** Lista de componentes soportados */
+  supportedComponents: string[];
+}
+
+/**
+ * Metadata de un engine.
+ */
+export interface EngineMetadata {
+  /** Nombre del engine */
+  name: EngineName;
+  /** Nombre completo/display */
+  displayName: string;
+  /** Descripción del engine */
+  description: string;
+  /** Versión del engine */
+  version: string;
+  /** Capacidades del engine */
+  capabilities: EngineCapabilities;
+}
+
+/**
+ * Contexto del EngineProvider.
+ */
+export interface EngineContextValue {
+  /** Engine activo actual */
+  engine: EngineName;
+  /** Función para cambiar el engine */
+  setEngine: (engine: EngineName) => void;
+  /** Metadata del engine activo */
+  metadata?: EngineMetadata;
+}
+
+/**
+ * Props del EngineProvider.
+ */
+export interface EngineProviderProps {
+  /** Engine por defecto */
+  defaultEngine?: EngineName;
+  /** Children */
+  children: React.ReactNode;
+  /** Si permitir cambio de engine en runtime */
+  allowEngineSwitch?: boolean;
+}
+
+/**
+ * Registro de engines disponibles.
+ */
+export type EngineRegistry = Record<EngineName, EngineMetadata>;
+
+/**
+ * Configuración de fallback cuando un engine no está disponible.
+ */
+export interface EngineFallbackConfig {
+  /** Engine a usar si el primario no está disponible */
+  fallbackEngine: EngineName;
+  /** Si mostrar warning en consola cuando ocurre fallback */
+  warnOnFallback?: boolean;
+}

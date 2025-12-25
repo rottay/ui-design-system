@@ -1,16 +1,29 @@
 {
   "name": "@es-rottay/designsystem-core",
-  "version": "0.2.0",
-  "description": "Multi-theme design system based on Ant Design with 87 components, 8 themes, and complete design tokens",
+  "version": "0.3.0",
+  "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./components/*": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js"
+    },
+    "./system/*": {
+      "types": "./dist/system/*.d.ts",
+      "import": "./dist/system/*.js"
+    },
+    "./config/*": {
+      "types": "./dist/config/*.d.ts",
+      "import": "./dist/config/*.js"
     }
   },
   "files": [

@@ -1,0 +1,134 @@
+/**
+ * Base Border Tokens - Rottay Design System
+ *
+ * Border widths, radii, and styles for consistent component boundaries.
+ */
+
+:root {
+  /* ========================================================================
+     BORDER WIDTHS
+     Standard border widths for component boundaries
+     ======================================================================== */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  --border-width-8: 8px;
+
+  /* Semantic aliases */
+  --border-width-none: var(--border-width-0);
+  --border-width-thin: var(--border-width-1);
+  --border-width-default: var(--border-width-1);
+  --border-width-medium: var(--border-width-2);
+  --border-width-thick: var(--border-width-4);
+
+  /* ========================================================================
+     BORDER RADIUS - Rounding Scale
+     Consistent corner rounding for components
+     ======================================================================== */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;    /* 2px */
+  --radius-sm: 0.25rem;     /* 4px */
+  --radius-md: 0.5rem;      /* 8px - Default */
+  --radius-lg: 0.75rem;     /* 12px */
+  --radius-xl: 1rem;        /* 16px */
+  --radius-2xl: 1.5rem;     /* 24px */
+  --radius-3xl: 2rem;       /* 32px */
+  --radius-full: 9999px;    /* Fully rounded (pills, circles) */
+
+  /* Component-specific radius */
+  --radius-button: var(--radius-md);
+  --radius-input: var(--radius-md);
+  --radius-card: var(--radius-lg);
+  --radius-modal: var(--radius-xl);
+  --radius-badge: var(--radius-full);
+  --radius-avatar: var(--radius-full);
+
+  /* ========================================================================
+     BORDER STYLES
+     Line styles for borders
+     ======================================================================== */
+  --border-style-none: none;
+  --border-style-solid: solid;
+  --border-style-dashed: dashed;
+  --border-style-dotted: dotted;
+  --border-style-double: double;
+
+  /* ========================================================================
+     BORDER COLORS
+     Contextual border colors based on the color palette
+     ======================================================================== */
+
+  /* Default borders */
+  --border-color-default: var(--color-neutral-200);
+  --border-color-muted: var(--color-neutral-100);
+  --border-color-strong: var(--color-neutral-300);
+
+  /* Interactive borders */
+  --border-color-hover: var(--color-neutral-300);
+  --border-color-focus: var(--color-primary-500);
+  --border-color-active: var(--color-primary-600);
+
+  /* Semantic borders */
+  --border-color-primary: var(--color-primary-500);
+  --border-color-secondary: var(--color-secondary-500);
+  --border-color-success: var(--color-success-500);
+  --border-color-warning: var(--color-warning-500);
+  --border-color-error: var(--color-error-500);
+  --border-color-info: var(--color-info-500);
+
+  /* Transparent borders for spacing */
+  --border-color-transparent: transparent;
+
+  /* ========================================================================
+     DIVIDER STYLES
+     Styles for visual separators
+     ======================================================================== */
+  --divider-width: var(--border-width-1);
+  --divider-color: var(--border-color-default);
+  --divider-style: var(--border-style-solid);
+
+  /* Divider with spacing */
+  --divider-spacing-sm: var(--spacing-2);   /* 8px */
+  --divider-spacing-md: var(--spacing-4);   /* 16px */
+  --divider-spacing-lg: var(--spacing-6);   /* 24px */
+
+  /* ========================================================================
+     OUTLINE STYLES
+     Styles for focus outlines and accessibility
+     ======================================================================== */
+  --outline-width: 2px;
+  --outline-offset: 2px;
+  --outline-style: solid;
+  --outline-color-default: var(--color-primary-500);
+  --outline-color-error: var(--color-error-500);
+
+  /* ========================================================================
+     COMPOSITE BORDERS
+     Pre-composed border combinations for common use cases
+     ======================================================================== */
+
+  /* Default component borders */
+  --border-default: var(--border-width-1) var(--border-style-solid) var(--border-color-default);
+  --border-muted: var(--border-width-1) var(--border-style-solid) var(--border-color-muted);
+  --border-strong: var(--border-width-1) var(--border-style-solid) var(--border-color-strong);
+
+  /* Interactive borders */
+  --border-hover: var(--border-width-1) var(--border-style-solid) var(--border-color-hover);
+  --border-focus: var(--border-width-2) var(--border-style-solid) var(--border-color-focus);
+
+  /* Semantic borders */
+  --border-primary: var(--border-width-1) var(--border-style-solid) var(--border-color-primary);
+  --border-secondary: var(--border-width-1) var(--border-style-solid) var(--border-color-secondary);
+  --border-success: var(--border-width-1) var(--border-style-solid) var(--border-color-success);
+  --border-warning: var(--border-width-1) var(--border-style-solid) var(--border-color-warning);
+  --border-error: var(--border-width-1) var(--border-style-solid) var(--border-color-error);
+  --border-info: var(--border-width-1) var(--border-style-solid) var(--border-color-info);
+
+  /* Dashed borders */
+  --border-dashed: var(--border-width-1) var(--border-style-dashed) var(--border-color-default);
+  --border-dashed-muted: var(--border-width-1) var(--border-style-dashed) var(--border-color-muted);
+
+  /* Transparent placeholder borders (for maintaining layout) */
+  --border-transparent: var(--border-width-1) var(--border-style-solid) transparent;
+}

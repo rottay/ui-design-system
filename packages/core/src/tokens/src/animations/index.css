@@ -1,0 +1,9 @@
+/**
+ * Animation Tokens Index - Rottay Design System
+ *
+ * Central import file for all animation-related tokens.
+ * Includes transitions and keyframe animations.
+ */
+
+@import './transitions.css';
+@import './keyframes.css';

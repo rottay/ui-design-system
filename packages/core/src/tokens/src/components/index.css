@@ -1,0 +1,12 @@
+/**
+ * Component Tokens Index - Rottay Design System
+ *
+ * Central import file for all component-specific design tokens.
+ * Import this file to get access to all component tokens.
+ */
+
+@import './avatar.css';
+@import './button.css';
+@import './input.css';
+@import './card.css';
+@import './modal.css';

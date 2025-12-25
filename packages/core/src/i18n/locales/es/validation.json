@@ -1,0 +1,45 @@
+{
+  "required": "Este campo es requerido",
+  "email": "Debe ser un email válido",
+  "url": "Debe ser una URL válida",
+  "min_length": "Debe tener al menos {min} caracteres",
+  "max_length": "Debe tener máximo {max} caracteres",
+  "min_value": "El valor mínimo es {min}",
+  "max_value": "El valor máximo es {max}",
+  "pattern": "Formato inválido",
+  "number": "Debe ser un número",
+  "integer": "Debe ser un número entero",
+  "positive": "Debe ser un número positivo",
+  "negative": "Debe ser un número negativo",
+  "date": "Debe ser una fecha válida",
+  "time": "Debe ser una hora válida",
+  "datetime": "Debe ser una fecha y hora válida",
+  "phone": "Debe ser un número de teléfono válido",
+  "postal_code": "Debe ser un código postal válido",
+  "password": {
+    "min_length": "La contraseña debe tener al menos {min} caracteres",
+    "uppercase": "Debe contener al menos una letra mayúscula",
+    "lowercase": "Debe contener al menos una letra minúscula",
+    "number": "Debe contener al menos un número",
+    "special": "Debe contener al menos un carácter especial",
+    "match": "Las contraseñas deben coincidir"
+  },
+  "file": {
+    "max_size": "El archivo no debe superar {size}",
+    "min_size": "El archivo debe ser al menos {size}",
+    "type": "Tipo de archivo no permitido",
+    "required": "Debe seleccionar un archivo"
+  },
+  "array": {
+    "min_items": "Debe tener al menos {min} elementos",
+    "max_items": "Debe tener máximo {max} elementos",
+    "unique": "Los elementos deben ser únicos"
+  },
+  "custom": {
+    "alphanumeric": "Solo se permiten letras y números",
+    "alpha": "Solo se permiten letras",
+    "numeric": "Solo se permiten números",
+    "no_spaces": "No se permiten espacios",
+    "no_special_chars": "No se permiten caracteres especiales"
+  }
+}

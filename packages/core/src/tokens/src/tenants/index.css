@@ -1,0 +1,15 @@
+/**
+ * Tenants Index - Rottay Design System
+ *
+ * Central import file for tenant-specific customizations.
+ * Add new tenant imports here as they are created.
+ *
+ * Current tenants:
+ * - rottay: Base/default tenant configuration
+ */
+
+@import './rottay/index.css';
+
+/* Future tenants can be imported here:
+ * @import './tenant-name/index.css';
+ */

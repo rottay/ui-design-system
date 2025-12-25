@@ -1,0 +1,266 @@
+/**
+ * Card Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Card component.
+ * Includes sizes, variants, states, and compositional properties.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Card Padding Variants
+     Three size variants for different card densities
+     ======================================================================== */
+  --card-sm-padding: 0.75rem;           /* 12px */
+  --card-md-padding: 1rem;              /* 16px - Default */
+  --card-lg-padding: 1.5rem;            /* 24px */
+  --card-xl-padding: 2rem;              /* 32px */
+
+  --card-default-padding: var(--card-md-padding);
+
+  /* ========================================================================
+     BACKGROUND & COLORS
+     Base appearance for cards
+     ======================================================================== */
+  --card-bg: var(--color-white);
+  --card-bg-hover: var(--color-neutral-50);
+  --card-bg-active: var(--color-neutral-100);
+  --card-bg-disabled: var(--color-neutral-50);
+
+  --card-color: var(--color-neutral-900);
+  --card-color-muted: var(--color-neutral-600);
+
+  /* ========================================================================
+     BORDERS
+     Border styling for cards
+     ======================================================================== */
+  --card-border-width: 1px;
+  --card-border-color: var(--color-neutral-200);
+  --card-border-color-hover: var(--color-neutral-300);
+  --card-border-style: solid;
+  --card-border-radius: var(--radius-lg);
+
+  /* Borderless variant */
+  --card-borderless-border-width: 0;
+
+  /* ========================================================================
+     SHADOWS
+     Elevation levels for cards
+     ======================================================================== */
+  --card-shadow-none: none;
+  --card-shadow-sm: var(--shadow-sm);
+  --card-shadow-md: var(--shadow-md);
+  --card-shadow-lg: var(--shadow-lg);
+  --card-shadow-xl: var(--shadow-xl);
+
+  /* Interactive shadows */
+  --card-shadow-hover: var(--shadow-card-hover);
+  --card-shadow-active: var(--shadow-card-active);
+
+  /* Default shadow */
+  --card-shadow-default: var(--card-shadow-sm);
+
+  /* ========================================================================
+     HEADER
+     Card header section styling
+     ======================================================================== */
+  --card-header-padding: var(--card-default-padding);
+  --card-header-padding-bottom: calc(var(--card-default-padding) * 0.75);
+  --card-header-border-width: 1px;
+  --card-header-border-color: var(--color-neutral-200);
+  --card-header-bg: transparent;
+
+  /* Header title */
+  --card-title-font-size: var(--font-size-lg);
+  --card-title-font-weight: var(--font-weight-semibold);
+  --card-title-line-height: var(--line-height-tight);
+  --card-title-color: var(--color-neutral-900);
+
+  /* Header subtitle */
+  --card-subtitle-font-size: var(--font-size-sm);
+  --card-subtitle-color: var(--color-neutral-600);
+  --card-subtitle-margin-top: 0.25rem;
+
+  /* Header actions */
+  --card-header-actions-gap: 0.5rem;
+
+  /* ========================================================================
+     BODY
+     Card content area styling
+     ======================================================================== */
+  --card-body-padding: var(--card-default-padding);
+  --card-body-color: var(--color-neutral-700);
+  --card-body-font-size: var(--font-size-base);
+  --card-body-line-height: var(--line-height-normal);
+
+  /* ========================================================================
+     FOOTER
+     Card footer section styling
+     ======================================================================== */
+  --card-footer-padding: var(--card-default-padding);
+  --card-footer-padding-top: calc(var(--card-default-padding) * 0.75);
+  --card-footer-border-width: 1px;
+  --card-footer-border-color: var(--color-neutral-200);
+  --card-footer-bg: transparent;
+  --card-footer-color: var(--color-neutral-600);
+
+  /* Footer actions */
+  --card-footer-actions-gap: 0.5rem;
+  --card-footer-actions-justify: flex-end;
+
+  /* ========================================================================
+     MEDIA/IMAGE
+     Card image and media styling
+     ======================================================================== */
+  --card-media-border-radius-top: var(--card-border-radius);
+  --card-media-border-radius-bottom: 0;
+  --card-media-aspect-ratio: 16 / 9;
+  --card-media-object-fit: cover;
+
+  /* Cover variant (full background image) */
+  --card-cover-min-height: 12rem;       /* 192px */
+  --card-cover-overlay-bg: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  --card-cover-content-color: var(--color-white);
+
+  /* ========================================================================
+     VARIANTS
+     Different card visual styles
+     ======================================================================== */
+
+  /* Default variant */
+  --card-default-bg: var(--card-bg);
+  --card-default-border-color: var(--card-border-color);
+  --card-default-shadow: var(--card-shadow-default);
+
+  /* Bordered variant (emphasized border, no shadow) */
+  --card-bordered-bg: var(--card-bg);
+  --card-bordered-border-width: 2px;
+  --card-bordered-border-color: var(--color-neutral-300);
+  --card-bordered-shadow: none;
+
+  /* Flat variant (no border, no shadow) */
+  --card-flat-bg: var(--card-bg);
+  --card-flat-border-width: 0;
+  --card-flat-shadow: none;
+
+  /* Elevated variant (strong shadow, no border) */
+  --card-elevated-bg: var(--card-bg);
+  --card-elevated-border-width: 0;
+  --card-elevated-shadow: var(--card-shadow-lg);
+  --card-elevated-shadow-hover: var(--card-shadow-xl);
+
+  /* Ghost variant (transparent background) */
+  --card-ghost-bg: transparent;
+  --card-ghost-border-color: var(--color-neutral-200);
+  --card-ghost-shadow: none;
+
+  /* ========================================================================
+     INTERACTIVE STATES
+     Clickable/hoverable cards
+     ======================================================================== */
+  --card-interactive-cursor: pointer;
+  --card-interactive-transform-hover: translateY(-2px);
+  --card-interactive-transition: all 0.3s ease;
+
+  /* ========================================================================
+     LOADING STATE
+     Skeleton/loading appearance
+     ======================================================================== */
+  --card-loading-bg: var(--color-neutral-100);
+  --card-loading-shimmer: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  --card-loading-animation: shimmer 2s infinite;
+
+  /* ========================================================================
+     DIVIDER
+     Internal card dividers
+     ======================================================================== */
+  --card-divider-width: 1px;
+  --card-divider-color: var(--color-neutral-200);
+  --card-divider-margin-y: 0.75rem;
+
+  /* ========================================================================
+     META/BADGE
+     Small metadata and badges
+     ======================================================================== */
+  --card-meta-font-size: var(--font-size-sm);
+  --card-meta-color: var(--color-neutral-500);
+  --card-meta-gap: 0.5rem;
+
+  --card-badge-margin-top: 0.5rem;
+
+  /* ========================================================================
+     GRID/LAYOUT
+     Settings for card grids
+     ======================================================================== */
+  --card-grid-gap: 1rem;                /* 16px */
+  --card-grid-gap-sm: 0.75rem;          /* 12px */
+  --card-grid-gap-lg: 1.5rem;           /* 24px */
+
+  /* Responsive columns */
+  --card-grid-columns-mobile: 1;
+  --card-grid-columns-tablet: 2;
+  --card-grid-columns-desktop: 3;
+  --card-grid-columns-wide: 4;
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+  --card-transition-duration: 0.3s;
+  --card-transition-timing: ease-in-out;
+  --card-transition: all var(--card-transition-duration) var(--card-transition-timing);
+
+  /* ========================================================================
+     SEMANTIC VARIANTS
+     Colored cards for different contexts
+     ======================================================================== */
+
+  /* Primary card */
+  --card-primary-bg: var(--color-primary-50);
+  --card-primary-border-color: var(--color-primary-200);
+  --card-primary-title-color: var(--color-primary-900);
+
+  /* Success card */
+  --card-success-bg: var(--color-success-50);
+  --card-success-border-color: var(--color-success-200);
+  --card-success-title-color: var(--color-success-900);
+
+  /* Warning card */
+  --card-warning-bg: var(--color-warning-50);
+  --card-warning-border-color: var(--color-warning-200);
+  --card-warning-title-color: var(--color-warning-900);
+
+  /* Error card */
+  --card-error-bg: var(--color-error-50);
+  --card-error-border-color: var(--color-error-200);
+  --card-error-title-color: var(--color-error-900);
+
+  /* Info card */
+  --card-info-bg: var(--color-info-50);
+  --card-info-border-color: var(--color-info-200);
+  --card-info-title-color: var(--color-info-900);
+
+  /* ========================================================================
+     ACCESSIBILITY
+     Focus states and keyboard navigation
+     ======================================================================== */
+  --card-focus-ring: var(--shadow-focus-ring);
+  --card-focus-ring-offset: 2px;
+  --card-focus-outline: none;
+
+  /* ========================================================================
+     DISABLED STATE
+     Appearance when disabled
+     ======================================================================== */
+  --card-disabled-opacity: 0.5;
+  --card-disabled-cursor: not-allowed;
+  --card-disabled-bg: var(--card-bg-disabled);
+}

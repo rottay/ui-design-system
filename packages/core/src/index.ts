@@ -1,150 +1,82 @@
-// Components
-export * from './components';
+/**
+ * Rottay Design System
+ * Multi-tenant, multi-engine UI component library
+ *
+ * @packageDocumentation
+ */
 
-// Providers
-export * from './providers';
-export { ThemeProvider, ThemeContext } from './providers/ThemeProvider';
+// ============================================
+// TYPES
+// ============================================
+export * from './types';
 
-// Hooks
-export * from './hooks';
-export { useTheme } from './hooks/useTheme';
+// ============================================
+// SYSTEM (Providers, Hooks, Engines)
+// ============================================
+export * from './system';
 
-// Themes
-export * from './themes';
-export { templates } from './themes';
-export type { TemplateName, TemplateConfig } from './themes/types';
+// ============================================
+// CONFIGURATION (Tenants, Themes, Tokens)
+// ============================================
+export * from './config';
 
-// Design Tokens
-export * from './tokens';
+// ============================================
+// COMPONENTS
+// ============================================
 
-// Icons (Icon component only, icons imported from /icons subpath)
-export { Icon } from './icons/Icon';
-export type { IconProps, IconSize } from './icons/Icon';
+// Primitives
+export * from './components/primitives';
 
-// Layout Patterns (export only the new components to avoid conflicts)
-export { HStack } from './layout-patterns/HStack';
-export { Center } from './layout-patterns/Center';
-export { Spacer } from './layout-patterns/Spacer';
-export { Wrap } from './layout-patterns/Wrap';
-export { Grid as LayoutGrid } from './layout-patterns/Grid';
-export { Section } from './layout-patterns/Section';
-export { AspectRatio } from './layout-patterns/AspectRatio';
-export type { HStackProps, HStackGap } from './layout-patterns/HStack';
-export type { CenterProps } from './layout-patterns/Center';
-export type { SpacerProps } from './layout-patterns/Spacer';
-export type { WrapProps, WrapGap } from './layout-patterns/Wrap';
-export type { GridProps, GridGap, ResponsiveColumns } from './layout-patterns/Grid';
-export type { SectionProps, SectionSize } from './layout-patterns/Section';
-export type { AspectRatioProps, AspectRatioPreset } from './layout-patterns/AspectRatio';
+// Custom Components
+export * from './components/custom';
 
-// Composite Components (Level 2 - Compositions of primitives)
-export { EmptyState } from './composite/EmptyState';
-export { PageHeader } from './composite/PageHeader';
-export { DashboardCard } from './composite/DashboardCard';
-export { AuthLayout } from './composite/AuthLayout';
-export { SearchableSelect } from './composite/SearchableSelect';
-export { DashboardLayout } from './composite/DashboardLayout';
-export { DataTable } from './composite/DataTable';
-export { FormBuilder } from './composite/FormBuilder';
-export { UserMenu } from './composite/UserMenu';
-export { SearchBar } from './composite/SearchBar';
-export { NotificationCenter } from './composite/NotificationCenter';
-export { Sidebar } from './composite/Sidebar';
-export { FileUploader } from './composite/FileUploader';
-export { Toast, ToastProvider, useToast } from './composite/Toast';
-export { ErrorBoundary, DefaultErrorFallback } from './composite/ErrorBoundary';
-export { SkeletonLoader } from './composite/SkeletonLoader';
-export { BottomSheet } from './composite/BottomSheet';
-export type {
-  EmptyStateProps,
-  EmptyStateVariant,
-  EmptyStateSize,
-  EmptyStateAction,
-} from './composite/EmptyState';
-export type { PageHeaderProps } from './composite/PageHeader';
-export type {
-  DashboardCardProps,
-  DashboardCardColor,
-  DashboardCardTrend,
-} from './composite/DashboardCard';
-export type {
-  AuthLayoutProps,
-  AuthBackgroundVariant,
-  AuthLayoutPosition,
-} from './composite/AuthLayout';
-export type {
-  SearchableSelectProps,
-  SearchableSelectOption,
-} from './composite/SearchableSelect';
-export type { DashboardLayoutProps, MenuItem } from './composite/DashboardLayout';
-export type { DataTableProps, DataTableColumn } from './composite/DataTable';
-export type {
-  FormBuilderProps,
-  FormField,
-  FieldType,
-  SelectOption,
-  FieldDependency,
-  CustomValidator,
-} from './composite/FormBuilder';
-export type { UserMenuProps, UserInfo, UserMenuItem } from './composite/UserMenu';
-export type { SearchBarProps, SearchResult } from './composite/SearchBar';
-export type { NotificationCenterProps, Notification } from './composite/NotificationCenter';
-export type { SidebarProps, SidebarItem, SidebarGroup } from './composite/Sidebar';
-export type { FileUploaderProps, UploadedFile } from './composite/FileUploader';
-export type {
-  ToastType,
-  ToastPosition,
-  ToastAction,
-  ToastOptions,
-  ToastData,
-  ToastContextValue,
-  ToastProviderProps,
-  ToastComponentProps,
-} from './composite/Toast';
-export type {
-  ErrorBoundaryProps,
-  ErrorBoundaryState,
-  DefaultErrorFallbackProps,
-} from './composite/ErrorBoundary';
-export type {
-  SkeletonLoaderProps,
-  SkeletonVariant,
-  SkeletonSize,
-} from './composite/SkeletonLoader';
-export type { BottomSheetProps } from './composite/BottomSheet';
+// ============================================
+// CONVENIENCE RE-EXPORTS
+// ============================================
 
-// DaisyUI Components
-export { DaisyButton, DaisyCard, DaisyBadge, DaisyAlert } from './daisyui';
-export type {
-  DaisyButtonProps,
-  DaisyButtonVariant,
-  DaisyButtonSize,
-  DaisyButtonShape,
-  DaisyCardProps,
-  DaisyCardVariant,
-  DaisyCardImagePosition,
-  DaisyBadgeProps,
-  DaisyBadgeVariant,
-  DaisyBadgeSize,
-  DaisyAlertProps,
-  DaisyAlertVariant,
-} from './daisyui';
+// Main Provider (most commonly used)
+export { DesignSystemProvider } from './system/providers/root';
+export type { DesignSystemProviderProps } from './system/providers/root';
 
-// HeroUI Components - UX-enhanced components from HeroUI
-export { Kbd } from './components/HeroUI/Kbd';
-export { Chip } from './components/HeroUI/Chip';
-export { ScrollShadow } from './components/HeroUI/ScrollShadow';
-export type { KbdProps } from './components/HeroUI/Kbd';
-export type {
-  ChipProps,
-  ChipVariant,
-  ChipColor,
-  ChipSize,
-  ChipRadius,
-} from './components/HeroUI/Chip';
-export type {
-  ScrollShadowProps,
-  ScrollShadowOrientation,
-  ScrollShadowSize,
-  ScrollShadowVisibility,
-} from './components/HeroUI/ScrollShadow';
+// Individual Providers (for standalone use)
+export { ThemeProvider } from './system/providers/theme';
+export type { ThemeProviderProps } from './system/providers/theme';
+
+// Common Hooks - Provider Contexts
+export { useEngineContext } from './system/providers/engine';
+export { useThemeContext } from './system/providers/theme';
+export { useTenantContext } from './system/providers/tenant';
+export { useFeatureContext } from './system/providers/features';
+
+// Common Hooks - Utilities
+export { useTenant } from './system/hooks/tenant';
+export { useTokens } from './system/hooks/tokens';
+export { useTheme } from './system/hooks/theme';
+
+// Engine utilities
+export {
+  getEngine,
+  getAvailableEngines,
+  getStableEngines,
+  isValidEngine,
+  getDefaultEngine,
+  ENGINE_REGISTRY
+} from './system/engines/registry';
+
+// Tenant utilities
+export {
+  resolveTenant,
+  getTenantConfig,
+  configureTenantApi,
+  configureDomainLookup,
+  DEFAULT_TENANT_CONFIG,
+  getDefaultTenantConfig,
+} from './config/tenants';
+
+// Theme utilities
+export {
+  getThemePreset,
+  getAvailableThemes,
+  extendTheme,
+  foundationTheme,
+} from './config/themes';

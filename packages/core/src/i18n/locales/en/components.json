@@ -1,0 +1,113 @@
+{
+  "avatar": {
+    "loading": "Loading avatar...",
+    "error": "Error loading image",
+    "fallback": "No image",
+    "group": {
+      "surplus": "+{count} more",
+      "empty": "No users"
+    },
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "away": "Away",
+      "busy": "Busy"
+    }
+  },
+  "button": {
+    "loading": "Loading...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save"
+  },
+  "input": {
+    "placeholder": "Type here...",
+    "required": "This field is required",
+    "optional": "(optional)",
+    "clear": "Clear",
+    "show_password": "Show password",
+    "hide_password": "Hide password"
+  },
+  "select": {
+    "placeholder": "Select an option",
+    "no_options": "No options available",
+    "loading": "Loading options...",
+    "search": "Search...",
+    "clear": "Clear selection"
+  },
+  "modal": {
+    "close": "Close",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {current} of {total}",
+    "go_to": "Go to page",
+    "items_per_page": "{count} per page"
+  },
+  "table": {
+    "empty": "No data",
+    "loading": "Loading data...",
+    "sort_asc": "Sort ascending",
+    "sort_desc": "Sort descending",
+    "filter": "Filter",
+    "clear_filters": "Clear filters",
+    "rows_selected": "{count} rows selected"
+  },
+  "upload": {
+    "drag_drop": "Drag files here or click to select",
+    "uploading": "Uploading...",
+    "success": "File uploaded successfully",
+    "error": "Error uploading file",
+    "remove": "Remove file",
+    "max_size": "Max size: {size}",
+    "accepted_formats": "Accepted formats: {formats}"
+  },
+  "datepicker": {
+    "placeholder": "Select a date",
+    "today": "Today",
+    "clear": "Clear",
+    "ok": "OK",
+    "month": "Month",
+    "year": "Year"
+  },
+  "timepicker": {
+    "placeholder": "Select a time",
+    "now": "Now",
+    "clear": "Clear",
+    "ok": "OK"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "no_results": "No results",
+    "searching": "Searching..."
+  },
+  "form": {
+    "required_field": "This field is required",
+    "invalid_field": "Invalid field",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "drawer": {
+    "close": "Close"
+  },
+  "dropdown": {
+    "no_options": "No options"
+  },
+  "tooltip": {
+    "close": "Close"
+  },
+  "notification": {
+    "close": "Close",
+    "mark_as_read": "Mark as read",
+    "clear_all": "Clear all"
+  },
+  "alert": {
+    "close": "Close"
+  }
+}

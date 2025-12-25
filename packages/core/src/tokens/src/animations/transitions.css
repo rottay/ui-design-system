@@ -1,0 +1,256 @@
+/**
+ * Transition Tokens - Rottay Design System
+ *
+ * Transition timing and easing functions for smooth animations.
+ * Provides consistent motion across the design system.
+ */
+
+:root {
+  /* ========================================================================
+     DURATION - Transition Speeds
+     Standard durations for different types of animations
+     ======================================================================== */
+  --duration-instant: 0s;
+  --duration-fastest: 0.1s;      /* 100ms - Micro-interactions */
+  --duration-faster: 0.15s;      /* 150ms - Quick feedback */
+  --duration-fast: 0.2s;         /* 200ms - Standard transitions */
+  --duration-normal: 0.3s;       /* 300ms - Default duration */
+  --duration-slow: 0.4s;         /* 400ms - Deliberate transitions */
+  --duration-slower: 0.5s;       /* 500ms - Emphasized animations */
+  --duration-slowest: 0.6s;      /* 600ms - Complex animations */
+  --duration-glacial: 1s;        /* 1000ms - Very slow, special cases */
+
+  /* Semantic durations */
+  --duration-default: var(--duration-normal);
+  --duration-quick: var(--duration-fast);
+  --duration-emphasized: var(--duration-slow);
+
+  /* ========================================================================
+     EASING - Timing Functions
+     Cubic bezier curves for natural motion
+     ======================================================================== */
+
+  /* Linear - No acceleration */
+  --easing-linear: linear;
+
+  /* Standard CSS easings */
+  --easing-ease: ease;
+  --easing-ease-in: ease-in;
+  --easing-ease-out: ease-out;
+  --easing-ease-in-out: ease-in-out;
+
+  /* Custom ease-out (most common) */
+  --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-emphasized: cubic-bezier(0.0, 0, 0.2, 1);
+  --easing-decelerated: cubic-bezier(0.0, 0, 0.2, 1);
+
+  /* Custom ease-in */
+  --easing-accelerated: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Custom ease-in-out */
+  --easing-standard-productive: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --easing-standard-expressive: cubic-bezier(0.4, 0.14, 0.3, 1);
+
+  /* Sharp - Quick entrance/exit */
+  --easing-sharp: cubic-bezier(0.4, 0, 0.6, 1);
+
+  /* Bounce - Playful effect */
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --easing-bounce-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  --easing-bounce-out: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* Overshoot - Slight overshoot for emphasis */
+  --easing-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Anticipate - Anticipation before action */
+  --easing-anticipate: cubic-bezier(0.36, 0, 0.66, -0.56);
+
+  /* Material Design easings */
+  --easing-material-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --easing-material-decelerate: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --easing-material-accelerate: cubic-bezier(0.4, 0.0, 1, 1);
+
+  /* ========================================================================
+     PROPERTY-SPECIFIC TRANSITIONS
+     Pre-composed transitions for common properties
+     ======================================================================== */
+
+  /* All properties */
+  --transition-all: all var(--duration-normal) var(--easing-standard);
+  --transition-all-fast: all var(--duration-fast) var(--easing-standard);
+  --transition-all-slow: all var(--duration-slow) var(--easing-standard);
+
+  /* Opacity */
+  --transition-opacity: opacity var(--duration-fast) var(--easing-standard);
+  --transition-opacity-slow: opacity var(--duration-normal) var(--easing-standard);
+
+  /* Transform */
+  --transition-transform: transform var(--duration-normal) var(--easing-standard);
+  --transition-transform-fast: transform var(--duration-fast) var(--easing-standard);
+  --transition-transform-bounce: transform var(--duration-normal) var(--easing-bounce-out);
+
+  /* Colors */
+  --transition-color: color var(--duration-fast) var(--easing-standard);
+  --transition-background: background-color var(--duration-fast) var(--easing-standard);
+  --transition-border: border-color var(--duration-fast) var(--easing-standard);
+
+  /* Box shadow */
+  --transition-shadow: box-shadow var(--duration-normal) var(--easing-standard);
+  --transition-shadow-fast: box-shadow var(--duration-fast) var(--easing-standard);
+
+  /* Width/Height */
+  --transition-width: width var(--duration-normal) var(--easing-standard);
+  --transition-height: height var(--duration-normal) var(--easing-standard);
+  --transition-size: width var(--duration-normal) var(--easing-standard),
+                     height var(--duration-normal) var(--easing-standard);
+
+  /* Margin/Padding */
+  --transition-spacing: margin var(--duration-normal) var(--easing-standard),
+                        padding var(--duration-normal) var(--easing-standard);
+
+  /* Border radius */
+  --transition-radius: border-radius var(--duration-normal) var(--easing-standard);
+
+  /* ========================================================================
+     COMPOSITE TRANSITIONS
+     Combinations for common animation patterns
+     ======================================================================== */
+
+  /* Fade */
+  --transition-fade: opacity var(--duration-normal) var(--easing-standard);
+  --transition-fade-in: opacity var(--duration-normal) var(--easing-decelerated);
+  --transition-fade-out: opacity var(--duration-fast) var(--easing-accelerated);
+
+  /* Scale */
+  --transition-scale: transform var(--duration-normal) var(--easing-standard);
+  --transition-scale-up: transform var(--duration-normal) var(--easing-decelerated);
+  --transition-scale-down: transform var(--duration-fast) var(--easing-accelerated);
+
+  /* Slide */
+  --transition-slide: transform var(--duration-normal) var(--easing-emphasized);
+
+  /* Expand/Collapse */
+  --transition-expand: height var(--duration-normal) var(--easing-emphasized),
+                       opacity var(--duration-normal) var(--easing-standard);
+
+  /* Fade + Scale (common for modals, popovers) */
+  --transition-fade-scale: opacity var(--duration-normal) var(--easing-standard),
+                           transform var(--duration-normal) var(--easing-standard);
+
+  /* Fade + Slide */
+  --transition-fade-slide: opacity var(--duration-normal) var(--easing-standard),
+                           transform var(--duration-normal) var(--easing-emphasized);
+
+  /* Color change */
+  --transition-color-change: color var(--duration-fast) var(--easing-standard),
+                             background-color var(--duration-fast) var(--easing-standard),
+                             border-color var(--duration-fast) var(--easing-standard);
+
+  /* ========================================================================
+     COMPONENT-SPECIFIC TRANSITIONS
+     Transitions optimized for specific components
+     ======================================================================== */
+
+  /* Button */
+  --transition-button: background-color var(--duration-fast) var(--easing-standard),
+                       color var(--duration-fast) var(--easing-standard),
+                       border-color var(--duration-fast) var(--easing-standard),
+                       box-shadow var(--duration-fast) var(--easing-standard),
+                       transform var(--duration-fastest) var(--easing-standard);
+
+  /* Input */
+  --transition-input: border-color var(--duration-fast) var(--easing-standard),
+                      box-shadow var(--duration-fast) var(--easing-standard);
+
+  /* Card */
+  --transition-card: transform var(--duration-normal) var(--easing-standard),
+                     box-shadow var(--duration-normal) var(--easing-standard);
+
+  /* Modal overlay */
+  --transition-modal-overlay: opacity var(--duration-normal) var(--easing-standard);
+
+  /* Modal content */
+  --transition-modal-content: opacity var(--duration-normal) var(--easing-standard),
+                              transform var(--duration-normal) var(--easing-emphasized);
+
+  /* Dropdown */
+  --transition-dropdown: opacity var(--duration-fast) var(--easing-decelerated),
+                         transform var(--duration-fast) var(--easing-decelerated);
+
+  /* Tooltip */
+  --transition-tooltip: opacity var(--duration-faster) var(--easing-standard);
+
+  /* Drawer */
+  --transition-drawer: transform var(--duration-normal) var(--easing-emphasized);
+
+  /* Toast/Notification */
+  --transition-toast: opacity var(--duration-normal) var(--easing-standard),
+                      transform var(--duration-normal) var(--easing-emphasized);
+
+  /* Accordion */
+  --transition-accordion: height var(--duration-normal) var(--easing-emphasized),
+                          opacity var(--duration-fast) var(--easing-standard);
+
+  /* Tab */
+  --transition-tab: color var(--duration-fast) var(--easing-standard),
+                    border-color var(--duration-fast) var(--easing-standard);
+
+  /* Avatar */
+  --transition-avatar: transform var(--duration-fast) var(--easing-standard),
+                       box-shadow var(--duration-fast) var(--easing-standard);
+
+  /* Switch/Toggle */
+  --transition-switch: transform var(--duration-fast) var(--easing-standard),
+                       background-color var(--duration-fast) var(--easing-standard);
+
+  /* Progress bar */
+  --transition-progress: width var(--duration-slower) var(--easing-standard);
+
+  /* Skeleton loader */
+  --transition-skeleton: opacity var(--duration-slow) var(--easing-standard);
+
+  /* ========================================================================
+     DELAY VALUES
+     Stagger delays for sequential animations
+     ======================================================================== */
+  --delay-none: 0s;
+  --delay-xs: 0.05s;       /* 50ms */
+  --delay-sm: 0.1s;        /* 100ms */
+  --delay-md: 0.15s;       /* 150ms */
+  --delay-lg: 0.2s;        /* 200ms */
+  --delay-xl: 0.3s;        /* 300ms */
+
+  /* Stagger increments for lists */
+  --delay-stagger-increment: 0.05s; /* 50ms between items */
+}
+
+/* ========================================================================
+   REDUCED MOTION
+   Respect user's motion preferences
+   ======================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Minimal durations */
+    --duration-instant: 0s;
+    --duration-fastest: 0.01s;
+    --duration-faster: 0.01s;
+    --duration-fast: 0.01s;
+    --duration-normal: 0.01s;
+    --duration-slow: 0.01s;
+    --duration-slower: 0.01s;
+    --duration-slowest: 0.01s;
+
+    /* Linear easing only */
+    --easing-standard: linear;
+    --easing-emphasized: linear;
+    --easing-bounce: linear;
+
+    /* Disable delays */
+    --delay-xs: 0s;
+    --delay-sm: 0s;
+    --delay-md: 0s;
+    --delay-lg: 0s;
+    --delay-xl: 0s;
+    --delay-stagger-increment: 0s;
+  }
+}

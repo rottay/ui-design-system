@@ -1,0 +1,93 @@
+/**
+ * Base Spacing Tokens - Rottay Design System
+ *
+ * Spacing scale based on 4px grid for consistency.
+ * All spacing values are multiples of 4px.
+ */
+
+:root {
+  /* ========================================================================
+     SPACING SCALE - 4px Grid System
+     Used for margins, paddings, gaps, and any dimensional spacing
+     ======================================================================== */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.25rem;   /* 20px */
+  --spacing-6: 1.5rem;    /* 24px */
+  --spacing-7: 1.75rem;   /* 28px */
+  --spacing-8: 2rem;      /* 32px */
+  --spacing-9: 2.25rem;   /* 36px */
+  --spacing-10: 2.5rem;   /* 40px */
+  --spacing-11: 2.75rem;  /* 44px */
+  --spacing-12: 3rem;     /* 48px */
+  --spacing-14: 3.5rem;   /* 56px */
+  --spacing-16: 4rem;     /* 64px */
+  --spacing-20: 5rem;     /* 80px */
+  --spacing-24: 6rem;     /* 96px */
+  --spacing-28: 7rem;     /* 112px */
+  --spacing-32: 8rem;     /* 128px */
+  --spacing-36: 9rem;     /* 144px */
+  --spacing-40: 10rem;    /* 160px */
+  --spacing-44: 11rem;    /* 176px */
+  --spacing-48: 12rem;    /* 192px */
+  --spacing-52: 13rem;    /* 208px */
+  --spacing-56: 14rem;    /* 224px */
+  --spacing-60: 15rem;    /* 240px */
+  --spacing-64: 16rem;    /* 256px */
+  --spacing-72: 18rem;    /* 288px */
+  --spacing-80: 20rem;    /* 320px */
+  --spacing-96: 24rem;    /* 384px */
+
+  /* ========================================================================
+     NAMED SPACING - Semantic Aliases
+     Commonly used spacing values with semantic names
+     ======================================================================== */
+  --spacing-xxxs: var(--spacing-1);   /* 4px */
+  --spacing-xxs: var(--spacing-2);    /* 8px */
+  --spacing-xs: var(--spacing-3);     /* 12px */
+  --spacing-sm: var(--spacing-4);     /* 16px */
+  --spacing-md: var(--spacing-6);     /* 24px */
+  --spacing-lg: var(--spacing-8);     /* 32px */
+  --spacing-xl: var(--spacing-10);    /* 40px */
+  --spacing-2xl: var(--spacing-12);   /* 48px */
+  --spacing-3xl: var(--spacing-16);   /* 64px */
+  --spacing-4xl: var(--spacing-20);   /* 80px */
+  --spacing-5xl: var(--spacing-24);   /* 96px */
+
+  /* ========================================================================
+     LAYOUT SPACING - Page/Section Level
+     Used for larger layout spacing needs
+     ======================================================================== */
+  --spacing-gutter: var(--spacing-4);        /* 16px - Base gutter */
+  --spacing-gutter-sm: var(--spacing-2);     /* 8px - Small screens */
+  --spacing-gutter-md: var(--spacing-6);     /* 24px - Medium screens */
+  --spacing-gutter-lg: var(--spacing-8);     /* 32px - Large screens */
+  --spacing-gutter-xl: var(--spacing-12);    /* 48px - Extra large screens */
+
+  --spacing-section: var(--spacing-16);      /* 64px - Section spacing */
+  --spacing-section-sm: var(--spacing-8);    /* 32px - Small sections */
+  --spacing-section-lg: var(--spacing-24);   /* 96px - Large sections */
+
+  --spacing-container: var(--spacing-6);     /* 24px - Container padding */
+  --spacing-container-sm: var(--spacing-4);  /* 16px - Small containers */
+  --spacing-container-lg: var(--spacing-12); /* 48px - Large containers */
+
+  /* ========================================================================
+     COMPONENT SPACING - Component-Specific
+     Default spacing for common component patterns
+     ======================================================================== */
+  --spacing-component-gap: var(--spacing-4);          /* 16px - Gap between items */
+  --spacing-component-gap-sm: var(--spacing-2);       /* 8px - Small gap */
+  --spacing-component-gap-lg: var(--spacing-6);       /* 24px - Large gap */
+
+  --spacing-component-padding: var(--spacing-4);      /* 16px - Internal padding */
+  --spacing-component-padding-sm: var(--spacing-2);   /* 8px - Small padding */
+  --spacing-component-padding-lg: var(--spacing-6);   /* 24px - Large padding */
+
+  --spacing-component-margin: var(--spacing-4);       /* 16px - External margin */
+  --spacing-component-margin-sm: var(--spacing-2);    /* 8px - Small margin */
+  --spacing-component-margin-lg: var(--spacing-8);    /* 32px - Large margin */
+}

@@ -19,6 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
 
     /* Library */
     "declaration": true,
@@ -27,5 +28,5 @@
     "rootDir": "./src"
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/*.md"]
+  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/*.md", "**/__test_imports.ts"]
 }

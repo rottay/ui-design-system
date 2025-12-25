@@ -1,0 +1,9 @@
+/**
+ * Responsive Tokens Index - Rottay Design System
+ *
+ * Central import file for all responsive token overrides.
+ * These tokens adjust component behavior across different screen sizes.
+ */
+
+@import './avatar.css';
+@import './button.css';
