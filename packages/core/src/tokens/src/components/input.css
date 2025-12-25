@@ -1,0 +1,261 @@
+/**
+ * Input Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to Input components (text inputs, textareas, etc).
+ * Includes sizes, variants, states, and interactive properties.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Input Dimensions
+     Four size variants from sm to lg with corresponding properties
+     ======================================================================== */
+
+  /* SM - Small */
+  --input-sm-height: 2rem;              /* 32px */
+  --input-sm-padding-x: 0.75rem;        /* 12px */
+  --input-sm-padding-y: 0.25rem;        /* 4px */
+  --input-sm-font-size: 0.875rem;       /* 14px */
+  --input-sm-line-height: 1.5rem;       /* 24px */
+  --input-sm-icon-size: 1rem;           /* 16px */
+  --input-sm-border-radius: var(--radius-md);
+
+  /* MD - Medium (Default) */
+  --input-md-height: 2.5rem;            /* 40px */
+  --input-md-padding-x: 1rem;           /* 16px */
+  --input-md-padding-y: 0.5rem;         /* 8px */
+  --input-md-font-size: 1rem;           /* 16px */
+  --input-md-line-height: 1.5rem;       /* 24px */
+  --input-md-icon-size: 1.25rem;        /* 20px */
+  --input-md-border-radius: var(--radius-md);
+
+  /* LG - Large */
+  --input-lg-height: 3rem;              /* 48px */
+  --input-lg-padding-x: 1.25rem;        /* 20px */
+  --input-lg-padding-y: 0.75rem;        /* 12px */
+  --input-lg-font-size: 1.125rem;       /* 18px */
+  --input-lg-line-height: 1.75rem;      /* 28px */
+  --input-lg-icon-size: 1.5rem;         /* 24px */
+  --input-lg-border-radius: var(--radius-lg);
+
+  /* Default size */
+  --input-default-height: var(--input-md-height);
+  --input-default-padding-x: var(--input-md-padding-x);
+  --input-default-padding-y: var(--input-md-padding-y);
+  --input-default-font-size: var(--input-md-font-size);
+
+  /* Textarea specific */
+  --textarea-min-height: 6rem;          /* 96px */
+  --textarea-max-height: 24rem;         /* 384px */
+
+  /* ========================================================================
+     DEFAULT STATE - Base Appearance
+     Default input styling
+     ======================================================================== */
+  --input-bg: var(--color-white);
+  --input-bg-hover: var(--color-white);
+  --input-bg-focus: var(--color-white);
+  --input-bg-disabled: var(--color-neutral-50);
+
+  --input-color: var(--color-neutral-900);
+  --input-color-placeholder: var(--color-neutral-400);
+  --input-color-disabled: var(--color-neutral-400);
+
+  --input-border-color: var(--color-neutral-300);
+  --input-border-color-hover: var(--color-neutral-400);
+  --input-border-color-focus: var(--color-primary-500);
+  --input-border-color-disabled: var(--color-neutral-200);
+
+  --input-border-width: 1px;
+  --input-border-width-focus: 2px;
+  --input-border-style: solid;
+
+  /* ========================================================================
+     VARIANTS - Semantic States
+     Success, warning, error variants
+     ======================================================================== */
+
+  /* Success variant */
+  --input-success-border-color: var(--color-success-500);
+  --input-success-border-color-focus: var(--color-success-600);
+  --input-success-shadow-focus: var(--shadow-focus-ring-success);
+  --input-success-icon-color: var(--color-success-500);
+
+  /* Warning variant */
+  --input-warning-border-color: var(--color-warning-500);
+  --input-warning-border-color-focus: var(--color-warning-600);
+  --input-warning-shadow-focus: var(--shadow-focus-ring-warning);
+  --input-warning-icon-color: var(--color-warning-500);
+
+  /* Error variant */
+  --input-error-border-color: var(--color-error-500);
+  --input-error-border-color-focus: var(--color-error-600);
+  --input-error-shadow-focus: var(--shadow-focus-ring-error);
+  --input-error-icon-color: var(--color-error-500);
+
+  /* ========================================================================
+     SHADOWS
+     Focus and state shadows
+     ======================================================================== */
+  --input-shadow-rest: var(--shadow-input-rest);
+  --input-shadow-focus: var(--shadow-input-focus);
+  --input-shadow-error-focus: var(--shadow-input-error);
+
+  /* ========================================================================
+     ADDONS - Prefix/Suffix
+     Settings for input addons and affixes
+     ======================================================================== */
+  --input-addon-bg: var(--color-neutral-50);
+  --input-addon-color: var(--color-neutral-600);
+  --input-addon-border-color: var(--color-neutral-300);
+  --input-addon-padding-x: 0.75rem;
+
+  --input-affix-gap: 0.5rem;            /* Gap between affix and input text */
+  --input-affix-color: var(--color-neutral-500);
+
+  /* ========================================================================
+     ICONS - Prefix/Suffix Icons
+     Settings for icons inside inputs
+     ======================================================================== */
+  --input-icon-color: var(--color-neutral-500);
+  --input-icon-color-hover: var(--color-neutral-600);
+  --input-icon-gap: 0.5rem;
+
+  /* ========================================================================
+     CLEAR BUTTON
+     Settings for the clear button (x icon)
+     ======================================================================== */
+  --input-clear-size: 1rem;
+  --input-clear-color: var(--color-neutral-400);
+  --input-clear-color-hover: var(--color-neutral-600);
+  --input-clear-bg-hover: var(--color-neutral-100);
+  --input-clear-radius: var(--radius-full);
+
+  /* ========================================================================
+     PASSWORD TOGGLE
+     Settings for password visibility toggle
+     ======================================================================== */
+  --input-password-toggle-size: 1.25rem;
+  --input-password-toggle-color: var(--color-neutral-500);
+  --input-password-toggle-color-hover: var(--color-neutral-700);
+
+  /* ========================================================================
+     CHARACTER COUNT
+     Settings for character counter
+     ======================================================================== */
+  --input-count-color: var(--color-neutral-500);
+  --input-count-color-warning: var(--color-warning-600);
+  --input-count-color-error: var(--color-error-600);
+  --input-count-font-size: var(--font-size-sm);
+  --input-count-margin-top: 0.25rem;
+
+  /* ========================================================================
+     LABEL
+     Settings for input labels
+     ======================================================================== */
+  --input-label-color: var(--color-neutral-700);
+  --input-label-color-disabled: var(--color-neutral-400);
+  --input-label-font-size: var(--font-size-sm);
+  --input-label-font-weight: var(--font-weight-medium);
+  --input-label-margin-bottom: 0.375rem;
+  --input-label-required-color: var(--color-error-500);
+
+  /* ========================================================================
+     HELPER TEXT
+     Settings for helper/description text
+     ======================================================================== */
+  --input-helper-color: var(--color-neutral-600);
+  --input-helper-font-size: var(--font-size-sm);
+  --input-helper-margin-top: 0.25rem;
+  --input-helper-line-height: var(--line-height-snug);
+
+  /* ========================================================================
+     ERROR MESSAGE
+     Settings for error message text
+     ======================================================================== */
+  --input-error-message-color: var(--color-error-600);
+  --input-error-message-font-size: var(--font-size-sm);
+  --input-error-message-margin-top: 0.25rem;
+  --input-error-message-icon-size: 1rem;
+
+  /* ========================================================================
+     SUCCESS MESSAGE
+     Settings for success message text
+     ======================================================================== */
+  --input-success-message-color: var(--color-success-600);
+  --input-success-message-font-size: var(--font-size-sm);
+  --input-success-message-margin-top: 0.25rem;
+
+  /* ========================================================================
+     GROUP/COMPACT
+     Settings for input groups
+     ======================================================================== */
+  --input-group-gap: 0;
+  --input-group-border-radius-first: var(--radius-md) 0 0 var(--radius-md);
+  --input-group-border-radius-last: 0 var(--radius-md) var(--radius-md) 0;
+  --input-group-border-radius-middle: 0;
+
+  /* ========================================================================
+     SEARCH INPUT
+     Specific settings for search inputs
+     ======================================================================== */
+  --input-search-icon-color: var(--color-neutral-500);
+  --input-search-clear-color: var(--color-neutral-400);
+
+  /* ========================================================================
+     NUMBER INPUT
+     Specific settings for number inputs
+     ======================================================================== */
+  --input-number-controls-width: 1.5rem;
+  --input-number-controls-bg: var(--color-neutral-50);
+  --input-number-controls-bg-hover: var(--color-neutral-100);
+  --input-number-controls-color: var(--color-neutral-600);
+  --input-number-controls-border-color: var(--color-neutral-300);
+
+  /* ========================================================================
+     FILE INPUT
+     Specific settings for file inputs
+     ======================================================================== */
+  --input-file-button-bg: var(--color-neutral-100);
+  --input-file-button-bg-hover: var(--color-neutral-200);
+  --input-file-button-color: var(--color-neutral-700);
+  --input-file-button-padding: 0.5rem 1rem;
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+  --input-transition-duration: 0.2s;
+  --input-transition-timing: ease-in-out;
+  --input-transition: all var(--input-transition-duration) var(--input-transition-timing);
+
+  /* ========================================================================
+     TYPOGRAPHY
+     Font settings for input text
+     ======================================================================== */
+  --input-font-family: var(--font-family-base);
+  --input-font-weight: var(--font-weight-normal);
+  --input-letter-spacing: normal;
+
+  /* ========================================================================
+     DISABLED STATE
+     Appearance when disabled
+     ======================================================================== */
+  --input-disabled-opacity: 0.6;
+  --input-disabled-cursor: not-allowed;
+
+  /* ========================================================================
+     READ-ONLY STATE
+     Appearance when read-only
+     ======================================================================== */
+  --input-readonly-bg: var(--color-neutral-50);
+  --input-readonly-cursor: default;
+  --input-readonly-border-style: dashed;
+
+  /* ========================================================================
+     AUTOFILL
+     Browser autofill appearance
+     ======================================================================== */
+  --input-autofill-bg: var(--color-primary-50);
+  --input-autofill-color: var(--color-neutral-900);
+}

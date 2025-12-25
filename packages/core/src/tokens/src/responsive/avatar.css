@@ -1,0 +1,162 @@
+/**
+ * Avatar Responsive Tokens - Rottay Design System
+ *
+ * Responsive overrides for Avatar component tokens.
+ * Adjusts sizes and spacing for different screen sizes.
+ */
+
+/* ========================================================================
+   MOBILE (< 640px)
+   Smaller avatars and compact spacing on mobile
+   ======================================================================== */
+@media (max-width: 639px) {
+  :root {
+    /* Reduce default avatar size on mobile */
+    --avatar-default-size: var(--avatar-sm-size);
+    --avatar-default-font-size: var(--avatar-sm-font-size);
+    --avatar-default-status-size: var(--avatar-sm-status-size);
+
+    /* Adjust group spacing for mobile */
+    --avatar-group-default-spacing: var(--avatar-group-compact-spacing);
+
+    /* Smaller badge on mobile */
+    --avatar-badge-size: 0.875rem;      /* 14px */
+    --avatar-badge-font-size: 0.5rem;   /* 8px */
+
+    /* Adjust touch targets for mobile */
+    --avatar-touch-target-min: 2.75rem; /* 44px - Maintain WCAG minimum */
+
+    /* Reduce max count for mobile */
+    --avatar-group-max-count: 3;
+  }
+}
+
+/* ========================================================================
+   TABLET (640px - 1023px)
+   Moderate sizes for tablet devices
+   ======================================================================== */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    /* Keep default sizes on tablet */
+    --avatar-default-size: var(--avatar-md-size);
+    --avatar-default-font-size: var(--avatar-md-font-size);
+
+    /* Standard group spacing */
+    --avatar-group-default-spacing: var(--avatar-group-normal-spacing);
+
+    /* Standard max count */
+    --avatar-group-max-count: 4;
+  }
+}
+
+/* ========================================================================
+   DESKTOP (>= 1024px)
+   Full sizes for desktop devices
+   ======================================================================== */
+@media (min-width: 1024px) {
+  :root {
+    /* Full default sizes on desktop */
+    --avatar-default-size: var(--avatar-md-size);
+    --avatar-default-font-size: var(--avatar-md-font-size);
+
+    /* Loose spacing option available */
+    --avatar-group-default-spacing: var(--avatar-group-normal-spacing);
+
+    /* Full max count */
+    --avatar-group-max-count: 5;
+
+    /* Enable hover effects on desktop */
+    --avatar-hover-enabled: 1;
+  }
+}
+
+/* ========================================================================
+   TOUCH DEVICES
+   Adjust for touch-based interactions
+   ======================================================================== */
+@media (hover: none) and (pointer: coarse) {
+  :root {
+    /* Ensure minimum touch targets */
+    --avatar-xs-size: max(var(--avatar-xs-size), 2.75rem);
+    --avatar-sm-size: max(var(--avatar-sm-size), 2.75rem);
+
+    /* Disable hover effects on touch devices */
+    --avatar-hover-scale: 1;
+    --avatar-hover-shadow: none;
+
+    /* Larger tap targets for status indicators */
+    --avatar-status-size: 0.75rem;      /* 12px minimum */
+  }
+}
+
+/* ========================================================================
+   HIGH DPI / RETINA
+   Adjustments for high-resolution displays
+   ======================================================================== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  :root {
+    /* Sharper borders on retina */
+    --avatar-default-border-width: 0.5px;
+    --avatar-sm-border-width: 0.5px;
+
+    /* More subtle shadows on retina */
+    --avatar-primary-shadow: 0 1px 4px rgba(0, 102, 204, 0.12);
+  }
+}
+
+/* ========================================================================
+   REDUCED MOTION
+   Respect user's motion preferences
+   ======================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Disable scale animations */
+    --avatar-hover-scale: 1;
+    --avatar-active-scale: 1;
+
+    /* Instant transitions */
+    --avatar-transition-duration: 0.01s;
+    --avatar-transition: none;
+
+    /* Disable loading animation */
+    --avatar-loading-animation: none;
+  }
+}
+
+/* ========================================================================
+   LANDSCAPE ORIENTATION
+   Specific adjustments for landscape mode on mobile
+   ======================================================================== */
+@media (max-width: 1023px) and (orientation: landscape) {
+  :root {
+    /* Slightly smaller avatars in landscape to save vertical space */
+    --avatar-default-size: var(--avatar-sm-size);
+
+    /* Compact group spacing */
+    --avatar-group-default-spacing: var(--avatar-group-compact-spacing);
+  }
+}
+
+/* ========================================================================
+   PRINT
+   Adjustments for print media
+   ======================================================================== */
+@media print {
+  :root {
+    /* Remove shadows for print */
+    --avatar-default-shadow: none;
+    --avatar-primary-shadow: none;
+    --avatar-secondary-shadow: none;
+    --avatar-hover-shadow: none;
+
+    /* Ensure borders are visible in print */
+    --avatar-default-border-width: 1px;
+    --avatar-default-border-color: var(--color-neutral-400);
+
+    /* Disable status indicators in print (save ink) */
+    --avatar-status-online-color: transparent;
+    --avatar-status-offline-color: transparent;
+    --avatar-status-away-color: transparent;
+    --avatar-status-busy-color: transparent;
+  }
+}

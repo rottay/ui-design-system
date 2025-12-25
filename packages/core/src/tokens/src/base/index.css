@@ -1,0 +1,13 @@
+/**
+ * Base Tokens Index - Rottay Design System
+ *
+ * Central import file for all base design tokens.
+ * Import this file to get access to all foundational design tokens.
+ */
+
+@import './colors.css';
+@import './spacing.css';
+@import './typography.css';
+@import './shadows.css';
+@import './borders.css';
+@import './z-index.css';

@@ -1,0 +1,259 @@
+/**
+ * Modal Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to Modal/Dialog components.
+ * Includes sizes, variants, animations, and overlay properties.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Modal Width Variants
+     Five size variants for different content amounts
+     ======================================================================== */
+  --modal-xs-width: 20rem;              /* 320px */
+  --modal-sm-width: 24rem;              /* 384px */
+  --modal-md-width: 32rem;              /* 512px - Default */
+  --modal-lg-width: 48rem;              /* 768px */
+  --modal-xl-width: 64rem;              /* 1024px */
+  --modal-full-width: calc(100vw - 2rem); /* Full width with margins */
+
+  /* Height variants */
+  --modal-max-height: calc(100vh - 4rem); /* Max height with margins */
+  --modal-full-height: calc(100vh - 2rem);
+
+  /* Default size */
+  --modal-default-width: var(--modal-md-width);
+
+  /* ========================================================================
+     OVERLAY/BACKDROP
+     Background overlay behind the modal
+     ======================================================================== */
+  --modal-overlay-bg: var(--color-alpha-black-50);
+  --modal-overlay-backdrop-filter: blur(4px);
+  --modal-overlay-z-index: var(--z-index-modal-backdrop);
+
+  /* ========================================================================
+     CONTAINER
+     Modal container positioning and appearance
+     ======================================================================== */
+  --modal-z-index: var(--z-index-modal-content);
+  --modal-margin: 2rem;                 /* Margin from viewport edges */
+  --modal-margin-mobile: 1rem;
+
+  /* ========================================================================
+     CONTENT
+     Main modal content area
+     ======================================================================== */
+  --modal-bg: var(--color-white);
+  --modal-color: var(--color-neutral-900);
+  --modal-border-radius: var(--radius-xl);
+  --modal-border-width: 0;
+  --modal-border-color: transparent;
+  --modal-shadow: var(--shadow-modal);
+
+  /* Padding */
+  --modal-padding: 1.5rem;              /* 24px */
+  --modal-padding-sm: 1rem;             /* 16px */
+  --modal-padding-lg: 2rem;             /* 32px */
+
+  /* ========================================================================
+     HEADER
+     Modal header section
+     ======================================================================== */
+  --modal-header-padding: var(--modal-padding);
+  --modal-header-padding-bottom: 1rem;
+  --modal-header-border-width: 1px;
+  --modal-header-border-color: var(--color-neutral-200);
+  --modal-header-bg: transparent;
+
+  /* Title */
+  --modal-title-font-size: var(--font-size-xl);
+  --modal-title-font-weight: var(--font-weight-semibold);
+  --modal-title-line-height: var(--line-height-tight);
+  --modal-title-color: var(--color-neutral-900);
+
+  /* Subtitle */
+  --modal-subtitle-font-size: var(--font-size-sm);
+  --modal-subtitle-color: var(--color-neutral-600);
+  --modal-subtitle-margin-top: 0.25rem;
+
+  /* ========================================================================
+     BODY
+     Modal content area
+     ======================================================================== */
+  --modal-body-padding: var(--modal-padding);
+  --modal-body-padding-y: 1.5rem;
+  --modal-body-color: var(--color-neutral-700);
+  --modal-body-font-size: var(--font-size-base);
+  --modal-body-line-height: var(--line-height-normal);
+  --modal-body-max-height: calc(100vh - 12rem); /* Scrollable body */
+
+  /* ========================================================================
+     FOOTER
+     Modal footer with actions
+     ======================================================================== */
+  --modal-footer-padding: var(--modal-padding);
+  --modal-footer-padding-top: 1rem;
+  --modal-footer-border-width: 1px;
+  --modal-footer-border-color: var(--color-neutral-200);
+  --modal-footer-bg: var(--color-neutral-50);
+  --modal-footer-justify: flex-end;
+  --modal-footer-gap: 0.75rem;
+
+  /* ========================================================================
+     CLOSE BUTTON
+     X button to close modal
+     ======================================================================== */
+  --modal-close-size: 2rem;             /* 32px */
+  --modal-close-icon-size: 1.25rem;     /* 20px */
+  --modal-close-color: var(--color-neutral-500);
+  --modal-close-color-hover: var(--color-neutral-700);
+  --modal-close-bg-hover: var(--color-neutral-100);
+  --modal-close-border-radius: var(--radius-md);
+  --modal-close-position-top: 1rem;
+  --modal-close-position-right: 1rem;
+
+  /* ========================================================================
+     ANIMATIONS - Entry/Exit
+     Modal open/close animations
+     ======================================================================== */
+
+  /* Fade animation */
+  --modal-fade-duration: 0.3s;
+  --modal-fade-timing: ease-out;
+
+  /* Scale animation */
+  --modal-scale-from: 0.95;
+  --modal-scale-to: 1;
+  --modal-scale-duration: 0.3s;
+  --modal-scale-timing: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Slide from top */
+  --modal-slide-top-from: -2rem;
+  --modal-slide-top-to: 0;
+  --modal-slide-duration: 0.3s;
+  --modal-slide-timing: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Slide from bottom (mobile) */
+  --modal-slide-bottom-from: 100%;
+  --modal-slide-bottom-to: 0;
+
+  /* Combined transition */
+  --modal-transition: all var(--modal-fade-duration) var(--modal-fade-timing);
+
+  /* ========================================================================
+     VARIANTS - Modal Types
+     Different modal styles for various use cases
+     ======================================================================== */
+
+  /* Centered modal (default) */
+  --modal-centered-align: center;
+  --modal-centered-justify: center;
+
+  /* Top modal */
+  --modal-top-align: flex-start;
+  --modal-top-justify: center;
+  --modal-top-margin-top: 4rem;
+
+  /* Drawer/Side modal */
+  --modal-drawer-width: 24rem;          /* 384px */
+  --modal-drawer-max-width: 90vw;
+  --modal-drawer-height: 100vh;
+  --modal-drawer-border-radius: 0;
+
+  /* Bottom sheet (mobile) */
+  --modal-bottom-sheet-width: 100%;
+  --modal-bottom-sheet-max-height: 90vh;
+  --modal-bottom-sheet-border-radius-top: var(--radius-2xl);
+  --modal-bottom-sheet-border-radius-bottom: 0;
+
+  /* ========================================================================
+     SEMANTIC VARIANTS
+     Colored modals for different contexts
+     ======================================================================== */
+
+  /* Confirmation modal */
+  --modal-confirm-icon-color: var(--color-primary-500);
+  --modal-confirm-icon-bg: var(--color-primary-100);
+
+  /* Success modal */
+  --modal-success-icon-color: var(--color-success-500);
+  --modal-success-icon-bg: var(--color-success-100);
+
+  /* Warning modal */
+  --modal-warning-icon-color: var(--color-warning-500);
+  --modal-warning-icon-bg: var(--color-warning-100);
+
+  /* Error/Destructive modal */
+  --modal-error-icon-color: var(--color-error-500);
+  --modal-error-icon-bg: var(--color-error-100);
+
+  /* Info modal */
+  --modal-info-icon-color: var(--color-info-500);
+  --modal-info-icon-bg: var(--color-info-100);
+
+  /* ========================================================================
+     ICON
+     Icon in header or content
+     ======================================================================== */
+  --modal-icon-size: 3rem;              /* 48px */
+  --modal-icon-size-sm: 2rem;           /* 32px */
+  --modal-icon-size-lg: 4rem;           /* 64px */
+  --modal-icon-margin-bottom: 1rem;
+
+  /* ========================================================================
+     SCROLLABLE CONTENT
+     Settings for scrolling modal body
+     ======================================================================== */
+  --modal-scroll-padding: 0.5rem;
+  --modal-scroll-shadow-top: inset 0 8px 8px -8px rgba(0, 0, 0, 0.1);
+  --modal-scroll-shadow-bottom: inset 0 -8px 8px -8px rgba(0, 0, 0, 0.1);
+
+  /* ========================================================================
+     LOADING STATE
+     Modal loading indicator
+     ======================================================================== */
+  --modal-loading-overlay-bg: var(--color-alpha-white-80);
+  --modal-loading-spinner-color: var(--color-primary-500);
+  --modal-loading-spinner-size: 2rem;
+
+  /* ========================================================================
+     NESTED MODALS
+     Stacking multiple modals
+     ======================================================================== */
+  --modal-nested-z-index-offset: 10;
+  --modal-nested-overlay-bg: var(--color-alpha-black-30);
+
+  /* ========================================================================
+     ACCESSIBILITY
+     Focus trap and keyboard navigation
+     ======================================================================== */
+  --modal-focus-ring: var(--shadow-focus-ring);
+  --modal-focus-ring-offset: 2px;
+  --modal-focus-outline: none;
+
+  /* ========================================================================
+     RESPONSIVE
+     Mobile-specific adjustments
+     ======================================================================== */
+  --modal-mobile-width: calc(100vw - 2rem);
+  --modal-mobile-max-height: calc(100vh - 2rem);
+  --modal-mobile-padding: 1rem;
+  --modal-mobile-border-radius: var(--radius-lg);
+
+  /* ========================================================================
+     DIVIDER
+     Internal modal dividers
+     ======================================================================== */
+  --modal-divider-width: 1px;
+  --modal-divider-color: var(--color-neutral-200);
+  --modal-divider-margin-y: 1rem;
+
+  /* ========================================================================
+     BACKDROP BLUR
+     Glassmorphism effect
+     ======================================================================== */
+  --modal-glass-bg: rgba(255, 255, 255, 0.9);
+  --modal-glass-backdrop-filter: blur(12px) saturate(180%);
+  --modal-glass-border: 1px solid rgba(255, 255, 255, 0.3);
+}

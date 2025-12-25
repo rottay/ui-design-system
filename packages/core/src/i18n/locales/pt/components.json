@@ -1,0 +1,113 @@
+{
+  "avatar": {
+    "loading": "Carregando avatar...",
+    "error": "Erro ao carregar imagem",
+    "fallback": "Sem imagem",
+    "group": {
+      "surplus": "+{count} mais",
+      "empty": "Sem usuários"
+    },
+    "status": {
+      "online": "Online",
+      "offline": "Offline",
+      "away": "Ausente",
+      "busy": "Ocupado"
+    }
+  },
+  "button": {
+    "loading": "Carregando...",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "save": "Salvar"
+  },
+  "input": {
+    "placeholder": "Digite aqui...",
+    "required": "Este campo é obrigatório",
+    "optional": "(opcional)",
+    "clear": "Limpar",
+    "show_password": "Mostrar senha",
+    "hide_password": "Ocultar senha"
+  },
+  "select": {
+    "placeholder": "Selecione uma opção",
+    "no_options": "Sem opções disponíveis",
+    "loading": "Carregando opções...",
+    "search": "Buscar...",
+    "clear": "Limpar seleção"
+  },
+  "modal": {
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar"
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Próximo",
+    "page": "Página {current} de {total}",
+    "go_to": "Ir para página",
+    "items_per_page": "{count} por página"
+  },
+  "table": {
+    "empty": "Sem dados",
+    "loading": "Carregando dados...",
+    "sort_asc": "Ordenar ascendente",
+    "sort_desc": "Ordenar descendente",
+    "filter": "Filtrar",
+    "clear_filters": "Limpar filtros",
+    "rows_selected": "{count} linhas selecionadas"
+  },
+  "upload": {
+    "drag_drop": "Arraste arquivos aqui ou clique para selecionar",
+    "uploading": "Enviando...",
+    "success": "Arquivo enviado com sucesso",
+    "error": "Erro ao enviar arquivo",
+    "remove": "Remover arquivo",
+    "max_size": "Tamanho máximo: {size}",
+    "accepted_formats": "Formatos aceitos: {formats}"
+  },
+  "datepicker": {
+    "placeholder": "Selecione uma data",
+    "today": "Hoje",
+    "clear": "Limpar",
+    "ok": "OK",
+    "month": "Mês",
+    "year": "Ano"
+  },
+  "timepicker": {
+    "placeholder": "Selecione uma hora",
+    "now": "Agora",
+    "clear": "Limpar",
+    "ok": "OK"
+  },
+  "search": {
+    "placeholder": "Buscar...",
+    "no_results": "Sem resultados",
+    "searching": "Buscando..."
+  },
+  "form": {
+    "required_field": "Este campo é obrigatório",
+    "invalid_field": "Campo inválido",
+    "submit": "Enviar",
+    "reset": "Resetar"
+  },
+  "drawer": {
+    "close": "Fechar"
+  },
+  "dropdown": {
+    "no_options": "Sem opções"
+  },
+  "tooltip": {
+    "close": "Fechar"
+  },
+  "notification": {
+    "close": "Fechar",
+    "mark_as_read": "Marcar como lido",
+    "clear_all": "Limpar tudo"
+  },
+  "alert": {
+    "close": "Fechar"
+  }
+}

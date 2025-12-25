@@ -1,0 +1,252 @@
+/**
+ * Rottay Tenant - Color Overrides
+ *
+ * Rottay-specific color customizations that override base tokens.
+ * This is the base/default tenant configuration.
+ */
+
+:root {
+  /* ========================================================================
+     ROTTAY BRAND COLORS
+     Override primary and secondary colors with Rottay brand
+     ======================================================================== */
+
+  /* Primary remains Rottay Blue (already defined in base) */
+  --color-primary-50: #E8F4FF;
+  --color-primary-100: #C8E2FF;
+  --color-primary-200: #A1CBFF;
+  --color-primary-300: #73AEFF;
+  --color-primary-400: #4A91FF;
+  --color-primary-500: #0066CC;   /* Rottay primary blue */
+  --color-primary-600: #0055AA;
+  --color-primary-700: #0047AB;
+  --color-primary-800: #003380;
+  --color-primary-900: #002255;
+
+  /* Secondary remains Rottay Purple (already defined in base) */
+  --color-secondary-50: #F5F5FF;
+  --color-secondary-100: #EBEBFF;
+  --color-secondary-200: #D4D4FF;
+  --color-secondary-300: #B0B0F0;
+  --color-secondary-400: #8F8FE0;
+  --color-secondary-500: #6B6BD4;
+  --color-secondary-600: #5555BB;
+  --color-secondary-700: #4B4B9E;
+  --color-secondary-800: #3A3A7A;
+  --color-secondary-900: #2A2A5A;
+
+  /* ========================================================================
+     ROTTAY ACCENT COLORS
+     Additional brand colors specific to Rottay
+     ======================================================================== */
+
+  /* Accent teal (for highlights and CTAs) */
+  --color-accent-teal-50: #E6FFFA;
+  --color-accent-teal-100: #B2F5EA;
+  --color-accent-teal-200: #81E6D9;
+  --color-accent-teal-300: #4FD1C5;
+  --color-accent-teal-400: #38B2AC;
+  --color-accent-teal-500: #319795;
+  --color-accent-teal-600: #2C7A7B;
+  --color-accent-teal-700: #285E61;
+  --color-accent-teal-800: #234E52;
+  --color-accent-teal-900: #1D4044;
+
+  /* Accent orange (for warm accents) */
+  --color-accent-orange-50: #FFF5F0;
+  --color-accent-orange-100: #FFE6D5;
+  --color-accent-orange-200: #FFCCAA;
+  --color-accent-orange-300: #FFB380;
+  --color-accent-orange-400: #FF9955;
+  --color-accent-orange-500: #FF8040;
+  --color-accent-orange-600: #E6663D;
+  --color-accent-orange-700: #CC4D33;
+  --color-accent-orange-800: #B3332A;
+  --color-accent-orange-900: #991A20;
+
+  /* ========================================================================
+     SEMANTIC COLOR OVERRIDES
+     Keep base semantic colors but ensure they work with brand
+     ======================================================================== */
+
+  /* Success - Keep green but ensure harmony with Rottay blue */
+  /* Using base success colors - no override needed */
+
+  /* Warning - Adjust to work with brand */
+  /* Using base warning colors - no override needed */
+
+  /* Error - Keep standard red */
+  /* Using base error colors - no override needed */
+
+  /* Info - Use primary blue for consistency */
+  --color-info-50: var(--color-primary-50);
+  --color-info-100: var(--color-primary-100);
+  --color-info-200: var(--color-primary-200);
+  --color-info-300: var(--color-primary-300);
+  --color-info-400: var(--color-primary-400);
+  --color-info-500: var(--color-primary-500);
+  --color-info-600: var(--color-primary-600);
+  --color-info-700: var(--color-primary-700);
+  --color-info-800: var(--color-primary-800);
+  --color-info-900: var(--color-primary-900);
+
+  /* ========================================================================
+     BACKGROUND COLORS
+     Rottay-specific background colors for surfaces
+     ======================================================================== */
+
+  --color-background-primary: #FFFFFF;
+  --color-background-secondary: #F8F9FA;
+  --color-background-tertiary: #F1F3F5;
+  --color-background-inverse: #212529;
+
+  /* Subtle branded backgrounds */
+  --color-background-primary-subtle: #F0F7FF;
+  --color-background-secondary-subtle: #F5F5FF;
+
+  /* ========================================================================
+     TEXT COLORS
+     Rottay-specific text colors
+     ======================================================================== */
+
+  --color-text-primary: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-700);
+  --color-text-tertiary: var(--color-neutral-600);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-inverse: #FFFFFF;
+
+  /* Brand text colors */
+  --color-text-brand: var(--color-primary-600);
+  --color-text-link: var(--color-primary-600);
+  --color-text-link-hover: var(--color-primary-700);
+
+  /* ========================================================================
+     BORDER COLORS
+     Rottay-specific border colors
+     ======================================================================== */
+
+  --color-border-default: var(--color-neutral-200);
+  --color-border-muted: var(--color-neutral-100);
+  --color-border-strong: var(--color-neutral-300);
+  --color-border-brand: var(--color-primary-500);
+
+  /* ========================================================================
+     SURFACE COLORS
+     Colors for cards, panels, and elevated surfaces
+     ======================================================================== */
+
+  --color-surface-default: #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-overlay: rgba(0, 0, 0, 0.5);
+  --color-surface-brand: var(--color-primary-50);
+  --color-surface-brand-strong: var(--color-primary-100);
+
+  /* ========================================================================
+     GRADIENT BACKGROUNDS
+     Rottay brand gradients
+     ======================================================================== */
+
+  --gradient-brand-primary: linear-gradient(
+    135deg,
+    var(--color-primary-500) 0%,
+    var(--color-primary-600) 100%
+  );
+
+  --gradient-brand-secondary: linear-gradient(
+    135deg,
+    var(--color-primary-400) 0%,
+    var(--color-secondary-500) 100%
+  );
+
+  --gradient-brand-accent: linear-gradient(
+    135deg,
+    var(--color-accent-teal-400) 0%,
+    var(--color-primary-500) 100%
+  );
+
+  --gradient-brand-vibrant: linear-gradient(
+    135deg,
+    var(--color-primary-500) 0%,
+    var(--color-accent-teal-500) 50%,
+    var(--color-accent-orange-500) 100%
+  );
+
+  /* Subtle gradients for backgrounds */
+  --gradient-subtle-primary: linear-gradient(
+    180deg,
+    var(--color-primary-50) 0%,
+    #FFFFFF 100%
+  );
+
+  --gradient-subtle-secondary: linear-gradient(
+    180deg,
+    var(--color-secondary-50) 0%,
+    #FFFFFF 100%
+  );
+
+  /* ========================================================================
+     SHADOW COLORS
+     Rottay-specific shadow tints
+     ======================================================================== */
+
+  --shadow-color-primary: rgba(0, 102, 204, 0.15);
+  --shadow-color-secondary: rgba(107, 107, 212, 0.15);
+  --shadow-color-neutral: rgba(0, 0, 0, 0.1);
+
+  /* ========================================================================
+     STATE COLORS
+     Interactive state colors specific to Rottay
+     ======================================================================== */
+
+  /* Hover states */
+  --color-hover-primary: var(--color-primary-50);
+  --color-hover-secondary: var(--color-secondary-50);
+  --color-hover-neutral: var(--color-neutral-50);
+
+  /* Active states */
+  --color-active-primary: var(--color-primary-100);
+  --color-active-secondary: var(--color-secondary-100);
+  --color-active-neutral: var(--color-neutral-100);
+
+  /* Focus states */
+  --color-focus-ring: var(--color-primary-500);
+  --color-focus-ring-offset: #FFFFFF;
+
+  /* ========================================================================
+     DARK MODE OVERRIDES (Optional)
+     Rottay dark mode color adjustments
+     ======================================================================== */
+
+  @media (prefers-color-scheme: dark) {
+    /* Background colors for dark mode */
+    --color-background-primary: #0F1419;
+    --color-background-secondary: #1A1F28;
+    --color-background-tertiary: #242936;
+    --color-background-inverse: #FFFFFF;
+
+    /* Text colors for dark mode */
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: var(--color-neutral-300);
+    --color-text-tertiary: var(--color-neutral-400);
+    --color-text-disabled: var(--color-neutral-600);
+    --color-text-inverse: var(--color-neutral-900);
+
+    /* Border colors for dark mode */
+    --color-border-default: var(--color-neutral-700);
+    --color-border-muted: var(--color-neutral-800);
+    --color-border-strong: var(--color-neutral-600);
+
+    /* Surface colors for dark mode */
+    --color-surface-default: #1A1F28;
+    --color-surface-elevated: #242936;
+    --color-surface-overlay: rgba(0, 0, 0, 0.7);
+
+    /* Adjust primary colors for dark mode visibility */
+    --color-primary-500: #4A91FF;
+    --color-primary-600: #73AEFF;
+
+    /* Adjust secondary colors */
+    --color-secondary-500: #8F8FE0;
+    --color-secondary-600: #B0B0F0;
+  }
+}

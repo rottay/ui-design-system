@@ -1,0 +1,252 @@
+/**
+ * Button Responsive Tokens - Rottay Design System
+ *
+ * Responsive overrides for Button component tokens.
+ * Adjusts sizes, spacing, and interactions for different screen sizes.
+ */
+
+/* ========================================================================
+   MOBILE (< 640px)
+   Larger touch targets and adjusted sizing on mobile
+   ======================================================================== */
+@media (max-width: 639px) {
+  :root {
+    /* Increase default button size for better touch targets */
+    --button-default-height: var(--button-lg-height);
+    --button-default-padding-x: var(--button-lg-padding-x);
+    --button-default-font-size: var(--button-lg-font-size);
+
+    /* Ensure minimum touch target */
+    --button-xs-height: max(var(--button-xs-height), 2.75rem); /* 44px minimum */
+    --button-sm-height: max(var(--button-sm-height), 2.75rem);
+
+    /* Full-width buttons on mobile by default */
+    --button-mobile-width: 100%;
+
+    /* Reduce icon gaps for better fit */
+    --button-sm-gap: 0.25rem;
+    --button-md-gap: 0.375rem;
+
+    /* Adjust icon-only sizes */
+    --button-icon-only-md-size: 2.75rem; /* Ensure touch target */
+    --button-icon-only-lg-size: 3rem;
+  }
+}
+
+/* ========================================================================
+   TABLET (640px - 1023px)
+   Moderate sizes for tablet devices
+   ======================================================================== */
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    /* Standard sizes on tablet */
+    --button-default-height: var(--button-md-height);
+    --button-default-padding-x: var(--button-md-padding-x);
+
+    /* Normal gaps */
+    --button-md-gap: 0.5rem;
+    --button-lg-gap: 0.625rem;
+  }
+}
+
+/* ========================================================================
+   DESKTOP (>= 1024px)
+   Full sizes and effects for desktop devices
+   ======================================================================== */
+@media (min-width: 1024px) {
+  :root {
+    /* Full default sizes */
+    --button-default-height: var(--button-md-height);
+
+    /* Enable all hover effects */
+    --button-hover-enabled: 1;
+
+    /* Full shadows */
+    --button-primary-shadow-hover: var(--shadow-button-hover);
+  }
+}
+
+/* ========================================================================
+   TOUCH DEVICES
+   Optimize for touch-based interactions
+   ======================================================================== */
+@media (hover: none) and (pointer: coarse) {
+  :root {
+    /* Ensure all buttons meet minimum touch target */
+    --button-touch-target-min: 2.75rem; /* 44px - WCAG AAA */
+
+    /* Larger buttons by default */
+    --button-default-height: max(var(--button-md-height), 2.75rem);
+
+    /* Disable hover states (use active instead) */
+    --button-primary-bg-hover: var(--button-primary-bg);
+    --button-secondary-bg-hover: var(--button-secondary-bg);
+    --button-default-bg-hover: var(--button-default-bg);
+    --button-ghost-bg-hover: transparent;
+    --button-text-bg-hover: transparent;
+
+    /* Enhanced active states for touch feedback */
+    --button-active-opacity: 0.8;
+
+    /* Remove hover shadows */
+    --button-primary-shadow-hover: var(--button-primary-shadow);
+    --button-secondary-shadow-hover: var(--button-secondary-shadow);
+
+    /* Larger icon sizes for better visibility */
+    --button-md-icon-size: 1.5rem;
+    --button-lg-icon-size: 1.75rem;
+  }
+}
+
+/* ========================================================================
+   MOUSE/PRECISION POINTER
+   Optimize for mouse and trackpad interactions
+   ======================================================================== */
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    /* Enable all hover effects */
+    --button-hover-enabled: 1;
+
+    /* Smooth transitions */
+    --button-transition-duration: 0.2s;
+
+    /* Full hover shadows */
+    --button-primary-shadow-hover: var(--shadow-button-hover);
+    --button-default-shadow-hover: var(--shadow-sm);
+  }
+}
+
+/* ========================================================================
+   SMALL SCREENS (< 375px)
+   Very small mobile devices
+   ======================================================================== */
+@media (max-width: 374px) {
+  :root {
+    /* Reduce padding on very small screens */
+    --button-sm-padding-x: 0.5rem;
+    --button-md-padding-x: 0.75rem;
+    --button-lg-padding-x: 1rem;
+
+    /* Smaller font sizes */
+    --button-md-font-size: 0.875rem;
+    --button-lg-font-size: 1rem;
+
+    /* Compact icon gaps */
+    --button-md-gap: 0.25rem;
+    --button-lg-gap: 0.375rem;
+  }
+}
+
+/* ========================================================================
+   LARGE DESKTOP (>= 1280px)
+   Wide screens with more space
+   ======================================================================== */
+@media (min-width: 1280px) {
+  :root {
+    /* Allow larger button variants */
+    --button-xl-height: 4rem;           /* 64px */
+    --button-xl-padding-x: 2.5rem;      /* 40px */
+    --button-xl-font-size: 1.375rem;    /* 22px */
+
+    /* More generous spacing */
+    --button-xl-gap: 1rem;
+  }
+}
+
+/* ========================================================================
+   REDUCED MOTION
+   Respect user's motion preferences
+   ======================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    /* Instant transitions */
+    --button-transition-duration: 0.01s;
+    --button-transition-timing: linear;
+    --button-transition: none;
+
+    /* Remove loading animations */
+    --button-loading-opacity: 1;
+  }
+}
+
+/* ========================================================================
+   HIGH CONTRAST MODE
+   Enhance visibility in high contrast mode
+   ======================================================================== */
+@media (prefers-contrast: high) {
+  :root {
+    /* Stronger borders */
+    --button-border-width: 2px;
+    --button-border-width-focus: 3px;
+
+    /* Higher contrast colors */
+    --button-default-border-color: var(--color-neutral-900);
+    --button-ghost-color: var(--color-neutral-900);
+
+    /* Thicker focus rings */
+    --button-focus-ring-offset: 3px;
+  }
+}
+
+/* ========================================================================
+   LANDSCAPE ORIENTATION (Mobile)
+   Specific adjustments for landscape mode
+   ======================================================================== */
+@media (max-width: 1023px) and (orientation: landscape) {
+  :root {
+    /* Reduce button heights in landscape to save vertical space */
+    --button-default-height: var(--button-sm-height);
+    --button-lg-height: var(--button-md-height);
+
+    /* Compact padding */
+    --button-md-padding-y: 0.375rem;
+    --button-lg-padding-y: 0.5rem;
+  }
+}
+
+/* ========================================================================
+   PRINT
+   Adjustments for print media
+   ======================================================================== */
+@media print {
+  :root {
+    /* Remove shadows for print */
+    --button-primary-shadow: none;
+    --button-secondary-shadow: none;
+    --button-default-shadow: none;
+    --button-primary-shadow-hover: none;
+
+    /* Ensure borders are visible */
+    --button-border-width: 1px;
+    --button-default-border-color: var(--color-neutral-900);
+
+    /* Print-friendly colors */
+    --button-primary-bg: var(--color-white);
+    --button-primary-color: var(--color-neutral-900);
+    --button-primary-border-color: var(--color-neutral-900);
+
+    /* Remove background colors to save ink */
+    --button-ghost-bg: transparent;
+    --button-ghost-bg-hover: transparent;
+    --button-text-bg: transparent;
+  }
+}
+
+/* ========================================================================
+   BUTTON GROUP RESPONSIVE
+   Adjustments for button groups on different screens
+   ======================================================================== */
+@media (max-width: 639px) {
+  :root {
+    /* Stack button groups vertically on mobile */
+    --button-group-mobile-direction: column;
+    --button-group-mobile-gap: 0.5rem;
+
+    /* Full width buttons in groups */
+    --button-group-mobile-width: 100%;
+
+    /* Adjust border radius for stacked layout */
+    --button-group-border-radius-first: var(--radius-md) var(--radius-md) 0 0;
+    --button-group-border-radius-last: 0 0 var(--radius-md) var(--radius-md);
+  }
+}

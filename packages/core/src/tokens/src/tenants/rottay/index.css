@@ -1,0 +1,12 @@
+/**
+ * Rottay Tenant Index - Design System
+ *
+ * Central import file for all Rottay tenant customizations.
+ * This is the base/default tenant for the system.
+ *
+ * Usage:
+ * Import this file to apply Rottay-specific overrides to the base design system.
+ */
+
+@import './colors.css';
+@import './components.css';

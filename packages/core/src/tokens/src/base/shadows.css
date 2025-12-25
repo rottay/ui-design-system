@@ -1,0 +1,141 @@
+/**
+ * Base Shadow Tokens - Rottay Design System
+ *
+ * Shadow scale for depth and elevation in the UI.
+ * Includes box shadows and drop shadows for consistent layering.
+ */
+
+:root {
+  /* ========================================================================
+     BOX SHADOWS - Elevation Scale
+     Used to create depth and elevation in the UI
+     ======================================================================== */
+  --shadow-none: none;
+
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+               0 1px 2px -1px rgba(0, 0, 0, 0.1);
+
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+               0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+               0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+               0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  --shadow-3xl: 0 35px 60px -15px rgba(0, 0, 0, 0.3);
+
+  /* Inner shadow for inset effects */
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+  /* ========================================================================
+     COLORED SHADOWS - Brand/Semantic Shadows
+     Shadows with color tints for special emphasis
+     ======================================================================== */
+
+  /* Primary shadows */
+  --shadow-primary-sm: 0 1px 3px 0 rgba(0, 102, 204, 0.12),
+                       0 1px 2px -1px rgba(0, 102, 204, 0.12);
+
+  --shadow-primary-md: 0 4px 6px -1px rgba(0, 102, 204, 0.12),
+                       0 2px 4px -2px rgba(0, 102, 204, 0.12);
+
+  --shadow-primary-lg: 0 10px 15px -3px rgba(0, 102, 204, 0.15),
+                       0 4px 6px -4px rgba(0, 102, 204, 0.15);
+
+  /* Secondary shadows */
+  --shadow-secondary-sm: 0 1px 3px 0 rgba(107, 107, 212, 0.12),
+                         0 1px 2px -1px rgba(107, 107, 212, 0.12);
+
+  --shadow-secondary-md: 0 4px 6px -1px rgba(107, 107, 212, 0.12),
+                         0 2px 4px -2px rgba(107, 107, 212, 0.12);
+
+  /* Success shadows */
+  --shadow-success-sm: 0 1px 3px 0 rgba(34, 197, 94, 0.12),
+                       0 1px 2px -1px rgba(34, 197, 94, 0.12);
+
+  --shadow-success-md: 0 4px 6px -1px rgba(34, 197, 94, 0.12),
+                       0 2px 4px -2px rgba(34, 197, 94, 0.12);
+
+  /* Warning shadows */
+  --shadow-warning-sm: 0 1px 3px 0 rgba(245, 158, 11, 0.12),
+                       0 1px 2px -1px rgba(245, 158, 11, 0.12);
+
+  --shadow-warning-md: 0 4px 6px -1px rgba(245, 158, 11, 0.12),
+                       0 2px 4px -2px rgba(245, 158, 11, 0.12);
+
+  /* Error shadows */
+  --shadow-error-sm: 0 1px 3px 0 rgba(239, 68, 68, 0.12),
+                     0 1px 2px -1px rgba(239, 68, 68, 0.12);
+
+  --shadow-error-md: 0 4px 6px -1px rgba(239, 68, 68, 0.12),
+                     0 2px 4px -2px rgba(239, 68, 68, 0.12);
+
+  /* ========================================================================
+     DROP SHADOWS - CSS Filter Shadows
+     Used with the filter property for images and elements
+     ======================================================================== */
+  --drop-shadow-none: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+  --drop-shadow-xs: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.05));
+  --drop-shadow-sm: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  --drop-shadow-md: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07))
+                    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06));
+  --drop-shadow-lg: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04))
+                    drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+  --drop-shadow-xl: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03))
+                    drop-shadow(0 8px 5px rgba(0, 0, 0, 0.08));
+  --drop-shadow-2xl: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.15));
+
+  /* ========================================================================
+     COMPONENT SHADOWS - Specific Component Elevations
+     Predefined shadows for common component states
+     ======================================================================== */
+
+  /* Card shadows */
+  --shadow-card-rest: var(--shadow-sm);
+  --shadow-card-hover: var(--shadow-md);
+  --shadow-card-active: var(--shadow-xs);
+
+  /* Button shadows */
+  --shadow-button-rest: var(--shadow-xs);
+  --shadow-button-hover: var(--shadow-sm);
+  --shadow-button-active: var(--shadow-none);
+
+  /* Modal/Dialog shadows */
+  --shadow-modal: var(--shadow-2xl);
+  --shadow-dialog: var(--shadow-xl);
+
+  /* Dropdown/Menu shadows */
+  --shadow-dropdown: var(--shadow-lg);
+  --shadow-menu: var(--shadow-lg);
+
+  /* Popover/Tooltip shadows */
+  --shadow-popover: var(--shadow-md);
+  --shadow-tooltip: var(--shadow-sm);
+
+  /* Drawer shadows */
+  --shadow-drawer: var(--shadow-xl);
+
+  /* Navigation shadows */
+  --shadow-navbar: var(--shadow-sm);
+  --shadow-sidebar: var(--shadow-md);
+
+  /* Input shadows */
+  --shadow-input-rest: var(--shadow-none);
+  --shadow-input-focus: 0 0 0 3px var(--color-alpha-primary-10, rgba(0, 102, 204, 0.1));
+  --shadow-input-error: 0 0 0 3px var(--color-alpha-error-10, rgba(239, 68, 68, 0.1));
+
+  /* ========================================================================
+     FOCUS RING SHADOWS
+     Accessibility-focused outlines for keyboard navigation
+     ======================================================================== */
+  --shadow-focus-ring: 0 0 0 3px var(--color-alpha-primary-20, rgba(0, 102, 204, 0.2));
+  --shadow-focus-ring-error: 0 0 0 3px var(--color-alpha-error-20, rgba(239, 68, 68, 0.2));
+  --shadow-focus-ring-success: 0 0 0 3px var(--color-alpha-success-20, rgba(34, 197, 94, 0.2));
+  --shadow-focus-ring-warning: 0 0 0 3px var(--color-alpha-warning-20, rgba(245, 158, 11, 0.2));
+}

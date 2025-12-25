@@ -1,0 +1,90 @@
+/**
+ * Base Z-Index Tokens - Rottay Design System
+ *
+ * Z-index layering system for consistent element stacking.
+ * Uses a scale that leaves room for component-specific adjustments.
+ */
+
+:root {
+  /* ========================================================================
+     Z-INDEX SCALE - Layering System
+     Organized from bottom to top of the stack
+     ======================================================================== */
+
+  /* Base layer - Normal document flow */
+  --z-index-base: 0;
+
+  /* Dropdown layer - Select menus, autocomplete, etc */
+  --z-index-dropdown: 1000;
+
+  /* Sticky elements - Sticky headers, footers */
+  --z-index-sticky: 1100;
+
+  /* Fixed elements - Fixed navigation, banners */
+  --z-index-fixed: 1200;
+
+  /* Overlay backdrop - Modal/drawer backdrops */
+  --z-index-overlay: 1300;
+
+  /* Drawer - Side panels */
+  --z-index-drawer: 1400;
+
+  /* Modal/Dialog - Modal windows */
+  --z-index-modal: 1500;
+
+  /* Popover - Context menus, popovers */
+  --z-index-popover: 1600;
+
+  /* Tooltip - Tooltips and hints */
+  --z-index-tooltip: 1700;
+
+  /* Notification/Toast - Toast messages, notifications */
+  --z-index-notification: 1800;
+
+  /* Maximum - Highest priority elements */
+  --z-index-max: 9999;
+
+  /* ========================================================================
+     COMPONENT-SPECIFIC Z-INDEX
+     Specific layers for common component scenarios
+     ======================================================================== */
+
+  /* Navigation */
+  --z-index-navbar: var(--z-index-fixed);
+  --z-index-sidebar: var(--z-index-drawer);
+  --z-index-navbar-dropdown: calc(var(--z-index-navbar) + 10);
+
+  /* Menus */
+  --z-index-menu: var(--z-index-dropdown);
+  --z-index-submenu: calc(var(--z-index-menu) + 10);
+  --z-index-context-menu: var(--z-index-popover);
+
+  /* Overlays */
+  --z-index-modal-backdrop: var(--z-index-overlay);
+  --z-index-modal-content: var(--z-index-modal);
+  --z-index-drawer-backdrop: var(--z-index-overlay);
+  --z-index-drawer-content: var(--z-index-drawer);
+
+  /* Feedback */
+  --z-index-toast: var(--z-index-notification);
+  --z-index-alert: calc(var(--z-index-base) + 1);
+  --z-index-banner: var(--z-index-sticky);
+
+  /* Forms */
+  --z-index-select-dropdown: var(--z-index-dropdown);
+  --z-index-datepicker: var(--z-index-dropdown);
+  --z-index-autocomplete: var(--z-index-dropdown);
+
+  /* Utility */
+  --z-index-loading-overlay: calc(var(--z-index-modal) + 100);
+  --z-index-skip-link: var(--z-index-max);
+
+  /* ========================================================================
+     RELATIVE Z-INDEX
+     For elements that need layering within their stacking context
+     ======================================================================== */
+  --z-index-relative-below: -1;
+  --z-index-relative-base: 0;
+  --z-index-relative-above: 1;
+  --z-index-relative-top: 10;
+}

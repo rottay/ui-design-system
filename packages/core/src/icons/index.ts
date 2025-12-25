@@ -1,15 +1,23 @@
-/**
- * Icons System
- * Icon component wrapper and common icons from Lucide
- */
+// Types
+export type { IconProps, IconComponent } from './types';
+export { ICON_SIZE_MAP } from './types';
 
-// Icon component
-export { Icon } from './Icon';
-export type { IconProps, IconSize } from './Icon';
-
-// Common icons (most used ~100 icons)
-export * from './common';
-
-// Re-export all lucide-react icons for convenience
-// Users can also import any icon directly from lucide-react
-export * from 'lucide-react';
+// Components
+export {
+  BaseIcon,
+  UserIcon,
+  UsersIcon,
+  CheckIcon,
+  XIcon,
+  AlertIcon,
+  InfoIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  LoaderIcon,
+  EyeIcon,
+  EyeOffIcon,
+  CameraIcon,
+} from './components';

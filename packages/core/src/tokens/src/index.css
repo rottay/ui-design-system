@@ -1,0 +1,48 @@
+/**
+ * Design Tokens - Rottay Design System
+ *
+ * Main entry point for all design tokens.
+ * Import this file to get access to the complete token system.
+ *
+ * Token Categories:
+ * - Base: Foundational tokens (colors, spacing, typography, shadows, borders, z-index)
+ * - Components: Component-specific tokens (avatar, button, input, card, modal)
+ * - Responsive: Media query overrides for components
+ * - Animations: Transitions and keyframes
+ * - Tenants: Brand-specific customizations (rottay)
+ *
+ * Usage:
+ * @import '@es-rottay/designsystem-core/tokens';
+ * or
+ * import '@es-rottay/designsystem-core/tokens/src/index.css';
+ */
+
+/* ========================================================================
+   BASE TOKENS
+   Foundational design tokens used throughout the system
+   ======================================================================== */
+@import './base/index.css';
+
+/* ========================================================================
+   COMPONENT TOKENS
+   Component-specific design tokens
+   ======================================================================== */
+@import './components/index.css';
+
+/* ========================================================================
+   RESPONSIVE TOKENS
+   Responsive overrides for different screen sizes
+   ======================================================================== */
+@import './responsive/index.css';
+
+/* ========================================================================
+   ANIMATION TOKENS
+   Transitions and keyframe animations
+   ======================================================================== */
+@import './animations/index.css';
+
+/* ========================================================================
+   TENANT TOKENS
+   Brand/tenant-specific customizations
+   ======================================================================== */
+@import './tenants/index.css';
