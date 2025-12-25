@@ -16,3 +16,14 @@ export { useTokens } from './tokens';
 
 // Feature hooks
 export { useFeatures, useHasFeature, useFeatureContext } from './features';
+
+// Responsive hooks
+export {
+  useMediaQuery,
+  useBreakpoints,
+  useResponsiveValue,
+} from './responsive';
+export type {
+  UseBreakpointsResult,
+  ResponsiveValueConfig,
+} from './responsive';

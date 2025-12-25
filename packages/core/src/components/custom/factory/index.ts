@@ -1,6 +1,6 @@
 /**
- * Composed Component Factory
- * Creates preset-based composed components
+ * Custom Component Factory
+ * Creates preset-based custom components
  */
 
 import React, { ComponentType, useMemo } from 'react';
@@ -26,7 +26,7 @@ export interface PresetContext<P = unknown> {
 }
 
 /**
- * Configuration for a composed component preset
+ * Configuration for a custom component preset
  */
 export interface PresetConfig<P = unknown> {
   /** Name of the preset */
@@ -40,7 +40,7 @@ export interface PresetConfig<P = unknown> {
 }
 
 /**
- * Create a composed component from a preset config
+ * Create a custom component from a preset config
  */
 export function createPreset<P extends object>(
   config: PresetConfig<P>

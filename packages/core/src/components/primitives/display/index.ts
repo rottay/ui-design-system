@@ -2,14 +2,14 @@
  * Display primitives
  */
 
-export { Avatar } from './avatar';
-export type { AvatarProps, AvatarSize, AvatarShape } from './avatar';
+export { Avatar, AvatarGroup, AvatarBadge, AvatarFallback } from './Avatar';
+export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant, AvatarGroupProps, AvatarBadgeProps, AvatarFallbackProps } from './Avatar';
 
-export { Badge } from './badge';
-export type { BadgeProps, BadgeVariant, BadgeSize } from './badge';
+export { Badge } from './Badge';
+export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge';
 
-export { Card } from './card';
-export type { CardProps, CardVariant } from './card';
+export { Card } from './Card';
+export type { CardProps, CardVariant } from './Card';
 
 export { Image } from './Image';
 export type { ImageProps, ImageFallbackProps, ImageSkeletonProps, ImageFit, ImageLoading, ImageRadius } from './Image';

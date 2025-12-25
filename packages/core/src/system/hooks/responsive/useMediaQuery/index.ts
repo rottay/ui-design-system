@@ -43,12 +43,13 @@ export function useMediaQuery(query: string): boolean {
     }
 
     // Legacy support (Safari < 14)
-    // @ts-expect-error - addListener is deprecated but needed for older browsers
-    if (mediaQuery.addListener) {
-      // @ts-expect-error - addListener is deprecated but needed for older browsers
-      mediaQuery.addListener(listener);
-      // @ts-expect-error - removeListener is deprecated but needed for older browsers
-      return () => mediaQuery.removeListener(listener);
+    if ('addListener' in mediaQuery && typeof mediaQuery.addListener === 'function') {
+      mediaQuery.addListener(listener as any);
+      return () => {
+        if ('removeListener' in mediaQuery && typeof mediaQuery.removeListener === 'function') {
+          mediaQuery.removeListener(listener as any);
+        }
+      };
     }
 
     // No listener support - just set initial value

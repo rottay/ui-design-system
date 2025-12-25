@@ -284,7 +284,7 @@ export function DataTable({ ... }: DataTableProps) {
    - Mensajes de error traducidos
 
 #### Para Agentes de Wave 3:
-1. **Integrar en componentes composed**
+1. **Integrar en componentes custom**
    - DataTable, FileUploader, etc.
    - Mensajes de estado traducidos
 

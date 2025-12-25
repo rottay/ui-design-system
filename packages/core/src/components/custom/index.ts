@@ -1,5 +1,5 @@
 /**
- * Composed Components
+ * Custom Components
  */
 
 // Factory

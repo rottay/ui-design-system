@@ -370,7 +370,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 - [ ] Verificar que existan las traducciones en los 4 locales
 - [ ] Agregar traducciones faltantes si es necesario
 
-### Para cada componente composed:
+### Para cada componente custom:
 
 - [ ] Todos los pasos anteriores
 - [ ] Mensajes de estado (loading, empty, error) traducidos
