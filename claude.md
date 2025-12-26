@@ -297,6 +297,13 @@ npm test                       # Vitest tests
 - Props siguen el patrón: `size`, `variant`, `disabled`, `className`, `style`
 - CSS variables con prefijo del componente: `--button-*`, `--avatar-*`
 
+### Reglas de Commits
+
+- **NUNCA** agregar `Co-Authored-By: Claude` en los commits
+- **NUNCA** agregar `🤖 Generated with Claude Code` en los mensajes de commit
+- Los commits deben aparecer como si fueran hechos únicamente por el desarrollador
+- Usar mensajes de commit convencionales: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`, `chore:`
+
 ---
 
 *Última actualización: 2025-12-26*
