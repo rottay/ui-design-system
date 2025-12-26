@@ -1,54 +1,155 @@
 /**
  * Divider - Titan Engine (Ant Design)
+ * Uses Ant Design styling conventions with custom enhancements.
  */
 
-import React from 'react';
-import type { DividerProps } from '../../types';
-import { DIVIDER_DEFAULTS, MARGIN_MAP } from '../../types';
+'use client';
 
-export default function TitanDivider(props: DividerProps): React.ReactElement {
-  const {
-    orientation = DIVIDER_DEFAULTS.orientation,
-    type = DIVIDER_DEFAULTS.type,
-    children,
-    margin = DIVIDER_DEFAULTS.margin,
-    className,
-    style,
-  } = props;
+import React, { forwardRef } from 'react';
+import type { DividerProps, DividerVariant, DividerTextPosition } from '../../types';
+import {
+  DIVIDER_DEFAULTS,
+  SPACING_MAP,
+  getThicknessValue,
+  DEFAULT_COLORS,
+} from '../../types';
 
-  const isHorizontal = orientation === 'horizontal';
+/**
+ * Titan Divider component.
+ * Styled to match Ant Design conventions.
+ */
+const TitanDivider = forwardRef<HTMLDivElement, DividerProps>(
+  (props, ref) => {
+    const {
+      orientation: orientationProp,
+      type,
+      variant: variantProp,
+      dashed = DIVIDER_DEFAULTS.dashed,
+      children,
+      textPosition: textPositionProp,
+      orientationMargin,
+      plain = DIVIDER_DEFAULTS.plain!,
+      color,
+      thickness = DIVIDER_DEFAULTS.thickness,
+      spacing: spacingProp,
+      margin,
+      className = '',
+      style = {},
+      'data-testid': testId,
+      ...rest
+    } = props;
 
-  const dividerStyle: React.CSSProperties = {
-    display: isHorizontal ? 'flex' : 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: isHorizontal ? '100%' : 'auto',
-    height: isHorizontal ? 'auto' : '100%',
-    margin: isHorizontal
-      ? `${MARGIN_MAP[margin!]} 0`
-      : `0 ${MARGIN_MAP[margin!]}`,
-    ...style,
-  };
+    // Resolve prop aliases
+    const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
+    const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
+    const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
+    const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
-  const lineStyle: React.CSSProperties = {
-    flex: 1,
-    borderTop: isHorizontal ? `1px ${type} #d9d9d9` : 'none',
-    borderLeft: !isHorizontal ? `1px ${type} #d9d9d9` : 'none',
-    height: isHorizontal ? '0' : '100%',
-    width: isHorizontal ? '100%' : '0',
-  };
+    const isHorizontal = orientation === 'horizontal';
+    const hasChildren = !!children && isHorizontal;
 
-  if (children) {
+    // Calculate values
+    const lineThickness = getThicknessValue(thickness);
+    const lineColor = color || DEFAULT_COLORS.titan;
+    const spacingValue = SPACING_MAP[spacing];
+
+    // Build class names (Ant Design style)
+    const classNames = [
+      'ant-divider',
+      `ant-divider-${orientation}`,
+      hasChildren ? 'ant-divider-with-text' : '',
+      hasChildren ? `ant-divider-with-text-${textPosition}` : '',
+      plain && hasChildren ? 'ant-divider-plain' : '',
+      variant === 'dashed' ? 'ant-divider-dashed' : '',
+      variant === 'dotted' ? 'ant-divider-dotted' : '',
+      className,
+    ].filter(Boolean).join(' ');
+
+    // Container style
+    const containerStyle: React.CSSProperties = {
+      display: isHorizontal ? 'flex' : 'inline-flex',
+      alignItems: 'center',
+      width: isHorizontal ? '100%' : 'auto',
+      height: isHorizontal ? 'auto' : '100%',
+      minHeight: isHorizontal ? undefined : '0.9em',
+      margin: isHorizontal
+        ? `${spacingValue} 0`
+        : `0 ${spacingValue}`,
+      clear: 'both',
+      ...style,
+    };
+
+    // Line style
+    const lineStyle: React.CSSProperties = {
+      flex: 1,
+      borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
+      borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
+      height: isHorizontal ? '0' : '100%',
+      width: isHorizontal ? '100%' : '0',
+    };
+
+    // Line before text
+    const lineBeforeStyle: React.CSSProperties = {
+      ...lineStyle,
+      flex: textPosition === 'left' ? '0 0 5%' :
+            textPosition === 'right' ? 1 : 1,
+      minWidth: textPosition === 'left' ? '5%' : undefined,
+    };
+
+    // Line after text
+    const lineAfterStyle: React.CSSProperties = {
+      ...lineStyle,
+      flex: textPosition === 'left' ? 1 :
+            textPosition === 'right' ? '0 0 5%' : 1,
+      minWidth: textPosition === 'right' ? '5%' : undefined,
+    };
+
+    // Text style (Ant Design style)
+    const textStyle: React.CSSProperties = {
+      padding: '0 1em',
+      display: 'inline-block',
+      whiteSpace: 'nowrap',
+      fontSize: plain ? 'inherit' : '16px',
+      fontWeight: plain ? 'inherit' : 500,
+      color: plain ? 'inherit' : 'rgba(0, 0, 0, 0.85)',
+    };
+
+    // Render with text
+    if (hasChildren) {
+      return (
+        <div
+          ref={ref}
+          className={classNames}
+          style={containerStyle}
+          role="separator"
+          aria-orientation={orientation}
+          data-testid={testId}
+          {...rest}
+        >
+          <span className="ant-divider-inner-text-before" style={lineBeforeStyle} />
+          <span className="ant-divider-inner-text" style={textStyle}>
+            {children}
+          </span>
+          <span className="ant-divider-inner-text-after" style={lineAfterStyle} />
+        </div>
+      );
+    }
+
+    // Simple divider without text
     return (
-      <div className={className} style={dividerStyle}>
-        <div style={lineStyle} />
-        <span style={{ padding: '0 1rem', whiteSpace: 'nowrap' }}>
-          {children}
-        </span>
-        <div style={lineStyle} />
-      </div>
+      <div
+        ref={ref}
+        className={classNames}
+        style={{ ...containerStyle, ...lineStyle }}
+        role="separator"
+        aria-orientation={orientation}
+        data-testid={testId}
+        {...rest}
+      />
     );
   }
+);
 
-  return <div className={className} style={{ ...dividerStyle, ...lineStyle }} />;
-}
+TitanDivider.displayName = 'TitanDivider';
+
+export default TitanDivider;
