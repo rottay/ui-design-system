@@ -4,11 +4,11 @@
 
 | Area | Progress | Status |
 |------|----------|--------|
-| **Architecture** | pending | Migrate dashboard → showroom |
-| **Refactor** | 1/76 | Avatar template only |
-| **Tests** | 125/216 (57%) | Failing: ThemeProvider, timeouts |
-| **JSDoc** | ~5% | Partial, in Spanish |
-| **Storybook** | 8/76 | Most not colocated |
+| **Architecture** | done | showroom created |
+| **Refactor** | 42/76 | Display done, Inputs 12/20, Feedback 11/11 ✅, Layout 1/10, Navigation 1/12 |
+| **Tests** | ~680/700 | Display + 12 Inputs + 11 Feedback + Box + Affix done |
+| **JSDoc** | ~58% | English, standardized |
+| **Storybook** | 42/76 | Display + 12 Inputs + 11 Feedback + Box + Affix done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -109,17 +109,17 @@ Component/
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Button | pending | pending | pending | pending | |
-| 2 | Input | pending | pending | pending | pending | |
-| 3 | Select | pending | pending | pending | pending | |
-| 4 | Checkbox | pending | pending | pending | pending | |
-| 5 | Radio | pending | pending | pending | pending | |
-| 6 | Toggle | pending | pending | pending | pending | |
-| 7 | Textarea | pending | pending | pending | pending | |
-| 8 | Switch | pending | pending | pending | pending | TS warnings |
-| 9 | InputNumber | pending | pending | pending | pending | TS warnings |
-| 10 | Form | pending | pending | pending | pending | Has Item, List, ErrorList |
-| 11 | DatePicker | pending | pending | pending | pending | Has RangePicker |
+| 1 | Button | done | done | done | done | 28 tests, Button.Group |
+| 2 | Input | done | done | done | done | 32 tests, Password/Search/TextArea |
+| 3 | Select | done | done | done | done | 25 tests, Option/OptGroup |
+| 4 | Checkbox | done | done | done | done | 22 tests, Checkbox.Group |
+| 5 | Radio | done | done | done | done | 19 tests, Radio.Group |
+| 6 | Toggle | done | done | done | done | 22 tests, with labels |
+| 7 | Textarea | done | done | done | done | 24 tests, autoSize |
+| 8 | Switch | done | done | done | done | 18 tests, labels |
+| 9 | InputNumber | done | done | done | done | 28 tests, controls |
+| 10 | Form | done | done | done | done | 20 tests, Item/List |
+| 11 | DatePicker | done | done | done | done | 24 tests, RangePicker |
 | 12 | TimePicker | pending | pending | pending | pending | Has RangePicker, TS errors |
 | 13 | AutoComplete | pending | pending | pending | pending | |
 | 14 | Cascader | pending | pending | pending | pending | |
@@ -127,30 +127,30 @@ Component/
 | 16 | Mentions | pending | pending | pending | pending | |
 | 17 | Transfer | pending | pending | pending | pending | |
 | 18 | ColorPicker | pending | pending | pending | pending | |
-| 19 | Slider | pending | pending | pending | pending | |
+| 19 | Slider | done | done | done | done | 25 tests, range/marks |
 | 20 | Upload | pending | pending | pending | pending | Has Dragger |
 
 ### Feedback (11 components)
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Alert | pending | pending | pending | pending | |
-| 2 | Spinner | pending | pending | pending | pending | |
-| 3 | Progress | pending | pending | pending | pending | |
-| 4 | Modal | pending | pending | pending | pending | Has Header, Body, Footer |
-| 5 | Toast | pending | pending | pending | pending | |
-| 6 | Skeleton | pending | pending | pending | pending | |
-| 7 | Drawer | pending | pending | pending | pending | |
-| 8 | Message | pending | pending | pending | pending | Has Provider, useMessage |
-| 9 | Notification | pending | pending | pending | pending | Has Provider, useNotification |
-| 10 | Result | pending | pending | pending | pending | |
-| 11 | Rate | pending | pending | pending | pending | |
+| 1 | Alert | done | done | done | done | 20+ tests, Alert.Description |
+| 2 | Spinner | done | done | done | done | 18+ tests, all sizes |
+| 3 | Progress | done | done | done | done | 25 tests, Circle/Line compounds |
+| 4 | Modal | done | done | done | done | 24+ tests, Header/Body/Footer |
+| 5 | Toast | done | done | done | done | 25+ tests, Provider/useToast |
+| 6 | Skeleton | done | done | done | done | 22 tests, Avatar/Text/Button variants |
+| 7 | Drawer | done | done | done | done | 24 tests, placements/sizes/footer |
+| 8 | Message | done | done | done | done | 18 tests, Provider/useMessage hook |
+| 9 | Notification | done | done | done | done | 20 tests, Provider/useNotification |
+| 10 | Result | done | done | done | done | 22 tests, status types/HTTP codes |
+| 11 | Rate | done | done | done | done | 53 tests, allowHalf/count/tooltips |
 
 ### Layout (10 components)
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Box | pending | pending | pending | pending | |
+| 1 | Box | done | done | done | done | 82 tests, polymorphic/spacing/layout |
 | 2 | Stack | pending | pending | pending | pending | |
 | 3 | Grid | pending | pending | pending | pending | |
 | 4 | Divider | pending | pending | pending | pending | |
@@ -171,7 +171,7 @@ Component/
 | 4 | Menu | pending | pending | pending | pending | |
 | 5 | Stepper | pending | pending | pending | pending | |
 | 6 | Steps | pending | pending | pending | pending | |
-| 7 | Affix | pending | pending | pending | pending | |
+| 7 | Affix | done | done | done | done | 45 tests, offsetTop/offsetBottom/target |
 | 8 | Segmented | pending | pending | pending | pending | |
 | 9 | BackTop | pending | pending | pending | pending | |
 | 10 | Anchor | pending | pending | pending | pending | Has Link |

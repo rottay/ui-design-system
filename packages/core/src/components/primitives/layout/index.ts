@@ -3,7 +3,16 @@
  */
 
 export { Box } from './Box';
-export type { BoxProps } from './Box';
+export type {
+  BoxProps,
+  BoxSpacing,
+  BoxBorderRadius,
+  BoxShadow,
+  BoxDisplay,
+  BoxPosition,
+  BoxOverflow,
+} from './Box';
+export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './Box';
 
 export { Stack } from './Stack';
 export type {

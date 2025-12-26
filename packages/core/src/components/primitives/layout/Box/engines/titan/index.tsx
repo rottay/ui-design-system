@@ -1,38 +1,51 @@
 /**
  * Box - Titan Engine (Ant Design)
+ * Provides Box component using Ant Design styling conventions
  */
 
-import React from 'react';
-import type { BoxProps } from '../../types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP } from '../../types';
+'use client';
 
-export default function TitanBox(props: BoxProps): React.ReactElement {
+import React, { forwardRef, type ElementType, type Ref } from 'react';
+import type { BoxProps } from '../../types';
+import { BOX_DEFAULTS } from '../../types';
+import { buildBoxStyles, filterBoxProps } from '../../base';
+
+/**
+ * Titan Box component.
+ * Uses Ant Design's styling conventions while maintaining
+ * compatibility with the Box API.
+ */
+const TitanBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const {
-    as: Component = BOX_DEFAULTS.as!,
+    as: Component = BOX_DEFAULTS.as,
+    className = '',
     children,
-    padding = BOX_DEFAULTS.padding,
-    margin = BOX_DEFAULTS.margin,
-    display,
-    position,
-    width,
-    height,
-    background,
-    borderRadius,
-    className,
-    style,
   } = props;
 
-  const combinedStyle: React.CSSProperties = {
-    padding: SPACING_MAP[padding!],
-    margin: SPACING_MAP[margin!],
-    display,
-    position,
-    width,
-    height,
-    background,
-    borderRadius: borderRadius ? RADIUS_MAP[borderRadius] : undefined,
-    ...style,
-  };
+  const computedStyle = buildBoxStyles(props);
+  const filteredProps = filterBoxProps(props);
 
-  return React.createElement(Component, { className, style: combinedStyle }, children);
-}
+  // Build class names with Titan-specific prefixes
+  const classNames = [
+    'rottay-box',
+    'rottay-box--titan',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const ElementType = Component as ElementType;
+
+  return React.createElement(
+    ElementType,
+    {
+      ref: ref as Ref<HTMLElement>,
+      className: classNames,
+      style: computedStyle,
+      ...filteredProps,
+    },
+    children
+  );
+});
+
+TitanBox.displayName = 'TitanBox';
+
+export default TitanBox;
