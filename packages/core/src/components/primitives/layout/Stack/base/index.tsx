@@ -1,30 +1,183 @@
 /**
  * Stack - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * Uses CSS variables from design tokens for consistent styling.
+ * This is extended by engine-specific implementations.
  */
 
 'use client';
 
-import { forwardRef } from 'react';
-import type { StackProps } from '../types';
+import React, { forwardRef, type CSSProperties, type ElementType, type Ref, type ReactNode } from 'react';
+import type { StackProps, StackDirection } from '../types';
+import { STACK_DEFAULTS, ALIGN_MAP, JUSTIFY_MAP, resolveSpacing } from '../types';
+
+/**
+ * Build flexbox styles from Stack props
+ */
+export function buildStackStyles(props: StackProps): CSSProperties {
+  const {
+    direction = STACK_DEFAULTS.direction,
+    spacing,
+    gap,
+    align = STACK_DEFAULTS.align,
+    justify = STACK_DEFAULTS.justify,
+    wrap = STACK_DEFAULTS.wrap,
+    reverse = STACK_DEFAULTS.reverse,
+    fullWidth = STACK_DEFAULTS.fullWidth,
+    fullHeight = STACK_DEFAULTS.fullHeight,
+    style,
+  } = props;
+
+  // Use gap if provided, otherwise use spacing
+  const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
+
+  // Determine flex direction based on direction and reverse props
+  let flexDirection: CSSProperties['flexDirection'] = direction === 'vertical' ? 'column' : 'row';
+  if (reverse) {
+    flexDirection = direction === 'vertical' ? 'column-reverse' : 'row-reverse';
+  }
+
+  const computedStyles: CSSProperties = {
+    display: 'flex',
+    flexDirection,
+    alignItems: ALIGN_MAP[align],
+    justifyContent: JUSTIFY_MAP[justify],
+    gap: resolveSpacing(spacingValue),
+    flexWrap: wrap ? 'wrap' : 'nowrap',
+    ...(fullWidth && { width: '100%' }),
+    ...(fullHeight && { height: '100%' }),
+    ...style,
+  };
+
+  return computedStyles;
+}
+
+/**
+ * Filter out Stack-specific props from being passed to the DOM element
+ */
+export function filterStackProps(props: StackProps): Record<string, unknown> {
+  const {
+    // Remove Stack-specific props
+    as: _as,
+    engine: _engine,
+    direction: _direction,
+    spacing: _spacing,
+    gap: _gap,
+    align: _align,
+    justify: _justify,
+    wrap: _wrap,
+    divider: _divider,
+    reverse: _reverse,
+    fullWidth: _fullWidth,
+    fullHeight: _fullHeight,
+    className: _className,
+    style: _style,
+    children: _children,
+    ...rest
+  } = props;
+
+  return rest;
+}
+
+/**
+ * Renders children with optional dividers between them
+ */
+export function renderStackChildren(
+  children: ReactNode,
+  divider: ReactNode | undefined,
+  direction: StackDirection
+): ReactNode {
+  if (!divider) {
+    return children;
+  }
+
+  const childArray = React.Children.toArray(children).filter(Boolean);
+
+  if (childArray.length <= 1) {
+    return children;
+  }
+
+  const result: ReactNode[] = [];
+
+  childArray.forEach((child, index) => {
+    result.push(
+      <React.Fragment key={`child-${index}`}>
+        {child}
+      </React.Fragment>
+    );
+
+    if (index < childArray.length - 1) {
+      // If divider is true/truthy but not a ReactNode, render default divider
+      const dividerElement = divider === true ? (
+        <DefaultDivider direction={direction} />
+      ) : (
+        divider
+      );
+
+      result.push(
+        <React.Fragment key={`divider-${index}`}>
+          {dividerElement}
+        </React.Fragment>
+      );
+    }
+  });
+
+  return result;
+}
+
+/**
+ * Default divider component
+ */
+interface DefaultDividerProps {
+  direction: StackDirection;
+}
+
+function DefaultDivider({ direction }: DefaultDividerProps) {
+  const isVertical = direction === 'vertical';
+
+  return (
+    <div
+      className="rottay-stack-divider"
+      style={{
+        width: isVertical ? '100%' : '1px',
+        height: isVertical ? '1px' : '100%',
+        backgroundColor: 'var(--stack-divider-color, #e5e7eb)',
+        flexShrink: 0,
+      }}
+      aria-hidden="true"
+    />
+  );
+}
 
 /**
  * Base Stack component using CSS variables.
  * This is extended by engine-specific implementations.
  */
-export const BaseStack = forwardRef<HTMLDivElement, StackProps>(
+export const BaseStack = forwardRef<HTMLElement, StackProps>(
   (props, ref) => {
-    const { className = '', style = {}, children, ...rest } = props;
+    const {
+      as: Component = STACK_DEFAULTS.as,
+      direction = STACK_DEFAULTS.direction,
+      divider,
+      className = '',
+      children,
+    } = props;
 
-    return (
-      <div
-        ref={ref}
-        className={`rottay-stack ${className}`}
-        style={style}
-        {...rest}
-      >
-        {children}
-      </div>
+    const computedStyle = buildStackStyles(props);
+    const filteredProps = filterStackProps(props);
+    const renderedChildren = renderStackChildren(children, divider, direction);
+
+    // Cast Component to ElementType for createElement
+    const ElementType = Component as ElementType;
+
+    return React.createElement(
+      ElementType,
+      {
+        ref: ref as Ref<HTMLElement>,
+        className: `rottay-stack ${className}`.trim(),
+        style: computedStyle,
+        ...filteredProps,
+      },
+      renderedChildren
     );
   }
 );
