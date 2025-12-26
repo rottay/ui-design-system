@@ -1,6 +1,10 @@
 /**
- * Card.Header - Compound Component
- * Header section for Card component
+ * @fileoverview Card.Header Compound Component
+ * @description Header section for Card component with title, subtitle, avatar, and extra content.
+ * Provides a consistent header layout across all card variations.
+ *
+ * @module Card/compound/Header
+ * @package @es-rottay/designsystem-core
  */
 
 'use client';
@@ -9,6 +13,10 @@ import React from 'react';
 import type { CSSProperties } from 'react';
 import type { CardHeaderProps } from '../../types';
 
+/**
+ * Padding size to CSS value mapping.
+ * @internal
+ */
 const PADDING_MAP: Record<string, string> = {
   none: '0',
   sm: '12px 16px',
@@ -17,7 +25,39 @@ const PADDING_MAP: Record<string, string> = {
 };
 
 /**
- * Card header with title, subtitle, avatar, and extra content
+ * Card header compound component.
+ * Displays title, subtitle, avatar, and extra content in a consistent layout.
+ *
+ * Features:
+ * - Flexible title and subtitle with text truncation
+ * - Optional avatar/icon support
+ * - Extra content slot (typically for action buttons)
+ * - Optional divider below the header
+ * - Configurable padding
+ *
+ * @component
+ * @example
+ * // Basic usage with title
+ * <Card.Header title="Card Title" />
+ *
+ * @example
+ * // With subtitle and avatar
+ * <Card.Header
+ *   title="John Doe"
+ *   subtitle="Software Engineer"
+ *   avatar={<Avatar src="/avatar.jpg" />}
+ * />
+ *
+ * @example
+ * // With extra content and divider
+ * <Card.Header
+ *   title="Settings"
+ *   extra={<Button icon={<SettingsIcon />} />}
+ *   divider
+ * />
+ *
+ * @param {CardHeaderProps} props - Component properties
+ * @returns {React.ReactElement} The rendered CardHeader component
  */
 export function CardHeader({
   title,

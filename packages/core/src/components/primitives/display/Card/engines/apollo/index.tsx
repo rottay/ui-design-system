@@ -1,5 +1,10 @@
 /**
- * Card - Apollo Engine (Pure HTML/CSS)
+ * @fileoverview Card - Apollo Engine Implementation
+ * @description Pure HTML/CSS implementation of the Card component.
+ * Provides maximum accessibility and zero external dependencies.
+ *
+ * @module Card/engines/apollo
+ * @package @es-rottay/designsystem-core
  */
 
 'use client';
@@ -8,6 +13,42 @@ import React, { useState } from 'react';
 import type { CardProps } from '../../types';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from '../../types';
 
+/**
+ * Apollo engine Card component using pure HTML/CSS.
+ * Provides a lightweight, accessible card implementation without external dependencies.
+ *
+ * Features:
+ * - Zero external dependencies (pure React)
+ * - Maximum accessibility with semantic HTML
+ * - CSS-in-JS styling with CSS variables
+ * - Loading state with spinner overlay
+ * - Cover image support (top/bottom position)
+ * - Header with title, description, and extra content
+ * - Action slot for buttons/links
+ * - Smooth hover transitions
+ * - Full keyboard navigation support
+ *
+ * @component
+ * @example
+ * // Basic card with Apollo engine
+ * <Card engine="apollo" title="Card Title">
+ *   <p>Card content</p>
+ * </Card>
+ *
+ * @example
+ * // Accessible clickable card
+ * <Card
+ *   engine="apollo"
+ *   clickable
+ *   onClick={() => navigate('/details')}
+ *   title="Click to view details"
+ * >
+ *   <p>This card is fully keyboard accessible</p>
+ * </Card>
+ *
+ * @param {CardProps} props - Component properties
+ * @returns {React.ReactElement} The rendered Apollo Card component
+ */
 export default function ApolloCard(props: CardProps): React.ReactElement {
   const {
     children,
@@ -118,6 +159,8 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
         justifyContent: 'center',
         zIndex: 10,
       }}
+      aria-busy="true"
+      aria-label="Loading"
     >
       <div
         style={{
@@ -141,6 +184,7 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
       onMouseLeave={() => setIsHovered(false)}
       role={clickable || onClick ? 'button' : undefined}
       tabIndex={clickable || onClick ? 0 : undefined}
+      aria-busy={loading}
     >
       {loadingOverlay}
 

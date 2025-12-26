@@ -1,106 +1,176 @@
+/**
+ * Tag - Hermes Engine (DaisyUI/Tailwind)
+ *
+ * @module Tag/engines/hermes
+ * @description Implements the Tag component using DaisyUI badge classes
+ * with Tailwind CSS. This engine provides a lightweight, utility-first approach.
+ */
+
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { useCallback } from 'react';
 import type { TagProps } from '../../types';
+import { TAG_DEFAULTS } from '../../types';
 
 /**
- * Hermes (DaisyUI/Tailwind) implementation of Tag component.
- *
- * Uses DaisyUI badge component with Tailwind classes.
+ * Close icon SVG component for closable tags.
  */
-export const HermesTag = forwardRef<HTMLSpanElement, TagProps>(
-  (
-    {
-      size = 'md',
-      variant = 'solid',
-      color = 'default',
-      closable = false,
-      onClose,
-      icon,
-      children,
-      rounded = false,
-      bordered = false,
-      disabled = false,
-      clickable = false,
-      onClick,
-      className,
-      style,
-      ...props
-    },
-    ref
-  ) => {
-    const sizeClasses = {
-      sm: 'badge-sm text-xs',
-      md: 'badge-md text-sm',
-      lg: 'badge-lg text-base',
-    };
-
-    const colorClasses = {
-      default: variant === 'outline' ? 'badge-outline' : 'badge-ghost',
-      primary: variant === 'outline' ? 'badge-primary badge-outline' : 'badge-primary',
-      secondary: variant === 'outline' ? 'badge-secondary badge-outline' : 'badge-secondary',
-      success: variant === 'outline' ? 'badge-success badge-outline' : 'badge-success',
-      warning: variant === 'outline' ? 'badge-warning badge-outline' : 'badge-warning',
-      error: variant === 'outline' ? 'badge-error badge-outline' : 'badge-error',
-    };
-
-    const classes = [
-      'badge',
-      'inline-flex',
-      'items-center',
-      'gap-1',
-      sizeClasses[size],
-      colorClasses[color],
-      clickable && !disabled ? 'cursor-pointer hover:opacity-80' : '',
-      disabled ? 'opacity-50 cursor-not-allowed' : '',
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    const handleClick = () => {
-      if (clickable && !disabled && onClick) {
-        onClick();
-      }
-    };
-
-    const handleClose = (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (!disabled && onClose) {
-        onClose();
-      }
-    };
-
-    return (
-      <span
-        ref={ref}
-        className={classes}
-        style={style}
-        onClick={handleClick}
-        {...props}
-      >
-        {icon && <span>{icon}</span>}
-        <span>{children}</span>
-        {closable && (
-          <button
-            type="button"
-            onClick={handleClose}
-            className="ml-1 hover:opacity-70"
-            aria-label="Close tag"
-          >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path
-                d="M9 3L3 9M3 3L9 9"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </button>
-        )}
-      </span>
-    );
-  }
+const CloseIcon: React.FC = () => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M9 3L3 9M3 3L9 9"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
 );
+
+/**
+ * Maps size prop to DaisyUI badge size classes.
+ */
+const SIZE_CLASSES: Record<string, string> = {
+  xs: 'badge-xs text-xs',
+  sm: 'badge-sm text-xs',
+  md: 'badge-md text-sm',
+  lg: 'badge-lg text-base',
+  xl: 'badge-lg text-lg',
+};
+
+/**
+ * Maps variant prop to DaisyUI badge color classes.
+ */
+const VARIANT_CLASSES: Record<string, string> = {
+  default: 'badge-ghost',
+  primary: 'badge-primary',
+  secondary: 'badge-secondary',
+  success: 'badge-success',
+  warning: 'badge-warning',
+  error: 'badge-error',
+};
+
+/**
+ * Maps radius prop to Tailwind border-radius classes.
+ */
+const RADIUS_CLASSES: Record<string, string> = {
+  none: 'rounded-none',
+  sm: 'rounded-sm',
+  md: 'rounded',
+  lg: 'rounded-lg',
+  full: 'rounded-full',
+};
+
+/**
+ * Hermes (DaisyUI/Tailwind) implementation of the Tag component.
+ *
+ * Uses DaisyUI's badge component with Tailwind utility classes
+ * for a lightweight, customizable tag implementation.
+ *
+ * @param props - Tag component properties
+ * @returns DaisyUI badge element
+ *
+ * @example
+ * ```tsx
+ * <HermesTag variant="success" closable>
+ *   Completed
+ * </HermesTag>
+ * ```
+ */
+export default function HermesTag(props: TagProps): React.ReactElement {
+  const {
+    size = TAG_DEFAULTS.size,
+    variant = TAG_DEFAULTS.variant,
+    closable = TAG_DEFAULTS.closable,
+    onClose,
+    icon,
+    children,
+    bordered = TAG_DEFAULTS.bordered,
+    radius = TAG_DEFAULTS.radius,
+    color,
+    outlined = TAG_DEFAULTS.outlined,
+    clickable = TAG_DEFAULTS.clickable,
+    onClick,
+    className = '',
+    style = {},
+    ...restProps
+  } = props;
+
+  /**
+   * Handles close button click.
+   * Stops propagation to prevent triggering tag click.
+   */
+  const handleClose = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onClose?.();
+    },
+    [onClose]
+  );
+
+  /**
+   * Handles tag click events when clickable.
+   */
+  const handleClick = useCallback(() => {
+    if (clickable && onClick) {
+      onClick();
+    }
+  }, [clickable, onClick]);
+
+  // Build class list
+  const classNames = [
+    'badge',
+    'inline-flex',
+    'items-center',
+    'gap-1',
+    SIZE_CLASSES[size] || SIZE_CLASSES.md,
+    VARIANT_CLASSES[variant] || VARIANT_CLASSES.default,
+    outlined && 'badge-outline',
+    RADIUS_CLASSES[radius] || RADIUS_CLASSES.md,
+    bordered && 'ring-1 ring-base-300',
+    clickable && 'cursor-pointer hover:opacity-80 active:scale-95',
+    'transition-all duration-200',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  // Build custom styles
+  const tagStyle: React.CSSProperties = {
+    ...(color && { backgroundColor: color }),
+    ...style,
+  };
+
+  return (
+    <span
+      className={classNames}
+      style={tagStyle}
+      onClick={handleClick}
+      role={clickable ? 'button' : undefined}
+      tabIndex={clickable ? 0 : undefined}
+      {...restProps}
+    >
+      {icon && <span className="flex-shrink-0">{icon}</span>}
+
+      <span>{children}</span>
+
+      {closable && (
+        <button
+          type="button"
+          onClick={handleClose}
+          className="ml-0.5 hover:opacity-70 focus:outline-none"
+          aria-label="Remove tag"
+        >
+          <CloseIcon />
+        </button>
+      )}
+    </span>
+  );
+}
 
 HermesTag.displayName = 'HermesTag';

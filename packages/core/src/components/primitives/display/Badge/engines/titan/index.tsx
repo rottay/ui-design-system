@@ -1,5 +1,9 @@
 /**
- * Badge - Titan Engine (Ant Design)
+ * @fileoverview Badge Titan Engine Implementation
+ * @description Ant Design-based implementation of the Badge component.
+ * Provides full-featured badge functionality using the antd Badge component
+ * with custom prop mapping for design system compatibility.
+ * @module components/primitives/display/Badge/engines/titan
  */
 
 'use client';
@@ -10,7 +14,10 @@ import type { BadgeProps } from '../../types';
 import { BADGE_DEFAULTS, VARIANT_COLOR_MAP, SIZE_MAP } from '../../types';
 
 /**
- * Format count for display
+ * Formats a numeric count value for display with overflow handling.
+ * @param count - The count value to format
+ * @param max - Maximum value before showing overflow
+ * @returns The formatted count or undefined
  */
 function formatCount(count: number | string | undefined, max: number): number | string | undefined {
   if (count === undefined) return undefined;
@@ -18,6 +25,29 @@ function formatCount(count: number | string | undefined, max: number): number | 
   return count > max ? max : count;
 }
 
+/**
+ * Titan (Ant Design) implementation of the Badge component.
+ *
+ * This engine provides the full feature set of Ant Design's Badge component,
+ * including animation support, status indicators, and ribbon variants.
+ * It maps the design system's unified prop interface to Ant Design's API.
+ *
+ * @component
+ * @example
+ * // Basic usage with count
+ * <TitanBadge count={5} variant="primary">
+ *   <Avatar />
+ * </TitanBadge>
+ *
+ * @example
+ * // Dot indicator with pulse animation
+ * <TitanBadge dot pulse variant="error">
+ *   <NotificationIcon />
+ * </TitanBadge>
+ *
+ * @param props - Badge component props
+ * @returns React element with Ant Design Badge
+ */
 export default function TitanBadge(props: BadgeProps): React.ReactElement {
   const {
     children,
@@ -28,7 +58,6 @@ export default function TitanBadge(props: BadgeProps): React.ReactElement {
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
     size = BADGE_DEFAULTS.size,
-    // visible - handled via count/dot display logic
     pulse,
     position = BADGE_DEFAULTS.position,
     icon,
@@ -41,16 +70,19 @@ export default function TitanBadge(props: BadgeProps): React.ReactElement {
     style,
   } = props;
 
-  // Get display value
+  // Determine display value (content takes precedence)
   const displayValue = content !== undefined ? content : count;
 
-  // Map variant to color
+  // Map variant to Ant Design color
   const color = VARIANT_COLOR_MAP[variant!] || VARIANT_COLOR_MAP.default;
 
-  // Map size to Ant size
+  // Map size to Ant Design size prop
   const antSize = size === 'sm' || size === 'xs' ? 'small' : 'default';
 
-  // Map position to offset
+  /**
+   * Position offset mapping for badge placement.
+   * Ant Design uses [x, y] offset from default position.
+   */
   const offsetMap: Record<string, [number, number]> = {
     'top-right': [0, 0],
     'top-left': [-100, 0],
@@ -59,24 +91,28 @@ export default function TitanBadge(props: BadgeProps): React.ReactElement {
   };
   const offset = offsetMap[position!] || [0, 0];
 
-  // Handle click
+  /**
+   * Handles badge click events with propagation control.
+   * @param e - Mouse event
+   */
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClick?.();
   };
 
-  // Build custom styles
+  // Build custom style object
   const badgeStyle: React.CSSProperties = {
     cursor: clickable || onClick ? 'pointer' : undefined,
     ...style,
   };
 
-  // Processing animation status
+  // Map pulse to Ant Design processing status
   const status = pulse ? 'processing' : undefined;
 
-  // If no children and no count, render as standalone badge (like a tag)
+  // Handle standalone badge (no children, no count)
   if (!children && displayValue === undefined && !dot) {
     const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
+
     const standaloneStyle: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
@@ -115,7 +151,7 @@ export default function TitanBadge(props: BadgeProps): React.ReactElement {
     );
   }
 
-  // Render Ant Badge
+  // Render standard Ant Design Badge
   return (
     <AntBadge
       count={typeof displayValue === 'string' ? displayValue : formatCount(displayValue as number, max!)}

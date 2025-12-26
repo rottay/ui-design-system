@@ -1,6 +1,10 @@
 /**
- * Card - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Card Base Component
+ * @description Pure React implementation of the Card component using CSS variables.
+ * Serves as the foundational component extended by engine-specific implementations.
+ *
+ * @module Card/base
+ * @package @es-rottay/designsystem-core
  */
 
 'use client';
@@ -10,8 +14,38 @@ import type { CardProps } from '../types';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from '../types';
 
 /**
- * Base Card component using CSS variables.
- * This is extended by engine-specific implementations.
+ * Base Card component using CSS variables for styling.
+ * This component provides the foundational structure and behavior
+ * that is extended by engine-specific implementations (Titan, Hermes, Apollo).
+ *
+ * Features:
+ * - Multiple visual variants (elevated, outlined, filled, ghost)
+ * - Configurable padding, radius, and shadow
+ * - Hover effects with smooth transitions
+ * - Loading state with spinner overlay
+ * - Accessible keyboard navigation for clickable cards
+ *
+ * @component
+ * @example
+ * // Basic usage
+ * <BaseCard variant="elevated" padding="md">
+ *   <p>Card content goes here</p>
+ * </BaseCard>
+ *
+ * @example
+ * // Clickable card with hover effects
+ * <BaseCard
+ *   variant="outlined"
+ *   hoverable
+ *   clickable
+ *   onClick={() => console.log('Card clicked')}
+ * >
+ *   <p>Click me!</p>
+ * </BaseCard>
+ *
+ * @param {CardProps} props - Component properties
+ * @param {React.Ref<HTMLDivElement>} ref - Forwarded ref to the root element
+ * @returns {React.ReactElement} The rendered Card component
  */
 export const BaseCard = forwardRef<HTMLDivElement, CardProps>(
   (props, ref) => {
@@ -85,10 +119,16 @@ export const BaseCard = forwardRef<HTMLDivElement, CardProps>(
       ...style,
     };
 
+    /**
+     * Handles mouse enter event for hover effects
+     */
     const handleMouseEnter = () => {
       if (hoverable) setIsHovered(true);
     };
 
+    /**
+     * Handles mouse leave event for hover effects
+     */
     const handleMouseLeave = () => {
       if (hoverable) setIsHovered(false);
     };

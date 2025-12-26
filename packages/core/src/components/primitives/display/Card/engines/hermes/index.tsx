@@ -1,5 +1,10 @@
 /**
- * Card - Hermes Engine (DaisyUI)
+ * @fileoverview Card - Hermes Engine Implementation
+ * @description DaisyUI/Tailwind-based implementation of the Card component.
+ * Utilizes DaisyUI's utility classes for styling while maintaining consistent API.
+ *
+ * @module Card/engines/hermes
+ * @package @es-rottay/designsystem-core
  */
 
 'use client';
@@ -8,6 +13,41 @@ import React, { useState } from 'react';
 import type { CardProps } from '../../types';
 import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP } from '../../types';
 
+/**
+ * Hermes engine Card component using DaisyUI/Tailwind CSS.
+ * Provides a utility-first card implementation with responsive design patterns.
+ *
+ * Features:
+ * - DaisyUI card component classes
+ * - Tailwind CSS utility-first styling
+ * - Skeleton loading animation
+ * - Cover image support (top/bottom position)
+ * - Header with title, description, and extra content
+ * - Action slot with flexible alignment
+ * - Smooth hover transitions
+ *
+ * @component
+ * @example
+ * // Basic card with Hermes engine
+ * <Card engine="hermes" title="Card Title">
+ *   <p>Card content</p>
+ * </Card>
+ *
+ * @example
+ * // Card with DaisyUI styling
+ * <Card
+ *   engine="hermes"
+ *   variant="outlined"
+ *   hoverable
+ * >
+ *   <Card.Body>
+ *     <p>DaisyUI styled content</p>
+ *   </Card.Body>
+ * </Card>
+ *
+ * @param {CardProps} props - Component properties
+ * @returns {React.ReactElement} The rendered Hermes Card component
+ */
 export default function HermesCard(props: CardProps): React.ReactElement {
   const {
     children,

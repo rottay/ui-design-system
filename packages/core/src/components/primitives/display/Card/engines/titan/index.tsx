@@ -1,5 +1,10 @@
 /**
- * Card - Titan Engine (Ant Design)
+ * @fileoverview Card - Titan Engine Implementation
+ * @description Ant Design-based implementation of the Card component.
+ * Leverages Ant Design's Card component while maintaining consistent API.
+ *
+ * @module Card/engines/titan
+ * @package @es-rottay/designsystem-core
  */
 
 'use client';
@@ -9,6 +14,40 @@ import { Card as AntCard, Skeleton } from 'antd';
 import type { CardProps } from '../../types';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from '../../types';
 
+/**
+ * Titan engine Card component using Ant Design.
+ * Provides a feature-rich card implementation with built-in loading states,
+ * cover images, and action slots.
+ *
+ * Features:
+ * - Native Ant Design Card integration
+ * - Built-in skeleton loading state
+ * - Cover image support
+ * - Header with title, description, and extra content
+ * - Action slot for buttons/links
+ * - Multiple visual variants
+ *
+ * @component
+ * @example
+ * // Basic card with Titan engine
+ * <Card engine="titan" title="Card Title">
+ *   <p>Card content</p>
+ * </Card>
+ *
+ * @example
+ * // Card with cover and actions
+ * <Card
+ *   engine="titan"
+ *   title="Product"
+ *   cover="/product.jpg"
+ *   actions={[<Button>Buy</Button>]}
+ * >
+ *   <p>Product description</p>
+ * </Card>
+ *
+ * @param {CardProps} props - Component properties
+ * @returns {React.ReactElement} The rendered Titan Card component
+ */
 export default function TitanCard(props: CardProps): React.ReactElement {
   const {
     children,
@@ -53,14 +92,14 @@ export default function TitanCard(props: CardProps): React.ReactElement {
     title
   );
 
-  // Build shadow style
+  // Build shadow style based on variant
   const shadowStyle = variant === 'elevated' || shadowed
     ? { boxShadow: SHADOW_MAP.md }
     : variant === 'ghost'
     ? { boxShadow: 'none', backgroundColor: 'transparent' }
     : {};
 
-  // Build cover element
+  // Build cover element if cover URL is provided
   const coverElement = cover ? (
     <img
       alt={typeof title === 'string' ? title : 'Card cover'}

@@ -1,27 +1,53 @@
+/**
+ * Typography - Base Components
+ *
+ * Pure CSS implementation of Typography components using CSS variables.
+ * These base components serve as the foundation for engine-specific implementations
+ * and provide the headless/Apollo engine behavior.
+ *
+ * @module Typography/base
+ */
+
 'use client';
 
 import React, { forwardRef } from 'react';
 import type { HeadingProps, TextProps, ParagraphProps } from '../types';
+import {
+  TYPOGRAPHY_DEFAULTS,
+  SIZE_MAP,
+  WEIGHT_MAP,
+  COLOR_MAP,
+} from '../types';
 
 /**
  * Base Heading component for semantic headings.
  *
+ * Renders an HTML heading element (h1-h6) with customizable visual appearance.
+ * Supports text truncation, line clamping, and semantic color variants.
+ *
  * Features:
- * - Semantic h1-h6 levels
- * - Visual size override
- * - Text alignment
- * - Line clamping
- * - Truncation
+ * - Semantic h1-h6 levels for accessibility
+ * - Visual size independent of semantic level
+ * - Text alignment and color variants
+ * - Line clamping and truncation support
+ * - CSS variable-based theming
+ *
+ * @example
+ * ```tsx
+ * <BaseHeading level="h1" size="3xl" weight="bold" color="primary">
+ *   Welcome to the Dashboard
+ * </BaseHeading>
+ * ```
  */
 export const BaseHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
   (
     {
-      level = 'h2',
+      level = TYPOGRAPHY_DEFAULTS.heading.level,
       size,
-      weight = 'bold',
-      align = 'left',
-      color = 'default',
-      truncate = false,
+      weight = TYPOGRAPHY_DEFAULTS.heading.weight,
+      align = TYPOGRAPHY_DEFAULTS.heading.align,
+      color = TYPOGRAPHY_DEFAULTS.heading.color,
+      truncate = TYPOGRAPHY_DEFAULTS.heading.truncate,
       lineClamp,
       children,
       className,
@@ -32,51 +58,39 @@ export const BaseHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
   ) => {
     const Component = level;
 
-    const sizeMap = {
-      xs: '1rem',
-      sm: '1.25rem',
-      md: '1.5rem',
-      lg: '1.875rem',
-      xl: '2.25rem',
-      '2xl': '3rem',
-      '3xl': '3.75rem',
-    };
-
-    const weightMap = {
-      normal: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700,
-    };
-
-    const colorMap = {
-      default: 'var(--color-text-primary)',
-      muted: 'var(--color-text-secondary)',
-      primary: 'var(--color-primary)',
-      success: 'var(--color-success)',
-      warning: 'var(--color-warning)',
-      error: 'var(--color-error)',
-    };
-
+    // Build computed styles using CSS variables and mappings
     const headingStyles: React.CSSProperties = {
-      fontSize: size ? sizeMap[size] : undefined,
-      fontWeight: weightMap[weight],
+      fontSize: size ? SIZE_MAP.heading[size] : undefined,
+      fontWeight: WEIGHT_MAP[weight],
       textAlign: align,
-      color: colorMap[color],
+      color: COLOR_MAP[color],
       margin: 0,
+      lineHeight: 1.2,
+      // Truncation styles
       overflow: truncate || lineClamp ? 'hidden' : undefined,
       textOverflow: truncate ? 'ellipsis' : undefined,
       whiteSpace: truncate ? 'nowrap' : undefined,
+      // Line clamping (CSS multi-line truncation)
       display: lineClamp ? '-webkit-box' : undefined,
       WebkitLineClamp: lineClamp,
       WebkitBoxOrient: lineClamp ? 'vertical' : undefined,
       ...style,
     };
 
+    const classNames = [
+      'rottay-heading',
+      `rottay-heading--${level}`,
+      size && `rottay-heading--${size}`,
+      `rottay-heading--${color}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     return (
       <Component
-        ref={ref as any}
-        className={`rottay-heading rottay-heading--${level} ${className || ''}`}
+        ref={ref as React.Ref<HTMLHeadingElement>}
+        className={classNames}
         style={headingStyles}
         {...props}
       >
@@ -89,29 +103,41 @@ export const BaseHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
 BaseHeading.displayName = 'BaseHeading';
 
 /**
- * Base Text component for inline text.
+ * Base Text component for inline text elements.
+ *
+ * Renders inline text with customizable appearance, decorations, and
+ * flexible element rendering. Supports various text styles including
+ * underline, strikethrough, italic, and monospace.
  *
  * Features:
- * - Multiple sizes and weights
- * - Semantic colors
- * - Text decorations
- * - Line clamping
- * - Flexible element rendering
+ * - Multiple size and weight options
+ * - Semantic color variants
+ * - Text decorations (underline, strikethrough, italic)
+ * - Monospace font support for code
+ * - Flexible element rendering (span, p, div, label)
+ * - Line clamping and truncation
+ *
+ * @example
+ * ```tsx
+ * <BaseText size="lg" color="primary" weight="semibold" italic>
+ *   Important emphasized text
+ * </BaseText>
+ * ```
  */
 export const BaseText = forwardRef<HTMLElement, TextProps>(
   (
     {
-      size = 'md',
-      weight = 'normal',
-      color = 'default',
-      align = 'left',
-      as = 'span',
-      truncate = false,
+      size = TYPOGRAPHY_DEFAULTS.text.size,
+      weight = TYPOGRAPHY_DEFAULTS.text.weight,
+      color = TYPOGRAPHY_DEFAULTS.text.color,
+      align = TYPOGRAPHY_DEFAULTS.text.align,
+      as = TYPOGRAPHY_DEFAULTS.text.as,
+      truncate = TYPOGRAPHY_DEFAULTS.text.truncate,
       lineClamp,
-      underline = false,
-      strikethrough = false,
-      italic = false,
-      monospace = false,
+      underline = TYPOGRAPHY_DEFAULTS.text.underline,
+      strikethrough = TYPOGRAPHY_DEFAULTS.text.strikethrough,
+      italic = TYPOGRAPHY_DEFAULTS.text.italic,
+      monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
       children,
       className,
       style,
@@ -121,53 +147,51 @@ export const BaseText = forwardRef<HTMLElement, TextProps>(
   ) => {
     const Component = as;
 
-    const sizeMap = {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      md: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '3xl': '1.875rem',
+    // Compute text decoration value
+    const getTextDecoration = (): string | undefined => {
+      if (underline && strikethrough) return 'underline line-through';
+      if (underline) return 'underline';
+      if (strikethrough) return 'line-through';
+      return undefined;
     };
 
-    const weightMap = {
-      normal: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700,
-    };
-
-    const colorMap = {
-      default: 'var(--color-text-primary)',
-      muted: 'var(--color-text-secondary)',
-      primary: 'var(--color-primary)',
-      success: 'var(--color-success)',
-      warning: 'var(--color-warning)',
-      error: 'var(--color-error)',
-    };
-
+    // Build computed styles
     const textStyles: React.CSSProperties = {
-      fontSize: sizeMap[size],
-      fontWeight: weightMap[weight],
+      fontSize: SIZE_MAP.text[size],
+      fontWeight: WEIGHT_MAP[weight],
       textAlign: align,
-      color: colorMap[color],
-      fontFamily: monospace ? 'monospace' : undefined,
-      textDecoration: underline ? 'underline' : strikethrough ? 'line-through' : undefined,
+      color: COLOR_MAP[color],
+      fontFamily: monospace ? 'ui-monospace, monospace' : undefined,
+      textDecoration: getTextDecoration(),
       fontStyle: italic ? 'italic' : undefined,
+      // Truncation styles
       overflow: truncate || lineClamp ? 'hidden' : undefined,
       textOverflow: truncate ? 'ellipsis' : undefined,
       whiteSpace: truncate ? 'nowrap' : undefined,
+      // Line clamping
       display: lineClamp ? '-webkit-box' : undefined,
       WebkitLineClamp: lineClamp,
       WebkitBoxOrient: lineClamp ? 'vertical' : undefined,
       ...style,
     };
 
+    const classNames = [
+      'rottay-text',
+      `rottay-text--${size}`,
+      `rottay-text--${color}`,
+      underline && 'rottay-text--underline',
+      strikethrough && 'rottay-text--strikethrough',
+      italic && 'rottay-text--italic',
+      monospace && 'rottay-text--monospace',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     return (
       <Component
         ref={ref as any}
-        className={`rottay-text rottay-text--${size} ${className || ''}`}
+        className={classNames}
         style={textStyles}
         {...props}
       >
@@ -180,22 +204,35 @@ export const BaseText = forwardRef<HTMLElement, TextProps>(
 BaseText.displayName = 'BaseText';
 
 /**
- * Base Paragraph component for block text.
+ * Base Paragraph component for block-level text.
+ *
+ * Renders a paragraph element with optimized line-height and spacing
+ * for readable body text. Supports text alignment, color variants,
+ * and truncation options.
  *
  * Features:
- * - Paragraph spacing
- * - Text alignment
- * - Line clamping
- * - Semantic colors
+ * - Optimized line-height (1.6) for readability
+ * - Automatic bottom margin for spacing
+ * - Text alignment and color variants
+ * - Line clamping and truncation support
+ * - CSS variable-based theming
+ *
+ * @example
+ * ```tsx
+ * <BaseParagraph size="md" color="muted" align="justify">
+ *   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *   Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+ * </BaseParagraph>
+ * ```
  */
 export const BaseParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   (
     {
-      size = 'md',
-      weight = 'normal',
-      color = 'default',
-      align = 'left',
-      truncate = false,
+      size = TYPOGRAPHY_DEFAULTS.paragraph.size,
+      weight = TYPOGRAPHY_DEFAULTS.paragraph.weight,
+      color = TYPOGRAPHY_DEFAULTS.paragraph.color,
+      align = TYPOGRAPHY_DEFAULTS.paragraph.align,
+      truncate = TYPOGRAPHY_DEFAULTS.paragraph.truncate,
       lineClamp,
       children,
       className,
@@ -204,52 +241,38 @@ export const BaseParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     },
     ref
   ) => {
-    const sizeMap = {
-      xs: '0.75rem',
-      sm: '0.875rem',
-      md: '1rem',
-      lg: '1.125rem',
-      xl: '1.25rem',
-      '2xl': '1.5rem',
-      '3xl': '1.875rem',
-    };
-
-    const weightMap = {
-      normal: 400,
-      medium: 500,
-      semibold: 600,
-      bold: 700,
-    };
-
-    const colorMap = {
-      default: 'var(--color-text-primary)',
-      muted: 'var(--color-text-secondary)',
-      primary: 'var(--color-primary)',
-      success: 'var(--color-success)',
-      warning: 'var(--color-warning)',
-      error: 'var(--color-error)',
-    };
-
+    // Build computed styles
     const paragraphStyles: React.CSSProperties = {
-      fontSize: sizeMap[size],
-      fontWeight: weightMap[weight],
+      fontSize: SIZE_MAP.text[size],
+      fontWeight: WEIGHT_MAP[weight],
       textAlign: align,
-      color: colorMap[color],
+      color: COLOR_MAP[color],
       margin: '0 0 1em 0',
       lineHeight: 1.6,
+      // Truncation styles
       overflow: truncate || lineClamp ? 'hidden' : undefined,
       textOverflow: truncate ? 'ellipsis' : undefined,
       whiteSpace: truncate ? 'nowrap' : undefined,
+      // Line clamping
       display: lineClamp ? '-webkit-box' : undefined,
       WebkitLineClamp: lineClamp,
       WebkitBoxOrient: lineClamp ? 'vertical' : undefined,
       ...style,
     };
 
+    const classNames = [
+      'rottay-paragraph',
+      `rottay-paragraph--${size}`,
+      `rottay-paragraph--${color}`,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     return (
       <p
         ref={ref}
-        className={`rottay-paragraph rottay-paragraph--${size} ${className || ''}`}
+        className={classNames}
         style={paragraphStyles}
         {...props}
       >

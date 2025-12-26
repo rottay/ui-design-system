@@ -1,0 +1,247 @@
+/**
+ * QRCode - Base Component
+ * Uses CSS variables from design tokens for consistent styling
+ */
+
+'use client';
+
+import React, { forwardRef, useEffect, useRef, useMemo } from 'react';
+import type { QRCodeProps } from '../types';
+import { QRCODE_DEFAULTS } from '../types';
+
+/**
+ * Generates a simple pattern that looks like a QR code.
+ * Note: This is a visual placeholder. Real QR code generation
+ * requires a proper QR encoding library.
+ */
+function generatePattern(value: string, gridSize: number): boolean[][] {
+  const pattern: boolean[][] = [];
+  let hash = 0;
+  for (let i = 0; i < value.length; i++) {
+    hash = ((hash << 5) - hash) + value.charCodeAt(i);
+    hash = hash & hash;
+  }
+
+  for (let i = 0; i < gridSize; i++) {
+    pattern[i] = [];
+    for (let j = 0; j < gridSize; j++) {
+      const seed = (hash + i * gridSize + j) * 2654435761;
+      pattern[i][j] = (seed & 0xFF) > 127;
+    }
+  }
+
+  // Add finder patterns (the three squares in corners)
+  const addFinderPattern = (startX: number, startY: number) => {
+    for (let i = 0; i < 7; i++) {
+      for (let j = 0; j < 7; j++) {
+        const isOuter = i === 0 || i === 6 || j === 0 || j === 6;
+        const isInner = i >= 2 && i <= 4 && j >= 2 && j <= 4;
+        if (startX + i < gridSize && startY + j < gridSize) {
+          pattern[startX + i][startY + j] = isOuter || isInner;
+        }
+      }
+    }
+  };
+
+  addFinderPattern(0, 0);
+  addFinderPattern(0, gridSize - 7);
+  addFinderPattern(gridSize - 7, 0);
+
+  return pattern;
+}
+
+/**
+ * Base QRCode component using CSS variables.
+ * This is extended by engine-specific implementations.
+ *
+ * @example
+ * ```tsx
+ * <BaseQRCode value="https://example.com" />
+ * ```
+ */
+export const BaseQRCode = forwardRef<HTMLDivElement, QRCodeProps>(
+  (props, ref) => {
+    const {
+      value,
+      size = QRCODE_DEFAULTS.size,
+      color = QRCODE_DEFAULTS.color,
+      bgColor = QRCODE_DEFAULTS.bgColor,
+      status = QRCODE_DEFAULTS.status,
+      bordered = QRCODE_DEFAULTS.bordered,
+      icon,
+      iconSize = QRCODE_DEFAULTS.iconSize,
+      onRefresh,
+      className = '',
+      style = {},
+    } = props;
+
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const gridSize = 25;
+    const pattern = useMemo(() => generatePattern(value || '', gridSize), [value]);
+
+    // Draw QR code pattern on canvas
+    useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const cellSize = size / gridSize;
+
+      // Draw background
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, size, size);
+
+      // Draw QR modules
+      ctx.fillStyle = color;
+      for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+          if (pattern[i][j]) {
+            ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }, [value, size, color, bgColor, pattern]);
+
+    // Build CSS variables for the QR code
+    const qrcodeVars: React.CSSProperties = {
+      '--qrcode-size': `${size}px`,
+      '--qrcode-color': color,
+      '--qrcode-bg': bgColor,
+      '--qrcode-border-color': bordered ? 'var(--color-border, #d9d9d9)' : 'transparent',
+      '--qrcode-border-width': bordered ? '1px' : '0',
+      '--qrcode-padding': bordered ? '12px' : '0',
+      '--qrcode-radius': bordered ? '8px' : '0',
+    } as React.CSSProperties;
+
+    // Container styles
+    const containerStyle: React.CSSProperties = {
+      ...qrcodeVars,
+      display: 'inline-block',
+      position: 'relative',
+      padding: 'var(--qrcode-padding)',
+      border: 'var(--qrcode-border-width) solid var(--qrcode-border-color)',
+      borderRadius: 'var(--qrcode-radius)',
+      backgroundColor: bordered ? 'var(--qrcode-bg)' : 'transparent',
+      ...style,
+    };
+
+    const qrcodeWrapperStyle: React.CSSProperties = {
+      position: 'relative',
+      width: size,
+      height: size,
+    };
+
+    const overlayStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    };
+
+    const iconWrapperStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: iconSize,
+      height: iconSize,
+      backgroundColor: '#fff',
+      padding: 4,
+      borderRadius: 4,
+    };
+
+    const renderOverlay = () => {
+      switch (status) {
+        case 'loading':
+          return (
+            <div style={overlayStyle}>
+              <div
+                style={{
+                  width: 24,
+                  height: 24,
+                  border: '3px solid #f3f3f3',
+                  borderTop: '3px solid #1890ff',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                }}
+              />
+            </div>
+          );
+        case 'expired':
+          return (
+            <div style={overlayStyle}>
+              <p style={{ margin: 0, color: '#666', fontSize: 14 }}>QR Code expired</p>
+              {onRefresh && (
+                <button
+                  onClick={onRefresh}
+                  style={{
+                    padding: '4px 12px',
+                    border: '1px solid #1890ff',
+                    borderRadius: 4,
+                    background: 'transparent',
+                    color: '#1890ff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Refresh
+                </button>
+              )}
+            </div>
+          );
+        case 'scanned':
+          return (
+            <div style={overlayStyle}>
+              <svg width={48} height={48} fill="#52c41a" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+          );
+        default:
+          return null;
+      }
+    };
+
+    return (
+      <div
+        ref={ref}
+        className={`rottay-qrcode ${className}`}
+        style={containerStyle}
+        data-status={status}
+      >
+        <div style={qrcodeWrapperStyle}>
+          <canvas
+            ref={canvasRef}
+            width={size}
+            height={size}
+            style={{ display: 'block' }}
+          />
+          {icon && status === 'active' && (
+            <div style={iconWrapperStyle}>
+              <img
+                src={icon}
+                alt=""
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
+            </div>
+          )}
+          {renderOverlay()}
+        </div>
+      </div>
+    );
+  }
+);
+
+BaseQRCode.displayName = 'BaseQRCode';

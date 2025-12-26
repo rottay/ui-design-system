@@ -1,6 +1,10 @@
 /**
- * Card.Image - Compound Component
- * Image section for Card component with overlay support
+ * @fileoverview Card.Image Compound Component
+ * @description Image section for Card component with overlay and gradient support.
+ * Provides a consistent image display with loading states and error handling.
+ *
+ * @module Card/compound/Image
+ * @package @es-rottay/designsystem-core
  */
 
 'use client';
@@ -9,6 +13,10 @@ import React, { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { CardImageProps } from '../../types';
 
+/**
+ * Border radius to CSS value mapping.
+ * @internal
+ */
 const RADIUS_MAP: Record<string, string> = {
   none: '0',
   sm: '4px',
@@ -18,7 +26,52 @@ const RADIUS_MAP: Record<string, string> = {
 };
 
 /**
- * Card image with overlay support
+ * Card image compound component.
+ * Displays images within cards with support for overlays, gradients, and loading states.
+ *
+ * Features:
+ * - Automatic loading state with spinner
+ * - Error state with placeholder icon
+ * - Gradient overlay for text readability
+ * - Custom overlay content support
+ * - Configurable positioning (top, bottom, cover)
+ * - Smooth fade-in animation on load
+ *
+ * @component
+ * @example
+ * // Basic usage
+ * <Card.Image src="/photo.jpg" alt="Product photo" />
+ *
+ * @example
+ * // With gradient overlay for text
+ * <Card.Image
+ *   src="/hero.jpg"
+ *   alt="Hero image"
+ *   gradient
+ *   height={300}
+ * />
+ *
+ * @example
+ * // With custom overlay content
+ * <Card.Image
+ *   src="/product.jpg"
+ *   alt="Product"
+ *   overlay={
+ *     <Badge variant="success">New</Badge>
+ *   }
+ * />
+ *
+ * @example
+ * // As full card cover
+ * <Card.Image
+ *   src="/background.jpg"
+ *   alt="Background"
+ *   position="cover"
+ *   gradient
+ * />
+ *
+ * @param {CardImageProps} props - Component properties
+ * @returns {React.ReactElement} The rendered CardImage component
  */
 export function CardImage({
   src,
@@ -37,11 +90,17 @@ export function CardImage({
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
+  /**
+   * Handles successful image load
+   */
   const handleLoad = () => {
     setImageLoaded(true);
     onLoad?.();
   };
 
+  /**
+   * Handles image load error
+   */
   const handleError = () => {
     setImageError(true);
     onError?.(new Error('Failed to load image'));
@@ -138,6 +197,7 @@ export function CardImage({
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
+              aria-hidden="true"
             >
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
@@ -171,7 +231,7 @@ export function CardImage({
       )}
 
       {/* Gradient overlay */}
-      {gradient && <div style={gradientStyle} />}
+      {gradient && <div style={gradientStyle} aria-hidden="true" />}
 
       {/* Custom overlay content */}
       {overlay && (
