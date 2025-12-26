@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 31/76 | Display done, Inputs 12/20, Feedback 5/11 |
-| **Tests** | ~400/500 | Display + 12 Inputs + 5 Feedback done |
-| **JSDoc** | ~50% | English, standardized |
-| **Storybook** | 31/76 | Display + 12 Inputs + 5 Feedback done |
+| **Refactor** | 39/76 | Display done, Inputs 12/20, Feedback 10/11 |
+| **Tests** | ~500/600 | Display + 12 Inputs + 10 Feedback done |
+| **JSDoc** | ~55% | English, standardized |
+| **Storybook** | 39/76 | Display + 12 Inputs + 10 Feedback done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -139,11 +139,11 @@ Component/
 | 3 | Progress | done | done | done | done | 25 tests, Circle/Line compounds |
 | 4 | Modal | done | done | done | done | 24+ tests, Header/Body/Footer |
 | 5 | Toast | done | done | done | done | 25+ tests, Provider/useToast |
-| 6 | Skeleton | in progress | in progress | in progress | in progress | Avatar, Text, Button compounds |
-| 7 | Drawer | in progress | in progress | in progress | in progress | Header/Body/Footer, placements |
-| 8 | Message | in progress | in progress | in progress | in progress | Provider, useMessage hook |
-| 9 | Notification | in progress | in progress | in progress | in progress | Provider, useNotification hook |
-| 10 | Result | in progress | in progress | in progress | in progress | Success/Error/Warning/Info compounds |
+| 6 | Skeleton | done | done | done | done | 22 tests, Avatar/Text/Button variants |
+| 7 | Drawer | done | done | done | done | 24 tests, placements/sizes/footer |
+| 8 | Message | done | done | done | done | 18 tests, Provider/useMessage hook |
+| 9 | Notification | done | done | done | done | 20 tests, Provider/useNotification |
+| 10 | Result | done | done | done | done | 22 tests, status types/HTTP codes |
 | 11 | Rate | pending | pending | pending | pending | |
 
 ### Layout (10 components)
