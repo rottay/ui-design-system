@@ -6,6 +6,21 @@ import React from 'react';
 const preview: Preview = {
   // Global types para el toolbar
   globalTypes: {
+    engine: {
+      name: 'Engine',
+      description: 'Rendering engine for components',
+      defaultValue: 'titan',
+      toolbar: {
+        icon: 'wrench',
+        items: [
+          { value: 'titan', title: 'Titan (Ant Design)' },
+          { value: 'hermes', title: 'Hermes (DaisyUI)' },
+          { value: 'apollo', title: 'Apollo (Vanilla)' },
+        ],
+        showName: true,
+        dynamicTitle: true,
+      },
+    },
     theme: {
       name: 'Theme',
       description: 'Design system theme (affects ALL components)',
@@ -164,18 +179,10 @@ const preview: Preview = {
       storySort: {
         order: [
           'Introduction',
-          'General',
-          ['Button', '*'],
-          'Inputs',
-          ['Input', 'Select', 'Form', '*'],
-          'Display',
-          ['Badge', 'Tag', 'Avatar', '*'],
-          'Feedback',
-          ['Alert', 'Modal', 'Message', '*'],
-          'Navigation',
-          ['Menu', 'Tabs', '*'],
-          'Overlay',
-          ['Tooltip', 'Popover', 'Drawer', '*'],
+          'System',
+          'Primitives',
+          ['Display', 'Inputs', 'Feedback', 'Layout', 'Navigation', 'Overlay'],
+          'Custom',
         ],
       },
     },

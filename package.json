@@ -6,16 +6,15 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=design-system-dashboard",
-    "build": "npm run build --workspace=@es-rottay/designsystem-core",
+    "dev": "npm run dev --workspace=@rottay/design-system-showroom",
+    "dev:core": "npm run dev --workspace=@rottay/design-system",
+    "build": "npm run build --workspace=@rottay/design-system",
     "build:all": "npm run build --workspaces",
-    "dev:core": "npm run dev --workspace=@es-rottay/designsystem-core",
-    "preview": "npm run preview --workspace=design-system-dashboard",
-    "storybook": "npm run storybook --workspace=@es-rottay/designsystem-core",
-    "build-storybook": "npm run build-storybook --workspace=@es-rottay/designsystem-core",
+    "storybook": "npm run storybook --workspace=@rottay/design-system",
+    "build-storybook": "npm run build-storybook --workspace=@rottay/design-system",
+    "test": "npm run test --workspace=@rottay/design-system",
     "typecheck": "npm run typecheck --workspaces",
-    "typecheck:core": "npm run typecheck --workspace=@es-rottay/designsystem-core",
-    "typecheck:dashboard": "npm run typecheck --workspace=design-system-dashboard",
+    "typecheck:core": "npm run typecheck --workspace=@rottay/design-system",
     "next:free": "kill-port 3000 && kill-port 6006 && kill-port 6007"
   },
   "engines": {

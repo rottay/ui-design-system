@@ -57,11 +57,11 @@ npm install file:../path/to/desing-system/packages/core
 ### Option 2: NPM/GitHub Packages (Coming Soon)
 
 ```bash
-npm install @es-rottay/designsystem-core
+npm install @rottay/design-system
 # or
-yarn add @es-rottay/designsystem-core
+yarn add @rottay/design-system
 # or
-pnpm add @es-rottay/designsystem-core
+pnpm add @rottay/design-system
 ```
 
 ---
@@ -74,7 +74,7 @@ pnpm add @es-rottay/designsystem-core
 // app/providers.tsx
 'use client';
 
-import { ThemeProvider } from '@es-rottay/designsystem-core';
+import { ThemeProvider } from '@rottay/design-system';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -105,7 +105,7 @@ export default function RootLayout({ children }) {
 
 ```tsx
 // pages/_app.tsx
-import { ThemeProvider } from '@es-rottay/designsystem-core';
+import { ThemeProvider } from '@rottay/design-system';
 import type { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -124,7 +124,7 @@ Add this to your `next.config.js`:
 ```js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@es-rottay/designsystem-core', 'antd'],
+  transpilePackages: ['@rottay/design-system', 'antd'],
 };
 
 module.exports = nextConfig;
@@ -139,7 +139,7 @@ module.exports = nextConfig;
 ```tsx
 'use client';
 
-import { Button, Input, Card, Badge } from '@es-rottay/designsystem-core';
+import { Button, Input, Card, Badge } from '@rottay/design-system';
 
 export default function MyPage() {
   return (
@@ -170,7 +170,7 @@ import {
   UserMenu,
   NotificationCenter,
   SearchBar,
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 import { Users, TrendingUp } from 'lucide-react';
 
 export default function Dashboard() {
@@ -227,7 +227,7 @@ import {
   Section,
   LayoutGrid,
   AspectRatio,
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 
 export default function LayoutExample() {
   return (
@@ -268,7 +268,7 @@ import {
   DaisyCard,
   DaisyBadge,
   DaisyAlert,
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 
 export default function DaisyUIExample() {
   return (
@@ -325,7 +325,7 @@ import {
   Chip,
   ScrollShadow,
   Avatar,
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 import { Check, X } from 'lucide-react';
 
 export default function EnhancedUI() {
@@ -440,7 +440,7 @@ import {
   borderRadius,
   transitions,
   themeColors,
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 
 const MyComponent = () => (
   <div
@@ -463,7 +463,7 @@ const MyComponent = () => (
 ```tsx
 'use client';
 
-import { useTheme, Button } from '@es-rottay/designsystem-core';
+import { useTheme, Button } from '@rottay/design-system';
 
 export function ThemeSwitcher() {
   const { template, setTemplate } = useTheme();

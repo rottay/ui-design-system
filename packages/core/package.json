@@ -1,5 +1,5 @@
 {
-  "name": "@es-rottay/designsystem-core",
+  "name": "@rottay/design-system",
   "version": "0.3.0",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",

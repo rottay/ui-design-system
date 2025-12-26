@@ -31,9 +31,9 @@ jobs:
         run: npm ci
 
       - name: Build package
-        run: npm run build --workspace=@es-rottay/designsystem-core
+        run: npm run build --workspace=@rottay/design-system
 
       - name: Publish to GitHub Packages
-        run: npm publish --workspace=@es-rottay/designsystem-core
+        run: npm publish --workspace=@rottay/design-system
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
