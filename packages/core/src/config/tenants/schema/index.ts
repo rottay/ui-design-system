@@ -3,8 +3,7 @@
  * Validation and type guards for tenant configuration
  */
 
-import type { TenantConfig, TenantBranding, TenantPlan } from '../../../types';
-import type { EngineName } from '../../../types/engines';
+import type { TenantConfig, TenantBranding, TenantPlan, EngineName } from '../../../types';
 
 /**
  * Validate tenant branding

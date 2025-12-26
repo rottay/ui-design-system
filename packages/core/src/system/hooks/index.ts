@@ -1,5 +1,7 @@
 /**
  * System hooks - All hooks for accessing design system state
+ *
+ * Note: Context hooks are re-exported here from providers for a single source of truth.
  */
 
 // Engine hooks
@@ -10,6 +12,8 @@ export { useTheme, useThemeContext } from './theme';
 
 // Tenant hooks
 export { useTenant } from './tenant';
+// Re-export useTenantContext from provider (single source of truth)
+export { useTenantContext } from '../providers/tenant';
 
 // Token hooks
 export { useTokens } from './tokens';
