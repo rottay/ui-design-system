@@ -91,7 +91,7 @@ export const BaseTag = forwardRef<HTMLSpanElement, TagProps>(
       ...sizeStyles[size],
       backgroundColor: colorStyles.bg,
       color: colorStyles.color,
-      border: bordered || variant === 'outline' ? `1px solid ${colorStyles.border || colorStyles.bg}` : 'none',
+      border: bordered || variant === 'outline' ? `1px solid ${(colorStyles as { border?: string }).border || colorStyles.bg}` : 'none',
       borderRadius: rounded ? '9999px' : '0.25rem',
       display: 'inline-flex',
       alignItems: 'center',

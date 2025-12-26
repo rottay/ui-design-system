@@ -3,7 +3,7 @@
  */
 
 import type { EngineAwareProps } from '../../../../../types';
-import type { ReactNode } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 
 export type DividerOrientation = 'horizontal' | 'vertical';
 export type DividerType = 'solid' | 'dashed' | 'dotted';
@@ -13,6 +13,8 @@ export interface DividerProps extends EngineAwareProps {
   type?: DividerType;
   children?: ReactNode;  // Text in the middle of divider
   margin?: 'none' | 'sm' | 'md' | 'lg';
+  className?: string;
+  style?: CSSProperties;
 }
 
 export const DIVIDER_DEFAULTS: Partial<DividerProps> = {

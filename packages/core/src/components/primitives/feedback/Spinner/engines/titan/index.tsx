@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Spin } from 'antd';
-import type { SpinnerProps } from '../types';
-import { SPINNER_DEFAULTS } from '../types';
+import type { SpinnerProps } from '../../types';
+import { SPINNER_DEFAULTS } from '../../types';
 
 export default function TitanSpinner(props: SpinnerProps): React.ReactElement {
   const {

@@ -1,93 +1,182 @@
 /**
- * Radio - Apollo Engine (Vanilla HTML/CSS)
+ * Radio - Apollo Engine (Pure HTML/CSS with a11y)
  */
 
-import React from 'react';
-import type { RadioProps, RadioGroupProps } from '../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS } from '../types';
+'use client';
 
-const SIZE_MAP = {
-  sm: 'rottay-radio--sm',
-  md: 'rottay-radio--md',
-  lg: 'rottay-radio--lg',
-};
-
-const VARIANT_MAP = {
-  default: 'rottay-radio--default',
-  outlined: 'rottay-radio--outlined',
-  filled: 'rottay-radio--filled',
-};
+import React, { useState, useId, useCallback } from 'react';
+import type { RadioProps, RadioGroupProps } from '../../types';
+import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
 
 export default function ApolloRadio(props: RadioProps): React.ReactElement {
   const {
     size = RADIO_DEFAULTS.size,
-    variant = RADIO_DEFAULTS.variant,
-    checked,
-    defaultChecked = RADIO_DEFAULTS.defaultChecked,
-    disabled = RADIO_DEFAULTS.disabled,
+    color = RADIO_DEFAULTS.color,
+    labelPlacement = RADIO_DEFAULTS.labelPlacement,
     label,
-    error,
-    onChange,
-    className,
-    style,
-    name,
-    id,
     value,
-    autoFocus,
-    ...rest
+    checked: controlledChecked,
+    defaultChecked = false,
+    disabled = RADIO_DEFAULTS.disabled,
+    required = RADIO_DEFAULTS.required,
+    error = RADIO_DEFAULTS.error,
+    onChange,
+    children,
+    name,
+    description,
+    className = '',
+    style,
   } = props;
 
-  const classes = [
-    'rottay-radio',
-    SIZE_MAP[size!],
-    VARIANT_MAP[variant!],
-    error && 'rottay-radio--error',
-    disabled && 'rottay-radio--disabled',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const generatedId = useId();
+  const inputId = `radio-apollo-${generatedId}`;
 
-  const cssVars = {
-    '--radio-size': `var(--radio-${size}-size)`,
-  } as React.CSSProperties;
+  // Internal state for uncontrolled mode
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const [isFocused, setIsFocused] = useState(false);
+  const isControlled = controlledChecked !== undefined;
+  const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  if (label) {
-    return (
-      <label className="rottay-radio-wrapper" style={{ ...cssVars, ...style }}>
-        <input
-          type="radio"
-          className={classes}
-          checked={checked}
-          defaultChecked={defaultChecked}
-          disabled={disabled}
-          onChange={onChange}
-          name={name}
-          id={id}
-          value={value}
-          autoFocus={autoFocus}
-          {...rest}
-        />
-        <span className="rottay-radio-label">{label}</span>
-      </label>
-    );
-  }
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isControlled) {
+      setInternalChecked(e.target.checked);
+    }
+    onChange?.(e);
+  }, [isControlled, onChange]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      if (!disabled) {
+        const event = {
+          target: { checked: true, value },
+          currentTarget: { checked: true, value },
+        } as React.ChangeEvent<HTMLInputElement>;
+        handleChange(event);
+      }
+    }
+  }, [disabled, value, handleChange]);
+
+  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+
+  const containerStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'flex-start',
+    gap: '8px',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.5 : 1,
+    flexDirection: labelPlacement === 'start' ? 'row-reverse' : 'row',
+    fontFamily: 'inherit',
+    ...style,
+  };
+
+  const radioCircleStyle: React.CSSProperties = {
+    position: 'relative',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: sizeValue,
+    height: sizeValue,
+    borderRadius: '50%',
+    border: `2px solid ${error ? 'var(--color-error, #ff4d4f)' : (isChecked ? colors.border : '#d9d9d9')}`,
+    backgroundColor: 'transparent',
+    transition: 'all 0.2s ease-in-out',
+    flexShrink: 0,
+    marginTop: description ? '2px' : 0,
+    outline: isFocused ? `2px solid ${colors.bg}` : 'none',
+    outlineOffset: '2px',
+  };
+
+  const inputStyle: React.CSSProperties = {
+    position: 'absolute',
+    opacity: 0,
+    width: '100%',
+    height: '100%',
+    margin: 0,
+    padding: 0,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+  };
+
+  const dotStyle: React.CSSProperties = {
+    display: isChecked ? 'block' : 'none',
+    width: sizeValue * 0.5,
+    height: sizeValue * 0.5,
+    borderRadius: '50%',
+    backgroundColor: colors.bg,
+    transition: 'transform 0.15s ease-in-out',
+  };
+
+  const labelContainerStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+  };
+
+  const labelStyle: React.CSSProperties = {
+    fontSize: sizeValue * 0.9,
+    color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+    userSelect: 'none',
+    lineHeight: 1.4,
+  };
+
+  const descriptionStyle: React.CSSProperties = {
+    fontSize: sizeValue * 0.75,
+    color: 'var(--color-text-secondary, #666)',
+    userSelect: 'none',
+    lineHeight: 1.4,
+  };
+
+  const displayLabel = label || children;
 
   return (
-    <input
-      type="radio"
-      className={classes}
-      checked={checked}
-      defaultChecked={defaultChecked}
-      disabled={disabled}
-      onChange={onChange}
-      style={{ ...cssVars, ...style }}
-      name={name}
-      id={id}
-      value={value}
-      autoFocus={autoFocus}
-      {...rest}
-    />
+    <label
+      className={`rottay-radio-apollo rottay-radio--${size} rottay-radio--${color} ${isChecked ? 'rottay-radio--checked' : ''} ${disabled ? 'rottay-radio--disabled' : ''} ${error ? 'rottay-radio--error' : ''} ${className}`}
+      style={containerStyle}
+      onKeyDown={handleKeyDown}
+    >
+      <span
+        className="rottay-radio__circle"
+        style={radioCircleStyle}
+        role="presentation"
+      >
+        <input
+          id={inputId}
+          type="radio"
+          name={name}
+          value={value}
+          checked={isChecked}
+          disabled={disabled}
+          required={required}
+          onChange={handleChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          style={inputStyle}
+          aria-checked={isChecked}
+          aria-invalid={error}
+          aria-describedby={displayLabel ? `${inputId}-label` : undefined}
+        />
+        <span className="rottay-radio__dot" style={dotStyle} />
+      </span>
+      {(displayLabel || description) && (
+        <span
+          id={`${inputId}-label`}
+          className="rottay-radio__content"
+          style={labelContainerStyle}
+        >
+          {displayLabel && (
+            <span className="rottay-radio__label" style={labelStyle}>
+              {displayLabel}
+            </span>
+          )}
+          {description && (
+            <span className="rottay-radio__description" style={descriptionStyle}>
+              {description}
+            </span>
+          )}
+        </span>
+      )}
+    </label>
   );
 }
 
@@ -95,60 +184,195 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
 export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
   const {
     size = RADIO_GROUP_DEFAULTS.size,
-    variant,
+    color = RADIO_GROUP_DEFAULTS.color,
     options = [],
-    value,
+    value: controlledValue,
     defaultValue,
     disabled = RADIO_GROUP_DEFAULTS.disabled,
     direction = RADIO_GROUP_DEFAULTS.direction,
+    spacing = RADIO_GROUP_DEFAULTS.spacing,
+    buttonStyle,
     onChange,
-    className,
+    children,
+    className = '',
     style,
-    name,
-    ...rest
+    name: providedName,
   } = props;
 
-  const [internalValue, setInternalValue] = React.useState<string | number | undefined>(
-    value || defaultValue
-  );
+  const generatedId = useId();
+  const name = providedName || `radio-group-${generatedId}`;
 
-  const currentValue = value !== undefined ? value : internalValue;
+  // Internal state for uncontrolled mode
+  const [internalValue, setInternalValue] = useState<string | number | undefined>(defaultValue);
+  const isControlled = controlledValue !== undefined;
+  const currentValue = isControlled ? controlledValue : internalValue;
 
-  const handleChange = (optionValue: string | number) => {
-    if (value === undefined) {
-      setInternalValue(optionValue);
+  const handleChange = (newValue: string | number) => {
+    if (!isControlled) {
+      setInternalValue(newValue);
     }
-
-    if (onChange) {
-      onChange(optionValue);
-    }
+    onChange?.(newValue);
   };
 
-  const containerClasses = [
-    'rottay-radio-group',
-    `rottay-radio-group--${direction}`,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  // Spacing values
+  const spacingMap: Record<string, string> = {
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+  };
+
+  const groupStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: direction === 'horizontal' ? 'row' : 'column',
+    gap: spacingMap[spacing] || spacingMap.md,
+    flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
+    ...style,
+  };
+
+  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+
+  const renderOptions = () => {
+    if (options.length === 0) return children;
+
+    if (buttonStyle) {
+      return options.map((option) => {
+        const isChecked = currentValue === option.value;
+        const isDisabled = disabled || option.disabled;
+
+        const paddingMap: Record<string, string> = {
+          xs: '4px 8px',
+          sm: '6px 12px',
+          md: '8px 16px',
+          lg: '10px 20px',
+          xl: '12px 24px',
+        };
+
+        return (
+          <label
+            key={String(option.value)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: paddingMap[size] || paddingMap.md,
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
+              opacity: isDisabled ? 0.5 : 1,
+              border: `1px solid ${isChecked ? colors.border : '#d9d9d9'}`,
+              borderRadius: '4px',
+              backgroundColor: buttonStyle === 'solid' && isChecked ? colors.bg : 'transparent',
+              color: buttonStyle === 'solid' && isChecked ? colors.dot : 'inherit',
+              transition: 'all 0.2s ease-in-out',
+              fontSize: sizeValue * 0.85,
+              fontWeight: 500,
+              userSelect: 'none',
+            }}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={isChecked}
+              disabled={isDisabled}
+              onChange={() => handleChange(option.value)}
+              style={{
+                position: 'absolute',
+                opacity: 0,
+                width: 0,
+                height: 0,
+              }}
+            />
+            {option.label}
+          </label>
+        );
+      });
+    }
+
+    return options.map((option) => {
+      const isChecked = currentValue === option.value;
+      const isDisabled = disabled || option.disabled;
+
+      return (
+        <label
+          key={String(option.value)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'flex-start',
+            gap: '8px',
+            cursor: isDisabled ? 'not-allowed' : 'pointer',
+            opacity: isDisabled ? 0.5 : 1,
+          }}
+        >
+          <span
+            style={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: sizeValue,
+              height: sizeValue,
+              borderRadius: '50%',
+              border: `2px solid ${isChecked ? colors.border : '#d9d9d9'}`,
+              backgroundColor: 'transparent',
+              transition: 'all 0.2s ease-in-out',
+              flexShrink: 0,
+              marginTop: option.description ? '2px' : 0,
+            }}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={isChecked}
+              disabled={isDisabled}
+              onChange={() => handleChange(option.value)}
+              style={{
+                position: 'absolute',
+                opacity: 0,
+                width: '100%',
+                height: '100%',
+                margin: 0,
+                padding: 0,
+                cursor: isDisabled ? 'not-allowed' : 'pointer',
+              }}
+            />
+            {isChecked && (
+              <span
+                style={{
+                  width: sizeValue * 0.5,
+                  height: sizeValue * 0.5,
+                  borderRadius: '50%',
+                  backgroundColor: colors.bg,
+                }}
+              />
+            )}
+          </span>
+          <span style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span style={{ fontSize: sizeValue * 0.9, userSelect: 'none', lineHeight: 1.4 }}>
+              {option.label}
+            </span>
+            {option.description && (
+              <span style={{ fontSize: sizeValue * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
+                {option.description}
+              </span>
+            )}
+          </span>
+        </label>
+      );
+    });
+  };
 
   return (
-    <div className={containerClasses} style={style} {...rest}>
-      {options.map((option) => (
-        <ApolloRadio
-          key={String(option.value)}
-          size={size}
-          variant={variant}
-          label={option.label}
-          checked={currentValue === option.value}
-          disabled={disabled || option.disabled}
-          onChange={() => handleChange(option.value)}
-          name={name}
-          value={option.value}
-        />
-      ))}
+    <div
+      className={`rottay-radio-group-apollo ${className}`}
+      style={groupStyle}
+      role="radiogroup"
+      aria-label="Radio group"
+    >
+      {renderOptions()}
     </div>
   );
 }
 
+ApolloRadio.displayName = 'ApolloRadio';
 ApolloRadio.Group = ApolloRadioGroup;

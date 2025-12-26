@@ -35,7 +35,7 @@ export default function TitanAvatar(props: AvatarProps): React.ReactElement {
     children,
     onClick,
     onError,
-    onLoad,
+    onLoad: _onLoad,
     backgroundColor,
     textColor,
     className,
@@ -51,14 +51,15 @@ export default function TitanAvatar(props: AvatarProps): React.ReactElement {
   const handleError = () => {
     setImageError(true);
     onError?.(new Error('Failed to load image'));
-  };
-
-  const handleLoad = () => {
-    onLoad?.();
+    return false; // Return false to prevent Ant Design's default error handling
   };
 
   // Determine display content
   const displayInitials = initials || getInitials(name, alt);
+
+  // Map shape to Ant Design's supported shapes ('circle' | 'square')
+  // 'rounded' maps to 'square' (Ant Design applies border-radius via CSS)
+  const antShape: 'circle' | 'square' = shape === 'circle' ? 'circle' : 'square';
 
   // Map variant to background color
   const variantColorMap: Record<string, string> = {
@@ -84,7 +85,7 @@ export default function TitanAvatar(props: AvatarProps): React.ReactElement {
       src={!imageError ? src : undefined}
       alt={alt || name}
       size={SIZE_MAP[size]}
-      shape={shape}
+      shape={antShape}
       onClick={onClick}
       className={className}
       style={avatarStyle}

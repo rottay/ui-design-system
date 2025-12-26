@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { GridProps } from '../types';
-import { GRID_DEFAULTS, GAP_MAP } from '../types';
+import type { GridProps } from '../../types';
+import { GRID_DEFAULTS, GAP_MAP } from '../../types';
 
 export default function ApolloGrid(props: GridProps): React.ReactElement {
   const {

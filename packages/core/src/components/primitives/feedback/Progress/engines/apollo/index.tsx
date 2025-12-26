@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import type { ProgressProps } from '../types';
-import { PROGRESS_DEFAULTS } from '../types';
+import type { ProgressProps, ProgressStatus } from '../../types';
+import { PROGRESS_DEFAULTS } from '../../types';
 
-const STATUS_COLORS = {
+const STATUS_COLORS: Record<ProgressStatus, string> = {
   normal: '#1890ff',
   success: '#52c41a',
   error: '#ff4d4f',

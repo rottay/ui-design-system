@@ -2,12 +2,19 @@
  * Progress - Core Interface
  */
 
-import type { EngineAwareProps } from '../../../../../types';
+import type { ReactNode, CSSProperties } from 'react';
+import type { EngineAwareProps, BaseComponentProps } from '../../../../../types';
 
 export type ProgressType = 'line' | 'circle';
 export type ProgressStatus = 'normal' | 'success' | 'error' | 'active';
 
-export interface ProgressProps extends EngineAwareProps {
+export interface ProgressProps extends BaseComponentProps, EngineAwareProps {
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: CSSProperties;
+  /** Children elements */
+  children?: ReactNode;
   percent: number;
   type?: ProgressType;
   status?: ProgressStatus;

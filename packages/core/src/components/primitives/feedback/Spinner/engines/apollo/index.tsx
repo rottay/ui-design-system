@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { SpinnerProps } from '../types';
-import { SPINNER_DEFAULTS, SIZE_MAP } from '../types';
+import type { SpinnerProps } from '../../types';
+import { SPINNER_DEFAULTS, SIZE_MAP } from '../../types';
 
 export default function ApolloSpinner(props: SpinnerProps): React.ReactElement {
   const {

@@ -3,10 +3,10 @@
  */
 
 import React, { useEffect } from 'react';
-import type { DrawerProps } from '../types';
-import { DRAWER_DEFAULTS } from '../types';
+import type { DrawerProps, DrawerSize } from '../../types';
+import { DRAWER_DEFAULTS } from '../../types';
 
-const SIZE_MAP = {
+const SIZE_MAP: Record<DrawerSize, string> = {
   sm: '256px',
   md: '378px',
   lg: '520px',
@@ -18,7 +18,7 @@ export default function HermesDrawer(props: DrawerProps): React.ReactElement {
   const {
     open,
     placement = DRAWER_DEFAULTS.placement,
-    size = DRAWER_DEFAULTS.size,
+    size = DRAWER_DEFAULTS.size as DrawerSize,
     title,
     onClose,
     onOpenChange,
@@ -68,9 +68,10 @@ export default function HermesDrawer(props: DrawerProps): React.ReactElement {
 
   if (!open) return <></>;
 
+  const drawerSize = size as DrawerSize;
   const isHorizontal = placement === 'left' || placement === 'right';
-  const drawerWidth = width || (isHorizontal ? SIZE_MAP[size!] : '100%');
-  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[size!] : '100%');
+  const drawerWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100%');
+  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100%');
 
   const getDrawerStyle = (): React.CSSProperties => {
     const baseStyle: React.CSSProperties = {

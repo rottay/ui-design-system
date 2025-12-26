@@ -52,7 +52,7 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
     } = props;
 
     const [imageError, setImageError] = useState(false);
-    const [imageLoaded, setImageLoaded] = useState(false);
+    const [_imageLoaded, setImageLoaded] = useState(false);
 
     // Reset error state when src changes
     useEffect(() => {
@@ -60,7 +60,7 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
       setImageLoaded(false);
     }, [src]);
 
-    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const handleImageError = (_e: React.SyntheticEvent<HTMLImageElement>) => {
       setImageError(true);
       onError?.(new Error('Failed to load image'));
     };
@@ -119,7 +119,7 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
       objectPosition: 'var(--avatar-image-object-position)',
     };
 
-    const statusIndicatorStyle: React.CSSProperties = status ? {
+    const statusIndicatorStyle: React.CSSProperties = {
       position: 'absolute',
       bottom: 'var(--avatar-status-offset)',
       right: 'var(--avatar-status-offset)',
@@ -129,7 +129,7 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
       backgroundColor: `var(--avatar-status-${status}-color)`,
       border: 'var(--avatar-status-border-width) solid var(--avatar-status-border-color)',
       zIndex: 1,
-    } : undefined;
+    };
 
     return (
       <div

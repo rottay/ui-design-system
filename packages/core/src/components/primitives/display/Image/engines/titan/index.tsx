@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Image as AntImage } from 'antd';
 import type { ImageProps } from '../../types';
 
@@ -17,18 +17,17 @@ export const TitanImage = forwardRef<HTMLImageElement, ImageProps>(
       width,
       height,
       fit = 'cover',
-      loading,
+      loading: _loading,
       fallbackSrc,
       fallback,
-      showSkeleton,
-      radius,
+      showSkeleton: _showSkeleton,
+      radius: _radius,
       onError,
       onLoad,
       className,
       style,
-      ...props
     },
-    ref
+    _ref
   ) => {
     const handleError = () => {
       if (onError) {
@@ -36,9 +35,9 @@ export const TitanImage = forwardRef<HTMLImageElement, ImageProps>(
       }
     };
 
+    // Note: AntImage doesn't support ref directly
     return (
       <AntImage
-        ref={ref as any}
         src={src}
         alt={alt}
         width={width}
@@ -52,7 +51,6 @@ export const TitanImage = forwardRef<HTMLImageElement, ImageProps>(
         onError={handleError}
         onLoad={onLoad}
         className={className}
-        {...props}
       />
     );
   }

@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import type { BreadcrumbProps, BreadcrumbItem } from '../types';
+import type { BreadcrumbProps, BreadcrumbItem } from '../../types';
 
 export default function HermesBreadcrumb(props: BreadcrumbProps): React.ReactElement {
   const {

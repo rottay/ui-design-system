@@ -2,6 +2,7 @@
  * Stack - Core Interface
  */
 
+import type React from 'react';
 import type { EngineAwareProps, WithChildrenProps } from '../../../../../types';
 
 export type StackDirection = 'vertical' | 'horizontal';
@@ -16,6 +17,8 @@ export interface StackProps extends EngineAwareProps, WithChildrenProps {
   spacing?: StackSpacing;
   wrap?: boolean;
   divider?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const STACK_DEFAULTS: Partial<StackProps> = {

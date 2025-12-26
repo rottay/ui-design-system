@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { ProgressProps } from '../types';
 
 /**
@@ -14,14 +14,13 @@ import type { ProgressProps } from '../types';
  */
 export const BaseProgress = forwardRef<HTMLDivElement, ProgressProps>(
   (props, ref) => {
-    const { className = '', style = {}, children, ...rest } = props;
+    const { className = '', style = {}, children } = props;
 
     return (
       <div
         ref={ref}
         className={`rottay-progress ${className}`}
         style={style}
-        {...rest}
       >
         {children}
       </div>

@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { BoxProps } from '../types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP } from '../types';
+import type { BoxProps } from '../../types';
+import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP } from '../../types';
 
 export default function TitanBox(props: BoxProps): React.ReactElement {
   const {

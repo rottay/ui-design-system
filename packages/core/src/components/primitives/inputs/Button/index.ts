@@ -1,13 +1,23 @@
 /**
  * Button - Engine Router
- * Exports the engine-routed Button component
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { ButtonProps } from './types';
 import { ButtonGroup, ButtonIcon } from './compound';
 
-export { type ButtonProps, type ButtonVariant, type ButtonSize, BUTTON_DEFAULTS } from './types';
+// Export types
+export type {
+  ButtonProps,
+  ButtonSize,
+  ButtonVariant,
+  ButtonShape,
+  ButtonHtmlType,
+  ButtonGroupProps as ButtonGroupPropsType,
+  IconButtonProps,
+  ButtonLoadingConfig,
+} from './types';
+export { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from './types';
 
 // Export compound components
 export { ButtonGroup, ButtonIcon };

@@ -6,7 +6,15 @@
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { ToggleProps } from './types';
 
-export { type ToggleProps, type ToggleSize, TOGGLE_DEFAULTS } from './types';
+export {
+  type ToggleProps,
+  type ToggleSize,
+  type ToggleVariant,
+  type ToggleLabelPlacement,
+  TOGGLE_DEFAULTS,
+  SIZE_MAP,
+  COLOR_MAP,
+} from './types';
 
 export { BaseToggle } from './base';
 
@@ -15,3 +23,5 @@ export const Toggle = createEngineComponent<ToggleProps>('Toggle', {
   hermes: () => import('./engines/hermes'),
   apollo: () => import('./engines/apollo'),
 });
+
+Toggle.displayName = 'Toggle';

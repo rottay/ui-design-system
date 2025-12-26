@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { BaseImage } from '../../base';
 import type { ImageProps } from '../../types';
 

@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import type { PaginationProps } from '../types';
-import { PAGINATION_DEFAULTS } from '../types';
+import type { PaginationProps, PaginationSize } from '../../types';
+import { PAGINATION_DEFAULTS } from '../../types';
 
-const SIZE_CLASSES = {
+const SIZE_CLASSES: Record<PaginationSize, string> = {
   sm: 'join-item btn-sm',
   md: 'join-item',
   lg: 'join-item btn-lg',
@@ -62,7 +62,8 @@ export default function HermesPagination(props: PaginationProps): React.ReactEle
     return pages;
   };
 
-  const buttonClass = SIZE_CLASSES[size!];
+  const sizeKey: PaginationSize = size ?? 'md';
+  const buttonClass = SIZE_CLASSES[sizeKey];
 
   return (
     <div className={className} style={style}>

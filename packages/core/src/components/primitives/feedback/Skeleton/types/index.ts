@@ -2,12 +2,19 @@
  * Skeleton - Core Interface
  */
 
+import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps, BaseComponentProps } from '../../../../../types';
 
 export type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'rounded';
 export type SkeletonAnimation = 'pulse' | 'wave' | false;
 
 export interface SkeletonProps extends BaseComponentProps, EngineAwareProps {
+  /** Additional CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: CSSProperties;
+  /** Children elements */
+  children?: ReactNode;
   /** Skeleton variant */
   variant?: SkeletonVariant;
   /** Width (number for px or string for any unit) */

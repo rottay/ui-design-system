@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { SkeletonProps } from '../types';
-import { SKELETON_DEFAULTS } from '../types';
+import type { SkeletonProps } from '../../types';
+import { SKELETON_DEFAULTS } from '../../types';
 
 export default function HermesSkeleton(props: SkeletonProps): React.ReactElement {
   const {

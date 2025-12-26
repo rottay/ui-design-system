@@ -3,13 +3,13 @@
  */
 
 import React from 'react';
-import type { StackProps } from '../types';
+import type { StackProps } from '../../types';
 import {
   STACK_DEFAULTS,
   SPACING_MAP,
   ALIGN_MAP,
   JUSTIFY_MAP,
-} from '../types';
+} from '../../types';
 
 export default function TitanStack(props: StackProps): React.ReactElement {
   const {

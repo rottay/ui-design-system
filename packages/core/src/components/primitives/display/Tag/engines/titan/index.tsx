@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Tag as AntTag } from 'antd';
 import type { TagProps } from '../../types';
 

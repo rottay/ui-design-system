@@ -84,8 +84,7 @@ export default function HermesAvatar(props: AvatarProps): React.ReactElement {
     gradient: 'text-white',
   }[variant] || 'text-neutral-content';
 
-  // Status indicator classes
-  const statusClass = status ? 'online' : undefined;
+  // Status indicator color
   const statusColor = status ? {
     online: 'bg-success',
     offline: 'bg-neutral',

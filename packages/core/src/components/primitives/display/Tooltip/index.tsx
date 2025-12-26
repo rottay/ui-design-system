@@ -1,6 +1,7 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { TooltipProps } from './types';
 import { TitanTooltip, HermesTooltip, ApolloTooltip } from './engines';
 import { TooltipTrigger, TooltipContent } from './compound';
@@ -20,16 +21,16 @@ import { TooltipTrigger, TooltipContent } from './compound';
  */
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   ({ engine = 'titan', ...props }, ref) => {
-    const engineMap = {
+    const engineMap: Record<string, ForwardRefExoticComponent<TooltipProps & RefAttributes<HTMLDivElement>>> = {
       titan: TitanTooltip,
       hermes: HermesTooltip,
       apollo: ApolloTooltip,
     };
 
-    const Component = engineMap[engine];
+    const Component = engineMap[engine] || TitanTooltip;
     return <Component ref={ref} {...props} />;
   }
-) as React.ForwardRefExoticComponent<TooltipProps & React.RefAttributes<HTMLDivElement>> & {
+) as ForwardRefExoticComponent<TooltipProps & RefAttributes<HTMLDivElement>> & {
   Trigger: typeof TooltipTrigger;
   Content: typeof TooltipContent;
 };

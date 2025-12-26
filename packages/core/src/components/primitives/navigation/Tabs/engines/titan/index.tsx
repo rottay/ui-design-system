@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Tabs as AntTabs } from 'antd';
-import type { TabsProps } from '../types';
-import { TABS_DEFAULTS } from '../types';
+import type { TabsProps, TabItem, TabsType, TabsSize } from '../../types';
+import { TABS_DEFAULTS } from '../../types';
 
 const TYPE_MAP = {
   line: 'line' as const,
@@ -32,7 +32,7 @@ export default function TitanTabs(props: TabsProps): React.ReactElement {
     style,
   } = props;
 
-  const antItems = items.map((item) => ({
+  const antItems = items.map((item: TabItem) => ({
     key: item.key,
     label: (
       <>
@@ -48,8 +48,8 @@ export default function TitanTabs(props: TabsProps): React.ReactElement {
       items={antItems}
       activeKey={activeKey}
       defaultActiveKey={defaultActiveKey}
-      type={TYPE_MAP[type!]}
-      size={SIZE_MAP[size!]}
+      type={TYPE_MAP[type as TabsType]}
+      size={SIZE_MAP[size as TabsSize]}
       centered={centered}
       onChange={onChange}
       className={className}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Typography as AntTypography } from 'antd';
 import type { HeadingProps, TextProps, ParagraphProps } from '../../types';
 
@@ -42,7 +42,7 @@ export const TitanHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         ref={ref as any}
         level={levelMap[level] as any}
         type={typeMap[color || 'default'] as any}
-        ellipsis={truncate || lineClamp ? { rows: lineClamp } : false}
+        ellipsis={truncate || lineClamp ? true : undefined}
         style={{ textAlign: align, ...style }}
         className={className}
         {...props}
@@ -96,7 +96,7 @@ export const TitanText = forwardRef<HTMLElement, TextProps>(
         delete={strikethrough}
         italic={italic}
         code={monospace}
-        ellipsis={truncate || lineClamp ? { rows: lineClamp } : false}
+        ellipsis={truncate || lineClamp ? true : undefined}
         style={{ textAlign: align, ...style }}
         className={className}
         {...props}
@@ -141,7 +141,7 @@ export const TitanParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       <AntParagraph
         ref={ref as any}
         type={typeMap[color || 'default'] as any}
-        ellipsis={truncate || lineClamp ? { rows: lineClamp } : false}
+        ellipsis={truncate || lineClamp ? true : undefined}
         style={{ textAlign: align, ...style }}
         className={className}
         {...props}

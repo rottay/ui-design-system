@@ -1,31 +1,55 @@
 /**
  * Card - Core Interface
+ * Re-exports from centralized types
  */
 
-import type { EngineAwareProps } from '../../../../../types';
-import type { ReactNode } from 'react';
+export type {
+  CardProps,
+  CardSize,
+  CardVariant,
+  CardHeaderProps,
+  CardBodyProps,
+  CardFooterProps,
+  CardCoverProps,
+  CardMetaProps,
+  CardImageProps,
+} from '../../../../../types/primitives/display/Card';
 
-export type CardVariant = 'elevated' | 'outlined' | 'filled';
-
-export interface CardProps extends EngineAwareProps {
-  children: ReactNode;
-  title?: ReactNode;
-  subtitle?: ReactNode;
-  variant?: CardVariant;
-  hoverable?: boolean;
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-  onClick?: () => void;
-}
-
-export const CARD_DEFAULTS: Partial<CardProps> = {
-  variant: 'elevated',
-  padding: 'md',
+// Default values
+export const CARD_DEFAULTS = {
+  variant: 'elevated' as const,
+  size: 'md' as const,
+  shadow: 'md' as const,
+  padding: 'md' as const,
   hoverable: false,
+  clickable: false,
+  bordered: true,
+  loading: false,
+  radius: 'md' as const,
 };
 
-export const PADDING_MAP = {
+// Size mapping to padding values (matches CSS tokens)
+export const PADDING_MAP: Record<string, number> = {
   none: 0,
-  sm: 12,
-  md: 24,
-  lg: 32,
+  sm: 12,   // --card-sm-padding: 0.75rem
+  md: 16,   // --card-md-padding: 1rem
+  lg: 24,   // --card-lg-padding: 1.5rem
+};
+
+// Shadow level mapping
+export const SHADOW_MAP: Record<string, string> = {
+  none: 'none',
+  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+};
+
+// Border radius mapping
+export const RADIUS_MAP: Record<string, string> = {
+  none: '0',
+  sm: '4px',
+  md: '8px',
+  lg: '12px',
+  xl: '16px',
 };

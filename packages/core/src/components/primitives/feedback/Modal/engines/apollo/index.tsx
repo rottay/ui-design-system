@@ -3,10 +3,10 @@
  */
 
 import React, { useEffect } from 'react';
-import type { ModalProps } from '../types';
-import { MODAL_DEFAULTS } from '../types';
+import type { ModalProps, ModalSize } from '../../types';
+import { MODAL_DEFAULTS } from '../../types';
 
-const SIZE_STYLES = {
+const SIZE_STYLES: Record<ModalSize, { maxWidth: string; width?: string }> = {
   sm: { maxWidth: '416px' },
   md: { maxWidth: '520px' },
   lg: { maxWidth: '720px' },
@@ -17,7 +17,7 @@ const SIZE_STYLES = {
 export default function ApolloModal(props: ModalProps): React.ReactElement {
   const {
     open,
-    size = MODAL_DEFAULTS.size,
+    size = MODAL_DEFAULTS.size as ModalSize,
     title,
     onClose,
     onOpenChange,
@@ -71,6 +71,8 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
 
   if (!open) return <></>;
 
+  const modalSize = size as ModalSize;
+
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -92,7 +94,7 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
     position: 'relative',
     width: '100%',
-    ...SIZE_STYLES[size!],
+    ...SIZE_STYLES[modalSize],
     ...style,
   };
 

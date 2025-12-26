@@ -3,17 +3,17 @@
  */
 
 import React, { useState } from 'react';
-import type { AlertProps } from '../types';
-import { ALERT_DEFAULTS } from '../types';
+import type { AlertProps, AlertType } from '../../types';
+import { ALERT_DEFAULTS } from '../../types';
 
-const TYPE_STYLES: Record<string, React.CSSProperties> = {
+const TYPE_STYLES: Record<AlertType, React.CSSProperties> = {
   info: { backgroundColor: '#EFF6FF', borderColor: '#3B82F6', color: '#1E40AF' },
   success: { backgroundColor: '#F0FDF4', borderColor: '#22C55E', color: '#166534' },
   warning: { backgroundColor: '#FFFBEB', borderColor: '#F59E0B', color: '#92400E' },
   error: { backgroundColor: '#FEF2F2', borderColor: '#EF4444', color: '#991B1B' },
 };
 
-const TYPE_ICONS = {
+const TYPE_ICONS: Record<AlertType, string> = {
   info: 'ℹ',
   success: '✓',
   warning: '⚠',
@@ -23,7 +23,7 @@ const TYPE_ICONS = {
 export default function ApolloAlert(props: AlertProps): React.ReactElement | null {
   const [visible, setVisible] = useState(true);
   const {
-    type = ALERT_DEFAULTS.type,
+    type = ALERT_DEFAULTS.type as AlertType,
     message,
     description,
     icon,
@@ -36,6 +36,8 @@ export default function ApolloAlert(props: AlertProps): React.ReactElement | nul
 
   if (!visible) return null;
 
+  const alertType = type as AlertType;
+
   const baseStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'flex-start',
@@ -43,13 +45,13 @@ export default function ApolloAlert(props: AlertProps): React.ReactElement | nul
     padding: '1rem',
     borderRadius: 'var(--radius-md, 0.375rem)',
     borderLeft: '4px solid',
-    ...TYPE_STYLES[type!],
+    ...TYPE_STYLES[alertType],
     ...style,
   };
 
   return (
     <div className={className} style={baseStyle}>
-      {showIcon && <span style={{ fontSize: '1.25rem' }}>{icon || TYPE_ICONS[type!]}</span>}
+      {showIcon && <span style={{ fontSize: '1.25rem' }}>{icon || TYPE_ICONS[alertType]}</span>}
       <div style={{ flex: 1 }}>
         <div style={{ fontWeight: 600 }}>{message}</div>
         {description && <div style={{ marginTop: '0.25rem', opacity: 0.9 }}>{description}</div>}

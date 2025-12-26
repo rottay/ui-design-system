@@ -2,6 +2,7 @@
  * Grid - Core Interface
  */
 
+import type React from 'react';
 import type { EngineAwareProps, WithChildrenProps } from '../../../../../types';
 
 export type GridColumns = 1 | 2 | 3 | 4 | 5 | 6 | 12;
@@ -12,6 +13,8 @@ export interface GridProps extends EngineAwareProps, WithChildrenProps {
   gap?: GridGap;
   rowGap?: GridGap;
   columnGap?: GridGap;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const GRID_DEFAULTS: Partial<GridProps> = {

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { HeadingProps, TextProps, ParagraphProps } from './types';
 import {
   TitanHeading,
@@ -28,13 +29,13 @@ import {
  */
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
   ({ engine = 'titan', ...props }, ref) => {
-    const engineMap = {
+    const engineMap: Record<string, ForwardRefExoticComponent<HeadingProps & RefAttributes<HTMLHeadingElement>>> = {
       titan: TitanHeading,
       hermes: HermesHeading,
       apollo: ApolloHeading,
     };
 
-    const Component = engineMap[engine];
+    const Component = engineMap[engine] || TitanHeading;
     return <Component ref={ref} {...props} />;
   }
 );
@@ -55,13 +56,13 @@ Heading.displayName = 'Heading';
  */
 export const Text = forwardRef<HTMLElement, TextProps>(
   ({ engine = 'titan', ...props }, ref) => {
-    const engineMap = {
+    const engineMap: Record<string, ForwardRefExoticComponent<TextProps & RefAttributes<HTMLElement>>> = {
       titan: TitanText,
       hermes: HermesText,
       apollo: ApolloText,
     };
 
-    const Component = engineMap[engine];
+    const Component = engineMap[engine] || TitanText;
     return <Component ref={ref} {...props} />;
   }
 );
@@ -82,13 +83,13 @@ Text.displayName = 'Text';
  */
 export const Paragraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
   ({ engine = 'titan', ...props }, ref) => {
-    const engineMap = {
+    const engineMap: Record<string, ForwardRefExoticComponent<ParagraphProps & RefAttributes<HTMLParagraphElement>>> = {
       titan: TitanParagraph,
       hermes: HermesParagraph,
       apollo: ApolloParagraph,
     };
 
-    const Component = engineMap[engine];
+    const Component = engineMap[engine] || TitanParagraph;
     return <Component ref={ref} {...props} />;
   }
 );

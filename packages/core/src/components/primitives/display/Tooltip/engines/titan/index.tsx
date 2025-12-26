@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { Tooltip as AntTooltip } from 'antd';
 import type { TooltipProps } from '../../types';
 
@@ -28,14 +28,32 @@ export const TitanTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       style,
       ...props
     },
-    ref
+    _ref
   ) => {
     const triggers = Array.isArray(trigger) ? trigger : [trigger];
+
+    // Map custom placements to Ant Design placements
+    const placementMap: Record<string, string> = {
+      'top': 'top',
+      'top-start': 'topLeft',
+      'top-end': 'topRight',
+      'bottom': 'bottom',
+      'bottom-start': 'bottomLeft',
+      'bottom-end': 'bottomRight',
+      'left': 'left',
+      'left-start': 'leftTop',
+      'left-end': 'leftBottom',
+      'right': 'right',
+      'right-start': 'rightTop',
+      'right-end': 'rightBottom',
+    };
+
+    const antPlacement = placementMap[placement] || 'top';
 
     return (
       <AntTooltip
         title={content}
-        placement={placement}
+        placement={antPlacement as any}
         trigger={triggers}
         arrow={arrow}
         mouseEnterDelay={openDelay ? openDelay / 1000 : 0.1}

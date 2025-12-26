@@ -1,75 +1,232 @@
 /**
- * Input - Apollo Engine (Vanilla HTML/CSS)
+ * Input - Apollo Engine (Pure HTML/CSS)
+ * Headless implementation using CSS variables
  */
 
-import React from 'react';
-import type { InputProps } from '../types';
-import { INPUT_DEFAULTS } from '../types';
+'use client';
 
-const SIZE_MAP = {
-  sm: 'rottay-input--sm',
-  md: 'rottay-input--md',
-  lg: 'rottay-input--lg',
-};
+import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'react';
+import type { InputProps } from '../../types';
+import { INPUT_DEFAULTS, SIZE_MAP } from '../../types';
 
-const VARIANT_MAP = {
-  outlined: 'rottay-input--outlined',
-  filled: 'rottay-input--filled',
-  borderless: 'rottay-input--borderless',
-};
-
-const STATUS_MAP = {
-  default: '',
-  error: 'rottay-input--error',
-  warning: 'rottay-input--warning',
-  success: 'rottay-input--success',
-};
-
-export default function ApolloInput(props: InputProps): React.ReactElement {
+const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     size = INPUT_DEFAULTS.size,
     variant = INPUT_DEFAULTS.variant,
     status = INPUT_DEFAULTS.status,
+    type = INPUT_DEFAULTS.type,
     placeholder,
-    value,
+    value: controlledValue,
     defaultValue,
-    disabled,
-    readOnly,
-    required,
+    disabled = INPUT_DEFAULTS.disabled,
+    readOnly = INPUT_DEFAULTS.readOnly,
+    required = INPUT_DEFAULTS.required,
+    error = INPUT_DEFAULTS.error,
+    errorMessage,
     maxLength,
+    minLength,
     prefix,
     suffix,
-    type = INPUT_DEFAULTS.type,
+    clearable = INPUT_DEFAULTS.clearable,
+    showCount = INPUT_DEFAULTS.showCount,
     onChange,
     onFocus,
     onBlur,
+    onKeyDown,
     onPressEnter,
-    className,
-    style,
+    onClear,
+    className = '',
+    style = {},
     name,
     id,
     autoComplete,
     autoFocus,
-    ...rest
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(e.target.value, e);
+  // Handle controlled/uncontrolled
+  const [internalValue, setInternalValue] = useState(defaultValue ?? '');
+  const isControlled = controlledValue !== undefined;
+  const currentValue = isControlled ? controlledValue : internalValue;
+
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Merge refs
+  useEffect(() => {
+    if (ref) {
+      if (typeof ref === 'function') {
+        ref(inputRef.current);
+      } else {
+        (ref as React.MutableRefObject<HTMLInputElement | null>).current = inputRef.current;
+      }
     }
+  }, [ref]);
+
+  // Handle auto focus
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
+
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      onChange?.(newValue, e);
+    },
+    [isControlled, onChange]
+  );
+
+  const handleFocus = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      setIsFocused(true);
+      onFocus?.(e);
+    },
+    [onFocus]
+  );
+
+  const handleBlur = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      setIsFocused(false);
+      onBlur?.(e);
+    },
+    [onBlur]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        onPressEnter?.(e);
+      }
+      onKeyDown?.(e);
+    },
+    [onKeyDown, onPressEnter]
+  );
+
+  const handleClear = useCallback(() => {
+    if (!isControlled) {
+      setInternalValue('');
+    }
+    onClear?.();
+    // Trigger onChange with empty value
+    const syntheticEvent = {
+      target: { value: '' },
+    } as React.ChangeEvent<HTMLInputElement>;
+    onChange?.('', syntheticEvent);
+    inputRef.current?.focus();
+  }, [isControlled, onChange, onClear]);
+
+  // Determine if error state
+  const hasError = error || status === 'error';
+
+  // Get size values
+  const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
+
+  // Determine colors based on state
+  const getBorderColor = () => {
+    if (hasError) return '#ff4d4f';
+    if (status === 'warning') return '#faad14';
+    if (status === 'success') return '#52c41a';
+    if (isFocused) return '#1890ff';
+    return '#d9d9d9';
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && onPressEnter) {
-      onPressEnter();
-    }
+  const getBoxShadow = () => {
+    if (variant === 'unstyled') return 'none';
+    if (hasError) return '0 0 0 2px rgba(255, 77, 79, 0.2)';
+    if (isFocused) return '0 0 0 2px rgba(24, 144, 255, 0.2)';
+    return 'none';
   };
 
-  const classes = [
+  // Container styles
+  const containerStyle: React.CSSProperties = {
+    position: 'relative',
+    display: 'inline-flex',
+    alignItems: 'center',
+    width: '100%',
+    height: sizeValues.height,
+    backgroundColor: variant === 'filled' ? '#f5f5f5' : 'transparent',
+    borderRadius: variant === 'flushed' ? 0 : 6,
+    border: variant === 'flushed'
+      ? 'none'
+      : variant === 'unstyled'
+        ? 'none'
+        : `1px solid ${getBorderColor()}`,
+    borderBottom: variant === 'flushed'
+      ? `${isFocused ? 2 : 1}px solid ${getBorderColor()}`
+      : undefined,
+    transition: 'all 0.2s ease',
+    opacity: disabled ? 0.6 : 1,
+    cursor: disabled ? 'not-allowed' : 'text',
+    boxShadow: getBoxShadow(),
+    ...style,
+  };
+
+  // Input styles
+  const inputStyle: React.CSSProperties = {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    padding: `0 ${sizeValues.paddingX}px`,
+    paddingLeft: prefix ? 0 : undefined,
+    paddingRight: suffix || (clearable && currentValue) ? 0 : undefined,
+    fontSize: sizeValues.fontSize,
+    fontFamily: 'inherit',
+    backgroundColor: 'transparent',
+    border: 'none',
+    outline: 'none',
+    color: disabled ? '#bfbfbf' : '#333333',
+    cursor: disabled ? 'not-allowed' : 'text',
+  };
+
+  // Affix styles
+  const affixStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '0 8px',
+    color: '#bfbfbf',
+    userSelect: 'none',
+  };
+
+  // Clear button styles
+  const clearButtonStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '0 8px',
+    color: '#bfbfbf',
+    cursor: 'pointer',
+    transition: 'color 0.2s',
+    background: 'none',
+    border: 'none',
+  };
+
+  // Character count styles
+  const countStyle: React.CSSProperties = {
+    position: 'absolute',
+    right: 0,
+    bottom: '-20px',
+    fontSize: 12,
+    color: hasError ? '#ff4d4f' : '#bfbfbf',
+  };
+
+  const showClearButton = clearable && currentValue && !disabled && !readOnly;
+
+  // Build class names
+  const containerClasses = [
     'rottay-input',
-    SIZE_MAP[size!],
-    VARIANT_MAP[variant!],
-    STATUS_MAP[status!],
+    'rottay-input--apollo',
+    `rottay-input--${size}`,
+    `rottay-input--${variant}`,
+    isFocused && 'rottay-input--focused',
+    hasError && 'rottay-input--error',
     disabled && 'rottay-input--disabled',
     readOnly && 'rottay-input--readonly',
     className,
@@ -77,63 +234,97 @@ export default function ApolloInput(props: InputProps): React.ReactElement {
     .filter(Boolean)
     .join(' ');
 
-  const cssVars = {
-    '--input-height': `var(--input-${size}-height)`,
-    '--input-padding': `var(--input-${size}-padding)`,
-    '--input-font-size': `var(--input-${size}-font-size)`,
-    '--input-border-color': `var(--input-${status}-border-color)`,
-  } as React.CSSProperties;
+  return (
+    <div style={{ position: 'relative', width: '100%' }}>
+      <div
+        className={containerClasses}
+        style={containerStyle}
+        onClick={() => inputRef.current?.focus()}
+      >
+        {prefix && (
+          <span style={affixStyle}>
+            {prefix}
+          </span>
+        )}
 
-  if (prefix || suffix) {
-    return (
-      <div className="rottay-input-wrapper" style={{ ...cssVars, ...style }}>
-        {prefix && <span className="rottay-input-prefix">{prefix}</span>}
         <input
+          ref={inputRef}
+          id={id}
+          name={name}
           type={type}
-          className={classes}
+          value={currentValue}
           placeholder={placeholder}
-          value={value}
-          defaultValue={defaultValue}
           disabled={disabled}
           readOnly={readOnly}
           required={required}
           maxLength={maxLength}
-          onChange={handleChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          onKeyDown={handleKeyDown}
-          name={name}
-          id={id}
+          minLength={minLength}
           autoComplete={autoComplete}
-          autoFocus={autoFocus}
-          {...rest}
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={hasError}
+          data-testid={dataTestId}
+          style={inputStyle}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
         />
-        {suffix && <span className="rottay-input-suffix">{suffix}</span>}
-      </div>
-    );
-  }
 
-  return (
-    <input
-      type={type}
-      className={classes}
-      placeholder={placeholder}
-      value={value}
-      defaultValue={defaultValue}
-      disabled={disabled}
-      readOnly={readOnly}
-      required={required}
-      maxLength={maxLength}
-      onChange={handleChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      onKeyDown={handleKeyDown}
-      style={{ ...cssVars, ...style }}
-      name={name}
-      id={id}
-      autoComplete={autoComplete}
-      autoFocus={autoFocus}
-      {...rest}
-    />
+        {showClearButton && (
+          <button
+            type="button"
+            style={clearButtonStyle}
+            onClick={handleClear}
+            aria-label="Clear input"
+            tabIndex={-1}
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </button>
+        )}
+
+        {suffix && (
+          <span style={affixStyle}>
+            {suffix}
+          </span>
+        )}
+      </div>
+
+      {showCount && maxLength && (
+        <span style={countStyle}>
+          {currentValue.length}/{maxLength}
+        </span>
+      )}
+
+      {hasError && errorMessage && (
+        <span
+          style={{
+            display: 'block',
+            marginTop: 4,
+            fontSize: 12,
+            color: '#ff4d4f',
+          }}
+        >
+          {errorMessage}
+        </span>
+      )}
+    </div>
   );
-}
+});
+
+ApolloInput.displayName = 'ApolloInput';
+
+export default ApolloInput;

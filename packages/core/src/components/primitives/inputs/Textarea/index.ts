@@ -4,7 +4,7 @@
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';
-import type { TextareaProps } from './core';
+import type { TextareaProps } from './types';
 
 export {
   type TextareaProps,
@@ -12,10 +12,10 @@ export {
   type TextareaSize,
   type TextareaStatus,
   TEXTAREA_DEFAULTS,
-} from './core';
+} from './types';
 
 export const Textarea = createEngineComponent<TextareaProps>('Textarea', {
-  titan: () => import('./titan'),
-  hermes: () => import('./hermes'),
-  apollo: () => import('./apollo'),
+  titan: () => import('./engines/titan'),
+  hermes: () => import('./engines/hermes'),
+  apollo: () => import('./engines/apollo'),
 });

@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Progress as AntProgress } from 'antd';
-import type { ProgressProps } from '../types';
-import { PROGRESS_DEFAULTS } from '../types';
+import type { ProgressProps } from '../../types';
+import { PROGRESS_DEFAULTS } from '../../types';
 
 export default function TitanProgress(props: ProgressProps): React.ReactElement {
   const {

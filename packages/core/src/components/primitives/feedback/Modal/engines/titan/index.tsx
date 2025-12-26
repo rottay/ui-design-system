@@ -4,10 +4,10 @@
 
 import React from 'react';
 import { Modal as AntModal } from 'antd';
-import type { ModalProps } from '../types';
-import { MODAL_DEFAULTS } from '../types';
+import type { ModalProps, ModalSize } from '../../types';
+import { MODAL_DEFAULTS } from '../../types';
 
-const SIZE_MAP = {
+const SIZE_MAP: Record<ModalSize, number | string> = {
   sm: 416,
   md: 520,
   lg: 720,
@@ -18,7 +18,7 @@ const SIZE_MAP = {
 export default function TitanModal(props: ModalProps): React.ReactElement {
   const {
     open,
-    size = MODAL_DEFAULTS.size,
+    size = MODAL_DEFAULTS.size as ModalSize,
     title,
     onClose,
     onOpenChange,
@@ -49,6 +49,8 @@ export default function TitanModal(props: ModalProps): React.ReactElement {
     onOk?.();
   };
 
+  const modalSize = size as ModalSize;
+
   return (
     <AntModal
       open={open}
@@ -60,7 +62,7 @@ export default function TitanModal(props: ModalProps): React.ReactElement {
       keyboard={closeOnEscape}
       centered={centered}
       footer={hideFooter ? null : footer}
-      width={SIZE_MAP[size!]}
+      width={SIZE_MAP[modalSize]}
       zIndex={zIndex}
       okText={okText}
       cancelText={cancelText}

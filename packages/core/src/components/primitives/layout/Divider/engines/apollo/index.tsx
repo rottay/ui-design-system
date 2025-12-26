@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { DividerProps } from '../types';
-import { DIVIDER_DEFAULTS, MARGIN_MAP } from '../types';
+import type { DividerProps } from '../../types';
+import { DIVIDER_DEFAULTS, MARGIN_MAP } from '../../types';
 
 export default function ApolloDivider(props: DividerProps): React.ReactElement {
   const {

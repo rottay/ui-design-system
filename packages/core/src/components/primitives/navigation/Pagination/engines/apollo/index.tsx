@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import type { PaginationProps } from '../types';
-import { PAGINATION_DEFAULTS } from '../types';
+import type { PaginationProps, PaginationSize } from '../../types';
+import { PAGINATION_DEFAULTS } from '../../types';
 
-const SIZE_STYLES = {
+const SIZE_STYLES: Record<PaginationSize, { padding: string; fontSize: string }> = {
   sm: { padding: '0.25rem 0.5rem', fontSize: '0.875rem' },
   md: { padding: '0.5rem 0.75rem', fontSize: '1rem' },
   lg: { padding: '0.75rem 1rem', fontSize: '1.125rem' },
@@ -74,8 +74,9 @@ export default function ApolloPagination(props: PaginationProps): React.ReactEle
     gap: '0.25rem',
   };
 
+  const sizeKey: PaginationSize = size ?? 'md';
   const getButtonStyle = (isActive: boolean, isDisabled: boolean): React.CSSProperties => ({
-    ...SIZE_STYLES[size!],
+    ...SIZE_STYLES[sizeKey],
     border: '1px solid var(--color-neutral-300, #d9d9d9)',
     borderRadius: '0.25rem',
     background: isActive ? 'var(--color-primary, #0066CC)' : 'white',

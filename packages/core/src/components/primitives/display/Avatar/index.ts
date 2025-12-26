@@ -7,7 +7,7 @@ import type { AvatarProps } from './types';
 import { AvatarGroup, AvatarBadge, AvatarFallback } from './compound';
 
 // Export types
-export type { AvatarProps, AvatarSize, AvatarShape } from './types';
+export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant } from './types';
 export { AVATAR_DEFAULTS } from './types';
 
 // Export compound components
