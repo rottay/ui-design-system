@@ -4,7 +4,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps, BaseComponentProps } from '../../../../types';
 
 export type DataTablePreset = 'simple' | 'searchable' | 'selectable' | 'full';
 
@@ -18,7 +18,7 @@ export interface DataTableColumn<T = unknown> {
   render?: (value: unknown, record: T, index: number) => ReactNode;
 }
 
-export interface DataTableProps<T = Record<string, unknown>> extends EngineAwareProps {
+export interface DataTableProps<T = Record<string, unknown>> extends EngineAwareProps, BaseComponentProps {
   /** Preset to use */
   preset?: DataTablePreset;
   /** Column definitions */

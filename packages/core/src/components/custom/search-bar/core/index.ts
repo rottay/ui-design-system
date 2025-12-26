@@ -15,7 +15,7 @@ export interface SearchSuggestion {
   category?: string;
 }
 
-export interface SearchBarProps extends EngineAwareProps, Record<string, unknown> {
+export interface SearchBarProps extends EngineAwareProps {
   preset?: SearchBarPreset;
   placeholder?: string;
   value?: string;

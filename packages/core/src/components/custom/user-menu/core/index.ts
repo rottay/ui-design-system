@@ -16,7 +16,7 @@ export interface UserMenuItem {
   onClick?: () => void;
 }
 
-export interface UserMenuProps extends EngineAwareProps, Record<string, unknown> {
+export interface UserMenuProps extends EngineAwareProps {
   preset?: UserMenuPreset;
   user: {
     name: string;

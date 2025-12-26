@@ -39,8 +39,6 @@ export interface AuthLayoutProps extends EngineAwareProps {
   termsContent?: ReactNode;
   /** Footer content */
   footer?: ReactNode;
-  /** Index signature for Record compatibility */
-  [key: string]: unknown;
 }
 
 export const AUTH_LAYOUT_DEFAULTS: Partial<AuthLayoutProps> = {
