@@ -1,34 +1,31 @@
 /**
- * Textarea - Titan Engine (Ant Design)
+ * Textarea - Hermes Engine (DaisyUI/Tailwind)
  */
 
 import React from 'react';
-import { Input } from 'antd';
 import type { TextareaProps } from '../../types';
 import { TEXTAREA_DEFAULTS } from '../../types';
 
-const { TextArea: AntTextArea } = Input;
-
 const SIZE_MAP = {
-  sm: 'small' as const,
-  md: 'middle' as const,
-  lg: 'large' as const,
+  sm: 'textarea-sm',
+  md: 'textarea-md',
+  lg: 'textarea-lg',
 };
 
 const STATUS_MAP = {
-  default: undefined,
-  error: 'error' as const,
-  warning: 'warning' as const,
-  success: undefined,
+  default: '',
+  error: 'textarea-error',
+  warning: 'textarea-warning',
+  success: 'textarea-success',
 };
 
 const VARIANT_MAP = {
-  outlined: undefined,
-  filled: 'filled' as const,
-  borderless: 'borderless' as const,
+  outlined: 'textarea-bordered',
+  filled: '',
+  borderless: '',
 };
 
-export default function TitanTextarea(props: TextareaProps): React.ReactElement {
+export default function HermesTextarea(props: TextareaProps): React.ReactElement {
   const {
     size = TEXTAREA_DEFAULTS.size,
     variant = TEXTAREA_DEFAULTS.variant,
@@ -40,15 +37,10 @@ export default function TitanTextarea(props: TextareaProps): React.ReactElement 
     readOnly,
     required,
     maxLength,
-    showCount,
     rows = TEXTAREA_DEFAULTS.rows,
-    autoSize,
-    allowClear,
     onChange,
     onFocus,
     onBlur,
-    onPressEnter,
-    onResize,
     className,
     style,
     name,
@@ -64,17 +56,19 @@ export default function TitanTextarea(props: TextareaProps): React.ReactElement 
     }
   };
 
-  const handlePressEnter = (_e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (onPressEnter) {
-      onPressEnter();
-    }
-  };
+  const classes = [
+    'textarea',
+    SIZE_MAP[size!],
+    VARIANT_MAP[variant!],
+    STATUS_MAP[status!],
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <AntTextArea
-      size={SIZE_MAP[size!]}
-      variant={VARIANT_MAP[variant!]}
-      status={STATUS_MAP[status!]}
+    <textarea
+      className={classes}
       placeholder={placeholder}
       value={value}
       defaultValue={defaultValue}
@@ -82,16 +76,10 @@ export default function TitanTextarea(props: TextareaProps): React.ReactElement 
       readOnly={readOnly}
       required={required}
       maxLength={maxLength}
-      showCount={showCount}
       rows={rows}
-      autoSize={autoSize}
-      allowClear={allowClear}
       onChange={handleChange}
       onFocus={onFocus}
       onBlur={onBlur}
-      onPressEnter={handlePressEnter}
-      onResize={onResize}
-      className={className}
       style={style}
       name={name}
       id={id}

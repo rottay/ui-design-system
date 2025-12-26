@@ -1,0 +1,193 @@
+/**
+ * Card.Image - Compound Component
+ * Image section for Card component with overlay support
+ */
+
+'use client';
+
+import React, { useState } from 'react';
+import type { CSSProperties } from 'react';
+import type { CardImageProps } from '../../types';
+
+const RADIUS_MAP: Record<string, string> = {
+  none: '0',
+  sm: '4px',
+  md: '8px',
+  lg: '12px',
+  inherit: 'inherit',
+};
+
+/**
+ * Card image with overlay support
+ */
+export function CardImage({
+  src,
+  alt,
+  height = 200,
+  objectFit = 'cover',
+  position = 'top',
+  overlay,
+  gradient = false,
+  radius = 'inherit',
+  onLoad,
+  onError,
+  className = '',
+  style,
+}: CardImageProps): React.ReactElement {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleLoad = () => {
+    setImageLoaded(true);
+    onLoad?.();
+  };
+
+  const handleError = () => {
+    setImageError(true);
+    onError?.(new Error('Failed to load image'));
+  };
+
+  const containerStyle: CSSProperties = {
+    position: 'relative',
+    width: '100%',
+    height: typeof height === 'number' ? `${height}px` : height,
+    overflow: 'hidden',
+    borderRadius: RADIUS_MAP[radius] || radius,
+    ...(position === 'top' && {
+      borderTopLeftRadius: 'var(--card-border-radius, 8px)',
+      borderTopRightRadius: 'var(--card-border-radius, 8px)',
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+    }),
+    ...(position === 'bottom' && {
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomLeftRadius: 'var(--card-border-radius, 8px)',
+      borderBottomRightRadius: 'var(--card-border-radius, 8px)',
+    }),
+    ...(position === 'cover' && {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: '100%',
+      zIndex: 0,
+    }),
+    ...style,
+  };
+
+  const imageStyle: CSSProperties = {
+    width: '100%',
+    height: '100%',
+    objectFit,
+    objectPosition: 'center',
+    display: 'block',
+    transition: 'opacity 0.3s ease',
+    opacity: imageLoaded ? 1 : 0,
+  };
+
+  const placeholderStyle: CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'var(--card-image-placeholder-bg, #f0f0f0)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'var(--card-image-placeholder-color, #999)',
+  };
+
+  const overlayStyle: CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  };
+
+  const gradientStyle: CSSProperties = gradient ? {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.7) 100%)',
+    zIndex: 1,
+  } : {};
+
+  return (
+    <div
+      className={`rottay-card-image ${className}`}
+      style={containerStyle}
+    >
+      {/* Placeholder shown while loading or on error */}
+      {(!imageLoaded || imageError) && (
+        <div style={placeholderStyle}>
+          {imageError ? (
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+          ) : (
+            <div
+              className="rottay-card-image-loading"
+              style={{
+                width: '40px',
+                height: '40px',
+                border: '3px solid var(--card-loading-color, #e0e0e0)',
+                borderTopColor: 'var(--card-loading-active-color, #1890ff)',
+                borderRadius: '50%',
+                animation: 'rottay-card-image-spin 1s linear infinite',
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Actual image */}
+      {!imageError && (
+        <img
+          src={src}
+          alt={alt}
+          style={imageStyle}
+          onLoad={handleLoad}
+          onError={handleError}
+        />
+      )}
+
+      {/* Gradient overlay */}
+      {gradient && <div style={gradientStyle} />}
+
+      {/* Custom overlay content */}
+      {overlay && (
+        <div className="rottay-card-image-overlay" style={overlayStyle}>
+          {overlay}
+        </div>
+      )}
+
+      {/* Keyframes for loading spinner */}
+      <style>{`
+        @keyframes rottay-card-image-spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+CardImage.displayName = 'Card.Image';
