@@ -1,72 +1,81 @@
-import type { BaseComponentProps } from '../../../../../types/common';
-import type { EngineAwareProps } from '../../../../../types/engine';
-
 /**
- * Image object-fit values.
+ * Image - Core Interface
+ * Re-exports from centralized types with local defaults
  */
-export type ImageFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+
+export type {
+  ImageFit,
+  ImageProps,
+  ImageGroupProps,
+  ImageLoadState,
+} from '../../../../../types/primitives/display/Image';
 
 /**
- * Image loading strategies.
- */
-export type ImageLoading = 'eager' | 'lazy';
-
-/**
- * Border radius options for images.
+ * Image radius options for border-radius styling.
  */
 export type ImageRadius = 'none' | 'sm' | 'md' | 'lg' | 'full';
 
 /**
- * Image loading status.
+ * Image loading status during lifecycle.
  */
 export type ImageStatus = 'loading' | 'loaded' | 'error';
 
 /**
- * Props for the Image component.
+ * Props for the Image.Fallback compound component.
+ * Displayed when the image fails to load.
  */
-export interface ImageProps extends BaseComponentProps, EngineAwareProps {
-  /** Image source URL */
-  src: string;
-  /** Alt text (required for accessibility) */
-  alt: string;
-  /** Image width */
-  width?: number | string;
-  /** Image height */
-  height?: number | string;
-  /** Object fit */
-  fit?: ImageFit;
-  /** Loading strategy */
-  loading?: ImageLoading;
-  /** Fallback image URL */
-  fallbackSrc?: string;
-  /** Custom fallback element */
-  fallback?: React.ReactNode;
-  /** Show skeleton while loading */
-  showSkeleton?: boolean;
-  /** Border radius */
-  radius?: ImageRadius;
-  /** Error callback */
-  onError?: (error: Error) => void;
-  /** Load callback */
-  onLoad?: () => void;
-}
-
-/**
- * Props for the Image.Fallback component.
- */
-export interface ImageFallbackProps extends BaseComponentProps {
-  /** Fallback content */
+export interface ImageFallbackProps {
+  /** Custom CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+  /** Fallback content to display */
   children?: React.ReactNode;
+  /** Width of the fallback container */
+  width?: number | string;
+  /** Height of the fallback container */
+  height?: number | string;
 }
 
 /**
- * Props for the Image.Skeleton component.
+ * Props for the Image.Skeleton compound component.
+ * Displayed while the image is loading.
  */
-export interface ImageSkeletonProps extends BaseComponentProps {
-  /** Width of skeleton */
+export interface ImageSkeletonProps {
+  /** Custom CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: React.CSSProperties;
+  /** Width of the skeleton */
   width?: number | string;
-  /** Height of skeleton */
+  /** Height of the skeleton */
   height?: number | string;
-  /** Border radius */
+  /** Border radius style */
   radius?: ImageRadius;
+  /** Whether to animate the skeleton */
+  animate?: boolean;
 }
+
+/**
+ * Default values for Image component props.
+ */
+export const IMAGE_DEFAULTS = {
+  objectFit: 'cover' as const,
+  objectPosition: 'center',
+  radius: 'none' as const,
+  lazy: true,
+  bordered: false,
+  shadow: false,
+  zoomable: false,
+};
+
+/**
+ * Radius mapping to CSS values (matches design tokens).
+ */
+export const RADIUS_MAP: Record<ImageRadius, string> = {
+  none: '0',
+  sm: 'var(--radius-sm, 0.25rem)',
+  md: 'var(--radius-md, 0.5rem)',
+  lg: 'var(--radius-lg, 1rem)',
+  full: 'var(--radius-full, 9999px)',
+};

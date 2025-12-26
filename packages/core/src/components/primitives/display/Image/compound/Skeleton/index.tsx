@@ -1,49 +1,74 @@
+/**
+ * Image.Skeleton - Compound Component
+ *
+ * Displays a loading skeleton placeholder while an image is loading.
+ * Can be used standalone or as part of the Image component.
+ */
+
 'use client';
 
 import React, { forwardRef } from 'react';
 import type { ImageSkeletonProps } from '../../types';
+import { RADIUS_MAP } from '../../types';
 
 /**
- * Image.Skeleton component for loading state.
+ * Image.Skeleton component for displaying loading state.
  *
- * Displays while image is loading.
+ * Features:
+ * - Animated pulse effect
+ * - Customizable dimensions
+ * - Border radius options
+ * - Accessible (hidden from screen readers)
+ *
+ * @example
+ * ```tsx
+ * <Image.Skeleton width={200} height={200} radius="md" />
+ * ```
  */
 export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
-  ({ width, height, radius = 'none', className, style, ...props }, ref) => {
-    const radiusMap: Record<string, string> = {
-      none: '0',
-      sm: '0.25rem',
-      md: '0.5rem',
-      lg: '1rem',
-      full: '9999px',
-    };
+  (
+    {
+      width,
+      height,
+      radius = 'none',
+      animate = true,
+      className = '',
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    // Get radius CSS value
+    const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 
+    // Container styles
     const skeletonStyles: React.CSSProperties = {
       width: typeof width === 'number' ? `${width}px` : width || '100%',
       height: typeof height === 'number' ? `${height}px` : height || '100%',
-      backgroundColor: 'var(--color-neutral-200)',
-      borderRadius: radiusMap[radius],
-      animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      backgroundColor: 'var(--color-neutral-200, #e5e5e5)',
+      borderRadius: radiusValue,
+      animation: animate ? 'rottayImageSkeletonPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
       ...style,
     };
 
     return (
       <>
+        <div
+          ref={ref}
+          className={`rottay-image-skeleton ${className}`}
+          style={skeletonStyles}
+          aria-hidden="true"
+          {...props}
+        />
+        {/* Inline keyframes for animation */}
         <style>
           {`
-            @keyframes pulse {
+            @keyframes rottayImageSkeletonPulse {
               0%, 100% { opacity: 1; }
               50% { opacity: 0.5; }
             }
           `}
         </style>
-        <div
-          ref={ref}
-          className={`rottay-image-skeleton ${className || ''}`}
-          style={skeletonStyles}
-          aria-hidden="true"
-          {...props}
-        />
       </>
     );
   }

@@ -1,5 +1,9 @@
 /**
- * Badge - Apollo Engine (Pure HTML/CSS with CSS Variables)
+ * @fileoverview Badge Apollo Engine Implementation
+ * @description Pure HTML/CSS implementation of the Badge component using CSS variables.
+ * Provides a headless, accessible badge with no external UI library dependencies.
+ * Ideal for maximum accessibility and custom styling needs.
+ * @module components/primitives/display/Badge/engines/apollo
  */
 
 'use client';
@@ -8,6 +12,27 @@ import React from 'react';
 import type { BadgeProps } from '../../types';
 import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP } from '../../types';
 
+/**
+ * Apollo (Pure HTML/CSS) implementation of the Badge component.
+ *
+ * This engine provides a zero-dependency badge implementation using only
+ * vanilla HTML, CSS, and CSS custom properties. It offers maximum control
+ * over styling and is optimized for accessibility.
+ *
+ * @component
+ * @example
+ * // Basic badge with count
+ * <ApolloBadge count={5} variant="primary">
+ *   <Avatar />
+ * </ApolloBadge>
+ *
+ * @example
+ * // Soft style badge with icon
+ * <ApolloBadge content="New" badgeStyle="soft" variant="success" icon={<StarIcon />} />
+ *
+ * @param props - Badge component props
+ * @returns React element with pure CSS Badge
+ */
 export default function ApolloBadge(props: BadgeProps): React.ReactElement {
   const {
     children,
@@ -33,28 +58,32 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     style,
   } = props;
 
-  // Get display value
+  // Determine display value (content takes precedence)
   const displayValue = content !== undefined ? content : count;
 
-  // Format count
+  /**
+   * Format count with overflow handling.
+   */
   const formattedValue = (() => {
     if (displayValue === undefined) return undefined;
     if (typeof displayValue === 'string') return displayValue;
     return displayValue > max! ? `${max}+` : displayValue;
   })();
 
-  // Determine if badge should be visible
+  // Calculate badge visibility
   const shouldShowBadge = visible && (
     dot ||
     (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
   );
 
-  // Get size and color values
+  // Retrieve size-specific values
   const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
   const color = VARIANT_COLOR_MAP[variant!] || VARIANT_COLOR_MAP.default;
 
-  // Build CSS variables
+  /**
+   * CSS custom properties for badge styling.
+   */
   const cssVars: React.CSSProperties = {
     '--badge-bg': color,
     '--badge-color': '#ffffff',
@@ -68,7 +97,9 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
                              radius === 'sm' ? '2px' : '0',
   } as React.CSSProperties;
 
-  // Position styles
+  /**
+   * Position offset styles for badge placement.
+   */
   const positionStyles: Record<string, React.CSSProperties> = {
     'top-right': { top: 0, right: 0, transform: 'translate(50%, -50%)' },
     'top-left': { top: 0, left: 0, transform: 'translate(-50%, -50%)' },
@@ -76,7 +107,10 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     'bottom-left': { bottom: 0, left: 0, transform: 'translate(-50%, 50%)' },
   };
 
-  // Badge style variations
+  /**
+   * Returns CSS styles for the selected badge style variant.
+   * @returns Style object for the badge appearance
+   */
   const getStyleVariation = (): React.CSSProperties => {
     switch (badgeStyle) {
       case 'outline':
@@ -87,7 +121,7 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
         };
       case 'soft':
         return {
-          backgroundColor: `${color}26`, // 15% opacity
+          backgroundColor: `${color}26`, // 15% opacity hex
           color: 'var(--badge-bg)',
         };
       case 'ghost':
@@ -103,18 +137,25 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     }
   };
 
-  // Handle click
+  /**
+   * Handles badge click events.
+   * @param e - Mouse event
+   */
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClick?.();
   };
 
+  /**
+   * Handles close button clicks.
+   * @param e - Mouse event
+   */
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClose?.();
   };
 
-  // Badge indicator base style
+  // Base indicator styles
   const badgeIndicatorStyle: React.CSSProperties = {
     ...cssVars,
     display: 'inline-flex',
@@ -135,12 +176,12 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     ...getStyleVariation(),
   };
 
-  // Pulse animation
+  // Pulse animation styles
   const pulseAnimation = pulse ? {
     animation: 'badge-pulse 1.5s ease-in-out infinite',
   } : {};
 
-  // If no children, render standalone badge
+  // Render standalone badge (no children)
   if (!children) {
     return (
       <>
@@ -173,7 +214,7 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     );
   }
 
-  // Container style
+  // Container wrapper styles
   const containerStyle: React.CSSProperties = {
     ...cssVars,
     position: 'relative',
@@ -181,7 +222,7 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     ...style,
   };
 
-  // Positioned badge style
+  // Positioned badge styles
   const positionedBadgeStyle: React.CSSProperties = {
     ...badgeIndicatorStyle,
     ...pulseAnimation,

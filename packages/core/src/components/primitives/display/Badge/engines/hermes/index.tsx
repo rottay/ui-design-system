@@ -1,5 +1,9 @@
 /**
- * Badge - Hermes Engine (DaisyUI)
+ * @fileoverview Badge Hermes Engine Implementation
+ * @description DaisyUI/Tailwind-based implementation of the Badge component.
+ * Provides a lightweight, utility-first badge using DaisyUI classes
+ * with Tailwind CSS for styling.
+ * @module components/primitives/display/Badge/engines/hermes
  */
 
 'use client';
@@ -8,6 +12,27 @@ import React from 'react';
 import type { BadgeProps } from '../../types';
 import { BADGE_DEFAULTS, DOT_SIZE_MAP } from '../../types';
 
+/**
+ * Hermes (DaisyUI) implementation of the Badge component.
+ *
+ * This engine uses DaisyUI's badge classes combined with Tailwind utilities
+ * to render badges. It's optimized for bundle size and uses utility-first
+ * CSS approach for styling.
+ *
+ * @component
+ * @example
+ * // Basic badge with count
+ * <HermesBadge count={5} variant="primary">
+ *   <Avatar />
+ * </HermesBadge>
+ *
+ * @example
+ * // Outline style badge
+ * <HermesBadge content="New" badgeStyle="outline" variant="success" />
+ *
+ * @param props - Badge component props
+ * @returns React element with DaisyUI Badge
+ */
 export default function HermesBadge(props: BadgeProps): React.ReactElement {
   const {
     children,
@@ -28,28 +53,31 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
     clickable,
     onClick,
     bordered,
-    // radius - not used in DaisyUI, uses default rounded styles
     className = '',
     style,
   } = props;
 
-  // Get display value
+  // Determine display value (content takes precedence)
   const displayValue = content !== undefined ? content : count;
 
-  // Format count
+  /**
+   * Format count with overflow handling.
+   */
   const formattedValue = (() => {
     if (displayValue === undefined) return undefined;
     if (typeof displayValue === 'string') return displayValue;
     return displayValue > max! ? `${max}+` : displayValue;
   })();
 
-  // Determine if badge should be visible
+  // Calculate badge visibility
   const shouldShowBadge = visible && (
     dot ||
     (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
   );
 
-  // Map our variants to DaisyUI badge classes
+  /**
+   * DaisyUI variant class mapping.
+   */
   const variantClassMap: Record<string, string> = {
     default: 'badge-neutral',
     primary: 'badge-primary',
@@ -60,7 +88,9 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
     info: 'badge-info',
   };
 
-  // Map sizes to DaisyUI classes
+  /**
+   * DaisyUI size class mapping.
+   */
   const sizeClassMap: Record<string, string> = {
     xs: 'badge-xs',
     sm: 'badge-sm',
@@ -69,7 +99,9 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
     xl: 'badge-lg',
   };
 
-  // Map badge style to DaisyUI classes
+  /**
+   * DaisyUI style variant class mapping.
+   */
   const styleClassMap: Record<string, string> = {
     solid: '',
     outline: 'badge-outline',
@@ -81,18 +113,25 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
   const sizeClass = sizeClassMap[size!] || 'badge-md';
   const styleClass = styleClassMap[badgeStyle!] || '';
 
-  // Handle click
+  /**
+   * Handles badge click events.
+   * @param e - Mouse event
+   */
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClick?.();
   };
 
+  /**
+   * Handles close button clicks.
+   * @param e - Mouse event
+   */
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
     onClose?.();
   };
 
-  // Build badge classes
+  // Build badge class list
   const badgeClasses = [
     'badge',
     variantClass,
@@ -103,7 +142,9 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
     pulse ? 'animate-pulse' : '',
   ].filter(Boolean).join(' ');
 
-  // Position classes for indicator
+  /**
+   * DaisyUI indicator position class mapping.
+   */
   const positionClassMap: Record<string, string> = {
     'top-right': 'indicator-top indicator-end',
     'top-left': 'indicator-top indicator-start',
@@ -112,7 +153,7 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
   };
   const positionClass = positionClassMap[position!] || 'indicator-top indicator-end';
 
-  // If no children, render as standalone badge
+  // Render standalone badge (no children)
   if (!children) {
     return (
       <span
@@ -135,12 +176,12 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
     );
   }
 
-  // If no badge to show, just render children
+  // Return children only if badge should not be shown
   if (!shouldShowBadge) {
     return <div className={className} style={style}>{children}</div>;
   }
 
-  // Render with indicator
+  // Render with DaisyUI indicator
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
 
   return (

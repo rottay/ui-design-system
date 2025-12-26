@@ -1,156 +1,216 @@
+/**
+ * Tag - Base Component
+ * Uses CSS variables from design tokens for consistent styling.
+ *
+ * @module Tag/base
+ * @description The base Tag component provides a foundation for all engine
+ * implementations. It uses CSS variables for theming and supports all common
+ * Tag features including closable tags, icons, and semantic colors.
+ */
+
 'use client';
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import type { TagProps } from '../types';
+import { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, VARIANT_COLORS } from '../types';
 
 /**
- * Base Tag component for labels and categories.
+ * Close icon SVG component for closable tags.
  *
- * Features:
- * - Multiple sizes and variants
- * - Semantic colors
- * - Closable with callback
- * - Icon support
- * - Clickable state
+ * @returns SVG element for the close button
+ */
+const CloseIcon: React.FC = () => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M9 3L3 9M3 3L9 9"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
+/**
+ * Base Tag component for labels, categories, and status indicators.
+ *
+ * This component serves as the foundation for all engine-specific
+ * implementations and can be used directly with the Apollo engine.
+ *
+ * @param props - Tag component properties
+ * @param ref - Forwarded ref to the root span element
+ *
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <BaseTag>New</BaseTag>
+ *
+ * // With variant and closable
+ * <BaseTag variant="primary" closable onClose={() => console.log('closed')}>
+ *   Premium
+ * </BaseTag>
+ *
+ * // With icon
+ * <BaseTag icon={<StarIcon />} variant="success">
+ *   Featured
+ * </BaseTag>
+ * ```
  */
 export const BaseTag = forwardRef<HTMLSpanElement, TagProps>(
-  (
-    {
-      size = 'md',
-      variant = 'solid',
-      color = 'default',
-      closable = false,
+  (props, ref) => {
+    const {
+      size = TAG_DEFAULTS.size,
+      variant = TAG_DEFAULTS.variant,
+      closable = TAG_DEFAULTS.closable,
       onClose,
       icon,
       children,
-      rounded = false,
-      bordered = false,
-      disabled = false,
-      clickable = false,
+      bordered = TAG_DEFAULTS.bordered,
+      radius = TAG_DEFAULTS.radius,
+      color,
+      outlined = TAG_DEFAULTS.outlined,
+      clickable = TAG_DEFAULTS.clickable,
       onClick,
-      className,
-      style,
-      ...props
-    },
-    ref
-  ) => {
-    const sizeStyles = {
-      sm: {
-        padding: '0.125rem 0.5rem',
-        fontSize: '0.75rem',
-        lineHeight: '1rem',
-      },
-      md: {
-        padding: '0.25rem 0.75rem',
-        fontSize: '0.875rem',
-        lineHeight: '1.25rem',
-      },
-      lg: {
-        padding: '0.375rem 1rem',
-        fontSize: '1rem',
-        lineHeight: '1.5rem',
-      },
-    };
+      className = '',
+      style = {},
+      ...restProps
+    } = props;
 
-    const colorMap = {
-      default: {
-        solid: { bg: 'var(--color-neutral-200)', color: 'var(--color-neutral-700)' },
-        outline: { bg: 'transparent', color: 'var(--color-neutral-700)', border: 'var(--color-neutral-400)' },
-        subtle: { bg: 'var(--color-neutral-100)', color: 'var(--color-neutral-700)' },
-      },
-      primary: {
-        solid: { bg: 'var(--color-primary)', color: 'white' },
-        outline: { bg: 'transparent', color: 'var(--color-primary)', border: 'var(--color-primary)' },
-        subtle: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)' },
-      },
-      secondary: {
-        solid: { bg: 'var(--color-secondary)', color: 'white' },
-        outline: { bg: 'transparent', color: 'var(--color-secondary)', border: 'var(--color-secondary)' },
-        subtle: { bg: 'var(--color-secondary-light)', color: 'var(--color-secondary)' },
-      },
-      success: {
-        solid: { bg: 'var(--color-success)', color: 'white' },
-        outline: { bg: 'transparent', color: 'var(--color-success)', border: 'var(--color-success)' },
-        subtle: { bg: 'var(--color-success-light)', color: 'var(--color-success)' },
-      },
-      warning: {
-        solid: { bg: 'var(--color-warning)', color: 'white' },
-        outline: { bg: 'transparent', color: 'var(--color-warning)', border: 'var(--color-warning)' },
-        subtle: { bg: 'var(--color-warning-light)', color: 'var(--color-warning)' },
-      },
-      error: {
-        solid: { bg: 'var(--color-error)', color: 'white' },
-        outline: { bg: 'transparent', color: 'var(--color-error)', border: 'var(--color-error)' },
-        subtle: { bg: 'var(--color-error-light)', color: 'var(--color-error)' },
-      },
-    };
+    /**
+     * Handles tag click events.
+     * Only triggers callback if tag is clickable.
+     */
+    const handleClick = useCallback(() => {
+      if (clickable && onClick) {
+        onClick();
+      }
+    }, [clickable, onClick]);
 
-    const colorStyles = colorMap[color][variant];
+    /**
+     * Handles close button click.
+     * Stops propagation to prevent triggering tag click.
+     */
+    const handleClose = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onClose?.();
+      },
+      [onClose]
+    );
 
-    const tagStyles: React.CSSProperties = {
-      ...sizeStyles[size],
-      backgroundColor: colorStyles.bg,
-      color: colorStyles.color,
-      border: bordered || variant === 'outline' ? `1px solid ${(colorStyles as { border?: string }).border || colorStyles.bg}` : 'none',
-      borderRadius: rounded ? '9999px' : '0.25rem',
+    // Determine the style type (solid, outline, or subtle)
+    const styleType = outlined ? 'outline' : 'solid';
+
+    // Get colors based on variant, with custom color override support
+    const variantKey = (variant as keyof typeof VARIANT_COLORS) || 'default';
+    const colors = VARIANT_COLORS[variantKey]?.[styleType] || VARIANT_COLORS.default[styleType];
+
+    // Get size styles
+    const sizeStyles = SIZE_MAP[size] || SIZE_MAP.md;
+
+    // Build CSS variables for theming
+    const tagVars: React.CSSProperties = {
+      '--tag-bg': color || colors.bg,
+      '--tag-color': colors.text,
+      '--tag-border-color': bordered || outlined ? colors.border : 'transparent',
+      '--tag-radius': RADIUS_MAP[radius] || RADIUS_MAP.md,
+      '--tag-height': sizeStyles.height,
+      '--tag-padding': sizeStyles.padding,
+      '--tag-font-size': sizeStyles.fontSize,
+    } as React.CSSProperties;
+
+    // Computed container styles
+    const containerStyle: React.CSSProperties = {
+      ...tagVars,
       display: 'inline-flex',
       alignItems: 'center',
-      gap: '0.375rem',
+      justifyContent: 'center',
+      gap: '0.25rem',
+      height: 'var(--tag-height)',
+      padding: 'var(--tag-padding)',
+      fontSize: 'var(--tag-font-size)',
       fontWeight: 500,
-      cursor: clickable && !disabled ? 'pointer' : 'default',
-      opacity: disabled ? 0.5 : 1,
-      pointerEvents: disabled ? 'none' : 'auto',
-      transition: 'all 0.2s ease',
+      lineHeight: 1,
+      backgroundColor: 'var(--tag-bg)',
+      color: 'var(--tag-color)',
+      border: `1px solid var(--tag-border-color)`,
+      borderRadius: 'var(--tag-radius)',
+      cursor: clickable ? 'pointer' : 'default',
+      transition: 'all 0.2s ease-in-out',
+      userSelect: 'none',
+      whiteSpace: 'nowrap',
       ...style,
     };
 
-    const handleClick = () => {
-      if (clickable && !disabled && onClick) {
-        onClick();
-      }
+    // Icon wrapper styles
+    const iconStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
     };
 
-    const handleClose = (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (!disabled && onClose) {
-        onClose();
-      }
+    // Close button styles
+    const closeButtonStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: '0.125rem',
+      padding: 0,
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: 'inherit',
+      opacity: 0.7,
+      transition: 'opacity 0.2s ease-in-out',
     };
+
+    // Build class names
+    const classNames = [
+      'rottay-tag',
+      `rottay-tag--${size}`,
+      `rottay-tag--${variant}`,
+      outlined && 'rottay-tag--outlined',
+      bordered && 'rottay-tag--bordered',
+      clickable && 'rottay-tag--clickable',
+      closable && 'rottay-tag--closable',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return (
       <span
         ref={ref}
-        className={`rottay-tag rottay-tag--${size} rottay-tag--${variant} rottay-tag--${color} ${className || ''}`}
-        style={tagStyles}
+        className={classNames}
+        style={containerStyle}
         onClick={handleClick}
-        {...props}
+        role={clickable ? 'button' : undefined}
+        tabIndex={clickable ? 0 : undefined}
+        {...restProps}
       >
-        {icon && <span className="rottay-tag__icon">{icon}</span>}
+        {icon && (
+          <span className="rottay-tag__icon" style={iconStyle}>
+            {icon}
+          </span>
+        )}
+
         <span className="rottay-tag__content">{children}</span>
+
         {closable && (
           <button
             type="button"
             className="rottay-tag__close"
             onClick={handleClose}
-            aria-label="Close tag"
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              marginLeft: '0.125rem',
-              display: 'flex',
-              alignItems: 'center',
-            }}
+            aria-label="Remove tag"
+            style={closeButtonStyle}
           >
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path
-                d="M9 3L3 9M3 3L9 9"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
+            <CloseIcon />
           </button>
         )}
       </span>

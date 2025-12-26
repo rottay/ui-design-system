@@ -1,5 +1,18 @@
 /**
- * Card - Compound Components
+ * @fileoverview Card Compound Components
+ * @description Exports all compound components for the Card component.
+ * These components are designed to work together to create structured card layouts.
+ *
+ * @module Card/compound
+ * @package @es-rottay/designsystem-core
+ *
+ * @example
+ * // Using compound components
+ * <Card>
+ *   <Card.Header title="Card Title" subtitle="Subtitle" />
+ *   <Card.Body>Content goes here</Card.Body>
+ *   <Card.Footer actions={[<Button>Action</Button>]} />
+ * </Card>
  */
 
 export { CardHeader } from './Header';

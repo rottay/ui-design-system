@@ -1,6 +1,9 @@
 /**
- * Badge - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Badge Base Component
+ * @description Base implementation of the Badge component using CSS variables
+ * for consistent styling across all rendering engines. This component serves
+ * as a headless implementation that engine-specific variants can extend.
+ * @module components/primitives/display/Badge/base
  */
 
 'use client';
@@ -10,7 +13,14 @@ import type { BadgeProps } from '../types';
 import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP } from '../types';
 
 /**
- * Format count for display
+ * Formats a numeric count for display, applying overflow logic.
+ * @param count - The raw count value (number or string)
+ * @param max - Maximum value before showing overflow indicator
+ * @returns Formatted display string or the original value
+ * @example
+ * formatCount(50, 99)   // returns 50
+ * formatCount(100, 99)  // returns "99+"
+ * formatCount("New", 99) // returns "New"
  */
 function formatCount(count: number | string | undefined, max: number): string | number | undefined {
   if (count === undefined) return undefined;
@@ -19,8 +29,32 @@ function formatCount(count: number | string | undefined, max: number): string | 
 }
 
 /**
- * Base Badge component using CSS variables.
- * This is extended by engine-specific implementations.
+ * Base Badge component using CSS variables for theming.
+ *
+ * The Badge component displays a small indicator that can show:
+ * - Numeric counts (e.g., notification counts)
+ * - Status dots
+ * - Text labels
+ * - Icons with optional content
+ *
+ * It can be used standalone or positioned over other elements.
+ *
+ * @component
+ * @example
+ * // Standalone badge with count
+ * <BaseBadge count={5} variant="primary" />
+ *
+ * @example
+ * // Badge as overlay on an element
+ * <BaseBadge count={10} position="top-right">
+ *   <Avatar src="/user.jpg" />
+ * </BaseBadge>
+ *
+ * @example
+ * // Dot indicator badge
+ * <BaseBadge dot pulse variant="error">
+ *   <NotificationIcon />
+ * </BaseBadge>
  */
 export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
   (props, ref) => {
@@ -48,22 +82,25 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       style = {},
     } = props;
 
-    // Get the display value
+    // Determine the display value (content takes precedence over count)
     const displayValue = content !== undefined ? content : count;
     const formattedValue = formatCount(displayValue, max!);
 
-    // Determine if badge should be visible
+    // Calculate badge visibility based on content and settings
     const shouldShowBadge = visible && (
       dot ||
       (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
     );
 
-    // Get size values
+    // Retrieve size-specific values from configuration maps
     const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
     const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
     const color = VARIANT_COLOR_MAP[variant!] || VARIANT_COLOR_MAP.default;
 
-    // Build CSS variables for the badge
+    /**
+     * CSS custom properties for badge styling.
+     * These variables enable consistent theming across engines.
+     */
     const badgeVars: React.CSSProperties = {
       '--badge-bg': `var(--badge-${variant}-bg, ${color})`,
       '--badge-color': `var(--badge-${variant}-color, #fff)`,
@@ -77,7 +114,9 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       '--badge-dot-size': `var(--badge-dot-size, ${dotSize}px)`,
     } as React.CSSProperties;
 
-    // Position styles
+    /**
+     * Position offset styles for badge placement over children.
+     */
     const positionStyles: Record<string, React.CSSProperties> = {
       'top-right': { top: 0, right: 0, transform: 'translate(50%, -50%)' },
       'top-left': { top: 0, left: 0, transform: 'translate(-50%, -50%)' },
@@ -85,7 +124,9 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       'bottom-left': { bottom: 0, left: 0, transform: 'translate(-50%, 50%)' },
     };
 
-    // Badge style variations
+    /**
+     * Visual style variations for the badge appearance.
+     */
     const badgeStyleVariations: Record<string, React.CSSProperties> = {
       solid: { backgroundColor: 'var(--badge-bg)', color: 'var(--badge-color)' },
       outline: { backgroundColor: 'transparent', color: 'var(--badge-bg)', border: '1px solid var(--badge-bg)' },
@@ -93,7 +134,7 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       ghost: { backgroundColor: 'transparent', color: 'var(--badge-bg)' },
     };
 
-    // Container style
+    // Container wrapper styles
     const containerStyle: React.CSSProperties = {
       ...badgeVars,
       position: 'relative',
@@ -101,7 +142,7 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       ...style,
     };
 
-    // Badge indicator style
+    // Badge indicator element styles
     const indicatorStyle: React.CSSProperties = {
       position: children ? 'absolute' : 'relative',
       ...(children ? positionStyles[position!] : {}),
@@ -123,22 +164,30 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       ...badgeStyleVariations[badgeStyle!],
     };
 
-    // Pulse animation style
+    // Pulse animation styles for attention-grabbing badges
     const pulseStyle: React.CSSProperties = pulse ? {
       animation: 'badge-pulse 1.5s ease-in-out infinite',
     } : {};
 
+    /**
+     * Handles click events on the badge.
+     * @param e - Mouse event object
+     */
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
       onClick?.();
     };
 
+    /**
+     * Handles close button clicks.
+     * @param e - Mouse event object
+     */
     const handleClose = (e: React.MouseEvent) => {
       e.stopPropagation();
       onClose?.();
     };
 
-    // If no children, render standalone badge
+    // Render standalone badge when no children are provided
     if (!children) {
       return (
         <span
@@ -162,7 +211,7 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       );
     }
 
-    // Render badge with children
+    // Render badge positioned over children
     return (
       <div
         ref={ref}
