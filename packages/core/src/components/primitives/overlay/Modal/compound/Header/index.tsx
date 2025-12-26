@@ -1,0 +1,61 @@
+/**
+ * Modal.Header - Compound Component
+ * Header section of the modal with title and close button
+ */
+
+'use client';
+
+import React, { forwardRef } from 'react';
+import type { ModalHeaderProps } from '../../../../../../types/primitives/feedback/Modal';
+import { ModalCloseButton } from '../CloseButton';
+import { PADDING_MAP } from '../../types';
+
+export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
+  (props, ref) => {
+    const {
+      children,
+      divider = false,
+      closable = true,
+      onClose,
+      className = '',
+      style = {},
+    } = props;
+
+    const headerStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: '12px',
+      padding: PADDING_MAP.lg,
+      borderBottom: divider ? '1px solid var(--modal-header-border, rgba(0, 0, 0, 0.1))' : 'none',
+      flexShrink: 0,
+      ...style,
+    };
+
+    const titleStyle: React.CSSProperties = {
+      flex: 1,
+      margin: 0,
+      fontSize: 'var(--modal-title-font-size, 18px)',
+      fontWeight: 'var(--modal-title-font-weight, 600)',
+      lineHeight: 1.4,
+      color: 'var(--modal-title-color, inherit)',
+    };
+
+    return (
+      <div
+        ref={ref}
+        className={`rottay-modal-header ${className}`}
+        style={headerStyle}
+      >
+        <div style={titleStyle}>{children}</div>
+        {closable && onClose && (
+          <ModalCloseButton onClose={onClose} />
+        )}
+      </div>
+    );
+  }
+);
+
+ModalHeader.displayName = 'Modal.Header';
+
+export default ModalHeader;
