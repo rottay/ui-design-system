@@ -155,7 +155,7 @@ import type {
   // Primitives - Navigation
   MenuProps,
   StepperProps,
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 
 // Ejemplo de uso
 const MyButton: React.FC<ButtonProps> = (props) => {

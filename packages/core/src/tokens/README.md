@@ -73,20 +73,20 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 
 ```css
 /* Import the complete token system */
-@import '@es-rottay/designsystem-core/tokens/src/index.css';
+@import '@rottay/design-system/tokens/src/index.css';
 ```
 
 ### Import Specific Categories
 
 ```css
 /* Import only base tokens */
-@import '@es-rottay/designsystem-core/tokens/src/base/index.css';
+@import '@rottay/design-system/tokens/src/base/index.css';
 
 /* Import only component tokens */
-@import '@es-rottay/designsystem-core/tokens/src/components/index.css';
+@import '@rottay/design-system/tokens/src/components/index.css';
 
 /* Import only animations */
-@import '@es-rottay/designsystem-core/tokens/src/animations/index.css';
+@import '@rottay/design-system/tokens/src/animations/index.css';
 ```
 
 ### Using Tokens in CSS

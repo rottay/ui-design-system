@@ -6,6 +6,16 @@ import type { CSSProperties, ReactNode } from 'react';
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 /**
+ * Alias for Size type (Ant Design compatible)
+ */
+export type SizeType = 'small' | 'middle' | 'large' | 'default';
+
+/**
+ * Status types for form controls
+ */
+export type StatusType = '' | 'error' | 'warning';
+
+/**
  * Variantes semánticas del sistema.
  */
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';

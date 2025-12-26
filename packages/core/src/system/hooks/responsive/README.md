@@ -34,7 +34,7 @@ function useMediaQuery(query: string): boolean
 **Examples:**
 
 ```tsx
-import { useMediaQuery } from '@es-rottay/designsystem-core';
+import { useMediaQuery } from '@rottay/design-system';
 
 function MyComponent() {
   const isMobile = useMediaQuery('(max-width: 639px)');
@@ -81,7 +81,7 @@ Based on Tailwind CSS mobile-first breakpoints:
 **Examples:**
 
 ```tsx
-import { useBreakpoints } from '@es-rottay/designsystem-core';
+import { useBreakpoints } from '@rottay/design-system';
 
 function Navigation() {
   const {
@@ -156,7 +156,7 @@ The hook follows a mobile-first approach and returns the most specific value tha
 **Examples:**
 
 ```tsx
-import { useResponsiveValue } from '@es-rottay/designsystem-core';
+import { useResponsiveValue } from '@rottay/design-system';
 
 // Responsive grid columns
 function ProductGrid() {

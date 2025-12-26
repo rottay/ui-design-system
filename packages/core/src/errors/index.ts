@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * import { useErrorHandler, ErrorCategory, ErrorSeverity } from '@es-rottay/designsystem-core';
+ * import { useErrorHandler, ErrorCategory, ErrorSeverity } from '@rottay/design-system';
  *
  * const MyComponent = () => {
  *   const { reportError } = useErrorHandler({
