@@ -1,97 +1,55 @@
 'use client';
 
 /**
- * Rate - Apollo Engine (Vanilla HTML/CSS)
- * Pure HTML/CSS implementation with maximum accessibility
- * @module Rate/Engines/Apollo
+ * Rate - Base Component
+ * Uses CSS variables from design tokens for consistent styling
+ * @module Rate/Base
  */
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import type { RateProps, RateCharacterProps } from '../../types';
-import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../types';
+import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'react';
+import type { RateProps, RateCharacterProps } from '../types';
+import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../types';
 
 /**
- * Inline styles for the Apollo Rate component
+ * Default star icon SVG component
  */
-const createStyles = (
-  size: keyof typeof RATE_SIZE_MAP,
-  activeColor?: string,
-  inactiveColor?: string
-) => {
-  const sizeValue = RATE_SIZE_MAP[size];
-  const gap = Math.max(4, sizeValue / 6);
-
-  return {
-    container: {
-      display: 'inline-flex',
-      gap: `${gap}px`,
-      alignItems: 'center',
-    } as React.CSSProperties,
-    star: {
-      base: {
-        cursor: 'pointer',
-        transition: 'transform 0.15s ease, color 0.15s ease',
-        position: 'relative' as const,
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: `${sizeValue}px`,
-        height: `${sizeValue}px`,
-        lineHeight: 1,
-        userSelect: 'none' as const,
-        borderRadius: '2px',
-      },
-      active: {
-        color: activeColor || '#facc15',
-      },
-      inactive: {
-        color: inactiveColor || '#d1d5db',
-      },
-      disabled: {
-        cursor: 'not-allowed',
-        opacity: 0.5,
-      },
-      readOnly: {
-        cursor: 'default',
-      },
-      hover: {
-        transform: 'scale(1.1)',
-      },
-      focus: {
-        outline: `2px solid ${activeColor || '#facc15'}`,
-        outlineOffset: '2px',
-      },
-    },
-    halfStar: {
-      position: 'absolute' as const,
-      left: 0,
-      top: 0,
-      width: '50%',
-      height: '100%',
-      overflow: 'hidden',
-    },
-    halfClickArea: {
-      position: 'absolute' as const,
-      left: 0,
-      top: 0,
-      width: '50%',
-      height: '100%',
-      zIndex: 1,
-    },
-    input: {
-      position: 'absolute' as const,
-      opacity: 0,
-      width: 0,
-      height: 0,
-      pointerEvents: 'none' as const,
-    },
-  };
-};
+const StarIcon: React.FC<{ filled?: boolean; half?: boolean }> = ({ filled, half }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill={filled || half ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth="1.5"
+    style={{ width: '100%', height: '100%' }}
+  >
+    {half ? (
+      <>
+        <defs>
+          <clipPath id="halfClip">
+            <rect x="0" y="0" width="12" height="24" />
+          </clipPath>
+        </defs>
+        <path
+          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          fill="none"
+          stroke="currentColor"
+        />
+        <path
+          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          fill="currentColor"
+          clipPath="url(#halfClip)"
+        />
+      </>
+    ) : (
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    )}
+  </svg>
+);
 
 /**
- * Apollo Rate component using vanilla HTML/CSS
+ * Base Rate component using CSS variables.
+ * This is extended by engine-specific implementations.
  */
-export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
+export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
   (props, ref) => {
     const {
       value,
@@ -105,20 +63,16 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       onHoverChange,
       character,
       className = '',
-      style,
+      style = {},
       tooltips,
       autoFocus,
       keyboard = RATE_DEFAULTS.keyboard,
       size = RATE_DEFAULTS.size,
+      direction = RATE_DEFAULTS.direction,
       activeColor,
       inactiveColor,
-      direction = RATE_DEFAULTS.direction,
-      // Omit engine prop
-      engine: _engine,
       ...restProps
     } = props;
-
-    const styles = createStyles(size, activeColor, inactiveColor);
 
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
@@ -213,26 +167,52 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange, focusIndex, handleClick]);
 
     // Render custom or default character
-    const renderCharacter = (index: number) => {
+    const renderCharacter = useCallback((index: number, filled: boolean, half: boolean) => {
       if (typeof character === 'function') {
         return character({ index, value: displayValue || 0 } as RateCharacterProps);
       }
       if (character) {
         return character;
       }
-      // Default star character
-      return (
-        <svg
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          style={{ width: '100%', height: '100%' }}
-        >
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
-      );
+      return <StarIcon filled={filled} half={half} />;
+    }, [character, displayValue]);
+
+    // Build CSS variables
+    const starSize = RATE_SIZE_MAP[size];
+    const rateVars: React.CSSProperties = {
+      '--rate-size': `${starSize}px`,
+      '--rate-gap': `${Math.max(4, starSize / 6)}px`,
+      '--rate-active-color': activeColor || 'var(--rate-star-active-color, #facc15)',
+      '--rate-inactive-color': inactiveColor || 'var(--rate-star-inactive-color, #d1d5db)',
+      '--rate-transition': 'var(--rate-transition-duration, 0.2s)',
+    } as React.CSSProperties;
+
+    // Container styles
+    const containerStyle: React.CSSProperties = {
+      ...rateVars,
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 'var(--rate-gap)',
+      direction: direction,
+      ...style,
     };
 
-    // Build stars array
+    // Star container styles
+    const getStarStyle = (isActive: boolean, isHovered: boolean): React.CSSProperties => ({
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 'var(--rate-size)',
+      height: 'var(--rate-size)',
+      color: isActive ? 'var(--rate-active-color)' : 'var(--rate-inactive-color)',
+      cursor: isInteractive ? 'pointer' : disabled ? 'not-allowed' : 'default',
+      opacity: disabled ? 0.5 : 1,
+      transition: 'transform var(--rate-transition), color var(--rate-transition)',
+      transform: isHovered && isInteractive ? 'scale(1.1)' : 'scale(1)',
+      position: 'relative',
+    });
+
+    // Render stars
     const stars = Array.from({ length: count }, (_, index) => {
       const starIndex = index + 1;
       const isFilled = (displayValue || 0) >= starIndex;
@@ -240,23 +220,18 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       const isHovered = hoverValue === starIndex || (allowHalf && hoverValue === starIndex - 0.5);
       const isFocused = focusIndex === starIndex;
 
-      // Compute star style
-      const starStyle: React.CSSProperties = {
-        ...styles.star.base,
-        ...(isFilled || isHalfFilled ? styles.star.active : styles.star.inactive),
-        ...(disabled ? styles.star.disabled : {}),
-        ...(readOnly ? styles.star.readOnly : {}),
-        ...(isHovered && isInteractive ? styles.star.hover : {}),
-        ...(isFocused ? styles.star.focus : {}),
-      };
-
-      return (
+      const starContent = (
         <span
           key={index}
-          style={starStyle}
+          className={`rottay-rate__star ${isFilled ? 'rottay-rate__star--filled' : ''} ${isHalfFilled ? 'rottay-rate__star--half' : ''}`}
+          style={{
+            ...getStarStyle(isFilled || isHalfFilled, isHovered),
+            outline: isFocused ? '2px solid var(--rate-active-color)' : 'none',
+            outlineOffset: '2px',
+            borderRadius: '2px',
+          }}
           title={tooltips?.[index]}
           onMouseEnter={() => handleMouseEnter(starIndex)}
-          onMouseLeave={handleMouseLeave}
           onClick={() => handleClick(starIndex)}
           role="radio"
           aria-checked={isFilled}
@@ -264,13 +239,18 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           aria-posinset={starIndex}
           aria-setsize={count}
           data-index={index}
-          data-filled={isFilled}
-          data-half={isHalfFilled}
         >
-          {/* Half star click area */}
+          {/* Half star overlay for allowHalf */}
           {allowHalf && (
             <span
-              style={styles.halfClickArea}
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: '50%',
+                height: '100%',
+                zIndex: 1,
+              }}
               onMouseEnter={(e) => {
                 e.stopPropagation();
                 handleMouseEnter(starIndex - 0.5);
@@ -281,28 +261,17 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
               }}
             />
           )}
-          {/* Render star with half support */}
-          {isHalfFilled ? (
-            <span style={{ position: 'relative', display: 'inline-flex', width: '100%', height: '100%' }}>
-              {/* Background (inactive) star */}
-              <span style={{ position: 'absolute', inset: 0, ...styles.star.inactive }}>
-                {renderCharacter(index)}
-              </span>
-              {/* Foreground (active) half star */}
-              <span style={{ ...styles.halfStar, ...styles.star.active }}>
-                {renderCharacter(index)}
-              </span>
-            </span>
-          ) : (
-            renderCharacter(index)
-          )}
+          {renderCharacter(index, isFilled, isHalfFilled)}
         </span>
       );
+
+      return starContent;
     });
 
     return (
       <div
         ref={(node) => {
+          // Handle both refs
           if (typeof ref === 'function') {
             ref(node);
           } else if (ref) {
@@ -311,7 +280,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
         className={`rottay-rate rottay-rate--${size} ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`}
-        style={{ ...styles.container, direction, ...style }}
+        style={containerStyle}
         role="radiogroup"
         aria-label="Rating"
         aria-disabled={disabled}
@@ -333,6 +302,6 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
   }
 );
 
-Rate.displayName = 'Rate.Apollo';
+BaseRate.displayName = 'BaseRate';
 
-export default Rate;
+export default BaseRate;
