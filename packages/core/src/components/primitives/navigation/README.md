@@ -18,7 +18,7 @@ Tab navigation with multiple styles.
 
 **Example:**
 ```tsx
-import { Tabs } from '@es-rottay/designsystem-core';
+import { Tabs } from '@rottay/design-system';
 import { Home, User, Settings } from 'lucide-react';
 
 const items = [
@@ -56,7 +56,7 @@ Breadcrumb navigation for hierarchical pages.
 
 **Example:**
 ```tsx
-import { Breadcrumb } from '@es-rottay/designsystem-core';
+import { Breadcrumb } from '@rottay/design-system';
 import { Home, ChevronRight } from 'lucide-react';
 
 const items = [
@@ -104,7 +104,7 @@ Page navigation for large datasets.
 
 **Example:**
 ```tsx
-import { Pagination } from '@es-rottay/designsystem-core';
+import { Pagination } from '@rottay/design-system';
 import { useState } from 'react';
 
 function DataList() {
@@ -142,7 +142,7 @@ Each component has three implementations:
 The active engine is determined by the EngineProvider:
 
 ```tsx
-import { EngineProvider } from '@es-rottay/designsystem-core';
+import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="titan">
   <App />

@@ -18,13 +18,13 @@ All components support three rendering engines:
 ## Installation
 
 ```bash
-npm install @es-rottay/designsystem-core
+npm install @rottay/design-system
 ```
 
 ## Basic Usage
 
 ```tsx
-import { Alert, Spinner, Progress } from '@es-rottay/designsystem-core';
+import { Alert, Spinner, Progress } from '@rottay/design-system';
 
 function App() {
   return (
@@ -159,7 +159,7 @@ Visualize the progress of an operation.
 **Best for:** Enterprise applications, admin dashboards
 
 ```tsx
-import { EngineProvider } from '@es-rottay/designsystem-core';
+import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="titan">
   <Alert type="success" message="Using Ant Design" />
@@ -177,7 +177,7 @@ import { EngineProvider } from '@es-rottay/designsystem-core';
 **Best for:** Modern web apps, Tailwind projects
 
 ```tsx
-import { EngineProvider } from '@es-rottay/designsystem-core';
+import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="hermes">
   <Alert type="success" message="Using DaisyUI" />
@@ -195,7 +195,7 @@ import { EngineProvider } from '@es-rottay/designsystem-core';
 **Best for:** Performance-critical apps, zero dependencies
 
 ```tsx
-import { EngineProvider } from '@es-rottay/designsystem-core';
+import { EngineProvider } from '@rottay/design-system';
 
 <EngineProvider engine="apollo">
   <Alert type="success" message="Using Pure CSS" />
@@ -329,7 +329,7 @@ import type {
   ProgressProps, 
   ProgressType, 
   ProgressStatus 
-} from '@es-rottay/designsystem-core';
+} from '@rottay/design-system';
 
 const alertType: AlertType = 'success';
 const spinnerSize: SpinnerSize = 'lg';
