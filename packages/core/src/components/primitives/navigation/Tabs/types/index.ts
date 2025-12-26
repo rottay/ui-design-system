@@ -2,8 +2,9 @@
  * Tabs - Core Interface
  */
 
-import type { EngineAwareProps } from '../../../../../types';
+import type React from 'react';
 import type { ReactNode } from 'react';
+import type { EngineAwareProps } from '../../../../../types';
 
 export interface TabItem {
   key: string;
@@ -24,6 +25,9 @@ export interface TabsProps extends EngineAwareProps {
   size?: TabsSize;
   centered?: boolean;
   onChange?: (key: string) => void;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: ReactNode;
 }
 
 export const TABS_DEFAULTS: Partial<TabsProps> = {

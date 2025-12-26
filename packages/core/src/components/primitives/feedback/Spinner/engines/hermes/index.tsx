@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { SpinnerProps } from '../types';
-import { SPINNER_DEFAULTS } from '../types';
+import type { SpinnerProps } from '../../types';
+import { SPINNER_DEFAULTS } from '../../types';
 
 const SIZE_CLASSES = {
   sm: 'loading-sm',

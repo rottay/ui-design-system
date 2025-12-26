@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { PaginationProps } from '../types';
 
 /**
@@ -14,14 +14,13 @@ import type { PaginationProps } from '../types';
  */
 export const BasePagination = forwardRef<HTMLDivElement, PaginationProps>(
   (props, ref) => {
-    const { className = '', style = {}, children, ...rest } = props;
+    const { className = '', style = {}, children } = props;
 
     return (
       <div
         ref={ref}
         className={`rottay-pagination ${className}`}
         style={style}
-        {...rest}
       >
         {children}
       </div>

@@ -3,10 +3,10 @@
  */
 
 import React, { useEffect } from 'react';
-import type { ModalProps } from '../types';
-import { MODAL_DEFAULTS } from '../types';
+import type { ModalProps, ModalSize } from '../../types';
+import { MODAL_DEFAULTS } from '../../types';
 
-const SIZE_CLASSES = {
+const SIZE_CLASSES: Record<ModalSize, string> = {
   sm: 'modal-box w-96',
   md: 'modal-box w-[520px]',
   lg: 'modal-box w-[720px]',
@@ -17,7 +17,7 @@ const SIZE_CLASSES = {
 export default function HermesModal(props: ModalProps): React.ReactElement {
   const {
     open,
-    size = MODAL_DEFAULTS.size,
+    size = MODAL_DEFAULTS.size as ModalSize,
     title,
     onClose,
     onOpenChange,
@@ -69,10 +69,12 @@ export default function HermesModal(props: ModalProps): React.ReactElement {
 
   if (!open) return <></>;
 
+  const modalSize = size as ModalSize;
+
   return (
     <div className={`modal modal-open ${centered ? 'modal-middle' : ''}`} style={style}>
       <div className="modal-backdrop" onClick={closeOnOverlayClick ? handleCancel : undefined} />
-      <div className={`${SIZE_CLASSES[size!]} ${className}`}>
+      <div className={`${SIZE_CLASSES[modalSize]} ${className}`}>
         {closable && (
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onClick={handleCancel} aria-label="Close">
             ✕

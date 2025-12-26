@@ -4,13 +4,13 @@
 
 import React from 'react';
 import { Pagination as AntPagination } from 'antd';
-import type { PaginationProps } from '../types';
-import { PAGINATION_DEFAULTS } from '../types';
+import type { PaginationProps, PaginationSize } from '../../types';
+import { PAGINATION_DEFAULTS } from '../../types';
 
-const SIZE_MAP = {
-  sm: 'small' as const,
-  md: 'default' as const,
-  lg: 'default' as const,
+const SIZE_MAP: Record<PaginationSize, 'small' | 'default'> = {
+  sm: 'small',
+  md: 'default',
+  lg: 'default',
 };
 
 export default function TitanPagination(props: PaginationProps): React.ReactElement {
@@ -32,7 +32,7 @@ export default function TitanPagination(props: PaginationProps): React.ReactElem
       current={current}
       total={total}
       pageSize={pageSize}
-      size={SIZE_MAP[size!]}
+      size={SIZE_MAP[size ?? 'md']}
       showSizeChanger={showSizeChanger}
       showTotal={showTotal ? (total) => `Total ${total} items` : undefined}
       disabled={disabled}

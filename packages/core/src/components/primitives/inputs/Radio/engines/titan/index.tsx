@@ -2,48 +2,61 @@
  * Radio - Titan Engine (Ant Design)
  */
 
+'use client';
+
 import React from 'react';
 import { Radio as AntRadio } from 'antd';
-import type { RadioProps, RadioGroupProps } from '../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS } from '../types';
+import type { RadioChangeEvent } from 'antd';
+import type { RadioProps, RadioGroupProps } from '../../types';
+import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
 
 export default function TitanRadio(props: RadioProps): React.ReactElement {
   const {
-    checked,
-    defaultChecked = RADIO_DEFAULTS.defaultChecked,
-    disabled = RADIO_DEFAULTS.disabled,
+    size = RADIO_DEFAULTS.size,
+    color = RADIO_DEFAULTS.color,
     label,
-    onChange,
-    className,
-    style,
-    name,
-    id,
     value,
-    autoFocus,
-    ...rest
+    checked,
+    defaultChecked,
+    disabled = RADIO_DEFAULTS.disabled,
+    onChange,
+    children,
+    className = '',
+    style,
   } = props;
 
-  const handleChange = (e: any) => {
+  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+
+  // Custom styles based on size and color
+  const customStyle: React.CSSProperties = {
+    '--ant-primary-color': colors.bg,
+    fontSize: sizeValue * 0.9,
+    ...style,
+  } as React.CSSProperties;
+
+  const displayLabel = label || children;
+
+  // Adapter for Ant Design's onChange
+  const handleChange = (e: RadioChangeEvent) => {
     if (onChange) {
-      onChange(e);
+      // Create a synthetic ChangeEvent from RadioChangeEvent
+      const syntheticEvent = e as unknown as React.ChangeEvent<HTMLInputElement>;
+      onChange(syntheticEvent);
     }
   };
 
   return (
     <AntRadio
+      value={value}
       checked={checked}
       defaultChecked={defaultChecked}
       disabled={disabled}
       onChange={handleChange}
-      className={className}
-      style={style}
-      name={name}
-      id={id}
-      value={value}
-      autoFocus={autoFocus}
-      {...rest}
+      className={`rottay-radio-titan rottay-radio--${size} ${className}`}
+      style={customStyle}
     >
-      {label}
+      {displayLabel}
     </AntRadio>
   );
 }
@@ -51,24 +64,43 @@ export default function TitanRadio(props: RadioProps): React.ReactElement {
 // Radio Group component
 export function TitanRadioGroup(props: RadioGroupProps): React.ReactElement {
   const {
-    size,
     options = [],
     value,
     defaultValue,
     disabled = RADIO_GROUP_DEFAULTS.disabled,
     direction = RADIO_GROUP_DEFAULTS.direction,
+    buttonStyle,
     onChange,
-    className,
+    className = '',
     style,
-    name,
-    ...rest
   } = props;
 
-  const handleChange = (e: any) => {
-    if (onChange) {
-      onChange(e.target.value);
-    }
+  const handleChange = (e: RadioChangeEvent) => {
+    onChange?.(e.target.value);
   };
+
+  const groupStyle: React.CSSProperties = {
+    display: buttonStyle ? 'inline-flex' : 'flex',
+    flexDirection: direction === 'horizontal' ? 'row' : 'column',
+    gap: direction === 'horizontal' ? '16px' : '8px',
+    ...style,
+  };
+
+  if (buttonStyle) {
+    return (
+      <AntRadio.Group
+        options={options as any}
+        value={value}
+        defaultValue={defaultValue}
+        disabled={disabled}
+        onChange={handleChange}
+        optionType="button"
+        buttonStyle={buttonStyle}
+        className={`rottay-radio-group-titan ${className}`}
+        style={groupStyle}
+      />
+    );
+  }
 
   return (
     <AntRadio.Group
@@ -77,13 +109,11 @@ export function TitanRadioGroup(props: RadioGroupProps): React.ReactElement {
       defaultValue={defaultValue}
       disabled={disabled}
       onChange={handleChange}
-      className={className}
-      style={style}
-      size={size as any}
-      optionType={direction === 'horizontal' ? 'button' : undefined}
-      {...rest}
+      className={`rottay-radio-group-titan ${className}`}
+      style={groupStyle}
     />
   );
 }
 
+TitanRadio.displayName = 'TitanRadio';
 TitanRadio.Group = TitanRadioGroup;

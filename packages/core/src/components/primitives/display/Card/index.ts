@@ -4,13 +4,14 @@
 
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { CardProps } from './types';
-import { CardHeader, CardBody, CardFooter } from './compound';
+import { CardHeader, CardBody, CardFooter, CardImage } from './compound';
 
-export { type CardProps, type CardVariant, CARD_DEFAULTS } from './types';
+// Export types
+export type { CardProps, CardVariant, CardSize, CardHeaderProps, CardBodyProps, CardFooterProps, CardImageProps } from './types';
+export { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from './types';
 
 // Export compound components
-export { CardHeader, CardBody, CardFooter };
-export type { CardHeaderProps, CardBodyProps, CardFooterProps } from './compound';
+export { CardHeader, CardBody, CardFooter, CardImage };
 
 // Export base component
 export { BaseCard } from './base';
@@ -26,5 +27,6 @@ export const Card = Object.assign(
     Header: CardHeader,
     Body: CardBody,
     Footer: CardFooter,
+    Image: CardImage,
   }
 );

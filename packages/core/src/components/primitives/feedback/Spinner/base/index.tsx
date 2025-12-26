@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { SpinnerProps } from '../types';
 
 /**
@@ -14,14 +14,13 @@ import type { SpinnerProps } from '../types';
  */
 export const BaseSpinner = forwardRef<HTMLDivElement, SpinnerProps>(
   (props, ref) => {
-    const { className = '', style = {}, children, ...rest } = props;
+    const { className = '', style = {}, children } = props;
 
     return (
       <div
         ref={ref}
         className={`rottay-spinner ${className}`}
         style={style}
-        {...rest}
       >
         {children}
       </div>

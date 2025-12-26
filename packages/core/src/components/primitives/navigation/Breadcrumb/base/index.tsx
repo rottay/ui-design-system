@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { BreadcrumbProps } from '../types';
 
 /**
@@ -14,14 +14,13 @@ import type { BreadcrumbProps } from '../types';
  */
 export const BaseBreadcrumb = forwardRef<HTMLDivElement, BreadcrumbProps>(
   (props, ref) => {
-    const { className = '', style = {}, children, ...rest } = props;
+    const { className = '', style = {}, children } = props;
 
     return (
       <div
         ref={ref}
         className={`rottay-breadcrumb ${className}`}
         style={style}
-        {...rest}
       >
         {children}
       </div>

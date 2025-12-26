@@ -1,6 +1,7 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { TagProps } from './types';
 import { TitanTag, HermesTag, ApolloTag } from './engines';
 
@@ -19,13 +20,13 @@ import { TitanTag, HermesTag, ApolloTag } from './engines';
  */
 export const Tag = forwardRef<HTMLSpanElement, TagProps>(
   ({ engine = 'titan', ...props }, ref) => {
-    const engineMap = {
+    const engineMap: Record<string, ForwardRefExoticComponent<TagProps & RefAttributes<HTMLSpanElement>>> = {
       titan: TitanTag,
       hermes: HermesTag,
       apollo: ApolloTag,
     };
 
-    const Component = engineMap[engine];
+    const Component = engineMap[engine] || TitanTag;
     return <Component ref={ref} {...props} />;
   }
 );

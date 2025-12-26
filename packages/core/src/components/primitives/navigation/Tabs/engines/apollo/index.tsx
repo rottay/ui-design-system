@@ -3,8 +3,8 @@
  */
 
 import React, { useState } from 'react';
-import type { TabsProps } from '../types';
-import { TABS_DEFAULTS } from '../types';
+import type { TabsProps, TabItem, TabsSize } from '../../types';
+import { TABS_DEFAULTS } from '../../types';
 
 const SIZE_STYLES = {
   sm: { padding: '0.25rem 0.75rem', fontSize: '0.875rem' },
@@ -33,7 +33,7 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
   };
 
   const currentKey = activeKey || active;
-  const activeItem = items.find((item) => item.key === currentKey);
+  const activeItem = items.find((item: TabItem) => item.key === currentKey);
 
   const tabListStyle: React.CSSProperties = {
     display: 'flex',
@@ -43,7 +43,7 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
   };
 
   const getTabStyle = (isActive: boolean, disabled?: boolean): React.CSSProperties => ({
-    ...SIZE_STYLES[size!],
+    ...SIZE_STYLES[size as TabsSize],
     border: 'none',
     background: isActive ? 'var(--color-primary, #0066CC)' : 'transparent',
     color: isActive ? 'white' : 'inherit',
@@ -60,7 +60,7 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
   return (
     <div className={className} style={style}>
       <div role="tablist" style={tabListStyle}>
-        {items.map((item) => (
+        {items.map((item: TabItem) => (
           <button
             key={item.key}
             role="tab"

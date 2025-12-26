@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import type { BreadcrumbProps, BreadcrumbItem } from '../types';
-import { BREADCRUMB_DEFAULTS } from '../types';
+import type { BreadcrumbProps, BreadcrumbItem } from '../../types';
+import { BREADCRUMB_DEFAULTS } from '../../types';
 
 export default function ApolloBreadcrumb(props: BreadcrumbProps): React.ReactElement {
   const {

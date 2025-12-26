@@ -3,10 +3,10 @@
  * Generic container component
  */
 
-import type { EngineAwareProps, WithChildrenProps } from '../../../../../types';
+import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../types';
 import type { CSSProperties } from 'react';
 
-export interface BoxProps extends EngineAwareProps, WithChildrenProps {
+export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseComponentProps {
   as?: keyof JSX.IntrinsicElements;
   padding?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   margin?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';

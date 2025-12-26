@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Alert as AntAlert } from 'antd';
-import type { AlertProps } from '../types';
-import { ALERT_DEFAULTS } from '../types';
+import type { AlertProps } from '../../types';
+import { ALERT_DEFAULTS } from '../../types';
 
 export default function TitanAlert(props: AlertProps): React.ReactElement {
   const {

@@ -2,33 +2,45 @@
  * Checkbox - Titan Engine (Ant Design)
  */
 
+'use client';
+
 import React from 'react';
 import { Checkbox as AntCheckbox } from 'antd';
-import type { CheckboxProps, CheckboxGroupProps } from '../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS } from '../types';
+import type { CheckboxProps, CheckboxGroupProps } from '../../types';
+import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
 
 export default function TitanCheckbox(props: CheckboxProps): React.ReactElement {
   const {
+    size = CHECKBOX_DEFAULTS.size,
+    color = CHECKBOX_DEFAULTS.color,
+    label,
     checked,
     defaultChecked = CHECKBOX_DEFAULTS.defaultChecked,
     indeterminate = CHECKBOX_DEFAULTS.indeterminate,
     disabled = CHECKBOX_DEFAULTS.disabled,
-    label,
     onChange,
-    className,
-    style,
+    children,
     name,
-    id,
     value,
-    autoFocus,
-    ...rest
+    className = '',
+    style,
   } = props;
 
+  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+
   const handleChange = (e: any) => {
-    if (onChange) {
-      onChange(e.target.checked, e);
-    }
+    onChange?.(e.target.checked, e);
   };
+
+  // Custom styles based on size and color
+  const customStyle: React.CSSProperties = {
+    '--ant-primary-color': colors.bg,
+    fontSize: sizeValue * 0.9,
+    ...style,
+  } as React.CSSProperties;
+
+  const displayLabel = label || children;
 
   return (
     <AntCheckbox
@@ -37,15 +49,12 @@ export default function TitanCheckbox(props: CheckboxProps): React.ReactElement 
       indeterminate={indeterminate}
       disabled={disabled}
       onChange={handleChange}
-      className={className}
-      style={style}
       name={name}
-      id={id}
       value={value}
-      autoFocus={autoFocus}
-      {...rest}
+      className={`rottay-checkbox-titan rottay-checkbox--${size} ${className}`}
+      style={customStyle}
     >
-      {label}
+      {displayLabel}
     </AntCheckbox>
   );
 }
@@ -57,17 +66,21 @@ export function TitanCheckboxGroup(props: CheckboxGroupProps): React.ReactElemen
     value,
     defaultValue,
     disabled = CHECKBOX_GROUP_DEFAULTS.disabled,
+    direction = CHECKBOX_GROUP_DEFAULTS.direction,
     onChange,
-    className,
+    className = '',
     style,
-    name,
-    ...rest
   } = props;
 
   const handleChange = (checkedValues: any[]) => {
-    if (onChange) {
-      onChange(checkedValues);
-    }
+    onChange?.(checkedValues);
+  };
+
+  const groupStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: direction === 'horizontal' ? 'row' : 'column',
+    gap: direction === 'horizontal' ? '16px' : '8px',
+    ...style,
   };
 
   return (
@@ -77,11 +90,11 @@ export function TitanCheckboxGroup(props: CheckboxGroupProps): React.ReactElemen
       defaultValue={defaultValue}
       disabled={disabled}
       onChange={handleChange}
-      className={className}
-      style={style}
-      {...rest}
+      className={`rottay-checkbox-group-titan ${className}`}
+      style={groupStyle}
     />
   );
 }
 
+TitanCheckbox.displayName = 'TitanCheckbox';
 TitanCheckbox.Group = TitanCheckboxGroup;

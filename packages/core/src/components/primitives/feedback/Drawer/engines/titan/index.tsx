@@ -4,10 +4,10 @@
 
 import React from 'react';
 import { Drawer as AntDrawer } from 'antd';
-import type { DrawerProps } from '../types';
-import { DRAWER_DEFAULTS } from '../types';
+import type { DrawerProps, DrawerSize } from '../../types';
+import { DRAWER_DEFAULTS } from '../../types';
 
-const SIZE_MAP = {
+const SIZE_MAP: Record<DrawerSize, number | string> = {
   sm: 256,
   md: 378,
   lg: 520,
@@ -19,7 +19,7 @@ export default function TitanDrawer(props: DrawerProps): React.ReactElement {
   const {
     open,
     placement = DRAWER_DEFAULTS.placement,
-    size = DRAWER_DEFAULTS.size,
+    size = DRAWER_DEFAULTS.size as DrawerSize,
     title,
     onClose,
     onOpenChange,
@@ -43,9 +43,10 @@ export default function TitanDrawer(props: DrawerProps): React.ReactElement {
   };
 
   // Determine width/height based on placement and size
+  const drawerSize = size as DrawerSize;
   const isHorizontal = placement === 'left' || placement === 'right';
-  const drawerWidth = width || (isHorizontal ? SIZE_MAP[size!] : undefined);
-  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[size!] : undefined);
+  const drawerWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : undefined);
+  const drawerHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : undefined);
 
   return (
     <AntDrawer

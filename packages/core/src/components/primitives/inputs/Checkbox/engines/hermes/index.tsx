@@ -1,86 +1,97 @@
 /**
- * Checkbox - Hermes Engine (DaisyUI/Tailwind)
+ * Checkbox - Hermes Engine (DaisyUI)
  */
 
-import React from 'react';
-import type { CheckboxProps, CheckboxGroupProps } from '../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS } from '../types';
+'use client';
 
-const SIZE_MAP = {
-  sm: 'checkbox-sm',
-  md: 'checkbox-md',
-  lg: 'checkbox-lg',
-};
+import React, { useState, useRef, useEffect, useId } from 'react';
+import type { CheckboxProps, CheckboxGroupProps } from '../../types';
+import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS } from '../../types';
 
 export default function HermesCheckbox(props: CheckboxProps): React.ReactElement {
   const {
     size = CHECKBOX_DEFAULTS.size,
-    checked,
-    defaultChecked = CHECKBOX_DEFAULTS.defaultChecked,
-    disabled = CHECKBOX_DEFAULTS.disabled,
+    color = CHECKBOX_DEFAULTS.color,
     label,
-    error,
+    checked: controlledChecked,
+    defaultChecked = CHECKBOX_DEFAULTS.defaultChecked,
+    indeterminate = CHECKBOX_DEFAULTS.indeterminate,
+    disabled = CHECKBOX_DEFAULTS.disabled,
     onChange,
-    className,
-    style,
+    children,
     name,
-    id,
     value,
-    autoFocus,
-    ...rest
+    className = '',
+    style,
   } = props;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(e.target.checked, e);
+  const generatedId = useId();
+  const inputId = `checkbox-hermes-${generatedId}`;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Internal state for uncontrolled mode
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const isControlled = controlledChecked !== undefined;
+  const isChecked = isControlled ? controlledChecked : internalChecked;
+
+  // Handle indeterminate state
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.indeterminate = indeterminate;
     }
+  }, [indeterminate]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newChecked = e.target.checked;
+
+    if (!isControlled) {
+      setInternalChecked(newChecked);
+    }
+
+    onChange?.(newChecked, e);
   };
 
-  const classes = [
-    'checkbox',
-    SIZE_MAP[size!],
-    error && 'checkbox-error',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  // DaisyUI size classes
+  const sizeClass = {
+    xs: 'checkbox-xs',
+    sm: 'checkbox-sm',
+    md: '',
+    lg: 'checkbox-lg',
+    xl: 'checkbox-lg',
+  }[size] || '';
 
-  if (label) {
-    return (
-      <label className="label cursor-pointer justify-start gap-2" style={style}>
-        <input
-          type="checkbox"
-          className={classes}
-          checked={checked}
-          defaultChecked={defaultChecked}
-          disabled={disabled}
-          onChange={handleChange}
-          name={name}
-          id={id}
-          value={value}
-          autoFocus={autoFocus}
-          {...rest}
-        />
-        <span className="label-text">{label}</span>
-      </label>
-    );
-  }
+  // DaisyUI color classes
+  const colorClass = {
+    default: '',
+    primary: 'checkbox-primary',
+    secondary: 'checkbox-secondary',
+    success: 'checkbox-success',
+    warning: 'checkbox-warning',
+    error: 'checkbox-error',
+  }[color] || 'checkbox-primary';
+
+  const displayLabel = label || children;
 
   return (
-    <input
-      type="checkbox"
-      className={classes}
-      checked={checked}
-      defaultChecked={defaultChecked}
-      disabled={disabled}
-      onChange={handleChange}
-      style={style}
-      name={name}
-      id={id}
-      value={value}
-      autoFocus={autoFocus}
-      {...rest}
-    />
+    <div className={`form-control ${className}`} style={style}>
+      <label className="label cursor-pointer gap-2 justify-start">
+        <input
+          ref={inputRef}
+          id={inputId}
+          type="checkbox"
+          name={name}
+          value={value}
+          checked={isChecked}
+          disabled={disabled}
+          onChange={handleChange}
+          className={`checkbox ${sizeClass} ${colorClass}`}
+          aria-checked={indeterminate ? 'mixed' : isChecked}
+        />
+        {displayLabel && (
+          <span className="label-text">{displayLabel}</span>
+        )}
+      </label>
+    </div>
   );
 }
 
@@ -88,56 +99,114 @@ export default function HermesCheckbox(props: CheckboxProps): React.ReactElement
 export function HermesCheckboxGroup(props: CheckboxGroupProps): React.ReactElement {
   const {
     size = CHECKBOX_GROUP_DEFAULTS.size,
+    color = CHECKBOX_GROUP_DEFAULTS.color,
     options = [],
-    value = [],
-    defaultValue,
+    value: controlledValue,
+    defaultValue = [],
     disabled = CHECKBOX_GROUP_DEFAULTS.disabled,
+    direction = CHECKBOX_GROUP_DEFAULTS.direction,
+    spacing = CHECKBOX_GROUP_DEFAULTS.spacing,
     onChange,
-    className,
+    children,
+    className = '',
     style,
     name,
-    ...rest
   } = props;
 
-  const [internalValue, setInternalValue] = React.useState<(string | number)[]>(
-    value || defaultValue || []
-  );
+  const generatedId = useId();
 
-  const currentValue = value !== undefined ? value : internalValue;
+  // Internal state for uncontrolled mode
+  const [internalValue, setInternalValue] = useState<(string | number)[]>(defaultValue);
+  const isControlled = controlledValue !== undefined;
+  const currentValue = isControlled ? controlledValue : internalValue;
 
-  const handleChange = (optionValue: string | number, checked: boolean) => {
+  const handleItemChange = (itemValue: string | number, checked: boolean) => {
     let newValue: (string | number)[];
+
     if (checked) {
-      newValue = [...currentValue, optionValue];
+      newValue = [...currentValue, itemValue];
     } else {
-      newValue = currentValue.filter((v) => v !== optionValue);
+      newValue = currentValue.filter((v) => v !== itemValue);
     }
 
-    if (value === undefined) {
+    if (!isControlled) {
       setInternalValue(newValue);
     }
 
-    if (onChange) {
-      onChange(newValue);
-    }
+    onChange?.(newValue);
+  };
+
+  // Spacing values
+  const spacingMap: Record<string, string> = {
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+  };
+
+  const groupStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: direction === 'horizontal' ? 'row' : 'column',
+    gap: spacingMap[spacing] || spacingMap.md,
+    flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
+    ...style,
+  };
+
+  // DaisyUI size classes
+  const sizeClass = {
+    xs: 'checkbox-xs',
+    sm: 'checkbox-sm',
+    md: '',
+    lg: 'checkbox-lg',
+    xl: 'checkbox-lg',
+  }[size] || '';
+
+  // DaisyUI color classes
+  const colorClass = {
+    default: '',
+    primary: 'checkbox-primary',
+    secondary: 'checkbox-secondary',
+    success: 'checkbox-success',
+    warning: 'checkbox-warning',
+    error: 'checkbox-error',
+  }[color] || 'checkbox-primary';
+
+  const renderOptions = () => {
+    if (options.length === 0) return children;
+
+    return options.map((option) => {
+      const isChecked = currentValue.includes(option.value);
+      const isDisabled = disabled || option.disabled;
+
+      return (
+        <label
+          key={String(option.value)}
+          className="label cursor-pointer gap-2 justify-start"
+        >
+          <input
+            type="checkbox"
+            name={name || `checkbox-group-${generatedId}`}
+            value={option.value}
+            checked={isChecked}
+            disabled={isDisabled}
+            onChange={(e) => handleItemChange(option.value, e.target.checked)}
+            className={`checkbox ${sizeClass} ${colorClass}`}
+          />
+          <span className="label-text">{option.label}</span>
+        </label>
+      );
+    });
   };
 
   return (
-    <div className={`flex flex-col gap-2 ${className || ''}`} style={style} {...rest}>
-      {options.map((option) => (
-        <HermesCheckbox
-          key={String(option.value)}
-          size={size}
-          label={option.label}
-          checked={currentValue.includes(option.value)}
-          disabled={disabled || option.disabled}
-          onChange={(checked) => handleChange(option.value, checked)}
-          name={name}
-          value={option.value}
-        />
-      ))}
+    <div
+      className={`rottay-checkbox-group-hermes ${className}`}
+      style={groupStyle}
+      role="group"
+    >
+      {renderOptions()}
     </div>
   );
 }
 
+HermesCheckbox.displayName = 'HermesCheckbox';
 HermesCheckbox.Group = HermesCheckboxGroup;

@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import type { ProgressProps } from '../types';
-import { PROGRESS_DEFAULTS } from '../types';
+import type { ProgressProps, ProgressStatus } from '../../types';
+import { PROGRESS_DEFAULTS } from '../../types';
 
-const STATUS_CLASSES = {
+const STATUS_CLASSES: Record<ProgressStatus, string> = {
   normal: 'progress-primary',
   success: 'progress-success',
   error: 'progress-error',

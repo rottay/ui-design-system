@@ -5,7 +5,7 @@
 
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { AlertProps } from '../types';
 
 /**
@@ -14,14 +14,30 @@ import type { AlertProps } from '../types';
  */
 export const BaseAlert = forwardRef<HTMLDivElement, AlertProps>(
   (props, ref) => {
-    const { className = '', style = {}, children, ...rest } = props;
+    const {
+      className = '',
+      style = {},
+      children,
+      // Destructure custom props to avoid spreading them onto HTML element
+      type: _type,
+      message: _message,
+      description: _description,
+      icon: _icon,
+      showIcon: _showIcon,
+      closable: _closable,
+      onClose: _onClose,
+      engine: _engine,
+      id,
+      'data-testid': dataTestId,
+    } = props;
 
     return (
       <div
         ref={ref}
         className={`rottay-alert ${className}`}
         style={style}
-        {...rest}
+        id={id}
+        data-testid={dataTestId}
       >
         {children}
       </div>

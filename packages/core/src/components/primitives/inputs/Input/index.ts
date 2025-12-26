@@ -1,17 +1,38 @@
 /**
  * Input - Engine Router
- * Exports the engine-routed Input component
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { InputProps } from './types';
+import { InputGroup, InputAddon } from './compound';
 
-export { type InputProps, type InputVariant, type InputSize, type InputStatus, INPUT_DEFAULTS } from './types';
+// Export types
+export type {
+  InputProps,
+  InputSize,
+  InputVariant,
+  InputStatus,
+  InputType,
+  InputGroupProps,
+  InputAddonProps,
+} from './types';
+export { INPUT_DEFAULTS } from './types';
 
+// Export compound components
+export { InputGroup, InputAddon };
+
+// Export base component
 export { BaseInput } from './base';
 
-export const Input = createEngineComponent<InputProps>('Input', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
-});
+// Create engine-aware Input component
+export const Input = Object.assign(
+  createEngineComponent<InputProps>('Input', {
+    titan: () => import('./engines/titan'),
+    hermes: () => import('./engines/hermes'),
+    apollo: () => import('./engines/apollo'),
+  }),
+  {
+    Group: InputGroup,
+    Addon: InputAddon,
+  }
+);

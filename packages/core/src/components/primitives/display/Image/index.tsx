@@ -1,6 +1,7 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
+import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { ImageProps } from './types';
 import { TitanImage, HermesImage, ApolloImage } from './engines';
 import { ImageFallback, ImageSkeleton } from './compound';
@@ -25,16 +26,16 @@ import { ImageFallback, ImageSkeleton } from './compound';
  */
 export const Image = forwardRef<HTMLImageElement, ImageProps>(
   ({ engine = 'titan', ...props }, ref) => {
-    const engineMap = {
+    const engineMap: Record<string, ForwardRefExoticComponent<ImageProps & RefAttributes<HTMLImageElement>>> = {
       titan: TitanImage,
       hermes: HermesImage,
       apollo: ApolloImage,
     };
 
-    const Component = engineMap[engine];
+    const Component = engineMap[engine] || TitanImage;
     return <Component ref={ref} {...props} />;
   }
-) as React.ForwardRefExoticComponent<ImageProps & React.RefAttributes<HTMLImageElement>> & {
+) as ForwardRefExoticComponent<ImageProps & RefAttributes<HTMLImageElement>> & {
   Fallback: typeof ImageFallback;
   Skeleton: typeof ImageSkeleton;
 };

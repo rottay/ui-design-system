@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Breadcrumb as AntBreadcrumb } from 'antd';
-import type { BreadcrumbProps, BreadcrumbItem } from '../types';
-import { BREADCRUMB_DEFAULTS } from '../types';
+import type { BreadcrumbProps, BreadcrumbItem } from '../../types';
+import { BREADCRUMB_DEFAULTS } from '../../types';
 
 export default function TitanBreadcrumb(props: BreadcrumbProps): React.ReactElement {
   const {

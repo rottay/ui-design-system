@@ -4,15 +4,15 @@
 
 import React from 'react';
 import { Skeleton as AntSkeleton } from 'antd';
-import type { SkeletonProps } from '../types';
-import { SKELETON_DEFAULTS } from '../types';
+import type { SkeletonProps } from '../../types';
+import { SKELETON_DEFAULTS } from '../../types';
 
 export default function TitanSkeleton(props: SkeletonProps): React.ReactElement {
   const {
     variant = SKELETON_DEFAULTS.variant,
     width,
     height,
-    animation = SKELETON_DEFAULTS.animation,
+    animation: _animation = SKELETON_DEFAULTS.animation,
     rows = SKELETON_DEFAULTS.rows,
     active = SKELETON_DEFAULTS.active,
     avatar,

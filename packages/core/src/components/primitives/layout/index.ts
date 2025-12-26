@@ -2,20 +2,20 @@
  * Layout primitives
  */
 
-export { Box } from './box';
-export type { BoxProps } from './box';
+export { Box } from './Box';
+export type { BoxProps } from './Box';
 
-export { Stack } from './stack';
+export { Stack } from './Stack';
 export type {
   StackProps,
   StackDirection,
   StackAlign,
   StackJustify,
   StackSpacing,
-} from './stack';
+} from './Stack';
 
-export { Grid } from './grid';
-export type { GridProps, GridColumns, GridGap } from './grid';
+export { Grid } from './Grid';
+export type { GridProps, GridColumns, GridGap } from './Grid';
 
-export { Divider } from './divider';
-export type { DividerProps, DividerOrientation, DividerType } from './divider';
+export { Divider } from './Divider';
+export type { DividerProps, DividerOrientation, DividerType } from './Divider';

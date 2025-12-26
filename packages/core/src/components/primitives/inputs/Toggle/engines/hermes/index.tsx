@@ -2,84 +2,124 @@
  * Toggle - Hermes Engine (DaisyUI/Tailwind)
  */
 
-import React from 'react';
-import type { ToggleProps } from '../types';
-import { TOGGLE_DEFAULTS } from '../types';
+'use client';
 
-const SIZE_MAP = {
+import React, { useState, useCallback, useId } from 'react';
+import type { ToggleProps } from '../../types';
+import { TOGGLE_DEFAULTS } from '../../types';
+
+// DaisyUI size classes
+const DAISY_SIZE_MAP = {
+  xs: 'toggle-xs',
   sm: 'toggle-sm',
-  md: 'toggle-md',
+  md: '',
   lg: 'toggle-lg',
+  xl: 'toggle-lg',
+};
+
+// DaisyUI color classes
+const DAISY_COLOR_MAP = {
+  default: '',
+  primary: 'toggle-primary',
+  secondary: 'toggle-secondary',
+  success: 'toggle-success',
+  warning: 'toggle-warning',
+  error: 'toggle-error',
 };
 
 export default function HermesToggle(props: ToggleProps): React.ReactElement {
   const {
     size = TOGGLE_DEFAULTS.size,
-    checked,
-    defaultChecked,
-    disabled,
+    color = TOGGLE_DEFAULTS.color,
+    labelPlacement = TOGGLE_DEFAULTS.labelPlacement,
     label,
-    error,
+    description,
+    checked: controlledChecked,
+    defaultChecked = false,
+    disabled = TOGGLE_DEFAULTS.disabled,
+    error = TOGGLE_DEFAULTS.error,
     onChange,
-    className,
+    children,
+    className = '',
     style,
     name,
-    id,
+    id: providedId,
     value,
     autoFocus,
     ...rest
   } = props;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(e.target.checked, e);
-    }
-  };
+  const generatedId = useId();
+  const inputId = providedId || `toggle-hermes-${generatedId}`;
 
-  const classes = [
+  // Internal state for uncontrolled mode
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const isControlled = controlledChecked !== undefined;
+  const isChecked = isControlled ? controlledChecked : internalChecked;
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isControlled) {
+      setInternalChecked(e.target.checked);
+    }
+    onChange?.(e.target.checked, e);
+  }, [isControlled, onChange]);
+
+  const toggleClasses = [
     'toggle',
-    SIZE_MAP[size!],
-    error && 'toggle-error',
+    DAISY_SIZE_MAP[size],
+    error ? 'toggle-error' : DAISY_COLOR_MAP[color],
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const displayLabel = label || children;
+
+  const containerClasses = [
+    'form-control',
+    disabled && 'opacity-50 cursor-not-allowed',
     className,
   ]
     .filter(Boolean)
     .join(' ');
 
-  if (label) {
-    return (
-      <label className="label cursor-pointer" style={style}>
-        <span className="label-text">{label}</span>
+  return (
+    <div className={containerClasses} style={style}>
+      <label
+        className={`label cursor-pointer gap-2 ${labelPlacement === 'start' ? 'flex-row-reverse justify-end' : 'justify-start'}`}
+        htmlFor={inputId}
+      >
         <input
+          id={inputId}
           type="checkbox"
-          className={classes}
-          checked={checked}
-          defaultChecked={defaultChecked}
+          role="switch"
+          name={name}
+          value={value}
+          checked={isChecked}
           disabled={disabled}
           onChange={handleChange}
-          name={name}
-          id={id}
-          value={value}
           autoFocus={autoFocus}
+          className={toggleClasses}
+          aria-checked={isChecked}
+          aria-invalid={error}
           {...rest}
         />
+        {(displayLabel || description) && (
+          <div className="flex flex-col">
+            {displayLabel && (
+              <span className={`label-text ${error ? 'text-error' : ''}`}>
+                {displayLabel}
+              </span>
+            )}
+            {description && (
+              <span className="label-text-alt text-gray-500">
+                {description}
+              </span>
+            )}
+          </div>
+        )}
       </label>
-    );
-  }
-
-  return (
-    <input
-      type="checkbox"
-      className={classes}
-      checked={checked}
-      defaultChecked={defaultChecked}
-      disabled={disabled}
-      onChange={handleChange}
-      style={style}
-      name={name}
-      id={id}
-      value={value}
-      autoFocus={autoFocus}
-      {...rest}
-    />
+    </div>
   );
 }
+
+HermesToggle.displayName = 'HermesToggle';

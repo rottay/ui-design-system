@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { BaseTooltip } from '../../base';
 import type { TooltipProps } from '../../types';
 

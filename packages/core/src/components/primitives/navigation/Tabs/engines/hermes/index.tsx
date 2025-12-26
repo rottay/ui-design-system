@@ -3,8 +3,8 @@
  */
 
 import React, { useState } from 'react';
-import type { TabsProps } from '../types';
-import { TABS_DEFAULTS } from '../types';
+import type { TabsProps, TabItem, TabsType, TabsSize } from '../../types';
+import { TABS_DEFAULTS } from '../../types';
 
 const TYPE_CLASSES = {
   line: 'tabs-bordered',
@@ -39,15 +39,15 @@ export default function HermesTabs(props: TabsProps): React.ReactElement {
   };
 
   const currentKey = activeKey || active;
-  const activeItem = items.find((item) => item.key === currentKey);
+  const activeItem = items.find((item: TabItem) => item.key === currentKey);
 
   return (
     <div className={className} style={style}>
       <div
         role="tablist"
-        className={`tabs ${TYPE_CLASSES[type!]} ${SIZE_CLASSES[size!]} ${centered ? 'justify-center' : ''}`}
+        className={`tabs ${TYPE_CLASSES[type as TabsType]} ${SIZE_CLASSES[size as TabsSize]} ${centered ? 'justify-center' : ''}`}
       >
-        {items.map((item) => (
+        {items.map((item: TabItem) => (
           <button
             key={item.key}
             role="tab"
