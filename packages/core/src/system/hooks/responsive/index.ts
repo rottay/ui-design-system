@@ -8,7 +8,7 @@
  *
  * @example
  * ```tsx
- * import { useBreakpoints, useResponsiveValue } from '@es-rottay/designsystem-core';
+ * import { useBreakpoints, useResponsiveValue } from '@rottay/design-system';
  *
  * function MyComponent() {
  *   const { isMobile, isDesktop } = useBreakpoints();

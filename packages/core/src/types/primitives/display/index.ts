@@ -68,3 +68,34 @@ export type {
   TextProps,
   ParagraphProps,
 } from './Typography';
+
+// Statistic
+export type {
+  StatisticProps,
+  CountdownProps,
+  StatisticValue,
+  StatisticValueType,
+} from './Statistic';
+
+export { STATISTIC_DEFAULTS } from './Statistic';
+
+// QRCode
+export type {
+  QRCodeStatus,
+  QRCodeErrorLevel,
+  QRCodeType,
+  QRCodeProps,
+} from './QRCode';
+
+export { QRCODE_DEFAULTS, SIZE_MAP as QRCODE_SIZE_MAP } from './QRCode';
+
+// Timeline
+export type {
+  TimelineProps,
+  TimelineItemProps,
+  TimelineMode,
+  TimelineItemColor,
+  TimelineItemPosition,
+} from './Timeline';
+
+export { TIMELINE_DEFAULTS, TIMELINE_COLOR_MAP, TIMELINE_SIZE_MAP } from './Timeline';

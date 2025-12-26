@@ -12,9 +12,9 @@
  * - Tenants: Brand-specific customizations (rottay)
  *
  * Usage:
- * @import '@es-rottay/designsystem-core/tokens';
+ * @import '@rottay/design-system/tokens';
  * or
- * import '@es-rottay/designsystem-core/tokens/src/index.css';
+ * import '@rottay/design-system/tokens/src/index.css';
  */
 
 /* ========================================================================

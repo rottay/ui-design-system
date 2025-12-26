@@ -31,4 +31,4 @@ export * from './tokens';
 // If you need primitive types, import them from the component:
 //   import type { ButtonProps } from './components/primitives/inputs/Button';
 // or from the main package:
-//   import type { ButtonProps } from '@es-rottay/designsystem-core';
+//   import type { ButtonProps } from '@rottay/design-system';
