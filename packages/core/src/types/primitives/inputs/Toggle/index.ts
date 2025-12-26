@@ -1,5 +1,5 @@
 import type { ReactNode, ChangeEvent } from 'react';
-import type { BaseComponentProps, Size, ControlledProps, DisableableProps, LoadableProps } from '../../../common';
+import type { BaseComponentProps, Size, DisableableProps, LoadableProps } from '../../../common';
 import type { EngineAwareProps } from '../../../engine';
 
 /**

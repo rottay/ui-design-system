@@ -3,16 +3,14 @@
  * Provides the current UI engine context
  */
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import type { EngineName, EngineContextValue } from '../../../types';
+import React, { createContext, useContext, useState, useCallback } from 'react';
+import type { EngineName, EngineContextValue, EngineProviderProps } from '../../../types';
 import { getDefaultEngine, isValidEngine } from '../../engines/registry';
 
 const EngineContext = createContext<EngineContextValue | null>(null);
 
-export interface EngineProviderProps {
-  children: ReactNode;
-  defaultEngine?: EngineName;
-}
+// Re-export type from types (single source of truth)
+export type { EngineProviderProps } from '../../../types';
 
 export function EngineProvider({
   children,

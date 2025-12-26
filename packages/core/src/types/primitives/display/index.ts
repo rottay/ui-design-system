@@ -16,6 +16,7 @@ export type {
   BadgeSize,
   BadgeVariant,
   BadgeStyle,
+  BadgeStatus,
   BadgeProps,
   BadgeRibbonProps,
   BadgeCountProps,

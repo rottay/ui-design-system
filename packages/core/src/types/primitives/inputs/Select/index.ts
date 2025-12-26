@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, Variant, ControlledProps, DisableableProps, ErrorableProps, LabeledProps, PlaceholderProps, ClearableProps, LoadableProps } from '../../../common';
+import type { BaseComponentProps, Size, Variant, DisableableProps, ErrorableProps, LabeledProps, PlaceholderProps, ClearableProps, LoadableProps } from '../../../common';
 import type { EngineAwareProps } from '../../../engine';
 
 /**

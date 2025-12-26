@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, CSSProperties } from 'react';
 
 /**
  * Nombres de engines disponibles en el sistema Rottay.
@@ -19,18 +19,40 @@ export interface EngineAwareProps {
    * @default 'titan'
    */
   engine?: EngineName;
+  /**
+   * Additional CSS class name(s) for the component.
+   */
+  className?: string;
+  /**
+   * Inline CSS styles for the component.
+   */
+  style?: CSSProperties;
 }
 
 /**
  * Configuración de engine por componente.
  */
-export interface EngineConfig<P = unknown> {
+export interface EngineComponentConfig<P = unknown> {
   /** Nombre del engine */
   name: EngineName;
   /** Componente React para este engine */
   component: ComponentType<P>;
   /** Si está disponible (puede no estar instalada la dependencia) */
   available: boolean;
+}
+
+/**
+ * Configuración de engine para el registry.
+ */
+export interface EngineConfig {
+  /** Nombre del engine */
+  name: EngineName;
+  /** Nombre de display para UI */
+  displayName: string;
+  /** Librería subyacente */
+  library: string;
+  /** Estado de estabilidad */
+  status: 'stable' | 'beta' | 'experimental' | 'deprecated';
 }
 
 /**

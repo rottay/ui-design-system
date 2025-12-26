@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, Variant, WithChildren, ClickableProps, ShadowedProps, BorderedProps } from '../../../common';
+import type { BaseComponentProps, Size, WithChildren, ClickableProps, ShadowedProps, BorderedProps } from '../../../common';
 import type { EngineAwareProps } from '../../../engine';
 
 /**
@@ -8,9 +8,9 @@ import type { EngineAwareProps } from '../../../engine';
 export type CardSize = Size;
 
 /**
- * Card variants.
+ * Card variants - specific to Card component.
  */
-export type CardVariant = Variant;
+export type CardVariant = 'elevated' | 'outlined' | 'filled' | 'ghost';
 
 /**
  * Card component props.
@@ -245,4 +245,64 @@ export interface CardMetaProps extends BaseComponentProps {
    * Meta description.
    */
   description?: ReactNode;
+}
+
+/**
+ * Card.Image component props.
+ */
+export interface CardImageProps extends BaseComponentProps {
+  /**
+   * Image source URL.
+   */
+  src: string;
+
+  /**
+   * Image alt text.
+   */
+  alt: string;
+
+  /**
+   * Image height.
+   * @default 200
+   */
+  height?: number | string;
+
+  /**
+   * Object fit behavior.
+   * @default 'cover'
+   */
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+
+  /**
+   * Image position relative to card.
+   * @default 'top'
+   */
+  position?: 'top' | 'bottom' | 'cover';
+
+  /**
+   * Overlay content to show on top of the image.
+   */
+  overlay?: ReactNode;
+
+  /**
+   * Whether to show a gradient overlay.
+   * @default false
+   */
+  gradient?: boolean;
+
+  /**
+   * Border radius for the image.
+   * @default 'inherit'
+   */
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'inherit';
+
+  /**
+   * Image load success callback.
+   */
+  onLoad?: () => void;
+
+  /**
+   * Image load error callback.
+   */
+  onError?: (error: Error) => void;
 }

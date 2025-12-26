@@ -3,8 +3,8 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { Stack } from '../../../components/primitives/layout/stack';
-import { Box } from '../../../components/primitives/layout/box';
+import { Stack } from '../../../components/primitives/layout/Stack';
+import { Box } from '../../../components/primitives/layout/Box';
 import { DesignSystemProvider } from '../../../system/providers/root';
 
 const meta: Meta<typeof Stack> = {

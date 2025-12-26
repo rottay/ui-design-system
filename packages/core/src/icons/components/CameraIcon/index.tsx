@@ -1,6 +1,6 @@
 'use client';
 
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
 import type { IconProps } from '../../types';
 

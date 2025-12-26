@@ -18,6 +18,11 @@ export type BadgeVariant = Variant;
 export type BadgeStyle = 'solid' | 'outline' | 'soft' | 'ghost';
 
 /**
+ * Badge status for status indicators.
+ */
+export type BadgeStatus = 'processing' | 'default' | 'success' | 'error' | 'warning';
+
+/**
  * Badge component props.
  */
 export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithChildren {
@@ -40,14 +45,25 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
   badgeStyle?: BadgeStyle;
 
   /**
-   * Badge content (number or text).
+   * Badge content (number or text). Alternative to count.
    */
   content?: number | string;
+
+  /**
+   * Number to display on badge. Alternative to content.
+   */
+  count?: number;
 
   /**
    * Whether to show the badge as a small dot.
    */
   dot?: boolean;
+
+  /**
+   * Whether to show zero when count is 0.
+   * @default false
+   */
+  showZero?: boolean;
 
   /**
    * Maximum number to show before using "+".
@@ -57,13 +73,34 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
   max?: number;
 
   /**
+   * @deprecated Use max instead. Maximum number before showing "+".
+   * @default 99
+   */
+  overflowCount?: number;
+
+  /**
+   * Status indicator for dot badges.
+   */
+  status?: BadgeStatus;
+
+  /**
+   * Text to show next to status dot.
+   */
+  text?: string;
+
+  /**
+   * Offset of the badge from default position [x, y].
+   */
+  offset?: [number, number];
+
+  /**
    * Whether the badge is visible.
    * @default true
    */
   visible?: boolean;
 
   /**
-   * Whether to show a pulsing dot (for notifications).
+   * Whether to show a pulsing animation (for notifications).
    */
   pulse?: boolean;
 
@@ -105,7 +142,7 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
 
   /**
    * Badge border radius.
-   * @default 'md'
+   * @default 'full'
    */
   radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
 }

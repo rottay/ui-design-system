@@ -1,37 +1,48 @@
-import type { ReactNode, InputHTMLAttributes, ChangeEvent, FocusEvent } from 'react';
-import type { BaseComponentProps, Size, Variant, ControlledProps, DisableableProps, ErrorableProps, LabeledProps, PlaceholderProps, ClearableProps } from '../../../common';
+import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
+import type { BaseComponentProps, DisableableProps, ErrorableProps, ClearableProps } from '../../../common';
 import type { EngineAwareProps } from '../../../engine';
 
 /**
- * specific sizes for Input.
+ * Input sizes available in the system.
  */
-export type InputSize = Size;
+export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
- * variants for Input.
+ * Input visual variants.
  */
-export type InputVariant = Variant;
+export type InputVariant = 'outline' | 'filled' | 'flushed' | 'unstyled';
 
 /**
- * Input HTML types.
+ * Input HTML types supported.
  */
-export type InputType = 'text' | 'password' | 'email' | 'number' | 'tel' | 'url' | 'search' | 'date' | 'time' | 'datetime-local';
+export type InputType = 'text' | 'password' | 'email' | 'number' | 'tel' | 'url' | 'search';
 
 /**
- * component props Input.
+ * Input validation status.
  */
-export interface InputProps extends BaseComponentProps, EngineAwareProps, DisableableProps, ErrorableProps, LabeledProps, PlaceholderProps, ClearableProps, Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix' | 'type' | 'onChange' | 'value' | 'defaultValue'> {
+export type InputStatus = 'default' | 'error' | 'warning' | 'success';
+
+/**
+ * Base Input component props.
+ */
+export interface InputProps extends BaseComponentProps, EngineAwareProps, DisableableProps, ErrorableProps, ClearableProps {
   /**
-   * size input.
+   * Input size.
    * @default 'md'
    */
   size?: InputSize;
 
   /**
-   * color variant input.
-   * @default 'default'
+   * Visual variant.
+   * @default 'outline'
    */
   variant?: InputVariant;
+
+  /**
+   * Validation status.
+   * @default 'default'
+   */
+  status?: InputStatus;
 
   /**
    * Input HTML type.
@@ -40,115 +51,161 @@ export interface InputProps extends BaseComponentProps, EngineAwareProps, Disabl
   type?: InputType;
 
   /**
-   * Prefix before input (icon, text, etc).
-   */
-  prefix?: ReactNode;
-
-  /**
-   * Suffix after input (icon, text, etc).
-   */
-  suffix?: ReactNode;
-
-  /**
-   * Addon before input (típicamente texto o botón).
-   */
-  addonBefore?: ReactNode;
-
-  /**
-   * Addon after input (típicamente texto o botón).
-   */
-  addonAfter?: ReactNode;
-
-  /**
-   * whether the input takes full available width.
-   */
-  fullWidth?: boolean;
-
-  /**
-   * Maximum number of characters allowed.
-   */
-  maxLength?: number;
-
-  /**
-   * Whether to show character counter.
-   */
-  showCount?: boolean;
-
-  /**
-   * whether the input puede ser autocompletado.
-   */
-  allowClear?: boolean;
-
-  /**
-   * Value change callback.
-   */
-  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
-
-  /**
-   * Input focus callback.
-   */
-  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
-
-  /**
-   * Input blur callback.
-   */
-  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
-
-  /**
-   * Enter key press callback.
-   */
-  onPressEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-
-  /**
-   * whether the input está en modo de solo lectura.
-   */
-  readOnly?: boolean;
-
-  /**
-   * border radius input.
-   * @default 'md'
-   */
-  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
-
-  /**
-   * whether the input has a border.
-   * @default true
-   */
-  bordered?: boolean;
-
-  /**
-   * Whether to show validation state with icon.
-   */
-  showValidationIcon?: boolean;
-
-  /**
-   * Input value in controlled mode.
+   * Current value (controlled).
    */
   value?: string;
 
   /**
-   * Default value in uncontrolled mode.
+   * Default value (uncontrolled).
    */
   defaultValue?: string;
 
   /**
-   * Input name (for forms).
+   * Placeholder text.
+   */
+  placeholder?: string;
+
+  /**
+   * Whether the input is read-only.
+   */
+  readOnly?: boolean;
+
+  /**
+   * Whether the input is required.
+   */
+  required?: boolean;
+
+  /**
+   * Content to display before the input.
+   */
+  prefix?: ReactNode;
+
+  /**
+   * Content to display after the input.
+   */
+  suffix?: ReactNode;
+
+  /**
+   * Maximum character length.
+   */
+  maxLength?: number;
+
+  /**
+   * Minimum character length.
+   */
+  minLength?: number;
+
+  /**
+   * Auto-complete attribute.
+   */
+  autoComplete?: string;
+
+  /**
+   * Whether to auto-focus the input.
+   */
+  autoFocus?: boolean;
+
+  /**
+   * Input name attribute.
    */
   name?: string;
 
   /**
-   * Input ID.
+   * Whether to show character count.
    */
-  id?: string;
+  showCount?: boolean;
 
   /**
-   * whether the input debería tener autoFocus.
+   * Callback when value changes.
    */
-  autoFocus?: boolean;
+  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
+
+  /**
+   * Callback when input receives focus.
+   */
+  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
+
+  /**
+   * Callback when input loses focus.
+   */
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
+
+  /**
+   * Callback when a key is pressed.
+   */
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
+
+  /**
+   * Callback when Enter is pressed.
+   */
+  onPressEnter?: (event: KeyboardEvent<HTMLInputElement>) => void;
+
+  /**
+   * ARIA label for accessibility.
+   */
+  'aria-label'?: string;
+
+  /**
+   * ARIA described by for accessibility.
+   */
+  'aria-describedby'?: string;
+
+  /**
+   * Data test id.
+   */
+  'data-testid'?: string;
 }
 
 /**
- * component props Input.Password.
+ * Input.Group component props.
+ */
+export interface InputGroupProps extends BaseComponentProps {
+  /**
+   * Group children (Input + addons).
+   */
+  children: ReactNode;
+
+  /**
+   * Size applied to all children.
+   */
+  size?: InputSize;
+
+  /**
+   * Whether the group is compact (no gaps).
+   * @default true
+   */
+  compact?: boolean;
+}
+
+/**
+ * Input.Addon component props.
+ */
+export interface InputAddonProps extends BaseComponentProps {
+  /**
+   * Addon content.
+   */
+  children: ReactNode;
+
+  /**
+   * Position of the addon.
+   * @default 'before'
+   */
+  position?: 'before' | 'after';
+
+  /**
+   * Size of the addon.
+   */
+  size?: InputSize;
+
+  /**
+   * Background style.
+   * @default 'default'
+   */
+  variant?: 'default' | 'transparent';
+}
+
+/**
+ * Input.Password component props.
  */
 export interface InputPasswordProps extends Omit<InputProps, 'type'> {
   /**
@@ -169,9 +226,9 @@ export interface InputPasswordProps extends Omit<InputProps, 'type'> {
 }
 
 /**
- * component props Input.TextArea.
+ * Input.TextArea component props.
  */
-export interface InputTextAreaProps extends Omit<InputProps, 'type' | 'prefix' | 'suffix' | 'addonBefore' | 'addonAfter'> {
+export interface InputTextAreaProps extends Omit<InputProps, 'type' | 'prefix' | 'suffix'> {
   /**
    * Number of textarea rows.
    * @default 4
@@ -179,7 +236,7 @@ export interface InputTextAreaProps extends Omit<InputProps, 'type' | 'prefix' |
   rows?: number;
 
   /**
-   * whether the textarea puede auto-resize según contenido.
+   * Whether the textarea can auto-resize.
    */
   autoSize?: boolean | { minRows?: number; maxRows?: number };
 
@@ -191,7 +248,7 @@ export interface InputTextAreaProps extends Omit<InputProps, 'type' | 'prefix' |
 }
 
 /**
- * component props Input.Search.
+ * Input.Search component props.
  */
 export interface InputSearchProps extends InputProps {
   /**
@@ -206,45 +263,24 @@ export interface InputSearchProps extends InputProps {
   showSearchButton?: boolean;
 
   /**
-   * Callback cuando se hace búsqueda (click en botón o Enter).
+   * Callback when search is triggered.
    */
   onSearch?: (value: string) => void;
 
   /**
-   * whether the botón de búsqueda está en loading.
+   * Whether the search button is loading.
    */
   loading?: boolean;
-}
-
-/**
- * component props Input.Group.
- */
-export interface InputGroupProps extends BaseComponentProps {
-  /**
-   * Input group size.
-   */
-  size?: InputSize;
-
-  /**
-   * Whether inputs are compact (joined without space).
-   * @default true
-   */
-  compact?: boolean;
-
-  /**
-   * Input group children.
-   */
-  children: ReactNode;
 }
 
 /**
  * Input validation state.
  */
 export interface InputValidationState {
-  /** whether the input es válido */
+  /** Whether the input is valid */
   valid: boolean;
   /** Error or validation message */
   message?: string;
-  /** Tipo de validación */
+  /** Validation type */
   type?: 'error' | 'warning' | 'success';
 }

@@ -103,17 +103,6 @@ export function ThemeProvider({
   }, [emergencyTokensInjected]);
 
   /**
-   * Removes theme link element from DOM
-   */
-  const removeThemeLink = useCallback((tenantName: string) => {
-    const linkId = `${THEME_LINK_ID_PREFIX}${tenantName}`;
-    const existingLink = document.getElementById(linkId);
-    if (existingLink) {
-      existingLink.remove();
-    }
-  }, []);
-
-  /**
    * Loads tenant CSS file via <link> element
    * Returns a promise that resolves when CSS is loaded or rejects on timeout/error
    */
@@ -353,5 +342,5 @@ export function useThemeContext(): ThemeContextValue {
 // EXPORTS
 // ─────────────────────────────────────────────────────────────────
 
-export { ThemeContext };
+// ThemeContext is already exported at line 52 via inline export
 export type { ThemeConfig, ThemeContextValue } from '../../../types';

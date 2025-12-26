@@ -1,5 +1,5 @@
 import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
-import type { BaseComponentProps, Size, Variant, LoadableProps, DisableableProps, IconProps } from '../../../common';
+import type { BaseComponentProps, Size, Variant, LoadableProps, DisableableProps } from '../../../common';
 import type { EngineAwareProps } from '../../../engine';
 
 /**
@@ -65,6 +65,12 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
    * Whether the button takes full available width.
    */
   block?: boolean;
+
+  /**
+   * Whether the button takes full width of its container.
+   * Alias for `block` prop.
+   */
+  fullWidth?: boolean;
 
   /**
    * Whether the button has danger/destructive state.
