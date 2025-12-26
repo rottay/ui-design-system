@@ -1,54 +1,168 @@
 /**
  * Divider - Apollo Engine (Pure HTML/CSS)
+ * Uses vanilla HTML/CSS with maximum accessibility.
  */
 
-import React from 'react';
-import type { DividerProps } from '../../types';
-import { DIVIDER_DEFAULTS, MARGIN_MAP } from '../../types';
+'use client';
 
-export default function ApolloDivider(props: DividerProps): React.ReactElement {
-  const {
-    orientation = DIVIDER_DEFAULTS.orientation,
-    type = DIVIDER_DEFAULTS.type,
-    children,
-    margin = DIVIDER_DEFAULTS.margin,
-    className,
-    style,
-  } = props;
+import React, { forwardRef } from 'react';
+import type { DividerProps, DividerVariant, DividerTextPosition } from '../../types';
+import {
+  DIVIDER_DEFAULTS,
+  SPACING_MAP,
+  getThicknessValue,
+  DEFAULT_COLORS,
+} from '../../types';
 
-  const isHorizontal = orientation === 'horizontal';
+/**
+ * Apollo Divider component.
+ * Pure HTML/CSS implementation with accessibility focus.
+ */
+const ApolloDivider = forwardRef<HTMLDivElement, DividerProps>(
+  (props, ref) => {
+    const {
+      orientation: orientationProp,
+      type,
+      variant: variantProp,
+      dashed = DIVIDER_DEFAULTS.dashed,
+      children,
+      textPosition: textPositionProp,
+      orientationMargin,
+      plain = DIVIDER_DEFAULTS.plain!,
+      color,
+      thickness = DIVIDER_DEFAULTS.thickness,
+      spacing: spacingProp,
+      margin,
+      className = '',
+      style = {},
+      'data-testid': testId,
+      ...rest
+    } = props;
 
-  const dividerStyle: React.CSSProperties = {
-    display: isHorizontal ? 'flex' : 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: isHorizontal ? '100%' : 'auto',
-    height: isHorizontal ? 'auto' : '100%',
-    margin: isHorizontal
-      ? `${MARGIN_MAP[margin!]} 0`
-      : `0 ${MARGIN_MAP[margin!]}`,
-    ...style,
-  };
+    // Resolve prop aliases
+    const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
+    const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
+    const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
+    const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
-  const lineStyle: React.CSSProperties = {
-    flex: 1,
-    borderTop: isHorizontal ? `1px ${type} #e0e0e0` : 'none',
-    borderLeft: !isHorizontal ? `1px ${type} #e0e0e0` : 'none',
-    height: isHorizontal ? '0' : '100%',
-    width: isHorizontal ? '100%' : '0',
-  };
+    const isHorizontal = orientation === 'horizontal';
+    const hasChildren = !!children && isHorizontal;
 
-  if (children) {
+    // Calculate values
+    const lineThickness = getThicknessValue(thickness);
+    const lineColor = color || DEFAULT_COLORS.apollo;
+    const spacingValue = SPACING_MAP[spacing];
+
+    // Build class names
+    const classNames = [
+      'divider',
+      `divider--${orientation}`,
+      `divider--${variant}`,
+      hasChildren ? 'divider--with-text' : '',
+      hasChildren ? `divider--text-${textPosition}` : '',
+      plain && hasChildren ? 'divider--plain' : '',
+      className,
+    ].filter(Boolean).join(' ');
+
+    // Container style
+    const containerStyle: React.CSSProperties = {
+      display: isHorizontal ? 'flex' : 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boxSizing: 'border-box',
+      width: isHorizontal ? '100%' : 'auto',
+      height: isHorizontal ? 'auto' : '100%',
+      minHeight: isHorizontal ? undefined : '1em',
+      margin: isHorizontal
+        ? `${spacingValue} 0`
+        : `0 ${spacingValue}`,
+      padding: 0,
+      ...style,
+    };
+
+    // Line style
+    const lineStyle: React.CSSProperties = {
+      flex: 1,
+      boxSizing: 'border-box',
+      height: isHorizontal ? '0' : '100%',
+      width: isHorizontal ? '100%' : '0',
+      borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
+      borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
+      borderRight: 'none',
+      borderBottom: 'none',
+    };
+
+    // Line before text
+    const lineBeforeStyle: React.CSSProperties = {
+      ...lineStyle,
+      flex: textPosition === 'left' ? '0 0 5%' :
+            textPosition === 'right' ? 1 : 1,
+      minWidth: '5%',
+    };
+
+    // Line after text
+    const lineAfterStyle: React.CSSProperties = {
+      ...lineStyle,
+      flex: textPosition === 'left' ? 1 :
+            textPosition === 'right' ? '0 0 5%' : 1,
+      minWidth: '5%',
+    };
+
+    // Text style
+    const textStyle: React.CSSProperties = {
+      display: 'inline-block',
+      padding: '0 1rem',
+      whiteSpace: 'nowrap',
+      fontSize: plain ? 'inherit' : '0.875rem',
+      fontWeight: plain ? 'inherit' : 500,
+      color: plain ? 'inherit' : '#555',
+      lineHeight: 1.5,
+    };
+
+    // Render with text
+    if (hasChildren) {
+      return (
+        <div
+          ref={ref}
+          className={classNames}
+          style={containerStyle}
+          role="separator"
+          aria-orientation={orientation}
+          data-testid={testId}
+          {...rest}
+        >
+          <span
+            className="divider__line divider__line--before"
+            style={lineBeforeStyle}
+            aria-hidden="true"
+          />
+          <span className="divider__text" style={textStyle}>
+            {children}
+          </span>
+          <span
+            className="divider__line divider__line--after"
+            style={lineAfterStyle}
+            aria-hidden="true"
+          />
+        </div>
+      );
+    }
+
+    // Simple divider without text
     return (
-      <div className={className} style={dividerStyle}>
-        <div style={lineStyle} />
-        <span style={{ padding: '0 1rem', whiteSpace: 'nowrap' }}>
-          {children}
-        </span>
-        <div style={lineStyle} />
-      </div>
+      <div
+        ref={ref}
+        className={classNames}
+        style={{ ...containerStyle, ...lineStyle }}
+        role="separator"
+        aria-orientation={orientation}
+        data-testid={testId}
+        {...rest}
+      />
     );
   }
+);
 
-  return <div className={className} style={{ ...dividerStyle, ...lineStyle }} />;
-}
+ApolloDivider.displayName = 'ApolloDivider';
+
+export default ApolloDivider;
