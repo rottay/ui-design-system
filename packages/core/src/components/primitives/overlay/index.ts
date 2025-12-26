@@ -51,3 +51,50 @@ export type {
   OverlayProps,
   FocusTrapProps,
 } from './Modal';
+
+// Dropdown
+export { Dropdown } from './Dropdown';
+export type {
+  DropdownProps,
+  DropdownMenuItem,
+  DropdownMenuProps,
+  DropdownTrigger,
+  DropdownPlacement,
+} from './Dropdown';
+export { DROPDOWN_DEFAULTS } from './Dropdown';
+
+// Popover
+export { Popover } from './Popover';
+export type {
+  PopoverProps,
+  PopoverTrigger,
+  PopoverPlacement,
+} from './Popover';
+export { POPOVER_DEFAULTS } from './Popover';
+
+// Popconfirm
+export { Popconfirm } from './Popconfirm';
+export type {
+  PopconfirmProps,
+  PopconfirmPlacement,
+  PopconfirmOkType,
+} from './Popconfirm';
+export { POPCONFIRM_DEFAULTS } from './Popconfirm';
+
+// Tour
+export { Tour } from './Tour';
+export type {
+  TourProps,
+  TourStepProps,
+  TourPlacement,
+  TourType,
+} from './Tour';
+export { TOUR_DEFAULTS } from './Tour';
+
+// Watermark
+export { Watermark } from './Watermark';
+export type {
+  WatermarkProps,
+  WatermarkFont,
+} from './Watermark';
+export { WATERMARK_DEFAULTS } from './Watermark';
