@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 42/76 | Display done, Inputs 12/20, Feedback 11/11 ✅, Layout 1/10, Navigation 1/12 |
-| **Tests** | ~680/700 | Display + 12 Inputs + 11 Feedback + Box + Affix done |
-| **JSDoc** | ~58% | English, standardized |
-| **Storybook** | 42/76 | Display + 12 Inputs + 11 Feedback + Box + Affix done |
+| **Refactor** | 45/76 | Display done, Inputs 12/20, Feedback 11/11 ✅, Layout 4/10, Navigation 1/12 |
+| **Tests** | ~925/1000 | Display + 12 Inputs + 11 Feedback + 4 Layout + Affix done |
+| **JSDoc** | ~62% | English, standardized |
+| **Storybook** | 45/76 | Display + 12 Inputs + 11 Feedback + 4 Layout + Affix done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -151,9 +151,9 @@ Component/
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
 | 1 | Box | done | done | done | done | 82 tests, polymorphic/spacing/layout |
-| 2 | Stack | pending | pending | pending | pending | |
-| 3 | Grid | pending | pending | pending | pending | |
-| 4 | Divider | pending | pending | pending | pending | |
+| 2 | Stack | done | done | done | done | 69 tests, direction/spacing/divider |
+| 3 | Grid | done | done | done | done | 115 tests, Grid.Item compound |
+| 4 | Divider | done | done | done | done | 61 tests, horizontal/vertical/text |
 | 5 | Container | pending | pending | pending | pending | |
 | 6 | Flex | pending | pending | pending | pending | |
 | 7 | Space | pending | pending | pending | pending | |
