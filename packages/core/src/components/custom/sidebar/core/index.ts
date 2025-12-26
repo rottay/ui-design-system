@@ -17,7 +17,7 @@ export interface SidebarItem {
   children?: SidebarItem[];
 }
 
-export interface SidebarProps extends EngineAwareProps, Record<string, unknown> {
+export interface SidebarProps extends EngineAwareProps {
   preset?: SidebarPreset;
   items: SidebarItem[];
   activeKey?: string;

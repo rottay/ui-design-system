@@ -4,13 +4,13 @@
  */
 
 import type { ReactNode } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { EngineAwareProps, BaseComponentProps } from '../../../../types';
 
 export type DashboardCardPreset = 'compact' | 'trending' | 'chart' | 'detailed';
 
 export type TrendDirection = 'up' | 'down' | 'neutral';
 
-export interface DashboardCardProps extends EngineAwareProps {
+export interface DashboardCardProps extends EngineAwareProps, BaseComponentProps {
   /** Preset to use */
   preset?: DashboardCardPreset;
   /** Card title/label */
