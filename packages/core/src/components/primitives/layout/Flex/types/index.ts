@@ -29,6 +29,8 @@ export interface FlexProps {
   className?: string;
   /** Inline styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const FLEX_DEFAULTS: Partial<FlexProps> = {

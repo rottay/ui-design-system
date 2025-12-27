@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 45/76 | Display done, Inputs 12/20, Feedback 11/11 ✅, Layout 4/10, Navigation 1/12 |
-| **Tests** | ~925/1000 | Display + 12 Inputs + 11 Feedback + 4 Layout + Affix done |
+| **Refactor** | 55/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 6/10, Navigation 6/12, Overlay 6/6 ✅ |
+| **Tests** | ~54 files | Display + 12 Inputs + 11 Feedback + 6 Layout + 6 Navigation + 5 Overlay done |
 | **JSDoc** | ~62% | English, standardized |
-| **Storybook** | 45/76 | Display + 12 Inputs + 11 Feedback + 4 Layout + Affix done |
+| **Storybook** | 54/76 | Display + 12 Inputs + 11 Feedback + 6 Layout + 6 Navigation + 5 Overlay done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -154,9 +154,9 @@ Component/
 | 2 | Stack | done | done | done | done | 69 tests, direction/spacing/divider |
 | 3 | Grid | done | done | done | done | 115 tests, Grid.Item compound |
 | 4 | Divider | done | done | done | done | 61 tests, horizontal/vertical/text |
-| 5 | Container | pending | pending | pending | pending | |
-| 6 | Flex | pending | pending | pending | pending | |
-| 7 | Space | pending | pending | pending | pending | |
+| 5 | Container | done | done | done | done | Multi-engine support |
+| 6 | Flex | done | done | done | done | Multi-engine support |
+| 7 | Space | pending | pending | pending | pending | Has engines, needs tests/stories |
 | 8 | Layout | pending | pending | pending | pending | Has Header, Sider, Content, Footer |
 | 9 | Splitter | pending | pending | pending | pending | Has Panel |
 | 10 | Collapse | pending | pending | pending | pending | Has Panel |
@@ -165,29 +165,29 @@ Component/
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Tabs | pending | pending | pending | pending | |
-| 2 | Breadcrumb | pending | pending | pending | pending | |
-| 3 | Pagination | pending | pending | pending | pending | |
-| 4 | Menu | pending | pending | pending | pending | |
-| 5 | Stepper | pending | pending | pending | pending | |
-| 6 | Steps | pending | pending | pending | pending | |
+| 1 | Tabs | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 2 | Breadcrumb | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 3 | Pagination | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 4 | Menu | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 5 | Stepper | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 6 | Steps | pending | pending | pending | pending | Has engines, needs tests/stories |
 | 7 | Affix | done | done | done | done | 45 tests, offsetTop/offsetBottom/target |
-| 8 | Segmented | pending | pending | pending | pending | |
-| 9 | BackTop | pending | pending | pending | pending | |
-| 10 | Anchor | pending | pending | pending | pending | Has Link |
-| 11 | FloatButton | pending | pending | pending | pending | Has Group, BackTop |
-| 12 | Link | pending | pending | pending | pending | |
+| 8 | Segmented | done | done | done | done | Multi-engine support |
+| 9 | BackTop | done | done | done | done | Multi-engine support |
+| 10 | Anchor | done | done | done | done | Has Link compound |
+| 11 | FloatButton | done | done | done | done | Has Group compound |
+| 12 | Link | done | done | done | done | Multi-engine support |
 
 ### Overlay (6 components)
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Modal | pending | pending | pending | pending | Overlay version |
-| 2 | Dropdown | pending | pending | pending | pending | |
-| 3 | Popover | pending | pending | pending | pending | |
-| 4 | Popconfirm | pending | pending | pending | pending | |
-| 5 | Tour | pending | pending | pending | pending | |
-| 6 | Watermark | pending | pending | pending | pending | |
+| 1 | Modal | done | pending | pending | pending | Overlay version, has base |
+| 2 | Dropdown | done | done | pending | done | Multi-trigger support |
+| 3 | Popover | done | done | pending | done | 12 placements, trigger types |
+| 4 | Popconfirm | done | done | pending | done | Async confirm, ok types |
+| 5 | Tour | done | done | pending | done | Multi-step, spotlight |
+| 6 | Watermark | done | done | pending | done | Canvas-based pattern |
 
 ---
 
