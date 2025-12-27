@@ -24,6 +24,8 @@ export interface SpaceProps {
   className?: string;
   /** Inline styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const SPACE_DEFAULTS: Partial<SpaceProps> = {
