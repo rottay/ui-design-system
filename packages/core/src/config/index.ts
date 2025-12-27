@@ -4,4 +4,4 @@
 
 export * from './tenants';
 export * from './themes';
-export * from './tokens';
+// Note: Tokens are exported from /tokens/ directory, not /config/tokens/
