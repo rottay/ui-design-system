@@ -25,7 +25,7 @@ export function InputAddon({
     alignItems: 'center',
     justifyContent: 'center',
     height: sizeValues.height,
-    padding: `0 ${sizeValues.paddingX}px`,
+    padding: `0 ${sizeValues.paddingX}`,
     fontSize: sizeValues.fontSize,
     backgroundColor: variant === 'transparent' ? 'transparent' : '#fafafa',
     border: '1px solid #d9d9d9',

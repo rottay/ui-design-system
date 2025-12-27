@@ -41,30 +41,40 @@ const SIZE_CONFIG = {
 export const BaseForm = forwardRef<HTMLFormElement, FormProps<unknown>>(
   (props, ref) => {
     const {
-      form,
+      form: _form,
       initialValues,
       layout = FORM_DEFAULTS.layout,
       labelCol,
       wrapperCol,
       labelAlign = FORM_DEFAULTS.labelAlign,
-      labelWrap,
+      labelWrap: _labelWrap,
       colon = FORM_DEFAULTS.colon,
       size = FORM_DEFAULTS.size,
       disabled = false,
       requiredMark = FORM_DEFAULTS.requiredMark,
-      validateTrigger,
-      preserve,
-      scrollToFirstError,
+      validateTrigger: _validateTrigger,
+      preserve: _preserve,
+      scrollToFirstError: _scrollToFirstError,
       name,
-      onValuesChange,
-      onFieldsChange,
+      onValuesChange: _onValuesChange,
+      onFieldsChange: _onFieldsChange,
       onFinish,
-      onFinishFailed,
+      onFinishFailed: _onFinishFailed,
       children,
       className = '',
       style = {},
       autoComplete = FORM_DEFAULTS.autoComplete,
     } = props;
+
+    // Suppress unused variable warnings - these props are available for engine implementations
+    void _form;
+    void _labelWrap;
+    void _validateTrigger;
+    void _preserve;
+    void _scrollToFirstError;
+    void _onValuesChange;
+    void _onFieldsChange;
+    void _onFinishFailed;
 
     // Size config
     const sizeKey = size === 'small' ? 'small' : size === 'large' ? 'large' : 'default';
@@ -131,32 +141,45 @@ export const BaseFormItem = forwardRef<HTMLDivElement, FormItemProps>(
     const formContext = useContext(FormContext);
 
     const {
-      name,
+      name: _name,
       label,
       labelCol = formContext.labelCol,
-      wrapperCol = formContext.wrapperCol,
+      wrapperCol: _wrapperCol = formContext.wrapperCol,
       rules,
-      validateTrigger,
+      validateTrigger: _validateTrigger,
       required,
       extra,
       help,
       validateStatus,
-      hasFeedback = FORM_ITEM_DEFAULTS.hasFeedback,
-      initialValue,
-      preserve,
+      hasFeedback: _hasFeedback = FORM_ITEM_DEFAULTS.hasFeedback,
+      initialValue: _initialValue,
+      preserve: _preserve,
       hidden = FORM_ITEM_DEFAULTS.hidden,
       noStyle = FORM_ITEM_DEFAULTS.noStyle,
       tooltip,
       colon = formContext.colon ?? FORM_ITEM_DEFAULTS.colon,
-      dependencies,
-      getValueFromEvent,
-      normalize,
-      valuePropName = FORM_ITEM_DEFAULTS.valuePropName,
-      trigger = FORM_ITEM_DEFAULTS.trigger,
+      dependencies: _dependencies,
+      getValueFromEvent: _getValueFromEvent,
+      normalize: _normalize,
+      valuePropName: _valuePropName = FORM_ITEM_DEFAULTS.valuePropName,
+      trigger: _trigger = FORM_ITEM_DEFAULTS.trigger,
       children,
       className = '',
       style = {},
     } = props;
+
+    // Suppress unused variable warnings - these props are available for engine implementations
+    void _name;
+    void _wrapperCol;
+    void _validateTrigger;
+    void _hasFeedback;
+    void _initialValue;
+    void _preserve;
+    void _dependencies;
+    void _getValueFromEvent;
+    void _normalize;
+    void _valuePropName;
+    void _trigger;
 
     const layout = formContext.layout || 'horizontal';
     const labelAlign = formContext.labelAlign || 'right';

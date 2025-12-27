@@ -123,13 +123,13 @@ export const INPUT_DEFAULTS = {
   showCount: false,
 };
 
-// Size mapping to pixel values (matches CSS tokens)
+// Size mapping to CSS variables (references tokens from tokens/css/components/input.css)
 export const SIZE_MAP = {
-  xs: { height: 24, paddingX: 8, fontSize: 12 },
-  sm: { height: 32, paddingX: 10, fontSize: 13 },
-  md: { height: 40, paddingX: 12, fontSize: 14 },
-  lg: { height: 48, paddingX: 14, fontSize: 16 },
-  xl: { height: 56, paddingX: 16, fontSize: 18 },
+  xs: { height: 'var(--input-xs-height)', paddingX: 'var(--input-xs-padding-x)', fontSize: 'var(--input-xs-font-size)' },
+  sm: { height: 'var(--input-sm-height)', paddingX: 'var(--input-sm-padding-x)', fontSize: 'var(--input-sm-font-size)' },
+  md: { height: 'var(--input-md-height)', paddingX: 'var(--input-md-padding-x)', fontSize: 'var(--input-md-font-size)' },
+  lg: { height: 'var(--input-lg-height)', paddingX: 'var(--input-lg-padding-x)', fontSize: 'var(--input-lg-font-size)' },
+  xl: { height: 'var(--input-xl-height)', paddingX: 'var(--input-xl-padding-x)', fontSize: 'var(--input-xl-font-size)' },
 };
 
 // Ant Design size mapping
@@ -149,3 +149,39 @@ export const DAISY_SIZE_MAP = {
   lg: 'input-lg',
   xl: 'input-lg', // DaisyUI doesn't have xl
 };
+
+/**
+ * Input.Password props
+ */
+export interface InputPasswordProps extends InputProps {
+  /** Whether to show the visibility toggle button */
+  visibilityToggle?: boolean;
+  /** Custom icon when password is visible */
+  visibleIcon?: React.ReactNode;
+  /** Custom icon when password is hidden */
+  hiddenIcon?: React.ReactNode;
+}
+
+/**
+ * Input.Search props
+ */
+export interface InputSearchProps extends InputProps {
+  /** Search handler */
+  onSearch?: (value: string) => void;
+  /** Loading state */
+  loading?: boolean;
+  /** Whether to show the search button */
+  showSearchButton?: boolean;
+  /** Custom search button text */
+  searchButtonText?: React.ReactNode;
+}
+
+/**
+ * Input.TextArea props
+ */
+export interface InputTextAreaProps extends Omit<InputProps, 'type' | 'prefix' | 'suffix' | 'clearable'> {
+  /** Number of rows */
+  rows?: number;
+  /** Whether the textarea is resizable */
+  resize?: boolean;
+}

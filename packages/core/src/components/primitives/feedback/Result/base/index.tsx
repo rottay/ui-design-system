@@ -7,7 +7,7 @@
 
 import React, { forwardRef, useMemo } from 'react';
 import type { ResultProps, ResultStatus } from '../types';
-import { RESULT_DEFAULTS, RESULT_ICONS, RESULT_COLORS } from '../types';
+import { RESULT_DEFAULTS, RESULT_COLORS } from '../types';
 
 /**
  * Status icons as SVGs

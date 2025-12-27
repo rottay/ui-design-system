@@ -70,17 +70,17 @@ export const BaseDatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const {
       value: controlledValue,
       defaultValue,
-      picker = DATE_PICKER_DEFAULTS.picker,
+      picker: _picker = DATE_PICKER_DEFAULTS.picker,
       format = 'YYYY-MM-DD',
-      showTime,
+      showTime: _showTime,
       showToday = DATE_PICKER_DEFAULTS.showToday,
-      showNow,
+      showNow: _showNow,
       disabled = false,
       readOnly = false,
       size = DATE_PICKER_DEFAULTS.size,
       status,
       placeholder = 'Select date',
-      placement = DATE_PICKER_DEFAULTS.placement,
+      placement: _placement = DATE_PICKER_DEFAULTS.placement,
       popupClassName,
       popupStyle,
       allowClear = DATE_PICKER_DEFAULTS.allowClear,
@@ -90,7 +90,7 @@ export const BaseDatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       disabledDate,
       onChange,
       onOpenChange,
-      onPanelChange,
+      onPanelChange: _onPanelChange,
       className = '',
       style = {},
       autoFocus,
@@ -98,10 +98,19 @@ export const BaseDatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       name,
       bordered = DATE_PICKER_DEFAULTS.bordered,
       variant = DATE_PICKER_DEFAULTS.variant,
-      locale,
+      locale: _locale,
       renderExtraFooter,
-      cellRender,
+      cellRender: _cellRender,
     } = props;
+
+    // Suppress unused variable warnings - these props are available for engine implementations
+    void _picker;
+    void _showTime;
+    void _showNow;
+    void _placement;
+    void _onPanelChange;
+    void _locale;
+    void _cellRender;
 
     const [internalValue, setInternalValue] = useState<Date | null>(
       parseDate(defaultValue)

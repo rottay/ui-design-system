@@ -30,7 +30,7 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
       vertical = SLIDER_DEFAULTS.vertical,
       reverse = SLIDER_DEFAULTS.reverse,
       tooltip,
-      keyboard = SLIDER_DEFAULTS.keyboard,
+      keyboard: _keyboard = SLIDER_DEFAULTS.keyboard,
       dots = SLIDER_DEFAULTS.dots,
       trackStyle,
       railStyle,
@@ -39,14 +39,21 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
       style = {},
     } = props;
 
+    // Suppress unused variable warnings - prop available for engine implementations
+    void _keyboard;
+
     // Initialize value
-    const getInitialValue = () => {
-      if (defaultValue !== undefined) return defaultValue;
-      if (range) return [min, max];
+    const getInitialValue = (): number | [number, number] => {
+      if (defaultValue !== undefined) {
+        return Array.isArray(defaultValue)
+          ? [defaultValue[0], defaultValue[1]] as [number, number]
+          : defaultValue;
+      }
+      if (range) return [min, max] as [number, number];
       return min;
     };
 
-    const [internalValue, setInternalValue] = useState<number | [number, number]>(getInitialValue());
+    const [internalValue, setInternalValue] = useState<number | [number, number]>(getInitialValue);
     const [isDragging, setIsDragging] = useState(false);
     const [activeHandle, setActiveHandle] = useState<0 | 1 | null>(null);
     const [showTooltip, setShowTooltip] = useState(false);
