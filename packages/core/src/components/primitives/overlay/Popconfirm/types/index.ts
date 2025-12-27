@@ -1,8 +1,17 @@
 /**
- * Popconfirm Types
+ * Popconfirm Component Types
+ *
+ * Type definitions for the Popconfirm component including placement options,
+ * button configurations, and component props.
+ *
+ * @module PopconfirmTypes
  */
 import type { ReactNode, CSSProperties } from 'react';
 
+/**
+ * Placement options for the popconfirm.
+ * Supports 12 positions around the trigger element.
+ */
 export type PopconfirmPlacement =
   | 'top'
   | 'topLeft'
@@ -17,8 +26,31 @@ export type PopconfirmPlacement =
   | 'rightTop'
   | 'rightBottom';
 
+/**
+ * Confirm button type/style options.
+ * - 'primary': Standard primary action
+ * - 'danger': Destructive/warning action (red)
+ * - 'default': Neutral styling
+ */
 export type PopconfirmOkType = 'primary' | 'danger' | 'default';
 
+/**
+ * Props for the Popconfirm component.
+ * A compact confirmation dialog displayed as a popover.
+ *
+ * @example
+ * ```tsx
+ * <Popconfirm
+ *   title="Delete this item?"
+ *   description="This action cannot be undone."
+ *   okText="Delete"
+ *   okType="danger"
+ *   onConfirm={handleDelete}
+ * >
+ *   <Button danger>Delete</Button>
+ * </Popconfirm>
+ * ```
+ */
 export interface PopconfirmProps {
   /** Title of the confirmation */
   title: ReactNode;
@@ -60,12 +92,23 @@ export interface PopconfirmProps {
   overlayStyle?: CSSProperties;
 }
 
+/**
+ * Default values for Popconfirm component props.
+ * These are applied when no explicit value is provided.
+ */
 export const POPCONFIRM_DEFAULTS: Partial<PopconfirmProps> = {
+  /** Default confirm button text */
   okText: 'Yes',
+  /** Default cancel button text */
   cancelText: 'No',
+  /** Default confirm button type */
   okType: 'primary',
+  /** Default placement */
   placement: 'top',
+  /** Show arrow by default */
   showArrow: true,
+  /** Not disabled by default */
   disabled: false,
+  /** Confirm button not loading by default */
   okButtonLoading: false,
 };

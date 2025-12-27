@@ -3,266 +3,298 @@ import type { BaseComponentProps, Size, WithChildren } from '../../../common';
 import type { EngineAwareProps } from '../../../engine';
 
 /**
- * Tamaños específicos de Modal.
+ * Modal size variants.
+ * Extends base sizes with additional large variants and full width option.
  */
 export type ModalSize = Size | '4xl' | '5xl' | 'full';
 
 /**
- * Posición del Modal.
+ * Modal placement options.
+ * Determines where the modal appears on the screen.
  */
 export type ModalPlacement = 'center' | 'top' | 'bottom';
 
 /**
- * Props del componente Modal.
+ * Props for the Modal component.
+ * A flexible dialog overlay for displaying content that requires user attention.
+ *
+ * @example
+ * ```tsx
+ * <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Confirm Action">
+ *   <Modal.Body>Are you sure you want to proceed?</Modal.Body>
+ *   <Modal.Footer>
+ *     <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+ *     <Button variant="primary" onClick={handleConfirm}>Confirm</Button>
+ *   </Modal.Footer>
+ * </Modal>
+ * ```
  */
 export interface ModalProps extends BaseComponentProps, EngineAwareProps, WithChildren {
   /**
-   * Si el modal está abierto.
+   * Whether the modal is open.
    */
   open: boolean;
 
   /**
-   * Callback cuando el modal debe cerrarse.
+   * Callback when the modal should close.
    */
   onClose: () => void;
 
   /**
-   * Tamaño del modal.
+   * Modal size.
    * @default 'md'
    */
   size?: ModalSize;
 
   /**
-   * Título del modal.
+   * Modal title.
    */
   title?: ReactNode;
 
   /**
-   * Descripción del modal.
+   * Modal description.
    */
   description?: ReactNode;
 
   /**
-   * Contenido del header del modal.
+   * Custom header content.
    */
   header?: ReactNode;
 
   /**
-   * Contenido del footer del modal.
+   * Custom footer content.
    */
   footer?: ReactNode;
 
   /**
-   * Si el modal puede ser cerrado clickeando el backdrop.
+   * Whether clicking the backdrop closes the modal.
    * @default true
    */
   closeOnBackdropClick?: boolean;
 
   /**
-   * Si el modal puede ser cerrado presionando ESC.
+   * Whether pressing ESC closes the modal.
    * @default true
    */
   closeOnEscape?: boolean;
 
   /**
-   * Si mostrar el botón de cerrar (X).
+   * Whether to show the close button (X).
    * @default true
    */
   closable?: boolean;
 
   /**
-   * Si mostrar el backdrop.
+   * Whether to show the backdrop.
    * @default true
    */
   showBackdrop?: boolean;
 
   /**
-   * Si el backdrop está blur.
+   * Whether the backdrop has blur effect.
    * @default false
    */
   blurBackdrop?: boolean;
 
   /**
-   * Posición del modal.
+   * Modal position on screen.
    * @default 'center'
    */
   placement?: ModalPlacement;
 
   /**
-   * Si el modal ocupa todo el viewport.
+   * Whether the modal takes up the full viewport.
    */
   fullScreen?: boolean;
 
   /**
-   * Callback cuando el modal se abre (animación completa).
+   * Callback when the modal opens (after animation completes).
    */
   onOpen?: () => void;
 
   /**
-   * Callback cuando el modal se cierra (animación completa).
+   * Callback when open state changes.
    */
   onOpenChange?: (open: boolean) => void;
 
   /**
-   * Si prevenir el scroll del body cuando está abierto.
+   * Whether to prevent body scroll when open.
    * @default true
    */
   preventScroll?: boolean;
 
   /**
-   * Radio del borde del modal.
+   * Modal border radius.
    * @default 'lg'
    */
   radius?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
   /**
-   * Si el modal tiene sombra.
+   * Whether the modal has shadow.
    * @default true
    */
   shadow?: boolean;
 
   /**
-   * Padding del contenido del modal.
+   * Modal content padding.
    * @default 'lg'
    */
   padding?: 'none' | 'sm' | 'md' | 'lg';
 
   /**
-   * Si mostrar divisor entre header y body.
+   * Whether to show divider between header and body.
    * @default false
    */
   divider?: boolean;
 
   /**
-   * Z-index del modal.
+   * Modal z-index.
    * @default 1000
    */
   zIndex?: number;
 
   /**
-   * Si deshabilitar animaciones.
+   * Whether to disable animations.
    * @default false
    */
   disableAnimation?: boolean;
 }
 
 /**
- * Props del componente Modal.Header.
+ * Props for the Modal.Header component.
+ * Contains the modal title and optional close button.
  */
 export interface ModalHeaderProps extends BaseComponentProps, WithChildren {
   /**
-   * Si mostrar divisor debajo del header.
+   * Whether to show divider below the header.
    * @default false
    */
   divider?: boolean;
 
   /**
-   * Si mostrar el botón de cerrar.
+   * Whether to show the close button.
    * @default true
    */
   closable?: boolean;
 
   /**
-   * Callback cuando se hace click en cerrar.
+   * Callback when close is clicked.
    */
   onClose?: () => void;
 }
 
 /**
- * Props del componente Modal.Body.
+ * Props for the Modal.Body component.
+ * Contains the main modal content.
  */
 export interface ModalBodyProps extends BaseComponentProps, WithChildren {
   /**
-   * Padding del body.
+   * Body padding.
    * @default 'lg'
    */
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
 /**
- * Props del componente Modal.Footer.
+ * Props for the Modal.Footer component.
+ * Contains action buttons and controls.
  */
 export interface ModalFooterProps extends BaseComponentProps, WithChildren {
   /**
-   * Si mostrar divisor encima del footer.
+   * Whether to show divider above the footer.
    * @default false
    */
   divider?: boolean;
 
   /**
-   * Alineación del contenido del footer.
+   * Footer content alignment.
    * @default 'end'
    */
   align?: 'start' | 'center' | 'end' | 'space-between';
 
   /**
-   * Padding del footer.
+   * Footer padding.
    * @default 'lg'
    */
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
 /**
- * Configuración de botones del Modal.
+ * Button configuration for modal actions.
+ * Used to define confirm/cancel button behavior.
  */
 export interface ModalButtonConfig {
-  /** Texto del botón */
+  /** Button text */
   text: ReactNode;
-  /** Callback onClick */
+  /** Click callback */
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  /** Si el botón está en loading */
+  /** Whether the button is loading */
   loading?: boolean;
-  /** Si el botón está deshabilitado */
+  /** Whether the button is disabled */
   disabled?: boolean;
-  /** Variante del botón */
+  /** Button variant */
   variant?: 'default' | 'primary' | 'secondary' | 'ghost' | 'link';
 }
 
 /**
- * Props del componente Modal.Confirm (modal de confirmación).
+ * Props for the Modal.Confirm component.
+ * A specialized modal for confirmation dialogs.
+ *
+ * @example
+ * ```tsx
+ * <Modal.Confirm
+ *   open={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ *   title="Delete Item"
+ *   type="warning"
+ *   onConfirm={handleDelete}
+ * >
+ *   Are you sure you want to delete this item?
+ * </Modal.Confirm>
+ * ```
  */
 export interface ModalConfirmProps extends Omit<ModalProps, 'footer'> {
   /**
-   * Tipo de confirmación.
+   * Confirmation type (affects icon and styling).
    * @default 'default'
    */
   type?: 'default' | 'info' | 'success' | 'warning' | 'error';
 
   /**
-   * Texto del botón de confirmar.
-   * @default 'Confirmar'
+   * Confirm button text.
+   * @default 'Confirm'
    */
   confirmText?: ReactNode;
 
   /**
-   * Texto del botón de cancelar.
-   * @default 'Cancelar'
+   * Cancel button text.
+   * @default 'Cancel'
    */
   cancelText?: ReactNode;
 
   /**
-   * Callback cuando se confirma.
+   * Callback when confirmed.
    */
   onConfirm?: () => void | Promise<void>;
 
   /**
-   * Callback cuando se cancela.
+   * Callback when cancelled.
    */
   onCancel?: () => void;
 
   /**
-   * Si el botón de confirmar está en loading.
+   * Whether the confirm button is loading.
    */
   confirmLoading?: boolean;
 
   /**
-   * Si mostrar el icono según el tipo.
+   * Whether to show the type icon.
    * @default true
    */
   showIcon?: boolean;
 
   /**
-   * Icono personalizado.
+   * Custom icon.
    */
   icon?: ReactNode;
 }

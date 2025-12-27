@@ -2,12 +2,24 @@
 
 /**
  * Tour - Apollo Engine (Vanilla HTML/CSS)
+ *
+ * Pure HTML/CSS implementation of the Tour component with no
+ * external UI library dependencies. Uses portal for overlay rendering.
+ *
+ * @module TourApollo
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { TourProps, TourStepProps } from '../../types';
 import { TOUR_DEFAULTS } from '../../types';
 
+/**
+ * Resolves target element from various input formats.
+ *
+ * @param target - CSS selector, ref, or getter function
+ * @returns The resolved HTMLElement or null
+ * @internal
+ */
 const getTargetElement = (target: TourStepProps['target']): HTMLElement | null => {
   if (!target) return null;
   if (typeof target === 'string') return document.querySelector(target);
@@ -16,6 +28,26 @@ const getTargetElement = (target: TourStepProps['target']): HTMLElement | null =
   return null;
 };
 
+/**
+ * Apollo engine implementation of Tour using vanilla HTML/CSS.
+ *
+ * Features:
+ * - Zero external dependencies (no UI library required)
+ * - Keyboard navigation support (Escape to close)
+ * - Accessible dialog with proper ARIA attributes
+ * - Portal rendering for proper z-index stacking
+ * - Spotlight effect with box-shadow technique
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Tour steps={steps} open={isOpen} engine="apollo" />
+ * ```
+ *
+ * @param props - Tour configuration props
+ * @param ref - Forwarded ref to the container div
+ * @returns Guided tour using vanilla HTML/CSS
+ */
 export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
   (props, ref) => {
     const {

@@ -28,6 +28,25 @@ const getTargetElement = (target: TourStepProps['target']): HTMLElement | null =
   return null;
 };
 
+/**
+ * Hermes engine implementation of Tour using Tailwind CSS.
+ *
+ * Features:
+ * - DaisyUI card and button components
+ * - Tailwind utility classes for layout
+ * - Portal rendering for proper z-index stacking
+ * - Spotlight effect with box-shadow technique
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Tour steps={steps} open={isOpen} engine="hermes" />
+ * ```
+ *
+ * @param props - Tour configuration props
+ * @param ref - Forwarded ref to the container div
+ * @returns Guided tour using Tailwind CSS
+ */
 export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
   (props, ref) => {
     const {
