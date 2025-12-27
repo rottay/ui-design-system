@@ -20,7 +20,7 @@ export default function ApolloSpinner(props: SpinnerProps): React.ReactElement {
   const spinnerStyle: React.CSSProperties = {
     width: spinnerSize,
     height: spinnerSize,
-    border: `${Math.max(2, spinnerSize / 8)}px solid rgba(0, 0, 0, 0.1)`,
+    border: 'var(--spinner-stroke-width, 2px) solid rgba(0, 0, 0, 0.1)',
     borderTopColor: color,
     borderRadius: '50%',
     animation: 'apollo-spin 0.8s linear infinite',

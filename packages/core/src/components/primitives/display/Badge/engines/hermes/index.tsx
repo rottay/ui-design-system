@@ -188,7 +188,7 @@ export default function HermesBadge(props: BadgeProps): React.ReactElement {
     <div className={`indicator ${className}`} style={style}>
       <span
         className={`indicator-item ${positionClass} ${badgeClasses}`}
-        style={dot ? { width: dotSize, height: dotSize, padding: 0, minWidth: 'auto' } : undefined}
+        style={dot ? { width: dotSize, height: dotSize, padding: 0, minWidth: 'auto' } as React.CSSProperties : undefined}
         onClick={clickable || onClick ? handleClick : undefined}
       >
         {!dot && (

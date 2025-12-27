@@ -173,7 +173,7 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     flex: 1,
     width: '100%',
     height: '100%',
-    padding: `0 ${sizeValues.paddingX}px`,
+    padding: `0 ${sizeValues.paddingX}`,
     paddingLeft: prefix ? 0 : undefined,
     paddingRight: suffix || (clearable && currentValue) ? 0 : undefined,
     fontSize: sizeValues.fontSize,

@@ -4,7 +4,7 @@
 
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { InputProps } from './types';
-import { InputGroup, InputAddon } from './compound';
+import { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea } from './compound';
 
 // Export types
 export type {
@@ -19,7 +19,7 @@ export type {
 export { INPUT_DEFAULTS } from './types';
 
 // Export compound components
-export { InputGroup, InputAddon };
+export { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea };
 
 // Export base component
 export { BaseInput } from './base';
@@ -34,5 +34,8 @@ export const Input = Object.assign(
   {
     Group: InputGroup,
     Addon: InputAddon,
+    Password: InputPassword,
+    Search: InputSearch,
+    TextArea: InputTextArea,
   }
 );

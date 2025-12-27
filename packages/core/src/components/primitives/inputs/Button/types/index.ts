@@ -27,13 +27,13 @@ export const BUTTON_DEFAULTS = {
   danger: false,
 };
 
-// Size mapping to CSS values
+// Size mapping to CSS variables
 export const SIZE_MAP = {
-  xs: { height: 24, padding: '0 8px', fontSize: 12 },
-  sm: { height: 28, padding: '0 12px', fontSize: 13 },
-  md: { height: 36, padding: '0 16px', fontSize: 14 },
-  lg: { height: 44, padding: '0 20px', fontSize: 16 },
-  xl: { height: 52, padding: '0 24px', fontSize: 18 },
+  xs: { height: 'var(--button-xs-height)', padding: 'var(--button-xs-padding)', fontSize: 'var(--button-xs-font-size)' },
+  sm: { height: 'var(--button-sm-height)', padding: 'var(--button-sm-padding)', fontSize: 'var(--button-sm-font-size)' },
+  md: { height: 'var(--button-md-height)', padding: 'var(--button-md-padding)', fontSize: 'var(--button-md-font-size)' },
+  lg: { height: 'var(--button-lg-height)', padding: 'var(--button-lg-padding)', fontSize: 'var(--button-lg-font-size)' },
+  xl: { height: 'var(--button-xl-height)', padding: 'var(--button-xl-padding)', fontSize: 'var(--button-xl-font-size)' },
 };
 
 // Variant color mapping for CSS variables

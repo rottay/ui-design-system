@@ -22,7 +22,8 @@ export const BaseIcon = forwardRef<SVGSVGElement, IconProps & { children: React.
     },
     ref
   ) => {
-    const sizeValue = typeof size === 'number' ? size : ICON_SIZE_MAP[size] || 20;
+    // If size is a number, use it directly; otherwise use CSS variable from token map
+    const sizeValue = typeof size === 'number' ? `${size}px` : (ICON_SIZE_MAP[size] || 'var(--icon-md-size)');
 
     return (
       <svg

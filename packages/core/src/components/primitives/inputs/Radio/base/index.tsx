@@ -7,7 +7,7 @@
 
 import React, { forwardRef, useState, useId } from 'react';
 import type { RadioProps } from '../types';
-import { RADIO_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../types';
+import { RADIO_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../types';
 
 /**
  * Base Radio component using CSS variables.
@@ -50,11 +50,12 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
     };
 
     const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+    const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
     const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
     // Build CSS variables for the radio
     const radioVars: React.CSSProperties = {
-      '--radio-size': `${sizeValue}px`,
+      '--radio-size': sizeValue,
       '--radio-bg': isChecked ? colors.bg : 'transparent',
       '--radio-border': error ? 'var(--color-error, #ff4d4f)' : (isChecked ? colors.border : 'var(--color-border, #d9d9d9)'),
       '--radio-dot-color': colors.dot,
@@ -98,8 +99,8 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
 
     const dotStyle: React.CSSProperties = {
       display: isChecked ? 'block' : 'none',
-      width: sizeValue * 0.5,
-      height: sizeValue * 0.5,
+      width: sizeNumeric * 0.5,
+      height: sizeNumeric * 0.5,
       borderRadius: '50%',
       backgroundColor: 'var(--radio-bg)',
     };
@@ -111,14 +112,14 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
     };
 
     const labelStyle: React.CSSProperties = {
-      fontSize: sizeValue * 0.9,
+      fontSize: sizeNumeric * 0.9,
       color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
       userSelect: 'none',
       lineHeight: 1.4,
     };
 
     const descriptionStyle: React.CSSProperties = {
-      fontSize: sizeValue * 0.75,
+      fontSize: sizeNumeric * 0.75,
       color: 'var(--color-text-secondary, #666)',
       userSelect: 'none',
       lineHeight: 1.4,

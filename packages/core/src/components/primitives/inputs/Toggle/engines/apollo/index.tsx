@@ -6,7 +6,7 @@
 
 import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../../types';
-import { TOGGLE_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
+import { TOGGLE_DEFAULTS, SIZE_MAP, SIZE_VALUES, COLOR_MAP } from '../../types';
 
 export default function ApolloToggle(props: ToggleProps): React.ReactElement {
   const {
@@ -69,7 +69,8 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
     }
   }, [disabled, loading, isChecked, isControlled, value, onChange]);
 
-  const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeTokens = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeValues = SIZE_VALUES[size] || SIZE_VALUES.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   const containerStyle: React.CSSProperties = {
@@ -87,9 +88,9 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
     position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
-    width: sizeValues.width,
-    height: sizeValues.height,
-    borderRadius: sizeValues.height / 2,
+    width: sizeTokens.width,
+    height: sizeTokens.height,
+    borderRadius: 'var(--toggle-track-border-radius, 9999px)',
     backgroundColor: isChecked ? colors.bgChecked : colors.bg,
     transition: 'all 0.2s ease-in-out',
     flexShrink: 0,
@@ -101,10 +102,10 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
   const dotStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
-    left: isChecked ? `calc(100% - ${sizeValues.dot}px - 2px)` : '2px',
+    left: isChecked ? `calc(100% - ${sizeTokens.dot} - 2px)` : '2px',
     transform: 'translateY(-50%)',
-    width: sizeValues.dot,
-    height: sizeValues.dot,
+    width: sizeTokens.dot,
+    height: sizeTokens.dot,
     borderRadius: '50%',
     backgroundColor: '#ffffff',
     transition: 'all 0.2s ease-in-out',

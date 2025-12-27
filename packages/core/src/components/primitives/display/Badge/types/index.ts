@@ -57,27 +57,27 @@ export const VARIANT_COLOR_MAP: Record<string, string> = {
 
 /**
  * Size configuration mapping.
- * Maps size tokens to their corresponding pixel dimensions.
- * @remarks These values align with CSS custom properties defined in design tokens.
+ * Maps size tokens to their corresponding CSS variable references.
+ * @remarks These values reference CSS custom properties defined in design tokens.
  */
-export const SIZE_MAP: Record<string, { minWidth: number; height: number; fontSize: number }> = {
-  xs: { minWidth: 14, height: 14, fontSize: 9 },
-  sm: { minWidth: 16, height: 16, fontSize: 10 },
-  md: { minWidth: 20, height: 20, fontSize: 12 },
-  lg: { minWidth: 24, height: 24, fontSize: 14 },
-  xl: { minWidth: 28, height: 28, fontSize: 16 },
+export const SIZE_MAP: Record<string, { minWidth: string; height: string; fontSize: string }> = {
+  xs: { minWidth: 'var(--badge-xs-min-width)', height: 'var(--badge-xs-height)', fontSize: 'var(--badge-xs-font-size)' },
+  sm: { minWidth: 'var(--badge-sm-min-width)', height: 'var(--badge-sm-height)', fontSize: 'var(--badge-sm-font-size)' },
+  md: { minWidth: 'var(--badge-md-min-width)', height: 'var(--badge-md-height)', fontSize: 'var(--badge-md-font-size)' },
+  lg: { minWidth: 'var(--badge-lg-min-width)', height: 'var(--badge-lg-height)', fontSize: 'var(--badge-lg-font-size)' },
+  xl: { minWidth: 'var(--badge-xl-min-width)', height: 'var(--badge-xl-height)', fontSize: 'var(--badge-xl-font-size)' },
 } as const;
 
 /**
  * Dot indicator size mapping.
- * Defines the diameter of dot badges for each size variant.
+ * Defines the diameter of dot badges for each size variant using CSS variables.
  */
-export const DOT_SIZE_MAP: Record<string, number> = {
-  xs: 4,
-  sm: 6,
-  md: 8,
-  lg: 10,
-  xl: 12,
+export const DOT_SIZE_MAP: Record<string, string> = {
+  xs: 'var(--badge-dot-xs-size)',
+  sm: 'var(--badge-dot-sm-size)',
+  md: 'var(--badge-dot-md-size)',
+  lg: 'var(--badge-dot-lg-size)',
+  xl: 'var(--badge-dot-xl-size)',
 } as const;
 
 /**

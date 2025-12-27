@@ -45,31 +45,28 @@ export const BaseTimelineItem = forwardRef<HTMLDivElement, TimelineItemProps & {
     // Build CSS variables for the timeline item
     const itemVars: React.CSSProperties = {
       '--timeline-dot-color': colorValue,
-      '--timeline-dot-size': `${TIMELINE_SIZE_MAP.dotSize}px`,
-      '--timeline-dot-border-width': `${TIMELINE_SIZE_MAP.dotBorderWidth}px`,
-      '--timeline-item-padding': `${TIMELINE_SIZE_MAP.itemPadding}px`,
     } as React.CSSProperties;
 
     const itemStyle: React.CSSProperties = {
       ...itemVars,
       position: 'relative',
-      paddingBottom: 'var(--timeline-item-padding)',
-      paddingLeft: isRight ? '0' : `${TIMELINE_SIZE_MAP.dotOffset}px`,
-      paddingRight: isRight ? `${TIMELINE_SIZE_MAP.dotOffset}px` : '0',
+      paddingBottom: TIMELINE_SIZE_MAP.itemPadding,
+      paddingLeft: isRight ? '0' : TIMELINE_SIZE_MAP.dotOffset,
+      paddingRight: isRight ? TIMELINE_SIZE_MAP.dotOffset : '0',
       textAlign: isRight ? 'right' : 'left',
       ...style,
     };
 
     const dotStyle: React.CSSProperties = {
       position: 'absolute',
-      [isRight ? 'right' : 'left']: `-${TIMELINE_SIZE_MAP.dotOffset}px`,
+      [isRight ? 'right' : 'left']: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
       top: '4px',
-      width: 'var(--timeline-dot-size)',
-      height: 'var(--timeline-dot-size)',
+      width: TIMELINE_SIZE_MAP.dotSize,
+      height: TIMELINE_SIZE_MAP.dotSize,
       borderRadius: '50%',
       backgroundColor: dot ? 'transparent' : 'var(--timeline-dot-color)',
-      border: dot ? 'none' : `var(--timeline-dot-border-width) solid white`,
-      boxShadow: dot ? 'none' : `0 0 0 var(--timeline-dot-border-width) var(--timeline-dot-color)`,
+      border: dot ? 'none' : `${TIMELINE_SIZE_MAP.dotBorderWidth} solid white`,
+      boxShadow: dot ? 'none' : `0 0 0 ${TIMELINE_SIZE_MAP.dotBorderWidth} var(--timeline-dot-color)`,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -135,31 +132,30 @@ export const BaseTimeline = forwardRef<HTMLDivElement, TimelineProps>(
     // Build CSS variables for the timeline
     const timelineVars: React.CSSProperties = {
       '--timeline-line-color': 'var(--color-border, #e8e8e8)',
-      '--timeline-line-width': `${TIMELINE_SIZE_MAP.lineWidth}px`,
     } as React.CSSProperties;
 
     const containerStyle: React.CSSProperties = {
       ...timelineVars,
       position: 'relative',
-      padding: `0 0 0 ${TIMELINE_SIZE_MAP.dotOffset}px`,
+      padding: `0 0 0 ${TIMELINE_SIZE_MAP.dotOffset}`,
       ...style,
     };
 
     const lineStyle: React.CSSProperties = {
       position: 'absolute',
-      left: `${TIMELINE_SIZE_MAP.dotSize / 2 - TIMELINE_SIZE_MAP.lineWidth / 2}px`,
-      top: `${TIMELINE_SIZE_MAP.dotSize / 2}px`,
-      bottom: pending ? '40px' : `${TIMELINE_SIZE_MAP.dotSize / 2}px`,
-      width: 'var(--timeline-line-width)',
+      left: `calc((${TIMELINE_SIZE_MAP.dotSize} - ${TIMELINE_SIZE_MAP.lineWidth}) / 2)`,
+      top: `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
+      bottom: pending ? '40px' : `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
+      width: TIMELINE_SIZE_MAP.lineWidth,
       backgroundColor: 'var(--timeline-line-color)',
     };
 
     const pendingDotStyle: React.CSSProperties = {
       position: 'absolute',
-      left: `-${TIMELINE_SIZE_MAP.dotOffset}px`,
+      left: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
       top: '4px',
-      width: `${TIMELINE_SIZE_MAP.dotSize}px`,
-      height: `${TIMELINE_SIZE_MAP.dotSize}px`,
+      width: TIMELINE_SIZE_MAP.dotSize,
+      height: TIMELINE_SIZE_MAP.dotSize,
       borderRadius: '50%',
       backgroundColor: 'var(--timeline-line-color)',
       animation: 'rottay-timeline-pulse 1.5s ease-in-out infinite',

@@ -8,7 +8,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useId } from 'react';
 import type { CSSProperties } from 'react';
 import type { RadioGroupProps, RadioOption, RadioSize, RadioVariant } from '../../types';
-import { RADIO_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
+import { RADIO_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 // Context for radio group
 interface RadioGroupContextValue {
@@ -82,6 +82,7 @@ export function RadioGroup({
   };
 
   const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   // Render options if provided
@@ -104,6 +105,7 @@ export function RadioGroup({
         return (
           <label
             key={String(option.value)}
+            data-testid={`radio-option-${option.value}`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -116,7 +118,7 @@ export function RadioGroup({
               backgroundColor: buttonStyle === 'solid' && isChecked ? colors.bg : 'transparent',
               color: buttonStyle === 'solid' && isChecked ? colors.dot : 'inherit',
               transition: 'all 0.2s ease-in-out',
-              fontSize: sizeValue * 0.85,
+              fontSize: sizeNumeric * 0.85,
               fontWeight: 500,
               userSelect: 'none',
             }}
@@ -148,6 +150,7 @@ export function RadioGroup({
       return (
         <label
           key={String(option.value)}
+          data-testid={`radio-option-${option.value}`}
           style={{
             display: 'inline-flex',
             alignItems: 'flex-start',
@@ -192,8 +195,8 @@ export function RadioGroup({
             {isChecked && (
               <span
                 style={{
-                  width: sizeValue * 0.5,
-                  height: sizeValue * 0.5,
+                  width: sizeNumeric * 0.5,
+                  height: sizeNumeric * 0.5,
                   borderRadius: '50%',
                   backgroundColor: colors.bg,
                 }}
@@ -201,11 +204,11 @@ export function RadioGroup({
             )}
           </span>
           <span style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontSize: sizeValue * 0.9, userSelect: 'none', lineHeight: 1.4 }}>
+            <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none', lineHeight: 1.4 }}>
               {option.label}
             </span>
             {option.description && (
-              <span style={{ fontSize: sizeValue * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
+              <span style={{ fontSize: sizeNumeric * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
                 {option.description}
               </span>
             )}
@@ -218,6 +221,9 @@ export function RadioGroup({
   return (
     <RadioGroupContext.Provider value={contextValue}>
       <div
+        data-testid="radio-group"
+        data-direction={direction}
+        data-disabled={disabled || undefined}
         className={`rottay-radio-group rottay-radio-group--${direction} ${buttonStyle ? 'rottay-radio-group--button' : ''} ${className}`}
         style={containerStyle}
         role="radiogroup"

@@ -7,7 +7,7 @@
 
 import React, { forwardRef, useState, useEffect, useRef, useId } from 'react';
 import type { CheckboxProps } from '../types';
-import { CHECKBOX_DEFAULTS, SIZE_MAP, COLOR_MAP, RADIUS_MAP } from '../types';
+import { CHECKBOX_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP, RADIUS_MAP } from '../types';
 
 /**
  * Base Checkbox component using CSS variables.
@@ -73,12 +73,13 @@ export const BaseCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
     };
 
     const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+    const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
     const colors = COLOR_MAP[color] || COLOR_MAP.primary;
     const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.sm;
 
     // Build CSS variables for the checkbox
     const checkboxVars: React.CSSProperties = {
-      '--checkbox-size': `${sizeValue}px`,
+      '--checkbox-size': sizeValue,
       '--checkbox-bg': isChecked || indeterminate ? colors.bg : 'transparent',
       '--checkbox-border': error ? 'var(--color-error, #ff4d4f)' : (isChecked || indeterminate ? colors.border : 'var(--color-border, #d9d9d9)'),
       '--checkbox-check-color': colors.check,
@@ -121,8 +122,8 @@ export const BaseCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const checkmarkStyle: React.CSSProperties = {
       display: isChecked && !indeterminate ? 'block' : 'none',
-      width: sizeValue * 0.5,
-      height: sizeValue * 0.3,
+      width: sizeNumeric * 0.5,
+      height: sizeNumeric * 0.3,
       borderLeft: '2px solid var(--checkbox-check-color)',
       borderBottom: '2px solid var(--checkbox-check-color)',
       transform: 'rotate(-45deg) translateY(-1px)',
@@ -130,13 +131,13 @@ export const BaseCheckbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const indeterminateStyle: React.CSSProperties = {
       display: indeterminate ? 'block' : 'none',
-      width: sizeValue * 0.6,
+      width: sizeNumeric * 0.6,
       height: '2px',
       backgroundColor: 'var(--checkbox-check-color)',
     };
 
     const labelStyle: React.CSSProperties = {
-      fontSize: sizeValue * 0.9,
+      fontSize: sizeNumeric * 0.9,
       color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
       userSelect: 'none',
     };

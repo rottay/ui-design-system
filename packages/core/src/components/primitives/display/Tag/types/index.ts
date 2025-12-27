@@ -40,15 +40,16 @@ export const TAG_DEFAULTS = {
 } as const;
 
 /**
- * Size mapping to pixel values (matches CSS tokens).
+ * Size mapping using CSS tokens.
  * Used for consistent sizing across all engine implementations.
+ * Values reference CSS custom properties defined in tokens/css/components/tag.css
  */
 export const SIZE_MAP: Record<string, { padding: string; fontSize: string; height: string }> = {
-  xs: { padding: '0 0.375rem', fontSize: '0.625rem', height: '1.25rem' },
-  sm: { padding: '0 0.5rem', fontSize: '0.75rem', height: '1.5rem' },
-  md: { padding: '0 0.625rem', fontSize: '0.8125rem', height: '1.75rem' },
-  lg: { padding: '0 0.75rem', fontSize: '0.875rem', height: '2rem' },
-  xl: { padding: '0 1rem', fontSize: '1rem', height: '2.25rem' },
+  xs: { padding: 'var(--tag-xs-padding)', fontSize: 'var(--tag-xs-font-size)', height: 'var(--tag-xs-height)' },
+  sm: { padding: 'var(--tag-sm-padding)', fontSize: 'var(--tag-sm-font-size)', height: 'var(--tag-sm-height)' },
+  md: { padding: 'var(--tag-md-padding)', fontSize: 'var(--tag-md-font-size)', height: 'var(--tag-md-height)' },
+  lg: { padding: 'var(--tag-lg-padding)', fontSize: 'var(--tag-lg-font-size)', height: 'var(--tag-lg-height)' },
+  xl: { padding: 'var(--tag-xl-padding)', fontSize: 'var(--tag-xl-font-size)', height: 'var(--tag-xl-height)' },
 };
 
 /**

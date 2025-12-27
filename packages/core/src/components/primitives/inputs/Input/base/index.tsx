@@ -137,9 +137,9 @@ export const BaseInput = forwardRef<HTMLInputElement, InputProps>(
 
     // Build CSS variables for the input
     const inputVars: React.CSSProperties = {
-      '--input-height': `${sizeValues.height}px`,
-      '--input-padding-x': `${sizeValues.paddingX}px`,
-      '--input-font-size': `${sizeValues.fontSize}px`,
+      '--input-height': sizeValues.height,
+      '--input-padding-x': sizeValues.paddingX,
+      '--input-font-size': sizeValues.fontSize,
       '--input-bg': variant === 'filled' ? '#f5f5f5' : 'transparent',
       '--input-border-color': hasError ? '#ff4d4f' : '#d9d9d9',
       '--input-focus-border': hasError ? '#ff4d4f' : '#1890ff',

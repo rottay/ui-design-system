@@ -93,9 +93,9 @@ export const BaseButton = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Build CSS variables for the button
     const buttonVars: React.CSSProperties = {
-      '--button-height': `${sizeConfig.height}px`,
+      '--button-height': sizeConfig.height,
       '--button-padding': sizeConfig.padding,
-      '--button-font-size': `${sizeConfig.fontSize}px`,
+      '--button-font-size': sizeConfig.fontSize,
       '--button-bg': variantConfig.bg,
       '--button-color': variantConfig.color,
       '--button-border-color': variantConfig.borderColor,

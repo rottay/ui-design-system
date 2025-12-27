@@ -35,11 +35,11 @@ export const SPACE_DEFAULTS: Partial<SpaceProps> = {
   align: 'center',
 };
 
-/** Size values in pixels */
-export const SPACE_SIZE_MAP: Record<SpaceSize, number> = {
-  small: 8,
-  middle: 16,
-  large: 24,
+/** Size values as CSS variable tokens */
+export const SPACE_SIZE_MAP: Record<SpaceSize, string> = {
+  small: 'var(--space-small-size)',
+  middle: 'var(--space-middle-size)',
+  large: 'var(--space-large-size)',
 };
 
 /** CSS align-items mapping */

@@ -87,14 +87,14 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
   const cssVars: React.CSSProperties = {
     '--badge-bg': color,
     '--badge-color': '#ffffff',
-    '--badge-min-width': `${sizeValues.minWidth}px`,
-    '--badge-height': `${sizeValues.height}px`,
-    '--badge-font-size': `${sizeValues.fontSize}px`,
-    '--badge-dot-size': `${dotSize}px`,
-    '--badge-border-radius': radius === 'full' ? '9999px' :
-                             radius === 'lg' ? '8px' :
-                             radius === 'md' ? '4px' :
-                             radius === 'sm' ? '2px' : '0',
+    '--badge-min-width': sizeValues.minWidth,
+    '--badge-height': sizeValues.height,
+    '--badge-font-size': sizeValues.fontSize,
+    '--badge-dot-size': dotSize,
+    '--badge-border-radius': radius === 'full' ? 'var(--badge-radius-full, 9999px)' :
+                             radius === 'lg' ? 'var(--badge-radius-lg, 8px)' :
+                             radius === 'md' ? 'var(--badge-radius-md, 4px)' :
+                             radius === 'sm' ? 'var(--badge-radius-sm, 2px)' : 'var(--badge-radius-none, 0)',
   } as React.CSSProperties;
 
   /**

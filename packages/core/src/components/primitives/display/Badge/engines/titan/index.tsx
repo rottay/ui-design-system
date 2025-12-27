@@ -123,6 +123,7 @@ export default function TitanBadge(props: BadgeProps): React.ReactElement {
       padding: '0 8px',
       fontSize: sizeValues.fontSize,
       height: sizeValues.height,
+      minWidth: sizeValues.minWidth,
       fontWeight: 500,
       border: bordered ? '2px solid #fff' : undefined,
       boxShadow: bordered ? `0 0 0 1px ${color}` : undefined,

@@ -34,28 +34,42 @@ export interface ButtonIconProps {
 }
 
 /**
+ * Spinner size mapping to CSS variables
+ */
+const SPINNER_SIZE_MAP = {
+  xs: 'var(--button-spinner-size-xs)',
+  sm: 'var(--button-spinner-size-sm)',
+  md: 'var(--button-spinner-size-md)',
+  lg: 'var(--button-spinner-size-lg)',
+  xl: 'var(--button-spinner-size-xl)',
+};
+
+/**
  * Loading spinner for icon button
  */
-const LoadingSpinner: React.FC<{ size: number }> = ({ size }) => (
-  <svg
-    width={size * 0.5}
-    height={size * 0.5}
-    viewBox="0 0 24 24"
-    fill="none"
-    style={{ animation: 'rottay-button-spin 1s linear infinite' }}
-  >
-    <circle
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeDasharray="31.416"
-      strokeDashoffset="25"
-    />
-  </svg>
-);
+const LoadingSpinner: React.FC<{ size: keyof typeof SPINNER_SIZE_MAP }> = ({ size }) => {
+  const spinnerSize = SPINNER_SIZE_MAP[size] || SPINNER_SIZE_MAP.md;
+  return (
+    <svg
+      width={spinnerSize}
+      height={spinnerSize}
+      viewBox="0 0 24 24"
+      fill="none"
+      style={{ animation: 'rottay-button-spin 1s linear infinite' }}
+    >
+      <circle
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeDasharray="31.416"
+        strokeDashoffset="25"
+      />
+    </svg>
+  );
+};
 
 /**
  * Icon-only button component
@@ -138,7 +152,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         aria-busy={loading}
         title={tooltip}
       >
-        {loading ? <LoadingSpinner size={buttonSize} /> : icon}
+        {loading ? <LoadingSpinner size={size as keyof typeof SPINNER_SIZE_MAP} /> : icon}
       </button>
     );
   }

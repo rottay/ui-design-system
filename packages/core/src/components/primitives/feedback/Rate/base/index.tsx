@@ -180,8 +180,8 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
     // Build CSS variables
     const starSize = RATE_SIZE_MAP[size];
     const rateVars: React.CSSProperties = {
-      '--rate-size': `${starSize}px`,
-      '--rate-gap': `${Math.max(4, starSize / 6)}px`,
+      '--rate-size': starSize,
+      '--rate-gap': 'var(--rate-gap, 0.25rem)',
       '--rate-active-color': activeColor || 'var(--rate-star-active-color, #facc15)',
       '--rate-inactive-color': inactiveColor || 'var(--rate-star-inactive-color, #d1d5db)',
       '--rate-transition': 'var(--rate-transition-duration, 0.2s)',

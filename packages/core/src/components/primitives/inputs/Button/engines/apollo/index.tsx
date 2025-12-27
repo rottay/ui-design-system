@@ -103,9 +103,9 @@ const ApolloButton = forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Build CSS variables for the button
     const buttonVars: React.CSSProperties = {
-      '--button-height': `${sizeConfig.height}px`,
+      '--button-height': sizeConfig.height,
       '--button-padding': sizeConfig.padding,
-      '--button-font-size': `${sizeConfig.fontSize}px`,
+      '--button-font-size': sizeConfig.fontSize,
       '--button-bg': variantConfig.bg,
       '--button-color': variantConfig.color,
       '--button-border-color': variantConfig.borderColor,
@@ -127,11 +127,11 @@ const ApolloButton = forwardRef<HTMLButtonElement, ButtonProps>(
       alignItems: 'center',
       justifyContent: 'center',
       gap: '8px',
-      height: `${sizeConfig.height}px`,
+      height: sizeConfig.height,
       padding: shape === 'circle' ? '0' : sizeConfig.padding,
-      width: isFullWidth ? '100%' : (shape === 'circle' ? `${sizeConfig.height}px` : 'auto'),
-      minWidth: shape === 'circle' ? `${sizeConfig.height}px` : 'auto',
-      fontSize: `${sizeConfig.fontSize}px`,
+      width: isFullWidth ? '100%' : (shape === 'circle' ? sizeConfig.height : 'auto'),
+      minWidth: shape === 'circle' ? sizeConfig.height : 'auto',
+      fontSize: sizeConfig.fontSize,
       fontWeight: 500,
       fontFamily: 'inherit',
       lineHeight: 1.5,

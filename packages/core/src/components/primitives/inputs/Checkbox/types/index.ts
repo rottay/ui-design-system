@@ -112,8 +112,17 @@ export const CHECKBOX_GROUP_DEFAULTS = {
   disabled: false,
 };
 
-// Size mapping to pixel values
-export const SIZE_MAP: Record<CheckboxSize, number> = {
+// Size mapping to CSS variables
+export const SIZE_MAP: Record<CheckboxSize, string> = {
+  xs: 'var(--checkbox-xs-size)',
+  sm: 'var(--checkbox-sm-size)',
+  md: 'var(--checkbox-md-size)',
+  lg: 'var(--checkbox-lg-size)',
+  xl: 'var(--checkbox-xl-size)',
+};
+
+// Numeric size values for calculations (e.g., checkmark sizing)
+export const SIZE_MAP_NUMERIC: Record<CheckboxSize, number> = {
   xs: 14,
   sm: 16,
   md: 18,
@@ -155,11 +164,11 @@ export const COLOR_MAP: Record<CheckboxVariant, { bg: string; border: string; ch
   },
 };
 
-// Radius mapping
+// Radius mapping to CSS variables
 export const RADIUS_MAP: Record<CheckboxRadius, string> = {
-  none: '0',
-  sm: '2px',
-  md: '4px',
-  lg: '6px',
-  full: '9999px',
+  none: 'var(--checkbox-radius-none)',
+  sm: 'var(--checkbox-radius-sm)',
+  md: 'var(--checkbox-radius-md)',
+  lg: 'var(--checkbox-radius-lg)',
+  full: 'var(--checkbox-radius-full)',
 };

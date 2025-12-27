@@ -7,7 +7,7 @@
 import React, { useState, useCallback, useId } from 'react';
 import { Switch as AntSwitch } from 'antd';
 import type { ToggleProps } from '../../types';
-import { TOGGLE_DEFAULTS, SIZE_MAP as TOGGLE_SIZE_MAP, COLOR_MAP } from '../../types';
+import { TOGGLE_DEFAULTS, SIZE_VALUES as TOGGLE_SIZE_VALUES, COLOR_MAP } from '../../types';
 
 // Ant Design size mapping
 const ANT_SIZE_MAP = {
@@ -61,7 +61,7 @@ export default function TitanToggle(props: ToggleProps): React.ReactElement {
     onChange?.(checked, syntheticEvent);
   }, [isControlled, onChange, value]);
 
-  const sizeValues = TOGGLE_SIZE_MAP[size] || TOGGLE_SIZE_MAP.md;
+  const sizeValues = TOGGLE_SIZE_VALUES[size] || TOGGLE_SIZE_VALUES.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   const displayLabel = label || children;

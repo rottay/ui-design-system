@@ -64,8 +64,17 @@ export interface ToggleProps extends EngineAwareProps {
   children?: ReactNode;
 }
 
-// Size mappings
-export const SIZE_MAP: Record<ToggleSize, { width: number; height: number; dot: number }> = {
+// Size mappings (using CSS variables from tokens)
+export const SIZE_MAP: Record<ToggleSize, { width: string; height: string; dot: string }> = {
+  xs: { width: 'var(--toggle-xs-width)', height: 'var(--toggle-xs-height)', dot: 'var(--toggle-xs-dot)' },
+  sm: { width: 'var(--toggle-sm-width)', height: 'var(--toggle-sm-height)', dot: 'var(--toggle-sm-dot)' },
+  md: { width: 'var(--toggle-md-width)', height: 'var(--toggle-md-height)', dot: 'var(--toggle-md-dot)' },
+  lg: { width: 'var(--toggle-lg-width)', height: 'var(--toggle-lg-height)', dot: 'var(--toggle-lg-dot)' },
+  xl: { width: 'var(--toggle-xl-width)', height: 'var(--toggle-xl-height)', dot: 'var(--toggle-xl-dot)' },
+};
+
+// Numeric size values for calculations (internal use)
+export const SIZE_VALUES: Record<ToggleSize, { width: number; height: number; dot: number }> = {
   xs: { width: 28, height: 16, dot: 12 },
   sm: { width: 36, height: 20, dot: 16 },
   md: { width: 44, height: 24, dot: 20 },

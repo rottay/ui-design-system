@@ -116,12 +116,12 @@ export const TIMELINE_COLOR_MAP: Record<string, string> = {
 };
 
 /**
- * Size values for timeline elements (in pixels).
+ * Size values for timeline elements using CSS variables.
  */
 export const TIMELINE_SIZE_MAP = {
-  dotSize: 12,
-  dotBorderWidth: 2,
-  lineWidth: 2,
-  itemPadding: 20,
-  dotOffset: 24,
+  dotSize: 'var(--timeline-dot-size)',
+  dotBorderWidth: 'var(--timeline-dot-border-width)',
+  lineWidth: 'var(--timeline-line-width)',
+  itemPadding: 'var(--timeline-item-padding)',
+  dotOffset: 'var(--timeline-dot-offset)',
 } as const;

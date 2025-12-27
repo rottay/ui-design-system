@@ -6,7 +6,7 @@
 
 import React, { useState, useId, useCallback } from 'react';
 import type { RadioProps, RadioGroupProps } from '../../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
+import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 export default function ApolloRadio(props: RadioProps): React.ReactElement {
   const {
@@ -58,6 +58,7 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
   }, [disabled, value, handleChange]);
 
   const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   const containerStyle: React.CSSProperties = {
@@ -100,8 +101,8 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
 
   const dotStyle: React.CSSProperties = {
     display: isChecked ? 'block' : 'none',
-    width: sizeValue * 0.5,
-    height: sizeValue * 0.5,
+    width: sizeNumeric * 0.5,
+    height: sizeNumeric * 0.5,
     borderRadius: '50%',
     backgroundColor: colors.bg,
     transition: 'transform 0.15s ease-in-out',
@@ -114,14 +115,14 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: sizeValue * 0.9,
+    fontSize: sizeNumeric * 0.9,
     color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
     userSelect: 'none',
     lineHeight: 1.4,
   };
 
   const descriptionStyle: React.CSSProperties = {
-    fontSize: sizeValue * 0.75,
+    fontSize: sizeNumeric * 0.75,
     color: 'var(--color-text-secondary, #666)',
     userSelect: 'none',
     lineHeight: 1.4,
@@ -230,6 +231,7 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
   };
 
   const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   const renderOptions = () => {
@@ -263,7 +265,7 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
               backgroundColor: buttonStyle === 'solid' && isChecked ? colors.bg : 'transparent',
               color: buttonStyle === 'solid' && isChecked ? colors.dot : 'inherit',
               transition: 'all 0.2s ease-in-out',
-              fontSize: sizeValue * 0.85,
+              fontSize: sizeNumeric * 0.85,
               fontWeight: 500,
               userSelect: 'none',
             }}
@@ -339,8 +341,8 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
             {isChecked && (
               <span
                 style={{
-                  width: sizeValue * 0.5,
-                  height: sizeValue * 0.5,
+                  width: sizeNumeric * 0.5,
+                  height: sizeNumeric * 0.5,
                   borderRadius: '50%',
                   backgroundColor: colors.bg,
                 }}
@@ -348,11 +350,11 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
             )}
           </span>
           <span style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontSize: sizeValue * 0.9, userSelect: 'none', lineHeight: 1.4 }}>
+            <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none', lineHeight: 1.4 }}>
               {option.label}
             </span>
             {option.description && (
-              <span style={{ fontSize: sizeValue * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
+              <span style={{ fontSize: sizeNumeric * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
                 {option.description}
               </span>
             )}

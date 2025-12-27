@@ -8,7 +8,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useId } from 'react';
 import type { CSSProperties } from 'react';
 import type { CheckboxGroupProps, CheckboxOption, CheckboxSize, CheckboxVariant } from '../../types';
-import { CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
+import { CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 // Context for checkbox group
 interface CheckboxGroupContextValue {
@@ -90,6 +90,7 @@ export function CheckboxGroup({
   };
 
   const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   // Render options if provided
@@ -103,6 +104,7 @@ export function CheckboxGroup({
       return (
         <label
           key={String(option.value)}
+          data-testid={`checkbox-option-${option.value}`}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -144,8 +146,8 @@ export function CheckboxGroup({
             />
             {isChecked && (
               <svg
-                width={sizeValue * 0.6}
-                height={sizeValue * 0.6}
+                width={sizeNumeric * 0.6}
+                height={sizeNumeric * 0.6}
                 viewBox="0 0 12 12"
                 fill="none"
               >
@@ -159,7 +161,7 @@ export function CheckboxGroup({
               </svg>
             )}
           </span>
-          <span style={{ fontSize: sizeValue * 0.9, userSelect: 'none' }}>
+          <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none' }}>
             {option.label}
           </span>
         </label>
@@ -170,6 +172,9 @@ export function CheckboxGroup({
   return (
     <CheckboxGroupContext.Provider value={contextValue}>
       <div
+        data-testid="checkbox-group"
+        data-direction={direction}
+        data-disabled={disabled || undefined}
         className={`rottay-checkbox-group rottay-checkbox-group--${direction} ${className}`}
         style={containerStyle}
         role="group"

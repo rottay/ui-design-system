@@ -104,14 +104,14 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
     const badgeVars: React.CSSProperties = {
       '--badge-bg': `var(--badge-${variant}-bg, ${color})`,
       '--badge-color': `var(--badge-${variant}-color, #fff)`,
-      '--badge-min-width': `var(--badge-${size}-min-width, ${sizeValues.minWidth}px)`,
-      '--badge-height': `var(--badge-${size}-height, ${sizeValues.height}px)`,
-      '--badge-font-size': `var(--badge-${size}-font-size, ${sizeValues.fontSize}px)`,
-      '--badge-border-radius': radius === 'full' ? '9999px' :
-                               radius === 'lg' ? '8px' :
-                               radius === 'md' ? '4px' :
-                               radius === 'sm' ? '2px' : '0',
-      '--badge-dot-size': `var(--badge-dot-size, ${dotSize}px)`,
+      '--badge-min-width': sizeValues.minWidth,
+      '--badge-height': sizeValues.height,
+      '--badge-font-size': sizeValues.fontSize,
+      '--badge-border-radius': radius === 'full' ? 'var(--badge-radius-full, 9999px)' :
+                               radius === 'lg' ? 'var(--badge-radius-lg, 8px)' :
+                               radius === 'md' ? 'var(--badge-radius-md, 4px)' :
+                               radius === 'sm' ? 'var(--badge-radius-sm, 2px)' : 'var(--badge-radius-none, 0)',
+      '--badge-dot-size': dotSize,
     } as React.CSSProperties;
 
     /**

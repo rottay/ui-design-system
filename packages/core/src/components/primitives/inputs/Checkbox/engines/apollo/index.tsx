@@ -6,7 +6,7 @@
 
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
 import type { CheckboxProps, CheckboxGroupProps } from '../../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP, RADIUS_MAP } from '../../types';
+import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP, RADIUS_MAP } from '../../types';
 
 export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement {
   const {
@@ -66,6 +66,7 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
   }, [disabled]);
 
   const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
   const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.sm;
 
@@ -106,7 +107,7 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: sizeValue * 0.9,
+    fontSize: sizeNumeric * 0.9,
     color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
     userSelect: 'none',
   };
@@ -116,8 +117,8 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
   // Checkmark SVG for checked state
   const CheckmarkIcon = () => (
     <svg
-      width={sizeValue * 0.6}
-      height={sizeValue * 0.6}
+      width={sizeNumeric * 0.6}
+      height={sizeNumeric * 0.6}
       viewBox="0 0 12 12"
       fill="none"
       style={{ display: isChecked && !indeterminate ? 'block' : 'none' }}
@@ -137,7 +138,7 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
     <div
       style={{
         display: indeterminate ? 'block' : 'none',
-        width: sizeValue * 0.6,
+        width: sizeNumeric * 0.6,
         height: 2,
         backgroundColor: colors.check,
         borderRadius: 1,
@@ -246,6 +247,7 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
   };
 
   const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   const renderOptions = () => {
@@ -299,8 +301,8 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
             />
             {isChecked && (
               <svg
-                width={sizeValue * 0.6}
-                height={sizeValue * 0.6}
+                width={sizeNumeric * 0.6}
+                height={sizeNumeric * 0.6}
                 viewBox="0 0 12 12"
                 fill="none"
               >
@@ -314,7 +316,7 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
               </svg>
             )}
           </span>
-          <span style={{ fontSize: sizeValue * 0.9, userSelect: 'none' }}>
+          <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none' }}>
             {option.label}
           </span>
         </label>

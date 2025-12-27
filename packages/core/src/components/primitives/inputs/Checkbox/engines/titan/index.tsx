@@ -7,7 +7,7 @@
 import React from 'react';
 import { Checkbox as AntCheckbox } from 'antd';
 import type { CheckboxProps, CheckboxGroupProps } from '../../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
+import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 export default function TitanCheckbox(props: CheckboxProps): React.ReactElement {
   const {
@@ -27,7 +27,7 @@ export default function TitanCheckbox(props: CheckboxProps): React.ReactElement 
   } = props;
 
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
 
   const handleChange = (e: any) => {
     onChange?.(e.target.checked, e);
@@ -36,7 +36,7 @@ export default function TitanCheckbox(props: CheckboxProps): React.ReactElement 
   // Custom styles based on size and color
   const customStyle: React.CSSProperties = {
     '--ant-primary-color': colors.bg,
-    fontSize: sizeValue * 0.9,
+    fontSize: sizeNumeric * 0.9,
     ...style,
   } as React.CSSProperties;
 

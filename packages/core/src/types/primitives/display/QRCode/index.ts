@@ -128,13 +128,13 @@ export const QRCODE_DEFAULTS = {
 } as const;
 
 /**
- * Size mapping for preset QR code sizes.
+ * Size mapping for preset QR code sizes using CSS variables.
  */
-export const SIZE_MAP: Record<string, number> = {
-  xs: 80,
-  sm: 120,
-  md: 160,
-  lg: 200,
-  xl: 256,
-  '2xl': 320,
+export const SIZE_MAP: Record<string, string> = {
+  xs: 'var(--qrcode-xs-size)',
+  sm: 'var(--qrcode-sm-size)',
+  md: 'var(--qrcode-md-size)',
+  lg: 'var(--qrcode-lg-size)',
+  xl: 'var(--qrcode-xl-size)',
+  '2xl': 'var(--qrcode-2xl-size)',
 };

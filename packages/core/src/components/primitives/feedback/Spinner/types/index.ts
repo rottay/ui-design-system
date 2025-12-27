@@ -21,8 +21,8 @@ export const SPINNER_DEFAULTS: Partial<SpinnerProps> = {
 };
 
 export const SIZE_MAP = {
-  sm: 16,
-  md: 24,
-  lg: 32,
-  xl: 48,
+  sm: 'var(--spinner-sm-size)',
+  md: 'var(--spinner-md-size)',
+  lg: 'var(--spinner-lg-size)',
+  xl: 'var(--spinner-xl-size)',
 };

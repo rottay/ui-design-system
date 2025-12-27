@@ -55,16 +55,16 @@ function ApolloTimeline(props: TimelineProps): React.ReactElement {
 
   const containerStyle: React.CSSProperties = {
     position: 'relative',
-    padding: `0 0 0 ${TIMELINE_SIZE_MAP.dotOffset}px`,
+    padding: `0 0 0 ${TIMELINE_SIZE_MAP.dotOffset}`,
     ...style,
   };
 
   const lineStyle: React.CSSProperties = {
     position: 'absolute',
-    left: `${TIMELINE_SIZE_MAP.dotSize / 2 - TIMELINE_SIZE_MAP.lineWidth / 2}px`,
-    top: `${TIMELINE_SIZE_MAP.dotSize / 2}px`,
-    bottom: pending ? '40px' : `${TIMELINE_SIZE_MAP.dotSize / 2}px`,
-    width: `${TIMELINE_SIZE_MAP.lineWidth}px`,
+    left: `calc((${TIMELINE_SIZE_MAP.dotSize} - ${TIMELINE_SIZE_MAP.lineWidth}) / 2)`,
+    top: `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
+    bottom: pending ? '40px' : `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
+    width: TIMELINE_SIZE_MAP.lineWidth,
     backgroundColor: '#e8e8e8',
   };
 
@@ -91,23 +91,23 @@ function ApolloTimeline(props: TimelineProps): React.ReactElement {
 
         const itemStyle: React.CSSProperties = {
           position: 'relative',
-          paddingBottom: `${TIMELINE_SIZE_MAP.itemPadding}px`,
+          paddingBottom: TIMELINE_SIZE_MAP.itemPadding,
           textAlign: isRight ? 'right' : 'left',
           paddingLeft: isRight ? '0' : undefined,
-          paddingRight: isRight ? `${TIMELINE_SIZE_MAP.dotOffset}px` : undefined,
+          paddingRight: isRight ? TIMELINE_SIZE_MAP.dotOffset : undefined,
           ...itemProps.style,
         };
 
         const dotStyle: React.CSSProperties = {
           position: 'absolute',
-          left: `-${TIMELINE_SIZE_MAP.dotOffset}px`,
+          left: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
           top: '4px',
-          width: `${TIMELINE_SIZE_MAP.dotSize}px`,
-          height: `${TIMELINE_SIZE_MAP.dotSize}px`,
+          width: TIMELINE_SIZE_MAP.dotSize,
+          height: TIMELINE_SIZE_MAP.dotSize,
           borderRadius: '50%',
           backgroundColor: itemProps.dot ? 'transparent' : colorValue,
-          border: itemProps.dot ? 'none' : `${TIMELINE_SIZE_MAP.dotBorderWidth}px solid white`,
-          boxShadow: itemProps.dot ? 'none' : `0 0 0 ${TIMELINE_SIZE_MAP.dotBorderWidth}px ${colorValue}`,
+          border: itemProps.dot ? 'none' : `${TIMELINE_SIZE_MAP.dotBorderWidth} solid white`,
+          boxShadow: itemProps.dot ? 'none' : `0 0 0 ${TIMELINE_SIZE_MAP.dotBorderWidth} ${colorValue}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -141,17 +141,17 @@ function ApolloTimeline(props: TimelineProps): React.ReactElement {
       {/* Pending item */}
       {pending && (
         <div
-          style={{ position: 'relative', paddingBottom: `${TIMELINE_SIZE_MAP.itemPadding}px` }}
+          style={{ position: 'relative', paddingBottom: TIMELINE_SIZE_MAP.itemPadding }}
           role="listitem"
           aria-label="Pending"
         >
           <div
             style={{
               position: 'absolute',
-              left: `-${TIMELINE_SIZE_MAP.dotOffset}px`,
+              left: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
               top: '4px',
-              width: `${TIMELINE_SIZE_MAP.dotSize}px`,
-              height: `${TIMELINE_SIZE_MAP.dotSize}px`,
+              width: TIMELINE_SIZE_MAP.dotSize,
+              height: TIMELINE_SIZE_MAP.dotSize,
               borderRadius: '50%',
               backgroundColor: '#e8e8e8',
               animation: 'rottay-timeline-pulse 1.5s ease-in-out infinite',

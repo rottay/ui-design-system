@@ -175,12 +175,12 @@ export const RATE_DEFAULTS: Required<Pick<RateProps,
 };
 
 /**
- * Size mapping to pixel values (matches CSS tokens)
+ * Size mapping to CSS variable tokens
  */
-export const RATE_SIZE_MAP: Record<RateSize, number> = {
-  xs: 16,   // --rate-xs-size: 1rem
-  sm: 20,   // --rate-sm-size: 1.25rem
-  md: 24,   // --rate-md-size: 1.5rem (default)
-  lg: 32,   // --rate-lg-size: 2rem
-  xl: 40,   // --rate-xl-size: 2.5rem
+export const RATE_SIZE_MAP: Record<RateSize, string> = {
+  xs: 'var(--rate-xs-size)',
+  sm: 'var(--rate-sm-size)',
+  md: 'var(--rate-md-size)',
+  lg: 'var(--rate-lg-size)',
+  xl: 'var(--rate-xl-size)',
 };

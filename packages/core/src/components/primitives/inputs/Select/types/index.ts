@@ -194,14 +194,14 @@ export const SELECT_DEFAULTS = {
 } as const;
 
 /**
- * Size mapping to pixel values (matches CSS tokens)
+ * Size mapping to CSS variable values (matches CSS tokens)
  */
-export const SIZE_MAP: Record<SelectSize, { height: number; fontSize: number; padding: string }> = {
-  xs: { height: 24, fontSize: 12, padding: '0 8px' },
-  sm: { height: 32, fontSize: 14, padding: '0 10px' },
-  md: { height: 40, fontSize: 14, padding: '0 12px' },
-  lg: { height: 48, fontSize: 16, padding: '0 14px' },
-  xl: { height: 56, fontSize: 18, padding: '0 16px' },
+export const SIZE_MAP: Record<SelectSize, { height: string; fontSize: string; padding: string }> = {
+  xs: { height: 'var(--select-xs-height)', fontSize: 'var(--select-xs-font-size)', padding: 'var(--select-xs-padding)' },
+  sm: { height: 'var(--select-sm-height)', fontSize: 'var(--select-sm-font-size)', padding: 'var(--select-sm-padding)' },
+  md: { height: 'var(--select-md-height)', fontSize: 'var(--select-md-font-size)', padding: 'var(--select-md-padding)' },
+  lg: { height: 'var(--select-lg-height)', fontSize: 'var(--select-lg-font-size)', padding: 'var(--select-lg-padding)' },
+  xl: { height: 'var(--select-xl-height)', fontSize: 'var(--select-xl-font-size)', padding: 'var(--select-xl-padding)' },
 };
 
 /**

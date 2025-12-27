@@ -19,12 +19,11 @@ const createStyles = (
   inactiveColor?: string
 ) => {
   const sizeValue = RATE_SIZE_MAP[size];
-  const gap = Math.max(4, sizeValue / 6);
 
   return {
     container: {
       display: 'inline-flex',
-      gap: `${gap}px`,
+      gap: 'var(--rate-gap, 0.25rem)',
       alignItems: 'center',
     } as React.CSSProperties,
     star: {
@@ -35,8 +34,8 @@ const createStyles = (
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: `${sizeValue}px`,
-        height: `${sizeValue}px`,
+        width: sizeValue,
+        height: sizeValue,
         lineHeight: 1,
         userSelect: 'none' as const,
         borderRadius: '2px',

@@ -109,8 +109,17 @@ export const RADIO_GROUP_DEFAULTS = {
   disabled: false,
 };
 
-// Size mapping to pixel values
-export const SIZE_MAP: Record<RadioSize, number> = {
+// Size mapping to CSS variables
+export const SIZE_MAP: Record<RadioSize, string> = {
+  xs: 'var(--radio-xs-size)',
+  sm: 'var(--radio-sm-size)',
+  md: 'var(--radio-md-size)',
+  lg: 'var(--radio-lg-size)',
+  xl: 'var(--radio-xl-size)',
+};
+
+// Numeric size values for calculations (e.g., dot sizing)
+export const SIZE_MAP_NUMERIC: Record<RadioSize, number> = {
   xs: 14,
   sm: 16,
   md: 18,

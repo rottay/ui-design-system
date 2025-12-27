@@ -8,7 +8,7 @@ import React from 'react';
 import { Radio as AntRadio } from 'antd';
 import type { RadioChangeEvent } from 'antd';
 import type { RadioProps, RadioGroupProps } from '../../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../../types';
+import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
 
 export default function TitanRadio(props: RadioProps): React.ReactElement {
   const {
@@ -26,12 +26,12 @@ export default function TitanRadio(props: RadioProps): React.ReactElement {
   } = props;
 
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
 
   // Custom styles based on size and color
   const customStyle: React.CSSProperties = {
     '--ant-primary-color': colors.bg,
-    fontSize: sizeValue * 0.9,
+    fontSize: sizeNumeric * 0.9,
     ...style,
   } as React.CSSProperties;
 

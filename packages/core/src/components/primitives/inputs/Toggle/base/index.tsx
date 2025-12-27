@@ -7,7 +7,7 @@
 
 import React, { forwardRef, useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../types';
-import { TOGGLE_DEFAULTS, SIZE_MAP, COLOR_MAP } from '../types';
+import { TOGGLE_DEFAULTS, SIZE_MAP, SIZE_VALUES, COLOR_MAP } from '../types';
 
 export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref) => {
   const {
@@ -52,14 +52,15 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
     onChange?.(e.target.checked, e);
   }, [isControlled, onChange]);
 
-  const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeTokens = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeValues = SIZE_VALUES[size] || SIZE_VALUES.md;
   const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
-  // CSS Variables for theming
+  // CSS Variables for theming (using tokens)
   const cssVariables = {
-    '--toggle-width': `${sizeValues.width}px`,
-    '--toggle-height': `${sizeValues.height}px`,
-    '--toggle-dot-size': `${sizeValues.dot}px`,
+    '--toggle-width': sizeTokens.width,
+    '--toggle-height': sizeTokens.height,
+    '--toggle-dot-size': sizeTokens.dot,
     '--toggle-bg': colors.bg,
     '--toggle-bg-checked': colors.bgChecked,
     '--toggle-border-color': colors.border,
@@ -83,9 +84,9 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
     position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
-    width: sizeValues.width,
-    height: sizeValues.height,
-    borderRadius: sizeValues.height / 2,
+    width: sizeTokens.width,
+    height: sizeTokens.height,
+    borderRadius: 'var(--toggle-track-border-radius, 9999px)',
     backgroundColor: isChecked ? colors.bgChecked : colors.bg,
     transition: 'all 0.2s ease-in-out',
     flexShrink: 0,
@@ -95,10 +96,10 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
   const dotStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
-    left: isChecked ? `calc(100% - ${sizeValues.dot}px - 2px)` : '2px',
+    left: isChecked ? `calc(100% - ${sizeTokens.dot} - 2px)` : '2px',
     transform: 'translateY(-50%)',
-    width: sizeValues.dot,
-    height: sizeValues.dot,
+    width: sizeTokens.dot,
+    height: sizeTokens.dot,
     borderRadius: '50%',
     backgroundColor: '#ffffff',
     transition: 'all 0.2s ease-in-out',
