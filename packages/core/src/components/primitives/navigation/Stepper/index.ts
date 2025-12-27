@@ -1,7 +1,34 @@
 /**
  * Stepper - Engine Router
+ *
+ * This module exports the Stepper component with multi-engine support.
+ * Stepper guides users through a multi-step process with visual feedback.
+ *
+ * @module Stepper
+ * @example
+ * ```tsx
+ * import { Stepper } from '@rottay/design-system';
+ *
+ * // Basic usage with items
+ * <Stepper
+ *   items={[
+ *     { title: 'Step 1', description: 'First step' },
+ *     { title: 'Step 2', description: 'Second step' },
+ *     { title: 'Step 3', description: 'Third step' },
+ *   ]}
+ *   current={0}
+ * />
+ *
+ * // Vertical stepper
+ * <Stepper items={items} direction="vertical" current={1} />
+ *
+ * // Clickable stepper with onChange
+ * <Stepper items={items} clickable onChange={(step) => setStep(step)} />
+ *
+ * // With error status
+ * <Stepper items={[{ title: 'Error', status: 'error' }]} current={0} />
+ * ```
  */
-
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { StepperProps } from './types';
 import { StepperStep, StepperContent } from './compound';
