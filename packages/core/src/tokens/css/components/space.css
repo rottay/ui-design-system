@@ -1,0 +1,25 @@
+/**
+ * Space Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Space component.
+ * Includes sizes for small, middle, large variants.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Space Gap Dimensions
+     Three size variants: small, middle, large
+     ======================================================================== */
+
+  /* Small (8px) */
+  --space-small-size: 0.5rem;        /* 8px */
+
+  /* Middle (16px - Default) */
+  --space-middle-size: 1rem;         /* 16px */
+
+  /* Large (24px) */
+  --space-large-size: 1.5rem;        /* 24px */
+
+  /* Default size */
+  --space-default-size: var(--space-small-size);
+}

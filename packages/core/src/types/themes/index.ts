@@ -2,7 +2,7 @@
  * Theme configuration types
  */
 
-import type { EngineName } from '../engines';
+import type { EngineName } from '../engine';
 
 export interface ThemeConfig {
   name: string;

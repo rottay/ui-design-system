@@ -1,0 +1,167 @@
+/**
+ * Badge Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Badge component.
+ * Includes sizes, dot sizes, variants, and styling properties.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Badge Dimensions
+     Five size variants from xs to xl with corresponding properties
+     ======================================================================== */
+
+  /* XS - Extra Small */
+  --badge-xs-min-width: 0.875rem;       /* 14px */
+  --badge-xs-height: 0.875rem;          /* 14px */
+  --badge-xs-font-size: 0.5625rem;      /* 9px */
+
+  /* SM - Small */
+  --badge-sm-min-width: 1rem;           /* 16px */
+  --badge-sm-height: 1rem;              /* 16px */
+  --badge-sm-font-size: 0.625rem;       /* 10px */
+
+  /* MD - Medium (Default) */
+  --badge-md-min-width: 1.25rem;        /* 20px */
+  --badge-md-height: 1.25rem;           /* 20px */
+  --badge-md-font-size: 0.75rem;        /* 12px */
+
+  /* LG - Large */
+  --badge-lg-min-width: 1.5rem;         /* 24px */
+  --badge-lg-height: 1.5rem;            /* 24px */
+  --badge-lg-font-size: 0.875rem;       /* 14px */
+
+  /* XL - Extra Large */
+  --badge-xl-min-width: 1.75rem;        /* 28px */
+  --badge-xl-height: 1.75rem;           /* 28px */
+  --badge-xl-font-size: 1rem;           /* 16px */
+
+  /* Default size (can be overridden) */
+  --badge-default-min-width: var(--badge-md-min-width);
+  --badge-default-height: var(--badge-md-height);
+  --badge-default-font-size: var(--badge-md-font-size);
+
+  /* ========================================================================
+     DOT SIZES - Badge Dot Indicator Dimensions
+     Diameter of dot badges for each size variant
+     ======================================================================== */
+
+  --badge-dot-xs-size: 0.25rem;         /* 4px */
+  --badge-dot-sm-size: 0.375rem;        /* 6px */
+  --badge-dot-md-size: 0.5rem;          /* 8px */
+  --badge-dot-lg-size: 0.625rem;        /* 10px */
+  --badge-dot-xl-size: 0.75rem;         /* 12px */
+
+  /* Default dot size */
+  --badge-dot-default-size: var(--badge-dot-md-size);
+
+  /* ========================================================================
+     VARIANTS - Badge Color Variants
+     Different visual styles for badges
+     ======================================================================== */
+
+  /* Default variant (neutral) */
+  --badge-default-bg: #d9d9d9;
+  --badge-default-color: var(--color-white, #ffffff);
+
+  /* Primary variant */
+  --badge-primary-bg: #1890ff;
+  --badge-primary-color: var(--color-white, #ffffff);
+
+  /* Secondary variant */
+  --badge-secondary-bg: #722ed1;
+  --badge-secondary-color: var(--color-white, #ffffff);
+
+  /* Success variant */
+  --badge-success-bg: #52c41a;
+  --badge-success-color: var(--color-white, #ffffff);
+
+  /* Warning variant */
+  --badge-warning-bg: #faad14;
+  --badge-warning-color: var(--color-white, #ffffff);
+
+  /* Error variant */
+  --badge-error-bg: #ff4d4f;
+  --badge-error-color: var(--color-white, #ffffff);
+
+  /* Info variant */
+  --badge-info-bg: #1890ff;
+  --badge-info-color: var(--color-white, #ffffff);
+
+  /* ========================================================================
+     STATUS INDICATORS
+     Color indicators for processing/default/success/error/warning states
+     ======================================================================== */
+
+  --badge-status-processing-color: #1890ff;
+  --badge-status-default-color: #d9d9d9;
+  --badge-status-success-color: #52c41a;
+  --badge-status-error-color: #ff4d4f;
+  --badge-status-warning-color: #faad14;
+
+  /* ========================================================================
+     BORDER RADIUS
+     Border radius options for badges
+     ======================================================================== */
+
+  --badge-radius-none: 0;
+  --badge-radius-sm: 0.125rem;          /* 2px */
+  --badge-radius-md: 0.25rem;           /* 4px */
+  --badge-radius-lg: 0.5rem;            /* 8px */
+  --badge-radius-full: 9999px;
+
+  /* Default border radius */
+  --badge-default-radius: var(--badge-radius-full);
+
+  /* ========================================================================
+     SPACING
+     Padding and spacing for badges
+     ======================================================================== */
+
+  --badge-padding-x: 0.375rem;          /* 6px */
+  --badge-padding-y: 0;
+  --badge-icon-gap: 0.25rem;            /* 4px */
+  --badge-close-gap: 0.25rem;           /* 4px */
+
+  /* ========================================================================
+     BORDER
+     Border settings for bordered badges
+     ======================================================================== */
+
+  --badge-border-width: 2px;
+  --badge-border-color: var(--color-white, #ffffff);
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+
+  --badge-transition-duration: 0.2s;
+  --badge-transition-timing: ease-in-out;
+  --badge-transition: all var(--badge-transition-duration) var(--badge-transition-timing);
+
+  /* ========================================================================
+     PULSE ANIMATION
+     Settings for attention-grabbing pulse animation
+     ======================================================================== */
+
+  --badge-pulse-duration: 1.5s;
+  --badge-pulse-timing: ease-in-out;
+  --badge-pulse-opacity: 0.6;
+  --badge-pulse-scale: 1.05;
+
+  /* ========================================================================
+     TYPOGRAPHY
+     Font settings for badge content
+     ======================================================================== */
+
+  --badge-font-weight: 500;
+  --badge-line-height: 1;
+
+  /* ========================================================================
+     Z-INDEX
+     Stacking context for positioned badges
+     ======================================================================== */
+
+  --badge-z-index: 1;
+}

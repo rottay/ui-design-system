@@ -1,0 +1,43 @@
+/**
+ * Spinner Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Spinner component.
+ * Includes sizes for sm, md, lg, xl variants.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Spinner Dimensions
+     Four size variants from sm to xl
+     ======================================================================== */
+
+  /* SM - Small (16px) */
+  --spinner-sm-size: 1rem;           /* 16px */
+
+  /* MD - Medium (24px - Default) */
+  --spinner-md-size: 1.5rem;         /* 24px */
+
+  /* LG - Large (32px) */
+  --spinner-lg-size: 2rem;           /* 32px */
+
+  /* XL - Extra Large (48px) */
+  --spinner-xl-size: 3rem;           /* 48px */
+
+  /* Default size */
+  --spinner-default-size: var(--spinner-md-size);
+
+  /* ========================================================================
+     COLORS
+     Default spinner colors
+     ======================================================================== */
+  --spinner-default-color: var(--color-primary-500);
+  --spinner-track-color: var(--color-neutral-200);
+
+  /* ========================================================================
+     ANIMATION
+     Spinner animation settings
+     ======================================================================== */
+  --spinner-animation-duration: 0.75s;
+  --spinner-animation-timing: linear;
+  --spinner-stroke-width: 2px;
+}

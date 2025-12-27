@@ -1,0 +1,114 @@
+/**
+ * Radio Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Radio component.
+ * Includes sizes, colors, and state indicators.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Radio Dimensions
+     Five size variants from xs to xl
+     ======================================================================== */
+
+  /* XS - Extra Small (14px) */
+  --radio-xs-size: 0.875rem;         /* 14px */
+  --radio-xs-font-size: 0.75rem;     /* 12px */
+  --radio-xs-border-width: 1.5px;
+
+  /* SM - Small (16px) */
+  --radio-sm-size: 1rem;             /* 16px */
+  --radio-sm-font-size: 0.8125rem;   /* 13px */
+  --radio-sm-border-width: 1.5px;
+
+  /* MD - Medium (18px - Default) */
+  --radio-md-size: 1.125rem;         /* 18px */
+  --radio-md-font-size: 0.875rem;    /* 14px */
+  --radio-md-border-width: 2px;
+
+  /* LG - Large (20px) */
+  --radio-lg-size: 1.25rem;          /* 20px */
+  --radio-lg-font-size: 1rem;        /* 16px */
+  --radio-lg-border-width: 2px;
+
+  /* XL - Extra Large (24px) */
+  --radio-xl-size: 1.5rem;           /* 24px */
+  --radio-xl-font-size: 1.125rem;    /* 18px */
+  --radio-xl-border-width: 2px;
+
+  /* Default size (can be overridden) */
+  --radio-default-size: var(--radio-md-size);
+  --radio-default-font-size: var(--radio-md-font-size);
+  --radio-default-border-width: var(--radio-md-border-width);
+
+  /* ========================================================================
+     COLORS - Radio Color Variants
+     Different visual styles for radios
+     ======================================================================== */
+
+  /* Default variant (neutral) */
+  --radio-default-bg: var(--color-neutral-600, #4b5563);
+  --radio-default-border: var(--color-neutral-600, #4b5563);
+  --radio-default-dot: #ffffff;
+
+  /* Primary variant */
+  --radio-primary-bg: var(--color-primary, #1890ff);
+  --radio-primary-border: var(--color-primary, #1890ff);
+  --radio-primary-dot: #ffffff;
+
+  /* Secondary variant */
+  --radio-secondary-bg: var(--color-secondary, #6b7280);
+  --radio-secondary-border: var(--color-secondary, #6b7280);
+  --radio-secondary-dot: #ffffff;
+
+  /* Success variant */
+  --radio-success-bg: var(--color-success, #52c41a);
+  --radio-success-border: var(--color-success, #52c41a);
+  --radio-success-dot: #ffffff;
+
+  /* Warning variant */
+  --radio-warning-bg: var(--color-warning, #faad14);
+  --radio-warning-border: var(--color-warning, #faad14);
+  --radio-warning-dot: #ffffff;
+
+  /* Error variant */
+  --radio-error-bg: var(--color-error, #ff4d4f);
+  --radio-error-border: var(--color-error, #ff4d4f);
+  --radio-error-dot: #ffffff;
+
+  /* ========================================================================
+     STATES
+     Visual indicators for different states
+     ======================================================================== */
+  --radio-unchecked-bg: transparent;
+  --radio-unchecked-border: var(--color-border, #d9d9d9);
+  --radio-disabled-opacity: 0.5;
+
+  /* ========================================================================
+     DOT
+     Inner dot settings
+     ======================================================================== */
+  --radio-dot-scale: 0.5;            /* Dot size relative to radio size */
+
+  /* ========================================================================
+     SPACING
+     Spacing between radio and label
+     ======================================================================== */
+  --radio-label-gap: 8px;
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+  --radio-transition-duration: 0.2s;
+  --radio-transition-timing: ease-in-out;
+  --radio-transition: all var(--radio-transition-duration) var(--radio-transition-timing);
+
+  /* ========================================================================
+     FOCUS
+     Focus ring settings
+     ======================================================================== */
+  --radio-focus-ring-width: 2px;
+  --radio-focus-ring-offset: 2px;
+  --radio-focus-ring-color: var(--color-primary, #1890ff);
+}

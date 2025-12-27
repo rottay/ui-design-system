@@ -15,6 +15,7 @@
   --button-xs-height: 1.5rem;           /* 24px */
   --button-xs-padding-x: 0.5rem;        /* 8px */
   --button-xs-padding-y: 0.125rem;      /* 2px */
+  --button-xs-padding: 0 0.5rem;        /* 0 8px - shorthand */
   --button-xs-font-size: 0.75rem;       /* 12px */
   --button-xs-line-height: 1.25rem;     /* 20px */
   --button-xs-icon-size: 0.75rem;       /* 12px */
@@ -25,6 +26,7 @@
   --button-sm-height: 2rem;             /* 32px */
   --button-sm-padding-x: 0.75rem;       /* 12px */
   --button-sm-padding-y: 0.25rem;       /* 4px */
+  --button-sm-padding: 0 0.75rem;       /* 0 12px - shorthand */
   --button-sm-font-size: 0.875rem;      /* 14px */
   --button-sm-line-height: 1.5rem;      /* 24px */
   --button-sm-icon-size: 1rem;          /* 16px */
@@ -35,6 +37,7 @@
   --button-md-height: 2.5rem;           /* 40px */
   --button-md-padding-x: 1rem;          /* 16px */
   --button-md-padding-y: 0.5rem;        /* 8px */
+  --button-md-padding: 0 1rem;          /* 0 16px - shorthand */
   --button-md-font-size: 1rem;          /* 16px */
   --button-md-line-height: 1.5rem;      /* 24px */
   --button-md-icon-size: 1.25rem;       /* 20px */
@@ -45,6 +48,7 @@
   --button-lg-height: 3rem;             /* 48px */
   --button-lg-padding-x: 1.5rem;        /* 24px */
   --button-lg-padding-y: 0.75rem;       /* 12px */
+  --button-lg-padding: 0 1.5rem;        /* 0 24px - shorthand */
   --button-lg-font-size: 1.125rem;      /* 18px */
   --button-lg-line-height: 1.75rem;     /* 28px */
   --button-lg-icon-size: 1.5rem;        /* 24px */
@@ -55,6 +59,7 @@
   --button-xl-height: 3.5rem;           /* 56px */
   --button-xl-padding-x: 2rem;          /* 32px */
   --button-xl-padding-y: 1rem;          /* 16px */
+  --button-xl-padding: 0 2rem;          /* 0 32px - shorthand */
   --button-xl-font-size: 1.25rem;       /* 20px */
   --button-xl-line-height: 1.75rem;     /* 28px */
   --button-xl-icon-size: 1.75rem;       /* 28px */

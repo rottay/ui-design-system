@@ -1,0 +1,99 @@
+/**
+ * QRCode Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the QRCode component.
+ * Includes sizes, colors, icon settings, and status indicators.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - QRCode Dimensions
+     Six size variants from xs to 2xl
+     ======================================================================== */
+
+  /* XS - Extra Small (80px) */
+  --qrcode-xs-size: 80px;
+  --qrcode-xs-icon-size: 20px;
+
+  /* SM - Small (120px) */
+  --qrcode-sm-size: 120px;
+  --qrcode-sm-icon-size: 30px;
+
+  /* MD - Medium (160px - Default) */
+  --qrcode-md-size: 160px;
+  --qrcode-md-icon-size: 40px;
+
+  /* LG - Large (200px) */
+  --qrcode-lg-size: 200px;
+  --qrcode-lg-icon-size: 50px;
+
+  /* XL - Extra Large (256px) */
+  --qrcode-xl-size: 256px;
+  --qrcode-xl-icon-size: 64px;
+
+  /* 2XL - 2x Extra Large (320px) */
+  --qrcode-2xl-size: 320px;
+  --qrcode-2xl-icon-size: 80px;
+
+  /* Default size */
+  --qrcode-default-size: var(--qrcode-md-size);
+  --qrcode-default-icon-size: var(--qrcode-md-icon-size);
+
+  /* ========================================================================
+     COLORS - QRCode color settings
+     ======================================================================== */
+
+  /* Default colors */
+  --qrcode-foreground-color: #000000;
+  --qrcode-background-color: #ffffff;
+
+  /* Border */
+  --qrcode-border-color: var(--color-neutral-200, #e5e7eb);
+  --qrcode-border-width: 1px;
+  --qrcode-border-radius: var(--radius-md, 8px);
+
+  /* ========================================================================
+     STATUS - Visual indicators for different states
+     ======================================================================== */
+
+  /* Active state */
+  --qrcode-status-active-opacity: 1;
+
+  /* Loading state */
+  --qrcode-status-loading-opacity: 0.5;
+  --qrcode-status-loading-bg: var(--color-neutral-100, #f3f4f6);
+
+  /* Expired state */
+  --qrcode-status-expired-opacity: 0.3;
+  --qrcode-status-expired-overlay-bg: rgba(0, 0, 0, 0.5);
+  --qrcode-status-expired-text-color: #ffffff;
+
+  /* Scanned state */
+  --qrcode-status-scanned-opacity: 0.7;
+  --qrcode-status-scanned-overlay-bg: rgba(82, 196, 26, 0.1);
+  --qrcode-status-scanned-icon-color: var(--color-success, #52c41a);
+
+  /* ========================================================================
+     REFRESH BUTTON - For expired state
+     ======================================================================== */
+
+  --qrcode-refresh-button-bg: var(--color-primary, #1890ff);
+  --qrcode-refresh-button-color: #ffffff;
+  --qrcode-refresh-button-size: 32px;
+  --qrcode-refresh-button-radius: 50%;
+
+  /* ========================================================================
+     ICON SETTINGS - Center icon/logo
+     ======================================================================== */
+
+  --qrcode-icon-bg: #ffffff;
+  --qrcode-icon-padding: 4px;
+  --qrcode-icon-border-radius: var(--radius-sm, 4px);
+
+  /* ========================================================================
+     TRANSITIONS
+     ======================================================================== */
+
+  --qrcode-transition-duration: 0.2s;
+  --qrcode-transition-timing: ease-in-out;
+}

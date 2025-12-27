@@ -8,16 +8,32 @@
 :root {
   /* ========================================================================
      SIZES - Modal Width Variants
-     Five size variants for different content amounts
+     Ten size variants for different content amounts
      ======================================================================== */
-  --modal-xs-width: 20rem;              /* 320px */
-  --modal-sm-width: 24rem;              /* 384px */
-  --modal-md-width: 32rem;              /* 512px - Default */
-  --modal-lg-width: 48rem;              /* 768px */
-  --modal-xl-width: 64rem;              /* 1024px */
-  --modal-full-width: calc(100vw - 2rem); /* Full width with margins */
+  --modal-xs-width: 320px;              /* Extra small */
+  --modal-sm-width: 400px;              /* Small */
+  --modal-md-width: 500px;              /* Medium - Default */
+  --modal-lg-width: 640px;              /* Large */
+  --modal-xl-width: 800px;              /* Extra large */
+  --modal-2xl-width: 960px;             /* 2X large */
+  --modal-3xl-width: 1120px;            /* 3X large */
+  --modal-4xl-width: 1280px;            /* 4X large */
+  --modal-5xl-width: 1440px;            /* 5X large */
+  --modal-full-width: 100%;             /* Full width */
 
-  /* Height variants */
+  /* Height variants per size */
+  --modal-xs-max-height: 90vh;
+  --modal-sm-max-height: 90vh;
+  --modal-md-max-height: 85vh;
+  --modal-lg-max-height: 85vh;
+  --modal-xl-max-height: 80vh;
+  --modal-2xl-max-height: 80vh;
+  --modal-3xl-max-height: 80vh;
+  --modal-4xl-max-height: 80vh;
+  --modal-5xl-max-height: 80vh;
+  --modal-full-max-height: 100vh;
+
+  /* Legacy height variants */
   --modal-max-height: calc(100vh - 4rem); /* Max height with margins */
   --modal-full-height: calc(100vh - 2rem);
 
@@ -51,10 +67,19 @@
   --modal-border-color: transparent;
   --modal-shadow: var(--shadow-modal);
 
-  /* Padding */
-  --modal-padding: 1.5rem;              /* 24px */
-  --modal-padding-sm: 1rem;             /* 16px */
-  --modal-padding-lg: 2rem;             /* 32px */
+  /* Padding variants */
+  --modal-padding: 1.5rem;              /* 24px - Default */
+  --modal-padding-none: 0;              /* No padding */
+  --modal-padding-sm: 12px;             /* Small: 12px */
+  --modal-padding-md: 16px;             /* Medium: 16px */
+  --modal-padding-lg: 24px;             /* Large: 24px */
+
+  /* Border radius variants */
+  --modal-radius-none: 0;               /* No border radius */
+  --modal-radius-sm: 4px;               /* Small: 4px */
+  --modal-radius-md: 8px;               /* Medium: 8px */
+  --modal-radius-lg: 12px;              /* Large: 12px */
+  --modal-radius-xl: 16px;              /* Extra large: 16px */
 
   /* ========================================================================
      HEADER

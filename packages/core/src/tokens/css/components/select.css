@@ -1,0 +1,230 @@
+/**
+ * Select Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to Select components (dropdowns, multi-select, etc).
+ * Includes sizes, variants, states, and interactive properties.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Select Dimensions
+     Five size variants from xs to xl with corresponding properties
+     ======================================================================== */
+
+  /* XS - Extra Small */
+  --select-xs-height: 1.5rem;            /* 24px */
+  --select-xs-font-size: 0.75rem;        /* 12px */
+  --select-xs-padding: 0 0.5rem;         /* 0 8px */
+  --select-xs-padding-x: 0.5rem;         /* 8px */
+  --select-xs-icon-size: 0.75rem;        /* 12px */
+  --select-xs-border-radius: var(--radius-sm);
+
+  /* SM - Small */
+  --select-sm-height: 2rem;              /* 32px */
+  --select-sm-font-size: 0.875rem;       /* 14px */
+  --select-sm-padding: 0 0.625rem;       /* 0 10px */
+  --select-sm-padding-x: 0.625rem;       /* 10px */
+  --select-sm-icon-size: 0.875rem;       /* 14px */
+  --select-sm-border-radius: var(--radius-md);
+
+  /* MD - Medium (Default) */
+  --select-md-height: 2.5rem;            /* 40px */
+  --select-md-font-size: 0.875rem;       /* 14px */
+  --select-md-padding: 0 0.75rem;        /* 0 12px */
+  --select-md-padding-x: 0.75rem;        /* 12px */
+  --select-md-icon-size: 1rem;           /* 16px */
+  --select-md-border-radius: var(--radius-md);
+
+  /* LG - Large */
+  --select-lg-height: 3rem;              /* 48px */
+  --select-lg-font-size: 1rem;           /* 16px */
+  --select-lg-padding: 0 0.875rem;       /* 0 14px */
+  --select-lg-padding-x: 0.875rem;       /* 14px */
+  --select-lg-icon-size: 1.25rem;        /* 20px */
+  --select-lg-border-radius: var(--radius-lg);
+
+  /* XL - Extra Large */
+  --select-xl-height: 3.5rem;            /* 56px */
+  --select-xl-font-size: 1.125rem;       /* 18px */
+  --select-xl-padding: 0 1rem;           /* 0 16px */
+  --select-xl-padding-x: 1rem;           /* 16px */
+  --select-xl-icon-size: 1.5rem;         /* 24px */
+  --select-xl-border-radius: var(--radius-lg);
+
+  /* Default size */
+  --select-default-height: var(--select-md-height);
+  --select-default-font-size: var(--select-md-font-size);
+  --select-default-padding: var(--select-md-padding);
+  --select-default-padding-x: var(--select-md-padding-x);
+
+  /* ========================================================================
+     DEFAULT STATE - Base Appearance
+     Default select styling
+     ======================================================================== */
+  --select-bg: var(--color-white);
+  --select-bg-hover: var(--color-white);
+  --select-bg-focus: var(--color-white);
+  --select-bg-disabled: var(--color-neutral-50);
+
+  --select-color: var(--color-neutral-900);
+  --select-color-placeholder: var(--color-neutral-400);
+  --select-color-disabled: var(--color-neutral-400);
+
+  --select-border-color: var(--color-neutral-300);
+  --select-border-color-hover: var(--color-neutral-400);
+  --select-border-color-focus: var(--color-primary-500);
+  --select-border-color-disabled: var(--color-neutral-200);
+
+  --select-border-width: 1px;
+  --select-border-style: solid;
+
+  /* ========================================================================
+     VARIANTS - Visual Styles
+     Outline, filled, flushed variants
+     ======================================================================== */
+
+  /* Outline variant (default) */
+  --select-outline-bg: transparent;
+  --select-outline-border-color: var(--color-neutral-300);
+
+  /* Filled variant */
+  --select-filled-bg: var(--color-neutral-100);
+  --select-filled-bg-hover: var(--color-neutral-200);
+  --select-filled-border-color: transparent;
+
+  /* Flushed variant */
+  --select-flushed-border-radius: 0;
+  --select-flushed-border-width: 0 0 1px 0;
+
+  /* ========================================================================
+     STATUS VARIANTS - Semantic States
+     Success, warning, error status
+     ======================================================================== */
+
+  /* Success status */
+  --select-success-border-color: var(--color-success-500);
+  --select-success-border-color-focus: var(--color-success-600);
+  --select-success-shadow-focus: var(--shadow-focus-ring-success);
+
+  /* Warning status */
+  --select-warning-border-color: var(--color-warning-500);
+  --select-warning-border-color-focus: var(--color-warning-600);
+  --select-warning-shadow-focus: var(--shadow-focus-ring-warning);
+
+  /* Error status */
+  --select-error-border-color: var(--color-error-500);
+  --select-error-border-color-focus: var(--color-error-600);
+  --select-error-shadow-focus: var(--shadow-focus-ring-error);
+
+  /* ========================================================================
+     DROPDOWN - Dropdown Panel Styling
+     Settings for the dropdown panel
+     ======================================================================== */
+  --select-dropdown-bg: var(--color-white);
+  --select-dropdown-border-color: var(--color-neutral-200);
+  --select-dropdown-border-radius: var(--radius-md);
+  --select-dropdown-shadow: var(--shadow-lg);
+  --select-dropdown-max-height: 16rem;   /* 256px */
+  --select-dropdown-padding: 0.25rem;    /* 4px */
+  --select-dropdown-z-index: 1050;
+
+  /* ========================================================================
+     OPTION - Option Item Styling
+     Settings for individual options
+     ======================================================================== */
+  --select-option-height: 2.25rem;       /* 36px */
+  --select-option-padding: 0.5rem 0.75rem;
+  --select-option-font-size: 0.875rem;   /* 14px */
+  --select-option-border-radius: var(--radius-sm);
+
+  --select-option-bg: transparent;
+  --select-option-bg-hover: var(--color-neutral-100);
+  --select-option-bg-selected: var(--color-primary-50);
+  --select-option-bg-focused: var(--color-neutral-100);
+  --select-option-bg-disabled: transparent;
+
+  --select-option-color: var(--color-neutral-900);
+  --select-option-color-selected: var(--color-primary-700);
+  --select-option-color-disabled: var(--color-neutral-400);
+
+  /* ========================================================================
+     ICONS - Arrow and Clear Icons
+     Settings for select icons
+     ======================================================================== */
+  --select-arrow-color: var(--color-neutral-500);
+  --select-arrow-color-hover: var(--color-neutral-700);
+  --select-arrow-size: 1rem;
+  --select-arrow-transition: transform 0.2s ease;
+
+  --select-clear-color: var(--color-neutral-400);
+  --select-clear-color-hover: var(--color-neutral-600);
+  --select-clear-size: 0.875rem;
+  --select-clear-bg-hover: var(--color-neutral-100);
+  --select-clear-radius: var(--radius-full);
+
+  /* ========================================================================
+     MULTIPLE/TAGS - Multi-select Styling
+     Settings for multiple selection mode
+     ======================================================================== */
+  --select-tag-height: 1.5rem;           /* 24px */
+  --select-tag-padding: 0 0.5rem;        /* 0 8px */
+  --select-tag-font-size: 0.75rem;       /* 12px */
+  --select-tag-border-radius: var(--radius-sm);
+  --select-tag-bg: var(--color-neutral-100);
+  --select-tag-color: var(--color-neutral-700);
+  --select-tag-gap: 0.25rem;             /* 4px */
+
+  --select-tag-close-size: 0.75rem;      /* 12px */
+  --select-tag-close-color: var(--color-neutral-500);
+  --select-tag-close-color-hover: var(--color-neutral-700);
+
+  /* ========================================================================
+     SEARCH - Search Input in Dropdown
+     Settings for searchable selects
+     ======================================================================== */
+  --select-search-bg: var(--color-white);
+  --select-search-border-color: var(--color-neutral-200);
+  --select-search-padding: 0.5rem 0.75rem;
+  --select-search-margin: 0.25rem;
+
+  /* ========================================================================
+     LOADING - Loading State
+     Settings for loading spinner
+     ======================================================================== */
+  --select-loading-size: 1rem;
+  --select-loading-color: var(--color-primary-500);
+
+  /* ========================================================================
+     EMPTY - Empty State
+     Settings for no options state
+     ======================================================================== */
+  --select-empty-padding: 1rem;
+  --select-empty-color: var(--color-neutral-500);
+  --select-empty-font-size: 0.875rem;
+
+  /* ========================================================================
+     GROUP - Option Groups
+     Settings for grouped options
+     ======================================================================== */
+  --select-group-label-padding: 0.5rem 0.75rem;
+  --select-group-label-font-size: 0.75rem;
+  --select-group-label-font-weight: var(--font-weight-semibold);
+  --select-group-label-color: var(--color-neutral-500);
+  --select-group-label-text-transform: uppercase;
+  --select-group-divider-color: var(--color-neutral-200);
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+  --select-transition-duration: 0.2s;
+  --select-transition-timing: ease-in-out;
+  --select-transition: all var(--select-transition-duration) var(--select-transition-timing);
+
+  /* ========================================================================
+     DISABLED STATE
+     Appearance when disabled
+     ======================================================================== */
+  --select-disabled-opacity: 0.6;
+  --select-disabled-cursor: not-allowed;
+}

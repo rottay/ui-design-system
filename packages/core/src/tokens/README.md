@@ -27,7 +27,7 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 
 ```
 /tokens/
-├── src/
+├── css/                       # CSS custom properties
 │   ├── base/                  # Foundational tokens
 │   │   ├── colors.css         # Color palette
 │   │   ├── spacing.css        # Spacing scale
@@ -62,31 +62,77 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 │   │   │   └── index.css
 │   │   └── index.css
 │   │
-│   └── index.css              # Main entry point
+│   └── index.css              # CSS entry point
 │
-└── README.md
+├── ts/                        # TypeScript mirrors
+│   ├── base/                  # Base token exports
+│   │   ├── colors.ts
+│   │   ├── spacing.ts
+│   │   ├── typography.ts
+│   │   ├── shadows.ts
+│   │   ├── borders.ts
+│   │   ├── zIndex.ts
+│   │   └── index.ts
+│   │
+│   ├── components/            # Component token exports
+│   │   ├── avatar.ts
+│   │   ├── button.ts
+│   │   ├── input.ts
+│   │   ├── card.ts
+│   │   ├── modal.ts
+│   │   └── index.ts
+│   │
+│   ├── tenants/               # Tenant-specific exports
+│   │   ├── rottay.ts
+│   │   └── index.ts
+│   │
+│   └── index.ts               # TypeScript entry point
+│
+├── index.ts                   # Main entry point
+├── README.md
+├── SIZE_MAP_CATALOG.md        # Hardcoded SIZE_MAP documentation
+└── CONFIG_TOKENS_REMOVAL.md   # Cleanup documentation
 ```
 
 ## 🚀 Usage
 
-### Import All Tokens
+### Import CSS Tokens
 
 ```css
-/* Import the complete token system */
-@import '@rottay/design-system/tokens/src/index.css';
+/* Import the complete CSS token system */
+@import '@rottay/design-system/tokens/css/index.css';
 ```
 
-### Import Specific Categories
+### Import Specific CSS Categories
 
 ```css
 /* Import only base tokens */
-@import '@rottay/design-system/tokens/src/base/index.css';
+@import '@rottay/design-system/tokens/css/base/index.css';
 
 /* Import only component tokens */
-@import '@rottay/design-system/tokens/src/components/index.css';
+@import '@rottay/design-system/tokens/css/components/index.css';
 
 /* Import only animations */
-@import '@rottay/design-system/tokens/src/animations/index.css';
+@import '@rottay/design-system/tokens/css/animations/index.css';
+```
+
+### Import TypeScript Tokens
+
+```typescript
+// Import all tokens
+import { tokens } from '@rottay/design-system/tokens';
+
+// Import specific base tokens
+import { colors, spacing, typography } from '@rottay/design-system/tokens';
+
+// Import component tokens
+import { buttonTokens, avatarTokens } from '@rottay/design-system/tokens';
+
+// Use tokens
+const style = {
+  backgroundColor: colors.primary[500],
+  padding: spacing.named.md,
+};
 ```
 
 ### Using Tokens in CSS

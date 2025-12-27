@@ -1,0 +1,121 @@
+/**
+ * List Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the List component.
+ * Includes sizes, spacing, borders, and item styling.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - List item sizing variants
+     Three size variants: small, default, large
+     ======================================================================== */
+
+  /* Small size */
+  --list-sm-padding-vertical: 8px;
+  --list-sm-padding-horizontal: 16px;
+  --list-sm-font-size: 12px;
+
+  /* Default size */
+  --list-default-padding-vertical: 12px;
+  --list-default-padding-horizontal: 16px;
+  --list-default-font-size: 14px;
+
+  /* Large size */
+  --list-lg-padding-vertical: 16px;
+  --list-lg-padding-horizontal: 24px;
+  --list-lg-font-size: 16px;
+
+  /* ========================================================================
+     BORDERS - List container and item borders
+     ======================================================================== */
+
+  --list-border-color: var(--color-neutral-200, #e5e7eb);
+  --list-border-width: 1px;
+  --list-border-radius: var(--radius-md, 8px);
+
+  /* Split/divider between items */
+  --list-split-color: var(--color-neutral-200, #e5e7eb);
+  --list-split-width: 1px;
+
+  /* ========================================================================
+     COLORS - List background and text colors
+     ======================================================================== */
+
+  --list-background-color: var(--color-white, #ffffff);
+  --list-item-background-color: transparent;
+  --list-item-hover-background-color: var(--color-neutral-50, #f9fafb);
+
+  --list-text-color: var(--color-neutral-900, #111827);
+  --list-secondary-text-color: var(--color-neutral-500, #6b7280);
+
+  /* ========================================================================
+     HEADER & FOOTER
+     ======================================================================== */
+
+  --list-header-padding-vertical: 12px;
+  --list-header-padding-horizontal: 16px;
+  --list-header-font-size: 14px;
+  --list-header-font-weight: 600;
+  --list-header-background-color: var(--color-neutral-50, #f9fafb);
+
+  --list-footer-padding-vertical: 12px;
+  --list-footer-padding-horizontal: 16px;
+  --list-footer-font-size: 14px;
+  --list-footer-background-color: var(--color-neutral-50, #f9fafb);
+
+  /* ========================================================================
+     LIST ITEM META - Avatar, title, description
+     ======================================================================== */
+
+  --list-meta-avatar-margin-right: 16px;
+  --list-meta-title-font-size: 14px;
+  --list-meta-title-font-weight: 500;
+  --list-meta-title-color: var(--color-neutral-900, #111827);
+  --list-meta-description-font-size: 12px;
+  --list-meta-description-color: var(--color-neutral-500, #6b7280);
+  --list-meta-description-margin-top: 4px;
+
+  /* ========================================================================
+     LIST ITEM ACTIONS
+     ======================================================================== */
+
+  --list-actions-gap: 16px;
+  --list-actions-color: var(--color-primary, #1890ff);
+  --list-actions-hover-color: var(--color-primary-600, #0066cc);
+
+  /* ========================================================================
+     LIST ITEM EXTRA
+     ======================================================================== */
+
+  --list-extra-margin-left: 24px;
+
+  /* ========================================================================
+     EMPTY STATE
+     ======================================================================== */
+
+  --list-empty-padding: 32px;
+  --list-empty-text-color: var(--color-neutral-400, #9ca3af);
+  --list-empty-font-size: 14px;
+
+  /* ========================================================================
+     LOADING STATE
+     ======================================================================== */
+
+  --list-loading-opacity: 0.6;
+  --list-loading-spinner-size: 24px;
+  --list-loading-spinner-color: var(--color-primary, #1890ff);
+
+  /* ========================================================================
+     GRID LAYOUT
+     ======================================================================== */
+
+  --list-grid-gutter: 16px;
+
+  /* ========================================================================
+     TRANSITIONS
+     ======================================================================== */
+
+  --list-transition-duration: 0.2s;
+  --list-transition-timing: ease-in-out;
+}

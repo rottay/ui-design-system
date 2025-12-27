@@ -1,0 +1,62 @@
+/**
+ * Rate Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Rate component.
+ * Includes sizes for xs, sm, md, lg, xl variants.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Rate Star Dimensions
+     Five size variants from xs to xl
+     ======================================================================== */
+
+  /* XS - Extra Small (16px) */
+  --rate-xs-size: 1rem;              /* 16px */
+
+  /* SM - Small (20px) */
+  --rate-sm-size: 1.25rem;           /* 20px */
+
+  /* MD - Medium (24px - Default) */
+  --rate-md-size: 1.5rem;            /* 24px */
+
+  /* LG - Large (32px) */
+  --rate-lg-size: 2rem;              /* 32px */
+
+  /* XL - Extra Large (40px) */
+  --rate-xl-size: 2.5rem;            /* 40px */
+
+  /* Default size */
+  --rate-default-size: var(--rate-md-size);
+
+  /* ========================================================================
+     COLORS
+     Rate star colors for active and inactive states
+     ======================================================================== */
+  --rate-active-color: var(--color-warning-400);
+  --rate-inactive-color: var(--color-neutral-300);
+  --rate-hover-color: var(--color-warning-500);
+
+  /* ========================================================================
+     SPACING
+     Gap between stars
+     ======================================================================== */
+  --rate-gap: 0.25rem;               /* 4px */
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+  --rate-transition-duration: 0.2s;
+  --rate-transition-timing: ease-in-out;
+  --rate-transition: all var(--rate-transition-duration) var(--rate-transition-timing);
+
+  /* ========================================================================
+     INTERACTIONS
+     Hover and focus states
+     ======================================================================== */
+  --rate-hover-scale: 1.1;
+  --rate-focus-ring-width: 2px;
+  --rate-focus-ring-color: var(--color-primary-500);
+  --rate-focus-ring-offset: 2px;
+}

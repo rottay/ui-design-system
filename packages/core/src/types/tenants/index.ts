@@ -3,7 +3,7 @@
  * Multi-tenant system configuration
  */
 
-import type { EngineName } from '../engines';
+import type { EngineName } from '../engine';
 
 export type TenantPlan = 'starter' | 'pro' | 'enterprise';
 

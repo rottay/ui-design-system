@@ -1,0 +1,121 @@
+/**
+ * Checkbox Component Tokens - Rottay Design System
+ *
+ * Design tokens specific to the Checkbox component.
+ * Includes sizes, colors, and state indicators.
+ */
+
+:root {
+  /* ========================================================================
+     SIZES - Checkbox Dimensions
+     Five size variants from xs to xl
+     ======================================================================== */
+
+  /* XS - Extra Small (14px) */
+  --checkbox-xs-size: 0.875rem;         /* 14px */
+  --checkbox-xs-font-size: 0.75rem;     /* 12px */
+  --checkbox-xs-border-width: 1.5px;
+
+  /* SM - Small (16px) */
+  --checkbox-sm-size: 1rem;             /* 16px */
+  --checkbox-sm-font-size: 0.8125rem;   /* 13px */
+  --checkbox-sm-border-width: 1.5px;
+
+  /* MD - Medium (18px - Default) */
+  --checkbox-md-size: 1.125rem;         /* 18px */
+  --checkbox-md-font-size: 0.875rem;    /* 14px */
+  --checkbox-md-border-width: 2px;
+
+  /* LG - Large (20px) */
+  --checkbox-lg-size: 1.25rem;          /* 20px */
+  --checkbox-lg-font-size: 1rem;        /* 16px */
+  --checkbox-lg-border-width: 2px;
+
+  /* XL - Extra Large (24px) */
+  --checkbox-xl-size: 1.5rem;           /* 24px */
+  --checkbox-xl-font-size: 1.125rem;    /* 18px */
+  --checkbox-xl-border-width: 2px;
+
+  /* Default size (can be overridden) */
+  --checkbox-default-size: var(--checkbox-md-size);
+  --checkbox-default-font-size: var(--checkbox-md-font-size);
+  --checkbox-default-border-width: var(--checkbox-md-border-width);
+
+  /* ========================================================================
+     RADIUS - Checkbox Border Radius
+     Multiple radius variants
+     ======================================================================== */
+  --checkbox-radius-none: 0;
+  --checkbox-radius-sm: 2px;
+  --checkbox-radius-md: 4px;
+  --checkbox-radius-lg: 6px;
+  --checkbox-radius-full: 9999px;
+
+  /* Default radius */
+  --checkbox-default-radius: var(--checkbox-radius-sm);
+
+  /* ========================================================================
+     COLORS - Checkbox Color Variants
+     Different visual styles for checkboxes
+     ======================================================================== */
+
+  /* Default variant (neutral) */
+  --checkbox-default-bg: var(--color-neutral-600, #4b5563);
+  --checkbox-default-border: var(--color-neutral-600, #4b5563);
+  --checkbox-default-check: #ffffff;
+
+  /* Primary variant */
+  --checkbox-primary-bg: var(--color-primary, #1890ff);
+  --checkbox-primary-border: var(--color-primary, #1890ff);
+  --checkbox-primary-check: #ffffff;
+
+  /* Secondary variant */
+  --checkbox-secondary-bg: var(--color-secondary, #6b7280);
+  --checkbox-secondary-border: var(--color-secondary, #6b7280);
+  --checkbox-secondary-check: #ffffff;
+
+  /* Success variant */
+  --checkbox-success-bg: var(--color-success, #52c41a);
+  --checkbox-success-border: var(--color-success, #52c41a);
+  --checkbox-success-check: #ffffff;
+
+  /* Warning variant */
+  --checkbox-warning-bg: var(--color-warning, #faad14);
+  --checkbox-warning-border: var(--color-warning, #faad14);
+  --checkbox-warning-check: #ffffff;
+
+  /* Error variant */
+  --checkbox-error-bg: var(--color-error, #ff4d4f);
+  --checkbox-error-border: var(--color-error, #ff4d4f);
+  --checkbox-error-check: #ffffff;
+
+  /* ========================================================================
+     STATES
+     Visual indicators for different states
+     ======================================================================== */
+  --checkbox-unchecked-bg: transparent;
+  --checkbox-unchecked-border: var(--color-border, #d9d9d9);
+  --checkbox-disabled-opacity: 0.5;
+
+  /* ========================================================================
+     SPACING
+     Spacing between checkbox and label
+     ======================================================================== */
+  --checkbox-label-gap: 8px;
+
+  /* ========================================================================
+     TRANSITIONS
+     Animation timing for state changes
+     ======================================================================== */
+  --checkbox-transition-duration: 0.2s;
+  --checkbox-transition-timing: ease-in-out;
+  --checkbox-transition: all var(--checkbox-transition-duration) var(--checkbox-transition-timing);
+
+  /* ========================================================================
+     FOCUS
+     Focus ring settings
+     ======================================================================== */
+  --checkbox-focus-ring-width: 2px;
+  --checkbox-focus-ring-offset: 2px;
+  --checkbox-focus-ring-color: var(--color-primary, #1890ff);
+}

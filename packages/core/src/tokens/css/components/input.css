@@ -8,35 +8,53 @@
 :root {
   /* ========================================================================
      SIZES - Input Dimensions
-     Four size variants from sm to lg with corresponding properties
+     Five size variants from xs to xl with corresponding properties
      ======================================================================== */
+
+  /* XS - Extra Small */
+  --input-xs-height: 1.5rem;            /* 24px */
+  --input-xs-padding-x: 0.5rem;         /* 8px */
+  --input-xs-padding-y: 0.125rem;       /* 2px */
+  --input-xs-font-size: 0.75rem;        /* 12px */
+  --input-xs-line-height: 1.25rem;      /* 20px */
+  --input-xs-icon-size: 0.875rem;       /* 14px */
+  --input-xs-border-radius: var(--radius-sm);
 
   /* SM - Small */
   --input-sm-height: 2rem;              /* 32px */
-  --input-sm-padding-x: 0.75rem;        /* 12px */
+  --input-sm-padding-x: 0.625rem;       /* 10px */
   --input-sm-padding-y: 0.25rem;        /* 4px */
-  --input-sm-font-size: 0.875rem;       /* 14px */
+  --input-sm-font-size: 0.8125rem;      /* 13px */
   --input-sm-line-height: 1.5rem;       /* 24px */
   --input-sm-icon-size: 1rem;           /* 16px */
   --input-sm-border-radius: var(--radius-md);
 
   /* MD - Medium (Default) */
   --input-md-height: 2.5rem;            /* 40px */
-  --input-md-padding-x: 1rem;           /* 16px */
+  --input-md-padding-x: 0.75rem;        /* 12px */
   --input-md-padding-y: 0.5rem;         /* 8px */
-  --input-md-font-size: 1rem;           /* 16px */
+  --input-md-font-size: 0.875rem;       /* 14px */
   --input-md-line-height: 1.5rem;       /* 24px */
   --input-md-icon-size: 1.25rem;        /* 20px */
   --input-md-border-radius: var(--radius-md);
 
   /* LG - Large */
   --input-lg-height: 3rem;              /* 48px */
-  --input-lg-padding-x: 1.25rem;        /* 20px */
+  --input-lg-padding-x: 0.875rem;       /* 14px */
   --input-lg-padding-y: 0.75rem;        /* 12px */
-  --input-lg-font-size: 1.125rem;       /* 18px */
+  --input-lg-font-size: 1rem;           /* 16px */
   --input-lg-line-height: 1.75rem;      /* 28px */
   --input-lg-icon-size: 1.5rem;         /* 24px */
   --input-lg-border-radius: var(--radius-lg);
+
+  /* XL - Extra Large */
+  --input-xl-height: 3.5rem;            /* 56px */
+  --input-xl-padding-x: 1rem;           /* 16px */
+  --input-xl-padding-y: 1rem;           /* 16px */
+  --input-xl-font-size: 1.125rem;       /* 18px */
+  --input-xl-line-height: 2rem;         /* 32px */
+  --input-xl-icon-size: 1.75rem;        /* 28px */
+  --input-xl-border-radius: var(--radius-lg);
 
   /* Default size */
   --input-default-height: var(--input-md-height);
