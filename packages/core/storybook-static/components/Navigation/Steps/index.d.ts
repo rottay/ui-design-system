@@ -1,3 +1,0 @@
-export { Steps } from './Steps';
-export type { StepsProps } from './types';
-//# sourceMappingURL=index.d.ts.map

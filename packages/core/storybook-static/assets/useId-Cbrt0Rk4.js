@@ -1,1 +1,0 @@
-import{r as a,q as i,_ as I,ad as f}from"./iframe-Dz2LC5nm.js";function _(){var r=I({},f);return r.useId}var n=0,s=_();const p=s?function(e){var t=s();return e||t}:function(e){var t=a.useState("ssr-id"),u=i(t,2),c=u[0],o=u[1];return a.useEffect(function(){var d=n;n+=1,o("rc_unique_".concat(d))},[]),e||c};export{p as u};

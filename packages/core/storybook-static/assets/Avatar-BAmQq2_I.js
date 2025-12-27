@@ -1,1 +1,0 @@
-import{j as t}from"./iframe-Dz2LC5nm.js";import{A as o}from"./index-BepmvXq0.js";const a=r=>t.jsx(o,{...r});a.displayName="Avatar";a.__docgenInfo={description:"",methods:[],displayName:"Avatar",composes:["AntAvatarProps"]};export{a as A};
