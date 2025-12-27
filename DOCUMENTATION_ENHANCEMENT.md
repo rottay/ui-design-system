@@ -42,20 +42,20 @@ Use `packages/core/src/components/primitives/feedback/Drawer/` as the gold stand
 | `feedback/Drawer/engines/hermes/index.tsx` | ✅ Completed |
 | `feedback/Drawer/engines/apollo/index.tsx` | ✅ Completed |
 
-### Modal ⏳
+### Modal ✅
 | File | Status |
 |------|--------|
-| `feedback/Modal/index.ts` | ⏳ Pending |
-| `feedback/Modal/compound/index.ts` | ⏳ Pending |
-| `feedback/Modal/compound/Header/index.tsx` | ⏳ Pending |
-| `feedback/Modal/compound/Body/index.tsx` | ⏳ Pending |
-| `feedback/Modal/compound/Footer/index.tsx` | ⏳ Pending |
-| `feedback/Modal/compound/CloseButton/index.tsx` | ⏳ Pending |
-| `feedback/Modal/types/index.ts` | ⏳ Pending |
-| `feedback/Modal/base/index.tsx` | ⏳ Pending |
-| `feedback/Modal/engines/titan/index.tsx` | ⏳ Pending |
-| `feedback/Modal/engines/hermes/index.tsx` | ⏳ Pending |
-| `feedback/Modal/engines/apollo/index.tsx` | ⏳ Pending |
+| `feedback/Modal/index.ts` | ✅ Completed |
+| `feedback/Modal/compound/index.ts` | ✅ Completed |
+| `feedback/Modal/compound/Header/index.tsx` | ✅ Completed |
+| `feedback/Modal/compound/Body/index.tsx` | ✅ Completed |
+| `feedback/Modal/compound/Footer/index.tsx` | ✅ Completed |
+| `feedback/Modal/compound/CloseButton/index.tsx` | ✅ Completed |
+| `feedback/Modal/types/index.ts` | ✅ Completed |
+| `feedback/Modal/base/index.tsx` | ✅ Completed |
+| `feedback/Modal/engines/titan/index.tsx` | ✅ Completed |
+| `feedback/Modal/engines/hermes/index.tsx` | ✅ Completed |
+| `feedback/Modal/engines/apollo/index.tsx` | ✅ Completed |
 
 ### Alert ⏳
 | File | Status |
