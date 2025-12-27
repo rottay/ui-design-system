@@ -1,6 +1,8 @@
 import type { Preview } from '@storybook/react-vite'
 import { ThemeProvider } from '../src/providers/ThemeProvider';
+import { EngineProvider } from '../src/system/providers';
 import type { TemplateName } from '../src/themes/types';
+import type { EngineName } from '../src/types/engine';
 import React from 'react';
 
 const preview: Preview = {
@@ -191,6 +193,7 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const selectedTheme = (context.globals.theme || 'base') as TemplateName;
+      const selectedEngine = (context.globals.engine || 'titan') as EngineName;
 
       // Extract DaisyUI theme name from template
       // If theme is "daisyui-light", daisyTheme becomes "light"
@@ -200,11 +203,13 @@ const preview: Preview = {
         : 'light';
 
       return (
-        <ThemeProvider defaultTemplate={selectedTheme}>
-          <div data-theme={daisyTheme} style={{ padding: '20px' }}>
-            <Story />
-          </div>
-        </ThemeProvider>
+        <EngineProvider defaultEngine={selectedEngine}>
+          <ThemeProvider defaultTemplate={selectedTheme}>
+            <div data-theme={daisyTheme} style={{ padding: '20px' }}>
+              <Story />
+            </div>
+          </ThemeProvider>
+        </EngineProvider>
       );
     },
   ],
