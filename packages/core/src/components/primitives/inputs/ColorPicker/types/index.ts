@@ -55,6 +55,8 @@ export interface ColorPickerProps {
   style?: CSSProperties;
   /** Panel render */
   panelRender?: (panel: ReactNode) => ReactNode;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const COLORPICKER_DEFAULTS: Partial<ColorPickerProps> = {
