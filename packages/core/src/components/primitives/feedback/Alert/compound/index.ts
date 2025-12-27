@@ -2,4 +2,5 @@
  * Alert - Compound Components
  */
 
-// Compound components will be added here as needed
+export { AlertDescription } from './Description';
+export type { AlertDescriptionProps } from './Description';

@@ -2,4 +2,8 @@
  * Progress - Compound Components
  */
 
-// Compound components will be added here as needed
+export { ProgressCircle } from './Circle';
+export type { ProgressCircleProps } from './Circle';
+
+export { ProgressLine } from './Line';
+export type { ProgressLineProps } from './Line';

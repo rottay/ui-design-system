@@ -2,4 +2,5 @@
  * Tabs - Compound Components
  */
 
-// Compound components will be added here as needed
+export { TabPane } from './TabPane';
+export type { TabPaneProps } from './TabPane';

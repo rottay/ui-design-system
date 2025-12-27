@@ -9,7 +9,7 @@
  * ```tsx
  * import { Tabs } from '@rottay/design-system';
  *
- * // Basic usage
+ * // Basic usage with items
  * <Tabs
  *   items={[
  *     { key: '1', label: 'Tab 1', children: <Content1 /> },
@@ -18,24 +18,31 @@
  *   defaultActiveKey="1"
  * />
  *
- * // Card style
- * <Tabs type="card" items={items} />
- *
- * // Controlled
- * <Tabs activeKey={activeKey} onChange={setActiveKey} items={items} />
+ * // Alternative: compound component syntax
+ * <Tabs defaultActiveKey="1">
+ *   <Tabs.TabPane tab="Tab 1" key="1">Content 1</Tabs.TabPane>
+ *   <Tabs.TabPane tab="Tab 2" key="2">Content 2</Tabs.TabPane>
+ * </Tabs>
  * ```
  */
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { TabsProps } from './types';
+import { TabPane } from './compound';
 
 export { type TabsProps, type TabItem, type TabsType, type TabsSize, TABS_DEFAULTS } from './types';
 
-
-// Export base component
 export { BaseTabs } from './base';
 
-export const Tabs = createEngineComponent<TabsProps>('Tabs', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
-});
+export { TabPane };
+export type { TabPaneProps } from './compound';
+
+export const Tabs = Object.assign(
+  createEngineComponent<TabsProps>('Tabs', {
+    titan: () => import('./engines/titan'),
+    hermes: () => import('./engines/hermes'),
+    apollo: () => import('./engines/apollo'),
+  }),
+  {
+    TabPane,
+  }
+);

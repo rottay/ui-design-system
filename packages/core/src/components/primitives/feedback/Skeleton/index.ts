@@ -1,9 +1,10 @@
 /**
- * Skeleton - Engine Router
+ * Skeleton Component with compound components
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { SkeletonProps } from './types';
+import { SkeletonAvatar, SkeletonText, SkeletonButton } from './compound';
 
 export {
   type SkeletonProps,
@@ -14,8 +15,18 @@ export {
 
 export { BaseSkeleton } from './base';
 
-export const Skeleton = createEngineComponent<SkeletonProps>('Skeleton', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
-});
+export { SkeletonAvatar, SkeletonText, SkeletonButton };
+export type { SkeletonAvatarProps, SkeletonTextProps, SkeletonButtonProps } from './compound';
+
+export const Skeleton = Object.assign(
+  createEngineComponent<SkeletonProps>('Skeleton', {
+    titan: () => import('./engines/titan'),
+    hermes: () => import('./engines/hermes'),
+    apollo: () => import('./engines/apollo'),
+  }),
+  {
+    Avatar: SkeletonAvatar,
+    Text: SkeletonText,
+    Button: SkeletonButton,
+  }
+);
