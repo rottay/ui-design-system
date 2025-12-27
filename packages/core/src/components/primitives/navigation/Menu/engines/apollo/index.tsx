@@ -1,5 +1,49 @@
 /**
- * Menu - Apollo Engine (Pure HTML/CSS with full keyboard navigation)
+ * @fileoverview Menu Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Menu component with
+ * comprehensive keyboard navigation. Part of the Rottay Design System's
+ * multi-engine architecture.
+ *
+ * @remarks
+ * The Apollo engine provides a zero-dependency implementation of the Menu
+ * component with:
+ * - Pure HTML/CSS rendering (no UI framework dependencies)
+ * - Full keyboard navigation (Arrow keys, Enter, Space, Home, End, Escape)
+ * - WCAG 2.1 AA compliant accessibility
+ * - Focus management with visual indicators
+ * - Controlled and uncontrolled state support
+ * - CSS variable-based theming
+ *
+ * This implementation is ideal for:
+ * - Maximum accessibility requirements
+ * - Custom styling without framework constraints
+ * - Minimal bundle size requirements
+ * - Server-side rendering optimization
+ *
+ * @example
+ * ```tsx
+ * import { Menu } from '@rottay/design-system';
+ *
+ * // Use Apollo engine explicitly
+ * <Menu
+ *   engine="apollo"
+ *   items={menuItems}
+ *   mode="vertical"
+ *   theme="light"
+ * />
+ *
+ * // Or via EngineProvider
+ * <EngineProvider engine="apollo">
+ *   <Menu items={menuItems} mode="inline" />
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link MenuProps} for prop documentation
+ * @see {@link Menu} for main component
+ *
+ * @module Menu/Engines/Apollo
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,22 +53,40 @@ import type { CSSProperties, KeyboardEvent } from 'react';
 import type { MenuProps, MenuItem as MenuItemInterface, MenuSelectInfo, MenuClickInfo } from '../../types';
 import { MENU_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Get all focusable menu item keys
+ * Gets all focusable menu item keys from the items array.
+ *
+ * @description
+ * Recursively traverses the menu structure to collect keys of all
+ * focusable items (non-divider, non-disabled items).
+ *
+ * @param items - Array of menu item configurations
+ * @returns Array of focusable item keys
+ *
+ * @internal
  */
 function getFocusableKeys(items: MenuItemInterface[]): string[] {
   const keys: string[] = [];
 
   items.forEach((item) => {
+    // Skip dividers
     if (item.type === 'divider') return;
+    // Skip disabled items
     if (item.disabled) return;
 
     if (item.children && item.children.length > 0) {
+      // Include submenu key and its children
       keys.push(item.key);
       keys.push(...getFocusableKeys(item.children));
     } else if (item.type !== 'group') {
+      // Regular item
       keys.push(item.key);
     } else if (item.children) {
+      // Group with children
       keys.push(...getFocusableKeys(item.children));
     }
   });
@@ -33,7 +95,23 @@ function getFocusableKeys(items: MenuItemInterface[]): string[] {
 }
 
 /**
- * Render Apollo menu items recursively
+ * Renders Apollo menu items recursively.
+ *
+ * @description
+ * Transforms the menu items array into accessible HTML elements
+ * with focus management and keyboard navigation support.
+ *
+ * @param items - Array of menu item configurations
+ * @param onItemClick - Click handler for menu items
+ * @param selectedKeys - Currently selected item keys
+ * @param focusedKey - Currently focused item key
+ * @param openKeys - Currently open submenu keys
+ * @param onSubmenuToggle - Handler for submenu toggle
+ * @param inlineIndent - Indentation size for nested items
+ * @param level - Current nesting level
+ * @returns Rendered Apollo menu item nodes
+ *
+ * @internal
  */
 function renderApolloMenuItems(
   items: MenuItemInterface[],
@@ -48,7 +126,7 @@ function renderApolloMenuItems(
   return items.map((item) => {
     const paddingLeft = level > 0 ? level * inlineIndent : undefined;
 
-    // Handle divider
+    // Handle divider type
     if (item.type === 'divider') {
       return (
         <li
@@ -63,7 +141,7 @@ function renderApolloMenuItems(
       );
     }
 
-    // Handle group
+    // Handle group type
     if (item.type === 'group') {
       return (
         <li key={item.key} role="presentation">
@@ -98,13 +176,14 @@ function renderApolloMenuItems(
       );
     }
 
-    // Handle submenu (has children)
+    // Handle submenu (item with children)
     if (item.children && item.children.length > 0) {
       const isOpen = openKeys.includes(item.key);
       const isFocused = focusedKey === item.key;
 
       return (
         <li key={item.key} role="presentation">
+          {/* Submenu title bar */}
           <div
             role="button"
             tabIndex={item.disabled ? -1 : 0}
@@ -136,6 +215,7 @@ function renderApolloMenuItems(
           >
             {item.icon && <span>{item.icon}</span>}
             <span style={{ flex: 1 }}>{item.label}</span>
+            {/* Expand icon with rotation */}
             <svg
               width="12"
               height="12"
@@ -155,6 +235,7 @@ function renderApolloMenuItems(
               />
             </svg>
           </div>
+          {/* Nested content */}
           <ul
             role="menu"
             aria-hidden={!isOpen}
@@ -182,7 +263,7 @@ function renderApolloMenuItems(
       );
     }
 
-    // Handle regular item
+    // Handle regular menu item
     const isSelected = selectedKeys.includes(item.key);
     const isFocused = focusedKey === item.key;
 
@@ -231,6 +312,41 @@ function renderApolloMenuItems(
   });
 }
 
+// ============================================================================
+// ApolloMenu Component
+// ============================================================================
+
+/**
+ * Pure HTML/CSS implementation of the Menu component.
+ *
+ * @description
+ * Renders the Menu component without external UI framework dependencies,
+ * providing maximum accessibility and customization potential.
+ *
+ * @remarks
+ * - Zero external dependencies
+ * - Full keyboard navigation support:
+ *   - ArrowUp/ArrowDown: Navigate between items
+ *   - Home/End: Jump to first/last item
+ *   - Enter/Space: Select item or toggle submenu
+ *   - Escape: Clear focus
+ * - WCAG 2.1 AA compliant
+ * - CSS variable-based theming
+ * - Focus management with visual indicators
+ *
+ * @param props - {@link MenuProps}
+ * @returns Rendered Apollo Menu component
+ *
+ * @example
+ * ```tsx
+ * <ApolloMenu
+ *   items={menuItems}
+ *   mode="vertical"
+ *   selectedKeys={['home']}
+ *   onSelect={handleSelect}
+ * />
+ * ```
+ */
 export default function ApolloMenu(props: MenuProps): React.ReactElement {
   const {
     items = [],
@@ -252,21 +368,41 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     style,
   } = props;
 
+  // ========================================================================
+  // Refs
+  // ========================================================================
+
+  /** Reference to the menu container for focus management */
   const menuRef = useRef<HTMLUListElement>(null);
 
-  // Internal state for uncontrolled mode
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
+  /** Internal state for uncontrolled selection mode */
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(defaultSelectedKeys);
+
+  /** Internal state for uncontrolled open keys mode */
   const [internalOpenKeys, setInternalOpenKeys] = useState<string[]>(defaultOpenKeys);
+
+  /** Currently focused item key for keyboard navigation */
   const [focusedKey, setFocusedKey] = useState<string | null>(null);
 
-  // Use controlled or uncontrolled state
+  /** Use controlled or uncontrolled state */
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
   const openKeys = controlledOpenKeys ?? internalOpenKeys;
 
-  // Get all focusable keys
+  /** Get all focusable keys for keyboard navigation */
   const focusableKeys = items ? getFocusableKeys(items) : [];
 
-  // Handle submenu toggle
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles submenu toggle.
+   * Expands or collapses a submenu.
+   */
   const handleSubmenuToggle = useCallback(
     (key: string) => {
       const newOpenKeys = openKeys.includes(key)
@@ -282,7 +418,10 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     [openKeys, controlledOpenKeys, onOpenChange]
   );
 
-  // Handle item click
+  /**
+   * Handles menu item click events.
+   * Manages selection state and triggers callbacks.
+   */
   const handleItemClick = useCallback(
     (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => {
       // Call onClick callback
@@ -298,10 +437,12 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
         let newSelectedKeys: string[];
 
         if (multiple) {
+          // Toggle selection in multiple mode
           newSelectedKeys = selectedKeys.includes(key)
             ? selectedKeys.filter((k) => k !== key)
             : [...selectedKeys, key];
         } else {
+          // Single selection
           newSelectedKeys = [key];
         }
 
@@ -320,7 +461,10 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     [selectedKeys, multiple, selectable, controlledSelectedKeys, onClick, onSelect]
   );
 
-  // Handle keyboard navigation
+  /**
+   * Handles keyboard navigation.
+   * Supports Arrow keys, Home, End, Enter, Space, and Escape.
+   */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLUListElement>) => {
       if (focusableKeys.length === 0) return;
@@ -371,7 +515,14 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     [focusedKey, focusableKeys, items, handleSubmenuToggle, handleItemClick]
   );
 
-  // Focus management
+  // ========================================================================
+  // Effects
+  // ========================================================================
+
+  /**
+   * Focus management effect.
+   * Focuses the DOM element when focusedKey changes.
+   */
   useEffect(() => {
     if (focusedKey && menuRef.current) {
       const element = menuRef.current.querySelector(`[data-key="${focusedKey}"]`) as HTMLElement;
@@ -379,6 +530,13 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     }
   }, [focusedKey]);
 
+  // ========================================================================
+  // Styles
+  // ========================================================================
+
+  /**
+   * Menu container styles with CSS variables for theming.
+   */
   const menuStyle: CSSProperties = {
     listStyle: 'none',
     padding: '4px',
@@ -392,6 +550,10 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     ...style,
   };
 
+  // ========================================================================
+  // Render
+  // ========================================================================
+
   return (
     <ul
       ref={menuRef}
@@ -402,11 +564,13 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
       tabIndex={0}
       onKeyDown={handleKeyDown}
       onFocus={() => {
+        // Focus first item when menu receives focus
         if (!focusedKey && focusableKeys.length > 0) {
           setFocusedKey(focusableKeys[0]);
         }
       }}
       onBlur={(e) => {
+        // Clear focus when leaving the menu
         if (!menuRef.current?.contains(e.relatedTarget as Node)) {
           setFocusedKey(null);
         }

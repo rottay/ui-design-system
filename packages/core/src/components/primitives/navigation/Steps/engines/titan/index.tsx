@@ -1,15 +1,78 @@
 'use client';
 
 /**
- * Steps - Titan Engine (Ant Design)
+ * @fileoverview Steps Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Steps component.
+ * Leverages Ant Design's mature Steps component for full-featured
+ * step navigation with animations and accessibility.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Steps component, providing:
+ * - Rich animations and transitions
+ * - Full accessibility support (ARIA)
+ * - All step types (default, navigation, inline)
+ * - Progress percentage indicator
+ * - Responsive behavior
+ *
+ * This implementation maps Rottay's unified props interface to
+ * Ant Design's Steps API, ensuring consistent behavior across engines.
+ *
+ * @example
+ * ```tsx
+ * // Titan engine is used by default or can be explicitly set
+ * <Steps
+ *   engine="titan"
+ *   items={[
+ *     { title: 'Step 1', description: 'First step' },
+ *     { title: 'Step 2', description: 'Second step' },
+ *   ]}
+ *   current={0}
+ * />
+ * ```
+ *
+ * @see {@link StepsProps} for prop documentation
+ * @see {@link https://ant.design/components/steps} for Ant Design Steps docs
+ *
+ * @module Steps/Engines/Titan
+ * @category Navigation
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import { Steps as AntSteps } from 'antd';
 import type { StepsProps } from '../../types';
 import { STEPS_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Titan Engine Component
+// ============================================================================
+
+/**
+ * Steps component - Titan Engine (Ant Design)
+ *
+ * @description
+ * Full-featured implementation using Ant Design's Steps component.
+ * Provides the richest feature set including all step types,
+ * progress indicators, and smooth animations.
+ *
+ * @remarks
+ * Features supported:
+ * - All direction modes (horizontal, vertical)
+ * - All types (default, navigation, inline)
+ * - Progress percentage within current step
+ * - Custom progress dot rendering
+ * - Responsive layout adaptation
+ * - Full keyboard navigation
+ *
+ * @param props - {@link StepsProps}
+ * @returns Steps component rendered with Ant Design
+ */
 export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
   (props, ref) => {
+    // ========================================================================
+    // Props Destructuring with Defaults
+    // ========================================================================
+
     const {
       current = STEPS_DEFAULTS.current,
       direction = STEPS_DEFAULTS.direction,
@@ -27,6 +90,14 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
       style,
     } = props;
 
+    // ========================================================================
+    // Progress Dot Adapter
+    // ========================================================================
+
+    /**
+     * Adapts the Rottay progressDot function signature to Ant Design's format.
+     * Ant Design passes different parameters than our unified interface.
+     */
     const antProgressDot = typeof progressDot === 'function'
       ? (_iconDot: React.ReactNode, { index, status: stepStatus, title, description }: {
           index: number;
@@ -40,6 +111,10 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
           description
         })
       : progressDot;
+
+    // ========================================================================
+    // Render
+    // ========================================================================
 
     return (
       <div ref={ref} className={className} style={style}>
@@ -68,6 +143,10 @@ export const Steps = React.forwardRef<HTMLDivElement, StepsProps>(
     );
   }
 );
+
+// ============================================================================
+// Display Name
+// ============================================================================
 
 Steps.displayName = 'Steps.Titan';
 

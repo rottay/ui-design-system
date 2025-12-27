@@ -1,6 +1,47 @@
 /**
- * Stepper.Step - Compound Component
- * Individual step in a stepper
+ * @fileoverview Stepper.Step Compound Component - Rottay Design System
+ * @description Individual step component for use within a Stepper.
+ * Renders the step indicator, title, description, and connector line.
+ *
+ * @remarks
+ * This component is designed to be used as a child of the Stepper component.
+ * It receives internal props from the parent Stepper for proper rendering.
+ * The component supports all step statuses (wait, process, finish, error)
+ * and provides visual feedback through colors and icons.
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Stepper current={1}>
+ *   <Stepper.Step title="Account" description="Create your account" />
+ *   <Stepper.Step title="Profile" description="Complete profile" />
+ *   <Stepper.Step title="Done" description="All finished" />
+ * </Stepper>
+ * ```
+ *
+ * @example With Custom Icon
+ * ```tsx
+ * <Stepper.Step
+ *   title="Upload"
+ *   description="Upload your files"
+ *   icon={<CloudUploadIcon />}
+ * />
+ * ```
+ *
+ * @example With Status Override
+ * ```tsx
+ * <Stepper.Step
+ *   title="Validation"
+ *   description="Error in form"
+ *   status="error"
+ * />
+ * ```
+ *
+ * @see {@link StepProps} for complete prop documentation
+ * @see {@link Stepper} for parent component
+ *
+ * @module Stepper/Step
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -10,8 +51,13 @@ import type { CSSProperties } from 'react';
 import type { StepProps, StepStatus } from '../../types';
 import { SIZE_MAP, FONT_SIZE_MAP } from '../../types';
 
+// ============================================================================
+// Icon Components
+// ============================================================================
+
 /**
- * Default check icon for finished steps
+ * Default check icon for finished steps.
+ * @internal
  */
 const CheckIcon = ({ size }: { size: number }) => (
   <svg
@@ -32,7 +78,8 @@ const CheckIcon = ({ size }: { size: number }) => (
 );
 
 /**
- * Default error icon
+ * Default error icon for error state steps.
+ * @internal
  */
 const ErrorIcon = ({ size }: { size: number }) => (
   <svg
@@ -52,21 +99,51 @@ const ErrorIcon = ({ size }: { size: number }) => (
   </svg>
 );
 
+// ============================================================================
+// Internal Props Interface
+// ============================================================================
+
+/**
+ * Extended props including internal properties set by parent Stepper.
+ * @internal
+ */
 interface StepInternalProps extends StepProps {
   /** Size inherited from Stepper */
   size?: 'sm' | 'md' | 'lg';
-  /** Step number (1-based) */
+  /** Step number (1-based) for display */
   stepNumber?: number;
   /** Direction inherited from Stepper */
   direction?: 'horizontal' | 'vertical';
   /** Variant inherited from Stepper */
   variant?: 'default' | 'simple' | 'circles';
-  /** Label placement */
+  /** Label placement relative to icon */
   labelPlacement?: 'horizontal' | 'vertical';
-  /** Whether this is the last step */
+  /** Whether this is the last step (no connector) */
   isLast?: boolean;
 }
 
+// ============================================================================
+// Main Component
+// ============================================================================
+
+/**
+ * Individual step component for the Stepper.
+ *
+ * @description
+ * Renders a single step with:
+ * - Step indicator (number, icon, or status icon)
+ * - Title and optional subtitle
+ * - Optional description
+ * - Connector line to next step
+ *
+ * @remarks
+ * - Supports keyboard navigation (Enter/Space to activate)
+ * - Includes ARIA attributes for accessibility
+ * - Uses CSS variables for theming consistency
+ *
+ * @param props - {@link StepInternalProps}
+ * @returns Individual step element with indicator and content
+ */
 export function StepperStep({
   title,
   description,
@@ -87,15 +164,28 @@ export function StepperStep({
   style,
   children,
 }: StepInternalProps): React.ReactElement {
+  // Get size values from mappings
   const iconSize = SIZE_MAP[size];
   const fontSize = FONT_SIZE_MAP[size];
 
+  // ============================================================================
+  // Event Handlers
+  // ============================================================================
+
+  /**
+   * Handles click events on the step.
+   * Only triggers if step is not disabled and has an onClick handler.
+   */
   const handleClick = () => {
     if (!disabled && onClick) {
       onClick();
     }
   };
 
+  /**
+   * Handles keyboard events for accessibility.
+   * Supports Enter and Space key activation.
+   */
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (disabled) return;
     if (e.key === 'Enter' || e.key === ' ') {
@@ -104,7 +194,14 @@ export function StepperStep({
     }
   };
 
-  // Get status-based colors
+  // ============================================================================
+  // Status Color Helpers
+  // ============================================================================
+
+  /**
+   * Gets the color configuration based on step status.
+   * Uses CSS variables with fallback values.
+   */
   const getStatusColors = (s: StepStatus) => {
     switch (s) {
       case 'finish':
@@ -137,7 +234,13 @@ export function StepperStep({
 
   const statusColors = getStatusColors(status);
 
-  // Render the icon/number
+  // ============================================================================
+  // Icon Renderer
+  // ============================================================================
+
+  /**
+   * Renders the step icon based on status and custom icon prop.
+   */
   const renderIcon = () => {
     if (icon) {
       return icon;
@@ -154,7 +257,10 @@ export function StepperStep({
     return <span>{stepNumber}</span>;
   };
 
+  // ============================================================================
   // Styles
+  // ============================================================================
+
   const stepStyle: CSSProperties = {
     display: 'flex',
     flexDirection: direction === 'vertical' ? 'row' : labelPlacement === 'vertical' ? 'column' : 'row',
@@ -215,7 +321,7 @@ export function StepperStep({
     color: 'var(--stepper-description-color, rgba(0, 0, 0, 0.45))',
   };
 
-  // Connector line style
+  // Connector line style (horizontal or vertical)
   const connectorStyle: CSSProperties = direction === 'horizontal' ? {
     flex: 1,
     minWidth: '32px',
@@ -238,6 +344,10 @@ export function StepperStep({
     transition: 'background-color 0.3s ease',
   };
 
+  // ============================================================================
+  // Render
+  // ============================================================================
+
   return (
     <>
       <div
@@ -251,10 +361,12 @@ export function StepperStep({
         aria-current={status === 'process' ? 'step' : undefined}
         data-step={stepIndex}
       >
+        {/* Step Icon/Number */}
         <div className="rottay-stepper-step__icon" style={iconContainerStyle}>
           {renderIcon()}
         </div>
 
+        {/* Step Content */}
         <div className="rottay-stepper-step__content" style={contentStyle}>
           <div className="rottay-stepper-step__title" style={titleStyle}>
             {title}
@@ -271,10 +383,11 @@ export function StepperStep({
           )}
         </div>
 
+        {/* Additional Children */}
         {children}
       </div>
 
-      {/* Connector line (not for last step) */}
+      {/* Connector line (not for last step in horizontal mode) */}
       {!isLast && direction === 'horizontal' && (
         <div className="rottay-stepper-connector" style={connectorStyle} />
       )}
@@ -282,4 +395,5 @@ export function StepperStep({
   );
 }
 
+// Set display name for compound component identification
 StepperStep.displayName = 'Stepper.Step';

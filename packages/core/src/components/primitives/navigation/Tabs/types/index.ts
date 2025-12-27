@@ -1,37 +1,248 @@
 /**
- * Tabs - Core Interface
+ * @fileoverview Tabs Type Definitions - Rottay Design System
+ * @description TypeScript interfaces and types for the Tabs component.
+ * Defines the contract for tabs across all engine implementations.
+ *
+ * @remarks
+ * These types ensure consistency across Titan, Hermes, and Apollo engines
+ * while providing full TypeScript intellisense and type safety.
+ *
+ * @module Tabs/Types
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 import type React from 'react';
 import type { ReactNode } from 'react';
 import type { EngineAwareProps } from '../../../../../types';
 
+// ============================================================================
+// Tab Item Interface
+// ============================================================================
+
+/**
+ * Configuration for a single tab item.
+ *
+ * @description
+ * Defines the structure of each tab in the items array.
+ * Used to programmatically configure tabs.
+ *
+ * @example
+ * ```tsx
+ * const tabItems: TabItem[] = [
+ *   { key: 'home', label: 'Home', children: <HomeContent /> },
+ *   { key: 'profile', label: 'Profile', icon: <UserIcon />, children: <ProfileContent /> },
+ *   { key: 'settings', label: 'Settings', disabled: true },
+ * ];
+ * ```
+ */
 export interface TabItem {
+  /**
+   * Unique identifier for the tab.
+   * Used to track active state and for accessibility.
+   */
   key: string;
+
+  /**
+   * The tab's label displayed in the tab bar.
+   * Can be a string or any React node (e.g., with icons).
+   */
   label: ReactNode;
+
+  /**
+   * Content rendered when this tab is active.
+   * Displayed in the tab panel area below the tab bar.
+   */
   children?: ReactNode;
+
+  /**
+   * Whether the tab is disabled and cannot be selected.
+   * @default false
+   */
   disabled?: boolean;
+
+  /**
+   * Optional icon displayed before the label.
+   * Typically a React icon component.
+   */
   icon?: ReactNode;
 }
 
+// ============================================================================
+// Type Aliases
+// ============================================================================
+
+/**
+ * Visual style variants for the tabs component.
+ *
+ * @description
+ * - `line`: Underlined tabs (default) - clean, minimal appearance
+ * - `card`: Card-style tabs - bordered, button-like appearance
+ * - `pills`: Pill-shaped tabs - rounded, filled background when active
+ *
+ * @example
+ * ```tsx
+ * <Tabs type="line" items={items} />   // Underlined style
+ * <Tabs type="card" items={items} />   // Card/boxed style
+ * <Tabs type="pills" items={items} />  // Pill/rounded style
+ * ```
+ */
 export type TabsType = 'line' | 'card' | 'pills';
+
+/**
+ * Size variants for the tabs component.
+ *
+ * @description
+ * Controls the padding and font size of tab buttons.
+ * - `sm`: Small - compact tabs for dense UIs
+ * - `md`: Medium - standard size (default)
+ * - `lg`: Large - prominent tabs for main navigation
+ *
+ * @example
+ * ```tsx
+ * <Tabs size="sm" items={items} />  // Compact
+ * <Tabs size="md" items={items} />  // Default
+ * <Tabs size="lg" items={items} />  // Large
+ * ```
+ */
 export type TabsSize = 'sm' | 'md' | 'lg';
 
+// ============================================================================
+// Main Props Interface
+// ============================================================================
+
+/**
+ * Props for the Tabs component.
+ *
+ * @description
+ * Complete prop interface for the Tabs component, supporting both
+ * controlled and uncontrolled modes, multiple visual variants,
+ * and full engine awareness for multi-engine rendering.
+ *
+ * @extends EngineAwareProps - Inherits engine override capability
+ *
+ * @example Uncontrolled Mode
+ * ```tsx
+ * <Tabs
+ *   items={tabItems}
+ *   defaultActiveKey="home"
+ *   type="line"
+ *   size="md"
+ * />
+ * ```
+ *
+ * @example Controlled Mode
+ * ```tsx
+ * const [activeKey, setActiveKey] = useState('home');
+ *
+ * <Tabs
+ *   items={tabItems}
+ *   activeKey={activeKey}
+ *   onChange={setActiveKey}
+ * />
+ * ```
+ */
 export interface TabsProps extends EngineAwareProps {
+  /**
+   * Array of tab items to render.
+   * Each item defines a tab's key, label, content, and state.
+   * @see {@link TabItem}
+   */
   items: TabItem[];
+
+  /**
+   * Currently active tab key (controlled mode).
+   * When provided, the component is fully controlled.
+   * Use with `onChange` to manage state externally.
+   */
   activeKey?: string;
+
+  /**
+   * Initial active tab key (uncontrolled mode).
+   * Used only on initial render if `activeKey` is not provided.
+   * @default First item's key
+   */
   defaultActiveKey?: string;
+
+  /**
+   * Visual style of the tabs.
+   * @default 'line'
+   * @see {@link TabsType}
+   */
   type?: TabsType;
+
+  /**
+   * Size variant of the tabs.
+   * @default 'md'
+   * @see {@link TabsSize}
+   */
   size?: TabsSize;
+
+  /**
+   * Whether to center the tabs in the container.
+   * @default false
+   */
   centered?: boolean;
+
+  /**
+   * Callback fired when the active tab changes.
+   * Receives the new active tab's key.
+   *
+   * @param key - The key of the newly selected tab
+   *
+   * @example
+   * ```tsx
+   * <Tabs
+   *   items={items}
+   *   onChange={(key) => console.log('Active tab:', key)}
+   * />
+   * ```
+   */
   onChange?: (key: string) => void;
+
+  /**
+   * Additional CSS class name(s) to apply.
+   * Merged with the component's default classes.
+   */
   className?: string;
+
+  /**
+   * Inline styles to apply to the root element.
+   * Use CSS variables for theme-aware styling.
+   */
   style?: React.CSSProperties;
+
+  /**
+   * Child elements (for compound component usage).
+   * When using TabPane children instead of items array.
+   */
   children?: ReactNode;
 }
 
+// ============================================================================
+// Default Values
+// ============================================================================
+
+/**
+ * Default values for Tabs props.
+ *
+ * @description
+ * Provides sensible defaults for optional props.
+ * Used by all engine implementations for consistency.
+ *
+ * @example
+ * ```tsx
+ * // These are applied automatically:
+ * // type: 'line'
+ * // size: 'md'
+ * // centered: false
+ * ```
+ */
 export const TABS_DEFAULTS: Partial<TabsProps> = {
+  /** Default visual style - underlined tabs */
   type: 'line',
+  /** Default size - medium */
   size: 'md',
+  /** Default alignment - left aligned */
   centered: false,
 };

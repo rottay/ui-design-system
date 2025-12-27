@@ -1,17 +1,90 @@
 /**
- * Tabs - Apollo Engine (Pure HTML/CSS)
+ * @fileoverview Tabs Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Tabs component.
+ * Provides a zero-dependency, fully accessible tabs experience.
+ *
+ * @remarks
+ * The Apollo engine uses only vanilla HTML and CSS, making it ideal for:
+ * - Projects that need minimal dependencies
+ * - Server-side rendering scenarios
+ * - Maximum accessibility compliance
+ * - Custom styling requirements
+ *
+ * Features provided by this engine:
+ * - Zero external dependencies
+ * - Full keyboard navigation
+ * - ARIA-compliant markup
+ * - CSS variable integration for theming
+ * - Inline styles for easy customization
+ *
+ * @example
+ * ```tsx
+ * // Use Apollo engine for zero dependencies
+ * <Tabs engine="apollo" items={items} />
+ *
+ * // Ideal for accessibility-focused projects
+ * <EngineProvider engine="apollo">
+ *   <Tabs items={items} />
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link Tabs} for the main component documentation
+ * @see {@link TabsProps} for prop definitions
+ *
+ * @module Tabs/Engines/Apollo
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 import React, { useState } from 'react';
 import type { TabsProps, TabItem, TabsSize } from '../../types';
 import { TABS_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Style Constants
+// ============================================================================
+
+/**
+ * Size-specific styles for tab buttons.
+ * Maps Rottay size variants to padding and font size values.
+ */
 const SIZE_STYLES = {
   sm: { padding: '0.25rem 0.75rem', fontSize: '0.875rem' },
   md: { padding: '0.5rem 1rem', fontSize: '1rem' },
   lg: { padding: '0.75rem 1.25rem', fontSize: '1.125rem' },
 };
 
+// ============================================================================
+// Component Implementation
+// ============================================================================
+
+/**
+ * Apollo engine implementation of Tabs.
+ *
+ * @description
+ * Renders the Tabs component using pure HTML and inline styles.
+ * Provides full functionality without external CSS frameworks.
+ *
+ * @remarks
+ * - Uses CSS variables for theme integration
+ * - Implements proper ARIA roles and attributes
+ * - Handles both controlled and uncontrolled modes
+ * - Styles adapt to type and size props
+ *
+ * @param props - {@link TabsProps}
+ * @returns React element rendered with vanilla HTML/CSS
+ *
+ * @example
+ * ```tsx
+ * <ApolloTabs
+ *   items={[
+ *     { key: '1', label: 'Tab 1', children: <Content /> },
+ *   ]}
+ *   type="line"
+ *   size="md"
+ * />
+ * ```
+ */
 export default function ApolloTabs(props: TabsProps): React.ReactElement {
   const {
     items,
@@ -25,16 +98,43 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
     style,
   } = props;
 
+  // ============================================================================
+  // State Management
+  // ============================================================================
+
+  /**
+   * Internal state for uncontrolled mode.
+   * Falls back to first item if no default provided.
+   */
   const [active, setActive] = useState(activeKey || defaultActiveKey || items[0]?.key);
 
+  /**
+   * Handles tab selection.
+   * Updates internal state in uncontrolled mode and calls onChange callback.
+   */
   const handleChange = (key: string) => {
     if (!activeKey) setActive(key);
     onChange?.(key);
   };
 
+  // ============================================================================
+  // Derived Values
+  // ============================================================================
+
+  /** Current active key, preferring controlled value */
   const currentKey = activeKey || active;
+
+  /** Currently active item for content rendering */
   const activeItem = items.find((item: TabItem) => item.key === currentKey);
 
+  // ============================================================================
+  // Style Definitions
+  // ============================================================================
+
+  /**
+   * Styles for the tab list container.
+   * Uses CSS variables for theming and flexbox for layout.
+   */
   const tabListStyle: React.CSSProperties = {
     display: 'flex',
     gap: '0.25rem',
@@ -42,6 +142,14 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
     justifyContent: centered ? 'center' : 'flex-start',
   };
 
+  /**
+   * Generates styles for individual tab buttons.
+   * Adapts based on active state, disabled state, and type.
+   *
+   * @param isActive - Whether this tab is currently active
+   * @param disabled - Whether this tab is disabled
+   * @returns CSSProperties for the tab button
+   */
   const getTabStyle = (isActive: boolean, disabled?: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[size as TabsSize],
     border: 'none',
@@ -57,8 +165,13 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
     gap: '0.5rem',
   });
 
+  // ============================================================================
+  // Render
+  // ============================================================================
+
   return (
     <div className={className} style={style}>
+      {/* Tab List */}
       <div role="tablist" style={tabListStyle}>
         {items.map((item: TabItem) => (
           <button
@@ -72,6 +185,8 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
           </button>
         ))}
       </div>
+
+      {/* Tab Panel */}
       {activeItem?.children && (
         <div style={{ padding: '1rem' }}>{activeItem.children}</div>
       )}

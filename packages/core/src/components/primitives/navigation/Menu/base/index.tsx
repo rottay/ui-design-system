@@ -1,6 +1,22 @@
 /**
- * Menu - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Menu Base Component - Rottay Design System
+ * @description Base implementation of the Menu component using CSS variables
+ * for consistent styling across the design system.
+ *
+ * @remarks
+ * This base component provides the foundation for engine-specific implementations.
+ * It uses CSS custom properties (variables) from the design tokens to ensure
+ * consistent theming and easy customization through tenant configurations.
+ *
+ * The base component handles:
+ * - Controlled and uncontrolled selection state
+ * - Menu item rendering from the `items` prop
+ * - CSS variable-based theming
+ * - Basic accessibility attributes
+ *
+ * @module Menu/Base
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -11,8 +27,25 @@ import type { MenuProps, MenuItem as MenuItemType, MenuSelectInfo, MenuClickInfo
 import { MENU_DEFAULTS } from '../types';
 import { MenuItem, MenuGroup, MenuSubMenu, MenuDivider } from '../compound';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Renders menu items from items prop
+ * Renders menu items from the items prop recursively.
+ *
+ * @description
+ * Transforms the declarative `items` array into rendered React components.
+ * Handles all item types: regular items, submenus, groups, and dividers.
+ *
+ * @param items - Array of menu item configurations
+ * @param onItemClick - Click handler for menu items
+ * @param selectedKeys - Currently selected item keys
+ * @param inlineIndent - Indentation size for nested items
+ * @param level - Current nesting level (for indentation calculation)
+ * @returns Rendered menu item React nodes
+ *
+ * @internal
  */
 function renderMenuItems(
   items: MenuItemType[],
@@ -22,12 +55,12 @@ function renderMenuItems(
   level: number = 0
 ): React.ReactNode {
   return items.map((item) => {
-    // Handle divider
+    // Handle divider type
     if (item.type === 'divider') {
       return <MenuDivider key={item.key} />;
     }
 
-    // Handle group
+    // Handle group type
     if (item.type === 'group') {
       return (
         <MenuGroup key={item.key} title={item.title || item.label}>
@@ -36,7 +69,7 @@ function renderMenuItems(
       );
     }
 
-    // Handle submenu (has children)
+    // Handle submenu (item with children)
     if (item.children && item.children.length > 0) {
       return (
         <MenuSubMenu
@@ -51,7 +84,7 @@ function renderMenuItems(
       );
     }
 
-    // Handle regular item
+    // Handle regular menu item
     const isSelected = selectedKeys.includes(item.key);
     return (
       <MenuItem
@@ -73,9 +106,35 @@ function renderMenuItems(
   });
 }
 
+// ============================================================================
+// Base Menu Component
+// ============================================================================
+
 /**
  * Base Menu component using CSS variables.
- * This is extended by engine-specific implementations.
+ *
+ * @description
+ * This is the foundational Menu component that uses CSS custom properties
+ * for styling. It is extended by engine-specific implementations (Titan,
+ * Hermes, Apollo) to provide framework-specific optimizations.
+ *
+ * @remarks
+ * - Uses CSS variables from design tokens for theming
+ * - Supports both `items` prop and compound component children
+ * - Handles controlled and uncontrolled selection state
+ * - Provides ARIA attributes for accessibility
+ *
+ * @example
+ * ```tsx
+ * import { BaseMenu } from '@rottay/design-system';
+ *
+ * <BaseMenu
+ *   items={menuItems}
+ *   mode="vertical"
+ *   selectedKeys={['home']}
+ *   onSelect={(info) => console.log(info)}
+ * />
+ * ```
  */
 export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
   (props, ref) => {
@@ -104,6 +163,10 @@ export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
     void _expandIcon;
     void _onOpenChange;
 
+    // ========================================================================
+    // State Management
+    // ========================================================================
+
     // Internal state for uncontrolled mode
     const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(defaultSelectedKeys);
     const [_internalOpenKeys, _setInternalOpenKeys] = useState<string[]>(defaultOpenKeys);
@@ -115,7 +178,14 @@ export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
     // Suppress unused warnings - these are used by engine implementations
     void _openKeys;
 
-    // Handle item click
+    // ========================================================================
+    // Event Handlers
+    // ========================================================================
+
+    /**
+     * Handles menu item click events.
+     * Updates selection state and triggers callbacks.
+     */
     const handleItemClick = useCallback(
       (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => {
         // Call onClick callback
@@ -157,7 +227,11 @@ export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
       [selectedKeys, multiple, selectable, controlledSelectedKeys, onClick, onSelect]
     );
 
-    // Build CSS variables for the menu
+    // ========================================================================
+    // CSS Variables & Styles
+    // ========================================================================
+
+    // Build CSS variables for theming
     const menuVars: CSSProperties = {
       '--menu-bg': theme === 'dark' ? 'var(--menu-dark-bg, #001529)' : 'var(--menu-light-bg, #fff)',
       '--menu-item-color': theme === 'dark' ? 'var(--menu-dark-item-color, rgba(255, 255, 255, 0.65))' : 'var(--menu-light-item-color, rgba(0, 0, 0, 0.88))',
@@ -181,9 +255,14 @@ export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
       ...style,
     };
 
+    // CSS class names
     const modeClass = `rottay-menu--${mode}`;
     const themeClass = `rottay-menu--${theme}`;
     const collapsedClass = inlineCollapsed ? 'rottay-menu--collapsed' : '';
+
+    // ========================================================================
+    // Render
+    // ========================================================================
 
     return (
       <ul

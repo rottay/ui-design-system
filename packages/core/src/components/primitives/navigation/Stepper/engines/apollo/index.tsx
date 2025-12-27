@@ -1,5 +1,52 @@
 /**
- * Stepper - Apollo Engine (Pure HTML/CSS with full keyboard navigation)
+ * @fileoverview Stepper Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Stepper component.
+ * Provides maximum accessibility and zero external dependencies.
+ *
+ * @remarks
+ * The Apollo engine provides a fully accessible stepper with:
+ * - Zero external dependencies (no Ant Design, no DaisyUI)
+ * - Full keyboard navigation (Arrow keys, Home, End, Enter, Space)
+ * - ARIA attributes for screen readers
+ * - CSS variable theming support
+ * - Focus management and visual indicators
+ *
+ * This engine is ideal for projects requiring maximum accessibility,
+ * minimal bundle size, or those avoiding framework dependencies.
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Stepper
+ *   engine="apollo"
+ *   items={[
+ *     { title: 'Step 1', description: 'First step' },
+ *     { title: 'Step 2', description: 'Second step' },
+ *   ]}
+ *   current={0}
+ * />
+ * ```
+ *
+ * @example With Keyboard Navigation
+ * ```tsx
+ * // Apollo engine automatically supports:
+ * // - Arrow Left/Right: Navigate between steps
+ * // - Home/End: Jump to first/last step
+ * // - Enter/Space: Activate focused step
+ * <Stepper
+ *   engine="apollo"
+ *   items={steps}
+ *   current={current}
+ *   clickable
+ *   onChange={handleChange}
+ * />
+ * ```
+ *
+ * @see {@link Stepper} for the main component
+ * @see {@link StepperProps} for prop documentation
+ *
+ * @module Stepper/Engines/Apollo
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +56,18 @@ import type { CSSProperties, KeyboardEvent } from 'react';
 import type { StepperProps, StepItem, StepStatus, StepProps } from '../../types';
 import { STEPPER_DEFAULTS, SIZE_MAP, FONT_SIZE_MAP } from '../../types';
 
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
 /**
- * Compute status for step
+ * Computes the status for a step based on its position.
+ * @param index - Step index
+ * @param current - Current active step
+ * @param itemStatus - Optional explicit status
+ * @param globalStatus - Optional global status override
+ * @returns Computed step status
+ * @internal
  */
 function computeStatus(index: number, current: number, itemStatus?: StepStatus, globalStatus?: StepStatus): StepStatus {
   if (itemStatus) return itemStatus;
@@ -20,8 +77,13 @@ function computeStatus(index: number, current: number, itemStatus?: StepStatus, 
   return 'wait';
 }
 
+// ============================================================================
+// Icon Components
+// ============================================================================
+
 /**
- * Check icon
+ * Check icon for completed steps.
+ * @internal
  */
 const CheckIcon = ({ size }: { size: number }) => (
   <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 16 16" fill="none">
@@ -30,7 +92,8 @@ const CheckIcon = ({ size }: { size: number }) => (
 );
 
 /**
- * Error icon
+ * Error icon for error state steps.
+ * @internal
  */
 const ErrorIcon = ({ size }: { size: number }) => (
   <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 16 16" fill="none">
@@ -38,8 +101,16 @@ const ErrorIcon = ({ size }: { size: number }) => (
   </svg>
 );
 
+// ============================================================================
+// Color Configuration
+// ============================================================================
+
 /**
- * Get status colors
+ * Gets the color configuration for a step based on its status.
+ * Uses CSS variables with fallback values.
+ * @param status - The step status
+ * @returns Object with bg, color, border, and title colors
+ * @internal
  */
 function getStatusColors(status: StepStatus) {
   switch (status) {
@@ -75,8 +146,26 @@ function getStatusColors(status: StepStatus) {
   }
 }
 
+// ============================================================================
+// Step Renderer
+// ============================================================================
+
 /**
- * Render a single step
+ * Renders a single step element with all styling and accessibility attributes.
+ * @param item - Step item data
+ * @param index - Step index
+ * @param totalSteps - Total number of steps
+ * @param current - Current active step
+ * @param size - Step size
+ * @param direction - Layout direction
+ * @param variant - Visual variant
+ * @param labelPlacement - Label position
+ * @param clickable - Whether clickable
+ * @param focusedIndex - Currently focused step index
+ * @param globalStatus - Global status override
+ * @param onChange - Change callback
+ * @returns Step React node
+ * @internal
  */
 function renderStep(
   item: StepItem,
@@ -99,6 +188,7 @@ function renderStep(
   const isLast = index === totalSteps - 1;
   const isFocused = focusedIndex === index;
 
+  // Step container styles
   const stepStyle: CSSProperties = {
     display: 'flex',
     flexDirection: direction === 'vertical' ? 'row' : labelPlacement === 'vertical' ? 'column' : 'row',
@@ -112,6 +202,7 @@ function renderStep(
     borderRadius: '4px',
   };
 
+  // Icon container styles
   const iconStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -128,6 +219,7 @@ function renderStep(
     transition: 'all 0.3s ease',
   };
 
+  // Content container styles
   const contentStyle: CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
@@ -135,6 +227,7 @@ function renderStep(
     textAlign: labelPlacement === 'vertical' && direction === 'horizontal' ? 'center' : 'left',
   };
 
+  // Title styles
   const titleStyle: CSSProperties = {
     fontSize: fontSize.title,
     fontWeight: 500,
@@ -144,11 +237,13 @@ function renderStep(
     gap: '8px',
   };
 
+  // Description styles
   const descStyle: CSSProperties = {
     fontSize: fontSize.description,
     color: 'var(--stepper-description-color, rgba(0, 0, 0, 0.45))',
   };
 
+  // Connector line styles (horizontal only)
   const connectorStyle: CSSProperties = direction === 'horizontal' ? {
     flex: 1,
     minWidth: '32px',
@@ -161,6 +256,9 @@ function renderStep(
     transition: 'background-color 0.3s ease',
   } : {};
 
+  /**
+   * Renders the step icon based on status and custom icon.
+   */
   const renderIcon = () => {
     if (item.icon) return item.icon;
     if (status === 'finish' && variant !== 'simple') return <CheckIcon size={iconSize} />;
@@ -196,11 +294,31 @@ function renderStep(
           {item.description && <div style={descStyle}>{item.description}</div>}
         </div>
       </div>
+      {/* Connector line (not for last step) */}
       {!isLast && direction === 'horizontal' && <div style={connectorStyle} />}
     </React.Fragment>
   );
 }
 
+// ============================================================================
+// Main Component
+// ============================================================================
+
+/**
+ * Apollo engine Stepper implementation using pure HTML/CSS.
+ *
+ * @description
+ * Provides a fully accessible stepper with no external dependencies.
+ * Features include:
+ * - Complete keyboard navigation
+ * - ARIA attributes for screen readers
+ * - CSS variable theming
+ * - Focus management
+ * - Zero framework dependencies
+ *
+ * @param props - {@link StepperProps}
+ * @returns Vanilla HTML stepper with full accessibility
+ */
 export default function ApolloStepper(props: StepperProps): React.ReactElement {
   const {
     items,
@@ -218,12 +336,30 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
     style,
   } = props;
 
+  // ============================================================================
+  // Refs and State
+  // ============================================================================
+
+  /** Ref to the stepper container for focus management */
   const stepperRef = useRef<HTMLDivElement>(null);
+
+  /** Internal state for uncontrolled mode */
   const [internalCurrent, setInternalCurrent] = useState(defaultCurrent);
+
+  /** Currently focused step index for keyboard navigation */
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
 
+  /** Use controlled or uncontrolled state */
   const current = controlledCurrent ?? internalCurrent;
 
+  // ============================================================================
+  // Event Handlers
+  // ============================================================================
+
+  /**
+   * Handles step change events.
+   * Updates internal state and calls the onChange callback.
+   */
   const handleChange = useCallback(
     (step: number) => {
       if (!clickable) return;
@@ -237,7 +373,11 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
     [clickable, controlledCurrent, onChange]
   );
 
-  // Get items array
+  // ============================================================================
+  // Items Processing
+  // ============================================================================
+
+  /** Build items array from items prop or children */
   let stepItems: StepItem[] = [];
 
   if (items) {
@@ -260,7 +400,14 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
     });
   }
 
-  // Keyboard navigation
+  // ============================================================================
+  // Keyboard Navigation
+  // ============================================================================
+
+  /**
+   * Handles keyboard navigation for accessibility.
+   * Supports Arrow keys, Home, End, Enter, and Space.
+   */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
       if (!clickable || stepItems.length === 0) return;
@@ -273,7 +420,7 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
         case 'ArrowDown':
           e.preventDefault();
           nextFocus = currentFocus < stepItems.length - 1 ? currentFocus + 1 : 0;
-          // Skip disabled
+          // Skip disabled steps
           while (stepItems[nextFocus]?.disabled && nextFocus !== currentFocus) {
             nextFocus = nextFocus < stepItems.length - 1 ? nextFocus + 1 : 0;
           }
@@ -282,7 +429,7 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
         case 'ArrowUp':
           e.preventDefault();
           nextFocus = currentFocus > 0 ? currentFocus - 1 : stepItems.length - 1;
-          // Skip disabled
+          // Skip disabled steps
           while (stepItems[nextFocus]?.disabled && nextFocus !== currentFocus) {
             nextFocus = nextFocus > 0 ? nextFocus - 1 : stepItems.length - 1;
           }
@@ -317,6 +464,11 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
     [clickable, stepItems, focusedIndex, current, handleChange]
   );
 
+  // ============================================================================
+  // Styles
+  // ============================================================================
+
+  /** Container styles */
   const containerStyle: CSSProperties = {
     display: 'flex',
     flexDirection: direction === 'horizontal' ? 'row' : 'column',
@@ -324,6 +476,10 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
     width: '100%',
     ...style,
   };
+
+  // ============================================================================
+  // Render
+  // ============================================================================
 
   return (
     <div
@@ -365,4 +521,5 @@ export default function ApolloStepper(props: StepperProps): React.ReactElement {
   );
 }
 
+// Set display name for debugging
 ApolloStepper.displayName = 'ApolloStepper';

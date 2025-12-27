@@ -1,5 +1,47 @@
 /**
- * Stepper - Hermes Engine (DaisyUI)
+ * @fileoverview Stepper Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based implementation of the Stepper component.
+ * Provides a lightweight, utility-first stepper with modern styling.
+ *
+ * @remarks
+ * The Hermes engine uses DaisyUI's steps component to provide:
+ * - Lightweight bundle size
+ * - Tailwind CSS utility classes
+ * - Modern, clean appearance
+ * - Easy customization via Tailwind
+ *
+ * This engine is ideal for projects already using Tailwind CSS or
+ * those prioritizing bundle size and customization flexibility.
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Stepper
+ *   engine="hermes"
+ *   items={[
+ *     { title: 'Step 1', description: 'First step' },
+ *     { title: 'Step 2', description: 'Second step' },
+ *   ]}
+ *   current={0}
+ * />
+ * ```
+ *
+ * @example Vertical Layout
+ * ```tsx
+ * <Stepper
+ *   engine="hermes"
+ *   direction="vertical"
+ *   items={steps}
+ *   current={current}
+ * />
+ * ```
+ *
+ * @see {@link Stepper} for the main component
+ * @see {@link StepperProps} for prop documentation
+ * @see {@link https://daisyui.com/components/steps} DaisyUI Steps documentation
+ *
+ * @module Stepper/Engines/Hermes
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +51,15 @@ import type { CSSProperties } from 'react';
 import type { StepperProps, StepItem, StepStatus } from '../../types';
 import { STEPPER_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
 /**
- * Get DaisyUI step class based on status
+ * Gets the DaisyUI step class based on step status.
+ * @param status - The step status
+ * @returns DaisyUI class name for the status
+ * @internal
  */
 function getStepClass(status: StepStatus): string {
   switch (status) {
@@ -27,7 +76,12 @@ function getStepClass(status: StepStatus): string {
 }
 
 /**
- * Compute status for step
+ * Computes the status for a step based on its position.
+ * @param index - Step index
+ * @param current - Current active step
+ * @param itemStatus - Optional explicit status
+ * @returns Computed step status
+ * @internal
  */
 function computeStatus(index: number, current: number, itemStatus?: StepStatus): StepStatus {
   if (itemStatus) return itemStatus;
@@ -37,7 +91,14 @@ function computeStatus(index: number, current: number, itemStatus?: StepStatus):
 }
 
 /**
- * Render steps from items
+ * Renders DaisyUI step elements from items array.
+ * @param items - Array of step items
+ * @param current - Current active step
+ * @param clickable - Whether steps are clickable
+ * @param onChange - Change handler callback
+ * @param globalStatus - Global status override
+ * @returns Array of step li elements
+ * @internal
  */
 function renderDaisySteps(
   items: StepItem[],
@@ -76,6 +137,24 @@ function renderDaisySteps(
   });
 }
 
+// ============================================================================
+// Main Component
+// ============================================================================
+
+/**
+ * Hermes engine Stepper implementation using DaisyUI.
+ *
+ * @description
+ * Provides a lightweight stepper using DaisyUI's steps component.
+ * Features include:
+ * - Minimal bundle impact
+ * - Tailwind CSS styling
+ * - Horizontal and vertical layouts
+ * - Clickable step navigation
+ *
+ * @param props - {@link StepperProps}
+ * @returns DaisyUI steps component with Rottay styling
+ */
 export default function HermesStepper(props: StepperProps): React.ReactElement {
   const {
     items,
@@ -96,13 +175,24 @@ export default function HermesStepper(props: StepperProps): React.ReactElement {
   void _size;
   void _variant;
 
-  // Internal state for uncontrolled mode
+  // ============================================================================
+  // State Management
+  // ============================================================================
+
+  /** Internal state for uncontrolled mode */
   const [internalCurrent, setInternalCurrent] = useState(defaultCurrent);
 
-  // Use controlled or uncontrolled state
+  /** Use controlled or uncontrolled state */
   const current = controlledCurrent ?? internalCurrent;
 
-  // Handle step change
+  // ============================================================================
+  // Event Handlers
+  // ============================================================================
+
+  /**
+   * Handles step change events.
+   * Updates internal state and calls the onChange callback.
+   */
   const handleChange = useCallback(
     (step: number) => {
       if (!clickable) return;
@@ -116,24 +206,35 @@ export default function HermesStepper(props: StepperProps): React.ReactElement {
     [clickable, controlledCurrent, onChange]
   );
 
-  // DaisyUI steps classes
+  // ============================================================================
+  // CSS Classes
+  // ============================================================================
+
+  /** DaisyUI steps classes based on direction */
   const stepsClasses = [
     'steps',
     direction === 'vertical' ? 'steps-vertical' : 'steps-horizontal',
     className,
   ].filter(Boolean).join(' ');
 
+  /** Container styles */
   const containerStyle: CSSProperties = {
     width: '100%',
     ...style,
   };
 
-  // Process children if no items provided
+  // ============================================================================
+  // Content Rendering
+  // ============================================================================
+
+  /** Process items or children into step content */
   let stepsContent: React.ReactNode = null;
 
   if (items) {
+    // Render from items prop
     stepsContent = renderDaisySteps(items, current, clickable, handleChange, status);
   } else if (children) {
+    // Convert children to items for DaisyUI rendering
     const childItems: StepItem[] = [];
 
     React.Children.forEach(children, (child) => {
@@ -158,6 +259,10 @@ export default function HermesStepper(props: StepperProps): React.ReactElement {
     }
   }
 
+  // ============================================================================
+  // Render
+  // ============================================================================
+
   return (
     <ul
       className={`rottay-stepper rottay-stepper--hermes ${stepsClasses}`}
@@ -170,4 +275,5 @@ export default function HermesStepper(props: StepperProps): React.ReactElement {
   );
 }
 
+// Set display name for debugging
 HermesStepper.displayName = 'HermesStepper';

@@ -1,13 +1,64 @@
 'use client';
 
 /**
- * BackTop - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview BackTop Apollo Engine - Rottay Design System
+ * @description Vanilla HTML/CSS implementation of the BackTop component.
+ * Provides a zero-dependency, fully accessible back-to-top button.
+ *
+ * @remarks
+ * The Apollo engine provides a pure HTML/CSS implementation featuring:
+ * - Zero external dependencies
+ * - Maximum accessibility compliance
+ * - Full control over styling via CSS-in-JS
+ * - Smooth CSS transitions for visibility changes
+ * - Lightweight bundle size
+ *
+ * This implementation uses inline styles and native browser APIs,
+ * making it ideal for projects that prioritize minimal dependencies
+ * or require maximum control over the component's behavior.
+ *
+ * @example
+ * ```tsx
+ * import { BackTop } from '@rottay/design-system';
+ *
+ * <BackTop engine="apollo" visibilityHeight={300} />
+ * ```
+ *
+ * @example Custom Styling
+ * ```tsx
+ * <BackTop
+ *   engine="apollo"
+ *   style={{
+ *     backgroundColor: '#52c41a',
+ *     bottom: '60px',
+ *     right: '20px',
+ *   }}
+ * />
+ * ```
+ *
+ * @see {@link BackTop} for the main component
+ * @see {@link BackTopProps} for prop documentation
+ * @see {@link BaseBackTop} for the base implementation this extends
+ *
+ * @module BackTop/Engines/Apollo
+ * @category Navigation
+ * @package @rottay/design-system
  */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import type { BackTopProps } from '../../types';
 import { BACKTOP_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Styles
+// ============================================================================
+
+/**
+ * Default styles for the Apollo BackTop button.
+ * Uses CSS-in-JS for zero-dependency styling.
+ */
 const styles = {
+  /** Base button styles - fixed position, circular shape, primary color */
   button: {
     position: 'fixed',
     bottom: '32px',
@@ -26,17 +77,51 @@ const styles = {
     zIndex: 1000,
     transition: 'opacity 0.3s, transform 0.3s',
   } as React.CSSProperties,
+  /** Hidden state styles - invisible and non-interactive */
   hidden: {
     opacity: 0,
     transform: 'scale(0)',
     pointerEvents: 'none',
   } as React.CSSProperties,
+  /** Visible state styles - fully visible and interactive */
   visible: {
     opacity: 1,
     transform: 'scale(1)',
   } as React.CSSProperties,
 };
 
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Apollo (Vanilla HTML/CSS) implementation of BackTop.
+ *
+ * @description
+ * A zero-dependency implementation using native browser APIs. Features:
+ * - CSS transition-based visibility (opacity + transform)
+ * - Passive scroll event listeners for performance
+ * - Native smooth scroll behavior
+ * - Full ARIA accessibility support
+ *
+ * @remarks
+ * Unlike Hermes which uses conditional rendering, Apollo keeps the
+ * element in the DOM and uses CSS transitions for smooth show/hide
+ * animations. The pointer-events property prevents interaction when hidden.
+ *
+ * @param props - {@link BackTopProps}
+ * @param ref - Forwarded ref to the button element
+ * @returns The BackTop button element (always rendered, visibility controlled via CSS)
+ *
+ * @example
+ * ```tsx
+ * <BackTop
+ *   engine="apollo"
+ *   visibilityHeight={200}
+ *   style={{ backgroundColor: '#ff4d4f' }}
+ * />
+ * ```
+ */
 export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
   (props, ref) => {
     const {
@@ -48,10 +133,27 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       style,
     } = props;
 
+    // ========================================================================
+    // State
+    // ========================================================================
+
+    /** Controls button visibility via CSS transitions */
     const [visible, setVisible] = useState(false);
 
+    // ========================================================================
+    // Callbacks
+    // ========================================================================
+
+    /**
+     * Returns the scroll target element.
+     * Defaults to window if no target is specified.
+     */
     const getTarget = useCallback(() => target?.() ?? window, [target]);
 
+    /**
+     * Handles scroll events to update button visibility.
+     * Compares current scroll position against visibilityHeight threshold.
+     */
     const handleScroll = useCallback(() => {
       const t = getTarget();
       const scrollTop = t === window
@@ -60,6 +162,14 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       setVisible(scrollTop >= visibilityHeight);
     }, [getTarget, visibilityHeight]);
 
+    // ========================================================================
+    // Effects
+    // ========================================================================
+
+    /**
+     * Sets up scroll event listener on the target element.
+     * Uses passive listener for better scroll performance.
+     */
     useEffect(() => {
       const t = getTarget();
       t.addEventListener('scroll', handleScroll, { passive: true });
@@ -67,6 +177,13 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       return () => t.removeEventListener('scroll', handleScroll);
     }, [getTarget, handleScroll]);
 
+    // ========================================================================
+    // Event Handlers
+    // ========================================================================
+
+    /**
+     * Handles button click - scrolls to top and triggers callback.
+     */
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       const t = getTarget();
       if (t === window) {
@@ -77,6 +194,11 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       onClick?.(e);
     };
 
+    // ========================================================================
+    // Render
+    // ========================================================================
+
+    /** Merged button styles including visibility state */
     const buttonStyle: React.CSSProperties = {
       ...styles.button,
       ...(visible ? styles.visible : styles.hidden),

@@ -1,5 +1,43 @@
 /**
- * Menu - Hermes Engine (DaisyUI)
+ * @fileoverview Menu Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based implementation of the Menu component.
+ * Part of the Rottay Design System's multi-engine architecture.
+ *
+ * @remarks
+ * The Hermes engine leverages DaisyUI's menu component classes to provide
+ * a lightweight, utility-first navigation menu with:
+ * - Tailwind CSS utility classes for styling
+ * - DaisyUI's menu component classes
+ * - Minimal JavaScript for interactivity
+ * - Fast rendering with smaller bundle size
+ *
+ * This implementation is ideal for projects already using Tailwind CSS
+ * or requiring lightweight, rapid development.
+ *
+ * @example
+ * ```tsx
+ * import { Menu } from '@rottay/design-system';
+ *
+ * // Use Hermes engine explicitly
+ * <Menu
+ *   engine="hermes"
+ *   items={menuItems}
+ *   mode="vertical"
+ *   theme="light"
+ * />
+ *
+ * // Or via EngineProvider
+ * <EngineProvider engine="hermes">
+ *   <Menu items={menuItems} mode="horizontal" />
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link MenuProps} for prop documentation
+ * @see {@link Menu} for main component
+ *
+ * @module Menu/Engines/Hermes
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +47,24 @@ import type { CSSProperties } from 'react';
 import type { MenuProps, MenuItem as MenuItemInterface, MenuSelectInfo, MenuClickInfo } from '../../types';
 import { MENU_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Render DaisyUI menu items recursively
+ * Renders DaisyUI menu items recursively.
+ *
+ * @description
+ * Transforms the menu items array into DaisyUI-styled elements,
+ * handling all item types: regular items, submenus, groups, and dividers.
+ *
+ * @param items - Array of menu item configurations
+ * @param onItemClick - Click handler for menu items
+ * @param selectedKeys - Currently selected item keys
+ * @param level - Current nesting level
+ * @returns Rendered DaisyUI menu item nodes
+ *
+ * @internal
  */
 function renderDaisyMenuItems(
   items: MenuItemInterface[],
@@ -19,12 +73,12 @@ function renderDaisyMenuItems(
   level: number = 0
 ): React.ReactNode {
   return items.map((item) => {
-    // Handle divider
+    // Handle divider type
     if (item.type === 'divider') {
       return <li key={item.key} className="divider" />;
     }
 
-    // Handle group
+    // Handle group type
     if (item.type === 'group') {
       return (
         <li key={item.key} className="menu-title">
@@ -38,7 +92,7 @@ function renderDaisyMenuItems(
       );
     }
 
-    // Handle submenu (has children)
+    // Handle submenu (item with children)
     if (item.children && item.children.length > 0) {
       return (
         <li key={item.key}>
@@ -83,6 +137,37 @@ function renderDaisyMenuItems(
   });
 }
 
+// ============================================================================
+// HermesMenu Component
+// ============================================================================
+
+/**
+ * DaisyUI/Tailwind implementation of the Menu component.
+ *
+ * @description
+ * Renders the Menu component using DaisyUI classes for styling,
+ * providing a lightweight alternative to the Titan engine.
+ *
+ * @remarks
+ * - Uses DaisyUI's menu component classes
+ * - Utility-first styling with Tailwind CSS
+ * - Supports horizontal and vertical modes
+ * - Theme-aware with base color classes
+ * - Smaller bundle size than Titan
+ *
+ * @param props - {@link MenuProps}
+ * @returns Rendered DaisyUI Menu component
+ *
+ * @example
+ * ```tsx
+ * <HermesMenu
+ *   items={menuItems}
+ *   mode="horizontal"
+ *   selectedKeys={['dashboard']}
+ *   onSelect={handleSelect}
+ * />
+ * ```
+ */
 export default function HermesMenu(props: MenuProps): React.ReactElement {
   const {
     items,
@@ -100,13 +185,24 @@ export default function HermesMenu(props: MenuProps): React.ReactElement {
     style,
   } = props;
 
-  // Internal state for uncontrolled mode
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
+  /** Internal state for uncontrolled selection mode */
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>(defaultSelectedKeys);
 
-  // Use controlled or uncontrolled state
+  /** Use controlled or uncontrolled state */
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
-  // Handle item click
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles menu item click events.
+   * Manages selection state and triggers callbacks.
+   */
   const handleItemClick = useCallback(
     (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => {
       // Call onClick callback
@@ -122,10 +218,12 @@ export default function HermesMenu(props: MenuProps): React.ReactElement {
         let newSelectedKeys: string[];
 
         if (multiple) {
+          // Toggle selection in multiple mode
           newSelectedKeys = selectedKeys.includes(key)
             ? selectedKeys.filter((k) => k !== key)
             : [...selectedKeys, key];
         } else {
+          // Single selection
           newSelectedKeys = [key];
         }
 
@@ -146,7 +244,13 @@ export default function HermesMenu(props: MenuProps): React.ReactElement {
     [selectedKeys, multiple, selectable, controlledSelectedKeys, onClick, onSelect]
   );
 
-  // DaisyUI menu classes
+  // ========================================================================
+  // Styles & Classes
+  // ========================================================================
+
+  /**
+   * DaisyUI menu classes based on props.
+   */
   const menuClasses = [
     'menu',
     mode === 'horizontal' ? 'menu-horizontal' : 'menu-vertical',
@@ -156,9 +260,16 @@ export default function HermesMenu(props: MenuProps): React.ReactElement {
     className,
   ].filter(Boolean).join(' ');
 
+  /**
+   * Custom styles for additional customization.
+   */
   const menuStyle: CSSProperties = {
     ...style,
   };
+
+  // ========================================================================
+  // Render
+  // ========================================================================
 
   return (
     <ul
