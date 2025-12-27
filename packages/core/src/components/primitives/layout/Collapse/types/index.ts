@@ -3,6 +3,9 @@
  */
 import type { ReactNode, CSSProperties } from 'react';
 
+/** Engine type for collapse components */
+type CollapseEngine = 'titan' | 'hermes' | 'apollo';
+
 export interface CollapsePanelProps {
   /** Unique key for the panel */
   panelKey?: string;
@@ -22,6 +25,8 @@ export interface CollapsePanelProps {
   className?: string;
   /** Custom styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: CollapseEngine;
 }
 
 export interface CollapseProps {
@@ -49,6 +54,8 @@ export interface CollapseProps {
   className?: string;
   /** Custom styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: CollapseEngine;
 }
 
 export const COLLAPSE_DEFAULTS = {

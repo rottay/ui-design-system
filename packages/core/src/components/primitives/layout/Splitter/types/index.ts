@@ -3,6 +3,9 @@
  */
 import type { ReactNode, CSSProperties } from 'react';
 
+/** Engine type for splitter components */
+type SplitterEngine = 'titan' | 'hermes' | 'apollo';
+
 export interface SplitterPanelProps {
   /** Default size (percentage or pixels) */
   defaultSize?: number | string;
@@ -20,6 +23,8 @@ export interface SplitterPanelProps {
   className?: string;
   /** Custom styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: SplitterEngine;
 }
 
 export interface SplitterProps {
@@ -37,6 +42,8 @@ export interface SplitterProps {
   className?: string;
   /** Custom styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: SplitterEngine;
 }
 
 export const SPLITTER_DEFAULTS = {

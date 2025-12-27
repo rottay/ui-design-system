@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 58/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 9/10, Navigation 6/12, Overlay 6/6 ✅ |
-| **Tests** | ~58 files | Display + 12 Inputs + 11 Feedback + 9 Layout + 6 Navigation + 6 Overlay done |
-| **JSDoc** | ~62% | English, standardized |
-| **Storybook** | 58/76 | Display + 12 Inputs + 11 Feedback + 9 Layout + 6 Navigation + 6 Overlay done |
+| **Refactor** | 60/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 6/12, Overlay 6/6 ✅ |
+| **Tests** | ~60 files | Display + 12 Inputs + 11 Feedback + 10 Layout + 6 Navigation + 6 Overlay done |
+| **JSDoc** | ~68% | English, standardized |
+| **Storybook** | 60/76 | Display + 12 Inputs + 11 Feedback + 10 Layout + 6 Navigation + 6 Overlay done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -157,9 +157,9 @@ Component/
 | 5 | Container | done | done | done | done | Multi-engine support |
 | 6 | Flex | done | done | done | done | Multi-engine support |
 | 7 | Space | done | done | done | done | Multi-engine support |
-| 8 | Layout | pending | pending | pending | pending | Has Header, Sider, Content, Footer |
-| 9 | Splitter | pending | pending | pending | pending | Has Panel |
-| 10 | Collapse | pending | pending | pending | pending | Has Panel |
+| 8 | Layout | done | done | done | done | Header, Sider, Content, Footer compounds |
+| 9 | Splitter | done | done | done | done | Panel compound |
+| 10 | Collapse | done | done | done | done | Panel compound |
 
 ### Navigation (12 components)
 
