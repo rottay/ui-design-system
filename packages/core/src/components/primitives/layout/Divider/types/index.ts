@@ -184,9 +184,27 @@ export const THICKNESS_MAP: Record<DividerThicknessPreset, string> = {
 };
 
 /**
- * Get CSS value for thickness.
- * @param thickness - Thickness value (preset or number)
- * @returns CSS value string
+ * Converts a thickness value to its CSS equivalent.
+ * Accepts preset names ('thin', 'medium', 'thick') or numeric pixel values.
+ *
+ * @example
+ * ```tsx
+ * import { getThicknessValue } from '@rottay/design-system';
+ *
+ * getThicknessValue('thin');     // '1px'
+ * getThicknessValue('medium');   // '2px'
+ * getThicknessValue('thick');    // '3px'
+ * getThicknessValue(4);          // '4px'
+ * getThicknessValue(undefined);  // '1px' (defaults to thin)
+ *
+ * // Usage in component styles
+ * const dividerStyle = {
+ *   borderWidth: getThicknessValue(thickness)
+ * };
+ * ```
+ *
+ * @param thickness - Thickness value: preset name or number in pixels
+ * @returns CSS-compatible thickness value string
  */
 export function getThicknessValue(thickness: DividerThickness | undefined): string {
   if (thickness === undefined) return THICKNESS_MAP.thin;

@@ -21,28 +21,39 @@ export interface UseBreakpointsResult {
 }
 
 /**
- * Hook conveniente para breakpoints comunes.
- * Usa un sistema mobile-first basado en Tailwind CSS breakpoints.
+ * Convenient hook for common breakpoint detection.
+ *
+ * Uses a mobile-first system based on Tailwind CSS breakpoints.
+ * SSR-safe: returns false for all breakpoints on the server.
  *
  * Breakpoints:
- * - Mobile: 0-639px
- * - Tablet: 640-1023px (sm)
- * - Desktop: 1024px+ (lg)
+ * - Mobile: 0-639px (default, no media query needed)
+ * - Tablet: 640-1023px (sm breakpoint)
+ * - Desktop: 1024px+ (lg breakpoint)
  *
- * @returns Object con flags booleanos para cada breakpoint
+ * Also detects:
+ * - Touch devices (via pointer and hover media features)
+ * - Reduced motion preference
  *
  * @example
  * ```tsx
- * const { isMobile, isDesktop, isTouchDevice } = useBreakpoints();
+ * import { useBreakpoints } from '@rottay/design-system';
  *
- * return (
- *   <div>
- *     {isMobile && <MobileNav />}
- *     {isDesktop && <DesktopNav />}
- *     {isTouchDevice && <TouchOptimizedButton />}
- *   </div>
- * );
+ * function ResponsiveLayout() {
+ *   const { isMobile, isDesktop, isTouchDevice, prefersReducedMotion } = useBreakpoints();
+ *
+ *   return (
+ *     <div>
+ *       {isMobile && <MobileNav />}
+ *       {isDesktop && <DesktopNav />}
+ *       {isTouchDevice && <TouchOptimizedButton />}
+ *       {!prefersReducedMotion && <AnimatedElement />}
+ *     </div>
+ *   );
+ * }
  * ```
+ *
+ * @returns {UseBreakpointsResult} Object with boolean flags for each breakpoint and device capability
  */
 export function useBreakpoints(): UseBreakpointsResult {
   // Core breakpoints (mobile-first)

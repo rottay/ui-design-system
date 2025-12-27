@@ -188,9 +188,27 @@ export const JUSTIFY_MAP: Record<StackJustify, string> = {
 };
 
 /**
- * Resolves spacing value to CSS value
- * @param value - Spacing value (preset string or number)
- * @returns CSS-compatible spacing value
+ * Converts a spacing value to its CSS equivalent.
+ * Accepts preset names or numeric pixel values.
+ *
+ * @example
+ * ```tsx
+ * import { resolveSpacing } from '@rottay/design-system';
+ *
+ * resolveSpacing('md');      // '1rem' (16px)
+ * resolveSpacing('xl');      // '2rem' (32px)
+ * resolveSpacing(24);        // '24px'
+ * resolveSpacing(undefined); // '0'
+ * resolveSpacing('none');    // '0'
+ *
+ * // Usage in component styles
+ * const stackStyle = {
+ *   gap: resolveSpacing(spacing)
+ * };
+ * ```
+ *
+ * @param value - Spacing value: preset name ('xs', 'sm', 'md', etc.) or number in pixels
+ * @returns CSS-compatible spacing value string
  */
 export function resolveSpacing(value: StackSpacing | undefined): string {
   if (value === undefined || value === 'none') return '0';

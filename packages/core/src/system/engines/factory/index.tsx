@@ -10,45 +10,99 @@ import { EngineErrorBoundary } from '../boundary';
 import type { EngineName } from '../../../types';
 
 /**
- * Engine implementation loaders
+ * Configuration object containing dynamic import functions for each engine.
+ * Each loader must return a Promise that resolves to a module with a default export.
+ *
+ * @example
+ * ```tsx
+ * const buttonLoaders: EngineLoaders<ButtonProps> = {
+ *   titan: () => import('./engines/titan'),
+ *   hermes: () => import('./engines/hermes'),
+ *   apollo: () => import('./engines/apollo'),
+ *   // Optional: custom Athena loader
+ *   athena: () => import('./engines/athena'),
+ * };
+ * ```
  */
 export interface EngineLoaders<P> {
+  /** Loader for Titan engine (Ant Design) */
   titan: () => Promise<{ default: ComponentType<P> }>;
+  /** Loader for Hermes engine (DaisyUI/Tailwind) */
   hermes: () => Promise<{ default: ComponentType<P> }>;
+  /** Loader for Apollo engine (Vanilla HTML/CSS) */
   apollo: () => Promise<{ default: ComponentType<P> }>;
+  /** Optional loader for Athena engine (custom implementations) */
   athena?: () => Promise<{ default: ComponentType<P> }>;
 }
 
 /**
- * Options for engine component creation
+ * Optional configuration for customizing engine component behavior.
+ *
+ * @example
+ * ```tsx
+ * const options: CreateEngineComponentOptions = {
+ *   fallback: <Skeleton />,
+ *   athenaEnabled: true,
+ *   fallbackEngine: 'apollo',
+ *   onError: (error, errorInfo) => {
+ *     console.error('Component failed to load:', error);
+ *     logToService(errorInfo);
+ *   }
+ * };
+ * ```
  */
 export interface CreateEngineComponentOptions {
-  /** Custom fallback UI while loading */
+  /** Custom fallback UI displayed while the component is lazy loading */
   fallback?: React.ReactNode;
-  /** Whether to use Athena wrapper for pluggable components */
+  /** Whether to wrap with Athena for custom component support (default: true) */
   athenaEnabled?: boolean;
-  /** Fallback engine to use if primary fails to load */
+  /** Fallback engine to use if the primary engine fails to load */
   fallbackEngine?: EngineName;
-  /** Callback when engine loading fails */
+  /** Callback invoked when engine loading encounters an error */
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
 }
 
 /**
- * Creates an engine-aware component that dynamically loads the appropriate implementation
+ * Creates an engine-aware component that dynamically loads the appropriate
+ * implementation based on the current engine context or component-level override.
  *
- * @param displayName - Component name for debugging
- * @param loaders - Dynamic import functions for each engine
- * @param options - Optional configuration
- * @returns Engine-aware component
+ * This factory function enables the multi-engine architecture by:
+ * - Lazy-loading engine implementations for code-splitting
+ * - Respecting the EngineProvider context for global engine selection
+ * - Allowing per-component engine overrides via the `engine` prop
+ * - Wrapping components with error boundaries for graceful failure handling
+ * - Supporting Athena's pluggable component system
  *
  * @example
  * ```tsx
+ * import { createEngineComponent } from '@rottay/design-system';
+ * import type { ButtonProps } from './types';
+ *
+ * // Create an engine-aware Button component
  * export const Button = createEngineComponent<ButtonProps>('Button', {
- *   titan: () => import('./titan'),
- *   hermes: () => import('./hermes'),
- *   apollo: () => import('./apollo'),
+ *   titan: () => import('./engines/titan'),
+ *   hermes: () => import('./engines/hermes'),
+ *   apollo: () => import('./engines/apollo'),
+ * });
+ *
+ * // Usage with default engine (from provider)
+ * <Button variant="primary">Click me</Button>
+ *
+ * // Usage with engine override
+ * <Button engine="hermes" variant="primary">Click me</Button>
+ *
+ * // With custom options
+ * export const Card = createEngineComponent<CardProps>('Card', loaders, {
+ *   fallback: <Skeleton />,
+ *   fallbackEngine: 'apollo',
+ *   onError: (error) => logError('Card loading failed', error)
  * });
  * ```
+ *
+ * @param displayName - Component name used for React DevTools and debugging
+ * @param loaders - Object containing dynamic import functions for each engine
+ * @param options - Optional configuration for loading behavior and error handling
+ * @returns A React component that renders the appropriate engine implementation
  */
 export function createEngineComponent<P extends object>(
   displayName: string,

@@ -1,11 +1,45 @@
 /**
- * Design tokens hook
- * Access design tokens with tenant overrides
+ * Design tokens hook - Access design tokens with tenant overrides
  */
 
 import { useTenant } from '../tenant';
 import type { DesignTokens } from '../../../types';
 
+/**
+ * Hook to access design tokens with tenant-specific overrides.
+ *
+ * Returns a complete set of design tokens (colors, spacing, typography, etc.)
+ * that are merged with any tenant-specific overrides. This ensures consistent
+ * styling while allowing tenant customization.
+ *
+ * @example
+ * ```tsx
+ * import { useTokens } from '@rottay/design-system';
+ *
+ * function CustomCard() {
+ *   const tokens = useTokens();
+ *
+ *   return (
+ *     <div style={{
+ *       backgroundColor: tokens.colors.neutral[100],
+ *       padding: tokens.spacing[4],
+ *       borderRadius: tokens.borderRadius.lg,
+ *       boxShadow: tokens.shadows.md,
+ *       fontSize: tokens.typography.fontSize.md,
+ *     }}>
+ *       Custom styled content
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * @returns {DesignTokens} Object containing all design tokens
+ * @returns {Object} returns.colors - Color palette including primary, secondary, neutral, and semantic colors
+ * @returns {number[]} returns.spacing - Spacing scale array (0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96)
+ * @returns {Object} returns.typography - Typography settings (fontSize, fontWeight, lineHeight)
+ * @returns {Object} returns.borderRadius - Border radius values (none, sm, md, lg, xl, full)
+ * @returns {Object} returns.shadows - Box shadow values (sm, md, lg, xl)
+ */
 export function useTokens(): DesignTokens {
   const { config } = useTenant();
 

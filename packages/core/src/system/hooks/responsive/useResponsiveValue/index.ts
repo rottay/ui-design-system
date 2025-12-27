@@ -19,37 +19,48 @@ export interface ResponsiveValueConfig<T> {
 }
 
 /**
- * Hook para valores responsivos basados en breakpoints.
- * Sigue el sistema mobile-first de Tailwind CSS.
+ * Hook for responsive values based on viewport breakpoints.
+ *
+ * Follows Tailwind CSS mobile-first breakpoint system. Values cascade up,
+ * meaning smaller breakpoint values apply until a larger breakpoint overrides them.
+ * SSR-safe: returns the base value on the server.
  *
  * Breakpoints (min-width):
- * - base: 0px (siempre aplica)
+ * - base: 0px (always applies, required)
  * - sm: 640px
  * - md: 768px
  * - lg: 1024px
  * - xl: 1280px
  * - 2xl: 1536px
  *
- * @param values - Object con valores por breakpoint
- * @returns El valor apropiado para el breakpoint actual
- *
  * @example
  * ```tsx
- * // Columns adaptables
- * const columns = useResponsiveValue({ base: 1, sm: 2, md: 3, lg: 4 });
+ * import { useResponsiveValue } from '@rottay/design-system';
  *
- * // Spacing adaptable
- * const gap = useResponsiveValue({ base: 8, md: 16, lg: 24 });
+ * function ResponsiveGrid() {
+ *   // Adaptive columns: 1 on mobile, 2 on small, 3 on medium, 4 on large
+ *   const columns = useResponsiveValue({ base: 1, sm: 2, md: 3, lg: 4 });
  *
- * // Texto adaptable
- * const fontSize = useResponsiveValue({
- *   base: '14px',
- *   md: '16px',
- *   lg: '18px'
- * });
+ *   // Adaptive spacing
+ *   const gap = useResponsiveValue({ base: 8, md: 16, lg: 24 });
  *
- * return <Grid columns={columns} gap={gap} fontSize={fontSize} />;
+ *   // Adaptive font size
+ *   const fontSize = useResponsiveValue({
+ *     base: '14px',
+ *     md: '16px',
+ *     lg: '18px'
+ *   });
+ *
+ *   return (
+ *     <Grid columns={columns} gap={gap} style={{ fontSize }}>
+ *       {children}
+ *     </Grid>
+ *   );
+ * }
  * ```
+ *
+ * @param values - Object mapping breakpoint names to values. The `base` key is required.
+ * @returns {T} The value for the current viewport breakpoint
  */
 export function useResponsiveValue<T>(values: ResponsiveValueConfig<T>): T {
   // Check breakpoints from largest to smallest (cascade)

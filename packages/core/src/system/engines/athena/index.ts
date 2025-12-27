@@ -35,15 +35,42 @@ let athenaConfig: AthenaConfig = {
 };
 
 /**
- * Configure the Athena engine globally
- * @param config - Configuration options
+ * Configures the Athena engine globally with custom options.
+ * Call this at application startup to customize fallback behavior and logging.
+ *
+ * @example
+ * ```tsx
+ * import { configureAthena } from '@rottay/design-system';
+ *
+ * // Configure at app initialization
+ * configureAthena({
+ *   fallbackEngine: 'apollo',
+ *   warnOnFallback: process.env.NODE_ENV === 'development',
+ *   logger: (message, level) => {
+ *     if (level === 'error') console.error(message);
+ *   }
+ * });
+ * ```
+ *
+ * @param config - Partial configuration options to merge with existing config
  */
 export function configureAthena(config: Partial<AthenaConfig>): void {
   athenaConfig = { ...athenaConfig, ...config };
 }
 
 /**
- * Get current Athena configuration
+ * Returns a copy of the current Athena engine configuration.
+ *
+ * @example
+ * ```tsx
+ * import { getAthenaConfig } from '@rottay/design-system';
+ *
+ * const config = getAthenaConfig();
+ * console.log(config.fallbackEngine); // 'titan'
+ * console.log(config.warnOnFallback); // true
+ * ```
+ *
+ * @returns A copy of the current Athena configuration object
  */
 export function getAthenaConfig(): AthenaConfig {
   return { ...athenaConfig };
@@ -97,8 +124,23 @@ export function registerAthenaComponents(
 }
 
 /**
- * Unregister a custom component
- * @param componentName - The component to unregister
+ * Removes a custom component from the Athena registry.
+ * After unregistering, the component will fall back to the default engine implementation.
+ *
+ * @example
+ * ```tsx
+ * import { unregisterAthenaComponent, hasAthenaComponent } from '@rottay/design-system';
+ *
+ * // Remove a custom implementation
+ * const wasRemoved = unregisterAthenaComponent('Button');
+ * console.log(wasRemoved); // true if it was registered, false otherwise
+ *
+ * // Verify removal
+ * console.log(hasAthenaComponent('Button')); // false
+ * ```
+ *
+ * @param componentName - The name of the component to unregister
+ * @returns True if the component was removed, false if it was not registered
  */
 export function unregisterAthenaComponent(componentName: string): boolean {
   const result = athenaRegistry.delete(componentName);
@@ -111,7 +153,19 @@ export function unregisterAthenaComponent(componentName: string): boolean {
 }
 
 /**
- * Clear all registered Athena components
+ * Removes all custom components from the Athena registry.
+ * Useful for testing or when switching contexts.
+ *
+ * @example
+ * ```tsx
+ * import { clearAthenaRegistry, getRegisteredComponentCount } from '@rottay/design-system';
+ *
+ * // In test cleanup
+ * afterEach(() => {
+ *   clearAthenaRegistry();
+ *   expect(getRegisteredComponentCount()).toBe(0);
+ * });
+ * ```
  */
 export function clearAthenaRegistry(): void {
   athenaRegistry.clear();
@@ -122,17 +176,51 @@ export function clearAthenaRegistry(): void {
 }
 
 /**
- * Check if a component is registered
- * @param componentName - The component name to check
+ * Checks if a component has a custom Athena implementation registered.
+ *
+ * @example
+ * ```tsx
+ * import { hasAthenaComponent, registerAthenaComponent } from '@rottay/design-system';
+ *
+ * // Check before registering to avoid duplicates
+ * if (!hasAthenaComponent('Button')) {
+ *   registerAthenaComponent('Button', MyCustomButton);
+ * }
+ *
+ * // Conditionally render based on availability
+ * const ButtonImpl = hasAthenaComponent('Button')
+ *   ? getAthenaComponent('Button')
+ *   : DefaultButton;
+ * ```
+ *
+ * @param componentName - The name of the component to check
+ * @returns True if the component is registered in Athena, false otherwise
  */
 export function hasAthenaComponent(componentName: string): boolean {
   return athenaRegistry.has(componentName);
 }
 
 /**
- * Get a registered component implementation
- * @param componentName - The component name to retrieve
- * @returns The component or undefined if not registered
+ * Retrieves a registered custom component implementation from the Athena registry.
+ *
+ * @example
+ * ```tsx
+ * import { getAthenaComponent } from '@rottay/design-system';
+ *
+ * // Get a registered component with type safety
+ * interface ButtonProps {
+ *   label: string;
+ *   onClick: () => void;
+ * }
+ *
+ * const CustomButton = getAthenaComponent<ButtonProps>('Button');
+ * if (CustomButton) {
+ *   return <CustomButton label="Click me" onClick={handleClick} />;
+ * }
+ * ```
+ *
+ * @param componentName - The name of the component to retrieve
+ * @returns The component implementation or undefined if not registered
  */
 export function getAthenaComponent<P>(
   componentName: string
@@ -141,25 +229,73 @@ export function getAthenaComponent<P>(
 }
 
 /**
- * Get all registered component names
+ * Returns an array of all component names that have custom Athena implementations.
+ *
+ * @example
+ * ```tsx
+ * import { getRegisteredComponents } from '@rottay/design-system';
+ *
+ * const components = getRegisteredComponents();
+ * console.log(components); // ['Button', 'Input', 'Card']
+ *
+ * // Display in a debug panel
+ * <DebugPanel>
+ *   <h3>Custom Components:</h3>
+ *   <ul>
+ *     {getRegisteredComponents().map(name => (
+ *       <li key={name}>{name}</li>
+ *     ))}
+ *   </ul>
+ * </DebugPanel>
+ * ```
+ *
+ * @returns Array of registered component names
  */
 export function getRegisteredComponents(): string[] {
   return Array.from(athenaRegistry.keys());
 }
 
 /**
- * Get the count of registered components
+ * Returns the number of custom components registered in Athena.
+ *
+ * @example
+ * ```tsx
+ * import { getRegisteredComponentCount } from '@rottay/design-system';
+ *
+ * console.log(`${getRegisteredComponentCount()} custom components registered`);
+ *
+ * // Use in tests
+ * expect(getRegisteredComponentCount()).toBe(3);
+ * ```
+ *
+ * @returns The count of registered components
  */
 export function getRegisteredComponentCount(): number {
   return athenaRegistry.size;
 }
 
 /**
- * Create an Athena component wrapper that uses registered implementation
- * or falls back to a default
+ * Creates a lazy-loadable wrapper that resolves to either a registered Athena
+ * component or a fallback implementation.
+ * Used internally by the engine factory to support custom component overrides.
  *
- * @param componentName - Name of the component
- * @param getFallback - Function to get the fallback component
+ * @example
+ * ```tsx
+ * import { createAthenaWrapper } from '@rottay/design-system';
+ *
+ * // Internal usage in engine factory
+ * const athenaLoader = createAthenaWrapper<ButtonProps>(
+ *   'Button',
+ *   () => import('./engines/apollo')
+ * );
+ *
+ * // The wrapper returns a Promise for lazy loading
+ * const { default: ButtonComponent } = await athenaLoader();
+ * ```
+ *
+ * @param componentName - Name of the component to look up in the registry
+ * @param getFallback - Function that returns a Promise for the fallback component
+ * @returns A function that returns a Promise resolving to the component module
  */
 export function createAthenaWrapper<P extends object>(
   componentName: string,
@@ -185,8 +321,32 @@ export function createAthenaWrapper<P extends object>(
 }
 
 /**
- * React hook to check if running with Athena engine
- * and if specific components are available
+ * React hook that provides the current Athena engine status.
+ * Useful for debugging or building admin interfaces that show component registration.
+ *
+ * @example
+ * ```tsx
+ * import { useAthenaStatus } from '@rottay/design-system';
+ *
+ * function AthenaDebugPanel() {
+ *   const { registeredComponents, componentCount, config, hasComponent } = useAthenaStatus();
+ *
+ *   return (
+ *     <div>
+ *       <p>Registered: {componentCount} components</p>
+ *       <p>Fallback: {config.fallbackEngine}</p>
+ *       <ul>
+ *         {registeredComponents.map(name => (
+ *           <li key={name}>{name}</li>
+ *         ))}
+ *       </ul>
+ *       <p>Has Button: {hasComponent('Button') ? 'Yes' : 'No'}</p>
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * @returns Object containing Athena status and utility functions
  */
 export function useAthenaStatus() {
   return {

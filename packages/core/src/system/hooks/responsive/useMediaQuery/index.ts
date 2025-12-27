@@ -1,17 +1,38 @@
 import { useState, useEffect, useCallback } from 'react';
 
 /**
- * Hook para detectar media queries en React.
- * SSR-safe: retorna false en el servidor.
+ * Hook to detect CSS media queries in React.
  *
- * @param query - Media query string (ej: '(min-width: 640px)')
- * @returns boolean - true si la media query coincide
+ * Provides reactive media query detection with automatic updates when the
+ * viewport changes. SSR-safe: returns false on the server to prevent
+ * hydration mismatches.
+ *
+ * Supports all valid CSS media query strings including:
+ * - Viewport queries: `(min-width: 640px)`, `(max-width: 1024px)`
+ * - Feature queries: `(prefers-color-scheme: dark)`, `(prefers-reduced-motion: reduce)`
+ * - Device queries: `(hover: none)`, `(pointer: coarse)`
+ * - Combined queries: `(min-width: 640px) and (max-width: 1023px)`
  *
  * @example
  * ```tsx
- * const isMobile = useMediaQuery('(max-width: 639px)');
- * const isDark = useMediaQuery('(prefers-color-scheme: dark)');
+ * import { useMediaQuery } from '@rottay/design-system';
+ *
+ * function AdaptiveComponent() {
+ *   const isMobile = useMediaQuery('(max-width: 639px)');
+ *   const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+ *   const isLandscape = useMediaQuery('(orientation: landscape)');
+ *
+ *   return (
+ *     <div className={isDarkMode ? 'dark-theme' : 'light-theme'}>
+ *       {isMobile ? <MobileView /> : <DesktopView />}
+ *       {isLandscape && <LandscapeOptimizedContent />}
+ *     </div>
+ *   );
+ * }
  * ```
+ *
+ * @param query - A valid CSS media query string (e.g., '(min-width: 640px)')
+ * @returns {boolean} True if the media query matches, false otherwise (or on server)
  */
 export function useMediaQuery(query: string): boolean {
   // SSR-safe: default to false on server

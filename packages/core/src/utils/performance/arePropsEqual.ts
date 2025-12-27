@@ -1,13 +1,25 @@
 /**
- * Performance utility for shallow comparison of props
- * Used with React.memo to prevent unnecessary re-renders
+ * Performance utility for shallow comparison of props.
+ * Used with React.memo to prevent unnecessary re-renders.
  */
 
 /**
- * Shallow compares two objects for equality
+ * Shallow compares two objects for equality.
+ * Useful for React.memo comparisons to prevent unnecessary re-renders.
+ *
+ * @example
+ * ```tsx
+ * import { memo } from 'react';
+ * import { arePropsEqual } from '@rottay/design-system';
+ *
+ * const MyComponent = memo(({ name, count }) => {
+ *   return <div>{name}: {count}</div>;
+ * }, arePropsEqual);
+ * ```
+ *
  * @param prevProps - Previous props object
  * @param nextProps - Next props object
- * @returns true if props are equal, false otherwise
+ * @returns true if props are shallowly equal, false otherwise
  */
 export function arePropsEqual<T extends Record<string, unknown>>(
   prevProps: T,
@@ -30,9 +42,30 @@ export function arePropsEqual<T extends Record<string, unknown>>(
 }
 
 /**
- * Creates a custom comparison function that ignores specific props
- * @param keysToIgnore - Array of prop keys to ignore in comparison
- * @returns A comparison function for React.memo
+ * Creates a custom comparison function that ignores specific props.
+ * Useful when certain props (like callbacks or refs) should not trigger re-renders.
+ *
+ * @example
+ * ```tsx
+ * import { memo } from 'react';
+ * import { createPropsComparator } from '@rottay/design-system';
+ *
+ * interface ButtonProps {
+ *   label: string;
+ *   onClick: () => void;
+ *   onHover?: () => void;
+ * }
+ *
+ * // Ignore callback props that change on every render
+ * const compareProps = createPropsComparator<ButtonProps>(['onClick', 'onHover']);
+ *
+ * const Button = memo(({ label, onClick }) => {
+ *   return <button onClick={onClick}>{label}</button>;
+ * }, compareProps);
+ * ```
+ *
+ * @param keysToIgnore - Array of prop keys to exclude from comparison
+ * @returns A comparison function compatible with React.memo
  */
 export function createPropsComparator<T extends Record<string, unknown>>(
   keysToIgnore: (keyof T)[]
