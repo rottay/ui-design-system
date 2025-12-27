@@ -9,8 +9,8 @@ import {
   BrandedAuthLayout,
   SocialAuthLayout,
   EnterpriseAuthLayout,
-} from '../../components/custom/auth-layout';
-import { DesignSystemProvider } from '../../system/providers/root';
+} from '../';
+import { DesignSystemProvider } from '../../../../system/providers/root';
 
 const meta: Meta = {
   title: 'Custom/AuthLayout',

@@ -8,8 +8,8 @@ import {
   SearchableDataTable,
   SelectableDataTable,
   FullDataTable,
-} from '../../components/custom/data-table';
-import { DesignSystemProvider } from '../../system/providers/root';
+} from '../';
+import { DesignSystemProvider } from '../../../../system/providers/root';
 
 const meta: Meta = {
   title: 'Custom/DataTable',

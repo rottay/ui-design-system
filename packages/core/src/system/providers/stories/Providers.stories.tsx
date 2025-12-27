@@ -3,10 +3,10 @@
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
-import { DesignSystemProvider } from '../../system/providers/root';
-import { FeatureGate } from '../../system/features/gate';
-import { Button } from '../../components/primitives/inputs/button';
-import { Alert } from '../../components/primitives/feedback/alert';
+import { DesignSystemProvider } from '../root';
+import { FeatureGate } from '../../features/gate';
+import { Button } from '../../../components/primitives/inputs/button';
+import { Alert } from '../../../components/primitives/feedback/alert';
 
 const meta: Meta = {
   title: 'System/Providers',
