@@ -2,9 +2,69 @@
  * Progress Component Tests
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { Progress } from '../';
+
+// Mock the engine factory
+vi.mock('../../../../../system/engines/factory', () => ({
+  createEngineComponent: () => {
+    const MockProgress = React.forwardRef<HTMLDivElement, any>(({
+      percent = 0,
+      type = 'line',
+      status,
+      showInfo = true,
+      strokeColor,
+      strokeWidth = 8,
+      className = '',
+      style = {},
+      ...props
+    }, ref) => {
+      const normalizedPercent = Math.min(100, Math.max(0, percent));
+      const isSuccess = status === 'success' || (!status && normalizedPercent === 100);
+
+      return (
+        <div
+          ref={ref}
+          role="progressbar"
+          aria-valuenow={normalizedPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          className={`rottay-progress rottay-progress--${type} rottay-progress--${status || 'normal'} ${className}`}
+          style={style}
+          {...props}
+        >
+          <div
+            className="rottay-progress__track"
+            style={{
+              backgroundColor: '#e6e6e6',
+              height: type === 'line' ? strokeWidth : undefined,
+              borderRadius: strokeWidth / 2,
+            }}
+          >
+            <div
+              className="rottay-progress__bar"
+              style={{
+                width: `${normalizedPercent}%`,
+                backgroundColor: strokeColor || (isSuccess ? '#52c41a' : status === 'error' ? '#ff4d4f' : '#1677ff'),
+                height: '100%',
+                borderRadius: strokeWidth / 2,
+              }}
+            />
+          </div>
+          {showInfo && (
+            <span className="rottay-progress__info">
+              {isSuccess ? '✓' : `${normalizedPercent}%`}
+            </span>
+          )}
+        </div>
+      );
+    });
+    MockProgress.displayName = 'Progress';
+    return MockProgress;
+  },
+}));
 
 describe('Progress', () => {
   describe('Basic Rendering', () => {

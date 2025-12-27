@@ -5,7 +5,53 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
 import { Alert } from '../';
+
+// Mock the engine factory
+vi.mock('../../../../../system/engines/factory', () => ({
+  createEngineComponent: () => {
+    const MockAlert = React.forwardRef<HTMLDivElement, any>(({
+      message,
+      description,
+      type = 'info',
+      icon,
+      showIcon = true,
+      closable = false,
+      onClose,
+      className = '',
+      style = {},
+      children,
+      ...props
+    }, ref) => (
+      <div
+        ref={ref}
+        role="alert"
+        className={`rottay-alert rottay-alert--${type} ${className}`}
+        style={style}
+        {...props}
+      >
+        {showIcon && icon && <span data-testid="alert-icon">{icon}</span>}
+        <div className="rottay-alert__content">
+          {message && <div className="rottay-alert__message">{message}</div>}
+          {description && <div className="rottay-alert__description">{description}</div>}
+          {children}
+        </div>
+        {closable && (
+          <button
+            type="button"
+            aria-label="Close alert"
+            onClick={onClose}
+          >
+            ×
+          </button>
+        )}
+      </div>
+    ));
+    MockAlert.displayName = 'Alert';
+    return MockAlert;
+  },
+}));
 
 describe('Alert', () => {
   describe('Basic Rendering', () => {

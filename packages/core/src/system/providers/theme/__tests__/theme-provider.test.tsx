@@ -6,6 +6,13 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider, useThemeContext } from '../index';
 
+// Store original createElement
+const originalCreateElement = document.createElement.bind(document);
+
+// Mock for controlling link element behavior
+let linkBehavior: 'success' | 'error' | 'timeout' = 'success';
+let tenantLoadedCallbacks: Map<string, () => void> = new Map();
+
 // Test component that uses the theme hook
 function TestConsumer() {
   const { tenant, theme, isLoading, isFallback, config } = useThemeContext();
@@ -24,11 +31,40 @@ describe('ThemeProvider', () => {
   beforeEach(() => {
     // Clear document head before each test
     document.head.innerHTML = '';
+    linkBehavior = 'success';
+    tenantLoadedCallbacks.clear();
+
+    // Mock document.createElement for link elements
+    document.createElement = vi.fn((tagName: string) => {
+      const element = originalCreateElement(tagName);
+      if (tagName === 'link') {
+        // Simulate async CSS loading
+        const originalAppend = document.head.appendChild.bind(document.head);
+        const href = element.href;
+
+        // Override appendChild to trigger load/error events
+        setTimeout(() => {
+          if (linkBehavior === 'success' || (element.href && element.href.includes('rottay'))) {
+            if (element.onload) {
+              element.onload(new Event('load'));
+            }
+          } else if (linkBehavior === 'error') {
+            if (element.onerror) {
+              element.onerror(new Event('error'));
+            }
+          }
+          // For timeout, we don't call anything - let the timeout handler run
+        }, 10);
+      }
+      return element;
+    }) as any;
   });
 
   afterEach(() => {
     // Clean up
     document.head.innerHTML = '';
+    document.createElement = originalCreateElement;
+    vi.clearAllMocks();
   });
 
   it('provides default theme context', async () => {
@@ -46,6 +82,26 @@ describe('ThemeProvider', () => {
   });
 
   it('accepts custom initial tenant', async () => {
+    // For custom tenant, simulate error so it falls back to rottay
+    document.createElement = vi.fn((tagName: string) => {
+      const element = originalCreateElement(tagName);
+      if (tagName === 'link') {
+        setTimeout(() => {
+          // Custom tenant fails, rottay succeeds
+          if (element.href && element.href.includes('custom-tenant')) {
+            if (element.onerror) {
+              element.onerror(new Event('error'));
+            }
+          } else if (element.href && element.href.includes('rottay')) {
+            if (element.onload) {
+              element.onload(new Event('load'));
+            }
+          }
+        }, 10);
+      }
+      return element;
+    }) as any;
+
     render(
       <ThemeProvider tenant="custom-tenant">
         <TestConsumer />
@@ -57,7 +113,7 @@ describe('ThemeProvider', () => {
       const tenant = screen.getByTestId('tenant').textContent;
       // Should fallback to rottay if custom-tenant.css doesn't exist
       expect(tenant).toBe('rottay');
-    });
+    }, { timeout: 1000 });
   });
 
   it('throws error when useThemeContext used outside provider', () => {
@@ -75,6 +131,25 @@ describe('ThemeProvider', () => {
   it('calls onError callback when theme fails to load', async () => {
     const onError = vi.fn();
 
+    // Simulate nonexistent theme failing
+    document.createElement = vi.fn((tagName: string) => {
+      const element = originalCreateElement(tagName);
+      if (tagName === 'link') {
+        setTimeout(() => {
+          if (element.href && element.href.includes('nonexistent')) {
+            if (element.onerror) {
+              element.onerror(new Event('error'));
+            }
+          } else if (element.href && element.href.includes('rottay')) {
+            if (element.onload) {
+              element.onload(new Event('load'));
+            }
+          }
+        }, 10);
+      }
+      return element;
+    }) as any;
+
     render(
       <ThemeProvider tenant="nonexistent" onError={onError}>
         <TestConsumer />
@@ -85,12 +160,31 @@ describe('ThemeProvider', () => {
       () => {
         expect(onError).toHaveBeenCalled();
       },
-      { timeout: 6000 }
+      { timeout: 1000 }
     );
   });
 
   it('calls onFallback callback when falling back to Rottay', async () => {
     const onFallback = vi.fn();
+
+    // Simulate nonexistent theme failing
+    document.createElement = vi.fn((tagName: string) => {
+      const element = originalCreateElement(tagName);
+      if (tagName === 'link') {
+        setTimeout(() => {
+          if (element.href && element.href.includes('nonexistent')) {
+            if (element.onerror) {
+              element.onerror(new Event('error'));
+            }
+          } else if (element.href && element.href.includes('rottay')) {
+            if (element.onload) {
+              element.onload(new Event('load'));
+            }
+          }
+        }, 10);
+      }
+      return element;
+    }) as any;
 
     render(
       <ThemeProvider tenant="nonexistent" onFallback={onFallback}>
@@ -102,7 +196,7 @@ describe('ThemeProvider', () => {
       () => {
         expect(onFallback).toHaveBeenCalledWith('nonexistent');
       },
-      { timeout: 6000 }
+      { timeout: 1000 }
     );
   });
 

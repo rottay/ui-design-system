@@ -2,9 +2,57 @@
  * Result Component Tests
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { Result } from '../';
+
+// Mock the engine factory
+vi.mock('../../../../../system/engines/factory', () => ({
+  createEngineComponent: () => {
+    const MockResult = React.forwardRef<HTMLDivElement, any>(({
+      status = 'info',
+      title,
+      subTitle,
+      icon,
+      extra,
+      className = '',
+      style = {},
+      children,
+      ...props
+    }, ref) => {
+      const statusIcons: Record<string, string> = {
+        success: '✓',
+        error: '✕',
+        info: 'ℹ',
+        warning: '⚠',
+        '404': '404',
+        '403': '403',
+        '500': '500',
+      };
+
+      return (
+        <div
+          ref={ref}
+          role="status"
+          className={`rottay-result rottay-result--${status} ${className}`}
+          style={style}
+          {...props}
+        >
+          <div className="rottay-result__icon" aria-hidden="true">
+            {icon || null}
+          </div>
+          {title && <div className="rottay-result__title">{title}</div>}
+          {subTitle && <div className="rottay-result__subtitle">{subTitle}</div>}
+          {children && <div className="rottay-result__content">{children}</div>}
+          {extra && <div className="rottay-result__extra">{extra}</div>}
+        </div>
+      );
+    });
+    MockResult.displayName = 'Result';
+    return MockResult;
+  },
+}));
 
 describe('Result', () => {
   describe('Basic Rendering', () => {

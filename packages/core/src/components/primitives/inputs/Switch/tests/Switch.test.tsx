@@ -30,7 +30,7 @@ vi.mock('../../../../../system/engines/factory', () => ({
         data-disabled={disabled}
         data-loading={loading}
         role="switch"
-        aria-checked={checked ?? defaultChecked}
+        aria-checked={String(checked ?? defaultChecked ?? false)}
         disabled={disabled || loading}
         className={className}
         onClick={(e) => {

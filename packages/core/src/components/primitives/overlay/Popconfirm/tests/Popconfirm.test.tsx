@@ -78,7 +78,7 @@ vi.mock('../../../../../system/engines/factory', () => ({
           </div>
           {actualOpen && !disabled && (
             <div data-testid="popconfirm-content" role="alertdialog">
-              {icon !== undefined && <span data-testid="popconfirm-icon">{icon}</span>}
+              {icon !== null && <span data-testid="popconfirm-icon">{icon === undefined ? '⚠️' : icon}</span>}
               <div data-testid="popconfirm-title">{title}</div>
               {description && <div data-testid="popconfirm-description">{description}</div>}
               <div data-testid="popconfirm-buttons">

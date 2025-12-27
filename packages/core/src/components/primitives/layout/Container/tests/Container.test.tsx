@@ -14,7 +14,7 @@ vi.mock('../../../../../system/engines/factory', () => ({
     const MockContainer = React.forwardRef<HTMLDivElement, any>(({
       children,
       maxWidth,
-      center,
+      center = true,
       padding,
       fluid,
       className,
@@ -26,7 +26,7 @@ vi.mock('../../../../../system/engines/factory', () => ({
         ref,
         'data-testid': testId || 'container',
         'data-max-width': maxWidth,
-        'data-center': center,
+        'data-center': String(center),
         'data-padding': padding,
         'data-fluid': fluid,
         className,

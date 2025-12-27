@@ -4,7 +4,78 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
 import { Modal } from '../';
+
+// Mock the engine factory
+vi.mock('../../../../../system/engines/factory', () => ({
+  createEngineComponent: () => {
+    const MockModal = React.forwardRef<HTMLDivElement, any>(({
+      open,
+      title,
+      size = 'md',
+      closable = true,
+      onClose,
+      onOk,
+      okText = 'OK',
+      cancelText = 'Cancel',
+      footer,
+      hideFooter,
+      closeOnOverlayClick = true,
+      confirmLoading,
+      className = '',
+      children,
+      ...props
+    }, ref) => {
+      if (!open) return null;
+
+      const titleId = title ? 'modal-title' : undefined;
+
+      return (
+        <>
+          <div
+            className={`rottay-modal-overlay ${className}`}
+            onClick={closeOnOverlayClick ? onClose : undefined}
+          />
+          <div
+            ref={ref}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
+            className={`rottay-modal rottay-modal--${size} ${className}`}
+            {...props}
+          >
+            {closable && (
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={onClose}
+              >
+                ×
+              </button>
+            )}
+            {title && <div id={titleId} className="rottay-modal__title">{title}</div>}
+            <div className="rottay-modal__body">{children}</div>
+            {!hideFooter && (
+              <div className="rottay-modal__footer">
+                {footer || (
+                  <>
+                    <button onClick={onClose}>{cancelText}</button>
+                    <button onClick={onOk} disabled={confirmLoading}>
+                      {confirmLoading ? 'Loading...' : okText}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </>
+      );
+    });
+    MockModal.displayName = 'Modal';
+    return MockModal;
+  },
+}));
 
 describe('Modal', () => {
   describe('Basic Rendering', () => {

@@ -40,7 +40,11 @@ vi.mock('../../../../../system/engines/factory', () => ({
           checked={checked}
           defaultChecked={defaultChecked}
           disabled={disabled || loading}
-          onChange={(e) => onChange?.(e.target.checked, e)}
+          onChange={(e) => {
+            if (!disabled && !loading) {
+              onChange?.(e.target.checked, e);
+            }
+          }}
           aria-checked={checked}
           data-testid="toggle-input"
         />

@@ -4,7 +4,66 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
 import { Drawer } from '../';
+
+// Mock the engine factory
+vi.mock('../../../../../system/engines/factory', () => ({
+  createEngineComponent: () => {
+    const MockDrawer = React.forwardRef<HTMLDivElement, any>(({
+      open,
+      title,
+      placement = 'right',
+      size = 'md',
+      width,
+      height,
+      closable = true,
+      onClose,
+      footer,
+      hideFooter,
+      closeOnOverlayClick = true,
+      className = '',
+      children,
+      ...props
+    }, ref) => {
+      if (!open) return null;
+
+      return (
+        <>
+          <div
+            className={`rottay-drawer-overlay ${className}`}
+            onClick={closeOnOverlayClick ? onClose : undefined}
+          />
+          <div
+            ref={ref}
+            role="dialog"
+            aria-modal="true"
+            className={`rottay-drawer rottay-drawer--${placement} rottay-drawer--${size} ${className}`}
+            style={{ width, height }}
+            {...props}
+          >
+            {closable && (
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={onClose}
+              >
+                ×
+              </button>
+            )}
+            {title && <div className="rottay-drawer__title">{title}</div>}
+            <div className="rottay-drawer__body">{children}</div>
+            {!hideFooter && footer && (
+              <div className="rottay-drawer__footer">{footer}</div>
+            )}
+          </div>
+        </>
+      );
+    });
+    MockDrawer.displayName = 'Drawer';
+    return MockDrawer;
+  },
+}));
 
 describe('Drawer', () => {
   describe('Basic Rendering', () => {

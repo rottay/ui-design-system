@@ -147,7 +147,8 @@ describe('Button.Group', () => {
 describe('Button.Icon', () => {
   it('renders icon button', () => {
     render(<Button.Icon icon={<span>★</span>} aria-label="Star" />);
-    expect(screen.getByTestId('button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Star' })).toBeInTheDocument();
+    expect(screen.getByText('★')).toBeInTheDocument();
   });
 });
 

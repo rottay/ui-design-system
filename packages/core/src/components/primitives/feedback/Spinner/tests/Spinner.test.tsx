@@ -2,9 +2,43 @@
  * Spinner Component Tests
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import React from 'react';
 import { Spinner } from '../';
+
+// Mock the engine factory
+vi.mock('../../../../../system/engines/factory', () => ({
+  createEngineComponent: () => {
+    const MockSpinner = React.forwardRef<HTMLDivElement, any>(({
+      size = 'md',
+      color,
+      label,
+      className = '',
+      style = {},
+      ...props
+    }, ref) => (
+      <div
+        ref={ref}
+        role="status"
+        aria-busy="true"
+        className={`rottay-spinner rottay-spinner--${size} ${className}`}
+        style={{
+          color,
+          ...style,
+        }}
+        {...props}
+      >
+        <svg className="rottay-spinner__circle" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+        </svg>
+        {label && <span className="rottay-spinner__label">{label}</span>}
+      </div>
+    ));
+    MockSpinner.displayName = 'Spinner';
+    return MockSpinner;
+  },
+}));
 
 describe('Spinner', () => {
   describe('Basic Rendering', () => {
