@@ -1,9 +1,57 @@
+/**
+ * @fileoverview Message Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Message component.
+ * Provides accessible, zero-dependency message functionality.
+ *
+ * @remarks
+ * The Apollo engine uses vanilla HTML and CSS for a completely dependency-free
+ * implementation with maximum accessibility:
+ *
+ * - **Zero Dependencies**: No external CSS frameworks required
+ * - **Full Accessibility**: ARIA attributes, role="alert", aria-live regions
+ * - **CSS Animations**: Smooth enter/exit animations via injected keyframes
+ * - **Provider Required**: Requires MessageProvider context for functionality
+ * - **Maximum Control**: Direct style object manipulation for full customization
+ *
+ * Note: Static message methods are not supported in Apollo.
+ * Use the MessageProvider and useMessage hook for full functionality.
+ *
+ * @example Provider and Hook Usage
+ * ```tsx
+ * import { MessageProvider, useMessage } from '@rottay/design-system';
+ * // Or import from Apollo engine directly:
+ * // import { MessageProvider, useMessage } from '@rottay/design-system/engines/apollo';
+ *
+ * function App() {
+ *   return (
+ *     <MessageProvider placement="top" maxCount={5}>
+ *       <MyComponent />
+ *     </MessageProvider>
+ *   );
+ * }
+ *
+ * function MyComponent() {
+ *   const [messageApi] = useMessage();
+ *
+ *   return (
+ *     <button onClick={() => messageApi.success('Saved!')}>
+ *       Show Message
+ *     </button>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link MessageProvider} for provider component
+ * @see {@link useMessage} for React hook
+ * @see {@link MessageItem} for individual message component
+ *
+ * @module Message/Apollo
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Message - Apollo Engine (Vanilla HTML/CSS)
- * Pure HTML/CSS implementation with no external dependencies
- */
 import React, {
   createContext,
   useContext,
@@ -22,20 +70,59 @@ import type {
 } from '../../types';
 import { MESSAGE_DEFAULTS, MESSAGE_ICONS } from '../../types';
 
-// Types for internal state
+// ============================================================================
+// Internal Types
+// ============================================================================
+
+/**
+ * Internal message state type with additional key property.
+ * @internal
+ */
 interface InternalMessage extends MessageItemProps {
+  /** Optional key for message identification and updates */
   key?: string | number;
 }
 
-// Context for message API
+// ============================================================================
+// Context
+// ============================================================================
+
+/**
+ * React context for the message API.
+ * Provides access to message methods throughout the component tree.
+ * @internal
+ */
 const MessageContext = createContext<MessageInstance | null>(null);
 
-// Unique ID generator
+// ============================================================================
+// Utilities
+// ============================================================================
+
+/**
+ * Unique ID counter for message identification.
+ * @internal
+ */
 let messageId = 0;
+
+/**
+ * Generates a unique message ID.
+ * @internal
+ */
 const generateId = () => `apollo-message-${++messageId}`;
 
+// ============================================================================
 // Styles
+// ============================================================================
+
+/**
+ * Style definitions for Apollo message components.
+ * All styles are defined as React.CSSProperties objects.
+ * @internal
+ */
 const styles = {
+  /**
+   * Container positioning styles based on placement.
+   */
   container: (placement: 'top' | 'bottom', top: number): React.CSSProperties => ({
     position: 'fixed',
     left: '50%',
@@ -48,6 +135,10 @@ const styles = {
     gap: '8px',
     pointerEvents: 'none',
   }),
+
+  /**
+   * Message box styles for each type.
+   */
   message: {
     base: {
       display: 'flex',
@@ -83,6 +174,10 @@ const styles = {
       border: '1px solid #91caff',
     },
   },
+
+  /**
+   * Icon styles for each message type.
+   */
   icon: {
     base: {
       display: 'inline-flex',
@@ -98,12 +193,20 @@ const styles = {
     warning: { color: '#faad14' },
     loading: { color: '#1677ff' },
   },
+
+  /**
+   * Content text styles.
+   */
   content: {
     flex: 1,
     fontSize: '14px',
     lineHeight: '22px',
     color: 'rgba(0, 0, 0, 0.88)',
   } as React.CSSProperties,
+
+  /**
+   * Close button styles.
+   */
   closeButton: {
     border: 'none',
     background: 'none',
@@ -115,6 +218,10 @@ const styles = {
     lineHeight: 1,
     transition: 'color 0.2s',
   } as React.CSSProperties,
+
+  /**
+   * Loading spinner styles.
+   */
   loadingSpinner: {
     display: 'inline-block',
     width: '14px',
@@ -126,7 +233,15 @@ const styles = {
   } as React.CSSProperties,
 };
 
-// Keyframes injection
+// ============================================================================
+// Keyframes Injection
+// ============================================================================
+
+/**
+ * Injects CSS keyframes for message animations.
+ * Only runs on client-side and only once per page load.
+ * @internal
+ */
 const injectStyles = () => {
   if (typeof document === 'undefined') return;
 
@@ -165,8 +280,33 @@ const injectStyles = () => {
   document.head.appendChild(styleSheet);
 };
 
+// ============================================================================
+// Message Provider Component
+// ============================================================================
+
 /**
  * MessageProvider - Apollo Engine
+ *
+ * @description
+ * Provides message context and renders the message container using vanilla CSS.
+ * Must wrap any components that use the useMessage hook.
+ *
+ * @remarks
+ * The Apollo provider:
+ * - Injects necessary CSS keyframes on mount
+ * - Manages message state internally
+ * - Renders accessible message container with ARIA attributes
+ * - Supports both top and bottom placement
+ *
+ * @param props - {@link MessageProviderProps}
+ * @returns Provider component with message container
+ *
+ * @example
+ * ```tsx
+ * <MessageProvider placement="top" maxCount={5} top={24}>
+ *   <App />
+ * </MessageProvider>
+ * ```
  */
 export const MessageProvider: React.FC<MessageProviderProps> = ({
   children,
@@ -176,14 +316,21 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 }) => {
   const [messages, setMessages] = useState<InternalMessage[]>([]);
 
+  // Inject CSS keyframes on mount
   useEffect(() => {
     injectStyles();
   }, []);
 
+  /**
+   * Removes a message from state by ID.
+   */
   const removeMessage = useCallback((id: string) => {
     setMessages((prev) => prev.filter((m) => m.id !== id));
   }, []);
 
+  /**
+   * Adds a new message to state, respecting maxCount and key updates.
+   */
   const addMessage = useCallback(
     (config: MessageConfig & { type: MessageType }): (() => void) => {
       const id = config.key?.toString() || generateId();
@@ -226,6 +373,9 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     [maxCount, removeMessage]
   );
 
+  /**
+   * Creates a type-specific message method.
+   */
   const createMessageMethod = useCallback(
     (type: MessageType) => {
       return (
@@ -250,6 +400,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     [addMessage]
   );
 
+  /** Complete message API instance */
   const messageApi: MessageInstance = {
     success: createMessageMethod('success'),
     error: createMessageMethod('error'),
@@ -289,8 +440,39 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 
 MessageProvider.displayName = 'MessageProvider.Apollo';
 
+// ============================================================================
+// useMessage Hook
+// ============================================================================
+
 /**
  * useMessage hook - Apollo Engine
+ *
+ * @description
+ * Returns the message API from the MessageProvider context.
+ * Must be used within a MessageProvider component.
+ *
+ * @remarks
+ * Unlike Titan, Apollo does not require a context holder to be rendered.
+ * The second element of the returned tuple is always null.
+ *
+ * If used outside a MessageProvider, returns no-op methods that do nothing.
+ *
+ * @returns Tuple of [MessageInstance, null]
+ *   - MessageInstance: API object with message methods
+ *   - null: No context holder needed for Apollo
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const [messageApi] = useMessage();
+ *
+ *   return (
+ *     <button onClick={() => messageApi.warning('Careful!')}>
+ *       Show Warning
+ *     </button>
+ *   );
+ * }
+ * ```
  */
 export function useMessage(): [MessageInstance, React.ReactElement | null] {
   const context = useContext(MessageContext);
@@ -319,8 +501,38 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
   return [context, null];
 }
 
+// ============================================================================
+// Message Item Component
+// ============================================================================
+
 /**
  * MessageItem - Apollo Engine
+ *
+ * @description
+ * Individual message component using vanilla HTML and CSS.
+ * Fully accessible with ARIA attributes and keyboard support.
+ *
+ * @remarks
+ * Features:
+ * - Smooth CSS animations for enter/exit
+ * - Accessible with role="alert" and aria-live
+ * - Hover states for close button
+ * - Auto-close timer with cleanup
+ * - Custom icon support
+ *
+ * @param props - {@link MessageItemProps}
+ * @returns Accessible message element with vanilla styling
+ *
+ * @example
+ * ```tsx
+ * <MessageItem
+ *   id="msg-1"
+ *   type="info"
+ *   content="Here is some information"
+ *   duration={3}
+ *   closable={true}
+ * />
+ * ```
  */
 export const MessageItem: React.FC<MessageItemProps> = ({
   id,
@@ -338,6 +550,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isExiting, setIsExiting] = useState(false);
 
+  // Auto-close timer
   useEffect(() => {
     if (duration > 0) {
       timerRef.current = setTimeout(() => {
@@ -352,6 +565,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     };
   }, [id, duration]);
 
+  /**
+   * Handle close with exit animation.
+   */
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -363,6 +579,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     }, 300); // Animation duration
   };
 
+  /**
+   * Renders the appropriate icon based on type or custom icon.
+   */
   const renderIcon = () => {
     if (icon) return icon;
 
@@ -377,6 +596,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     );
   };
 
+  /** Combined message styles with type-specific and animation styles */
   const messageStyle: React.CSSProperties = {
     ...styles.message.base,
     ...styles.message[type],
@@ -414,9 +634,30 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 
 MessageItem.displayName = 'MessageItem.Apollo';
 
+// ============================================================================
+// Static Message API (Not Supported)
+// ============================================================================
+
 /**
- * Static message methods
- * Note: For Apollo engine, static methods are not available without provider
+ * Static message methods - Apollo Engine
+ *
+ * @description
+ * Static methods are NOT supported in the Apollo engine.
+ * These methods will log a warning and do nothing.
+ *
+ * @remarks
+ * Apollo engine requires the MessageProvider and useMessage hook pattern.
+ * Static methods are only available in the Titan engine.
+ *
+ * @example
+ * ```tsx
+ * // This will NOT work - use Provider instead
+ * message.success('Hello'); // Logs warning
+ *
+ * // Correct usage for Apollo:
+ * const [messageApi] = useMessage();
+ * messageApi.success('Hello');
+ * ```
  */
 export const message: MessageInstance = {
   success: () => {
@@ -460,6 +701,13 @@ export const message: MessageInstance = {
   },
 };
 
+// ============================================================================
+// Default Export
+// ============================================================================
+
+/**
+ * Default export containing all Apollo engine message exports.
+ */
 export default {
   MessageProvider,
   MessageItem,

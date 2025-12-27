@@ -1,10 +1,37 @@
 /**
- * Spinner Component Stories
+ * @fileoverview Spinner Component Stories - Rottay Design System
+ * @description Storybook stories for the Spinner component demonstrating
+ * various configurations, sizes, and engine implementations.
+ *
+ * @remarks
+ * These stories showcase:
+ * - Default spinner behavior
+ * - Size variants (sm, md, lg, xl)
+ * - Label text support
+ * - Custom color configuration
+ * - Engine comparison (Titan, Hermes, Apollo)
+ *
+ * @example Running Storybook
+ * ```bash
+ * npm run storybook
+ * # Navigate to Primitives/Feedback/Spinner
+ * ```
+ *
+ * @module Spinner/Stories
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Spinner } from '../';
 
+// ============================================================================
+// Meta Configuration
+// ============================================================================
+
+/**
+ * Storybook meta configuration for the Spinner component.
+ */
 const meta: Meta<typeof Spinner> = {
   title: 'Primitives/Feedback/Spinner',
   component: Spinner,
@@ -30,12 +57,22 @@ const meta: Meta<typeof Spinner> = {
 export default meta;
 type Story = StoryObj<typeof Spinner>;
 
+// ============================================================================
+// Stories
+// ============================================================================
+
+/**
+ * Default spinner with medium size.
+ */
 export const Default: Story = {
   args: {
     size: 'md',
   },
 };
 
+/**
+ * Demonstrates all available size variants side by side.
+ */
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
@@ -49,6 +86,9 @@ export const Sizes: Story = {
   ),
 };
 
+/**
+ * Spinner with descriptive label text.
+ */
 export const WithLabel: Story = {
   args: {
     size: 'md',
@@ -56,6 +96,9 @@ export const WithLabel: Story = {
   },
 };
 
+/**
+ * Spinner with custom brand color.
+ */
 export const CustomColor: Story = {
   args: {
     size: 'lg',
@@ -63,6 +106,9 @@ export const CustomColor: Story = {
   },
 };
 
+/**
+ * Compares spinner rendering across all three engines.
+ */
 export const EngineComparison: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 48, alignItems: 'center' }}>

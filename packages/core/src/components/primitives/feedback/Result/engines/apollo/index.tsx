@@ -1,13 +1,105 @@
+/**
+ * @fileoverview Result Apollo Engine - Rottay Design System
+ * @description Vanilla HTML/CSS implementation of the Result component.
+ * A zero-dependency engine for maximum compatibility and accessibility.
+ *
+ * @remarks
+ * **Engine Overview:**
+ * Apollo is the headless engine in the Rottay Design System, built with
+ * vanilla HTML and CSS. It provides:
+ * - Zero external dependencies (no Ant Design or Tailwind required)
+ * - Maximum accessibility with semantic HTML and ARIA attributes
+ * - Full styling control via inline styles
+ * - Smallest possible bundle footprint
+ *
+ * **When to Use Apollo:**
+ * - Projects that cannot use external UI libraries
+ * - When maximum accessibility compliance is required
+ * - Server-side rendering scenarios
+ * - Embedding in legacy applications
+ * - When full styling control is needed
+ *
+ * **Multi-Tenant Theming:**
+ * Apollo results use the design system's color constants which can be
+ * customized per tenant. The component uses inline styles that can be
+ * overridden via the style prop or CSS custom properties.
+ *
+ * **Accessibility Features:**
+ * - Uses `role="status"` for screen reader announcements
+ * - Includes `aria-live="polite"` for dynamic updates
+ * - Semantic heading structure with `<h2>` for titles
+ * - Proper text hierarchy with `<p>` for subtitles
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Result } from '@rottay/design-system';
+ *
+ * <Result engine="apollo" status="success" title="Done!">
+ *   <p>Your changes have been saved.</p>
+ * </Result>
+ * ```
+ *
+ * @example Server-Side Rendering
+ * ```tsx
+ * // Apollo works well in SSR contexts
+ * export default function Page() {
+ *   return (
+ *     <Result
+ *       engine="apollo"
+ *       status="error"
+ *       title="Submission Failed"
+ *       subTitle="Please try again later."
+ *     />
+ *   );
+ * }
+ * ```
+ *
+ * @example Custom Styling
+ * ```tsx
+ * <Result
+ *   engine="apollo"
+ *   status="success"
+ *   title="Custom Styled Result"
+ *   style={{
+ *     backgroundColor: '#f0f5ff',
+ *     borderRadius: '16px',
+ *     padding: '48px',
+ *   }}
+ * />
+ * ```
+ *
+ * @see {@link ResultProps} - Component props interface
+ * @see {@link TitanResult} - Ant Design alternative
+ * @see {@link HermesResult} - DaisyUI alternative
+ * @module Result/Engines/Apollo
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Result - Apollo Engine (Vanilla HTML/CSS)
- */
 import React from 'react';
 import type { ResultProps, ResultStatus } from '../../types';
 import { RESULT_DEFAULTS, RESULT_COLORS, RESULT_ICONS } from '../../types';
 
+// ============================================================================
+// Styles
+// ============================================================================
+
+/**
+ * Inline style definitions for the Apollo engine.
+ * Uses a styles object pattern for maintainability and type safety.
+ *
+ * @remarks
+ * All styles are defined as React.CSSProperties for type checking.
+ * Dynamic styles (like status-specific colors) are defined as functions.
+ *
+ * @internal
+ */
 const styles = {
+  /**
+   * Container styles - centered flex layout.
+   */
   container: {
     display: 'flex',
     flexDirection: 'column' as const,
@@ -16,9 +108,21 @@ const styles = {
     textAlign: 'center' as const,
     padding: '48px 24px',
   },
+
+  /**
+   * Icon wrapper styles - provides spacing below icon.
+   */
   iconWrapper: {
     marginBottom: '24px',
   },
+
+  /**
+   * Standard status icon styles (success, error, info, warning).
+   * Creates a circular badge with the status color.
+   *
+   * @param status - The result status for color lookup
+   * @returns CSSProperties for the icon container
+   */
   icon: (status: ResultStatus): React.CSSProperties => ({
     width: '72px',
     height: '72px',
@@ -30,12 +134,24 @@ const styles = {
     color: '#fff',
     backgroundColor: RESULT_COLORS[status],
   }),
+
+  /**
+   * HTTP status code display styles (404, 403, 500).
+   * Creates a large, bold status code display.
+   *
+   * @param status - The result status for color lookup
+   * @returns CSSProperties for the status code display
+   */
   statusCode: (status: ResultStatus): React.CSSProperties => ({
     fontSize: '72px',
     fontWeight: 700,
     color: RESULT_COLORS[status],
     lineHeight: 1,
   }),
+
+  /**
+   * Title styles - prominent heading.
+   */
   title: {
     fontSize: '24px',
     fontWeight: 600,
@@ -43,6 +159,10 @@ const styles = {
     marginBottom: '8px',
     maxWidth: '480px',
   } as React.CSSProperties,
+
+  /**
+   * Subtitle styles - secondary text.
+   */
   subTitle: {
     fontSize: '14px',
     color: 'rgba(0, 0, 0, 0.45)',
@@ -50,6 +170,10 @@ const styles = {
     maxWidth: '480px',
     lineHeight: 1.6,
   } as React.CSSProperties,
+
+  /**
+   * Extra content container styles - for action buttons.
+   */
   extra: {
     display: 'flex',
     flexWrap: 'wrap' as const,
@@ -57,19 +181,36 @@ const styles = {
     justifyContent: 'center',
     marginBottom: '24px',
   },
+
+  /**
+   * Children container styles - for additional content.
+   */
   children: {
     width: '100%',
     maxWidth: '560px',
   },
 };
 
+// ============================================================================
+// Icon Rendering
+// ============================================================================
+
+/**
+ * Renders the appropriate icon based on the result status.
+ * HTTP status codes display as large text, other statuses show icons.
+ *
+ * @param status - The result status to render
+ * @returns React node containing the status icon or code
+ *
+ * @internal
+ */
 const renderIcon = (status: ResultStatus): React.ReactNode => {
-  // HTTP status codes
+  // HTTP status codes (404, 403, 500) display as large text
   if (['404', '403', '500'].includes(status)) {
     return <div style={styles.statusCode(status)}>{status}</div>;
   }
 
-  // Regular status with icon
+  // Standard statuses display icon character in colored circle
   return (
     <div style={styles.icon(status)}>
       {RESULT_ICONS[status]}
@@ -77,8 +218,63 @@ const renderIcon = (status: ResultStatus): React.ReactNode => {
   );
 };
 
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Apollo Engine implementation of the Result component.
+ *
+ * @description
+ * A zero-dependency implementation using vanilla HTML and inline CSS.
+ * Provides maximum accessibility and compatibility with any environment.
+ *
+ * @remarks
+ * **Key Features:**
+ * - No external dependencies
+ * - Full accessibility support with ARIA attributes
+ * - Inline styles for complete encapsulation
+ * - Works in any React environment
+ *
+ * **Accessibility:**
+ * - `role="status"` announces content to screen readers
+ * - `aria-live="polite"` ensures updates are announced
+ * - Semantic HTML structure with proper heading levels
+ *
+ * **Layout Structure:**
+ * ```
+ * Container (role="status" aria-live="polite")
+ * ├── Icon Wrapper
+ * │   └── Status Icon or Code
+ * ├── Title (h2)
+ * ├── Subtitle (p)
+ * ├── Extra (div for buttons)
+ * └── Children (div for additional content)
+ * ```
+ *
+ * @param props - {@link ResultProps}
+ * @returns The rendered result display with vanilla styling
+ *
+ * @example
+ * ```tsx
+ * <ApolloResult
+ *   status="success"
+ *   title="Payment Successful"
+ *   subTitle="Your order has been confirmed."
+ *   extra={
+ *     <button style={{ padding: '8px 16px' }}>
+ *       Continue Shopping
+ *     </button>
+ *   }
+ * />
+ * ```
+ */
 export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
   (props, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
     const {
       status = RESULT_DEFAULTS.status,
       icon,
@@ -90,6 +286,10 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
       style,
     } = props;
 
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
+
     return (
       <div
         ref={ref}
@@ -98,33 +298,33 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
         role="status"
         aria-live="polite"
       >
-        {/* Icon */}
+        {/* Icon Section */}
         <div style={styles.iconWrapper}>
           {icon || renderIcon(status!)}
         </div>
 
-        {/* Title */}
+        {/* Title Section */}
         {title && (
           <h2 style={styles.title}>
             {title}
           </h2>
         )}
 
-        {/* Subtitle */}
+        {/* Subtitle Section */}
         {subTitle && (
           <p style={styles.subTitle}>
             {subTitle}
           </p>
         )}
 
-        {/* Extra (buttons) */}
+        {/* Extra Section (Buttons) */}
         {extra && (
           <div style={styles.extra}>
             {extra}
           </div>
         )}
 
-        {/* Children */}
+        {/* Children Section */}
         {children && (
           <div style={styles.children}>
             {children}
@@ -135,6 +335,7 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
   }
 );
 
+// Set display name for React DevTools debugging
 Result.displayName = 'Result.Apollo';
 
 export default Result;

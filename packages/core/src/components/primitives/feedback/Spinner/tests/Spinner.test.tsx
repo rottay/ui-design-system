@@ -1,5 +1,28 @@
 /**
- * Spinner Component Tests
+ * @fileoverview Spinner Component Tests - Rottay Design System
+ * @description Unit tests for the Spinner component covering rendering,
+ * sizes, colors, engine support, and accessibility.
+ *
+ * @remarks
+ * These tests verify:
+ * - Basic rendering and structure
+ * - Label text display
+ * - Custom className and style application
+ * - All size variants (sm, md, lg, xl)
+ * - Custom color support
+ * - Multi-engine rendering (titan, hermes, apollo)
+ * - Accessibility attributes (role, aria-busy)
+ *
+ * @example Running tests
+ * ```bash
+ * npm test -- Spinner
+ * # or
+ * npm run test:watch -- Spinner
+ * ```
+ *
+ * @module Spinner/Tests
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -7,7 +30,14 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { Spinner } from '../';
 
-// Mock the engine factory
+// ============================================================================
+// Mocks
+// ============================================================================
+
+/**
+ * Mock the engine factory to provide a testable spinner implementation.
+ * This ensures consistent testing regardless of the actual engine.
+ */
 vi.mock('../../../../../system/engines/factory', () => ({
   createEngineComponent: () => {
     const MockSpinner = React.forwardRef<HTMLDivElement, any>(({
@@ -40,7 +70,15 @@ vi.mock('../../../../../system/engines/factory', () => ({
   },
 }));
 
+// ============================================================================
+// Test Suites
+// ============================================================================
+
 describe('Spinner', () => {
+  // ==========================================================================
+  // Basic Rendering Tests
+  // ==========================================================================
+
   describe('Basic Rendering', () => {
     it('renders correctly', () => {
       const { container } = render(<Spinner />);
@@ -63,6 +101,10 @@ describe('Spinner', () => {
     });
   });
 
+  // ==========================================================================
+  // Size Variant Tests
+  // ==========================================================================
+
   describe('Sizes', () => {
     it.each(['sm', 'md', 'lg', 'xl'] as const)(
       'renders size %s correctly',
@@ -78,12 +120,20 @@ describe('Spinner', () => {
     });
   });
 
+  // ==========================================================================
+  // Custom Color Tests
+  // ==========================================================================
+
   describe('Custom Color', () => {
     it('applies custom color', () => {
       const { container } = render(<Spinner color="#ff0000" />);
       expect(container.querySelector('[class*="spinner"]')).toBeInTheDocument();
     });
   });
+
+  // ==========================================================================
+  // Engine Support Tests
+  // ==========================================================================
 
   describe('Engine Support', () => {
     it.each(['titan', 'hermes', 'apollo'] as const)(
@@ -94,6 +144,10 @@ describe('Spinner', () => {
       }
     );
   });
+
+  // ==========================================================================
+  // Accessibility Tests
+  // ==========================================================================
 
   describe('Accessibility', () => {
     it('has role="status" or aria-busy', () => {

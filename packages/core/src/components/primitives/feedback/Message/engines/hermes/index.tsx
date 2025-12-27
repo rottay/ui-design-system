@@ -1,9 +1,56 @@
+/**
+ * @fileoverview Message Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind implementation of the Message component.
+ * Provides lightweight, utility-first message functionality with modern styling.
+ *
+ * @remarks
+ * The Hermes engine uses DaisyUI's toast and alert components for a lightweight,
+ * utility-first implementation:
+ *
+ * - **Tailwind Classes**: Uses DaisyUI utility classes for styling
+ * - **Provider Required**: Unlike Titan, requires MessageProvider context
+ * - **Lightweight**: Minimal bundle size with CSS-based styling
+ * - **Accessible**: Full ARIA support with semantic HTML
+ *
+ * Note: Static message methods (message.success, etc.) are not fully supported
+ * in Hermes. Use the MessageProvider and useMessage hook for full functionality.
+ *
+ * @example Provider and Hook Usage
+ * ```tsx
+ * import { MessageProvider, useMessage } from '@rottay/design-system';
+ * // Or import from Hermes engine directly:
+ * // import { MessageProvider, useMessage } from '@rottay/design-system/engines/hermes';
+ *
+ * function App() {
+ *   return (
+ *     <MessageProvider placement="top" maxCount={3}>
+ *       <MyComponent />
+ *     </MessageProvider>
+ *   );
+ * }
+ *
+ * function MyComponent() {
+ *   const [messageApi] = useMessage();
+ *
+ *   return (
+ *     <button onClick={() => messageApi.success('Saved!')}>
+ *       Show Message
+ *     </button>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link MessageProvider} for provider component
+ * @see {@link useMessage} for React hook
+ * @see {@link MessageItem} for individual message component
+ *
+ * @module Message/Hermes
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Message - Hermes Engine (DaisyUI/Tailwind)
- * Uses DaisyUI toast/alert components
- */
 import React, {
   createContext,
   useContext,
@@ -22,20 +69,71 @@ import type {
 } from '../../types';
 import { MESSAGE_DEFAULTS } from '../../types';
 
-// Types for internal state
+// ============================================================================
+// Internal Types
+// ============================================================================
+
+/**
+ * Internal message state type with additional key property.
+ * @internal
+ */
 interface InternalMessage extends MessageItemProps {
+  /** Optional key for message identification and updates */
   key?: string | number;
 }
 
-// Context for message API
+// ============================================================================
+// Context
+// ============================================================================
+
+/**
+ * React context for the message API.
+ * Provides access to message methods throughout the component tree.
+ * @internal
+ */
 const MessageContext = createContext<MessageInstance | null>(null);
 
-// Unique ID generator
+// ============================================================================
+// Utilities
+// ============================================================================
+
+/**
+ * Unique ID counter for message identification.
+ * @internal
+ */
 let messageId = 0;
+
+/**
+ * Generates a unique message ID.
+ * @internal
+ */
 const generateId = () => `hermes-message-${++messageId}`;
+
+// ============================================================================
+// Message Provider Component
+// ============================================================================
 
 /**
  * MessageProvider - Hermes Engine
+ *
+ * @description
+ * Provides message context and renders the toast container for DaisyUI messages.
+ * Must wrap any components that use the useMessage hook.
+ *
+ * @remarks
+ * The Hermes provider manages message state internally and renders messages
+ * using DaisyUI's toast positioning classes. Messages are automatically
+ * positioned and stacked within the toast container.
+ *
+ * @param props - {@link MessageProviderProps}
+ * @returns Provider component with toast container
+ *
+ * @example
+ * ```tsx
+ * <MessageProvider placement="bottom" maxCount={5} top={32}>
+ *   <App />
+ * </MessageProvider>
+ * ```
  */
 export const MessageProvider: React.FC<MessageProviderProps> = ({
   children,
@@ -45,10 +143,16 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 }) => {
   const [messages, setMessages] = useState<InternalMessage[]>([]);
 
+  /**
+   * Removes a message from state by ID.
+   */
   const removeMessage = useCallback((id: string) => {
     setMessages((prev) => prev.filter((m) => m.id !== id));
   }, []);
 
+  /**
+   * Adds a new message to state, respecting maxCount and key updates.
+   */
   const addMessage = useCallback(
     (config: MessageConfig & { type: MessageType }): (() => void) => {
       const id = config.key?.toString() || generateId();
@@ -91,6 +195,9 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     [maxCount, removeMessage]
   );
 
+  /**
+   * Creates a type-specific message method.
+   */
   const createMessageMethod = useCallback(
     (type: MessageType) => {
       return (
@@ -115,6 +222,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     [addMessage]
   );
 
+  /** Complete message API instance */
   const messageApi: MessageInstance = {
     success: createMessageMethod('success'),
     error: createMessageMethod('error'),
@@ -136,6 +244,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     },
   };
 
+  /** DaisyUI toast positioning classes */
   const placementClasses = {
     top: 'toast toast-top toast-center',
     bottom: 'toast toast-bottom toast-center',
@@ -162,8 +271,39 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 
 MessageProvider.displayName = 'MessageProvider.Hermes';
 
+// ============================================================================
+// useMessage Hook
+// ============================================================================
+
 /**
  * useMessage hook - Hermes Engine
+ *
+ * @description
+ * Returns the message API from the MessageProvider context.
+ * Must be used within a MessageProvider component.
+ *
+ * @remarks
+ * Unlike Titan, Hermes does not require a context holder to be rendered.
+ * The second element of the returned tuple is always null.
+ *
+ * If used outside a MessageProvider, returns no-op methods that do nothing.
+ *
+ * @returns Tuple of [MessageInstance, null]
+ *   - MessageInstance: API object with message methods
+ *   - null: No context holder needed for Hermes
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const [messageApi] = useMessage();
+ *
+ *   return (
+ *     <button onClick={() => messageApi.info('Hello!')}>
+ *       Show Info
+ *     </button>
+ *   );
+ * }
+ * ```
  */
 export function useMessage(): [MessageInstance, React.ReactElement | null] {
   const context = useContext(MessageContext);
@@ -192,8 +332,39 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
   return [context, null]; // No context holder needed for Hermes
 }
 
+// ============================================================================
+// Message Item Component
+// ============================================================================
+
 /**
  * MessageItem - Hermes Engine
+ *
+ * @description
+ * Individual message component using DaisyUI alert classes.
+ * Renders with appropriate styling based on message type.
+ *
+ * @remarks
+ * Uses DaisyUI's alert component classes for consistent styling:
+ * - `alert-success` for success messages
+ * - `alert-error` for error messages
+ * - `alert-info` for info and loading messages
+ * - `alert-warning` for warning messages
+ *
+ * SVG icons are inline for better performance and customization.
+ *
+ * @param props - {@link MessageItemProps}
+ * @returns DaisyUI-styled alert element
+ *
+ * @example
+ * ```tsx
+ * <MessageItem
+ *   id="msg-1"
+ *   type="success"
+ *   content="Operation completed"
+ *   duration={3}
+ *   closable={true}
+ * />
+ * ```
  */
 export const MessageItem: React.FC<MessageItemProps> = ({
   id,
@@ -210,6 +381,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Auto-close timer
   useEffect(() => {
     if (duration > 0) {
       timerRef.current = setTimeout(() => {
@@ -225,6 +397,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     };
   }, [id, duration, onRemove, onClose]);
 
+  /** Handle manual close */
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -233,6 +406,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     onClose?.();
   };
 
+  /** DaisyUI alert class mapping */
   const alertClasses: Record<MessageType, string> = {
     success: 'alert-success',
     error: 'alert-error',
@@ -241,6 +415,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     loading: 'alert-info',
   };
 
+  /** SVG icons for each message type */
   const icons: Record<MessageType, ReactNode> = {
     success: (
       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
@@ -294,8 +469,13 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 
 MessageItem.displayName = 'MessageItem.Hermes';
 
+// ============================================================================
+// Global Message Store (Limited Support)
+// ============================================================================
+
 /**
- * Global message store for static methods
+ * Global message storage for static methods.
+ * @internal
  */
 let _globalMessages: InternalMessage[] = [];
 let _globalSetMessages: React.Dispatch<React.SetStateAction<InternalMessage[]>> | null = null;
@@ -304,14 +484,40 @@ let _globalSetMessages: React.Dispatch<React.SetStateAction<InternalMessage[]>> 
 void _globalMessages;
 void _globalSetMessages;
 
+/**
+ * Sets the global message handler for static methods.
+ * @internal
+ */
 export const setGlobalMessageHandler = (
   setter: React.Dispatch<React.SetStateAction<InternalMessage[]>>
 ) => {
   _globalSetMessages = setter;
 };
 
+// ============================================================================
+// Static Message API (Limited Support)
+// ============================================================================
+
 /**
- * Static message methods
+ * Static message methods - Hermes Engine
+ *
+ * @description
+ * Static methods are NOT fully supported in the Hermes engine.
+ * These methods will log a warning and do nothing.
+ *
+ * @remarks
+ * For full functionality, use the MessageProvider and useMessage hook.
+ * Static methods are only available in the Titan engine.
+ *
+ * @example
+ * ```tsx
+ * // This will NOT work - use Provider instead
+ * message.success('Hello'); // Logs warning
+ *
+ * // Correct usage for Hermes:
+ * const [messageApi] = useMessage();
+ * messageApi.success('Hello');
+ * ```
  */
 export const message: MessageInstance = {
   success: (_content, _duration, _onClose) => {
@@ -355,6 +561,13 @@ export const message: MessageInstance = {
   },
 };
 
+// ============================================================================
+// Default Export
+// ============================================================================
+
+/**
+ * Default export containing all Hermes engine message exports.
+ */
 export default {
   MessageProvider,
   MessageItem,

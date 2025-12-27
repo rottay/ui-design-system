@@ -1,5 +1,28 @@
 /**
- * Result Component Tests
+ * @fileoverview Result Component Tests - Rottay Design System
+ * @description Unit tests for the Result component.
+ * Tests all status types, props, accessibility, and engine support.
+ *
+ * @remarks
+ * This test suite provides comprehensive coverage for the Result component,
+ * including:
+ * - Basic rendering with different props
+ * - All 7 status types (success, error, info, warning, 404, 403, 500)
+ * - Custom icons and content
+ * - Extra actions (buttons)
+ * - Accessibility features
+ * - Multi-engine support
+ *
+ * @example Running Tests
+ * ```bash
+ * npm test Result.test.tsx
+ * ```
+ *
+ * @see {@link Result} - Main component
+ * @see {@link ResultProps} - Component props
+ * @module Result/Tests
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -7,7 +30,14 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { Result } from '../';
 
-// Mock the engine factory
+// ============================================================================
+// Test Mocks
+// ============================================================================
+
+/**
+ * Mock the engine factory to provide a consistent test implementation.
+ * This ensures tests run predictably without engine-specific behavior.
+ */
 vi.mock('../../../../../system/engines/factory', () => ({
   createEngineComponent: () => {
     const MockResult = React.forwardRef<HTMLDivElement, any>(({
@@ -54,18 +84,35 @@ vi.mock('../../../../../system/engines/factory', () => ({
   },
 }));
 
+// ============================================================================
+// Test Suite
+// ============================================================================
+
 describe('Result', () => {
+  // --------------------------------------------------------------------------
+  // Basic Rendering Tests
+  // --------------------------------------------------------------------------
+
   describe('Basic Rendering', () => {
+    /**
+     * Verifies the component renders with a title.
+     */
     it('renders with title', () => {
       render(<Result title="Operation Successful" />);
       expect(screen.getByText('Operation Successful')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies the component renders with both title and subtitle.
+     */
     it('renders with subtitle', () => {
       render(<Result title="Title" subTitle="Subtitle description" />);
       expect(screen.getByText('Subtitle description')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies children content is rendered correctly.
+     */
     it('renders children content', () => {
       render(
         <Result title="Title">
@@ -75,13 +122,23 @@ describe('Result', () => {
       expect(screen.getByText('Child content')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies custom className is applied to the container.
+     */
     it('applies custom className', () => {
       const { container } = render(<Result title="Title" className="custom-result" />);
       expect(container.querySelector('.custom-result')).toBeInTheDocument();
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Status Type Tests
+  // --------------------------------------------------------------------------
+
   describe('Status Types', () => {
+    /**
+     * Verifies each status type renders correctly.
+     */
     it.each(['success', 'error', 'info', 'warning', '404', '403', '500'] as const)(
       'renders %s status correctly',
       (status) => {
@@ -91,13 +148,23 @@ describe('Result', () => {
       }
     );
 
+    /**
+     * Verifies the default status is 'info'.
+     */
     it('defaults to info status', () => {
       render(<Result title="Default" />);
       expect(screen.getByText('Default')).toBeInTheDocument();
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Custom Icon Tests
+  // --------------------------------------------------------------------------
+
   describe('Custom Icon', () => {
+    /**
+     * Verifies custom icons are rendered.
+     */
     it('renders custom icon', () => {
       render(
         <Result
@@ -108,6 +175,9 @@ describe('Result', () => {
       expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies custom icons override default status icons.
+     */
     it('overrides default status icon with custom icon', () => {
       render(
         <Result
@@ -120,7 +190,14 @@ describe('Result', () => {
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Extra Actions Tests
+  // --------------------------------------------------------------------------
+
   describe('Extra Actions', () => {
+    /**
+     * Verifies extra content (single element) is rendered.
+     */
     it('renders extra content', () => {
       render(
         <Result
@@ -131,6 +208,9 @@ describe('Result', () => {
       expect(screen.getByText('Action Button')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies multiple extra buttons are rendered.
+     */
     it('renders multiple extra buttons', () => {
       render(
         <Result
@@ -146,7 +226,14 @@ describe('Result', () => {
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Success Result Tests
+  // --------------------------------------------------------------------------
+
   describe('Success Result', () => {
+    /**
+     * Verifies a complete success result with all props.
+     */
     it('renders success result with all props', () => {
       render(
         <Result
@@ -166,7 +253,14 @@ describe('Result', () => {
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Error Result Tests
+  // --------------------------------------------------------------------------
+
   describe('Error Result', () => {
+    /**
+     * Verifies an error result with additional details.
+     */
     it('renders error result with details', () => {
       render(
         <Result
@@ -182,7 +276,14 @@ describe('Result', () => {
     });
   });
 
+  // --------------------------------------------------------------------------
+  // HTTP Status Results Tests
+  // --------------------------------------------------------------------------
+
   describe('HTTP Status Results', () => {
+    /**
+     * Verifies 404 result renders correctly.
+     */
     it('renders 404 result', () => {
       render(
         <Result
@@ -196,6 +297,9 @@ describe('Result', () => {
       expect(screen.getByText('Sorry, the page you visited does not exist.')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies 403 result renders correctly.
+     */
     it('renders 403 result', () => {
       render(
         <Result
@@ -207,6 +311,9 @@ describe('Result', () => {
       expect(screen.getByText('403')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies 500 result renders correctly.
+     */
     it('renders 500 result', () => {
       render(
         <Result
@@ -219,19 +326,36 @@ describe('Result', () => {
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Accessibility Tests
+  // --------------------------------------------------------------------------
+
   describe('Accessibility', () => {
+    /**
+     * Verifies the component has appropriate ARIA role.
+     */
     it('has appropriate role', () => {
       render(<Result title="Accessible Result" />);
       expect(screen.getByRole('status')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies title is properly announced to screen readers.
+     */
     it('title is properly announced', () => {
       render(<Result title="Important Result" />);
       expect(screen.getByText('Important Result')).toBeInTheDocument();
     });
   });
 
+  // --------------------------------------------------------------------------
+  // Engine Support Tests
+  // --------------------------------------------------------------------------
+
   describe('Engine Support', () => {
+    /**
+     * Verifies the component renders with each engine.
+     */
     it.each(['titan', 'hermes', 'apollo'] as const)(
       'renders with %s engine',
       (engine) => {
@@ -241,7 +365,14 @@ describe('Result', () => {
     );
   });
 
+  // --------------------------------------------------------------------------
+  // Complex Layout Tests
+  // --------------------------------------------------------------------------
+
   describe('Complex Layouts', () => {
+    /**
+     * Verifies result with complex children structure.
+     */
     it('renders result with complex children', () => {
       render(
         <Result
@@ -261,6 +392,9 @@ describe('Result', () => {
       expect(screen.getByText('Item 3')).toBeInTheDocument();
     });
 
+    /**
+     * Verifies result renders correctly within a card wrapper.
+     */
     it('renders result within a card', () => {
       render(
         <div data-testid="card-wrapper" style={{ padding: 24 }}>

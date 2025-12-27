@@ -1,17 +1,74 @@
-'use client';
-
 /**
- * Rate - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Rate Base Component - Rottay Design System
+ * @description Base implementation for the Rate component using CSS variables.
+ * Provides core rating functionality used by all engine implementations.
+ *
+ * @remarks
+ * The BaseRate serves as the foundational implementation that:
+ * - Provides core rating logic and state management
+ * - Uses CSS variables for theming compatibility
+ * - Implements full keyboard accessibility
+ * - Can be used directly or extended by engine implementations
+ *
+ * **Important:** This is the base implementation. For full feature set,
+ * use the Rate component with an engine:
+ * - **Titan**: Full-featured with Ant Design styling
+ * - **Hermes**: Utility-first with Tailwind/DaisyUI
+ * - **Apollo**: Zero-dependency vanilla implementation
+ *
+ * **Multi-Tenant Integration:**
+ * The base component fully respects tenant-specific CSS variables for:
+ * - Star sizes (--rate-xs-size through --rate-xl-size)
+ * - Active/inactive colors (--rate-star-active-color, --rate-star-inactive-color)
+ * - Transitions and spacing
+ *
+ * @example Direct Usage
+ * ```tsx
+ * import { BaseRate } from '@rottay/design-system';
+ *
+ * <BaseRate
+ *   defaultValue={3}
+ *   count={5}
+ *   allowHalf
+ *   onChange={(value) => console.log('Rating:', value)}
+ * />
+ * ```
+ *
+ * @example Recommended Usage
+ * ```tsx
+ * import { Rate } from '@rottay/design-system';
+ *
+ * // Always prefer the main Rate export for engine support
+ * <Rate defaultValue={3} allowHalf />
+ * ```
+ *
+ * @see {@link RateProps} - Component props interface
+ * @see {@link TitanRate} - Ant Design implementation
+ * @see {@link HermesRate} - DaisyUI implementation
+ * @see {@link ApolloRate} - Vanilla implementation
  * @module Rate/Base
+ * @category Feedback
+ * @package @rottay/design-system
  */
+
+'use client';
 
 import React, { forwardRef, useState, useCallback, useRef, useEffect } from 'react';
 import type { RateProps, RateCharacterProps } from '../types';
 import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../types';
 
+// ============================================================================
+// Internal Components
+// ============================================================================
+
 /**
- * Default star icon SVG component
+ * Default star icon SVG component.
+ * Renders a five-pointed star with optional half-fill support.
+ *
+ * @internal
+ * @param props - Star rendering options
+ * @param props.filled - Whether the star is fully filled
+ * @param props.half - Whether the star is half-filled
  */
 const StarIcon: React.FC<{ filled?: boolean; half?: boolean }> = ({ filled, half }) => (
   <svg
@@ -45,12 +102,54 @@ const StarIcon: React.FC<{ filled?: boolean; half?: boolean }> = ({ filled, half
   </svg>
 );
 
+// ============================================================================
+// Component
+// ============================================================================
+
 /**
  * Base Rate component using CSS variables.
  * This is extended by engine-specific implementations.
+ *
+ * @description
+ * Provides a fully functional star rating component with:
+ * - Controlled and uncontrolled state management
+ * - Half-star rating support
+ * - Keyboard navigation (Arrow keys, Home, End, Enter, Space)
+ * - ARIA radiogroup accessibility semantics
+ * - Custom character/icon support
+ * - Hover state management with callbacks
+ *
+ * @remarks
+ * **State Management:**
+ * - Uses internal state for uncontrolled mode
+ * - Respects `value` prop for controlled mode
+ * - Hover value is always internal, exposed via `onHoverChange`
+ *
+ * **Accessibility:**
+ * - Role: radiogroup
+ * - Each star has role: radio
+ * - Full keyboard support with focus management
+ * - ARIA attributes for current value and bounds
+ *
+ * **CSS Classes:**
+ * - `rottay-rate`: Base container class
+ * - `rottay-rate--{size}`: Size modifier
+ * - `rottay-rate--disabled`: Disabled state
+ * - `rottay-rate--readonly`: Read-only state
+ * - `rottay-rate__star`: Individual star element
+ * - `rottay-rate__star--filled`: Filled star state
+ * - `rottay-rate__star--half`: Half-filled star state
+ *
+ * @param props - {@link RateProps}
+ * @param ref - Forwarded ref to the container div
+ * @returns A star rating component with full interactivity
  */
 export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
   (props, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
     const {
       value,
       defaultValue = RATE_DEFAULTS.defaultValue,
@@ -74,24 +173,42 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       ...restProps
     } = props;
 
+    // -------------------------------------------------------------------------
+    // State Management
+    // -------------------------------------------------------------------------
+
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
     const [focusIndex, setFocusIndex] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Derived values
     const currentValue = isControlled ? value : internalValue;
     const displayValue = hoverValue !== null ? hoverValue : currentValue;
     const isInteractive = !disabled && !readOnly;
 
-    // Auto focus on mount
+    // -------------------------------------------------------------------------
+    // Effects
+    // -------------------------------------------------------------------------
+
+    /**
+     * Auto focus on mount if requested.
+     */
     useEffect(() => {
       if (autoFocus && containerRef.current) {
         containerRef.current.focus();
       }
     }, [autoFocus]);
 
-    // Handle click on a star
+    // -------------------------------------------------------------------------
+    // Event Handlers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Handle click on a star.
+     * Updates the rating value and triggers onChange callback.
+     */
     const handleClick = useCallback((starValue: number) => {
       if (!isInteractive) return;
 
@@ -108,21 +225,30 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       onChange?.(newValue);
     }, [isInteractive, allowClear, currentValue, isControlled, onChange]);
 
-    // Handle mouse enter on a star
+    /**
+     * Handle mouse enter on a star.
+     * Updates hover preview and triggers onHoverChange callback.
+     */
     const handleMouseEnter = useCallback((starValue: number) => {
       if (!isInteractive) return;
       setHoverValue(starValue);
       onHoverChange?.(starValue);
     }, [isInteractive, onHoverChange]);
 
-    // Handle mouse leave from container
+    /**
+     * Handle mouse leave from container.
+     * Clears hover state and notifies via callback.
+     */
     const handleMouseLeave = useCallback(() => {
       if (!isInteractive) return;
       setHoverValue(null);
       onHoverChange?.(0);
     }, [isInteractive, onHoverChange]);
 
-    // Handle keyboard navigation
+    /**
+     * Handle keyboard navigation.
+     * Supports Arrow keys, Home, End, Enter, and Space.
+     */
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       if (!keyboard || !isInteractive) return;
 
@@ -166,7 +292,13 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       onChange?.(newValue);
     }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange, focusIndex, handleClick]);
 
-    // Render custom or default character
+    // -------------------------------------------------------------------------
+    // Render Helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Render custom or default character for a star.
+     */
     const renderCharacter = useCallback((index: number, filled: boolean, half: boolean) => {
       if (typeof character === 'function') {
         return character({ index, value: displayValue || 0 } as RateCharacterProps);
@@ -177,7 +309,11 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       return <StarIcon filled={filled} half={half} />;
     }, [character, displayValue]);
 
-    // Build CSS variables
+    // -------------------------------------------------------------------------
+    // Styles
+    // -------------------------------------------------------------------------
+
+    // Build CSS variables for theming
     const starSize = RATE_SIZE_MAP[size];
     const rateVars: React.CSSProperties = {
       '--rate-size': starSize,
@@ -197,7 +333,9 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       ...style,
     };
 
-    // Star container styles
+    /**
+     * Get styles for individual star element.
+     */
     const getStarStyle = (isActive: boolean, isHovered: boolean): React.CSSProperties => ({
       display: 'inline-flex',
       alignItems: 'center',
@@ -212,7 +350,10 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       position: 'relative',
     });
 
-    // Render stars
+    // -------------------------------------------------------------------------
+    // Render Stars
+    // -------------------------------------------------------------------------
+
     const stars = Array.from({ length: count }, (_, index) => {
       const starIndex = index + 1;
       const isFilled = (displayValue || 0) >= starIndex;
@@ -268,6 +409,10 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       return starContent;
     });
 
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
+
     return (
       <div
         ref={(node) => {
@@ -302,6 +447,7 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
   }
 );
 
+// Set display name for React DevTools debugging
 BaseRate.displayName = 'BaseRate';
 
 export default BaseRate;

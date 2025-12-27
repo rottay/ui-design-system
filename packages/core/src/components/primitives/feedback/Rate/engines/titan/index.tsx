@@ -1,18 +1,98 @@
-'use client';
-
 /**
- * Rate - Titan Engine (Ant Design)
- * Wraps Ant Design Rate component with design system props
+ * @fileoverview Rate Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Rate component.
+ * The primary, full-featured engine for enterprise applications.
+ *
+ * @remarks
+ * **Engine Overview:**
+ * Titan is the default engine in the Rottay Design System, built on
+ * Ant Design. It provides the most complete feature set including:
+ * - Native Ant Design Rate component
+ * - Smooth hover and selection animations
+ * - Full keyboard navigation support
+ * - RTL (Right-to-Left) support
+ * - Custom character rendering
+ *
+ * **When to Use Titan:**
+ * - Enterprise applications requiring full feature set
+ * - Projects already using Ant Design
+ * - When bundle size is not a primary concern
+ * - When you need maximum accessibility features
+ *
+ * **Multi-Tenant Theming:**
+ * Titan rates inherit Ant Design's theme tokens which can be
+ * customized per tenant via the ConfigProvider or CSS variables.
+ *
+ * **Size Mapping:**
+ * | Size | Font Size |
+ * |------|-----------|
+ * | xs | 16px |
+ * | sm | 20px |
+ * | md | 24px |
+ * | lg | 32px |
+ * | xl | 40px |
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Rate } from '@rottay/design-system';
+ *
+ * // Titan is the default engine
+ * <Rate defaultValue={3} allowHalf />
+ * ```
+ *
+ * @example Explicit Engine Selection
+ * ```tsx
+ * <Rate engine="titan" defaultValue={3}>
+ *   {/* Explicitly using Titan engine *\/}
+ * </Rate>
+ * ```
+ *
+ * @example With Custom Character
+ * ```tsx
+ * import { HeartOutlined } from '@ant-design/icons';
+ *
+ * <Rate
+ *   character={<HeartOutlined />}
+ *   defaultValue={3}
+ *   allowHalf
+ * />
+ * ```
+ *
+ * @example With Tooltips
+ * ```tsx
+ * <Rate
+ *   tooltips={['Terrible', 'Bad', 'Normal', 'Good', 'Excellent']}
+ *   defaultValue={3}
+ * />
+ * ```
+ *
+ * @see {@link RateProps} - Component props interface
+ * @see {@link HermesRate} - DaisyUI alternative
+ * @see {@link ApolloRate} - Vanilla alternative
+ * @see {@link https://ant.design/components/rate} - Ant Design Rate docs
  * @module Rate/Engines/Titan
+ * @category Feedback
+ * @package @rottay/design-system
  */
+
+'use client';
 
 import React from 'react';
 import { Rate as AntRate } from 'antd';
 import type { RateProps } from '../../types';
 import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../types';
 
+// ============================================================================
+// Helpers
+// ============================================================================
+
 /**
- * Map design system sizes to Ant Design font sizes
+ * Map design system sizes to Ant Design font sizes.
+ * Ant Design Rate uses fontSize for star sizing.
+ *
+ * @internal
+ * @param size - The design system size preset
+ * @returns CSS properties with fontSize set
  */
 const getSizeStyle = (size: RateProps['size']): React.CSSProperties => {
   const sizeValue = RATE_SIZE_MAP[size || 'md'];
@@ -21,11 +101,60 @@ const getSizeStyle = (size: RateProps['size']): React.CSSProperties => {
   };
 };
 
+// ============================================================================
+// Component
+// ============================================================================
+
 /**
- * Titan Rate component using Ant Design
+ * Titan Engine implementation of the Rate component.
+ *
+ * @description
+ * Wraps Ant Design's Rate component with Rottay's standardized props API.
+ * Provides enterprise-grade rating functionality with full accessibility support.
+ *
+ * @remarks
+ * **Key Features:**
+ * - Native Ant Design Rate with all features
+ * - Smooth transitions and hover effects
+ * - Full keyboard navigation (Arrow, Home, End)
+ * - Screen reader support
+ *
+ * **Prop Mappings to Ant Design:**
+ * | Rottay Prop | Ant Design Prop |
+ * |-------------|-----------------|
+ * | value | value |
+ * | defaultValue | defaultValue |
+ * | count | count |
+ * | allowHalf | allowHalf |
+ * | allowClear | allowClear |
+ * | disabled | disabled |
+ * | readOnly | disabled (combined) |
+ * | character | character |
+ * | tooltips | tooltips |
+ * | keyboard | keyboard |
+ * | direction | direction |
+ *
+ * @param props - {@link RateProps}
+ * @param ref - Forwarded ref to the Ant Design Rate element
+ * @returns The rendered Ant Design Rate component
+ *
+ * @example
+ * ```tsx
+ * <TitanRate
+ *   defaultValue={3}
+ *   allowHalf
+ *   count={5}
+ *   tooltips={['1 star', '2 stars', '3 stars', '4 stars', '5 stars']}
+ *   onChange={(value) => console.log('Selected:', value)}
+ * />
+ * ```
  */
 export const Rate = React.forwardRef<HTMLUListElement, RateProps>(
   (props, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
     const {
       value,
       defaultValue = RATE_DEFAULTS.defaultValue,
@@ -54,8 +183,12 @@ export const Rate = React.forwardRef<HTMLUListElement, RateProps>(
       ...restProps
     } = props;
 
-    // Omit more conflicting props - using void to avoid unused variable warnings
+    // Suppress unused variable warnings
     void restProps;
+
+    // -------------------------------------------------------------------------
+    // Styles
+    // -------------------------------------------------------------------------
 
     // Combine size styles with custom styles and colors
     const combinedStyle: React.CSSProperties = {
@@ -64,8 +197,12 @@ export const Rate = React.forwardRef<HTMLUListElement, RateProps>(
       ...style,
     };
 
-    // Custom root class for styling
+    // Custom root class for styling hooks
     const rootClassName = `rottay-rate rottay-rate--${size} ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`.trim();
+
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
 
     return (
       <AntRate
@@ -90,6 +227,7 @@ export const Rate = React.forwardRef<HTMLUListElement, RateProps>(
   }
 );
 
+// Set display name for React DevTools debugging
 Rate.displayName = 'Rate.Titan';
 
 export default Rate;

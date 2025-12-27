@@ -1,10 +1,22 @@
 /**
- * Message - Engine Router
- * Imperative API for global messages/toasts
+ * @fileoverview Message Component - Rottay Design System
+ * @description An imperative API for displaying global messages and toasts.
+ * Part of the Rottay Design System's feedback primitives collection.
  *
- * Usage:
+ * @remarks
+ * The Message component is built on Rottay's multi-engine architecture, allowing
+ * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * (Vanilla) engines. This ensures consistent behavior while adapting to your
+ * project's styling framework.
+ *
+ * Multi-tenant theming is fully supported - message styling automatically adapts
+ * to your tenant's brand colors, spacing, and typography tokens.
+ *
+ * Unlike most components, Message uses an imperative API pattern where you call
+ * methods like `messageApi.success()` to display messages programmatically.
+ *
+ * @example Basic Usage with Provider and Hook
  * ```tsx
- * // With Provider (recommended)
  * import { MessageProvider, useMessage } from '@rottay/design-system';
  *
  * function App() {
@@ -21,25 +33,128 @@
  *   return (
  *     <>
  *       {contextHolder}
- *       <button onClick={() => messageApi.success('Success!')}>
- *         Show Message
+ *       <button onClick={() => messageApi.success('Operation completed!')}>
+ *         Show Success
  *       </button>
  *     </>
  *   );
  * }
+ * ```
  *
- * // With static methods (Titan only)
+ * @example Different Message Types
+ * ```tsx
+ * import { useMessage } from '@rottay/design-system';
+ *
+ * function NotificationDemo() {
+ *   const [messageApi, contextHolder] = useMessage();
+ *
+ *   const showMessages = () => {
+ *     messageApi.success('This is a success message');
+ *     messageApi.error('This is an error message');
+ *     messageApi.info('This is an info message');
+ *     messageApi.warning('This is a warning message');
+ *     messageApi.loading('Loading in progress...');
+ *   };
+ *
+ *   return (
+ *     <>
+ *       {contextHolder}
+ *       <button onClick={showMessages}>Show All Types</button>
+ *     </>
+ *   );
+ * }
+ * ```
+ *
+ * @example Custom Duration and Callbacks
+ * ```tsx
+ * import { useMessage } from '@rottay/design-system';
+ *
+ * function CustomMessage() {
+ *   const [messageApi, contextHolder] = useMessage();
+ *
+ *   const showMessage = () => {
+ *     messageApi.success({
+ *       content: 'Custom message with options',
+ *       duration: 5,
+ *       onClose: () => console.log('Message closed'),
+ *       closable: true,
+ *     });
+ *   };
+ *
+ *   return (
+ *     <>
+ *       {contextHolder}
+ *       <button onClick={showMessage}>Show Custom</button>
+ *     </>
+ *   );
+ * }
+ * ```
+ *
+ * @example Static Methods (Titan Engine Only)
+ * ```tsx
  * import { message } from '@rottay/design-system';
  *
+ * // These work globally without context (Titan engine only)
  * message.success('Success!');
  * message.error('Error!');
  * message.info('Info!');
  * message.warning('Warning!');
  * message.loading('Loading...');
  * ```
+ *
+ * @example Promise-like Chaining
+ * ```tsx
+ * import { useMessage } from '@rottay/design-system';
+ *
+ * function AsyncMessage() {
+ *   const [messageApi, contextHolder] = useMessage();
+ *
+ *   const handleSave = async () => {
+ *     const hide = messageApi.loading('Saving...');
+ *     try {
+ *       await saveData();
+ *       hide(); // Destroy loading message
+ *       messageApi.success('Saved successfully!');
+ *     } catch (error) {
+ *       hide();
+ *       messageApi.error('Save failed!');
+ *     }
+ *   };
+ *
+ *   return (
+ *     <>
+ *       {contextHolder}
+ *       <button onClick={handleSave}>Save</button>
+ *     </>
+ *   );
+ * }
+ * ```
+ *
+ * @example Multi-Tenant Theming
+ * ```tsx
+ * // Message automatically inherits tenant theme
+ * <ThemeProvider tenant="acme-corp">
+ *   <MessageProvider>
+ *     {/* Messages use ACME Corp's brand colors and styling *\/}
+ *     <App />
+ *   </MessageProvider>
+ * </ThemeProvider>
+ * ```
+ *
+ * @see {@link MessageConfig} for message configuration options
+ * @see {@link MessageInstance} for the message API interface
+ * @see {@link MessageProviderProps} for provider configuration
+ * @see {@link useMessage} for the React hook API
+ *
+ * @module Message
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
-// Re-export types
+// ============================================================================
+// Type Exports
+// ============================================================================
+
 export {
   type MessageType,
   type MessagePlacement,
@@ -54,7 +169,18 @@ export {
   MESSAGE_ICONS,
 } from './types';
 
-// Re-export from Titan engine (default)
+// ============================================================================
+// Component Exports (Default: Titan Engine)
+// ============================================================================
+
+/**
+ * Re-exports from the Titan engine (Ant Design implementation).
+ *
+ * @remarks
+ * The Titan engine is the default and provides the richest feature set,
+ * including static message methods that work without a provider context.
+ * For Hermes and Apollo engines, use the MessageProvider and useMessage hook.
+ */
 export {
   MessageProvider,
   MessageItem,
@@ -62,6 +188,13 @@ export {
   message,
 } from './engines/titan';
 
-// Default export
+// ============================================================================
+// Default Export
+// ============================================================================
+
+/**
+ * Default export containing all Titan engine exports.
+ * Includes MessageProvider, MessageItem, useMessage hook, and static message API.
+ */
 import * as titanEngine from './engines/titan';
 export default titanEngine;

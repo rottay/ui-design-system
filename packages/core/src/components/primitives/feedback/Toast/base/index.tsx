@@ -1,6 +1,24 @@
 /**
- * Toast - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Toast Base Component - Rottay Design System
+ * @description Foundation component using CSS variables from design tokens.
+ * Extended by engine-specific implementations for consistent styling.
+ *
+ * @remarks
+ * The BaseToast component provides a complete, standalone toast implementation
+ * using pure CSS variables for theming. It serves as the foundation for all
+ * engine implementations and can be used directly when custom styling is needed.
+ *
+ * Features:
+ * - CSS variable-based theming for multi-tenant support
+ * - Auto-dismiss with configurable duration
+ * - Pause on hover functionality
+ * - Optional progress bar
+ * - Action button support
+ * - Fully accessible with ARIA attributes
+ *
+ * @module Toast/Base
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +27,24 @@ import React, { forwardRef, useEffect, useState, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../types';
 import { TOAST_DEFAULTS, TOAST_ANIMATION, VARIANT_COLORS } from '../types';
 
+// ============================================================================
+// Icon Components
+// ============================================================================
+
 /**
- * Default icons for each variant
+ * Returns the default icon SVG for a given toast variant.
+ *
+ * @description
+ * Provides semantic icons for each variant type:
+ * - Success: Checkmark circle
+ * - Error: X circle
+ * - Warning: Triangle exclamation
+ * - Info: Information circle
+ *
+ * @param variant - The toast variant to get an icon for
+ * @returns React node containing the SVG icon, or null for default variant
+ *
+ * @internal
  */
 function getDefaultIcon(variant: ToastVariant): React.ReactNode {
   const iconSize = 20;
@@ -47,7 +81,14 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
 }
 
 /**
- * Close button icon
+ * Close button icon component.
+ *
+ * @description
+ * Renders an X icon for the dismiss button.
+ *
+ * @returns SVG element for the close icon
+ *
+ * @internal
  */
 function CloseIcon(): React.ReactElement {
   return (
@@ -57,9 +98,68 @@ function CloseIcon(): React.ReactElement {
   );
 }
 
+// ============================================================================
+// Base Toast Component
+// ============================================================================
+
 /**
  * Base Toast component using CSS variables.
- * This is extended by engine-specific implementations.
+ *
+ * @description
+ * A foundational toast component that uses CSS custom properties for all
+ * styling, making it fully themeable through the design token system.
+ * This component is extended by engine-specific implementations.
+ *
+ * @remarks
+ * CSS Variables used:
+ * - `--toast-{variant}-bg` - Background color per variant
+ * - `--toast-{variant}-color` - Text color per variant
+ * - `--toast-{variant}-border-color` - Border color per variant
+ * - `--toast-{variant}-icon-color` - Icon color per variant
+ * - `--toast-border-radius` - Border radius
+ * - `--toast-shadow` - Box shadow
+ * - `--toast-padding` - Internal padding
+ * - `--toast-max-width` - Maximum width
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <BaseToast
+ *   variant="success"
+ *   title="Success!"
+ *   description="Your changes have been saved."
+ *   visible={true}
+ *   onClose={() => console.log('Closed')}
+ * />
+ * ```
+ *
+ * @example With Action Button
+ * ```tsx
+ * <BaseToast
+ *   variant="info"
+ *   title="Update Available"
+ *   description="A new version is available."
+ *   action={{
+ *     label: 'Update Now',
+ *     onClick: () => handleUpdate(),
+ *   }}
+ *   visible={true}
+ * />
+ * ```
+ *
+ * @example With Progress Bar
+ * ```tsx
+ * <BaseToast
+ *   variant="warning"
+ *   title="Session Expiring"
+ *   description="Your session will expire soon."
+ *   showProgress={true}
+ *   duration={10000}
+ *   visible={true}
+ * />
+ * ```
+ *
+ * @see {@link ToastProps} for complete prop documentation
+ * @see {@link Toast} for the engine-aware component
  */
 export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
   (props, ref) => {
@@ -82,6 +182,10 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       style = {},
     } = props;
 
+    // ========================================================================
+    // State Management
+    // ========================================================================
+
     const [isVisible, setIsVisible] = useState(visible);
     const [isExiting, setIsExiting] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -90,7 +194,14 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
     // Get variant colors
     const colors = VARIANT_COLORS[variant as keyof typeof VARIANT_COLORS] || VARIANT_COLORS.default;
 
-    // Handle close
+    // ========================================================================
+    // Event Handlers
+    // ========================================================================
+
+    /**
+     * Handles the close animation and callback.
+     * Triggers exit animation before calling onClose.
+     */
     const handleClose = useCallback(() => {
       setIsExiting(true);
       setTimeout(() => {
@@ -99,7 +210,14 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       }, TOAST_ANIMATION.exitDuration);
     }, [onClose]);
 
-    // Auto-dismiss timer
+    // ========================================================================
+    // Auto-Dismiss Effect
+    // ========================================================================
+
+    /**
+     * Effect to handle auto-dismiss timer and progress bar animation.
+     * Respects pause on hover functionality.
+     */
     useEffect(() => {
       if (!visible || duration === 0 || isPaused) return;
 
@@ -132,7 +250,13 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       };
     }, [visible, duration, isPaused, handleClose, showProgress, progress]);
 
-    // Sync with visible prop
+    // ========================================================================
+    // Visibility Sync Effect
+    // ========================================================================
+
+    /**
+     * Effect to sync internal visibility state with visible prop.
+     */
     useEffect(() => {
       if (visible) {
         setIsVisible(true);
@@ -143,13 +267,23 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       }
     }, [visible, isVisible, handleClose]);
 
+    // Don't render if not visible
     if (!isVisible) return null;
 
-    // Handle mouse events for pause on hover
+    // ========================================================================
+    // Mouse Event Handlers
+    // ========================================================================
+
+    /** Handle mouse enter for pause on hover */
     const handleMouseEnter = pauseOnHover ? () => setIsPaused(true) : undefined;
+    /** Handle mouse leave for pause on hover */
     const handleMouseLeave = pauseOnHover ? () => setIsPaused(false) : undefined;
 
-    // Border radius map
+    // ========================================================================
+    // Style Definitions
+    // ========================================================================
+
+    /** Border radius map for the radius prop */
     const radiusMap = {
       none: '0',
       sm: '4px',
@@ -157,7 +291,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       lg: '12px',
     };
 
-    // Build CSS variables for the toast
+    /** CSS variables for toast theming */
     const toastVars: React.CSSProperties = {
       '--toast-bg': `var(--toast-${variant}-bg, ${colors.bg})`,
       '--toast-color': `var(--toast-${variant}-color, ${colors.color})`,
@@ -171,7 +305,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       '--toast-exit-duration': `${TOAST_ANIMATION.exitDuration}ms`,
     } as React.CSSProperties;
 
-    // Container styles
+    /** Main container styles */
     const containerStyle: React.CSSProperties = {
       ...toastVars,
       position: 'relative',
@@ -192,20 +326,20 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       ...style,
     };
 
-    // Icon styles
+    /** Icon container styles */
     const iconStyle: React.CSSProperties = {
       color: 'var(--toast-icon-color)',
       flexShrink: 0,
       marginTop: '2px',
     };
 
-    // Content styles
+    /** Content container styles */
     const contentStyle: React.CSSProperties = {
       flex: 1,
       minWidth: 0,
     };
 
-    // Title styles
+    /** Title text styles */
     const titleStyle: React.CSSProperties = {
       fontWeight: 600,
       fontSize: '14px',
@@ -213,7 +347,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       margin: 0,
     };
 
-    // Description styles
+    /** Description text styles */
     const descriptionStyle: React.CSSProperties = {
       fontSize: '14px',
       lineHeight: 1.5,
@@ -221,7 +355,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       opacity: 0.9,
     };
 
-    // Close button styles
+    /** Close button styles */
     const closeButtonStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
@@ -239,7 +373,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       flexShrink: 0,
     };
 
-    // Action button styles
+    /** Action button styles */
     const actionButtonStyle: React.CSSProperties = {
       marginTop: '8px',
       padding: '4px 12px',
@@ -253,7 +387,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       transition: 'background 0.2s',
     };
 
-    // Progress bar styles
+    /** Progress bar styles */
     const progressStyle: React.CSSProperties = {
       position: 'absolute',
       bottom: 0,
@@ -265,8 +399,12 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       transition: 'width 0.1s linear',
     };
 
-    // Display icon
+    // Determine which icon to display
     const displayIcon = icon !== undefined ? icon : getDefaultIcon(variant as ToastVariant);
+
+    // ========================================================================
+    // Render
+    // ========================================================================
 
     return (
       <div
@@ -278,12 +416,14 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Icon */}
         {displayIcon && (
           <span className="rottay-toast__icon" style={iconStyle}>
             {displayIcon}
           </span>
         )}
 
+        {/* Content */}
         <div className="rottay-toast__content" style={contentStyle}>
           {title && (
             <p className="rottay-toast__title" style={titleStyle}>
@@ -313,6 +453,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
           )}
         </div>
 
+        {/* Close Button */}
         {closable && (
           <button
             type="button"
@@ -325,6 +466,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
           </button>
         )}
 
+        {/* Progress Bar */}
         {showProgress && duration > 0 && (
           <div className="rottay-toast__progress" style={progressStyle} />
         )}

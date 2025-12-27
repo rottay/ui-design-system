@@ -1,6 +1,50 @@
 /**
- * Toast - Apollo Engine (Pure HTML/CSS)
- * Headless implementation with custom animations
+ * @fileoverview Toast Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Toast component.
+ * Headless implementation with inline styles and zero external dependencies.
+ *
+ * @remarks
+ * The Apollo engine provides a completely self-contained toast implementation:
+ * - No external CSS framework dependencies
+ * - All styles applied via inline CSS
+ * - Maximum accessibility with ARIA attributes
+ * - Ideal for projects without Ant Design or DaisyUI
+ *
+ * This implementation provides:
+ * - Pure React with no external styling dependencies
+ * - Complete feature parity with other engines
+ * - Inline styles for maximum isolation
+ * - Full accessibility support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Toast
+ *   engine="apollo"
+ *   variant="success"
+ *   description="Operation completed"
+ *   visible={true}
+ * />
+ * ```
+ *
+ * @example With Custom Styling
+ * ```tsx
+ * <Toast
+ *   engine="apollo"
+ *   variant="info"
+ *   title="Custom Toast"
+ *   description="With custom border radius and no shadow."
+ *   radius="lg"
+ *   shadow={false}
+ *   visible={true}
+ * />
+ * ```
+ *
+ * @see {@link ToastProps} for prop documentation
+ * @see {@link Toast} for the engine-agnostic component
+ *
+ * @module Toast/Engines/Apollo
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +53,24 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../types';
 import { TOAST_DEFAULTS, TOAST_ANIMATION, VARIANT_COLORS } from '../../types';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Default icons for each variant
+ * Returns the default icon SVG for a given variant.
+ *
+ * @description
+ * Provides semantic icons for each variant type:
+ * - Success: Checkmark circle
+ * - Error: X circle
+ * - Warning: Triangle exclamation
+ * - Info: Information circle
+ *
+ * @param variant - Toast variant
+ * @returns React node containing SVG icon, or null
+ *
+ * @internal
  */
 function getDefaultIcon(variant: ToastVariant): React.ReactNode {
   const iconSize = 20;
@@ -46,9 +106,38 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
   }
 }
 
+// ============================================================================
+// Apollo Toast Component
+// ============================================================================
+
 /**
- * ApolloToast - Pure HTML/CSS implementation
- * Headless component with inline styles
+ * ApolloToast - Pure HTML/CSS implementation of Toast.
+ *
+ * @description
+ * A headless toast component with all styles applied inline.
+ * Perfect for applications that don't use Ant Design or DaisyUI.
+ *
+ * @remarks
+ * This component:
+ * - Uses VARIANT_COLORS for styling
+ * - Manages its own visibility and animation state
+ * - Provides full accessibility with ARIA attributes
+ * - Supports all Toast props including actions and progress
+ *
+ * @param props - {@link ToastProps}
+ * @returns Styled div element, or null if not visible
+ *
+ * @example
+ * ```tsx
+ * <ApolloToast
+ *   variant="warning"
+ *   title="Warning!"
+ *   description="This action cannot be undone."
+ *   closable={true}
+ *   showProgress={true}
+ *   visible={true}
+ * />
+ * ```
  */
 export default function ApolloToast(props: ToastProps): React.ReactElement | null {
   const {
@@ -70,15 +159,26 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     style,
   } = props;
 
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
   const [isVisible, setIsVisible] = useState(visible);
   const [isExiting, setIsExiting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
 
-  // Get variant colors
+  // Get variant colors from the color map
   const colors = VARIANT_COLORS[variant as keyof typeof VARIANT_COLORS] || VARIANT_COLORS.default;
 
-  // Handle close
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles the close animation and callback.
+   * Triggers exit animation before calling onClose.
+   */
   const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
@@ -87,7 +187,13 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     }, TOAST_ANIMATION.exitDuration);
   }, [onClose]);
 
-  // Auto-dismiss timer
+  // ========================================================================
+  // Auto-Dismiss Effect
+  // ========================================================================
+
+  /**
+   * Effect to handle auto-dismiss timer and progress bar animation.
+   */
   useEffect(() => {
     if (!visible || duration === 0 || isPaused) return;
 
@@ -120,7 +226,13 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     };
   }, [visible, duration, isPaused, handleClose, showProgress, progress]);
 
-  // Sync with visible prop
+  // ========================================================================
+  // Visibility Sync Effect
+  // ========================================================================
+
+  /**
+   * Effect to sync internal visibility with visible prop.
+   */
   useEffect(() => {
     if (visible) {
       setIsVisible(true);
@@ -131,13 +243,23 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     }
   }, [visible, isVisible, handleClose]);
 
+  // Don't render if not visible
   if (!isVisible) return null;
 
-  // Handle mouse events
+  // ========================================================================
+  // Event Handlers for Hover
+  // ========================================================================
+
+  /** Handle mouse enter for pause on hover */
   const handleMouseEnter = pauseOnHover ? () => setIsPaused(true) : undefined;
+  /** Handle mouse leave for pause on hover */
   const handleMouseLeave = pauseOnHover ? () => setIsPaused(false) : undefined;
 
-  // Border radius map
+  // ========================================================================
+  // Style Definitions
+  // ========================================================================
+
+  /** Border radius map for the radius prop */
   const radiusMap: Record<string, string> = {
     none: '0',
     sm: '4px',
@@ -145,7 +267,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     lg: '12px',
   };
 
-  // Container styles
+  /** Main container styles */
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
@@ -168,20 +290,20 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     ...style,
   };
 
-  // Icon styles
+  /** Icon container styles */
   const iconStyle: React.CSSProperties = {
     color: colors.iconColor,
     flexShrink: 0,
     marginTop: '2px',
   };
 
-  // Content styles
+  /** Content container styles */
   const contentStyle: React.CSSProperties = {
     flex: 1,
     minWidth: 0,
   };
 
-  // Title styles
+  /** Title text styles */
   const titleStyle: React.CSSProperties = {
     fontWeight: 600,
     fontSize: '14px',
@@ -189,7 +311,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     margin: 0,
   };
 
-  // Description styles
+  /** Description text styles */
   const descriptionStyle: React.CSSProperties = {
     fontSize: '14px',
     lineHeight: 1.5,
@@ -197,7 +319,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     opacity: 0.9,
   };
 
-  // Close button styles
+  /** Close button styles */
   const closeButtonStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -214,7 +336,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     flexShrink: 0,
   };
 
-  // Action button styles
+  /** Action button styles */
   const actionButtonStyle: React.CSSProperties = {
     marginTop: '8px',
     padding: '4px 12px',
@@ -227,7 +349,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     cursor: 'pointer',
   };
 
-  // Progress bar styles
+  /** Progress bar styles */
   const progressStyle: React.CSSProperties = {
     position: 'absolute',
     bottom: 0,
@@ -239,8 +361,12 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     transition: 'width 0.1s linear',
   };
 
-  // Display icon
+  // Determine icon to display
   const displayIcon = icon !== undefined ? icon : getDefaultIcon(variant as ToastVariant);
+
+  // ========================================================================
+  // Render
+  // ========================================================================
 
   return (
     <div
@@ -251,8 +377,10 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Icon */}
       {displayIcon && <span style={iconStyle}>{displayIcon}</span>}
 
+      {/* Content */}
       <div style={contentStyle}>
         {title && <p style={titleStyle}>{title}</p>}
         {description && <p style={descriptionStyle}>{description}</p>}
@@ -273,6 +401,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
         )}
       </div>
 
+      {/* Close Button */}
       {closable && (
         <button
           type="button"
@@ -286,6 +415,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
         </button>
       )}
 
+      {/* Progress Bar */}
       {showProgress && duration > 0 && <div style={progressStyle} />}
     </div>
   );

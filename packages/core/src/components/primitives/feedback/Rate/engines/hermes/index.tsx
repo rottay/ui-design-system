@@ -1,31 +1,152 @@
-'use client';
-
 /**
- * Rate - Hermes Engine (DaisyUI/Tailwind)
- * Custom implementation using DaisyUI rating classes
+ * @fileoverview Rate Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind implementation of the Rate component.
+ * Utility-first styling for modern, lightweight applications.
+ *
+ * @remarks
+ * **Engine Overview:**
+ * Hermes is the utility-first engine in the Rottay Design System, built on
+ * DaisyUI and Tailwind CSS. It provides:
+ * - DaisyUI rating component classes
+ * - Tailwind utility-based styling
+ * - Smaller bundle size than Titan
+ * - Consistent with Tailwind design patterns
+ *
+ * **When to Use Hermes:**
+ * - Projects using Tailwind CSS
+ * - Applications prioritizing bundle size
+ * - When you prefer utility-first styling
+ * - Modern, lightweight applications
+ *
+ * **Multi-Tenant Theming:**
+ * Hermes rates use DaisyUI theme variables and Tailwind configuration,
+ * allowing per-tenant customization through theme configuration.
+ *
+ * **DaisyUI Rating Classes:**
+ * | Size | DaisyUI Class |
+ * |------|---------------|
+ * | xs | rating-xs |
+ * | sm | rating-sm |
+ * | md | rating-md |
+ * | lg | rating-lg |
+ * | xl | rating-lg (fallback) |
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Rate } from '@rottay/design-system';
+ *
+ * <Rate engine="hermes" defaultValue={3} />
+ * ```
+ *
+ * @example With DaisyUI Theming
+ * ```tsx
+ * // Uses DaisyUI's warning color for active stars by default
+ * <Rate engine="hermes" defaultValue={4} allowHalf />
+ * ```
+ *
+ * @example Custom Styling
+ * ```tsx
+ * <Rate
+ *   engine="hermes"
+ *   defaultValue={3}
+ *   activeColor="#ff4d4f"
+ *   className="custom-rating"
+ * />
+ * ```
+ *
+ * @see {@link RateProps} - Component props interface
+ * @see {@link TitanRate} - Ant Design alternative
+ * @see {@link ApolloRate} - Vanilla alternative
+ * @see {@link https://daisyui.com/components/rating/} - DaisyUI Rating docs
  * @module Rate/Engines/Hermes
+ * @category Feedback
+ * @package @rottay/design-system
  */
+
+'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import type { RateProps, RateCharacterProps } from '../../types';
 import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../types';
 
-/**
- * Map design system sizes to Tailwind classes
- */
-const SIZE_CLASSES: Record<string, string> = {
-  xs: 'rating-xs',
-  sm: 'rating-sm',
-  md: 'rating-md',
-  lg: 'rating-lg',
-  xl: 'rating-lg', // DaisyUI doesn't have xl, use lg
-};
+// ============================================================================
+// Constants
+// ============================================================================
 
 /**
- * Hermes Rate component using DaisyUI/Tailwind
+ * Map design system sizes to DaisyUI/Tailwind classes.
+ * Note: DaisyUI doesn't have an 'xl' size, so we fall back to 'lg'.
+ *
+ * @internal
+ */
+const SIZE_CLASSES: Record<string, string> = {
+  /** Extra small rating */
+  xs: 'rating-xs',
+  /** Small rating */
+  sm: 'rating-sm',
+  /** Medium rating (default) */
+  md: 'rating-md',
+  /** Large rating */
+  lg: 'rating-lg',
+  /** Extra large - falls back to large */
+  xl: 'rating-lg',
+};
+
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Hermes Engine implementation of the Rate component.
+ *
+ * @description
+ * Custom implementation using DaisyUI rating classes and Tailwind utilities.
+ * Provides a lightweight rating component with utility-first styling.
+ *
+ * @remarks
+ * **Key Features:**
+ * - DaisyUI rating class integration
+ * - Tailwind utility-based styling
+ * - Custom half-star support
+ * - Full keyboard navigation
+ * - Responsive design support
+ *
+ * **Implementation Notes:**
+ * - Uses hidden radio inputs for accessibility
+ * - Custom star SVG for consistent cross-browser rendering
+ * - Half-star support via overlay technique
+ * - Focus ring using Tailwind ring utilities
+ *
+ * **Tailwind Classes Used:**
+ * - `rating`, `rating-{size}`: DaisyUI rating container
+ * - `text-warning`: Active star color
+ * - `text-base-300`: Inactive star color
+ * - `cursor-pointer`, `cursor-not-allowed`: Interaction states
+ * - `transition-all`, `duration-200`: Animations
+ * - `hover:scale-110`: Hover effect
+ * - `ring-2`, `ring-warning`: Focus indicator
+ *
+ * @param props - {@link RateProps}
+ * @param ref - Forwarded ref to the container div
+ * @returns The rendered DaisyUI-styled Rate component
+ *
+ * @example
+ * ```tsx
+ * <HermesRate
+ *   defaultValue={3}
+ *   allowHalf
+ *   count={5}
+ *   size="lg"
+ *   onChange={(value) => console.log('Selected:', value)}
+ * />
+ * ```
  */
 export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
   (props, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
     const {
       value,
       defaultValue = RATE_DEFAULTS.defaultValue,
@@ -51,24 +172,41 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       ...restProps
     } = props;
 
+    // -------------------------------------------------------------------------
+    // State Management
+    // -------------------------------------------------------------------------
+
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
     const [focusIndex, setFocusIndex] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Derived values
     const currentValue = isControlled ? value : internalValue;
     const displayValue = hoverValue !== null ? hoverValue : currentValue;
     const isInteractive = !disabled && !readOnly;
 
-    // Auto focus on mount
+    // -------------------------------------------------------------------------
+    // Effects
+    // -------------------------------------------------------------------------
+
+    /**
+     * Auto focus on mount if requested.
+     */
     useEffect(() => {
       if (autoFocus && containerRef.current) {
         containerRef.current.focus();
       }
     }, [autoFocus]);
 
-    // Handle click on a star
+    // -------------------------------------------------------------------------
+    // Event Handlers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Handle click on a star.
+     */
     const handleClick = useCallback((starValue: number) => {
       if (!isInteractive) return;
 
@@ -85,7 +223,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       onChange?.(newValue);
     }, [isInteractive, allowClear, currentValue, isControlled, onChange]);
 
-    // Handle hover
+    /**
+     * Handle hover state changes.
+     */
     const handleHover = useCallback((starValue: number | null) => {
       if (!isInteractive) return;
       setHoverValue(starValue);
@@ -96,7 +236,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       }
     }, [isInteractive, onHoverChange]);
 
-    // Handle keyboard navigation
+    /**
+     * Handle keyboard navigation.
+     */
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       if (!keyboard || !isInteractive) return;
 
@@ -132,7 +274,13 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       onChange?.(newValue);
     }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange]);
 
-    // Render custom or default character
+    // -------------------------------------------------------------------------
+    // Render Helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Render custom or default character.
+     */
     const renderCharacter = (index: number) => {
       if (typeof character === 'function') {
         return character({ index, value: displayValue || 0 } as RateCharacterProps);
@@ -152,10 +300,17 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       );
     };
 
-    // Get size in pixels for custom sizing
+    // -------------------------------------------------------------------------
+    // Styles
+    // -------------------------------------------------------------------------
+
+    // Get size value for custom sizing
     const sizeValue = RATE_SIZE_MAP[size];
 
-    // Build stars array
+    // -------------------------------------------------------------------------
+    // Render Stars
+    // -------------------------------------------------------------------------
+
     const stars = Array.from({ length: count }, (_, index) => {
       const starIndex = index + 1;
       const isFilled = (displayValue || 0) >= starIndex;
@@ -186,6 +341,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           aria-checked={isFilled}
           aria-label={tooltips?.[index] || `${starIndex} star${starIndex > 1 ? 's' : ''}`}
         >
+          {/* Hidden radio input for form compatibility */}
           <input
             type="radio"
             name={`rating-${Math.random().toString(36).substr(2, 9)}`}
@@ -209,15 +365,17 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
               }}
             />
           )}
-          {/* Half star visual */}
+          {/* Half star visual - overlay technique */}
           {isHalfFilled ? (
             <span className="relative inline-flex w-full h-full">
+              {/* Background (inactive) star */}
               <span
                 className="absolute inset-0"
                 style={{ color: inactiveColor || 'inherit' }}
               >
                 {renderCharacter(index)}
               </span>
+              {/* Foreground (active) half star */}
               <span
                 className="absolute inset-0 overflow-hidden"
                 style={{
@@ -234,6 +392,10 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         </label>
       );
     });
+
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
 
     // Combine DaisyUI classes
     const ratingClasses = [
@@ -278,6 +440,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
   }
 );
 
+// Set display name for React DevTools debugging
 Rate.displayName = 'Rate.Hermes';
 
 export default Rate;

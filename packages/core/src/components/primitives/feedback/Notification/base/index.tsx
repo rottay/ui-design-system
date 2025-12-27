@@ -1,6 +1,34 @@
 /**
- * Notification - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Notification Base Component - Rottay Design System
+ * @description Base implementation for the Notification component using CSS variables
+ * for consistent theming across all rendering engines.
+ *
+ * @remarks
+ * This base component provides the foundation for notification rendering using
+ * CSS variables from the design token system. It can be extended by engine-specific
+ * implementations or used directly for custom notification scenarios.
+ *
+ * The component uses CSS custom properties (variables) for all themeable values,
+ * enabling dynamic theme switching and multi-tenant support without re-rendering.
+ *
+ * @example
+ * ```tsx
+ * import { BaseNotificationItem } from './base';
+ *
+ * <BaseNotificationItem
+ *   id="notification-1"
+ *   type="success"
+ *   message="File saved"
+ *   description="Your changes have been saved."
+ *   duration={4.5}
+ *   closable
+ *   onRemove={(id) => handleRemove(id)}
+ * />
+ * ```
+ *
+ * @module Notification/Base
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +37,18 @@ import React, { forwardRef, useEffect, useState, useMemo } from 'react';
 import type { NotificationItemProps, NotificationType } from '../types';
 import { NOTIFICATION_DEFAULTS, NOTIFICATION_ICONS } from '../types';
 
+// ============================================================================
+// Type Color Configuration
+// ============================================================================
+
 /**
- * Type color configurations
+ * Color configuration for each notification type.
+ *
+ * @remarks
+ * Maps notification types to their background color, icon color, and icon character.
+ * These are fallback values when CSS variables are not defined.
+ *
+ * @internal
  */
 const TYPE_COLORS: Record<Exclude<NotificationType, 'open'>, { bg: string; color: string; icon: string }> = {
   success: { bg: '#f6ffed', color: '#52c41a', icon: NOTIFICATION_ICONS.success },
@@ -19,8 +57,17 @@ const TYPE_COLORS: Record<Exclude<NotificationType, 'open'>, { bg: string; color
   warning: { bg: '#fffbe6', color: '#faad14', icon: NOTIFICATION_ICONS.warning },
 };
 
+// ============================================================================
+// Internal Components
+// ============================================================================
+
 /**
- * Close icon
+ * Close icon SVG component.
+ *
+ * @remarks
+ * A simple X icon used as the default close button for notifications.
+ *
+ * @internal
  */
 const CloseIcon: React.FC = () => (
   <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
@@ -28,9 +75,49 @@ const CloseIcon: React.FC = () => (
   </svg>
 );
 
+// ============================================================================
+// Base Notification Item Component
+// ============================================================================
+
 /**
  * Base NotificationItem component using CSS variables.
- * This is extended by engine-specific implementations.
+ *
+ * @description
+ * The foundational notification item that renders individual notifications.
+ * Uses CSS custom properties for theming, enabling seamless integration with
+ * the design token system.
+ *
+ * @remarks
+ * Features:
+ * - Auto-dismiss timer with configurable duration
+ * - Exit animation on close
+ * - Support for custom icons, buttons, and close icons
+ * - Click handler for notification body
+ * - Accessible with role="alert"
+ *
+ * CSS Variables Used:
+ * - `--notification-bg` - Background color
+ * - `--notification-icon-color` - Icon color based on type
+ * - `--notification-shadow` - Box shadow
+ * - `--notification-border-radius` - Border radius
+ * - `--notification-padding` - Internal padding
+ * - `--notification-width` - Container width
+ *
+ * @param props - {@link NotificationItemProps}
+ * @returns A notification item element
+ *
+ * @example
+ * ```tsx
+ * <BaseNotificationItem
+ *   id="notif-1"
+ *   type="success"
+ *   message="Operation Complete"
+ *   description="Your data has been saved."
+ *   duration={5}
+ *   closable
+ *   onRemove={(id) => removeNotification(id)}
+ * />
+ * ```
  */
 export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemProps>(
   (props, ref) => {
@@ -51,12 +138,19 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       onRemove,
     } = props;
 
+    // ========================================================================
+    // State Management
+    // ========================================================================
+
     const [isVisible, setIsVisible] = useState(true);
     const [isExiting, setIsExiting] = useState(false);
 
     const typeConfig = type !== 'open' ? TYPE_COLORS[type] : null;
 
-    // Auto close timer
+    // ========================================================================
+    // Auto-close Timer
+    // ========================================================================
+
     useEffect(() => {
       if (duration && duration > 0) {
         const timer = setTimeout(() => {
@@ -67,6 +161,14 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       }
     }, [duration]);
 
+    // ========================================================================
+    // Event Handlers
+    // ========================================================================
+
+    /**
+     * Handles the notification close action.
+     * Triggers exit animation before removing from DOM.
+     */
     const handleClose = () => {
       setIsExiting(true);
       setTimeout(() => {
@@ -76,11 +178,21 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       }, 200);
     };
 
+    /**
+     * Handles click on the notification body.
+     */
     const handleClick = () => {
       onClick?.();
     };
 
-    // CSS variables
+    // ========================================================================
+    // CSS Variables
+    // ========================================================================
+
+    /**
+     * CSS custom properties for theming.
+     * These variables can be overridden by tenant themes.
+     */
     const notificationVars = useMemo<React.CSSProperties>(() => ({
       '--notification-bg': 'var(--color-bg-elevated, #fff)',
       '--notification-icon-color': typeConfig?.color || 'var(--color-text-secondary)',
@@ -90,7 +202,15 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       '--notification-width': '384px',
     } as React.CSSProperties), [typeConfig]);
 
+    // ========================================================================
+    // Early Return
+    // ========================================================================
+
     if (!isVisible) return null;
+
+    // ========================================================================
+    // Style Definitions
+    // ========================================================================
 
     const notificationStyle: React.CSSProperties = {
       ...notificationVars,
@@ -164,6 +284,10 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       justifyContent: 'flex-end',
     };
 
+    // ========================================================================
+    // Render
+    // ========================================================================
+
     return (
       <div
         ref={ref}
@@ -172,16 +296,23 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
         onClick={handleClick}
         role="alert"
       >
+        {/* Header with icon and content */}
         <div className="rottay-notification__header" style={headerStyle}>
+          {/* Icon */}
           {(icon !== undefined || typeConfig) && (
             <span className="rottay-notification__icon" style={iconStyle}>
               {icon !== undefined ? icon : typeConfig?.icon}
             </span>
           )}
+
+          {/* Content */}
           <div className="rottay-notification__content" style={contentStyle}>
+            {/* Title */}
             <div className="rottay-notification__title" style={titleStyle}>
               {message}
             </div>
+
+            {/* Description */}
             {description && (
               <div className="rottay-notification__description" style={descriptionStyle}>
                 {description}
@@ -189,11 +320,15 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
             )}
           </div>
         </div>
+
+        {/* Action buttons */}
         {btn && (
           <div className="rottay-notification__btn" style={btnStyle}>
             {btn}
           </div>
         )}
+
+        {/* Close button */}
         {closable && (
           <span
             className="rottay-notification__close"
@@ -213,17 +348,56 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
 
 BaseNotificationItem.displayName = 'BaseNotificationItem';
 
+// ============================================================================
+// Base Notification Container Component
+// ============================================================================
+
 /**
- * Notification container for positioning notifications
+ * Props for the BaseNotificationContainer component.
+ *
+ * @internal
  */
-export const BaseNotificationContainer = forwardRef<HTMLDivElement, {
+interface BaseNotificationContainerProps {
+  /** Placement position on screen */
   placement?: 'top' | 'topLeft' | 'topRight' | 'bottom' | 'bottomLeft' | 'bottomRight';
+  /** Distance from top edge */
   top?: number;
+  /** Distance from bottom edge */
   bottom?: number;
+  /** Distance from right edge */
   right?: number;
+  /** Distance from left edge */
   left?: number;
+  /** Notification items to render */
   children: React.ReactNode;
-}>(({
+}
+
+/**
+ * Container component for positioning notifications on screen.
+ *
+ * @description
+ * A fixed-position container that holds notification items and positions
+ * them according to the specified placement. Handles stacking direction
+ * based on whether notifications appear from top or bottom.
+ *
+ * @remarks
+ * The container:
+ * - Uses fixed positioning relative to viewport
+ * - Handles different placement positions (6 options)
+ * - Manages notification stacking direction
+ * - Provides proper z-index layering
+ *
+ * @param props - Container configuration
+ * @returns A positioned container for notifications
+ *
+ * @example
+ * ```tsx
+ * <BaseNotificationContainer placement="topRight" top={24}>
+ *   <BaseNotificationItem {...notificationProps} />
+ * </BaseNotificationContainer>
+ * ```
+ */
+export const BaseNotificationContainer = forwardRef<HTMLDivElement, BaseNotificationContainerProps>(({
   placement = 'topRight',
   top = NOTIFICATION_DEFAULTS.top,
   bottom = NOTIFICATION_DEFAULTS.bottom,
@@ -231,6 +405,11 @@ export const BaseNotificationContainer = forwardRef<HTMLDivElement, {
   left = NOTIFICATION_DEFAULTS.left,
   children,
 }, ref) => {
+  /**
+   * Calculates positioning styles based on placement.
+   *
+   * @returns CSS properties for container positioning
+   */
   const getPosition = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',

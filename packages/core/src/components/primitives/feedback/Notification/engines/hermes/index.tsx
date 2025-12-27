@@ -1,8 +1,51 @@
+/**
+ * @fileoverview Notification Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based implementation of the Notification component.
+ * Provides a lightweight notification experience using utility-first CSS classes.
+ *
+ * @remarks
+ * The Hermes engine leverages DaisyUI's toast and alert components to provide:
+ * - Utility-first Tailwind CSS styling
+ * - Lightweight bundle size
+ * - Easy customization through class overrides
+ * - Consistent DaisyUI theming integration
+ *
+ * This engine is recommended for applications using Tailwind CSS and DaisyUI,
+ * or those prioritizing bundle size over feature richness.
+ *
+ * Note: Static methods are not supported in Hermes. Always use the Provider
+ * and useNotification hook pattern.
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { NotificationProvider, useNotification } from '@rottay/design-system/hermes';
+ *
+ * function App() {
+ *   return (
+ *     <NotificationProvider>
+ *       <MyComponent />
+ *     </NotificationProvider>
+ *   );
+ * }
+ *
+ * function MyComponent() {
+ *   const [api] = useNotification();
+ *
+ *   return (
+ *     <button onClick={() => api.success({ message: 'Saved!' })}>
+ *       Save
+ *     </button>
+ *   );
+ * }
+ * ```
+ *
+ * @module Notification/Engines/Hermes
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Notification - Hermes Engine (DaisyUI/Tailwind)
- */
 import React, {
   createContext,
   useContext,
@@ -22,21 +65,84 @@ import type {
 } from '../../types';
 import { NOTIFICATION_DEFAULTS } from '../../types';
 
-// Types for internal state
+// ============================================================================
+// Internal Types
+// ============================================================================
+
+/**
+ * Internal notification state with additional properties.
+ *
+ * @internal
+ */
 interface InternalNotification extends NotificationItemProps {
+  /** Optional key for updating existing notifications */
   key?: string;
+  /** Placement position for this notification */
   placement: NotificationPlacement;
 }
 
-// Context for notification API
-const NotificationContext = createContext<NotificationInstance | null>(null);
-
-// Unique ID generator
-let notificationId = 0;
-const generateId = () => `hermes-notification-${++notificationId}`;
+// ============================================================================
+// Context
+// ============================================================================
 
 /**
- * NotificationProvider - Hermes Engine
+ * Context for providing notification API to child components.
+ *
+ * @internal
+ */
+const NotificationContext = createContext<NotificationInstance | null>(null);
+
+// ============================================================================
+// ID Generator
+// ============================================================================
+
+/**
+ * Counter for generating unique notification IDs.
+ *
+ * @internal
+ */
+let notificationId = 0;
+
+/**
+ * Generates a unique notification ID.
+ *
+ * @returns Unique string identifier
+ * @internal
+ */
+const generateId = () => `hermes-notification-${++notificationId}`;
+
+// ============================================================================
+// Notification Provider
+// ============================================================================
+
+/**
+ * NotificationProvider component for the Hermes engine.
+ *
+ * @description
+ * Provides notification context to child components and manages the
+ * notification state. Renders notifications using DaisyUI's toast component.
+ *
+ * @remarks
+ * Key features:
+ * - Context-based notification management
+ * - Supports multiple placements simultaneously
+ * - Automatic notification stacking and limiting
+ * - DaisyUI toast positioning classes
+ *
+ * @param props - {@link NotificationProviderProps}
+ * @returns Provider component with notification containers
+ *
+ * @example
+ * ```tsx
+ * <NotificationProvider
+ *   maxCount={5}
+ *   placement="topRight"
+ *   top={24}
+ *   bottom={24}
+ * >
+ *   <App />
+ * </NotificationProvider>
+ * ```
  */
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   children,
@@ -45,12 +151,27 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   top = NOTIFICATION_DEFAULTS.top,
   bottom = NOTIFICATION_DEFAULTS.bottom,
 }) => {
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
   const [notifications, setNotifications] = useState<InternalNotification[]>([]);
 
+  // ========================================================================
+  // Notification Actions
+  // ========================================================================
+
+  /**
+   * Removes a notification by ID.
+   */
   const removeNotification = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
+  /**
+   * Adds a new notification to the stack.
+   * Updates existing notification if key matches.
+   */
   const addNotification = useCallback(
     (config: NotificationConfig & { type: NotificationType }) => {
       const id = config.key || generateId();
@@ -93,6 +214,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     [maxCount, placement]
   );
 
+  /**
+   * Creates a notification method for a specific type.
+   */
   const createNotificationMethod = useCallback(
     (type: NotificationType) => {
       return (config: NotificationConfig) => {
@@ -102,6 +226,13 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     [addNotification]
   );
 
+  // ========================================================================
+  // API Instance
+  // ========================================================================
+
+  /**
+   * Notification API provided to consumers.
+   */
   const notificationApi: NotificationInstance = {
     success: createNotificationMethod('success'),
     error: createNotificationMethod('error'),
@@ -117,7 +248,13 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     },
   };
 
-  // Group notifications by placement
+  // ========================================================================
+  // Grouping and Styling
+  // ========================================================================
+
+  /**
+   * Group notifications by their placement position.
+   */
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
     (acc, notification) => {
       const p = notification.placement || placement;
@@ -128,6 +265,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     {} as Record<NotificationPlacement, InternalNotification[]>
   );
 
+  /**
+   * DaisyUI toast classes for each placement.
+   */
   const placementClasses: Record<NotificationPlacement, string> = {
     top: 'toast toast-top toast-center',
     topLeft: 'toast toast-top toast-start',
@@ -137,6 +277,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     bottomRight: 'toast toast-bottom toast-end',
   };
 
+  /**
+   * Margin styles for offset configuration.
+   */
   const placementStyles: Record<NotificationPlacement, React.CSSProperties> = {
     top: { marginTop: top },
     topLeft: { marginTop: top },
@@ -146,9 +289,14 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     bottomRight: { marginBottom: bottom },
   };
 
+  // ========================================================================
+  // Render
+  // ========================================================================
+
   return (
     <NotificationContext.Provider value={notificationApi}>
       {children}
+      {/* Render notification containers for each placement with notifications */}
       {Object.entries(groupedNotifications).map(([p, items]) => (
         <div
           key={p}
@@ -170,12 +318,40 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
 NotificationProvider.displayName = 'NotificationProvider.Hermes';
 
+// ============================================================================
+// useNotification Hook
+// ============================================================================
+
 /**
- * useNotification hook - Hermes Engine
+ * Hook for accessing the notification API in the Hermes engine.
+ *
+ * @description
+ * Returns a notification API instance. Unlike Titan, Hermes doesn't need
+ * a context holder element since notifications are rendered by the provider.
+ *
+ * @remarks
+ * Must be used within a NotificationProvider. If used outside, returns
+ * a no-op API that logs warnings.
+ *
+ * @returns Tuple of [NotificationInstance, null]
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const [api] = useNotification();
+ *
+ *   return (
+ *     <button onClick={() => api.success({ message: 'Done!' })}>
+ *       Complete
+ *     </button>
+ *   );
+ * }
+ * ```
  */
 export function useNotification(): [NotificationInstance, React.ReactElement | null] {
   const context = useContext(NotificationContext);
 
+  // Return no-op API if outside provider
   if (!context) {
     const noop = () => {};
     return [
@@ -194,8 +370,38 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
   return [context, null];
 }
 
+// ============================================================================
+// Notification Item Component
+// ============================================================================
+
 /**
- * NotificationItem - Hermes Engine
+ * NotificationItem component for the Hermes engine.
+ *
+ * @description
+ * Renders an individual notification using DaisyUI alert classes.
+ * Supports all standard notification features with Tailwind styling.
+ *
+ * @remarks
+ * Uses DaisyUI classes:
+ * - `alert` - Base alert styling
+ * - `alert-success`, `alert-error`, `alert-info`, `alert-warning` - Type variants
+ * - `shadow-lg` - Elevation shadow
+ *
+ * @param props - {@link NotificationItemProps}
+ * @returns A DaisyUI-styled notification item
+ *
+ * @example
+ * ```tsx
+ * <NotificationItem
+ *   id="notif-1"
+ *   type="success"
+ *   message="File Uploaded"
+ *   description="Your file has been uploaded successfully."
+ *   duration={4.5}
+ *   closable
+ *   onRemove={(id) => handleRemove(id)}
+ * />
+ * ```
  */
 export const NotificationItem: React.FC<NotificationItemProps> = ({
   id,
@@ -215,6 +421,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // ========================================================================
+  // Auto-close Timer
+  // ========================================================================
+
   useEffect(() => {
     if (duration && duration > 0) {
       timerRef.current = setTimeout(() => {
@@ -230,6 +440,13 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     };
   }, [id, duration, onRemove, onClose]);
 
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles manual close of the notification.
+   */
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -238,6 +455,13 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     onClose?.();
   };
 
+  // ========================================================================
+  // Style Definitions
+  // ========================================================================
+
+  /**
+   * DaisyUI alert classes for each notification type.
+   */
   const alertClasses: Record<NotificationType, string> = {
     success: 'alert-success',
     error: 'alert-error',
@@ -246,6 +470,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     open: '',
   };
 
+  /**
+   * SVG icons for each notification type.
+   */
   const icons: Record<NotificationType, ReactNode> = {
     success: (
       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
@@ -270,6 +497,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     open: null,
   };
 
+  // ========================================================================
+  // Render
+  // ========================================================================
+
   return (
     <div
       className={`alert ${alertClasses[type]} shadow-lg min-w-80 ${className}`}
@@ -278,12 +509,22 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       role="alert"
     >
       <div className="flex gap-3 w-full">
+        {/* Icon */}
         {icon !== null && <span>{icon || icons[type]}</span>}
+
+        {/* Content */}
         <div className="flex-1">
+          {/* Title */}
           <div className="font-bold">{message}</div>
+
+          {/* Description */}
           {description && <div className="text-sm opacity-80">{description}</div>}
+
+          {/* Action Button */}
           {btn && <div className="mt-2">{btn}</div>}
         </div>
+
+        {/* Close Button */}
         {closable && (
           <button
             className="btn btn-ghost btn-sm btn-square"
@@ -307,8 +548,29 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
 
 NotificationItem.displayName = 'NotificationItem.Hermes';
 
+// ============================================================================
+// Static Notification Methods (Not Supported)
+// ============================================================================
+
 /**
- * Static notification methods
+ * Static notification API for the Hermes engine.
+ *
+ * @remarks
+ * Static methods are not supported in the Hermes engine because it relies
+ * on React context for state management. All methods will log a warning
+ * instructing users to use the Provider and hook pattern instead.
+ *
+ * @example
+ * ```tsx
+ * // DON'T do this with Hermes:
+ * notification.success({ message: 'Hello' }); // Will only log a warning
+ *
+ * // DO this instead:
+ * function MyComponent() {
+ *   const [api] = useNotification();
+ *   api.success({ message: 'Hello' }); // Works correctly
+ * }
+ * ```
  */
 export const notification: NotificationInstance = {
   success: () => console.warn('Hermes notification: Please use NotificationProvider and useNotification hook'),
@@ -319,6 +581,13 @@ export const notification: NotificationInstance = {
   destroy: () => console.warn('Hermes notification: Please use NotificationProvider and useNotification hook'),
 };
 
+// ============================================================================
+// Default Export
+// ============================================================================
+
+/**
+ * Default export containing all Hermes engine exports.
+ */
 export default {
   NotificationProvider,
   NotificationItem,

@@ -1,17 +1,92 @@
-'use client';
-
 /**
- * Rate - Apollo Engine (Vanilla HTML/CSS)
- * Pure HTML/CSS implementation with maximum accessibility
+ * @fileoverview Rate Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Rate component.
+ * Zero-dependency engine with maximum accessibility and customization.
+ *
+ * @remarks
+ * **Engine Overview:**
+ * Apollo is the vanilla engine in the Rottay Design System, built with
+ * pure HTML and CSS. It provides:
+ * - Zero external dependencies
+ * - Maximum accessibility compliance
+ * - Full customization via inline styles
+ * - Smallest possible bundle footprint
+ * - Works in any React environment
+ *
+ * **When to Use Apollo:**
+ * - When minimizing bundle size is critical
+ * - Projects without Ant Design or Tailwind
+ * - When you need maximum styling control
+ * - Accessibility-focused applications
+ * - Server-side rendering optimization
+ *
+ * **Multi-Tenant Theming:**
+ * Apollo rates use inline styles that can be customized via:
+ * - Direct prop values (activeColor, inactiveColor)
+ * - CSS variables defined in tenant themes
+ * - Style prop for complete override
+ *
+ * **Accessibility Features:**
+ * - Full ARIA radiogroup semantics
+ * - Keyboard navigation (Arrow keys, Home, End, Enter, Space)
+ * - Focus management with visible indicators
+ * - Screen reader announcements
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Rate } from '@rottay/design-system';
+ *
+ * <Rate engine="apollo" defaultValue={3} />
+ * ```
+ *
+ * @example Custom Styling
+ * ```tsx
+ * <Rate
+ *   engine="apollo"
+ *   defaultValue={3}
+ *   activeColor="#ff6b6b"
+ *   inactiveColor="#e0e0e0"
+ *   size="lg"
+ * />
+ * ```
+ *
+ * @example Accessible Usage
+ * ```tsx
+ * <Rate
+ *   engine="apollo"
+ *   defaultValue={3}
+ *   tooltips={['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']}
+ *   aria-labelledby="rating-label"
+ * />
+ * ```
+ *
+ * @see {@link RateProps} - Component props interface
+ * @see {@link TitanRate} - Ant Design alternative
+ * @see {@link HermesRate} - DaisyUI alternative
  * @module Rate/Engines/Apollo
+ * @category Feedback
+ * @package @rottay/design-system
  */
+
+'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import type { RateProps, RateCharacterProps } from '../../types';
 import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../types';
 
+// ============================================================================
+// Styles Factory
+// ============================================================================
+
 /**
- * Inline styles for the Apollo Rate component
+ * Create inline styles for the Apollo Rate component.
+ * All styles are computed at render time for maximum flexibility.
+ *
+ * @internal
+ * @param size - The size preset to use
+ * @param activeColor - Color for filled stars
+ * @param inactiveColor - Color for empty stars
+ * @returns Object containing all style definitions
  */
 const createStyles = (
   size: keyof typeof RATE_SIZE_MAP,
@@ -21,12 +96,16 @@ const createStyles = (
   const sizeValue = RATE_SIZE_MAP[size];
 
   return {
+    /** Container styles */
     container: {
       display: 'inline-flex',
       gap: 'var(--rate-gap, 0.25rem)',
       alignItems: 'center',
     } as React.CSSProperties,
+
+    /** Star element styles */
     star: {
+      /** Base star styles */
       base: {
         cursor: 'pointer',
         transition: 'transform 0.15s ease, color 0.15s ease',
@@ -40,27 +119,35 @@ const createStyles = (
         userSelect: 'none' as const,
         borderRadius: '2px',
       },
+      /** Active (filled) star color */
       active: {
         color: activeColor || '#facc15',
       },
+      /** Inactive (empty) star color */
       inactive: {
         color: inactiveColor || '#d1d5db',
       },
+      /** Disabled state styles */
       disabled: {
         cursor: 'not-allowed',
         opacity: 0.5,
       },
+      /** Read-only state styles */
       readOnly: {
         cursor: 'default',
       },
+      /** Hover state transform */
       hover: {
         transform: 'scale(1.1)',
       },
+      /** Focus indicator styles */
       focus: {
         outline: `2px solid ${activeColor || '#facc15'}`,
         outlineOffset: '2px',
       },
     },
+
+    /** Half star overlay styles */
     halfStar: {
       position: 'absolute' as const,
       left: 0,
@@ -69,6 +156,8 @@ const createStyles = (
       height: '100%',
       overflow: 'hidden',
     },
+
+    /** Half star click area styles */
     halfClickArea: {
       position: 'absolute' as const,
       left: 0,
@@ -77,6 +166,8 @@ const createStyles = (
       height: '100%',
       zIndex: 1,
     },
+
+    /** Hidden input styles */
     input: {
       position: 'absolute' as const,
       opacity: 0,
@@ -87,11 +178,59 @@ const createStyles = (
   };
 };
 
+// ============================================================================
+// Component
+// ============================================================================
+
 /**
- * Apollo Rate component using vanilla HTML/CSS
+ * Apollo Engine implementation of the Rate component.
+ *
+ * @description
+ * Pure HTML/CSS implementation providing a zero-dependency rating component.
+ * Maximum accessibility and customization with minimal bundle impact.
+ *
+ * @remarks
+ * **Key Features:**
+ * - No external CSS or component libraries
+ * - All styles computed inline
+ * - Full keyboard navigation support
+ * - ARIA radiogroup semantics
+ * - Half-star support via overlay technique
+ *
+ * **Implementation Notes:**
+ * - Uses span elements for stars (semantic role="radio")
+ * - Custom SVG for star icon
+ * - Focus management with visible outline
+ * - Data attributes for testing and styling hooks
+ *
+ * **Data Attributes:**
+ * - `data-testid="rate"`: Container test ID
+ * - `data-index`: Star index (0-based)
+ * - `data-filled`: Whether star is filled
+ * - `data-half`: Whether star is half-filled
+ *
+ * @param props - {@link RateProps}
+ * @param ref - Forwarded ref to the container div
+ * @returns The rendered vanilla HTML/CSS Rate component
+ *
+ * @example
+ * ```tsx
+ * <ApolloRate
+ *   defaultValue={3}
+ *   allowHalf
+ *   count={5}
+ *   activeColor="#facc15"
+ *   inactiveColor="#d1d5db"
+ *   onChange={(value) => console.log('Selected:', value)}
+ * />
+ * ```
  */
 export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
   (props, ref) => {
+    // -------------------------------------------------------------------------
+    // Props Destructuring
+    // -------------------------------------------------------------------------
+
     const {
       value,
       defaultValue = RATE_DEFAULTS.defaultValue,
@@ -117,7 +256,15 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       ...restProps
     } = props;
 
+    // -------------------------------------------------------------------------
+    // Styles
+    // -------------------------------------------------------------------------
+
     const styles = createStyles(size, activeColor, inactiveColor);
+
+    // -------------------------------------------------------------------------
+    // State Management
+    // -------------------------------------------------------------------------
 
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState(defaultValue);
@@ -125,18 +272,31 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     const [focusIndex, setFocusIndex] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Derived values
     const currentValue = isControlled ? value : internalValue;
     const displayValue = hoverValue !== null ? hoverValue : currentValue;
     const isInteractive = !disabled && !readOnly;
 
-    // Auto focus on mount
+    // -------------------------------------------------------------------------
+    // Effects
+    // -------------------------------------------------------------------------
+
+    /**
+     * Auto focus on mount if requested.
+     */
     useEffect(() => {
       if (autoFocus && containerRef.current) {
         containerRef.current.focus();
       }
     }, [autoFocus]);
 
-    // Handle click on a star
+    // -------------------------------------------------------------------------
+    // Event Handlers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Handle click on a star.
+     */
     const handleClick = useCallback((starValue: number) => {
       if (!isInteractive) return;
 
@@ -153,21 +313,27 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       onChange?.(newValue);
     }, [isInteractive, allowClear, currentValue, isControlled, onChange]);
 
-    // Handle mouse enter on a star
+    /**
+     * Handle mouse enter on a star.
+     */
     const handleMouseEnter = useCallback((starValue: number) => {
       if (!isInteractive) return;
       setHoverValue(starValue);
       onHoverChange?.(starValue);
     }, [isInteractive, onHoverChange]);
 
-    // Handle mouse leave from container
+    /**
+     * Handle mouse leave from container.
+     */
     const handleMouseLeave = useCallback(() => {
       if (!isInteractive) return;
       setHoverValue(null);
       onHoverChange?.(0);
     }, [isInteractive, onHoverChange]);
 
-    // Handle keyboard navigation
+    /**
+     * Handle keyboard navigation.
+     */
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       if (!keyboard || !isInteractive) return;
 
@@ -211,7 +377,13 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       onChange?.(newValue);
     }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange, focusIndex, handleClick]);
 
-    // Render custom or default character
+    // -------------------------------------------------------------------------
+    // Render Helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Render custom or default character.
+     */
     const renderCharacter = (index: number) => {
       if (typeof character === 'function') {
         return character({ index, value: displayValue || 0 } as RateCharacterProps);
@@ -219,7 +391,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       if (character) {
         return character;
       }
-      // Default star character
+      // Default star SVG
       return (
         <svg
           viewBox="0 0 24 24"
@@ -231,7 +403,10 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       );
     };
 
-    // Build stars array
+    // -------------------------------------------------------------------------
+    // Render Stars
+    // -------------------------------------------------------------------------
+
     const stars = Array.from({ length: count }, (_, index) => {
       const starIndex = index + 1;
       const isFilled = (displayValue || 0) >= starIndex;
@@ -239,7 +414,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       const isHovered = hoverValue === starIndex || (allowHalf && hoverValue === starIndex - 0.5);
       const isFocused = focusIndex === starIndex;
 
-      // Compute star style
+      // Compute star style by merging base and state-specific styles
       const starStyle: React.CSSProperties = {
         ...styles.star.base,
         ...(isFilled || isHalfFilled ? styles.star.active : styles.star.inactive),
@@ -299,6 +474,10 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       );
     });
 
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
+
     return (
       <div
         ref={(node) => {
@@ -332,6 +511,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
   }
 );
 
+// Set display name for React DevTools debugging
 Rate.displayName = 'Rate.Apollo';
 
 export default Rate;

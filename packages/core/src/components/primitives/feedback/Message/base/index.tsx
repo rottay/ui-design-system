@@ -1,6 +1,32 @@
 /**
- * Message - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Message Base Component - Rottay Design System
+ * @description Base implementation of the Message component using CSS variables.
+ * Provides the foundation for engine-specific implementations.
+ *
+ * @remarks
+ * This base component uses CSS variables from design tokens for consistent styling
+ * across all engines. It serves as the foundational implementation that can be
+ * extended or used directly by engine-specific versions.
+ *
+ * The component follows Rottay's design token system, using CSS custom properties
+ * for colors, spacing, shadows, and typography to ensure consistent theming.
+ *
+ * @example Using the Base Component
+ * ```tsx
+ * import { BaseMessageItem } from './base';
+ *
+ * <BaseMessageItem
+ *   id="msg-1"
+ *   type="success"
+ *   content="Operation completed successfully"
+ *   duration={3}
+ *   onClose={() => console.log('closed')}
+ * />
+ * ```
+ *
+ * @module Message/Base
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +35,15 @@ import React, { forwardRef, useEffect, useState, useMemo } from 'react';
 import type { MessageItemProps, MessageType } from '../types';
 import { MESSAGE_DEFAULTS, MESSAGE_ICONS } from '../types';
 
+// ============================================================================
+// Type Color Configuration
+// ============================================================================
+
 /**
- * Type color configurations
+ * Color configurations for each message type.
+ * Maps message types to their corresponding background, text, and icon colors.
+ *
+ * @internal
  */
 const TYPE_COLORS: Record<MessageType, { bg: string; color: string; icon: string }> = {
   success: { bg: '#f6ffed', color: '#52c41a', icon: MESSAGE_ICONS.success },
@@ -20,8 +53,15 @@ const TYPE_COLORS: Record<MessageType, { bg: string; color: string; icon: string
   loading: { bg: '#e6f4ff', color: '#1677ff', icon: MESSAGE_ICONS.loading },
 };
 
+// ============================================================================
+// Loading Spinner Component
+// ============================================================================
+
 /**
- * Loading spinner
+ * Animated loading spinner SVG component.
+ * Used for loading type messages to indicate ongoing operations.
+ *
+ * @internal
  */
 const LoadingSpinner: React.FC = () => (
   <svg
@@ -44,9 +84,40 @@ const LoadingSpinner: React.FC = () => (
   </svg>
 );
 
+// ============================================================================
+// Base Message Item Component
+// ============================================================================
+
 /**
  * Base MessageItem component using CSS variables.
- * This is extended by engine-specific implementations.
+ *
+ * @description
+ * This is the foundational message item component that uses CSS custom properties
+ * for styling. It is extended by engine-specific implementations (Titan, Hermes, Apollo)
+ * to provide consistent behavior while allowing framework-specific styling.
+ *
+ * @remarks
+ * Features:
+ * - Uses CSS variables for theming (--message-bg, --message-color, etc.)
+ * - Auto-close timer based on duration prop
+ * - Smooth enter/exit animations
+ * - Accessible with role="alert" for screen readers
+ * - Supports custom icons and close buttons
+ *
+ * @param props - {@link MessageItemProps}
+ * @returns A styled message element with icon, content, and optional close button
+ *
+ * @example
+ * ```tsx
+ * <BaseMessageItem
+ *   id="unique-id"
+ *   type="success"
+ *   content="Your changes have been saved"
+ *   duration={3}
+ *   closable={true}
+ *   onRemove={(id) => removeFromState(id)}
+ * />
+ * ```
  */
 export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
   (props, ref) => {
@@ -64,12 +135,19 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       onRemove,
     } = props;
 
+    // ========================================================================
+    // State Management
+    // ========================================================================
+
     const [isVisible, setIsVisible] = useState(true);
     const [isExiting, setIsExiting] = useState(false);
 
     const typeConfig = TYPE_COLORS[type];
 
-    // Auto close timer
+    // ========================================================================
+    // Auto-Close Timer
+    // ========================================================================
+
     useEffect(() => {
       if (duration && duration > 0) {
         const timer = setTimeout(() => {
@@ -80,6 +158,14 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       }
     }, [duration]);
 
+    // ========================================================================
+    // Event Handlers
+    // ========================================================================
+
+    /**
+     * Handles closing the message with exit animation.
+     * Triggers the exit animation, then removes from DOM after animation completes.
+     */
     const handleClose = () => {
       setIsExiting(true);
       setTimeout(() => {
@@ -89,7 +175,14 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       }, 200);
     };
 
-    // CSS variables
+    // ========================================================================
+    // CSS Variables
+    // ========================================================================
+
+    /**
+     * CSS custom properties for theming the message.
+     * These variables can be overridden by tenant themes.
+     */
     const messageVars = useMemo<React.CSSProperties>(() => ({
       '--message-bg': typeConfig.bg,
       '--message-color': typeConfig.color,
@@ -99,8 +192,13 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       '--message-font-size': '14px',
     } as React.CSSProperties), [typeConfig]);
 
+    // ========================================================================
+    // Render Logic
+    // ========================================================================
+
     if (!isVisible) return null;
 
+    /** Combined styles for the message container */
     const messageStyle: React.CSSProperties = {
       ...messageVars,
       display: 'inline-flex',
@@ -117,16 +215,19 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       ...style,
     };
 
+    /** Icon container styles */
     const iconStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
       color: 'var(--message-color)',
     };
 
+    /** Content text styles */
     const contentStyle: React.CSSProperties = {
       color: 'var(--color-text-primary)',
     };
 
+    /** Close button styles */
     const closeStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
@@ -166,14 +267,45 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
 
 BaseMessageItem.displayName = 'BaseMessageItem';
 
+// ============================================================================
+// Base Message Container Component
+// ============================================================================
+
 /**
- * Message container for positioning messages
+ * Container component for positioning messages on the viewport.
+ *
+ * @description
+ * Provides a fixed-position container that holds and positions message items.
+ * Handles the layout and z-index stacking for proper message display.
+ *
+ * @remarks
+ * Features:
+ * - Fixed positioning at top or bottom of viewport
+ * - Horizontally centered with flex layout
+ * - Proper z-index for overlay behavior
+ * - Pointer-events handled for interaction passthrough
+ *
+ * @param props.placement - Position of container ('top' or 'bottom')
+ * @param props.top - Top offset in pixels when placement is 'top'
+ * @param props.children - MessageItem components to render
+ *
+ * @example
+ * ```tsx
+ * <BaseMessageContainer placement="top" top={24}>
+ *   <BaseMessageItem type="success" content="Message 1" />
+ *   <BaseMessageItem type="info" content="Message 2" />
+ * </BaseMessageContainer>
+ * ```
  */
 export const BaseMessageContainer = forwardRef<HTMLDivElement, {
+  /** Position of the container (top or bottom of viewport) */
   placement?: 'top' | 'bottom';
+  /** Top offset in pixels when placement is 'top' */
   top?: number;
+  /** Message items to render inside the container */
   children: React.ReactNode;
 }>(({ placement = 'top', top = MESSAGE_DEFAULTS.top, children }, ref) => {
+  /** Container positioning styles */
   const containerStyle: React.CSSProperties = {
     position: 'fixed',
     left: '50%',

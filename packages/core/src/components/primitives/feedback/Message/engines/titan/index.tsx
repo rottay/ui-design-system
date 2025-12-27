@@ -1,9 +1,65 @@
+/**
+ * @fileoverview Message Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Message component.
+ * Provides full-featured message functionality with rich animations and static methods.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's message API for a production-ready
+ * implementation with the following features:
+ *
+ * - **Static Methods**: Unlike other engines, Titan supports global static
+ *   methods (message.success(), etc.) that work without provider context
+ * - **Rich Animations**: Smooth enter/exit animations powered by Ant Design
+ * - **Full Feature Set**: Complete implementation of all message options
+ * - **App Integration**: Uses Ant Design's App wrapper for proper context
+ *
+ * @example Using Static Methods (Titan Only)
+ * ```tsx
+ * import { message } from '@rottay/design-system';
+ *
+ * // Works globally without context
+ * message.success('Saved!');
+ * message.error('Failed to save');
+ * message.loading('Processing...');
+ * ```
+ *
+ * @example Using Provider and Hook
+ * ```tsx
+ * import { MessageProvider, useMessage } from '@rottay/design-system';
+ *
+ * function App() {
+ *   return (
+ *     <MessageProvider maxCount={5} top={24}>
+ *       <MyComponent />
+ *     </MessageProvider>
+ *   );
+ * }
+ *
+ * function MyComponent() {
+ *   const [messageApi, contextHolder] = useMessage();
+ *
+ *   return (
+ *     <>
+ *       {contextHolder}
+ *       <button onClick={() => messageApi.success('Done!')}>
+ *         Show Message
+ *       </button>
+ *     </>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link MessageProvider} for provider component
+ * @see {@link useMessage} for React hook
+ * @see {@link message} for static API
+ *
+ * @module Message/Titan
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Message - Titan Engine (Ant Design)
- * Uses Ant Design's message API
- */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { message as antMessage, App } from 'antd';
 import type {
@@ -15,9 +71,30 @@ import type {
 } from '../../types';
 import { MESSAGE_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Message Provider Component
+// ============================================================================
+
 /**
  * MessageProvider - Titan Engine
- * Wraps children with Ant Design App for message context
+ *
+ * @description
+ * Wraps children with Ant Design's App component for message context.
+ * Configures global message settings and provides the context for useMessage hook.
+ *
+ * @remarks
+ * The Titan provider uses Ant Design's App wrapper which is required for
+ * proper message rendering in certain React environments (like Next.js).
+ *
+ * @param props - {@link MessageProviderProps}
+ * @returns Provider component wrapping children with message context
+ *
+ * @example
+ * ```tsx
+ * <MessageProvider maxCount={3} top={50}>
+ *   <App />
+ * </MessageProvider>
+ * ```
  */
 export const MessageProvider: React.FC<MessageProviderProps> = ({
   children,
@@ -25,7 +102,7 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
   placement: _placement = MESSAGE_DEFAULTS.placement,
   top = MESSAGE_DEFAULTS.top,
 }) => {
-  // Configure message globally
+  // Configure message globally on mount/update
   useEffect(() => {
     antMessage.config({
       top,
@@ -42,13 +119,50 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
 
 MessageProvider.displayName = 'MessageProvider.Titan';
 
+// ============================================================================
+// useMessage Hook
+// ============================================================================
+
 /**
  * useMessage hook - Titan Engine
- * Returns message API from Ant Design
+ *
+ * @description
+ * Returns the message API instance and context holder from Ant Design.
+ * The context holder must be rendered in the component tree for messages to appear.
+ *
+ * @remarks
+ * The hook normalizes the Ant Design message API to match the Rottay interface,
+ * providing consistent behavior across all engines.
+ *
+ * @returns Tuple of [MessageInstance, ReactElement | null]
+ *   - MessageInstance: API object with success, error, info, warning, loading, open, destroy methods
+ *   - ReactElement: Context holder to render in component (required for Titan)
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const [messageApi, contextHolder] = useMessage();
+ *
+ *   const showSuccess = () => {
+ *     messageApi.success('Operation completed!');
+ *   };
+ *
+ *   return (
+ *     <>
+ *       {contextHolder}
+ *       <button onClick={showSuccess}>Show Success</button>
+ *     </>
+ *   );
+ * }
+ * ```
  */
 export function useMessage(): [MessageInstance, React.ReactElement | null] {
   const [api, contextHolder] = antMessage.useMessage();
 
+  /**
+   * Normalizes content parameter to MessageConfig object.
+   * Handles both simple content and full config objects.
+   */
   const normalizeConfig = useCallback((
     content: React.ReactNode | MessageConfig,
     duration?: number,
@@ -64,6 +178,10 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
     };
   }, []);
 
+  /**
+   * Creates a type-specific message method.
+   * Returns a function that shows a message of the specified type.
+   */
   const createMessageMethod = useCallback((type: MessageType) => {
     return (
       content: React.ReactNode | MessageConfig,
@@ -81,7 +199,7 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
         onClose: config.onClose,
       });
 
-      // Return promise-like object
+      // Return promise-like object for chaining
       const result = () => destroy?.();
       result.then = (fn: () => void) => {
         setTimeout(fn, (config.duration ?? MESSAGE_DEFAULTS.duration) * 1000);
@@ -90,6 +208,7 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
     };
   }, [api, normalizeConfig]);
 
+  /** Complete message API instance */
   const messageInstance: MessageInstance = {
     success: createMessageMethod('success'),
     error: createMessageMethod('error'),
@@ -112,9 +231,35 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
   return [messageInstance, contextHolder as React.ReactElement | null];
 }
 
+// ============================================================================
+// Message Item Component
+// ============================================================================
+
 /**
  * MessageItem - Titan Engine
- * Individual message component (for custom rendering)
+ *
+ * @description
+ * Individual message component for custom rendering scenarios.
+ * Provides Ant Design-styled message items with auto-close functionality.
+ *
+ * @remarks
+ * While the Titan engine typically uses Ant Design's internal message rendering,
+ * this component is provided for custom implementations and consistency with
+ * other engines.
+ *
+ * @param props - {@link MessageItemProps}
+ * @returns Styled message element with Ant Design styling
+ *
+ * @example
+ * ```tsx
+ * <MessageItem
+ *   id="msg-1"
+ *   type="success"
+ *   content="Changes saved"
+ *   duration={3}
+ *   closable={true}
+ * />
+ * ```
  */
 export const MessageItem: React.FC<MessageItemProps> = ({
   id,
@@ -131,6 +276,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Auto-close timer
   useEffect(() => {
     if (duration > 0) {
       timerRef.current = setTimeout(() => {
@@ -146,12 +292,13 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     };
   }, [id, duration, onRemove, onClose]);
 
+  /** Handle manual close */
   const handleClose = () => {
     onRemove?.(id);
     onClose?.();
   };
 
-  // Use Ant Design's message styling through ConfigProvider
+  /** Type-specific background and border colors */
   const typeStyles: Record<MessageType, React.CSSProperties> = {
     success: { backgroundColor: '#f6ffed', borderColor: '#b7eb8f' },
     error: { backgroundColor: '#fff2f0', borderColor: '#ffccc7' },
@@ -160,6 +307,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     loading: { backgroundColor: '#e6f4ff', borderColor: '#91caff' },
   };
 
+  /** Type-specific icon colors */
   const iconColors: Record<MessageType, string> = {
     success: '#52c41a',
     error: '#ff4d4f',
@@ -206,9 +354,48 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 
 MessageItem.displayName = 'MessageItem.Titan';
 
+// ============================================================================
+// Static Message API
+// ============================================================================
+
 /**
- * Static message methods for global usage
- * These work without context but require App wrapper
+ * Static message methods for global usage.
+ *
+ * @description
+ * These methods work without requiring a React context or provider.
+ * They are only available in the Titan engine due to Ant Design's
+ * global message singleton.
+ *
+ * @remarks
+ * For server-side rendering or when using other engines (Hermes, Apollo),
+ * use the MessageProvider and useMessage hook instead.
+ *
+ * @example
+ * ```tsx
+ * import { message } from '@rottay/design-system';
+ *
+ * // Show different message types
+ * message.success('Success!');
+ * message.error('Error occurred');
+ * message.info('FYI...');
+ * message.warning('Be careful!');
+ * message.loading('Please wait...');
+ *
+ * // With duration and callback
+ * message.success('Saved!', 5, () => console.log('Closed'));
+ *
+ * // With full config
+ * message.open({
+ *   type: 'success',
+ *   content: 'Custom message',
+ *   duration: 0, // Won't auto-close
+ *   key: 'my-message',
+ * });
+ *
+ * // Destroy by key or all
+ * message.destroy('my-message');
+ * message.destroy();
+ * ```
  */
 export const message: MessageInstance = {
   success: (content, duration, onClose) => {
@@ -329,6 +516,13 @@ export const message: MessageInstance = {
   },
 };
 
+// ============================================================================
+// Default Export
+// ============================================================================
+
+/**
+ * Default export containing all Titan engine message exports.
+ */
 export default {
   MessageProvider,
   MessageItem,

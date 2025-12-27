@@ -1,8 +1,52 @@
+/**
+ * @fileoverview Notification Apollo Engine - Rottay Design System
+ * @description Vanilla HTML/CSS implementation of the Notification component.
+ * Provides a zero-dependency notification experience with maximum accessibility.
+ *
+ * @remarks
+ * The Apollo engine uses pure HTML/CSS and minimal JavaScript to provide:
+ * - Zero external dependencies
+ * - Maximum accessibility compliance
+ * - Full control over styling
+ * - Lightweight bundle footprint
+ * - Server-side rendering compatibility
+ *
+ * This engine is recommended for applications requiring no external UI dependencies,
+ * maximum accessibility, or those building custom design systems on top of Rottay.
+ *
+ * Note: Static methods are not supported in Apollo. Always use the Provider
+ * and useNotification hook pattern.
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { NotificationProvider, useNotification } from '@rottay/design-system/apollo';
+ *
+ * function App() {
+ *   return (
+ *     <NotificationProvider>
+ *       <MyComponent />
+ *     </NotificationProvider>
+ *   );
+ * }
+ *
+ * function MyComponent() {
+ *   const [api] = useNotification();
+ *
+ *   return (
+ *     <button onClick={() => api.success({ message: 'Saved!' })}>
+ *       Save
+ *     </button>
+ *   );
+ * }
+ * ```
+ *
+ * @module Notification/Engines/Apollo
+ * @category Feedback
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Notification - Apollo Engine (Vanilla HTML/CSS)
- */
 import React, {
   createContext,
   useContext,
@@ -21,21 +65,70 @@ import type {
 } from '../../types';
 import { NOTIFICATION_DEFAULTS, NOTIFICATION_ICONS } from '../../types';
 
-// Types for internal state
+// ============================================================================
+// Internal Types
+// ============================================================================
+
+/**
+ * Internal notification state with additional properties.
+ *
+ * @internal
+ */
 interface InternalNotification extends NotificationItemProps {
+  /** Optional key for updating existing notifications */
   key?: string;
+  /** Placement position for this notification */
   placement: NotificationPlacement;
 }
 
+// ============================================================================
 // Context
+// ============================================================================
+
+/**
+ * Context for providing notification API to child components.
+ *
+ * @internal
+ */
 const NotificationContext = createContext<NotificationInstance | null>(null);
 
-// ID generator
+// ============================================================================
+// ID Generator
+// ============================================================================
+
+/**
+ * Counter for generating unique notification IDs.
+ *
+ * @internal
+ */
 let notificationId = 0;
+
+/**
+ * Generates a unique notification ID.
+ *
+ * @returns Unique string identifier
+ * @internal
+ */
 const generateId = () => `apollo-notification-${++notificationId}`;
 
-// Styles
+// ============================================================================
+// Style Definitions
+// ============================================================================
+
+/**
+ * Inline styles for Apollo engine components.
+ *
+ * @remarks
+ * All styles are defined as JavaScript objects for zero CSS dependency.
+ * These provide a solid baseline that can be customized through the
+ * style prop or CSS custom properties.
+ *
+ * @internal
+ */
 const styles = {
+  /**
+   * Container styles based on placement position.
+   */
   container: (placement: NotificationPlacement, top: number, bottom: number): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
@@ -59,6 +152,10 @@ const styles = {
 
     return { ...base, ...placements[placement] };
   },
+
+  /**
+   * Notification item styles.
+   */
   notification: {
     base: {
       display: 'flex',
@@ -77,6 +174,10 @@ const styles = {
     warning: { borderLeft: '4px solid #faad14' },
     open: {},
   },
+
+  /**
+   * Icon styles by type.
+   */
   icon: {
     base: {
       display: 'flex',
@@ -90,10 +191,18 @@ const styles = {
     warning: { color: '#faad14' },
     open: { color: '#1677ff' },
   },
+
+  /**
+   * Content container styles.
+   */
   content: {
     flex: 1,
     minWidth: 0,
   } as React.CSSProperties,
+
+  /**
+   * Message/title styles.
+   */
   message: {
     fontWeight: 600,
     fontSize: '16px',
@@ -101,14 +210,26 @@ const styles = {
     color: 'rgba(0, 0, 0, 0.88)',
     marginBottom: '4px',
   } as React.CSSProperties,
+
+  /**
+   * Description styles.
+   */
   description: {
     fontSize: '14px',
     lineHeight: '22px',
     color: 'rgba(0, 0, 0, 0.65)',
   } as React.CSSProperties,
+
+  /**
+   * Action button container styles.
+   */
   btnContainer: {
     marginTop: '12px',
   } as React.CSSProperties,
+
+  /**
+   * Close button styles.
+   */
   closeButton: {
     border: 'none',
     background: 'none',
@@ -122,7 +243,19 @@ const styles = {
   } as React.CSSProperties,
 };
 
-// Inject animation styles
+// ============================================================================
+// Animation Styles Injection
+// ============================================================================
+
+/**
+ * Injects CSS keyframe animations into the document head.
+ *
+ * @remarks
+ * Called once when the provider mounts to add slide animations.
+ * Checks for existing styles to prevent duplicates.
+ *
+ * @internal
+ */
 const injectStyles = () => {
   if (typeof document === 'undefined') return;
 
@@ -156,8 +289,39 @@ const injectStyles = () => {
   document.head.appendChild(styleSheet);
 };
 
+// ============================================================================
+// Notification Provider
+// ============================================================================
+
 /**
- * NotificationProvider - Apollo Engine
+ * NotificationProvider component for the Apollo engine.
+ *
+ * @description
+ * Provides notification context to child components and manages the
+ * notification state. Renders notifications using vanilla HTML/CSS.
+ *
+ * @remarks
+ * Key features:
+ * - Zero external dependencies
+ * - Context-based notification management
+ * - CSS keyframe animations
+ * - Full accessibility with ARIA attributes
+ * - Supports multiple placements simultaneously
+ *
+ * @param props - {@link NotificationProviderProps}
+ * @returns Provider component with notification containers
+ *
+ * @example
+ * ```tsx
+ * <NotificationProvider
+ *   maxCount={5}
+ *   placement="topRight"
+ *   top={24}
+ *   bottom={24}
+ * >
+ *   <App />
+ * </NotificationProvider>
+ * ```
  */
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   children,
@@ -166,16 +330,38 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   top = NOTIFICATION_DEFAULTS.top,
   bottom = NOTIFICATION_DEFAULTS.bottom,
 }) => {
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
   const [notifications, setNotifications] = useState<InternalNotification[]>([]);
 
+  // ========================================================================
+  // Effects
+  // ========================================================================
+
+  /**
+   * Inject animation styles on mount.
+   */
   useEffect(() => {
     injectStyles();
   }, []);
 
+  // ========================================================================
+  // Notification Actions
+  // ========================================================================
+
+  /**
+   * Removes a notification by ID.
+   */
   const removeNotification = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
   }, []);
 
+  /**
+   * Adds a new notification to the stack.
+   * Updates existing notification if key matches.
+   */
   const addNotification = useCallback(
     (config: NotificationConfig & { type: NotificationType }) => {
       const id = config.key || generateId();
@@ -199,6 +385,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       };
 
       setNotifications((prev) => {
+        // Update existing notification if key matches
         const existingIndex = prev.findIndex((n) => config.key && n.key === config.key);
         if (existingIndex !== -1) {
           const updated = [...prev];
@@ -206,6 +393,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
           return updated;
         }
 
+        // Add new notification, respecting maxCount
         const updated = [...prev, newNotification];
         if (updated.length > maxCount) {
           return updated.slice(-maxCount);
@@ -216,6 +404,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     [maxCount, placement]
   );
 
+  /**
+   * Creates a notification method for a specific type.
+   */
   const createNotificationMethod = useCallback(
     (type: NotificationType) => {
       return (config: NotificationConfig) => {
@@ -225,6 +416,13 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     [addNotification]
   );
 
+  // ========================================================================
+  // API Instance
+  // ========================================================================
+
+  /**
+   * Notification API provided to consumers.
+   */
   const notificationApi: NotificationInstance = {
     success: createNotificationMethod('success'),
     error: createNotificationMethod('error'),
@@ -240,7 +438,13 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     },
   };
 
-  // Group by placement
+  // ========================================================================
+  // Grouping
+  // ========================================================================
+
+  /**
+   * Group notifications by their placement position.
+   */
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
     (acc, notification) => {
       const p = notification.placement || placement;
@@ -251,9 +455,14 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     {} as Record<NotificationPlacement, InternalNotification[]>
   );
 
+  // ========================================================================
+  // Render
+  // ========================================================================
+
   return (
     <NotificationContext.Provider value={notificationApi}>
       {children}
+      {/* Render notification containers for each placement with notifications */}
       {Object.entries(groupedNotifications).map(([p, items]) => (
         <div
           key={p}
@@ -276,12 +485,40 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
 NotificationProvider.displayName = 'NotificationProvider.Apollo';
 
+// ============================================================================
+// useNotification Hook
+// ============================================================================
+
 /**
- * useNotification hook - Apollo Engine
+ * Hook for accessing the notification API in the Apollo engine.
+ *
+ * @description
+ * Returns a notification API instance. Apollo doesn't need a context holder
+ * element since notifications are rendered directly by the provider.
+ *
+ * @remarks
+ * Must be used within a NotificationProvider. If used outside, returns
+ * a no-op API that does nothing.
+ *
+ * @returns Tuple of [NotificationInstance, null]
+ *
+ * @example
+ * ```tsx
+ * function MyComponent() {
+ *   const [api] = useNotification();
+ *
+ *   return (
+ *     <button onClick={() => api.success({ message: 'Done!' })}>
+ *       Complete
+ *     </button>
+ *   );
+ * }
+ * ```
  */
 export function useNotification(): [NotificationInstance, React.ReactElement | null] {
   const context = useContext(NotificationContext);
 
+  // Return no-op API if outside provider
   if (!context) {
     const noop = () => {};
     return [
@@ -300,8 +537,39 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
   return [context, null];
 }
 
+// ============================================================================
+// Notification Item Component
+// ============================================================================
+
 /**
- * NotificationItem - Apollo Engine
+ * NotificationItem component for the Apollo engine.
+ *
+ * @description
+ * Renders an individual notification using vanilla HTML/CSS.
+ * Supports all standard notification features with inline styles.
+ *
+ * @remarks
+ * Features:
+ * - CSS keyframe animations for enter/exit
+ * - Full accessibility with ARIA attributes
+ * - Hover state for close button
+ * - Type-based color coding
+ *
+ * @param props - {@link NotificationItemProps}
+ * @returns A vanilla HTML notification item
+ *
+ * @example
+ * ```tsx
+ * <NotificationItem
+ *   id="notif-1"
+ *   type="success"
+ *   message="File Uploaded"
+ *   description="Your file has been uploaded successfully."
+ *   duration={4.5}
+ *   closable
+ *   onRemove={(id) => handleRemove(id)}
+ * />
+ * ```
  */
 export const NotificationItem: React.FC<NotificationItemProps> = ({
   id,
@@ -322,6 +590,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isExiting, setIsExiting] = useState(false);
 
+  // ========================================================================
+  // Auto-close Timer
+  // ========================================================================
+
   useEffect(() => {
     if (duration && duration > 0) {
       timerRef.current = setTimeout(() => {
@@ -336,6 +608,13 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     };
   }, [id, duration]);
 
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles manual close with exit animation.
+   */
   const handleClose = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -347,6 +626,13 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     }, 300);
   };
 
+  // ========================================================================
+  // Icon Rendering
+  // ========================================================================
+
+  /**
+   * Renders the appropriate icon based on type and custom icon prop.
+   */
   const renderIcon = () => {
     if (icon === null) return null;
     if (icon) return icon;
@@ -359,6 +645,13 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     );
   };
 
+  // ========================================================================
+  // Style Computation
+  // ========================================================================
+
+  /**
+   * Combined notification styles with animation state.
+   */
   const notificationStyle: React.CSSProperties = {
     ...styles.notification.base,
     ...styles.notification[type],
@@ -366,6 +659,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     cursor: onClick ? 'pointer' : 'default',
     ...style,
   };
+
+  // ========================================================================
+  // Render
+  // ========================================================================
 
   return (
     <div
@@ -375,12 +672,22 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       role="alert"
       aria-live="polite"
     >
+      {/* Icon */}
       {renderIcon()}
+
+      {/* Content */}
       <div style={styles.content}>
+        {/* Title */}
         <div style={styles.message}>{message}</div>
+
+        {/* Description */}
         {description && <div style={styles.description}>{description}</div>}
+
+        {/* Action Button */}
         {btn && <div style={styles.btnContainer}>{btn}</div>}
       </div>
+
+      {/* Close Button */}
       {closable && (
         <button
           onClick={(e) => {
@@ -405,8 +712,29 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
 
 NotificationItem.displayName = 'NotificationItem.Apollo';
 
+// ============================================================================
+// Static Notification Methods (Not Supported)
+// ============================================================================
+
 /**
- * Static notification methods
+ * Static notification API for the Apollo engine.
+ *
+ * @remarks
+ * Static methods are not supported in the Apollo engine because it relies
+ * on React context for state management. All methods will log a warning
+ * instructing users to use the Provider and hook pattern instead.
+ *
+ * @example
+ * ```tsx
+ * // DON'T do this with Apollo:
+ * notification.success({ message: 'Hello' }); // Will only log a warning
+ *
+ * // DO this instead:
+ * function MyComponent() {
+ *   const [api] = useNotification();
+ *   api.success({ message: 'Hello' }); // Works correctly
+ * }
+ * ```
  */
 export const notification: NotificationInstance = {
   success: () => console.warn('Apollo notification: Please use NotificationProvider and useNotification hook'),
@@ -417,6 +745,13 @@ export const notification: NotificationInstance = {
   destroy: () => console.warn('Apollo notification: Please use NotificationProvider and useNotification hook'),
 };
 
+// ============================================================================
+// Default Export
+// ============================================================================
+
+/**
+ * Default export containing all Apollo engine exports.
+ */
 export default {
   NotificationProvider,
   NotificationItem,

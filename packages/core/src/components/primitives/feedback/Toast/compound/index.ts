@@ -1,6 +1,42 @@
 /**
- * Toast - Compound Components
+ * @fileoverview Toast Compound Components - Rottay Design System
+ * @description Exports compound components for the Toast component.
+ *
+ * @remarks
+ * This module exports the ToastContainer compound component which is
+ * responsible for rendering and managing the toast stack. The container
+ * handles positioning, stacking, animations, and portal rendering.
+ *
+ * @example Using Toast.Container
+ * ```tsx
+ * import { ToastProvider, Toast } from '@rottay/design-system';
+ *
+ * function App() {
+ *   return (
+ *     <ToastProvider>
+ *       <YourApp />
+ *       <Toast.Container position="top-right" max={5} />
+ *     </ToastProvider>
+ *   );
+ * }
+ * ```
+ *
+ * @module Toast/Compound
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
+// ============================================================================
+// Compound Component Exports
+// ============================================================================
+
+/**
+ * ToastContainer - Renders the toast stack at a given position.
+ * @see {@link ToastContainerProps} for prop documentation
+ */
 export { ToastContainer } from './Container';
+
+/**
+ * Props for the ToastContainer compound component.
+ */
 export type { ToastContainerProps } from './Container';

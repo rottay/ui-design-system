@@ -1,5 +1,37 @@
 /**
- * Spinner - Titan Engine (Ant Design)
+ * @fileoverview Spinner Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Spinner component.
+ * Uses the Spin component from Ant Design for enterprise-grade loading indicators.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's Spin component, providing:
+ * - Native Ant Design animations and transitions
+ * - Consistent sizing with Ant Design's design tokens
+ * - Full integration with Ant Design's theming system
+ * - Enterprise-ready accessibility features
+ *
+ * Size mapping from Rottay to Ant Design:
+ * - `sm` -> `small`
+ * - `md` -> `default`
+ * - `lg` -> `large`
+ * - `xl` -> `large` (Ant Design maximum)
+ *
+ * @example
+ * ```tsx
+ * import { Spinner } from '@rottay/design-system';
+ *
+ * // Titan engine is the default
+ * <Spinner size="lg" label="Loading..." />
+ *
+ * // Explicit engine selection
+ * <Spinner engine="titan" size="md" />
+ * ```
+ *
+ * @see {@link https://ant.design/components/spin} Ant Design Spin documentation
+ *
+ * @module Spinner/Engines/Titan
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 import React from 'react';
@@ -7,6 +39,25 @@ import { Spin } from 'antd';
 import type { SpinnerProps } from '../../types';
 import { SPINNER_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Titan Engine Implementation
+// ============================================================================
+
+/**
+ * Titan (Ant Design) implementation of the Spinner component.
+ *
+ * @description
+ * Renders a spinner using Ant Design's Spin component with appropriate
+ * size mapping and optional label support.
+ *
+ * @param props - {@link SpinnerProps} Component properties
+ * @returns React element with Ant Design Spin component
+ *
+ * @example
+ * ```tsx
+ * <TitanSpinner size="lg" label="Processing..." />
+ * ```
+ */
 export default function TitanSpinner(props: SpinnerProps): React.ReactElement {
   const {
     size = SPINNER_DEFAULTS.size,
@@ -14,6 +65,10 @@ export default function TitanSpinner(props: SpinnerProps): React.ReactElement {
     className,
     style,
   } = props;
+
+  // ============================================================================
+  // Render
+  // ============================================================================
 
   return (
     <div className={className} style={{ textAlign: 'center', ...style }}>

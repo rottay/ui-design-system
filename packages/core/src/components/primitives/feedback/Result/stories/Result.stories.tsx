@@ -1,10 +1,40 @@
 /**
- * Result Component Stories
+ * @fileoverview Result Component Stories - Rottay Design System
+ * @description Storybook stories for the Result component.
+ * Demonstrates all status types, engine variations, and use cases.
+ *
+ * @remarks
+ * This file provides comprehensive Storybook documentation for the Result
+ * component, showcasing:
+ * - All 7 status types (success, error, info, warning, 404, 403, 500)
+ * - Multi-engine support (Titan, Hermes, Apollo)
+ * - Custom icons and content
+ * - Real-world usage patterns
+ *
+ * @example Running Stories
+ * ```bash
+ * npm run storybook
+ * # Navigate to Primitives/Feedback/Result
+ * ```
+ *
+ * @see {@link Result} - Main component
+ * @see {@link ResultProps} - Component props
+ * @module Result/Stories
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Result } from '../';
 
+// ============================================================================
+// Meta Configuration
+// ============================================================================
+
+/**
+ * Storybook meta configuration for the Result component.
+ * Configures controls, decorators, and documentation settings.
+ */
 const meta: Meta<typeof Result> = {
   title: 'Primitives/Feedback/Result',
   component: Result,
@@ -27,12 +57,24 @@ const meta: Meta<typeof Result> = {
 export default meta;
 type Story = StoryObj<typeof Result>;
 
+// ============================================================================
+// Basic Stories
+// ============================================================================
+
+/**
+ * Default Result story.
+ * Shows a basic result with just a title.
+ */
 export const Default: Story = {
   args: {
     title: 'Your operation has been executed',
   },
 };
 
+/**
+ * Success Result story.
+ * Demonstrates a successful operation confirmation.
+ */
 export const Success: Story = {
   args: {
     status: 'success',
@@ -49,6 +91,10 @@ export const Success: Story = {
   },
 };
 
+/**
+ * Error Result story.
+ * Demonstrates a failed operation message.
+ */
 export const Error: Story = {
   args: {
     status: 'error',
@@ -62,6 +108,10 @@ export const Error: Story = {
   },
 };
 
+/**
+ * Info Result story.
+ * Demonstrates an informational message.
+ */
 export const Info: Story = {
   args: {
     status: 'info',
@@ -70,6 +120,10 @@ export const Info: Story = {
   },
 };
 
+/**
+ * Warning Result story.
+ * Demonstrates a warning message.
+ */
 export const Warning: Story = {
   args: {
     status: 'warning',
@@ -78,6 +132,14 @@ export const Warning: Story = {
   },
 };
 
+// ============================================================================
+// Status Type Comparison
+// ============================================================================
+
+/**
+ * All Status Types story.
+ * Displays all four standard status types side by side.
+ */
 export const StatusTypes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -93,6 +155,14 @@ export const StatusTypes: Story = {
   ),
 };
 
+// ============================================================================
+// HTTP Status Pages
+// ============================================================================
+
+/**
+ * 404 Not Found story.
+ * Demonstrates a page not found error page.
+ */
 export const NotFound404: Story = {
   args: {
     status: '404',
@@ -106,6 +176,10 @@ export const NotFound404: Story = {
   },
 };
 
+/**
+ * 403 Forbidden story.
+ * Demonstrates an access denied error page.
+ */
 export const Forbidden403: Story = {
   args: {
     status: '403',
@@ -119,6 +193,10 @@ export const Forbidden403: Story = {
   },
 };
 
+/**
+ * 500 Server Error story.
+ * Demonstrates a server error page.
+ */
 export const ServerError500: Story = {
   args: {
     status: '500',
@@ -132,6 +210,10 @@ export const ServerError500: Story = {
   },
 };
 
+/**
+ * All HTTP Status Codes story.
+ * Displays all HTTP error status codes together.
+ */
 export const HTTPStatusCodes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -147,6 +229,14 @@ export const HTTPStatusCodes: Story = {
   ),
 };
 
+// ============================================================================
+// Custom Content Stories
+// ============================================================================
+
+/**
+ * Custom Icon story.
+ * Demonstrates using a custom icon instead of the default status icon.
+ */
 export const CustomIcon: Story = {
   args: {
     icon: <span style={{ fontSize: 64 }}>🎉</span>,
@@ -160,6 +250,10 @@ export const CustomIcon: Story = {
   },
 };
 
+/**
+ * With Details story.
+ * Demonstrates a result with additional error details in children.
+ */
 export const WithDetails: Story = {
   render: () => (
     <Result
@@ -183,6 +277,10 @@ export const WithDetails: Story = {
   ),
 };
 
+/**
+ * With Complex Extra story.
+ * Demonstrates multiple action buttons in the extra area.
+ */
 export const WithComplexExtra: Story = {
   render: () => (
     <Result
@@ -206,6 +304,14 @@ export const WithComplexExtra: Story = {
   ),
 };
 
+// ============================================================================
+// Layout Integration Stories
+// ============================================================================
+
+/**
+ * In Card story.
+ * Demonstrates a result displayed within a card container.
+ */
 export const InCard: Story = {
   render: () => (
     <div
@@ -226,6 +332,14 @@ export const InCard: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Engine Comparison story.
+ * Displays the same result rendered with all three engines.
+ */
 export const EngineComparison: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>

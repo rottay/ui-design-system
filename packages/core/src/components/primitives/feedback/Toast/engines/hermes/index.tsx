@@ -1,6 +1,47 @@
 /**
- * Toast - Hermes Engine (DaisyUI)
- * Uses DaisyUI alert classes inside a toast container
+ * @fileoverview Toast Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind implementation of the Toast component.
+ * Uses DaisyUI alert classes styled as toast notifications.
+ *
+ * @remarks
+ * The Hermes engine uses DaisyUI's alert component classes:
+ * - `alert` base class for container styling
+ * - `alert-{variant}` for color variants
+ * - Tailwind utilities for layout and spacing
+ *
+ * This implementation provides:
+ * - Utility-first styling with Tailwind CSS
+ * - DaisyUI's semantic color classes
+ * - Consistent animation timing
+ * - Full feature parity with other engines
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Toast
+ *   engine="hermes"
+ *   variant="success"
+ *   description="File uploaded successfully"
+ *   visible={true}
+ * />
+ * ```
+ *
+ * @example With Title and Description
+ * ```tsx
+ * <Toast
+ *   engine="hermes"
+ *   variant="warning"
+ *   title="Low Storage"
+ *   description="You have less than 10% storage remaining."
+ *   visible={true}
+ * />
+ * ```
+ *
+ * @see {@link ToastProps} for prop documentation
+ * @see {@link Toast} for the engine-agnostic component
+ *
+ * @module Toast/Engines/Hermes
+ * @category Feedback
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,8 +50,21 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../types';
 import { TOAST_DEFAULTS, TOAST_ANIMATION } from '../../types';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Map variant to DaisyUI alert class
+ * Maps Toast variant to DaisyUI alert class.
+ *
+ * @description
+ * Converts the design system's variant to DaisyUI's alert-{variant} class.
+ * Unknown variants return an empty string for default styling.
+ *
+ * @param variant - Toast variant
+ * @returns DaisyUI alert class name
+ *
+ * @internal
  */
 function getAlertClass(variant: ToastVariant): string {
   switch (variant) {
@@ -28,7 +82,19 @@ function getAlertClass(variant: ToastVariant): string {
 }
 
 /**
- * Get default icon SVG for variant
+ * Returns the default icon SVG for a given variant.
+ *
+ * @description
+ * Provides semantic icons matching DaisyUI's icon styling:
+ * - Success: Checkmark circle
+ * - Error: X circle
+ * - Warning: Triangle exclamation
+ * - Info: Information circle
+ *
+ * @param variant - Toast variant
+ * @returns React node with SVG icon, or null
+ *
+ * @internal
  */
 function getDefaultIcon(variant: ToastVariant): React.ReactNode {
   switch (variant) {
@@ -61,9 +127,35 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
   }
 }
 
+// ============================================================================
+// Hermes Toast Component
+// ============================================================================
+
 /**
- * HermesToast - DaisyUI implementation
- * Renders an alert component styled as a toast
+ * HermesToast - DaisyUI implementation of Toast.
+ *
+ * @description
+ * Renders an alert component styled as a toast notification using
+ * DaisyUI classes and Tailwind utilities.
+ *
+ * @remarks
+ * This component manages its own visibility state and animations.
+ * It uses DaisyUI's alert classes for consistent styling within
+ * DaisyUI-based applications.
+ *
+ * @param props - {@link ToastProps}
+ * @returns Styled alert element, or null if not visible
+ *
+ * @example
+ * ```tsx
+ * <HermesToast
+ *   variant="success"
+ *   title="Success!"
+ *   description="Your profile has been updated."
+ *   closable={true}
+ *   visible={true}
+ * />
+ * ```
  */
 export default function HermesToast(props: ToastProps): React.ReactElement | null {
   const {
@@ -83,12 +175,23 @@ export default function HermesToast(props: ToastProps): React.ReactElement | nul
     style,
   } = props;
 
+  // ========================================================================
+  // State Management
+  // ========================================================================
+
   const [isVisible, setIsVisible] = useState(visible);
   const [isExiting, setIsExiting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
 
-  // Handle close
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
+
+  /**
+   * Handles the close animation and callback.
+   * Triggers exit animation before calling onClose.
+   */
   const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
@@ -97,7 +200,13 @@ export default function HermesToast(props: ToastProps): React.ReactElement | nul
     }, TOAST_ANIMATION.exitDuration);
   }, [onClose]);
 
-  // Auto-dismiss timer
+  // ========================================================================
+  // Auto-Dismiss Effect
+  // ========================================================================
+
+  /**
+   * Effect to handle auto-dismiss timer and progress bar animation.
+   */
   useEffect(() => {
     if (!visible || duration === 0 || isPaused) return;
 
@@ -130,7 +239,13 @@ export default function HermesToast(props: ToastProps): React.ReactElement | nul
     };
   }, [visible, duration, isPaused, handleClose, showProgress, progress]);
 
-  // Sync with visible prop
+  // ========================================================================
+  // Visibility Sync Effect
+  // ========================================================================
+
+  /**
+   * Effect to sync internal visibility with visible prop.
+   */
   useEffect(() => {
     if (visible) {
       setIsVisible(true);
@@ -141,19 +256,33 @@ export default function HermesToast(props: ToastProps): React.ReactElement | nul
     }
   }, [visible, isVisible, handleClose]);
 
+  // Don't render if not visible
   if (!isVisible) return null;
+
+  // ========================================================================
+  // Class Names
+  // ========================================================================
 
   // Build class names
   const alertClass = getAlertClass(variant as ToastVariant);
   const baseClasses = `alert ${alertClass} shadow-lg`.trim();
   const animationClass = isExiting ? 'animate-fade-out' : 'animate-fade-in';
 
-  // Handle mouse events
+  // ========================================================================
+  // Event Handlers for Hover
+  // ========================================================================
+
+  /** Handle mouse enter for pause on hover */
   const handleMouseEnter = pauseOnHover ? () => setIsPaused(true) : undefined;
+  /** Handle mouse leave for pause on hover */
   const handleMouseLeave = pauseOnHover ? () => setIsPaused(false) : undefined;
 
-  // Display icon
+  // Determine icon to display
   const displayIcon = icon !== undefined ? icon : getDefaultIcon(variant as ToastVariant);
+
+  // ========================================================================
+  // Render
+  // ========================================================================
 
   return (
     <div
@@ -170,14 +299,17 @@ export default function HermesToast(props: ToastProps): React.ReactElement | nul
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Icon */}
       {displayIcon}
 
+      {/* Content */}
       <div className="flex flex-col">
         {title && <span className="font-semibold">{title}</span>}
         {description && <span className="text-sm">{description}</span>}
         {children}
       </div>
 
+      {/* Actions */}
       <div className="flex-none flex gap-2">
         {action && (
           <button
@@ -206,6 +338,7 @@ export default function HermesToast(props: ToastProps): React.ReactElement | nul
         )}
       </div>
 
+      {/* Progress Bar */}
       {showProgress && duration > 0 && (
         <div
           className="absolute bottom-0 left-0 h-1 bg-current opacity-30"
