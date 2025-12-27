@@ -1,8 +1,17 @@
 /**
- * Tour Types
+ * Tour Component Types
+ *
+ * Type definitions for the Tour component including step configuration,
+ * placement options, and visual styles.
+ *
+ * @module TourTypes
  */
 import type { ReactNode, CSSProperties, RefObject } from 'react';
 
+/**
+ * Placement options for tour popover positioning.
+ * Supports 12 positions around the target element plus center.
+ */
 export type TourPlacement =
   | 'top'
   | 'topLeft'
@@ -18,8 +27,27 @@ export type TourPlacement =
   | 'rightBottom'
   | 'center';
 
+/**
+ * Visual style type for the tour.
+ * - 'default': Standard neutral styling
+ * - 'primary': Highlighted primary color styling
+ */
 export type TourType = 'default' | 'primary';
 
+/**
+ * Configuration for a single tour step.
+ *
+ * @example
+ * ```tsx
+ * const step: TourStepProps = {
+ *   target: '#my-element',
+ *   title: 'Step Title',
+ *   description: 'This explains the feature',
+ *   placement: 'bottom',
+ *   cover: <img src="/guide.png" alt="Guide" />,
+ * };
+ * ```
+ */
 export interface TourStepProps {
   /** Target element ref or selector */
   target?: RefObject<HTMLElement> | (() => HTMLElement | null) | string;
@@ -53,8 +81,24 @@ export interface TourStepProps {
   };
 }
 
+/**
+ * Props for the Tour component.
+ *
+ * @example
+ * ```tsx
+ * const props: TourProps = {
+ *   steps: [
+ *     { target: '#step1', title: 'Welcome' },
+ *     { target: '#step2', title: 'Next Step' },
+ *   ],
+ *   open: true,
+ *   onClose: () => setOpen(false),
+ *   onFinish: () => console.log('Complete'),
+ * };
+ * ```
+ */
 export interface TourProps {
-  /** Tour steps */
+  /** Array of tour steps to display sequentially */
   steps: TourStepProps[];
   /** Current step index (controlled) */
   current?: number;

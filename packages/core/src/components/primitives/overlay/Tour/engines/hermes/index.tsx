@@ -2,12 +2,24 @@
 
 /**
  * Tour - Hermes Engine (DaisyUI/Tailwind)
+ *
+ * Tailwind CSS implementation of the Tour component.
+ * Uses DaisyUI components for consistent styling with Tailwind utilities.
+ *
+ * @module TourHermes
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { TourProps, TourStepProps } from '../../types';
 import { TOUR_DEFAULTS } from '../../types';
 
+/**
+ * Resolves target element from various input formats.
+ *
+ * @param target - CSS selector, ref, or getter function
+ * @returns The resolved HTMLElement or null
+ * @internal
+ */
 const getTargetElement = (target: TourStepProps['target']): HTMLElement | null => {
   if (!target) return null;
   if (typeof target === 'string') return document.querySelector(target);

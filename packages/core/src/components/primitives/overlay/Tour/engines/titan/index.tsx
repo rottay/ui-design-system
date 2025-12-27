@@ -2,11 +2,35 @@
 
 /**
  * Tour - Titan Engine (Ant Design)
+ *
+ * Ant Design implementation of the Tour component.
+ * Wraps the native antd Tour component with our unified API.
+ *
+ * @module TourTitan
+ * @see {@link https://ant.design/components/tour} Ant Design Tour
  */
 import React from 'react';
 import { Tour as AntTour } from 'antd';
 import type { TourProps } from '../../types';
 
+/**
+ * Titan engine implementation of Tour using Ant Design.
+ *
+ * Features:
+ * - Full Ant Design Tour feature support
+ * - Automatic target element resolution
+ * - Built-in spotlight and mask effects
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Tour steps={steps} open={isOpen} engine="titan" />
+ * ```
+ *
+ * @param props - Tour configuration props
+ * @param ref - Forwarded ref to the container div
+ * @returns Guided tour using Ant Design
+ */
 export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
   (props, ref) => {
     const {

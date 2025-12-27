@@ -55,6 +55,8 @@ export interface TransferProps {
   className?: string;
   /** Additional styles */
   style?: CSSProperties;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const TRANSFER_DEFAULTS: Partial<TransferProps> = {

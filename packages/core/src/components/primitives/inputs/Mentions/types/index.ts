@@ -58,6 +58,8 @@ export interface MentionsProps {
   textareaClassName?: string;
   /** Popup class name */
   popupClassName?: string;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const MENTIONS_DEFAULTS: Partial<MentionsProps> = {

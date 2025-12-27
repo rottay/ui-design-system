@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 69/76 | Display 14/17, Inputs 15/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 12/12 ✅, Overlay 6/6 ✅ |
-| **Tests** | ~69 files | Display + 15 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
-| **JSDoc** | ~81% | English, standardized |
-| **Storybook** | 69/76 | Display + 15 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
+| **Refactor** | 71/76 | Display 14/17, Inputs 17/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 12/12 ✅, Overlay 6/6 ✅ |
+| **Tests** | ~71 files | Display + 17 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
+| **JSDoc** | ~83% | English, standardized |
+| **Storybook** | 71/76 | Display + 17 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -124,8 +124,8 @@ Component/
 | 13 | AutoComplete | done | done | done | done | Multi-engine support |
 | 14 | Cascader | done | done | done | done | Multi-engine support |
 | 15 | TreeSelect | done | done | done | done | Multi-engine support |
-| 16 | Mentions | pending | pending | pending | pending | |
-| 17 | Transfer | pending | pending | pending | pending | |
+| 16 | Mentions | done | done | done | done | Multi-engine support |
+| 17 | Transfer | done | done | done | done | Multi-engine support |
 | 18 | ColorPicker | pending | pending | pending | pending | |
 | 19 | Slider | done | done | done | done | 25 tests, range/marks |
 | 20 | Upload | pending | pending | pending | pending | Has Dragger |
