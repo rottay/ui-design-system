@@ -13,6 +13,9 @@ const originalCreateElement = document.createElement.bind(document);
 let linkBehavior: 'success' | 'error' | 'timeout' = 'success';
 let tenantLoadedCallbacks: Map<string, () => void> = new Map();
 
+// Track timeouts for cleanup
+let pendingTimeouts: NodeJS.Timeout[] = [];
+
 // Test component that uses the theme hook
 function TestConsumer() {
   const { tenant, theme, isLoading, isFallback, config } = useThemeContext();
@@ -33,17 +36,14 @@ describe('ThemeProvider', () => {
     document.head.innerHTML = '';
     linkBehavior = 'success';
     tenantLoadedCallbacks.clear();
+    pendingTimeouts = [];
 
     // Mock document.createElement for link elements
     document.createElement = vi.fn((tagName: string) => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
-        // Simulate async CSS loading
-        const originalAppend = document.head.appendChild.bind(document.head);
-        const href = element.href;
-
-        // Override appendChild to trigger load/error events
-        setTimeout(() => {
+        // Simulate async CSS loading with tracked timeout
+        const timeoutId = setTimeout(() => {
           if (linkBehavior === 'success' || (element.href && element.href.includes('rottay'))) {
             if (element.onload) {
               element.onload(new Event('load'));
@@ -55,13 +55,17 @@ describe('ThemeProvider', () => {
           }
           // For timeout, we don't call anything - let the timeout handler run
         }, 10);
+        pendingTimeouts.push(timeoutId);
       }
       return element;
     }) as any;
   });
 
   afterEach(() => {
-    // Clean up
+    // Clean up pending timeouts
+    pendingTimeouts.forEach(id => clearTimeout(id));
+    pendingTimeouts = [];
+    // Clean up DOM
     document.head.innerHTML = '';
     document.createElement = originalCreateElement;
     vi.clearAllMocks();
@@ -86,7 +90,7 @@ describe('ThemeProvider', () => {
     document.createElement = vi.fn((tagName: string) => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           // Custom tenant fails, rottay succeeds
           if (element.href && element.href.includes('custom-tenant')) {
             if (element.onerror) {
@@ -98,6 +102,7 @@ describe('ThemeProvider', () => {
             }
           }
         }, 10);
+        pendingTimeouts.push(timeoutId);
       }
       return element;
     }) as any;
@@ -135,7 +140,7 @@ describe('ThemeProvider', () => {
     document.createElement = vi.fn((tagName: string) => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           if (element.href && element.href.includes('nonexistent')) {
             if (element.onerror) {
               element.onerror(new Event('error'));
@@ -146,6 +151,7 @@ describe('ThemeProvider', () => {
             }
           }
         }, 10);
+        pendingTimeouts.push(timeoutId);
       }
       return element;
     }) as any;
@@ -171,7 +177,7 @@ describe('ThemeProvider', () => {
     document.createElement = vi.fn((tagName: string) => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           if (element.href && element.href.includes('nonexistent')) {
             if (element.onerror) {
               element.onerror(new Event('error'));
@@ -182,6 +188,7 @@ describe('ThemeProvider', () => {
             }
           }
         }, 10);
+        pendingTimeouts.push(timeoutId);
       }
       return element;
     }) as any;
@@ -202,16 +209,16 @@ describe('ThemeProvider', () => {
 
   it('injects emergency tokens when even Rottay fails', async () => {
     // Mock loadTenantCSS to always fail
-    const originalCreateElement = document.createElement.bind(document);
     document.createElement = vi.fn((tagName: string) => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
         // Trigger error immediately
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           if (element.onerror) {
             element.onerror(new Event('error'));
           }
         }, 0);
+        pendingTimeouts.push(timeoutId);
       }
       return element;
     }) as any;
@@ -230,9 +237,6 @@ describe('ThemeProvider', () => {
       },
       { timeout: 6000 }
     );
-
-    // Restore
-    document.createElement = originalCreateElement;
   });
 
   it('applies branding CSS variables', async () => {
