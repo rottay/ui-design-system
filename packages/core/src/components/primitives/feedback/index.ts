@@ -11,8 +11,16 @@ export type { SpinnerProps, SpinnerSize } from './Spinner';
 export { Progress } from './Progress';
 export type { ProgressProps, ProgressType, ProgressStatus } from './Progress';
 
-export { Modal } from './Modal';
-export type { ModalProps, ModalSize } from './Modal';
+export { Modal, ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from './Modal';
+export type {
+  ModalProps,
+  ModalSize,
+  ModalPlacement,
+  ModalHeaderProps,
+  ModalBodyProps,
+  ModalFooterProps,
+  ModalCloseButtonProps,
+} from './Modal';
 
 export { Toast } from './Toast';
 export type {

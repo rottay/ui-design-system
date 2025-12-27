@@ -7,10 +7,15 @@ import type { ModalProps, ModalSize } from '../../types';
 import { MODAL_DEFAULTS } from '../../types';
 
 const SIZE_CLASSES: Record<ModalSize, string> = {
+  xs: 'modal-box w-80',
   sm: 'modal-box w-96',
   md: 'modal-box w-[520px]',
   lg: 'modal-box w-[720px]',
   xl: 'modal-box w-[900px]',
+  '2xl': 'modal-box w-[960px]',
+  '3xl': 'modal-box w-[1120px]',
+  '4xl': 'modal-box w-[1280px]',
+  '5xl': 'modal-box w-[1440px]',
   full: 'modal-box w-11/12 max-w-7xl',
 };
 

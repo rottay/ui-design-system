@@ -7,10 +7,15 @@ import type { ModalProps, ModalSize } from '../../types';
 import { MODAL_DEFAULTS } from '../../types';
 
 const SIZE_STYLES: Record<ModalSize, { maxWidth: string; width?: string }> = {
+  xs: { maxWidth: '320px' },
   sm: { maxWidth: '416px' },
   md: { maxWidth: '520px' },
   lg: { maxWidth: '720px' },
   xl: { maxWidth: '900px' },
+  '2xl': { maxWidth: '960px' },
+  '3xl': { maxWidth: '1120px' },
+  '4xl': { maxWidth: '1280px' },
+  '5xl': { maxWidth: '1440px' },
   full: { maxWidth: '90vw', width: '100%' },
 };
 

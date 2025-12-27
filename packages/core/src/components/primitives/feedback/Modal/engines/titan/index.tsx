@@ -8,10 +8,15 @@ import type { ModalProps, ModalSize } from '../../types';
 import { MODAL_DEFAULTS } from '../../types';
 
 const SIZE_MAP: Record<ModalSize, number | string> = {
+  xs: 320,
   sm: 416,
   md: 520,
   lg: 720,
   xl: 900,
+  '2xl': 960,
+  '3xl': 1120,
+  '4xl': 1280,
+  '5xl': 1440,
   full: '100%',
 };
 

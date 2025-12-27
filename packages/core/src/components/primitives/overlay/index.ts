@@ -1,21 +1,15 @@
 /**
  * Overlay primitives
  *
- * Note: Modal is also available from './feedback/Modal' with simpler API.
- * This overlay Modal provides advanced features: Portal, Overlay, FocusTrap.
+ * Note: Modal compound components (Header, Body, Footer) are exported from
+ * './feedback/Modal'. Use OverlayModal for advanced features like Portal.
  */
 
 // Re-export Modal with alias to avoid conflict with feedback/Modal
 export { Modal as OverlayModal } from './Modal';
 
-// Export compound components directly (no conflict)
-export {
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  BaseModal,
-} from './Modal';
+// Export base component with alias
+export { BaseModal as OverlayBaseModal } from './Modal';
 
 // Export utility components (unique to overlay)
 export {
@@ -36,17 +30,9 @@ export {
 } from './Modal';
 
 // Re-export types with aliases where needed
-// Note: ModalSize is already exported from ./feedback, so we use an alias here
 export type {
   ModalProps as OverlayModalProps,
   ModalSize as OverlayModalSize,
-  ModalPlacement,
-  ModalHeaderProps,
-  ModalBodyProps,
-  ModalFooterProps,
-  ModalButtonConfig,
-  ModalConfirmProps,
-  ModalCloseButtonProps,
   PortalProps,
   OverlayProps,
   FocusTrapProps,
