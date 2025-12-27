@@ -2,11 +2,28 @@
 
 /**
  * Rate - Hermes Engine (DaisyUI/Tailwind)
+ * Custom implementation using DaisyUI rating classes
+ * @module Rate/Engines/Hermes
  */
-import React, { useState, useCallback } from 'react';
-import type { RateProps } from '../../types';
-import { RATE_DEFAULTS } from '../../types';
 
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import type { RateProps, RateCharacterProps } from '../../types';
+import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../../types';
+
+/**
+ * Map design system sizes to Tailwind classes
+ */
+const SIZE_CLASSES: Record<string, string> = {
+  xs: 'rating-xs',
+  sm: 'rating-sm',
+  md: 'rating-md',
+  lg: 'rating-lg',
+  xl: 'rating-lg', // DaisyUI doesn't have xl, use lg
+};
+
+/**
+ * Hermes Rate component using DaisyUI/Tailwind
+ */
 export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
   (props, ref) => {
     const {
@@ -16,21 +33,44 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       allowHalf = RATE_DEFAULTS.allowHalf,
       allowClear = RATE_DEFAULTS.allowClear,
       disabled = RATE_DEFAULTS.disabled,
+      readOnly = RATE_DEFAULTS.readOnly,
       onChange,
       onHoverChange,
       character,
       className = '',
       style,
       tooltips,
+      autoFocus,
+      keyboard = RATE_DEFAULTS.keyboard,
+      size = RATE_DEFAULTS.size,
+      activeColor,
+      inactiveColor,
+      direction = RATE_DEFAULTS.direction,
+      // Omit engine prop
+      engine: _engine,
+      ...restProps
     } = props;
 
     const isControlled = value !== undefined;
-    const [internalValue, setInternalValue] = useState(defaultValue || 0);
+    const [internalValue, setInternalValue] = useState(defaultValue);
     const [hoverValue, setHoverValue] = useState<number | null>(null);
-    const currentValue = isControlled ? value : internalValue;
+    const [focusIndex, setFocusIndex] = useState<number | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
+    const currentValue = isControlled ? value : internalValue;
+    const displayValue = hoverValue !== null ? hoverValue : currentValue;
+    const isInteractive = !disabled && !readOnly;
+
+    // Auto focus on mount
+    useEffect(() => {
+      if (autoFocus && containerRef.current) {
+        containerRef.current.focus();
+      }
+    }, [autoFocus]);
+
+    // Handle click on a star
     const handleClick = useCallback((starValue: number) => {
-      if (disabled) return;
+      if (!isInteractive) return;
 
       let newValue = starValue;
 
@@ -43,21 +83,59 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         setInternalValue(newValue);
       }
       onChange?.(newValue);
-    }, [disabled, allowClear, currentValue, isControlled, onChange]);
+    }, [isInteractive, allowClear, currentValue, isControlled, onChange]);
 
+    // Handle hover
     const handleHover = useCallback((starValue: number | null) => {
-      if (disabled) return;
+      if (!isInteractive) return;
       setHoverValue(starValue);
       if (starValue !== null) {
         onHoverChange?.(starValue);
+      } else {
+        onHoverChange?.(0);
       }
-    }, [disabled, onHoverChange]);
+    }, [isInteractive, onHoverChange]);
 
-    const displayValue = hoverValue !== null ? hoverValue : currentValue;
+    // Handle keyboard navigation
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+      if (!keyboard || !isInteractive) return;
 
+      let newValue = currentValue || 0;
+      const step = allowHalf ? 0.5 : 1;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowUp':
+          e.preventDefault();
+          newValue = Math.min(count, newValue + step);
+          break;
+        case 'ArrowLeft':
+        case 'ArrowDown':
+          e.preventDefault();
+          newValue = Math.max(0, newValue - step);
+          break;
+        case 'Home':
+          e.preventDefault();
+          newValue = 0;
+          break;
+        case 'End':
+          e.preventDefault();
+          newValue = count;
+          break;
+        default:
+          return;
+      }
+
+      if (!isControlled) {
+        setInternalValue(newValue);
+      }
+      onChange?.(newValue);
+    }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange]);
+
+    // Render custom or default character
     const renderCharacter = (index: number) => {
       if (typeof character === 'function') {
-        return character({ index, value: displayValue || 0 });
+        return character({ index, value: displayValue || 0 } as RateCharacterProps);
       }
       if (character) {
         return character;
@@ -65,7 +143,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       // Default star SVG
       return (
         <svg
-          className="w-6 h-6"
+          className="w-full h-full"
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -74,34 +152,53 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       );
     };
 
-    const stars = Array.from({ length: count! }, (_, index) => {
+    // Get size in pixels for custom sizing
+    const sizeValue = RATE_SIZE_MAP[size];
+
+    // Build stars array
+    const stars = Array.from({ length: count }, (_, index) => {
       const starIndex = index + 1;
-      const isFilled = displayValue! >= starIndex;
-      const isHalfFilled = allowHalf && displayValue! >= starIndex - 0.5 && displayValue! < starIndex;
+      const isFilled = (displayValue || 0) >= starIndex;
+      const isHalfFilled = allowHalf && (displayValue || 0) >= starIndex - 0.5 && (displayValue || 0) < starIndex;
+      const isFocused = focusIndex === starIndex;
 
       return (
         <label
           key={index}
           className={`
-            cursor-pointer transition-colors
+            relative inline-flex items-center justify-center
+            transition-all duration-200
             ${isFilled || isHalfFilled ? 'text-warning' : 'text-base-300'}
-            ${disabled ? 'cursor-not-allowed opacity-50' : 'hover:scale-110'}
+            ${isInteractive ? 'cursor-pointer hover:scale-110' : disabled ? 'cursor-not-allowed opacity-50' : 'cursor-default'}
+            ${isFocused ? 'ring-2 ring-warning ring-offset-2' : ''}
           `}
+          style={{
+            width: `${sizeValue}px`,
+            height: `${sizeValue}px`,
+            color: isFilled || isHalfFilled
+              ? activeColor || undefined
+              : inactiveColor || undefined,
+          }}
           title={tooltips?.[index]}
           onMouseEnter={() => handleHover(starIndex)}
           onMouseLeave={() => handleHover(null)}
+          role="radio"
+          aria-checked={isFilled}
+          aria-label={tooltips?.[index] || `${starIndex} star${starIndex > 1 ? 's' : ''}`}
         >
           <input
             type="radio"
-            name="rating"
+            name={`rating-${Math.random().toString(36).substr(2, 9)}`}
             className="hidden"
             value={starIndex}
-            disabled={disabled}
+            disabled={!isInteractive}
             onClick={() => handleClick(starIndex)}
+            onChange={() => {}}
           />
+          {/* Half star click area */}
           {allowHalf && (
             <span
-              className="absolute left-0 w-1/2 overflow-hidden"
+              className="absolute left-0 top-0 w-1/2 h-full z-10"
               onMouseEnter={(e) => {
                 e.stopPropagation();
                 handleHover(starIndex - 0.5);
@@ -112,18 +209,68 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
               }}
             />
           )}
-          {renderCharacter(index)}
+          {/* Half star visual */}
+          {isHalfFilled ? (
+            <span className="relative inline-flex w-full h-full">
+              <span
+                className="absolute inset-0"
+                style={{ color: inactiveColor || 'inherit' }}
+              >
+                {renderCharacter(index)}
+              </span>
+              <span
+                className="absolute inset-0 overflow-hidden"
+                style={{
+                  width: '50%',
+                  color: activeColor || 'inherit',
+                }}
+              >
+                {renderCharacter(index)}
+              </span>
+            </span>
+          ) : (
+            renderCharacter(index)
+          )}
         </label>
       );
     });
 
+    // Combine DaisyUI classes
+    const ratingClasses = [
+      'rating',
+      SIZE_CLASSES[size] || SIZE_CLASSES.md,
+      'gap-1',
+      className,
+    ].filter(Boolean).join(' ');
+
     return (
       <div
-        ref={ref}
-        className={`rating rating-lg ${className}`}
-        style={style}
+        ref={(node) => {
+          if (typeof ref === 'function') {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }}
+        className={ratingClasses}
+        style={{
+          direction,
+          ...style,
+        }}
         role="radiogroup"
         aria-label="Rating"
+        aria-disabled={disabled}
+        aria-readonly={readOnly}
+        aria-valuenow={currentValue}
+        aria-valuemin={0}
+        aria-valuemax={count}
+        tabIndex={isInteractive ? 0 : -1}
+        onKeyDown={handleKeyDown}
+        onFocus={() => setFocusIndex(Math.ceil(currentValue || 0.5))}
+        onBlur={() => setFocusIndex(null)}
+        data-testid="rate"
+        {...restProps}
       >
         {stars}
       </div>

@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 39/76 | Display done, Inputs 12/20, Feedback 10/11 |
-| **Tests** | ~500/600 | Display + 12 Inputs + 10 Feedback done |
-| **JSDoc** | ~55% | English, standardized |
-| **Storybook** | 39/76 | Display + 12 Inputs + 10 Feedback done |
+| **Refactor** | 45/76 | Display done, Inputs 12/20, Feedback 11/11 ✅, Layout 4/10, Navigation 1/12 |
+| **Tests** | ~925/1000 | Display + 12 Inputs + 11 Feedback + 4 Layout + Affix done |
+| **JSDoc** | ~62% | English, standardized |
+| **Storybook** | 45/76 | Display + 12 Inputs + 11 Feedback + 4 Layout + Affix done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -144,16 +144,16 @@ Component/
 | 8 | Message | done | done | done | done | 18 tests, Provider/useMessage hook |
 | 9 | Notification | done | done | done | done | 20 tests, Provider/useNotification |
 | 10 | Result | done | done | done | done | 22 tests, status types/HTTP codes |
-| 11 | Rate | pending | pending | pending | pending | |
+| 11 | Rate | done | done | done | done | 53 tests, allowHalf/count/tooltips |
 
 ### Layout (10 components)
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Box | pending | pending | pending | pending | |
-| 2 | Stack | pending | pending | pending | pending | |
-| 3 | Grid | pending | pending | pending | pending | |
-| 4 | Divider | pending | pending | pending | pending | |
+| 1 | Box | done | done | done | done | 82 tests, polymorphic/spacing/layout |
+| 2 | Stack | done | done | done | done | 69 tests, direction/spacing/divider |
+| 3 | Grid | done | done | done | done | 115 tests, Grid.Item compound |
+| 4 | Divider | done | done | done | done | 61 tests, horizontal/vertical/text |
 | 5 | Container | pending | pending | pending | pending | |
 | 6 | Flex | pending | pending | pending | pending | |
 | 7 | Space | pending | pending | pending | pending | |
@@ -171,7 +171,7 @@ Component/
 | 4 | Menu | pending | pending | pending | pending | |
 | 5 | Stepper | pending | pending | pending | pending | |
 | 6 | Steps | pending | pending | pending | pending | |
-| 7 | Affix | pending | pending | pending | pending | |
+| 7 | Affix | done | done | done | done | 45 tests, offsetTop/offsetBottom/target |
 | 8 | Segmented | pending | pending | pending | pending | |
 | 9 | BackTop | pending | pending | pending | pending | |
 | 10 | Anchor | pending | pending | pending | pending | Has Link |

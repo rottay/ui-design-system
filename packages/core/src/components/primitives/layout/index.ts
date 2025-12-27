@@ -3,7 +3,16 @@
  */
 
 export { Box } from './Box';
-export type { BoxProps } from './Box';
+export type {
+  BoxProps,
+  BoxSpacing,
+  BoxBorderRadius,
+  BoxShadow,
+  BoxDisplay,
+  BoxPosition,
+  BoxOverflow,
+} from './Box';
+export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './Box';
 
 export { Stack } from './Stack';
 export type {
@@ -12,13 +21,58 @@ export type {
   StackAlign,
   StackJustify,
   StackSpacing,
+  StackSpacingPreset,
+} from './Stack';
+export {
+  STACK_DEFAULTS,
+  SPACING_MAP as STACK_SPACING_MAP,
+  ALIGN_MAP as STACK_ALIGN_MAP,
+  JUSTIFY_MAP as STACK_JUSTIFY_MAP,
+  resolveSpacing as resolveStackSpacing,
 } from './Stack';
 
-export { Grid } from './Grid';
-export type { GridProps, GridColumns, GridGap } from './Grid';
+export { Grid, GridItem } from './Grid';
+export type {
+  GridProps,
+  GridItemProps,
+  GridColumns,
+  GridColumnsValue,
+  GridRows,
+  GridGap,
+  GridGapValue,
+  GridAutoFlow,
+  GridAlignItems,
+  GridJustifyItems,
+  GridAlignContent,
+  GridJustifyContent,
+  GridPlaceItems,
+  ResponsiveValue,
+} from './Grid';
+export {
+  GRID_DEFAULTS,
+  GRID_ITEM_DEFAULTS,
+  GAP_MAP,
+  ALIGN_ITEMS_MAP,
+  JUSTIFY_ITEMS_MAP,
+} from './Grid';
 
 export { Divider } from './Divider';
-export type { DividerProps, DividerOrientation, DividerType } from './Divider';
+export type {
+  DividerProps,
+  DividerOrientation,
+  DividerVariant,
+  DividerTextPosition,
+  DividerThickness,
+  DividerThicknessPreset,
+  DividerSpacing,
+} from './Divider';
+export {
+  DIVIDER_DEFAULTS,
+  SPACING_MAP as DIVIDER_SPACING_MAP,
+  THICKNESS_MAP,
+  DEFAULT_COLORS as DIVIDER_DEFAULT_COLORS,
+  getThicknessValue,
+} from './Divider';
 
 // Wave 4 - New Layout Components
 export { Container } from './Container';

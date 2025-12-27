@@ -1,68 +1,151 @@
 /**
- * Stack - Hermes Engine (DaisyUI)
+ * Stack - Hermes Engine (DaisyUI/Tailwind)
+ * Provides Stack component using DaisyUI/Tailwind styling conventions
  */
 
-import React from 'react';
-import type { StackProps } from '../../types';
-import {
-  STACK_DEFAULTS,
-  SPACING_MAP,
-  ALIGN_MAP,
-  JUSTIFY_MAP,
-} from '../../types';
+'use client';
 
-export default function HermesStack(props: StackProps): React.ReactElement {
+import React, { forwardRef, type ElementType, type Ref } from 'react';
+import type { StackProps, StackSpacingPreset, StackAlign, StackJustify } from '../../types';
+import { STACK_DEFAULTS } from '../../types';
+import { buildStackStyles, filterStackProps, renderStackChildren } from '../../base';
+
+/**
+ * Maps spacing values to Tailwind gap classes
+ */
+const GAP_CLASS_MAP: Record<StackSpacingPreset, string> = {
+  none: 'gap-0',
+  xs: 'gap-1',    // 0.25rem
+  sm: 'gap-2',    // 0.5rem
+  md: 'gap-4',    // 1rem
+  lg: 'gap-6',    // 1.5rem
+  xl: 'gap-8',    // 2rem
+  '2xl': 'gap-10', // 2.5rem
+  '3xl': 'gap-12', // 3rem
+  '4xl': 'gap-16', // 4rem
+};
+
+/**
+ * Maps alignment values to Tailwind classes
+ */
+const ALIGN_CLASS_MAP: Record<StackAlign, string> = {
+  start: 'items-start',
+  center: 'items-center',
+  end: 'items-end',
+  stretch: 'items-stretch',
+  baseline: 'items-baseline',
+};
+
+/**
+ * Maps justify values to Tailwind classes
+ */
+const JUSTIFY_CLASS_MAP: Record<StackJustify, string> = {
+  start: 'justify-start',
+  center: 'justify-center',
+  end: 'justify-end',
+  'space-between': 'justify-between',
+  'space-around': 'justify-around',
+  'space-evenly': 'justify-evenly',
+};
+
+/**
+ * Build Tailwind classes from Stack props
+ */
+function buildTailwindClasses(props: StackProps): string[] {
+  const classes: string[] = ['flex'];
   const {
-    children,
     direction = STACK_DEFAULTS.direction,
+    spacing,
+    gap,
     align = STACK_DEFAULTS.align,
     justify = STACK_DEFAULTS.justify,
-    spacing = STACK_DEFAULTS.spacing,
     wrap = STACK_DEFAULTS.wrap,
-    divider,
-    className = '',
-    style,
+    reverse = STACK_DEFAULTS.reverse,
+    fullWidth = STACK_DEFAULTS.fullWidth,
+    fullHeight = STACK_DEFAULTS.fullHeight,
   } = props;
 
-  const combinedStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'vertical' ? 'column' : 'row',
-    alignItems: ALIGN_MAP[align!],
-    justifyContent: JUSTIFY_MAP[justify!],
-    gap: SPACING_MAP[spacing!],
-    flexWrap: wrap ? 'wrap' : 'nowrap',
-    ...style,
-  };
-
-  const childArray = React.Children.toArray(children);
-
-  if (divider && childArray.length > 1) {
-    const withDividers: React.ReactNode[] = [];
-    childArray.forEach((child, index) => {
-      withDividers.push(child);
-      if (index < childArray.length - 1) {
-        withDividers.push(
-          <div
-            key={`divider-${index}`}
-            className="divider"
-            style={{
-              [direction === 'vertical' ? 'width' : 'height']: '100%',
-              [direction === 'vertical' ? 'height' : 'width']: '1px',
-            }}
-          />
-        );
-      }
-    });
-    return (
-      <div className={className} style={combinedStyle}>
-        {withDividers}
-      </div>
-    );
+  // Direction classes
+  if (direction === 'vertical') {
+    classes.push(reverse ? 'flex-col-reverse' : 'flex-col');
+  } else {
+    classes.push(reverse ? 'flex-row-reverse' : 'flex-row');
   }
 
-  return (
-    <div className={className} style={combinedStyle}>
-      {children}
-    </div>
-  );
+  // Gap classes (only for preset values, not numeric)
+  const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
+  if (typeof spacingValue === 'string' && spacingValue in GAP_CLASS_MAP) {
+    classes.push(GAP_CLASS_MAP[spacingValue as StackSpacingPreset]);
+  }
+
+  // Alignment classes
+  classes.push(ALIGN_CLASS_MAP[align]);
+
+  // Justify classes
+  classes.push(JUSTIFY_CLASS_MAP[justify]);
+
+  // Wrap classes
+  classes.push(wrap ? 'flex-wrap' : 'flex-nowrap');
+
+  // Size classes
+  if (fullWidth) {
+    classes.push('w-full');
+  }
+  if (fullHeight) {
+    classes.push('h-full');
+  }
+
+  return classes;
 }
+
+/**
+ * Hermes Stack component.
+ * Uses DaisyUI/Tailwind styling conventions while maintaining
+ * compatibility with the Stack API.
+ */
+const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
+  const {
+    as: Component = STACK_DEFAULTS.as,
+    direction = STACK_DEFAULTS.direction,
+    spacing,
+    gap,
+    divider,
+    className = '',
+    children,
+  } = props;
+
+  // For numeric spacing values, use inline styles
+  const spacingValue = gap ?? spacing ?? STACK_DEFAULTS.spacing;
+  const needsInlineGap = typeof spacingValue === 'number';
+
+  // Use base styles for numeric gap, otherwise let Tailwind handle it
+  const computedStyle = needsInlineGap ? buildStackStyles(props) : props.style;
+  const filteredProps = filterStackProps(props);
+  const tailwindClasses = buildTailwindClasses(props);
+  const renderedChildren = renderStackChildren(children, divider, direction);
+
+  // Build class names with Hermes-specific prefixes and Tailwind classes
+  const classNames = [
+    'rottay-stack',
+    'rottay-stack--hermes',
+    ...(needsInlineGap ? [] : tailwindClasses),
+    className,
+  ].filter(Boolean).join(' ');
+
+  const ElementType = Component as ElementType;
+
+  return React.createElement(
+    ElementType,
+    {
+      ref: ref as Ref<HTMLElement>,
+      className: classNames,
+      style: computedStyle,
+      ...filteredProps,
+    },
+    renderedChildren
+  );
+});
+
+HermesStack.displayName = 'HermesStack';
+
+export default HermesStack;

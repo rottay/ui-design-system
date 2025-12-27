@@ -1,68 +1,54 @@
 /**
  * Stack - Titan Engine (Ant Design)
+ * Provides Stack component using Ant Design styling conventions
  */
 
-import React from 'react';
-import type { StackProps } from '../../types';
-import {
-  STACK_DEFAULTS,
-  SPACING_MAP,
-  ALIGN_MAP,
-  JUSTIFY_MAP,
-} from '../../types';
+'use client';
 
-export default function TitanStack(props: StackProps): React.ReactElement {
+import React, { forwardRef, type ElementType, type Ref } from 'react';
+import type { StackProps } from '../../types';
+import { STACK_DEFAULTS } from '../../types';
+import { buildStackStyles, filterStackProps, renderStackChildren } from '../../base';
+
+/**
+ * Titan Stack component.
+ * Uses Ant Design's styling conventions while maintaining
+ * compatibility with the Stack API.
+ */
+const TitanStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   const {
-    children,
+    as: Component = STACK_DEFAULTS.as,
     direction = STACK_DEFAULTS.direction,
-    align = STACK_DEFAULTS.align,
-    justify = STACK_DEFAULTS.justify,
-    spacing = STACK_DEFAULTS.spacing,
-    wrap = STACK_DEFAULTS.wrap,
     divider,
-    className,
-    style,
+    className = '',
+    children,
   } = props;
 
-  const combinedStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'vertical' ? 'column' : 'row',
-    alignItems: ALIGN_MAP[align!],
-    justifyContent: JUSTIFY_MAP[justify!],
-    gap: SPACING_MAP[spacing!],
-    flexWrap: wrap ? 'wrap' : 'nowrap',
-    ...style,
-  };
+  const computedStyle = buildStackStyles(props);
+  const filteredProps = filterStackProps(props);
+  const renderedChildren = renderStackChildren(children, divider, direction);
 
-  const childArray = React.Children.toArray(children);
+  // Build class names with Titan-specific prefixes
+  const classNames = [
+    'rottay-stack',
+    'rottay-stack--titan',
+    className,
+  ].filter(Boolean).join(' ');
 
-  if (divider && childArray.length > 1) {
-    const withDividers: React.ReactNode[] = [];
-    childArray.forEach((child, index) => {
-      withDividers.push(child);
-      if (index < childArray.length - 1) {
-        withDividers.push(
-          <div
-            key={`divider-${index}`}
-            style={{
-              [direction === 'vertical' ? 'width' : 'height']: '100%',
-              [direction === 'vertical' ? 'height' : 'width']: '1px',
-              backgroundColor: '#d9d9d9',
-            }}
-          />
-        );
-      }
-    });
-    return (
-      <div className={className} style={combinedStyle}>
-        {withDividers}
-      </div>
-    );
-  }
+  const ElementType = Component as ElementType;
 
-  return (
-    <div className={className} style={combinedStyle}>
-      {children}
-    </div>
+  return React.createElement(
+    ElementType,
+    {
+      ref: ref as Ref<HTMLElement>,
+      className: classNames,
+      style: computedStyle,
+      ...filteredProps,
+    },
+    renderedChildren
   );
-}
+});
+
+TitanStack.displayName = 'TitanStack';
+
+export default TitanStack;

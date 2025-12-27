@@ -1,54 +1,155 @@
 /**
- * Divider - Hermes Engine (DaisyUI)
+ * Divider - Hermes Engine (DaisyUI/Tailwind)
+ * Uses DaisyUI styling conventions with Tailwind utilities.
  */
 
-import React from 'react';
-import type { DividerProps } from '../../types';
-import { DIVIDER_DEFAULTS, MARGIN_MAP } from '../../types';
+'use client';
 
-export default function HermesDivider(props: DividerProps): React.ReactElement {
-  const {
-    orientation = DIVIDER_DEFAULTS.orientation,
-    type = DIVIDER_DEFAULTS.type,
-    children,
-    margin = DIVIDER_DEFAULTS.margin,
-    className = '',
-    style,
-  } = props;
+import React, { forwardRef } from 'react';
+import type { DividerProps, DividerVariant, DividerTextPosition } from '../../types';
+import {
+  DIVIDER_DEFAULTS,
+  SPACING_MAP,
+  getThicknessValue,
+  DEFAULT_COLORS,
+} from '../../types';
 
-  const isHorizontal = orientation === 'horizontal';
+/**
+ * Hermes Divider component.
+ * Styled to match DaisyUI conventions.
+ */
+const HermesDivider = forwardRef<HTMLDivElement, DividerProps>(
+  (props, ref) => {
+    const {
+      orientation: orientationProp,
+      type,
+      variant: variantProp,
+      dashed = DIVIDER_DEFAULTS.dashed,
+      children,
+      textPosition: textPositionProp,
+      orientationMargin,
+      plain = DIVIDER_DEFAULTS.plain!,
+      color,
+      thickness = DIVIDER_DEFAULTS.thickness,
+      spacing: spacingProp,
+      margin,
+      className = '',
+      style = {},
+      'data-testid': testId,
+      ...rest
+    } = props;
 
-  const dividerStyle: React.CSSProperties = {
-    display: isHorizontal ? 'flex' : 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: isHorizontal ? '100%' : 'auto',
-    height: isHorizontal ? 'auto' : '100%',
-    margin: isHorizontal
-      ? `${MARGIN_MAP[margin!]} 0`
-      : `0 ${MARGIN_MAP[margin!]}`,
-    ...style,
-  };
+    // Resolve prop aliases
+    const orientation = orientationProp || type || DIVIDER_DEFAULTS.orientation!;
+    const variant: DividerVariant = dashed ? 'dashed' : (variantProp || DIVIDER_DEFAULTS.variant!);
+    const textPosition: DividerTextPosition = textPositionProp || orientationMargin || DIVIDER_DEFAULTS.textPosition!;
+    const spacing = spacingProp || margin || DIVIDER_DEFAULTS.spacing!;
 
-  const lineStyle: React.CSSProperties = {
-    flex: 1,
-    borderTop: isHorizontal ? `1px ${type} oklch(var(--bc) / 0.2)` : 'none',
-    borderLeft: !isHorizontal ? `1px ${type} oklch(var(--bc) / 0.2)` : 'none',
-    height: isHorizontal ? '0' : '100%',
-    width: isHorizontal ? '100%' : '0',
-  };
+    const isHorizontal = orientation === 'horizontal';
+    const hasChildren = !!children && isHorizontal;
 
-  if (children) {
+    // Calculate values
+    const lineThickness = getThicknessValue(thickness);
+    const lineColor = color || DEFAULT_COLORS.hermes;
+    const spacingValue = SPACING_MAP[spacing];
+
+    // Build class names (DaisyUI style)
+    const classNames = [
+      'divider',
+      isHorizontal ? 'divider-horizontal' : 'divider-vertical',
+      hasChildren && textPosition === 'left' ? 'divider-start' : '',
+      hasChildren && textPosition === 'right' ? 'divider-end' : '',
+      className,
+    ].filter(Boolean).join(' ');
+
+    // Container style
+    const containerStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      alignSelf: 'stretch',
+      flexDirection: isHorizontal ? 'row' : 'column',
+      width: isHorizontal ? '100%' : 'auto',
+      height: isHorizontal ? 'auto' : '100%',
+      gap: '1rem',
+      margin: isHorizontal
+        ? `${spacingValue} 0`
+        : `0 ${spacingValue}`,
+      ...style,
+    };
+
+    // Line style for DaisyUI (uses pseudo-element approach)
+    const lineStyle: React.CSSProperties = {
+      flex: 1,
+      height: isHorizontal ? '0' : '100%',
+      width: isHorizontal ? '100%' : '0',
+      borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
+      borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
+    };
+
+    // Line before text
+    const lineBeforeStyle: React.CSSProperties = {
+      ...lineStyle,
+      flexGrow: textPosition === 'left' ? 0 : 1,
+      flexBasis: textPosition === 'left' ? '5%' : undefined,
+      minWidth: '5%',
+    };
+
+    // Line after text
+    const lineAfterStyle: React.CSSProperties = {
+      ...lineStyle,
+      flexGrow: textPosition === 'right' ? 0 : 1,
+      flexBasis: textPosition === 'right' ? '5%' : undefined,
+      minWidth: '5%',
+    };
+
+    // Text style (DaisyUI style)
+    const textStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      whiteSpace: 'nowrap',
+      fontSize: plain ? 'inherit' : '0.875rem',
+      fontWeight: plain ? 'inherit' : 600,
+      color: plain ? 'inherit' : 'oklch(var(--bc) / 0.7)',
+      textTransform: plain ? 'none' : 'uppercase',
+      letterSpacing: plain ? 'normal' : '0.05em',
+    };
+
+    // Render with text
+    if (hasChildren) {
+      return (
+        <div
+          ref={ref}
+          className={classNames}
+          style={containerStyle}
+          role="separator"
+          aria-orientation={orientation}
+          data-testid={testId}
+          {...rest}
+        >
+          <span className="divider-line divider-line-before" style={lineBeforeStyle} />
+          <span className="divider-content" style={textStyle}>
+            {children}
+          </span>
+          <span className="divider-line divider-line-after" style={lineAfterStyle} />
+        </div>
+      );
+    }
+
+    // Simple divider without text
     return (
-      <div className={`divider ${className}`} style={dividerStyle}>
-        <div style={lineStyle} />
-        <span style={{ padding: '0 1rem', whiteSpace: 'nowrap' }}>
-          {children}
-        </span>
-        <div style={lineStyle} />
-      </div>
+      <div
+        ref={ref}
+        className={classNames}
+        style={{ ...containerStyle, ...lineStyle }}
+        role="separator"
+        aria-orientation={orientation}
+        data-testid={testId}
+        {...rest}
+      />
     );
   }
+);
 
-  return <div className={`divider ${className}`} style={{ ...dividerStyle, ...lineStyle }} />;
-}
+HermesDivider.displayName = 'HermesDivider';
+
+export default HermesDivider;
