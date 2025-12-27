@@ -57,83 +57,83 @@ Use `packages/core/src/components/primitives/feedback/Drawer/` as the gold stand
 | `feedback/Modal/engines/hermes/index.tsx` | ✅ Completed |
 | `feedback/Modal/engines/apollo/index.tsx` | ✅ Completed |
 
-### Alert ⏳
+### Alert ✅
 | File | Status |
 |------|--------|
-| `feedback/Alert/index.ts` | ⏳ Pending |
-| `feedback/Alert/compound/index.ts` | ⏳ Pending |
-| `feedback/Alert/compound/Description/index.tsx` | ⏳ Pending |
-| `feedback/Alert/types/index.ts` | ⏳ Pending |
-| `feedback/Alert/base/index.tsx` | ⏳ Pending |
-| `feedback/Alert/engines/titan/index.tsx` | ⏳ Pending |
-| `feedback/Alert/engines/hermes/index.tsx` | ⏳ Pending |
-| `feedback/Alert/engines/apollo/index.tsx` | ⏳ Pending |
+| `feedback/Alert/index.ts` | ✅ Completed |
+| `feedback/Alert/compound/index.ts` | ✅ Completed |
+| `feedback/Alert/compound/Description/index.tsx` | ✅ Completed |
+| `feedback/Alert/types/index.ts` | ✅ Completed |
+| `feedback/Alert/base/index.tsx` | ✅ Completed |
+| `feedback/Alert/engines/titan/index.tsx` | ✅ Completed |
+| `feedback/Alert/engines/hermes/index.tsx` | ✅ Completed |
+| `feedback/Alert/engines/apollo/index.tsx` | ✅ Completed |
 
-### Skeleton ⏳
+### Skeleton ✅
 | File | Status |
 |------|--------|
-| `feedback/Skeleton/index.ts` | ⏳ Pending |
-| `feedback/Skeleton/compound/index.ts` | ⏳ Pending |
-| `feedback/Skeleton/compound/Avatar/index.tsx` | ⏳ Pending |
-| `feedback/Skeleton/compound/Text/index.tsx` | ⏳ Pending |
-| `feedback/Skeleton/compound/Button/index.tsx` | ⏳ Pending |
-| `feedback/Skeleton/types/index.ts` | ⏳ Pending |
-| `feedback/Skeleton/base/index.tsx` | ⏳ Pending |
-| `feedback/Skeleton/engines/titan/index.tsx` | ⏳ Pending |
-| `feedback/Skeleton/engines/hermes/index.tsx` | ⏳ Pending |
-| `feedback/Skeleton/engines/apollo/index.tsx` | ⏳ Pending |
+| `feedback/Skeleton/index.ts` | ✅ Completed |
+| `feedback/Skeleton/compound/index.ts` | ✅ Completed |
+| `feedback/Skeleton/compound/Avatar/index.tsx` | ✅ Completed |
+| `feedback/Skeleton/compound/Text/index.tsx` | ✅ Completed |
+| `feedback/Skeleton/compound/Button/index.tsx` | ✅ Completed |
+| `feedback/Skeleton/types/index.ts` | ✅ Completed |
+| `feedback/Skeleton/base/index.tsx` | ✅ Completed |
+| `feedback/Skeleton/engines/titan/index.tsx` | ✅ Completed |
+| `feedback/Skeleton/engines/hermes/index.tsx` | ✅ Completed |
+| `feedback/Skeleton/engines/apollo/index.tsx` | ✅ Completed |
 
-### Progress ⏳
+### Progress ✅
 | File | Status |
 |------|--------|
-| `feedback/Progress/index.ts` | ⏳ Pending |
-| `feedback/Progress/compound/index.ts` | ⏳ Pending |
-| `feedback/Progress/compound/Circle/index.tsx` | ⏳ Pending |
-| `feedback/Progress/compound/Line/index.tsx` | ⏳ Pending |
-| `feedback/Progress/types/index.ts` | ⏳ Pending |
-| `feedback/Progress/base/index.tsx` | ⏳ Pending |
-| `feedback/Progress/engines/titan/index.tsx` | ⏳ Pending |
-| `feedback/Progress/engines/hermes/index.tsx` | ⏳ Pending |
-| `feedback/Progress/engines/apollo/index.tsx` | ⏳ Pending |
+| `feedback/Progress/index.ts` | ✅ Completed |
+| `feedback/Progress/compound/index.ts` | ✅ Completed |
+| `feedback/Progress/compound/Circle/index.tsx` | ✅ Completed |
+| `feedback/Progress/compound/Line/index.tsx` | ✅ Completed |
+| `feedback/Progress/types/index.ts` | ✅ Completed |
+| `feedback/Progress/base/index.tsx` | ✅ Completed |
+| `feedback/Progress/engines/titan/index.tsx` | ✅ Completed |
+| `feedback/Progress/engines/hermes/index.tsx` | ✅ Completed |
+| `feedback/Progress/engines/apollo/index.tsx` | ✅ Completed |
 
-### Toast ⏳
+### Toast ✅
 | File | Status |
 |------|--------|
-| `feedback/Toast/index.ts` | ⏳ Pending |
-| `feedback/Toast/compound/index.ts` | ⏳ Pending |
-| `feedback/Toast/types/index.ts` | ⏳ Pending |
-| `feedback/Toast/engines/*` | ⏳ Pending |
+| `feedback/Toast/index.ts` | ✅ Completed |
+| `feedback/Toast/compound/index.ts` | ✅ Completed |
+| `feedback/Toast/types/index.ts` | ✅ Completed |
+| `feedback/Toast/engines/*` | ✅ Completed |
 
-### Spinner ⏳
+### Spinner ✅
 | File | Status |
 |------|--------|
-| `feedback/Spinner/index.ts` | ⏳ Pending |
-| `feedback/Spinner/types/index.ts` | ⏳ Pending |
-| `feedback/Spinner/engines/*` | ⏳ Pending |
+| `feedback/Spinner/index.ts` | ✅ Completed |
+| `feedback/Spinner/types/index.ts` | ✅ Completed |
+| `feedback/Spinner/engines/*` | ✅ Completed |
 
-### Message ⏳
+### Message ✅
 | File | Status |
 |------|--------|
-| `feedback/Message/index.ts` | ⏳ Pending |
-| `feedback/Message/types/index.ts` | ⏳ Pending |
+| `feedback/Message/index.ts` | ✅ Completed |
+| `feedback/Message/types/index.ts` | ✅ Completed |
 
-### Notification ⏳
+### Notification ✅
 | File | Status |
 |------|--------|
-| `feedback/Notification/index.ts` | ⏳ Pending |
-| `feedback/Notification/types/index.ts` | ⏳ Pending |
+| `feedback/Notification/index.ts` | ✅ Completed |
+| `feedback/Notification/types/index.ts` | ✅ Completed |
 
-### Result ⏳
+### Result ✅
 | File | Status |
 |------|--------|
-| `feedback/Result/index.ts` | ⏳ Pending |
-| `feedback/Result/types/index.ts` | ⏳ Pending |
+| `feedback/Result/index.ts` | ✅ Completed |
+| `feedback/Result/types/index.ts` | ✅ Completed |
 
-### Rate ⏳
+### Rate ✅
 | File | Status |
 |------|--------|
-| `feedback/Rate/index.ts` | ⏳ Pending |
-| `feedback/Rate/types/index.ts` | ⏳ Pending |
+| `feedback/Rate/index.ts` | ✅ Completed |
+| `feedback/Rate/types/index.ts` | ✅ Completed |
 
 ---
 
