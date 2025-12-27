@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 55/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 6/10, Navigation 6/12, Overlay 6/6 ✅ |
-| **Tests** | ~54 files | Display + 12 Inputs + 11 Feedback + 6 Layout + 6 Navigation + 5 Overlay done |
+| **Refactor** | 58/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 9/10, Navigation 6/12, Overlay 6/6 ✅ |
+| **Tests** | ~58 files | Display + 12 Inputs + 11 Feedback + 9 Layout + 6 Navigation + 6 Overlay done |
 | **JSDoc** | ~62% | English, standardized |
-| **Storybook** | 54/76 | Display + 12 Inputs + 11 Feedback + 6 Layout + 6 Navigation + 5 Overlay done |
+| **Storybook** | 58/76 | Display + 12 Inputs + 11 Feedback + 9 Layout + 6 Navigation + 6 Overlay done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -156,7 +156,7 @@ Component/
 | 4 | Divider | done | done | done | done | 61 tests, horizontal/vertical/text |
 | 5 | Container | done | done | done | done | Multi-engine support |
 | 6 | Flex | done | done | done | done | Multi-engine support |
-| 7 | Space | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 7 | Space | done | done | done | done | Multi-engine support |
 | 8 | Layout | pending | pending | pending | pending | Has Header, Sider, Content, Footer |
 | 9 | Splitter | pending | pending | pending | pending | Has Panel |
 | 10 | Collapse | pending | pending | pending | pending | Has Panel |
@@ -182,7 +182,7 @@ Component/
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Modal | done | pending | pending | pending | Overlay version, has base |
+| 1 | Modal | done | done | pending | done | Overlay version, compound components |
 | 2 | Dropdown | done | done | pending | done | Multi-trigger support |
 | 3 | Popover | done | done | pending | done | 12 placements, trigger types |
 | 4 | Popconfirm | done | done | pending | done | Async confirm, ok types |
