@@ -2,6 +2,10 @@
 
 /**
  * List - Hermes Engine (DaisyUI/Tailwind)
+ *
+ * Implementation of the List component using DaisyUI and Tailwind CSS.
+ * Provides a lightweight, utility-first approach to list rendering
+ * with responsive design support.
  */
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../../types';
@@ -23,11 +27,12 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
 );
 Meta.displayName = 'List.Item.Meta.Hermes';
 
-export const Item = React.forwardRef<HTMLDivElement, ListItemProps>(
-  (props, _ref) => {
+export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
+  (props, ref) => {
     const { actions, extra, children, className = '', style } = props;
     return (
       <li
+        ref={ref}
         className={`flex items-center justify-between py-3 ${className}`}
         style={style}
       >

@@ -2,6 +2,10 @@
 
 /**
  * List - Apollo Engine (Vanilla HTML/CSS)
+ *
+ * Implementation of the List component using vanilla HTML and CSS.
+ * Provides maximum accessibility and control with no external dependencies,
+ * ideal for headless or custom-styled applications.
  */
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../../types';

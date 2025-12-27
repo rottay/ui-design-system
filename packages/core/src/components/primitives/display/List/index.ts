@@ -1,5 +1,22 @@
 /**
  * List - Engine Router (Compound Component)
+ *
+ * A versatile list component for displaying collections of items.
+ * Supports multiple rendering engines (Titan, Hermes, Apollo) and
+ * includes compound components for Item and Item.Meta.
+ *
+ * @example
+ * ```tsx
+ * <List bordered>
+ *   <List.Item>
+ *     <List.Item.Meta
+ *       avatar={<Avatar src="..." />}
+ *       title="Title"
+ *       description="Description"
+ *     />
+ *   </List.Item>
+ * </List>
+ * ```
  */
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { ListProps, ListItemProps, ListItemMetaProps } from './types';

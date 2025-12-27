@@ -2,6 +2,10 @@
 
 /**
  * Table - Titan Engine (Ant Design)
+ *
+ * A data table component wrapping Ant Design's Table.
+ * Supports all Ant Design Table features including sorting, filtering,
+ * pagination, row selection, and expandable rows.
  */
 import { Table as AntTable } from 'antd';
 import type { TableProps } from '../../types';

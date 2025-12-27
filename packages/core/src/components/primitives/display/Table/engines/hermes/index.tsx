@@ -2,8 +2,12 @@
 
 /**
  * Table - Hermes Engine (DaisyUI/Tailwind)
+ *
+ * A data table component built with DaisyUI/Tailwind CSS.
+ * Supports sorting, pagination, row selection, and responsive design.
  */
-import { useState, useMemo, useCallback, Key } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import type { Key } from 'react';
 import type { TableProps, ColumnType, SortOrder } from '../../types';
 
 const sizeClasses = {

@@ -1,5 +1,8 @@
 /**
  * Table Types
+ *
+ * Type definitions for the Table component including column configuration,
+ * pagination, row selection, and expandable row settings.
  */
 import type { ReactNode, CSSProperties, Key } from 'react';
 import type { SizeType } from '../../../../../types/common';

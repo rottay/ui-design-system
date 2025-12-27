@@ -2,8 +2,12 @@
 
 /**
  * Table - Apollo Engine (Vanilla HTML/CSS)
+ *
+ * A fully accessible data table component using vanilla HTML/CSS.
+ * Provides maximum accessibility with ARIA attributes and keyboard navigation support.
  */
-import { useState, useMemo, useCallback, Key } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import type { Key } from 'react';
 import type { TableProps, ColumnType, SortOrder } from '../../types';
 
 const styles = {

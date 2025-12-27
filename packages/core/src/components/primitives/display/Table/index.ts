@@ -1,25 +1,34 @@
 /**
  * Table - Engine Router
+ *
+ * A data table component that displays tabular data with support for
+ * sorting, filtering, pagination, row selection, and expandable rows.
+ * Renders using the configured engine (Titan/Hermes/Apollo).
  */
 
+import React from 'react';
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { TableProps } from './types';
 
-export {
-  type TableProps,
-  type ColumnType,
-  type TablePaginationConfig,
-  type TableRowSelection,
-  type ExpandableConfig,
-  type TableSize,
-  type TableLayout,
-  type SortOrder,
-  type FilterMode,
-  TABLE_DEFAULTS,
+// Export types
+export type {
+  TableProps,
+  ColumnType,
+  TablePaginationConfig,
+  TableRowSelection,
+  ExpandableConfig,
+  TableSize,
+  TableLayout,
+  SortOrder,
+  FilterMode,
 } from './types';
 
+export { TABLE_DEFAULTS } from './types';
+
+// Create engine-aware Table component
+// Note: Type assertions needed due to generic Table<T> component signature
 export const Table = createEngineComponent<TableProps>('Table', {
-  titan: () => import('./engines/titan') as any,
-  hermes: () => import('./engines/hermes') as any,
-  apollo: () => import('./engines/apollo') as any,
+  titan: () => import('./engines/titan') as Promise<{ default: React.ComponentType<TableProps> }>,
+  hermes: () => import('./engines/hermes') as Promise<{ default: React.ComponentType<TableProps> }>,
+  apollo: () => import('./engines/apollo') as Promise<{ default: React.ComponentType<TableProps> }>,
 });

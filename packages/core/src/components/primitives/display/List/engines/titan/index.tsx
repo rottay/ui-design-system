@@ -2,6 +2,10 @@
 
 /**
  * List - Titan Engine (Ant Design)
+ *
+ * Implementation of the List component using Ant Design.
+ * Provides a feature-rich list with built-in pagination, grid layout,
+ * and item metadata support.
  */
 import React from 'react';
 import { List as AntList } from 'antd';
