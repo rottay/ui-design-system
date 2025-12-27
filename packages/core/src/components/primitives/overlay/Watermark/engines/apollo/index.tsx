@@ -2,11 +2,37 @@
 
 /**
  * Watermark - Apollo Engine (Vanilla HTML/CSS)
+ *
+ * Pure HTML/CSS implementation of the Watermark component with no
+ * external UI library dependencies. Uses canvas for pattern generation.
+ *
+ * @module WatermarkApollo
  */
 import React, { useEffect, useState } from 'react';
 import type { WatermarkProps } from '../../types';
 import { WATERMARK_DEFAULTS } from '../../types';
 
+/**
+ * Apollo engine implementation of Watermark using vanilla HTML/CSS.
+ *
+ * Features:
+ * - Zero external dependencies (no UI library required)
+ * - Canvas-based watermark pattern generation
+ * - Full offset support for precise positioning
+ * - Device pixel ratio support for retina displays
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Watermark content="Confidential" engine="apollo">
+ *   <div>Sensitive content</div>
+ * </Watermark>
+ * ```
+ *
+ * @param props - Watermark configuration props
+ * @param ref - Forwarded ref to the container div
+ * @returns Watermarked content using vanilla HTML/CSS
+ */
 export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
   (props, ref) => {
     const {

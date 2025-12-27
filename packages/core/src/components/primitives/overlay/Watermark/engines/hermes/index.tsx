@@ -2,11 +2,36 @@
 
 /**
  * Watermark - Hermes Engine (DaisyUI/Tailwind)
+ *
+ * Tailwind CSS implementation of the Watermark component.
+ * Uses canvas for pattern generation with Tailwind utility classes for layout.
+ *
+ * @module WatermarkHermes
  */
 import React, { useEffect, useState } from 'react';
 import type { WatermarkProps } from '../../types';
 import { WATERMARK_DEFAULTS } from '../../types';
 
+/**
+ * Hermes engine implementation of Watermark using Tailwind CSS.
+ *
+ * Features:
+ * - Canvas-based watermark pattern generation
+ * - Tailwind utility classes for positioning
+ * - Device pixel ratio support for retina displays
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <Watermark content="Draft" engine="hermes">
+ *   <div>Document content</div>
+ * </Watermark>
+ * ```
+ *
+ * @param props - Watermark configuration props
+ * @param ref - Forwarded ref to the container div
+ * @returns Watermarked content using Tailwind CSS
+ */
 export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
   (props, ref) => {
     const {

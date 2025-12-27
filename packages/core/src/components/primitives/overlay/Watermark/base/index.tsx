@@ -1,6 +1,18 @@
 /**
  * Watermark - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ *
+ * Base implementation of the Watermark component using CSS variables
+ * from design tokens for consistent styling. This component is extended
+ * by engine-specific implementations (Titan, Hermes, Apollo).
+ *
+ * Features:
+ * - Canvas-based pattern generation for crisp rendering
+ * - Support for text and image watermarks
+ * - Multi-line text support
+ * - Device pixel ratio awareness for retina displays
+ * - CSS variables for easy theming
+ *
+ * @module WatermarkBase
  */
 
 'use client';
@@ -10,7 +22,19 @@ import type { WatermarkProps } from '../types';
 import { WATERMARK_DEFAULTS } from '../types';
 
 /**
- * Generates watermark pattern using canvas
+ * Custom hook that generates a watermark pattern using HTML5 Canvas.
+ * Creates a repeating background image from text or image content.
+ *
+ * @param content - Text content (string or array for multiple lines)
+ * @param image - Image URL (takes precedence over content)
+ * @param width - Width of the watermark unit
+ * @param height - Height of the watermark unit
+ * @param rotate - Rotation angle in degrees
+ * @param gap - Gap between watermarks [horizontal, vertical]
+ * @param font - Font configuration object
+ * @returns CSS background-image value as data URL
+ *
+ * @internal
  */
 function useWatermarkPattern(
   content: WatermarkProps['content'],
@@ -72,7 +96,22 @@ function useWatermarkPattern(
 
 /**
  * Base Watermark component using CSS variables.
- * This is extended by engine-specific implementations.
+ *
+ * This component provides the foundation for all engine-specific watermark
+ * implementations. It uses CSS variables for styling consistency and
+ * canvas rendering for the watermark pattern.
+ *
+ * @component
+ * @example
+ * ```tsx
+ * <BaseWatermark content="Draft" rotate={-22}>
+ *   <div>Document content</div>
+ * </BaseWatermark>
+ * ```
+ *
+ * @param props - Component props
+ * @param ref - Forwarded ref to the container div
+ * @returns The watermarked content container
  */
 export const BaseWatermark = forwardRef<HTMLDivElement, WatermarkProps>(
   (props, ref) => {
@@ -101,7 +140,8 @@ export const BaseWatermark = forwardRef<HTMLDivElement, WatermarkProps>(
       font
     );
 
-    // Build CSS variables for the watermark
+    // Build CSS custom properties for theming and styling consistency
+    // These variables can be overridden via CSS for custom themes
     const watermarkVars = useMemo<React.CSSProperties>(() => ({
       '--watermark-z-index': zIndex,
       '--watermark-rotate': `${rotate}deg`,

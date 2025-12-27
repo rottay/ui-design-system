@@ -66,6 +66,8 @@ export interface CascaderProps {
   style?: CSSProperties;
   /** Popup class name */
   popupClassName?: string;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const CASCADER_DEFAULTS: Partial<CascaderProps> = {

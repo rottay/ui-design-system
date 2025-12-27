@@ -81,6 +81,8 @@ export interface TreeSelectProps {
   style?: CSSProperties;
   /** Popup class name */
   popupClassName?: string;
+  /** Rendering engine override */
+  engine?: 'titan' | 'hermes' | 'apollo';
 }
 
 export const TREESELECT_DEFAULTS: Partial<TreeSelectProps> = {

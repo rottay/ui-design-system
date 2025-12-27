@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 66/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 12/12 ✅, Overlay 6/6 ✅ |
-| **Tests** | ~66 files | Display + 12 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
-| **JSDoc** | ~78% | English, standardized |
-| **Storybook** | 66/76 | Display + 12 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
+| **Refactor** | 69/76 | Display 14/17, Inputs 15/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 12/12 ✅, Overlay 6/6 ✅ |
+| **Tests** | ~69 files | Display + 15 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
+| **JSDoc** | ~81% | English, standardized |
+| **Storybook** | 69/76 | Display + 15 Inputs + 11 Feedback + 10 Layout + 12 Navigation + 6 Overlay done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -121,9 +121,9 @@ Component/
 | 10 | Form | done | done | done | done | 20 tests, Item/List |
 | 11 | DatePicker | done | done | done | done | 24 tests, RangePicker |
 | 12 | TimePicker | pending | pending | pending | pending | Has RangePicker, TS errors |
-| 13 | AutoComplete | pending | pending | pending | pending | |
-| 14 | Cascader | pending | pending | pending | pending | |
-| 15 | TreeSelect | pending | pending | pending | pending | |
+| 13 | AutoComplete | done | done | done | done | Multi-engine support |
+| 14 | Cascader | done | done | done | done | Multi-engine support |
+| 15 | TreeSelect | done | done | done | done | Multi-engine support |
 | 16 | Mentions | pending | pending | pending | pending | |
 | 17 | Transfer | pending | pending | pending | pending | |
 | 18 | ColorPicker | pending | pending | pending | pending | |
@@ -187,7 +187,7 @@ Component/
 | 3 | Popover | done | done | pending | done | 12 placements, trigger types |
 | 4 | Popconfirm | done | done | pending | done | Async confirm, ok types |
 | 5 | Tour | done | done | pending | done | Multi-step, spotlight |
-| 6 | Watermark | done | done | pending | done | Canvas-based pattern |
+| 6 | Watermark | done | done | done | done | Canvas-based pattern |
 
 ---
 
