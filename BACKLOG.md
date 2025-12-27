@@ -5,10 +5,10 @@
 | Area | Progress | Status |
 |------|----------|--------|
 | **Architecture** | done | showroom created |
-| **Refactor** | 60/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 6/12, Overlay 6/6 ✅ |
-| **Tests** | ~60 files | Display + 12 Inputs + 11 Feedback + 10 Layout + 6 Navigation + 6 Overlay done |
-| **JSDoc** | ~68% | English, standardized |
-| **Storybook** | 60/76 | Display + 12 Inputs + 11 Feedback + 10 Layout + 6 Navigation + 6 Overlay done |
+| **Refactor** | 62/76 | Display 14/17, Inputs 12/20, Feedback 11/11 ✅, Layout 10/10 ✅, Navigation 8/12, Overlay 6/6 ✅ |
+| **Tests** | ~62 files | Display + 12 Inputs + 11 Feedback + 10 Layout + 8 Navigation + 6 Overlay done |
+| **JSDoc** | ~72% | English, standardized |
+| **Storybook** | 62/76 | Display + 12 Inputs + 11 Feedback + 10 Layout + 8 Navigation + 6 Overlay done |
 | **Build** | 100% | 7.58s |
 
 ---
@@ -165,8 +165,8 @@ Component/
 
 | # | Component | Refactor | Tests | JSDoc | Story | Notes |
 |---|-----------|----------|-------|-------|-------|-------|
-| 1 | Tabs | pending | pending | pending | pending | Has engines, needs tests/stories |
-| 2 | Breadcrumb | pending | pending | pending | pending | Has engines, needs tests/stories |
+| 1 | Tabs | done | done | done | done | Multi-engine support |
+| 2 | Breadcrumb | done | done | done | done | Multi-engine support |
 | 3 | Pagination | pending | pending | pending | pending | Has engines, needs tests/stories |
 | 4 | Menu | pending | pending | pending | pending | Has engines, needs tests/stories |
 | 5 | Stepper | pending | pending | pending | pending | Has engines, needs tests/stories |
