@@ -57,11 +57,14 @@ import { SPINNER_DEFAULTS, SIZE_MAP } from '../../types';
 export default function ApolloSpinner(props: SpinnerProps): React.ReactElement {
   const {
     size = SPINNER_DEFAULTS.size,
-    color = '#1890ff',
+    color,
     label,
     className,
     style,
   } = props;
+
+  // Use provided color or fallback to CSS variable
+  const spinnerColor = color || 'var(--ds-spinner-color, var(--ds-color-primary-500, #1890ff))';
 
   // ============================================================================
   // Styles
@@ -74,10 +77,10 @@ export default function ApolloSpinner(props: SpinnerProps): React.ReactElement {
   const spinnerStyle: React.CSSProperties = {
     width: spinnerSize,
     height: spinnerSize,
-    border: 'var(--spinner-stroke-width, 2px) solid rgba(0, 0, 0, 0.1)',
-    borderTopColor: color,
+    border: 'var(--ds-spinner-stroke-width, 2px) solid var(--ds-spinner-track-color, rgba(0, 0, 0, 0.1))',
+    borderTopColor: spinnerColor,
     borderRadius: '50%',
-    animation: 'apollo-spin 0.8s linear infinite',
+    animation: 'apollo-spin var(--ds-spinner-duration, 0.8s) linear infinite',
   };
 
   /** Container styles for centering and spacing */
@@ -104,7 +107,7 @@ export default function ApolloSpinner(props: SpinnerProps): React.ReactElement {
       {/* Animated spinner circle */}
       <div style={spinnerStyle} />
       {/* Optional label text */}
-      {label && <div style={{ fontSize: '0.875rem' }}>{label}</div>}
+      {label && <div style={{ fontSize: 'var(--ds-spinner-label-size, 0.875rem)', color: 'var(--ds-spinner-label-color, inherit)' }}>{label}</div>}
     </div>
   );
 }

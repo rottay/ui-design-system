@@ -299,9 +299,9 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
    * Uses CSS custom properties for tenant theming.
    */
   const modalStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
-    borderRadius: 'var(--ds-radius-lg, 8px)',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff))',
+    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg, 8px))',
+    boxShadow: 'var(--ds-modal-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
     position: 'relative',
     width: '100%',
     ...SIZE_STYLES[modalSize],
@@ -312,8 +312,8 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
    * Header section styles.
    */
   const headerStyle: React.CSSProperties = {
-    padding: '16px 24px',
-    borderBottom: '1px solid var(--ds-color-border, #f0f0f0)',
+    padding: 'var(--ds-modal-header-padding, 16px 24px)',
+    borderBottom: '1px solid var(--ds-modal-border-color, var(--ds-color-border, #f0f0f0))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -323,35 +323,36 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
    * Footer section styles.
    */
   const footerStyle: React.CSSProperties = {
-    padding: '10px 16px',
-    borderTop: '1px solid var(--ds-color-border, #f0f0f0)',
+    padding: 'var(--ds-modal-footer-padding, 10px 16px)',
+    borderTop: '1px solid var(--ds-modal-border-color, var(--ds-color-border, #f0f0f0))',
     display: 'flex',
     justifyContent: 'flex-end',
-    gap: '8px',
+    gap: 'var(--ds-modal-footer-gap, 8px)',
   };
 
   /**
    * Cancel button styles.
    */
   const cancelButtonStyle: React.CSSProperties = {
-    padding: '4px 15px',
-    fontSize: '14px',
-    borderRadius: '4px',
+    padding: 'var(--ds-modal-btn-padding, 4px 15px)',
+    fontSize: 'var(--ds-modal-btn-font-size, 14px)',
+    borderRadius: 'var(--ds-modal-btn-radius, 4px)',
     cursor: 'pointer',
-    border: '1px solid #d9d9d9',
-    background: '#fff',
+    border: '1px solid var(--ds-modal-cancel-border, #d9d9d9)',
+    background: 'var(--ds-modal-cancel-bg, #fff)',
+    color: 'var(--ds-modal-cancel-color, inherit)',
   };
 
   /**
    * OK/primary button styles.
    */
   const okButtonStyle: React.CSSProperties = {
-    padding: '4px 15px',
-    fontSize: '14px',
-    borderRadius: '4px',
+    padding: 'var(--ds-modal-btn-padding, 4px 15px)',
+    fontSize: 'var(--ds-modal-btn-font-size, 14px)',
+    borderRadius: 'var(--ds-modal-btn-radius, 4px)',
     cursor: 'pointer',
-    background: '#1890ff',
-    color: '#fff',
+    background: 'var(--ds-modal-ok-bg, var(--ds-color-primary-500, #1890ff))',
+    color: 'var(--ds-modal-ok-color, #fff)',
     border: 'none',
   };
 

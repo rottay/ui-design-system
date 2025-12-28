@@ -24,10 +24,10 @@
  * - When avoiding third-party UI libraries
  *
  * **Multi-Tenant Theming:**
- * Apollo heavily uses CSS custom properties for theming:
- * - `--rottay-color-background`: Drawer background
- * - `--rottay-color-border`: Border color
- * - `--rottay-color-text-secondary`: Close button color
+ * Apollo uses CSS custom properties for theming:
+ * - `--ds-drawer-bg`: Drawer background
+ * - `--ds-drawer-border-color`: Border color
+ * - `--ds-drawer-close-color`: Close button color
  *
  * **Size Mapping:**
  * | Size | Width/Height |
@@ -50,9 +50,9 @@
  * @example With Custom CSS Variables
  * ```tsx
  * <div style={{
- *   '--rottay-color-background': '#1a1a2e',
- *   '--rottay-color-border': '#333',
- *   '--rottay-color-text-secondary': '#888'
+ *   '--ds-drawer-bg': '#1a1a2e',
+ *   '--ds-drawer-border-color': '#333',
+ *   '--ds-drawer-close-color': '#888'
  * }}>
  *   <Drawer engine="apollo" open={open} onClose={onClose}>
  *     Dark themed drawer
@@ -124,9 +124,13 @@ const SIZE_MAP: Record<DrawerSize, string> = {
  * **CSS Custom Properties:**
  * | Property | Default | Description |
  * |----------|---------|-------------|
- * | `--rottay-color-background` | #fff | Drawer background |
- * | `--rottay-color-border` | #f0f0f0 | Border color |
- * | `--rottay-color-text-secondary` | #666 | Close button color |
+ * | `--ds-drawer-bg` | #fff | Drawer background |
+ * | `--ds-drawer-border-color` | #f0f0f0 | Border color |
+ * | `--ds-drawer-close-color` | #666 | Close button color |
+ * | `--ds-drawer-shadow` | 0 8px 30px rgba(0, 0, 0, 0.12) | Box shadow |
+ * | `--ds-drawer-header-padding` | 16px 24px | Header padding |
+ * | `--ds-drawer-body-padding` | 24px | Body padding |
+ * | `--ds-drawer-footer-padding` | 10px 16px | Footer padding |
  *
  * @param props - {@link DrawerProps}
  * @returns The rendered vanilla Drawer or empty fragment when closed
@@ -279,9 +283,9 @@ export default function ApolloDrawer(props: DrawerProps): React.ReactElement {
     // Base styles with CSS custom property theming
     const baseStyle: React.CSSProperties = {
       position: 'fixed',
-      backgroundColor: 'var(--rottay-color-background, #fff)',
-      boxShadow: '0 8px 30px rgba(0, 0, 0, 0.12)',
-      transition: 'transform 0.3s ease-in-out',
+      backgroundColor: 'var(--ds-drawer-bg, #fff)',
+      boxShadow: 'var(--ds-drawer-shadow, 0 8px 30px rgba(0, 0, 0, 0.12))',
+      transition: 'var(--ds-drawer-transition, transform 0.3s ease-in-out)',
       overflowY: 'auto',
       zIndex: zIndex! + 1,
       display: 'flex',
@@ -333,8 +337,8 @@ export default function ApolloDrawer(props: DrawerProps): React.ReactElement {
    * Fixed at top with title and close button.
    */
   const headerStyle: React.CSSProperties = {
-    padding: '16px 24px',
-    borderBottom: '1px solid var(--rottay-color-border, #f0f0f0)',
+    padding: 'var(--ds-drawer-header-padding, 16px 24px)',
+    borderBottom: '1px solid var(--ds-drawer-border-color, #f0f0f0)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -346,7 +350,7 @@ export default function ApolloDrawer(props: DrawerProps): React.ReactElement {
    * Scrollable content area that fills available space.
    */
   const bodyStyle: React.CSSProperties = {
-    padding: '24px',
+    padding: 'var(--ds-drawer-body-padding, 24px)',
     flex: 1,
     overflowY: 'auto',
   };
@@ -356,8 +360,8 @@ export default function ApolloDrawer(props: DrawerProps): React.ReactElement {
    * Fixed at bottom with border separator.
    */
   const footerStyle: React.CSSProperties = {
-    padding: '10px 16px',
-    borderTop: '1px solid var(--rottay-color-border, #f0f0f0)',
+    padding: 'var(--ds-drawer-footer-padding, 10px 16px)',
+    borderTop: '1px solid var(--ds-drawer-border-color, #f0f0f0)',
     flexShrink: 0,
   };
 
@@ -368,7 +372,7 @@ export default function ApolloDrawer(props: DrawerProps): React.ReactElement {
   const closeButtonStyle: React.CSSProperties = {
     background: 'transparent',
     border: 'none',
-    fontSize: '20px',
+    fontSize: 'var(--ds-drawer-close-size, 20px)',
     cursor: 'pointer',
     padding: '0',
     width: '24px',
@@ -376,7 +380,7 @@ export default function ApolloDrawer(props: DrawerProps): React.ReactElement {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--rottay-color-text-secondary, #666)',
+    color: 'var(--ds-drawer-close-color, #666)',
   };
 
   // ---------------------------------------------------------------------------

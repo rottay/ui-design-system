@@ -94,27 +94,27 @@ import { ALERT_DEFAULTS } from '../../types';
 const TYPE_STYLES: Record<AlertType, React.CSSProperties> = {
   /** Blue theme for informational messages */
   info: {
-    backgroundColor: '#EFF6FF',
-    borderColor: '#3B82F6',
-    color: '#1E40AF',
+    backgroundColor: 'var(--ds-alert-info-bg, #EFF6FF)',
+    borderColor: 'var(--ds-alert-info-border, #3B82F6)',
+    color: 'var(--ds-alert-info-color, #1E40AF)',
   },
   /** Green theme for success confirmations */
   success: {
-    backgroundColor: '#F0FDF4',
-    borderColor: '#22C55E',
-    color: '#166534',
+    backgroundColor: 'var(--ds-alert-success-bg, #F0FDF4)',
+    borderColor: 'var(--ds-alert-success-border, #22C55E)',
+    color: 'var(--ds-alert-success-color, #166534)',
   },
   /** Yellow/orange theme for warnings */
   warning: {
-    backgroundColor: '#FFFBEB',
-    borderColor: '#F59E0B',
-    color: '#92400E',
+    backgroundColor: 'var(--ds-alert-warning-bg, #FFFBEB)',
+    borderColor: 'var(--ds-alert-warning-border, #F59E0B)',
+    color: 'var(--ds-alert-warning-color, #92400E)',
   },
   /** Red theme for errors and failures */
   error: {
-    backgroundColor: '#FEF2F2',
-    borderColor: '#EF4444',
-    color: '#991B1B',
+    backgroundColor: 'var(--ds-alert-error-bg, #FEF2F2)',
+    borderColor: 'var(--ds-alert-error-border, #EF4444)',
+    color: 'var(--ds-alert-error-color, #991B1B)',
   },
 };
 

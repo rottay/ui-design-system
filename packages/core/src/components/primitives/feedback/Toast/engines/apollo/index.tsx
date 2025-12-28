@@ -262,9 +262,9 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
   /** Border radius map for the radius prop */
   const radiusMap: Record<string, string> = {
     none: '0',
-    sm: '4px',
-    md: '8px',
-    lg: '12px',
+    sm: 'var(--ds-toast-radius-sm, 4px)',
+    md: 'var(--ds-toast-radius-md, 8px)',
+    lg: 'var(--ds-toast-radius-lg, 12px)',
   };
 
   /** Main container styles */
@@ -272,14 +272,14 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     position: 'relative',
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '12px',
-    padding: '12px 16px',
-    maxWidth: '400px',
+    gap: 'var(--ds-toast-gap, 12px)',
+    padding: 'var(--ds-toast-padding, 12px 16px)',
+    maxWidth: 'var(--ds-toast-max-width, 400px)',
     background: colors.bg,
     color: colors.color,
-    borderRadius: radiusMap[radius] || '8px',
+    borderRadius: radiusMap[radius] || 'var(--ds-toast-radius-md, 8px)',
     border: `1px solid ${colors.borderColor}`,
-    boxShadow: shadow ? '0 4px 12px rgba(0, 0, 0, 0.15)' : 'none',
+    boxShadow: shadow ? 'var(--ds-toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))' : 'none',
     overflow: 'hidden',
     opacity: isExiting ? 0 : 1,
     transform: isExiting ? 'scale(0.95) translateY(-10px)' : 'scale(1) translateY(0)',
@@ -306,14 +306,14 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
   /** Title text styles */
   const titleStyle: React.CSSProperties = {
     fontWeight: 600,
-    fontSize: '14px',
+    fontSize: 'var(--ds-toast-title-size, 14px)',
     lineHeight: 1.4,
     margin: 0,
   };
 
   /** Description text styles */
   const descriptionStyle: React.CSSProperties = {
-    fontSize: '14px',
+    fontSize: 'var(--ds-toast-desc-size, 14px)',
     lineHeight: 1.5,
     marginTop: title ? '4px' : 0,
     opacity: 0.9,
@@ -330,7 +330,7 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     border: 'none',
     background: 'transparent',
     color: 'inherit',
-    opacity: 0.5,
+    opacity: 'var(--ds-toast-close-opacity, 0.5)' as unknown as number,
     cursor: 'pointer',
     borderRadius: '4px',
     flexShrink: 0,
@@ -339,12 +339,12 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
   /** Action button styles */
   const actionButtonStyle: React.CSSProperties = {
     marginTop: '8px',
-    padding: '4px 12px',
-    fontSize: '13px',
+    padding: 'var(--ds-toast-action-padding, 4px 12px)',
+    fontSize: 'var(--ds-toast-action-size, 13px)',
     fontWeight: 500,
     background: 'transparent',
     border: '1px solid currentColor',
-    borderRadius: '4px',
+    borderRadius: 'var(--ds-toast-action-radius, 4px)',
     color: 'inherit',
     cursor: 'pointer',
   };
@@ -354,10 +354,10 @@ export default function ApolloToast(props: ToastProps): React.ReactElement | nul
     position: 'absolute',
     bottom: 0,
     left: 0,
-    height: '3px',
+    height: 'var(--ds-toast-progress-height, 3px)',
     width: `${progress}%`,
     background: colors.iconColor,
-    opacity: 0.5,
+    opacity: 'var(--ds-toast-progress-opacity, 0.5)' as unknown as number,
     transition: 'width 0.1s linear',
   };
 

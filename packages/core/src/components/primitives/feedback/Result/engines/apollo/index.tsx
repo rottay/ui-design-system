@@ -96,6 +96,20 @@ import { RESULT_DEFAULTS, RESULT_COLORS, RESULT_ICONS } from '../../types';
  *
  * @internal
  */
+/**
+ * CSS variable-based color mapping for result statuses.
+ * Uses design system tokens with fallbacks.
+ */
+const STATUS_COLOR_VARS: Record<ResultStatus, string> = {
+  success: 'var(--ds-result-success-color, var(--ds-color-success-500, #52c41a))',
+  error: 'var(--ds-result-error-color, var(--ds-color-error-500, #ff4d4f))',
+  info: 'var(--ds-result-info-color, var(--ds-color-primary-500, #1677ff))',
+  warning: 'var(--ds-result-warning-color, var(--ds-color-warning-500, #faad14))',
+  '404': 'var(--ds-result-404-color, var(--ds-color-primary-500, #1677ff))',
+  '403': 'var(--ds-result-403-color, var(--ds-color-warning-500, #faad14))',
+  '500': 'var(--ds-result-500-color, var(--ds-color-error-500, #ff4d4f))',
+};
+
 const styles = {
   /**
    * Container styles - centered flex layout.
@@ -106,14 +120,14 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center' as const,
-    padding: '48px 24px',
+    padding: 'var(--ds-result-padding, 48px 24px)',
   },
 
   /**
    * Icon wrapper styles - provides spacing below icon.
    */
   iconWrapper: {
-    marginBottom: '24px',
+    marginBottom: 'var(--ds-result-icon-margin, 24px)',
   },
 
   /**
@@ -124,15 +138,15 @@ const styles = {
    * @returns CSSProperties for the icon container
    */
   icon: (status: ResultStatus): React.CSSProperties => ({
-    width: '72px',
-    height: '72px',
+    width: 'var(--ds-result-icon-size, 72px)',
+    height: 'var(--ds-result-icon-size, 72px)',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '32px',
-    color: '#fff',
-    backgroundColor: RESULT_COLORS[status],
+    fontSize: 'var(--ds-result-icon-font-size, 32px)',
+    color: 'var(--ds-result-icon-color, #fff)',
+    backgroundColor: STATUS_COLOR_VARS[status] || RESULT_COLORS[status],
   }),
 
   /**
@@ -143,9 +157,9 @@ const styles = {
    * @returns CSSProperties for the status code display
    */
   statusCode: (status: ResultStatus): React.CSSProperties => ({
-    fontSize: '72px',
+    fontSize: 'var(--ds-result-code-size, 72px)',
     fontWeight: 700,
-    color: RESULT_COLORS[status],
+    color: STATUS_COLOR_VARS[status] || RESULT_COLORS[status],
     lineHeight: 1,
   }),
 
@@ -153,21 +167,21 @@ const styles = {
    * Title styles - prominent heading.
    */
   title: {
-    fontSize: '24px',
+    fontSize: 'var(--ds-result-title-size, 24px)',
     fontWeight: 600,
-    color: 'rgba(0, 0, 0, 0.88)',
+    color: 'var(--ds-result-title-color, rgba(0, 0, 0, 0.88))',
     marginBottom: '8px',
-    maxWidth: '480px',
+    maxWidth: 'var(--ds-result-max-width, 480px)',
   } as React.CSSProperties,
 
   /**
    * Subtitle styles - secondary text.
    */
   subTitle: {
-    fontSize: '14px',
-    color: 'rgba(0, 0, 0, 0.45)',
+    fontSize: 'var(--ds-result-subtitle-size, 14px)',
+    color: 'var(--ds-result-subtitle-color, rgba(0, 0, 0, 0.45))',
     marginBottom: '24px',
-    maxWidth: '480px',
+    maxWidth: 'var(--ds-result-max-width, 480px)',
     lineHeight: 1.6,
   } as React.CSSProperties,
 
@@ -177,7 +191,7 @@ const styles = {
   extra: {
     display: 'flex',
     flexWrap: 'wrap' as const,
-    gap: '8px',
+    gap: 'var(--ds-result-extra-gap, 8px)',
     justifyContent: 'center',
     marginBottom: '24px',
   },
@@ -187,7 +201,7 @@ const styles = {
    */
   children: {
     width: '100%',
-    maxWidth: '560px',
+    maxWidth: 'var(--ds-result-content-max-width, 560px)',
   },
 };
 

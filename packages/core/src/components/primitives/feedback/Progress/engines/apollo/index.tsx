@@ -72,19 +72,19 @@ import { PROGRESS_DEFAULTS } from '../../types';
 
 /**
  * Status to color mappings.
- * Maps Rottay status values to hex colors for vanilla styling.
+ * Maps Rottay status values to CSS variable references for theming.
  *
  * @internal
  */
 const STATUS_COLORS: Record<ProgressStatus, string> = {
   /** Normal state - primary blue */
-  normal: '#1890ff',
+  normal: 'var(--ds-progress-normal-color, var(--ds-color-primary-500, #1890ff))',
   /** Success state - green */
-  success: '#52c41a',
+  success: 'var(--ds-progress-success-color, var(--ds-color-success-500, #52c41a))',
   /** Error state - red */
-  error: '#ff4d4f',
+  error: 'var(--ds-progress-error-color, var(--ds-color-error-500, #ff4d4f))',
   /** Active state - primary blue (with animation) */
-  active: '#1890ff',
+  active: 'var(--ds-progress-active-color, var(--ds-color-primary-500, #1890ff))',
 };
 
 // ============================================================================
@@ -194,7 +194,7 @@ export default function ApolloProgress(props: ProgressProps): React.ReactElement
             cy={center}
             r={radius}
             fill="none"
-            stroke="#f0f0f0"
+            stroke="var(--ds-progress-track-color, #f0f0f0)"
             strokeWidth={strokeWidth}
           />
 
@@ -245,7 +245,7 @@ export default function ApolloProgress(props: ProgressProps): React.ReactElement
   const trackStyle: React.CSSProperties = {
     width: '100%',
     height: strokeWidth,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--ds-progress-track-color, #f0f0f0)',
     borderRadius: strokeWidth! / 2,
     overflow: 'hidden',
     position: 'relative',

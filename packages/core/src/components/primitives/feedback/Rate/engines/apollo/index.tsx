@@ -121,11 +121,11 @@ const createStyles = (
       },
       /** Active (filled) star color */
       active: {
-        color: activeColor || '#facc15',
+        color: activeColor || 'var(--ds-rate-active-color, #facc15)',
       },
       /** Inactive (empty) star color */
       inactive: {
-        color: inactiveColor || '#d1d5db',
+        color: inactiveColor || 'var(--ds-rate-inactive-color, #d1d5db)',
       },
       /** Disabled state styles */
       disabled: {
@@ -142,7 +142,7 @@ const createStyles = (
       },
       /** Focus indicator styles */
       focus: {
-        outline: `2px solid ${activeColor || '#facc15'}`,
+        outline: `2px solid ${activeColor || 'var(--ds-rate-active-color, #facc15)'}`,
         outlineOffset: '2px',
       },
     },

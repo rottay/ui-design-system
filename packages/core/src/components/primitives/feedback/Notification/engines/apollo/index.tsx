@@ -132,12 +132,12 @@ const styles = {
   container: (placement: NotificationPlacement, top: number, bottom: number): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
-      zIndex: 1000,
+      zIndex: 'var(--ds-notification-z-index, 1000)' as unknown as number,
       display: 'flex',
       flexDirection: 'column',
-      gap: '12px',
+      gap: 'var(--ds-notification-gap, 12px)',
       pointerEvents: 'none',
-      maxWidth: '400px',
+      maxWidth: 'var(--ds-notification-max-width, 400px)',
       width: '100%',
     };
 
@@ -160,18 +160,18 @@ const styles = {
     base: {
       display: 'flex',
       gap: '12px',
-      padding: '16px 24px',
-      borderRadius: '8px',
-      backgroundColor: '#fff',
-      boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+      padding: 'var(--ds-notification-padding, 16px 24px)',
+      borderRadius: 'var(--ds-notification-radius, 8px)',
+      backgroundColor: 'var(--ds-notification-bg, #fff)',
+      boxShadow: 'var(--ds-notification-shadow, 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05))',
       pointerEvents: 'auto' as const,
       animation: 'notificationSlideIn 0.3s ease-out',
-      minWidth: '300px',
+      minWidth: 'var(--ds-notification-min-width, 300px)',
     } as React.CSSProperties,
-    success: { borderLeft: '4px solid #52c41a' },
-    error: { borderLeft: '4px solid #ff4d4f' },
-    info: { borderLeft: '4px solid #1677ff' },
-    warning: { borderLeft: '4px solid #faad14' },
+    success: { borderLeft: '4px solid var(--ds-notification-success-color, var(--ds-color-success-500, #52c41a))' },
+    error: { borderLeft: '4px solid var(--ds-notification-error-color, var(--ds-color-error-500, #ff4d4f))' },
+    info: { borderLeft: '4px solid var(--ds-notification-info-color, var(--ds-color-primary-500, #1677ff))' },
+    warning: { borderLeft: '4px solid var(--ds-notification-warning-color, var(--ds-color-warning-500, #faad14))' },
     open: {},
   },
 
@@ -185,11 +185,11 @@ const styles = {
       fontSize: '20px',
       paddingTop: '2px',
     } as React.CSSProperties,
-    success: { color: '#52c41a' },
-    error: { color: '#ff4d4f' },
-    info: { color: '#1677ff' },
-    warning: { color: '#faad14' },
-    open: { color: '#1677ff' },
+    success: { color: 'var(--ds-notification-success-color, var(--ds-color-success-500, #52c41a))' },
+    error: { color: 'var(--ds-notification-error-color, var(--ds-color-error-500, #ff4d4f))' },
+    info: { color: 'var(--ds-notification-info-color, var(--ds-color-primary-500, #1677ff))' },
+    warning: { color: 'var(--ds-notification-warning-color, var(--ds-color-warning-500, #faad14))' },
+    open: { color: 'var(--ds-notification-info-color, var(--ds-color-primary-500, #1677ff))' },
   },
 
   /**
@@ -205,9 +205,9 @@ const styles = {
    */
   message: {
     fontWeight: 600,
-    fontSize: '16px',
+    fontSize: 'var(--ds-notification-title-size, 16px)',
     lineHeight: '24px',
-    color: 'rgba(0, 0, 0, 0.88)',
+    color: 'var(--ds-notification-title-color, rgba(0, 0, 0, 0.88))',
     marginBottom: '4px',
   } as React.CSSProperties,
 
@@ -215,9 +215,9 @@ const styles = {
    * Description styles.
    */
   description: {
-    fontSize: '14px',
+    fontSize: 'var(--ds-notification-desc-size, 14px)',
     lineHeight: '22px',
-    color: 'rgba(0, 0, 0, 0.65)',
+    color: 'var(--ds-notification-desc-color, rgba(0, 0, 0, 0.65))',
   } as React.CSSProperties,
 
   /**
@@ -235,7 +235,7 @@ const styles = {
     background: 'none',
     cursor: 'pointer',
     padding: '4px',
-    color: 'rgba(0, 0, 0, 0.45)',
+    color: 'var(--ds-notification-close-color, rgba(0, 0, 0, 0.45))',
     fontSize: '14px',
     lineHeight: 1,
     transition: 'color 0.2s',
