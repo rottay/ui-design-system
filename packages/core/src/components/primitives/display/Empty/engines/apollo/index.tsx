@@ -180,7 +180,7 @@ const ApolloEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '32px 8px',
+      padding: 'var(--ds-empty-padding, 32px 8px)',
       textAlign: 'center',
       ...style,
     };
@@ -196,8 +196,8 @@ const ApolloEmpty = forwardRef<HTMLDivElement, EmptyProps>(
     const descriptionStyle: React.CSSProperties = {
       margin: 0,
       marginBottom: children ? '16px' : 0,
-      color: 'rgba(0, 0, 0, 0.25)',
-      fontSize: '14px',
+      color: 'var(--ds-empty-description-color, var(--ds-color-text-tertiary, rgba(0, 0, 0, 0.25)))',
+      fontSize: 'var(--ds-empty-description-font-size, 14px)',
       lineHeight: '1.5',
     };
 

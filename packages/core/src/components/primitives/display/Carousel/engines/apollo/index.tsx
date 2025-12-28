@@ -216,17 +216,17 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       top: '50%',
       transform: 'translateY(-50%)',
       zIndex: 10,
-      background: 'rgba(255, 255, 255, 0.9)',
-      border: '1px solid #ddd',
-      borderRadius: '50%',
-      width: '32px',
-      height: '32px',
+      background: 'var(--ds-carousel-arrow-bg, rgba(255, 255, 255, 0.9))',
+      border: '1px solid var(--ds-carousel-arrow-border, #ddd)',
+      borderRadius: 'var(--ds-carousel-arrow-radius, 50%)',
+      width: 'var(--ds-carousel-arrow-size, 32px)',
+      height: 'var(--ds-carousel-arrow-size, 32px)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       fontSize: '16px',
-      transition: 'background-color 0.2s ease',
+      transition: 'var(--ds-carousel-transition, background-color 0.2s ease)',
     };
 
     /**
@@ -293,13 +293,15 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
      * @returns {React.CSSProperties} Dot visual styles
      */
     const getDotStyle = (isActive: boolean): React.CSSProperties => ({
-      width: isActive ? '16px' : '8px',
-      height: '8px',
-      borderRadius: '4px',
-      background: isActive ? '#1890ff' : '#d9d9d9',
+      width: isActive ? 'var(--ds-carousel-dot-active-width, 16px)' : 'var(--ds-carousel-dot-size, 8px)',
+      height: 'var(--ds-carousel-dot-size, 8px)',
+      borderRadius: 'var(--ds-carousel-dot-radius, 4px)',
+      background: isActive
+        ? 'var(--ds-carousel-dot-active-bg, var(--ds-color-primary-500, #1890ff))'
+        : 'var(--ds-carousel-dot-bg, #d9d9d9)',
       border: 'none',
       cursor: 'pointer',
-      transition: 'all 0.3s ease',
+      transition: 'var(--ds-carousel-transition, all 0.3s ease)',
     });
 
     return (

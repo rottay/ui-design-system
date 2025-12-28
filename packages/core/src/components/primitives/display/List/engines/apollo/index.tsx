@@ -73,7 +73,7 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
             </div>
           )}
           {description && (
-            <div style={{ fontSize: '14px', color: '#00000073' }}>
+            <div style={{ fontSize: 'var(--ds-list-meta-description-font-size, 14px)', color: 'var(--ds-list-meta-description-color, #00000073)' }}>
               {description}
             </div>
           )}
@@ -146,10 +146,10 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         <div ref={ref} className={className} style={{ ...style }}>
           {[1, 2, 3].map((i) => (
             <div key={i} style={{ padding: '12px 0', display: 'flex', gap: '12px' }}>
-              <div style={{ width: 40, height: 40, background: '#f5f5f5', borderRadius: '50%' }} />
+              <div style={{ width: 40, height: 40, background: 'var(--ds-list-skeleton-bg, #f5f5f5)', borderRadius: '50%' }} />
               <div style={{ flex: 1 }}>
-                <div style={{ height: 16, background: '#f5f5f5', borderRadius: 4, width: '33%', marginBottom: 8 }} />
-                <div style={{ height: 12, background: '#f5f5f5', borderRadius: 4, width: '66%' }} />
+                <div style={{ height: 16, background: 'var(--ds-list-skeleton-bg, #f5f5f5)', borderRadius: 4, width: '33%', marginBottom: 8 }} />
+                <div style={{ height: 12, background: 'var(--ds-list-skeleton-bg, #f5f5f5)', borderRadius: 4, width: '66%' }} />
               </div>
             </div>
           ))}
@@ -162,8 +162,8 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         ref={ref}
         className={className}
         style={{
-          border: bordered ? '1px solid #d9d9d9' : undefined,
-          borderRadius: bordered ? '8px' : undefined,
+          border: bordered ? '1px solid var(--ds-list-border-color, #d9d9d9)' : undefined,
+          borderRadius: bordered ? 'var(--ds-list-border-radius, 8px)' : undefined,
           fontSize: fontSizes[size],
           ...style,
         }}
@@ -173,7 +173,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             style={{
               padding: '12px 16px',
               fontWeight: 500,
-              borderBottom: bordered ? '1px solid #d9d9d9' : undefined,
+              borderBottom: bordered ? '1px solid var(--ds-list-border-color, #d9d9d9)' : undefined,
             }}
           >
             {header}
@@ -195,7 +195,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             <React.Fragment key={index}>
               {child}
               {split && index < React.Children.count(listContent) - 1 && !grid && (
-                <div style={{ borderBottom: '1px solid #f0f0f0' }} />
+                <div style={{ borderBottom: '1px solid var(--ds-list-split-color, #f0f0f0)' }} />
               )}
             </React.Fragment>
           ))}
@@ -204,7 +204,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           <div
             style={{
               padding: '12px 16px',
-              borderTop: bordered ? '1px solid #d9d9d9' : undefined,
+              borderTop: bordered ? '1px solid var(--ds-list-border-color, #d9d9d9)' : undefined,
             }}
           >
             {footer}

@@ -61,31 +61,32 @@ const styles = {
   table: {
     width: '100%',
     borderCollapse: 'collapse' as const,
-    fontSize: '14px',
+    fontSize: 'var(--ds-table-cell-font-size, 14px)',
   },
   tableSmall: {
-    fontSize: '12px',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
   },
   tableLarge: {
-    fontSize: '16px',
+    fontSize: 'var(--ds-font-size-lg, 16px)',
   },
   tableBordered: {
-    border: '1px solid #e8e8e8',
+    border: '1px solid var(--ds-table-border, #e8e8e8)',
   },
   th: {
-    padding: '12px 16px',
-    backgroundColor: '#fafafa',
-    borderBottom: '1px solid #e8e8e8',
+    padding: 'var(--ds-table-cell-padding, 12px 16px)',
+    backgroundColor: 'var(--ds-table-header-bg, #fafafa)',
+    borderBottom: '1px solid var(--ds-table-border, #e8e8e8)',
     textAlign: 'left' as const,
-    fontWeight: 500,
+    fontWeight: 'var(--ds-table-header-font-weight, 500)',
+    color: 'var(--ds-table-header-color)',
   },
   thSortable: {
     cursor: 'pointer',
     userSelect: 'none' as const,
   },
   td: {
-    padding: '12px 16px',
-    borderBottom: '1px solid #e8e8e8',
+    padding: 'var(--ds-table-cell-padding, 12px 16px)',
+    borderBottom: '1px solid var(--ds-table-row-border, #e8e8e8)',
   },
   tdSmall: {
     padding: '8px 12px',
@@ -97,12 +98,12 @@ const styles = {
     transition: 'background-color 0.2s',
   },
   rowSelected: {
-    backgroundColor: 'rgba(24, 144, 255, 0.1)',
+    backgroundColor: 'var(--ds-table-row-bg-selected, rgba(24, 144, 255, 0.1))',
   },
   emptyCell: {
     textAlign: 'center' as const,
     padding: '32px',
-    color: '#999',
+    color: 'var(--ds-color-text-secondary, #999)',
   },
   loading: {
     position: 'absolute' as const,
@@ -119,13 +120,13 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     marginTop: '16px',
-    fontSize: '14px',
+    fontSize: 'var(--ds-table-cell-font-size, 14px)',
   },
   pageButton: {
     padding: '4px 12px',
-    border: '1px solid #d9d9d9',
-    borderRadius: '4px',
-    backgroundColor: '#fff',
+    border: '1px solid var(--ds-color-neutral-300, #d9d9d9)',
+    borderRadius: 'var(--ds-radius-sm, 4px)',
+    backgroundColor: 'var(--ds-table-bg, #fff)',
     cursor: 'pointer',
   },
   pageButtonDisabled: {
@@ -329,7 +330,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     style={{
                       ...(isSelected ? styles.rowSelected : {}),
                       ...(rowHoverable ? styles.rowHover : {}),
-                      backgroundColor: isHovered && rowHoverable ? '#f5f5f5' : isSelected ? 'rgba(24, 144, 255, 0.1)' : undefined,
+                      backgroundColor: isHovered && rowHoverable ? 'var(--ds-table-row-bg-hover, #f5f5f5)' : isSelected ? 'var(--ds-table-row-bg-selected, rgba(24, 144, 255, 0.1))' : undefined,
                     }}
                     onMouseEnter={() => rowHoverable && setHoveredRow(key)}
                     onMouseLeave={() => rowHoverable && setHoveredRow(null)}
@@ -378,7 +379,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {pagination !== false && (
         <div style={styles.pagination}>
-          <span style={{ color: '#666' }}>
+          <span style={{ color: 'var(--ds-color-text-secondary, #666)' }}>
             {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, sortedData.length)} of {sortedData.length}
           </span>
           <button

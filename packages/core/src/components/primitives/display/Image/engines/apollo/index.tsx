@@ -158,10 +158,10 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
     aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
     borderRadius: radiusValue,
     overflow: 'hidden',
-    border: bordered ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
-    boxShadow: shadow ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none',
+    border: bordered ? '1px solid var(--ds-image-border-color, rgba(0, 0, 0, 0.1))' : 'none',
+    boxShadow: shadow ? 'var(--ds-image-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06))' : 'none',
     cursor: onClick || zoomable ? 'pointer' : 'default',
-    transition: 'all 0.2s ease-in-out',
+    transition: 'var(--ds-image-transition, all 0.2s ease-in-out)',
     ...style,
   };
 
@@ -186,7 +186,7 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
     display: status === 'loading' ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'var(--ds-image-placeholder-bg, #f5f5f5)',
     borderRadius: radiusValue,
   };
 
@@ -200,8 +200,8 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
     display: status === 'error' ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-    color: '#737373',
+    backgroundColor: 'var(--ds-image-fallback-bg, #f5f5f5)',
+    color: 'var(--ds-image-fallback-color, #737373)',
     borderRadius: radiusValue,
   };
 
@@ -215,7 +215,7 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
     display: isHovered && hoverOverlay ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'var(--ds-image-overlay-bg, rgba(0, 0, 0, 0.4))',
     borderRadius: radiusValue,
     transition: 'opacity 0.2s ease-in-out',
   };
@@ -230,7 +230,7 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
     display: isZoomed ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    backgroundColor: 'var(--ds-image-zoom-overlay-bg, rgba(0, 0, 0, 0.9))',
     zIndex: 9999,
     cursor: 'zoom-out',
   };
@@ -264,7 +264,7 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: '#e5e5e5',
+        backgroundColor: 'var(--ds-image-loading-bg, #e5e5e5)',
         animation: 'apolloImagePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       }}
     />
@@ -317,9 +317,9 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
               bottom: 8,
               right: 8,
               padding: 6,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: 'var(--ds-image-zoom-indicator-bg, rgba(0, 0, 0, 0.5))',
               borderRadius: '50%',
-              color: 'white',
+              color: 'var(--ds-image-zoom-indicator-color, white)',
             }}
           >
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -350,10 +350,10 @@ export default function ApolloImage(props: ImageProps): React.ReactElement {
               top: 16,
               right: 16,
               padding: 8,
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'var(--ds-image-zoom-close-bg, rgba(255, 255, 255, 0.1))',
               border: 'none',
               borderRadius: '50%',
-              color: 'white',
+              color: 'var(--ds-image-zoom-close-color, white)',
               cursor: 'pointer',
             }}
             aria-label="Close zoom"

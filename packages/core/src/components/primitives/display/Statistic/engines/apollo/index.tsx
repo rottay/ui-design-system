@@ -74,15 +74,15 @@ import { formatNumber } from '../../base';
 const STYLES = {
   container: {},
   title: {
-    fontSize: '14px',
-    color: '#00000073',
+    fontSize: 'var(--ds-statistic-title-font-size, 14px)',
+    color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary, #00000073))',
     marginBottom: '4px',
     lineHeight: 1.5,
   } as React.CSSProperties,
   value: {
-    fontSize: '24px',
+    fontSize: 'var(--ds-statistic-value-font-size, 24px)',
     fontWeight: 600,
-    color: '#000000e0',
+    color: 'var(--ds-statistic-value-color, var(--ds-color-text-primary, #000000e0))',
     lineHeight: 1.3,
   } as React.CSSProperties,
   prefix: {
@@ -92,7 +92,7 @@ const STYLES = {
     marginLeft: '4px',
   } as React.CSSProperties,
   skeleton: {
-    background: '#f5f5f5',
+    background: 'var(--ds-statistic-skeleton-bg, #f5f5f5)',
     borderRadius: '4px',
   } as React.CSSProperties,
 };
@@ -102,10 +102,10 @@ const STYLES = {
  * Uses WCAG 2.1 AA compliant colors for accessibility.
  */
 const VALUE_TYPE_COLOR_MAP: Record<string, string> = {
-  default: '#000000e0',
-  positive: '#52c41a',
-  negative: '#ff4d4f',
-  warning: '#faad14',
+  default: 'var(--ds-statistic-value-color, var(--ds-color-text-primary, #000000e0))',
+  positive: 'var(--ds-statistic-positive-color, var(--ds-color-success-500, #52c41a))',
+  negative: 'var(--ds-statistic-negative-color, var(--ds-color-error-500, #ff4d4f))',
+  warning: 'var(--ds-statistic-warning-color, var(--ds-color-warning-500, #faad14))',
 };
 
 /**

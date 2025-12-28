@@ -65,7 +65,7 @@ function ApolloTimeline(props: TimelineProps): React.ReactElement {
     top: `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
     bottom: pending ? '40px' : `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
     width: TIMELINE_SIZE_MAP.lineWidth,
-    backgroundColor: '#e8e8e8',
+    backgroundColor: 'var(--ds-timeline-line-color, #e8e8e8)',
   };
 
   return (
@@ -127,7 +127,7 @@ function ApolloTimeline(props: TimelineProps): React.ReactElement {
 
             {/* Label */}
             {itemProps.label && (
-              <div style={{ color: '#999', fontSize: '12px', marginBottom: '4px' }}>
+              <div style={{ color: 'var(--ds-timeline-label-color, #999)', fontSize: 'var(--ds-timeline-label-font-size, 12px)', marginBottom: '4px' }}>
                 {itemProps.label}
               </div>
             )}
@@ -153,14 +153,14 @@ function ApolloTimeline(props: TimelineProps): React.ReactElement {
               width: TIMELINE_SIZE_MAP.dotSize,
               height: TIMELINE_SIZE_MAP.dotSize,
               borderRadius: '50%',
-              backgroundColor: '#e8e8e8',
+              backgroundColor: 'var(--ds-timeline-pending-dot-color, #e8e8e8)',
               animation: 'rottay-timeline-pulse 1.5s ease-in-out infinite',
             }}
             aria-hidden="true"
           >
             {pendingDot}
           </div>
-          <div style={{ color: '#999' }}>{pending}</div>
+          <div style={{ color: 'var(--ds-timeline-pending-color, #999)' }}>{pending}</div>
         </div>
       )}
 

@@ -57,22 +57,22 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 
 const styles = {
   container: {
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    padding: '16px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+    backgroundColor: 'var(--ds-calendar-bg, #fff)',
+    borderRadius: 'var(--ds-calendar-radius, 8px)',
+    padding: 'var(--ds-calendar-padding, 16px)',
+    boxShadow: 'var(--ds-calendar-shadow, 0 2px 8px rgba(0, 0, 0, 0.1))',
   },
   containerFullscreen: {
     width: '100%',
   },
   containerCompact: {
-    width: '320px',
+    width: 'var(--ds-calendar-compact-width, 320px)',
   },
   header: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: '16px',
+    marginBottom: 'var(--ds-calendar-header-margin, 16px)',
   },
   headerNav: {
     display: 'flex',
@@ -84,22 +84,22 @@ const styles = {
     border: 'none',
     background: 'transparent',
     cursor: 'pointer',
-    borderRadius: '4px',
+    borderRadius: 'var(--ds-calendar-nav-radius, 4px)',
     fontSize: '16px',
-    color: '#666',
+    color: 'var(--ds-calendar-nav-color, #666)',
   },
   modeButton: {
     padding: '4px 12px',
-    border: '1px solid #d9d9d9',
-    background: '#fff',
+    border: '1px solid var(--ds-calendar-border, #d9d9d9)',
+    background: 'var(--ds-calendar-bg, #fff)',
     cursor: 'pointer',
-    borderRadius: '4px',
+    borderRadius: 'var(--ds-calendar-nav-radius, 4px)',
     fontSize: '14px',
   },
   modeButtonActive: {
-    backgroundColor: 'var(--primary-color, #1890ff)',
-    color: '#fff',
-    borderColor: 'var(--primary-color, #1890ff)',
+    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
+    color: 'var(--ds-calendar-primary-text, #fff)',
+    borderColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
   },
   daysHeader: {
     display: 'grid',
@@ -109,9 +109,9 @@ const styles = {
   },
   dayHeader: {
     textAlign: 'center' as const,
-    fontSize: '12px',
+    fontSize: 'var(--ds-calendar-header-font-size, 12px)',
     fontWeight: 500,
-    color: '#666',
+    color: 'var(--ds-calendar-header-color, #666)',
     padding: '8px',
   },
   daysGrid: {
@@ -125,22 +125,22 @@ const styles = {
     flexDirection: 'column' as const,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: '8px',
+    borderRadius: 'var(--ds-calendar-cell-radius, 8px)',
     cursor: 'pointer',
     position: 'relative' as const,
     border: 'none',
     background: 'transparent',
-    transition: 'background-color 0.2s',
+    transition: 'var(--ds-calendar-transition, background-color 0.2s)',
   },
   dayCellToday: {
-    border: '1px solid var(--primary-color, #1890ff)',
+    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
   },
   dayCellSelected: {
-    backgroundColor: 'var(--primary-color, #1890ff)',
-    color: '#fff',
+    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
+    color: 'var(--ds-calendar-primary-text, #fff)',
   },
   dayCellDisabled: {
-    opacity: 0.3,
+    opacity: 'var(--ds-calendar-disabled-opacity, 0.3)',
     cursor: 'not-allowed',
   },
   monthsGrid: {
@@ -150,19 +150,19 @@ const styles = {
   },
   monthCell: {
     padding: '16px',
-    borderRadius: '8px',
+    borderRadius: 'var(--ds-calendar-cell-radius, 8px)',
     textAlign: 'center' as const,
     cursor: 'pointer',
     border: 'none',
     background: 'transparent',
-    transition: 'background-color 0.2s',
+    transition: 'var(--ds-calendar-transition, background-color 0.2s)',
   },
   monthCellCurrent: {
-    border: '1px solid var(--primary-color, #1890ff)',
+    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
   },
   monthCellSelected: {
-    backgroundColor: 'var(--primary-color, #1890ff)',
-    color: '#fff',
+    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500, #1890ff))',
+    color: 'var(--ds-calendar-primary-text, #fff)',
   },
 };
 
@@ -282,7 +282,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
       <div style={styles.header}>
         <div style={styles.headerNav}>
           <button
-            style={{ ...styles.navButton, ...(hovered === 'prevYear' ? { backgroundColor: '#f5f5f5' } : {}) }}
+            style={{ ...styles.navButton, ...(hovered === 'prevYear' ? { backgroundColor: 'var(--ds-calendar-hover-bg, #f5f5f5)' } : {}) }}
             onClick={() => setViewYear((y) => y - 1)}
             onMouseEnter={() => setHovered('prevYear')}
             onMouseLeave={() => setHovered(null)}
@@ -292,7 +292,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           </button>
           {mode === 'month' && (
             <button
-              style={{ ...styles.navButton, ...(hovered === 'prevMonth' ? { backgroundColor: '#f5f5f5' } : {}) }}
+              style={{ ...styles.navButton, ...(hovered === 'prevMonth' ? { backgroundColor: 'var(--ds-calendar-hover-bg, #f5f5f5)' } : {}) }}
               onClick={handlePrevMonth}
               onMouseEnter={() => setHovered('prevMonth')}
               onMouseLeave={() => setHovered(null)}
@@ -321,7 +321,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
         <div style={styles.headerNav}>
           {mode === 'month' && (
             <button
-              style={{ ...styles.navButton, ...(hovered === 'nextMonth' ? { backgroundColor: '#f5f5f5' } : {}) }}
+              style={{ ...styles.navButton, ...(hovered === 'nextMonth' ? { backgroundColor: 'var(--ds-calendar-hover-bg, #f5f5f5)' } : {}) }}
               onClick={handleNextMonth}
               onMouseEnter={() => setHovered('nextMonth')}
               onMouseLeave={() => setHovered(null)}
@@ -331,7 +331,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             </button>
           )}
           <button
-            style={{ ...styles.navButton, ...(hovered === 'nextYear' ? { backgroundColor: '#f5f5f5' } : {}) }}
+            style={{ ...styles.navButton, ...(hovered === 'nextYear' ? { backgroundColor: 'var(--ds-calendar-hover-bg, #f5f5f5)' } : {}) }}
             onClick={() => setViewYear((y) => y + 1)}
             onMouseEnter={() => setHovered('nextYear')}
             onMouseLeave={() => setHovered(null)}
@@ -377,7 +377,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                     ...(isToday && !isSelected ? styles.dayCellToday : {}),
                     ...(isSelected ? styles.dayCellSelected : {}),
                     ...(isDisabled ? styles.dayCellDisabled : {}),
-                    ...(hovered === cellKey && !isDisabled && !isSelected ? { backgroundColor: '#f5f5f5' } : {}),
+                    ...(hovered === cellKey && !isDisabled && !isSelected ? { backgroundColor: 'var(--ds-calendar-hover-bg, #f5f5f5)' } : {}),
                   }}
                   onClick={() => handleDateClick(day)}
                   onMouseEnter={() => setHovered(cellKey)}
@@ -414,7 +414,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                   ...styles.monthCell,
                   ...(isCurrentMonth && !isSelected ? styles.monthCellCurrent : {}),
                   ...(isSelected ? styles.monthCellSelected : {}),
-                  ...(hovered === cellKey && !isSelected ? { backgroundColor: '#f5f5f5' } : {}),
+                  ...(hovered === cellKey && !isSelected ? { backgroundColor: 'var(--ds-calendar-hover-bg, #f5f5f5)' } : {}),
                 }}
                 onClick={() => handleMonthClick(i)}
                 onMouseEnter={() => setHovered(cellKey)}

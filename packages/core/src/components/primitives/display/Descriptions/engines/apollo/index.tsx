@@ -26,9 +26,9 @@ function resolveColumnCount(column: DescriptionsProps['column']): number {
  * Size to font size mapping for Apollo implementation.
  */
 const SIZE_FONT_MAP: Record<string, string> = {
-  default: '14px',
-  small: '12px',
-  middle: '14px',
+  default: 'var(--ds-descriptions-font-size-default, 14px)',
+  small: 'var(--ds-descriptions-font-size-small, 12px)',
+  middle: 'var(--ds-descriptions-font-size-default, 14px)',
 };
 
 /**
@@ -83,17 +83,17 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
     // Title styles
     const titleStyle: React.CSSProperties = {
-      fontSize: '18px',
+      fontSize: 'var(--ds-descriptions-title-font-size, 18px)',
       fontWeight: 600,
       margin: 0,
-      color: '#333',
+      color: 'var(--ds-descriptions-title-color, var(--ds-color-text-primary, #333))',
     };
 
     // Content container styles
     const contentContainerStyle: React.CSSProperties = {
-      border: bordered ? '1px solid #e8e8e8' : 'none',
-      borderRadius: bordered ? '8px' : '0',
-      backgroundColor: bordered ? '#fff' : 'transparent',
+      border: bordered ? '1px solid var(--ds-descriptions-border-color, #e8e8e8)' : 'none',
+      borderRadius: bordered ? 'var(--ds-descriptions-radius, 8px)' : '0',
+      backgroundColor: bordered ? 'var(--ds-descriptions-bg, #fff)' : 'transparent',
       overflow: 'hidden',
     };
 
@@ -107,15 +107,15 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
     // Base label styles
     const labelBaseStyle: React.CSSProperties = {
-      color: '#666',
-      fontSize: '13px',
+      color: 'var(--ds-descriptions-label-color, var(--ds-color-text-secondary, #666))',
+      fontSize: 'var(--ds-descriptions-label-font-size, 13px)',
       marginBottom: layout === 'vertical' ? '4px' : '0',
       ...labelStyle,
     };
 
     // Base content styles
     const contentBaseStyle: React.CSSProperties = {
-      color: '#333',
+      color: 'var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333))',
       ...contentStyle,
     };
 
@@ -134,7 +134,7 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               role="listitem"
               style={{
                 gridColumn: `span ${span}`,
-                borderBottom: bordered ? '1px solid #f0f0f0' : 'none',
+                borderBottom: bordered ? '1px solid var(--ds-descriptions-item-border-color, #f0f0f0)' : 'none',
                 paddingBottom: bordered ? '12px' : '0',
               }}
             >
@@ -166,7 +166,7 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               style={{
                 display: 'flex',
                 padding: '12px 16px',
-                borderBottom: bordered ? '1px solid #f0f0f0' : 'none',
+                borderBottom: bordered ? '1px solid var(--ds-descriptions-item-border-color, #f0f0f0)' : 'none',
               }}
             >
               <div
