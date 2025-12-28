@@ -249,6 +249,7 @@ html[data-tenant] .ant-btn-primary {
 | 2025-12-28 | Removidos exports de Base* en index.ts | 39 files limpiados |
 | 2025-12-28 | Apollo engines migrados a CSS vars (display/) | 10 components: Calendar, Carousel, Descriptions, Empty, Image, List, QRCode, Statistic, Timeline, Tree |
 | 2025-12-28 | Apollo engines migrados a CSS vars (feedback/) | 11 components: Alert, Drawer, Message, Modal, Notification, Progress, Rate, Result, Skeleton, Spinner, Toast |
+| 2025-12-28 | Apollo engines migrados a CSS vars (navigation/) | 12 components: Menu, Tabs, Breadcrumb, Pagination, Steps, Affix, Anchor, BackTop, FloatButton, Link, Segmented, Stepper |
 
 ---
 
@@ -326,7 +327,7 @@ Para cada componente, seguir estos pasos EN ORDEN:
 - 🔄 IN PROGRESS - En proceso (indicar quién)
 - ✅ COMPLETE - Migración completa y verificada
 
-**Resumen:** 8/76 completados (10.5%) + 21 Apollo engines migrados a CSS vars
+**Resumen:** 8/76 completados (10.5%) + 33 Apollo engines migrados a CSS vars
 
 ---
 
@@ -397,18 +398,18 @@ Para cada componente, seguir estos pasos EN ORDEN:
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Menu | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 2 | Tabs | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 3 | Breadcrumb | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 4 | Pagination | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 5 | Steps | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 6 | Affix | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 7 | Anchor | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 8 | BackTop | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 9 | FloatButton | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 10 | Link | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 11 | Segmented | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 12 | Stepper | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 1 | Menu | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-menu-* vars |
+| 2 | Tabs | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-tabs-* vars |
+| 3 | Breadcrumb | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-breadcrumb-* vars |
+| 4 | Pagination | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-pagination-* vars |
+| 5 | Steps | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-steps-* vars |
+| 6 | Affix | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-affix-* vars |
+| 7 | Anchor | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-anchor-* vars |
+| 8 | BackTop | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-backtop-* vars |
+| 9 | FloatButton | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-floatbutton-* vars |
+| 10 | Link | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-link-* vars |
+| 11 | Segmented | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-segmented-* vars |
+| 12 | Stepper | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-stepper-* vars |
 
 #### LAYOUT (10) - Prioridad BAJA
 
