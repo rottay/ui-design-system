@@ -56,7 +56,7 @@
 
 import React, { useState, useEffect } from 'react';
 import type { AvatarProps } from '../../types';
-import { AVATAR_DEFAULTS, SIZE_MAP } from '../../types';
+import { AVATAR_DEFAULTS } from '../../types';
 
 /**
  * Generates initials from name or alt text
@@ -105,13 +105,18 @@ export default function HermesAvatar(props: AvatarProps): React.ReactElement {
     onLoad?.();
   };
 
-  const sizeValue = SIZE_MAP[size];
   const displayInitials = initials || getInitials(name, alt);
 
   // DaisyUI mask classes
   const maskClass = shape === 'circle' ? 'mask-circle' :
                     shape === 'square' ? 'mask-squircle' :
                     'mask-squircle';
+
+  // Use CSS variables for sizing
+  const sizeStyle = {
+    width: `var(--ds-avatar-${size}-size)`,
+    height: `var(--ds-avatar-${size}-size)`,
+  };
 
   // Variant to DaisyUI color classes
   const variantBgClass = {
@@ -153,7 +158,7 @@ export default function HermesAvatar(props: AvatarProps): React.ReactElement {
     >
       <div
         className={`mask ${maskClass} ${ringClass}`}
-        style={{ width: sizeValue, height: sizeValue }}
+        style={sizeStyle}
       >
         {src && !imageError ? (
           <img
@@ -165,7 +170,11 @@ export default function HermesAvatar(props: AvatarProps): React.ReactElement {
         ) : (
           <div
             className={`${variantBgClass} ${variantTextClass} flex items-center justify-center font-medium`}
-            style={{ width: '100%', height: '100%', fontSize: sizeValue * 0.4 }}
+            style={{
+              width: '100%',
+              height: '100%',
+              fontSize: `var(--ds-avatar-${size}-font-size)`,
+            }}
           >
             {displayInitials || children}
           </div>
@@ -173,8 +182,12 @@ export default function HermesAvatar(props: AvatarProps): React.ReactElement {
       </div>
       {status && (
         <span
-          className={`absolute bottom-0 right-0 w-3 h-3 ${statusColor} border-2 border-white rounded-full`}
-          style={{ transform: 'translate(25%, 25%)' }}
+          className={`absolute bottom-0 right-0 ${statusColor} border-2 border-white rounded-full`}
+          style={{
+            width: 'var(--ds-avatar-status-size)',
+            height: 'var(--ds-avatar-status-size)',
+            transform: 'translate(25%, 25%)',
+          }}
         />
       )}
     </div>

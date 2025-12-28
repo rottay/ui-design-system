@@ -324,7 +324,7 @@ Para cada componente, seguir estos pasos EN ORDEN:
 - 🔄 IN PROGRESS - En proceso (indicar quién)
 - ✅ COMPLETE - Migración completa y verificada
 
-**Resumen:** 1/76 completados (1.3%)
+**Resumen:** 2/76 completados (2.6%)
 
 ---
 
@@ -359,7 +359,7 @@ Para cada componente, seguir estos pasos EN ORDEN:
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
 | 1 | Card | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 2 | Table | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 3 | Avatar | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 3 | Avatar | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, engines use var(--ds-*) |
 | 4 | Badge | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 5 | Tag | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 6 | Tooltip | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |

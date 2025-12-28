@@ -660,19 +660,53 @@
   --ds-avatar-primary-color: var(--ds-color-primary-700);
   --ds-avatar-primary-border: var(--ds-color-primary-200);
 
+  --ds-avatar-secondary-bg: var(--ds-color-secondary-100);
+  --ds-avatar-secondary-color: var(--ds-color-secondary-700);
+  --ds-avatar-secondary-border: var(--ds-color-secondary-200);
+
+  --ds-avatar-success-bg: var(--ds-color-success-100);
+  --ds-avatar-success-color: var(--ds-color-success-700);
+  --ds-avatar-success-border: var(--ds-color-success-200);
+
+  --ds-avatar-warning-bg: var(--ds-color-warning-100);
+  --ds-avatar-warning-color: var(--ds-color-warning-700);
+  --ds-avatar-warning-border: var(--ds-color-warning-200);
+
+  --ds-avatar-error-bg: var(--ds-color-error-100);
+  --ds-avatar-error-color: var(--ds-color-error-700);
+  --ds-avatar-error-border: var(--ds-color-error-200);
+
+  --ds-avatar-gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --ds-avatar-gradient-color: var(--ds-color-white);
+  --ds-avatar-gradient-border: transparent;
+
   /* Avatar Status */
   --ds-avatar-status-online: var(--ds-color-success-500);
   --ds-avatar-status-offline: var(--ds-color-neutral-400);
   --ds-avatar-status-away: var(--ds-color-warning-500);
   --ds-avatar-status-busy: var(--ds-color-error-500);
+  --ds-avatar-status-size: 0.625rem;
+  --ds-avatar-status-border: var(--ds-color-white);
+  --ds-avatar-status-border-width: 2px;
+
+  /* Avatar Ring */
+  --ds-avatar-ring-color: var(--ds-color-primary-500);
+  --ds-avatar-ring-width: 2px;
+  --ds-avatar-ring-offset: 2px;
+
+  /* Avatar Border */
+  --ds-avatar-border-width: 2px;
+  --ds-avatar-border-color: rgba(0, 0, 0, 0.1);
 
   /* Avatar Group */
   --ds-avatar-group-spacing: -0.5rem;
+  --ds-avatar-group-border-color: var(--ds-color-white);
   --ds-avatar-group-overflow-bg: var(--ds-color-neutral-200);
   --ds-avatar-group-overflow-color: var(--ds-color-neutral-700);
 
   /* Avatar Common */
   --ds-avatar-transition: var(--ds-transition-fast);
+  --ds-avatar-font-weight: 500;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      BADGE

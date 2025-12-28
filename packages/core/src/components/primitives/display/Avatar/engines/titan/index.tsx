@@ -107,20 +107,12 @@ export default function TitanAvatar(props: AvatarProps): React.ReactElement {
   // 'rounded' maps to 'square' (Ant Design applies border-radius via CSS)
   const antShape: 'circle' | 'square' = shape === 'circle' ? 'circle' : 'square';
 
-  // Map variant to background color
-  const variantColorMap: Record<string, string> = {
-    default: backgroundColor || '#f0f0f0',
-    primary: backgroundColor || '#e6f7ff',
-    secondary: backgroundColor || '#f0f0ff',
-    success: backgroundColor || '#f6ffed',
-    warning: backgroundColor || '#fffbe6',
-    error: backgroundColor || '#fff1f0',
-    gradient: backgroundColor || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  };
-
+  // Only apply inline styles if explicitly provided by user
+  // Otherwise, let CSS custom properties handle theming via .ant-avatar classes
   const avatarStyle: React.CSSProperties = {
-    backgroundColor: variantColorMap[variant],
-    color: textColor,
+    // Use CSS variables for variant colors - only override if user provides explicit values
+    backgroundColor: backgroundColor || `var(--ds-avatar-${variant}-bg)`,
+    color: textColor || `var(--ds-avatar-${variant}-color)`,
     cursor: onClick ? 'pointer' : undefined,
     ...style,
   };
@@ -142,16 +134,14 @@ export default function TitanAvatar(props: AvatarProps): React.ReactElement {
   );
 
   // Wrap with status badge if needed
+  // Use CSS variables for status colors
   if (status) {
-    const statusColorMap = {
-      online: '#52c41a',
-      offline: '#d9d9d9',
-      away: '#faad14',
-      busy: '#ff4d4f',
-    };
-
     return (
-      <Badge dot color={statusColorMap[status]} offset={[-5, 5]}>
+      <Badge
+        dot
+        color={`var(--ds-avatar-status-${status})`}
+        offset={[-5, 5]}
+      >
         {avatar}
       </Badge>
     );
