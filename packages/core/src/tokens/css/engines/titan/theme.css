@@ -85,14 +85,14 @@ html[data-tenant] .ant-btn-default {
 
 html[data-tenant] .ant-btn-default:hover:not(:disabled) {
   background: var(--ds-button-default-bg-hover);
-  border-color: var(--ds-color-primary-400);
-  color: var(--ds-color-primary-500);
+  border-color: var(--ds-button-default-border-hover);
+  color: var(--ds-button-default-color-hover);
 }
 
 html[data-tenant] .ant-btn-default:active:not(:disabled) {
   background: var(--ds-button-default-bg-active);
-  border-color: var(--ds-color-primary-600);
-  color: var(--ds-color-primary-600);
+  border-color: var(--ds-button-default-border-active);
+  color: var(--ds-button-default-color-active);
 }
 
 /* Ghost Button */
@@ -104,8 +104,14 @@ html[data-tenant] .ant-btn-ghost {
 
 html[data-tenant] .ant-btn-ghost:hover:not(:disabled) {
   background: var(--ds-button-ghost-bg-hover);
-  color: var(--ds-color-primary-500);
-  border-color: var(--ds-color-primary-500);
+  color: var(--ds-button-ghost-color-hover);
+  border-color: var(--ds-button-ghost-border-hover);
+}
+
+html[data-tenant] .ant-btn-ghost:active:not(:disabled) {
+  background: var(--ds-button-ghost-bg-active);
+  color: var(--ds-button-ghost-color-active);
+  border-color: var(--ds-button-ghost-border-active);
 }
 
 /* Text Button */
@@ -119,9 +125,15 @@ html[data-tenant] .ant-btn-text:hover:not(:disabled) {
   color: var(--ds-button-text-color-hover);
 }
 
+html[data-tenant] .ant-btn-text:active:not(:disabled) {
+  background: var(--ds-button-text-bg-active);
+  color: var(--ds-button-text-color-active);
+}
+
 /* Link Button */
 html[data-tenant] .ant-btn-link {
   color: var(--ds-button-link-color);
+  text-decoration: var(--ds-button-link-decoration);
 }
 
 html[data-tenant] .ant-btn-link:hover:not(:disabled) {
@@ -129,16 +141,25 @@ html[data-tenant] .ant-btn-link:hover:not(:disabled) {
   text-decoration: var(--ds-button-link-decoration-hover);
 }
 
+html[data-tenant] .ant-btn-link:active:not(:disabled) {
+  color: var(--ds-button-link-color-active);
+}
+
 /* Danger Button */
 html[data-tenant] .ant-btn-dangerous {
   background: var(--ds-button-error-bg);
-  border-color: var(--ds-button-error-bg);
+  border-color: var(--ds-button-error-border);
   color: var(--ds-button-error-color);
 }
 
 html[data-tenant] .ant-btn-dangerous:hover:not(:disabled) {
   background: var(--ds-button-error-bg-hover);
   border-color: var(--ds-button-error-bg-hover);
+}
+
+html[data-tenant] .ant-btn-dangerous:active:not(:disabled) {
+  background: var(--ds-button-error-bg-active);
+  border-color: var(--ds-button-error-bg-active);
 }
 
 /* Disabled Button */

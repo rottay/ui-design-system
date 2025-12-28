@@ -152,7 +152,12 @@
 
 [data-tenant] .btn-ghost:hover:not(:disabled) {
   background-color: var(--ds-button-ghost-bg-hover);
-  color: var(--ds-color-primary-500);
+  color: var(--ds-button-ghost-color-hover);
+}
+
+[data-tenant] .btn-ghost:active:not(:disabled) {
+  background-color: var(--ds-button-ghost-bg-active);
+  color: var(--ds-button-ghost-color-active);
 }
 
 /* Outline Button */
@@ -164,8 +169,14 @@
 
 [data-tenant] .btn-outline:hover:not(:disabled) {
   background-color: var(--ds-button-default-bg-hover);
-  border-color: var(--ds-color-primary-400);
-  color: var(--ds-color-primary-500);
+  border-color: var(--ds-button-default-border-hover);
+  color: var(--ds-button-default-color-hover);
+}
+
+[data-tenant] .btn-outline:active:not(:disabled) {
+  background-color: var(--ds-button-default-bg-active);
+  border-color: var(--ds-button-default-border-active);
+  color: var(--ds-button-default-color-active);
 }
 
 /* Link Button */
@@ -173,6 +184,7 @@
   background-color: transparent;
   border-color: transparent;
   color: var(--ds-button-link-color);
+  text-decoration: var(--ds-button-link-decoration);
 }
 
 [data-tenant] .btn-link:hover:not(:disabled) {
@@ -180,10 +192,14 @@
   text-decoration: var(--ds-button-link-decoration-hover);
 }
 
+[data-tenant] .btn-link:active:not(:disabled) {
+  color: var(--ds-button-link-color-active);
+}
+
 /* Semantic Buttons */
 [data-tenant] .btn-success {
   background-color: var(--ds-button-success-bg);
-  border-color: var(--ds-button-success-bg);
+  border-color: var(--ds-button-success-border);
   color: var(--ds-button-success-color);
 }
 
@@ -191,9 +207,13 @@
   background-color: var(--ds-button-success-bg-hover);
 }
 
+[data-tenant] .btn-success:active:not(:disabled) {
+  background-color: var(--ds-button-success-bg-active);
+}
+
 [data-tenant] .btn-warning {
   background-color: var(--ds-button-warning-bg);
-  border-color: var(--ds-button-warning-bg);
+  border-color: var(--ds-button-warning-border);
   color: var(--ds-button-warning-color);
 }
 
@@ -201,14 +221,37 @@
   background-color: var(--ds-button-warning-bg-hover);
 }
 
+[data-tenant] .btn-warning:active:not(:disabled) {
+  background-color: var(--ds-button-warning-bg-active);
+}
+
 [data-tenant] .btn-error {
   background-color: var(--ds-button-error-bg);
-  border-color: var(--ds-button-error-bg);
+  border-color: var(--ds-button-error-border);
   color: var(--ds-button-error-color);
 }
 
 [data-tenant] .btn-error:hover:not(:disabled) {
   background-color: var(--ds-button-error-bg-hover);
+}
+
+[data-tenant] .btn-error:active:not(:disabled) {
+  background-color: var(--ds-button-error-bg-active);
+}
+
+/* Info Button */
+[data-tenant] .btn-info {
+  background-color: var(--ds-button-info-bg);
+  border-color: var(--ds-button-info-border);
+  color: var(--ds-button-info-color);
+}
+
+[data-tenant] .btn-info:hover:not(:disabled) {
+  background-color: var(--ds-button-info-bg-hover);
+}
+
+[data-tenant] .btn-info:active:not(:disabled) {
+  background-color: var(--ds-button-info-bg-active);
 }
 
 /* Disabled Button */

@@ -392,37 +392,62 @@
   --ds-button-default-bg-hover: var(--ds-color-neutral-50);
   --ds-button-default-bg-active: var(--ds-color-neutral-100);
   --ds-button-default-color: var(--ds-color-neutral-900);
+  --ds-button-default-color-hover: var(--ds-color-primary-500);
+  --ds-button-default-color-active: var(--ds-color-primary-600);
   --ds-button-default-border: var(--ds-color-neutral-300);
+  --ds-button-default-border-hover: var(--ds-color-primary-400);
+  --ds-button-default-border-active: var(--ds-color-primary-600);
 
   /* Button Ghost Variant */
   --ds-button-ghost-bg: transparent;
   --ds-button-ghost-bg-hover: var(--ds-color-neutral-100);
+  --ds-button-ghost-bg-active: var(--ds-color-neutral-200);
   --ds-button-ghost-color: var(--ds-color-neutral-700);
+  --ds-button-ghost-color-hover: var(--ds-color-primary-500);
+  --ds-button-ghost-color-active: var(--ds-color-primary-600);
   --ds-button-ghost-border: transparent;
+  --ds-button-ghost-border-hover: var(--ds-color-primary-500);
+  --ds-button-ghost-border-active: var(--ds-color-primary-600);
 
   /* Button Text Variant */
   --ds-button-text-bg: transparent;
   --ds-button-text-bg-hover: var(--ds-color-neutral-100);
+  --ds-button-text-bg-active: var(--ds-color-neutral-200);
   --ds-button-text-color: var(--ds-color-primary-600);
   --ds-button-text-color-hover: var(--ds-color-primary-700);
+  --ds-button-text-color-active: var(--ds-color-primary-800);
 
   /* Button Link Variant */
   --ds-button-link-color: var(--ds-color-primary-600);
   --ds-button-link-color-hover: var(--ds-color-primary-700);
+  --ds-button-link-color-active: var(--ds-color-primary-800);
+  --ds-button-link-decoration: none;
   --ds-button-link-decoration-hover: underline;
 
   /* Button Semantic Variants */
   --ds-button-success-bg: var(--ds-color-success-500);
   --ds-button-success-bg-hover: var(--ds-color-success-600);
+  --ds-button-success-bg-active: var(--ds-color-success-700);
   --ds-button-success-color: var(--ds-color-white);
+  --ds-button-success-border: transparent;
 
   --ds-button-warning-bg: var(--ds-color-warning-500);
   --ds-button-warning-bg-hover: var(--ds-color-warning-600);
+  --ds-button-warning-bg-active: var(--ds-color-warning-700);
   --ds-button-warning-color: var(--ds-color-white);
+  --ds-button-warning-border: transparent;
 
   --ds-button-error-bg: var(--ds-color-error-500);
   --ds-button-error-bg-hover: var(--ds-color-error-600);
+  --ds-button-error-bg-active: var(--ds-color-error-700);
   --ds-button-error-color: var(--ds-color-white);
+  --ds-button-error-border: transparent;
+
+  --ds-button-info-bg: var(--ds-color-info-500);
+  --ds-button-info-bg-hover: var(--ds-color-info-600);
+  --ds-button-info-bg-active: var(--ds-color-info-700);
+  --ds-button-info-color: var(--ds-color-white);
+  --ds-button-info-border: transparent;
 
   /* Button States */
   --ds-button-disabled-bg: var(--ds-color-neutral-100);
@@ -432,8 +457,11 @@
 
   /* Button Common */
   --ds-button-font-weight: var(--ds-font-weight-medium);
+  --ds-button-line-height: var(--ds-line-height-tight);
   --ds-button-transition: var(--ds-transition-fast);
   --ds-button-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-button-icon-gap: 0.5rem;
+  --ds-button-icon-only-padding: 0;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      INPUT

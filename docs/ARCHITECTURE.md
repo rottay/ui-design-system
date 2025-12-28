@@ -260,7 +260,7 @@ Para cada componente, seguir estos pasos EN ORDEN:
 - 🔄 IN PROGRESS - En proceso (indicar quién)
 - ✅ COMPLETE - Migración completa y verificada
 
-**Resumen:** 0/76 completados (0%)
+**Resumen:** 1/76 completados (1.3%)
 
 ---
 
@@ -268,7 +268,7 @@ Para cada componente, seguir estos pasos EN ORDEN:
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Button | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 1 | Button | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, fixed primitives, added active states |
 | 2 | Input | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 3 | Select | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 4 | Checkbox | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
