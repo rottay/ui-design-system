@@ -106,9 +106,9 @@ const styles = {
   /** Container wrapper - inline flex with rounded background */
   container: {
     display: 'inline-flex',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '6px',
-    padding: '2px',
+    backgroundColor: 'var(--ds-segmented-bg, var(--ds-color-neutral-100, #f5f5f5))',
+    borderRadius: 'var(--ds-segmented-radius, 6px)',
+    padding: 'var(--ds-segmented-padding, 2px)',
   } as React.CSSProperties,
 
   /** Block mode - full width flex */
@@ -122,7 +122,7 @@ const styles = {
     flex: 1,
     border: 'none',
     background: 'transparent',
-    borderRadius: '4px',
+    borderRadius: 'var(--ds-segmented-item-radius, 4px)',
     cursor: 'pointer',
     transition: 'all 0.3s',
     display: 'flex',
@@ -142,9 +142,9 @@ const styles = {
 
   /** Active/selected state - elevated with primary color */
   buttonActive: {
-    backgroundColor: '#fff',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-    color: '#1677ff',
+    backgroundColor: 'var(--ds-segmented-active-bg, #fff)',
+    boxShadow: 'var(--ds-segmented-active-shadow, 0 2px 8px rgba(0,0,0,0.08))',
+    color: 'var(--ds-segmented-active-color, var(--ds-color-primary-500, #1677ff))',
     fontWeight: 500,
   } as React.CSSProperties,
 

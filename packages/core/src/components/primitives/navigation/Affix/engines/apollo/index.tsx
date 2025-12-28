@@ -285,10 +285,10 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
 
     // CSS variables for theming (enables tenant customization)
     const cssVars: React.CSSProperties = {
-      '--affix-z-index': zIndex,
-      '--affix-offset-top': `${offsetTop}px`,
-      '--affix-offset-bottom': offsetBottom !== undefined ? `${offsetBottom}px` : 'auto',
-      '--affix-transition': 'box-shadow 0.2s ease-in-out',
+      '--ds-affix-z-index': zIndex,
+      '--ds-affix-offset-top': `${offsetTop}px`,
+      '--ds-affix-offset-bottom': offsetBottom !== undefined ? `${offsetBottom}px` : 'auto',
+      '--ds-affix-transition': 'box-shadow 0.2s ease-in-out',
     } as React.CSSProperties;
 
     // ========================================================================
@@ -328,13 +328,13 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       ? {
           ...cssVars,
           ...state.fixedStyle,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-          transition: 'var(--affix-transition)',
+          boxShadow: 'var(--ds-affix-shadow, 0 2px 8px rgba(0, 0, 0, 0.15))',
+          transition: 'var(--ds-affix-transition)',
           ...style,
         }
       : {
           ...cssVars,
-          transition: 'var(--affix-transition)',
+          transition: 'var(--ds-affix-transition)',
           ...style,
         };
 

@@ -61,35 +61,35 @@ const styles = {
     justifyContent: 'center',
     border: 'none',
     cursor: 'pointer',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    boxShadow: 'var(--ds-floatbutton-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
     transition: 'all 0.2s',
     position: 'relative',
   } as React.CSSProperties,
 
   /** Circle shape styles */
   buttonCircle: {
-    width: 48,
-    height: 48,
+    width: 'var(--ds-floatbutton-size, 48px)',
+    height: 'var(--ds-floatbutton-size, 48px)',
     borderRadius: '50%',
   } as React.CSSProperties,
 
   /** Square shape styles with rounded corners */
   buttonSquare: {
-    width: 48,
-    height: 48,
-    borderRadius: 8,
+    width: 'var(--ds-floatbutton-size, 48px)',
+    height: 'var(--ds-floatbutton-size, 48px)',
+    borderRadius: 'var(--ds-floatbutton-square-radius, 8px)',
   } as React.CSSProperties,
 
   /** Default type color scheme */
   buttonDefault: {
-    backgroundColor: '#fff',
-    color: '#595959',
+    backgroundColor: 'var(--ds-floatbutton-default-bg, #fff)',
+    color: 'var(--ds-floatbutton-default-color, var(--ds-color-neutral-600, #595959))',
   } as React.CSSProperties,
 
   /** Primary type color scheme */
   buttonPrimary: {
-    backgroundColor: '#1890ff',
-    color: '#fff',
+    backgroundColor: 'var(--ds-floatbutton-primary-bg, var(--ds-color-primary-500, #1890ff))',
+    color: 'var(--ds-floatbutton-primary-color, #fff)',
   } as React.CSSProperties,
 
   /** Hover state transformation */
@@ -100,9 +100,9 @@ const styles = {
   /** Fixed positioning for floating behavior */
   fixed: {
     position: 'fixed',
-    bottom: 24,
-    right: 24,
-    zIndex: 1000,
+    bottom: 'var(--ds-floatbutton-bottom, 24px)',
+    right: 'var(--ds-floatbutton-right, 24px)',
+    zIndex: 'var(--ds-floatbutton-z-index, 1000)' as unknown as number,
   } as React.CSSProperties,
 
   /** Group container styles */
@@ -110,7 +110,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column-reverse',
     alignItems: 'center',
-    gap: 8,
+    gap: 'var(--ds-floatbutton-gap, 8px)',
   } as React.CSSProperties,
 
   /** Group items container */
@@ -118,7 +118,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 8,
+    gap: 'var(--ds-floatbutton-gap, 8px)',
     transition: 'all 0.2s',
   } as React.CSSProperties,
 
@@ -140,8 +140,8 @@ const styles = {
     fontSize: 12,
     lineHeight: '18px',
     textAlign: 'center',
-    backgroundColor: '#ff4d4f',
-    color: '#fff',
+    backgroundColor: 'var(--ds-floatbutton-badge-bg, var(--ds-color-error-500, #ff4d4f))',
+    color: 'var(--ds-floatbutton-badge-color, #fff)',
     borderRadius: 9,
   } as React.CSSProperties,
 

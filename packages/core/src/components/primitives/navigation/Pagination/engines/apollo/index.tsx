@@ -209,10 +209,10 @@ export default function ApolloPagination(props: PaginationProps): React.ReactEle
    */
   const getButtonStyle = (isActive: boolean, isDisabled: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[sizeKey],
-    border: '1px solid var(--color-neutral-300, #d9d9d9)',
-    borderRadius: '0.25rem',
-    background: isActive ? 'var(--color-primary, #0066CC)' : 'white',
-    color: isActive ? 'white' : 'inherit',
+    border: '1px solid var(--ds-pagination-border-color, var(--ds-color-neutral-300, #d9d9d9))',
+    borderRadius: 'var(--ds-pagination-radius, 0.25rem)',
+    background: isActive ? 'var(--ds-pagination-active-bg, var(--ds-color-primary-500, #0066CC))' : 'var(--ds-pagination-bg, white)',
+    color: isActive ? 'var(--ds-pagination-active-color, white)' : 'inherit',
     cursor: isDisabled ? 'not-allowed' : 'pointer',
     opacity: isDisabled ? 0.5 : 1,
   });
@@ -225,7 +225,7 @@ export default function ApolloPagination(props: PaginationProps): React.ReactEle
     <div className={className} style={containerStyle}>
       {/* Total items display */}
       {showTotal && (
-        <div style={{ fontSize: '0.875rem', color: 'var(--color-neutral-600, #666)' }}>
+        <div style={{ fontSize: '0.875rem', color: 'var(--ds-pagination-total-color, var(--ds-color-neutral-600, #666))' }}>
           Total {total} items
         </div>
       )}

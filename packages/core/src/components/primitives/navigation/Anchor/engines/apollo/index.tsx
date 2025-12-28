@@ -111,29 +111,29 @@ const styles = {
   /** Link base styles */
   link: {
     display: 'block',
-    padding: '4px 12px',
-    fontSize: 14,
+    padding: 'var(--ds-anchor-link-padding, 4px 12px)',
+    fontSize: 'var(--ds-anchor-link-font-size, 14px)',
     textDecoration: 'none',
-    color: '#595959',
+    color: 'var(--ds-anchor-link-color, var(--ds-color-neutral-600, #595959))',
     borderLeft: '2px solid transparent',
     transition: 'color 0.2s, border-color 0.2s',
   } as React.CSSProperties,
 
   /** Active link styles */
   linkActive: {
-    color: '#1890ff',
-    borderLeftColor: '#1890ff',
+    color: 'var(--ds-anchor-link-active-color, var(--ds-color-primary-500, #1890ff))',
+    borderLeftColor: 'var(--ds-anchor-link-active-border, var(--ds-color-primary-500, #1890ff))',
     fontWeight: 500,
   } as React.CSSProperties,
 
   /** Hovered link styles */
   linkHover: {
-    color: '#1890ff',
+    color: 'var(--ds-anchor-link-hover-color, var(--ds-color-primary-500, #1890ff))',
   } as React.CSSProperties,
 
   /** Nested links container */
   nested: {
-    marginLeft: 16,
+    marginLeft: 'var(--ds-anchor-nested-indent, 16px)',
   } as React.CSSProperties,
 };
 

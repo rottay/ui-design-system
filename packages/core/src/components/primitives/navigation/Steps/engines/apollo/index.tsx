@@ -53,13 +53,29 @@ import { STEPS_DEFAULTS } from '../../types';
 const getStatusColors = (status: StepStatus) => {
   switch (status) {
     case 'finish':
-      return { bg: '#1677ff', border: '#1677ff', text: '#fff' };
+      return {
+        bg: 'var(--ds-steps-finish-bg, var(--ds-color-primary-500, #1677ff))',
+        border: 'var(--ds-steps-finish-border, var(--ds-color-primary-500, #1677ff))',
+        text: 'var(--ds-steps-finish-text, #fff)'
+      };
     case 'process':
-      return { bg: '#fff', border: '#1677ff', text: '#1677ff' };
+      return {
+        bg: 'var(--ds-steps-process-bg, #fff)',
+        border: 'var(--ds-steps-process-border, var(--ds-color-primary-500, #1677ff))',
+        text: 'var(--ds-steps-process-text, var(--ds-color-primary-500, #1677ff))'
+      };
     case 'error':
-      return { bg: '#fff', border: '#ff4d4f', text: '#ff4d4f' };
+      return {
+        bg: 'var(--ds-steps-error-bg, #fff)',
+        border: 'var(--ds-steps-error-border, var(--ds-color-error-500, #ff4d4f))',
+        text: 'var(--ds-steps-error-text, var(--ds-color-error-500, #ff4d4f))'
+      };
     default:
-      return { bg: '#fff', border: '#d9d9d9', text: '#00000040' };
+      return {
+        bg: 'var(--ds-steps-wait-bg, #fff)',
+        border: 'var(--ds-steps-wait-border, var(--ds-color-neutral-300, #d9d9d9))',
+        text: 'var(--ds-steps-wait-text, rgba(0, 0, 0, 0.25))'
+      };
   }
 };
 
@@ -320,12 +336,12 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                   style={{
                     fontSize: isSmall ? 12 : 14,
                     fontWeight: 500,
-                    color: step.effectiveStatus === 'error' ? '#ff4d4f' : '#000000d9',
+                    color: step.effectiveStatus === 'error' ? 'var(--ds-steps-error-text, var(--ds-color-error-500, #ff4d4f))' : 'var(--ds-steps-title-color, rgba(0, 0, 0, 0.85))',
                   }}
                 >
                   {step.title}
                   {step.subTitle && (
-                    <span style={{ fontSize: 12, color: '#00000073', marginLeft: 8 }}>
+                    <span style={{ fontSize: 12, color: 'var(--ds-steps-subtitle-color, rgba(0, 0, 0, 0.45))', marginLeft: 8 }}>
                       {step.subTitle}
                     </span>
                   )}
@@ -333,7 +349,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
 
                 {/* Description */}
                 {step.description && (
-                  <span style={{ fontSize: 12, color: '#00000073', marginTop: 4 }}>
+                  <span style={{ fontSize: 12, color: 'var(--ds-steps-description-color, rgba(0, 0, 0, 0.45))', marginTop: 4 }}>
                     {step.description}
                   </span>
                 )}
@@ -349,7 +365,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                     top: isVertical ? 40 : 15,
                     left: isVertical ? 15 : 40,
                     right: isVertical ? 'auto' : 8,
-                    backgroundColor: index < current ? '#1677ff' : '#e8e8e8',
+                    backgroundColor: index < current ? 'var(--ds-steps-connector-finish, var(--ds-color-primary-500, #1677ff))' : 'var(--ds-steps-connector-wait, var(--ds-color-neutral-200, #e8e8e8))',
                   }}
                 />
               )}

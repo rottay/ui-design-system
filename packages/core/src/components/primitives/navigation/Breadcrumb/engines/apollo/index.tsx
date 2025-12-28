@@ -178,7 +178,7 @@ export default function ApolloBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
   /** Link styles using CSS variables for theming */
   const linkStyle: React.CSSProperties = {
-    color: 'var(--color-primary, #0066CC)',
+    color: 'var(--ds-breadcrumb-link-color, var(--ds-color-primary-500, #0066CC))',
     textDecoration: 'none',
     cursor: 'pointer',
     display: 'flex',
@@ -188,7 +188,7 @@ export default function ApolloBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
   /** Non-link item styles (current page) */
   const itemStyle: React.CSSProperties = {
-    color: 'var(--color-neutral-600, #666)',
+    color: 'var(--ds-breadcrumb-item-color, var(--ds-color-neutral-600, #666))',
     display: 'flex',
     alignItems: 'center',
     gap: '0.25rem',
@@ -196,7 +196,7 @@ export default function ApolloBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
   /** Separator styles */
   const separatorStyle: React.CSSProperties = {
-    color: 'var(--color-neutral-400, #999)',
+    color: 'var(--ds-breadcrumb-separator-color, var(--ds-color-neutral-400, #999))',
   };
 
   // ---------------------------------------------------------------------------

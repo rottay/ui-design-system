@@ -143,8 +143,25 @@ export default function ApolloLink(props: LinkProps): React.ReactElement {
    * Build complete inline styles for the link element.
    * Combines type-based colors, underline, disabled state, and custom styles.
    */
+  const getColorVar = () => {
+    switch (type) {
+      case 'primary':
+        return 'var(--ds-link-primary-color, var(--ds-color-primary-500, #1677ff))';
+      case 'secondary':
+        return 'var(--ds-link-secondary-color, var(--ds-color-neutral-600, #595959))';
+      case 'success':
+        return 'var(--ds-link-success-color, var(--ds-color-success-500, #52c41a))';
+      case 'warning':
+        return 'var(--ds-link-warning-color, var(--ds-color-warning-500, #faad14))';
+      case 'danger':
+        return 'var(--ds-link-danger-color, var(--ds-color-error-500, #ff4d4f))';
+      default:
+        return colors.color;
+    }
+  };
+
   const linkStyle: React.CSSProperties = {
-    color: disabled ? '#00000040' : colors.color,
+    color: disabled ? 'var(--ds-link-disabled-color, rgba(0, 0, 0, 0.25))' : getColorVar(),
     textDecoration: underline ? 'underline' : 'none',
     cursor: disabled ? 'not-allowed' : 'pointer',
     transition: 'color 0.2s ease-in-out',

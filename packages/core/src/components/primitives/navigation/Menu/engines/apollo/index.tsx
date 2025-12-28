@@ -135,7 +135,7 @@ function renderApolloMenuItems(
           style={{
             height: '1px',
             margin: '8px 0',
-            backgroundColor: 'var(--menu-divider-color, rgba(0, 0, 0, 0.06))',
+            backgroundColor: 'var(--ds-menu-divider-color, rgba(0, 0, 0, 0.06))',
           }}
         />
       );
@@ -150,7 +150,7 @@ function renderApolloMenuItems(
               padding: '8px 16px 4px',
               fontSize: '12px',
               fontWeight: 600,
-              color: 'var(--menu-group-title-color, rgba(0, 0, 0, 0.45))',
+              color: 'var(--ds-menu-group-title-color, rgba(0, 0, 0, 0.45))',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
               paddingLeft: paddingLeft ? `${paddingLeft}px` : undefined,
@@ -205,11 +205,11 @@ function renderApolloMenuItems(
               minHeight: '40px',
               cursor: item.disabled ? 'not-allowed' : 'pointer',
               opacity: item.disabled ? 0.5 : 1,
-              color: 'var(--menu-item-color, inherit)',
-              backgroundColor: isFocused ? 'var(--menu-item-hover-bg, rgba(0, 0, 0, 0.04))' : 'transparent',
-              borderRadius: 'var(--menu-border-radius, 6px)',
+              color: 'var(--ds-menu-item-color, inherit)',
+              backgroundColor: isFocused ? 'var(--ds-menu-item-hover-bg, rgba(0, 0, 0, 0.04))' : 'transparent',
+              borderRadius: 'var(--ds-menu-border-radius, 6px)',
               transition: 'all 0.2s ease',
-              outline: isFocused ? '2px solid var(--menu-focus-ring, #1677ff)' : 'none',
+              outline: isFocused ? '2px solid var(--ds-menu-focus-ring, var(--ds-color-primary-500, #1677ff))' : 'none',
               outlineOffset: '-2px',
             }}
           >
@@ -289,18 +289,18 @@ function renderApolloMenuItems(
             cursor: item.disabled ? 'not-allowed' : 'pointer',
             opacity: item.disabled ? 0.5 : 1,
             color: item.danger
-              ? 'var(--menu-item-danger-color, #ff4d4f)'
+              ? 'var(--ds-menu-item-danger-color, var(--ds-color-error-500, #ff4d4f))'
               : isSelected
-                ? 'var(--menu-item-selected-color, #1677ff)'
-                : 'var(--menu-item-color, inherit)',
+                ? 'var(--ds-menu-item-selected-color, var(--ds-color-primary-500, #1677ff))'
+                : 'var(--ds-menu-item-color, inherit)',
             backgroundColor: isSelected
-              ? 'var(--menu-item-selected-bg, rgba(22, 119, 255, 0.08))'
+              ? 'var(--ds-menu-item-selected-bg, rgba(22, 119, 255, 0.08))'
               : isFocused
-                ? 'var(--menu-item-hover-bg, rgba(0, 0, 0, 0.04))'
+                ? 'var(--ds-menu-item-hover-bg, rgba(0, 0, 0, 0.04))'
                 : 'transparent',
-            borderRadius: 'var(--menu-border-radius, 6px)',
+            borderRadius: 'var(--ds-menu-border-radius, 6px)',
             transition: 'all 0.2s ease',
-            outline: isFocused ? '2px solid var(--menu-focus-ring, #1677ff)' : 'none',
+            outline: isFocused ? '2px solid var(--ds-menu-focus-ring, var(--ds-color-primary-500, #1677ff))' : 'none',
             outlineOffset: '-2px',
           }}
         >
@@ -541,12 +541,12 @@ export default function ApolloMenu(props: MenuProps): React.ReactElement {
     listStyle: 'none',
     padding: '4px',
     margin: 0,
-    backgroundColor: theme === 'dark' ? 'var(--menu-dark-bg, #001529)' : 'var(--menu-bg, #fff)',
-    color: theme === 'dark' ? 'var(--menu-dark-item-color, rgba(255, 255, 255, 0.65))' : 'var(--menu-item-color, rgba(0, 0, 0, 0.88))',
-    borderRadius: 'var(--menu-border-radius, 8px)',
+    backgroundColor: theme === 'dark' ? 'var(--ds-menu-dark-bg, #001529)' : 'var(--ds-menu-bg, #fff)',
+    color: theme === 'dark' ? 'var(--ds-menu-dark-item-color, rgba(255, 255, 255, 0.65))' : 'var(--ds-menu-item-color, rgba(0, 0, 0, 0.88))',
+    borderRadius: 'var(--ds-menu-border-radius, 8px)',
     display: mode === 'horizontal' ? 'flex' : 'block',
     flexDirection: mode === 'horizontal' ? 'row' : undefined,
-    width: inlineCollapsed && mode === 'inline' ? 'var(--menu-collapsed-width, 80px)' : undefined,
+    width: inlineCollapsed && mode === 'inline' ? 'var(--ds-menu-collapsed-width, 80px)' : undefined,
     ...style,
   };
 

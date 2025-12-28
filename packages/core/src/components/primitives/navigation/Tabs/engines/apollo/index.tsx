@@ -137,8 +137,8 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
    */
   const tabListStyle: React.CSSProperties = {
     display: 'flex',
-    gap: '0.25rem',
-    borderBottom: type === 'line' ? '1px solid var(--color-neutral-200, #e5e5e5)' : undefined,
+    gap: 'var(--ds-tabs-gap, 0.25rem)',
+    borderBottom: type === 'line' ? '1px solid var(--ds-tabs-border-color, var(--ds-color-neutral-200, #e5e5e5))' : undefined,
     justifyContent: centered ? 'center' : 'flex-start',
   };
 
@@ -153,12 +153,12 @@ export default function ApolloTabs(props: TabsProps): React.ReactElement {
   const getTabStyle = (isActive: boolean, disabled?: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[size as TabsSize],
     border: 'none',
-    background: isActive ? 'var(--color-primary, #0066CC)' : 'transparent',
-    color: isActive ? 'white' : 'inherit',
+    background: isActive ? 'var(--ds-tabs-active-bg, var(--ds-color-primary-500, #0066CC))' : 'transparent',
+    color: isActive ? 'var(--ds-tabs-active-color, white)' : 'inherit',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
-    borderRadius: type === 'card' || type === 'pills' ? '0.375rem' : '0',
-    borderBottom: type === 'line' && isActive ? '2px solid var(--color-primary, #0066CC)' : undefined,
+    borderRadius: type === 'card' || type === 'pills' ? 'var(--ds-tabs-radius, 0.375rem)' : '0',
+    borderBottom: type === 'line' && isActive ? '2px solid var(--ds-tabs-active-border, var(--ds-color-primary-500, #0066CC))' : undefined,
     marginBottom: type === 'line' ? '-1px' : undefined,
     display: 'flex',
     alignItems: 'center',

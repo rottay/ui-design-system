@@ -116,32 +116,32 @@ function getStatusColors(status: StepStatus) {
   switch (status) {
     case 'finish':
       return {
-        bg: 'var(--stepper-icon-finish-bg, #1677ff)',
-        color: 'var(--stepper-icon-finish-color, #fff)',
-        border: 'var(--stepper-icon-finish-border, #1677ff)',
-        title: 'var(--stepper-title-finish-color, rgba(0, 0, 0, 0.88))',
+        bg: 'var(--ds-stepper-icon-finish-bg, var(--ds-color-primary-500, #1677ff))',
+        color: 'var(--ds-stepper-icon-finish-color, #fff)',
+        border: 'var(--ds-stepper-icon-finish-border, var(--ds-color-primary-500, #1677ff))',
+        title: 'var(--ds-stepper-title-finish-color, rgba(0, 0, 0, 0.88))',
       };
     case 'process':
       return {
-        bg: 'var(--stepper-icon-process-bg, #1677ff)',
-        color: 'var(--stepper-icon-process-color, #fff)',
-        border: 'var(--stepper-icon-process-border, #1677ff)',
-        title: 'var(--stepper-title-process-color, rgba(0, 0, 0, 0.88))',
+        bg: 'var(--ds-stepper-icon-process-bg, var(--ds-color-primary-500, #1677ff))',
+        color: 'var(--ds-stepper-icon-process-color, #fff)',
+        border: 'var(--ds-stepper-icon-process-border, var(--ds-color-primary-500, #1677ff))',
+        title: 'var(--ds-stepper-title-process-color, rgba(0, 0, 0, 0.88))',
       };
     case 'error':
       return {
-        bg: 'var(--stepper-icon-error-bg, #fff)',
-        color: 'var(--stepper-icon-error-color, #ff4d4f)',
-        border: 'var(--stepper-icon-error-border, #ff4d4f)',
-        title: 'var(--stepper-title-error-color, #ff4d4f)',
+        bg: 'var(--ds-stepper-icon-error-bg, #fff)',
+        color: 'var(--ds-stepper-icon-error-color, var(--ds-color-error-500, #ff4d4f))',
+        border: 'var(--ds-stepper-icon-error-border, var(--ds-color-error-500, #ff4d4f))',
+        title: 'var(--ds-stepper-title-error-color, var(--ds-color-error-500, #ff4d4f))',
       };
     case 'wait':
     default:
       return {
-        bg: 'var(--stepper-icon-wait-bg, #fff)',
-        color: 'var(--stepper-icon-wait-color, rgba(0, 0, 0, 0.45))',
-        border: 'var(--stepper-icon-wait-border, rgba(0, 0, 0, 0.25))',
-        title: 'var(--stepper-title-wait-color, rgba(0, 0, 0, 0.45))',
+        bg: 'var(--ds-stepper-icon-wait-bg, #fff)',
+        color: 'var(--ds-stepper-icon-wait-color, rgba(0, 0, 0, 0.45))',
+        border: 'var(--ds-stepper-icon-wait-border, rgba(0, 0, 0, 0.25))',
+        title: 'var(--ds-stepper-title-wait-color, rgba(0, 0, 0, 0.45))',
       };
   }
 }
@@ -197,7 +197,7 @@ function renderStep(
     flex: direction === 'horizontal' && !isLast ? 1 : 'none',
     opacity: item.disabled ? 0.5 : 1,
     cursor: clickable && !item.disabled ? 'pointer' : 'default',
-    outline: isFocused ? '2px solid var(--stepper-focus-ring, #1677ff)' : 'none',
+    outline: isFocused ? '2px solid var(--ds-stepper-focus-ring, var(--ds-color-primary-500, #1677ff))' : 'none',
     outlineOffset: '4px',
     borderRadius: '4px',
   };
@@ -240,17 +240,17 @@ function renderStep(
   // Description styles
   const descStyle: CSSProperties = {
     fontSize: fontSize.description,
-    color: 'var(--stepper-description-color, rgba(0, 0, 0, 0.45))',
+    color: 'var(--ds-stepper-description-color, rgba(0, 0, 0, 0.45))',
   };
 
   // Connector line styles (horizontal only)
   const connectorStyle: CSSProperties = direction === 'horizontal' ? {
     flex: 1,
     minWidth: '32px',
-    height: 'var(--stepper-connector-width, 1px)',
+    height: 'var(--ds-stepper-connector-width, 1px)',
     backgroundColor: status === 'finish'
-      ? 'var(--stepper-connector-finish-color, #1677ff)'
-      : 'var(--stepper-connector-color, rgba(0, 0, 0, 0.06))',
+      ? 'var(--ds-stepper-connector-finish-color, var(--ds-color-primary-500, #1677ff))'
+      : 'var(--ds-stepper-connector-color, rgba(0, 0, 0, 0.06))',
     margin: '0 8px',
     alignSelf: 'center',
     transition: 'background-color 0.3s ease',
