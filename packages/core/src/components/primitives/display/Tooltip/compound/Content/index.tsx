@@ -75,14 +75,14 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       ...restProps
     } = props;
 
-    // Content container styles using CSS variables
+    // Content container styles using design system CSS variables
     const contentStyles: React.CSSProperties = {
-      padding: 'var(--tooltip-padding, 0.5rem 0.75rem)',
-      backgroundColor: 'var(--tooltip-bg, rgba(0, 0, 0, 0.9))',
-      color: 'var(--tooltip-color, white)',
-      fontSize: 'var(--tooltip-font-size, 0.875rem)',
-      borderRadius: 'var(--tooltip-radius, 0.375rem)',
-      boxShadow: 'var(--tooltip-shadow, 0 4px 6px rgba(0, 0, 0, 0.1))',
+      padding: 'var(--ds-tooltip-padding, 0.5rem 0.75rem)',
+      backgroundColor: 'var(--ds-tooltip-bg, rgba(0, 0, 0, 0.9))',
+      color: 'var(--ds-tooltip-color, white)',
+      fontSize: 'var(--ds-tooltip-font-size, 0.875rem)',
+      borderRadius: 'var(--ds-tooltip-radius, 0.375rem)',
+      boxShadow: 'var(--ds-tooltip-shadow, 0 4px 6px rgba(0, 0, 0, 0.1))',
       ...style,
     };
 
@@ -97,9 +97,9 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     // Arrow styles
     const arrowStyles: React.CSSProperties = {
       position: 'absolute',
-      width: 'var(--tooltip-arrow-size, 8px)',
-      height: 'var(--tooltip-arrow-size, 8px)',
-      backgroundColor: 'var(--tooltip-bg, rgba(0, 0, 0, 0.9))',
+      width: 'var(--ds-tooltip-arrow-size, 8px)',
+      height: 'var(--ds-tooltip-arrow-size, 8px)',
+      backgroundColor: 'var(--ds-tooltip-bg, rgba(0, 0, 0, 0.9))',
       transform: 'rotate(45deg)',
       ...arrowPositions[side],
     };

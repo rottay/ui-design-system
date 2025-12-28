@@ -73,16 +73,16 @@ export const BADGE_DEFAULTS = {
 
 /**
  * Mapping of variant names to their corresponding background colors.
- * Uses CSS variable references with fallback hex values.
+ * Uses CSS variable references for multi-tenant support.
  */
 export const VARIANT_COLOR_MAP: Record<string, string> = {
-  default: 'var(--ds-color-neutral-300, #d9d9d9)',
-  primary: 'var(--ds-color-primary-500, #1890ff)',
-  secondary: 'var(--ds-color-secondary-500, #722ed1)',
-  success: 'var(--ds-color-success-500, #52c41a)',
-  warning: 'var(--ds-color-warning-500, #faad14)',
-  error: 'var(--ds-color-error-500, #ff4d4f)',
-  info: 'var(--ds-color-info-500, #1890ff)',
+  default: 'var(--ds-badge-default-bg)',
+  primary: 'var(--ds-badge-primary-bg)',
+  secondary: 'var(--ds-badge-secondary-bg)',
+  success: 'var(--ds-badge-success-bg)',
+  warning: 'var(--ds-badge-warning-bg)',
+  error: 'var(--ds-badge-error-bg)',
+  info: 'var(--ds-badge-info-bg)',
 } as const;
 
 /**

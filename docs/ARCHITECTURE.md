@@ -357,13 +357,13 @@ Para cada componente, seguir estos pasos EN ORDEN:
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Card | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 1 | Card | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Engines use var(--ds-card-*) |
 | 2 | Table | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 3 | Avatar | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, engines use var(--ds-*) |
-| 4 | Badge | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 5 | Tag | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 6 | Tooltip | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 7 | Typography | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 4 | Badge | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +9 tokens, engines use var(--ds-badge-*) |
+| 5 | Tag | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, apollo uses var(--ds-tag-*) |
+| 6 | Tooltip | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +17 tokens, engines rewritten (no base) |
+| 7 | Typography | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | SIZE_MAP uses CSS vars, apollo rewritten |
 | 8 | Calendar | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 9 | Carousel | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
 | 10 | Descriptions | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |

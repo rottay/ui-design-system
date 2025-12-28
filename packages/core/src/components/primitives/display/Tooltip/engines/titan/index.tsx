@@ -119,14 +119,15 @@ const TitanTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const mouseEnterDelay = showDelay ? showDelay / 1000 : 0.1;
     const mouseLeaveDelay = hideDelay ? hideDelay / 1000 : 0.1;
 
-    // Map color variants to Ant Design colors
+    // Map color variants to CSS variable references
+    // Ant Design accepts CSS variables as color values
     const colorMap: Record<string, string | undefined> = {
-      default: undefined,
-      primary: '#1677ff',
-      secondary: '#722ed1',
-      success: '#52c41a',
-      warning: '#faad14',
-      error: '#ff4d4f',
+      default: undefined, // Use Ant Design's default
+      primary: 'var(--ds-tooltip-primary-bg, #1677ff)',
+      secondary: 'var(--ds-tooltip-secondary-bg, #722ed1)',
+      success: 'var(--ds-tooltip-success-bg, #52c41a)',
+      warning: 'var(--ds-tooltip-warning-bg, #faad14)',
+      error: 'var(--ds-tooltip-error-bg, #ff4d4f)',
     };
 
     return (

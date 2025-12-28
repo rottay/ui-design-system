@@ -117,14 +117,14 @@ export default function TitanCard(props: CardProps): React.ReactElement {
   // Build body style
   const bodyStyle: React.CSSProperties = {
     padding: PADDING_MAP[padding] || PADDING_MAP.md,
-    ...(variant === 'filled' && { backgroundColor: '#fafafa' }),
+    ...(variant === 'filled' && { backgroundColor: 'var(--ds-color-neutral-50, #fafafa)' }),
   };
 
   // Build card title with description
   const cardTitle = description ? (
     <div>
       <div>{title}</div>
-      <div style={{ fontSize: '14px', color: '#8c8c8c', fontWeight: 'normal' }}>
+      <div style={{ fontSize: '14px', color: 'var(--ds-card-subtitle-color, #8c8c8c)', fontWeight: 'normal' }}>
         {description}
       </div>
     </div>

@@ -116,7 +116,9 @@ export default function TitanTag(props: TagProps): React.ReactElement {
   // Build additional styles
   const tagStyle: React.CSSProperties = {
     cursor: clickable ? 'pointer' : undefined,
-    borderRadius: radius === 'full' ? '9999px' : undefined,
+    borderRadius: radius === 'full' ? 'var(--ds-tag-radius-full, 9999px)' :
+                  radius ? `var(--ds-tag-radius-${radius})` : undefined,
+    transition: 'var(--ds-tag-transition)',
     ...style,
   };
 

@@ -324,27 +324,27 @@ export const TYPOGRAPHY_DEFAULTS = {
 } as const;
 
 /**
- * Size mapping to CSS values for typography.
- * Used by base components for consistent sizing.
+ * Size mapping to CSS variables for typography.
+ * Uses design system tokens for consistent sizing across tenants.
  */
 export const SIZE_MAP = {
   heading: {
-    xs: '1rem',
-    sm: '1.25rem',
-    md: '1.5rem',
-    lg: '1.875rem',
-    xl: '2.25rem',
-    '2xl': '3rem',
-    '3xl': '3.75rem',
+    xs: 'var(--ds-font-size-base, 1rem)',
+    sm: 'var(--ds-font-size-xl, 1.25rem)',
+    md: 'var(--ds-font-size-2xl, 1.5rem)',
+    lg: 'var(--ds-font-size-3xl, 1.875rem)',
+    xl: 'var(--ds-font-size-4xl, 2.25rem)',
+    '2xl': 'var(--ds-font-size-5xl, 3rem)',
+    '3xl': 'var(--ds-font-size-6xl, 3.75rem)',
   },
   text: {
-    xs: '0.75rem',
-    sm: '0.875rem',
-    md: '1rem',
-    lg: '1.125rem',
-    xl: '1.25rem',
-    '2xl': '1.5rem',
-    '3xl': '1.875rem',
+    xs: 'var(--ds-font-size-xs, 0.75rem)',
+    sm: 'var(--ds-font-size-sm, 0.875rem)',
+    md: 'var(--ds-font-size-base, 1rem)',
+    lg: 'var(--ds-font-size-lg, 1.125rem)',
+    xl: 'var(--ds-font-size-xl, 1.25rem)',
+    '2xl': 'var(--ds-font-size-2xl, 1.5rem)',
+    '3xl': 'var(--ds-font-size-3xl, 1.875rem)',
   },
 } as const;
 

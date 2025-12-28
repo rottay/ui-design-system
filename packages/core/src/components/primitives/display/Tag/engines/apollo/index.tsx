@@ -62,15 +62,15 @@ const CloseIcon: React.FC = () => (
 );
 
 /**
- * Color configuration for each variant.
+ * Color configuration for each variant using CSS variables.
  */
 const VARIANT_COLORS = {
-  default: { bg: '#f0f0f0', text: '#333333', border: '#d9d9d9' },
-  primary: { bg: '#e6f7ff', text: '#0066cc', border: '#91d5ff' },
-  secondary: { bg: '#f0f0ff', text: '#6b6bd4', border: '#d3adf7' },
-  success: { bg: '#f6ffed', text: '#22c55e', border: '#b7eb8f' },
-  warning: { bg: '#fffbe6', text: '#faad14', border: '#ffe58f' },
-  error: { bg: '#fff1f0', text: '#ef4444', border: '#ffa39e' },
+  default: { bg: 'var(--ds-tag-default-bg)', text: 'var(--ds-tag-default-color)', border: 'var(--ds-tag-default-border)' },
+  primary: { bg: 'var(--ds-tag-primary-bg)', text: 'var(--ds-tag-primary-color)', border: 'var(--ds-tag-primary-border)' },
+  secondary: { bg: 'var(--ds-tag-secondary-bg)', text: 'var(--ds-tag-secondary-color)', border: 'var(--ds-tag-secondary-border)' },
+  success: { bg: 'var(--ds-tag-success-bg)', text: 'var(--ds-tag-success-color)', border: 'var(--ds-tag-success-border)' },
+  warning: { bg: 'var(--ds-tag-warning-bg)', text: 'var(--ds-tag-warning-color)', border: 'var(--ds-tag-warning-border)' },
+  error: { bg: 'var(--ds-tag-error-bg)', text: 'var(--ds-tag-error-color)', border: 'var(--ds-tag-error-border)' },
 };
 
 /**
@@ -152,7 +152,7 @@ export default function ApolloTag(props: TagProps): React.ReactElement {
     border: bordered || outlined ? `1px solid ${colors.border}` : '1px solid transparent',
     borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
     cursor: clickable ? 'pointer' : 'default',
-    transition: 'all 0.2s ease-in-out',
+    transition: 'var(--ds-tag-transition, all 0.2s ease-in-out)',
     userSelect: 'none',
     whiteSpace: 'nowrap',
     ...style,

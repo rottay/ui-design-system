@@ -125,20 +125,20 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
   const borderRadiusValue = RADIUS_MAP[radius] || RADIUS_MAP.md;
 
-  // Variant-specific styles
+  // Variant-specific styles using design system tokens
   const variantStyles: Record<string, React.CSSProperties> = {
     elevated: {
-      backgroundColor: backgroundColor || '#fff',
+      backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
       border: 'none',
       boxShadow: isHovered && hoverable ? SHADOW_MAP.lg : SHADOW_MAP.md,
     },
     outlined: {
-      backgroundColor: backgroundColor || '#fff',
-      border: '1px solid var(--color-neutral-200, #e5e5e5)',
+      backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
+      border: '1px solid var(--ds-card-border, #e5e5e5)',
       boxShadow: 'none',
     },
     filled: {
-      backgroundColor: backgroundColor || 'var(--color-neutral-100, #f5f5f5)',
+      backgroundColor: backgroundColor || 'var(--ds-color-neutral-100, #f5f5f5)',
       border: 'none',
       boxShadow: 'none',
     },
@@ -170,7 +170,7 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: paddingValue,
-    borderBottom: divider ? '1px solid var(--color-neutral-200, #e5e5e5)' : 'none',
+    borderBottom: divider ? '1px solid var(--ds-card-header-border, #e5e5e5)' : 'none',
   };
 
   // Cover image style
@@ -187,7 +187,7 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
     justifyContent: 'flex-end',
     gap: '8px',
     padding: paddingValue,
-    borderTop: '1px solid var(--color-neutral-200, #e5e5e5)',
+    borderTop: '1px solid var(--ds-card-footer-border, #e5e5e5)',
   };
 
   // Loading overlay
@@ -212,8 +212,8 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
         style={{
           width: '32px',
           height: '32px',
-          border: '3px solid #e0e0e0',
-          borderTopColor: '#1890ff',
+          border: '3px solid var(--ds-color-neutral-200, #e0e0e0)',
+          borderTopColor: 'var(--ds-color-primary-500, #1890ff)',
           borderRadius: '50%',
           animation: 'rottay-apollo-card-spin 1s linear infinite',
         }}
@@ -265,7 +265,7 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
               <div
                 style={{
                   fontSize: '14px',
-                  color: 'var(--color-neutral-500, #8c8c8c)',
+                  color: 'var(--ds-card-subtitle-color, #8c8c8c)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',

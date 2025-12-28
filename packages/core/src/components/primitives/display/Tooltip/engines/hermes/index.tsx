@@ -11,18 +11,12 @@
  * - Uses DaisyUI `tooltip` class for container
  * - Uses `tooltip-{position}` for placement
  * - Uses `tooltip-{color}` for color variants
- * - Extends BaseTooltip for core functionality
+ * - CSS-only implementation for maximum performance
  *
  * **Class Mappings:**
  * - `tooltip-top`, `tooltip-bottom`, `tooltip-left`, `tooltip-right`
  * - `tooltip-primary`, `tooltip-secondary`, `tooltip-success`, etc.
  * - `transition-opacity`, `duration-200` for animations
- *
- * **Advantages:**
- * - CSS-only implementation
- * - Smallest bundle impact
- * - Tailwind utility compatibility
- * - DaisyUI theme integration
  *
  * @example Basic Usage
  * ```tsx
@@ -34,7 +28,6 @@
  * ```
  *
  * @see {@link Tooltip} for the main component
- * @see {@link BaseTooltip} for CSS variable implementation
  * @see {@link https://daisyui.com/components/tooltip/} DaisyUI Tooltip
  * @module Tooltip/engines/hermes
  * @category Display
@@ -43,9 +36,9 @@
 
 'use client';
 
-import { forwardRef } from 'react';
-import { BaseTooltip } from '../../base';
+import React, { forwardRef } from 'react';
 import type { TooltipProps } from '../../types';
+import { TOOLTIP_DEFAULTS } from '../../types';
 
 /**
  * Maps color variants to DaisyUI tooltip color classes.
@@ -96,33 +89,40 @@ const PLACEMENT_CLASS_MAP: Record<string, string> = {
 const HermesTooltip = forwardRef<HTMLDivElement, TooltipProps>(
   (props, ref) => {
     const {
-      color = 'default',
-      placement = 'top',
+      content,
+      children,
+      color = TOOLTIP_DEFAULTS.color,
+      placement = TOOLTIP_DEFAULTS.placement,
+      disabled = TOOLTIP_DEFAULTS.disabled,
+      visible,
       className = '',
-      ...restProps
+      style,
     } = props;
 
     // Build Tailwind/DaisyUI class names
-    const tailwindClasses = [
+    const tooltipClasses = [
       'tooltip',
-      'tooltip-open',
+      visible !== undefined && visible ? 'tooltip-open' : '',
       COLOR_CLASS_MAP[color] || '',
       PLACEMENT_CLASS_MAP[placement] || 'tooltip-top',
       'transition-opacity',
       'duration-200',
+      disabled && 'opacity-50 cursor-not-allowed',
       className,
     ]
       .filter(Boolean)
       .join(' ');
 
+    // DaisyUI tooltip uses data-tip attribute for content
     return (
-      <BaseTooltip
+      <div
         ref={ref}
-        placement={placement}
-        color={color}
-        className={tailwindClasses}
-        {...restProps}
-      />
+        className={tooltipClasses}
+        data-tip={disabled ? undefined : content}
+        style={style}
+      >
+        {children}
+      </div>
     );
   }
 );

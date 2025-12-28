@@ -129,18 +129,19 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
 
   /**
    * CSS custom properties for badge styling.
+   * Uses design system tokens with fallbacks.
    */
   const cssVars: React.CSSProperties = {
     '--badge-bg': color,
-    '--badge-color': '#ffffff',
+    '--badge-color': 'var(--ds-badge-text-color, #ffffff)',
     '--badge-min-width': sizeValues.minWidth,
     '--badge-height': sizeValues.height,
     '--badge-font-size': sizeValues.fontSize,
     '--badge-dot-size': dotSize,
-    '--badge-border-radius': radius === 'full' ? 'var(--badge-radius-full, 9999px)' :
-                             radius === 'lg' ? 'var(--badge-radius-lg, 8px)' :
-                             radius === 'md' ? 'var(--badge-radius-md, 4px)' :
-                             radius === 'sm' ? 'var(--badge-radius-sm, 2px)' : 'var(--badge-radius-none, 0)',
+    '--badge-border-radius': radius === 'full' ? 'var(--ds-badge-radius-full, 9999px)' :
+                             radius === 'lg' ? 'var(--ds-badge-radius-lg, 8px)' :
+                             radius === 'md' ? 'var(--ds-badge-radius-md, 4px)' :
+                             radius === 'sm' ? 'var(--ds-badge-radius-sm, 2px)' : 'var(--ds-badge-radius-none, 0)',
   } as React.CSSProperties;
 
   /**
@@ -214,10 +215,10 @@ export default function ApolloBadge(props: BadgeProps): React.ReactElement {
     fontWeight: 500,
     lineHeight: 1,
     borderRadius: 'var(--badge-border-radius)',
-    border: bordered ? '2px solid #fff' : 'none',
+    border: bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : 'none',
     boxShadow: bordered ? `0 0 0 1px ${color}` : 'none',
     cursor: clickable || onClick ? 'pointer' : 'default',
-    transition: 'all 0.2s ease-in-out',
+    transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',
     userSelect: 'none',
     ...getStyleVariation(),
   };

@@ -714,16 +714,31 @@
 
   /* Badge Sizes */
   --ds-badge-xs-height: 0.875rem;
+  --ds-badge-xs-min-width: 0.875rem;
   --ds-badge-xs-font-size: 0.5625rem;
 
   --ds-badge-sm-height: 1rem;
+  --ds-badge-sm-min-width: 1rem;
   --ds-badge-sm-font-size: 0.625rem;
 
   --ds-badge-md-height: 1.25rem;
+  --ds-badge-md-min-width: 1.25rem;
   --ds-badge-md-font-size: 0.75rem;
 
   --ds-badge-lg-height: 1.5rem;
+  --ds-badge-lg-min-width: 1.5rem;
   --ds-badge-lg-font-size: 0.875rem;
+
+  --ds-badge-xl-height: 1.75rem;
+  --ds-badge-xl-min-width: 1.75rem;
+  --ds-badge-xl-font-size: 1rem;
+
+  /* Badge Dot Sizes */
+  --ds-badge-dot-xs-size: 0.375rem;
+  --ds-badge-dot-sm-size: 0.5rem;
+  --ds-badge-dot-md-size: 0.625rem;
+  --ds-badge-dot-lg-size: 0.75rem;
+  --ds-badge-dot-xl-size: 0.875rem;
 
   /* Badge Variants */
   --ds-badge-default-bg: var(--ds-color-neutral-400);
@@ -749,25 +764,50 @@
 
   /* Badge Common */
   --ds-badge-radius: var(--ds-radius-full);
+  --ds-badge-border-radius: var(--ds-radius-full);
+  --ds-badge-padding: 0 0.5rem;
   --ds-badge-padding-x: 0.375rem;
   --ds-badge-font-weight: var(--ds-font-weight-medium);
+  --ds-badge-text-color: var(--ds-color-white);
+  --ds-badge-border-width: 2px;
+  --ds-badge-border-color: var(--ds-color-white);
+  --ds-badge-transition: var(--ds-transition-fast);
+  --ds-badge-z-index: 1;
+
+  /* Badge Radius Variants */
+  --ds-badge-radius-none: 0;
+  --ds-badge-radius-sm: var(--ds-radius-sm);
+  --ds-badge-radius-md: var(--ds-radius-md);
+  --ds-badge-radius-lg: var(--ds-radius-lg);
+  --ds-badge-radius-full: var(--ds-radius-full);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TAG
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Tag Sizes */
+  --ds-tag-xs-height: 1rem;
+  --ds-tag-xs-padding: 0 0.375rem;
+  --ds-tag-xs-font-size: 0.6875rem;
+
   --ds-tag-sm-height: 1.25rem;
+  --ds-tag-sm-padding: 0 0.5rem;
   --ds-tag-sm-padding-x: 0.5rem;
   --ds-tag-sm-font-size: 0.75rem;
 
   --ds-tag-md-height: 1.5rem;
+  --ds-tag-md-padding: 0 0.625rem;
   --ds-tag-md-padding-x: 0.625rem;
   --ds-tag-md-font-size: 0.8125rem;
 
   --ds-tag-lg-height: 1.75rem;
+  --ds-tag-lg-padding: 0 0.75rem;
   --ds-tag-lg-padding-x: 0.75rem;
   --ds-tag-lg-font-size: 0.875rem;
+
+  --ds-tag-xl-height: 2rem;
+  --ds-tag-xl-padding: 0 0.875rem;
+  --ds-tag-xl-font-size: 1rem;
 
   /* Tag Variants */
   --ds-tag-default-bg: var(--ds-color-neutral-100);
@@ -777,6 +817,10 @@
   --ds-tag-primary-bg: var(--ds-color-primary-50);
   --ds-tag-primary-color: var(--ds-color-primary-700);
   --ds-tag-primary-border: var(--ds-color-primary-200);
+
+  --ds-tag-secondary-bg: var(--ds-color-secondary-50);
+  --ds-tag-secondary-color: var(--ds-color-secondary-700);
+  --ds-tag-secondary-border: var(--ds-color-secondary-200);
 
   --ds-tag-success-bg: var(--ds-color-success-50);
   --ds-tag-success-color: var(--ds-color-success-700);
@@ -793,6 +837,14 @@
   /* Tag Common */
   --ds-tag-radius: var(--ds-radius-sm);
   --ds-tag-font-weight: var(--ds-font-weight-medium);
+  --ds-tag-transition: var(--ds-transition-fast);
+
+  /* Tag Radius Variants */
+  --ds-tag-radius-none: 0;
+  --ds-tag-radius-sm: var(--ds-radius-xs);
+  --ds-tag-radius-md: var(--ds-radius-sm);
+  --ds-tag-radius-lg: var(--ds-radius-md);
+  --ds-tag-radius-full: var(--ds-radius-full);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      ALERT
@@ -827,6 +879,8 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      TOOLTIP
      ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Tooltip Base */
   --ds-tooltip-bg: var(--ds-color-neutral-900);
   --ds-tooltip-color: var(--ds-color-white);
   --ds-tooltip-radius: var(--ds-radius-md);
@@ -834,6 +888,29 @@
   --ds-tooltip-font-size: var(--ds-font-size-sm);
   --ds-tooltip-shadow: var(--ds-shadow-md);
   --ds-tooltip-max-width: 300px;
+  --ds-tooltip-z-index: 1070;
+  --ds-tooltip-arrow-size: 6px;
+  --ds-tooltip-offset: 8px;
+  --ds-tooltip-transition: var(--ds-transition-fast);
+
+  /* Tooltip Color Variants */
+  --ds-tooltip-default-bg: var(--ds-color-neutral-900);
+  --ds-tooltip-default-color: var(--ds-color-white);
+
+  --ds-tooltip-primary-bg: var(--ds-color-primary-500);
+  --ds-tooltip-primary-color: var(--ds-color-white);
+
+  --ds-tooltip-secondary-bg: var(--ds-color-secondary-500);
+  --ds-tooltip-secondary-color: var(--ds-color-white);
+
+  --ds-tooltip-success-bg: var(--ds-color-success-500);
+  --ds-tooltip-success-color: var(--ds-color-white);
+
+  --ds-tooltip-warning-bg: var(--ds-color-warning-500);
+  --ds-tooltip-warning-color: var(--ds-color-neutral-900);
+
+  --ds-tooltip-error-bg: var(--ds-color-error-500);
+  --ds-tooltip-error-color: var(--ds-color-white);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      CHECKBOX & RADIO
