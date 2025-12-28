@@ -88,7 +88,6 @@ export { IMAGE_DEFAULTS, RADIUS_MAP } from './types';
 export { ImageFallback, ImageSkeleton };
 
 // Export base component
-export { BaseImage } from './base';
 
 /**
  * Image component with engine-aware rendering.

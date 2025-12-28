@@ -131,7 +131,6 @@ export { RATE_DEFAULTS, RATE_SIZE_MAP } from './types';
  * Prefer using the main Rate export which includes engine support.
  * @see {@link BaseRate}
  */
-export { BaseRate } from './base';
 
 // ============================================================================
 // Main Component

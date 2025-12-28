@@ -170,7 +170,6 @@ export { GridItem };
 /**
  * Re-export base components for custom extensions.
  */
-export { BaseGrid, BaseGridItem } from './base';
 
 // ============================================================================
 // UTILITY FUNCTION EXPORTS
@@ -188,7 +187,6 @@ export {
   resolveGap,
   resolveColumns,
   getResponsiveColumnsStyles,
-} from './base';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

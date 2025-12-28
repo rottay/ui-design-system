@@ -106,7 +106,6 @@ export { ButtonGroup, ButtonIcon };
 export type { ButtonGroupProps, ButtonIconProps } from './compound';
 
 // Export base component
-export { BaseButton } from './base';
 
 // Create engine-aware Button component with compound components attached
 export const Button = Object.assign(

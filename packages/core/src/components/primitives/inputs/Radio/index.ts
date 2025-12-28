@@ -109,7 +109,6 @@ export {
   RADIO_GROUP_DEFAULTS,
 } from './types';
 
-export { BaseRadio } from './base';
 export { RadioGroup } from './compound';
 
 export const Radio = Object.assign(

@@ -137,7 +137,6 @@ export { StepperStep, StepperContent };
 // Base Component Export
 // ============================================================================
 
-export { BaseStepper } from './base';
 
 // ============================================================================
 // Main Component

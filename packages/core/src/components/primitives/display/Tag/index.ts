@@ -80,7 +80,6 @@ export { TagGroup };
 export type { TagGroupProps } from './compound';
 
 // Export base component
-export { BaseTag } from './base';
 
 /**
  * Tag component with engine-aware rendering.

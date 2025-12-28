@@ -72,7 +72,6 @@ export type { EmptyProps, EmptyImageType } from './types';
 export { EMPTY_DEFAULTS } from './types';
 
 // Export base component for direct use or extension
-export { BaseEmpty, DefaultImage, SimpleImage } from './base';
 
 /**
  * Empty component with engine awareness.

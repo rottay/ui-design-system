@@ -135,7 +135,6 @@ export { LINK_DEFAULTS, LINK_TYPE_COLORS } from './types';
 // Base Component Export
 // ============================================================================
 
-export { BaseLink } from './base';
 
 // ============================================================================
 // Main Component

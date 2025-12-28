@@ -116,7 +116,6 @@ export { INPUT_DEFAULTS } from './types';
 export { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea };
 
 // Export base component
-export { BaseInput } from './base';
 
 // Create engine-aware Input component
 export const Input = Object.assign(

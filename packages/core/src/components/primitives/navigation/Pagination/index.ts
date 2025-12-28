@@ -127,7 +127,6 @@ export { type PaginationProps, type PaginationSize, PAGINATION_DEFAULTS } from '
 // Base Component Export
 // ============================================================================
 
-export { BasePagination } from './base';
 
 // ============================================================================
 // Main Component

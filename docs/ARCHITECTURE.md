@@ -31,7 +31,63 @@
                  76 total (228 engine implementations)
 ```
 
-### 1.2 Engine System
+### 1.2 Component Folder Structure - CRÍTICO
+
+Cada componente tiene la siguiente estructura. **NO hay carpeta `base/`** - fue eliminada por ser código muerto.
+
+```
+ComponentName/
+├── index.ts           → Factory + exports (createEngineComponent)
+├── types/
+│   └── index.ts       → Props compartidos por todos los engines
+├── compound/          → Layout wrappers (1 sola versión, compartida)
+│   ├── index.ts       → Exports de subcomponentes
+│   └── Group/         → Ej: Button.Group, Avatar.Group
+│       └── index.tsx  → Usa CSS variables var(--ds-*)
+└── engines/           → 3 implementaciones DIFERENTES
+    ├── index.ts       → Barrel export
+    ├── titan/         → Wrapper de Ant Design
+    │   └── index.tsx  → Usa componentes antd
+    ├── hermes/        → Wrapper de DaisyUI/Tailwind
+    │   └── index.tsx  → Usa clases .btn, .card, etc.
+    └── apollo/        → CSS puro inline
+        └── index.tsx  → Usa styles con var(--ds-*)
+```
+
+**Flujo de renderizado:**
+
+```
+Usuario: <Avatar size="lg" />
+            ↓
+index.ts: createEngineComponent('Avatar', { titan, hermes, apollo })
+            ↓
+factory: useEngineContext() → ¿Qué engine está activo?
+            ↓
+      ┌─────┴─────┬───────────┐
+      ↓           ↓           ↓
+   titan/      hermes/     apollo/
+   index.tsx   index.tsx   index.tsx
+      ↓           ↓           ↓
+   <AntAvatar>  <div class=  <div style=
+                "avatar">    "var(--ds-*)">
+```
+
+**¿Por qué NO hay `base/`?**
+
+| Antes (incorrecto) | Ahora (correcto) |
+|--------------------|------------------|
+| `base/` = implementación CSS con var() | Apollo = fallback vanilla |
+| Apollo = duplicaba base con hardcoded | Apollo = usa var(--ds-*) |
+| Código muerto, nunca usado | Sin duplicación |
+
+**compound/ vs engines/:**
+
+| Carpeta | Cambia entre engines? | Propósito |
+|---------|----------------------|-----------|
+| `compound/` | ❌ NO | Layout wrappers (Group, Item) |
+| `engines/` | ✅ SÍ | Implementación por librería |
+
+### 1.3 Engine System
 
 | Engine | Library | Files |
 |--------|---------|-------|
@@ -39,7 +95,7 @@
 | **Hermes** | Tailwind 4.x / DaisyUI | 76 components + theme.css (1,047 lines) |
 | **Apollo** | Vanilla CSS | 76 components + theme.css (1,087 lines) |
 
-### 1.3 Token System (CSS Cascade) - IMPORTANTE
+### 1.4 Token System (CSS Cascade) - IMPORTANTE
 
 **Concepto clave:** Los valores hardcodeados van en `default.css` y `tenants/`. Los engines SOLO usan `var(--ds-*)`.
 
@@ -123,7 +179,7 @@ html[data-tenant] .ant-btn-primary {
 | `tenants/{name}/index.css` | Valores hardcodeados (overrides) | Personalización por marca |
 | `engines/{name}/theme.css` | Solo `var(--ds-*)` | Mapeo a clases de librería |
 
-### 1.4 Tenant Detection Flow
+### 1.5 Tenant Detection Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -146,7 +202,7 @@ html[data-tenant] .ant-btn-primary {
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 1.5 Key Files
+### 1.6 Key Files
 
 | File | Purpose | Lines |
 |------|---------|-------|
@@ -177,12 +233,20 @@ html[data-tenant] .ant-btn-primary {
 
 | Area | Status | Problem |
 |------|--------|---------|
+| **Engine Hardcoding** | ❌ | Engines usan valores hardcodeados (#fff, #0066cc) en vez de var(--ds-*) |
 | Titan Engine Depth | ⚠️ | 70-80% are shallow wrappers, not real customizations |
 | Ant Design 5.x API | ❌ | NOT using ConfigProvider/Design Token API |
 | TypeScript Quality | ⚠️ | 18 components use `as any` |
 | Tenant Auto-Detection | ❌ | TODO in DesignSystemProvider not implemented |
 | data-tenant Auto-Set | ❌ | Must be set manually on HTML element |
 | Backend API Docs | ❌ | No documentation for expected API contract |
+
+### 2.3 Cleanup Done
+
+| Date | Change | Impact |
+|------|--------|--------|
+| 2025-12-28 | Eliminadas 60 carpetas `base/` | -60 files, Apollo es el fallback vanilla |
+| 2025-12-28 | Removidos exports de Base* en index.ts | 39 files limpiados |
 
 ---
 

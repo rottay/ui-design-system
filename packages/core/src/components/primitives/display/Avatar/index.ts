@@ -90,7 +90,6 @@ export { AvatarGroup, AvatarBadge, AvatarFallback };
 export type { AvatarGroupProps, AvatarBadgeProps, BadgeStatus, AvatarFallbackProps } from './compound';
 
 // Export base component
-export { BaseAvatar } from './base';
 
 /**
  * Avatar component with multi-engine support.

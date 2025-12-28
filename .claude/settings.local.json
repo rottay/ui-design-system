@@ -70,7 +70,9 @@
       "Bash(sleep:*)",
       "Read(//c/Users/Emmanuel/AppData/Local/npm-cache/_logs/**)",
       "Read(//c/Users/Emmanuel/Github/bithire/**)",
-      "Read(//c/Users/Emmanuel/Github/desing-system/**)"
+      "Read(//c/Users/Emmanuel/Github/desing-system/**)",
+      "WebFetch(domain:ant.design)",
+      "WebFetch(domain:daisyui.com)"
     ],
     "deny": [],
     "ask": []

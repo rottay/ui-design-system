@@ -104,7 +104,6 @@ export { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, COLOR_MAP, RADIUS
 export { CheckboxGroup };
 
 // Export base component
-export { BaseCheckbox } from './base';
 
 // Create engine-aware Checkbox component
 export const Checkbox = Object.assign(

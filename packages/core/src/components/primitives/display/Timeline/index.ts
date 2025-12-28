@@ -105,7 +105,6 @@ export { TimelineItem };
 export type { TimelineItemProps as TimelineItemComponentProps } from './compound';
 
 // Export base component
-export { BaseTimeline, BaseTimelineItem } from './base';
 
 // Create engine-aware Timeline component
 export const Timeline = Object.assign(

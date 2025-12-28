@@ -154,7 +154,6 @@ export {
   buildStackStyles,
   filterStackProps,
   renderStackChildren,
-} from './base';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

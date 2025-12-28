@@ -45,20 +45,11 @@
 // Compound Component Exports
 // ============================================================================
 
-/**
- * FloatButtonGroup - Groups multiple float buttons with expandable trigger.
- * @see {@link FloatButtonGroupProps}
- */
-export { BaseGroup as FloatButtonGroup } from '../base';
-
-/**
- * FloatButtonBackTop - Scroll-to-top button with visibility threshold.
- * @see {@link FloatButtonBackTopProps}
- */
-export { BaseBackTop as FloatButtonBackTop } from '../base';
-
 // ============================================================================
 // Type Exports
 // ============================================================================
 
 export type { FloatButtonGroupProps, FloatButtonBackTopProps } from '../types';
+
+// TODO: FloatButtonGroup and FloatButtonBackTop need engine-based implementations
+// These were previously in base/ which has been removed

@@ -194,7 +194,6 @@ export { MenuItem, MenuGroup, MenuSubMenu, MenuDivider };
 // Base Component Export
 // ============================================================================
 
-export { BaseMenu } from './base';
 
 // ============================================================================
 // Main Component

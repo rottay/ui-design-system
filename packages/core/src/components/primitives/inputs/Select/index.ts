@@ -125,7 +125,6 @@ export {
 export { SelectOption, SelectOptGroup };
 
 // Export base component
-export { BaseSelect } from './base';
 
 // Create engine-aware Select component
 export const Select = Object.assign(

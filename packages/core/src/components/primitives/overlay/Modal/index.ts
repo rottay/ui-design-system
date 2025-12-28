@@ -158,7 +158,6 @@ export { FocusTrap, useFocusTrap } from './utils/FocusTrap';
 export type { FocusTrapProps } from './utils/FocusTrap';
 
 // Export base component
-export { BaseModal } from './base';
 
 /**
  * Modal component with multi-engine support.

@@ -135,7 +135,6 @@ export {
 /**
  * Re-export base component for custom extensions.
  */
-export { BaseDivider } from './base';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

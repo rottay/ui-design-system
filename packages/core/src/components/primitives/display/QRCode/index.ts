@@ -89,7 +89,6 @@ export type {
 export { QRCODE_DEFAULTS, SIZE_MAP } from './types';
 
 // Export base component
-export { BaseQRCode } from './base';
 
 /**
  * Create engine-aware QRCode component.

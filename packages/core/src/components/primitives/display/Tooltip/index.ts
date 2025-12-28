@@ -94,7 +94,6 @@ export { TOOLTIP_DEFAULTS, PLACEMENT_MAP } from './types';
 export { TooltipTrigger, TooltipContent };
 
 // Export base component
-export { BaseTooltip } from './base';
 
 /**
  * Tooltip component with engine-aware rendering.

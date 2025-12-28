@@ -184,7 +184,6 @@ export type { ToastContainerProps } from './compound';
 // Base Component Export
 // ============================================================================
 
-export { BaseToast } from './base';
 
 // ============================================================================
 // Utility Exports

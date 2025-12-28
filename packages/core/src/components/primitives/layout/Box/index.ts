@@ -132,7 +132,6 @@ export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './types';
  * Re-export base component and utility functions.
  * These can be used to create custom Box variants or extend functionality.
  */
-export { BaseBox, buildBoxStyles, filterBoxProps } from './base';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

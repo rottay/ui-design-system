@@ -88,7 +88,6 @@ export {
 } from './types';
 
 // Export base component for direct access
-export { BaseBadge } from './base';
 
 /**
  * Badge component with automatic engine selection.

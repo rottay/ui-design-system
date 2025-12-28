@@ -90,7 +90,6 @@ export { STATISTIC_DEFAULTS, CSS_VARS } from './types';
 export { Countdown };
 
 // Re-export base component for custom implementations
-export { BaseStatistic, formatNumber } from './base';
 
 /**
  * Statistic component for displaying numerical data.

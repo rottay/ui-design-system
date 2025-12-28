@@ -87,7 +87,6 @@ export {
   COLOR_MAP,
 } from './types';
 
-export { BaseToggle } from './base';
 
 export const Toggle = createEngineComponent<ToggleProps>('Toggle', {
   titan: () => import('./engines/titan'),

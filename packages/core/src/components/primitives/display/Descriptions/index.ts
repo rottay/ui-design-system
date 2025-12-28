@@ -89,7 +89,6 @@ export { DESCRIPTIONS_DEFAULTS, SIZE_MAP, PADDING_MAP } from './types';
 export { DescriptionsItem };
 
 // Re-export base component
-export { BaseDescriptions, BaseDescriptionsItem } from './base';
 
 /**
  * Engine-aware Descriptions component.

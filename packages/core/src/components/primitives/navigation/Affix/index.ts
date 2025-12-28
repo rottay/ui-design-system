@@ -142,7 +142,6 @@ export { AFFIX_DEFAULTS } from './types';
 // Base Component Export
 // ============================================================================
 
-export { BaseAffix } from './base';
 
 // ============================================================================
 // Main Component

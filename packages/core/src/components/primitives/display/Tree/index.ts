@@ -96,7 +96,6 @@ export { TreeNode };
 export type { TreeNodeProps as TreeNodeComponentProps } from './compound';
 
 // Export base component for custom implementations
-export { BaseTree } from './base';
 
 /**
  * Create engine-aware Tree component.

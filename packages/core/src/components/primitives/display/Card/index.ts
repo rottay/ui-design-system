@@ -88,7 +88,6 @@ export { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from './types';
 export { CardHeader, CardBody, CardFooter, CardImage };
 
 // Export base component
-export { BaseCard } from './base';
 
 /**
  * Card component with engine-aware routing.

@@ -122,7 +122,6 @@ export type { AlertDescriptionProps } from './compound';
 // ============================================================================
 
 /** Base Alert component for fallback/SSR scenarios */
-export { BaseAlert } from './base';
 
 // ============================================================================
 // Main Component

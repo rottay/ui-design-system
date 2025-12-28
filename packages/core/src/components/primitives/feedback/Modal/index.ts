@@ -181,7 +181,6 @@ export { ModalHeader, ModalBody, ModalFooter, ModalCloseButton };
 // Base Component Export
 // ============================================================================
 
-export { BaseModal } from './base';
 
 // ============================================================================
 // Main Component

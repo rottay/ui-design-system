@@ -99,7 +99,6 @@ export { CarouselItem };
 export type { CarouselItemComponentProps } from './compound';
 
 // Export base component for direct usage
-export { BaseCarousel } from './base';
 
 /**
  * Carousel Component

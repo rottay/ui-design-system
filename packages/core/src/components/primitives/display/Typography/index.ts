@@ -100,7 +100,6 @@ export { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP } from './types';
 export { TypographyHeading, TypographyText, TypographyParagraph };
 
 // Export base components for direct usage or extension
-export { BaseHeading, BaseText, BaseParagraph } from './base';
 
 // Standalone exports with shorter names
 export { TypographyHeading as Heading };
