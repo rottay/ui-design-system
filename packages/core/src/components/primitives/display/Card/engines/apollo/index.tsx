@@ -1,10 +1,56 @@
 /**
- * @fileoverview Card - Apollo Engine Implementation
- * @description Pure HTML/CSS implementation of the Card component.
- * Provides maximum accessibility and zero external dependencies.
+ * @fileoverview Card Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS card implementation with zero dependencies.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/engines/apollo
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * This engine provides a lightweight, dependency-free card using only
+ * inline styles and semantic HTML for maximum accessibility.
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - Uses semantic HTML with ARIA attributes
+ * - Spinner overlay for loading state
+ * - Full keyboard navigation support
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility (ARIA, keyboard)
+ *
+ * **Accessibility Features:**
+ * - `role="button"` for clickable cards
+ * - `tabIndex` for keyboard navigation
+ * - `aria-busy` for loading state
+ * - `aria-label` for loading overlay
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Card } from '@rottay/design-system';
+ *
+ * <Card engine="apollo" title="Card Title">
+ *   <p>Card content</p>
+ * </Card>
+ * ```
+ *
+ * @example Accessible Clickable Card
+ * ```tsx
+ * <Card
+ *   engine="apollo"
+ *   clickable
+ *   onClick={() => navigate('/details')}
+ *   title="Click to view details"
+ * >
+ *   <p>Fully keyboard accessible</p>
+ * </Card>
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @see {@link BaseCard} for CSS variable implementation
+ * @module ApolloCard
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

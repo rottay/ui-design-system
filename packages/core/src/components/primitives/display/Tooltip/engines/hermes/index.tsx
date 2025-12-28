@@ -1,10 +1,44 @@
 /**
- * Tooltip - Hermes Engine Implementation
- * Uses DaisyUI/Tailwind CSS for lightweight, utility-first tooltip styling.
+ * @fileoverview Tooltip Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based tooltip with utility classes.
+ * Part of the Rottay Design System's display primitives collection.
  *
+ * @remarks
+ * This engine uses DaisyUI's tooltip component classes with Tailwind utilities
+ * for lightweight, utility-first tooltip rendering.
+ *
+ * **Implementation Details:**
+ * - Uses DaisyUI `tooltip` class for container
+ * - Uses `tooltip-{position}` for placement
+ * - Uses `tooltip-{color}` for color variants
+ * - Extends BaseTooltip for core functionality
+ *
+ * **Class Mappings:**
+ * - `tooltip-top`, `tooltip-bottom`, `tooltip-left`, `tooltip-right`
+ * - `tooltip-primary`, `tooltip-secondary`, `tooltip-success`, etc.
+ * - `transition-opacity`, `duration-200` for animations
+ *
+ * **Advantages:**
+ * - CSS-only implementation
+ * - Smallest bundle impact
+ * - Tailwind utility compatibility
+ * - DaisyUI theme integration
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Tooltip } from '@rottay/design-system';
+ *
+ * <Tooltip engine="hermes" content="DaisyUI tooltip" color="primary">
+ *   <Button>Hover me</Button>
+ * </Tooltip>
+ * ```
+ *
+ * @see {@link Tooltip} for the main component
+ * @see {@link BaseTooltip} for CSS variable implementation
+ * @see {@link https://daisyui.com/components/tooltip/} DaisyUI Tooltip
  * @module Tooltip/engines/hermes
- * @description Hermes engine implementation using DaisyUI and Tailwind CSS.
- * Provides a lightweight alternative with Tailwind utility classes.
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,0 +1,226 @@
+/**
+ * Collapse Engine Styles - Rottay Design System
+ *
+ * Engine-agnostic CSS that bridges design tokens to underlying library components.
+ * Uses CSS custom properties set by the token system to style inner elements.
+ *
+ * Targets:
+ * - .ds-collapse: Token wrapper (receives CSS custom properties)
+ * - .ant-collapse-*: Ant Design internal classes (Titan engine)
+ * - [data-collapse-*]: DaisyUI/custom attributes (Hermes engine)
+ * - Native elements: For Apollo (vanilla) engine
+ */
+
+/* =============================================================================
+   BASE COLLAPSE STYLES
+   Applied to the wrapper element that receives tokens
+   ============================================================================= */
+
+.ds-collapse {
+  /* Reset any inherited styles */
+  box-sizing: border-box;
+
+  /* Apply root tokens */
+  background: var(--ds-collapse-root-bg);
+  border-color: var(--ds-collapse-root-border-color);
+  border-width: var(--ds-collapse-root-border-width);
+  border-style: solid;
+  border-radius: var(--ds-collapse-root-border-radius);
+  box-shadow: var(--ds-collapse-root-shadow);
+
+  /* Ensure full width */
+  width: 100%;
+
+  /* Container for inner engine component */
+  overflow: hidden;
+}
+
+/* =============================================================================
+   ANT DESIGN OVERRIDES (TITAN ENGINE)
+   Override Ant Design's default styles with our tokens
+   ============================================================================= */
+
+/* Reset Ant Design's outer border - we handle it on wrapper */
+.ds-collapse .ant-collapse {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+}
+
+/* Collapse header styling */
+.ds-collapse .ant-collapse-header {
+  background: var(--ds-collapse-header-default-idle-bg) !important;
+  color: var(--ds-collapse-header-default-idle-color) !important;
+  padding: var(--ds-collapse-header-padding-y) var(--ds-collapse-header-padding-x) !important;
+  font-size: var(--ds-collapse-header-font-size) !important;
+  font-weight: var(--ds-collapse-header-default-idle-font-weight);
+  line-height: var(--ds-collapse-header-default-idle-line-height);
+  cursor: pointer;
+  transition: var(--ds-collapse-transition);
+  border-bottom: 1px solid var(--ds-collapse-header-default-idle-border-color);
+}
+
+.ds-collapse .ant-collapse-header:hover {
+  background: var(--ds-collapse-header-default-hover-bg) !important;
+  color: var(--ds-collapse-header-default-hover-color) !important;
+}
+
+.ds-collapse .ant-collapse-header:focus-visible {
+  outline: var(--ds-collapse-header-default-focus-outline);
+  outline-offset: var(--ds-collapse-header-default-focus-outline-offset);
+}
+
+.ds-collapse .ant-collapse-header:active {
+  background: var(--ds-collapse-header-default-active-bg) !important;
+}
+
+/* Expanded header state */
+.ds-collapse .ant-collapse-item-active .ant-collapse-header {
+  background: var(--ds-collapse-header-default-expanded-bg) !important;
+  color: var(--ds-collapse-header-default-expanded-color) !important;
+  border-color: var(--ds-collapse-header-default-expanded-border-color);
+}
+
+/* Disabled header state */
+.ds-collapse .ant-collapse-item-disabled .ant-collapse-header {
+  background: var(--ds-collapse-header-default-disabled-bg) !important;
+  color: var(--ds-collapse-header-default-disabled-color) !important;
+  cursor: not-allowed;
+  opacity: var(--ds-collapse-header-default-disabled-opacity);
+}
+
+/* Collapse content styling */
+.ds-collapse .ant-collapse-content {
+  background: var(--ds-collapse-content-default-idle-bg) !important;
+  color: var(--ds-collapse-content-default-idle-color) !important;
+  border-top: none;
+}
+
+.ds-collapse .ant-collapse-content-box {
+  padding: var(--ds-collapse-content-padding-y) var(--ds-collapse-content-padding-x) !important;
+  font-size: var(--ds-collapse-content-default-idle-font-size);
+  line-height: var(--ds-collapse-content-default-idle-line-height);
+}
+
+/* Expand icon styling */
+.ds-collapse .ant-collapse-expand-icon {
+  color: var(--ds-collapse-icon-default-idle-color);
+  transition: var(--ds-collapse-icon-default-idle-transition);
+}
+
+.ds-collapse .ant-collapse-expand-icon svg {
+  width: var(--ds-collapse-icon-size);
+  height: var(--ds-collapse-icon-size);
+}
+
+.ds-collapse .ant-collapse-item-active .ant-collapse-expand-icon {
+  color: var(--ds-collapse-icon-default-expanded-color);
+}
+
+.ds-collapse .ant-collapse-item-disabled .ant-collapse-expand-icon {
+  color: var(--ds-collapse-icon-default-disabled-color);
+}
+
+/* Panel borders */
+.ds-collapse .ant-collapse-item {
+  border-bottom: 1px solid var(--ds-collapse-header-default-idle-border-color);
+}
+
+.ds-collapse .ant-collapse-item:last-child {
+  border-bottom: none;
+}
+
+.ds-collapse .ant-collapse-item:last-child .ant-collapse-header {
+  border-radius: 0 0 var(--ds-collapse-root-border-radius) var(--ds-collapse-root-border-radius);
+}
+
+.ds-collapse .ant-collapse-item:first-child .ant-collapse-header {
+  border-radius: var(--ds-collapse-root-border-radius) var(--ds-collapse-root-border-radius) 0 0;
+}
+
+/* =============================================================================
+   GHOST VARIANT
+   ============================================================================= */
+
+.ds-collapse--ghost {
+  background: var(--ds-collapse-root-ghost-idle-bg);
+  border: none;
+  box-shadow: none;
+}
+
+.ds-collapse--ghost .ant-collapse-header {
+  background: var(--ds-collapse-header-ghost-idle-bg) !important;
+  color: var(--ds-collapse-header-ghost-idle-color) !important;
+  border-bottom: none;
+  padding: var(--ds-collapse-header-ghost-idle-padding-y) var(--ds-collapse-header-ghost-idle-padding-x) !important;
+}
+
+.ds-collapse--ghost .ant-collapse-header:hover {
+  background: var(--ds-collapse-header-ghost-hover-bg) !important;
+  color: var(--ds-collapse-header-ghost-hover-color) !important;
+}
+
+.ds-collapse--ghost .ant-collapse-content {
+  background: var(--ds-collapse-content-ghost-idle-bg) !important;
+  color: var(--ds-collapse-content-ghost-idle-color) !important;
+}
+
+.ds-collapse--ghost .ant-collapse-content-box {
+  padding: var(--ds-collapse-content-ghost-idle-padding-y) var(--ds-collapse-content-ghost-idle-padding-x) !important;
+}
+
+.ds-collapse--ghost .ant-collapse-item {
+  border-bottom: none;
+}
+
+/* =============================================================================
+   BORDERED VARIANT
+   ============================================================================= */
+
+.ds-collapse--bordered {
+  background: var(--ds-collapse-root-bordered-idle-bg);
+  border-color: var(--ds-collapse-root-bordered-idle-border-color);
+}
+
+/* =============================================================================
+   SIZE VARIANTS
+   ============================================================================= */
+
+/* Small size */
+.ds-collapse--small .ant-collapse-header {
+  padding: var(--ds-collapse-size-small-header-padding-y) var(--ds-collapse-size-small-header-padding-x) !important;
+  font-size: var(--ds-collapse-size-small-header-font-size) !important;
+}
+
+.ds-collapse--small .ant-collapse-content-box {
+  padding: var(--ds-collapse-size-small-content-padding-y) var(--ds-collapse-size-small-content-padding-x) !important;
+}
+
+.ds-collapse--small .ant-collapse-expand-icon svg {
+  width: var(--ds-collapse-size-small-icon-size);
+  height: var(--ds-collapse-size-small-icon-size);
+}
+
+/* Large size */
+.ds-collapse--large .ant-collapse-header {
+  padding: var(--ds-collapse-size-large-header-padding-y) var(--ds-collapse-size-large-header-padding-x) !important;
+  font-size: var(--ds-collapse-size-large-header-font-size) !important;
+}
+
+.ds-collapse--large .ant-collapse-content-box {
+  padding: var(--ds-collapse-size-large-content-padding-y) var(--ds-collapse-size-large-content-padding-x) !important;
+}
+
+.ds-collapse--large .ant-collapse-expand-icon svg {
+  width: var(--ds-collapse-size-large-icon-size);
+  height: var(--ds-collapse-size-large-icon-size);
+}
+
+/* =============================================================================
+   DISABLED STATE
+   ============================================================================= */
+
+.ds-collapse--disabled {
+  pointer-events: none;
+  opacity: var(--ds-collapse-header-default-disabled-opacity);
+}

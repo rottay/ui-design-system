@@ -1,18 +1,61 @@
 /**
- * TimePicker Types
+ * @fileoverview TimePicker Component Types - Rottay Design System
+ * @description Type definitions for the TimePicker component including time formats,
+ * step intervals, disabled time configuration, and range selection.
  *
- * Type definitions for the TimePicker component and its variants.
+ * @remarks
+ * The TimePicker types provide comprehensive configuration for:
+ * - Time formats: 12-hour (AM/PM) or 24-hour format
+ * - Step intervals: Custom steps for hours, minutes, seconds
+ * - Range selection: Start and end time pairs
+ * - Validation: Disabled times, status indicators
+ * - Customization: Icons, cell rendering, footer
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   TimePickerProps,
+ *   TimeRangePickerProps,
+ * } from '@rottay/design-system';
+ *
+ * const timeConfig: TimePickerProps = {
+ *   format: 'HH:mm',
+ *   hourStep: 1,
+ *   minuteStep: 15,
+ *   showSecond: false,
+ * };
+ *
+ * const rangeConfig: TimeRangePickerProps = {
+ *   placeholder: ['Start', 'End'],
+ *   separator: '→',
+ * };
+ * ```
+ *
+ * @module TimePicker/Types
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 import type { SizeType, StatusType } from '../../../../../types/common';
 
-/** Size options for the TimePicker component */
+/**
+ * Size variants for the TimePicker input.
+ */
 export type TimePickerSize = SizeType;
 
-/** Validation status for the TimePicker component */
+/**
+ * Validation status for the TimePicker.
+ */
 export type TimePickerStatus = StatusType;
 
-/** Placement options for the TimePicker dropdown */
+/**
+ * Dropdown placement options for the time picker popup.
+ *
+ * @example
+ * ```tsx
+ * <TimePicker placement="topRight" />
+ * ```
+ */
 export type TimePickerPlacement = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight';
 
 /**
@@ -138,18 +181,35 @@ export interface TimeRangePickerProps extends Omit<TimePickerProps, 'value' | 'd
   onChange?: (times: [Date | null, Date | null] | null, timeStrings: [string, string]) => void;
 }
 
+/**
+ * Default values for TimePicker props.
+ * Used across all engine implementations for consistency.
+ */
 export const TIME_PICKER_DEFAULTS: Partial<TimePickerProps> = {
+  /** Default size variant */
   size: 'default',
+  /** Allow clearing the selected time */
   allowClear: true,
+  /** Show "Now" button in footer */
   showNow: true,
+  /** Show border around input */
   bordered: true,
+  /** Default input variant */
   variant: 'outlined',
+  /** Default dropdown placement */
   placement: 'bottomLeft',
+  /** Default time format (24-hour with seconds) */
   format: 'HH:mm:ss',
+  /** Default hour step interval */
   hourStep: 1,
+  /** Default minute step interval */
   minuteStep: 1,
+  /** Default second step interval */
   secondStep: 1,
+  /** Show hour column */
   showHour: true,
+  /** Show minute column */
   showMinute: true,
+  /** Show second column */
   showSecond: true,
 };

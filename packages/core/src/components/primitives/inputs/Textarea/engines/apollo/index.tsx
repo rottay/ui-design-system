@@ -1,5 +1,53 @@
 /**
- * Textarea - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Textarea Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Textarea component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a zero-dependency textarea implementation
+ * using pure HTML and CSS classes. It includes custom character count
+ * display with full accessibility.
+ *
+ * **Pure CSS Features:**
+ * - Native textarea with custom class styling
+ * - Character count display (showCount)
+ * - Size variants via CSS classes
+ * - Status colors via CSS classes
+ * - Variant styles (outlined, filled, borderless)
+ *
+ * **CSS Classes Generated:**
+ * - `rottay-textarea` - Base class
+ * - `rottay-textarea--{size}` - Size modifier
+ * - `rottay-textarea--{variant}` - Variant modifier
+ * - `rottay-textarea--{status}` - Status modifier
+ * - `rottay-textarea--disabled` - Disabled state
+ * - `rottay-textarea--readonly` - Read-only state
+ *
+ * **Character Count:**
+ * When `showCount` is enabled, displays:
+ * - Current character count
+ * - Max length if specified (e.g., "150 / 500")
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Textarea } from '@rottay/design-system';
+ *
+ * <Textarea
+ *   engine="apollo"
+ *   placeholder="Add notes..."
+ *   rows={5}
+ *   showCount
+ *   maxLength={1000}
+ *   status="default"
+ * />
+ * ```
+ *
+ * @see {@link Textarea} for the main component
+ * @see {@link TitanTextarea} for Ant Design implementation
+ * @see {@link HermesTextarea} for DaisyUI implementation
+ * @module ApolloTextarea
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import React from 'react';

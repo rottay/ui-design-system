@@ -1,6 +1,39 @@
 /**
- * Flex Types
+ * @fileoverview Flex Types - Rottay Design System
+ * @description Type definitions for the Flex layout component.
+ * Provides comprehensive typing for flexbox direction, alignment, justification, and wrapping.
+ *
+ * @remarks
+ * The Flex component uses CSS Flexbox terminology directly, making it intuitive
+ * for developers familiar with CSS. The type system ensures valid combinations
+ * of flexbox properties while providing helpful documentation.
+ *
+ * Key type mappings:
+ * - `FlexDirection`: Maps to CSS flex-direction (row, column, row-reverse, column-reverse)
+ * - `FlexWrap`: Maps to CSS flex-wrap (nowrap, wrap, wrap-reverse)
+ * - `FlexJustify`: Maps to CSS justify-content with shorthand names
+ * - `FlexAlign`: Maps to CSS align-items with shorthand names
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { FlexProps, FlexDirection, FlexJustify } from '@rottay/design-system';
+ *
+ * // Create a custom flex wrapper
+ * interface CardRowProps extends Partial<FlexProps> {
+ *   title: string;
+ * }
+ *
+ * // Use types for state management
+ * const [direction, setDirection] = useState<FlexDirection>('row');
+ * const [justify, setJustify] = useState<FlexJustify>('between');
+ * ```
+ *
+ * @see {@link Flex} - The main Flex component
+ * @module Flex/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import type { ReactNode, CSSProperties } from 'react';
 
 export type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse';

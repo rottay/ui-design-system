@@ -1,8 +1,50 @@
 /**
- * @fileoverview Carousel Base Component
- * @description Provides the foundational carousel implementation using CSS variables
- * from design tokens. This base component is extended by engine-specific implementations.
- * @module components/primitives/display/Carousel/base
+ * @fileoverview Carousel Base Component - Rottay Design System
+ * @description Base carousel implementation using CSS custom properties.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module provides the foundation for all Carousel engine implementations.
+ * Uses CSS variables for consistent theming across the design system.
+ *
+ * **Exported Components:**
+ * - `BaseCarousel` - Main carousel with all core features
+ *
+ * **Implementation Details:**
+ * - CSS custom properties for theming
+ * - Autoplay with pause on hover
+ * - Fade and slide transitions
+ * - Vertical mode support
+ * - Imperative ref methods (goTo, next, prev)
+ * - ARIA attributes for accessibility
+ *
+ * **CSS Custom Properties Used:**
+ * - `--carousel-speed` - Transition duration
+ * - `--carousel-height` - Container height
+ * - `--carousel-arrow-bg` - Arrow background
+ * - `--carousel-arrow-border` - Arrow border
+ * - `--carousel-arrow-radius` - Arrow border radius
+ * - `--carousel-arrow-size` - Arrow dimensions
+ * - `--carousel-dot-bg` - Inactive dot color
+ * - `--carousel-dot-active-bg` - Active dot color
+ * - `--carousel-dot-width` - Dot width
+ * - `--carousel-dot-height` - Dot height
+ * - `--carousel-dots-gap` - Spacing between dots
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseCarousel } from '@rottay/design-system';
+ *
+ * <BaseCarousel autoplay dots>
+ *   <div>Slide 1</div>
+ *   <div>Slide 2</div>
+ * </BaseCarousel>
+ * ```
+ *
+ * @see {@link Carousel} for engine-aware component
+ * @module Carousel/base
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

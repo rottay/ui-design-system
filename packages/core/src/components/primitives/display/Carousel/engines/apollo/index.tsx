@@ -1,8 +1,50 @@
 /**
- * @fileoverview Carousel - Apollo Engine Implementation
- * @description Provides a vanilla HTML/CSS carousel implementation with maximum
- * accessibility and zero external dependencies. Ideal for headless usage.
- * @module components/primitives/display/Carousel/engines/apollo
+ * @fileoverview Carousel Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS carousel with maximum accessibility.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine provides a lightweight, dependency-free carousel using only
+ * inline styles and semantic HTML elements.
+ *
+ * **Exported Components:**
+ * - `Carousel` - Main carousel component
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - CSS transition-based animations
+ * - Interval-based autoplay
+ * - ARIA attributes for screen readers
+ *
+ * **Accessibility Features:**
+ * - `role="region"` on container
+ * - `aria-roledescription="carousel"` for context
+ * - `role="group"` on slides
+ * - `aria-hidden` on inactive slides
+ * - `role="tablist"` on dot navigation
+ * - Keyboard-accessible controls
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility compliance
+ * - SSR-safe implementation
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Carousel } from '@rottay/design-system';
+ *
+ * <Carousel engine="apollo" dots arrows>
+ *   <div style={{ background: '#1890ff' }}>Slide 1</div>
+ *   <div style={{ background: '#52c41a' }}>Slide 2</div>
+ * </Carousel>
+ * ```
+ *
+ * @see {@link Carousel} for the main component
+ * @module Carousel/engines/apollo
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

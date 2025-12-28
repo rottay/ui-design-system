@@ -1,42 +1,129 @@
 /**
- * Modal Component
+ * @fileoverview Modal (Overlay) Component - Rottay Design System
+ * @description A flexible modal dialog component for displaying overlay content.
+ * Supports multiple sizes, placements, backdrop options, focus trapping,
+ * and includes compound components for structured content organization.
+ * Part of the Rottay Design System's overlay primitives collection.
  *
- * A flexible modal dialog component for displaying overlay content.
- * Supports multiple sizes, placements, backdrop options, and includes
- * compound components for structured content organization.
+ * @remarks
+ * The Modal (Overlay) component provides:
+ * - Multiple size presets (xs to full)
+ * - Center, top, and bottom placements
+ * - Focus trapping for accessibility
+ * - Scroll prevention when open
+ * - Backdrop click and ESC key dismissal
+ * - Blur backdrop option
+ * - Full-screen mode
  *
- * @component
- * @example
+ * Key features:
+ * - Compound components (Modal.Header, Modal.Body, Modal.Footer, Modal.CloseButton)
+ * - Portal rendering to document body
+ * - Controlled open/close state
+ * - Smooth enter/exit animations
+ *
+ * This component supports the Rottay multi-engine architecture:
+ * - **Titan**: Wraps Ant Design Modal with full feature parity
+ * - **Hermes**: Tailwind CSS/DaisyUI modal implementation
+ * - **Apollo**: Pure CSS modal with inline styles
+ *
+ * @example Basic Modal
  * ```tsx
- * // Basic modal
- * <Modal open={isOpen} onClose={() => setIsOpen(false)}>
- *   <Modal.Header>Title</Modal.Header>
- *   <Modal.Body>Content goes here</Modal.Body>
- *   <Modal.Footer>
- *     <Button onClick={() => setIsOpen(false)}>Close</Button>
- *   </Modal.Footer>
- * </Modal>
+ * import { useState } from 'react';
+ * import { Modal, Button } from '@rottay/design-system';
  *
- * // Simple modal with title prop
+ * function Example() {
+ *   const [isOpen, setIsOpen] = useState(false);
+ *
+ *   return (
+ *     <>
+ *       <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+ *       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+ *         <Modal.Header>Title</Modal.Header>
+ *         <Modal.Body>Content goes here</Modal.Body>
+ *         <Modal.Footer>
+ *           <Button onClick={() => setIsOpen(false)}>Close</Button>
+ *         </Modal.Footer>
+ *       </Modal>
+ *     </>
+ *   );
+ * }
+ * ```
+ *
+ * @example Simple Modal with Title Prop
+ * ```tsx
+ * import { Modal } from '@rottay/design-system';
+ *
  * <Modal open={isOpen} onClose={handleClose} title="Confirmation">
  *   Are you sure you want to proceed?
  * </Modal>
+ * ```
  *
- * // Full-screen modal
+ * @example Full-Screen Modal
+ * ```tsx
+ * import { Modal } from '@rottay/design-system';
+ *
  * <Modal open={isOpen} onClose={handleClose} fullScreen>
  *   <Modal.Body>Full screen content</Modal.Body>
  * </Modal>
+ * ```
  *
- * // Modal with blur backdrop
+ * @example Modal with Blur Backdrop
+ * ```tsx
+ * import { Modal } from '@rottay/design-system';
+ *
  * <Modal open={isOpen} onClose={handleClose} blurBackdrop>
  *   <Modal.Body>Content with blurred background</Modal.Body>
  * </Modal>
  * ```
  *
+ * @example Size Variants
+ * ```tsx
+ * import { Modal } from '@rottay/design-system';
+ *
+ * // Extra small modal
+ * <Modal open={isOpen} onClose={handleClose} size="xs">
+ *   <Modal.Body>Compact dialog</Modal.Body>
+ * </Modal>
+ *
+ * // Large modal
+ * <Modal open={isOpen} onClose={handleClose} size="lg">
+ *   <Modal.Body>Spacious content area</Modal.Body>
+ * </Modal>
+ * ```
+ *
+ * @example Placement Options
+ * ```tsx
+ * import { Modal } from '@rottay/design-system';
+ *
+ * // Top-aligned modal
+ * <Modal open={isOpen} onClose={handleClose} placement="top">
+ *   <Modal.Body>Appears at top of screen</Modal.Body>
+ * </Modal>
+ * ```
+ *
+ * @example Engine Override
+ * ```tsx
+ * import { Modal } from '@rottay/design-system';
+ *
+ * // Force Hermes (Tailwind) implementation
+ * <Modal engine="hermes" open={isOpen} onClose={handleClose}>
+ *   <Modal.Header>Tailwind Modal</Modal.Header>
+ *   <Modal.Body>DaisyUI styled content</Modal.Body>
+ * </Modal>
+ * ```
+ *
+ * @see {@link Drawer} - For slide-in panel overlays
+ * @see {@link Popover} - For smaller contextual overlays
+ * @see {@link Dropdown} - For menu overlays
+ *
  * @see {@link ModalProps} for available props
  * @see {@link ModalHeaderProps} for header configuration
  * @see {@link ModalBodyProps} for body configuration
  * @see {@link ModalFooterProps} for footer configuration
+ *
+ * @module Modal
+ * @category Overlay
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

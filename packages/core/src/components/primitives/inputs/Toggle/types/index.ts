@@ -1,6 +1,38 @@
 /**
- * Toggle - Core Interface
- * Shared types and defaults for all engine implementations
+ * @fileoverview Toggle Types - Rottay Design System
+ * @description Type definitions for the Toggle component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module defines all TypeScript interfaces, types, and constants for the
+ * Toggle component. These types are shared across all engine implementations.
+ *
+ * **Exported Types:**
+ * - `ToggleProps` - Main component props interface
+ * - `ToggleSize` - Size variant type ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+ * - `ToggleVariant` - Color variant type ('default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error')
+ * - `ToggleLabelPlacement` - Label position type ('start' | 'end')
+ *
+ * **Configuration Constants:**
+ * - `TOGGLE_DEFAULTS` - Default prop values
+ * - `SIZE_MAP` - CSS variable mappings per size
+ * - `SIZE_VALUES` - Numeric values for calculations
+ * - `COLOR_MAP` - Color values for each variant
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { ToggleProps, ToggleSize, ToggleVariant } from '@rottay/design-system';
+ *
+ * interface SettingToggleProps extends Omit<ToggleProps, 'size'> {
+ *   setting: string;
+ *   size?: ToggleSize;
+ * }
+ * ```
+ *
+ * @see {@link Toggle} for the main component
+ * @module ToggleTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import type { EngineAwareProps } from '../../../../../types';
@@ -66,11 +98,11 @@ export interface ToggleProps extends EngineAwareProps {
 
 // Size mappings (using CSS variables from tokens)
 export const SIZE_MAP: Record<ToggleSize, { width: string; height: string; dot: string }> = {
-  xs: { width: 'var(--toggle-xs-width)', height: 'var(--toggle-xs-height)', dot: 'var(--toggle-xs-dot)' },
-  sm: { width: 'var(--toggle-sm-width)', height: 'var(--toggle-sm-height)', dot: 'var(--toggle-sm-dot)' },
-  md: { width: 'var(--toggle-md-width)', height: 'var(--toggle-md-height)', dot: 'var(--toggle-md-dot)' },
-  lg: { width: 'var(--toggle-lg-width)', height: 'var(--toggle-lg-height)', dot: 'var(--toggle-lg-dot)' },
-  xl: { width: 'var(--toggle-xl-width)', height: 'var(--toggle-xl-height)', dot: 'var(--toggle-xl-dot)' },
+  xs: { width: 'var(--ds-toggle-xs-width)', height: 'var(--ds-toggle-xs-height)', dot: 'var(--ds-toggle-xs-dot)' },
+  sm: { width: 'var(--ds-toggle-sm-width)', height: 'var(--ds-toggle-sm-height)', dot: 'var(--ds-toggle-sm-dot)' },
+  md: { width: 'var(--ds-toggle-md-width)', height: 'var(--ds-toggle-md-height)', dot: 'var(--ds-toggle-md-dot)' },
+  lg: { width: 'var(--ds-toggle-lg-width)', height: 'var(--ds-toggle-lg-height)', dot: 'var(--ds-toggle-lg-dot)' },
+  xl: { width: 'var(--ds-toggle-xl-width)', height: 'var(--ds-toggle-xl-height)', dot: 'var(--ds-toggle-xl-dot)' },
 };
 
 // Numeric size values for calculations (internal use)
@@ -84,12 +116,12 @@ export const SIZE_VALUES: Record<ToggleSize, { width: number; height: number; do
 
 // Color mappings
 export const COLOR_MAP: Record<ToggleVariant, { bg: string; bgChecked: string; border: string }> = {
-  default: { bg: '#d9d9d9', bgChecked: '#1890ff', border: '#d9d9d9' },
-  primary: { bg: '#d9d9d9', bgChecked: '#1890ff', border: '#1890ff' },
-  secondary: { bg: '#d9d9d9', bgChecked: '#6c757d', border: '#6c757d' },
-  success: { bg: '#d9d9d9', bgChecked: '#52c41a', border: '#52c41a' },
-  warning: { bg: '#d9d9d9', bgChecked: '#faad14', border: '#faad14' },
-  error: { bg: '#d9d9d9', bgChecked: '#ff4d4f', border: '#ff4d4f' },
+  default: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-primary-500, #1890ff)', border: 'var(--ds-color-neutral-300, #d9d9d9)' },
+  primary: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-primary-500, #1890ff)', border: 'var(--ds-color-primary-500, #1890ff)' },
+  secondary: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-secondary-500, #6c757d)', border: 'var(--ds-color-secondary-500, #6c757d)' },
+  success: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-success-500, #52c41a)', border: 'var(--ds-color-success-500, #52c41a)' },
+  warning: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-warning-500, #faad14)', border: 'var(--ds-color-warning-500, #faad14)' },
+  error: { bg: 'var(--ds-color-neutral-300, #d9d9d9)', bgChecked: 'var(--ds-color-error-500, #ff4d4f)', border: 'var(--ds-color-error-500, #ff4d4f)' },
 };
 
 export const TOGGLE_DEFAULTS = {

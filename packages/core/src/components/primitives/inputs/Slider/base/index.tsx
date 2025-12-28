@@ -1,6 +1,54 @@
 /**
- * Slider - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Slider Base Component - Rottay Design System
+ * @description Core slider implementation with CSS variables for theming.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The BaseSlider provides a full-featured range slider with CSS variable
+ * support. It handles single and range modes with drag interaction,
+ * keyboard navigation, and tooltip display.
+ *
+ * **Component Structure:**
+ * - Container div with role slider
+ * - Rail (inactive track background)
+ * - Track (active selection area)
+ * - Handle(s) with drag interaction
+ * - Optional dots at step intervals
+ * - Optional marks with labels
+ * - Tooltip on drag
+ *
+ * **CSS Variable Integration:**
+ * - `--ds-slider-rail-bg` - Rail background
+ * - `--ds-slider-track-bg` - Active track color
+ * - `--ds-slider-handle-bg` - Handle fill
+ * - `--ds-slider-handle-border` - Handle border
+ * - `--ds-slider-handle-size` - Handle diameter
+ * - `--ds-slider-rail-size` - Track thickness
+ * - `--ds-slider-dot-size` - Step dot size
+ *
+ * **Interaction Handling:**
+ * - Mouse drag on handles
+ * - Click on rail to jump
+ * - Keyboard support (Arrow keys)
+ * - Touch support for mobile
+ *
+ * @example Using BaseSlider
+ * ```tsx
+ * import { BaseSlider } from '@rottay/design-system';
+ *
+ * <BaseSlider
+ *   min={0}
+ *   max={100}
+ *   step={10}
+ *   defaultValue={50}
+ *   marks={{ 0: '0', 50: '50', 100: '100' }}
+ * />
+ * ```
+ *
+ * @see {@link Slider} for the engine-routed component
+ * @module BaseSlider
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -160,13 +208,13 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
 
     // CSS variables
     const sliderVars = useMemo<React.CSSProperties>(() => ({
-      '--slider-rail-bg': 'var(--color-bg-tertiary, #f0f0f0)',
-      '--slider-track-bg': disabled ? 'var(--color-bg-disabled)' : 'var(--color-primary, #1677ff)',
-      '--slider-handle-bg': 'var(--color-bg-elevated, #fff)',
-      '--slider-handle-border': disabled ? 'var(--color-bg-disabled)' : 'var(--color-primary, #1677ff)',
-      '--slider-handle-size': '14px',
-      '--slider-rail-size': '4px',
-      '--slider-dot-size': '8px',
+      '--ds-slider-rail-bg': 'var(--ds-color-bg-tertiary, #f0f0f0)',
+      '--ds-slider-track-bg': disabled ? 'var(--ds-color-bg-disabled, #d9d9d9)' : 'var(--ds-color-primary-500, #1677ff)',
+      '--ds-slider-handle-bg': 'var(--ds-color-bg-elevated, #fff)',
+      '--ds-slider-handle-border': disabled ? 'var(--ds-color-bg-disabled, #d9d9d9)' : 'var(--ds-color-primary-500, #1677ff)',
+      '--ds-slider-handle-size': '14px',
+      '--ds-slider-rail-size': '4px',
+      '--ds-slider-dot-size': '8px',
     } as React.CSSProperties), [disabled]);
 
     // Track position and size
@@ -189,8 +237,8 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
     const sliderStyle: React.CSSProperties = {
       ...sliderVars,
       position: 'relative',
-      width: vertical ? 'var(--slider-rail-size)' : '100%',
-      height: vertical ? '100%' : 'var(--slider-rail-size)',
+      width: vertical ? 'var(--ds-slider-rail-size)' : '100%',
+      height: vertical ? '100%' : 'var(--ds-slider-rail-size)',
       minHeight: vertical ? 100 : undefined,
       cursor: disabled ? 'not-allowed' : 'pointer',
       padding: vertical ? '0 5px' : '5px 0',
@@ -199,23 +247,23 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
 
     const railStyles: React.CSSProperties = {
       position: 'absolute',
-      width: vertical ? 'var(--slider-rail-size)' : '100%',
-      height: vertical ? '100%' : 'var(--slider-rail-size)',
-      backgroundColor: 'var(--slider-rail-bg)',
-      borderRadius: 'var(--slider-rail-size)',
+      width: vertical ? 'var(--ds-slider-rail-size)' : '100%',
+      height: vertical ? '100%' : 'var(--ds-slider-rail-size)',
+      backgroundColor: 'var(--ds-slider-rail-bg)',
+      borderRadius: 'var(--ds-slider-rail-size)',
       ...railStyle,
     };
 
     const trackStyles: React.CSSProperties = {
       position: 'absolute',
-      backgroundColor: 'var(--slider-track-bg)',
-      borderRadius: 'var(--slider-rail-size)',
+      backgroundColor: 'var(--ds-slider-track-bg)',
+      borderRadius: 'var(--ds-slider-rail-size)',
       ...(vertical ? {
-        width: 'var(--slider-rail-size)',
+        width: 'var(--ds-slider-rail-size)',
         bottom: `${trackPosition.start}%`,
         height: `${trackPosition.size}%`,
       } : {
-        height: 'var(--slider-rail-size)',
+        height: 'var(--ds-slider-rail-size)',
         left: `${trackPosition.start}%`,
         width: `${trackPosition.size}%`,
       }),
@@ -224,10 +272,10 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
 
     const getHandleStyle = (percent: number, index: number): React.CSSProperties => ({
       position: 'absolute',
-      width: 'var(--slider-handle-size)',
-      height: 'var(--slider-handle-size)',
-      backgroundColor: 'var(--slider-handle-bg)',
-      border: '2px solid var(--slider-handle-border)',
+      width: 'var(--ds-slider-handle-size)',
+      height: 'var(--ds-slider-handle-size)',
+      backgroundColor: 'var(--ds-slider-handle-bg)',
+      border: '2px solid var(--ds-slider-handle-border)',
       borderRadius: '50%',
       transform: 'translate(-50%, -50%)',
       cursor: disabled ? 'not-allowed' : 'grab',
@@ -276,10 +324,10 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
                     className="rottay-slider__dot"
                     style={{
                       position: 'absolute',
-                      width: 'var(--slider-dot-size)',
-                      height: 'var(--slider-dot-size)',
-                      backgroundColor: 'var(--slider-rail-bg)',
-                      border: '2px solid var(--slider-handle-border)',
+                      width: 'var(--ds-slider-dot-size)',
+                      height: 'var(--ds-slider-dot-size)',
+                      backgroundColor: 'var(--ds-slider-rail-bg)',
+                      border: '2px solid var(--ds-slider-handle-border)',
                       borderRadius: '50%',
                       transform: 'translate(-50%, -50%)',
                       ...(vertical ? { left: '50%', bottom: `${percent}%` } : { top: '50%', left: `${percent}%` }),
@@ -304,7 +352,7 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
                 style={{
                   position: 'absolute',
                   fontSize: 12,
-                  color: 'var(--color-text-secondary)',
+                  color: 'var(--ds-color-text-secondary, #666)',
                   ...(vertical ? { left: 20, bottom: `${percent}%`, transform: 'translateY(50%)' } : { top: 20, left: `${percent}%`, transform: 'translateX(-50%)' }),
                   ...markStyle,
                 }}
@@ -344,7 +392,7 @@ export const BaseSlider = forwardRef<HTMLDivElement, SliderProps>(
                     transform: 'translateX(-50%)',
                     marginBottom: 8,
                     padding: '4px 8px',
-                    backgroundColor: 'var(--color-bg-spotlight, rgba(0,0,0,0.75))',
+                    backgroundColor: 'var(--ds-color-bg-spotlight, rgba(0,0,0,0.75))',
                     color: '#fff',
                     borderRadius: 4,
                     fontSize: 12,

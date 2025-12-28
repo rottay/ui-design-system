@@ -1,12 +1,46 @@
 'use client';
 
 /**
- * Tour - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Tour Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Tour component.
+ * Uses DaisyUI card and button components with Tailwind utility classes.
  *
- * Tailwind CSS implementation of the Tour component.
- * Uses DaisyUI components for consistent styling with Tailwind utilities.
+ * @remarks
+ * The Hermes engine provides:
+ * - DaisyUI card component for step content
+ * - DaisyUI button styling for navigation
+ * - Tailwind utility classes for layout
+ * - Portal rendering via createPortal
+ * - Box-shadow spotlight technique
  *
- * @module TourHermes
+ * Implementation details:
+ * - getTargetElement resolves selectors, refs, and functions
+ * - useEffect updates targetRect when step changes
+ * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
+ * - Step indicators use bg-primary/bg-base-300 classes
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Tour, Button } from '@rottay/design-system';
+ *
+ * const steps = [
+ *   { target: '#feature', title: 'New Feature', description: 'Try it!' },
+ *   { target: '.settings', title: 'Settings', description: 'Configure' },
+ * ];
+ *
+ * <Tour
+ *   engine="hermes"
+ *   steps={steps}
+ *   open={isOpen}
+ *   type="primary"
+ *   onClose={() => setIsOpen(false)}
+ * />
+ * ```
+ *
+ * @see {@link Tour} - The main engine-aware component
+ * @module Tour/Engines/Hermes
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';

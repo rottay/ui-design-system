@@ -1,7 +1,48 @@
 'use client';
 
 /**
- * Calendar - Titan Engine (Ant Design)
+ * @fileoverview Calendar Titan Engine - Rottay Design System
+ * @description Ant Design-based calendar with dayjs integration.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine wraps Ant Design's Calendar component with dayjs
+ * for date manipulation and full feature support.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Calendar` for core rendering
+ * - Converts Date/string to dayjs internally
+ * - Full cell render customization
+ * - Header render customization
+ * - Locale support via Ant Design
+ *
+ * **Date Handling:**
+ * - Input: Date | string | null
+ * - Internal: dayjs objects
+ * - Output: Date objects in callbacks
+ *
+ * **Advantages:**
+ * - Full Ant Design theming
+ * - Comprehensive localization
+ * - Rich cell customization
+ * - Consistent date handling
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Calendar } from '@rottay/design-system';
+ *
+ * <Calendar
+ *   engine="titan"
+ *   defaultValue={new Date()}
+ *   fullscreen={true}
+ * />
+ * ```
+ *
+ * @see {@link Calendar} for the main component
+ * @see {@link https://ant.design/components/calendar} Ant Design Calendar
+ * @module Calendar/engines/titan
+ * @category Display
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Calendar as AntCalendar } from 'antd';

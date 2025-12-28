@@ -1,6 +1,39 @@
 /**
- * @file Descriptions - Core Interface
- * @description Re-exports from centralized types with component-specific defaults.
+ * @fileoverview Descriptions Types - Rottay Design System
+ * @description Type definitions and constants for the Descriptions component.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module re-exports types from the centralized type system and provides
+ * default configuration values and size mappings for the Descriptions component.
+ *
+ * **Exported Types:**
+ * - `DescriptionsProps` - Main component properties
+ * - `DescriptionsItemProps` - Item properties (label, span, styles)
+ * - `DescriptionsLayout` - Layout direction ('horizontal' | 'vertical')
+ * - `DescriptionsSize` - Size variants ('small' | 'default' | 'middle')
+ * - `ResponsiveColumn` - Responsive column configuration
+ *
+ * **Exported Constants:**
+ * - `DESCRIPTIONS_DEFAULTS` - Default configuration values
+ * - `SIZE_MAP` - Size to font size mapping
+ * - `PADDING_MAP` - Size to padding mapping
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { DescriptionsProps, DescriptionsItemProps } from '@rottay/design-system';
+ *
+ * const props: DescriptionsProps = {
+ *   title: 'User Info',
+ *   bordered: true,
+ *   column: 2,
+ * };
+ * ```
+ *
+ * @see {@link Descriptions} for component implementation
+ * @module Descriptions/types
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {

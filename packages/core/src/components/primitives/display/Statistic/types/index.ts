@@ -1,7 +1,38 @@
 /**
- * @fileoverview Statistic Component Types
- * @description Re-exports from centralized types for the Statistic component.
- * @module components/primitives/display/Statistic/types
+ * @fileoverview Statistic Types - Rottay Design System
+ * @description Type definitions and constants for the Statistic component.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module re-exports types from the centralized type system and provides
+ * CSS variable mappings for theming the Statistic component.
+ *
+ * **Exported Types:**
+ * - `StatisticProps` - Main component properties
+ * - `CountdownProps` - Countdown timer properties
+ * - `StatisticValue` - Value type (number | string)
+ * - `StatisticValueType` - Semantic value types
+ *
+ * **Exported Constants:**
+ * - `STATISTIC_DEFAULTS` - Default configuration values
+ * - `CSS_VARS` - CSS variable name mappings
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { StatisticProps, CountdownProps } from '@rottay/design-system';
+ *
+ * const props: StatisticProps = {
+ *   title: 'Revenue',
+ *   value: 1250000,
+ *   precision: 2,
+ *   prefix: '$',
+ * };
+ * ```
+ *
+ * @see {@link Statistic} for component implementation
+ * @module Statistic/types
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {

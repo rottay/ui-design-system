@@ -1,7 +1,38 @@
 'use client';
 
 /**
- * Upload - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Upload Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Upload component
+ * with drag-and-drop support and styled file list.
+ *
+ * @remarks
+ * The Hermes engine provides a lightweight upload using:
+ * - **DaisyUI styling**: Consistent with Tailwind design tokens
+ * - **Drag and drop**: Custom dragger with visual feedback
+ * - **File validation**: beforeUpload hook support
+ * - **Responsive design**: Mobile-friendly interface
+ *
+ * Optimized for smaller bundle size while maintaining core functionality.
+ *
+ * @example Basic upload
+ * ```tsx
+ * <Upload engine="hermes">
+ *   <button className="btn">Upload File</button>
+ * </Upload>
+ * ```
+ *
+ * @example Drag and drop
+ * ```tsx
+ * <Upload.Dragger engine="hermes" multiple accept="image/*">
+ *   <p>Drag images here</p>
+ * </Upload.Dragger>
+ * ```
+ *
+ * @see {@link Upload} - Main component
+ * @see {@link UploadProps} - Component props
+ * @module Upload/Engines/Hermes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useRef } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo } from '../../types';

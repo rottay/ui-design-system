@@ -1,10 +1,51 @@
 'use client';
 
 /**
- * Table - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Table Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based table with responsive design.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * A data table component built with DaisyUI/Tailwind CSS.
- * Supports sorting, pagination, row selection, and responsive design.
+ * @remarks
+ * This engine uses DaisyUI's table classes with Tailwind utilities
+ * for lightweight, responsive table rendering.
+ *
+ * **Implementation Details:**
+ * - Uses DaisyUI `table` class for container
+ * - Uses `table-xs`, `table-md`, `table-lg` for sizes
+ * - Uses `table-zebra` for striped rows
+ * - Custom sorting implementation
+ * - Client-side pagination
+ * - Checkbox/radio row selection
+ *
+ * **Class Mappings:**
+ * - `table` - Base table styling
+ * - `table-zebra` - Alternating row colors
+ * - `overflow-x-auto` - Horizontal scroll
+ * - `join` - Pagination button group
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Responsive by default
+ * - DaisyUI theme integration
+ * - Tailwind utility compatibility
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Table } from '@rottay/design-system';
+ *
+ * <Table
+ *   engine="hermes"
+ *   dataSource={data}
+ *   columns={columns}
+ *   bordered
+ * />
+ * ```
+ *
+ * @see {@link Table} for the main component
+ * @see {@link https://daisyui.com/components/table/} DaisyUI Table
+ * @module Table/engines/hermes
+ * @category Display
+ * @package @rottay/design-system
  */
 import { useState, useMemo, useCallback } from 'react';
 import type { Key } from 'react';

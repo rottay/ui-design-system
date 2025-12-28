@@ -1,6 +1,67 @@
 /**
- * Select - Core Interface
- * Local types for the Select primitive component
+ * @fileoverview Select Types - Rottay Design System
+ * @description Type definitions, interfaces, and constants for the Select component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module provides comprehensive type definitions for the Select component,
+ * including all props, option structures, sizes, variants, and state interfaces.
+ *
+ * **Available Types:**
+ * - `SelectProps` - Main component props interface
+ * - `SelectSize` - Size variants (xs, sm, md, lg, xl)
+ * - `SelectVariant` - Visual style variants (outline, filled, flushed, default)
+ * - `SelectStatus` - Validation states (default, error, warning, success)
+ * - `SelectMode` - Selection modes (single, multiple, tags)
+ * - `SelectOption` - Individual option structure with value, label, icon, etc.
+ * - `SelectOptionGroup` - Grouped options structure
+ * - `SelectOptionProps` - Props for Select.Option compound component
+ * - `SelectOptGroupProps` - Props for Select.OptGroup compound component
+ * - `SelectSearchState` - Search state interface
+ * - `SelectDropdownState` - Dropdown state interface
+ *
+ * **CSS Custom Properties:**
+ * The type definitions include mappings to CSS variables for consistent theming:
+ * - Size: `--ds-select-{size}-height`, `--ds-select-{size}-font-size`, `--ds-select-{size}-padding`
+ * - Appearance: `--ds-select-bg`, `--ds-select-border-color`, `--ds-select-border-radius`
+ * - Dropdown: `--ds-select-dropdown-bg`, `--ds-select-dropdown-shadow`
+ * - Options: `--ds-select-option-hover-bg`, `--ds-select-option-selected-bg`
+ *
+ * @example Using Types
+ * ```tsx
+ * import type { SelectProps, SelectOption, SelectSize } from '@rottay/design-system';
+ *
+ * // Typed options array
+ * const options: SelectOption[] = [
+ *   { value: '1', label: 'Option 1' },
+ *   { value: '2', label: 'Option 2', disabled: true },
+ * ];
+ *
+ * // Custom select wrapper with typed props
+ * const MySelect: React.FC<SelectProps> = (props) => {
+ *   return <Select {...props} />;
+ * };
+ * ```
+ *
+ * @example Using Constants
+ * ```tsx
+ * import { SELECT_DEFAULTS, SIZE_MAP, SELECT_CSS_VARS } from '@rottay/design-system';
+ *
+ * // Access default values
+ * console.log(SELECT_DEFAULTS.size);     // 'md'
+ * console.log(SELECT_DEFAULTS.variant);  // 'outline'
+ * console.log(SELECT_DEFAULTS.multiple); // false
+ *
+ * // Access CSS variable mappings
+ * console.log(SIZE_MAP.lg.height); // 'var(--select-lg-height)'
+ * ```
+ *
+ * @see {@link Select} for the main component
+ * @see {@link SelectOption} for option component
+ * @see {@link SelectOptGroup} for grouping options
+ * @module SelectTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import type { ReactNode, CSSProperties, FocusEvent } from 'react';
@@ -197,17 +258,17 @@ export const SELECT_DEFAULTS = {
  * Size mapping to CSS variable values (matches CSS tokens)
  */
 export const SIZE_MAP: Record<SelectSize, { height: string; fontSize: string; padding: string }> = {
-  xs: { height: 'var(--select-xs-height)', fontSize: 'var(--select-xs-font-size)', padding: 'var(--select-xs-padding)' },
-  sm: { height: 'var(--select-sm-height)', fontSize: 'var(--select-sm-font-size)', padding: 'var(--select-sm-padding)' },
-  md: { height: 'var(--select-md-height)', fontSize: 'var(--select-md-font-size)', padding: 'var(--select-md-padding)' },
-  lg: { height: 'var(--select-lg-height)', fontSize: 'var(--select-lg-font-size)', padding: 'var(--select-lg-padding)' },
-  xl: { height: 'var(--select-xl-height)', fontSize: 'var(--select-xl-font-size)', padding: 'var(--select-xl-padding)' },
+  xs: { height: 'var(--ds-select-xs-height)', fontSize: 'var(--ds-select-xs-font-size)', padding: 'var(--ds-select-xs-padding)' },
+  sm: { height: 'var(--ds-select-sm-height)', fontSize: 'var(--ds-select-sm-font-size)', padding: 'var(--ds-select-sm-padding)' },
+  md: { height: 'var(--ds-select-md-height)', fontSize: 'var(--ds-select-md-font-size)', padding: 'var(--ds-select-md-padding)' },
+  lg: { height: 'var(--ds-select-lg-height)', fontSize: 'var(--ds-select-lg-font-size)', padding: 'var(--ds-select-lg-padding)' },
+  xl: { height: 'var(--ds-select-xl-height)', fontSize: 'var(--ds-select-xl-font-size)', padding: 'var(--ds-select-xl-padding)' },
 };
 
 /**
  * CSS Variable prefix for Select
  */
-export const SELECT_CSS_PREFIX = '--select';
+export const SELECT_CSS_PREFIX = '--ds-select';
 
 /**
  * CSS Variables for Select component

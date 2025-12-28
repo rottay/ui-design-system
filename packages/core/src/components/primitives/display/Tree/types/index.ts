@@ -1,11 +1,44 @@
 /**
- * Tree - Core Interface
+ * @fileoverview Tree Component Types - Rottay Design System
+ * @description Type definitions for the Tree component including data structure,
+ * selection modes, checkbox configuration, drag-and-drop, and virtual scrolling.
  *
- * A hierarchical list structure component that displays data in a tree format.
- * Supports selection, checkboxes, drag-and-drop, and virtual scrolling.
+ * @remarks
+ * The Tree types provide comprehensive configuration for:
+ * - TreeDataNode: Hierarchical data structure with key, title, children
+ * - Selection: Single, multiple, or checkbox-based selection
+ * - Expansion: Controlled/uncontrolled expand states
+ * - Drag and drop: Reordering callbacks and position info
+ * - Visual options: Lines, icons, block nodes
  *
- * @module Tree
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   TreeProps,
+ *   TreeDataNode,
+ *   TreeNodeProps,
+ * } from '@rottay/design-system';
+ *
+ * const data: TreeDataNode[] = [
+ *   {
+ *     key: '1',
+ *     title: 'Parent',
+ *     children: [
+ *       { key: '1-1', title: 'Child', isLeaf: true },
+ *     ],
+ *   },
+ * ];
+ *
+ * const props: TreeProps = {
+ *   treeData: data,
+ *   checkable: true,
+ *   showLine: true,
+ * };
+ * ```
+ *
+ * @module Tree/Types
  * @category Display
+ * @package @rottay/design-system
  */
 
 import type { ReactNode, CSSProperties, Key } from 'react';

@@ -1,13 +1,54 @@
 /**
- * Empty Component - Apollo Engine (Pure HTML/CSS)
+ * @fileoverview Empty Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS empty state with maximum accessibility.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * This implementation uses vanilla HTML and inline CSS for maximum
- * accessibility, control, and framework independence. No external
- * dependencies are required.
+ * @remarks
+ * This engine provides a lightweight, dependency-free empty state using only
+ * inline styles and semantic HTML elements.
  *
+ * **Exported Components:**
+ * - `ApolloEmpty` - Main empty state component
+ * - `DefaultImage` - Standard empty box SVG
+ * - `SimpleImage` - Minimal SVG variant
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - Flexbox-based centering layout
+ * - SVG images with neutral colors
+ * - ARIA attributes for screen readers
+ *
+ * **Accessibility Features:**
+ * - `role="status"` on container
+ * - `aria-label` with description text
+ * - `aria-hidden="true"` on decorative SVGs
+ * - Semantic HTML structure
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility compliance
+ * - SSR-safe implementation
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Empty } from '@rottay/design-system';
+ *
+ * <Empty engine="apollo" />
+ * ```
+ *
+ * @example With Custom Content
+ * ```tsx
+ * <Empty engine="apollo" description="Nothing here">
+ *   <button>Create First Item</button>
+ * </Empty>
+ * ```
+ *
+ * @see {@link Empty} for the main component
  * @module Empty/engines/apollo
  * @category Display
- * @engine Apollo
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,12 +1,70 @@
 'use client';
 
 /**
- * FloatButton - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview FloatButton Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the FloatButton component.
+ * Provides utility-first styled floating action buttons.
+ *
+ * @remarks
+ * The Hermes engine uses DaisyUI and Tailwind CSS for a lightweight,
+ * utility-first implementation including:
+ * - Tailwind utility classes for styling
+ * - DaisyUI button components
+ * - Minimal JavaScript footprint
+ * - Easy customization via Tailwind config
+ *
+ * This engine is ideal for projects using Tailwind CSS where bundle
+ * size and utility-first CSS are priorities.
+ *
+ * @example Hermes FloatButton
+ * ```tsx
+ * import { FloatButton } from '@rottay/design-system';
+ *
+ * // Explicitly use Hermes engine
+ * <FloatButton engine="hermes" icon={<PlusIcon />} type="primary" />
+ * ```
+ *
+ * @example Hermes Group
+ * ```tsx
+ * <FloatButton.Group engine="hermes" trigger="hover">
+ *   <FloatButton icon={<EditIcon />} />
+ *   <FloatButton icon={<ShareIcon />} />
+ * </FloatButton.Group>
+ * ```
+ *
+ * @see {@link FloatButtonProps} for prop documentation
+ * @see {@link https://daisyui.com/components/button} DaisyUI Button
+ *
+ * @module FloatButton/Engines/Hermes
+ * @category Navigation
+ * @package @rottay/design-system
  */
+
 import React, { useState, useEffect } from 'react';
 import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps } from '../../types';
 import { FLOAT_BUTTON_DEFAULTS } from '../../types';
 
+// ============================================================================
+// FloatButton Hermes Implementation
+// ============================================================================
+
+/**
+ * FloatButton component using DaisyUI/Tailwind CSS.
+ *
+ * @description
+ * Implements floating action button with Tailwind utility classes
+ * and DaisyUI button components for consistent styling.
+ *
+ * @remarks
+ * - Uses DaisyUI btn classes for base styling
+ * - Tailwind utilities for positioning and effects
+ * - Badge support via DaisyUI badge component
+ * - Supports both button and anchor rendering
+ *
+ * @param props - {@link FloatButtonProps}
+ * @param ref - Forwarded ref to button/anchor element
+ * @returns DaisyUI styled float button element
+ */
 export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>(
   (props, ref) => {
     const {
@@ -24,10 +82,12 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       children,
     } = props;
 
+    // Compose Tailwind/DaisyUI classes
     const baseClasses = `btn ${
       shape === 'circle' ? 'btn-circle' : 'rounded-lg'
     } ${type === 'primary' ? 'btn-primary' : 'btn-ghost bg-base-100'} shadow-lg`;
 
+    // Button content with icon, description, and badges
     const content = (
       <>
         {icon}
@@ -44,6 +104,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       </>
     );
 
+    // Render as anchor or button based on href
     const buttonElement = href ? (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
@@ -73,6 +134,27 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
 );
 FloatButton.displayName = 'FloatButton.Hermes';
 
+// ============================================================================
+// Group Hermes Implementation
+// ============================================================================
+
+/**
+ * FloatButton.Group component using DaisyUI/Tailwind CSS.
+ *
+ * @description
+ * Implements expandable button group with Tailwind utilities
+ * for positioning, transitions, and layout.
+ *
+ * @remarks
+ * - Fixed positioning in bottom-right corner
+ * - Flex column layout for vertical stacking
+ * - Tailwind transition utilities for animations
+ * - Controlled and uncontrolled state support
+ *
+ * @param props - {@link FloatButtonGroupProps}
+ * @param ref - Forwarded ref to container div
+ * @returns DaisyUI styled group container
+ */
 export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
   (props, ref) => {
     const {
@@ -90,8 +172,11 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
     } = props;
 
     const [internalOpen, setInternalOpen] = useState(false);
+
+    // Support controlled and uncontrolled modes
     const isOpen = controlledOpen ?? internalOpen;
 
+    // Toggle handler for click trigger
     const handleToggle = () => {
       const newOpen = !isOpen;
       if (controlledOpen === undefined) {
@@ -100,6 +185,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
       onOpenChange?.(newOpen);
     };
 
+    // Mouse enter handler for hover trigger
     const handleMouseEnter = () => {
       if (trigger === 'hover') {
         if (controlledOpen === undefined) {
@@ -109,6 +195,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
       }
     };
 
+    // Mouse leave handler for hover trigger
     const handleMouseLeave = () => {
       if (trigger === 'hover') {
         if (controlledOpen === undefined) {
@@ -126,6 +213,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
+        {/* Trigger button */}
         <button
           type="button"
           onClick={trigger === 'click' ? handleToggle : undefined}
@@ -136,6 +224,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         >
           {isOpen ? (closeIcon ?? '×') : icon}
         </button>
+
+        {/* Child buttons with transition */}
         <div
           className={`flex flex-col items-center gap-2 transition-all duration-200 ${
             isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
@@ -149,6 +239,27 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
 );
 Group.displayName = 'FloatButton.Group.Hermes';
 
+// ============================================================================
+// BackTop Hermes Implementation
+// ============================================================================
+
+/**
+ * FloatButton.BackTop component using DaisyUI/Tailwind CSS.
+ *
+ * @description
+ * Implements scroll-to-top button with Tailwind utilities
+ * for positioning and visibility transitions.
+ *
+ * @remarks
+ * - Monitors scroll position via useEffect
+ * - Fixed positioning with Tailwind classes
+ * - Smooth scroll behavior
+ * - Automatic visibility based on threshold
+ *
+ * @param props - {@link FloatButtonBackTopProps}
+ * @param ref - Forwarded ref to button element
+ * @returns DaisyUI styled back-to-top button or null
+ */
 export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopProps>(
   (props, ref) => {
     const {
@@ -166,6 +277,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
 
     const [visible, setVisible] = useState(false);
 
+    // Monitor scroll position and update visibility
     useEffect(() => {
       const container = target?.() ?? window;
 
@@ -177,13 +289,14 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
       };
 
       container.addEventListener('scroll', handleScroll);
-      handleScroll();
+      handleScroll(); // Check initial scroll position
 
       return () => {
         container.removeEventListener('scroll', handleScroll);
       };
     }, [target, visibilityHeight]);
 
+    // Scroll to top handler
     const scrollToTop = () => {
       const container = target?.() ?? window;
       if (container === window) {
@@ -194,6 +307,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
       onClick?.();
     };
 
+    // Don't render when not visible
     if (!visible) return null;
 
     return (
@@ -214,5 +328,9 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
   }
 );
 BackTop.displayName = 'FloatButton.BackTop.Hermes';
+
+// ============================================================================
+// Default Export
+// ============================================================================
 
 export default FloatButton;

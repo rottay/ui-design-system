@@ -1,10 +1,47 @@
 /**
- * Typography Paragraph - Compound Component
+ * @fileoverview Typography.Paragraph Compound - Rottay Design System
+ * @description Engine-aware block-level paragraph component.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Engine-aware Paragraph component that can be used standalone or
- * as Typography.Paragraph in the compound pattern.
+ * @remarks
+ * The TypographyParagraph component provides block-level text with
+ * optimized line-height and spacing for readable body content.
  *
+ * **Features:**
+ * - Optimized line-height (1.6) for readability
+ * - Automatic bottom margin for spacing
+ * - Multiple sizes and colors
+ * - Text alignment options
+ * - Line clamping for excerpts
+ * - Engine-aware rendering
+ *
+ * **Use Cases:**
+ * - Body text and content
+ * - Article paragraphs
+ * - Descriptions and summaries
+ * - Truncated previews
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Typography.Paragraph>
+ *   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ *   Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+ * </Typography.Paragraph>
+ * ```
+ *
+ * @example With Line Clamping
+ * ```tsx
+ * <Typography.Paragraph lineClamp={3} color="muted">
+ *   This long paragraph will be truncated after 3 lines
+ *   with an ellipsis indicator...
+ * </Typography.Paragraph>
+ * ```
+ *
+ * @see {@link Typography} for the main namespace
+ * @see {@link ParagraphProps} for available props
  * @module Typography/compound/Paragraph
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

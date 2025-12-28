@@ -1,21 +1,40 @@
 /**
- * Timeline - Engine Router
+ * @fileoverview Timeline Component - Rottay Design System
+ * @description A component for displaying a sequence of events or activities
+ * in chronological order. Supports multiple display modes (left, right, alternate),
+ * custom dot elements, color presets, and timestamp labels.
  *
- * A component for displaying a sequence of events or activities
- * in chronological order. Supports multiple display modes, custom
- * dot elements, and labels.
+ * @remarks
+ * The Timeline component visualizes sequential data with a vertical line connecting
+ * chronological events. It's commonly used for:
+ * - Activity feeds and logs
+ * - Order/delivery tracking
+ * - Project milestones and history
+ * - Event timelines and schedules
+ * - Changelog and version history
  *
- * @example
+ * Key features:
+ * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Display modes**: Left, right, or alternating item positions
+ * - **Color presets**: Blue, red, green, gray, and semantic colors
+ * - **Custom dots**: Replace default dots with icons or custom elements
+ * - **Labels**: Timestamp or metadata display opposite to content
+ * - **Pending state**: Loading indicator for ongoing activities
+ * - **Reverse order**: Display newest items first
+ *
+ * @example Basic timeline with items
  * ```tsx
- * import { Timeline } from '@es-rottay/designsystem-core';
+ * import { Timeline } from '@rottay/design-system';
  *
- * // Basic usage
  * <Timeline>
  *   <Timeline.Item>First event</Timeline.Item>
  *   <Timeline.Item>Second event</Timeline.Item>
+ *   <Timeline.Item>Third event</Timeline.Item>
  * </Timeline>
+ * ```
  *
- * // With colors and labels
+ * @example Alternate mode with colors and labels
+ * ```tsx
  * <Timeline mode="alternate">
  *   <Timeline.Item color="green" label="2024-01-01">
  *     Task completed
@@ -23,14 +42,47 @@
  *   <Timeline.Item color="blue" label="2024-01-02">
  *     In progress
  *   </Timeline.Item>
+ *   <Timeline.Item color="gray" label="2024-01-03">
+ *     Pending review
+ *   </Timeline.Item>
+ * </Timeline>
+ * ```
+ *
+ * @example Using items prop with pending state
+ * ```tsx
+ * <Timeline
+ *   pending="Recording..."
+ *   items={[
+ *     { children: 'Event 1', color: 'green' },
+ *     { children: 'Event 2', color: 'blue' },
+ *   ]}
+ * />
+ * ```
+ *
+ * @example Multi-engine usage
+ * ```tsx
+ * // Titan engine (Ant Design - default)
+ * <Timeline engine="titan" mode="left">
+ *   <Timeline.Item>Event</Timeline.Item>
  * </Timeline>
  *
- * // Using items prop
- * <Timeline items={[
- *   { children: 'Event 1', color: 'green' },
- *   { children: 'Event 2', color: 'blue' },
- * ]} />
+ * // Hermes engine (DaisyUI/Tailwind)
+ * <Timeline engine="hermes" mode="alternate">
+ *   <Timeline.Item color="primary">Event</Timeline.Item>
+ * </Timeline>
+ *
+ * // Apollo engine (Pure HTML/CSS)
+ * <Timeline engine="apollo" reverse>
+ *   <Timeline.Item>Newest first</Timeline.Item>
+ * </Timeline>
  * ```
+ *
+ * @see {@link TimelineProps} for component props
+ * @see {@link TimelineItemProps} for item configuration
+ * @see {@link TimelineMode} for display modes
+ * @module Timeline
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

@@ -1,0 +1,1047 @@
+/**
+ * Hermes Engine Theme - Rottay Design System
+ *
+ * Maps --ds-* design tokens to Tailwind CSS and DaisyUI component classes.
+ * This file bridges the centralized token system with Tailwind CSS 4.x / DaisyUI 5.x.
+ *
+ * Architecture:
+ * - Uses [data-tenant] selector for tenant-scoped overrides
+ * - All values reference --ds-* variables from default.css
+ * - Covers all interactive states: hover, focus, active, disabled
+ * - Maintains visual parity with Titan engine
+ *
+ * @version 0.4.0
+ * @engine Hermes (Tailwind CSS 4.x / DaisyUI 5.x)
+ */
+
+/* =============================================================================
+   CSS CUSTOM PROPERTIES FOR TAILWIND
+   These can be used with Tailwind's arbitrary value syntax: bg-[var(--ds-*)]
+   ============================================================================= */
+
+[data-tenant] {
+  /* Map design system colors to DaisyUI color system */
+  --p: var(--ds-color-primary-500);
+  --pf: var(--ds-color-primary-600);
+  --pc: var(--ds-color-white);
+
+  --s: var(--ds-color-secondary-500);
+  --sf: var(--ds-color-secondary-600);
+  --sc: var(--ds-color-white);
+
+  --a: var(--ds-color-info-500);
+  --af: var(--ds-color-info-600);
+  --ac: var(--ds-color-white);
+
+  --n: var(--ds-color-neutral-700);
+  --nf: var(--ds-color-neutral-800);
+  --nc: var(--ds-color-white);
+
+  --b1: var(--ds-color-white);
+  --b2: var(--ds-color-neutral-50);
+  --b3: var(--ds-color-neutral-100);
+  --bc: var(--ds-text-primary);
+
+  --su: var(--ds-color-success-500);
+  --wa: var(--ds-color-warning-500);
+  --er: var(--ds-color-error-500);
+  --in: var(--ds-color-info-500);
+
+  /* Border radius */
+  --rounded-box: var(--ds-radius-lg);
+  --rounded-btn: var(--ds-button-md-radius);
+  --rounded-badge: var(--ds-badge-radius);
+
+  /* Animation */
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+
+  /* Button */
+  --btn-focus-scale: 0.98;
+  --border-btn: 1px;
+  --tab-border: 2px;
+  --tab-radius: var(--ds-radius-md);
+}
+
+/* =============================================================================
+   BUTTON - .btn
+   ============================================================================= */
+
+[data-tenant] .btn {
+  font-family: var(--ds-font-family-base);
+  font-weight: var(--ds-button-font-weight);
+  border-radius: var(--ds-button-md-radius);
+  transition: var(--ds-button-transition);
+  height: var(--ds-button-md-height);
+  min-height: var(--ds-button-md-height);
+  padding-left: var(--ds-button-md-padding-x);
+  padding-right: var(--ds-button-md-padding-x);
+  font-size: var(--ds-button-md-font-size);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+[data-tenant] .btn:focus-visible {
+  box-shadow: var(--ds-button-focus-ring);
+  outline: none;
+}
+
+/* Button Sizes */
+[data-tenant] .btn-xs {
+  height: var(--ds-button-xs-height);
+  min-height: var(--ds-button-xs-height);
+  padding-left: var(--ds-button-xs-padding-x);
+  padding-right: var(--ds-button-xs-padding-x);
+  font-size: var(--ds-button-xs-font-size);
+  border-radius: var(--ds-button-xs-radius);
+}
+
+[data-tenant] .btn-sm {
+  height: var(--ds-button-sm-height);
+  min-height: var(--ds-button-sm-height);
+  padding-left: var(--ds-button-sm-padding-x);
+  padding-right: var(--ds-button-sm-padding-x);
+  font-size: var(--ds-button-sm-font-size);
+  border-radius: var(--ds-button-sm-radius);
+}
+
+[data-tenant] .btn-lg {
+  height: var(--ds-button-lg-height);
+  min-height: var(--ds-button-lg-height);
+  padding-left: var(--ds-button-lg-padding-x);
+  padding-right: var(--ds-button-lg-padding-x);
+  font-size: var(--ds-button-lg-font-size);
+  border-radius: var(--ds-button-lg-radius);
+}
+
+/* Primary Button */
+[data-tenant] .btn-primary {
+  background-color: var(--ds-button-primary-bg);
+  border-color: var(--ds-button-primary-border);
+  color: var(--ds-button-primary-color);
+  box-shadow: var(--ds-button-primary-shadow);
+}
+
+[data-tenant] .btn-primary:hover:not(:disabled) {
+  background-color: var(--ds-button-primary-bg-hover);
+  border-color: var(--ds-button-primary-bg-hover);
+  box-shadow: var(--ds-button-primary-shadow-hover);
+}
+
+[data-tenant] .btn-primary:active:not(:disabled) {
+  background-color: var(--ds-button-primary-bg-active);
+}
+
+/* Secondary Button */
+[data-tenant] .btn-secondary {
+  background-color: var(--ds-button-secondary-bg);
+  border-color: var(--ds-button-secondary-border);
+  color: var(--ds-button-secondary-color);
+}
+
+[data-tenant] .btn-secondary:hover:not(:disabled) {
+  background-color: var(--ds-button-secondary-bg-hover);
+}
+
+/* Ghost Button */
+[data-tenant] .btn-ghost {
+  background-color: var(--ds-button-ghost-bg);
+  border-color: var(--ds-button-ghost-border);
+  color: var(--ds-button-ghost-color);
+}
+
+[data-tenant] .btn-ghost:hover:not(:disabled) {
+  background-color: var(--ds-button-ghost-bg-hover);
+  color: var(--ds-color-primary-500);
+}
+
+/* Outline Button */
+[data-tenant] .btn-outline {
+  background-color: transparent;
+  border-color: var(--ds-button-default-border);
+  color: var(--ds-button-default-color);
+}
+
+[data-tenant] .btn-outline:hover:not(:disabled) {
+  background-color: var(--ds-button-default-bg-hover);
+  border-color: var(--ds-color-primary-400);
+  color: var(--ds-color-primary-500);
+}
+
+/* Link Button */
+[data-tenant] .btn-link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ds-button-link-color);
+}
+
+[data-tenant] .btn-link:hover:not(:disabled) {
+  color: var(--ds-button-link-color-hover);
+  text-decoration: var(--ds-button-link-decoration-hover);
+}
+
+/* Semantic Buttons */
+[data-tenant] .btn-success {
+  background-color: var(--ds-button-success-bg);
+  border-color: var(--ds-button-success-bg);
+  color: var(--ds-button-success-color);
+}
+
+[data-tenant] .btn-success:hover:not(:disabled) {
+  background-color: var(--ds-button-success-bg-hover);
+}
+
+[data-tenant] .btn-warning {
+  background-color: var(--ds-button-warning-bg);
+  border-color: var(--ds-button-warning-bg);
+  color: var(--ds-button-warning-color);
+}
+
+[data-tenant] .btn-warning:hover:not(:disabled) {
+  background-color: var(--ds-button-warning-bg-hover);
+}
+
+[data-tenant] .btn-error {
+  background-color: var(--ds-button-error-bg);
+  border-color: var(--ds-button-error-bg);
+  color: var(--ds-button-error-color);
+}
+
+[data-tenant] .btn-error:hover:not(:disabled) {
+  background-color: var(--ds-button-error-bg-hover);
+}
+
+/* Disabled Button */
+[data-tenant] .btn:disabled,
+[data-tenant] .btn-disabled {
+  background-color: var(--ds-button-disabled-bg) !important;
+  border-color: var(--ds-button-disabled-border) !important;
+  color: var(--ds-button-disabled-color) !important;
+  opacity: var(--ds-button-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   INPUT - .input
+   ============================================================================= */
+
+[data-tenant] .input {
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-input-md-font-size);
+  height: var(--ds-input-md-height);
+  padding-left: var(--ds-input-md-padding-x);
+  padding-right: var(--ds-input-md-padding-x);
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  color: var(--ds-input-color);
+  transition: var(--ds-input-transition);
+}
+
+[data-tenant] .input::placeholder {
+  color: var(--ds-input-color-placeholder);
+}
+
+[data-tenant] .input:hover:not(:disabled) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .input:focus {
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
+  outline: none;
+}
+
+[data-tenant] .input:disabled {
+  background-color: var(--ds-input-bg-disabled);
+  border-color: var(--ds-input-border-disabled);
+  color: var(--ds-input-color-disabled);
+  cursor: not-allowed;
+}
+
+/* Input Sizes */
+[data-tenant] .input-sm {
+  height: var(--ds-input-sm-height);
+  padding-left: var(--ds-input-sm-padding-x);
+  padding-right: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+}
+
+[data-tenant] .input-lg {
+  height: var(--ds-input-lg-height);
+  padding-left: var(--ds-input-lg-padding-x);
+  padding-right: var(--ds-input-lg-padding-x);
+  font-size: var(--ds-input-lg-font-size);
+}
+
+/* Input States */
+[data-tenant] .input-error {
+  border-color: var(--ds-input-error-border) !important;
+}
+
+[data-tenant] .input-error:focus {
+  box-shadow: var(--ds-input-error-shadow-focus);
+}
+
+[data-tenant] .input-warning {
+  border-color: var(--ds-input-warning-border) !important;
+}
+
+[data-tenant] .input-success {
+  border-color: var(--ds-input-success-border) !important;
+}
+
+/* =============================================================================
+   SELECT - .select
+   ============================================================================= */
+
+[data-tenant] .select {
+  background-color: var(--ds-select-bg);
+  border-color: var(--ds-select-border);
+  border-radius: var(--ds-select-radius);
+  font-family: var(--ds-font-family-base);
+  height: var(--ds-input-md-height);
+  min-height: var(--ds-input-md-height);
+  padding-left: var(--ds-input-md-padding-x);
+  transition: var(--ds-input-transition);
+}
+
+[data-tenant] .select:hover:not(:disabled) {
+  border-color: var(--ds-select-border-hover);
+}
+
+[data-tenant] .select:focus {
+  border-color: var(--ds-select-border-focus);
+  box-shadow: var(--ds-select-shadow-focus);
+  outline: none;
+}
+
+/* =============================================================================
+   CHECKBOX - .checkbox
+   ============================================================================= */
+
+[data-tenant] .checkbox {
+  width: var(--ds-checkbox-size);
+  height: var(--ds-checkbox-size);
+  border-color: var(--ds-checkbox-border);
+  border-radius: var(--ds-checkbox-radius);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .checkbox:hover:not(:disabled) {
+  border-color: var(--ds-checkbox-border-hover);
+}
+
+[data-tenant] .checkbox:checked {
+  background-color: var(--ds-checkbox-checked-bg);
+  border-color: var(--ds-checkbox-checked-border);
+}
+
+[data-tenant] .checkbox:focus-visible {
+  box-shadow: var(--ds-checkbox-focus-ring);
+  outline: none;
+}
+
+/* =============================================================================
+   RADIO - .radio
+   ============================================================================= */
+
+[data-tenant] .radio {
+  width: var(--ds-radio-size);
+  height: var(--ds-radio-size);
+  border-color: var(--ds-radio-border);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .radio:hover:not(:disabled) {
+  border-color: var(--ds-radio-border-hover);
+}
+
+[data-tenant] .radio:checked {
+  background-color: var(--ds-radio-checked-bg);
+  border-color: var(--ds-radio-checked-border);
+}
+
+[data-tenant] .radio:focus-visible {
+  box-shadow: var(--ds-radio-focus-ring);
+  outline: none;
+}
+
+/* =============================================================================
+   TOGGLE - .toggle
+   ============================================================================= */
+
+[data-tenant] .toggle {
+  width: var(--ds-toggle-md-width);
+  height: var(--ds-toggle-md-height);
+  background-color: var(--ds-toggle-bg);
+  border-radius: var(--ds-radius-full);
+  transition: var(--ds-toggle-transition);
+}
+
+[data-tenant] .toggle:hover:not(:disabled) {
+  background-color: var(--ds-toggle-bg-hover);
+}
+
+[data-tenant] .toggle:checked {
+  background-color: var(--ds-toggle-checked-bg);
+}
+
+[data-tenant] .toggle:checked:hover:not(:disabled) {
+  background-color: var(--ds-toggle-checked-bg-hover);
+}
+
+[data-tenant] .toggle:focus-visible {
+  box-shadow: var(--ds-toggle-focus-ring);
+  outline: none;
+}
+
+[data-tenant] .toggle:disabled {
+  opacity: var(--ds-toggle-disabled-opacity);
+  background-color: var(--ds-toggle-disabled-bg);
+}
+
+/* Toggle Sizes */
+[data-tenant] .toggle-sm {
+  width: var(--ds-toggle-sm-width);
+  height: var(--ds-toggle-sm-height);
+}
+
+[data-tenant] .toggle-lg {
+  width: var(--ds-toggle-lg-width);
+  height: var(--ds-toggle-lg-height);
+}
+
+/* =============================================================================
+   CARD - .card
+   ============================================================================= */
+
+[data-tenant] .card {
+  background-color: var(--ds-card-bg);
+  border-color: var(--ds-card-border);
+  border-radius: var(--ds-card-radius);
+  box-shadow: var(--ds-card-shadow);
+  transition: var(--ds-card-transition);
+}
+
+[data-tenant] .card:hover {
+  box-shadow: var(--ds-card-shadow-hover);
+}
+
+[data-tenant] .card-title {
+  font-size: var(--ds-card-title-font-size);
+  font-weight: var(--ds-card-title-font-weight);
+  color: var(--ds-card-title-color);
+}
+
+[data-tenant] .card-body {
+  padding: var(--ds-card-body-padding);
+  color: var(--ds-card-body-color);
+}
+
+[data-tenant] .card-compact .card-body {
+  padding: var(--ds-card-padding-sm);
+}
+
+/* =============================================================================
+   MODAL - .modal
+   ============================================================================= */
+
+[data-tenant] .modal-box {
+  background-color: var(--ds-modal-bg);
+  border-radius: var(--ds-modal-radius);
+  box-shadow: var(--ds-modal-shadow);
+  padding: var(--ds-modal-padding);
+}
+
+[data-tenant] .modal-backdrop {
+  background-color: var(--ds-modal-overlay-bg);
+  backdrop-filter: var(--ds-modal-overlay-backdrop);
+}
+
+[data-tenant] .modal-action {
+  margin-top: var(--ds-modal-footer-padding);
+  gap: var(--ds-modal-footer-gap);
+}
+
+/* =============================================================================
+   ALERT - .alert
+   ============================================================================= */
+
+[data-tenant] .alert {
+  padding: var(--ds-alert-padding);
+  border-radius: var(--ds-alert-radius);
+  font-size: var(--ds-alert-font-size);
+}
+
+[data-tenant] .alert-info {
+  background-color: var(--ds-alert-info-bg);
+  border-color: var(--ds-alert-info-border);
+  color: var(--ds-alert-info-color);
+}
+
+[data-tenant] .alert-success {
+  background-color: var(--ds-alert-success-bg);
+  border-color: var(--ds-alert-success-border);
+  color: var(--ds-alert-success-color);
+}
+
+[data-tenant] .alert-warning {
+  background-color: var(--ds-alert-warning-bg);
+  border-color: var(--ds-alert-warning-border);
+  color: var(--ds-alert-warning-color);
+}
+
+[data-tenant] .alert-error {
+  background-color: var(--ds-alert-error-bg);
+  border-color: var(--ds-alert-error-border);
+  color: var(--ds-alert-error-color);
+}
+
+/* =============================================================================
+   TOOLTIP - .tooltip
+   ============================================================================= */
+
+[data-tenant] .tooltip::before {
+  background-color: var(--ds-tooltip-bg);
+  color: var(--ds-tooltip-color);
+  border-radius: var(--ds-tooltip-radius);
+  padding: var(--ds-tooltip-padding);
+  font-size: var(--ds-tooltip-font-size);
+  max-width: var(--ds-tooltip-max-width);
+}
+
+/* =============================================================================
+   BADGE - .badge
+   ============================================================================= */
+
+[data-tenant] .badge {
+  font-size: var(--ds-badge-md-font-size);
+  height: var(--ds-badge-md-height);
+  padding-left: var(--ds-badge-padding-x);
+  padding-right: var(--ds-badge-padding-x);
+  border-radius: var(--ds-badge-radius);
+  font-weight: var(--ds-badge-font-weight);
+}
+
+[data-tenant] .badge-primary {
+  background-color: var(--ds-badge-primary-bg);
+  color: var(--ds-badge-primary-color);
+}
+
+[data-tenant] .badge-secondary {
+  background-color: var(--ds-badge-secondary-bg);
+  color: var(--ds-badge-secondary-color);
+}
+
+[data-tenant] .badge-success {
+  background-color: var(--ds-badge-success-bg);
+  color: var(--ds-badge-success-color);
+}
+
+[data-tenant] .badge-warning {
+  background-color: var(--ds-badge-warning-bg);
+  color: var(--ds-badge-warning-color);
+}
+
+[data-tenant] .badge-error {
+  background-color: var(--ds-badge-error-bg);
+  color: var(--ds-badge-error-color);
+}
+
+[data-tenant] .badge-info {
+  background-color: var(--ds-badge-info-bg);
+  color: var(--ds-badge-info-color);
+}
+
+/* Badge Sizes */
+[data-tenant] .badge-sm {
+  font-size: var(--ds-badge-sm-font-size);
+  height: var(--ds-badge-sm-height);
+}
+
+[data-tenant] .badge-lg {
+  font-size: var(--ds-badge-lg-font-size);
+  height: var(--ds-badge-lg-height);
+}
+
+/* =============================================================================
+   AVATAR - .avatar
+   ============================================================================= */
+
+[data-tenant] .avatar > div {
+  background-color: var(--ds-avatar-default-bg);
+  color: var(--ds-avatar-default-color);
+}
+
+[data-tenant] .avatar.placeholder > div {
+  background-color: var(--ds-avatar-default-bg);
+  color: var(--ds-avatar-default-color);
+}
+
+/* =============================================================================
+   PROGRESS - .progress
+   ============================================================================= */
+
+[data-tenant] .progress {
+  background-color: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
+  height: var(--ds-progress-height);
+}
+
+[data-tenant] .progress::-webkit-progress-bar {
+  background-color: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
+}
+
+[data-tenant] .progress::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-primary);
+  border-radius: var(--ds-progress-radius);
+}
+
+[data-tenant] .progress-primary::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-primary);
+}
+
+[data-tenant] .progress-success::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-success);
+}
+
+[data-tenant] .progress-warning::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-warning);
+}
+
+[data-tenant] .progress-error::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-error);
+}
+
+/* =============================================================================
+   LOADING / SPINNER - .loading
+   ============================================================================= */
+
+[data-tenant] .loading {
+  color: var(--ds-spinner-color);
+}
+
+[data-tenant] .loading-sm {
+  width: var(--ds-spinner-sm-size);
+  height: var(--ds-spinner-sm-size);
+}
+
+[data-tenant] .loading-md {
+  width: var(--ds-spinner-md-size);
+  height: var(--ds-spinner-md-size);
+}
+
+[data-tenant] .loading-lg {
+  width: var(--ds-spinner-lg-size);
+  height: var(--ds-spinner-lg-size);
+}
+
+/* =============================================================================
+   DIVIDER - .divider
+   ============================================================================= */
+
+[data-tenant] .divider {
+  margin: var(--ds-divider-spacing) 0;
+}
+
+[data-tenant] .divider::before,
+[data-tenant] .divider::after {
+  background-color: var(--ds-divider-color);
+  height: var(--ds-divider-width);
+}
+
+/* =============================================================================
+   DROPDOWN - .dropdown
+   ============================================================================= */
+
+[data-tenant] .dropdown-content {
+  background-color: var(--ds-dropdown-bg);
+  border-radius: var(--ds-dropdown-radius);
+  box-shadow: var(--ds-dropdown-shadow);
+  padding: var(--ds-dropdown-padding);
+}
+
+[data-tenant] .menu li > a,
+[data-tenant] .menu li > button {
+  padding: var(--ds-dropdown-item-padding);
+  border-radius: var(--ds-dropdown-item-radius);
+  color: var(--ds-dropdown-item-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .menu li > a:hover,
+[data-tenant] .menu li > button:hover {
+  background-color: var(--ds-dropdown-item-bg-hover);
+  color: var(--ds-dropdown-item-color-hover);
+}
+
+[data-tenant] .menu li > a.active,
+[data-tenant] .menu li > button.active {
+  background-color: var(--ds-dropdown-item-bg-active);
+  color: var(--ds-dropdown-item-color-active);
+}
+
+/* =============================================================================
+   TABS - .tabs
+   ============================================================================= */
+
+[data-tenant] .tabs {
+  border-color: var(--ds-tabs-border);
+}
+
+[data-tenant] .tab {
+  color: var(--ds-tab-color);
+  font-weight: var(--ds-tab-font-weight);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .tab:hover {
+  color: var(--ds-tab-color-hover);
+  background-color: var(--ds-tab-bg-hover);
+}
+
+[data-tenant] .tab-active {
+  color: var(--ds-tab-color-active);
+  border-color: var(--ds-tab-border-active);
+}
+
+/* =============================================================================
+   TABLE - .table
+   ============================================================================= */
+
+[data-tenant] .table {
+  background-color: var(--ds-table-bg);
+  border-radius: var(--ds-table-radius);
+}
+
+[data-tenant] .table :where(thead, tfoot) {
+  background-color: var(--ds-table-header-bg);
+}
+
+[data-tenant] .table :where(thead, tfoot) :where(th, td) {
+  background-color: var(--ds-table-header-bg);
+  color: var(--ds-table-header-color);
+  font-weight: var(--ds-table-header-font-weight);
+  font-size: var(--ds-table-header-font-size);
+}
+
+[data-tenant] .table :where(tbody th, tbody td) {
+  background-color: var(--ds-table-row-bg);
+  font-size: var(--ds-table-cell-font-size);
+}
+
+[data-tenant] .table-zebra tbody tr:nth-child(even) :where(th, td) {
+  background-color: var(--ds-table-row-bg-striped);
+}
+
+[data-tenant] .table tr:hover :where(th, td) {
+  background-color: var(--ds-table-row-bg-hover);
+}
+
+/* =============================================================================
+   BREADCRUMBS - .breadcrumbs
+   ============================================================================= */
+
+[data-tenant] .breadcrumbs {
+  font-size: var(--ds-breadcrumb-font-size);
+}
+
+[data-tenant] .breadcrumbs li a {
+  color: var(--ds-breadcrumb-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .breadcrumbs li a:hover {
+  color: var(--ds-breadcrumb-color-hover);
+}
+
+[data-tenant] .breadcrumbs li + li::before {
+  color: var(--ds-breadcrumb-separator-color);
+}
+
+[data-tenant] .breadcrumbs li:last-child {
+  color: var(--ds-breadcrumb-color-active);
+}
+
+/* =============================================================================
+   PAGINATION - .join (used for pagination)
+   ============================================================================= */
+
+[data-tenant] .join .btn {
+  min-width: var(--ds-pagination-item-size);
+  height: var(--ds-pagination-item-size);
+  padding: 0;
+  background-color: var(--ds-pagination-item-bg);
+  border-color: var(--ds-pagination-item-border);
+  color: var(--ds-pagination-item-color);
+  border-radius: var(--ds-pagination-item-radius);
+}
+
+[data-tenant] .join .btn:hover {
+  background-color: var(--ds-pagination-item-bg-hover);
+}
+
+[data-tenant] .join .btn.btn-active {
+  background-color: var(--ds-pagination-item-bg-active);
+  color: var(--ds-pagination-item-color-active);
+  border-color: var(--ds-pagination-item-bg-active);
+}
+
+/* =============================================================================
+   STEPS - .steps
+   ============================================================================= */
+
+[data-tenant] .steps .step::before {
+  background-color: var(--ds-steps-line-color);
+}
+
+[data-tenant] .steps .step-primary::before {
+  background-color: var(--ds-steps-line-color-active);
+}
+
+[data-tenant] .steps .step::after {
+  background-color: var(--ds-steps-item-bg);
+  color: var(--ds-steps-item-color);
+}
+
+[data-tenant] .steps .step-primary::after {
+  background-color: var(--ds-steps-item-bg-active);
+  color: var(--ds-steps-item-color-active);
+}
+
+/* =============================================================================
+   COLLAPSE / ACCORDION - .collapse
+   ============================================================================= */
+
+[data-tenant] .collapse {
+  background-color: var(--ds-collapse-bg);
+  border-color: var(--ds-collapse-border);
+  border-radius: var(--ds-collapse-radius);
+}
+
+[data-tenant] .collapse-title {
+  padding: var(--ds-collapse-header-padding);
+  background-color: var(--ds-collapse-header-bg);
+  font-weight: var(--ds-collapse-header-font-weight);
+  color: var(--ds-collapse-header-color);
+}
+
+[data-tenant] .collapse-title:hover {
+  background-color: var(--ds-collapse-header-bg-hover);
+}
+
+[data-tenant] .collapse-content {
+  padding: var(--ds-collapse-content-padding);
+  background-color: var(--ds-collapse-content-bg);
+}
+
+/* =============================================================================
+   DRAWER - .drawer
+   ============================================================================= */
+
+[data-tenant] .drawer-side {
+  z-index: var(--ds-z-index-drawer);
+}
+
+[data-tenant] .drawer-side > .drawer-overlay {
+  background-color: var(--ds-modal-overlay-bg);
+}
+
+[data-tenant] .drawer-side > *:not(.drawer-overlay) {
+  background-color: var(--ds-drawer-bg);
+  width: var(--ds-drawer-width);
+  box-shadow: var(--ds-drawer-shadow);
+}
+
+/* =============================================================================
+   TEXTAREA - .textarea
+   ============================================================================= */
+
+[data-tenant] .textarea {
+  min-height: var(--ds-textarea-min-height);
+  padding: var(--ds-textarea-padding);
+  line-height: var(--ds-textarea-line-height);
+  font-family: var(--ds-font-family-base);
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  color: var(--ds-input-color);
+  transition: var(--ds-input-transition);
+}
+
+[data-tenant] .textarea:hover:not(:disabled) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .textarea:focus {
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
+  outline: none;
+}
+
+/* =============================================================================
+   FILE INPUT - .file-input
+   ============================================================================= */
+
+[data-tenant] .file-input {
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+}
+
+[data-tenant] .file-input:hover:not(:disabled) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .file-input:focus {
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
+  outline: none;
+}
+
+/* =============================================================================
+   RANGE / SLIDER - .range
+   ============================================================================= */
+
+[data-tenant] .range {
+  height: var(--ds-slider-thumb-size);
+}
+
+[data-tenant] .range::-webkit-slider-runnable-track {
+  background-color: var(--ds-slider-track-bg);
+  height: var(--ds-slider-track-height);
+  border-radius: var(--ds-radius-full);
+}
+
+[data-tenant] .range::-webkit-slider-thumb {
+  width: var(--ds-slider-thumb-size);
+  height: var(--ds-slider-thumb-size);
+  background-color: var(--ds-slider-thumb-bg);
+  border-color: var(--ds-slider-thumb-border);
+  box-shadow: var(--ds-slider-thumb-shadow);
+}
+
+[data-tenant] .range:focus::-webkit-slider-thumb {
+  box-shadow: var(--ds-slider-focus-ring);
+}
+
+/* =============================================================================
+   RATING - .rating
+   ============================================================================= */
+
+[data-tenant] .rating input {
+  background-color: var(--ds-rate-color);
+}
+
+[data-tenant] .rating input:checked ~ input {
+  background-color: var(--ds-rate-color);
+}
+
+[data-tenant] .rating input:checked,
+[data-tenant] .rating input:checked ~ input:checked {
+  background-color: var(--ds-rate-color-active);
+}
+
+[data-tenant] .rating:hover input:hover,
+[data-tenant] .rating:hover input:hover ~ input {
+  background-color: var(--ds-rate-color-hover);
+}
+
+/* =============================================================================
+   SKELETON - .skeleton
+   ============================================================================= */
+
+[data-tenant] .skeleton {
+  background-color: var(--ds-skeleton-bg);
+  border-radius: var(--ds-skeleton-radius);
+}
+
+/* =============================================================================
+   TOAST - .toast
+   ============================================================================= */
+
+[data-tenant] .toast {
+  background-color: var(--ds-notification-bg);
+  border-radius: var(--ds-notification-radius);
+  box-shadow: var(--ds-notification-shadow);
+  padding: var(--ds-notification-padding);
+}
+
+/* =============================================================================
+   LINK - a
+   ============================================================================= */
+
+[data-tenant] a.link {
+  color: var(--ds-link-color);
+  text-decoration: var(--ds-link-decoration);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] a.link:hover {
+  color: var(--ds-link-color-hover);
+  text-decoration: var(--ds-link-decoration-hover);
+}
+
+[data-tenant] a.link:active {
+  color: var(--ds-link-color-active);
+}
+
+/* =============================================================================
+   FORM CONTROL
+   ============================================================================= */
+
+[data-tenant] .form-control {
+  margin-bottom: var(--ds-form-item-margin-bottom);
+}
+
+[data-tenant] .label-text {
+  color: var(--ds-form-label-color);
+  font-size: var(--ds-form-label-font-size);
+  font-weight: var(--ds-form-label-font-weight);
+}
+
+[data-tenant] .label-text-alt {
+  color: var(--ds-form-helper-color);
+  font-size: var(--ds-input-helper-font-size);
+}
+
+/* =============================================================================
+   HERO
+   ============================================================================= */
+
+[data-tenant] .hero-content {
+  text-align: center;
+}
+
+/* =============================================================================
+   STAT
+   ============================================================================= */
+
+[data-tenant] .stat-title {
+  color: var(--ds-statistic-title-color);
+  font-size: var(--ds-statistic-title-font-size);
+}
+
+[data-tenant] .stat-value {
+  color: var(--ds-statistic-value-color);
+  font-size: var(--ds-statistic-value-font-size);
+  font-weight: var(--ds-statistic-value-font-weight);
+}
+
+/* =============================================================================
+   TIMELINE
+   ============================================================================= */
+
+[data-tenant] .timeline::before {
+  background-color: var(--ds-timeline-line-color);
+  width: var(--ds-timeline-line-width);
+}
+
+[data-tenant] .timeline-start,
+[data-tenant] .timeline-middle,
+[data-tenant] .timeline-end {
+  color: var(--ds-text-primary);
+}

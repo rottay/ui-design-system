@@ -1,10 +1,51 @@
 'use client';
 
 /**
- * Table - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Table Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS table implementation with maximum accessibility.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * A fully accessible data table component using vanilla HTML/CSS.
- * Provides maximum accessibility with ARIA attributes and keyboard navigation support.
+ * @remarks
+ * This engine provides a lightweight, dependency-free table using only
+ * inline styles and semantic HTML elements.
+ *
+ * **Implementation Details:**
+ * - Uses semantic `<table>`, `<thead>`, `<tbody>` elements
+ * - Inline styles for all visual properties
+ * - ARIA attributes for screen readers
+ * - Keyboard navigation support
+ * - Custom sorting implementation
+ * - Client-side pagination
+ *
+ * **Accessibility Features:**
+ * - `role="table"` for proper semantics
+ * - `aria-sort` on sortable columns
+ * - `aria-label` on interactive elements
+ * - Keyboard-accessible controls
+ * - High contrast support
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility compliance
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Table } from '@rottay/design-system';
+ *
+ * <Table
+ *   engine="apollo"
+ *   dataSource={data}
+ *   columns={columns}
+ *   size="small"
+ * />
+ * ```
+ *
+ * @see {@link Table} for the main component
+ * @module Table/engines/apollo
+ * @category Display
+ * @package @rottay/design-system
  */
 import { useState, useMemo, useCallback } from 'react';
 import type { Key } from 'react';

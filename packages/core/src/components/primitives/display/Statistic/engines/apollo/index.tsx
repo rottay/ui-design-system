@@ -1,9 +1,63 @@
 /**
- * @fileoverview Statistic - Apollo Engine Implementation
- * @description Vanilla HTML/CSS implementation of the Statistic component.
- * Provides maximum accessibility and minimal dependencies with inline styles.
- * Ideal for environments where external CSS frameworks are not available.
- * @module components/primitives/display/Statistic/engines/apollo
+ * @fileoverview Statistic Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS statistic with WCAG-compliant colors.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine provides a lightweight, dependency-free statistic using only
+ * inline styles and semantic HTML elements.
+ *
+ * **Exported Components:**
+ * - `Statistic` - Main statistic component
+ * - `Countdown` - Countdown timer with ARIA attributes
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - WCAG 2.1 AA compliant color contrast
+ * - Interval-based countdown updates
+ * - Semantic HTML and ARIA attributes
+ *
+ * **Accessibility Features:**
+ * - `role="status"` on loading skeleton
+ * - `role="timer"` on countdown
+ * - `aria-live="polite"` for updates
+ * - `aria-atomic="true"` for complete announcements
+ * - Screen reader friendly text
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility compliance
+ * - SSR-safe implementation
+ *
+ * @example Statistic Usage
+ * ```tsx
+ * import { Statistic } from '@rottay/design-system';
+ *
+ * <Statistic
+ *   engine="apollo"
+ *   title="Revenue"
+ *   value={125000}
+ *   prefix="$"
+ *   valueType="positive"
+ * />
+ * ```
+ *
+ * @example Countdown Usage
+ * ```tsx
+ * <Statistic.Countdown
+ *   engine="apollo"
+ *   title="Offer Expires"
+ *   value={Date.now() + 86400000}
+ *   format="DD:HH:mm:ss"
+ * />
+ * ```
+ *
+ * @see {@link Statistic} for the main component
+ * @module Statistic/engines/apollo
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

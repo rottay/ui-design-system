@@ -1,29 +1,59 @@
 /**
- * @fileoverview Carousel Component - Engine Router
- * @description Provides a responsive carousel/slider component for displaying
- * multiple content items with navigation controls. Supports multiple rendering
- * engines (Titan/Ant Design, Hermes/DaisyUI, Apollo/Vanilla).
+ * @fileoverview Carousel Component - Rottay Design System
+ * @description Responsive slideshow with navigation, autoplay, and transitions.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module components/primitives/display/Carousel
+ * @remarks
+ * The Carousel component displays rotating content with navigation controls,
+ * autoplay, fade/slide transitions, and vertical mode support.
  *
- * @example
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Carousel with full feature support
+ * - **Hermes**: DaisyUI-styled carousel with Tailwind utilities
+ * - **Apollo**: Pure HTML/CSS with maximum accessibility
+ *
+ * **Key Features:**
+ * - Autoplay with configurable speed
+ * - Navigation dots and arrows
+ * - Fade and slide transitions
+ * - Vertical carousel mode
+ * - Touch/swipe support
+ * - Infinite loop mode
+ * - Programmatic control via ref
+ * - ARIA-compliant accessibility
+ *
+ * **Compound Components:**
+ * - `Carousel.Item` - Styled slide wrapper with background support
+ *
+ * **CSS Custom Properties:**
+ * - `--carousel-speed` - Transition duration
+ * - `--carousel-height` - Carousel height
+ * - `--carousel-arrow-bg` - Arrow background
+ * - `--carousel-arrow-size` - Arrow dimensions
+ * - `--carousel-dot-bg` - Inactive dot color
+ * - `--carousel-dot-active-bg` - Active dot color
+ * - `--carousel-dots-gap` - Spacing between dots
+ *
+ * @example Basic Usage
  * ```tsx
  * import { Carousel } from '@rottay/design-system';
  *
- * // Basic usage with dots and arrows
  * <Carousel dots arrows>
  *   <div>Slide 1</div>
  *   <div>Slide 2</div>
- *   <div>Slide 3</div>
  * </Carousel>
+ * ```
  *
- * // Autoplay carousel
+ * @example Autoplay
+ * ```tsx
  * <Carousel autoplay autoplaySpeed={3000}>
  *   <img src="/image1.jpg" alt="Slide 1" />
  *   <img src="/image2.jpg" alt="Slide 2" />
  * </Carousel>
+ * ```
  *
- * // Using compound components
+ * @example Compound Components
+ * ```tsx
  * <Carousel>
  *   <Carousel.Item backgroundColor="#f0f0f0">
  *     <h2>Welcome</h2>
@@ -32,13 +62,21 @@
  *     <h2>Hero Section</h2>
  *   </Carousel.Item>
  * </Carousel>
+ * ```
  *
- * // With ref for programmatic control
+ * @example Programmatic Control
+ * ```tsx
  * const carouselRef = useRef<CarouselRef>(null);
  * <Carousel ref={carouselRef}>...</Carousel>
  * carouselRef.current?.next();
  * carouselRef.current?.goTo(2);
  * ```
+ *
+ * @see {@link CarouselProps} for component props
+ * @see {@link CarouselRef} for ref methods
+ * @module Carousel
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

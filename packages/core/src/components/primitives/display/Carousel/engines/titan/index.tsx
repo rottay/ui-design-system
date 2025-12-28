@@ -1,8 +1,55 @@
 /**
- * @fileoverview Carousel - Titan Engine Implementation
- * @description Provides Ant Design-based carousel implementation with full feature support.
- * Leverages the antd Carousel component for robust slider functionality.
- * @module components/primitives/display/Carousel/engines/titan
+ * @fileoverview Carousel Titan Engine - Rottay Design System
+ * @description Ant Design-based carousel with slick.js foundation.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine wraps Ant Design's Carousel component to provide
+ * full-featured slider functionality with smooth animations.
+ *
+ * **Exported Components:**
+ * - `Carousel` - Main carousel wrapper
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Carousel` (slick.js-based) for core rendering
+ * - Full imperative API via ref (goTo, next, prev)
+ * - Supports custom prev/next arrows
+ * - Touch/swipe support built-in
+ *
+ * **Ant Design Features:**
+ * - Smooth CSS transitions
+ * - Touch/swipe gestures
+ * - Custom arrow components
+ * - Responsive breakpoints
+ * - Theme token integration
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Carousel } from '@rottay/design-system';
+ *
+ * <Carousel engine="titan" autoplay dots>
+ *   <div>Slide 1</div>
+ *   <div>Slide 2</div>
+ * </Carousel>
+ * ```
+ *
+ * @example With Custom Arrows
+ * ```tsx
+ * <Carousel
+ *   engine="titan"
+ *   arrows
+ *   prevArrow={<LeftOutlined />}
+ *   nextArrow={<RightOutlined />}
+ * >
+ *   <div>Slide 1</div>
+ * </Carousel>
+ * ```
+ *
+ * @see {@link Carousel} for the main component
+ * @see {@link https://ant.design/components/carousel} Ant Design Carousel
+ * @module Carousel/engines/titan
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

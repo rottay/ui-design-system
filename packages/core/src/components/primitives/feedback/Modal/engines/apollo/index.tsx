@@ -25,9 +25,9 @@
  *
  * **Multi-Tenant Theming:**
  * Apollo heavily uses CSS custom properties for theming:
- * - `--rottay-color-background`: Modal background
- * - `--rottay-color-border`: Border color
- * - `--rottay-border-radius-lg`: Border radius
+ * - `--ds-color-bg-elevated`: Modal background
+ * - `--ds-color-border`: Border color
+ * - `--ds-radius-lg`: Border radius
  *
  * **Size Styles:**
  * | Size | Max Width |
@@ -51,9 +51,9 @@
  * @example With Custom CSS Variables
  * ```tsx
  * <div style={{
- *   '--rottay-color-background': '#1a1a2e',
- *   '--rottay-color-border': '#333',
- *   '--rottay-border-radius-lg': '16px'
+ *   '--ds-color-bg-elevated': '#1a1a2e',
+ *   '--ds-color-border': '#333',
+ *   '--ds-radius-lg': '16px'
  * }}>
  *   <Modal engine="apollo" open={open} onClose={onClose}>
  *     Dark themed modal
@@ -135,9 +135,9 @@ const SIZE_STYLES: Record<ModalSize, { maxWidth: string; width?: string }> = {
  * **CSS Custom Properties:**
  * | Property | Default | Description |
  * |----------|---------|-------------|
- * | `--rottay-color-background` | #fff | Modal background |
- * | `--rottay-color-border` | #f0f0f0 | Border color |
- * | `--rottay-border-radius-lg` | 8px | Border radius |
+ * | `--ds-color-bg-elevated` | #fff | Modal background |
+ * | `--ds-color-border` | #f0f0f0 | Border color |
+ * | `--ds-radius-lg` | 8px | Border radius |
  *
  * @param props - {@link ModalProps}
  * @returns The rendered vanilla Modal or empty fragment when closed
@@ -299,8 +299,8 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
    * Uses CSS custom properties for tenant theming.
    */
   const modalStyle: React.CSSProperties = {
-    backgroundColor: 'var(--rottay-color-background, #fff)',
-    borderRadius: 'var(--rottay-border-radius-lg, 8px)',
+    backgroundColor: 'var(--ds-color-bg-elevated, #fff)',
+    borderRadius: 'var(--ds-radius-lg, 8px)',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
     position: 'relative',
     width: '100%',
@@ -313,7 +313,7 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
    */
   const headerStyle: React.CSSProperties = {
     padding: '16px 24px',
-    borderBottom: '1px solid var(--rottay-color-border, #f0f0f0)',
+    borderBottom: '1px solid var(--ds-color-border, #f0f0f0)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -324,7 +324,7 @@ export default function ApolloModal(props: ModalProps): React.ReactElement {
    */
   const footerStyle: React.CSSProperties = {
     padding: '10px 16px',
-    borderTop: '1px solid #f0f0f0',
+    borderTop: '1px solid var(--ds-color-border, #f0f0f0)',
     display: 'flex',
     justifyContent: 'flex-end',
     gap: '8px',

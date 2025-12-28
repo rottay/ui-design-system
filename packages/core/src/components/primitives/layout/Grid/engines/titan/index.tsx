@@ -1,6 +1,41 @@
 /**
- * Grid - Titan Engine (Ant Design)
- * Full-featured implementation using Ant Design patterns
+ * @fileoverview Grid Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Grid component.
+ * Provides full-featured Grid using Ant Design styling conventions.
+ *
+ * @remarks
+ * The Titan engine implementation uses Ant Design's design system principles
+ * while maintaining full compatibility with the Grid API. It applies the
+ * `rottay-grid--titan` class for engine-specific styling hooks.
+ *
+ * CSS Classes Applied:
+ * - `rottay-grid`: Base class for all Grid containers
+ * - `rottay-grid--titan`: Engine-specific class for Titan styling
+ * - `rottay-grid-item`: Base class for all Grid items
+ * - `rottay-grid-item--titan`: Engine-specific class for Titan item styling
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Grid } from '@rottay/design-system';
+ *
+ * // Automatically uses Titan if default engine
+ * <Grid columns={3} gap="md">
+ *   <Grid.Item span={2}>Wide item</Grid.Item>
+ *   <Grid.Item>Regular item</Grid.Item>
+ * </Grid>
+ *
+ * // Or explicitly specify engine
+ * <Grid engine="titan" columns={4} gap="lg">
+ *   Ant Design styled grid
+ * </Grid>
+ * ```
+ *
+ * @see {@link Grid} - The main engine-aware component
+ * @see {@link HermesGrid} - Tailwind implementation
+ * @see {@link ApolloGrid} - Pure HTML/CSS implementation
+ * @module Grid/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

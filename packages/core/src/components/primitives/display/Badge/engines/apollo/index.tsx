@@ -1,9 +1,55 @@
 /**
- * @fileoverview Badge Apollo Engine Implementation
- * @description Pure HTML/CSS implementation of the Badge component using CSS variables.
- * Provides a headless, accessible badge with no external UI library dependencies.
- * Ideal for maximum accessibility and custom styling needs.
- * @module components/primitives/display/Badge/engines/apollo
+ * @fileoverview Badge Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS badge implementation with zero dependencies.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine provides a lightweight, dependency-free badge using only
+ * inline styles and CSS custom properties for theming.
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - Injects keyframe animation for pulse effect
+ * - Computes dimensions from SIZE_MAP constants
+ * - Supports all style variants (solid, outline, soft, ghost)
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full control over styles
+ *
+ * **Style Variants:**
+ * - `solid` - Filled background with white text
+ * - `outline` - Transparent with colored border
+ * - `soft` - Light background (15% opacity)
+ * - `ghost` - Transparent with colored text
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Badge } from '@rottay/design-system';
+ *
+ * <Badge engine="apollo" count={5} variant="primary">
+ *   <Avatar />
+ * </Badge>
+ * ```
+ *
+ * @example Soft Style with Icon
+ * ```tsx
+ * <Badge
+ *   engine="apollo"
+ *   content="New"
+ *   badgeStyle="soft"
+ *   variant="success"
+ *   icon={<StarIcon />}
+ * />
+ * ```
+ *
+ * @see {@link Badge} for the main component
+ * @see {@link BaseBadge} for CSS variable implementation
+ * @module ApolloBadge
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

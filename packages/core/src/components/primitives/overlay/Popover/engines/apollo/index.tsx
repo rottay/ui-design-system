@@ -1,7 +1,48 @@
 'use client';
 
 /**
- * Popover - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Popover Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Popover component.
+ * Uses inline CSS styles with portal rendering for proper z-index stacking.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with no external dependencies
+ * - Portal rendering to document.body via createPortal
+ * - Full 12-position placement support with precise positioning
+ * - Custom trigger handling for click, hover, and focus
+ * - Click-outside dismissal via event listeners
+ *
+ * Implementation details:
+ * - getPositionStyles calculates absolute positioning for each placement
+ * - Uses window scroll offsets for scroll-aware positioning
+ * - Timeout refs for enter/leave delay management
+ * - Arrow element with CSS rotation and shadow
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Popover, Button } from '@rottay/design-system';
+ *
+ * <Popover
+ *   engine="apollo"
+ *   content="Pure CSS styled content"
+ *   title="Apollo Popover"
+ *   placement="right"
+ *   zIndex={2000}
+ * >
+ *   <Button>Trigger</Button>
+ * </Popover>
+ * ```
+ *
+ * @see {@link Popover} - The main engine-aware component
+ * @module Popover/Engines/Apollo
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';

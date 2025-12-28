@@ -1,5 +1,55 @@
 /**
- * Button - Titan Engine (Ant Design)
+ * @fileoverview Button Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Button component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Button component, providing enterprise-grade
+ * features and polished animations. It maps Rottay's standardized props to Ant
+ * Design's API while maintaining consistent behavior across all engines.
+ *
+ * **Ant Design Features Utilized:**
+ * - Native button types (primary, default, dashed, link, text)
+ * - Built-in loading state with spinner animation
+ * - Size variants (small, middle, large)
+ * - Shape options (default, circle, round)
+ * - Block mode for full-width buttons
+ * - Icon support with automatic positioning
+ *
+ * **Prop Mapping:**
+ * - `variant="primary"` → `type="primary"`
+ * - `variant="outline"` → `type="default"` with border
+ * - `variant="ghost"` → `type="text"`
+ * - `variant="danger"` → `type="primary" danger={true}`
+ * - `size="sm"` → `size="small"`
+ * - `size="lg"` → `size="large"`
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ *
+ * // Explicit Titan engine (default)
+ * <Button engine="titan" variant="primary">
+ *   Ant Design Button
+ * </Button>
+ *
+ * // With Ant Design-specific features
+ * <Button
+ *   engine="titan"
+ *   variant="primary"
+ *   loading
+ *   icon={<SaveIcon />}
+ * >
+ *   Saving...
+ * </Button>
+ * ```
+ *
+ * @see {@link Button} for the main component
+ * @see {@link HermesButton} for DaisyUI implementation
+ * @see {@link ApolloButton} for vanilla implementation
+ * @module TitanButton
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

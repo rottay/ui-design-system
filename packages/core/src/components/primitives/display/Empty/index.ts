@@ -1,38 +1,67 @@
 /**
- * Empty Component - Engine Router
+ * @fileoverview Empty Component - Rottay Design System
+ * @description Empty state placeholder with customizable image and description.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * This is the main entry point for the Empty component. It uses the
- * engine factory to create a component that dynamically loads the
- * appropriate engine implementation (Titan, Hermes, or Apollo) based
- * on the current engine context or prop override.
+ * @remarks
+ * The Empty component displays a placeholder when there is no data available.
+ * It supports multiple image variants and custom content.
  *
- * The Empty component displays a placeholder with an optional image
- * and description when there is no data to show.
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Empty with built-in image presets
+ * - **Hermes**: DaisyUI-styled empty with theme-aware colors
+ * - **Apollo**: Pure HTML/CSS with maximum accessibility
  *
- * @module Empty
- * @category Display
+ * **Key Features:**
+ * - Default and simple image variants
+ * - Custom image support (React nodes)
+ * - Description text with localization support
+ * - Action button slot for CTAs
+ * - ARIA-compliant accessibility
+ * - CSS custom properties for theming
  *
- * @example
+ * **CSS Custom Properties:**
+ * - `--empty-padding` - Container padding
+ * - `--empty-text-color` - Description text color
+ * - `--empty-font-size` - Description font size
+ * - `--empty-image-margin-bottom` - Image spacing
+ * - `--empty-image-fill-color` - SVG fill color
+ * - `--empty-image-stroke-color` - SVG stroke color
+ *
+ * @example Basic Usage
  * ```tsx
  * import { Empty } from '@rottay/design-system';
  *
- * // Basic usage
  * <Empty />
+ * ```
  *
- * // With custom description
+ * @example Custom Description
+ * ```tsx
  * <Empty description="No results found" />
+ * ```
  *
- * // With simple image variant
+ * @example Simple Image Variant
+ * ```tsx
  * <Empty image="simple" description="Nothing to display" />
+ * ```
  *
- * // With action button
+ * @example With Action Button
+ * ```tsx
  * <Empty description="Your cart is empty">
  *   <Button>Start Shopping</Button>
  * </Empty>
+ * ```
  *
- * // With engine override
+ * @example Engine Override
+ * ```tsx
  * <Empty engine="apollo" description="Custom engine" />
  * ```
+ *
+ * @see {@link EmptyProps} for component props
+ * @see {@link BaseEmpty} for base implementation
+ * @module Empty
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

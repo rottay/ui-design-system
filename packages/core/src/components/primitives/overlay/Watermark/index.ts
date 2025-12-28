@@ -1,40 +1,84 @@
 /**
- * Watermark Component
+ * @fileoverview Watermark Component - Rottay Design System
+ * @description A canvas-based watermark overlay component that renders repeating text or image
+ * patterns over content. Supports customizable rotation, gap, offset, font settings, and
+ * retina display support for crisp rendering on high-DPI screens.
  *
- * A canvas-based watermark overlay component that renders repeating text or image
- * patterns over content. Supports customizable rotation, gap, offset, and font settings.
+ * @remarks
+ * The Watermark component provides content protection and branding overlays for
+ * sensitive documents, previews, and protected content areas. It's commonly used for:
+ * - Document confidentiality markers
+ * - Brand watermarking on images and content
+ * - Draft/Preview status indicators
+ * - Copyright protection overlays
+ * - User identification watermarks
  *
- * @component
- * @example
+ * Key features:
+ * - **Multi-engine support**: Titan (Ant Design), Hermes (Tailwind), Apollo (Vanilla)
+ * - **Canvas rendering**: High-quality pattern generation with device pixel ratio support
+ * - **Text & image**: Supports text content (including multi-line) or image URLs
+ * - **Customizable positioning**: Rotation, gap, and offset controls
+ * - **Font configuration**: Color, size, weight, family, and style options
+ * - **Pointer-events passthrough**: Watermark doesn't interfere with user interaction
+ *
+ * @example Basic text watermark
  * ```tsx
- * // Text watermark
+ * import { Watermark } from '@rottay/design-system';
+ *
  * <Watermark content="Confidential">
  *   <div>Protected content</div>
  * </Watermark>
+ * ```
  *
- * // Multi-line text watermark
+ * @example Multi-line text watermark
+ * ```tsx
  * <Watermark content={['Company Name', 'Confidential']}>
  *   <div>Protected content</div>
  * </Watermark>
+ * ```
  *
- * // Image watermark
+ * @example Image watermark with logo
+ * ```tsx
  * <Watermark image="/logo.png" width={100} height={50}>
  *   <div>Branded content</div>
  * </Watermark>
+ * ```
  *
- * // Custom styling
+ * @example Custom styled watermark
+ * ```tsx
  * <Watermark
- *   content="Draft"
+ *   content="DRAFT"
  *   rotate={-30}
  *   gap={[150, 150]}
- *   font={{ color: 'rgba(255,0,0,0.1)', fontSize: 24 }}
+ *   font={{ color: 'rgba(255,0,0,0.1)', fontSize: 24, fontWeight: 'bold' }}
  * >
  *   <div>Draft document</div>
  * </Watermark>
  * ```
  *
+ * @example Multi-engine usage
+ * ```tsx
+ * // Titan engine (Ant Design - default)
+ * <Watermark engine="titan" content="Protected">
+ *   <div>Content</div>
+ * </Watermark>
+ *
+ * // Hermes engine (Tailwind CSS)
+ * <Watermark engine="hermes" content="Draft" zIndex={50}>
+ *   <div>Content</div>
+ * </Watermark>
+ *
+ * // Apollo engine (Pure HTML/CSS)
+ * <Watermark engine="apollo" content="Confidential" offset={[20, 20]}>
+ *   <div>Content</div>
+ * </Watermark>
+ * ```
+ *
  * @see {@link WatermarkProps} for available props
  * @see {@link WatermarkFont} for font configuration options
+ * @module Watermark
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { WatermarkProps } from './types';

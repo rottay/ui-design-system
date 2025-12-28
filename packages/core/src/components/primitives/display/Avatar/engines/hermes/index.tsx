@@ -1,5 +1,55 @@
 /**
- * Avatar - Hermes Engine (DaisyUI)
+ * @fileoverview Avatar Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based avatar with mask utilities.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine uses DaisyUI's avatar component with mask classes for
+ * shape styling and Tailwind utilities for colors.
+ *
+ * **Implementation Details:**
+ * - Uses DaisyUI `avatar` class for container
+ * - Uses DaisyUI `mask-*` classes for shape styling
+ * - Uses Tailwind `bg-*` and `text-*-content` for variant colors
+ * - Uses `ring` utilities for bordered style
+ *
+ * **Mask Classes:**
+ * - `circle` → `mask-circle`
+ * - `square` → `mask-squircle`
+ * - `rounded` → `mask-squircle`
+ *
+ * **Variant Mapping:**
+ * - Uses DaisyUI semantic colors (primary, secondary, success, etc.)
+ * - Automatically applies `-content` text color for contrast
+ * - Gradient variant uses `bg-gradient-to-br`
+ *
+ * **Ring Support:**
+ * - Uses Tailwind `ring` utilities
+ * - Includes `ring-offset-base-100` for proper spacing
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Avatar } from '@rottay/design-system';
+ *
+ * <Avatar engine="hermes" src="/user.jpg" name="Jane Doe" />
+ * ```
+ *
+ * @example With DaisyUI Styling
+ * ```tsx
+ * <Avatar
+ *   engine="hermes"
+ *   name="JD"
+ *   variant="primary"
+ *   bordered
+ *   status="online"
+ * />
+ * ```
+ *
+ * @see {@link Avatar} for the main component
+ * @see {@link https://daisyui.com/components/avatar/} DaisyUI Avatar
+ * @module HermesAvatar
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

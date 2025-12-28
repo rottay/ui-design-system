@@ -1,10 +1,42 @@
 /**
- * @fileoverview Card.Footer Compound Component
- * @description Footer section for Card component with actions and additional content.
- * Provides consistent layout for card actions and supplementary information.
+ * @fileoverview Card.Footer Compound - Rottay Design System
+ * @description Action area for Card with flexible button layout.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/compound/Footer
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * The CardFooter provides a consistent action area for cards with
+ * configurable alignment and optional divider.
+ *
+ * **Alignment Options:**
+ * - `start` - Align to left
+ * - `center` - Center alignment
+ * - `end` - Align to right (default)
+ * - `space-between` - Spread across
+ *
+ * **Content Sources:**
+ * - `children` - Custom content
+ * - `actions` - Array of action elements
+ *
+ * @example Actions Array
+ * ```tsx
+ * <Card.Footer actions={[
+ *   <Button key="cancel">Cancel</Button>,
+ *   <Button key="save" variant="primary">Save</Button>
+ * ]} />
+ * ```
+ *
+ * @example Custom Layout
+ * ```tsx
+ * <Card.Footer align="space-between" divider>
+ *   <span>Last updated: Today</span>
+ *   <Button>Edit</Button>
+ * </Card.Footer>
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @module CardFooter
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -143,18 +143,18 @@ export const BaseWatermark = forwardRef<HTMLDivElement, WatermarkProps>(
     // Build CSS custom properties for theming and styling consistency
     // These variables can be overridden via CSS for custom themes
     const watermarkVars = useMemo<React.CSSProperties>(() => ({
-      '--watermark-z-index': zIndex,
-      '--watermark-rotate': `${rotate}deg`,
-      '--watermark-gap-x': `${gap[0]}px`,
-      '--watermark-gap-y': `${gap[1]}px`,
-      '--watermark-offset-x': `${offset[0]}px`,
-      '--watermark-offset-y': `${offset[1]}px`,
-      '--watermark-width': `${width}px`,
-      '--watermark-height': `${height}px`,
-      '--watermark-font-color': font?.color || WATERMARK_DEFAULTS.font?.color,
-      '--watermark-font-size': `${font?.fontSize || WATERMARK_DEFAULTS.font?.fontSize}px`,
-      '--watermark-font-weight': font?.fontWeight || WATERMARK_DEFAULTS.font?.fontWeight,
-      '--watermark-font-family': font?.fontFamily || WATERMARK_DEFAULTS.font?.fontFamily,
+      '--ds-watermark-z-index': zIndex,
+      '--ds-watermark-rotate': `${rotate}deg`,
+      '--ds-watermark-gap-x': `${gap[0]}px`,
+      '--ds-watermark-gap-y': `${gap[1]}px`,
+      '--ds-watermark-offset-x': `${offset[0]}px`,
+      '--ds-watermark-offset-y': `${offset[1]}px`,
+      '--ds-watermark-width': `${width}px`,
+      '--ds-watermark-height': `${height}px`,
+      '--ds-watermark-font-color': font?.color || WATERMARK_DEFAULTS.font?.color,
+      '--ds-watermark-font-size': `${font?.fontSize || WATERMARK_DEFAULTS.font?.fontSize}px`,
+      '--ds-watermark-font-weight': font?.fontWeight || WATERMARK_DEFAULTS.font?.fontWeight,
+      '--ds-watermark-font-family': font?.fontFamily || WATERMARK_DEFAULTS.font?.fontFamily,
     } as React.CSSProperties), [zIndex, rotate, gap, offset, width, height, font]);
 
     // Container styles
@@ -171,8 +171,8 @@ export const BaseWatermark = forwardRef<HTMLDivElement, WatermarkProps>(
       pointerEvents: 'none',
       backgroundImage,
       backgroundRepeat: 'repeat',
-      backgroundPosition: `var(--watermark-offset-x) var(--watermark-offset-y)`,
-      zIndex: 'var(--watermark-z-index)' as any,
+      backgroundPosition: `var(--ds-watermark-offset-x) var(--ds-watermark-offset-y)`,
+      zIndex: 'var(--ds-watermark-z-index)' as any,
     };
 
     return (

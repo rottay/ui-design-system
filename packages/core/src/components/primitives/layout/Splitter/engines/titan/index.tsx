@@ -1,7 +1,36 @@
 'use client';
 
 /**
- * Splitter - Titan Engine (Ant Design)
+ * @fileoverview Splitter Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Splitter compound component.
+ * Wraps Ant Design's Splitter component with full feature parity.
+ *
+ * @remarks
+ * The Titan engine provides:
+ * - Direct passthrough to Ant Design Splitter and Panel components
+ * - Full Ant Design styling and theming support
+ * - Native resizable panels with smooth drag handling
+ * - Collapsible panel support
+ * - Size constraints (min/max)
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Splitter } from '@rottay/design-system';
+ *
+ * <Splitter engine="titan" layout="horizontal">
+ *   <Splitter.Panel engine="titan" defaultSize={30} min={100}>
+ *     Sidebar
+ *   </Splitter.Panel>
+ *   <Splitter.Panel engine="titan">
+ *     Main Content
+ *   </Splitter.Panel>
+ * </Splitter>
+ * ```
+ *
+ * @see {@link Splitter} - The main engine-aware component
+ * @module Splitter/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Splitter as AntSplitter } from 'antd';

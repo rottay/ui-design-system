@@ -24,6 +24,7 @@ export * from './space';
 export * from './timeline';
 export * from './qrcode';
 export * from './list';
+export * from './collapse';
 
 // Named imports for grouped exports
 import { avatarTokens } from './avatar';
@@ -44,6 +45,7 @@ import { spaceTokens } from './space';
 import { timelineTokens } from './timeline';
 import { qrcodeTokens } from './qrcode';
 import { listTokens } from './list';
+import { collapseTokens } from './collapse';
 
 // Combined component tokens export
 export const componentTokens = {
@@ -65,6 +67,7 @@ export const componentTokens = {
   timeline: timelineTokens,
   qrcode: qrcodeTokens,
   list: listTokens,
+  collapse: collapseTokens,
 } as const;
 
 export default componentTokens;

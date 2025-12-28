@@ -1,5 +1,32 @@
 /**
- * Tenant hook - Access tenant configuration
+ * @fileoverview useTenant Hook - Rottay Design System
+ * @description React hook for accessing tenant-specific configuration,
+ * branding, and multi-tenant settings.
+ *
+ * @remarks
+ * The useTenant hook provides:
+ * - **Tenant config**: Access complete tenant settings
+ * - **Branding**: Logo, colors, company name
+ * - **Features**: Enabled feature flags for the tenant
+ * - **Plan info**: Subscription tier and limitations
+ *
+ * @example Branded header
+ * ```tsx
+ * function Header() {
+ *   const { config } = useTenant();
+ *   return (
+ *     <header style={{ color: config.branding?.primaryColor }}>
+ *       <img src={config.branding?.logo} alt={config.name} />
+ *     </header>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link TenantProvider} - Provider component
+ * @see {@link TenantConfig} - Configuration type
+ * @module System/Hooks/Tenant
+ * @category System
+ * @package @rottay/design-system
  */
 
 import { useContext } from 'react';

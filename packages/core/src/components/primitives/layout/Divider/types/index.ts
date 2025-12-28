@@ -1,6 +1,41 @@
 /**
- * Divider - Core Interface
- * A visual separator that can be horizontal or vertical, with optional text content.
+ * @fileoverview Divider Types - Rottay Design System
+ * @description Type definitions for the Divider layout component.
+ * Provides comprehensive typing for orientation, line styles, text positioning,
+ * thickness, and spacing options.
+ *
+ * @remarks
+ * The Divider component offers extensive customization through its type system:
+ * - **Orientation**: Horizontal (default) or vertical dividers
+ * - **Variant**: Solid, dashed, or dotted line styles
+ * - **Thickness**: Preset (thin, medium, thick) or custom pixel values
+ * - **Spacing**: Margin around the divider using design token presets
+ * - **Text**: Optional content with configurable positioning
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   DividerProps,
+ *   DividerVariant,
+ *   DividerThickness,
+ *   DividerSpacing
+ * } from '@rottay/design-system';
+ *
+ * // Create a custom section divider
+ * interface SectionDividerProps {
+ *   title: string;
+ *   variant?: DividerVariant;
+ * }
+ *
+ * // Type-safe thickness and spacing
+ * const thickness: DividerThickness = 'thick'; // or 4 for 4px
+ * const spacing: DividerSpacing = 'lg';
+ * ```
+ *
+ * @see {@link Divider} - The main Divider component
+ * @module Divider/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 import type { EngineAwareProps } from '../../../../../types';

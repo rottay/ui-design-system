@@ -1,7 +1,35 @@
 'use client';
 
 /**
- * Space - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Space Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Space component.
+ * Uses Tailwind CSS utility classes with inline gap styles.
+ *
+ * @remarks
+ * The Hermes engine generates:
+ * - `inline-flex` for inline display
+ * - `flex-row` or `flex-col` based on direction
+ * - `flex-wrap` when wrapping is enabled
+ * - `items-*` classes for alignment
+ * - Inline `gap` style for spacing (supports all size formats)
+ *
+ * Split separators are handled by inserting elements between children.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Space } from '@rottay/design-system';
+ *
+ * // Generates: class="inline-flex flex-row items-center flex-wrap"
+ * <Space engine="hermes" size="middle" wrap>
+ *   <Tag>Tag 1</Tag>
+ *   <Tag>Tag 2</Tag>
+ * </Space>
+ * ```
+ *
+ * @see {@link Space} - The main engine-aware component
+ * @module Space/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { Children, Fragment } from 'react';
 import type { SpaceProps } from '../../types';

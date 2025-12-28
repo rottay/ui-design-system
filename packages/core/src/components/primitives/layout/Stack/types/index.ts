@@ -1,7 +1,38 @@
 /**
- * Stack - Core Interface
- * A layout primitive for stacking elements vertically or horizontally
- * with configurable spacing, alignment, and dividers.
+ * @fileoverview Stack Types - Rottay Design System
+ * @description Type definitions for the Stack layout primitive component.
+ * Provides comprehensive typing for direction, spacing, alignment, and layout properties.
+ *
+ * @remarks
+ * The Stack component uses flexbox under the hood, exposing a simplified API
+ * that maps to common flexbox patterns. The type system ensures valid combinations
+ * of direction, alignment, and justification values.
+ *
+ * Key features:
+ * - **Direction**: `vertical` (column) or `horizontal` (row)
+ * - **Spacing presets**: Design token-based gap values
+ * - **Alignment**: Cross-axis item alignment (align-items)
+ * - **Justification**: Main-axis item distribution (justify-content)
+ * - **Dividers**: Automatic or custom separators between items
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { StackProps, StackDirection, StackSpacing } from '@rottay/design-system';
+ *
+ * // Create a custom stack variant
+ * interface FormStackProps extends Partial<StackProps> {
+ *   error?: boolean;
+ * }
+ *
+ * // Use types for custom hooks
+ * const direction: StackDirection = 'horizontal';
+ * const spacing: StackSpacing = 'lg'; // or number like 24
+ * ```
+ *
+ * @see {@link Stack} - The main Stack component
+ * @module Stack/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 import type { CSSProperties, ElementType, HTMLAttributes, ReactNode } from 'react';

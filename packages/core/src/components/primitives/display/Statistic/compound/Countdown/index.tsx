@@ -1,8 +1,54 @@
 /**
- * @fileoverview Statistic Countdown Component
- * @description A countdown timer component that displays time remaining
- * until a target date/time with customizable formatting.
- * @module components/primitives/display/Statistic/compound/Countdown
+ * @fileoverview Statistic Countdown Component - Rottay Design System
+ * @description Countdown timer with customizable format tokens.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * The Countdown component displays time remaining until a target date/time.
+ * Uses requestAnimationFrame for smooth, performant updates.
+ *
+ * **Exported Components:**
+ * - `Countdown` - Main countdown timer component
+ *
+ * **Exported Functions:**
+ * - `formatTime` - Time formatting with tokens
+ *
+ * **Format Tokens:**
+ * - `DD` - Days, zero-padded (01-99)
+ * - `D` - Days (1-99)
+ * - `HH` - Hours, zero-padded (00-23)
+ * - `H` - Hours (0-23)
+ * - `mm` - Minutes, zero-padded (00-59)
+ * - `m` - Minutes (0-59)
+ * - `ss` - Seconds, zero-padded (00-59)
+ * - `s` - Seconds (0-59)
+ *
+ * **Event Callbacks:**
+ * - `onFinish` - Called when countdown reaches zero
+ * - `onChange` - Called every second with remaining ms
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Countdown
+ *   title="Sale Ends In"
+ *   value={Date.now() + 86400000}
+ *   format="DD:HH:mm:ss"
+ * />
+ * ```
+ *
+ * @example With Callbacks
+ * ```tsx
+ * <Countdown
+ *   value={Date.now() + 3600000}
+ *   onFinish={() => alert('Time is up!')}
+ *   onChange={(ms) => console.log('Remaining:', ms)}
+ * />
+ * ```
+ *
+ * @see {@link Statistic} for parent component
+ * @module Statistic/compound/Countdown
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

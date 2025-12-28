@@ -1,9 +1,46 @@
 /**
- * @fileoverview Badge Titan Engine Implementation
- * @description Ant Design-based implementation of the Badge component.
- * Provides full-featured badge functionality using the antd Badge component
- * with custom prop mapping for design system compatibility.
- * @module components/primitives/display/Badge/engines/titan
+ * @fileoverview Badge Titan Engine - Rottay Design System
+ * @description Ant Design-based badge with animation and status support.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine wraps Ant Design's Badge component to provide full-featured
+ * badge functionality with processing animations and ribbon support.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Badge` for core rendering
+ * - Maps pulse prop to Ant Design's processing status
+ * - Maps size variants to Ant Design's small/default sizes
+ * - Applies variant colors via inline styles
+ *
+ * **Size Mapping:**
+ * - `xs`, `sm` → Ant Design `small`
+ * - `md`, `lg`, `xl` → Ant Design `default`
+ *
+ * **Position Offsets:**
+ * Position prop is mapped to [x, y] offset arrays for Ant Design.
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Badge } from '@rottay/design-system';
+ *
+ * <Badge engine="titan" count={5} variant="primary">
+ *   <Avatar />
+ * </Badge>
+ * ```
+ *
+ * @example Processing Animation
+ * ```tsx
+ * <Badge engine="titan" dot pulse variant="error">
+ *   <NotificationIcon />
+ * </Badge>
+ * ```
+ *
+ * @see {@link Badge} for the main component
+ * @see {@link https://ant.design/components/badge} Ant Design Badge
+ * @module TitanBadge
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,10 +1,50 @@
 /**
- * @fileoverview Card - Titan Engine Implementation
- * @description Ant Design-based implementation of the Card component.
- * Leverages Ant Design's Card component while maintaining consistent API.
+ * @fileoverview Card Titan Engine - Rottay Design System
+ * @description Ant Design-based card with skeleton loading support.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/engines/titan
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * This engine wraps Ant Design's Card component to provide full-featured
+ * card functionality with built-in skeleton loading and cover support.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Card` for core rendering
+ * - Uses `antd/Skeleton` for loading state
+ * - Maps variants to Ant Design border/shadow styles
+ * - Supports cover images via Card's cover prop
+ *
+ * **Variant Mapping:**
+ * - `elevated` - Card with shadow
+ * - `outlined` - Bordered card
+ * - `filled` - Gray background
+ * - `ghost` - Transparent background
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Card } from '@rottay/design-system';
+ *
+ * <Card engine="titan" title="Card Title">
+ *   <p>Card content</p>
+ * </Card>
+ * ```
+ *
+ * @example With Cover and Actions
+ * ```tsx
+ * <Card
+ *   engine="titan"
+ *   title="Product"
+ *   cover="/product.jpg"
+ *   actions={[<Button>Buy</Button>]}
+ * >
+ *   <p>Product description</p>
+ * </Card>
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @see {@link https://ant.design/components/card} Ant Design Card
+ * @module TitanCard
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

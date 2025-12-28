@@ -1,6 +1,40 @@
 /**
- * Box - Hermes Engine (DaisyUI/Tailwind)
- * Provides Box component using DaisyUI/Tailwind styling conventions
+ * @fileoverview Box Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Box component.
+ * Provides utility-first Box using Tailwind CSS classes.
+ *
+ * @remarks
+ * The Hermes engine leverages Tailwind CSS utility classes for styling,
+ * making it ideal for projects using the utility-first paradigm. Spacing,
+ * shadows, and border-radius values are mapped to Tailwind class names.
+ *
+ * Tailwind Class Mappings:
+ * - Spacing: `p-1` (xs) through `p-16` (4xl)
+ * - Shadows: `shadow-xs` through `shadow-2xl`
+ * - Border Radius: `rounded-sm` through `rounded-full`
+ * - Display: Direct passthrough (`flex`, `grid`, etc.)
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Box } from '@rottay/design-system';
+ *
+ * // Use Hermes engine for Tailwind classes
+ * <Box engine="hermes" p="md" rounded="lg" shadow="md">
+ *   Outputs: class="p-4 rounded-lg shadow"
+ * </Box>
+ *
+ * // Combine with global EngineProvider
+ * <EngineProvider engine="hermes">
+ *   <Box p="sm" m="lg">Tailwind classes applied</Box>
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link Box} - The main engine-aware component
+ * @see {@link TitanBox} - Ant Design implementation
+ * @see {@link ApolloBox} - Pure HTML/CSS implementation
+ * @module Box/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,33 +1,139 @@
 /**
- * Space Types
+ * @fileoverview Space Component Types - Rottay Design System
+ * @description Type definitions for the Space layout component including props,
+ * size presets, direction options, alignment values, and configuration constants.
+ *
+ * @remarks
+ * The Space component types support:
+ * - Preset sizes (small, middle, large) mapped to CSS variables
+ * - Custom numeric pixel values
+ * - Asymmetric [horizontal, vertical] gap arrays
+ * - Horizontal and vertical flow directions
+ * - Flexbox alignment options
+ * - Split separator elements
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { SpaceProps, SpaceSize, SpaceDirection } from '@rottay/design-system';
+ *
+ * const customSpace: SpaceProps = {
+ *   size: 'middle',
+ *   direction: 'vertical',
+ *   wrap: true,
+ *   align: 'start',
+ * };
+ * ```
+ *
+ * @module Space/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 
+/**
+ * Preset size options for Space component.
+ * Each size maps to a CSS variable for consistent theming.
+ *
+ * @remarks
+ * - `small`: Compact spacing (default: 8px)
+ * - `middle`: Standard spacing (default: 16px)
+ * - `large`: Generous spacing (default: 24px)
+ */
 export type SpaceSize = 'small' | 'middle' | 'large';
+
+/**
+ * Flow direction for Space component.
+ *
+ * @remarks
+ * - `horizontal`: Items flow left-to-right (default)
+ * - `vertical`: Items flow top-to-bottom
+ */
 export type SpaceDirection = 'horizontal' | 'vertical';
+
+/**
+ * Cross-axis alignment options for Space items.
+ * Maps to CSS `align-items` values.
+ *
+ * @remarks
+ * - `start`: Align to flex-start
+ * - `end`: Align to flex-end
+ * - `center`: Center alignment (default)
+ * - `baseline`: Align to text baseline
+ */
 export type SpaceAlign = 'start' | 'end' | 'center' | 'baseline';
 
+/**
+ * Props for the Space component.
+ *
+ * @interface SpaceProps
+ * @example
+ * ```tsx
+ * <Space
+ *   size="middle"
+ *   direction="horizontal"
+ *   wrap={true}
+ *   align="center"
+ *   split={<Divider orientation="vertical" />}
+ * >
+ *   <Button>Action 1</Button>
+ *   <Button>Action 2</Button>
+ * </Space>
+ * ```
+ */
 export interface SpaceProps {
-  /** Size of spacing: preset or number (px) or [horizontal, vertical] */
+  /**
+   * Size of spacing between items.
+   * - Preset: 'small' | 'middle' | 'large'
+   * - Number: Custom pixel value (e.g., 16)
+   * - Array: [horizontal, vertical] gaps (e.g., [8, 16])
+   * @default 'small'
+   */
   size?: SpaceSize | number | [number, number];
-  /** Direction of spacing */
+
+  /**
+   * Direction of item flow.
+   * @default 'horizontal'
+   */
   direction?: SpaceDirection;
-  /** Whether to wrap items */
+
+  /**
+   * Whether items should wrap to new lines when they overflow.
+   * @default false
+   */
   wrap?: boolean;
-  /** Alignment of items */
+
+  /**
+   * Cross-axis alignment of items.
+   * @default 'center'
+   */
   align?: SpaceAlign;
-  /** Element to render between items */
+
+  /**
+   * Element to render between each child item.
+   * Useful for dividers or custom separators.
+   */
   split?: ReactNode;
-  /** Space content */
+
+  /** Child elements to space out. */
   children?: ReactNode;
-  /** Additional CSS classes */
+
+  /** Additional CSS class names. */
   className?: string;
-  /** Inline styles */
+
+  /** Inline CSS styles. */
   style?: CSSProperties;
-  /** Rendering engine override */
+
+  /**
+   * Rendering engine override.
+   * Overrides the engine from EngineProvider context.
+   */
   engine?: 'titan' | 'hermes' | 'apollo';
 }
 
+/**
+ * Default values for Space component props.
+ * Used when props are not explicitly provided.
+ */
 export const SPACE_DEFAULTS: Partial<SpaceProps> = {
   size: 'small',
   direction: 'horizontal',
@@ -35,14 +141,26 @@ export const SPACE_DEFAULTS: Partial<SpaceProps> = {
   align: 'center',
 };
 
-/** Size values as CSS variable tokens */
+/**
+ * Size values mapped to CSS custom property tokens.
+ * Enables consistent theming across the design system.
+ *
+ * @remarks
+ * These CSS variables should be defined in the theme:
+ * - `--space-small-size`: Default 8px
+ * - `--space-middle-size`: Default 16px
+ * - `--space-large-size`: Default 24px
+ */
 export const SPACE_SIZE_MAP: Record<SpaceSize, string> = {
   small: 'var(--space-small-size)',
   middle: 'var(--space-middle-size)',
   large: 'var(--space-large-size)',
 };
 
-/** CSS align-items mapping */
+/**
+ * Mapping from SpaceAlign values to CSS align-items values.
+ * Used by engine implementations for cross-axis alignment.
+ */
 export const SPACE_ALIGN_MAP: Record<SpaceAlign, string> = {
   start: 'flex-start',
   end: 'flex-end',

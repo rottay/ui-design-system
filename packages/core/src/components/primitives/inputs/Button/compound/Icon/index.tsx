@@ -1,6 +1,68 @@
 /**
- * Button.Icon - Compound Component
- * Icon-only button variant
+ * @fileoverview ButtonIcon - Rottay Design System
+ * @description Icon-only button variant with required accessibility label.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * ButtonIcon provides a specialized button designed for icon-only actions.
+ * Unlike regular buttons with text, this component requires an `aria-label`
+ * prop to ensure accessibility for screen reader users.
+ *
+ * **Key Features:**
+ * - Square aspect ratio (width equals height)
+ * - Required aria-label for accessibility
+ * - Optional tooltip for sighted users
+ * - All standard button states (hover, active, disabled, loading)
+ * - Size and variant customization
+ *
+ * **Accessibility Requirements:**
+ * - `aria-label` is REQUIRED and enforced via TypeScript
+ * - Use descriptive labels that explain the action, not the icon
+ * - Good: "Delete item", Bad: "Trash icon"
+ *
+ * **CSS Custom Properties:**
+ * - `--button-spinner-size-{size}` - Loading spinner size per button size
+ *
+ * @example Basic Icon Button
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ * import { EditIcon } from '@rottay/icons';
+ *
+ * <Button.Icon
+ *   icon={<EditIcon />}
+ *   aria-label="Edit document"
+ *   onClick={handleEdit}
+ * />
+ * ```
+ *
+ * @example With Tooltip and Variants
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ * import { TrashIcon, SettingsIcon } from '@rottay/icons';
+ *
+ * // Danger variant with tooltip
+ * <Button.Icon
+ *   icon={<TrashIcon />}
+ *   aria-label="Delete item"
+ *   variant="danger"
+ *   tooltip="Delete this item permanently"
+ *   onClick={handleDelete}
+ * />
+ *
+ * // Ghost variant for subtle actions
+ * <Button.Icon
+ *   icon={<SettingsIcon />}
+ *   aria-label="Open settings"
+ *   variant="ghost"
+ *   size="sm"
+ * />
+ * ```
+ *
+ * @see {@link Button} for the main component
+ * @see {@link ButtonGroup} for grouping buttons
+ * @module ButtonIcon
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

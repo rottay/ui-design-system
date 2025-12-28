@@ -1,6 +1,42 @@
 /**
- * Switch Types
+ * @fileoverview Switch Types - Rottay Design System
+ * @description Type definitions for the Switch component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module defines all TypeScript interfaces, types, and constants
+ * for the Switch component. These types are shared across all engines.
+ *
+ * **Exported Types:**
+ * - `SwitchProps` - Main component props interface
+ * - `SwitchSize` - Size variant type (uses SizeType: 'small' | 'default' | 'large')
+ *
+ * **Configuration Constants:**
+ * - `SWITCH_DEFAULTS` - Default prop values
+ *
+ * **Key Props:**
+ * - `checked` / `defaultChecked` - Controlled/uncontrolled state
+ * - `checkedChildren` / `unCheckedChildren` - Content for each state
+ * - `loading` - Shows loading spinner and disables interaction
+ * - `onChange` - Callback with new checked value
+ * - `onClick` - Callback with checked value and event
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { SwitchProps, SwitchSize } from '@rottay/design-system';
+ *
+ * interface SettingSwitchProps extends SwitchProps {
+ *   settingKey: string;
+ *   onSave?: (value: boolean) => Promise<void>;
+ * }
+ * ```
+ *
+ * @see {@link Switch} for the main component
+ * @module SwitchTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { SizeType } from '../../../../../types/common';
 

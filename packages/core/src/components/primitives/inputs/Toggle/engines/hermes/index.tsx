@@ -1,5 +1,49 @@
 /**
- * Toggle - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Toggle Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Toggle component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements toggles using DaisyUI's toggle classes
+ * with Tailwind CSS utilities. It provides a lightweight alternative
+ * with utility-first styling.
+ *
+ * **DaisyUI Classes Used:**
+ * - `toggle` - Base toggle styling
+ * - `toggle-{size}` - Size variants (xs, sm, lg)
+ * - `toggle-{color}` - Color variants (primary, secondary, success, warning, error)
+ * - `form-control` - Form wrapper styling
+ * - `label`, `label-text`, `label-text-alt` - Label styling
+ *
+ * **Tailwind Utilities:**
+ * - `flex`, `flex-col`, `gap-*` - Layout utilities
+ * - `opacity-50`, `cursor-not-allowed` - Disabled state
+ * - `flex-row-reverse`, `justify-end` - Label placement
+ *
+ * **Accessibility:**
+ * - Native checkbox with role="switch"
+ * - aria-checked and aria-invalid attributes
+ * - Proper label association
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Toggle } from '@rottay/design-system';
+ *
+ * <Toggle
+ *   engine="hermes"
+ *   color="primary"
+ *   size="lg"
+ *   label="Enable feature"
+ *   className="my-4"
+ * />
+ * ```
+ *
+ * @see {@link Toggle} for the main component
+ * @see {@link TitanToggle} for Ant Design implementation
+ * @see {@link ApolloToggle} for vanilla implementation
+ * @module HermesToggle
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

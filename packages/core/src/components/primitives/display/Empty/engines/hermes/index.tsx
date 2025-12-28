@@ -1,12 +1,47 @@
 /**
- * Empty Component - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Empty Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based empty state with theme-aware colors.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * This implementation uses DaisyUI utility classes for a lightweight,
- * utility-first approach to styling the empty state component.
+ * @remarks
+ * This engine uses DaisyUI classes with Tailwind utilities
+ * for a lightweight, theme-integrated empty state.
  *
+ * **Exported Components:**
+ * - `HermesEmpty` - Main empty state component
+ * - `DefaultImage` - Theme-aware SVG illustration
+ * - `SimpleImage` - Minimal SVG variant
+ *
+ * **Implementation Details:**
+ * - Custom SVGs with `currentColor` for theming
+ * - DaisyUI semantic color classes
+ * - Tailwind flex utilities for layout
+ * - ARIA role="status" for accessibility
+ *
+ * **Class Mappings:**
+ * - `flex flex-col items-center` - Container layout
+ * - `text-base-content/50` - Description color
+ * - `text-base-content/20` - Image color
+ * - `py-8` - Vertical padding
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Automatic theme adaptation
+ * - DaisyUI semantic colors
+ * - Responsive-friendly
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Empty } from '@rottay/design-system';
+ *
+ * <Empty engine="hermes" />
+ * ```
+ *
+ * @see {@link Empty} for the main component
+ * @see {@link https://daisyui.com/} DaisyUI
  * @module Empty/engines/hermes
  * @category Display
- * @engine Hermes
+ * @package @rottay/design-system
  */
 
 'use client';

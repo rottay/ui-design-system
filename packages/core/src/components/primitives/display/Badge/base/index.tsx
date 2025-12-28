@@ -1,9 +1,52 @@
 /**
- * @fileoverview Badge Base Component
- * @description Base implementation of the Badge component using CSS variables
- * for consistent styling across all rendering engines. This component serves
- * as a headless implementation that engine-specific variants can extend.
- * @module components/primitives/display/Badge/base
+ * @fileoverview Badge Base Component - Rottay Design System
+ * @description Core badge implementation with CSS variables for theming.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * The BaseBadge provides a full-featured badge with CSS variable support.
+ * It handles count formatting, dot indicators, positioning, and all
+ * visual customization options.
+ *
+ * **Component Structure:**
+ * - Container wrapper for positioned badges
+ * - Badge indicator span with content
+ * - Optional icon and close button
+ * - Pulse animation support
+ *
+ * **CSS Variable Integration:**
+ * - `--ds-badge-bg` - Background color
+ * - `--ds-badge-color` - Text color
+ * - `--ds-badge-min-width` - Minimum badge width
+ * - `--ds-badge-height` - Badge height
+ * - `--ds-badge-font-size` - Text size
+ * - `--ds-badge-border-radius` - Corner radius
+ * - `--ds-badge-dot-size` - Dot indicator size
+ *
+ * **Position Options:**
+ * - `top-right` - Default, upper right corner
+ * - `top-left` - Upper left corner
+ * - `bottom-right` - Lower right corner
+ * - `bottom-left` - Lower left corner
+ *
+ * @example Standalone Badge
+ * ```tsx
+ * import { BaseBadge } from '@rottay/design-system';
+ *
+ * <BaseBadge count={5} variant="primary" />
+ * ```
+ *
+ * @example Badge Overlay
+ * ```tsx
+ * <BaseBadge count={10} position="top-right">
+ *   <Avatar src="/user.jpg" />
+ * </BaseBadge>
+ * ```
+ *
+ * @see {@link Badge} for the engine-routed component
+ * @module BaseBadge
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -102,16 +145,16 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
      * These variables enable consistent theming across engines.
      */
     const badgeVars: React.CSSProperties = {
-      '--badge-bg': `var(--badge-${variant}-bg, ${color})`,
-      '--badge-color': `var(--badge-${variant}-color, #fff)`,
-      '--badge-min-width': sizeValues.minWidth,
-      '--badge-height': sizeValues.height,
-      '--badge-font-size': sizeValues.fontSize,
-      '--badge-border-radius': radius === 'full' ? 'var(--badge-radius-full, 9999px)' :
-                               radius === 'lg' ? 'var(--badge-radius-lg, 8px)' :
-                               radius === 'md' ? 'var(--badge-radius-md, 4px)' :
-                               radius === 'sm' ? 'var(--badge-radius-sm, 2px)' : 'var(--badge-radius-none, 0)',
-      '--badge-dot-size': dotSize,
+      '--ds-badge-bg': `var(--ds-badge-${variant}-bg, ${color})`,
+      '--ds-badge-color': `var(--ds-badge-${variant}-color, #fff)`,
+      '--ds-badge-min-width': sizeValues.minWidth,
+      '--ds-badge-height': sizeValues.height,
+      '--ds-badge-font-size': sizeValues.fontSize,
+      '--ds-badge-border-radius': radius === 'full' ? 'var(--ds-badge-radius-full, 9999px)' :
+                               radius === 'lg' ? 'var(--ds-badge-radius-lg, 8px)' :
+                               radius === 'md' ? 'var(--ds-badge-radius-md, 4px)' :
+                               radius === 'sm' ? 'var(--ds-badge-radius-sm, 2px)' : 'var(--ds-badge-radius-none, 0)',
+      '--ds-badge-dot-size': dotSize,
     } as React.CSSProperties;
 
     /**
@@ -128,10 +171,10 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
      * Visual style variations for the badge appearance.
      */
     const badgeStyleVariations: Record<string, React.CSSProperties> = {
-      solid: { backgroundColor: 'var(--badge-bg)', color: 'var(--badge-color)' },
-      outline: { backgroundColor: 'transparent', color: 'var(--badge-bg)', border: '1px solid var(--badge-bg)' },
-      soft: { backgroundColor: `color-mix(in srgb, var(--badge-bg) 15%, transparent)`, color: 'var(--badge-bg)' },
-      ghost: { backgroundColor: 'transparent', color: 'var(--badge-bg)' },
+      solid: { backgroundColor: 'var(--ds-badge-bg)', color: 'var(--ds-badge-color)' },
+      outline: { backgroundColor: 'transparent', color: 'var(--ds-badge-bg)', border: '1px solid var(--ds-badge-bg)' },
+      soft: { backgroundColor: `color-mix(in srgb, var(--ds-badge-bg) 15%, transparent)`, color: 'var(--ds-badge-bg)' },
+      ghost: { backgroundColor: 'transparent', color: 'var(--ds-badge-bg)' },
     };
 
     // Container wrapper styles
@@ -149,15 +192,15 @@ export const BaseBadge = forwardRef<HTMLDivElement, BadgeProps>(
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      minWidth: dot ? 'var(--badge-dot-size)' : 'var(--badge-min-width)',
-      height: dot ? 'var(--badge-dot-size)' : 'var(--badge-height)',
+      minWidth: dot ? 'var(--ds-badge-dot-size)' : 'var(--ds-badge-min-width)',
+      height: dot ? 'var(--ds-badge-dot-size)' : 'var(--ds-badge-height)',
       padding: dot ? 0 : '0 6px',
-      fontSize: 'var(--badge-font-size)',
+      fontSize: 'var(--ds-badge-font-size)',
       fontWeight: 500,
       lineHeight: 1,
-      borderRadius: 'var(--badge-border-radius)',
+      borderRadius: 'var(--ds-badge-border-radius)',
       border: bordered ? '2px solid #fff' : 'none',
-      boxShadow: bordered ? '0 0 0 1px var(--badge-bg)' : 'none',
+      boxShadow: bordered ? '0 0 0 1px var(--ds-badge-bg)' : 'none',
       cursor: clickable || onClick ? 'pointer' : 'default',
       transition: 'all 0.2s ease-in-out',
       zIndex: 1,

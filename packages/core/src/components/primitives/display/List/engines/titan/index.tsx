@@ -1,11 +1,48 @@
 'use client';
 
 /**
- * List - Titan Engine (Ant Design)
+ * @fileoverview List Titan Engine - Rottay Design System
+ * @description Ant Design-based list with full feature support.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Implementation of the List component using Ant Design.
- * Provides a feature-rich list with built-in pagination, grid layout,
- * and item metadata support.
+ * @remarks
+ * This engine wraps Ant Design's List component to provide
+ * comprehensive list functionality including pagination and grid layout.
+ *
+ * **Exported Components:**
+ * - `List` - Main list container
+ * - `Item` - List item wrapper
+ * - `Meta` - Item metadata display
+ *
+ * **Implementation Details:**
+ * - Uses `antd/List` for core rendering
+ * - Full pagination configuration
+ * - Grid layout support
+ * - Loading states
+ * - Locale customization
+ *
+ * **Ant Design Features:**
+ * - Built-in pagination
+ * - Responsive grid
+ * - Item actions
+ * - Virtual scrolling (via rowKey)
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { List } from '@rottay/design-system';
+ *
+ * <List
+ *   engine="titan"
+ *   dataSource={data}
+ *   renderItem={(item) => <List.Item>{item.name}</List.Item>}
+ * />
+ * ```
+ *
+ * @see {@link List} for the main component
+ * @see {@link https://ant.design/components/list} Ant Design List
+ * @module List/engines/titan
+ * @category Display
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { List as AntList } from 'antd';

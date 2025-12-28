@@ -1,7 +1,42 @@
 'use client';
 
 /**
- * Popover - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Popover Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Popover component.
+ * Uses Tailwind CSS utilities with DaisyUI styling conventions.
+ *
+ * @remarks
+ * The Hermes engine provides:
+ * - DaisyUI tooltip/card component base classes
+ * - Tailwind utility classes for layout and styling
+ * - Custom trigger handling for click, hover, and focus
+ * - Click-outside dismissal via event listeners
+ * - Delay support for hover triggers
+ *
+ * Implementation details:
+ * - Uses controlled/uncontrolled pattern for open state
+ * - Placement mapped to DaisyUI tooltip position classes
+ * - Timeout refs for enter/leave delay management
+ * - Arrow styling with rotated div element
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Popover, Button } from '@rottay/design-system';
+ *
+ * <Popover
+ *   engine="hermes"
+ *   content="Tailwind styled content"
+ *   title="Hermes Popover"
+ *   trigger="hover"
+ * >
+ *   <Button>Hover me</Button>
+ * </Popover>
+ * ```
+ *
+ * @see {@link Popover} - The main engine-aware component
+ * @module Popover/Engines/Hermes
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { PopoverProps } from '../../types';

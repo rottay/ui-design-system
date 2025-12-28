@@ -1,6 +1,40 @@
 /**
- * Engine Registry
- * Central registry of all available UI engine implementations
+ * @fileoverview Engine Registry - Rottay Design System
+ * @description Central registry containing metadata and utilities for all
+ * available UI rendering engines in the design system.
+ *
+ * @remarks
+ * The registry provides:
+ * - **Engine metadata**: Names, display names, libraries, status
+ * - **Validation**: Type guards for engine names
+ * - **Discovery**: List available and stable engines
+ * - **Defaults**: Get default engine configuration
+ *
+ * Available engines:
+ * - `titan`: Ant Design (stable) - Full-featured
+ * - `hermes`: DaisyUI (stable) - Lightweight
+ * - `apollo`: Vanilla (stable) - Zero dependencies
+ * - `athena`: Pluggable (experimental) - Custom implementations
+ *
+ * @example Get engine info
+ * ```tsx
+ * const config = getEngine('titan');
+ * console.log(config.displayName); // 'Titan (Ant Design)'
+ * ```
+ *
+ * @example Validate engine name
+ * ```tsx
+ * if (isValidEngine(userInput)) {
+ *   setEngine(userInput);
+ * }
+ * ```
+ *
+ * @see {@link ENGINE_REGISTRY} - Engine definitions
+ * @see {@link getEngine} - Get engine config
+ * @see {@link isValidEngine} - Validate engine name
+ * @module System/Engines/Registry
+ * @category System
+ * @package @rottay/design-system
  */
 
 import type { EngineName, EngineConfig } from '../../../types';

@@ -1,7 +1,43 @@
 'use client';
 
 /**
- * Splitter - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Splitter Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Splitter compound component.
+ * Uses Tailwind CSS utilities with custom mouse event handling for drag-to-resize.
+ *
+ * @remarks
+ * The Hermes engine provides:
+ * - Tailwind CSS styled panels with `flex` layout
+ * - Custom gutter with `bg-base-300 hover:bg-primary` styling
+ * - Mouse event-based drag handling for resizing
+ * - Percentage-based panel sizing
+ * - Size constraints via min/max props
+ *
+ * Implementation details:
+ * - Panels use `flex: 0 0 {size}%` for sizing
+ * - Gutter changes cursor based on layout direction
+ * - Uses React refs for container measurements
+ * - Clones children to inject calculated sizes
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Splitter } from '@rottay/design-system';
+ *
+ * // Tailwind-styled splitter
+ * <Splitter engine="hermes" layout="vertical">
+ *   <Splitter.Panel engine="hermes" defaultSize={40}>
+ *     Top Panel
+ *   </Splitter.Panel>
+ *   <Splitter.Panel engine="hermes">
+ *     Bottom Panel
+ *   </Splitter.Panel>
+ * </Splitter>
+ * ```
+ *
+ * @see {@link Splitter} - The main engine-aware component
+ * @module Splitter/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
 import type { SplitterProps, SplitterPanelProps } from '../../types';

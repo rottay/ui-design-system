@@ -1,12 +1,336 @@
 /**
- * Rottay Tenant Index - Design System
+ * Rottay Tenant - Design System Overrides
  *
- * Central import file for all Rottay tenant customizations.
- * This is the base/default tenant for the system.
+ * Tenant-specific customizations that override default.css tokens.
+ * Only includes values that DIFFER from the default theme.
  *
  * Usage:
- * Import this file to apply Rottay-specific overrides to the base design system.
+ * Add [data-tenant="rottay"] to html or body element to apply these overrides.
+ *
+ * @version 0.4.0
+ * @tenant Rottay (Default)
  */
 
-@import './colors.css';
-@import './components.css';
+/* =============================================================================
+   ROTTAY BRAND OVERRIDES
+   Applied when [data-tenant="rottay"] is present
+   ============================================================================= */
+
+[data-tenant="rottay"] {
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BRAND COLORS
+     Rottay uses a professional blue as primary, purple as secondary
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Primary - Rottay Blue (slightly different shades from default) */
+  --ds-color-primary-500: #0066CC;
+  --ds-color-primary-600: #0055AA;
+  --ds-color-primary-700: #0047AB;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     ACCENT COLORS (Rottay-specific)
+     Additional brand colors for special elements
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-color-accent-teal: #319795;
+  --ds-color-accent-orange: #FF8040;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     GRADIENTS (Rottay Brand)
+     Custom gradients for premium feel
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-gradient-brand-primary: linear-gradient(
+    135deg,
+    var(--ds-color-primary-500) 0%,
+    var(--ds-color-primary-600) 100%
+  );
+
+  --ds-gradient-brand-secondary: linear-gradient(
+    135deg,
+    var(--ds-color-primary-400) 0%,
+    var(--ds-color-secondary-500) 100%
+  );
+
+  --ds-gradient-brand-accent: linear-gradient(
+    135deg,
+    var(--ds-color-accent-teal) 0%,
+    var(--ds-color-primary-500) 100%
+  );
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SHADOW COLORS (Rottay-tinted)
+     Colored shadows that align with brand
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-shadow-primary: 0 4px 14px 0 rgba(0, 102, 204, 0.25);
+  --ds-shadow-focus-ring: 0 0 0 3px rgba(0, 102, 204, 0.2);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BUTTON OVERRIDES
+     Rottay-specific button styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* More rounded buttons */
+  --ds-button-md-radius: var(--ds-radius-lg);
+  --ds-button-lg-radius: var(--ds-radius-xl);
+
+  /* Enhanced primary button shadow */
+  --ds-button-primary-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+  --ds-button-primary-shadow-hover: 0 4px 12px rgba(0, 102, 204, 0.3);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     INPUT OVERRIDES
+     Rottay-specific input styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Focus state with Rottay blue */
+  --ds-input-shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.1);
+
+  /* More rounded inputs */
+  --ds-input-radius: var(--ds-radius-lg);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CARD OVERRIDES
+     Rottay-specific card styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* More rounded cards */
+  --ds-card-radius: var(--ds-radius-xl);
+
+  /* Subtle shadow with slight tint */
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Title with brand color */
+  --ds-card-title-color: var(--ds-color-primary-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     MODAL OVERRIDES
+     Rottay-specific modal styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* More rounded modals */
+  --ds-modal-radius: var(--ds-radius-2xl);
+
+  /* Enhanced shadow */
+  --ds-modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Title with brand color */
+  --ds-modal-title-color: var(--ds-color-primary-700);
+  --ds-modal-title-font-weight: var(--ds-font-weight-bold);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     AVATAR OVERRIDES
+     Rottay-specific avatar styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Primary variant with Rottay blue */
+  --ds-avatar-primary-bg: var(--ds-color-primary-100);
+  --ds-avatar-primary-color: var(--ds-color-primary-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     NAVIGATION OVERRIDES
+     Rottay-specific navigation styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Active state with Rottay blue */
+  --ds-menu-item-bg-active: var(--ds-color-primary-50);
+  --ds-menu-item-color-active: var(--ds-color-primary-700);
+  --ds-menu-item-border-active: var(--ds-color-primary-500);
+
+  /* Tab active state */
+  --ds-tab-color-active: var(--ds-color-primary-600);
+  --ds-tab-border-active: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TABLE OVERRIDES
+     Rottay-specific table styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Hover row with brand tint */
+  --ds-table-row-bg-hover: var(--ds-color-primary-50);
+
+  /* Selected row */
+  --ds-table-row-bg-selected: var(--ds-color-primary-100);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     ALERT OVERRIDES
+     Rottay-specific alert styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Info alert uses Rottay blue */
+  --ds-alert-info-bg: var(--ds-color-primary-50);
+  --ds-alert-info-border: var(--ds-color-primary-200);
+  --ds-alert-info-color: var(--ds-color-primary-800);
+  --ds-alert-info-icon: var(--ds-color-primary-500);
+
+  /* More rounded alerts */
+  --ds-alert-radius: var(--ds-radius-lg);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     DROPDOWN OVERRIDES
+     Rottay-specific dropdown styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-dropdown-radius: var(--ds-radius-lg);
+  --ds-dropdown-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Active item with brand color */
+  --ds-dropdown-item-bg-active: var(--ds-color-primary-50);
+  --ds-dropdown-item-color-active: var(--ds-color-primary-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SWITCH/TOGGLE OVERRIDES
+     Rottay-specific switch styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-switch-checked-bg: var(--ds-color-primary-500);
+  --ds-switch-checked-bg-hover: var(--ds-color-primary-600);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CHECKBOX/RADIO OVERRIDES
+     Rottay-specific checkbox/radio styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-checkbox-checked-bg: var(--ds-color-primary-500);
+  --ds-checkbox-checked-border: var(--ds-color-primary-500);
+
+  --ds-radio-checked-border: var(--ds-color-primary-500);
+  --ds-radio-checked-dot: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     PAGINATION OVERRIDES
+     Rottay-specific pagination styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-pagination-item-bg-active: var(--ds-color-primary-500);
+  --ds-pagination-item-bg-hover: var(--ds-color-primary-50);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     COLLAPSE OVERRIDES
+     Rottay-specific collapse styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-collapse-radius: var(--ds-radius-xl);
+  --ds-collapse-header-bg-hover: var(--ds-color-primary-50);
+  --ds-collapse-icon-color-expanded: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     LINK OVERRIDES
+     Rottay-specific link styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-link-color: var(--ds-color-primary-600);
+  --ds-link-color-hover: var(--ds-color-primary-700);
+  --ds-link-color-active: var(--ds-color-primary-800);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     PROGRESS OVERRIDES
+     Rottay-specific progress indicators
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-progress-fill-primary: var(--ds-color-primary-500);
+  --ds-spinner-color: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     STEPS OVERRIDES
+     Rottay-specific steps styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-steps-item-bg-active: var(--ds-color-primary-500);
+  --ds-steps-item-border-active: var(--ds-color-primary-500);
+  --ds-steps-line-color-active: var(--ds-color-primary-500);
+  --ds-steps-item-bg-completed: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TIMELINE OVERRIDES
+     Rottay-specific timeline styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-timeline-dot-active-bg: var(--ds-color-primary-500);
+  --ds-timeline-dot-active-border: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BREADCRUMB OVERRIDES
+     Rottay-specific breadcrumb styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-breadcrumb-color-hover: var(--ds-color-primary-600);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TAG OVERRIDES
+     Rottay-specific tag styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-tag-primary-bg: var(--ds-color-primary-50);
+  --ds-tag-primary-color: var(--ds-color-primary-700);
+  --ds-tag-primary-border: var(--ds-color-primary-200);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BADGE OVERRIDES
+     Rottay-specific badge styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-badge-primary-bg: var(--ds-color-primary-500);
+  --ds-badge-info-bg: var(--ds-color-primary-100);
+  --ds-badge-info-color: var(--ds-color-primary-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     FLOAT BUTTON OVERRIDES
+     Rottay-specific float button styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-float-button-primary-bg: var(--ds-color-primary-500);
+  --ds-float-button-shadow: 0 4px 16px rgba(0, 102, 204, 0.2);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     ANCHOR OVERRIDES
+     Rottay-specific anchor styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-anchor-link-color-active: var(--ds-color-primary-600);
+  --ds-anchor-ink-color: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SEGMENTED OVERRIDES
+     Rottay-specific segmented styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-segmented-item-shadow-active: 0 1px 3px rgba(0, 102, 204, 0.1);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TOUR OVERRIDES
+     Rottay-specific tour styling
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  --ds-tour-indicator-color: var(--ds-color-primary-500);
+}
+
+/* =============================================================================
+   ROTTAY BRAND SPECIAL CLASSES
+   Utility classes specific to Rottay tenant
+   ============================================================================= */
+
+[data-tenant="rottay"] .ds-brand-gradient {
+  background: var(--ds-gradient-brand-primary);
+}
+
+[data-tenant="rottay"] .ds-brand-gradient-secondary {
+  background: var(--ds-gradient-brand-secondary);
+}
+
+[data-tenant="rottay"] .ds-brand-shadow {
+  box-shadow: var(--ds-shadow-primary);
+}
+
+/* Premium card variant */
+[data-tenant="rottay"] .ds-card--premium {
+  border: 1px solid var(--ds-color-primary-100);
+  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.08);
+}
+
+[data-tenant="rottay"] .ds-card--premium:hover {
+  border-color: var(--ds-color-primary-200);
+  box-shadow: 0 8px 30px rgba(0, 102, 204, 0.12);
+}

@@ -1,5 +1,60 @@
 /**
- * Input - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Input Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Input component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements inputs using DaisyUI's utility-first approach
+ * with Tailwind CSS classes. This provides a lightweight alternative to Titan
+ * with smaller bundle size and easier customization via CSS utilities.
+ *
+ * **DaisyUI Features Utilized:**
+ * - Semantic input classes (input, input-bordered)
+ * - Size modifiers (input-xs, input-sm, input-md, input-lg)
+ * - Status classes (input-error, input-warning, input-success, input-primary)
+ * - Base content color utilities for prefix/suffix
+ * - Ghost button for clear functionality
+ *
+ * **Prop Mapping:**
+ * - `variant="outline"` → `input-bordered`
+ * - `variant="filled"` → `bg-base-200`
+ * - `variant="flushed"` → Custom border-bottom only styling
+ * - `variant="unstyled"` → `border-0 bg-transparent`
+ * - `status="error"` → `input-error`
+ * - `status="warning"` → `input-warning`
+ * - `status="success"` → `input-success`
+ * - `size="xs"` → `input-xs`
+ *
+ * **Layout:**
+ * When prefix/suffix is provided, uses a DaisyUI label wrapper with
+ * flex layout for proper alignment.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Input } from '@rottay/design-system';
+ *
+ * // Explicit Hermes engine
+ * <Input
+ *   engine="hermes"
+ *   placeholder="Tailwind input"
+ *   className="custom-class"
+ * />
+ *
+ * // With DaisyUI styling
+ * <Input
+ *   engine="hermes"
+ *   variant="filled"
+ *   status="success"
+ *   prefix={<CheckIcon />}
+ * />
+ * ```
+ *
+ * @see {@link Input} for the main component
+ * @see {@link TitanInput} for Ant Design implementation
+ * @see {@link ApolloInput} for vanilla implementation
+ * @module HermesInput
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

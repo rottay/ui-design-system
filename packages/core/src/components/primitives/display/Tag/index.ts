@@ -1,39 +1,70 @@
 /**
- * Tag - Engine Router
+ * @fileoverview Tag - Rottay Design System
+ * @description Label component for categorization and status indication.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tag
- * @description Main entry point for the Tag component. Creates an engine-aware
- * Tag component that dynamically loads the appropriate engine implementation
- * based on context or explicit prop.
+ * @remarks
+ * The Tag component provides labels for categorization, filtering, and
+ * status indication with support for icons, closing, and clickable interactions.
  *
- * @example
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Tag with preset colors
+ * - **Hermes**: DaisyUI badge classes with Tailwind utilities
+ * - **Apollo**: Pure CSS implementation with zero dependencies
+ *
+ * **Key Features:**
+ * - Multiple sizes (xs, sm, md, lg, xl)
+ * - Semantic variants (default, primary, secondary, success, warning, error)
+ * - Closable with close button
+ * - Icon support (left side)
+ * - Outlined and bordered styles
+ * - Clickable tags with hover effects
+ * - Grouping with consistent spacing
+ *
+ * **Compound Components:**
+ * - `Tag.Group` - Container for multiple tags with gap options
+ *
+ * **CSS Custom Properties:**
+ * - `--tag-{size}-height` - Tag height per size
+ * - `--tag-{size}-padding` - Tag padding per size
+ * - `--tag-{size}-font-size` - Font size per size
+ *
+ * @example Basic Tag
  * ```tsx
  * import { Tag } from '@rottay/design-system';
  *
- * // Basic usage
  * <Tag>Label</Tag>
+ * <Tag variant="primary">Primary</Tag>
+ * ```
  *
- * // With variants and closable
- * <Tag variant="primary" closable onClose={handleClose}>
- *   Premium
+ * @example Closable Tag
+ * ```tsx
+ * <Tag variant="success" closable onClose={handleClose}>
+ *   Removable
  * </Tag>
+ * ```
  *
- * // With icon
- * <Tag icon={<StarIcon />} variant="success">
+ * @example Tag with Icon
+ * ```tsx
+ * <Tag icon={<StarIcon />} variant="warning">
  *   Featured
  * </Tag>
+ * ```
  *
- * // Explicit engine selection
- * <Tag engine="hermes" variant="warning">
- *   Hermes Tag
- * </Tag>
- *
- * // Tag group
+ * @example Tag Group
+ * ```tsx
  * <Tag.Group gap="md">
  *   <Tag>React</Tag>
  *   <Tag>TypeScript</Tag>
+ *   <Tag>Vite</Tag>
  * </Tag.Group>
  * ```
+ *
+ * @see {@link TagProps} for available props
+ * @see {@link TagGroup} for grouping configuration
+ * @module Tag
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

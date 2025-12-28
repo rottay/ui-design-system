@@ -1,14 +1,122 @@
 /**
- * DatePicker Types
+ * @fileoverview DatePicker Component Types - Rottay Design System
+ * @description Type definitions for the DatePicker component including picker modes,
+ * placements, range selection, and customization options.
+ *
+ * @remarks
+ * The DatePicker types provide comprehensive configuration for:
+ * - Picker modes: Date, week, month, quarter, year selection
+ * - Time support: Combined date-time picking
+ * - Range selection: Start and end date pairs
+ * - Validation: Disabled dates, status indicators
+ * - Customization: Formats, locales, icons, cell rendering
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   DatePickerProps,
+ *   RangePickerProps,
+ *   DatePickerMode,
+ * } from '@rottay/design-system';
+ *
+ * const dateConfig: DatePickerProps = {
+ *   picker: 'month',
+ *   format: 'MMMM YYYY',
+ *   placeholder: 'Select month',
+ * };
+ *
+ * const rangeConfig: RangePickerProps = {
+ *   placeholder: ['Start', 'End'],
+ *   separator: '→',
+ * };
+ * ```
+ *
+ * @module DatePicker/Types
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 import type { SizeType, StatusType } from '../../../../../types/common';
 
+/**
+ * Size variants for the DatePicker input.
+ */
 export type DatePickerSize = SizeType;
-export type DatePickerStatus = StatusType;
-export type DatePickerPlacement = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight';
-export type DatePickerMode = 'date' | 'week' | 'month' | 'quarter' | 'year';
 
+/**
+ * Validation status for the DatePicker.
+ */
+export type DatePickerStatus = StatusType;
+
+/**
+ * Dropdown placement options for the calendar popup.
+ *
+ * @example
+ * ```tsx
+ * <DatePicker placement="topRight" />
+ * ```
+ */
+export type DatePickerPlacement =
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'topLeft'
+  | 'topRight';
+
+/**
+ * Picker mode determining the selection granularity.
+ *
+ * @example
+ * ```tsx
+ * // Date picker (default)
+ * <DatePicker picker="date" />
+ *
+ * // Month picker
+ * <DatePicker picker="month" format="MMMM YYYY" />
+ *
+ * // Year picker
+ * <DatePicker picker="year" />
+ * ```
+ */
+export type DatePickerMode =
+  /** Select a specific date (default) */
+  | 'date'
+  /** Select a week */
+  | 'week'
+  /** Select a month */
+  | 'month'
+  /** Select a quarter */
+  | 'quarter'
+  /** Select a year */
+  | 'year';
+
+/**
+ * Props for the DatePicker component.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <DatePicker
+ *   placeholder="Select date"
+ *   onChange={(date, dateString) => setDate(date)}
+ * />
+ * ```
+ *
+ * @example With time picker
+ * ```tsx
+ * <DatePicker
+ *   showTime={{ format: 'HH:mm' }}
+ *   format="YYYY-MM-DD HH:mm"
+ * />
+ * ```
+ *
+ * @example Controlled component
+ * ```tsx
+ * <DatePicker
+ *   value={selectedDate}
+ *   onChange={(date) => setSelectedDate(date)}
+ *   disabledDate={(d) => d < new Date()}
+ * />
+ * ```
+ */
 export interface DatePickerProps {
   /** Current value (Date object, string, or dayjs) */
   value?: Date | string | null;
@@ -86,29 +194,91 @@ export interface DatePickerProps {
   cellRender?: (current: Date, info: { originNode: ReactNode; today: Date; range?: 'start' | 'end' }) => ReactNode;
 }
 
+/**
+ * Props for the RangePicker component.
+ *
+ * @example Basic range picker
+ * ```tsx
+ * <DatePicker.RangePicker
+ *   placeholder={['Start date', 'End date']}
+ *   onChange={(dates, dateStrings) => {
+ *     console.log('Range:', dates);
+ *   }}
+ * />
+ * ```
+ *
+ * @example With separator and format
+ * ```tsx
+ * <DatePicker.RangePicker
+ *   separator="→"
+ *   format="DD MMM YYYY"
+ *   placeholder={['From', 'To']}
+ * />
+ * ```
+ */
 export interface RangePickerProps extends Omit<DatePickerProps, 'value' | 'defaultValue' | 'onChange' | 'placeholder'> {
-  /** Current value as [start, end] */
+  /**
+   * Current value as [start, end] date tuple.
+   * @example value={[startDate, endDate]}
+   */
   value?: [Date | string | null, Date | string | null] | null;
-  /** Default value as [start, end] */
+
+  /**
+   * Default value as [start, end] date tuple.
+   * @example defaultValue={[new Date(), new Date()]}
+   */
   defaultValue?: [Date | string, Date | string];
-  /** Placeholders for [start, end] */
+
+  /**
+   * Placeholder text for [start, end] inputs.
+   * @example placeholder={['Start date', 'End date']}
+   */
   placeholder?: [string, string];
-  /** Separator between dates */
+
+  /**
+   * Separator element between the two date inputs.
+   * @default '~'
+   * @example separator="→"
+   */
   separator?: ReactNode;
-  /** Disabled dates */
+
+  /**
+   * Function to determine which dates should be disabled.
+   * @param currentDate - The date being evaluated
+   * @returns Whether the date should be disabled
+   */
   disabledDate?: (currentDate: Date) => boolean;
-  /** Callback when value changes */
+
+  /**
+   * Callback fired when the date range changes.
+   * @param dates - Tuple of [start, end] Date objects (or null)
+   * @param dateStrings - Tuple of formatted date strings
+   */
   onChange?: (dates: [Date | null, Date | null] | null, dateStrings: [string, string]) => void;
-  /** Which input is active */
+
+  /**
+   * Index of the currently active picker input (0 = start, 1 = end).
+   */
   activePickerIndex?: 0 | 1;
 }
 
+/**
+ * Default values for DatePicker props.
+ * Used across all engine implementations for consistency.
+ */
 export const DATE_PICKER_DEFAULTS: Partial<DatePickerProps> = {
+  /** Default picker mode */
   picker: 'date',
+  /** Default size variant */
   size: 'default',
+  /** Allow clearing the selected date */
   allowClear: true,
+  /** Show today button in footer */
   showToday: true,
+  /** Show border around input */
   bordered: true,
+  /** Default input variant */
   variant: 'outlined',
+  /** Default dropdown placement */
   placement: 'bottomLeft',
 };

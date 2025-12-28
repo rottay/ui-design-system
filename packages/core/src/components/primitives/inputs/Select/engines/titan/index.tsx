@@ -1,5 +1,66 @@
 /**
- * Select - Titan Engine (Ant Design)
+ * @fileoverview Select Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Select component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Select component, providing enterprise-grade
+ * features including rich filtering, async loading, and advanced dropdown behavior.
+ * It maps Rottay's standardized props to Ant Design's API.
+ *
+ * **Ant Design Features Utilized:**
+ * - Mode support (default, multiple, tags)
+ * - Built-in search with showSearch
+ * - allowClear for clearing selection
+ * - Loading state with spinner
+ * - maxTagCount for limiting visible tags
+ * - Custom filterOption function
+ * - Size variants (small, middle, large)
+ * - Variant options (outlined, filled, borderless)
+ * - Status indicators (error, warning)
+ *
+ * **Prop Mapping:**
+ * - `multiple` → `mode="multiple"`
+ * - `searchable` → `showSearch`
+ * - `clearable` → `allowClear`
+ * - `variant="filled"` → `variant="filled"`
+ * - `variant="flushed"` → `variant="borderless"`
+ * - `status="error"` → `status="error"`
+ * - `size="sm"` → `size="small"`
+ * - `size="lg"` → `size="large"`
+ *
+ * **Option Mapping:**
+ * Options with icons are transformed to include the icon in the label render.
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Select } from '@rottay/design-system';
+ *
+ * // Explicit Titan engine (default)
+ * <Select
+ *   engine="titan"
+ *   options={options}
+ *   showSearch
+ *   allowClear
+ *   placeholder="Search and select..."
+ * />
+ *
+ * // Multiple selection with Ant Design features
+ * <Select
+ *   engine="titan"
+ *   mode="multiple"
+ *   maxTagCount={3}
+ *   loading={isLoading}
+ *   onSearch={handleAsyncSearch}
+ * />
+ * ```
+ *
+ * @see {@link Select} for the main component
+ * @see {@link HermesSelect} for DaisyUI implementation
+ * @see {@link ApolloSelect} for vanilla implementation
+ * @module TitanSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

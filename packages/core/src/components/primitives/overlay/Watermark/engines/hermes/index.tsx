@@ -1,12 +1,42 @@
 'use client';
 
 /**
- * Watermark - Hermes Engine (DaisyUI/Tailwind)
- *
- * Tailwind CSS implementation of the Watermark component.
+ * @fileoverview Watermark Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Watermark component.
  * Uses canvas for pattern generation with Tailwind utility classes for layout.
  *
- * @module WatermarkHermes
+ * @remarks
+ * The Hermes engine provides:
+ * - Canvas-based watermark pattern generation
+ * - Tailwind utility classes for positioning (relative, absolute, inset-0)
+ * - Device pixel ratio support for retina displays
+ * - Text and image watermark rendering
+ * - Pointer-events-none for non-blocking overlay
+ *
+ * Implementation details:
+ * - useEffect generates canvas pattern on prop changes
+ * - Image watermarks load via Image() with crossOrigin
+ * - Multi-line text support with array content
+ * - Pattern set as CSS backgroundImage
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Watermark } from '@rottay/design-system';
+ *
+ * <Watermark
+ *   engine="hermes"
+ *   content="Draft"
+ *   rotate={-30}
+ *   gap={[120, 120]}
+ * >
+ *   <div>Document preview</div>
+ * </Watermark>
+ * ```
+ *
+ * @see {@link Watermark} - The main engine-aware component
+ * @module Watermark/Engines/Hermes
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useEffect, useState } from 'react';
 import type { WatermarkProps } from '../../types';

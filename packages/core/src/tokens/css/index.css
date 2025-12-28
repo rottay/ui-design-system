@@ -1,48 +1,67 @@
 /**
- * Design Tokens - Rottay Design System
+ * Rottay Design System - Main CSS Entry Point
  *
- * Main entry point for all CSS design tokens.
- * Import this file to get access to the complete token system.
+ * Central import file for the complete design token system.
+ * Import this single file to get all tokens, themes, and engine styles.
  *
- * Token Categories:
- * - Base: Foundational tokens (colors, spacing, typography, shadows, borders, z-index)
- * - Components: Component-specific tokens (avatar, button, input, card, modal)
- * - Responsive: Media query overrides for components
- * - Animations: Transitions and keyframes
- * - Tenants: Brand-specific customizations (rottay)
+ * CSS Cascade Order (specificity matters):
+ * 1. default.css      - Base tokens in :root (lowest specificity)
+ * 2. tenants/         - Tenant overrides via [data-tenant="x"] selector
+ * 3. engines/         - Engine themes mapping tokens to library classes
+ * 4. responsive/      - Media query overrides (web-first, NOT mobile-first)
+ * 5. animations/      - Transitions and keyframe animations
+ *
+ * Architecture:
+ * - All tokens use --ds-* naming convention
+ * - Tenants ONLY override values that differ from default
+ * - Engines map --ds-* tokens to library-specific classes (.ant-*, .btn, .ds-*)
  *
  * Usage:
  * @import '@rottay/design-system/tokens/css';
  * or
  * import '@rottay/design-system/tokens/css/index.css';
+ *
+ * @version 0.4.0
  */
 
-/* ========================================================================
-   BASE TOKENS
-   Foundational design tokens used throughout the system
-   ======================================================================== */
-@import './base/index.css';
+/* =============================================================================
+   LAYER 1: DEFAULT THEME (Base Tokens)
+   Centralized design tokens defining the complete system in :root
+   All tokens use --ds-* naming convention
+   ============================================================================= */
+@import './themes/default.css';
 
-/* ========================================================================
-   COMPONENT TOKENS
-   Component-specific design tokens
-   ======================================================================== */
+/* =============================================================================
+   LAYER 2: LEGACY BASE TOKENS (To be deprecated)
+   Will be removed once all components migrate to --ds-* tokens
+   ============================================================================= */
+@import './base/index.css';
 @import './components/index.css';
 
-/* ========================================================================
-   RESPONSIVE TOKENS
-   Responsive overrides for different screen sizes
-   ======================================================================== */
+/* =============================================================================
+   LAYER 3: TENANT OVERRIDES
+   Brand-specific customizations via [data-tenant="x"] selector
+   Only includes values that DIFFER from default.css
+   ============================================================================= */
+@import './tenants/index.css';
+
+/* =============================================================================
+   LAYER 4: ENGINE THEMES
+   Maps --ds-* tokens to library-specific classes
+   - Titan: Ant Design (.ant-*) mappings
+   - Hermes: DaisyUI/Tailwind (.btn, .card, etc.) mappings
+   - Apollo: Vanilla CSS (.ds-*) classes
+   ============================================================================= */
+@import './engines/index.css';
+
+/* =============================================================================
+   LAYER 5: RESPONSIVE OVERRIDES
+   Media query-based adjustments (web-first design, NOT mobile-first)
+   ============================================================================= */
 @import './responsive/index.css';
 
-/* ========================================================================
-   ANIMATION TOKENS
+/* =============================================================================
+   LAYER 6: ANIMATIONS
    Transitions and keyframe animations
-   ======================================================================== */
+   ============================================================================= */
 @import './animations/index.css';
-
-/* ========================================================================
-   TENANT TOKENS
-   Brand/tenant-specific customizations
-   ======================================================================== */
-@import './tenants/index.css';

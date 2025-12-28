@@ -1,7 +1,42 @@
 'use client';
 
 /**
- * Dropdown - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Dropdown Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Dropdown component.
+ * Uses Tailwind CSS utilities with DaisyUI dropdown classes.
+ *
+ * @remarks
+ * The Hermes engine provides:
+ * - DaisyUI `dropdown` component classes
+ * - Tailwind-styled menu items with hover effects
+ * - Custom trigger handling for click, hover, contextMenu
+ * - Click-outside dismissal via event listeners
+ * - Placement via `dropdown-top` and `dropdown-end` classes
+ *
+ * Implementation details:
+ * - Uses controlled/uncontrolled pattern for open state
+ * - MenuItem component handles dividers, groups, and items
+ * - Danger items styled with `text-error`
+ * - Disabled items have `disabled` class
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Dropdown, Button } from '@rottay/design-system';
+ *
+ * // DaisyUI styled dropdown
+ * <Dropdown
+ *   engine="hermes"
+ *   trigger={['click']}
+ *   menu={{ items: [{ key: '1', label: 'Option' }] }}
+ * >
+ *   <Button>Tailwind Dropdown</Button>
+ * </Dropdown>
+ * ```
+ *
+ * @see {@link Dropdown} - The main engine-aware component
+ * @module Dropdown/Engines/Hermes
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { DropdownProps, DropdownMenuItem } from '../../types';

@@ -1,6 +1,77 @@
 /**
- * Design System Root Provider
- * Composes all providers into a single provider
+ * @fileoverview DesignSystemProvider - Rottay Design System
+ * @description The root provider that composes all system providers into a single,
+ * easy-to-use wrapper for multi-engine, multi-tenant React applications.
+ *
+ * @remarks
+ * The DesignSystemProvider is the recommended entry point that automatically
+ * configures and composes:
+ *
+ * - **TenantProvider**: Tenant configuration and branding
+ * - **EngineProvider**: UI rendering engine selection
+ * - **ThemeProvider**: Theme variants and CSS tokens
+ * - **FeatureProvider**: Feature flag management
+ *
+ * It handles async tenant resolution and provides loading states.
+ *
+ * @example Minimal setup
+ * ```tsx
+ * import { DesignSystemProvider } from '@rottay/design-system';
+ *
+ * function App() {
+ *   return (
+ *     <DesignSystemProvider>
+ *       <YourApplication />
+ *     </DesignSystemProvider>
+ *   );
+ * }
+ * ```
+ *
+ * @example With explicit tenant config
+ * ```tsx
+ * const tenantConfig = {
+ *   slug: 'acme',
+ *   name: 'ACME Corp',
+ *   engine: 'titan',
+ *   theme: 'dark',
+ *   plan: 'enterprise',
+ *   features: ['advanced-analytics', 'export'],
+ *   branding: { companyName: 'ACME', primaryColor: '#FF5500' },
+ * };
+ *
+ * <DesignSystemProvider tenantConfig={tenantConfig}>
+ *   <App />
+ * </DesignSystemProvider>
+ * ```
+ *
+ * @example With forced overrides
+ * ```tsx
+ * <DesignSystemProvider
+ *   tenantConfig={config}
+ *   forceEngine="hermes"
+ *   forceTheme="light"
+ * >
+ *   <App />
+ * </DesignSystemProvider>
+ * ```
+ *
+ * @example With callbacks
+ * ```tsx
+ * <DesignSystemProvider
+ *   onTenantResolved={(tenant) => analytics.identify(tenant.slug)}
+ *   onError={(error) => errorTracker.capture(error)}
+ * >
+ *   <App />
+ * </DesignSystemProvider>
+ * ```
+ *
+ * @see {@link TenantProvider} - Tenant configuration
+ * @see {@link EngineProvider} - Engine selection
+ * @see {@link ThemeProvider} - Theme management
+ * @see {@link FeatureProvider} - Feature flags
+ * @module System/Providers/Root
+ * @category System
+ * @package @rottay/design-system
  */
 
 import React, { ReactNode, useState, useEffect } from 'react';

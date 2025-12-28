@@ -1,6 +1,45 @@
 /**
- * Grid - Hermes Engine (DaisyUI/Tailwind)
- * Utility-first implementation using DaisyUI patterns
+ * @fileoverview Grid Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Grid component.
+ * Provides utility-first Grid using Tailwind CSS grid classes.
+ *
+ * @remarks
+ * The Hermes engine leverages Tailwind CSS utility classes for CSS Grid layouts,
+ * making it ideal for projects using the utility-first paradigm.
+ *
+ * Tailwind Class Mappings:
+ * - Display: `grid` / `inline-grid`
+ * - Columns: `grid-cols-1` through `grid-cols-12`, `grid-cols-auto`
+ * - Gap: `gap-1` (xs) through `gap-16` (4xl)
+ * - Item spanning: `col-span-*`, `row-span-*`
+ * - Alignment: `items-*`, `justify-*`, `place-*`
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Grid } from '@rottay/design-system';
+ *
+ * // Use Hermes engine for Tailwind classes
+ * <Grid engine="hermes" columns={3} gap="md">
+ *   <Grid.Item span={2}>
+ *     Outputs: class="col-span-2"
+ *   </Grid.Item>
+ * </Grid>
+ * // Container outputs: class="grid grid-cols-3 gap-4"
+ *
+ * // Combine with global EngineProvider
+ * <EngineProvider engine="hermes">
+ *   <Grid columns={4} gap="lg">
+ *     Tailwind grid classes applied
+ *   </Grid>
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link Grid} - The main engine-aware component
+ * @see {@link TitanGrid} - Ant Design implementation
+ * @see {@link ApolloGrid} - Pure HTML/CSS implementation
+ * @module Grid/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

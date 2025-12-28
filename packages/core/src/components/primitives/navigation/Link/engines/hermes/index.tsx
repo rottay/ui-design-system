@@ -1,5 +1,55 @@
 /**
- * Link - Hermes Engine (DaisyUI)
+ * @fileoverview Hermes Link Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Link component.
+ * Uses DaisyUI's link utility classes for consistent Tailwind-based styling.
+ *
+ * @remarks
+ * The Hermes engine uses DaisyUI's link component classes, providing:
+ * - Utility-first Tailwind CSS approach
+ * - DaisyUI's semantic color system
+ * - Lightweight bundle size
+ * - Easy customization via className
+ *
+ * Perfect for projects already using Tailwind CSS or preferring utility classes.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Link } from '@rottay/design-system';
+ *
+ * // Specify the Hermes engine
+ * <Link engine="hermes" href="/dashboard" type="primary">
+ *   Dashboard
+ * </Link>
+ * ```
+ *
+ * @example With Global Engine Provider
+ * ```tsx
+ * import { EngineProvider, Link } from '@rottay/design-system';
+ *
+ * <EngineProvider engine="hermes">
+ *   {/* All Links use DaisyUI styling *\/}
+ *   <Link href="/about" type="secondary">About Us</Link>
+ *   <Link href="/contact" type="primary">Contact</Link>
+ * </EngineProvider>
+ * ```
+ *
+ * @example DaisyUI Class Mapping
+ * ```tsx
+ * // Type to DaisyUI class mapping:
+ * // default   -> link-info
+ * // primary   -> link-primary
+ * // secondary -> link-secondary
+ * // success   -> link-success
+ * // warning   -> link-warning
+ * // danger    -> link-error
+ * ```
+ *
+ * @see {@link LinkProps} for prop documentation
+ * @see {@link https://daisyui.com/components/link DaisyUI Link Component}
+ *
+ * @module Link/engines/hermes
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -8,7 +58,56 @@ import React from 'react';
 import type { LinkProps } from '../../types';
 import { LINK_DEFAULTS } from '../../types';
 
+// ============================================================================
+// DaisyUI Class Mapping
+// ============================================================================
+
+/**
+ * Maps semantic link types to DaisyUI link color classes.
+ * DaisyUI uses 'link-error' for danger state (following their naming convention).
+ */
+const typeClassMap: Record<string, string> = {
+  default: 'link-info',
+  primary: 'link-primary',
+  secondary: 'link-secondary',
+  success: 'link-success',
+  warning: 'link-warning',
+  danger: 'link-error',
+};
+
+// ============================================================================
+// Hermes Link Component
+// ============================================================================
+
+/**
+ * Hermes engine Link component using DaisyUI/Tailwind CSS classes.
+ *
+ * @description
+ * Implements the Link component using DaisyUI's utility classes for
+ * a lightweight, Tailwind-native approach. Combines DaisyUI's semantic
+ * link classes with Tailwind utilities for disabled states.
+ *
+ * @remarks
+ * - Uses DaisyUI's `link` base class and color variants
+ * - Applies Tailwind utilities for disabled state (opacity-50, cursor-not-allowed)
+ * - Supports `no-underline` class for underline control
+ * - Prevents click events when disabled via pointer-events-none
+ *
+ * @param props - {@link LinkProps}
+ * @returns Native anchor element with DaisyUI classes
+ *
+ * @example
+ * ```tsx
+ * <HermesLink href="/dashboard" type="primary" underline>
+ *   Go to Dashboard
+ * </HermesLink>
+ * ```
+ */
 export default function HermesLink(props: LinkProps): React.ReactElement {
+  // ========================================================================
+  // Props Destructuring
+  // ========================================================================
+
   const {
     children,
     href,
@@ -22,15 +121,14 @@ export default function HermesLink(props: LinkProps): React.ReactElement {
     ...rest
   } = props;
 
-  const typeClassMap: Record<string, string> = {
-    default: 'link-info',
-    primary: 'link-primary',
-    secondary: 'link-secondary',
-    success: 'link-success',
-    warning: 'link-warning',
-    danger: 'link-error',
-  };
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
 
+  /**
+   * Handle click events on the link.
+   * Prevents navigation when the link is disabled.
+   */
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {
       e.preventDefault();
@@ -39,10 +137,26 @@ export default function HermesLink(props: LinkProps): React.ReactElement {
     onClick?.(e);
   };
 
+  // ========================================================================
+  // External Link Attributes
+  // ========================================================================
+
+  /** Security attributes for external links */
   const externalProps = external
     ? { target: '_blank', rel: 'noopener noreferrer' }
     : {};
 
+  // ========================================================================
+  // Class Name Computation
+  // ========================================================================
+
+  /**
+   * Combine DaisyUI and Tailwind classes for the link element.
+   * - `link`: DaisyUI base link class
+   * - `link-{type}`: DaisyUI color variant
+   * - `no-underline`: Removes underline when underline=false
+   * - Disabled classes: opacity-50, cursor-not-allowed, pointer-events-none
+   */
   const linkClasses = [
     'link',
     typeClassMap[type],
@@ -50,6 +164,10 @@ export default function HermesLink(props: LinkProps): React.ReactElement {
     disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
     className,
   ].filter(Boolean).join(' ');
+
+  // ========================================================================
+  // Render
+  // ========================================================================
 
   return (
     <a
@@ -66,4 +184,9 @@ export default function HermesLink(props: LinkProps): React.ReactElement {
   );
 }
 
+// ============================================================================
+// Display Name
+// ============================================================================
+
+/** Set display name for React DevTools debugging */
 HermesLink.displayName = 'HermesLink';

@@ -1,7 +1,44 @@
 /**
- * Image - Base Component
- * Uses CSS variables from design tokens for consistent styling.
- * This is extended by engine-specific implementations.
+ * @fileoverview Image Base Component - Rottay Design System
+ * @description Core image implementation with CSS variables for theming.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * The BaseImage provides a full-featured image with CSS variable support.
+ * It handles loading states, error fallbacks, and visual customization.
+ *
+ * **Component Structure:**
+ * - Container wrapper with positioning
+ * - Loading placeholder (animated skeleton)
+ * - Error fallback (icon or custom content)
+ * - Main image element
+ * - Hover overlay (optional)
+ *
+ * **CSS Variable Integration:**
+ * - `--image-width` - Container width
+ * - `--image-height` - Container height
+ * - `--image-radius` - Border radius
+ * - `--image-object-fit` - Object fit mode
+ * - `--image-object-position` - Object position
+ * - `--image-aspect-ratio` - Aspect ratio
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseImage } from '@rottay/design-system';
+ *
+ * <BaseImage
+ *   src="/photo.jpg"
+ *   alt="Landscape"
+ *   width={400}
+ *   height={300}
+ *   radius="md"
+ * />
+ * ```
+ *
+ * @see {@link Image} for the engine-routed component
+ * @module BaseImage
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -86,12 +123,12 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
 
     // Build CSS variables for the image
     const imageVars: React.CSSProperties = {
-      '--image-width': typeof width === 'number' ? `${width}px` : width || 'auto',
-      '--image-height': typeof height === 'number' ? `${height}px` : height || 'auto',
-      '--image-radius': radiusValue,
-      '--image-object-fit': objectFit,
-      '--image-object-position': objectPosition,
-      '--image-aspect-ratio': aspectRatio ? String(aspectRatio) : 'auto',
+      '--ds-image-width': typeof width === 'number' ? `${width}px` : width || 'auto',
+      '--ds-image-height': typeof height === 'number' ? `${height}px` : height || 'auto',
+      '--ds-image-radius': radiusValue,
+      '--ds-image-object-fit': objectFit,
+      '--ds-image-object-position': objectPosition,
+      '--ds-image-aspect-ratio': aspectRatio ? String(aspectRatio) : 'auto',
     } as React.CSSProperties;
 
     // Container styles
@@ -99,13 +136,13 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
       ...imageVars,
       position: 'relative',
       display: 'inline-block',
-      width: 'var(--image-width)',
-      height: 'var(--image-height)',
-      aspectRatio: aspectRatio ? 'var(--image-aspect-ratio)' : undefined,
-      borderRadius: 'var(--image-radius)',
+      width: 'var(--ds-image-width)',
+      height: 'var(--ds-image-height)',
+      aspectRatio: aspectRatio ? 'var(--ds-image-aspect-ratio)' : undefined,
+      borderRadius: 'var(--ds-image-radius)',
       overflow: 'hidden',
-      border: bordered ? '1px solid var(--color-border, rgba(0, 0, 0, 0.1))' : 'none',
-      boxShadow: shadow ? 'var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1))' : 'none',
+      border: bordered ? '1px solid var(--ds-color-border, rgba(0, 0, 0, 0.1))' : 'none',
+      boxShadow: shadow ? 'var(--ds-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1))' : 'none',
       cursor: onClick || zoomable ? 'pointer' : 'default',
       ...style,
     };
@@ -114,9 +151,9 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
     const imageStyle: React.CSSProperties = {
       width: '100%',
       height: '100%',
-      objectFit: 'var(--image-object-fit)' as React.CSSProperties['objectFit'],
-      objectPosition: 'var(--image-object-position)',
-      borderRadius: 'var(--image-radius)',
+      objectFit: 'var(--ds-image-object-fit)' as React.CSSProperties['objectFit'],
+      objectPosition: 'var(--ds-image-object-position)',
+      borderRadius: 'var(--ds-image-radius)',
       display: status === 'loaded' ? 'block' : 'none',
       transition: 'opacity 0.3s ease-in-out',
     };
@@ -131,8 +168,8 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
       display: status === 'loading' ? 'flex' : 'none',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'var(--color-neutral-100, #f5f5f5)',
-      borderRadius: 'var(--image-radius)',
+      backgroundColor: 'var(--ds-color-neutral-100, #f5f5f5)',
+      borderRadius: 'var(--ds-image-radius)',
     };
 
     // Fallback styles
@@ -145,9 +182,9 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
       display: status === 'error' ? 'flex' : 'none',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'var(--color-neutral-100, #f5f5f5)',
-      color: 'var(--color-neutral-500, #737373)',
-      borderRadius: 'var(--image-radius)',
+      backgroundColor: 'var(--ds-color-neutral-100, #f5f5f5)',
+      color: 'var(--ds-color-neutral-500, #737373)',
+      borderRadius: 'var(--ds-image-radius)',
     };
 
     // Hover overlay styles
@@ -161,7 +198,7 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
-      borderRadius: 'var(--image-radius)',
+      borderRadius: 'var(--ds-image-radius)',
       transition: 'opacity 0.2s ease-in-out',
     };
 
@@ -188,7 +225,7 @@ export const BaseImage = forwardRef<HTMLImageElement, ImageProps>(
         style={{
           width: '100%',
           height: '100%',
-          backgroundColor: 'var(--color-neutral-200, #e5e5e5)',
+          backgroundColor: 'var(--ds-color-neutral-200, #e5e5e5)',
           animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         }}
       />

@@ -1,7 +1,43 @@
 'use client';
 
 /**
- * Popconfirm - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Popconfirm Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Popconfirm component.
+ * Uses DaisyUI card and button components with Tailwind utility classes.
+ *
+ * @remarks
+ * The Hermes engine provides:
+ * - DaisyUI card component for the confirmation panel
+ * - DaisyUI button styling (btn-primary, btn-error, btn-ghost)
+ * - Loading spinner via DaisyUI loading component
+ * - Click-outside dismissal via event listeners
+ * - Async onConfirm support with automatic loading state
+ *
+ * Implementation details:
+ * - Uses controlled/uncontrolled pattern for open state
+ * - Placement mapped to Tailwind positioning classes
+ * - Internal loading state tracks async onConfirm execution
+ * - Button types mapped to DaisyUI button variants
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Popconfirm, Button } from '@rottay/design-system';
+ *
+ * <Popconfirm
+ *   engine="hermes"
+ *   title="Remove item?"
+ *   okText="Remove"
+ *   okType="danger"
+ *   onConfirm={async () => await removeItem()}
+ * >
+ *   <Button>Remove</Button>
+ * </Popconfirm>
+ * ```
+ *
+ * @see {@link Popconfirm} - The main engine-aware component
+ * @module Popconfirm/Engines/Hermes
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { PopconfirmProps } from '../../types';

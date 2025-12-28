@@ -1,8 +1,52 @@
 'use client';
 
 /**
- * Switch - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Switch Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Switch component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements switches using DaisyUI's toggle classes
+ * with Tailwind CSS utilities. It provides a lightweight alternative
+ * with utility-first styling.
+ *
+ * **DaisyUI Classes Used:**
+ * - `toggle` - Base toggle styling
+ * - `toggle-primary` - Primary color variant
+ * - `toggle-{size}` - Size variants (sm, md, lg)
+ * - `loading loading-spinner` - Loading indicator
+ *
+ * **Component Structure:**
+ * - Label wrapper with flex layout
+ * - Native checkbox input with toggle classes
+ * - Conditional children labels based on state
+ * - Separate loading spinner (not inside toggle)
+ *
+ * **Size Mapping:**
+ * - `small` → `toggle-sm`
+ * - `default` → `toggle-md`
+ * - `large` → `toggle-lg`
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Switch } from '@rottay/design-system';
+ *
+ * <Switch
+ *   engine="hermes"
+ *   size="default"
+ *   checkedChildren="Yes"
+ *   unCheckedChildren="No"
+ * />
+ * ```
+ *
+ * @see {@link Switch} for the main component
+ * @see {@link TitanSwitch} for Ant Design implementation
+ * @see {@link ApolloSwitch} for vanilla implementation
+ * @module HermesSwitch
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState } from 'react';
 import type { SwitchProps } from '../../types';
 

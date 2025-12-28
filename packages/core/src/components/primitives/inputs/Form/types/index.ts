@@ -1,6 +1,79 @@
 /**
- * Form Types
+ * @fileoverview Form Types - Rottay Design System
+ * @description Type definitions, interfaces, and constants for the Form component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module provides comprehensive type definitions for the Form component,
+ * including all props, validation rules, field data structures, and form instance API.
+ *
+ * **Available Types:**
+ * - `FormProps` - Main form component props
+ * - `FormItemProps` - Individual form field wrapper props
+ * - `FormListProps` - Dynamic field list props
+ * - `FormErrorListProps` - Error display component props
+ * - `FormInstance` - Programmatic form control interface
+ * - `FormLayout` - Layout options (horizontal, vertical, inline)
+ * - `FormSize` - Size variants (small, default, large)
+ * - `FormRule` - Validation rule structure
+ * - `FieldData` - Field state structure
+ * - `FormListFieldData` - List field metadata
+ * - `FormListOperation` - List operations (add, remove, move)
+ *
+ * **Validation Rules:**
+ * - `required` - Field must have a value
+ * - `message` - Custom error message
+ * - `pattern` - RegExp for format validation
+ * - `min/max` - String length or number range
+ * - `type` - Built-in type validation (email, url, etc.)
+ * - `validator` - Custom async validation function
+ *
+ * @example Using Types
+ * ```tsx
+ * import type {
+ *   FormProps,
+ *   FormInstance,
+ *   FormRule,
+ *   FieldData
+ * } from '@rottay/design-system';
+ *
+ * // Custom form wrapper
+ * const MyForm: React.FC<FormProps<MyValues>> = (props) => {
+ *   return <Form {...props} />;
+ * };
+ *
+ * // Custom validation rules
+ * const rules: FormRule[] = [
+ *   { required: true, message: 'Required field' },
+ *   { pattern: /^[A-Z]/, message: 'Must start with uppercase' },
+ * ];
+ * ```
+ *
+ * @example FormInstance API
+ * ```tsx
+ * const [form] = useForm<UserFormValues>();
+ *
+ * // Get/set values
+ * form.getFieldValue('email');
+ * form.setFieldsValue({ email: 'new@email.com' });
+ *
+ * // Validation
+ * await form.validateFields();
+ * form.getFieldError('email');
+ *
+ * // Reset
+ * form.resetFields();
+ * form.resetFields(['email', 'password']);
+ * ```
+ *
+ * @see {@link Form} for the main component
+ * @see {@link FormItem} for field wrapper
+ * @see {@link useForm} for form control hook
+ * @module FormTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { SizeType } from '../../../../../types/common';
 

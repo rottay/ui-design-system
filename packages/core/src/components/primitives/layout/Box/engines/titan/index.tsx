@@ -1,6 +1,38 @@
 /**
- * Box - Titan Engine (Ant Design)
- * Provides Box component using Ant Design styling conventions
+ * @fileoverview Box Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Box component.
+ * Provides full-featured Box using Ant Design styling conventions.
+ *
+ * @remarks
+ * The Titan engine implementation uses Ant Design's design system principles
+ * while maintaining full compatibility with the Box API. It applies the
+ * `rottay-box--titan` class for engine-specific styling hooks.
+ *
+ * CSS Custom Properties:
+ * - `--box-padding`: Resolved from spacing tokens
+ * - `--box-margin`: Resolved from spacing tokens
+ * - `--box-shadow`: Resolved from shadow tokens
+ * - `--box-radius`: Resolved from border-radius tokens
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Box } from '@rottay/design-system';
+ *
+ * // Automatically uses Titan if default engine
+ * <Box p="md" shadow="sm">Titan-styled Box</Box>
+ *
+ * // Or explicitly specify engine
+ * <Box engine="titan" p="lg" rounded="md">
+ *   Ant Design styled container
+ * </Box>
+ * ```
+ *
+ * @see {@link Box} - The main engine-aware component
+ * @see {@link HermesBox} - Tailwind implementation
+ * @see {@link ApolloBox} - Pure HTML/CSS implementation
+ * @module Box/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,10 +1,40 @@
 /**
- * Tooltip.Trigger - Trigger Compound Component
- * Wraps the element that triggers the tooltip display.
+ * @fileoverview Tooltip.Trigger Compound - Rottay Design System
+ * @description Wrapper for tooltip trigger elements with event handling.
+ * Part of the Rottay Design System's display primitives collection.
  *
+ * @remarks
+ * The TooltipTrigger component wraps or clones the element that triggers
+ * tooltip display. Supports two rendering modes for flexibility.
+ *
+ * **Rendering Modes:**
+ * - **Default**: Wraps child in a `<span>` element
+ * - **asChild**: Clones props directly onto the child element
+ *
+ * **Use Cases:**
+ * - Wrap buttons, icons, or interactive elements
+ * - Preserve original element type with `asChild`
+ * - Attach tooltip trigger events to custom components
+ *
+ * @example Default Wrapper
+ * ```tsx
+ * <Tooltip.Trigger>
+ *   <Button>Hover me</Button>
+ * </Tooltip.Trigger>
+ * ```
+ *
+ * @example Clone to Child
+ * ```tsx
+ * <Tooltip.Trigger asChild>
+ *   <IconButton aria-label="Help">?</IconButton>
+ * </Tooltip.Trigger>
+ * ```
+ *
+ * @see {@link Tooltip} for the main component
+ * @see {@link TooltipContent} for content component
  * @module Tooltip/compound/Trigger
- * @description The trigger component for the Tooltip compound pattern.
- * This component wraps or clones the child element to attach tooltip trigger behavior.
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

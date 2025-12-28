@@ -1,6 +1,88 @@
 /**
- * Select - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Select Base Component - Rottay Design System
+ * @description Core select implementation using CSS custom properties for styling.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The BaseSelect component provides a foundational select implementation that
+ * relies entirely on CSS custom properties for theming. It includes full
+ * keyboard navigation, search functionality, and multiple selection support.
+ *
+ * **Key Features:**
+ * - Pure CSS variable-based theming
+ * - Controlled and uncontrolled modes
+ * - Single and multiple selection
+ * - Search/filter functionality
+ * - Keyboard navigation (Arrow keys, Enter, Escape, Home, End)
+ * - Clear button support
+ * - Loading state indicator
+ * - Option icons and descriptions
+ * - Max tag count for multiple mode
+ * - Form integration with hidden input
+ *
+ * **CSS Custom Properties Used:**
+ * - `--ds-select-height` - Trigger height
+ * - `--ds-select-font-size` - Text size
+ * - `--ds-select-padding` - Internal padding
+ * - `--ds-select-bg` - Background color
+ * - `--ds-select-border-color` - Border color (status-aware)
+ * - `--ds-select-border-radius` - Corner radius
+ * - `--ds-select-dropdown-bg` - Dropdown background
+ * - `--ds-select-dropdown-shadow` - Dropdown shadow
+ * - `--ds-select-option-hover-bg` - Option hover background
+ * - `--ds-select-option-selected-bg` - Selected option background
+ * - `--ds-select-transition` - Animation timing
+ *
+ * **Accessibility:**
+ * - ARIA combobox pattern
+ * - Role="listbox" for dropdown
+ * - Role="option" for each option
+ * - aria-selected for selection state
+ * - Keyboard navigation support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseSelect } from './base';
+ *
+ * const options = [
+ *   { value: 'a', label: 'Option A' },
+ *   { value: 'b', label: 'Option B' },
+ * ];
+ *
+ * <BaseSelect
+ *   options={options}
+ *   placeholder="Choose..."
+ *   onChange={(value) => console.log(value)}
+ * />
+ * ```
+ *
+ * @example With All Features
+ * ```tsx
+ * import { BaseSelect } from './base';
+ *
+ * <BaseSelect
+ *   options={options}
+ *   multiple
+ *   searchable
+ *   clearable
+ *   maxTagCount={3}
+ *   placeholder="Select items..."
+ *   status="error"
+ *   loading={isLoading}
+ *   filterOption={(input, opt) => opt?.label.includes(input)}
+ *   onChange={(values, opts) => handleChange(values, opts)}
+ *   onSearch={(query) => fetchOptions(query)}
+ *   onClear={() => reset()}
+ * />
+ * ```
+ *
+ * @see {@link Select} for the engine-aware wrapper
+ * @see {@link TitanSelect} for Ant Design implementation
+ * @see {@link HermesSelect} for DaisyUI implementation
+ * @see {@link ApolloSelect} for vanilla implementation
+ * @module BaseSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -106,20 +188,20 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
     // Build CSS variables
     const sizeConfig = SIZE_MAP[size];
     const selectVars: React.CSSProperties = {
-      '--select-height': `${sizeConfig.height}px`,
-      '--select-font-size': `${sizeConfig.fontSize}px`,
-      '--select-padding': sizeConfig.padding,
-      '--select-bg': variant === 'filled' ? 'var(--color-gray-100, #f5f5f5)' : 'var(--color-white, #fff)',
-      '--select-border-color': effectiveStatus === 'error' ? 'var(--color-error, #ff4d4f)' :
-                               effectiveStatus === 'warning' ? 'var(--color-warning, #faad14)' :
-                               effectiveStatus === 'success' ? 'var(--color-success, #52c41a)' :
-                               'var(--color-border, #d9d9d9)',
-      '--select-border-radius': variant === 'flushed' ? '0' : 'var(--radius-md, 6px)',
-      '--select-dropdown-bg': 'var(--color-white, #fff)',
-      '--select-dropdown-shadow': '0 6px 16px rgba(0, 0, 0, 0.08)',
-      '--select-option-hover-bg': 'var(--color-gray-50, #f9fafb)',
-      '--select-option-selected-bg': 'var(--color-primary-50, #e6f7ff)',
-      '--select-transition': 'all 0.2s ease',
+      '--ds-select-height': sizeConfig.height,
+      '--ds-select-font-size': sizeConfig.fontSize,
+      '--ds-select-padding': sizeConfig.padding,
+      '--ds-select-bg': variant === 'filled' ? 'var(--ds-color-gray-100, #f5f5f5)' : 'var(--ds-color-white, #fff)',
+      '--ds-select-border-color': effectiveStatus === 'error' ? 'var(--ds-color-error-500, #ff4d4f)' :
+                               effectiveStatus === 'warning' ? 'var(--ds-color-warning-500, #faad14)' :
+                               effectiveStatus === 'success' ? 'var(--ds-color-success-500, #52c41a)' :
+                               'var(--ds-color-border, #d9d9d9)',
+      '--ds-select-border-radius': variant === 'flushed' ? '0' : 'var(--ds-radius-md, 6px)',
+      '--ds-select-dropdown-bg': 'var(--ds-color-white, #fff)',
+      '--ds-select-dropdown-shadow': '0 6px 16px rgba(0, 0, 0, 0.08)',
+      '--ds-select-option-hover-bg': 'var(--ds-color-gray-50, #f9fafb)',
+      '--ds-select-option-selected-bg': 'var(--ds-color-primary-50, #e6f7ff)',
+      '--ds-select-transition': 'all 0.2s ease',
     } as React.CSSProperties;
 
     // Handlers
@@ -291,20 +373,20 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
       display: 'flex',
       alignItems: 'center',
       gap: '8px',
-      minHeight: 'var(--select-height)',
-      padding: 'var(--select-padding)',
-      backgroundColor: 'var(--select-bg)',
+      minHeight: 'var(--ds-select-height)',
+      padding: 'var(--ds-select-padding)',
+      backgroundColor: 'var(--ds-select-bg)',
       border: variant === 'flushed'
         ? 'none'
-        : '1px solid var(--select-border-color)',
+        : '1px solid var(--ds-select-border-color)',
       borderBottom: variant === 'flushed'
-        ? '2px solid var(--select-border-color)'
+        ? '2px solid var(--ds-select-border-color)'
         : undefined,
-      borderRadius: 'var(--select-border-radius)',
-      fontSize: 'var(--select-font-size)',
+      borderRadius: 'var(--ds-select-border-radius)',
+      fontSize: 'var(--ds-select-font-size)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
-      transition: 'var(--select-transition)',
+      transition: 'var(--ds-select-transition)',
       outline: 'none',
     };
 
@@ -315,10 +397,10 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
       right: 0,
       marginTop: '4px',
       padding: '4px 0',
-      backgroundColor: 'var(--select-dropdown-bg)',
-      border: '1px solid var(--select-border-color)',
-      borderRadius: 'var(--select-border-radius)',
-      boxShadow: 'var(--select-dropdown-shadow)',
+      backgroundColor: 'var(--ds-select-dropdown-bg)',
+      border: '1px solid var(--ds-select-border-color)',
+      borderRadius: 'var(--ds-select-border-radius)',
+      boxShadow: 'var(--ds-select-dropdown-shadow)',
       maxHeight: '256px',
       overflowY: 'auto',
       zIndex: 1050,
@@ -329,15 +411,15 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
       alignItems: 'center',
       gap: '8px',
       padding: '8px 12px',
-      fontSize: 'var(--select-font-size)',
+      fontSize: 'var(--ds-select-font-size)',
       backgroundColor: isSelected
-        ? 'var(--select-option-selected-bg)'
+        ? 'var(--ds-select-option-selected-bg)'
         : focusedIndex === index
-          ? 'var(--select-option-hover-bg)'
+          ? 'var(--ds-select-option-hover-bg)'
           : 'transparent',
       cursor: isDisabled ? 'not-allowed' : 'pointer',
       opacity: isDisabled ? 0.5 : 1,
-      transition: 'var(--select-transition)',
+      transition: 'var(--ds-select-transition)',
     });
 
     const statusClass = effectiveStatus !== 'default' ? `rottay-select--${effectiveStatus}` : '';
@@ -405,7 +487,7 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
               onClick={(e) => e.stopPropagation()}
             />
           ) : displayValue || (
-            <span className="rottay-select__placeholder" style={{ color: 'var(--color-text-secondary, #999)' }}>
+            <span className="rottay-select__placeholder" style={{ color: 'var(--ds-color-text-secondary, #999)' }}>
               {placeholder}
             </span>
           )}
@@ -486,7 +568,7 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
             {filteredOptions.length === 0 ? (
               <div
                 className="rottay-select__empty"
-                style={{ padding: '8px 12px', color: 'var(--color-text-secondary, #999)', textAlign: 'center' }}
+                style={{ padding: '8px 12px', color: 'var(--ds-color-text-secondary, #999)', textAlign: 'center' }}
               >
                 No options
               </div>
@@ -510,12 +592,12 @@ export const BaseSelect = forwardRef<HTMLDivElement, SelectProps>(
                         style={{
                           width: '16px',
                           height: '16px',
-                          border: '1px solid var(--select-border-color)',
+                          border: '1px solid var(--ds-select-border-color)',
                           borderRadius: '3px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          backgroundColor: isSelected ? 'var(--color-primary, #1890ff)' : 'transparent',
+                          backgroundColor: isSelected ? 'var(--ds-color-primary-500, #1890ff)' : 'transparent',
                           color: 'white',
                           fontSize: '10px',
                         }}

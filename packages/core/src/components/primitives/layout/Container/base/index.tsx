@@ -1,6 +1,33 @@
 /**
- * Container - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Container Base Component - Rottay Design System
+ * @description Core implementation of the Container component using CSS variables.
+ * This base component is extended by engine-specific implementations.
+ *
+ * @remarks
+ * The base component handles:
+ * - Max-width computation from presets or numeric values
+ * - Padding resolution from presets or numeric values
+ * - Horizontal centering via margin-auto
+ * - CSS variable injection for theming
+ *
+ * CSS Custom Properties set by this component:
+ * - `--container-max-width`: Resolved max-width value
+ * - `--container-padding`: Resolved padding value
+ *
+ * @example Using Base Component
+ * ```tsx
+ * import { BaseContainer } from '@rottay/design-system';
+ *
+ * // The base component is typically used by engine implementations
+ * <BaseContainer maxWidth="lg" padding="md" center>
+ *   Page content
+ * </BaseContainer>
+ * ```
+ *
+ * @see {@link Container} - The main engine-aware component
+ * @module Container/Base
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

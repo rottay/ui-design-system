@@ -1,6 +1,42 @@
 /**
- * Stack - Hermes Engine (DaisyUI/Tailwind)
- * Provides Stack component using DaisyUI/Tailwind styling conventions
+ * @fileoverview Stack Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Stack component.
+ * Provides utility-first Stack using Tailwind CSS flexbox classes.
+ *
+ * @remarks
+ * The Hermes engine leverages Tailwind CSS utility classes for flexbox layouts,
+ * making it ideal for projects using the utility-first paradigm.
+ *
+ * Tailwind Class Mappings:
+ * - Direction: `flex-col` / `flex-row` (with `-reverse` variants)
+ * - Spacing: `gap-1` (xs) through `gap-16` (4xl)
+ * - Alignment: `items-start`, `items-center`, `items-end`, etc.
+ * - Justification: `justify-start`, `justify-between`, `justify-evenly`, etc.
+ * - Sizing: `w-full`, `h-full` for fullWidth/fullHeight
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Stack } from '@rottay/design-system';
+ *
+ * // Use Hermes engine for Tailwind classes
+ * <Stack engine="hermes" direction="horizontal" spacing="md" align="center">
+ *   Outputs: class="flex flex-row gap-4 items-center"
+ * </Stack>
+ *
+ * // Combine with global EngineProvider
+ * <EngineProvider engine="hermes">
+ *   <Stack spacing="lg" justify="space-between">
+ *     Tailwind flexbox classes applied
+ *   </Stack>
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link Stack} - The main engine-aware component
+ * @see {@link TitanStack} - Ant Design implementation
+ * @see {@link ApolloStack} - Pure HTML/CSS implementation
+ * @module Stack/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

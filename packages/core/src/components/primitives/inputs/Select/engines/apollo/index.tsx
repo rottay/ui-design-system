@@ -1,6 +1,73 @@
 /**
- * Select - Apollo Engine (Headless/Pure HTML/CSS)
- * Full-featured custom select with keyboard navigation
+ * @fileoverview Select Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Select component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a headless select implementation using only
+ * native HTML elements and inline styles. This offers maximum flexibility
+ * for custom styling and ensures full keyboard navigation compliance.
+ *
+ * **Key Features:**
+ * - Zero UI library dependencies
+ * - Full keyboard navigation (Arrow keys, Enter, Escape, Home, End, Tab)
+ * - Search/filter functionality
+ * - Single and multiple selection modes
+ * - Option scrolling into view
+ * - Focus management
+ * - Click outside handling
+ * - Hidden input for form submission
+ *
+ * **Inline Style Approach:**
+ * Uses computed inline styles for complete control over appearance,
+ * ensuring styles work without requiring any external CSS files.
+ *
+ * **Accessibility:**
+ * - ARIA combobox pattern with proper roles
+ * - aria-expanded, aria-haspopup, aria-controls
+ * - aria-selected on options
+ * - aria-disabled for disabled states
+ * - aria-activedescendant for focused option
+ * - Keyboard-accessible selection and navigation
+ *
+ * **CSS Custom Properties:**
+ * - `--select-height` - Trigger height based on size
+ * - `--select-font-size` - Font size based on size
+ * - `--select-border-color` - Status-aware border color
+ * - `--select-option-hover-bg` - Option hover background
+ * - `--select-option-selected-bg` - Selected option background
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Select } from '@rottay/design-system';
+ *
+ * // Explicit Apollo engine
+ * <Select
+ *   engine="apollo"
+ *   options={options}
+ *   placeholder="Select..."
+ *   searchable
+ * />
+ *
+ * // With full customization
+ * <Select
+ *   engine="apollo"
+ *   options={options}
+ *   multiple
+ *   searchable
+ *   clearable
+ *   maxTagCount={2}
+ *   status="success"
+ *   style={{ maxWidth: '300px' }}
+ * />
+ * ```
+ *
+ * @see {@link Select} for the main component
+ * @see {@link TitanSelect} for Ant Design implementation
+ * @see {@link HermesSelect} for DaisyUI implementation
+ * @module ApolloSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -184,12 +184,12 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
      * These variables can be overridden by tenant themes.
      */
     const messageVars = useMemo<React.CSSProperties>(() => ({
-      '--message-bg': typeConfig.bg,
-      '--message-color': typeConfig.color,
-      '--message-shadow': 'var(--shadow-md)',
-      '--message-border-radius': 'var(--radius-lg, 8px)',
-      '--message-padding': '10px 16px',
-      '--message-font-size': '14px',
+      '--ds-message-bg': typeConfig.bg,
+      '--ds-message-color': typeConfig.color,
+      '--ds-message-shadow': 'var(--ds-shadow-md)',
+      '--ds-message-border-radius': 'var(--ds-radius-lg, 8px)',
+      '--ds-message-padding': '10px 16px',
+      '--ds-message-font-size': '14px',
     } as React.CSSProperties), [typeConfig]);
 
     // ========================================================================
@@ -204,11 +204,11 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       display: 'inline-flex',
       alignItems: 'center',
       gap: '8px',
-      padding: 'var(--message-padding)',
-      backgroundColor: 'var(--message-bg)',
-      borderRadius: 'var(--message-border-radius)',
-      boxShadow: 'var(--message-shadow)',
-      fontSize: 'var(--message-font-size)',
+      padding: 'var(--ds-message-padding)',
+      backgroundColor: 'var(--ds-message-bg)',
+      borderRadius: 'var(--ds-message-border-radius)',
+      boxShadow: 'var(--ds-message-shadow)',
+      fontSize: 'var(--ds-message-font-size)',
       opacity: isExiting ? 0 : 1,
       transform: isExiting ? 'translateY(-10px)' : 'translateY(0)',
       transition: 'opacity 0.2s, transform 0.2s',
@@ -219,12 +219,12 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
     const iconStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
-      color: 'var(--message-color)',
+      color: 'var(--ds-message-color)',
     };
 
     /** Content text styles */
     const contentStyle: React.CSSProperties = {
-      color: 'var(--color-text-primary)',
+      color: 'var(--ds-color-text-primary)',
     };
 
     /** Close button styles */
@@ -233,7 +233,7 @@ export const BaseMessageItem = forwardRef<HTMLDivElement, MessageItemProps>(
       alignItems: 'center',
       marginLeft: '8px',
       cursor: 'pointer',
-      color: 'var(--color-text-secondary)',
+      color: 'var(--ds-color-text-secondary)',
     };
 
     return (

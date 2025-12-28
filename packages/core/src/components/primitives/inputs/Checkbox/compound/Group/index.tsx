@@ -1,6 +1,68 @@
 /**
- * Checkbox.Group - Compound Component
- * Manages a group of checkboxes with shared state
+ * @fileoverview CheckboxGroup - Rottay Design System
+ * @description Compound component for managing multiple checkboxes with shared state.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * CheckboxGroup provides a way to manage multiple checkbox selections with a
+ * unified API. It supports both options-based and children-based rendering,
+ * with controlled and uncontrolled state management.
+ *
+ * **Key Features:**
+ * - Shared state management across checkboxes
+ * - Options array or children-based rendering
+ * - Controlled and uncontrolled modes
+ * - Horizontal or vertical layout
+ * - Configurable spacing between items
+ * - Context-based prop inheritance (size, color, disabled)
+ * - Form integration with name attribute
+ *
+ * **Context API:**
+ * The group provides a React context that child Checkbox components can use
+ * to inherit group settings and register their values. Use `useCheckboxGroup`
+ * hook to access the context in custom implementations.
+ *
+ * @example Options-Based Group
+ * ```tsx
+ * import { Checkbox } from '@rottay/design-system';
+ *
+ * const options = [
+ *   { value: 'email', label: 'Email notifications' },
+ *   { value: 'sms', label: 'SMS notifications' },
+ *   { value: 'push', label: 'Push notifications', disabled: true },
+ * ];
+ *
+ * <Checkbox.Group
+ *   options={options}
+ *   value={notifications}
+ *   onChange={setNotifications}
+ *   direction="vertical"
+ *   size="md"
+ *   color="primary"
+ * />
+ * ```
+ *
+ * @example Children-Based Group
+ * ```tsx
+ * import { Checkbox } from '@rottay/design-system';
+ *
+ * <Checkbox.Group
+ *   value={selected}
+ *   onChange={setSelected}
+ *   direction="horizontal"
+ *   spacing="lg"
+ * >
+ *   <Checkbox value="1">First</Checkbox>
+ *   <Checkbox value="2">Second</Checkbox>
+ *   <Checkbox value="3">Third</Checkbox>
+ * </Checkbox.Group>
+ * ```
+ *
+ * @see {@link Checkbox} for individual checkboxes
+ * @see {@link useCheckboxGroup} for context access
+ * @module CheckboxGroup
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,11 +1,39 @@
 /**
- * Typography - Compound Components
+ * @fileoverview Typography Compound Components - Rottay Design System
+ * @description Barrel export for Typography compound components.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Re-exports compound components for the Typography namespace.
- * These components provide direct access to Typography sub-components
- * without requiring the full Typography compound pattern.
+ * @remarks
+ * This module exports compound components for the Typography namespace.
+ * These components can be used standalone or through the Typography namespace.
  *
+ * **Available Components:**
+ * - `TypographyHeading` - Engine-aware heading (h1-h6)
+ * - `TypographyText` - Engine-aware inline text
+ * - `TypographyParagraph` - Engine-aware paragraph
+ *
+ * **Usage Patterns:**
+ * ```tsx
+ * // Standalone import
+ * import { TypographyHeading } from '@rottay/design-system';
+ * <TypographyHeading level="h1">Title</TypographyHeading>
+ *
+ * // Namespace pattern
+ * import { Typography } from '@rottay/design-system';
+ * <Typography.Heading level="h1">Title</Typography.Heading>
+ *
+ * // Alias imports
+ * import { Heading, Text, Paragraph } from '@rottay/design-system';
+ * <Heading level="h1">Title</Heading>
+ * ```
+ *
+ * @see {@link Typography} for the main namespace
+ * @see {@link TypographyHeading} for heading component
+ * @see {@link TypographyText} for text component
+ * @see {@link TypographyParagraph} for paragraph component
  * @module Typography/compound
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export { TypographyHeading } from './Heading';

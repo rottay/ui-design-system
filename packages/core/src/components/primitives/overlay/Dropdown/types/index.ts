@@ -1,10 +1,34 @@
 /**
- * Dropdown Component Types
- *
- * Type definitions for the Dropdown component including trigger types,
+ * @fileoverview Dropdown Component Types - Rottay Design System
+ * @description Type definitions for the Dropdown component including trigger types,
  * placement options, menu item configuration, and component props.
  *
- * @module DropdownTypes
+ * @remarks
+ * The Dropdown types support:
+ * - Multiple trigger modes (click, hover, contextMenu)
+ * - Six placement positions
+ * - Menu item types (item, divider, group)
+ * - Nested submenu configuration
+ * - Controlled and uncontrolled state
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   DropdownProps,
+ *   DropdownMenuItem,
+ *   DropdownMenuProps,
+ * } from '@rottay/design-system';
+ *
+ * const menuItems: DropdownMenuItem[] = [
+ *   { key: 'edit', label: 'Edit', icon: <EditIcon /> },
+ *   { type: 'divider', key: 'd1' },
+ *   { key: 'delete', label: 'Delete', danger: true },
+ * ];
+ * ```
+ *
+ * @module Dropdown/Types
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 

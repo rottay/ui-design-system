@@ -1,8 +1,35 @@
 'use client';
 
 /**
- * Flex - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Flex Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Flex component.
+ * Generates Tailwind CSS utility classes for flexbox layouts.
+ *
+ * @remarks
+ * The Hermes engine translates Flex props to Tailwind CSS classes:
+ * - Direction: `flex-row`, `flex-col`, `flex-row-reverse`, `flex-col-reverse`
+ * - Wrap: `flex-nowrap`, `flex-wrap`, `flex-wrap-reverse`
+ * - Justify: `justify-start`, `justify-end`, `justify-center`, `justify-between`, etc.
+ * - Align: `items-start`, `items-end`, `items-center`, `items-baseline`, `items-stretch`
+ *
+ * Gap values are applied via inline styles since Tailwind gap classes are spacing-based.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Flex } from '@rottay/design-system';
+ *
+ * // Generates Tailwind classes
+ * <Flex engine="hermes" direction="row" justify="between" align="center">
+ *   Outputs: class="flex flex-row justify-between items-center"
+ * </Flex>
+ * ```
+ *
+ * @see {@link Flex} - The main engine-aware component
+ * @module Flex/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import type { FlexProps } from '../../types';
 import { FLEX_DEFAULTS } from '../../types';

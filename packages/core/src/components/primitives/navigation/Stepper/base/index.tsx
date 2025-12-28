@@ -267,9 +267,9 @@ export const BaseStepper = forwardRef<HTMLDivElement, StepperProps>(
 
     /** CSS variables for the stepper container */
     const stepperVars: CSSProperties = {
-      '--stepper-item-gap': '12px',
-      '--stepper-connector-width': direction === 'horizontal' ? '100%' : '1px',
-      '--stepper-connector-height': direction === 'horizontal' ? '1px' : '100%',
+      '--ds-stepper-item-gap': '12px',
+      '--ds-stepper-connector-width': direction === 'horizontal' ? '100%' : '1px',
+      '--ds-stepper-connector-height': direction === 'horizontal' ? '1px' : '100%',
     } as CSSProperties;
 
     /** Computed container styles */

@@ -1,5 +1,58 @@
 /**
- * Button - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Button Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Button component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements buttons using DaisyUI's utility-first approach
+ * with Tailwind CSS classes. This provides a lightweight alternative to Titan
+ * with smaller bundle size and easier customization via CSS utilities.
+ *
+ * **DaisyUI Features Utilized:**
+ * - Semantic color classes (btn-primary, btn-secondary, btn-error, etc.)
+ * - Size modifiers (btn-xs, btn-sm, btn-lg)
+ * - Shape modifiers (rounded-full, btn-circle)
+ * - State classes (btn-disabled, loading)
+ * - Block mode (btn-block, w-full)
+ *
+ * **Prop Mapping:**
+ * - `variant="primary"` → `btn-primary`
+ * - `variant="secondary"` → `btn-secondary`
+ * - `variant="danger"` → `btn-error`
+ * - `variant="ghost"` → `btn-ghost`
+ * - `variant="link"` → `btn-link`
+ * - `size="xs"` → `btn-xs`
+ * - `shape="round"` → `rounded-full`
+ *
+ * **Loading State:**
+ * Uses DaisyUI's loading spinner with size-appropriate classes.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ *
+ * // Explicit Hermes engine
+ * <Button engine="hermes" variant="primary">
+ *   DaisyUI Button
+ * </Button>
+ *
+ * // With shadow and loading
+ * <Button
+ *   engine="hermes"
+ *   variant="secondary"
+ *   shadow
+ *   loading
+ * >
+ *   Processing...
+ * </Button>
+ * ```
+ *
+ * @see {@link Button} for the main component
+ * @see {@link TitanButton} for Ant Design implementation
+ * @see {@link ApolloButton} for vanilla implementation
+ * @module HermesButton
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

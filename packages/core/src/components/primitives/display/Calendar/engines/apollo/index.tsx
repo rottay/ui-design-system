@@ -1,7 +1,53 @@
 'use client';
 
 /**
- * Calendar - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Calendar Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS calendar implementation with maximum accessibility.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine provides a lightweight, dependency-free calendar using only
+ * inline styles and semantic HTML elements.
+ *
+ * **Implementation Details:**
+ * - CSS Grid for layout
+ * - Inline styles for all visual properties
+ * - Native Date object handling
+ * - ARIA attributes for accessibility
+ * - Keyboard navigation support
+ *
+ * **Accessibility Features:**
+ * - `role="application"` on container
+ * - `role="grid"` on calendar grid
+ * - `role="gridcell"` on day/month cells
+ * - `aria-selected` on selected items
+ * - `aria-disabled` on disabled items
+ * - `aria-label` on navigation buttons
+ *
+ * **CSS Custom Properties:**
+ * - `--primary-color` - Primary theme color
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility compliance
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Calendar } from '@rottay/design-system';
+ *
+ * <Calendar
+ *   engine="apollo"
+ *   fullscreen={false}
+ *   onChange={(date) => console.log(date)}
+ * />
+ * ```
+ *
+ * @see {@link Calendar} for the main component
+ * @module Calendar/engines/apollo
+ * @category Display
+ * @package @rottay/design-system
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import type { CalendarProps, CalendarMode } from '../../types';

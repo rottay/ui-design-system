@@ -1,6 +1,35 @@
 /**
- * Divider - Apollo Engine (Pure HTML/CSS)
- * Uses vanilla HTML/CSS with maximum accessibility.
+ * @fileoverview Divider Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Divider component.
+ * Uses vanilla HTML with inline CSS for maximum compatibility and accessibility.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS styling without external dependencies
+ * - Full ARIA accessibility (`role="separator"`, `aria-orientation`, `aria-hidden`)
+ * - BEM-style class names (`divider`, `divider--horizontal`, `divider__text`)
+ * - Complete box-sizing control for consistent rendering
+ *
+ * This implementation is ideal for:
+ * - Embedded widgets in third-party applications
+ * - Server-side rendering without CSS extraction
+ * - Accessibility-focused implementations
+ * - Maximum browser compatibility
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Divider } from '@rottay/design-system';
+ *
+ * // Pure HTML/CSS divider with accessibility
+ * <Divider engine="apollo" variant="dashed">
+ *   Section Break
+ * </Divider>
+ * ```
+ *
+ * @see {@link Divider} - The main engine-aware component
+ * @module Divider/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

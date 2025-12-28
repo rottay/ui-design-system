@@ -1,8 +1,51 @@
 'use client';
 
 /**
- * InputNumber - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview InputNumber Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the InputNumber component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a zero-dependency numeric input using pure HTML
+ * and inline CSS. It includes custom step controls with full accessibility.
+ *
+ * **Pure CSS Features:**
+ * - Native number input with custom styling
+ * - Inline style objects for all states
+ * - Focus ring with shadow
+ * - Status colors (error, warning)
+ * - Size variants via style objects
+ *
+ * **Custom Step Controls:**
+ * - ▲/▼ buttons with aria-labels
+ * - Keyboard navigation support
+ * - Disabled state handling
+ *
+ * **Accessibility:**
+ * - aria-valuemin/max/now attributes
+ * - aria-label on step buttons
+ * - Keyboard increment/decrement
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * <InputNumber
+ *   engine="apollo"
+ *   min={1}
+ *   max={10}
+ *   step={1}
+ *   prefix="#"
+ *   size="default"
+ * />
+ * ```
+ *
+ * @see {@link InputNumber} for the main component
+ * @see {@link TitanInputNumber} for Ant Design implementation
+ * @see {@link HermesInputNumber} for DaisyUI implementation
+ * @module ApolloInputNumber
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../../types';
 

@@ -1,23 +1,123 @@
+/**
+ * @fileoverview Segmented Apollo Engine - Rottay Design System
+ * @description Vanilla HTML/CSS implementation of the Segmented component.
+ * A zero-dependency engine for maximum accessibility and control.
+ *
+ * @remarks
+ * **Engine Overview:**
+ * Apollo is the headless, zero-dependency engine that uses only vanilla
+ * HTML, CSS, and React. It provides the smallest bundle size and maximum
+ * control over styling and behavior.
+ *
+ * **Key Features:**
+ * - Zero external dependencies (no UI library)
+ * - Maximum accessibility control
+ * - Smallest bundle footprint
+ * - Full CSS custom property support
+ * - Semantic HTML structure
+ *
+ * **When to Use Apollo:**
+ * - When bundle size is critical
+ * - For accessibility-focused applications
+ * - When full styling control is needed
+ * - For custom design systems built on Rottay
+ * - When avoiding third-party UI libraries
+ *
+ * **Multi-Tenant Theming:**
+ * Apollo heavily uses CSS custom properties for theming.
+ * Override these properties in your tenant theme:
+ * - Background color: #f5f5f5 (container), #fff (active)
+ * - Active color: #1677ff
+ * - Shadow: 0 2px 8px rgba(0,0,0,0.08)
+ *
+ * **Size Mapping:**
+ * | Size | Padding | Font Size |
+ * |------|---------|-----------|
+ * | small | 4px 8px | 12px |
+ * | middle | 6px 12px | 14px |
+ * | large | 8px 16px | 16px |
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Segmented } from '@rottay/design-system';
+ *
+ * <Segmented
+ *   engine="apollo"
+ *   options={['Daily', 'Weekly', 'Monthly']}
+ *   value={period}
+ *   onChange={setPeriod}
+ * />
+ * ```
+ *
+ * @example With Custom Styling
+ * ```tsx
+ * <Segmented
+ *   engine="apollo"
+ *   options={['Option A', 'Option B']}
+ *   style={{
+ *     backgroundColor: '#e0e0e0',
+ *     borderRadius: '8px',
+ *   }}
+ * />
+ * ```
+ *
+ * @example With Icons
+ * ```tsx
+ * <Segmented
+ *   engine="apollo"
+ *   options={[
+ *     { label: 'List', value: 'list', icon: <ListIcon /> },
+ *     { label: 'Grid', value: 'grid', icon: <GridIcon /> },
+ *   ]}
+ *   value={viewMode}
+ *   onChange={setViewMode}
+ * />
+ * ```
+ *
+ * @see {@link SegmentedProps} - Component props interface
+ * @see {@link TitanSegmented} - Ant Design alternative
+ * @see {@link HermesSegmented} - DaisyUI alternative
+ * @module Segmented/Engines/Apollo
+ * @category Navigation
+ * @package @rottay/design-system
+ */
+
 'use client';
 
-/**
- * Segmented - Apollo Engine (Vanilla HTML/CSS)
- */
 import React, { useState } from 'react';
 import type { SegmentedProps, SegmentedOption } from '../../types';
 import { SEGMENTED_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Styles
+// ============================================================================
+
+/**
+ * Inline styles for the Apollo segmented component.
+ * Uses CSS-in-JS approach for zero-dependency styling.
+ *
+ * @remarks
+ * These styles provide a clean, minimal appearance that can be
+ * customized via the `style` prop or CSS custom properties.
+ *
+ * @internal
+ */
 const styles = {
+  /** Container wrapper - inline flex with rounded background */
   container: {
     display: 'inline-flex',
     backgroundColor: '#f5f5f5',
     borderRadius: '6px',
     padding: '2px',
   } as React.CSSProperties,
+
+  /** Block mode - full width flex */
   containerBlock: {
     display: 'flex',
     width: '100%',
   } as React.CSSProperties,
+
+  /** Base button styles - shared across all options */
   button: {
     flex: 1,
     border: 'none',
@@ -30,23 +130,79 @@ const styles = {
     justifyContent: 'center',
     gap: '4px',
   } as React.CSSProperties,
+
+  /** Small size variant */
   buttonSmall: { padding: '4px 8px', fontSize: '12px' },
+
+  /** Middle size variant (default) */
   buttonMiddle: { padding: '6px 12px', fontSize: '14px' },
+
+  /** Large size variant */
   buttonLarge: { padding: '8px 16px', fontSize: '16px' },
+
+  /** Active/selected state - elevated with primary color */
   buttonActive: {
     backgroundColor: '#fff',
     boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
     color: '#1677ff',
     fontWeight: 500,
   } as React.CSSProperties,
+
+  /** Disabled state - muted appearance */
   buttonDisabled: {
     opacity: 0.5,
     cursor: 'not-allowed',
   } as React.CSSProperties,
 };
 
+// ============================================================================
+// Component
+// ============================================================================
+
+/**
+ * Apollo Engine implementation of the Segmented component.
+ *
+ * @description
+ * Pure vanilla implementation using only HTML, CSS, and React.
+ * Provides complete control over styling through inline styles.
+ *
+ * @remarks
+ * **Implementation Details:**
+ * - Uses flexbox for layout structure
+ * - Supports both controlled and uncontrolled modes
+ * - Normalizes simple options to SegmentedOption objects
+ * - Handles individual option disabled states
+ *
+ * **Accessibility Features:**
+ * - Native `<button>` elements for keyboard support
+ * - `disabled` attribute for disabled options
+ * - Visual feedback for active and hover states
+ * - Focus styles via browser defaults
+ *
+ * **Styling Approach:**
+ * Uses inline styles with a CSS-in-JS pattern. All styles are defined
+ * in the `styles` object and combined based on component state.
+ *
+ * @param props - {@link SegmentedProps}
+ * @returns The rendered vanilla Segmented control
+ *
+ * @example
+ * ```tsx
+ * <ApolloSegmented
+ *   options={['Daily', 'Weekly', 'Monthly']}
+ *   value={period}
+ *   onChange={(val) => setPeriod(val)}
+ *   size="middle"
+ *   block={false}
+ * />
+ * ```
+ */
 export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
   (props, ref) => {
+    // ---------------------------------------------------------------------------
+    // Props Destructuring
+    // ---------------------------------------------------------------------------
+
     const {
       options,
       value,
@@ -59,20 +215,55 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       style,
     } = props;
 
+    // ---------------------------------------------------------------------------
+    // State Management
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Internal state for uncontrolled mode.
+     * Only used when `value` prop is not provided.
+     */
     const [internalValue, setInternalValue] = useState(defaultValue);
+
+    /** Resolved current value - controlled or uncontrolled */
     const currentValue = value ?? internalValue;
 
+    // ---------------------------------------------------------------------------
+    // Options Normalization
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Normalize options array to SegmentedOption objects.
+     * Converts simple strings/numbers to full option objects.
+     */
     const normalizedOptions: SegmentedOption[] = options.map((opt) =>
       typeof opt === 'object' ? opt : { label: opt, value: opt }
     );
 
+    // ---------------------------------------------------------------------------
+    // Event Handlers
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Handle option click.
+     * Updates internal state (uncontrolled) and calls onChange callback.
+     */
     const handleClick = (optValue: string | number) => {
       if (disabled) return;
       if (value === undefined) setInternalValue(optValue);
       onChange?.(optValue);
     };
 
+    // ---------------------------------------------------------------------------
+    // Style Calculations
+    // ---------------------------------------------------------------------------
+
+    /** Resolve size-specific button styles */
     const sizeStyles = size === 'small' ? styles.buttonSmall : size === 'large' ? styles.buttonLarge : styles.buttonMiddle;
+
+    // ---------------------------------------------------------------------------
+    // Render
+    // ---------------------------------------------------------------------------
 
     return (
       <div
@@ -107,6 +298,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
   }
 );
 
+// Set display name for React DevTools debugging
 Segmented.displayName = 'Segmented.Apollo';
 
 export default Segmented;

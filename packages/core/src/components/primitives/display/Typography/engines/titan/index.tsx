@@ -1,11 +1,43 @@
 /**
- * Typography - Titan Engine Implementation
+ * @fileoverview Typography Titan Engine - Rottay Design System
+ * @description Ant Design-based typography with rich text features.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Ant Design-based implementation of Typography components.
- * Uses Ant Design's Typography components for consistent styling
- * with the Ant Design ecosystem.
+ * @remarks
+ * This engine wraps Ant Design's Typography components to provide
+ * rich text features with consistent design system API.
  *
+ * **Available Components:**
+ * - `TitanHeading` - Ant Design Title wrapper
+ * - `TitanText` - Ant Design Text wrapper
+ * - `TitanParagraph` - Ant Design Paragraph wrapper
+ *
+ * **Implementation Details:**
+ * - Maps heading levels to Ant Design Title levels (1-5)
+ * - Maps colors to Ant Design text types
+ * - Uses built-in ellipsis for truncation
+ * - h6 maps to level 5 (Ant Design limitation)
+ *
+ * **Ant Design Features:**
+ * - Built-in copy to clipboard
+ * - Editable text support
+ * - Expandable truncation
+ * - Typography context
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Typography } from '@rottay/design-system';
+ *
+ * <Typography.Heading engine="titan" level="h1">
+ *   Rich Heading
+ * </Typography.Heading>
+ * ```
+ *
+ * @see {@link Typography} for the main component
+ * @see {@link https://ant.design/components/typography} Ant Design Typography
  * @module Typography/engines/titan
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

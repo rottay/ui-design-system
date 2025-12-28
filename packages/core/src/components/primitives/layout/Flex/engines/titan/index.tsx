@@ -1,8 +1,33 @@
 'use client';
 
 /**
- * Flex - Titan Engine (Ant Design)
+ * @fileoverview Flex Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Flex component.
+ * Uses Ant Design's Flex component for consistent styling with the Ant ecosystem.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's built-in Flex component, providing:
+ * - Seamless integration with Ant Design themes
+ * - Consistent styling with other Ant Design components
+ * - Vertical direction support via the `vertical` prop
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Flex } from '@rottay/design-system';
+ *
+ * // Uses Ant Design's Flex under the hood
+ * <Flex engine="titan" justify="between" align="center" gap={16}>
+ *   <Button>Cancel</Button>
+ *   <Button type="primary">Submit</Button>
+ * </Flex>
+ * ```
+ *
+ * @see {@link Flex} - The main engine-aware component
+ * @module Flex/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import { Flex as AntFlex } from 'antd';
 import type { FlexProps } from '../../types';

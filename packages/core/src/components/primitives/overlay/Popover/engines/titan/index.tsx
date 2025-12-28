@@ -1,7 +1,42 @@
 'use client';
 
 /**
- * Popover - Titan Engine (Ant Design)
+ * @fileoverview Popover Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Popover component.
+ * Wraps Ant Design's Popover with full feature parity and theming.
+ *
+ * @remarks
+ * The Titan engine provides:
+ * - Native Ant Design Popover styling and animations
+ * - Full theming integration with Ant Design tokens
+ * - Built-in title and content sections
+ * - All 12 placement positions supported
+ * - Delay configuration for hover triggers
+ *
+ * Implementation details:
+ * - Converts mouseEnterDelay/mouseLeaveDelay from ms to seconds
+ * - Wraps children in a container div for ref forwarding
+ * - Passes through all overlay styling options
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Popover, Button } from '@rottay/design-system';
+ *
+ * <Popover
+ *   engine="titan"
+ *   content={<div>Rich content here</div>}
+ *   title="Panel Title"
+ *   trigger="click"
+ *   placement="bottomRight"
+ * >
+ *   <Button>Open Popover</Button>
+ * </Popover>
+ * ```
+ *
+ * @see {@link Popover} - The main engine-aware component
+ * @module Popover/Engines/Titan
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Popover as AntPopover } from 'antd';

@@ -1,10 +1,52 @@
 /**
- * @fileoverview Card.Image Compound Component
- * @description Image section for Card component with overlay and gradient support.
- * Provides a consistent image display with loading states and error handling.
+ * @fileoverview Card.Image Compound - Rottay Design System
+ * @description Cover image for Card with overlay and loading states.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/compound/Image
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * The CardImage provides image display with automatic loading states,
+ * error handling, gradient overlays, and custom overlay content.
+ *
+ * **Position Options:**
+ * - `top` - Image at card top (default)
+ * - `bottom` - Image at card bottom
+ * - `cover` - Full card background
+ *
+ * **Features:**
+ * - Automatic loading spinner
+ * - Error state with placeholder icon
+ * - Gradient overlay for text readability
+ * - Custom overlay content slot
+ * - Smooth fade-in animation
+ *
+ * @example Basic Image
+ * ```tsx
+ * <Card.Image src="/photo.jpg" alt="Product" />
+ * ```
+ *
+ * @example With Gradient Overlay
+ * ```tsx
+ * <Card.Image
+ *   src="/hero.jpg"
+ *   alt="Hero"
+ *   gradient
+ *   height={300}
+ * />
+ * ```
+ *
+ * @example Custom Overlay
+ * ```tsx
+ * <Card.Image
+ *   src="/product.jpg"
+ *   alt="Product"
+ *   overlay={<Badge variant="success">New</Badge>}
+ * />
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @module CardImage
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

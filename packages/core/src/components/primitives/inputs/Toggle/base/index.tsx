@@ -1,6 +1,52 @@
 /**
- * Toggle - Base Component
- * Provides CSS variables and base structure for all engine implementations
+ * @fileoverview Toggle Base Component - Rottay Design System
+ * @description Core toggle implementation with CSS variables for theming.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The BaseToggle provides the foundational toggle switch implementation with
+ * comprehensive CSS variable support. It serves as a reference for engine
+ * implementations and can be used directly for custom styling needs.
+ *
+ * **Component Structure:**
+ * - Container label with configurable flex direction
+ * - Track element with sliding dot indicator
+ * - Hidden checkbox input with switch role
+ * - Optional label, description, and helper text
+ *
+ * **CSS Variable Integration:**
+ * The component exposes CSS custom properties for deep customization:
+ * - `--ds-toggle-width` - Track width
+ * - `--ds-toggle-height` - Track height
+ * - `--ds-toggle-dot-size` - Sliding dot diameter
+ * - `--ds-toggle-bg` - Track background (unchecked)
+ * - `--ds-toggle-bg-checked` - Track background (checked)
+ * - `--ds-toggle-transition` - Animation timing
+ *
+ * **Accessibility Features:**
+ * - Hidden checkbox with role="switch"
+ * - aria-checked reflects current state
+ * - aria-invalid for error state
+ * - aria-busy for loading state
+ * - Label association via htmlFor
+ *
+ * @example Using BaseToggle
+ * ```tsx
+ * import { BaseToggle } from '@rottay/design-system';
+ *
+ * <BaseToggle
+ *   size="md"
+ *   color="primary"
+ *   label="Enable feature"
+ *   checked={isEnabled}
+ *   onChange={handleToggle}
+ * />
+ * ```
+ *
+ * @see {@link Toggle} for the engine-routed component
+ * @module BaseToggle
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -58,14 +104,14 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
 
   // CSS Variables for theming (using tokens)
   const cssVariables = {
-    '--toggle-width': sizeTokens.width,
-    '--toggle-height': sizeTokens.height,
-    '--toggle-dot-size': sizeTokens.dot,
-    '--toggle-bg': colors.bg,
-    '--toggle-bg-checked': colors.bgChecked,
-    '--toggle-border-color': colors.border,
-    '--toggle-dot-color': '#ffffff',
-    '--toggle-transition': 'all 0.2s ease-in-out',
+    '--ds-toggle-width': sizeTokens.width,
+    '--ds-toggle-height': sizeTokens.height,
+    '--ds-toggle-dot-size': sizeTokens.dot,
+    '--ds-toggle-bg': colors.bg,
+    '--ds-toggle-bg-checked': colors.bgChecked,
+    '--ds-toggle-border-color': colors.border,
+    '--ds-toggle-dot-color': '#ffffff',
+    '--ds-toggle-transition': 'all 0.2s ease-in-out',
   } as React.CSSProperties;
 
   const containerStyle: React.CSSProperties = {
@@ -86,11 +132,11 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
     alignItems: 'center',
     width: sizeTokens.width,
     height: sizeTokens.height,
-    borderRadius: 'var(--toggle-track-border-radius, 9999px)',
+    borderRadius: 'var(--ds-toggle-track-border-radius, 9999px)',
     backgroundColor: isChecked ? colors.bgChecked : colors.bg,
     transition: 'all 0.2s ease-in-out',
     flexShrink: 0,
-    border: error ? '2px solid var(--color-error, #ff4d4f)' : 'none',
+    border: error ? '2px solid var(--ds-color-error-500, #ff4d4f)' : 'none',
   };
 
   const dotStyle: React.CSSProperties = {
@@ -196,7 +242,7 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
               className="rottay-toggle__label"
               style={{
                 fontSize: sizeValues.height * 0.6,
-                color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+                color: error ? 'var(--ds-color-error-500, #ff4d4f)' : 'inherit',
                 userSelect: 'none',
                 lineHeight: 1.4,
               }}
@@ -209,7 +255,7 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
               className="rottay-toggle__description"
               style={{
                 fontSize: sizeValues.height * 0.5,
-                color: 'var(--color-text-secondary, #666)',
+                color: 'var(--ds-color-text-secondary, #666)',
                 userSelect: 'none',
                 lineHeight: 1.4,
               }}
@@ -224,7 +270,7 @@ export const BaseToggle = forwardRef<HTMLLabelElement, ToggleProps>((props, ref)
           className="rottay-toggle__helper"
           style={{
             fontSize: sizeValues.height * 0.5,
-            color: errorMessage ? 'var(--color-error, #ff4d4f)' : 'var(--color-text-secondary, #666)',
+            color: errorMessage ? 'var(--ds-color-error-500, #ff4d4f)' : 'var(--ds-color-text-secondary, #666)',
             marginTop: '4px',
           }}
         >

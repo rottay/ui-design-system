@@ -1,35 +1,75 @@
 /**
- * @fileoverview Statistic Component - Engine Router
- * @description Main entry point for the Statistic component.
- * Routes to the appropriate engine implementation based on context or props.
+ * @fileoverview Statistic Component - Rottay Design System
+ * @description Numerical data display with formatting, countdown, and value types.
+ * Part of the Rottay Design System's display primitives collection.
  *
+ * @remarks
  * The Statistic component displays numerical data with optional formatting,
- * supporting titles, prefixes, suffixes, and loading states.
+ * supporting titles, prefixes, suffixes, value types, and countdown timers.
  *
- * @example
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Statistic with full feature support
+ * - **Hermes**: DaisyUI-styled statistic with Tailwind utilities
+ * - **Apollo**: Pure HTML/CSS with WCAG-compliant colors
+ *
+ * **Key Features:**
+ * - Number formatting with separators and precision
+ * - Semantic value types (positive, negative, warning)
+ * - Prefix and suffix support
+ * - Loading skeleton states
+ * - Countdown timer compound component
+ * - Custom formatter function support
+ *
+ * **Compound Components:**
+ * - `Statistic.Countdown` - Countdown timer with format tokens
+ *
+ * **CSS Custom Properties:**
+ * - `--statistic-title-color` - Title text color
+ * - `--statistic-title-font-size` - Title font size
+ * - `--statistic-value-color` - Value text color
+ * - `--statistic-value-font-size` - Value font size
+ * - `--statistic-positive-color` - Positive value color
+ * - `--statistic-negative-color` - Negative value color
+ * - `--statistic-warning-color` - Warning value color
+ *
+ * @example Basic Usage
  * ```tsx
- * // Basic usage
  * import { Statistic } from '@rottay/design-system';
  *
  * <Statistic title="Active Users" value={1128} />
+ * ```
  *
- * // With formatting
+ * @example With Formatting
+ * ```tsx
  * <Statistic
  *   title="Revenue"
  *   value={1250000.5}
  *   prefix="$"
  *   precision={2}
  * />
+ * ```
  *
- * // Countdown
+ * @example Value Types
+ * ```tsx
+ * <Statistic title="Growth" value={15.5} suffix="%" valueType="positive" />
+ * <Statistic title="Loss" value={-8.2} suffix="%" valueType="negative" />
+ * ```
+ *
+ * @example Countdown Timer
+ * ```tsx
  * <Statistic.Countdown
  *   title="Time Remaining"
  *   value={Date.now() + 3600000}
  *   format="HH:mm:ss"
+ *   onFinish={() => console.log('Done!')}
  * />
  * ```
  *
- * @module components/primitives/display/Statistic
+ * @see {@link StatisticProps} for component props
+ * @see {@link CountdownProps} for countdown props
+ * @module Statistic
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

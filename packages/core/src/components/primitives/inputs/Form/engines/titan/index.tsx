@@ -1,8 +1,68 @@
 'use client';
 
 /**
- * Form - Titan Engine (Ant Design)
+ * @fileoverview Form Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Form component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Form component, providing enterprise-grade
+ * features including async validation, rich feedback icons, and scroll-to-error.
+ *
+ * **Ant Design Features Utilized:**
+ * - Full form validation with async support
+ * - Layout modes (horizontal, vertical, inline)
+ * - Label/wrapper column configuration
+ * - Form.Item with hasFeedback icons
+ * - Form.List for dynamic fields
+ * - Form.ErrorList for error display
+ * - scrollToFirstError for UX
+ * - useForm hook with full API
+ *
+ * **Prop Mapping:**
+ * - Direct pass-through to Ant Design Form props
+ * - `size="default"` → `size="middle"` (Ant Design naming)
+ * - Validation rules are passed directly to Ant Design
+ *
+ * **Compound Components:**
+ * - `Form.Item` - Wraps Ant Design Form.Item
+ * - `Form.List` - Wraps Ant Design Form.List
+ * - `Form.ErrorList` - Wraps Ant Design Form.ErrorList
+ * - `Form.useForm` - Re-exports Ant Design useForm
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Form, Input, useForm } from '@rottay/design-system';
+ *
+ * const [form] = useForm();
+ *
+ * <Form
+ *   engine="titan"
+ *   form={form}
+ *   layout="horizontal"
+ *   labelCol={{ span: 6 }}
+ *   wrapperCol={{ span: 18 }}
+ *   onFinish={handleSubmit}
+ * >
+ *   <Form.Item
+ *     name="email"
+ *     label="Email"
+ *     rules={[{ required: true, type: 'email' }]}
+ *     hasFeedback
+ *   >
+ *     <Input />
+ *   </Form.Item>
+ * </Form>
+ * ```
+ *
+ * @see {@link Form} for the main component
+ * @see {@link HermesForm} for DaisyUI implementation
+ * @see {@link ApolloForm} for vanilla implementation
+ * @module TitanForm
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import { Form as AntForm } from 'antd';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance } from '../../types';

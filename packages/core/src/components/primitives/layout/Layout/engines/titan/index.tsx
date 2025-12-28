@@ -1,7 +1,36 @@
 'use client';
 
 /**
- * Layout - Titan Engine (Ant Design)
+ * @fileoverview Layout Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Layout compound component.
+ * Wraps Ant Design's Layout components with full feature parity.
+ *
+ * @remarks
+ * The Titan engine provides:
+ * - Direct passthrough to Ant Design Layout, Header, Sider, Content, Footer
+ * - Full Ant Design styling and theming support
+ * - Native collapsible sidebar with all Ant Design features
+ * - Responsive breakpoint support for auto-collapse
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Layout } from '@rottay/design-system';
+ *
+ * <Layout engine="titan" hasSider>
+ *   <Layout.Sider engine="titan" collapsible>
+ *     Sidebar content
+ *   </Layout.Sider>
+ *   <Layout>
+ *     <Layout.Header engine="titan">Header</Layout.Header>
+ *     <Layout.Content engine="titan">Content</Layout.Content>
+ *   </Layout>
+ * </Layout>
+ * ```
+ *
+ * @see {@link Layout} - The main engine-aware component
+ * @module Layout/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Layout as AntLayout } from 'antd';

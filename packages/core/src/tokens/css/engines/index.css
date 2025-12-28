@@ -1,0 +1,24 @@
+/**
+ * Engine Styles Index - Rottay Design System
+ *
+ * Central import file for all engine theme files.
+ * These CSS files map --ds-* design tokens to library-specific classes.
+ *
+ * Architecture:
+ * 1. default.css provides all base tokens (:root)
+ * 2. Engine themes map tokens to library classes (Ant Design, Tailwind, Vanilla)
+ * 3. Tenant CSS can override token values via [data-tenant] selectors
+ *
+ * Usage:
+ * @import '@rottay/design-system/tokens/css/engines';
+ *
+ * @version 0.4.0
+ */
+
+/* Component-specific styles (legacy) */
+@import './collapse.css';
+
+/* Engine-specific themes */
+@import './titan/theme.css';
+@import './hermes/theme.css';
+@import './apollo/theme.css';

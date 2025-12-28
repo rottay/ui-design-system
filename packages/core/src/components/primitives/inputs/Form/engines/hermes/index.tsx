@@ -1,8 +1,66 @@
 'use client';
 
 /**
- * Form - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Form Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Form component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements forms using DaisyUI's utility-first approach
+ * with Tailwind CSS classes and custom validation logic. It provides a
+ * lightweight alternative to Titan with smaller bundle size.
+ *
+ * **DaisyUI Features Utilized:**
+ * - Form control wrapper classes
+ * - Label text and label-text-alt styling
+ * - Text error/warning/success color utilities
+ * - Flex layout utilities for form layouts
+ * - Tooltip for field hints
+ *
+ * **Custom Implementation:**
+ * Unlike Titan which wraps Ant Design, Hermes provides its own:
+ * - Form state management via React context
+ * - Validation engine with rule processing
+ * - Field registration and value tracking
+ * - useForm hook with full FormInstance API
+ *
+ * **Validation Support:**
+ * - Required validation
+ * - Min/max length validation
+ * - Pattern (regex) validation
+ * - Custom async validators
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Form, Input, useForm } from '@rottay/design-system';
+ *
+ * const [form] = useForm();
+ *
+ * <Form
+ *   engine="hermes"
+ *   form={form}
+ *   layout="vertical"
+ *   onFinish={handleSubmit}
+ *   className="max-w-md"
+ * >
+ *   <Form.Item
+ *     name="username"
+ *     label="Username"
+ *     rules={[{ required: true }, { min: 3 }]}
+ *   >
+ *     <input className="input input-bordered w-full" />
+ *   </Form.Item>
+ * </Form>
+ * ```
+ *
+ * @see {@link Form} for the main component
+ * @see {@link TitanForm} for Ant Design implementation
+ * @see {@link ApolloForm} for vanilla implementation
+ * @module HermesForm
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../types';
 

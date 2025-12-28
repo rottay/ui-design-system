@@ -1,12 +1,47 @@
 'use client';
 
 /**
- * Watermark - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Watermark Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Watermark component.
+ * Uses canvas for pattern generation with inline CSS for positioning.
  *
- * Pure HTML/CSS implementation of the Watermark component with no
- * external UI library dependencies. Uses canvas for pattern generation.
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with no external dependencies
+ * - Canvas-based watermark pattern generation
+ * - Full offset support for precise positioning
+ * - Device pixel ratio support for retina displays
+ * - SSR-safe with typeof document check
  *
- * @module WatermarkApollo
+ * Implementation details:
+ * - useEffect generates canvas pattern on prop changes
+ * - SSR guard prevents document access on server
+ * - backgroundPosition uses offset prop for positioning
+ * - Image crossOrigin set for external images
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Watermark } from '@rottay/design-system';
+ *
+ * <Watermark
+ *   engine="apollo"
+ *   content="Confidential"
+ *   offset={[20, 20]}
+ *   zIndex={100}
+ * >
+ *   <div>Sensitive document</div>
+ * </Watermark>
+ * ```
+ *
+ * @see {@link Watermark} - The main engine-aware component
+ * @module Watermark/Engines/Apollo
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useEffect, useState } from 'react';
 import type { WatermarkProps } from '../../types';

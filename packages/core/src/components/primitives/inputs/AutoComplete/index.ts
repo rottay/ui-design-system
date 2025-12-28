@@ -1,15 +1,27 @@
 /**
- * AutoComplete - Engine Router
+ * @fileoverview AutoComplete Component - Rottay Design System
+ * @description An input component with dropdown suggestions that provides
+ * type-ahead search functionality with customizable filtering and selection.
  *
- * This module exports the AutoComplete component with multi-engine support.
- * AutoComplete provides input with dropdown suggestions for type-ahead search.
+ * @remarks
+ * The AutoComplete component provides intelligent input suggestions for:
+ * - **Search boxes**: Type-ahead search with dynamic suggestions
+ * - **Form inputs**: Autocomplete for addresses, names, emails
+ * - **Command palettes**: Quick action search interfaces
+ * - **Tag entry**: Suggesting existing tags while typing
  *
- * @module AutoComplete
- * @example
+ * Key features:
+ * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Custom filtering**: Built-in or custom filter functions
+ * - **Async search**: Fetch suggestions dynamically via onSearch
+ * - **Custom rendering**: Custom option labels and content
+ * - **Keyboard navigation**: Full keyboard accessibility
+ * - **Controlled/uncontrolled**: Full state management flexibility
+ *
+ * @example Basic autocomplete
  * ```tsx
  * import { AutoComplete } from '@rottay/design-system';
  *
- * // Basic usage
  * <AutoComplete
  *   options={[
  *     { value: 'React' },
@@ -18,15 +30,25 @@
  *   ]}
  *   placeholder="Search frameworks"
  * />
+ * ```
  *
- * // With search callback
+ * @example Async search with API
+ * ```tsx
+ * const [options, setOptions] = useState([]);
+ *
  * <AutoComplete
  *   options={options}
- *   onSearch={(text) => fetchSuggestions(text)}
+ *   onSearch={async (text) => {
+ *     const results = await fetchSuggestions(text);
+ *     setOptions(results.map(r => ({ value: r.name })));
+ *   }}
  *   onChange={(value) => setValue(value)}
+ *   placeholder="Search users..."
  * />
+ * ```
  *
- * // With custom filter
+ * @example Custom filter function
+ * ```tsx
  * <AutoComplete
  *   options={options}
  *   filterOption={(input, option) =>
@@ -34,10 +56,40 @@
  *   }
  * />
  * ```
+ *
+ * @example With custom option labels
+ * ```tsx
+ * <AutoComplete
+ *   options={[
+ *     { value: 'react', label: <span>⚛️ React</span> },
+ *     { value: 'vue', label: <span>💚 Vue</span> },
+ *   ]}
+ *   onSelect={(value, option) => console.log('Selected:', value)}
+ * />
+ * ```
+ *
+ * @example Multi-engine usage
+ * ```tsx
+ * // Titan engine (Ant Design - default)
+ * <AutoComplete engine="titan" options={options} allowClear />
+ *
+ * // Hermes engine (DaisyUI/Tailwind)
+ * <AutoComplete engine="hermes" options={options} size="large" />
+ *
+ * // Apollo engine (Pure HTML/CSS)
+ * <AutoComplete engine="apollo" options={options} />
+ * ```
+ *
+ * @see {@link AutoCompleteProps} for component props
+ * @see {@link AutoCompleteOption} for option structure
+ * @module AutoComplete
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { AutoCompleteProps } from './types';
 
+// Export types
 export {
   type AutoCompleteProps,
   type AutoCompleteOption,
@@ -45,6 +97,17 @@ export {
   AUTOCOMPLETE_DEFAULTS,
 } from './types';
 
+/**
+ * Create engine-aware AutoComplete component.
+ *
+ * The AutoComplete component automatically selects the appropriate rendering engine
+ * based on the current context or explicit engine prop.
+ *
+ * Engines:
+ * - **titan**: Full-featured implementation using Ant Design (default)
+ * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
+ * - **apollo**: Headless implementation using vanilla HTML/CSS
+ */
 export const AutoComplete = createEngineComponent<AutoCompleteProps>('AutoComplete', {
   titan: () => import('./engines/titan'),
   hermes: () => import('./engines/hermes'),

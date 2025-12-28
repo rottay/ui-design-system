@@ -1,25 +1,125 @@
 /**
- * TreeSelect Types
+ * @fileoverview TreeSelect Component Types - Rottay Design System
+ * @description Type definitions for the TreeSelect component including tree nodes,
+ * selection modes, checkable configuration, and search filtering.
+ *
+ * @remarks
+ * The TreeSelect types provide comprehensive configuration for:
+ * - Tree nodes: Hierarchical structure with value, title, children
+ * - Selection modes: Single, multiple, or checkbox selection
+ * - Search filtering: Built-in or custom filter functions
+ * - Customization: Field names, tree lines, expand behavior
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   TreeSelectProps,
+ *   TreeSelectNode,
+ *   TreeSelectValue,
+ * } from '@rottay/design-system';
+ *
+ * const treeData: TreeSelectNode[] = [
+ *   {
+ *     value: 'parent',
+ *     title: 'Parent Node',
+ *     children: [
+ *       { value: 'child', title: 'Child Node', isLeaf: true },
+ *     ],
+ *   },
+ * ];
+ *
+ * const config: TreeSelectProps = {
+ *   treeData,
+ *   treeCheckable: true,
+ *   showSearch: true,
+ * };
+ * ```
+ *
+ * @module TreeSelect/Types
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 
+/**
+ * Size variants for the TreeSelect input.
+ */
 export type TreeSelectSize = 'small' | 'middle' | 'large';
 
+/**
+ * Structure for a tree select node with hierarchical children.
+ *
+ * @example
+ * ```tsx
+ * const node: TreeSelectNode = {
+ *   value: 'engineering',
+ *   title: 'Engineering Department',
+ *   children: [
+ *     { value: 'frontend', title: 'Frontend Team', isLeaf: true },
+ *     { value: 'backend', title: 'Backend Team', isLeaf: true },
+ *   ],
+ * };
+ * ```
+ */
 export interface TreeSelectNode {
+  /** Optional unique key (defaults to value) */
   key?: string;
+  /** Unique value for this node */
   value: string | number;
+  /** Display content for this node */
   title: ReactNode;
+  /** Whether this node is disabled */
   disabled?: boolean;
+  /** Whether the checkbox is disabled (when treeCheckable) */
   disableCheckbox?: boolean;
+  /** Whether this node is selectable */
   selectable?: boolean;
+  /** Whether to show checkbox for this node */
   checkable?: boolean;
+  /** Child nodes (nested hierarchy) */
   children?: TreeSelectNode[];
+  /** Whether this is a leaf node (no children) */
   isLeaf?: boolean;
+  /** Additional custom properties */
   [key: string]: unknown;
 }
 
+/**
+ * Selected value type - single value or array for multiple selection.
+ *
+ * @example
+ * ```tsx
+ * // Single selection
+ * const value: TreeSelectValue = 'engineering';
+ *
+ * // Multiple selection
+ * const values: TreeSelectValue = ['frontend', 'backend'];
+ * ```
+ */
 export type TreeSelectValue = string | number | (string | number)[];
 
+/**
+ * Props for the TreeSelect component.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <TreeSelect
+ *   treeData={data}
+ *   placeholder="Select..."
+ *   onChange={(value) => handleChange(value)}
+ * />
+ * ```
+ *
+ * @example Checkable with search
+ * ```tsx
+ * <TreeSelect
+ *   treeData={data}
+ *   treeCheckable
+ *   showSearch
+ *   treeDefaultExpandAll
+ * />
+ * ```
+ */
 export interface TreeSelectProps {
   /** Tree data */
   treeData: TreeSelectNode[];
@@ -85,15 +185,29 @@ export interface TreeSelectProps {
   engine?: 'titan' | 'hermes' | 'apollo';
 }
 
+/**
+ * Default values for TreeSelect props.
+ * Used across all engine implementations for consistency.
+ */
 export const TREESELECT_DEFAULTS: Partial<TreeSelectProps> = {
+  /** Single selection by default */
   multiple: false,
+  /** Checkboxes hidden by default */
   treeCheckable: false,
+  /** Parent-child check cascading enabled */
   treeCheckStrictly: false,
+  /** Search hidden by default */
   showSearch: false,
+  /** Tree collapsed by default */
   treeDefaultExpandAll: false,
+  /** Not disabled by default */
   disabled: false,
+  /** Clear button enabled */
   allowClear: true,
+  /** Default size variant */
   size: 'middle',
+  /** Default placeholder text */
   placeholder: 'Please select',
+  /** Tree lines hidden by default */
   treeLine: false,
 };

@@ -1,5 +1,53 @@
 /**
- * Radio - Titan Engine (Ant Design)
+ * @fileoverview Radio Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Radio component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Radio component, providing enterprise-grade
+ * features including button style groups and consistent styling with Ant ecosystem.
+ *
+ * **Ant Design Features Utilized:**
+ * - Native Radio component
+ * - Radio.Group for exclusive selection
+ * - optionType="button" for button-style radios
+ * - buttonStyle="solid" or "outline" for button appearance
+ *
+ * **Prop Mapping:**
+ * - `color` → Custom CSS variable override for primary color
+ * - `size` → Font size adjustment via inline styles
+ * - `buttonStyle` → Ant Design optionType="button"
+ *
+ * **Group Support:**
+ * TitanRadioGroup supports both standard radio circles and button-style
+ * segmented controls via the buttonStyle prop.
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Radio } from '@rottay/design-system';
+ *
+ * // Explicit Titan engine (default)
+ * <Radio
+ *   engine="titan"
+ *   name="option"
+ *   value="a"
+ *   label="Ant Design Radio"
+ * />
+ *
+ * // Button style group
+ * <Radio.Group
+ *   engine="titan"
+ *   options={options}
+ *   buttonStyle="solid"
+ * />
+ * ```
+ *
+ * @see {@link Radio} for the main component
+ * @see {@link HermesRadio} for DaisyUI implementation
+ * @see {@link ApolloRadio} for vanilla implementation
+ * @module TitanRadio
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

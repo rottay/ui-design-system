@@ -1,10 +1,36 @@
 /**
- * @fileoverview Card.Body Compound Component
- * @description Body/content section for Card component.
- * Provides consistent padding and layout for main card content.
+ * @fileoverview Card.Body Compound - Rottay Design System
+ * @description Main content area for Card with configurable padding.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/compound/Body
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * The CardBody provides a flexible content container that fills
+ * available vertical space with consistent padding options.
+ *
+ * **Padding Options:**
+ * - `none` - No padding (0)
+ * - `sm` - Small padding (12px 16px)
+ * - `md` - Medium padding (16px 24px) - default
+ * - `lg` - Large padding (24px 32px)
+ *
+ * @example Basic Body
+ * ```tsx
+ * <Card.Body>
+ *   <p>Main content goes here</p>
+ * </Card.Body>
+ * ```
+ *
+ * @example Edge-to-Edge Content
+ * ```tsx
+ * <Card.Body padding="none">
+ *   <Image src="/full-width.jpg" />
+ * </Card.Body>
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @module CardBody
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

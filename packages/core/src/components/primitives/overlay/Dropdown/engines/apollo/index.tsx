@@ -1,7 +1,48 @@
 'use client';
 
 /**
- * Dropdown - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Dropdown Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Dropdown component.
+ * Uses inline CSS styles with portal rendering for proper z-index stacking.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with absolute positioning
+ * - Portal rendering to document.body
+ * - Custom trigger handling for click, hover, contextMenu
+ * - Click-outside dismissal via event listeners
+ * - Placement calculation based on trigger element rect
+ *
+ * Implementation details:
+ * - MenuItem component renders items, dividers, and groups
+ * - Hover effects via onMouseEnter/onMouseLeave
+ * - Danger items styled with red color (#ef4444)
+ * - Menu positioned absolutely based on trigger getBoundingClientRect()
+ * - Uses createPortal for proper overlay stacking
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Dropdown, Button } from '@rottay/design-system';
+ *
+ * // Pure inline CSS dropdown
+ * <Dropdown
+ *   engine="apollo"
+ *   trigger={['click']}
+ *   menu={{ items: [{ key: '1', label: 'Option' }] }}
+ * >
+ *   <Button>Vanilla Dropdown</Button>
+ * </Dropdown>
+ * ```
+ *
+ * @see {@link Dropdown} - The main engine-aware component
+ * @module Dropdown/Engines/Apollo
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';

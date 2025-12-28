@@ -1,6 +1,69 @@
 /**
- * Radio - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Radio Base Component - Rottay Design System
+ * @description Core radio implementation using CSS custom properties for styling.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The BaseRadio component provides a foundational radio implementation that
+ * relies on CSS custom properties for theming. It supports controlled/uncontrolled
+ * modes and full accessibility compliance.
+ *
+ * **Key Features:**
+ * - Pure CSS variable-based theming
+ * - Controlled and uncontrolled modes
+ * - Circular dot indicator for checked state
+ * - Label and description support
+ * - Label placement options (start/end)
+ * - Error state indication
+ * - Size and color variants
+ *
+ * **CSS Custom Properties Used:**
+ * - `--ds-radio-size` - Radio dimensions
+ * - `--ds-radio-bg` - Dot background color when checked
+ * - `--ds-radio-border` - Border color
+ * - `--ds-radio-dot-color` - Dot color
+ *
+ * **Accessibility:**
+ * - Native radio input for form compatibility
+ * - aria-checked for selection state
+ * - aria-invalid for error state
+ * - Proper label association via htmlFor
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseRadio } from './base';
+ *
+ * <BaseRadio
+ *   name="option"
+ *   value="a"
+ *   label="Option A"
+ *   onChange={(e) => console.log(e.target.value)}
+ * />
+ * ```
+ *
+ * @example With Description
+ * ```tsx
+ * import { BaseRadio } from './base';
+ *
+ * <BaseRadio
+ *   name="plan"
+ *   value="pro"
+ *   size="lg"
+ *   color="primary"
+ *   label="Pro Plan"
+ *   description="Includes all premium features"
+ *   checked={plan === 'pro'}
+ *   onChange={() => setPlan('pro')}
+ * />
+ * ```
+ *
+ * @see {@link Radio} for the engine-aware wrapper
+ * @see {@link TitanRadio} for Ant Design implementation
+ * @see {@link HermesRadio} for DaisyUI implementation
+ * @see {@link ApolloRadio} for vanilla implementation
+ * @module BaseRadio
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -55,10 +118,10 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
 
     // Build CSS variables for the radio
     const radioVars: React.CSSProperties = {
-      '--radio-size': sizeValue,
-      '--radio-bg': isChecked ? colors.bg : 'transparent',
-      '--radio-border': error ? 'var(--color-error, #ff4d4f)' : (isChecked ? colors.border : 'var(--color-border, #d9d9d9)'),
-      '--radio-dot-color': colors.dot,
+      '--ds-radio-size': sizeValue,
+      '--ds-radio-bg': isChecked ? colors.bg : 'transparent',
+      '--ds-radio-border': error ? 'var(--ds-color-error-500, #ff4d4f)' : (isChecked ? colors.border : 'var(--ds-color-border, #d9d9d9)'),
+      '--ds-radio-dot-color': colors.dot,
     } as React.CSSProperties;
 
     const containerStyle: React.CSSProperties = {
@@ -77,10 +140,10 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 'var(--radio-size)',
-      height: 'var(--radio-size)',
+      width: 'var(--ds-radio-size)',
+      height: 'var(--ds-radio-size)',
       borderRadius: '50%',
-      border: '2px solid var(--radio-border)',
+      border: '2px solid var(--ds-radio-border)',
       backgroundColor: 'transparent',
       transition: 'all 0.2s ease-in-out',
       flexShrink: 0,
@@ -102,7 +165,7 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
       width: sizeNumeric * 0.5,
       height: sizeNumeric * 0.5,
       borderRadius: '50%',
-      backgroundColor: 'var(--radio-bg)',
+      backgroundColor: 'var(--ds-radio-bg)',
     };
 
     const labelContainerStyle: React.CSSProperties = {
@@ -113,14 +176,14 @@ export const BaseRadio = forwardRef<HTMLInputElement, RadioProps>(
 
     const labelStyle: React.CSSProperties = {
       fontSize: sizeNumeric * 0.9,
-      color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+      color: error ? 'var(--ds-color-error-500, #ff4d4f)' : 'inherit',
       userSelect: 'none',
       lineHeight: 1.4,
     };
 
     const descriptionStyle: React.CSSProperties = {
       fontSize: sizeNumeric * 0.75,
-      color: 'var(--color-text-secondary, #666)',
+      color: 'var(--ds-color-text-secondary, #666)',
       userSelect: 'none',
       lineHeight: 1.4,
     };

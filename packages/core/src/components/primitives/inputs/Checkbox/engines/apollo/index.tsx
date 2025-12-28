@@ -1,5 +1,65 @@
 /**
- * Checkbox - Apollo Engine (Pure HTML/CSS with a11y)
+ * @fileoverview Checkbox Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Checkbox component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a headless checkbox implementation using only
+ * native HTML elements and inline styles. This offers maximum flexibility
+ * for custom styling and ensures full accessibility compliance.
+ *
+ * **Key Features:**
+ * - Zero UI library dependencies
+ * - Custom SVG checkmark rendering
+ * - Indeterminate state with horizontal line
+ * - Focus ring management
+ * - Keyboard navigation (Space, Enter)
+ * - Full ARIA compliance
+ *
+ * **Visual Elements:**
+ * - CheckmarkIcon: SVG path for checked state
+ * - IndeterminateLine: Horizontal line for mixed state
+ * - Focus outline with color matching
+ *
+ * **Accessibility:**
+ * - Native input element with proper ARIA attributes
+ * - aria-checked with "mixed" for indeterminate
+ * - aria-invalid for error state
+ * - aria-describedby linking to label
+ * - Keyboard accessible via Space/Enter
+ *
+ * **Group Support:**
+ * Includes ApolloCheckboxGroup for fully accessible group management.
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Checkbox } from '@rottay/design-system';
+ *
+ * // Explicit Apollo engine
+ * <Checkbox
+ *   engine="apollo"
+ *   label="Accessible Checkbox"
+ *   color="primary"
+ *   radius="md"
+ * />
+ *
+ * // With full customization
+ * <Checkbox
+ *   engine="apollo"
+ *   size="lg"
+ *   color="success"
+ *   radius="full"
+ *   labelPlacement="start"
+ *   indeterminate={hasPartialSelection}
+ * />
+ * ```
+ *
+ * @see {@link Checkbox} for the main component
+ * @see {@link TitanCheckbox} for Ant Design implementation
+ * @see {@link HermesCheckbox} for DaisyUI implementation
+ * @module ApolloCheckbox
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

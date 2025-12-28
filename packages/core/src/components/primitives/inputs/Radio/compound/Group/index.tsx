@@ -1,6 +1,69 @@
 /**
- * Radio.Group - Compound Component
- * Manages a group of radios with shared state
+ * @fileoverview RadioGroup - Rottay Design System
+ * @description Compound component for managing exclusive selection across radio buttons.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * RadioGroup provides a way to manage mutually exclusive selection across multiple
+ * radio buttons. Only one radio can be selected at a time within a group.
+ *
+ * **Key Features:**
+ * - Exclusive selection (one option at a time)
+ * - Options array or children-based rendering
+ * - Controlled and uncontrolled modes
+ * - Horizontal or vertical layout
+ * - Button style variant for segmented control appearance
+ * - Configurable spacing between items
+ * - Context-based prop inheritance (size, color, disabled)
+ * - Option descriptions for additional context
+ *
+ * **Button Style Variant:**
+ * When `buttonStyle` prop is provided, radios render as button-like segments:
+ * - `buttonStyle="outline"`: Selected option has colored border
+ * - `buttonStyle="solid"`: Selected option has solid background
+ *
+ * **Context API:**
+ * The group provides a React context for child Radio components. Use
+ * `useRadioGroup` hook to access the context in custom implementations.
+ *
+ * @example Standard Radio Group
+ * ```tsx
+ * import { Radio } from '@rottay/design-system';
+ *
+ * const options = [
+ *   { value: 'sm', label: 'Small', description: 'Compact size' },
+ *   { value: 'md', label: 'Medium', description: 'Standard size' },
+ *   { value: 'lg', label: 'Large', description: 'Expanded size' },
+ * ];
+ *
+ * <Radio.Group
+ *   options={options}
+ *   value={size}
+ *   onChange={setSize}
+ *   direction="vertical"
+ *   spacing="lg"
+ * />
+ * ```
+ *
+ * @example Segmented Control Style
+ * ```tsx
+ * import { Radio } from '@rottay/design-system';
+ *
+ * <Radio.Group
+ *   options={viewOptions}
+ *   value={view}
+ *   onChange={setView}
+ *   buttonStyle="solid"
+ *   direction="horizontal"
+ *   size="sm"
+ * />
+ * ```
+ *
+ * @see {@link Radio} for individual radio buttons
+ * @see {@link useRadioGroup} for context access
+ * @module RadioGroup
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

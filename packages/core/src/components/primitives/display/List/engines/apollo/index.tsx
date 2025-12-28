@@ -1,11 +1,51 @@
 'use client';
 
 /**
- * List - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview List Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS list implementation with maximum accessibility.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Implementation of the List component using vanilla HTML and CSS.
- * Provides maximum accessibility and control with no external dependencies,
- * ideal for headless or custom-styled applications.
+ * @remarks
+ * This engine provides a lightweight, dependency-free list using only
+ * inline styles and semantic HTML elements.
+ *
+ * **Exported Components:**
+ * - `List` - Main list container (div + ul)
+ * - `Item` - List item wrapper (li)
+ * - `Meta` - Item metadata display (div)
+ *
+ * **Implementation Details:**
+ * - Uses semantic `<ul>` and `<li>` elements
+ * - Inline styles for all visual properties
+ * - Flexbox-based layouts
+ * - Grid support via CSS Grid
+ * - Skeleton loading states
+ *
+ * **Accessibility Features:**
+ * - Semantic list markup
+ * - Proper list item structure
+ * - Keyboard navigation support
+ * - Screen reader friendly
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility compliance
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { List } from '@rottay/design-system';
+ *
+ * <List engine="apollo" bordered>
+ *   <List.Item>Item content</List.Item>
+ * </List>
+ * ```
+ *
+ * @see {@link List} for the main component
+ * @module List/engines/apollo
+ * @category Display
+ * @package @rottay/design-system
  */
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../../types';

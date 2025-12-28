@@ -1,14 +1,40 @@
 /**
- * @fileoverview Card Component - Engine Router
- * @description Main entry point for the Card component with engine-aware routing.
- * Automatically selects the appropriate engine implementation based on context or props.
+ * @fileoverview Card - Rottay Design System
+ * @description Container component for grouping related content and actions.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * The Card component provides a flexible container for displaying content
+ * with optional header, body, footer, and cover image sections.
  *
- * @example
- * // Basic usage (uses default engine from context)
- * import { Card } from '@es-rottay/designsystem-core';
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Card with skeleton loading
+ * - **Hermes**: DaisyUI card classes with Tailwind utilities
+ * - **Apollo**: Pure CSS implementation with zero dependencies
+ *
+ * **Key Features:**
+ * - Multiple variants (elevated, outlined, filled, ghost)
+ * - Configurable padding, radius, and shadow
+ * - Cover image with top/bottom positioning
+ * - Loading state with skeleton/spinner
+ * - Hoverable and clickable interactions
+ * - Action slots for buttons
+ *
+ * **Compound Components:**
+ * - `Card.Header` - Title, subtitle, and extra content
+ * - `Card.Body` - Main content area
+ * - `Card.Footer` - Actions and alignment options
+ * - `Card.Image` - Cover image with overlay support
+ *
+ * **CSS Custom Properties:**
+ * - `--card-{variant}-bg` - Background color per variant
+ * - `--card-{size}-padding` - Content padding
+ * - `--card-{size}-shadow` - Shadow elevation
+ * - `--card-border-default` - Border color
+ *
+ * @example Basic Card
+ * ```tsx
+ * import { Card } from '@rottay/design-system';
  *
  * <Card variant="elevated" padding="md">
  *   <Card.Header title="Card Title" subtitle="Subtitle" />
@@ -17,12 +43,28 @@
  *   </Card.Body>
  *   <Card.Footer actions={[<Button>Action</Button>]} />
  * </Card>
+ * ```
  *
- * @example
- * // With specific engine override
- * <Card engine="hermes" hoverable clickable>
- *   <p>Hermes-styled card</p>
+ * @example Clickable Card
+ * ```tsx
+ * <Card hoverable clickable onClick={handleClick}>
+ *   <Card.Body>Click me!</Card.Body>
  * </Card>
+ * ```
+ *
+ * @example Engine Override
+ * ```tsx
+ * <Card engine="hermes" variant="outlined">
+ *   <p>DaisyUI styled card</p>
+ * </Card>
+ * ```
+ *
+ * @see {@link CardProps} for available props
+ * @see {@link CardHeader} for header configuration
+ * @see {@link CardBody} for body configuration
+ * @module Card
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

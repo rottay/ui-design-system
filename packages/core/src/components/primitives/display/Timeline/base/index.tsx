@@ -1,6 +1,40 @@
 /**
- * Timeline - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Timeline Base Component - Rottay Design System
+ * @description Base timeline implementation using CSS custom properties
+ * for consistent styling across the design system.
+ *
+ * @remarks
+ * The BaseTimeline provides the foundation for all engine implementations:
+ * - CSS variables for theming (--timeline-dot-color, --timeline-line-color)
+ * - Three display modes: left, right, alternate
+ * - Color preset mapping to CSS values
+ * - Pending state with pulsing animation
+ * - Reverse order support
+ *
+ * **CSS Custom Properties:**
+ * - `--timeline-dot-size` - Dot diameter
+ * - `--timeline-dot-border-width` - Dot border thickness
+ * - `--timeline-line-width` - Connecting line width
+ * - `--timeline-item-padding` - Item spacing
+ * - `--timeline-dot-offset` - Dot position offset
+ * - `--timeline-dot-color` - Individual item dot color
+ * - `--timeline-line-color` - Connecting line color
+ *
+ * @example Base component usage
+ * ```tsx
+ * import { BaseTimeline, BaseTimelineItem } from './base';
+ *
+ * <BaseTimeline mode="alternate">
+ *   <BaseTimelineItem color="green" index={0}>
+ *     First event
+ *   </BaseTimelineItem>
+ * </BaseTimeline>
+ * ```
+ *
+ * @see {@link Timeline} for engine-aware component
+ * @module Timeline/Base
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,8 +1,52 @@
 /**
- * Athena - Pluggable Engine System
+ * @fileoverview Athena Engine - Rottay Design System
+ * @description Pluggable engine system that allows developers to register
+ * custom component implementations, overriding default engine behavior.
  *
- * Allows developers to register custom component implementations
- * that override the default engine behavior.
+ * @remarks
+ * Athena enables complete component customization:
+ *
+ * - **Registration**: Add custom implementations for any component
+ * - **Fallback**: Gracefully fall back to other engines when not registered
+ * - **Configuration**: Customize fallback behavior and logging
+ * - **Discovery**: Query registered components and status
+ *
+ * Use cases:
+ * - White-label applications with custom UI
+ * - Incremental migration to custom components
+ * - A/B testing different implementations
+ * - Specialized accessibility implementations
+ *
+ * @example Register custom component
+ * ```tsx
+ * import { registerAthenaComponent } from '@rottay/design-system';
+ *
+ * registerAthenaComponent('Button', MyCustomButton);
+ * registerAthenaComponent('Card', MyCustomCard);
+ * ```
+ *
+ * @example Configure Athena
+ * ```tsx
+ * import { configureAthena } from '@rottay/design-system';
+ *
+ * configureAthena({
+ *   fallbackEngine: 'apollo',
+ *   warnOnFallback: false,
+ * });
+ * ```
+ *
+ * @example Check registration status
+ * ```tsx
+ * const { registeredComponents, hasComponent } = useAthenaStatus();
+ * console.log(registeredComponents); // ['Button', 'Card']
+ * ```
+ *
+ * @see {@link registerAthenaComponent} - Register components
+ * @see {@link configureAthena} - Configure behavior
+ * @see {@link useAthenaStatus} - Check status
+ * @module System/Engines/Athena
+ * @category System
+ * @package @rottay/design-system
  */
 
 import type { ComponentType } from 'react';

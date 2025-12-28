@@ -1,6 +1,47 @@
 /**
- * Engine Error Boundary
- * Handles errors during engine component loading with fallback support
+ * @fileoverview EngineErrorBoundary Component - Rottay Design System
+ * @description React error boundary that catches and handles errors during
+ * engine component loading, providing graceful degradation and fallback support.
+ *
+ * @remarks
+ * The EngineErrorBoundary provides:
+ *
+ * - **Error catching**: Catches errors from lazy-loaded engine components
+ * - **Fallback UI**: Displays error message with optional custom render
+ * - **Reset capability**: Allows retry after error recovery
+ * - **Error reporting**: Callback for logging/monitoring integration
+ * - **Fallback engine**: Option to try a different engine on failure
+ *
+ * This boundary is used internally by `createEngineComponent` but can also
+ * be used directly for custom error handling scenarios.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <EngineErrorBoundary
+ *   onError={(error) => logToSentry(error)}
+ * >
+ *   <LazyLoadedComponent />
+ * </EngineErrorBoundary>
+ * ```
+ *
+ * @example With custom fallback
+ * ```tsx
+ * <EngineErrorBoundary
+ *   fallbackRender={(error, reset) => (
+ *     <div>
+ *       <p>Failed to load: {error.message}</p>
+ *       <button onClick={reset}>Retry</button>
+ *     </div>
+ *   )}
+ * >
+ *   <Component />
+ * </EngineErrorBoundary>
+ * ```
+ *
+ * @see {@link createEngineComponent} - Uses this boundary internally
+ * @module System/Engines/Boundary/EngineErrorBoundary
+ * @category System
+ * @package @rottay/design-system
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react';

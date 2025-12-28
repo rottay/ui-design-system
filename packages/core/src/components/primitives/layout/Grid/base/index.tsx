@@ -1,6 +1,49 @@
 /**
- * Grid - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Grid Base Component - Rottay Design System
+ * @description Core implementation of the Grid layout component using CSS Grid.
+ * This base component is extended by engine-specific implementations.
+ *
+ * @remarks
+ * The base component handles all CSS Grid style computation for both the
+ * container (Grid) and items (GridItem). It provides a foundation for
+ * Titan, Hermes, and Apollo engine implementations.
+ *
+ * Key utilities exported:
+ * - `buildGridStyles`: Converts Grid props to CSS Grid container properties
+ * - `buildGridItemStyles`: Converts GridItem props to CSS Grid item properties
+ * - `filterGridProps` / `filterGridItemProps`: Remove custom props before DOM passthrough
+ * - `resolveGap`: Converts gap presets to CSS values
+ * - `resolveColumns`: Converts column count to grid-template-columns value
+ * - `getResponsiveColumnsStyles`: Handles responsive column configurations
+ *
+ * @example Using Utility Functions
+ * ```tsx
+ * import { buildGridStyles, buildGridItemStyles, resolveGap } from '@rottay/design-system';
+ *
+ * // Build grid container styles
+ * const containerStyles = buildGridStyles({
+ *   columns: 3,
+ *   gap: 'md',
+ *   alignItems: 'center'
+ * });
+ * // Result: { display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }
+ *
+ * // Build grid item styles
+ * const itemStyles = buildGridItemStyles({
+ *   span: 2,
+ *   rowSpan: 1
+ * });
+ * // Result: { gridColumn: 'span 2' }
+ *
+ * // Resolve gap values
+ * const gapValue = resolveGap('lg'); // '1.5rem'
+ * ```
+ *
+ * @see {@link Grid} - The main engine-aware component
+ * @see {@link GridItem} - The compound component for grid items
+ * @module Grid/Base
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -66,13 +109,13 @@ export function getResponsiveColumnsStyles(columns: GridColumns | undefined): CS
   const baseValue = responsiveValue.xs || responsiveValue.sm || responsiveValue.md || 12;
 
   return {
-    '--grid-columns-xs': resolveColumns(responsiveValue.xs || baseValue),
-    '--grid-columns-sm': resolveColumns(responsiveValue.sm || responsiveValue.xs || baseValue),
-    '--grid-columns-md': resolveColumns(responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
-    '--grid-columns-lg': resolveColumns(responsiveValue.lg || responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
-    '--grid-columns-xl': resolveColumns(responsiveValue.xl || responsiveValue.lg || responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
-    '--grid-columns-2xl': resolveColumns(responsiveValue['2xl'] || responsiveValue.xl || responsiveValue.lg || responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
-    gridTemplateColumns: 'var(--grid-columns-xs)',
+    '--ds-grid-columns-xs': resolveColumns(responsiveValue.xs || baseValue),
+    '--ds-grid-columns-sm': resolveColumns(responsiveValue.sm || responsiveValue.xs || baseValue),
+    '--ds-grid-columns-md': resolveColumns(responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
+    '--ds-grid-columns-lg': resolveColumns(responsiveValue.lg || responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
+    '--ds-grid-columns-xl': resolveColumns(responsiveValue.xl || responsiveValue.lg || responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
+    '--ds-grid-columns-2xl': resolveColumns(responsiveValue['2xl'] || responsiveValue.xl || responsiveValue.lg || responsiveValue.md || responsiveValue.sm || responsiveValue.xs || baseValue),
+    gridTemplateColumns: 'var(--ds-grid-columns-xs)',
   } as CSSProperties;
 }
 

@@ -1,10 +1,38 @@
 /**
- * @fileoverview Card Component Type Definitions
- * @description Centralized type exports and default values for the Card component.
- * Re-exports types from the centralized type system and provides component-specific defaults.
+ * @fileoverview Card Types - Rottay Design System
+ * @description Type definitions for the Card component.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/types
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * This module re-exports types from the centralized types definition
+ * and provides default values and configuration maps for the Card component.
+ *
+ * **Exported Types:**
+ * - `CardProps` - Main component props interface
+ * - `CardVariant` - Visual variant type (elevated, outlined, filled, ghost)
+ * - `CardSize` - Size variant type
+ * - `CardHeaderProps` - Header compound props
+ * - `CardBodyProps` - Body compound props
+ * - `CardFooterProps` - Footer compound props
+ * - `CardImageProps` - Image compound props
+ *
+ * **Configuration Constants:**
+ * - `CARD_DEFAULTS` - Default prop values
+ * - `PADDING_MAP` - Size to padding mapping
+ * - `SHADOW_MAP` - Shadow intensity mapping
+ * - `RADIUS_MAP` - Border radius mapping
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { CardProps, CardVariant } from '@rottay/design-system';
+ *
+ * const variant: CardVariant = 'elevated';
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @module CardTypes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {
@@ -48,24 +76,24 @@ export const CARD_DEFAULTS = {
 };
 
 /**
- * Mapping of padding size names to pixel values.
+ * Mapping of padding size names to CSS variable references.
  * Corresponds to CSS custom properties defined in design tokens.
  *
  * @constant
- * @type {Record<string, number>}
+ * @type {Record<string, string>}
  * @example
  * // Access padding value
- * const paddingPx = PADDING_MAP['md']; // 16
+ * const padding = PADDING_MAP['md']; // 'var(--ds-card-md-padding)'
  */
-export const PADDING_MAP: Record<string, number> = {
-  none: 0,
-  sm: 12,   // --card-sm-padding: 0.75rem
-  md: 16,   // --card-md-padding: 1rem
-  lg: 24,   // --card-lg-padding: 1.5rem
+export const PADDING_MAP: Record<string, string> = {
+  none: '0',
+  sm: 'var(--ds-card-sm-padding, 12px)',
+  md: 'var(--ds-card-md-padding, 16px)',
+  lg: 'var(--ds-card-lg-padding, 24px)',
 };
 
 /**
- * Mapping of shadow intensity names to CSS box-shadow values.
+ * Mapping of shadow intensity names to CSS variable references.
  * Provides consistent elevation across the design system.
  *
  * @constant
@@ -76,14 +104,14 @@ export const PADDING_MAP: Record<string, number> = {
  */
 export const SHADOW_MAP: Record<string, string> = {
   none: 'none',
-  sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+  sm: 'var(--ds-card-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05))',
+  md: 'var(--ds-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1))',
+  lg: 'var(--ds-card-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1))',
+  xl: 'var(--ds-card-shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1))',
 };
 
 /**
- * Mapping of border radius names to CSS values.
+ * Mapping of border radius names to CSS variable references.
  * Ensures consistent rounded corners throughout the design system.
  *
  * @constant
@@ -94,8 +122,8 @@ export const SHADOW_MAP: Record<string, string> = {
  */
 export const RADIUS_MAP: Record<string, string> = {
   none: '0',
-  sm: '4px',
-  md: '8px',
-  lg: '12px',
-  xl: '16px',
+  sm: 'var(--ds-card-radius-sm, 4px)',
+  md: 'var(--ds-card-radius, 8px)',
+  lg: 'var(--ds-card-radius-lg, 12px)',
+  xl: 'var(--ds-card-radius-xl, 16px)',
 };

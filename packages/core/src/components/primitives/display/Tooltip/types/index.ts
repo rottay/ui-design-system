@@ -1,11 +1,40 @@
 /**
- * Tooltip - Core Interface
- * Re-exports from centralized types for consistent type definitions
- *
- * @module Tooltip/types
+ * @fileoverview Tooltip Types - Rottay Design System
  * @description Type definitions for the Tooltip component and its compound components.
- * These types are re-exported from the centralized types directory to maintain
- * a single source of truth for type definitions across the design system.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module provides comprehensive type definitions for the Tooltip component,
+ * including props interfaces, placement options, trigger types, and default values.
+ *
+ * **Exported Types:**
+ * - `TooltipProps` - Main component properties
+ * - `TooltipPlacement` - Position options (12 positions)
+ * - `TooltipTrigger` - Trigger event types
+ * - `TooltipState` - Internal visibility state
+ * - `TooltipTriggerProps` - Trigger compound component props
+ * - `TooltipContentProps` - Content compound component props
+ *
+ * **Exported Constants:**
+ * - `TOOLTIP_DEFAULTS` - Default prop values
+ * - `PLACEMENT_MAP` - CSS position mappings
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { TooltipProps, TooltipPlacement } from '@rottay/design-system';
+ *
+ * const placement: TooltipPlacement = 'top-start';
+ * const props: TooltipProps = {
+ *   content: 'Tooltip text',
+ *   placement,
+ *   trigger: 'hover',
+ * };
+ * ```
+ *
+ * @see {@link Tooltip} for component implementation
+ * @module Tooltip/types
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {

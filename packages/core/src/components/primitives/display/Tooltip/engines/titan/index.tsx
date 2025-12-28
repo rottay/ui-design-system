@@ -1,10 +1,47 @@
 /**
- * Tooltip - Titan Engine Implementation
- * Uses Ant Design's Tooltip component for full-featured tooltip functionality.
+ * @fileoverview Tooltip Titan Engine - Rottay Design System
+ * @description Ant Design-based tooltip with collision detection.
+ * Part of the Rottay Design System's display primitives collection.
  *
+ * @remarks
+ * This engine wraps Ant Design's Tooltip component to provide advanced
+ * positioning, animations, and accessibility features.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Tooltip` for core rendering
+ * - Maps placement to Ant Design naming conventions
+ * - Converts delays from milliseconds to seconds
+ * - Maps color variants to Ant Design colors
+ * - Portal rendering for proper z-index handling
+ *
+ * **Placement Mapping:**
+ * - `top-start` → `topLeft`
+ * - `top-end` → `topRight`
+ * - `bottom-start` → `bottomLeft`
+ * - `bottom-end` → `bottomRight`
+ * - etc.
+ *
+ * **Advantages:**
+ * - Collision detection and auto-flip
+ * - Portal rendering
+ * - Smooth animations
+ * - Comprehensive ARIA support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Tooltip } from '@rottay/design-system';
+ *
+ * <Tooltip engine="titan" content="Smart tooltip" placement="top">
+ *   <Button>Hover me</Button>
+ * </Tooltip>
+ * ```
+ *
+ * @see {@link Tooltip} for the main component
+ * @see {@link BaseTooltip} for CSS variable implementation
+ * @see {@link https://ant.design/components/tooltip} Ant Design Tooltip
  * @module Tooltip/engines/titan
- * @description Titan engine implementation using Ant Design as the underlying library.
- * Provides advanced positioning, animations, and accessibility features.
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

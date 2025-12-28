@@ -1,9 +1,39 @@
 /**
- * Tag - Titan Engine (Ant Design)
+ * @fileoverview Tag Titan Engine - Rottay Design System
+ * @description Ant Design-based tag with preset color support.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tag/engines/titan
- * @description Implements the Tag component using Ant Design's Tag component.
- * This engine provides full-featured tags with seamless Ant Design integration.
+ * @remarks
+ * This engine wraps Ant Design's Tag component to provide full-featured
+ * tag functionality with built-in color presets.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Tag` for core rendering
+ * - Maps variants to Ant Design color presets
+ * - Supports built-in close functionality
+ * - Handles icon placement
+ *
+ * **Variant Mapping:**
+ * - `primary` → Ant Design `blue`
+ * - `secondary` → Ant Design `purple`
+ * - `success` → Ant Design `success`
+ * - `warning` → Ant Design `warning`
+ * - `error` → Ant Design `error`
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Tag } from '@rottay/design-system';
+ *
+ * <Tag engine="titan" variant="primary" closable>
+ *   Premium
+ * </Tag>
+ * ```
+ *
+ * @see {@link Tag} for the main component
+ * @see {@link https://ant.design/components/tag} Ant Design Tag
+ * @module TitanTag
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

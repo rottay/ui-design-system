@@ -1,7 +1,39 @@
 'use client';
 
 /**
- * Space - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Space Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Space component.
+ * Uses inline CSS flexbox styles for spacing without external dependencies.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with flexbox layout
+ * - `display: inline-flex` for inline container
+ * - `flexDirection` based on direction prop
+ * - `flexWrap` for wrapping behavior
+ * - `alignItems` using SPACE_ALIGN_MAP values
+ * - `gap` CSS property for spacing
+ *
+ * This implementation is ideal for:
+ * - Embedded widgets without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Space } from '@rottay/design-system';
+ *
+ * // Pure inline CSS styling
+ * <Space engine="apollo" size={16} direction="vertical">
+ *   <span>Item 1</span>
+ *   <span>Item 2</span>
+ * </Space>
+ * ```
+ *
+ * @see {@link Space} - The main engine-aware component
+ * @module Space/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { Children, Fragment } from 'react';
 import type { SpaceProps } from '../../types';

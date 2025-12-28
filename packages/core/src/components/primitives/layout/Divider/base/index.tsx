@@ -1,7 +1,36 @@
 /**
- * Divider - Base Component
- * Uses CSS variables from design tokens for consistent styling.
- * This component provides the core rendering logic that can be extended by engine implementations.
+ * @fileoverview Divider Base Component - Rottay Design System
+ * @description Core implementation of the Divider component using CSS variables.
+ * This base component provides the rendering logic extended by engine implementations.
+ *
+ * @remarks
+ * The base component handles:
+ * - Orientation-based layout (horizontal vs vertical)
+ * - Text content rendering with flexbox positioning
+ * - Line style computation (solid, dashed, dotted)
+ * - CSS variable injection for theming
+ * - ARIA accessibility attributes (`role="separator"`, `aria-orientation`)
+ *
+ * CSS Custom Properties set by this component:
+ * - `--ds-divider-color`: Line color value
+ * - `--ds-divider-thickness`: Line thickness in pixels
+ * - `--ds-divider-spacing`: Margin around the divider
+ * - `--ds-divider-variant`: Line style (solid, dashed, dotted)
+ *
+ * @example Using Base Component
+ * ```tsx
+ * import { BaseDivider } from '@rottay/design-system';
+ *
+ * // The base component is typically used by engine implementations
+ * <BaseDivider orientation="horizontal" variant="dashed">
+ *   Section Title
+ * </BaseDivider>
+ * ```
+ *
+ * @see {@link Divider} - The main engine-aware component
+ * @module Divider/Base
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -88,10 +117,10 @@ export const BaseDivider = forwardRef<HTMLDivElement, DividerProps>(
 
     // Build CSS variables for theming
     const dividerVars: React.CSSProperties = {
-      '--divider-color': lineColor,
-      '--divider-thickness': lineThickness,
-      '--divider-spacing': spacingValue,
-      '--divider-variant': variant,
+      '--ds-divider-color': lineColor,
+      '--ds-divider-thickness': lineThickness,
+      '--ds-divider-spacing': spacingValue,
+      '--ds-divider-variant': variant,
     } as React.CSSProperties;
 
     // Container style

@@ -1,5 +1,57 @@
 /**
- * Toggle - Apollo Engine (Pure HTML/CSS with a11y)
+ * @fileoverview Toggle Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Toggle component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a zero-dependency toggle implementation
+ * using pure HTML and inline CSS. It offers maximum accessibility
+ * and customization through CSS custom properties.
+ *
+ * **Pure CSS Features:**
+ * - Custom sliding dot animation
+ * - Focus ring with outline styling
+ * - Loading spinner SVG
+ * - Inner checked/unchecked labels
+ * - Color theming via inline styles
+ *
+ * **Accessibility Features:**
+ * - Native checkbox with role="switch"
+ * - Full keyboard support (Space, Enter)
+ * - Focus state with visible outline
+ * - aria-checked, aria-invalid, aria-busy
+ * - Screen reader label association
+ *
+ * **Keyboard Navigation:**
+ * - Space/Enter: Toggle checked state
+ * - Tab: Focus navigation
+ *
+ * **Customization Points:**
+ * - All styling via inline CSSProperties
+ * - Size tokens from SIZE_MAP
+ * - Color tokens from COLOR_MAP
+ * - CSS variables for tenant theming
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Toggle } from '@rottay/design-system';
+ *
+ * <Toggle
+ *   engine="apollo"
+ *   size="lg"
+ *   color="success"
+ *   label="Accessibility mode"
+ *   checkedLabel="ON"
+ *   uncheckedLabel="OFF"
+ * />
+ * ```
+ *
+ * @see {@link Toggle} for the main component
+ * @see {@link TitanToggle} for Ant Design implementation
+ * @see {@link HermesToggle} for DaisyUI implementation
+ * @module ApolloToggle
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

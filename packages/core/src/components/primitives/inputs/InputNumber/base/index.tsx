@@ -1,6 +1,54 @@
 /**
- * InputNumber - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview InputNumber Base Component - Rottay Design System
+ * @description Core numeric input implementation with CSS variables.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The BaseInputNumber provides a full-featured numeric input with
+ * step controls, bounds checking, and formatting support. It uses
+ * CSS custom properties for deep theming customization.
+ *
+ * **Component Structure:**
+ * - Wrapper div with addon slots
+ * - Input wrapper with prefix/suffix
+ * - Native text input with inputMode="decimal"
+ * - Step control buttons (up/down)
+ *
+ * **CSS Variable Integration:**
+ * - `--ds-input-number-height` - Total height
+ * - `--ds-input-number-font-size` - Text size
+ * - `--ds-input-number-padding` - Internal padding
+ * - `--ds-input-number-border-color` - Border color
+ * - `--ds-input-number-bg` - Background color
+ * - `--ds-input-number-focus-border` - Focus border color
+ * - `--ds-input-number-focus-shadow` - Focus shadow
+ *
+ * **Size Configurations:**
+ * - `small`: 24px height, 12px font
+ * - `default`: 32px height, 14px font
+ * - `large`: 40px height, 16px font
+ *
+ * **Accessibility:**
+ * - aria-valuemin/max/now attributes
+ * - Keyboard navigation (Arrow Up/Down)
+ * - inputMode="decimal" for mobile keyboards
+ *
+ * @example Using BaseInputNumber
+ * ```tsx
+ * import { BaseInputNumber } from '@rottay/design-system';
+ *
+ * <BaseInputNumber
+ *   min={0}
+ *   max={100}
+ *   step={5}
+ *   defaultValue={50}
+ * />
+ * ```
+ *
+ * @see {@link InputNumber} for the engine-routed component
+ * @module BaseInputNumber
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -171,13 +219,13 @@ export const BaseInputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
 
     // CSS variables
     const inputVars = useMemo<React.CSSProperties>(() => ({
-      '--input-number-height': `${config.height}px`,
-      '--input-number-font-size': `${config.fontSize}px`,
-      '--input-number-padding': config.padding,
-      '--input-number-border-color': status === 'error' ? 'var(--color-error, #ff4d4f)' : status === 'warning' ? 'var(--color-warning, #faad14)' : 'var(--color-border, #d9d9d9)',
-      '--input-number-bg': variant === 'filled' ? 'var(--color-bg-secondary, #f5f5f5)' : 'var(--color-bg-elevated, #fff)',
-      '--input-number-focus-border': 'var(--color-primary, #1677ff)',
-      '--input-number-focus-shadow': '0 0 0 2px rgba(22, 119, 255, 0.1)',
+      '--ds-input-number-height': `${config.height}px`,
+      '--ds-input-number-font-size': `${config.fontSize}px`,
+      '--ds-input-number-padding': config.padding,
+      '--ds-input-number-border-color': status === 'error' ? 'var(--ds-color-error-500, #ff4d4f)' : status === 'warning' ? 'var(--ds-color-warning-500, #faad14)' : 'var(--ds-color-border, #d9d9d9)',
+      '--ds-input-number-bg': variant === 'filled' ? 'var(--ds-color-bg-secondary, #f5f5f5)' : 'var(--ds-color-bg-elevated, #fff)',
+      '--ds-input-number-focus-border': 'var(--ds-color-primary-500, #1677ff)',
+      '--ds-input-number-focus-shadow': '0 0 0 2px rgba(22, 119, 255, 0.1)',
     } as React.CSSProperties), [config, status, variant]);
 
     const wrapperStyle: React.CSSProperties = {
@@ -193,19 +241,19 @@ export const BaseInputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
       display: 'inline-flex',
       alignItems: 'center',
       flex: 1,
-      height: 'var(--input-number-height)',
-      backgroundColor: 'var(--input-number-bg)',
-      border: bordered && variant !== 'borderless' ? '1px solid var(--input-number-border-color)' : 'none',
-      borderRadius: 'var(--radius-md, 6px)',
+      height: 'var(--ds-input-number-height)',
+      backgroundColor: 'var(--ds-input-number-bg)',
+      border: bordered && variant !== 'borderless' ? '1px solid var(--ds-input-number-border-color)' : 'none',
+      borderRadius: 'var(--ds-radius-md, 6px)',
       transition: 'all 0.2s',
     };
 
     const inputStyle: React.CSSProperties = {
       width: '100%',
       height: '100%',
-      padding: 'var(--input-number-padding)',
+      padding: 'var(--ds-input-number-padding)',
       paddingRight: controls ? '32px' : undefined,
-      fontSize: 'var(--input-number-font-size)',
+      fontSize: 'var(--ds-input-number-font-size)',
       border: 'none',
       outline: 'none',
       backgroundColor: 'transparent',
@@ -220,7 +268,7 @@ export const BaseInputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
       display: 'flex',
       flexDirection: 'column',
       width: '22px',
-      borderLeft: '1px solid var(--input-number-border-color)',
+      borderLeft: '1px solid var(--ds-input-number-border-color)',
     };
 
     const controlBtnStyle: React.CSSProperties = {
@@ -229,7 +277,7 @@ export const BaseInputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
       alignItems: 'center',
       justifyContent: 'center',
       cursor: disabled ? 'not-allowed' : 'pointer',
-      color: 'var(--color-text-secondary)',
+      color: 'var(--ds-color-text-secondary, #666)',
       transition: 'color 0.2s',
     };
 
@@ -264,7 +312,7 @@ export const BaseInputNumber = forwardRef<HTMLInputElement, InputNumberProps>(
             <div className="rottay-input-number__controls" style={controlsStyle}>
               <span
                 className="rottay-input-number__control-up"
-                style={{ ...controlBtnStyle, borderBottom: '1px solid var(--input-number-border-color)' }}
+                style={{ ...controlBtnStyle, borderBottom: '1px solid var(--ds-input-number-border-color)' }}
                 onClick={() => stepValue('up')}
               >
                 {typeof controls === 'object' && controls.upIcon ? controls.upIcon : <UpIcon />}

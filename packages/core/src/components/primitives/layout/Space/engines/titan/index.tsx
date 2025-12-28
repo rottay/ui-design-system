@@ -1,7 +1,33 @@
 'use client';
 
 /**
- * Space - Titan Engine (Ant Design)
+ * @fileoverview Space Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Space component.
+ * Wraps Ant Design's Space component with full feature parity.
+ *
+ * @remarks
+ * The Titan engine provides:
+ * - Direct passthrough to Ant Design Space component
+ * - Preset sizes (small, middle, large) matching Ant Design tokens
+ * - Support for array-based asymmetric gaps
+ * - Built-in split separator support
+ * - Native wrapping behavior
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Space } from '@rottay/design-system';
+ *
+ * // Ant Design styling with preset sizes
+ * <Space engine="titan" size="middle" direction="vertical">
+ *   <Input placeholder="Field 1" />
+ *   <Input placeholder="Field 2" />
+ * </Space>
+ * ```
+ *
+ * @see {@link Space} - The main engine-aware component
+ * @module Space/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Space as AntSpace } from 'antd';

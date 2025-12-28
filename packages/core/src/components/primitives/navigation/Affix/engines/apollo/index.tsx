@@ -1,16 +1,73 @@
 'use client';
 
 /**
- * Affix - Apollo Engine (Vanilla HTML/CSS)
- * Pure HTML/CSS implementation with maximum accessibility
+ * @fileoverview Affix Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Affix component.
+ * Provides maximum accessibility and zero external dependencies.
+ *
+ * @remarks
+ * The Apollo engine offers a headless, dependency-free implementation
+ * of the Affix component using vanilla HTML and CSS. This approach:
+ * - Ensures maximum browser compatibility
+ * - Provides complete accessibility control
+ * - Eliminates external dependencies
+ * - Allows full CSS customization via variables
+ * - Ideal for lightweight or specialized environments
+ *
+ * @example Apollo Engine Usage
+ * ```tsx
+ * import { Affix } from '@rottay/design-system';
+ *
+ * function AccessibleStickyNav() {
+ *   return (
+ *     <Affix engine="apollo" offsetTop={0}>
+ *       <nav role="navigation" aria-label="Main navigation">
+ *         Navigation Content
+ *       </nav>
+ *     </Affix>
+ *   );
+ * }
+ * ```
+ *
+ * @example With Custom Styling
+ * ```tsx
+ * <Affix
+ *   engine="apollo"
+ *   offsetTop={64}
+ *   style={{ '--affix-shadow': '0 4px 12px rgba(0,0,0,0.1)' }}
+ *   onChange={(affixed) => console.log(affixed)}
+ * >
+ *   <header>Pure CSS Sticky Header</header>
+ * </Affix>
+ * ```
+ *
+ * @see {@link AffixProps} for component props
+ * @see {@link AffixState} for internal state interface
+ *
+ * @module Affix/Engines/Apollo
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 import React, { forwardRef, useState, useEffect, useRef, useCallback } from 'react';
 import type { AffixProps, AffixState } from '../../types';
 import { AFFIX_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Get scroll container element
+ * Get scroll container element.
+ *
+ * @description
+ * Retrieves the scroll container from the target function prop.
+ * Falls back to window if no target is specified.
+ *
+ * @param target - Optional function that returns the scroll container
+ * @returns The scroll container (Window or HTMLElement)
+ *
+ * @internal
  */
 function getTargetContainer(target?: () => Window | HTMLElement | null): Window | HTMLElement {
   if (target) {
@@ -21,7 +78,16 @@ function getTargetContainer(target?: () => Window | HTMLElement | null): Window 
 }
 
 /**
- * Get bounding rect relative to target container
+ * Get bounding rect relative to target container.
+ *
+ * @description
+ * Calculates the bounding rectangle of the target container.
+ * Creates a virtual rect for window, uses getBoundingClientRect for elements.
+ *
+ * @param target - The scroll container
+ * @returns DOMRect representing the container bounds
+ *
+ * @internal
  */
 function getTargetRect(target: Window | HTMLElement): DOMRect {
   if (target === window) {
@@ -40,9 +106,43 @@ function getTargetRect(target: Window | HTMLElement): DOMRect {
   return (target as HTMLElement).getBoundingClientRect();
 }
 
+// ============================================================================
+// Apollo Engine Component
+// ============================================================================
+
 /**
  * Apollo engine implementation using pure HTML/CSS.
- * Maximum accessibility and zero external dependencies.
+ *
+ * @description
+ * Maximum accessibility and zero external dependencies implementation.
+ * Uses CSS position: sticky for simple cases and fixed positioning
+ * with JavaScript for precise onChange tracking.
+ *
+ * @remarks
+ * Key features of the Apollo implementation:
+ * - No external library dependencies
+ * - Full CSS variable support for theming
+ * - Semantic HTML structure
+ * - Built-in box-shadow transition for visual feedback
+ * - Consistent Rottay class naming conventions
+ * - SSR-safe with 'use client' directive
+ *
+ * @param props - {@link AffixProps}
+ * @param ref - Forwarded ref to the affix element
+ * @returns React element with vanilla CSS sticky positioning
+ *
+ * @example
+ * ```tsx
+ * <ApolloAffix
+ *   offsetTop={0}
+ *   zIndex={100}
+ *   onChange={(affixed) => {
+ *     document.body.classList.toggle('has-sticky-header', affixed);
+ *   }}
+ * >
+ *   <header className="site-header">Site Header</header>
+ * </ApolloAffix>
+ * ```
  */
 export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
   (props, ref) => {
@@ -57,13 +157,25 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       zIndex = AFFIX_DEFAULTS.zIndex,
     } = props;
 
+    // ========================================================================
+    // Refs and State
+    // ========================================================================
+
     const placeholderRef = useRef<HTMLDivElement>(null);
     const affixRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState<AffixState>({ affixed: false });
     const lastAffixedRef = useRef<boolean>(false);
 
+    // ========================================================================
+    // Measurement Logic
+    // ========================================================================
+
     /**
-     * Measure element and calculate affix state
+     * Measure element and calculate affix state.
+     *
+     * @description
+     * Calculates whether the element should be affixed based on scroll position
+     * and offset values. Updates state and triggers onChange when status changes.
      */
     const measure = useCallback(() => {
       const targetContainer = getTargetContainer(target);
@@ -121,8 +233,16 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       setState({ affixed, fixedStyle, placeholderStyle });
     }, [offsetTop, offsetBottom, target, onChange, zIndex]);
 
+    // ========================================================================
+    // Event Listeners
+    // ========================================================================
+
     /**
-     * Set up scroll and resize listeners
+     * Set up scroll and resize listeners.
+     *
+     * @description
+     * Only attaches listeners when onChange callback is provided.
+     * Uses requestAnimationFrame for optimized scroll handling.
      */
     useEffect(() => {
       // If no onChange, use simple sticky and skip measurements
@@ -131,7 +251,7 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       const targetContainer = getTargetContainer(target);
       if (!targetContainer) return;
 
-      // Throttle scroll events
+      // Throttle scroll events using requestAnimationFrame
       let ticking = false;
       const handleScroll = () => {
         if (!ticking) {
@@ -159,7 +279,11 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       };
     }, [measure, target, onChange]);
 
-    // CSS variables for theming
+    // ========================================================================
+    // CSS Variables
+    // ========================================================================
+
+    // CSS variables for theming (enables tenant customization)
     const cssVars: React.CSSProperties = {
       '--affix-z-index': zIndex,
       '--affix-offset-top': `${offsetTop}px`,
@@ -167,7 +291,11 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       '--affix-transition': 'box-shadow 0.2s ease-in-out',
     } as React.CSSProperties;
 
-    // Simple sticky mode (no onChange callback)
+    // ========================================================================
+    // Render - Simple Sticky Mode
+    // ========================================================================
+
+    // Simple sticky mode (no onChange callback) - pure CSS solution
     if (!onChange) {
       const stickyStyle: React.CSSProperties = {
         ...cssVars,
@@ -191,7 +319,11 @@ export const ApolloAffix = forwardRef<HTMLDivElement, AffixProps>(
       );
     }
 
-    // Advanced mode with onChange tracking
+    // ========================================================================
+    // Render - Advanced Mode with onChange
+    // ========================================================================
+
+    // Advanced mode with onChange tracking - uses JavaScript positioning
     const affixedStyle: React.CSSProperties = state.affixed
       ? {
           ...cssVars,

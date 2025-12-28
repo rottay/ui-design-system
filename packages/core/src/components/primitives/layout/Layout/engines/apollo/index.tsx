@@ -1,7 +1,44 @@
 'use client';
 
 /**
- * Layout - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Layout Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Layout compound component.
+ * Uses inline CSS styles for maximum compatibility without external dependencies.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with flexbox layout
+ * - Dark theme header and sider styling by default
+ * - Light theme option for sider with border
+ * - Collapsible sidebar with smooth width transition
+ * - Centered footer with light background
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Layout } from '@rottay/design-system';
+ *
+ * // Pure inline CSS styling
+ * <Layout engine="apollo" hasSider>
+ *   <Layout.Sider engine="apollo" theme="light" collapsible>
+ *     Navigation
+ *   </Layout.Sider>
+ *   <Layout>
+ *     <Layout.Header engine="apollo">Header</Layout.Header>
+ *     <Layout.Content engine="apollo">Content</Layout.Content>
+ *     <Layout.Footer engine="apollo">Footer</Layout.Footer>
+ *   </Layout>
+ * </Layout>
+ * ```
+ *
+ * @see {@link Layout} - The main engine-aware component
+ * @module Layout/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { useState } from 'react';
 import type {

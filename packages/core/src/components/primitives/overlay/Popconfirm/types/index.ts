@@ -1,10 +1,38 @@
 /**
- * Popconfirm Component Types
+ * @fileoverview Popconfirm Component Types - Rottay Design System
+ * @description Type definitions for the Popconfirm component including placement options,
+ * button configurations (type, text, loading), callback handlers, and component props.
  *
- * Type definitions for the Popconfirm component including placement options,
- * button configurations, and component props.
+ * @remarks
+ * The Popconfirm types provide comprehensive configuration for:
+ * - Placement options: 12 positions around the trigger element
+ * - Button types: primary, danger, or default styling
+ * - Callback handlers: onConfirm (async supported), onCancel
+ * - Loading states: okButtonLoading for async operations
+ * - Controlled/uncontrolled state management
  *
- * @module PopconfirmTypes
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   PopconfirmProps,
+ *   PopconfirmPlacement,
+ *   PopconfirmOkType,
+ * } from '@rottay/design-system';
+ *
+ * const confirmProps: PopconfirmProps = {
+ *   title: 'Delete this item?',
+ *   description: 'This cannot be undone',
+ *   okText: 'Delete',
+ *   cancelText: 'Cancel',
+ *   okType: 'danger',
+ *   placement: 'top',
+ *   onConfirm: async () => await deleteItem(),
+ * };
+ * ```
+ *
+ * @module Popconfirm/Types
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 

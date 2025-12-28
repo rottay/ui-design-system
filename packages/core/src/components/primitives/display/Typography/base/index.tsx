@@ -1,11 +1,46 @@
 /**
- * Typography - Base Components
+ * @fileoverview Typography Base Components - Rottay Design System
+ * @description CSS variable-based typography with semantic structure.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Pure CSS implementation of Typography components using CSS variables.
- * These base components serve as the foundation for engine-specific implementations
- * and provide the headless/Apollo engine behavior.
+ * @remarks
+ * The base Typography components use CSS custom properties for theming
+ * and serve as the foundation for engine-specific implementations.
  *
+ * **Available Components:**
+ * - `BaseHeading` - Semantic heading (h1-h6) with visual customization
+ * - `BaseText` - Inline text with decorations and styles
+ * - `BaseParagraph` - Block-level paragraph with spacing
+ *
+ * **CSS Custom Properties:**
+ * - `--ds-color-text-primary` - Default text color
+ * - `--ds-color-text-secondary` - Muted text color
+ * - `--ds-color-primary-500` - Primary accent color
+ * - `--ds-color-success-500` - Success state color
+ * - `--ds-color-warning-500` - Warning state color
+ * - `--ds-color-error-500` - Error state color
+ *
+ * **Features:**
+ * - Semantic HTML elements for accessibility
+ * - CSS variable-based theming
+ * - Line clamping and truncation support
+ * - Text decorations (underline, strikethrough, italic)
+ * - Monospace font support for code
+ * - Flexible element rendering
+ *
+ * @example Direct Usage
+ * ```tsx
+ * import { BaseHeading, BaseText, BaseParagraph } from '@rottay/design-system';
+ *
+ * <BaseHeading level="h1" size="3xl">Title</BaseHeading>
+ * <BaseText color="primary" italic>Emphasized text</BaseText>
+ * <BaseParagraph lineClamp={3}>Long content...</BaseParagraph>
+ * ```
+ *
+ * @see {@link Typography} for the main component
  * @module Typography/base
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,6 +1,36 @@
 /**
- * Grid - Core Interface
- * CSS Grid layout component with responsive support and compound components
+ * @fileoverview Grid Types - Rottay Design System
+ * @description Type definitions for the Grid layout component and its compound Grid.Item.
+ * Provides comprehensive typing for CSS Grid properties and responsive configurations.
+ *
+ * @remarks
+ * The Grid component uses CSS Grid under the hood, exposing a declarative API
+ * that simplifies common grid patterns. The type system supports:
+ * - **Responsive values**: Breakpoint-based column/row configurations
+ * - **Gap presets**: Design token-based spacing values
+ * - **Item positioning**: Span, start/end lines, and named areas
+ * - **Alignment**: Both grid container and item-level alignment
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { GridProps, GridItemProps, ResponsiveValue } from '@rottay/design-system';
+ *
+ * // Create responsive column config
+ * const columns: ResponsiveValue<number> = { xs: 1, sm: 2, md: 3, lg: 4 };
+ *
+ * // Type-safe grid item props
+ * const itemProps: GridItemProps = {
+ *   span: 2,
+ *   rowSpan: 1,
+ *   area: 'header'
+ * };
+ * ```
+ *
+ * @see {@link Grid} - The main Grid component
+ * @see {@link GridItem} - The Grid.Item compound component
+ * @module Grid/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 import type React from 'react';

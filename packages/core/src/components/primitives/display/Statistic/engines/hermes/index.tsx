@@ -1,8 +1,54 @@
 /**
- * @fileoverview Statistic - Hermes Engine Implementation
- * @description DaisyUI/Tailwind based implementation of the Statistic component.
- * Provides a lightweight, utility-first approach using Tailwind CSS classes.
- * @module components/primitives/display/Statistic/engines/hermes
+ * @fileoverview Statistic Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based statistic with semantic colors.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine uses DaisyUI classes with Tailwind utilities
+ * for a lightweight, theme-integrated statistic display.
+ *
+ * **Exported Components:**
+ * - `Statistic` - Main statistic component
+ * - `Countdown` - Countdown timer component
+ *
+ * **Implementation Details:**
+ * - DaisyUI semantic color classes
+ * - Tailwind typography utilities
+ * - Interval-based countdown updates
+ * - Loading skeleton with animate-pulse
+ *
+ * **Class Mappings:**
+ * - `text-base-content` - Default value color
+ * - `text-success` - Positive value color
+ * - `text-error` - Negative value color
+ * - `text-warning` - Warning value color
+ * - `text-2xl font-semibold` - Value styling
+ * - `text-sm text-base-content/60` - Title styling
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Automatic theme adaptation
+ * - DaisyUI semantic colors
+ * - Responsive-friendly
+ *
+ * @example Statistic Usage
+ * ```tsx
+ * import { Statistic } from '@rottay/design-system';
+ *
+ * <Statistic
+ *   engine="hermes"
+ *   title="Total Users"
+ *   value={10542}
+ *   suffix="users"
+ *   valueType="positive"
+ * />
+ * ```
+ *
+ * @see {@link Statistic} for the main component
+ * @see {@link https://daisyui.com/} DaisyUI
+ * @module Statistic/engines/hermes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

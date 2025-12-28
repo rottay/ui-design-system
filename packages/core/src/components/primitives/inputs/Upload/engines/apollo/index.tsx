@@ -1,7 +1,41 @@
 'use client';
 
 /**
- * Upload - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Upload Apollo Engine - Rottay Design System
+ * @description Pure vanilla HTML/CSS implementation of the Upload component
+ * with zero external dependencies for maximum portability.
+ *
+ * @remarks
+ * The Apollo engine provides a dependency-free upload using:
+ * - **Native file input**: Standard HTML file input
+ * - **Custom dragger**: Pure CSS drag-and-drop zone
+ * - **Inline styles**: No CSS framework dependencies
+ * - **Full control**: Complete customization flexibility
+ *
+ * Ideal for environments where bundle size and dependency count are critical.
+ *
+ * @example Basic upload
+ * ```tsx
+ * <Upload engine="apollo">
+ *   <button>Select Files</button>
+ * </Upload>
+ * ```
+ *
+ * @example Dragger with validation
+ * ```tsx
+ * <Upload.Dragger
+ *   engine="apollo"
+ *   beforeUpload={(file) => file.size < 5 * 1024 * 1024}
+ * >
+ *   <p>Drop files here (max 5MB)</p>
+ * </Upload.Dragger>
+ * ```
+ *
+ * @see {@link Upload} - Main component
+ * @see {@link UploadProps} - Component props
+ * @module Upload/Engines/Apollo
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useRef } from 'react';
 import type { UploadProps, DraggerProps, UploadFile } from '../../types';

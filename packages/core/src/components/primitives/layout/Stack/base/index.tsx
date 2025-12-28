@@ -1,7 +1,39 @@
 /**
- * Stack - Base Component
- * Uses CSS variables from design tokens for consistent styling.
- * This is extended by engine-specific implementations.
+ * @fileoverview Stack Base Component - Rottay Design System
+ * @description Core implementation of the Stack layout primitive using flexbox.
+ * This base component is extended by engine-specific implementations.
+ *
+ * @remarks
+ * The base component handles all flexbox style computation, prop filtering,
+ * and child rendering (including divider insertion). It provides a foundation
+ * for Titan, Hermes, and Apollo engine implementations.
+ *
+ * Key utilities exported:
+ * - `buildStackStyles`: Converts Stack props to CSS flexbox properties
+ * - `filterStackProps`: Removes Stack-specific props before DOM passthrough
+ * - `renderStackChildren`: Handles divider insertion between children
+ * - `BaseStack`: The foundational component with full Stack API support
+ *
+ * @example Using Utility Functions
+ * ```tsx
+ * import { buildStackStyles, renderStackChildren } from '@rottay/design-system';
+ *
+ * // Build flexbox styles from props
+ * const styles = buildStackStyles({
+ *   direction: 'horizontal',
+ *   spacing: 'md',
+ *   align: 'center'
+ * });
+ * // Result: { display: 'flex', flexDirection: 'row', gap: '1rem', alignItems: 'center' }
+ *
+ * // Render children with dividers
+ * const renderedChildren = renderStackChildren(children, <Divider />, 'vertical');
+ * ```
+ *
+ * @see {@link Stack} - The main engine-aware component
+ * @module Stack/Base
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -140,7 +172,7 @@ function DefaultDivider({ direction }: DefaultDividerProps) {
       style={{
         width: isVertical ? '100%' : '1px',
         height: isVertical ? '1px' : '100%',
-        backgroundColor: 'var(--stack-divider-color, #e5e7eb)',
+        backgroundColor: 'var(--ds-stack-divider-color, #e5e7eb)',
         flexShrink: 0,
       }}
       aria-hidden="true"

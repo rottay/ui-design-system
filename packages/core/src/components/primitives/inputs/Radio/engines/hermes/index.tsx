@@ -1,5 +1,51 @@
 /**
- * Radio - Hermes Engine (DaisyUI)
+ * @fileoverview Radio Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Radio component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements radios using DaisyUI's utility-first approach
+ * with Tailwind CSS classes. It provides a lightweight alternative with
+ * smaller bundle size.
+ *
+ * **DaisyUI Features Utilized:**
+ * - Radio component classes
+ * - Size modifiers (radio-xs, radio-sm, radio-lg)
+ * - Color modifiers (radio-primary, radio-secondary, etc.)
+ * - Form control wrapper for label alignment
+ * - Label text and alt-text for descriptions
+ *
+ * **Prop Mapping:**
+ * - `size="xs"` → `radio-xs`
+ * - `size="sm"` → `radio-sm`
+ * - `size="lg"` → `radio-lg`
+ * - `color="primary"` → `radio-primary`
+ * - `color="success"` → `radio-success`
+ *
+ * **Description Support:**
+ * Uses DaisyUI's `label-text-alt` class for option descriptions.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Radio } from '@rottay/design-system';
+ *
+ * // Explicit Hermes engine
+ * <Radio
+ *   engine="hermes"
+ *   name="option"
+ *   value="a"
+ *   label="DaisyUI Radio"
+ *   description="Additional info"
+ *   color="success"
+ * />
+ * ```
+ *
+ * @see {@link Radio} for the main component
+ * @see {@link TitanRadio} for Ant Design implementation
+ * @see {@link ApolloRadio} for vanilla implementation
+ * @module HermesRadio
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

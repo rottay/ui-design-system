@@ -1,8 +1,71 @@
 'use client';
 
 /**
- * Form - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Form Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Form component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a headless form implementation using only
+ * native HTML elements and inline styles. This offers maximum flexibility
+ * for custom styling and ensures full accessibility compliance.
+ *
+ * **Key Features:**
+ * - Zero UI library dependencies
+ * - Complete form state management
+ * - Custom validation engine
+ * - Inline styles for layout
+ * - Full FormInstance API
+ * - ARIA role="form" for accessibility
+ *
+ * **Custom Implementation:**
+ * Like Hermes, Apollo provides its own:
+ * - Form state management via React context
+ * - Validation engine with rule processing
+ * - Field registration and value tracking
+ * - useForm hook with full FormInstance API
+ *
+ * **Inline Styles:**
+ * All styling is done via inline styles defined in the `styles` object,
+ * ensuring the component works without external CSS.
+ *
+ * **Accessibility:**
+ * - `role="form"` on form element
+ * - `role="alert"` on error lists
+ * - Required field indication
+ * - Error messages linked to fields
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Form, Input, useForm } from '@rottay/design-system';
+ *
+ * const [form] = useForm();
+ *
+ * <Form
+ *   engine="apollo"
+ *   form={form}
+ *   layout="vertical"
+ *   onFinish={handleSubmit}
+ *   style={{ maxWidth: '400px' }}
+ * >
+ *   <Form.Item
+ *     name="email"
+ *     label="Email Address"
+ *     rules={[{ required: true }, { type: 'email' }]}
+ *   >
+ *     <input type="email" style={{ width: '100%', padding: '8px' }} />
+ *   </Form.Item>
+ * </Form>
+ * ```
+ *
+ * @see {@link Form} for the main component
+ * @see {@link TitanForm} for Ant Design implementation
+ * @see {@link HermesForm} for DaisyUI implementation
+ * @module ApolloForm
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../types';
 

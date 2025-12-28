@@ -1,10 +1,53 @@
 /**
- * Typography Text - Compound Component
+ * @fileoverview Typography.Text Compound - Rottay Design System
+ * @description Engine-aware inline text component with decorations.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Engine-aware Text component that can be used standalone or
- * as Typography.Text in the compound pattern.
+ * @remarks
+ * The TypographyText component provides inline text with customizable
+ * appearance, decorations, and flexible element rendering.
  *
+ * **Features:**
+ * - Multiple sizes and font weights
+ * - Semantic color variants
+ * - Text decorations (underline, strikethrough, italic)
+ * - Monospace font for code
+ * - Flexible element rendering (span, p, div, label)
+ * - Line clamping and truncation
+ * - Engine-aware rendering
+ *
+ * **Use Cases:**
+ * - Inline emphasized text
+ * - Code snippets
+ * - Labels and annotations
+ * - Styled links
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Typography.Text color="primary" weight="semibold">
+ *   Important text
+ * </Typography.Text>
+ * ```
+ *
+ * @example With Decorations
+ * ```tsx
+ * <Typography.Text underline italic color="muted">
+ *   Emphasized note
+ * </Typography.Text>
+ * ```
+ *
+ * @example Code Style
+ * ```tsx
+ * <Typography.Text monospace color="error">
+ *   console.error('message')
+ * </Typography.Text>
+ * ```
+ *
+ * @see {@link Typography} for the main namespace
+ * @see {@link TextProps} for available props
  * @module Typography/compound/Text
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

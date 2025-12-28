@@ -1,9 +1,41 @@
 /**
- * Collapse Types
+ * @fileoverview Collapse Component Types - Rottay Design System
+ * @description Type definitions for the Collapse compound component including
+ * props for the main Collapse container and Collapse.Panel sub-component.
+ *
+ * @remarks
+ * The Collapse types support:
+ * - Accordion and multi-panel modes
+ * - Controlled and uncontrolled state
+ * - Panel customization (disabled, extra content, icons)
+ * - Visual variants (bordered, ghost, sizes)
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { CollapseProps, CollapsePanelProps } from '@rottay/design-system';
+ *
+ * const collapseConfig: CollapseProps = {
+ *   accordion: true,
+ *   bordered: true,
+ *   expandIconPosition: 'start',
+ * };
+ *
+ * const panelConfig: CollapsePanelProps = {
+ *   panelKey: 'panel1',
+ *   header: 'Section Title',
+ *   showArrow: true,
+ * };
+ * ```
+ *
+ * @module Collapse/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 
-/** Engine type for collapse components */
+/**
+ * Supported rendering engines for Collapse components.
+ */
 type CollapseEngine = 'titan' | 'hermes' | 'apollo';
 
 export interface CollapsePanelProps {

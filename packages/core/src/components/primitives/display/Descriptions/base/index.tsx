@@ -1,8 +1,49 @@
 /**
- * @file Descriptions - Base Component
- * @description Base implementation using CSS variables from design tokens.
- * This component provides consistent styling across all engines and can be
- * extended by engine-specific implementations.
+ * @fileoverview Descriptions Base Component - Rottay Design System
+ * @description Base descriptions implementation using CSS custom properties.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module provides the foundation for all Descriptions engine implementations.
+ * Uses CSS variables for consistent theming across the design system.
+ *
+ * **Exported Components:**
+ * - `BaseDescriptions` - Main descriptions container
+ * - `BaseDescriptionsItem` - Item wrapper component
+ *
+ * **Implementation Details:**
+ * - CSS custom properties for theming
+ * - Grid-based horizontal layout
+ * - Flex-based vertical layout
+ * - Responsive column support
+ * - Span attribute for wide items
+ * - Ref forwarding support
+ *
+ * **CSS Custom Properties Used:**
+ * - `--descriptions-font-size` - Base font size
+ * - `--descriptions-padding` - Container padding
+ * - `--descriptions-border-color` - Border styling
+ * - `--descriptions-label-color` - Label text color
+ * - `--descriptions-content-color` - Content text color
+ * - `--descriptions-title-color` - Title color
+ * - `--descriptions-bg` - Background color
+ * - `--color-border` - Border color fallback
+ * - `--color-text-secondary` - Label color fallback
+ * - `--color-text-primary` - Content color fallback
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseDescriptions } from '@rottay/design-system';
+ *
+ * <BaseDescriptions title="User Profile">
+ *   <BaseDescriptions.Item label="Name">John Doe</BaseDescriptions.Item>
+ * </BaseDescriptions>
+ * ```
+ *
+ * @see {@link Descriptions} for engine-aware component
+ * @module Descriptions/base
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

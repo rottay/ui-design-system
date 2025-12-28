@@ -1,8 +1,50 @@
 'use client';
 
 /**
- * Slider - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Slider Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Slider component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements sliders using DaisyUI's range input classes
+ * with custom track overlays for range mode support.
+ *
+ * **DaisyUI Classes Used:**
+ * - `range range-primary` - Base range input styling
+ * - `bg-base-300` - Rail background color
+ * - `bg-primary` - Active track color
+ * - Custom positioning for handles and marks
+ *
+ * **Custom Implementation:**
+ * - Range mode with dual hidden inputs
+ * - Custom track overlay showing selection
+ * - Visual handles positioned over inputs
+ * - Marks rendered as absolute positioned labels
+ *
+ * **Limitations:**
+ * - No built-in tooltip
+ * - No reverse direction
+ * - No dots on steps
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * <Slider
+ *   engine="hermes"
+ *   range
+ *   min={0}
+ *   max={100}
+ *   marks={{ 0: 'Min', 100: 'Max' }}
+ * />
+ * ```
+ *
+ * @see {@link Slider} for the main component
+ * @see {@link TitanSlider} for Ant Design implementation
+ * @see {@link ApolloSlider} for vanilla implementation
+ * @module HermesSlider
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useCallback } from 'react';
 import type { SliderProps } from '../../types';
 import { SLIDER_DEFAULTS } from '../../types';

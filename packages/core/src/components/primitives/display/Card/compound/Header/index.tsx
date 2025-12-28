@@ -1,10 +1,43 @@
 /**
- * @fileoverview Card.Header Compound Component
- * @description Header section for Card component with title, subtitle, avatar, and extra content.
- * Provides a consistent header layout across all card variations.
+ * @fileoverview Card.Header Compound - Rottay Design System
+ * @description Header section for Card with title, subtitle, and extra content.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/compound/Header
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * The CardHeader provides a consistent header layout for cards with
+ * flexible content slots for title, subtitle, avatar, and extra actions.
+ *
+ * **Layout Structure:**
+ * - Avatar slot (optional, left side)
+ * - Text content (title + subtitle, center)
+ * - Extra content (optional, right side)
+ *
+ * **CSS Variables:**
+ * - `--card-title-size` - Title font size
+ * - `--card-title-color` - Title text color
+ * - `--card-subtitle-size` - Subtitle font size
+ * - `--card-subtitle-color` - Subtitle text color
+ *
+ * @example Basic Header
+ * ```tsx
+ * <Card.Header title="Card Title" />
+ * ```
+ *
+ * @example With Avatar and Actions
+ * ```tsx
+ * <Card.Header
+ *   title="John Doe"
+ *   subtitle="Software Engineer"
+ *   avatar={<Avatar src="/avatar.jpg" />}
+ *   extra={<Button icon={<MoreIcon />} />}
+ *   divider
+ * />
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @module CardHeader
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

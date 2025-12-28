@@ -1,8 +1,36 @@
 'use client';
 
 /**
- * Container - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Container Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Container component.
+ * Generates Tailwind CSS utility classes for responsive containers.
+ *
+ * @remarks
+ * The Hermes engine translates Container props to Tailwind CSS classes:
+ * - Max-width: `max-w-screen-sm`, `max-w-screen-lg`, etc.
+ * - Centering: `mx-auto`
+ * - Padding: `p-0`, `p-2`, `p-4`, `p-6`
+ * - Width: `w-full` for full container width
+ * - Box-sizing: `box-border`
+ *
+ * For custom numeric values (max-width or padding), inline styles are used.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Container } from '@rottay/design-system';
+ *
+ * // Generates Tailwind classes
+ * <Container engine="hermes" maxWidth="lg" padding="md" center>
+ *   Outputs: class="max-w-screen-lg mx-auto p-4 w-full box-border"
+ * </Container>
+ * ```
+ *
+ * @see {@link Container} - The main engine-aware component
+ * @module Container/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import type { ContainerProps } from '../../types';
 import { CONTAINER_DEFAULTS } from '../../types';

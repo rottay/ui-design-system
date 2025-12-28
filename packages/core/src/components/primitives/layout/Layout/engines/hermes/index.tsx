@@ -1,7 +1,38 @@
 'use client';
 
 /**
- * Layout - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Layout Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Layout compound component.
+ * Uses Tailwind CSS utility classes for styling with DaisyUI theme integration.
+ *
+ * @remarks
+ * The Hermes engine generates:
+ * - `flex flex-col min-h-screen` for main layout
+ * - `md:flex-row` when hasSider is true (responsive row layout)
+ * - `bg-base-200` for header/footer backgrounds
+ * - `bg-base-100` or `bg-base-300` for sider based on theme
+ * - Custom collapsible sidebar with controlled/uncontrolled state
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Layout } from '@rottay/design-system';
+ *
+ * // Tailwind-styled layout
+ * <Layout engine="hermes" hasSider>
+ *   <Layout.Sider engine="hermes" theme="dark" collapsible>
+ *     Navigation
+ *   </Layout.Sider>
+ *   <Layout>
+ *     <Layout.Header engine="hermes">Header</Layout.Header>
+ *     <Layout.Content engine="hermes">Content</Layout.Content>
+ *   </Layout>
+ * </Layout>
+ * ```
+ *
+ * @see {@link Layout} - The main engine-aware component
+ * @module Layout/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { useState } from 'react';
 import type {

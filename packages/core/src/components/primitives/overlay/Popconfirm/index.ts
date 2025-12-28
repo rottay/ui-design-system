@@ -1,14 +1,30 @@
 /**
- * Popconfirm Component
+ * @fileoverview Popconfirm Component - Rottay Design System
+ * @description A compact confirmation dialog that appears as a popover. Perfect for
+ * confirming destructive actions without taking up screen space with a full modal dialog.
+ * Includes customizable confirm/cancel buttons with loading states and danger styling.
  *
- * A compact confirmation dialog that appears as a popover. Perfect for
- * confirming destructive actions without taking up screen space with
- * a full modal dialog. Includes customizable confirm/cancel buttons.
+ * @remarks
+ * The Popconfirm component provides an inline confirmation experience that's less
+ * intrusive than a full modal. It's ideal for:
+ * - Delete confirmations for items in lists or tables
+ * - Form submission confirmations
+ * - Dangerous action warnings
+ * - Quick yes/no decisions
+ * - Inline workflow approvals
  *
- * @component
- * @example
+ * Key features:
+ * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Async support**: onConfirm can return a Promise with loading state
+ * - **Button customization**: Text, type (primary/danger/default), and loading
+ * - **12 placement positions**: All sides with alignment variants
+ * - **Description support**: Additional context below the title
+ * - **Custom icons**: Warning, question, or custom icons
+ *
+ * @example Basic confirmation dialog
  * ```tsx
- * // Basic confirmation
+ * import { Popconfirm, Button } from '@rottay/design-system';
+ *
  * <Popconfirm
  *   title="Are you sure you want to delete this?"
  *   onConfirm={() => handleDelete()}
@@ -16,8 +32,10 @@
  * >
  *   <Button danger>Delete</Button>
  * </Popconfirm>
+ * ```
  *
- * // With description and custom button text
+ * @example With description and custom button text
+ * ```tsx
  * <Popconfirm
  *   title="Delete Item"
  *   description="This action cannot be undone."
@@ -28,8 +46,10 @@
  * >
  *   <Button>Remove</Button>
  * </Popconfirm>
+ * ```
  *
- * // With loading state
+ * @example Async confirmation with loading state
+ * ```tsx
  * <Popconfirm
  *   title="Confirm action?"
  *   okButtonLoading={isDeleting}
@@ -39,16 +59,33 @@
  * >
  *   <Button>Submit</Button>
  * </Popconfirm>
+ * ```
  *
- * // Custom placement
- * <Popconfirm title="Confirm?" placement="rightTop">
- *   <Button>Action</Button>
+ * @example Multi-engine usage
+ * ```tsx
+ * // Titan engine (Ant Design - default)
+ * <Popconfirm engine="titan" title="Confirm?" okType="danger">
+ *   <Button>Titan Confirm</Button>
+ * </Popconfirm>
+ *
+ * // Hermes engine (DaisyUI/Tailwind)
+ * <Popconfirm engine="hermes" title="Confirm?" okType="primary">
+ *   <Button>Hermes Confirm</Button>
+ * </Popconfirm>
+ *
+ * // Apollo engine (Pure HTML/CSS)
+ * <Popconfirm engine="apollo" title="Confirm?" placement="bottom">
+ *   <Button>Apollo Confirm</Button>
  * </Popconfirm>
  * ```
  *
  * @see {@link PopconfirmProps} for available props
  * @see {@link PopconfirmPlacement} for placement options
  * @see {@link PopconfirmOkType} for confirm button styles
+ * @see {@link Modal} for full-screen confirmation dialogs
+ * @module Popconfirm
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import { createEngineComponent } from '../../../../system/engines/factory';
 import type { PopconfirmProps } from './types';

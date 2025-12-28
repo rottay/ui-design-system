@@ -1,5 +1,51 @@
 /**
- * Checkbox - Titan Engine (Ant Design)
+ * @fileoverview Checkbox Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Checkbox component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Checkbox component, providing enterprise-grade
+ * features including indeterminate state, group support, and consistent styling.
+ *
+ * **Ant Design Features Utilized:**
+ * - Native checkbox with indeterminate support
+ * - Built-in Checkbox.Group component
+ * - Consistent styling with Ant Design ecosystem
+ *
+ * **Prop Mapping:**
+ * - `color` → Custom CSS variable override for primary color
+ * - `size` → Font size adjustment via inline styles
+ * - `onChange` → Mapped to Ant Design's change handler format
+ *
+ * **Group Support:**
+ * Includes TitanCheckboxGroup for options-based checkbox groups
+ * with horizontal/vertical layout support.
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Checkbox } from '@rottay/design-system';
+ *
+ * // Explicit Titan engine (default)
+ * <Checkbox
+ *   engine="titan"
+ *   label="Ant Design Checkbox"
+ *   indeterminate={hasPartial}
+ * />
+ *
+ * // Group with Titan
+ * <Checkbox.Group
+ *   engine="titan"
+ *   options={options}
+ *   direction="horizontal"
+ * />
+ * ```
+ *
+ * @see {@link Checkbox} for the main component
+ * @see {@link HermesCheckbox} for DaisyUI implementation
+ * @see {@link ApolloCheckbox} for vanilla implementation
+ * @module TitanCheckbox
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

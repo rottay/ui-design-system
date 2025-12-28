@@ -1,8 +1,52 @@
 /**
- * Table Types
+ * @fileoverview Table Types - Rottay Design System
+ * @description Type definitions for the Table component and its configurations.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Type definitions for the Table component including column configuration,
- * pagination, row selection, and expandable row settings.
+ * @remarks
+ * This module provides comprehensive type definitions for the Table component,
+ * including column configuration, pagination, row selection, and expandable rows.
+ *
+ * **Exported Types:**
+ * - `TableProps` - Main component properties
+ * - `ColumnType` - Column configuration
+ * - `TablePaginationConfig` - Pagination settings
+ * - `TableRowSelection` - Row selection configuration
+ * - `ExpandableConfig` - Expandable row settings
+ * - `TableSize` - Size variants
+ * - `TableLayout` - Layout modes
+ * - `SortOrder` - Sort direction
+ * - `FilterMode` - Filter display mode
+ *
+ * **Exported Constants:**
+ * - `TABLE_DEFAULTS` - Default prop values
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { TableProps, ColumnType } from '@rottay/design-system';
+ *
+ * interface User {
+ *   id: number;
+ *   name: string;
+ *   email: string;
+ * }
+ *
+ * const columns: ColumnType<User>[] = [
+ *   { title: 'Name', dataIndex: 'name', sorter: true },
+ *   { title: 'Email', dataIndex: 'email' },
+ * ];
+ *
+ * const props: TableProps<User> = {
+ *   dataSource: users,
+ *   columns,
+ *   rowKey: 'id',
+ * };
+ * ```
+ *
+ * @see {@link Table} for component implementation
+ * @module Table/types
+ * @category Display
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties, Key } from 'react';
 import type { SizeType } from '../../../../../types/common';

@@ -1,7 +1,45 @@
 'use client';
 
 /**
- * Collapse - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Collapse Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Collapse compound component.
+ * Uses inline CSS styles with React Context for state management.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with flexbox layout
+ * - React Context for sharing state between Collapse and Panel
+ * - Custom accordion logic with controlled/uncontrolled support
+ * - CSS transitions for smooth expand/collapse (max-height animation)
+ * - Ghost mode support with transparent backgrounds
+ *
+ * Implementation details:
+ * - Uses CollapseContext to share activeKeys and toggleKey
+ * - Panels have header with fafafa background, content with white
+ * - Arrow icon uses transform: rotate(90deg) when active
+ * - Content uses max-height transition for smooth animations
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Collapse } from '@rottay/design-system';
+ *
+ * // Pure inline CSS collapse
+ * <Collapse engine="apollo" ghost>
+ *   <Collapse.Panel engine="apollo" header="Section 1" panelKey="1">
+ *     Self-contained styling
+ *   </Collapse.Panel>
+ * </Collapse>
+ * ```
+ *
+ * @see {@link Collapse} - The main engine-aware component
+ * @module Collapse/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { useState, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
 import type { CollapseProps, CollapsePanelProps } from '../../types';

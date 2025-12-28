@@ -1,6 +1,48 @@
 /**
- * Slider Types
+ * @fileoverview Slider Types - Rottay Design System
+ * @description Type definitions for the Slider component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module defines all TypeScript interfaces, types, and constants
+ * for the Slider component. These types are shared across all engines.
+ *
+ * **Exported Types:**
+ * - `SliderProps` - Main component props interface
+ * - `SliderMarks` - Marks configuration type
+ *
+ * **Configuration Constants:**
+ * - `SLIDER_DEFAULTS` - Default prop values
+ *
+ * **Value Types:**
+ * - Single: `number` for single handle
+ * - Range: `[number, number]` for dual handles
+ *
+ * **Marks Configuration:**
+ * ```tsx
+ * marks: {
+ *   0: 'Start',                    // Simple label
+ *   50: { label: 'Middle' },       // Object with label
+ *   100: { label: 'End', style: { color: 'red' } }  // With custom style
+ * }
+ * ```
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { SliderProps, SliderMarks } from '@rottay/design-system';
+ *
+ * const marks: SliderMarks = {
+ *   0: 'Min',
+ *   100: 'Max',
+ * };
+ * ```
+ *
+ * @see {@link Slider} for the main component
+ * @module SliderTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import type { ReactNode, CSSProperties } from 'react';
 
 export interface SliderMarks {

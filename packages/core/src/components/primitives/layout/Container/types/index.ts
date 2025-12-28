@@ -1,6 +1,41 @@
 /**
- * Container Types
+ * @fileoverview Container Types - Rottay Design System
+ * @description Type definitions for the Container layout component.
+ * Provides comprehensive typing for max-width, padding, and centering options.
+ *
+ * @remarks
+ * The Container component uses a breakpoint-based max-width system that aligns
+ * with common screen sizes. The type system provides both preset values and
+ * support for custom numeric values.
+ *
+ * Preset Max-widths:
+ * - `sm`: 640px - Mobile landscape / small tablet
+ * - `md`: 768px - Tablet portrait
+ * - `lg`: 1024px - Tablet landscape / small desktop (default)
+ * - `xl`: 1280px - Desktop
+ * - `2xl`: 1536px - Large desktop
+ * - `full`: 100% - Full width
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { ContainerProps, ContainerMaxWidth, ContainerPadding } from '@rottay/design-system';
+ *
+ * // Create a page wrapper component
+ * interface PageProps extends Partial<ContainerProps> {
+ *   title: string;
+ * }
+ *
+ * // Type-safe max-width values
+ * const maxWidth: ContainerMaxWidth = 'lg';
+ * const padding: ContainerPadding = 'md';
+ * ```
+ *
+ * @see {@link Container} - The main Container component
+ * @module Container/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import type { ReactNode, CSSProperties } from 'react';
 
 export type ContainerMaxWidth = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';

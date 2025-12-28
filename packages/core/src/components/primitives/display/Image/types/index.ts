@@ -1,6 +1,35 @@
 /**
- * Image - Core Interface
- * Re-exports from centralized types with local defaults
+ * @fileoverview Image Types - Rottay Design System
+ * @description Type definitions for the Image component.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module re-exports types from the centralized types definition
+ * and provides default values and configuration maps for the Image component.
+ *
+ * **Exported Types:**
+ * - `ImageProps` - Main component props interface
+ * - `ImageFit` - Object-fit mode (cover, contain, fill, none, scale-down)
+ * - `ImageRadius` - Border radius options
+ * - `ImageStatus` - Loading state (loading, loaded, error)
+ * - `ImageFallbackProps` - Fallback compound props
+ * - `ImageSkeletonProps` - Skeleton compound props
+ *
+ * **Configuration Constants:**
+ * - `IMAGE_DEFAULTS` - Default prop values
+ * - `RADIUS_MAP` - Radius to CSS value mapping
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { ImageProps, ImageRadius } from '@rottay/design-system';
+ *
+ * const radius: ImageRadius = 'lg';
+ * ```
+ *
+ * @see {@link Image} for the main component
+ * @module ImageTypes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {

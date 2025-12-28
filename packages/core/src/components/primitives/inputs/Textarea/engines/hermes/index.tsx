@@ -1,5 +1,48 @@
 /**
- * Textarea - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Textarea Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Textarea component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements textareas using DaisyUI's textarea classes
+ * with Tailwind CSS utilities. It provides a lightweight alternative
+ * with utility-first styling.
+ *
+ * **DaisyUI Classes Used:**
+ * - `textarea` - Base textarea styling
+ * - `textarea-{size}` - Size variants (sm, md, lg)
+ * - `textarea-bordered` - Outlined variant
+ * - `textarea-{status}` - Status colors (error, warning, success)
+ *
+ * **Tailwind Integration:**
+ * - Native textarea element
+ * - DaisyUI classes for consistent styling
+ * - Supports all native textarea attributes
+ *
+ * **Limitations:**
+ * - No built-in autoSize (use custom solution if needed)
+ * - No built-in showCount (implement separately)
+ * - No allowClear button
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Textarea } from '@rottay/design-system';
+ *
+ * <Textarea
+ *   engine="hermes"
+ *   placeholder="Enter description..."
+ *   rows={4}
+ *   variant="outlined"
+ *   className="w-full"
+ * />
+ * ```
+ *
+ * @see {@link Textarea} for the main component
+ * @see {@link TitanTextarea} for Ant Design implementation
+ * @see {@link ApolloTextarea} for vanilla implementation
+ * @module HermesTextarea
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import React from 'react';

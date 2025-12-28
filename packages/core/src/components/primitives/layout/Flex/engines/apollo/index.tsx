@@ -1,8 +1,38 @@
 'use client';
 
 /**
- * Flex - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Flex Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Flex component.
+ * Uses inline CSS styles for maximum compatibility without external dependencies.
+ *
+ * @remarks
+ * The Apollo engine applies all flexbox properties via inline styles:
+ * - `display: flex` or `display: inline-flex`
+ * - `flexDirection`, `flexWrap`, `justifyContent`, `alignItems`
+ * - `gap`, `columnGap`, `rowGap` for spacing
+ *
+ * This makes it ideal for:
+ * - Embedding in third-party applications
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Flex } from '@rottay/design-system';
+ *
+ * // Pure inline CSS, no external dependencies
+ * <Flex engine="apollo" direction="column" gap={16} align="center">
+ *   <span>First</span>
+ *   <span>Second</span>
+ * </Flex>
+ * ```
+ *
+ * @see {@link Flex} - The main engine-aware component
+ * @module Flex/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import type { FlexProps } from '../../types';
 import { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from '../../types';

@@ -1,8 +1,49 @@
 /**
- * @fileoverview Carousel - Hermes Engine Implementation
- * @description Provides a DaisyUI/Tailwind-based carousel implementation.
- * Utilizes utility-first CSS classes for lightweight, customizable styling.
- * @module components/primitives/display/Carousel/engines/hermes
+ * @fileoverview Carousel Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based carousel with utility-first styling.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine uses DaisyUI classes with Tailwind utilities
+ * for a lightweight, theme-integrated carousel.
+ *
+ * **Exported Components:**
+ * - `Carousel` - Main carousel component
+ *
+ * **Implementation Details:**
+ * - DaisyUI carousel classes
+ * - Tailwind utility-first styling
+ * - Interval-based autoplay
+ * - Imperative ref methods
+ *
+ * **Class Mappings:**
+ * - `carousel` - Container class
+ * - `carousel-vertical` - Vertical mode
+ * - `carousel-item` - Slide wrapper
+ * - `btn btn-circle btn-sm` - Arrow buttons
+ * - `bg-primary`, `bg-base-300` - Dot colors
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Automatic theme adaptation
+ * - DaisyUI component classes
+ * - Responsive-friendly
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Carousel } from '@rottay/design-system';
+ *
+ * <Carousel engine="hermes" autoplay arrows>
+ *   <div className="bg-primary p-8">Slide 1</div>
+ *   <div className="bg-secondary p-8">Slide 2</div>
+ * </Carousel>
+ * ```
+ *
+ * @see {@link Carousel} for the main component
+ * @see {@link https://daisyui.com/components/carousel/} DaisyUI Carousel
+ * @module Carousel/engines/hermes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,5 +1,51 @@
 /**
- * Avatar - Titan Engine (Ant Design)
+ * @fileoverview Avatar Titan Engine - Rottay Design System
+ * @description Ant Design-based avatar implementation with Badge for status.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine wraps Ant Design's Avatar and Badge components to provide
+ * a full-featured avatar with status indicators.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Avatar` for the core avatar rendering
+ * - Uses `antd/Badge` with dot mode for status indicators
+ * - Maps custom shapes to Ant Design's 'circle' | 'square' shapes
+ * - Applies variant colors via inline styles
+ *
+ * **Shape Mapping:**
+ * - `circle` → Ant Design `circle`
+ * - `square` → Ant Design `square`
+ * - `rounded` → Ant Design `square` (with CSS border-radius)
+ *
+ * **Status Colors:**
+ * - `online` → Green (#52c41a)
+ * - `offline` → Gray (#d9d9d9)
+ * - `away` → Orange (#faad14)
+ * - `busy` → Red (#ff4d4f)
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Avatar } from '@rottay/design-system';
+ *
+ * <Avatar engine="titan" src="/user.jpg" name="John Doe" />
+ * ```
+ *
+ * @example With Status Badge
+ * ```tsx
+ * <Avatar
+ *   engine="titan"
+ *   src="/profile.jpg"
+ *   status="online"
+ *   size="lg"
+ * />
+ * ```
+ *
+ * @see {@link Avatar} for the main component
+ * @see {@link https://ant.design/components/avatar} Ant Design Avatar
+ * @module TitanAvatar
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

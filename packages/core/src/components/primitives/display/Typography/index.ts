@@ -1,16 +1,40 @@
 /**
- * Typography - Engine Router
+ * @fileoverview Typography - Rottay Design System
+ * @description Text rendering components for headings, inline text, and paragraphs.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Main entry point for the Typography component family.
- * Provides engine-aware Heading, Text, and Paragraph components
- * with a compound component pattern (Typography.Heading, etc.).
+ * @remarks
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Typography with rich text features
+ * - **Hermes**: DaisyUI/Tailwind utility classes
+ * - **Apollo**: Pure CSS implementation with zero dependencies
  *
- * @module Typography
+ * **Key Features:**
+ * - Semantic heading levels (h1-h6) with visual size override
+ * - Multiple text sizes (xs, sm, md, lg, xl, 2xl, 3xl)
+ * - Font weights (normal, medium, semibold, bold)
+ * - Text alignment (left, center, right, justify)
+ * - Semantic colors (default, muted, primary, success, warning, error)
+ * - Text decorations (underline, strikethrough, italic, monospace)
+ * - Line clamping and truncation
+ * - Flexible element rendering
  *
- * @example
+ * **Compound Components:**
+ * - `Typography.Heading` - Semantic heading elements (h1-h6)
+ * - `Typography.Text` - Inline text with decorations
+ * - `Typography.Paragraph` - Block-level body text
+ *
+ * **CSS Custom Properties:**
+ * - `--color-text-primary` - Default text color
+ * - `--color-text-secondary` - Muted text color
+ * - `--color-primary` - Primary accent color
+ * - `--color-success` - Success state color
+ * - `--color-warning` - Warning state color
+ * - `--color-error` - Error state color
+ *
+ * @example Compound Pattern
  * ```tsx
- * // Using compound pattern
- * import { Typography } from '@es-rottay/designsystem-core';
+ * import { Typography } from '@rottay/design-system';
  *
  * <Typography.Heading level="h1" size="3xl">
  *   Page Title
@@ -25,23 +49,28 @@
  * </Typography.Paragraph>
  * ```
  *
- * @example
+ * @example Individual Components
  * ```tsx
- * // Using individual components
- * import { Heading, Text, Paragraph } from '@es-rottay/designsystem-core';
+ * import { Heading, Text, Paragraph } from '@rottay/design-system';
  *
  * <Heading level="h2">Section Title</Heading>
- * <Text underline>Click here</Text>
+ * <Text underline italic>Emphasized link</Text>
  * <Paragraph lineClamp={3}>Long content...</Paragraph>
  * ```
  *
- * @example
+ * @example Engine Override
  * ```tsx
- * // Using specific engine
  * <Typography.Heading engine="hermes" level="h1">
  *   Tailwind-styled Heading
  * </Typography.Heading>
  * ```
+ *
+ * @see {@link HeadingProps} for heading properties
+ * @see {@link TextProps} for text properties
+ * @see {@link ParagraphProps} for paragraph properties
+ * @module Typography
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

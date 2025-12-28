@@ -1,8 +1,31 @@
 'use client';
 
 /**
- * Container - Titan Engine (Ant Design)
+ * @fileoverview Container Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Container component.
+ * Uses inline CSS styles following Ant Design conventions.
+ *
+ * @remarks
+ * The Titan engine provides:
+ * - Inline CSS styling for compatibility with Ant Design themes
+ * - Box-sizing: border-box for consistent sizing
+ * - Margin-auto for horizontal centering
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Container } from '@rottay/design-system';
+ *
+ * <Container engine="titan" maxWidth="lg" padding="md">
+ *   Ant Design compatible container
+ * </Container>
+ * ```
+ *
+ * @see {@link Container} - The main engine-aware component
+ * @module Container/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import type { ContainerProps } from '../../types';
 import {

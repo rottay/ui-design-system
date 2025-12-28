@@ -1,7 +1,39 @@
 'use client';
 
 /**
- * Collapse - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Collapse Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Collapse compound component.
+ * Uses Tailwind CSS utilities with React Context for state management.
+ *
+ * @remarks
+ * The Hermes engine provides:
+ * - Tailwind CSS styled panels with `collapse` classes
+ * - React Context for sharing state between Collapse and Panel
+ * - Custom accordion logic with controlled/uncontrolled support
+ * - CSS transitions for smooth expand/collapse animations
+ * - DaisyUI theme integration (base-100, base-300 colors)
+ *
+ * Implementation details:
+ * - Uses CollapseContext to share activeKeys and toggleKey between components
+ * - Panels clone children to inject index for key generation
+ * - Arrow icon rotates 90deg when panel is active
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Collapse } from '@rottay/design-system';
+ *
+ * // Tailwind-styled collapse
+ * <Collapse engine="hermes" accordion>
+ *   <Collapse.Panel engine="hermes" header="FAQ 1" panelKey="1">
+ *     Answer to FAQ 1
+ *   </Collapse.Panel>
+ * </Collapse>
+ * ```
+ *
+ * @see {@link Collapse} - The main engine-aware component
+ * @module Collapse/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { useState, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
 import type { CollapseProps, CollapsePanelProps } from '../../types';

@@ -1,6 +1,52 @@
 /**
- * Avatar - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Avatar Base Component - Rottay Design System
+ * @description Core avatar implementation with CSS variables for theming.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * The BaseAvatar provides a full-featured avatar with CSS variable support.
+ * It handles image loading, error fallback to initials, status indicators,
+ * and all visual customization options.
+ *
+ * **Component Structure:**
+ * - Container div with role and aria attributes
+ * - Image element (if src provided and loaded)
+ * - Initials span (fallback when no image)
+ * - Status indicator (if status provided)
+ *
+ * **CSS Variable Integration:**
+ * - `--avatar-size` - Avatar dimensions
+ * - `--avatar-font-size` - Initials font size
+ * - `--avatar-border-width` - Border thickness
+ * - `--avatar-bg` - Background color
+ * - `--avatar-color` - Text color
+ * - `--avatar-border-color` - Border color
+ * - `--avatar-shape` - Border radius
+ * - `--avatar-ring-color` - Ring outline color
+ *
+ * **Initials Generation:**
+ * Automatically generates initials from name or alt:
+ * - "John Doe" → "JD"
+ * - "Alice" → "A"
+ * - "Mary Jane Watson" → "MW"
+ *
+ * @example Using BaseAvatar
+ * ```tsx
+ * import { BaseAvatar } from '@rottay/design-system';
+ *
+ * <BaseAvatar
+ *   src="/profile.jpg"
+ *   name="John Doe"
+ *   size="lg"
+ *   shape="circle"
+ *   status="online"
+ * />
+ * ```
+ *
+ * @see {@link Avatar} for the engine-routed component
+ * @module BaseAvatar
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -77,16 +123,16 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
 
     // Build CSS variables for the avatar
     const avatarVars: React.CSSProperties = {
-      '--avatar-size': `var(--avatar-${size}-size)`,
-      '--avatar-font-size': `var(--avatar-${size}-font-size)`,
-      '--avatar-border-width': bordered ? `var(--avatar-${size}-border-width)` : '0',
-      '--avatar-bg': backgroundColor || `var(--avatar-${variant}-bg)`,
-      '--avatar-color': textColor || `var(--avatar-${variant}-color)`,
-      '--avatar-border-color': bordered ? `var(--avatar-${variant}-border-color)` : 'transparent',
-      '--avatar-shape': shape === 'circle' ? 'var(--avatar-circle-radius)' :
-                       shape === 'square' ? 'var(--avatar-square-radius)' :
-                       'var(--avatar-rounded-radius)',
-      '--avatar-ring-color': ringColor || 'var(--avatar-focus-ring-color)',
+      '--ds-avatar-size': `var(--ds-avatar-${size}-size)`,
+      '--ds-avatar-font-size': `var(--ds-avatar-${size}-font-size)`,
+      '--ds-avatar-border-width': bordered ? `var(--ds-avatar-${size}-border-width)` : '0',
+      '--ds-avatar-bg': backgroundColor || `var(--ds-avatar-${variant}-bg)`,
+      '--ds-avatar-color': textColor || `var(--ds-avatar-${variant}-color)`,
+      '--ds-avatar-border-color': bordered ? `var(--ds-avatar-${variant}-border-color)` : 'transparent',
+      '--ds-avatar-shape': shape === 'circle' ? 'var(--ds-avatar-circle-radius)' :
+                       shape === 'square' ? 'var(--ds-avatar-square-radius)' :
+                       'var(--ds-avatar-rounded-radius)',
+      '--ds-avatar-ring-color': ringColor || 'var(--ds-avatar-focus-ring-color)',
     } as React.CSSProperties;
 
     // Computed styles
@@ -96,18 +142,18 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 'var(--avatar-size)',
-      height: 'var(--avatar-size)',
-      borderRadius: 'var(--avatar-shape)',
-      backgroundColor: 'var(--avatar-bg)',
-      color: 'var(--avatar-color)',
-      fontSize: 'var(--avatar-font-size)',
+      width: 'var(--ds-avatar-size)',
+      height: 'var(--ds-avatar-size)',
+      borderRadius: 'var(--ds-avatar-shape)',
+      backgroundColor: 'var(--ds-avatar-bg)',
+      color: 'var(--ds-avatar-color)',
+      fontSize: 'var(--ds-avatar-font-size)',
       fontWeight: 500,
       overflow: 'hidden',
-      border: 'var(--avatar-border-width) solid var(--avatar-border-color)',
+      border: 'var(--ds-avatar-border-width) solid var(--ds-avatar-border-color)',
       cursor: onClick ? 'pointer' : 'default',
-      transition: 'var(--avatar-transition)',
-      outline: ring ? '2px solid var(--avatar-ring-color)' : 'none',
+      transition: 'var(--ds-avatar-transition)',
+      outline: ring ? '2px solid var(--ds-avatar-ring-color)' : 'none',
       outlineOffset: ring ? '2px' : '0',
       ...style,
     };
@@ -115,19 +161,19 @@ export const BaseAvatar = forwardRef<HTMLDivElement, AvatarProps>(
     const imageStyle: React.CSSProperties = {
       width: '100%',
       height: '100%',
-      objectFit: 'var(--avatar-image-object-fit)' as any,
-      objectPosition: 'var(--avatar-image-object-position)',
+      objectFit: 'var(--ds-avatar-image-object-fit, cover)' as any,
+      objectPosition: 'var(--ds-avatar-image-object-position, center)',
     };
 
     const statusIndicatorStyle: React.CSSProperties = {
       position: 'absolute',
-      bottom: 'var(--avatar-status-offset)',
-      right: 'var(--avatar-status-offset)',
-      width: `var(--avatar-${size}-status-size)`,
-      height: `var(--avatar-${size}-status-size)`,
+      bottom: 'var(--ds-avatar-status-offset)',
+      right: 'var(--ds-avatar-status-offset)',
+      width: `var(--ds-avatar-${size}-status-size)`,
+      height: `var(--ds-avatar-${size}-status-size)`,
       borderRadius: '50%',
-      backgroundColor: `var(--avatar-status-${status}-color)`,
-      border: 'var(--avatar-status-border-width) solid var(--avatar-status-border-color)',
+      backgroundColor: `var(--ds-avatar-status-${status}-color)`,
+      border: 'var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border-color)',
       zIndex: 1,
     };
 

@@ -1,13 +1,48 @@
 'use client';
 
 /**
- * Tour - Titan Engine (Ant Design)
+ * @fileoverview Tour Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Tour component.
+ * Wraps Ant Design's Tour with full feature parity and target resolution.
  *
- * Ant Design implementation of the Tour component.
- * Wraps the native antd Tour component with our unified API.
+ * @remarks
+ * The Titan engine provides:
+ * - Native Ant Design Tour styling and animations
+ * - Automatic target element resolution from selectors/refs/functions
+ * - Built-in spotlight mask with customizable styling
+ * - Full step navigation with indicators
+ * - Custom close icon support
  *
- * @module TourTitan
- * @see {@link https://ant.design/components/tour} Ant Design Tour
+ * Implementation details:
+ * - Maps target props to Ant Design's expected function format
+ * - CSS selectors converted to () => document.querySelector()
+ * - React refs converted to () => ref.current
+ * - Getter functions passed through directly
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Tour, Button } from '@rottay/design-system';
+ *
+ * const steps = [
+ *   { target: '#intro', title: 'Welcome', description: 'Get started' },
+ *   { target: buttonRef, title: 'Action', description: 'Click here' },
+ * ];
+ *
+ * <Tour
+ *   engine="titan"
+ *   steps={steps}
+ *   open={isOpen}
+ *   type="primary"
+ *   mask={{ color: 'rgba(0,0,0,0.6)' }}
+ *   onFinish={() => markTourComplete()}
+ * />
+ * ```
+ *
+ * @see {@link Tour} - The main engine-aware component
+ * @see {@link https://ant.design/components/tour} - Ant Design Tour docs
+ * @module Tour/Engines/Titan
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Tour as AntTour } from 'antd';

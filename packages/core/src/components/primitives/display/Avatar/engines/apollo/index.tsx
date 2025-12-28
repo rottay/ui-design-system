@@ -1,5 +1,58 @@
 /**
- * Avatar - Apollo Engine (Pure HTML/CSS)
+ * @fileoverview Avatar Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS avatar implementation with zero dependencies.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine provides a lightweight, dependency-free avatar using
+ * only inline styles and standard HTML elements.
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - Computes sizes from SIZE_MAP constants
+ * - Handles image loading and fallback to initials
+ * - Supports all variant colors with gradient option
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full control over styles
+ *
+ * **Variant Colors:**
+ * - Each variant has predefined `bg` and `color` values
+ * - Gradient variant uses CSS `linear-gradient`
+ * - Custom colors via `backgroundColor` and `textColor` props
+ *
+ * **Status Indicator:**
+ * - Positioned absolute at bottom-right
+ * - Size scales with avatar (25% of avatar size, min 8px)
+ * - White border for separation from avatar
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Avatar } from '@rottay/design-system';
+ *
+ * <Avatar engine="apollo" src="/user.jpg" name="John Doe" />
+ * ```
+ *
+ * @example Custom Colors
+ * ```tsx
+ * <Avatar
+ *   engine="apollo"
+ *   name="JD"
+ *   backgroundColor="#1a1a2e"
+ *   textColor="#eaeaea"
+ *   ring
+ *   ringColor="#00ff88"
+ * />
+ * ```
+ *
+ * @see {@link Avatar} for the main component
+ * @see {@link BaseAvatar} for CSS variable implementation
+ * @module ApolloAvatar
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

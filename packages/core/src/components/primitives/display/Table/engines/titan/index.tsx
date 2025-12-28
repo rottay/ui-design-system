@@ -1,11 +1,48 @@
 'use client';
 
 /**
- * Table - Titan Engine (Ant Design)
+ * @fileoverview Table Titan Engine - Rottay Design System
+ * @description Ant Design-based table with full feature support.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * A data table component wrapping Ant Design's Table.
- * Supports all Ant Design Table features including sorting, filtering,
- * pagination, row selection, and expandable rows.
+ * @remarks
+ * This engine wraps Ant Design's Table component to provide
+ * comprehensive data table functionality.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Table` for core rendering
+ * - Maps size variants to Ant Design sizes
+ * - Full pagination configuration support
+ * - Row selection with checkbox/radio
+ * - Expandable rows with custom render
+ * - Virtual scrolling for large datasets
+ * - Fixed columns and headers
+ *
+ * **Ant Design Features:**
+ * - Column filtering with menus
+ * - Nested column groups
+ * - Summary rows
+ * - Sticky headers
+ * - Resizable columns
+ * - Tree data structure
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Table } from '@rottay/design-system';
+ *
+ * <Table
+ *   engine="titan"
+ *   dataSource={data}
+ *   columns={columns}
+ *   pagination={{ pageSize: 20 }}
+ * />
+ * ```
+ *
+ * @see {@link Table} for the main component
+ * @see {@link https://ant.design/components/table} Ant Design Table
+ * @module Table/engines/titan
+ * @category Display
+ * @package @rottay/design-system
  */
 import { Table as AntTable } from 'antd';
 import type { TableProps } from '../../types';

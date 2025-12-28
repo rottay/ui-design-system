@@ -1,10 +1,39 @@
 /**
- * Avatar Component Types
+ * @fileoverview Avatar Types - Rottay Design System
+ * @description Type definitions for the Avatar component.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Type definitions for the Avatar component including size, shape,
- * variant options, and compound component props.
+ * @remarks
+ * This module re-exports types from the centralized types definition
+ * and provides default values and size mappings for the Avatar component.
  *
+ * **Exported Types:**
+ * - `AvatarProps` - Main component props interface
+ * - `AvatarSize` - Size variant type ('xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl')
+ * - `AvatarShape` - Shape variant type ('circle' | 'square' | 'rounded')
+ * - `AvatarVariant` - Color variant type
+ * - `AvatarStatus` - Status indicator type ('online' | 'offline' | 'away' | 'busy')
+ * - `AvatarGroupProps` - Group component props
+ * - `AvatarBadgeProps` - Badge compound props
+ * - `AvatarFallbackProps` - Fallback compound props
+ *
+ * **Configuration Constants:**
+ * - `AVATAR_DEFAULTS` - Default prop values
+ * - `SIZE_MAP` - Pixel values for each size
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { AvatarProps, AvatarSize, AvatarStatus } from '@rottay/design-system';
+ *
+ * interface UserAvatarProps extends AvatarProps {
+ *   userId: string;
+ * }
+ * ```
+ *
+ * @see {@link Avatar} for the main component
  * @module AvatarTypes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {

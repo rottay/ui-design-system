@@ -1,3 +1,29 @@
+/**
+ * @fileoverview useMediaQuery Hook - Rottay Design System
+ * @description SSR-safe React hook for subscribing to CSS media queries,
+ * enabling reactive responsive behavior in components.
+ *
+ * @remarks
+ * Supports all valid CSS media queries:
+ * - Viewport: `(min-width: 768px)`, `(max-width: 1024px)`
+ * - Preference: `(prefers-color-scheme: dark)`, `(prefers-reduced-motion)`
+ * - Device: `(hover: none)`, `(pointer: coarse)`
+ * - Combined: `(min-width: 640px) and (orientation: landscape)`
+ *
+ * @example Dark mode detection
+ * ```tsx
+ * const isDark = useMediaQuery('(prefers-color-scheme: dark)');
+ * ```
+ *
+ * @example Custom breakpoint
+ * ```tsx
+ * const isWide = useMediaQuery('(min-width: 1400px)');
+ * ```
+ *
+ * @module System/Hooks/Responsive/useMediaQuery
+ * @category System
+ * @package @rottay/design-system
+ */
 import { useState, useEffect, useCallback } from 'react';
 
 /**

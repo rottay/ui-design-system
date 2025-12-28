@@ -1,10 +1,44 @@
 /**
- * Tour Component Types
+ * @fileoverview Tour Component Types - Rottay Design System
+ * @description Type definitions for the Tour component including step configuration,
+ * placement options (13 positions), visual styles, mask options, and navigation callbacks.
  *
- * Type definitions for the Tour component including step configuration,
- * placement options, and visual styles.
+ * @remarks
+ * The Tour types provide comprehensive configuration for:
+ * - Step configuration: target, title, description, cover, placement
+ * - Target types: CSS selectors, React refs, or getter functions
+ * - Visual options: type (default/primary), mask, arrow
+ * - Navigation: current step, onChange, onClose, onFinish
+ * - Customization: indicators, close icon, gap settings
  *
- * @module TourTypes
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   TourProps,
+ *   TourStepProps,
+ *   TourPlacement,
+ *   TourType,
+ * } from '@rottay/design-system';
+ *
+ * const step: TourStepProps = {
+ *   target: '#my-element',
+ *   title: 'Feature Title',
+ *   description: 'Learn about this feature',
+ *   placement: 'bottom',
+ *   cover: <img src="/guide.png" alt="Guide" />,
+ * };
+ *
+ * const tourProps: TourProps = {
+ *   steps: [step],
+ *   open: true,
+ *   type: 'primary',
+ *   onFinish: () => console.log('Done'),
+ * };
+ * ```
+ *
+ * @module Tour/Types
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties, RefObject } from 'react';
 

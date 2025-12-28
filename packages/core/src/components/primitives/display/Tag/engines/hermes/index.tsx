@@ -1,9 +1,37 @@
 /**
- * Tag - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Tag Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based tag with badge classes.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tag/engines/hermes
- * @description Implements the Tag component using DaisyUI badge classes
- * with Tailwind CSS. This engine provides a lightweight, utility-first approach.
+ * @remarks
+ * This engine uses DaisyUI's badge component classes with Tailwind utilities
+ * for lightweight, utility-first tag rendering.
+ *
+ * **Implementation Details:**
+ * - Uses DaisyUI `badge` class for container
+ * - Uses `badge-{size}` for size variants
+ * - Uses `badge-{variant}` for color variants
+ * - Uses `badge-outline` for outlined style
+ *
+ * **Class Mappings:**
+ * - `badge-primary`, `badge-secondary`, etc. for variants
+ * - `badge-xs`, `badge-sm`, `badge-md`, `badge-lg` for sizes
+ * - `rounded-*` for border radius
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Tag } from '@rottay/design-system';
+ *
+ * <Tag engine="hermes" variant="success" closable>
+ *   Completed
+ * </Tag>
+ * ```
+ *
+ * @see {@link Tag} for the main component
+ * @see {@link https://daisyui.com/components/badge/} DaisyUI Badge
+ * @module HermesTag
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

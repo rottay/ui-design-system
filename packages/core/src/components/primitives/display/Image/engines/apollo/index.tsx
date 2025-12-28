@@ -1,8 +1,53 @@
 /**
- * Image - Apollo Engine (Pure HTML/CSS)
+ * @fileoverview Image Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS image with custom zoom overlay.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Uses vanilla HTML and CSS for maximum accessibility
- * and zero external dependencies.
+ * @remarks
+ * This engine provides a lightweight, dependency-free image using only
+ * inline styles with a custom zoom modal overlay.
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - Custom zoom overlay with close button
+ * - Native loading state management
+ * - Full accessibility support
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Custom zoom implementation
+ *
+ * **Accessibility:**
+ * - `role="button"` for clickable images
+ * - `aria-label` for zoom functionality
+ * - `role="dialog"` for zoom overlay
+ * - Keyboard close support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Image } from '@rottay/design-system';
+ *
+ * <Image engine="apollo" src="/photo.jpg" alt="Photo" />
+ * ```
+ *
+ * @example With Custom Zoom
+ * ```tsx
+ * <Image
+ *   engine="apollo"
+ *   src="/photo.jpg"
+ *   alt="Photo"
+ *   zoomable
+ *   radius="md"
+ * />
+ * ```
+ *
+ * @see {@link Image} for the main component
+ * @see {@link BaseImage} for CSS variable implementation
+ * @module ApolloImage
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

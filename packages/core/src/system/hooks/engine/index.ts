@@ -1,5 +1,38 @@
 /**
- * Engine hook - Access and control the current UI engine
+ * @fileoverview useEngine Hook - Rottay Design System
+ * @description React hook for accessing and controlling the UI rendering engine,
+ * enabling runtime switching between Titan, Hermes, and Apollo engines.
+ *
+ * @remarks
+ * The useEngine hook provides:
+ * - **Engine access**: Get current engine (titan, hermes, apollo)
+ * - **Engine switching**: Change rendering engine at runtime
+ * - **Context integration**: Works with EngineProvider
+ *
+ * Engines differ in their underlying implementation:
+ * - **Titan**: Ant Design (feature-rich)
+ * - **Hermes**: DaisyUI/Tailwind (lightweight)
+ * - **Apollo**: Vanilla HTML/CSS (zero dependencies)
+ *
+ * @example Engine switcher
+ * ```tsx
+ * function EngineSwitcher() {
+ *   const { engine, setEngine } = useEngine();
+ *   return (
+ *     <select value={engine} onChange={(e) => setEngine(e.target.value)}>
+ *       <option value="titan">Titan</option>
+ *       <option value="hermes">Hermes</option>
+ *       <option value="apollo">Apollo</option>
+ *     </select>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link EngineProvider} - Provider component
+ * @see {@link EngineName} - Valid engine names
+ * @module System/Hooks/Engine
+ * @category System
+ * @package @rottay/design-system
  */
 import { useContext } from 'react';
 import { EngineContext } from '../../providers/engine';

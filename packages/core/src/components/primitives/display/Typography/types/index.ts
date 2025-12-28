@@ -1,10 +1,48 @@
 /**
- * Typography - Type Definitions
+ * @fileoverview Typography Types - Rottay Design System
+ * @description Type definitions for the Typography component family.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Core type definitions for the Typography component family.
- * Includes types for Heading, Text, and Paragraph subcomponents.
+ * @remarks
+ * This module provides comprehensive type definitions for Typography components,
+ * including props interfaces for Heading, Text, and Paragraph subcomponents.
  *
+ * **Exported Types:**
+ * - `HeadingProps` - Semantic heading component properties
+ * - `TextProps` - Inline text component properties
+ * - `ParagraphProps` - Block-level paragraph properties
+ * - `TypographyProps` - Combined namespace properties
+ * - `HeadingLevel` - h1-h6 semantic levels
+ * - `TextSize` - Size variants (xs to 3xl)
+ * - `TextWeight` - Font weight options
+ * - `TextAlign` - Text alignment options
+ * - `TextColor` - Semantic color variants
+ *
+ * **Exported Constants:**
+ * - `TYPOGRAPHY_DEFAULTS` - Default prop values
+ * - `SIZE_MAP` - Size to CSS value mappings
+ * - `WEIGHT_MAP` - Weight to numeric mappings
+ * - `COLOR_MAP` - Color to CSS variable mappings
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { HeadingProps, TextSize, TextColor } from '@rottay/design-system';
+ *
+ * const size: TextSize = '2xl';
+ * const color: TextColor = 'primary';
+ *
+ * const headingProps: HeadingProps = {
+ *   level: 'h1',
+ *   size,
+ *   color,
+ *   children: 'Title',
+ * };
+ * ```
+ *
+ * @see {@link Typography} for component implementation
  * @module Typography/types
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import type { BaseComponentProps } from '../../../../../types/common';
@@ -324,10 +362,10 @@ export const WEIGHT_MAP = {
  * Color mapping to CSS variables.
  */
 export const COLOR_MAP = {
-  default: 'var(--color-text-primary)',
-  muted: 'var(--color-text-secondary)',
-  primary: 'var(--color-primary)',
-  success: 'var(--color-success)',
-  warning: 'var(--color-warning)',
-  error: 'var(--color-error)',
+  default: 'var(--ds-color-text-primary)',
+  muted: 'var(--ds-color-text-secondary)',
+  primary: 'var(--ds-color-primary-500)',
+  success: 'var(--ds-color-success-500)',
+  warning: 'var(--ds-color-warning-500)',
+  error: 'var(--ds-color-error-500)',
 } as const;

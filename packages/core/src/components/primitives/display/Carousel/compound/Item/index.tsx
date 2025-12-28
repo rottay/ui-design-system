@@ -1,8 +1,49 @@
 /**
- * @fileoverview Carousel Item Compound Component
- * @description Provides a styled wrapper for individual carousel slides
- * with consistent layout and optional background customization.
- * @module components/primitives/display/Carousel/compound/Item
+ * @fileoverview Carousel Item Component - Rottay Design System
+ * @description Styled slide wrapper with background and alignment options.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * The CarouselItem component provides a styled container for individual slides
+ * with background customization and content alignment options.
+ *
+ * **Exported Components:**
+ * - `CarouselItem` - Styled slide wrapper
+ *
+ * **Props:**
+ * - `backgroundColor` - Solid background color
+ * - `backgroundImage` - Background image URL
+ * - `align` - Horizontal alignment ('start' | 'center' | 'end')
+ * - `justify` - Vertical alignment ('start' | 'center' | 'end')
+ *
+ * **Implementation Details:**
+ * - Flexbox-based content alignment
+ * - Background image with cover sizing
+ * - Full-size slide container
+ * - Ref forwarding support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Carousel.Item backgroundColor="#f0f0f0">
+ *   <h2>Slide Content</h2>
+ * </Carousel.Item>
+ * ```
+ *
+ * @example With Background Image
+ * ```tsx
+ * <Carousel.Item
+ *   backgroundImage="/hero.jpg"
+ *   align="center"
+ *   justify="end"
+ * >
+ *   <h2>Hero Title</h2>
+ * </Carousel.Item>
+ * ```
+ *
+ * @see {@link Carousel} for parent component
+ * @module Carousel/compound/Item
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

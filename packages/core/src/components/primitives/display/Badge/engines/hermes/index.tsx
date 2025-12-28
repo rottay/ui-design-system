@@ -1,9 +1,46 @@
 /**
- * @fileoverview Badge Hermes Engine Implementation
- * @description DaisyUI/Tailwind-based implementation of the Badge component.
- * Provides a lightweight, utility-first badge using DaisyUI classes
- * with Tailwind CSS for styling.
- * @module components/primitives/display/Badge/engines/hermes
+ * @fileoverview Badge Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based badge with indicator positioning.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine uses DaisyUI's badge and indicator classes for lightweight,
+ * utility-first badge rendering with Tailwind CSS.
+ *
+ * **Implementation Details:**
+ * - Uses DaisyUI `badge` class for standalone badges
+ * - Uses DaisyUI `indicator` for positioned badges over children
+ * - Uses Tailwind `animate-pulse` for pulse animation
+ * - Supports all DaisyUI semantic color classes
+ *
+ * **Class Mappings:**
+ * - Variants: `badge-primary`, `badge-secondary`, etc.
+ * - Sizes: `badge-xs`, `badge-sm`, `badge-md`, `badge-lg`
+ * - Styles: `badge-outline`, `badge-ghost`
+ *
+ * **Indicator Positions:**
+ * - Uses `indicator-top`, `indicator-bottom`
+ * - Combined with `indicator-start`, `indicator-end`
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Badge } from '@rottay/design-system';
+ *
+ * <Badge engine="hermes" count={5} variant="primary">
+ *   <Avatar />
+ * </Badge>
+ * ```
+ *
+ * @example Outline Style
+ * ```tsx
+ * <Badge engine="hermes" content="New" badgeStyle="outline" variant="success" />
+ * ```
+ *
+ * @see {@link Badge} for the main component
+ * @see {@link https://daisyui.com/components/badge/} DaisyUI Badge
+ * @module HermesBadge
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

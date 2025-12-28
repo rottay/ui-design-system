@@ -224,19 +224,19 @@ export const BasePopover = forwardRef<HTMLDivElement, PopoverProps>(
     const popoverVars = useMemo<React.CSSProperties>(
       () =>
         ({
-          '--popover-bg': 'var(--color-bg-elevated, #fff)',
-          '--popover-border-radius': 'var(--radius-lg, 8px)',
-          '--popover-shadow': 'var(--shadow-lg)',
-          '--popover-padding': 'var(--spacing-3, 12px)',
-          '--popover-min-width': '180px',
-          '--popover-max-width': '350px',
-          '--popover-title-font-size': '0.875rem',
-          '--popover-title-font-weight': '600',
-          '--popover-title-color': 'var(--color-text-primary)',
-          '--popover-title-margin-bottom': 'var(--spacing-2, 8px)',
-          '--popover-content-font-size': '0.875rem',
-          '--popover-content-color': 'var(--color-text-secondary)',
-          '--popover-arrow-size': '8px',
+          '--ds-popover-bg': 'var(--ds-color-bg-elevated, #fff)',
+          '--ds-popover-border-radius': 'var(--ds-radius-lg, 8px)',
+          '--ds-popover-shadow': 'var(--ds-shadow-lg)',
+          '--ds-popover-padding': 'var(--ds-spacing-3, 12px)',
+          '--ds-popover-min-width': '180px',
+          '--ds-popover-max-width': '350px',
+          '--ds-popover-title-font-size': '0.875rem',
+          '--ds-popover-title-font-weight': '600',
+          '--ds-popover-title-color': 'var(--ds-color-text-primary)',
+          '--ds-popover-title-margin-bottom': 'var(--ds-spacing-2, 8px)',
+          '--ds-popover-content-font-size': '0.875rem',
+          '--ds-popover-content-color': 'var(--ds-color-text-secondary)',
+          '--ds-popover-arrow-size': '8px',
         }) as React.CSSProperties,
       []
     );
@@ -255,12 +255,12 @@ export const BasePopover = forwardRef<HTMLDivElement, PopoverProps>(
             top: position.top,
             left: position.left,
             zIndex,
-            minWidth: 'var(--popover-min-width)',
-            maxWidth: 'var(--popover-max-width)',
-            padding: 'var(--popover-padding)',
-            backgroundColor: 'var(--popover-bg)',
-            borderRadius: 'var(--popover-border-radius)',
-            boxShadow: 'var(--popover-shadow)',
+            minWidth: 'var(--ds-popover-min-width)',
+            maxWidth: 'var(--ds-popover-max-width)',
+            padding: 'var(--ds-popover-padding)',
+            backgroundColor: 'var(--ds-popover-bg)',
+            borderRadius: 'var(--ds-popover-border-radius)',
+            boxShadow: 'var(--ds-popover-shadow)',
             opacity: isOpen ? 1 : 0,
             visibility: isOpen ? 'visible' : 'hidden',
             transition: 'opacity 0.2s, visibility 0.2s',
@@ -275,9 +275,9 @@ export const BasePopover = forwardRef<HTMLDivElement, PopoverProps>(
               className="rottay-popover__arrow"
               style={{
                 position: 'absolute',
-                width: 'var(--popover-arrow-size)',
-                height: 'var(--popover-arrow-size)',
-                backgroundColor: 'var(--popover-bg)',
+                width: 'var(--ds-popover-arrow-size)',
+                height: 'var(--ds-popover-arrow-size)',
+                backgroundColor: 'var(--ds-popover-bg)',
                 transform: 'rotate(45deg)',
                 ...position.arrowPosition,
               }}
@@ -287,10 +287,10 @@ export const BasePopover = forwardRef<HTMLDivElement, PopoverProps>(
             <div
               className="rottay-popover__title"
               style={{
-                fontSize: 'var(--popover-title-font-size)',
-                fontWeight: 'var(--popover-title-font-weight)' as any,
-                color: 'var(--popover-title-color)',
-                marginBottom: 'var(--popover-title-margin-bottom)',
+                fontSize: 'var(--ds-popover-title-font-size)',
+                fontWeight: 'var(--ds-popover-title-font-weight)' as any,
+                color: 'var(--ds-popover-title-color)',
+                marginBottom: 'var(--ds-popover-title-margin-bottom)',
               }}
             >
               {title}
@@ -299,8 +299,8 @@ export const BasePopover = forwardRef<HTMLDivElement, PopoverProps>(
           <div
             className="rottay-popover__content"
             style={{
-              fontSize: 'var(--popover-content-font-size)',
-              color: 'var(--popover-content-color)',
+              fontSize: 'var(--ds-popover-content-font-size)',
+              color: 'var(--ds-popover-content-color)',
             }}
           >
             {content}

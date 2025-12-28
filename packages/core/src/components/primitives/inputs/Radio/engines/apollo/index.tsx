@@ -1,5 +1,63 @@
 /**
- * Radio - Apollo Engine (Pure HTML/CSS with a11y)
+ * @fileoverview Radio Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Radio component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a headless radio implementation using only
+ * native HTML elements and inline styles. This offers maximum flexibility
+ * for custom styling and ensures full accessibility compliance.
+ *
+ * **Key Features:**
+ * - Zero UI library dependencies
+ * - Circular dot indicator for checked state
+ * - Focus ring management
+ * - Keyboard navigation (Space, Enter)
+ * - Full ARIA compliance
+ * - Button style variant support
+ * - Option descriptions
+ *
+ * **Visual Elements:**
+ * - Outer circle with border
+ * - Inner dot when selected
+ * - Focus outline with color matching
+ * - Button-style rendering when buttonStyle prop is used
+ *
+ * **Accessibility:**
+ * - Native radio input with proper ARIA attributes
+ * - aria-checked for selection state
+ * - aria-invalid for error state
+ * - role="radiogroup" on group container
+ * - Keyboard accessible via Space/Enter
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Radio } from '@rottay/design-system';
+ *
+ * // Explicit Apollo engine
+ * <Radio
+ *   engine="apollo"
+ *   name="option"
+ *   value="a"
+ *   label="Accessible Radio"
+ *   description="With description support"
+ * />
+ *
+ * // Button style group
+ * <Radio.Group
+ *   engine="apollo"
+ *   options={options}
+ *   buttonStyle="solid"
+ *   direction="horizontal"
+ * />
+ * ```
+ *
+ * @see {@link Radio} for the main component
+ * @see {@link TitanRadio} for Ant Design implementation
+ * @see {@link HermesRadio} for DaisyUI implementation
+ * @module ApolloRadio
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

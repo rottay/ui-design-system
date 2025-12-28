@@ -1,6 +1,58 @@
 /**
- * Input - Core Interface
- * Shared types and defaults for all engine implementations
+ * @fileoverview Input Types - Rottay Design System
+ * @description Type definitions, interfaces, and constants for the Input component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module provides comprehensive type definitions for the Input component,
+ * including all props, variants, sizes, validation states, and configuration objects.
+ *
+ * **Available Types:**
+ * - `InputProps` - Main component props interface
+ * - `InputSize` - Size variants (xs, sm, md, lg, xl)
+ * - `InputVariant` - Visual style variants (outline, filled, flushed, unstyled)
+ * - `InputStatus` - Validation states (default, error, warning, success)
+ * - `InputType` - HTML input types (text, password, email, number, tel, url, search)
+ * - `InputGroupProps` - Props for Input.Group compound component
+ * - `InputAddonProps` - Props for Input.Addon compound component
+ * - `InputPasswordProps` - Props for Input.Password compound component
+ * - `InputSearchProps` - Props for Input.Search compound component
+ * - `InputTextAreaProps` - Props for Input.TextArea compound component
+ *
+ * **CSS Custom Properties:**
+ * The type definitions include mappings to CSS variables for consistent theming:
+ * - Size: `--input-{size}-height`, `--input-{size}-padding-x`, `--input-{size}-font-size`
+ *
+ * @example Using Types
+ * ```tsx
+ * import type { InputProps, InputSize, InputStatus } from '@rottay/design-system';
+ *
+ * // Custom input wrapper with typed props
+ * const MyInput: React.FC<InputProps> = (props) => {
+ *   return <Input {...props} />;
+ * };
+ *
+ * // Typed validation
+ * const status: InputStatus = hasError ? 'error' : 'default';
+ * ```
+ *
+ * @example Using Constants
+ * ```tsx
+ * import { INPUT_DEFAULTS, SIZE_MAP } from '@rottay/design-system';
+ *
+ * // Access default values
+ * console.log(INPUT_DEFAULTS.size);    // 'md'
+ * console.log(INPUT_DEFAULTS.variant); // 'outline'
+ *
+ * // Access CSS variable mappings
+ * console.log(SIZE_MAP.lg.height); // 'var(--input-lg-height)'
+ * ```
+ *
+ * @see {@link Input} for the main component
+ * @see {@link InputGroup} for grouping inputs
+ * @module InputTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -123,13 +175,13 @@ export const INPUT_DEFAULTS = {
   showCount: false,
 };
 
-// Size mapping to CSS variables (references tokens from tokens/css/components/input.css)
+// Size mapping to CSS variables (references tokens from tokens/css/themes/default.css)
 export const SIZE_MAP = {
-  xs: { height: 'var(--input-xs-height)', paddingX: 'var(--input-xs-padding-x)', fontSize: 'var(--input-xs-font-size)' },
-  sm: { height: 'var(--input-sm-height)', paddingX: 'var(--input-sm-padding-x)', fontSize: 'var(--input-sm-font-size)' },
-  md: { height: 'var(--input-md-height)', paddingX: 'var(--input-md-padding-x)', fontSize: 'var(--input-md-font-size)' },
-  lg: { height: 'var(--input-lg-height)', paddingX: 'var(--input-lg-padding-x)', fontSize: 'var(--input-lg-font-size)' },
-  xl: { height: 'var(--input-xl-height)', paddingX: 'var(--input-xl-padding-x)', fontSize: 'var(--input-xl-font-size)' },
+  xs: { height: 'var(--ds-input-xs-height)', paddingX: 'var(--ds-input-xs-padding-x)', fontSize: 'var(--ds-input-xs-font-size)' },
+  sm: { height: 'var(--ds-input-sm-height)', paddingX: 'var(--ds-input-sm-padding-x)', fontSize: 'var(--ds-input-sm-font-size)' },
+  md: { height: 'var(--ds-input-md-height)', paddingX: 'var(--ds-input-md-padding-x)', fontSize: 'var(--ds-input-md-font-size)' },
+  lg: { height: 'var(--ds-input-lg-height)', paddingX: 'var(--ds-input-lg-padding-x)', fontSize: 'var(--ds-input-lg-font-size)' },
+  xl: { height: 'var(--ds-input-xl-height)', paddingX: 'var(--ds-input-xl-padding-x)', fontSize: 'var(--ds-input-xl-font-size)' },
 };
 
 // Ant Design size mapping

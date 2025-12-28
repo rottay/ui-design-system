@@ -78,8 +78,8 @@ const MenuItem: React.FC<{
         className="rottay-dropdown-menu__divider"
         style={{
           height: '1px',
-          backgroundColor: 'var(--dropdown-divider-color)',
-          margin: 'var(--dropdown-divider-margin)',
+          backgroundColor: 'var(--ds-dropdown-divider-color)',
+          margin: 'var(--ds-dropdown-divider-margin)',
         }}
       />
     );
@@ -91,10 +91,10 @@ const MenuItem: React.FC<{
         <div
           className="rottay-dropdown-menu__group-title"
           style={{
-            padding: 'var(--dropdown-item-padding)',
-            color: 'var(--dropdown-group-title-color)',
-            fontSize: 'var(--dropdown-group-title-font-size)',
-            fontWeight: 'var(--dropdown-group-title-font-weight)',
+            padding: 'var(--ds-dropdown-item-padding)',
+            color: 'var(--ds-dropdown-group-title-color)',
+            fontSize: 'var(--ds-dropdown-group-title-font-size)',
+            fontWeight: 'var(--ds-dropdown-group-title-font-weight)',
           }}
         >
           {item.label}
@@ -131,29 +131,29 @@ const MenuItem: React.FC<{
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 'var(--dropdown-item-icon-gap)',
-        padding: 'var(--dropdown-item-padding)',
+        gap: 'var(--ds-dropdown-item-icon-gap)',
+        padding: 'var(--ds-dropdown-item-padding)',
         cursor: isDisabled ? 'not-allowed' : 'pointer',
         color: item.danger
-          ? 'var(--dropdown-danger-color)'
+          ? 'var(--ds-dropdown-danger-color)'
           : isDisabled
-            ? 'var(--dropdown-disabled-color)'
-            : 'var(--dropdown-item-color)',
+            ? 'var(--ds-dropdown-disabled-color)'
+            : 'var(--ds-dropdown-item-color)',
         backgroundColor: isSelected
-          ? 'var(--dropdown-selected-bg)'
+          ? 'var(--ds-dropdown-selected-bg)'
           : 'transparent',
-        borderRadius: 'var(--dropdown-item-border-radius)',
+        borderRadius: 'var(--ds-dropdown-item-border-radius)',
         transition: 'background-color 0.2s, color 0.2s',
       }}
       onMouseEnter={(e) => {
         if (!isDisabled) {
           e.currentTarget.style.backgroundColor =
-            'var(--dropdown-item-hover-bg)';
+            'var(--ds-dropdown-item-hover-bg)';
         }
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = isSelected
-          ? 'var(--dropdown-selected-bg)'
+          ? 'var(--ds-dropdown-selected-bg)'
           : 'transparent';
       }}
     >
@@ -274,24 +274,24 @@ export const BaseDropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const dropdownVars = useMemo<React.CSSProperties>(
       () =>
         ({
-          '--dropdown-bg': 'var(--color-bg-elevated, #fff)',
-          '--dropdown-border-radius': 'var(--radius-md, 8px)',
-          '--dropdown-shadow': 'var(--shadow-lg)',
-          '--dropdown-padding': 'var(--spacing-1, 4px)',
-          '--dropdown-min-width': '120px',
-          '--dropdown-item-padding': 'var(--spacing-2, 8px) var(--spacing-3, 12px)',
-          '--dropdown-item-border-radius': 'var(--radius-sm, 4px)',
-          '--dropdown-item-color': 'var(--color-text-primary)',
-          '--dropdown-item-hover-bg': 'var(--color-bg-hover)',
-          '--dropdown-item-icon-gap': 'var(--spacing-2, 8px)',
-          '--dropdown-selected-bg': 'var(--color-primary-100)',
-          '--dropdown-disabled-color': 'var(--color-text-disabled)',
-          '--dropdown-danger-color': 'var(--color-error)',
-          '--dropdown-divider-color': 'var(--color-border)',
-          '--dropdown-divider-margin': 'var(--spacing-1, 4px) 0',
-          '--dropdown-group-title-color': 'var(--color-text-secondary)',
-          '--dropdown-group-title-font-size': '0.75rem',
-          '--dropdown-group-title-font-weight': '600',
+          '--ds-dropdown-bg': 'var(--ds-color-bg-elevated, #fff)',
+          '--ds-dropdown-border-radius': 'var(--ds-radius-md, 8px)',
+          '--ds-dropdown-shadow': 'var(--ds-shadow-lg)',
+          '--ds-dropdown-padding': 'var(--ds-spacing-1, 4px)',
+          '--ds-dropdown-min-width': '120px',
+          '--ds-dropdown-item-padding': 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
+          '--ds-dropdown-item-border-radius': 'var(--ds-radius-sm, 4px)',
+          '--ds-dropdown-item-color': 'var(--ds-color-text-primary)',
+          '--ds-dropdown-item-hover-bg': 'var(--ds-color-bg-hover)',
+          '--ds-dropdown-item-icon-gap': 'var(--ds-spacing-2, 8px)',
+          '--ds-dropdown-selected-bg': 'var(--ds-color-primary-100)',
+          '--ds-dropdown-disabled-color': 'var(--ds-color-text-disabled)',
+          '--ds-dropdown-danger-color': 'var(--ds-color-error-500)',
+          '--ds-dropdown-divider-color': 'var(--ds-color-border)',
+          '--ds-dropdown-divider-margin': 'var(--ds-spacing-1, 4px) 0',
+          '--ds-dropdown-group-title-color': 'var(--ds-color-text-secondary)',
+          '--ds-dropdown-group-title-font-size': '0.75rem',
+          '--ds-dropdown-group-title-font-weight': '600',
         }) as React.CSSProperties,
       []
     );
@@ -311,11 +311,11 @@ export const BaseDropdown = forwardRef<HTMLDivElement, DropdownProps>(
             top: position.top,
             left: position.left,
             zIndex: 1050,
-            minWidth: 'var(--dropdown-min-width)',
-            padding: 'var(--dropdown-padding)',
-            backgroundColor: 'var(--dropdown-bg)',
-            borderRadius: 'var(--dropdown-border-radius)',
-            boxShadow: 'var(--dropdown-shadow)',
+            minWidth: 'var(--ds-dropdown-min-width)',
+            padding: 'var(--ds-dropdown-padding)',
+            backgroundColor: 'var(--ds-dropdown-bg)',
+            borderRadius: 'var(--ds-dropdown-border-radius)',
+            boxShadow: 'var(--ds-dropdown-shadow)',
             opacity: isOpen ? 1 : 0,
             visibility: isOpen ? 'visible' : 'hidden',
             transition: 'opacity 0.2s, visibility 0.2s',
@@ -332,7 +332,7 @@ export const BaseDropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 position: 'absolute',
                 width: 8,
                 height: 8,
-                backgroundColor: 'var(--dropdown-bg)',
+                backgroundColor: 'var(--ds-dropdown-bg)',
                 transform: 'rotate(45deg)',
                 top: placement.startsWith('bottom') ? -4 : undefined,
                 bottom: placement.startsWith('top') ? -4 : undefined,

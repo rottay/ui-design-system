@@ -1,5 +1,50 @@
 /**
- * Textarea - Titan Engine (Ant Design)
+ * @fileoverview Textarea Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Textarea component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's TextArea component, providing
+ * enterprise-grade multi-line input with advanced features like
+ * auto-sizing and character counting.
+ *
+ * **Ant Design Features Utilized:**
+ * - Input.TextArea component
+ * - Auto-resize with minRows/maxRows
+ * - Built-in character count (showCount)
+ * - Clear button (allowClear)
+ * - Resize callback (onResize)
+ *
+ * **Prop Mapping:**
+ * - `size`: 'sm' → 'small', 'md' → 'middle', 'lg' → 'large'
+ * - `variant`: 'outlined' → undefined, 'filled' → 'filled', 'borderless' → 'borderless'
+ * - `status`: 'default' → undefined, 'error' → 'error', 'warning' → 'warning'
+ *
+ * **Event Handlers:**
+ * - `onChange`: Wraps native event to provide value directly
+ * - `onPressEnter`: Triggered on Enter key press
+ * - `onResize`: Reports new dimensions
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Textarea } from '@rottay/design-system';
+ *
+ * <Textarea
+ *   engine="titan"
+ *   placeholder="Type here..."
+ *   autoSize={{ minRows: 3, maxRows: 8 }}
+ *   showCount
+ *   maxLength={500}
+ *   allowClear
+ * />
+ * ```
+ *
+ * @see {@link Textarea} for the main component
+ * @see {@link HermesTextarea} for DaisyUI implementation
+ * @see {@link ApolloTextarea} for vanilla implementation
+ * @module TitanTextarea
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import React from 'react';

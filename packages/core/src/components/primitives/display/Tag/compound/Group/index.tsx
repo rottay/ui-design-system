@@ -1,9 +1,38 @@
 /**
- * TagGroup - Compound Component
+ * @fileoverview Tag.Group Compound - Rottay Design System
+ * @description Container for grouping multiple tags with consistent spacing.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tag/compound/Group
- * @description A container component for grouping multiple Tag components
- * with consistent spacing and optional wrapping behavior.
+ * @remarks
+ * The TagGroup provides a flexbox container for organizing multiple tags
+ * with configurable gap, direction, and wrapping behavior.
+ *
+ * **Layout Options:**
+ * - `gap` - Space between tags (xs, sm, md, lg)
+ * - `wrap` - Whether tags wrap to new lines
+ * - `direction` - Horizontal or vertical layout
+ * - `align` - Alignment within the group
+ *
+ * @example Basic Group
+ * ```tsx
+ * <Tag.Group gap="md">
+ *   <Tag>React</Tag>
+ *   <Tag>TypeScript</Tag>
+ * </Tag.Group>
+ * ```
+ *
+ * @example Vertical Group
+ * ```tsx
+ * <Tag.Group direction="vertical" gap="sm">
+ *   <Tag variant="success">Active</Tag>
+ *   <Tag variant="warning">Pending</Tag>
+ * </Tag.Group>
+ * ```
+ *
+ * @see {@link Tag} for the main component
+ * @module TagGroup
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

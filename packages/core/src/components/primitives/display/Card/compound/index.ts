@@ -1,18 +1,45 @@
 /**
- * @fileoverview Card Compound Components
- * @description Exports all compound components for the Card component.
- * These components are designed to work together to create structured card layouts.
+ * @fileoverview Card Compound Components - Rottay Design System
+ * @description Compound components for structured Card layouts.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/compound
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * This module exports compound components that work together to create
+ * structured card layouts with consistent spacing and styling.
  *
- * @example
- * // Using compound components
+ * **CardHeader:**
+ * Title area with optional subtitle, avatar, and extra content.
+ *
+ * **CardBody:**
+ * Main content area with configurable padding.
+ *
+ * **CardFooter:**
+ * Action area with buttons and flexible alignment.
+ *
+ * **CardImage:**
+ * Cover image with overlay and gradient support.
+ *
+ * @example Structured Card
+ * ```tsx
  * <Card>
  *   <Card.Header title="Card Title" subtitle="Subtitle" />
  *   <Card.Body>Content goes here</Card.Body>
  *   <Card.Footer actions={[<Button>Action</Button>]} />
  * </Card>
+ * ```
+ *
+ * @example Card with Image
+ * ```tsx
+ * <Card>
+ *   <Card.Image src="/cover.jpg" overlay gradient />
+ *   <Card.Body>Content with cover image</Card.Body>
+ * </Card>
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @module CardCompound
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export { CardHeader } from './Header';

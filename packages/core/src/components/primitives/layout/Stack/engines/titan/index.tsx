@@ -1,6 +1,39 @@
 /**
- * Stack - Titan Engine (Ant Design)
- * Provides Stack component using Ant Design styling conventions
+ * @fileoverview Stack Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Stack component.
+ * Provides full-featured Stack using Ant Design styling conventions.
+ *
+ * @remarks
+ * The Titan engine implementation uses Ant Design's design system principles
+ * while maintaining full compatibility with the Stack API. It applies the
+ * `rottay-stack--titan` class for engine-specific styling hooks.
+ *
+ * CSS Classes Applied:
+ * - `rottay-stack`: Base class for all Stack components
+ * - `rottay-stack--titan`: Engine-specific class for Titan styling
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Stack } from '@rottay/design-system';
+ *
+ * // Automatically uses Titan if default engine
+ * <Stack spacing="md" direction="vertical">
+ *   <Item>First</Item>
+ *   <Item>Second</Item>
+ * </Stack>
+ *
+ * // Or explicitly specify engine
+ * <Stack engine="titan" spacing="lg" align="center">
+ *   Ant Design styled stack
+ * </Stack>
+ * ```
+ *
+ * @see {@link Stack} - The main engine-aware component
+ * @see {@link HermesStack} - Tailwind implementation
+ * @see {@link ApolloStack} - Pure HTML/CSS implementation
+ * @module Stack/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

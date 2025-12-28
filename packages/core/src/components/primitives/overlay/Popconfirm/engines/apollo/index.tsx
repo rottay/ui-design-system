@@ -1,7 +1,49 @@
 'use client';
 
 /**
- * Popconfirm - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Popconfirm Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Popconfirm component.
+ * Uses inline CSS styles with portal rendering for proper z-index stacking.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with no external dependencies
+ * - Portal rendering to document.body via createPortal
+ * - Click-outside dismissal via event listeners
+ * - Async onConfirm support with loading state tracking
+ * - Accessible dialog with proper ARIA attributes
+ *
+ * Implementation details:
+ * - Position calculated based on trigger getBoundingClientRect()
+ * - Button colors based on okType (danger=#ef4444, primary=#3b82f6)
+ * - Loading state disables confirm button and reduces opacity
+ * - Uses scroll offsets for scroll-aware positioning
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Popconfirm, Button } from '@rottay/design-system';
+ *
+ * <Popconfirm
+ *   engine="apollo"
+ *   title="Confirm deletion?"
+ *   description="This cannot be reversed."
+ *   okText="Yes, delete"
+ *   okType="danger"
+ *   onConfirm={handleDelete}
+ * >
+ *   <Button>Delete</Button>
+ * </Popconfirm>
+ * ```
+ *
+ * @see {@link Popconfirm} - The main engine-aware component
+ * @module Popconfirm/Engines/Apollo
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';

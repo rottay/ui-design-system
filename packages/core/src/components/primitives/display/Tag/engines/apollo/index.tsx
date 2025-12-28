@@ -1,9 +1,38 @@
 /**
- * Tag - Apollo Engine (Pure HTML/CSS)
+ * @fileoverview Tag Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS tag implementation with zero dependencies.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tag/engines/apollo
- * @description Implements the Tag component using pure HTML and CSS.
- * This engine provides maximum accessibility and minimal dependencies.
+ * @remarks
+ * This engine provides a lightweight, dependency-free tag using only
+ * inline styles and semantic HTML elements.
+ *
+ * **Implementation Details:**
+ * - Uses inline styles for all visual properties
+ * - Uses semantic span element with role attributes
+ * - Handles close button with accessibility
+ * - Full keyboard navigation support
+ *
+ * **Advantages:**
+ * - Zero external dependencies
+ * - Smallest bundle size
+ * - Maximum browser compatibility
+ * - Full accessibility
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Tag } from '@rottay/design-system';
+ *
+ * <Tag engine="apollo" variant="warning" icon={<AlertIcon />}>
+ *   Attention
+ * </Tag>
+ * ```
+ *
+ * @see {@link Tag} for the main component
+ * @see {@link BaseTag} for CSS variable implementation
+ * @module ApolloTag
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

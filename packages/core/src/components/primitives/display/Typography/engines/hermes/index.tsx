@@ -1,10 +1,45 @@
 /**
- * Typography - Hermes Engine Implementation
+ * @fileoverview Typography Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based typography with utility classes.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * DaisyUI/Tailwind CSS-based implementation of Typography components.
- * Uses utility classes for lightweight, customizable styling.
+ * @remarks
+ * This engine uses Tailwind CSS utility classes and DaisyUI colors
+ * for lightweight, customizable typography rendering.
  *
+ * **Available Components:**
+ * - `HermesHeading` - Tailwind-styled heading
+ * - `HermesText` - Tailwind-styled inline text
+ * - `HermesParagraph` - Tailwind-styled paragraph
+ *
+ * **Class Mappings:**
+ * - Size: `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
+ * - Weight: `font-normal`, `font-medium`, `font-semibold`, `font-bold`
+ * - Align: `text-left`, `text-center`, `text-right`, `text-justify`
+ * - Color: `text-base-content`, `text-primary`, `text-success`, etc.
+ * - Decoration: `underline`, `line-through`, `italic`, `font-mono`
+ * - Truncation: `truncate`, `line-clamp-{n}`
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only approach
+ * - Tailwind utility compatibility
+ * - DaisyUI theme integration
+ * - Responsive design support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Typography } from '@rottay/design-system';
+ *
+ * <Typography.Heading engine="hermes" level="h1" size="3xl">
+ *   Tailwind Heading
+ * </Typography.Heading>
+ * ```
+ *
+ * @see {@link Typography} for the main component
+ * @see {@link https://daisyui.com/} DaisyUI
  * @module Typography/engines/hermes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

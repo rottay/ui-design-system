@@ -1,6 +1,59 @@
 /**
- * Radio - Core Interface
- * Shared types and defaults for all engine implementations
+ * @fileoverview Radio Types - Rottay Design System
+ * @description Type definitions, interfaces, and constants for the Radio component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module provides comprehensive type definitions for the Radio component,
+ * including all props, sizes, color variants, and group configuration.
+ *
+ * **Available Types:**
+ * - `RadioProps` - Main component props interface
+ * - `RadioSize` - Size variants (xs, sm, md, lg, xl)
+ * - `RadioVariant` - Color variants (default, primary, secondary, success, warning, error)
+ * - `RadioLabelPlacement` - Label position (start, end)
+ * - `RadioGroupProps` - Props for Radio.Group compound component
+ * - `RadioOption` - Option structure for group mode (includes description)
+ *
+ * **CSS Custom Properties:**
+ * - Size: `--ds-radio-{size}-size` for radio dimensions
+ * - Colors are mapped via COLOR_MAP to CSS variables
+ *
+ * **Key Differences from Checkbox Types:**
+ * - RadioGroupProps uses single `value` instead of array
+ * - RadioOption includes optional `description` field
+ * - No indeterminate state (radios are always checked or unchecked)
+ *
+ * @example Using Types
+ * ```tsx
+ * import type { RadioProps, RadioSize, RadioOption } from '@rottay/design-system';
+ *
+ * // Typed options with descriptions
+ * const options: RadioOption[] = [
+ *   { value: 'free', label: 'Free Plan', description: 'Limited features' },
+ *   { value: 'pro', label: 'Pro Plan', description: 'All features' },
+ * ];
+ *
+ * // Custom radio wrapper
+ * const MyRadio: React.FC<RadioProps> = (props) => {
+ *   return <Radio {...props} />;
+ * };
+ * ```
+ *
+ * @example Using Constants
+ * ```tsx
+ * import { RADIO_DEFAULTS, SIZE_MAP, COLOR_MAP } from '@rottay/design-system';
+ *
+ * console.log(RADIO_DEFAULTS.size);  // 'md'
+ * console.log(RADIO_DEFAULTS.color); // 'primary'
+ * console.log(COLOR_MAP.success.bg); // 'var(--color-success, #52c41a)'
+ * ```
+ *
+ * @see {@link Radio} for the main component
+ * @see {@link RadioGroup} for grouping radios
+ * @module RadioTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import type { EngineAwareProps } from '../../../../../types';
@@ -111,11 +164,11 @@ export const RADIO_GROUP_DEFAULTS = {
 
 // Size mapping to CSS variables
 export const SIZE_MAP: Record<RadioSize, string> = {
-  xs: 'var(--radio-xs-size)',
-  sm: 'var(--radio-sm-size)',
-  md: 'var(--radio-md-size)',
-  lg: 'var(--radio-lg-size)',
-  xl: 'var(--radio-xl-size)',
+  xs: 'var(--ds-radio-xs-size)',
+  sm: 'var(--ds-radio-sm-size)',
+  md: 'var(--ds-radio-md-size)',
+  lg: 'var(--ds-radio-lg-size)',
+  xl: 'var(--ds-radio-xl-size)',
 };
 
 // Numeric size values for calculations (e.g., dot sizing)
@@ -130,33 +183,33 @@ export const SIZE_MAP_NUMERIC: Record<RadioSize, number> = {
 // Color mapping
 export const COLOR_MAP: Record<RadioVariant, { bg: string; border: string; dot: string }> = {
   default: {
-    bg: 'var(--color-neutral-600, #4b5563)',
-    border: 'var(--color-neutral-600, #4b5563)',
+    bg: 'var(--ds-color-neutral-600, #4b5563)',
+    border: 'var(--ds-color-neutral-600, #4b5563)',
     dot: '#ffffff',
   },
   primary: {
-    bg: 'var(--color-primary, #1890ff)',
-    border: 'var(--color-primary, #1890ff)',
+    bg: 'var(--ds-color-primary-500, #1890ff)',
+    border: 'var(--ds-color-primary-500, #1890ff)',
     dot: '#ffffff',
   },
   secondary: {
-    bg: 'var(--color-secondary, #6b7280)',
-    border: 'var(--color-secondary, #6b7280)',
+    bg: 'var(--ds-color-secondary-500, #6b7280)',
+    border: 'var(--ds-color-secondary-500, #6b7280)',
     dot: '#ffffff',
   },
   success: {
-    bg: 'var(--color-success, #52c41a)',
-    border: 'var(--color-success, #52c41a)',
+    bg: 'var(--ds-color-success-500, #52c41a)',
+    border: 'var(--ds-color-success-500, #52c41a)',
     dot: '#ffffff',
   },
   warning: {
-    bg: 'var(--color-warning, #faad14)',
-    border: 'var(--color-warning, #faad14)',
+    bg: 'var(--ds-color-warning-500, #faad14)',
+    border: 'var(--ds-color-warning-500, #faad14)',
     dot: '#ffffff',
   },
   error: {
-    bg: 'var(--color-error, #ff4d4f)',
-    border: 'var(--color-error, #ff4d4f)',
+    bg: 'var(--ds-color-error-500, #ff4d4f)',
+    border: 'var(--ds-color-error-500, #ff4d4f)',
     dot: '#ffffff',
   },
 };

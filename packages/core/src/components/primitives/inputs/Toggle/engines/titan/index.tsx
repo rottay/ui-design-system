@@ -1,5 +1,50 @@
 /**
- * Toggle - Titan Engine (Ant Design)
+ * @fileoverview Toggle Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Toggle component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Switch component, providing
+ * enterprise-grade toggle functionality with built-in loading states
+ * and accessibility features.
+ *
+ * **Ant Design Features Utilized:**
+ * - AntSwitch component with checked/loading props
+ * - Size mapping (small, default)
+ * - checkedChildren/unCheckedChildren for inner labels
+ * - Built-in focus and keyboard handling
+ *
+ * **Prop Mapping:**
+ * - `size`: 'xs'|'sm' → 'small', 'md'|'lg'|'xl' → 'default'
+ * - `color`: Applied via inline styles
+ * - `loading`: Direct pass-through to AntSwitch
+ * - `checkedLabel`/`uncheckedLabel`: Maps to children slots
+ *
+ * **Added Features:**
+ * - Label and description wrapper
+ * - Error state styling
+ * - Color variant support
+ * - Synthetic onChange event
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Toggle } from '@rottay/design-system';
+ *
+ * <Toggle
+ *   engine="titan"
+ *   loading={isProcessing}
+ *   label="Auto-save"
+ *   description="Save changes automatically"
+ *   color="success"
+ * />
+ * ```
+ *
+ * @see {@link Toggle} for the main component
+ * @see {@link HermesToggle} for DaisyUI implementation
+ * @see {@link ApolloToggle} for vanilla implementation
+ * @module TitanToggle
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

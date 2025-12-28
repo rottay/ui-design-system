@@ -1,8 +1,39 @@
 /**
- * @fileoverview Carousel Component Type Definitions
- * @description Re-exports carousel-related types from centralized type system
- * and provides component-specific default values.
- * @module components/primitives/display/Carousel/types
+ * @fileoverview Carousel Types - Rottay Design System
+ * @description Type definitions and constants for the Carousel component.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module re-exports types from the centralized type system and provides
+ * default configuration values for the Carousel component.
+ *
+ * **Exported Types:**
+ * - `CarouselProps` - Main component properties
+ * - `CarouselRef` - Imperative handle methods (goTo, next, prev)
+ * - `CarouselEffect` - Transition effects ('scrollx' | 'fade')
+ * - `CarouselDotPosition` - Dot positions ('top' | 'bottom' | 'left' | 'right')
+ * - `CarouselSize` - Component sizes
+ * - `CarouselItemProps` - Slide item properties
+ *
+ * **Exported Constants:**
+ * - `CAROUSEL_DEFAULTS` - Default configuration values
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { CarouselProps, CarouselRef } from '@rottay/design-system';
+ *
+ * const carouselRef = useRef<CarouselRef>(null);
+ * const props: CarouselProps = {
+ *   autoplay: true,
+ *   autoplaySpeed: 3000,
+ *   dots: true,
+ * };
+ * ```
+ *
+ * @see {@link Carousel} for component implementation
+ * @module Carousel/types
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {

@@ -1,7 +1,34 @@
 'use client';
 
 /**
- * ColorPicker - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview ColorPicker Apollo Engine - Rottay Design System
+ * @description Pure vanilla HTML/CSS implementation of the ColorPicker component
+ * with zero external dependencies for maximum portability.
+ *
+ * @remarks
+ * The Apollo engine provides a dependency-free color picker using:
+ * - **Native browser input**: Uses HTML5 color input type
+ * - **Portal rendering**: Dropdown renders to document.body
+ * - **Inline styles**: No CSS framework dependencies
+ * - **Full accessibility**: Keyboard navigation and screen reader support
+ *
+ * Ideal for environments where bundle size and dependency count are critical.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <ColorPicker engine="apollo" defaultValue="#faad14" />
+ * ```
+ *
+ * @example With text display
+ * ```tsx
+ * <ColorPicker engine="apollo" defaultValue="#1677ff" showText format="rgb" />
+ * ```
+ *
+ * @see {@link ColorPicker} - Main component
+ * @see {@link ColorPickerProps} - Component props
+ * @module ColorPicker/Engines/Apollo
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';

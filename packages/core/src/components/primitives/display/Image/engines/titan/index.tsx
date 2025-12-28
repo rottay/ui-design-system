@@ -1,8 +1,47 @@
 /**
- * Image - Titan Engine (Ant Design)
+ * @fileoverview Image Titan Engine - Rottay Design System
+ * @description Ant Design-based image with built-in preview/lightbox.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Uses Ant Design's Image component with preview functionality
- * and built-in loading states.
+ * @remarks
+ * This engine wraps Ant Design's Image component to provide full-featured
+ * image display with built-in preview functionality.
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Image` for core rendering
+ * - Built-in preview/lightbox on click
+ * - Loading placeholder support
+ * - Error fallback handling
+ *
+ * **Ant Design Features:**
+ * - Native preview with zoom
+ * - Image group gallery support
+ * - Placeholder while loading
+ * - Fallback on error
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Image } from '@rottay/design-system';
+ *
+ * <Image engine="titan" src="/photo.jpg" alt="Photo" zoomable />
+ * ```
+ *
+ * @example With Preview
+ * ```tsx
+ * <Image
+ *   engine="titan"
+ *   src="/photo.jpg"
+ *   alt="Photo"
+ *   width={400}
+ *   zoomable
+ * />
+ * ```
+ *
+ * @see {@link Image} for the main component
+ * @see {@link https://ant.design/components/image} Ant Design Image
+ * @module TitanImage
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

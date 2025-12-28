@@ -1,7 +1,49 @@
 'use client';
 
 /**
- * Splitter - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Splitter Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Splitter compound component.
+ * Uses inline CSS styles with custom mouse event handling for drag-to-resize.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with flexbox layout
+ * - Custom gutter with hover state highlighting
+ * - Mouse event-based drag handling for resizing
+ * - Percentage-based panel sizing
+ * - Size constraints via min/max props
+ *
+ * Implementation details:
+ * - Container uses `display: flex` with configurable direction
+ * - Panels use `flex: 0 0 {size}%` for sizing
+ * - Gutter styled with light gray background, blue on hover
+ * - Uses React refs for container measurements
+ * - Clones children to inject calculated sizes
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Splitter } from '@rottay/design-system';
+ *
+ * // Pure inline CSS splitter
+ * <Splitter engine="apollo" layout="horizontal">
+ *   <Splitter.Panel engine="apollo" defaultSize={25}>
+ *     Left Panel
+ *   </Splitter.Panel>
+ *   <Splitter.Panel engine="apollo">
+ *     Right Panel
+ *   </Splitter.Panel>
+ * </Splitter>
+ * ```
+ *
+ * @see {@link Splitter} - The main engine-aware component
+ * @module Splitter/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
 import type { SplitterProps, SplitterPanelProps } from '../../types';

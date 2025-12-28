@@ -1,15 +1,49 @@
 /**
- * Empty Component - Base Implementation
+ * @fileoverview Empty Base Component - Rottay Design System
+ * @description Base empty state implementation using CSS custom properties.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * This is the base Empty component using CSS variables from design tokens.
- * It provides a consistent foundation that can be extended by engine-specific
- * implementations (Titan, Hermes, Apollo).
+ * @remarks
+ * This module provides the foundation for all Empty engine implementations.
+ * Uses CSS variables for consistent theming across the design system.
  *
- * The component displays a placeholder with an optional image and description
- * when there is no data to display.
+ * **Exported Components:**
+ * - `BaseEmpty` - Main empty state component
+ * - `DefaultImage` - Standard empty box SVG illustration
+ * - `SimpleImage` - Minimal empty state SVG
  *
+ * **Implementation Details:**
+ * - Flexbox-based centering layout
+ * - CSS custom properties for theming
+ * - SVG images with theme-aware colors
+ * - ARIA role="status" for accessibility
+ * - Ref forwarding support
+ *
+ * **CSS Custom Properties Used:**
+ * - `--empty-container-padding` - Container padding
+ * - `--empty-text-color` - Description color
+ * - `--empty-font-size` - Text size
+ * - `--empty-image-margin-bottom` - Image spacing
+ * - `--empty-image-shadow-color` - SVG shadow
+ * - `--empty-image-stroke-color` - SVG stroke
+ * - `--empty-image-fill-color` - SVG fill
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseEmpty } from '@rottay/design-system';
+ *
+ * <BaseEmpty description="No data available" />
+ * ```
+ *
+ * @example With Custom Image
+ * ```tsx
+ * <BaseEmpty image={<CustomIcon />} description="Custom empty" />
+ * ```
+ *
+ * @see {@link Empty} for engine-aware component
  * @module Empty/base
  * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -41,16 +75,16 @@ const DefaultImage: React.FC = () => (
         cy="33"
         rx="32"
         ry="7"
-        fill="var(--empty-image-shadow-color, #f5f5f5)"
+        fill="var(--ds-empty-image-shadow-color, #f5f5f5)"
       />
-      <g fillRule="nonzero" stroke="var(--empty-image-stroke-color, #d9d9d9)">
+      <g fillRule="nonzero" stroke="var(--ds-empty-image-stroke-color, #d9d9d9)">
         <path
           d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
-          fill="var(--empty-image-fill-color, #fafafa)"
+          fill="var(--ds-empty-image-fill-color, #fafafa)"
         />
         <path
           d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
-          fill="var(--empty-image-fill-color, #fafafa)"
+          fill="var(--ds-empty-image-fill-color, #fafafa)"
         />
       </g>
     </g>
@@ -79,9 +113,9 @@ const SimpleImage: React.FC = () => (
         cy="33"
         rx="32"
         ry="7"
-        fill="var(--empty-image-shadow-color, #f5f5f5)"
+        fill="var(--ds-empty-image-shadow-color, #f5f5f5)"
       />
-      <g stroke="var(--empty-image-stroke-color, #d9d9d9)" strokeWidth="1">
+      <g stroke="var(--ds-empty-image-stroke-color, #d9d9d9)" strokeWidth="1">
         <path d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z" />
         <path d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z" />
       </g>
@@ -141,9 +175,9 @@ export const BaseEmpty = forwardRef<HTMLDivElement, EmptyProps>(
 
     // Build CSS variables for theming
     const emptyVars: React.CSSProperties = {
-      '--empty-padding': 'var(--empty-container-padding, 32px 8px)',
-      '--empty-description-color': 'var(--empty-text-color, rgba(0, 0, 0, 0.25))',
-      '--empty-description-font-size': 'var(--empty-font-size, 14px)',
+      '--ds-empty-padding': 'var(--ds-empty-container-padding, 32px 8px)',
+      '--ds-empty-description-color': 'var(--ds-empty-text-color, rgba(0, 0, 0, 0.25))',
+      '--ds-empty-description-font-size': 'var(--ds-empty-font-size, 14px)',
     } as React.CSSProperties;
 
     // Container styles
@@ -153,14 +187,14 @@ export const BaseEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: 'var(--empty-padding)',
+      padding: 'var(--ds-empty-padding)',
       textAlign: 'center',
       ...style,
     };
 
     // Image container styles
     const imageContainerStyle: React.CSSProperties = {
-      marginBottom: 'var(--empty-image-margin-bottom, 16px)',
+      marginBottom: 'var(--ds-empty-image-margin-bottom, 16px)',
       lineHeight: 1,
       ...imageStyle,
     };
@@ -168,9 +202,9 @@ export const BaseEmpty = forwardRef<HTMLDivElement, EmptyProps>(
     // Description styles
     const descriptionStyle: React.CSSProperties = {
       margin: 0,
-      marginBottom: children ? 'var(--empty-description-margin-bottom, 16px)' : 0,
-      color: 'var(--empty-description-color)',
-      fontSize: 'var(--empty-description-font-size)',
+      marginBottom: children ? 'var(--ds-empty-description-margin-bottom, 16px)' : 0,
+      color: 'var(--ds-empty-description-color)',
+      fontSize: 'var(--ds-empty-description-font-size)',
     };
 
     return (

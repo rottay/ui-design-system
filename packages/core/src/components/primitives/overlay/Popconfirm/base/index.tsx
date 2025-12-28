@@ -228,21 +228,21 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
     const popconfirmVars = useMemo<React.CSSProperties>(
       () =>
         ({
-          '--popconfirm-bg': 'var(--color-bg-elevated, #fff)',
-          '--popconfirm-border-radius': 'var(--radius-lg, 8px)',
-          '--popconfirm-shadow': 'var(--shadow-lg)',
-          '--popconfirm-padding': 'var(--spacing-3, 12px)',
-          '--popconfirm-min-width': '200px',
-          '--popconfirm-max-width': '350px',
-          '--popconfirm-icon-color': 'var(--color-warning)',
-          '--popconfirm-icon-size': '16px',
-          '--popconfirm-title-font-size': '0.875rem',
-          '--popconfirm-title-font-weight': '500',
-          '--popconfirm-title-color': 'var(--color-text-primary)',
-          '--popconfirm-description-font-size': '0.813rem',
-          '--popconfirm-description-color': 'var(--color-text-secondary)',
-          '--popconfirm-arrow-size': '8px',
-          '--popconfirm-button-gap': 'var(--spacing-2, 8px)',
+          '--ds-popconfirm-bg': 'var(--ds-color-bg-elevated, #fff)',
+          '--ds-popconfirm-border-radius': 'var(--ds-radius-lg, 8px)',
+          '--ds-popconfirm-shadow': 'var(--ds-shadow-lg)',
+          '--ds-popconfirm-padding': 'var(--ds-spacing-3, 12px)',
+          '--ds-popconfirm-min-width': '200px',
+          '--ds-popconfirm-max-width': '350px',
+          '--ds-popconfirm-icon-color': 'var(--ds-color-warning-500)',
+          '--ds-popconfirm-icon-size': '16px',
+          '--ds-popconfirm-title-font-size': '0.875rem',
+          '--ds-popconfirm-title-font-weight': '500',
+          '--ds-popconfirm-title-color': 'var(--ds-color-text-primary)',
+          '--ds-popconfirm-description-font-size': '0.813rem',
+          '--ds-popconfirm-description-color': 'var(--ds-color-text-secondary)',
+          '--ds-popconfirm-arrow-size': '8px',
+          '--ds-popconfirm-button-gap': 'var(--ds-spacing-2, 8px)',
         }) as React.CSSProperties,
       []
     );
@@ -252,7 +252,7 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
       const baseStyle: React.CSSProperties = {
         padding: '4px 12px',
         fontSize: '0.813rem',
-        borderRadius: 'var(--radius-sm, 4px)',
+        borderRadius: 'var(--ds-radius-sm, 4px)',
         border: 'none',
         cursor: loading ? 'not-allowed' : 'pointer',
         opacity: loading ? 0.7 : 1,
@@ -263,21 +263,21 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
         case 'danger':
           return {
             ...baseStyle,
-            backgroundColor: 'var(--color-error)',
+            backgroundColor: 'var(--ds-color-error-500)',
             color: '#fff',
           };
         case 'default':
           return {
             ...baseStyle,
-            backgroundColor: 'var(--color-bg-secondary)',
-            color: 'var(--color-text-primary)',
-            border: '1px solid var(--color-border)',
+            backgroundColor: 'var(--ds-color-bg-secondary)',
+            color: 'var(--ds-color-text-primary)',
+            border: '1px solid var(--ds-color-border)',
           };
         case 'primary':
         default:
           return {
             ...baseStyle,
-            backgroundColor: 'var(--color-primary)',
+            backgroundColor: 'var(--ds-color-primary-500)',
             color: '#fff',
           };
       }
@@ -297,12 +297,12 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
             top: position.top,
             left: position.left,
             zIndex: 1050,
-            minWidth: 'var(--popconfirm-min-width)',
-            maxWidth: 'var(--popconfirm-max-width)',
-            padding: 'var(--popconfirm-padding)',
-            backgroundColor: 'var(--popconfirm-bg)',
-            borderRadius: 'var(--popconfirm-border-radius)',
-            boxShadow: 'var(--popconfirm-shadow)',
+            minWidth: 'var(--ds-popconfirm-min-width)',
+            maxWidth: 'var(--ds-popconfirm-max-width)',
+            padding: 'var(--ds-popconfirm-padding)',
+            backgroundColor: 'var(--ds-popconfirm-bg)',
+            borderRadius: 'var(--ds-popconfirm-border-radius)',
+            boxShadow: 'var(--ds-popconfirm-shadow)',
             ...overlayStyle,
           }}
           role="alertdialog"
@@ -313,9 +313,9 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
               className="rottay-popconfirm__arrow"
               style={{
                 position: 'absolute',
-                width: 'var(--popconfirm-arrow-size)',
-                height: 'var(--popconfirm-arrow-size)',
-                backgroundColor: 'var(--popconfirm-bg)',
+                width: 'var(--ds-popconfirm-arrow-size)',
+                height: 'var(--ds-popconfirm-arrow-size)',
+                backgroundColor: 'var(--ds-popconfirm-bg)',
                 transform: 'rotate(45deg)',
                 ...position.arrowPosition,
               }}
@@ -323,17 +323,17 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
           )}
           <div
             className="rottay-popconfirm__content"
-            style={{ display: 'flex', gap: 'var(--spacing-2, 8px)' }}
+            style={{ display: 'flex', gap: 'var(--ds-spacing-2, 8px)' }}
           >
             <div
               className="rottay-popconfirm__icon"
-              style={{ color: 'var(--popconfirm-icon-color)', flexShrink: 0 }}
+              style={{ color: 'var(--ds-popconfirm-icon-color)', flexShrink: 0 }}
             >
               {icon !== undefined ? (
                 icon
               ) : (
                 <WarningIcon
-                  style={{ width: 'var(--popconfirm-icon-size)', height: 'var(--popconfirm-icon-size)' }}
+                  style={{ width: 'var(--ds-popconfirm-icon-size)', height: 'var(--ds-popconfirm-icon-size)' }}
                 />
               )}
             </div>
@@ -342,9 +342,9 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
                 id="popconfirm-title"
                 className="rottay-popconfirm__title"
                 style={{
-                  fontSize: 'var(--popconfirm-title-font-size)',
-                  fontWeight: 'var(--popconfirm-title-font-weight)' as any,
-                  color: 'var(--popconfirm-title-color)',
+                  fontSize: 'var(--ds-popconfirm-title-font-size)',
+                  fontWeight: 'var(--ds-popconfirm-title-font-weight)' as any,
+                  color: 'var(--ds-popconfirm-title-color)',
                 }}
               >
                 {title}
@@ -353,9 +353,9 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
                 <div
                   className="rottay-popconfirm__description"
                   style={{
-                    fontSize: 'var(--popconfirm-description-font-size)',
-                    color: 'var(--popconfirm-description-color)',
-                    marginTop: 'var(--spacing-1, 4px)',
+                    fontSize: 'var(--ds-popconfirm-description-font-size)',
+                    color: 'var(--ds-popconfirm-description-color)',
+                    marginTop: 'var(--ds-spacing-1, 4px)',
                   }}
                 >
                   {description}
@@ -368,8 +368,8 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
             style={{
               display: 'flex',
               justifyContent: 'flex-end',
-              gap: 'var(--popconfirm-button-gap)',
-              marginTop: 'var(--spacing-3, 12px)',
+              gap: 'var(--ds-popconfirm-button-gap)',
+              marginTop: 'var(--ds-spacing-3, 12px)',
             }}
           >
             <button
@@ -379,10 +379,10 @@ export const BasePopconfirm = forwardRef<HTMLDivElement, PopconfirmProps>(
               style={{
                 padding: '4px 12px',
                 fontSize: '0.813rem',
-                borderRadius: 'var(--radius-sm, 4px)',
+                borderRadius: 'var(--ds-radius-sm, 4px)',
                 backgroundColor: 'transparent',
-                border: '1px solid var(--color-border)',
-                color: 'var(--color-text-primary)',
+                border: '1px solid var(--ds-color-border)',
+                color: 'var(--ds-color-text-primary)',
                 cursor: 'pointer',
                 transition: 'background-color 0.2s',
               }}

@@ -1,8 +1,37 @@
 'use client';
 
 /**
- * Container - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Container Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Container component.
+ * Uses inline CSS styles for maximum compatibility without external dependencies.
+ *
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS styling without external dependencies
+ * - Full max-width, padding, and centering support
+ * - Box-sizing: border-box for consistent sizing
+ *
+ * This implementation is ideal for:
+ * - Embedded widgets in third-party applications
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Container } from '@rottay/design-system';
+ *
+ * // Pure inline CSS container
+ * <Container engine="apollo" maxWidth="lg" padding="md">
+ *   Self-contained styling, no framework dependencies
+ * </Container>
+ * ```
+ *
+ * @see {@link Container} - The main engine-aware component
+ * @module Container/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import type { ContainerProps } from '../../types';
 import {

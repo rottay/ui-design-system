@@ -1,3 +1,31 @@
+/**
+ * @fileoverview useResponsiveValue Hook - Rottay Design System
+ * @description React hook for getting breakpoint-specific values using
+ * Tailwind CSS mobile-first conventions.
+ *
+ * @remarks
+ * Returns the appropriate value based on current viewport:
+ * - Values cascade up (smaller values apply until overridden)
+ * - SSR-safe (returns base value on server)
+ * - Supports any value type (numbers, strings, objects, etc.)
+ *
+ * Breakpoints (min-width):
+ * - base: 0px (required, always applies)
+ * - sm: 640px
+ * - md: 768px
+ * - lg: 1024px
+ * - xl: 1280px
+ * - 2xl: 1536px
+ *
+ * @example Responsive columns
+ * ```tsx
+ * const cols = useResponsiveValue({ base: 1, sm: 2, md: 3, lg: 4 });
+ * ```
+ *
+ * @module System/Hooks/Responsive/useResponsiveValue
+ * @category System
+ * @package @rottay/design-system
+ */
 import { useMediaQuery } from '../useMediaQuery';
 
 /**

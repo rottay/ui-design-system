@@ -1,12 +1,53 @@
 'use client';
 
 /**
- * Tour - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Tour Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Tour component.
+ * Uses inline CSS styles with portal rendering for proper z-index stacking.
  *
- * Pure HTML/CSS implementation of the Tour component with no
- * external UI library dependencies. Uses portal for overlay rendering.
+ * @remarks
+ * The Apollo engine provides:
+ * - Pure inline CSS with no external dependencies
+ * - Portal rendering to document.body via createPortal
+ * - Keyboard navigation support (Escape to close)
+ * - Accessible dialog with proper ARIA attributes
+ * - Box-shadow spotlight technique
  *
- * @module TourApollo
+ * Implementation details:
+ * - getTargetElement resolves selectors, refs, and functions
+ * - useEffect adds keyboard listener for Escape key
+ * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
+ * - Primary type adds blue border (#3b82f6) to dialog
+ * - Step indicators are circular divs with conditional colors
+ *
+ * This implementation is ideal for:
+ * - Embedded applications without CSS framework dependencies
+ * - Server-side rendering without CSS extraction
+ * - Maximum browser compatibility scenarios
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Tour, Button } from '@rottay/design-system';
+ *
+ * const steps = [
+ *   { target: '#welcome', title: 'Welcome', description: 'Start here' },
+ *   { target: '#action', title: 'Action', description: 'Click to proceed' },
+ * ];
+ *
+ * <Tour
+ *   engine="apollo"
+ *   steps={steps}
+ *   open={isOpen}
+ *   type="primary"
+ *   zIndex={2000}
+ *   onFinish={() => saveTourState()}
+ * />
+ * ```
+ *
+ * @see {@link Tour} - The main engine-aware component
+ * @module Tour/Engines/Apollo
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';

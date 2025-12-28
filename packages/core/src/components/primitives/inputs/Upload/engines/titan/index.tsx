@@ -1,7 +1,38 @@
 'use client';
 
 /**
- * Upload - Titan Engine (Ant Design)
+ * @fileoverview Upload Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Upload component providing
+ * full-featured file upload with progress tracking, previews, and list types.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's Upload for:
+ * - **Progress tracking**: Real-time upload progress bars
+ * - **List types**: text, picture, picture-card, picture-circle
+ * - **Drag and drop**: Native Dragger component
+ * - **Preview/Download**: Built-in file preview and download
+ * - **Custom request**: Override default XHR behavior
+ * - **Accessibility**: Full ARIA support and keyboard navigation
+ *
+ * This is the most feature-complete engine for file uploads.
+ *
+ * @example Basic upload
+ * ```tsx
+ * <Upload engine="titan" action="/api/upload">
+ *   <Button icon={<UploadIcon />}>Upload</Button>
+ * </Upload>
+ * ```
+ *
+ * @example Picture card
+ * ```tsx
+ * <Upload engine="titan" listType="picture-card" action="/api/upload" />
+ * ```
+ *
+ * @see {@link Upload} - Main component
+ * @see {@link UploadProps} - Component props
+ * @module Upload/Engines/Titan
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Upload as AntUpload } from 'antd';

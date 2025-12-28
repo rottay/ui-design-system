@@ -1,12 +1,71 @@
 'use client';
 
 /**
- * FloatButton - Titan Engine (Ant Design)
+ * @fileoverview FloatButton Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the FloatButton component.
+ * Provides full-featured floating action buttons with rich animations.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's FloatButton component for a
+ * feature-rich implementation including:
+ * - Smooth animations and transitions
+ * - Built-in tooltip support
+ * - Badge indicators
+ * - Group expansion with menu behavior
+ * - BackTop with scroll tracking
+ *
+ * This engine is ideal for enterprise applications where Ant Design
+ * is already part of the tech stack.
+ *
+ * @example Titan FloatButton
+ * ```tsx
+ * import { FloatButton } from '@rottay/design-system';
+ *
+ * // Explicitly use Titan engine
+ * <FloatButton engine="titan" icon={<PlusOutlined />} type="primary" />
+ * ```
+ *
+ * @example Titan Group
+ * ```tsx
+ * <FloatButton.Group engine="titan" trigger="click" icon={<MenuOutlined />}>
+ *   <FloatButton icon={<EditOutlined />} />
+ *   <FloatButton icon={<ShareOutlined />} />
+ * </FloatButton.Group>
+ * ```
+ *
+ * @see {@link FloatButtonProps} for prop documentation
+ * @see {@link https://ant.design/components/float-button} Ant Design FloatButton
+ *
+ * @module FloatButton/Engines/Titan
+ * @category Navigation
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import { FloatButton as AntFloatButton } from 'antd';
 import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps } from '../../types';
 
+// ============================================================================
+// FloatButton Titan Implementation
+// ============================================================================
+
+/**
+ * FloatButton component using Ant Design.
+ *
+ * @description
+ * Wraps Ant Design's FloatButton with Rottay's unified prop interface.
+ * Provides full access to Ant Design's floating action button features.
+ *
+ * @remarks
+ * - Full animation support
+ * - Native tooltip integration
+ * - Badge with count and dot variants
+ * - Supports href for link behavior
+ *
+ * @param props - {@link FloatButtonProps}
+ * @param _ref - Ref (not forwarded to Ant Design component)
+ * @returns Ant Design FloatButton element
+ */
 export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>(
   (props, _ref) => {
     const {
@@ -42,6 +101,27 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
 );
 FloatButton.displayName = 'FloatButton.Titan';
 
+// ============================================================================
+// Group Titan Implementation
+// ============================================================================
+
+/**
+ * FloatButton.Group component using Ant Design.
+ *
+ * @description
+ * Wraps Ant Design's FloatButton.Group for expandable button menus.
+ * Supports click and hover triggers with smooth animations.
+ *
+ * @remarks
+ * - Expandable menu with trigger control
+ * - Controlled and uncontrolled modes
+ * - Custom open/close icons
+ * - Smooth expand/collapse animations
+ *
+ * @param props - {@link FloatButtonGroupProps}
+ * @param _ref - Ref (not forwarded to Ant Design component)
+ * @returns Ant Design FloatButton.Group element
+ */
 export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
   (props, _ref) => {
     const {
@@ -78,6 +158,27 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
 );
 Group.displayName = 'FloatButton.Group.Titan';
 
+// ============================================================================
+// BackTop Titan Implementation
+// ============================================================================
+
+/**
+ * FloatButton.BackTop component using Ant Design.
+ *
+ * @description
+ * Wraps Ant Design's FloatButton.BackTop for scroll-to-top functionality.
+ * Automatically shows when scroll exceeds visibility threshold.
+ *
+ * @remarks
+ * - Configurable visibility threshold
+ * - Custom scroll target support
+ * - Smooth scroll animation with configurable duration
+ * - Full styling customization
+ *
+ * @param props - {@link FloatButtonBackTopProps}
+ * @param _ref - Ref (not forwarded to Ant Design component)
+ * @returns Ant Design FloatButton.BackTop element
+ */
 export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopProps>(
   (props, _ref) => {
     const {
@@ -112,5 +213,9 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
   }
 );
 BackTop.displayName = 'FloatButton.BackTop.Titan';
+
+// ============================================================================
+// Default Export
+// ============================================================================
 
 export default FloatButton;

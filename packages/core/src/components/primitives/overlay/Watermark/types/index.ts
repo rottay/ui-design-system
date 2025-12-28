@@ -1,10 +1,38 @@
 /**
- * Watermark Component Types
+ * @fileoverview Watermark Component Types - Rottay Design System
+ * @description Type definitions for the Watermark component including font configuration,
+ * positioning options (rotation, gap, offset), and content configuration.
  *
- * Type definitions for the Watermark component including font configuration
- * and positioning options.
+ * @remarks
+ * The Watermark types provide comprehensive configuration for:
+ * - Content options: Text (single or multi-line) or image URL
+ * - Positioning: Width, height, rotation angle, gap, offset
+ * - Font styling: Color, size, weight, family, style
+ * - Z-index control for overlay stacking
+ * - Inheritance settings for nested watermarks
  *
- * @module WatermarkTypes
+ * @example Type Usage
+ * ```tsx
+ * import type { WatermarkProps, WatermarkFont } from '@rottay/design-system';
+ *
+ * const font: WatermarkFont = {
+ *   color: 'rgba(0, 0, 0, 0.15)',
+ *   fontSize: 16,
+ *   fontWeight: 'bold',
+ *   fontFamily: 'Arial',
+ * };
+ *
+ * const props: WatermarkProps = {
+ *   content: 'Confidential',
+ *   rotate: -22,
+ *   gap: [100, 100],
+ *   font,
+ * };
+ * ```
+ *
+ * @module Watermark/Types
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 

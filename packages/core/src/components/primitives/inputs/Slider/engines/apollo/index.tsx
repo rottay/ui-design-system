@@ -1,8 +1,51 @@
 'use client';
 
 /**
- * Slider - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Slider Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Slider component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a zero-dependency slider using hidden range
+ * inputs with custom visual overlays for track, rail, and handles.
+ *
+ * **Pure CSS Features:**
+ * - Hidden native range inputs for interaction
+ * - Custom rail with absolute positioning
+ * - Active track showing selection range
+ * - Visual handles with box shadow
+ * - Marks with custom label positioning
+ *
+ * **Component Structure:**
+ * - Container div with relative positioning
+ * - Rail (full width/height background)
+ * - Track (selection area, positioned dynamically)
+ * - Hidden range input(s) for interaction
+ * - Visual handles at current value positions
+ * - Optional marks with labels
+ *
+ * **Range Mode:**
+ * Uses two overlapping hidden inputs, each controlling one handle.
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * <Slider
+ *   engine="apollo"
+ *   min={0}
+ *   max={100}
+ *   step={10}
+ *   marks={{ 0: '0', 50: '50', 100: '100' }}
+ * />
+ * ```
+ *
+ * @see {@link Slider} for the main component
+ * @see {@link TitanSlider} for Ant Design implementation
+ * @see {@link HermesSlider} for DaisyUI implementation
+ * @module ApolloSlider
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useCallback } from 'react';
 import type { SliderProps } from '../../types';
 import { SLIDER_DEFAULTS } from '../../types';

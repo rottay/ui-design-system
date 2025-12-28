@@ -316,11 +316,11 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
     // Build CSS variables for theming
     const starSize = RATE_SIZE_MAP[size];
     const rateVars: React.CSSProperties = {
-      '--rate-size': starSize,
-      '--rate-gap': 'var(--rate-gap, 0.25rem)',
-      '--rate-active-color': activeColor || 'var(--rate-star-active-color, #facc15)',
-      '--rate-inactive-color': inactiveColor || 'var(--rate-star-inactive-color, #d1d5db)',
-      '--rate-transition': 'var(--rate-transition-duration, 0.2s)',
+      '--ds-rate-size': starSize,
+      '--ds-rate-gap': 'var(--ds-rate-gap, 0.25rem)',
+      '--ds-rate-active-color': activeColor || 'var(--ds-rate-star-active-color, #facc15)',
+      '--ds-rate-inactive-color': inactiveColor || 'var(--ds-rate-star-inactive-color, #d1d5db)',
+      '--ds-rate-transition': 'var(--ds-rate-transition-duration, 0.2s)',
     } as React.CSSProperties;
 
     // Container styles
@@ -328,7 +328,7 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       ...rateVars,
       display: 'inline-flex',
       alignItems: 'center',
-      gap: 'var(--rate-gap)',
+      gap: 'var(--ds-rate-gap)',
       direction: direction,
       ...style,
     };
@@ -340,12 +340,12 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 'var(--rate-size)',
-      height: 'var(--rate-size)',
-      color: isActive ? 'var(--rate-active-color)' : 'var(--rate-inactive-color)',
+      width: 'var(--ds-rate-size)',
+      height: 'var(--ds-rate-size)',
+      color: isActive ? 'var(--ds-rate-active-color)' : 'var(--ds-rate-inactive-color)',
       cursor: isInteractive ? 'pointer' : disabled ? 'not-allowed' : 'default',
       opacity: disabled ? 0.5 : 1,
-      transition: 'transform var(--rate-transition), color var(--rate-transition)',
+      transition: 'transform var(--ds-rate-transition), color var(--ds-rate-transition)',
       transform: isHovered && isInteractive ? 'scale(1.1)' : 'scale(1)',
       position: 'relative',
     });
@@ -367,7 +367,7 @@ export const BaseRate = forwardRef<HTMLDivElement, RateProps>(
           className={`rottay-rate__star ${isFilled ? 'rottay-rate__star--filled' : ''} ${isHalfFilled ? 'rottay-rate__star--half' : ''}`}
           style={{
             ...getStarStyle(isFilled || isHalfFilled, isHovered),
-            outline: isFocused ? '2px solid var(--rate-active-color)' : 'none',
+            outline: isFocused ? '2px solid var(--ds-rate-active-color)' : 'none',
             outlineOffset: '2px',
             borderRadius: '2px',
           }}

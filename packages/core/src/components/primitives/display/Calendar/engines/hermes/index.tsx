@@ -1,7 +1,50 @@
 'use client';
 
 /**
- * Calendar - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Calendar Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based calendar with responsive design.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine uses DaisyUI classes with Tailwind utilities
+ * for a lightweight, responsive calendar implementation.
+ *
+ * **Implementation Details:**
+ * - Custom grid-based layout
+ * - DaisyUI button and container classes
+ * - Native Date object handling
+ * - Controlled and uncontrolled modes
+ * - Month and year view switching
+ *
+ * **Class Mappings:**
+ * - `btn btn-sm btn-ghost` - Navigation buttons
+ * - `btn btn-primary` - Active mode button
+ * - `grid grid-cols-7` - Days grid
+ * - `grid grid-cols-3` - Months grid
+ * - `bg-primary text-primary-content` - Selected state
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Responsive by default
+ * - DaisyUI theme integration
+ * - No external date library
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Calendar } from '@rottay/design-system';
+ *
+ * <Calendar
+ *   engine="hermes"
+ *   fullscreen={false}
+ *   onChange={(date) => console.log(date)}
+ * />
+ * ```
+ *
+ * @see {@link Calendar} for the main component
+ * @see {@link https://daisyui.com/} DaisyUI
+ * @module Calendar/engines/hermes
+ * @category Display
+ * @package @rottay/design-system
  */
 import React, { useState, useMemo, useCallback } from 'react';
 import type { CalendarProps, CalendarMode } from '../../types';

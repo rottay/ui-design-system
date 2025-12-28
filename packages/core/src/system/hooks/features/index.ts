@@ -1,5 +1,33 @@
 /**
- * Feature hooks - Access feature flags and permissions
+ * @fileoverview Feature Hooks - Rottay Design System
+ * @description React hooks for accessing feature flags and implementing
+ * conditional feature rendering based on tenant plans and flags.
+ *
+ * @remarks
+ * The feature hooks provide:
+ * - **useFeatures**: Full access to features array and hasFeature function
+ * - **useHasFeature**: Simple boolean check for a single feature
+ * - **useFeatureContext**: Direct context access (alias)
+ *
+ * Features enable:
+ * - Progressive feature rollout
+ * - Plan-based feature gating
+ * - A/B testing support
+ * - Tenant-specific customization
+ *
+ * @example Feature-gated component
+ * ```tsx
+ * function PremiumFeature() {
+ *   const isPremium = useHasFeature('premium-analytics');
+ *   if (!isPremium) return <UpgradePrompt />;
+ *   return <AnalyticsDashboard />;
+ * }
+ * ```
+ *
+ * @see {@link FeatureProvider} - Provider component
+ * @module System/Hooks/Features
+ * @category System
+ * @package @rottay/design-system
  */
 import { useContext } from 'react';
 import { FeatureContext } from '../../providers/features';

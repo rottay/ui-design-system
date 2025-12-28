@@ -1,11 +1,44 @@
 /**
- * Tooltip - Base Component
- * Uses CSS variables from design tokens for consistent styling across engines.
+ * @fileoverview Tooltip Base Component - Rottay Design System
+ * @description CSS variable-based tooltip with dynamic positioning.
+ * Part of the Rottay Design System's display primitives collection.
  *
+ * @remarks
+ * The base Tooltip component uses CSS custom properties for theming and serves
+ * as the foundation for engine-specific implementations.
+ *
+ * **Implementation Details:**
+ * - Uses CSS variables for all visual properties
+ * - Handles controlled and uncontrolled visibility
+ * - Manages show/hide delays with timers
+ * - Supports multiple trigger types simultaneously
+ * - Provides arrow positioning based on placement
+ * - Full ARIA accessibility implementation
+ *
+ * **CSS Custom Properties:**
+ * - `--ds-tooltip-bg` - Background color (varies by color prop)
+ * - `--ds-tooltip-color` - Text color
+ * - `--ds-tooltip-radius` - Border radius (sm, md, lg)
+ * - `--ds-tooltip-offset` - Distance from trigger element
+ * - `--ds-tooltip-z-index` - Stack order
+ * - `--ds-tooltip-padding` - Content padding
+ * - `--ds-tooltip-font-size` - Text size
+ * - `--ds-tooltip-shadow` - Box shadow
+ * - `--ds-tooltip-arrow-size` - Arrow dimensions
+ *
+ * @example Direct Usage
+ * ```tsx
+ * import { BaseTooltip } from '@rottay/design-system';
+ *
+ * <BaseTooltip content="Helpful tip" placement="top">
+ *   <Button>Hover me</Button>
+ * </BaseTooltip>
+ * ```
+ *
+ * @see {@link Tooltip} for the main component
  * @module Tooltip/base
- * @description The base Tooltip component implementation that uses CSS custom properties
- * for theming. This component serves as the foundation for engine-specific implementations
- * and can be used directly for the Apollo (vanilla) engine.
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -143,11 +176,11 @@ export const BaseTooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     // Build CSS variables for theming
     const tooltipVars: React.CSSProperties = {
-      '--tooltip-bg': `var(--tooltip-${color}-bg, rgba(0, 0, 0, 0.9))`,
-      '--tooltip-color': `var(--tooltip-${color}-color, white)`,
-      '--tooltip-radius': `var(--tooltip-${radius}-radius, 0.375rem)`,
-      '--tooltip-offset': `${offset}px`,
-      '--tooltip-z-index': zIndex,
+      '--ds-tooltip-bg': `var(--ds-tooltip-${color}-bg, rgba(0, 0, 0, 0.9))`,
+      '--ds-tooltip-color': `var(--ds-tooltip-${color}-color, white)`,
+      '--ds-tooltip-radius': `var(--ds-tooltip-${radius}-radius, 0.375rem)`,
+      '--ds-tooltip-offset': `${offset}px`,
+      '--ds-tooltip-z-index': zIndex,
     } as React.CSSProperties;
 
     // Compute tooltip position styles
@@ -164,18 +197,18 @@ export const BaseTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     const tooltipStyles: React.CSSProperties = {
       ...tooltipVars,
       position: 'absolute',
-      zIndex: 'var(--tooltip-z-index)' as any,
-      padding: 'var(--tooltip-padding, 0.5rem 0.75rem)',
-      backgroundColor: 'var(--tooltip-bg)',
-      color: 'var(--tooltip-color)',
-      fontSize: 'var(--tooltip-font-size, 0.875rem)',
-      borderRadius: 'var(--tooltip-radius)',
-      maxWidth: 'var(--tooltip-max-width, 300px)',
-      boxShadow: 'var(--tooltip-shadow, 0 4px 6px rgba(0, 0, 0, 0.1))',
+      zIndex: 'var(--ds-tooltip-z-index)' as any,
+      padding: 'var(--ds-tooltip-padding, 0.5rem 0.75rem)',
+      backgroundColor: 'var(--ds-tooltip-bg)',
+      color: 'var(--ds-tooltip-color)',
+      fontSize: 'var(--ds-tooltip-font-size, 0.875rem)',
+      borderRadius: 'var(--ds-tooltip-radius)',
+      maxWidth: 'var(--ds-tooltip-max-width, 300px)',
+      boxShadow: 'var(--ds-tooltip-shadow, 0 4px 6px rgba(0, 0, 0, 0.1))',
       pointerEvents: interactive ? 'auto' : 'none',
       opacity: isVisible ? 1 : 0,
       visibility: isVisible ? 'visible' : 'hidden',
-      transition: 'var(--tooltip-transition, opacity 0.2s ease, visibility 0.2s ease)',
+      transition: 'var(--ds-tooltip-transition, opacity 0.2s ease, visibility 0.2s ease)',
       ...positionStyles,
       ...marginStyles,
       ...style,
@@ -184,9 +217,9 @@ export const BaseTooltip = forwardRef<HTMLDivElement, TooltipProps>(
     // Arrow styles based on placement
     const arrowStyles: React.CSSProperties = {
       position: 'absolute',
-      width: 'var(--tooltip-arrow-size, 8px)',
-      height: 'var(--tooltip-arrow-size, 8px)',
-      backgroundColor: 'var(--tooltip-bg)',
+      width: 'var(--ds-tooltip-arrow-size, 8px)',
+      height: 'var(--ds-tooltip-arrow-size, 8px)',
+      backgroundColor: 'var(--ds-tooltip-bg)',
       transform: 'rotate(45deg)',
       ...(placement.startsWith('top') && { bottom: '-4px', left: '50%', marginLeft: '-4px' }),
       ...(placement.startsWith('bottom') && { top: '-4px', left: '50%', marginLeft: '-4px' }),

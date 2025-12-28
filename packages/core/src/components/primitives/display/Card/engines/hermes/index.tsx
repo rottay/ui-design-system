@@ -1,10 +1,47 @@
 /**
- * @fileoverview Card - Hermes Engine Implementation
- * @description DaisyUI/Tailwind-based implementation of the Card component.
- * Utilizes DaisyUI's utility classes for styling while maintaining consistent API.
+ * @fileoverview Card Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based card with utility-first styling.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Card/engines/hermes
- * @package @es-rottay/designsystem-core
+ * @remarks
+ * This engine uses DaisyUI's card component classes with Tailwind utilities
+ * for lightweight, responsive card rendering.
+ *
+ * **Implementation Details:**
+ * - Uses DaisyUI `card` class for container
+ * - Uses `card-body`, `card-title`, `card-actions` for structure
+ * - Uses Tailwind `animate-pulse` for skeleton loading
+ * - Uses `figure` element for cover images
+ *
+ * **Class Mappings:**
+ * - `elevated` → `bg-base-100 shadow-md`
+ * - `outlined` → `card-bordered bg-base-100`
+ * - `filled` → `bg-base-200`
+ * - `ghost` → `bg-transparent`
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Card } from '@rottay/design-system';
+ *
+ * <Card engine="hermes" title="Card Title">
+ *   <p>Card content</p>
+ * </Card>
+ * ```
+ *
+ * @example DaisyUI Styling
+ * ```tsx
+ * <Card engine="hermes" variant="outlined" hoverable>
+ *   <Card.Body>
+ *     <p>DaisyUI styled content</p>
+ *   </Card.Body>
+ * </Card>
+ * ```
+ *
+ * @see {@link Card} for the main component
+ * @see {@link https://daisyui.com/components/card/} DaisyUI Card
+ * @module HermesCard
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

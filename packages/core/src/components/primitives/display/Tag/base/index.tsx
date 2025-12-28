@@ -1,11 +1,40 @@
 /**
- * Tag - Base Component
- * Uses CSS variables from design tokens for consistent styling.
+ * @fileoverview Tag Base Component - Rottay Design System
+ * @description Core tag implementation with CSS variables for theming.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tag/base
- * @description The base Tag component provides a foundation for all engine
- * implementations. It uses CSS variables for theming and supports all common
- * Tag features including closable tags, icons, and semantic colors.
+ * @remarks
+ * The BaseTag provides a full-featured tag with CSS variable support.
+ * It handles icons, closable functionality, and all visual customizations.
+ *
+ * **Component Structure:**
+ * - Container span with role and aria attributes
+ * - Icon slot (optional, left side)
+ * - Content span for label text
+ * - Close button (when closable)
+ *
+ * **CSS Variable Integration:**
+ * - `--ds-tag-bg` - Background color
+ * - `--ds-tag-color` - Text color
+ * - `--ds-tag-border-color` - Border color
+ * - `--ds-tag-radius` - Border radius
+ * - `--ds-tag-height` - Tag height
+ * - `--ds-tag-padding` - Content padding
+ * - `--ds-tag-font-size` - Text size
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseTag } from '@rottay/design-system';
+ *
+ * <BaseTag variant="primary" closable onClose={handleClose}>
+ *   Premium
+ * </BaseTag>
+ * ```
+ *
+ * @see {@link Tag} for the engine-routed component
+ * @module BaseTag
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -115,13 +144,13 @@ export const BaseTag = forwardRef<HTMLSpanElement, TagProps>(
 
     // Build CSS variables for theming
     const tagVars: React.CSSProperties = {
-      '--tag-bg': color || colors.bg,
-      '--tag-color': colors.text,
-      '--tag-border-color': bordered || outlined ? colors.border : 'transparent',
-      '--tag-radius': RADIUS_MAP[radius] || RADIUS_MAP.md,
-      '--tag-height': sizeStyles.height,
-      '--tag-padding': sizeStyles.padding,
-      '--tag-font-size': sizeStyles.fontSize,
+      '--ds-tag-bg': color || colors.bg,
+      '--ds-tag-color': colors.text,
+      '--ds-tag-border-color': bordered || outlined ? colors.border : 'transparent',
+      '--ds-tag-radius': RADIUS_MAP[radius] || RADIUS_MAP.md,
+      '--ds-tag-height': sizeStyles.height,
+      '--ds-tag-padding': sizeStyles.padding,
+      '--ds-tag-font-size': sizeStyles.fontSize,
     } as React.CSSProperties;
 
     // Computed container styles
@@ -131,15 +160,15 @@ export const BaseTag = forwardRef<HTMLSpanElement, TagProps>(
       alignItems: 'center',
       justifyContent: 'center',
       gap: '0.25rem',
-      height: 'var(--tag-height)',
-      padding: 'var(--tag-padding)',
-      fontSize: 'var(--tag-font-size)',
+      height: 'var(--ds-tag-height)',
+      padding: 'var(--ds-tag-padding)',
+      fontSize: 'var(--ds-tag-font-size)',
       fontWeight: 500,
       lineHeight: 1,
-      backgroundColor: 'var(--tag-bg)',
-      color: 'var(--tag-color)',
-      border: `1px solid var(--tag-border-color)`,
-      borderRadius: 'var(--tag-radius)',
+      backgroundColor: 'var(--ds-tag-bg)',
+      color: 'var(--ds-tag-color)',
+      border: `1px solid var(--ds-tag-border-color)`,
+      borderRadius: 'var(--ds-tag-radius)',
       cursor: clickable ? 'pointer' : 'default',
       transition: 'all 0.2s ease-in-out',
       userSelect: 'none',

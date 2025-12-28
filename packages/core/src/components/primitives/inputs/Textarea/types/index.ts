@@ -1,6 +1,39 @@
 /**
- * Textarea - Core Interface
- * Shared types and defaults for all engine implementations
+ * @fileoverview Textarea Types - Rottay Design System
+ * @description Type definitions for the Textarea component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module defines all TypeScript interfaces, types, and constants
+ * for the Textarea component. These types are shared across all engines.
+ *
+ * **Exported Types:**
+ * - `TextareaProps` - Main component props interface
+ * - `TextareaSize` - Size variant type ('sm' | 'md' | 'lg')
+ * - `TextareaVariant` - Visual variant type ('outlined' | 'filled' | 'borderless')
+ * - `TextareaStatus` - Validation status type ('default' | 'error' | 'warning' | 'success')
+ *
+ * **Configuration Constants:**
+ * - `TEXTAREA_DEFAULTS` - Default prop values
+ *
+ * **AutoSize Configuration:**
+ * The `autoSize` prop accepts either a boolean or an object:
+ * - `true` - Auto-resize without limits
+ * - `{ minRows: number, maxRows: number }` - Constrained auto-resize
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { TextareaProps, TextareaSize } from '@rottay/design-system';
+ *
+ * interface CommentInputProps extends Omit<TextareaProps, 'showCount'> {
+ *   label: string;
+ * }
+ * ```
+ *
+ * @see {@link Textarea} for the main component
+ * @module TextareaTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import type { EngineAwareProps } from '../../../../../types';

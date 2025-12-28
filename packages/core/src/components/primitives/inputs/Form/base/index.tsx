@@ -1,6 +1,55 @@
 /**
- * Form - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Form Base Component - Rottay Design System
+ * @description Core form implementation using CSS custom properties for styling.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The BaseForm component provides a foundational form implementation that
+ * relies on CSS custom properties for theming. It serves as the base for
+ * engine-specific implementations.
+ *
+ * **Key Features:**
+ * - Pure CSS variable-based theming
+ * - Context-based form state sharing
+ * - Layout modes (horizontal, vertical, inline)
+ * - Size variants for consistent sizing
+ * - Form submission handling
+ *
+ * **CSS Custom Properties Used:**
+ * - `--form-font-size` - Base font size
+ * - `--form-label-height` - Label line height
+ * - `--form-control-height` - Input control height
+ * - `--form-label-color` - Label text color
+ * - `--form-item-margin-bottom` - Spacing between fields
+ * - `--form-error-color` - Error text color
+ * - `--form-warning-color` - Warning text color
+ *
+ * **FormContext:**
+ * The form provides context for child Form.Item components to inherit:
+ * - layout, labelCol, wrapperCol, labelAlign
+ * - colon, size, disabled, requiredMark
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { BaseForm, BaseFormItem } from './base';
+ *
+ * <BaseForm
+ *   layout="vertical"
+ *   onFinish={(values) => console.log(values)}
+ * >
+ *   <BaseFormItem name="email" label="Email">
+ *     <input type="email" />
+ *   </BaseFormItem>
+ * </BaseForm>
+ * ```
+ *
+ * @see {@link Form} for the engine-aware wrapper
+ * @see {@link TitanForm} for Ant Design implementation
+ * @see {@link HermesForm} for DaisyUI implementation
+ * @see {@link ApolloForm} for vanilla implementation
+ * @module BaseForm
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

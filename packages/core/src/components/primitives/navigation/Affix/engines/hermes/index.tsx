@@ -1,16 +1,70 @@
 'use client';
 
 /**
- * Affix - Hermes Engine (DaisyUI/Tailwind)
- * Lightweight sticky implementation using Tailwind CSS utilities
+ * @fileoverview Affix Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS-based implementation of the Affix component.
+ * Provides a lightweight sticky solution using Tailwind CSS utilities.
+ *
+ * @remarks
+ * The Hermes engine offers a lightweight, utility-first implementation
+ * of the Affix component using Tailwind CSS. This approach:
+ * - Minimizes bundle size with CSS utilities
+ * - Provides smooth transitions via Tailwind classes
+ * - Offers easy customization through utility classes
+ * - Maintains full onChange callback support
+ *
+ * @example Hermes Engine Usage
+ * ```tsx
+ * import { Affix } from '@rottay/design-system';
+ *
+ * function StickyNav() {
+ *   return (
+ *     <Affix engine="hermes" offsetTop={0}>
+ *       <nav className="bg-white shadow-lg">Navigation</nav>
+ *     </Affix>
+ *   );
+ * }
+ * ```
+ *
+ * @example With Tailwind Customization
+ * ```tsx
+ * <Affix
+ *   engine="hermes"
+ *   offsetTop={64}
+ *   className="transition-all duration-300"
+ *   onChange={(affixed) => console.log(affixed)}
+ * >
+ *   <header className="p-4">Header</header>
+ * </Affix>
+ * ```
+ *
+ * @see {@link AffixProps} for component props
+ * @see {@link https://tailwindcss.com/docs/position#sticky-positioning} Tailwind sticky docs
+ *
+ * @module Affix/Engines/Hermes
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 import React, { forwardRef, useState, useEffect, useRef, useCallback } from 'react';
 import type { AffixProps, AffixState } from '../../types';
 import { AFFIX_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Get scroll container element
+ * Get scroll container element.
+ *
+ * @description
+ * Retrieves the scroll container from the target function prop.
+ * Falls back to window if no target is specified.
+ *
+ * @param target - Optional function that returns the scroll container
+ * @returns The scroll container (Window or HTMLElement)
+ *
+ * @internal
  */
 function getTargetContainer(target?: () => Window | HTMLElement | null): Window | HTMLElement {
   if (target) {
@@ -21,7 +75,16 @@ function getTargetContainer(target?: () => Window | HTMLElement | null): Window 
 }
 
 /**
- * Get bounding rect relative to target container
+ * Get bounding rect relative to target container.
+ *
+ * @description
+ * Calculates the bounding rectangle of the target container.
+ * Creates a virtual rect for window, uses getBoundingClientRect for elements.
+ *
+ * @param target - The scroll container
+ * @returns DOMRect representing the container bounds
+ *
+ * @internal
  */
 function getTargetRect(target: Window | HTMLElement): DOMRect {
   if (target === window) {
@@ -40,9 +103,39 @@ function getTargetRect(target: Window | HTMLElement): DOMRect {
   return (target as HTMLElement).getBoundingClientRect();
 }
 
+// ============================================================================
+// Hermes Engine Component
+// ============================================================================
+
 /**
  * Hermes engine implementation using Tailwind CSS utilities.
+ *
+ * @description
  * Provides a lightweight sticky solution with onChange callback support.
+ * Uses pure CSS sticky positioning when onChange is not needed, and
+ * switches to JavaScript-based fixed positioning for precise tracking.
+ *
+ * @remarks
+ * Key features of the Hermes implementation:
+ * - Tailwind CSS utility classes for z-index
+ * - Smooth shadow transitions when affixed
+ * - Optimized scroll handling with requestAnimationFrame
+ * - Minimal JavaScript when onChange is not used
+ *
+ * @param props - {@link AffixProps}
+ * @param ref - Forwarded ref to the affix element
+ * @returns React element with Tailwind-styled sticky positioning
+ *
+ * @example
+ * ```tsx
+ * <HermesAffix
+ *   offsetTop={0}
+ *   zIndex={50}
+ *   onChange={(affixed) => setShowShadow(affixed)}
+ * >
+ *   <header className="bg-base-100">Header</header>
+ * </HermesAffix>
+ * ```
  */
 export const HermesAffix = forwardRef<HTMLDivElement, AffixProps>(
   (props, ref) => {
@@ -57,13 +150,25 @@ export const HermesAffix = forwardRef<HTMLDivElement, AffixProps>(
       zIndex = AFFIX_DEFAULTS.zIndex,
     } = props;
 
+    // ========================================================================
+    // Refs and State
+    // ========================================================================
+
     const placeholderRef = useRef<HTMLDivElement>(null);
     const affixRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState<AffixState>({ affixed: false });
     const lastAffixedRef = useRef<boolean>(false);
 
+    // ========================================================================
+    // Measurement Logic
+    // ========================================================================
+
     /**
-     * Measure element and calculate affix state
+     * Measure element and calculate affix state.
+     *
+     * @description
+     * Calculates whether the element should be affixed based on scroll position
+     * and offset values. Updates state and triggers onChange when status changes.
      */
     const measure = useCallback(() => {
       const targetContainer = getTargetContainer(target);
@@ -121,8 +226,16 @@ export const HermesAffix = forwardRef<HTMLDivElement, AffixProps>(
       setState({ affixed, fixedStyle, placeholderStyle });
     }, [offsetTop, offsetBottom, target, onChange, zIndex]);
 
+    // ========================================================================
+    // Event Listeners
+    // ========================================================================
+
     /**
-     * Set up scroll and resize listeners
+     * Set up scroll and resize listeners.
+     *
+     * @description
+     * Only attaches listeners when onChange callback is provided.
+     * Uses requestAnimationFrame for smooth scroll handling.
      */
     useEffect(() => {
       // If no onChange, use simple sticky and skip measurements
@@ -131,7 +244,7 @@ export const HermesAffix = forwardRef<HTMLDivElement, AffixProps>(
       const targetContainer = getTargetContainer(target);
       if (!targetContainer) return;
 
-      // Throttle scroll events
+      // Throttle scroll events using requestAnimationFrame
       let ticking = false;
       const handleScroll = () => {
         if (!ticking) {
@@ -159,14 +272,22 @@ export const HermesAffix = forwardRef<HTMLDivElement, AffixProps>(
       };
     }, [measure, target, onChange]);
 
-    // Build z-index class based on value
+    // ========================================================================
+    // Tailwind Classes
+    // ========================================================================
+
+    // Build z-index class based on value (Tailwind utility mapping)
     const zIndexClass = zIndex === 10 ? 'z-10' :
                         zIndex === 20 ? 'z-20' :
                         zIndex === 30 ? 'z-30' :
                         zIndex === 40 ? 'z-40' :
                         zIndex === 50 ? 'z-50' : '';
 
-    // Simple sticky mode (no onChange callback)
+    // ========================================================================
+    // Render - Simple Sticky Mode
+    // ========================================================================
+
+    // Simple sticky mode (no onChange callback) - pure CSS solution
     if (!onChange) {
       const stickyStyle: React.CSSProperties = {
         position: 'sticky',
@@ -189,7 +310,11 @@ export const HermesAffix = forwardRef<HTMLDivElement, AffixProps>(
       );
     }
 
-    // Advanced mode with onChange tracking
+    // ========================================================================
+    // Render - Advanced Mode with onChange
+    // ========================================================================
+
+    // Advanced mode with onChange tracking - uses JavaScript positioning
     return (
       <div ref={placeholderRef} style={state.placeholderStyle}>
         <div

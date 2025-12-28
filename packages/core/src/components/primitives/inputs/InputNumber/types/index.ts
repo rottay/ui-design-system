@@ -1,6 +1,43 @@
 /**
- * InputNumber Types
+ * @fileoverview InputNumber Types - Rottay Design System
+ * @description Type definitions for the InputNumber component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module defines all TypeScript interfaces, types, and constants
+ * for the InputNumber component. These types are shared across all engines.
+ *
+ * **Exported Types:**
+ * - `InputNumberProps` - Main component props interface
+ * - `InputNumberSize` - Size variant type (SizeType)
+ * - `InputNumberStatus` - Validation status type (StatusType)
+ *
+ * **Configuration Constants:**
+ * - `INPUT_NUMBER_DEFAULTS` - Default prop values
+ *
+ * **Key Props:**
+ * - `min` / `max` - Value bounds
+ * - `step` - Increment/decrement amount
+ * - `precision` - Decimal places
+ * - `formatter` / `parser` - Custom value display
+ * - `stringMode` - High precision mode
+ * - `controls` - Show/hide step buttons
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { InputNumberProps } from '@rottay/design-system';
+ *
+ * interface QuantityInputProps extends Omit<InputNumberProps, 'stringMode'> {
+ *   label: string;
+ * }
+ * ```
+ *
+ * @see {@link InputNumber} for the main component
+ * @module InputNumberTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import type { ReactNode, CSSProperties, KeyboardEvent } from 'react';
 import type { SizeType, StatusType } from '../../../../../types/common';
 

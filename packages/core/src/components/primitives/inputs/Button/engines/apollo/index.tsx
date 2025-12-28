@@ -1,6 +1,76 @@
 /**
- * Button - Apollo Engine (Pure HTML/CSS)
- * Headless implementation with CSS variables for full customization
+ * @fileoverview Button Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Button component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a headless button implementation using only
+ * native HTML elements and CSS custom properties. This offers maximum
+ * flexibility for custom styling and ensures accessibility compliance.
+ *
+ * **Key Features:**
+ * - Zero UI library dependencies
+ * - Full CSS custom property theming
+ * - Native HTML button and anchor element support
+ * - Built-in hover, focus, and active states
+ * - Loading spinner with CSS animation
+ * - Link support via `href` prop (renders as anchor)
+ *
+ * **Additional Props (Apollo-specific):**
+ * - `shadow` - Adds box-shadow for elevated appearance
+ * - `gradient` - Applies gradient background
+ * - `pulse` - Adds pulsing animation for attention
+ * - `bordered` - Forces visible border
+ *
+ * **CSS Custom Properties:**
+ * All styling is controlled via CSS variables, making it easy to theme:
+ * - `--button-{variant}-bg` - Background colors
+ * - `--button-{variant}-color` - Text colors
+ * - `--button-{size}-height` - Heights per size
+ * - `--button-transition` - Transition timing
+ *
+ * **Accessibility:**
+ * - Proper ARIA attributes (aria-disabled, aria-busy)
+ * - Keyboard navigation support
+ * - Focus visible styles
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ *
+ * // Explicit Apollo engine
+ * <Button engine="apollo" variant="primary">
+ *   Vanilla Button
+ * </Button>
+ *
+ * // With Apollo-specific features
+ * <Button
+ *   engine="apollo"
+ *   variant="primary"
+ *   shadow
+ *   gradient
+ *   pulse
+ * >
+ *   Attention!
+ * </Button>
+ *
+ * // As a link
+ * <Button
+ *   engine="apollo"
+ *   variant="link"
+ *   href="/dashboard"
+ *   target="_blank"
+ * >
+ *   Go to Dashboard
+ * </Button>
+ * ```
+ *
+ * @see {@link Button} for the main component
+ * @see {@link TitanButton} for Ant Design implementation
+ * @see {@link HermesButton} for DaisyUI implementation
+ * @module ApolloButton
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,10 +1,36 @@
 /**
- * Popover Component Types
+ * @fileoverview Popover Component Types - Rottay Design System
+ * @description Type definitions for the Popover component including trigger types,
+ * placement options (12 positions), delay configurations, and component props.
  *
- * Type definitions for the Popover component including trigger types,
- * placement options, and component props.
+ * @remarks
+ * The Popover types provide comprehensive configuration for:
+ * - Trigger methods: click, hover, or focus activation
+ * - Placement options: 12 positions around the trigger element
+ * - Delay configurations: mouse enter/leave timing control
+ * - Controlled/uncontrolled state management
+ * - Styling options: overlays, z-index, and custom classes
  *
- * @module PopoverTypes
+ * @example Type Usage
+ * ```tsx
+ * import type {
+ *   PopoverProps,
+ *   PopoverTrigger,
+ *   PopoverPlacement,
+ * } from '@rottay/design-system';
+ *
+ * const props: PopoverProps = {
+ *   content: 'Help text here',
+ *   title: 'Information',
+ *   trigger: 'click',
+ *   placement: 'rightTop',
+ *   mouseEnterDelay: 200,
+ * };
+ * ```
+ *
+ * @module Popover/Types
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
 

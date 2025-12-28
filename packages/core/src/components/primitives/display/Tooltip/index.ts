@@ -1,34 +1,78 @@
 /**
- * Tooltip - Engine Router
- * Main entry point for the Tooltip component with engine-aware rendering.
+ * @fileoverview Tooltip - Rottay Design System
+ * @description Contextual information overlay triggered by user interaction.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * @module Tooltip
- * @description The Tooltip component provides contextual information when users
- * hover, focus, or click on an element. Supports multiple placement positions,
- * trigger types, and color variants across all three engines (Titan, Hermes, Apollo).
+ * @remarks
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Tooltip with collision detection
+ * - **Hermes**: DaisyUI tooltip classes with Tailwind utilities
+ * - **Apollo**: Pure CSS implementation with zero dependencies
  *
- * @example
+ * **Key Features:**
+ * - 12 placement positions (top, bottom, left, right with start/end variants)
+ * - Multiple trigger types (hover, click, focus, manual)
+ * - Controlled and uncontrolled visibility modes
+ * - Configurable show/hide delays
+ * - Arrow indicator support
+ * - Color variants (default, primary, secondary, success, warning, error)
+ * - Interactive mode for hoverable content
+ * - Full ARIA accessibility
+ *
+ * **Compound Components:**
+ * - `Tooltip.Trigger` - Element that triggers tooltip display
+ * - `Tooltip.Content` - Content displayed within the tooltip
+ *
+ * **CSS Custom Properties:**
+ * - `--tooltip-bg` - Background color
+ * - `--tooltip-color` - Text color
+ * - `--tooltip-radius` - Border radius
+ * - `--tooltip-padding` - Content padding
+ * - `--tooltip-shadow` - Box shadow
+ * - `--tooltip-arrow-size` - Arrow dimensions
+ *
+ * @example Basic Usage
  * ```tsx
- * // Basic usage with default engine (Titan)
+ * import { Tooltip } from '@rottay/design-system';
+ *
  * <Tooltip content="Helpful information">
  *   <Button>Hover me</Button>
  * </Tooltip>
+ * ```
  *
- * // With engine override
- * <Tooltip engine="hermes" content="DaisyUI styled tooltip">
- *   <span>Hover for info</span>
- * </Tooltip>
- *
- * // With placement and color
+ * @example With Placement and Color
+ * ```tsx
  * <Tooltip content="Success tip" placement="bottom" color="success">
  *   <IconButton>?</IconButton>
  * </Tooltip>
+ * ```
  *
- * // Controlled visibility
- * <Tooltip content="Controlled" visible={isOpen} onVisibleChange={setIsOpen}>
+ * @example Controlled Visibility
+ * ```tsx
+ * const [isOpen, setIsOpen] = useState(false);
+ *
+ * <Tooltip
+ *   content="Controlled tooltip"
+ *   visible={isOpen}
+ *   onVisibleChange={setIsOpen}
+ *   trigger="click"
+ * >
  *   <Button>Click me</Button>
  * </Tooltip>
  * ```
+ *
+ * @example Engine Override
+ * ```tsx
+ * <Tooltip engine="hermes" content="DaisyUI styled tooltip">
+ *   <span>Hover for info</span>
+ * </Tooltip>
+ * ```
+ *
+ * @see {@link TooltipProps} for available props
+ * @see {@link BaseTooltip} for CSS variable implementation
+ * @module Tooltip
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

@@ -1,13 +1,42 @@
 'use client';
 
 /**
- * Watermark - Titan Engine (Ant Design)
+ * @fileoverview Watermark Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Watermark component.
+ * Wraps Ant Design's Watermark with full feature parity and theming support.
  *
- * Ant Design implementation of the Watermark component.
- * Wraps the native antd Watermark component with our unified API.
+ * @remarks
+ * The Titan engine provides:
+ * - Native Ant Design Watermark rendering
+ * - Full theme integration with Ant Design tokens
+ * - Built-in canvas pattern generation
+ * - Inheritance support for nested watermarks
+ * - All font and positioning options
  *
- * @module WatermarkTitan
- * @see {@link https://ant.design/components/watermark} Ant Design Watermark
+ * Implementation details:
+ * - Wraps children in container div for ref forwarding
+ * - Passes all props directly to AntWatermark
+ * - Font prop cast to any for type compatibility
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Watermark } from '@rottay/design-system';
+ *
+ * <Watermark
+ *   engine="titan"
+ *   content="Confidential"
+ *   rotate={-22}
+ *   font={{ color: 'rgba(0,0,0,0.15)' }}
+ * >
+ *   <div>Protected content</div>
+ * </Watermark>
+ * ```
+ *
+ * @see {@link Watermark} - The main engine-aware component
+ * @see {@link https://ant.design/components/watermark} - Ant Design Watermark docs
+ * @module Watermark/Engines/Titan
+ * @category Overlay
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { Watermark as AntWatermark } from 'antd';

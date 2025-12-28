@@ -1,30 +1,69 @@
 /**
- * Avatar Component
+ * @fileoverview Avatar - Rottay Design System
+ * @description User profile display with image, initials, and status indicators.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * A versatile avatar component for displaying user profile images, initials,
- * or fallback icons. Supports multiple sizes, shapes, variants, and status indicators.
- * Includes compound components for grouping, badges, and fallback content.
+ * @remarks
+ * The Avatar component displays user profile images with automatic fallback
+ * to initials or custom content. It supports status indicators, grouping,
+ * and badge overlays for notifications.
  *
- * @component
- * @example
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Wraps Ant Design Avatar with Badge for status
+ * - **Hermes**: DaisyUI avatar classes with mask shapes
+ * - **Apollo**: Pure CSS implementation with inline styling
+ *
+ * **Key Features:**
+ * - Image with automatic error fallback to initials
+ * - Multiple sizes (xs, sm, md, lg, xl, 2xl, 3xl)
+ * - Shape variants (circle, square, rounded)
+ * - Color variants (default, primary, secondary, success, warning, error, gradient)
+ * - Status indicators (online, offline, away, busy)
+ * - Ring outline with custom color
+ * - Avatar grouping with max limit and overlap
+ * - Badge overlay for notifications
+ *
+ * **Compound Components:**
+ * - `Avatar.Group` - Display multiple avatars in a stack
+ * - `Avatar.Badge` - Notification badge overlay
+ * - `Avatar.Fallback` - Custom fallback content
+ *
+ * **CSS Custom Properties:**
+ * - `--avatar-{size}-size` - Avatar dimensions
+ * - `--avatar-{size}-font-size` - Initials font size
+ * - `--avatar-{variant}-bg` - Background color
+ * - `--avatar-{variant}-color` - Text color
+ * - `--avatar-status-{status}-color` - Status indicator color
+ *
+ * @example Basic Avatar
  * ```tsx
- * // Basic avatar with image
+ * import { Avatar } from '@rottay/design-system';
+ *
  * <Avatar src="/user.jpg" alt="John Doe" />
+ * ```
  *
- * // Avatar with initials fallback
- * <Avatar name="John Doe" />
+ * @example Initials Fallback
+ * ```tsx
+ * <Avatar name="John Doe" size="lg" variant="primary" />
+ * ```
  *
- * // Avatar with status indicator
- * <Avatar src="/user.jpg" status="online" />
+ * @example With Status Indicator
+ * ```tsx
+ * <Avatar src="/user.jpg" status="online" ring />
+ * ```
  *
- * // Avatar group
+ * @example Avatar Group
+ * ```tsx
  * <Avatar.Group max={3}>
  *   <Avatar src="/user1.jpg" />
  *   <Avatar src="/user2.jpg" />
  *   <Avatar name="JD" />
+ *   <Avatar name="AB" />
  * </Avatar.Group>
+ * ```
  *
- * // Avatar with badge
+ * @example With Badge
+ * ```tsx
  * <Avatar src="/user.jpg">
  *   <Avatar.Badge content={5} />
  * </Avatar>
@@ -32,7 +71,10 @@
  *
  * @see {@link AvatarProps} for available props
  * @see {@link AvatarGroupProps} for group configuration
- * @see {@link AvatarBadgeProps} for badge configuration
+ * @see {@link Badge} for notification badges
+ * @module Avatar
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

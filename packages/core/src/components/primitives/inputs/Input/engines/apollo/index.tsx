@@ -1,6 +1,66 @@
 /**
- * Input - Apollo Engine (Pure HTML/CSS)
- * Headless implementation using CSS variables
+ * @fileoverview Input Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Input component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a headless input implementation using only
+ * native HTML elements and inline styles. This offers maximum flexibility
+ * for custom styling and ensures accessibility compliance.
+ *
+ * **Key Features:**
+ * - Zero UI library dependencies
+ * - Controlled and uncontrolled modes
+ * - Focus, hover, and disabled state handling
+ * - Clear button with custom SVG icon
+ * - Character count display
+ * - Error message display
+ * - Multiple variants and validation states
+ *
+ * **Inline Style Approach:**
+ * Unlike CSS variable-based styling, Apollo uses computed inline styles
+ * for complete control over appearance. This ensures styles work without
+ * requiring any external CSS files.
+ *
+ * **State-Based Styling:**
+ * - Border color changes based on focus, error, warning, success states
+ * - Box-shadow for focus and error visual feedback
+ * - Opacity reduction for disabled state
+ *
+ * **Accessibility:**
+ * - Proper ARIA attributes (aria-invalid, aria-label, aria-describedby)
+ * - Focus management for clear button
+ * - Required attribute support
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Input } from '@rottay/design-system';
+ *
+ * // Explicit Apollo engine
+ * <Input
+ *   engine="apollo"
+ *   placeholder="Vanilla input"
+ *   variant="filled"
+ * />
+ *
+ * // With full customization
+ * <Input
+ *   engine="apollo"
+ *   placeholder="Custom styled"
+ *   status="success"
+ *   prefix={<MailIcon />}
+ *   suffix={<CheckIcon />}
+ *   clearable
+ *   style={{ backgroundColor: '#f0fff4' }}
+ * />
+ * ```
+ *
+ * @see {@link Input} for the main component
+ * @see {@link TitanInput} for Ant Design implementation
+ * @see {@link HermesInput} for DaisyUI implementation
+ * @module ApolloInput
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

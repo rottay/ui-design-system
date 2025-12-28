@@ -1,6 +1,33 @@
 /**
- * Divider - Hermes Engine (DaisyUI/Tailwind)
- * Uses DaisyUI styling conventions with Tailwind utilities.
+ * @fileoverview Divider Hermes Engine - Rottay Design System
+ * @description Hermes (DaisyUI/Tailwind) implementation of the Divider component.
+ * Uses DaisyUI's divider classes with Tailwind utilities.
+ *
+ * @remarks
+ * The Hermes engine provides DaisyUI-compatible styling:
+ * - Uses DaisyUI's `divider` class structure
+ * - Text styling uses uppercase and letter-spacing for emphasis
+ * - Colors use DaisyUI's `oklch` color variables
+ *
+ * CSS Classes Applied:
+ * - `divider`: Base DaisyUI class
+ * - `divider-horizontal` / `divider-vertical`: Orientation
+ * - `divider-start` / `divider-end`: Text positioning
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Divider } from '@rottay/design-system';
+ *
+ * // DaisyUI styled divider
+ * <Divider engine="hermes" textPosition="left">
+ *   CHAPTER ONE
+ * </Divider>
+ * ```
+ *
+ * @see {@link Divider} - The main engine-aware component
+ * @module Divider/Engines/Hermes
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

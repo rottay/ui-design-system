@@ -1,8 +1,47 @@
 /**
- * Image - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Image Hermes Engine - Rottay Design System
+ * @description Tailwind/DaisyUI-based image with utility-first styling.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Uses Tailwind CSS utility classes for styling with
- * DaisyUI component patterns.
+ * @remarks
+ * This engine uses Tailwind CSS utilities and DaisyUI patterns for
+ * lightweight, responsive image rendering with hover effects.
+ *
+ * **Implementation Details:**
+ * - Uses Tailwind `object-*` classes for fit modes
+ * - Uses `rounded-*` classes for border radius
+ * - Uses `animate-pulse` for loading skeleton
+ * - Smooth opacity transitions on load
+ *
+ * **Tailwind Classes:**
+ * - `rounded-none/sm/md/lg/full` - Border radius
+ * - `object-cover/contain/fill` - Object fit
+ * - `shadow-md` - Drop shadow
+ * - `border border-base-300` - Border styling
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Image } from '@rottay/design-system';
+ *
+ * <Image engine="hermes" src="/photo.jpg" alt="Photo" radius="lg" />
+ * ```
+ *
+ * @example With Hover Effect
+ * ```tsx
+ * <Image
+ *   engine="hermes"
+ *   src="/photo.jpg"
+ *   alt="Photo"
+ *   shadow
+ *   hoverOverlay={<span className="text-white">View</span>}
+ * />
+ * ```
+ *
+ * @see {@link Image} for the main component
+ * @see {@link https://tailwindcss.com/docs/object-fit} Tailwind Object Fit
+ * @module HermesImage
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

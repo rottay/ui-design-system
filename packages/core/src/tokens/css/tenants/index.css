@@ -2,14 +2,22 @@
  * Tenants Index - Rottay Design System
  *
  * Central import file for tenant-specific customizations.
- * Add new tenant imports here as they are created.
+ * Each tenant overrides default.css tokens via [data-tenant="x"] selector.
+ *
+ * Architecture:
+ * 1. default.css provides all base tokens (:root)
+ * 2. Tenant CSS overrides ONLY values that differ from default
+ * 3. Apply tenant by adding data-tenant="x" to html element
  *
  * Current tenants:
- * - rottay: Base/default tenant configuration
+ * - rottay: Default/primary tenant
+ *
+ * @version 0.4.0
  */
 
 @import './rottay/index.css';
 
-/* Future tenants can be imported here:
- * @import './tenant-name/index.css';
+/* Future tenants:
+ * @import './bithire/index.css';
+ * @import './clientname/index.css';
  */

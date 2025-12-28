@@ -1,18 +1,33 @@
 /**
- * Responsive hooks - Media queries and breakpoint detection
+ * @fileoverview Responsive Hooks - Rottay Design System
+ * @description SSR-safe React hooks for responsive design, media queries,
+ * breakpoint detection, and viewport-based value resolution.
  *
- * These hooks provide SSR-safe responsive behavior detection:
- * - useMediaQuery: Custom media query detection
- * - useBreakpoints: Common breakpoint detection (mobile/tablet/desktop)
- * - useResponsiveValue: Responsive values based on current breakpoint
+ * @remarks
+ * The responsive hooks provide:
  *
- * @example
+ * - **useMediaQuery**: Subscribe to any CSS media query
+ * - **useBreakpoints**: Detect mobile/tablet/desktop and device capabilities
+ * - **useResponsiveValue**: Get breakpoint-specific values (Tailwind-style)
+ *
+ * All hooks are:
+ * - **SSR-safe**: Return false/base on server to prevent hydration mismatches
+ * - **Reactive**: Update automatically when viewport changes
+ * - **Mobile-first**: Follow Tailwind CSS breakpoint conventions
+ *
+ * Breakpoints:
+ * - base: 0px (mobile, always applies)
+ * - sm: 640px (small tablets)
+ * - md: 768px (tablets)
+ * - lg: 1024px (small desktops)
+ * - xl: 1280px (desktops)
+ * - 2xl: 1536px (large screens)
+ *
+ * @example Responsive layout
  * ```tsx
- * import { useBreakpoints, useResponsiveValue } from '@rottay/design-system';
- *
- * function MyComponent() {
+ * function Layout() {
  *   const { isMobile, isDesktop } = useBreakpoints();
- *   const columns = useResponsiveValue({ base: 1, md: 2, lg: 3 });
+ *   const columns = useResponsiveValue({ base: 1, md: 2, lg: 4 });
  *
  *   return (
  *     <Grid columns={columns}>
@@ -21,6 +36,13 @@
  *   );
  * }
  * ```
+ *
+ * @see {@link useMediaQuery} - Custom media query detection
+ * @see {@link useBreakpoints} - Breakpoint detection
+ * @see {@link useResponsiveValue} - Responsive values
+ * @module System/Hooks/Responsive
+ * @category System
+ * @package @rottay/design-system
  */
 
 // Media query hook

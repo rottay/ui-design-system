@@ -1,10 +1,43 @@
 /**
- * Typography Heading - Compound Component
+ * @fileoverview Typography.Heading Compound - Rottay Design System
+ * @description Engine-aware semantic heading component (h1-h6).
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Engine-aware Heading component that can be used standalone or
- * as Typography.Heading in the compound pattern.
+ * @remarks
+ * The TypographyHeading component provides semantic heading elements with
+ * customizable visual appearance independent of semantic level.
  *
+ * **Features:**
+ * - Semantic h1-h6 levels for document outline
+ * - Visual size independent of semantic level
+ * - Multiple font weights and colors
+ * - Text alignment options
+ * - Line clamping and truncation
+ * - Engine-aware rendering
+ *
+ * **Accessibility:**
+ * - Uses proper heading hierarchy for screen readers
+ * - Maintains semantic structure regardless of visual size
+ *
+ * @example Basic Usage
+ * ```tsx
+ * <Typography.Heading level="h1" size="3xl">
+ *   Page Title
+ * </Typography.Heading>
+ * ```
+ *
+ * @example Visual Override
+ * ```tsx
+ * <Typography.Heading level="h3" size="xl" color="primary">
+ *   Section (h3 with xl visual size)
+ * </Typography.Heading>
+ * ```
+ *
+ * @see {@link Typography} for the main namespace
+ * @see {@link HeadingProps} for available props
  * @module Typography/compound/Heading
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,10 +1,45 @@
 /**
- * Tooltip.Content - Content Compound Component
- * Displays the content within the tooltip popup.
+ * @fileoverview Tooltip.Content Compound - Rottay Design System
+ * @description Content container for tooltip popup with arrow positioning.
+ * Part of the Rottay Design System's display primitives collection.
  *
+ * @remarks
+ * The TooltipContent component renders the content displayed within the
+ * tooltip popup. Includes optional arrow indicator for visual connection.
+ *
+ * **Features:**
+ * - Arrow indicator with automatic positioning
+ * - CSS variable-based theming
+ * - Customizable side positioning (top, bottom, left, right)
+ * - Accessible content container
+ *
+ * **CSS Custom Properties:**
+ * - `--tooltip-padding` - Content padding
+ * - `--tooltip-bg` - Background color
+ * - `--tooltip-color` - Text color
+ * - `--tooltip-radius` - Border radius
+ * - `--tooltip-shadow` - Box shadow
+ * - `--tooltip-arrow-size` - Arrow dimensions
+ *
+ * @example With Arrow
+ * ```tsx
+ * <Tooltip.Content arrow side="bottom">
+ *   <p>This is helpful tooltip content</p>
+ * </Tooltip.Content>
+ * ```
+ *
+ * @example Without Arrow
+ * ```tsx
+ * <Tooltip.Content arrow={false}>
+ *   <span>Simple tooltip text</span>
+ * </Tooltip.Content>
+ * ```
+ *
+ * @see {@link Tooltip} for the main component
+ * @see {@link TooltipTrigger} for trigger component
  * @module Tooltip/compound/Content
- * @description The content component for the Tooltip compound pattern.
- * This component renders the tooltip content with optional arrow indicator.
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

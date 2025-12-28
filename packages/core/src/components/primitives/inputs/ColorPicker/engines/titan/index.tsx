@@ -1,7 +1,35 @@
 'use client';
 
 /**
- * ColorPicker - Titan Engine (Ant Design)
+ * @fileoverview ColorPicker Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the ColorPicker component providing
+ * full-featured color selection with gradient picker, format switching, and presets.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's ColorPicker for:
+ * - **Full color panel**: Gradient picker with saturation/brightness
+ * - **Alpha channel**: Native transparency slider support
+ * - **Format switching**: Built-in HEX/RGB/HSB format switcher
+ * - **Preset palettes**: Native preset group support
+ * - **Accessibility**: Full keyboard navigation and ARIA support
+ *
+ * This is the most feature-complete engine for color selection.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <ColorPicker engine="titan" defaultValue="#1677ff" showText />
+ * ```
+ *
+ * @example With format switcher
+ * ```tsx
+ * <ColorPicker engine="titan" format="rgb" onFormatChange={setFormat} />
+ * ```
+ *
+ * @see {@link ColorPicker} - Main component
+ * @see {@link ColorPickerProps} - Component props
+ * @module ColorPicker/Engines/Titan
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React from 'react';
 import { ColorPicker as AntColorPicker } from 'antd';

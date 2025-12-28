@@ -1,3 +1,29 @@
+/**
+ * @fileoverview useBreakpoints Hook - Rottay Design System
+ * @description Convenient React hook for detecting common breakpoints
+ * and device capabilities using Tailwind CSS conventions.
+ *
+ * @remarks
+ * Detects:
+ * - **Breakpoints**: isMobile, isTablet, isDesktop
+ * - **Combinations**: isMobileOrTablet, isTabletOrDesktop
+ * - **Capabilities**: isTouchDevice, prefersReducedMotion
+ *
+ * Breakpoint ranges (Tailwind-compatible):
+ * - Mobile: 0-639px
+ * - Tablet: 640-1023px
+ * - Desktop: 1024px+
+ *
+ * @example Responsive navigation
+ * ```tsx
+ * const { isMobile, isDesktop, isTouchDevice } = useBreakpoints();
+ * return isMobile ? <Drawer /> : <Sidebar />;
+ * ```
+ *
+ * @module System/Hooks/Responsive/useBreakpoints
+ * @category System
+ * @package @rottay/design-system
+ */
 import { useMediaQuery } from '../useMediaQuery';
 
 /**

@@ -1,9 +1,39 @@
 /**
- * @fileoverview Badge Component Type Definitions
- * @description Re-exports centralized types and provides default configuration values
- * for the Badge component. The Badge component displays counts, status indicators,
- * or small labels attached to other UI elements.
- * @module components/primitives/display/Badge/types
+ * @fileoverview Badge Types - Rottay Design System
+ * @description Type definitions for the Badge component.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This module re-exports types from the centralized types definition
+ * and provides default values and configuration maps for the Badge component.
+ *
+ * **Exported Types:**
+ * - `BadgeProps` - Main component props interface
+ * - `BadgeSize` - Size variant type ('xs' | 'sm' | 'md' | 'lg' | 'xl')
+ * - `BadgeVariant` - Color variant type (default, primary, secondary, etc.)
+ * - `BadgeStyle` - Visual style type (solid, outline, soft, ghost)
+ * - `BadgeStatus` - Status indicator type (processing, success, error, etc.)
+ * - `BadgeRibbonProps` - Ribbon badge props (future)
+ * - `BadgeCountProps` - Count badge props (future)
+ *
+ * **Configuration Constants:**
+ * - `BADGE_DEFAULTS` - Default prop values
+ * - `VARIANT_COLOR_MAP` - Variant to color mapping
+ * - `SIZE_MAP` - Size to dimensions mapping
+ * - `DOT_SIZE_MAP` - Dot size per size variant
+ * - `STATUS_COLOR_MAP` - Status to color mapping
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { BadgeProps, BadgeVariant } from '@rottay/design-system';
+ *
+ * const variant: BadgeVariant = 'success';
+ * ```
+ *
+ * @see {@link Badge} for the main component
+ * @module BadgeTypes
+ * @category Display
+ * @package @rottay/design-system
  */
 
 export type {
@@ -43,16 +73,16 @@ export const BADGE_DEFAULTS = {
 
 /**
  * Mapping of variant names to their corresponding background colors.
- * Uses hex color values that align with design system tokens.
+ * Uses CSS variable references with fallback hex values.
  */
 export const VARIANT_COLOR_MAP: Record<string, string> = {
-  default: '#d9d9d9',
-  primary: '#1890ff',
-  secondary: '#722ed1',
-  success: '#52c41a',
-  warning: '#faad14',
-  error: '#ff4d4f',
-  info: '#1890ff',
+  default: 'var(--ds-color-neutral-300, #d9d9d9)',
+  primary: 'var(--ds-color-primary-500, #1890ff)',
+  secondary: 'var(--ds-color-secondary-500, #722ed1)',
+  success: 'var(--ds-color-success-500, #52c41a)',
+  warning: 'var(--ds-color-warning-500, #faad14)',
+  error: 'var(--ds-color-error-500, #ff4d4f)',
+  info: 'var(--ds-color-info-500, #1890ff)',
 } as const;
 
 /**
@@ -61,11 +91,11 @@ export const VARIANT_COLOR_MAP: Record<string, string> = {
  * @remarks These values reference CSS custom properties defined in design tokens.
  */
 export const SIZE_MAP: Record<string, { minWidth: string; height: string; fontSize: string }> = {
-  xs: { minWidth: 'var(--badge-xs-min-width)', height: 'var(--badge-xs-height)', fontSize: 'var(--badge-xs-font-size)' },
-  sm: { minWidth: 'var(--badge-sm-min-width)', height: 'var(--badge-sm-height)', fontSize: 'var(--badge-sm-font-size)' },
-  md: { minWidth: 'var(--badge-md-min-width)', height: 'var(--badge-md-height)', fontSize: 'var(--badge-md-font-size)' },
-  lg: { minWidth: 'var(--badge-lg-min-width)', height: 'var(--badge-lg-height)', fontSize: 'var(--badge-lg-font-size)' },
-  xl: { minWidth: 'var(--badge-xl-min-width)', height: 'var(--badge-xl-height)', fontSize: 'var(--badge-xl-font-size)' },
+  xs: { minWidth: 'var(--ds-badge-xs-min-width)', height: 'var(--ds-badge-xs-height)', fontSize: 'var(--ds-badge-xs-font-size)' },
+  sm: { minWidth: 'var(--ds-badge-sm-min-width)', height: 'var(--ds-badge-sm-height)', fontSize: 'var(--ds-badge-sm-font-size)' },
+  md: { minWidth: 'var(--ds-badge-md-min-width)', height: 'var(--ds-badge-md-height)', fontSize: 'var(--ds-badge-md-font-size)' },
+  lg: { minWidth: 'var(--ds-badge-lg-min-width)', height: 'var(--ds-badge-lg-height)', fontSize: 'var(--ds-badge-lg-font-size)' },
+  xl: { minWidth: 'var(--ds-badge-xl-min-width)', height: 'var(--ds-badge-xl-height)', fontSize: 'var(--ds-badge-xl-font-size)' },
 } as const;
 
 /**
@@ -73,11 +103,11 @@ export const SIZE_MAP: Record<string, { minWidth: string; height: string; fontSi
  * Defines the diameter of dot badges for each size variant using CSS variables.
  */
 export const DOT_SIZE_MAP: Record<string, string> = {
-  xs: 'var(--badge-dot-xs-size)',
-  sm: 'var(--badge-dot-sm-size)',
-  md: 'var(--badge-dot-md-size)',
-  lg: 'var(--badge-dot-lg-size)',
-  xl: 'var(--badge-dot-xl-size)',
+  xs: 'var(--ds-badge-dot-xs-size)',
+  sm: 'var(--ds-badge-dot-sm-size)',
+  md: 'var(--ds-badge-dot-md-size)',
+  lg: 'var(--ds-badge-dot-lg-size)',
+  xl: 'var(--ds-badge-dot-xl-size)',
 } as const;
 
 /**
@@ -85,9 +115,9 @@ export const DOT_SIZE_MAP: Record<string, string> = {
  * Maps status types to their corresponding display colors.
  */
 export const STATUS_COLOR_MAP: Record<string, string> = {
-  processing: '#1890ff',
-  default: '#d9d9d9',
-  success: '#52c41a',
-  error: '#ff4d4f',
-  warning: '#faad14',
+  processing: 'var(--ds-color-primary-500, #1890ff)',
+  default: 'var(--ds-color-neutral-300, #d9d9d9)',
+  success: 'var(--ds-color-success-500, #52c41a)',
+  error: 'var(--ds-color-error-500, #ff4d4f)',
+  warning: 'var(--ds-color-warning-500, #faad14)',
 } as const;

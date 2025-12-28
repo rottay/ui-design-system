@@ -194,12 +194,12 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
      * These variables can be overridden by tenant themes.
      */
     const notificationVars = useMemo<React.CSSProperties>(() => ({
-      '--notification-bg': 'var(--color-bg-elevated, #fff)',
-      '--notification-icon-color': typeConfig?.color || 'var(--color-text-secondary)',
-      '--notification-shadow': 'var(--shadow-lg)',
-      '--notification-border-radius': 'var(--radius-lg, 8px)',
-      '--notification-padding': '16px 24px',
-      '--notification-width': '384px',
+      '--ds-notification-bg': 'var(--ds-color-bg-elevated, #fff)',
+      '--ds-notification-icon-color': typeConfig?.color || 'var(--ds-color-text-secondary)',
+      '--ds-notification-shadow': 'var(--ds-shadow-lg)',
+      '--ds-notification-border-radius': 'var(--ds-radius-lg, 8px)',
+      '--ds-notification-padding': '16px 24px',
+      '--ds-notification-width': '384px',
     } as React.CSSProperties), [typeConfig]);
 
     // ========================================================================
@@ -215,11 +215,11 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
     const notificationStyle: React.CSSProperties = {
       ...notificationVars,
       position: 'relative',
-      width: 'var(--notification-width)',
-      padding: 'var(--notification-padding)',
-      backgroundColor: 'var(--notification-bg)',
-      borderRadius: 'var(--notification-border-radius)',
-      boxShadow: 'var(--notification-shadow)',
+      width: 'var(--ds-notification-width)',
+      padding: 'var(--ds-notification-padding)',
+      backgroundColor: 'var(--ds-notification-bg)',
+      borderRadius: 'var(--ds-notification-border-radius)',
+      boxShadow: 'var(--ds-notification-shadow)',
       opacity: isExiting ? 0 : 1,
       transform: isExiting ? 'translateX(100%)' : 'translateX(0)',
       transition: 'opacity 0.3s, transform 0.3s',
@@ -240,7 +240,7 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       width: '24px',
       height: '24px',
       fontSize: '24px',
-      color: 'var(--notification-icon-color)',
+      color: 'var(--ds-notification-icon-color)',
       flexShrink: 0,
     };
 
@@ -252,14 +252,14 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
     const titleStyle: React.CSSProperties = {
       fontSize: '16px',
       fontWeight: 500,
-      color: 'var(--color-text-primary)',
+      color: 'var(--ds-color-text-primary)',
       marginBottom: description ? '8px' : 0,
       paddingRight: closable ? '24px' : 0,
     };
 
     const descriptionStyle: React.CSSProperties = {
       fontSize: '14px',
-      color: 'var(--color-text-secondary)',
+      color: 'var(--ds-color-text-secondary)',
       lineHeight: 1.5,
     };
 
@@ -273,7 +273,7 @@ export const BaseNotificationItem = forwardRef<HTMLDivElement, NotificationItemP
       width: '22px',
       height: '22px',
       cursor: 'pointer',
-      color: 'var(--color-text-tertiary)',
+      color: 'var(--ds-color-text-tertiary)',
       borderRadius: '4px',
       transition: 'color 0.2s, background-color 0.2s',
     };

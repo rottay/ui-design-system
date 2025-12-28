@@ -1,6 +1,40 @@
 /**
- * Engine Component Factory
- * Creates engine-aware components that dynamically load implementations
+ * @fileoverview Engine Component Factory - Rottay Design System
+ * @description Factory function for creating engine-aware components that
+ * dynamically load implementations based on the current engine context.
+ *
+ * @remarks
+ * The factory enables the multi-engine architecture by:
+ *
+ * - **Lazy loading**: Code-splits engine implementations
+ * - **Context-aware**: Respects EngineProvider settings
+ * - **Override support**: Per-component engine override via prop
+ * - **Error handling**: Built-in error boundary with fallbacks
+ * - **Athena support**: Custom component registration
+ *
+ * @example Creating a component
+ * ```tsx
+ * export const Button = createEngineComponent<ButtonProps>('Button', {
+ *   titan: () => import('./engines/titan'),
+ *   hermes: () => import('./engines/hermes'),
+ *   apollo: () => import('./engines/apollo'),
+ * });
+ * ```
+ *
+ * @example With options
+ * ```tsx
+ * export const Card = createEngineComponent('Card', loaders, {
+ *   fallback: <Skeleton />,
+ *   fallbackEngine: 'apollo',
+ *   onError: (error) => logError(error),
+ * });
+ * ```
+ *
+ * @see {@link EngineLoaders} - Loader configuration
+ * @see {@link CreateEngineComponentOptions} - Factory options
+ * @module System/Engines/Factory
+ * @category System
+ * @package @rottay/design-system
  */
 
 import { lazy, Suspense, ComponentType, LazyExoticComponent, ErrorInfo } from 'react';

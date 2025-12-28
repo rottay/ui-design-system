@@ -1,6 +1,62 @@
 /**
- * Button.Group - Compound Component
- * Groups multiple buttons together with consistent spacing
+ * @fileoverview ButtonGroup - Rottay Design System
+ * @description Compound component for grouping multiple buttons together.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * ButtonGroup provides a way to visually and semantically group related buttons.
+ * It supports both horizontal and vertical orientations, with options for
+ * connected styling (no gaps) or spaced buttons.
+ *
+ * **Key Features:**
+ * - Horizontal or vertical orientation
+ * - Connected mode for toolbar-style button groups
+ * - Configurable spacing between buttons
+ * - Automatic border radius adjustment for connected buttons
+ * - Props cascade to child buttons (size, variant, shape)
+ *
+ * **Accessibility:**
+ * - Uses `role="group"` for semantic grouping
+ * - Connected buttons maintain proper focus order
+ *
+ * @example Basic Button Group
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ *
+ * <Button.Group>
+ *   <Button variant="outline">Left</Button>
+ *   <Button variant="outline">Center</Button>
+ *   <Button variant="outline">Right</Button>
+ * </Button.Group>
+ * ```
+ *
+ * @example Connected Toolbar Style
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ *
+ * <Button.Group connected orientation="horizontal">
+ *   <Button variant="secondary">Bold</Button>
+ *   <Button variant="secondary">Italic</Button>
+ *   <Button variant="secondary">Underline</Button>
+ * </Button.Group>
+ * ```
+ *
+ * @example Vertical Group with Shared Size
+ * ```tsx
+ * import { Button } from '@rottay/design-system';
+ *
+ * <Button.Group orientation="vertical" size="sm" spacing={4}>
+ *   <Button>Option 1</Button>
+ *   <Button>Option 2</Button>
+ *   <Button>Option 3</Button>
+ * </Button.Group>
+ * ```
+ *
+ * @see {@link Button} for the main component
+ * @see {@link ButtonIcon} for icon-only buttons
+ * @module ButtonGroup
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

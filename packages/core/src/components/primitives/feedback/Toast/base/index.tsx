@@ -293,16 +293,16 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
 
     /** CSS variables for toast theming */
     const toastVars: React.CSSProperties = {
-      '--toast-bg': `var(--toast-${variant}-bg, ${colors.bg})`,
-      '--toast-color': `var(--toast-${variant}-color, ${colors.color})`,
-      '--toast-border-color': `var(--toast-${variant}-border-color, ${colors.borderColor})`,
-      '--toast-icon-color': `var(--toast-${variant}-icon-color, ${colors.iconColor})`,
-      '--toast-border-radius': `var(--toast-border-radius, ${radiusMap[radius]})`,
-      '--toast-shadow': shadow ? 'var(--toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))' : 'none',
-      '--toast-padding': 'var(--toast-padding, 12px 16px)',
-      '--toast-max-width': 'var(--toast-max-width, 400px)',
-      '--toast-enter-duration': `${TOAST_ANIMATION.enterDuration}ms`,
-      '--toast-exit-duration': `${TOAST_ANIMATION.exitDuration}ms`,
+      '--ds-toast-bg': `var(--ds-toast-${variant}-bg, ${colors.bg})`,
+      '--ds-toast-color': `var(--ds-toast-${variant}-color, ${colors.color})`,
+      '--ds-toast-border-color': `var(--ds-toast-${variant}-border-color, ${colors.borderColor})`,
+      '--ds-toast-icon-color': `var(--ds-toast-${variant}-icon-color, ${colors.iconColor})`,
+      '--ds-toast-border-radius': `var(--ds-toast-border-radius, ${radiusMap[radius]})`,
+      '--ds-toast-shadow': shadow ? 'var(--ds-toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))' : 'none',
+      '--ds-toast-padding': 'var(--ds-toast-padding, 12px 16px)',
+      '--ds-toast-max-width': 'var(--ds-toast-max-width, 400px)',
+      '--ds-toast-enter-duration': `${TOAST_ANIMATION.enterDuration}ms`,
+      '--ds-toast-exit-duration': `${TOAST_ANIMATION.exitDuration}ms`,
     } as React.CSSProperties;
 
     /** Main container styles */
@@ -312,23 +312,23 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       display: 'flex',
       alignItems: 'flex-start',
       gap: '12px',
-      padding: 'var(--toast-padding)',
-      maxWidth: 'var(--toast-max-width)',
-      background: 'var(--toast-bg)',
-      color: 'var(--toast-color)',
-      borderRadius: 'var(--toast-border-radius)',
-      border: '1px solid var(--toast-border-color)',
-      boxShadow: 'var(--toast-shadow)',
+      padding: 'var(--ds-toast-padding)',
+      maxWidth: 'var(--ds-toast-max-width)',
+      background: 'var(--ds-toast-bg)',
+      color: 'var(--ds-toast-color)',
+      borderRadius: 'var(--ds-toast-border-radius)',
+      border: '1px solid var(--ds-toast-border-color)',
+      boxShadow: 'var(--ds-toast-shadow)',
       overflow: 'hidden',
       animation: isExiting
-        ? `toast-fade-out var(--toast-exit-duration) ease-in forwards`
-        : `toast-fade-in var(--toast-enter-duration) ease-out forwards`,
+        ? `toast-fade-out var(--ds-toast-exit-duration) ease-in forwards`
+        : `toast-fade-in var(--ds-toast-enter-duration) ease-out forwards`,
       ...style,
     };
 
     /** Icon container styles */
     const iconStyle: React.CSSProperties = {
-      color: 'var(--toast-icon-color)',
+      color: 'var(--ds-toast-icon-color)',
       flexShrink: 0,
       marginTop: '2px',
     };
@@ -394,7 +394,7 @@ export const BaseToast = forwardRef<HTMLDivElement, ToastProps>(
       left: 0,
       height: '3px',
       width: `${progress}%`,
-      background: 'var(--toast-icon-color)',
+      background: 'var(--ds-toast-icon-color)',
       opacity: 0.5,
       transition: 'width 0.1s linear',
     };

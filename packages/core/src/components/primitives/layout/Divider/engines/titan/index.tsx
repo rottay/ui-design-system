@@ -1,6 +1,34 @@
 /**
- * Divider - Titan Engine (Ant Design)
- * Uses Ant Design styling conventions with custom enhancements.
+ * @fileoverview Divider Titan Engine - Rottay Design System
+ * @description Titan (Ant Design) implementation of the Divider component.
+ * Uses Ant Design styling conventions with `ant-divider` class structure.
+ *
+ * @remarks
+ * The Titan engine provides Ant Design-compatible styling:
+ * - Class names follow Ant Design conventions (`ant-divider`, `ant-divider-horizontal`, etc.)
+ * - Text styling matches Ant Design's typography
+ * - Default colors use Ant Design's border color palette
+ *
+ * CSS Classes Applied:
+ * - `ant-divider`: Base class
+ * - `ant-divider-horizontal` / `ant-divider-vertical`: Orientation
+ * - `ant-divider-with-text`: When text content is present
+ * - `ant-divider-with-text-left/center/right`: Text positioning
+ * - `ant-divider-dashed` / `ant-divider-dotted`: Line variants
+ * - `ant-divider-plain`: Plain text without styling
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Divider } from '@rottay/design-system';
+ *
+ * // Ant Design styled divider
+ * <Divider engine="titan" dashed>Section</Divider>
+ * ```
+ *
+ * @see {@link Divider} - The main engine-aware component
+ * @module Divider/Engines/Titan
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

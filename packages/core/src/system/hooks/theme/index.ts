@@ -1,5 +1,32 @@
 /**
- * Theme hook - Access and control the current theme
+ * @fileoverview useTheme Hook - Rottay Design System
+ * @description React hook for accessing and controlling the current theme variant,
+ * supporting light/dark modes and custom tenant themes.
+ *
+ * @remarks
+ * The useTheme hook provides:
+ * - **Theme access**: Get current theme name (light, dark, custom)
+ * - **Theme switching**: Change theme at runtime
+ * - **Full config**: Access complete theme configuration
+ * - **Tenant awareness**: Respects tenant-specific theme settings
+ *
+ * @example Basic theme toggle
+ * ```tsx
+ * function ThemeToggle() {
+ *   const { theme, setTheme } = useTheme();
+ *   return (
+ *     <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+ *       Current: {theme}
+ *     </button>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link ThemeProvider} - Provider component
+ * @see {@link ThemeContextValue} - Context value type
+ * @module System/Hooks/Theme
+ * @category System
+ * @package @rottay/design-system
  */
 import { useContext } from 'react';
 import { ThemeContext } from '../../providers/theme';

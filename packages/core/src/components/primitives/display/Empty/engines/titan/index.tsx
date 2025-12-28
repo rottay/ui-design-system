@@ -1,13 +1,46 @@
 /**
- * Empty Component - Titan Engine (Ant Design)
+ * @fileoverview Empty Titan Engine - Rottay Design System
+ * @description Ant Design-based empty state with built-in image presets.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * This implementation uses Ant Design's Empty component as the underlying
- * rendering engine. It provides a feature-rich empty state with built-in
- * theming and accessibility support.
+ * @remarks
+ * This engine wraps Ant Design's Empty component to provide
+ * feature-rich empty states with ecosystem consistency.
  *
+ * **Exported Components:**
+ * - `TitanEmpty` - Main empty state wrapper
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Empty` for core rendering
+ * - Built-in PRESENTED_IMAGE_DEFAULT and PRESENTED_IMAGE_SIMPLE
+ * - Consistent with Ant Design theming
+ * - RTL (right-to-left) support
+ *
+ * **Ant Design Features:**
+ * - Built-in image variants
+ * - Theme token integration
+ * - Accessible by default
+ * - Locale support
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { Empty } from '@rottay/design-system';
+ *
+ * <Empty engine="titan" />
+ * ```
+ *
+ * @example With Action
+ * ```tsx
+ * <Empty engine="titan" description="No items">
+ *   <Button type="primary">Create Now</Button>
+ * </Empty>
+ * ```
+ *
+ * @see {@link Empty} for the main component
+ * @see {@link https://ant.design/components/empty} Ant Design Empty
  * @module Empty/engines/titan
  * @category Display
- * @engine Titan
+ * @package @rottay/design-system
  */
 
 'use client';

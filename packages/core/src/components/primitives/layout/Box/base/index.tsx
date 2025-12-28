@@ -1,6 +1,34 @@
 /**
- * Box - Base Component
- * Uses CSS variables from design tokens for consistent styling
+ * @fileoverview Box Base Component - Rottay Design System
+ * @description Core implementation of the Box layout primitive using CSS variables.
+ * This base component is extended by engine-specific implementations.
+ *
+ * @remarks
+ * The base component handles all style computation and prop filtering, providing
+ * a foundation for Titan, Hermes, and Apollo engine implementations. It converts
+ * shorthand props to CSS properties and resolves design tokens to their CSS values.
+ *
+ * Key utilities exported:
+ * - `buildBoxStyles`: Converts Box props to a CSSProperties object
+ * - `filterBoxProps`: Removes Box-specific props before DOM passthrough
+ * - `BaseBox`: The foundational component with full Box API support
+ *
+ * @example Using Utility Functions
+ * ```tsx
+ * import { buildBoxStyles, filterBoxProps } from '@rottay/design-system';
+ *
+ * // Build styles from props
+ * const styles = buildBoxStyles({ padding: 'md', shadow: 'sm' });
+ * // Result: { padding: '1rem', boxShadow: '0 1px 3px...' }
+ *
+ * // Filter custom props before passing to DOM
+ * const domProps = filterBoxProps(props);
+ * ```
+ *
+ * @see {@link Box} - The main engine-aware component
+ * @module Box/Base
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

@@ -1,9 +1,56 @@
 /**
- * @fileoverview Statistic - Titan Engine Implementation
- * @description Ant Design based implementation of the Statistic component.
- * Provides full feature parity with Ant Design's Statistic component
- * while maintaining Rottay Design System API consistency.
- * @module components/primitives/display/Statistic/engines/titan
+ * @fileoverview Statistic Titan Engine - Rottay Design System
+ * @description Ant Design-based statistic with native countdown support.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine wraps Ant Design's Statistic component to provide
+ * comprehensive numerical display with countdown functionality.
+ *
+ * **Exported Components:**
+ * - `Statistic` - Main statistic wrapper
+ * - `Countdown` - Ant Design countdown wrapper
+ *
+ * **Implementation Details:**
+ * - Uses `antd/Statistic` for core rendering
+ * - Uses `antd/Statistic.Countdown` for timer
+ * - Maps valueType to inline colors
+ * - Consistent with Ant Design theming
+ *
+ * **Ant Design Features:**
+ * - Built-in number formatting
+ * - Native countdown component
+ * - Loading skeleton
+ * - Theme token integration
+ *
+ * @example Statistic Usage
+ * ```tsx
+ * import { Statistic } from '@rottay/design-system';
+ *
+ * <Statistic
+ *   engine="titan"
+ *   title="Account Balance"
+ *   value={1128.99}
+ *   precision={2}
+ *   prefix="$"
+ * />
+ * ```
+ *
+ * @example Countdown Usage
+ * ```tsx
+ * <Statistic.Countdown
+ *   engine="titan"
+ *   title="Time Remaining"
+ *   value={Date.now() + 3600000}
+ *   format="HH:mm:ss"
+ * />
+ * ```
+ *
+ * @see {@link Statistic} for the main component
+ * @see {@link https://ant.design/components/statistic} Ant Design Statistic
+ * @module Statistic/engines/titan
+ * @category Display
+ * @package @rottay/design-system
  */
 
 'use client';

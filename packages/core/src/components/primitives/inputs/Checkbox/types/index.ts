@@ -1,6 +1,56 @@
 /**
- * Checkbox - Core Interface
- * Shared types and defaults for all engine implementations
+ * @fileoverview Checkbox Types - Rottay Design System
+ * @description Type definitions, interfaces, and constants for the Checkbox component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * This module provides comprehensive type definitions for the Checkbox component,
+ * including all props, sizes, color variants, and group configuration.
+ *
+ * **Available Types:**
+ * - `CheckboxProps` - Main component props interface
+ * - `CheckboxSize` - Size variants (xs, sm, md, lg, xl)
+ * - `CheckboxVariant` - Color variants (default, primary, secondary, success, warning, error)
+ * - `CheckboxRadius` - Border radius options (none, sm, md, lg, full)
+ * - `CheckboxLabelPlacement` - Label position (start, end)
+ * - `CheckboxGroupProps` - Props for Checkbox.Group compound component
+ * - `CheckboxOption` - Option structure for group mode
+ *
+ * **CSS Custom Properties:**
+ * - Size: `--ds-checkbox-{size}-size` for checkbox dimensions
+ * - Radius: `--ds-checkbox-radius-{radius}` for border radius
+ * - Colors are mapped via COLOR_MAP to CSS variables
+ *
+ * @example Using Types
+ * ```tsx
+ * import type { CheckboxProps, CheckboxSize, CheckboxOption } from '@rottay/design-system';
+ *
+ * // Typed options array
+ * const options: CheckboxOption[] = [
+ *   { value: 'a', label: 'Option A' },
+ *   { value: 'b', label: 'Option B', disabled: true },
+ * ];
+ *
+ * // Custom checkbox wrapper
+ * const MyCheckbox: React.FC<CheckboxProps> = (props) => {
+ *   return <Checkbox {...props} />;
+ * };
+ * ```
+ *
+ * @example Using Constants
+ * ```tsx
+ * import { CHECKBOX_DEFAULTS, SIZE_MAP, COLOR_MAP } from '@rottay/design-system';
+ *
+ * console.log(CHECKBOX_DEFAULTS.size);  // 'md'
+ * console.log(CHECKBOX_DEFAULTS.color); // 'primary'
+ * console.log(COLOR_MAP.success.bg);    // 'var(--color-success, #52c41a)'
+ * ```
+ *
+ * @see {@link Checkbox} for the main component
+ * @see {@link CheckboxGroup} for grouping checkboxes
+ * @module CheckboxTypes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 import type { EngineAwareProps } from '../../../../../types';
@@ -114,11 +164,11 @@ export const CHECKBOX_GROUP_DEFAULTS = {
 
 // Size mapping to CSS variables
 export const SIZE_MAP: Record<CheckboxSize, string> = {
-  xs: 'var(--checkbox-xs-size)',
-  sm: 'var(--checkbox-sm-size)',
-  md: 'var(--checkbox-md-size)',
-  lg: 'var(--checkbox-lg-size)',
-  xl: 'var(--checkbox-xl-size)',
+  xs: 'var(--ds-checkbox-xs-size)',
+  sm: 'var(--ds-checkbox-sm-size)',
+  md: 'var(--ds-checkbox-md-size)',
+  lg: 'var(--ds-checkbox-lg-size)',
+  xl: 'var(--ds-checkbox-xl-size)',
 };
 
 // Numeric size values for calculations (e.g., checkmark sizing)
@@ -133,42 +183,42 @@ export const SIZE_MAP_NUMERIC: Record<CheckboxSize, number> = {
 // Color mapping
 export const COLOR_MAP: Record<CheckboxVariant, { bg: string; border: string; check: string }> = {
   default: {
-    bg: 'var(--color-neutral-600, #4b5563)',
-    border: 'var(--color-neutral-600, #4b5563)',
+    bg: 'var(--ds-color-neutral-600, #4b5563)',
+    border: 'var(--ds-color-neutral-600, #4b5563)',
     check: '#ffffff',
   },
   primary: {
-    bg: 'var(--color-primary, #1890ff)',
-    border: 'var(--color-primary, #1890ff)',
+    bg: 'var(--ds-color-primary-500, #1890ff)',
+    border: 'var(--ds-color-primary-500, #1890ff)',
     check: '#ffffff',
   },
   secondary: {
-    bg: 'var(--color-secondary, #6b7280)',
-    border: 'var(--color-secondary, #6b7280)',
+    bg: 'var(--ds-color-secondary-500, #6b7280)',
+    border: 'var(--ds-color-secondary-500, #6b7280)',
     check: '#ffffff',
   },
   success: {
-    bg: 'var(--color-success, #52c41a)',
-    border: 'var(--color-success, #52c41a)',
+    bg: 'var(--ds-color-success-500, #52c41a)',
+    border: 'var(--ds-color-success-500, #52c41a)',
     check: '#ffffff',
   },
   warning: {
-    bg: 'var(--color-warning, #faad14)',
-    border: 'var(--color-warning, #faad14)',
+    bg: 'var(--ds-color-warning-500, #faad14)',
+    border: 'var(--ds-color-warning-500, #faad14)',
     check: '#ffffff',
   },
   error: {
-    bg: 'var(--color-error, #ff4d4f)',
-    border: 'var(--color-error, #ff4d4f)',
+    bg: 'var(--ds-color-error-500, #ff4d4f)',
+    border: 'var(--ds-color-error-500, #ff4d4f)',
     check: '#ffffff',
   },
 };
 
 // Radius mapping to CSS variables
 export const RADIUS_MAP: Record<CheckboxRadius, string> = {
-  none: 'var(--checkbox-radius-none)',
-  sm: 'var(--checkbox-radius-sm)',
-  md: 'var(--checkbox-radius-md)',
-  lg: 'var(--checkbox-radius-lg)',
-  full: 'var(--checkbox-radius-full)',
+  none: 'var(--ds-checkbox-radius-none)',
+  sm: 'var(--ds-checkbox-radius-sm)',
+  md: 'var(--ds-checkbox-radius-md)',
+  lg: 'var(--ds-checkbox-radius-lg)',
+  full: 'var(--ds-checkbox-radius-full)',
 };

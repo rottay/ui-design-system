@@ -1,8 +1,60 @@
 'use client';
 
 /**
- * Switch - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Switch Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the Switch component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Apollo engine provides a zero-dependency switch implementation
+ * using pure HTML and inline CSS. It offers maximum customization
+ * and works without any CSS framework dependencies.
+ *
+ * **Pure CSS Features:**
+ * - Custom sliding knob animation
+ * - Size variants via inline styles
+ * - Checked state color transition
+ * - Disabled/loading opacity states
+ *
+ * **Component Structure:**
+ * - Label wrapper with flex layout
+ * - Hidden checkbox input with role="switch"
+ * - Slider track with animated knob
+ * - Conditional children labels
+ * - Loading indicator emoji fallback
+ *
+ * **Style Objects:**
+ * - `wrapper` - Flex container layout
+ * - `switch`, `switchSmall`, `switchLarge` - Size variants
+ * - `slider`, `sliderChecked`, `sliderDisabled` - Track states
+ * - `knob`, `knobChecked*` - Handle states and transitions
+ *
+ * **Accessibility:**
+ * - Hidden input with role="switch"
+ * - aria-checked attribute
+ * - Proper label association
+ * - Keyboard activation
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Switch } from '@rottay/design-system';
+ *
+ * <Switch
+ *   engine="apollo"
+ *   size="large"
+ *   checkedChildren="Enabled"
+ *   unCheckedChildren="Disabled"
+ * />
+ * ```
+ *
+ * @see {@link Switch} for the main component
+ * @see {@link TitanSwitch} for Ant Design implementation
+ * @see {@link HermesSwitch} for DaisyUI implementation
+ * @module ApolloSwitch
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState } from 'react';
 import type { SwitchProps } from '../../types';
 

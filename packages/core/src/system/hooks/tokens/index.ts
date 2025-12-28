@@ -1,5 +1,38 @@
 /**
- * Design tokens hook - Access design tokens with tenant overrides
+ * @fileoverview useTokens Hook - Rottay Design System
+ * @description React hook for accessing design tokens (colors, spacing,
+ * typography) with automatic tenant-specific overrides.
+ *
+ * @remarks
+ * The useTokens hook provides:
+ * - **Colors**: Primary, secondary, neutral, and semantic colors
+ * - **Spacing**: Consistent spacing scale (0-96px)
+ * - **Typography**: Font sizes, weights, and line heights
+ * - **Border radius**: From none to full (pill)
+ * - **Shadows**: Elevation levels (sm, md, lg, xl)
+ *
+ * Tokens are automatically merged with tenant branding overrides.
+ *
+ * @example Custom styled component
+ * ```tsx
+ * function Card() {
+ *   const tokens = useTokens();
+ *   return (
+ *     <div style={{
+ *       padding: tokens.spacing[4],
+ *       borderRadius: tokens.borderRadius.lg,
+ *       boxShadow: tokens.shadows.md,
+ *     }}>
+ *       Content
+ *     </div>
+ *   );
+ * }
+ * ```
+ *
+ * @see {@link DesignTokens} - Token structure
+ * @module System/Hooks/Tokens
+ * @category System
+ * @package @rottay/design-system
  */
 
 import { useTenant } from '../tenant';

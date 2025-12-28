@@ -149,7 +149,7 @@ const CloseIcon: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
       border: 'none',
       cursor: 'pointer',
       padding: 4,
-      color: 'var(--tour-close-color)',
+      color: 'var(--ds-tour-close-color)',
     }}
     aria-label="Close tour"
   >
@@ -176,8 +176,8 @@ const DefaultIndicators: React.FC<{ current: number; total: number }> = ({
           borderRadius: '50%',
           backgroundColor:
             i === current
-              ? 'var(--tour-indicator-active-color)'
-              : 'var(--tour-indicator-color)',
+              ? 'var(--ds-tour-indicator-active-color)'
+              : 'var(--ds-tour-indicator-color)',
           transition: 'background-color 0.2s',
         }}
       />
@@ -286,23 +286,23 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
   const tourVars = useMemo<React.CSSProperties>(
     () =>
       ({
-        '--tour-bg': type === 'primary' ? 'var(--color-primary)' : 'var(--color-bg-elevated, #fff)',
-        '--tour-color': type === 'primary' ? '#fff' : 'var(--color-text-primary)',
-        '--tour-border-radius': 'var(--radius-lg, 8px)',
-        '--tour-shadow': 'var(--shadow-xl)',
-        '--tour-padding': 'var(--spacing-4, 16px)',
-        '--tour-min-width': '280px',
-        '--tour-max-width': '400px',
-        '--tour-title-font-size': '1rem',
-        '--tour-title-font-weight': '600',
-        '--tour-description-font-size': '0.875rem',
-        '--tour-description-margin-top': 'var(--spacing-2, 8px)',
-        '--tour-arrow-size': '8px',
-        '--tour-close-color': type === 'primary' ? 'rgba(255,255,255,0.7)' : 'var(--color-text-secondary)',
-        '--tour-indicator-color': type === 'primary' ? 'rgba(255,255,255,0.4)' : 'var(--color-border)',
-        '--tour-indicator-active-color': type === 'primary' ? '#fff' : 'var(--color-primary)',
-        '--tour-button-gap': 'var(--spacing-2, 8px)',
-        '--tour-mask-color': 'rgba(0, 0, 0, 0.5)',
+        '--ds-tour-bg': type === 'primary' ? 'var(--ds-color-primary-500)' : 'var(--ds-color-bg-elevated, #fff)',
+        '--ds-tour-color': type === 'primary' ? '#fff' : 'var(--ds-color-text-primary)',
+        '--ds-tour-border-radius': 'var(--ds-radius-lg, 8px)',
+        '--ds-tour-shadow': 'var(--ds-shadow-xl)',
+        '--ds-tour-padding': 'var(--ds-spacing-4, 16px)',
+        '--ds-tour-min-width': '280px',
+        '--ds-tour-max-width': '400px',
+        '--ds-tour-title-font-size': '1rem',
+        '--ds-tour-title-font-weight': '600',
+        '--ds-tour-description-font-size': '0.875rem',
+        '--ds-tour-description-margin-top': 'var(--ds-spacing-2, 8px)',
+        '--ds-tour-arrow-size': '8px',
+        '--ds-tour-close-color': type === 'primary' ? 'rgba(255,255,255,0.7)' : 'var(--ds-color-text-secondary)',
+        '--ds-tour-indicator-color': type === 'primary' ? 'rgba(255,255,255,0.4)' : 'var(--ds-color-border)',
+        '--ds-tour-indicator-active-color': type === 'primary' ? '#fff' : 'var(--ds-color-primary-500)',
+        '--ds-tour-button-gap': 'var(--ds-spacing-2, 8px)',
+        '--ds-tour-mask-color': 'rgba(0, 0, 0, 0.5)',
       }) as React.CSSProperties,
     [type]
   );
@@ -311,7 +311,7 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
   const buttonBaseStyle: React.CSSProperties = {
     padding: '6px 16px',
     fontSize: '0.875rem',
-    borderRadius: 'var(--radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 6px)',
     cursor: 'pointer',
     transition: 'background-color 0.2s, opacity 0.2s',
     border: 'none',
@@ -319,15 +319,15 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
 
   const prevButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
-    backgroundColor: type === 'primary' ? 'rgba(255,255,255,0.2)' : 'var(--color-bg-secondary)',
-    color: type === 'primary' ? '#fff' : 'var(--color-text-primary)',
-    border: type === 'primary' ? 'none' : '1px solid var(--color-border)',
+    backgroundColor: type === 'primary' ? 'rgba(255,255,255,0.2)' : 'var(--ds-color-bg-secondary)',
+    color: type === 'primary' ? '#fff' : 'var(--ds-color-text-primary)',
+    border: type === 'primary' ? 'none' : '1px solid var(--ds-color-border)',
   };
 
   const nextButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
-    backgroundColor: type === 'primary' ? '#fff' : 'var(--color-primary)',
-    color: type === 'primary' ? 'var(--color-primary)' : '#fff',
+    backgroundColor: type === 'primary' ? '#fff' : 'var(--ds-color-primary-500)',
+    color: type === 'primary' ? 'var(--ds-color-primary-500)' : '#fff',
   };
 
   if (!open || !step) return null;
@@ -339,7 +339,7 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
     const maskStyle =
       typeof showMask === 'object' ? showMask.style : undefined;
     const maskColor =
-      typeof showMask === 'object' ? showMask.color : 'var(--tour-mask-color)';
+      typeof showMask === 'object' ? showMask.color : 'var(--ds-tour-mask-color)';
 
     // Spotlight cutout if target exists
     if (targetRect) {
@@ -417,13 +417,13 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
           position: 'absolute',
           top: position.top,
           left: position.left,
-          minWidth: 'var(--tour-min-width)',
-          maxWidth: 'var(--tour-max-width)',
-          padding: 'var(--tour-padding)',
-          backgroundColor: 'var(--tour-bg)',
-          color: 'var(--tour-color)',
-          borderRadius: 'var(--tour-border-radius)',
-          boxShadow: 'var(--tour-shadow)',
+          minWidth: 'var(--ds-tour-min-width)',
+          maxWidth: 'var(--ds-tour-max-width)',
+          padding: 'var(--ds-tour-padding)',
+          backgroundColor: 'var(--ds-tour-bg)',
+          color: 'var(--ds-tour-color)',
+          borderRadius: 'var(--ds-tour-border-radius)',
+          boxShadow: 'var(--ds-tour-shadow)',
           pointerEvents: 'auto',
           ...step.style,
         }}
@@ -435,9 +435,9 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
             className="rottay-tour__arrow"
             style={{
               position: 'absolute',
-              width: 'var(--tour-arrow-size)',
-              height: 'var(--tour-arrow-size)',
-              backgroundColor: 'var(--tour-bg)',
+              width: 'var(--ds-tour-arrow-size)',
+              height: 'var(--ds-tour-arrow-size)',
+              backgroundColor: 'var(--ds-tour-bg)',
               transform: 'rotate(45deg)',
               ...position.arrowPosition,
             }}
@@ -453,7 +453,7 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
         {step.cover && (
           <div
             className="rottay-tour__cover"
-            style={{ marginBottom: 'var(--spacing-3, 12px)' }}
+            style={{ marginBottom: 'var(--ds-spacing-3, 12px)' }}
           >
             {step.cover}
           </div>
@@ -463,8 +463,8 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
           id="tour-title"
           className="rottay-tour__title"
           style={{
-            fontSize: 'var(--tour-title-font-size)',
-            fontWeight: 'var(--tour-title-font-weight)' as any,
+            fontSize: 'var(--ds-tour-title-font-size)',
+            fontWeight: 'var(--ds-tour-title-font-weight)' as any,
             paddingRight: 24,
           }}
         >
@@ -475,8 +475,8 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
           <div
             className="rottay-tour__description"
             style={{
-              fontSize: 'var(--tour-description-font-size)',
-              marginTop: 'var(--tour-description-margin-top)',
+              fontSize: 'var(--ds-tour-description-font-size)',
+              marginTop: 'var(--ds-tour-description-margin-top)',
               opacity: 0.85,
             }}
           >
@@ -490,7 +490,7 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginTop: 'var(--spacing-4, 16px)',
+            marginTop: 'var(--ds-spacing-4, 16px)',
           }}
         >
           <div className="rottay-tour__indicators">
@@ -503,7 +503,7 @@ export const BaseTour = forwardRef<HTMLDivElement, TourProps>((props, ref) => {
 
           <div
             className="rottay-tour__buttons"
-            style={{ display: 'flex', gap: 'var(--tour-button-gap)' }}
+            style={{ display: 'flex', gap: 'var(--ds-tour-button-gap)' }}
           >
             {!isFirst && (
               <button

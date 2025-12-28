@@ -196,12 +196,12 @@ export const BaseResult = forwardRef<HTMLDivElement, ResultProps>(
      * These can be overridden by tenant-specific styles.
      */
     const resultVars = useMemo<React.CSSProperties>(() => ({
-      '--result-icon-color': statusColor,
-      '--result-padding': '48px 32px',
-      '--result-title-font-size': '24px',
-      '--result-title-color': 'var(--color-text-primary)',
-      '--result-subtitle-font-size': '14px',
-      '--result-subtitle-color': 'var(--color-text-secondary)',
+      '--ds-result-icon-color': statusColor,
+      '--ds-result-padding': '48px 32px',
+      '--ds-result-title-font-size': '24px',
+      '--ds-result-title-color': 'var(--ds-color-text-primary)',
+      '--ds-result-subtitle-font-size': '14px',
+      '--ds-result-subtitle-color': 'var(--ds-color-text-secondary)',
     } as React.CSSProperties), [statusColor]);
 
     // -------------------------------------------------------------------------
@@ -212,28 +212,28 @@ export const BaseResult = forwardRef<HTMLDivElement, ResultProps>(
     const resultStyle: React.CSSProperties = {
       ...resultVars,
       textAlign: 'center',
-      padding: 'var(--result-padding)',
+      padding: 'var(--ds-result-padding)',
       ...style,
     };
 
     /** Icon container styles */
     const iconContainerStyle: React.CSSProperties = {
       marginBottom: '24px',
-      color: 'var(--result-icon-color)',
+      color: 'var(--ds-result-icon-color)',
     };
 
     /** Title styles */
     const titleStyle: React.CSSProperties = {
-      fontSize: 'var(--result-title-font-size)',
+      fontSize: 'var(--ds-result-title-font-size)',
       fontWeight: 500,
-      color: 'var(--result-title-color)',
+      color: 'var(--ds-result-title-color)',
       marginBottom: subTitle ? '8px' : '24px',
     };
 
     /** Subtitle styles */
     const subTitleStyle: React.CSSProperties = {
-      fontSize: 'var(--result-subtitle-font-size)',
-      color: 'var(--result-subtitle-color)',
+      fontSize: 'var(--ds-result-subtitle-font-size)',
+      color: 'var(--ds-result-subtitle-color)',
       marginBottom: '24px',
       lineHeight: 1.6,
     };
@@ -251,8 +251,8 @@ export const BaseResult = forwardRef<HTMLDivElement, ResultProps>(
     const contentStyle: React.CSSProperties = {
       marginTop: '24px',
       padding: '24px',
-      backgroundColor: 'var(--color-bg-secondary, #fafafa)',
-      borderRadius: 'var(--radius-lg, 8px)',
+      backgroundColor: 'var(--ds-color-bg-secondary, #fafafa)',
+      borderRadius: 'var(--ds-radius-lg, 8px)',
     };
 
     // -------------------------------------------------------------------------

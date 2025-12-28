@@ -76,25 +76,25 @@ export const MODAL_DEFAULTS = {
  */
 export const SIZE_MAP: Record<string, string> = {
   /** Extra small: 320px */
-  xs: 'var(--modal-xs-width)',
+  xs: 'var(--ds-modal-xs-width)',
   /** Small: 400px */
-  sm: 'var(--modal-sm-width)',
+  sm: 'var(--ds-modal-sm-width)',
   /** Medium: 500px - default */
-  md: 'var(--modal-md-width)',
+  md: 'var(--ds-modal-md-width)',
   /** Large: 640px */
-  lg: 'var(--modal-lg-width)',
+  lg: 'var(--ds-modal-lg-width)',
   /** Extra large: 800px */
-  xl: 'var(--modal-xl-width)',
+  xl: 'var(--ds-modal-xl-width)',
   /** 2X large: 960px */
-  '2xl': 'var(--modal-2xl-width)',
+  '2xl': 'var(--ds-modal-2xl-width)',
   /** 3X large: 1120px */
-  '3xl': 'var(--modal-3xl-width)',
+  '3xl': 'var(--ds-modal-3xl-width)',
   /** 4X large: 1280px */
-  '4xl': 'var(--modal-4xl-width)',
+  '4xl': 'var(--ds-modal-4xl-width)',
   /** 5X large: 1440px */
-  '5xl': 'var(--modal-5xl-width)',
+  '5xl': 'var(--ds-modal-5xl-width)',
   /** Full width: 100% */
-  full: 'var(--modal-full-width)',
+  full: 'var(--ds-modal-full-width)',
 };
 
 /**
@@ -102,16 +102,16 @@ export const SIZE_MAP: Record<string, string> = {
  * Uses CSS custom properties for consistent theming.
  */
 export const MAX_HEIGHT_MAP: Record<string, string> = {
-  xs: 'var(--modal-xs-max-height)',
-  sm: 'var(--modal-sm-max-height)',
-  md: 'var(--modal-md-max-height)',
-  lg: 'var(--modal-lg-max-height)',
-  xl: 'var(--modal-xl-max-height)',
-  '2xl': 'var(--modal-2xl-max-height)',
-  '3xl': 'var(--modal-3xl-max-height)',
-  '4xl': 'var(--modal-4xl-max-height)',
-  '5xl': 'var(--modal-5xl-max-height)',
-  full: 'var(--modal-full-max-height)',
+  xs: 'var(--ds-modal-xs-max-height)',
+  sm: 'var(--ds-modal-sm-max-height)',
+  md: 'var(--ds-modal-md-max-height)',
+  lg: 'var(--ds-modal-lg-max-height)',
+  xl: 'var(--ds-modal-xl-max-height)',
+  '2xl': 'var(--ds-modal-2xl-max-height)',
+  '3xl': 'var(--ds-modal-3xl-max-height)',
+  '4xl': 'var(--ds-modal-4xl-max-height)',
+  '5xl': 'var(--ds-modal-5xl-max-height)',
+  full: 'var(--ds-modal-full-max-height)',
 };
 
 /**
@@ -120,13 +120,13 @@ export const MAX_HEIGHT_MAP: Record<string, string> = {
  */
 export const PADDING_MAP: Record<string, string> = {
   /** No padding */
-  none: 'var(--modal-padding-none)',
+  none: 'var(--ds-modal-padding-none)',
   /** Small padding: 12px */
-  sm: 'var(--modal-padding-sm)',
+  sm: 'var(--ds-modal-padding-sm)',
   /** Medium padding: 16px */
-  md: 'var(--modal-padding-md)',
+  md: 'var(--ds-modal-padding-md)',
   /** Large padding: 24px */
-  lg: 'var(--modal-padding-lg)',
+  lg: 'var(--ds-modal-padding-lg)',
 };
 
 /**
@@ -135,13 +135,13 @@ export const PADDING_MAP: Record<string, string> = {
  */
 export const RADIUS_MAP: Record<string, string> = {
   /** No border radius */
-  none: 'var(--modal-radius-none)',
+  none: 'var(--ds-modal-radius-none)',
   /** Small radius: 4px */
-  sm: 'var(--modal-radius-sm)',
+  sm: 'var(--ds-modal-radius-sm)',
   /** Medium radius: 8px */
-  md: 'var(--modal-radius-md)',
+  md: 'var(--ds-modal-radius-md)',
   /** Large radius: 12px */
-  lg: 'var(--modal-radius-lg)',
+  lg: 'var(--ds-modal-radius-lg)',
   /** Extra large radius: 16px */
-  xl: 'var(--modal-radius-xl)',
+  xl: 'var(--ds-modal-radius-xl)',
 };

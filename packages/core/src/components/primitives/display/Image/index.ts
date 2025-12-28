@@ -1,8 +1,70 @@
 /**
- * Image - Engine Router
+ * @fileoverview Image - Rottay Design System
+ * @description Enhanced image component with loading states and zoom support.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Provides an engine-aware Image component that dynamically loads
- * the appropriate implementation based on the engine context.
+ * @remarks
+ * The Image component provides enhanced image display with automatic loading
+ * states, error fallbacks, lazy loading, and optional zoom/lightbox functionality.
+ *
+ * **Multi-Engine Architecture:**
+ * - **Titan**: Ant Design Image with built-in preview
+ * - **Hermes**: Tailwind utilities with DaisyUI patterns
+ * - **Apollo**: Pure CSS with custom zoom overlay
+ *
+ * **Key Features:**
+ * - Automatic loading skeleton placeholder
+ * - Error fallback content
+ * - Lazy loading support (native)
+ * - Multiple object-fit modes
+ * - Border radius options
+ * - Zoom/lightbox functionality
+ * - Hover overlay support
+ *
+ * **Compound Components:**
+ * - `Image.Fallback` - Custom error fallback content
+ * - `Image.Skeleton` - Custom loading placeholder
+ *
+ * **CSS Custom Properties:**
+ * - `--image-width` - Image width
+ * - `--image-height` - Image height
+ * - `--image-radius` - Border radius
+ * - `--image-object-fit` - Object fit mode
+ *
+ * @example Basic Image
+ * ```tsx
+ * import { Image } from '@rottay/design-system';
+ *
+ * <Image
+ *   src="/photo.jpg"
+ *   alt="Description"
+ *   width={400}
+ *   height={300}
+ * />
+ * ```
+ *
+ * @example With Styling Options
+ * ```tsx
+ * <Image
+ *   src="/photo.jpg"
+ *   alt="Description"
+ *   radius="lg"
+ *   bordered
+ *   shadow
+ *   zoomable
+ * />
+ * ```
+ *
+ * @example Engine Override
+ * ```tsx
+ * <Image engine="hermes" src="/photo.jpg" alt="Photo" />
+ * ```
+ *
+ * @see {@link ImageProps} for available props
+ * @see {@link ImageFallback} for error handling
+ * @module Image
+ * @category Display
+ * @package @rottay/design-system
  */
 
 import { createEngineComponent } from '../../../../system/engines/factory';

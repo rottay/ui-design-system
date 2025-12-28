@@ -1,6 +1,37 @@
 /**
- * Box - Core Interface
- * Generic container component with extensive styling props
+ * @fileoverview Box Types - Rottay Design System
+ * @description Type definitions for the Box layout primitive component.
+ * Provides comprehensive typing for spacing, borders, shadows, and layout properties.
+ *
+ * @remarks
+ * The Box component uses a design token-based approach for spacing, border radius,
+ * and shadow values. This ensures consistency across the design system while
+ * allowing custom CSS values when needed.
+ *
+ * Key features:
+ * - **Shorthand props**: `p`, `m`, `bg`, etc. for rapid development
+ * - **Directional spacing**: `pt`, `px`, `my`, etc. for precise control
+ * - **Design tokens**: Predefined values that map to CSS custom properties
+ * - **Full CSS support**: Direct CSS property passthrough when needed
+ *
+ * @example Type Usage
+ * ```tsx
+ * import type { BoxProps, BoxSpacing, BoxShadow } from '@rottay/design-system';
+ *
+ * // Create a custom card component with Box props
+ * interface CardProps extends Partial<BoxProps> {
+ *   title: string;
+ * }
+ *
+ * // Use spacing types for custom components
+ * const spacing: BoxSpacing = 'md'; // '16px' equivalent
+ * const shadow: BoxShadow = 'lg';   // Large elevation
+ * ```
+ *
+ * @see {@link Box} - The main Box component
+ * @module Box/Types
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 import type { EngineAwareProps, WithChildrenProps, BaseComponentProps } from '../../../../../types';

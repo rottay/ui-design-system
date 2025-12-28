@@ -1,8 +1,44 @@
 'use client';
 
 /**
- * InputNumber - Titan Engine (Ant Design)
+ * @fileoverview InputNumber Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the InputNumber component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's InputNumber, providing enterprise-grade
+ * numeric input with advanced formatting, precision control, and step handling.
+ *
+ * **Ant Design Features Utilized:**
+ * - Full InputNumber component with all props
+ * - Custom formatter/parser functions
+ * - stringMode for high precision
+ * - decimalSeparator customization
+ * - Variant styles (outlined, borderless, filled)
+ *
+ * **Prop Mapping:**
+ * - `size`: 'default' → 'middle'
+ * - All other props passed directly
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * <InputNumber
+ *   engine="titan"
+ *   min={0}
+ *   max={1000}
+ *   formatter={(v) => `$ ${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+ *   parser={(v) => v.replace(/\$\s?|(,*)/g, '')}
+ * />
+ * ```
+ *
+ * @see {@link InputNumber} for the main component
+ * @see {@link HermesInputNumber} for DaisyUI implementation
+ * @see {@link ApolloInputNumber} for vanilla implementation
+ * @module TitanInputNumber
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React from 'react';
 import { InputNumber as AntInputNumber } from 'antd';
 import type { InputNumberProps } from '../../types';

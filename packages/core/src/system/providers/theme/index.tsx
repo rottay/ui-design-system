@@ -1,6 +1,66 @@
 /**
- * Theme Provider
- * Manages theme state and CSS variable injection with tenant CSS loading and Rottay fallback
+ * @fileoverview ThemeProvider - Rottay Design System
+ * @description Manages theme state, CSS variable injection, and tenant-specific
+ * styling with automatic fallback to Rottay theme on load failures.
+ *
+ * @remarks
+ * The ThemeProvider is responsible for:
+ * - **Tenant CSS Loading**: Dynamically loads tenant-specific CSS files
+ * - **Theme Variants**: Supports light, dark, and custom theme variants
+ * - **Fallback System**: Automatically falls back to Rottay if tenant CSS fails
+ * - **Emergency Tokens**: Injects inline tokens if even Rottay CSS fails
+ * - **Branding Override**: Allows runtime branding color customization
+ *
+ * The provider implements a robust fallback hierarchy:
+ * 1. Requested tenant CSS
+ * 2. Rottay (default) tenant CSS
+ * 3. Emergency inline Rottay tokens
+ *
+ * @example Basic usage
+ * ```tsx
+ * import { ThemeProvider } from '@rottay/design-system';
+ *
+ * <ThemeProvider tenant="acme" theme="light">
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ *
+ * @example With error handling
+ * ```tsx
+ * <ThemeProvider
+ *   tenant="acme"
+ *   onError={(error, tenant) => console.error(`Failed: ${tenant}`, error)}
+ *   onFallback={(tenant) => console.warn(`Fallback from ${tenant}`)}
+ * >
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ *
+ * @example Custom CSS base URL
+ * ```tsx
+ * <ThemeProvider
+ *   tenant="client-x"
+ *   cssBaseUrl="https://cdn.example.com/themes"
+ * >
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ *
+ * @example Runtime branding
+ * ```tsx
+ * <ThemeProvider
+ *   tenant="rottay"
+ *   branding={{ primaryColor: '#FF5733', accentColor: '#33FF57' }}
+ * >
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ *
+ * @see {@link useThemeContext} - Hook to access theme context
+ * @see {@link ThemeConfig} - Theme configuration structure
+ * @module System/Providers/Theme
+ * @category System
+ * @package @rottay/design-system
  */
 
 'use client';

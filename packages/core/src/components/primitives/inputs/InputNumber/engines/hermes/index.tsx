@@ -1,8 +1,47 @@
 'use client';
 
 /**
- * InputNumber - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview InputNumber Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the InputNumber component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements numeric input using DaisyUI's input classes
+ * with custom step control buttons. It provides a lightweight alternative
+ * with utility-first styling.
+ *
+ * **DaisyUI Classes Used:**
+ * - `input input-bordered` - Base input styling
+ * - `input-{size}` - Size variants (sm, md, lg)
+ * - `input-error`, `input-warning` - Status styles
+ * - `btn btn-xs btn-ghost` - Step control buttons
+ *
+ * **Custom Implementation:**
+ * - Step up/down buttons with ▲/▼ arrows
+ * - Keyboard navigation (Arrow Up/Down)
+ * - Precision formatting
+ * - Min/max bounds checking
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * <InputNumber
+ *   engine="hermes"
+ *   min={0}
+ *   max={100}
+ *   step={5}
+ *   size="default"
+ *   className="w-32"
+ * />
+ * ```
+ *
+ * @see {@link InputNumber} for the main component
+ * @see {@link TitanInputNumber} for Ant Design implementation
+ * @see {@link ApolloInputNumber} for vanilla implementation
+ * @module HermesInputNumber
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../../types';
 

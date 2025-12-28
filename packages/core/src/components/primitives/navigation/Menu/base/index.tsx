@@ -96,8 +96,8 @@ function renderMenuItems(
         onClick={(e) => onItemClick(item.key, [item.key], e)}
         style={{
           paddingLeft: level > 0 ? `${inlineIndent * level}px` : undefined,
-          backgroundColor: isSelected ? 'var(--menu-item-selected-bg, rgba(0, 0, 0, 0.04))' : undefined,
-          color: isSelected ? 'var(--menu-item-selected-color, var(--menu-item-color))' : undefined,
+          backgroundColor: isSelected ? 'var(--ds-menu-item-selected-bg, rgba(0, 0, 0, 0.04))' : undefined,
+          color: isSelected ? 'var(--ds-menu-item-selected-color, var(--ds-menu-item-color))' : undefined,
         }}
       >
         {item.label}
@@ -233,11 +233,11 @@ export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
 
     // Build CSS variables for theming
     const menuVars: CSSProperties = {
-      '--menu-bg': theme === 'dark' ? 'var(--menu-dark-bg, #001529)' : 'var(--menu-light-bg, #fff)',
-      '--menu-item-color': theme === 'dark' ? 'var(--menu-dark-item-color, rgba(255, 255, 255, 0.65))' : 'var(--menu-light-item-color, rgba(0, 0, 0, 0.88))',
-      '--menu-item-selected-color': theme === 'dark' ? 'var(--menu-dark-item-selected-color, #fff)' : 'var(--menu-light-item-selected-color, #1677ff)',
-      '--menu-item-selected-bg': theme === 'dark' ? 'var(--menu-dark-item-selected-bg, #1677ff)' : 'var(--menu-light-item-selected-bg, #e6f4ff)',
-      '--menu-submenu-indent': `${inlineIndent}px`,
+      '--ds-menu-bg': theme === 'dark' ? 'var(--ds-menu-dark-bg, #001529)' : 'var(--ds-menu-light-bg, #fff)',
+      '--ds-menu-item-color': theme === 'dark' ? 'var(--ds-menu-dark-item-color, rgba(255, 255, 255, 0.65))' : 'var(--ds-menu-light-item-color, rgba(0, 0, 0, 0.88))',
+      '--ds-menu-item-selected-color': theme === 'dark' ? 'var(--ds-menu-dark-item-selected-color, #fff)' : 'var(--ds-menu-light-item-selected-color, #1677ff)',
+      '--ds-menu-item-selected-bg': theme === 'dark' ? 'var(--ds-menu-dark-item-selected-bg, #1677ff)' : 'var(--ds-menu-light-item-selected-bg, #e6f4ff)',
+      '--ds-menu-submenu-indent': `${inlineIndent}px`,
     } as CSSProperties;
 
     // Computed styles
@@ -246,11 +246,11 @@ export const BaseMenu = forwardRef<HTMLUListElement, MenuProps>(
       display: mode === 'horizontal' ? 'flex' : 'block',
       flexDirection: mode === 'horizontal' ? 'row' : undefined,
       listStyle: 'none',
-      padding: 'var(--menu-padding, 4px)',
+      padding: 'var(--ds-menu-padding, 4px)',
       margin: 0,
-      backgroundColor: 'var(--menu-bg)',
-      borderRadius: 'var(--menu-border-radius, 8px)',
-      width: inlineCollapsed && mode === 'inline' ? 'var(--menu-collapsed-width, 80px)' : undefined,
+      backgroundColor: 'var(--ds-menu-bg)',
+      borderRadius: 'var(--ds-menu-border-radius, 8px)',
+      width: inlineCollapsed && mode === 'inline' ? 'var(--ds-menu-collapsed-width, 80px)' : undefined,
       transition: 'width 0.2s ease, background-color 0.2s ease',
       ...style,
     };

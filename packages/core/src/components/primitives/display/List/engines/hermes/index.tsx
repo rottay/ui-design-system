@@ -1,11 +1,52 @@
 'use client';
 
 /**
- * List - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview List Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based list with responsive design.
+ * Part of the Rottay Design System's display primitives collection.
  *
- * Implementation of the List component using DaisyUI and Tailwind CSS.
- * Provides a lightweight, utility-first approach to list rendering
- * with responsive design support.
+ * @remarks
+ * This engine uses DaisyUI classes with Tailwind utilities
+ * for a lightweight, responsive list implementation.
+ *
+ * **Exported Components:**
+ * - `List` - Main list container
+ * - `Item` - List item wrapper
+ * - `Meta` - Item metadata display
+ *
+ * **Implementation Details:**
+ * - Custom flex-based layout
+ * - DaisyUI color classes
+ * - Skeleton loading states
+ * - Grid layout support
+ * - Split dividers
+ *
+ * **Class Mappings:**
+ * - `border border-base-300` - Bordered variant
+ * - `text-sm`, `text-base`, `text-lg` - Sizes
+ * - `flex items-center` - Item layout
+ * - `animate-pulse` - Loading skeleton
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Responsive by default
+ * - DaisyUI theme integration
+ * - Custom skeleton loading
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { List } from '@rottay/design-system';
+ *
+ * <List engine="hermes" bordered>
+ *   <List.Item>Item content</List.Item>
+ * </List>
+ * ```
+ *
+ * @see {@link List} for the main component
+ * @see {@link https://daisyui.com/} DaisyUI
+ * @module List/engines/hermes
+ * @category Display
+ * @package @rottay/design-system
  */
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../../types';

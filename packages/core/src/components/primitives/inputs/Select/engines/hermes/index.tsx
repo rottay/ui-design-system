@@ -1,5 +1,62 @@
 /**
- * Select - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview Select Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Select component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements select using DaisyUI's utility-first approach
+ * with Tailwind CSS classes. It provides both native select for simple cases
+ * and custom dropdown for advanced features (search, multiple selection).
+ *
+ * **DaisyUI Features Utilized:**
+ * - Native select classes (select, select-bordered)
+ * - Size modifiers (select-xs, select-sm, select-md, select-lg)
+ * - Status classes (select-error, select-warning, select-success)
+ * - Menu component for dropdown
+ * - Badge component for selected tags
+ * - Loading spinner component
+ * - Checkbox component for multiple selection
+ *
+ * **Prop Mapping:**
+ * - `variant="outline"` → `select-bordered`
+ * - `variant="filled"` → `bg-base-200`
+ * - `variant="flushed"` → Custom border-bottom only styling
+ * - `status="error"` → `select-error`
+ * - `status="warning"` → `select-warning`
+ * - `status="success"` → `select-success`
+ * - `size="xs"` → `select-xs`
+ *
+ * **Behavior:**
+ * - Simple select (non-searchable, non-multiple): Uses native `<select>`
+ * - Advanced select (searchable or multiple): Uses custom dropdown with menu
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Select } from '@rottay/design-system';
+ *
+ * // Explicit Hermes engine with native select
+ * <Select
+ *   engine="hermes"
+ *   options={options}
+ *   placeholder="Select option..."
+ * />
+ *
+ * // With DaisyUI custom dropdown
+ * <Select
+ *   engine="hermes"
+ *   options={options}
+ *   searchable
+ *   multiple
+ *   className="w-full"
+ * />
+ * ```
+ *
+ * @see {@link Select} for the main component
+ * @see {@link TitanSelect} for Ant Design implementation
+ * @see {@link ApolloSelect} for vanilla implementation
+ * @module HermesSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

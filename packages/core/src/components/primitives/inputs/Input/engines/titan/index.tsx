@@ -1,5 +1,63 @@
 /**
- * Input - Titan Engine (Ant Design)
+ * @fileoverview Input Titan Engine - Rottay Design System
+ * @description Ant Design implementation of the Input component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Titan engine wraps Ant Design's Input component, providing enterprise-grade
+ * features including rich validation states, character counting, and various
+ * input types. It maps Rottay's standardized props to Ant Design's API.
+ *
+ * **Ant Design Features Utilized:**
+ * - Native validation states (error, warning)
+ * - Built-in clear button with allowClear
+ * - Character count display with showCount
+ * - Password input with visibility toggle
+ * - Search input with search callback
+ * - Size variants (small, middle, large)
+ * - Variant options (outlined, filled, borderless)
+ *
+ * **Prop Mapping:**
+ * - `variant="filled"` → `variant="filled"`
+ * - `variant="flushed"` → `variant="borderless"` + custom border-bottom
+ * - `status="error"` → `status="error"`
+ * - `status="warning"` → `status="warning"`
+ * - `size="sm"` → `size="small"`
+ * - `size="lg"` → `size="large"`
+ * - `clearable` → `allowClear`
+ *
+ * **Special Type Handling:**
+ * - `type="number"` → Uses Ant Design's InputNumber component
+ * - `type="password"` → Uses Ant Design's Input.Password component
+ * - `type="search"` → Uses Ant Design's Input.Search component
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Input } from '@rottay/design-system';
+ *
+ * // Explicit Titan engine (default)
+ * <Input
+ *   engine="titan"
+ *   placeholder="Enterprise input"
+ *   status="warning"
+ *   showCount
+ *   maxLength={100}
+ * />
+ *
+ * // Password with Ant Design features
+ * <Input
+ *   engine="titan"
+ *   type="password"
+ *   placeholder="Enter password"
+ * />
+ * ```
+ *
+ * @see {@link Input} for the main component
+ * @see {@link HermesInput} for DaisyUI implementation
+ * @see {@link ApolloInput} for vanilla implementation
+ * @module TitanInput
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

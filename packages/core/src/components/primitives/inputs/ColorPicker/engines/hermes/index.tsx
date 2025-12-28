@@ -1,7 +1,37 @@
 'use client';
 
 /**
- * ColorPicker - Hermes Engine (DaisyUI/Tailwind)
+ * @fileoverview ColorPicker Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the ColorPicker component
+ * with native browser color input and custom preset panels.
+ *
+ * @remarks
+ * The Hermes engine provides a lightweight color picker using:
+ * - **Native color input**: Browser's built-in color picker
+ * - **DaisyUI styling**: Consistent with Tailwind design tokens
+ * - **Custom dropdowns**: Styled panel with presets
+ * - **Format display**: Shows color value in selected format
+ *
+ * Optimized for smaller bundle size while maintaining functionality.
+ *
+ * @example Basic usage
+ * ```tsx
+ * <ColorPicker engine="hermes" defaultValue="#52c41a" />
+ * ```
+ *
+ * @example With presets
+ * ```tsx
+ * <ColorPicker
+ *   engine="hermes"
+ *   presets={[{ label: 'Brand', colors: ['#1677ff', '#52c41a'] }]}
+ * />
+ * ```
+ *
+ * @see {@link ColorPicker} - Main component
+ * @see {@link ColorPickerProps} - Component props
+ * @module ColorPicker/Engines/Hermes
+ * @category Inputs
+ * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ColorPickerProps, Color } from '../../types';

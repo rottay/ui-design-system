@@ -1,5 +1,51 @@
 /**
- * Checkbox - Hermes Engine (DaisyUI)
+ * @fileoverview Checkbox Hermes Engine - Rottay Design System
+ * @description DaisyUI/Tailwind CSS implementation of the Checkbox component.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @remarks
+ * The Hermes engine implements checkboxes using DaisyUI's utility-first approach
+ * with Tailwind CSS classes. It provides a lightweight alternative to Titan
+ * with smaller bundle size.
+ *
+ * **DaisyUI Features Utilized:**
+ * - Checkbox component classes
+ * - Size modifiers (checkbox-xs, checkbox-sm, checkbox-lg)
+ * - Color modifiers (checkbox-primary, checkbox-secondary, etc.)
+ * - Form control wrapper for label alignment
+ * - Label text styling
+ *
+ * **Prop Mapping:**
+ * - `size="xs"` → `checkbox-xs`
+ * - `size="sm"` → `checkbox-sm`
+ * - `size="lg"` → `checkbox-lg`
+ * - `color="primary"` → `checkbox-primary`
+ * - `color="success"` → `checkbox-success`
+ * - `color="warning"` → `checkbox-warning`
+ * - `color="error"` → `checkbox-error`
+ *
+ * **Group Support:**
+ * Includes HermesCheckboxGroup with DaisyUI styling for groups.
+ *
+ * @example Using Hermes Engine
+ * ```tsx
+ * import { Checkbox } from '@rottay/design-system';
+ *
+ * // Explicit Hermes engine
+ * <Checkbox
+ *   engine="hermes"
+ *   label="DaisyUI Checkbox"
+ *   color="success"
+ *   size="lg"
+ * />
+ * ```
+ *
+ * @see {@link Checkbox} for the main component
+ * @see {@link TitanCheckbox} for Ant Design implementation
+ * @see {@link ApolloCheckbox} for vanilla implementation
+ * @module HermesCheckbox
+ * @category Inputs
+ * @package @rottay/design-system
  */
 
 'use client';

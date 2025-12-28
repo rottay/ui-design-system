@@ -1,6 +1,51 @@
 /**
- * Grid - Apollo Engine (Vanilla HTML/CSS)
- * Pure HTML/CSS implementation for maximum accessibility and performance
+ * @fileoverview Grid Apollo Engine - Rottay Design System
+ * @description Apollo (Pure HTML/CSS) implementation of the Grid component.
+ * Provides a dependency-free Grid using inline CSS Grid styles.
+ *
+ * @remarks
+ * The Apollo engine uses pure inline CSS styles without any external CSS framework
+ * dependencies. All CSS Grid properties are computed and applied inline:
+ * - `display: grid`
+ * - `gridTemplateColumns`, `gridTemplateRows`
+ * - `gap`, `columnGap`, `rowGap`
+ * - `gridColumn`, `gridRow` (for items)
+ *
+ * This makes it ideal for:
+ * - Server-side rendering without CSS extraction
+ * - Embedding in third-party applications
+ * - Maximum browser compatibility (CSS Grid is well-supported)
+ * - Accessibility-focused implementations
+ *
+ * Data attributes are added for debugging:
+ * - `data-component="grid"` on the container
+ * - `data-component="grid-item"` on items
+ *
+ * @example Using Apollo Engine
+ * ```tsx
+ * import { Grid } from '@rottay/design-system';
+ *
+ * // Use Apollo for dependency-free styling
+ * <Grid engine="apollo" columns={3} gap="md">
+ *   <Grid.Item span={2}>
+ *     Pure inline CSS Grid, no framework dependencies
+ *   </Grid.Item>
+ * </Grid>
+ *
+ * // Ideal for embedded widgets
+ * <EngineProvider engine="apollo">
+ *   <Grid columns={4} gap="lg">
+ *     Self-contained grid styling
+ *   </Grid>
+ * </EngineProvider>
+ * ```
+ *
+ * @see {@link Grid} - The main engine-aware component
+ * @see {@link TitanGrid} - Ant Design implementation
+ * @see {@link HermesGrid} - Tailwind implementation
+ * @module Grid/Engines/Apollo
+ * @category Layout
+ * @package @rottay/design-system
  */
 
 'use client';

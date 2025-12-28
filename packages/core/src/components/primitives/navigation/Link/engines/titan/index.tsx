@@ -1,5 +1,47 @@
 /**
- * Link - Titan Engine (Ant Design)
+ * @fileoverview Titan Link Engine - Rottay Design System
+ * @description Ant Design implementation of the Link component.
+ * Uses Typography.Link for consistent Ant Design styling and behavior.
+ *
+ * @remarks
+ * The Titan engine leverages Ant Design's Typography.Link component,
+ * providing a feature-rich implementation with:
+ * - Built-in Ant Design theming support
+ * - Consistent typography with other Ant components
+ * - Native disabled and underline prop support
+ * - Smooth color transitions
+ *
+ * This is the default engine and provides the most complete feature set.
+ *
+ * @example Using Titan Engine
+ * ```tsx
+ * import { Link } from '@rottay/design-system';
+ *
+ * // Titan is the default engine
+ * <Link href="/dashboard" type="primary">Dashboard</Link>
+ *
+ * // Or explicitly specify the engine
+ * <Link engine="titan" href="/about">About Us</Link>
+ * ```
+ *
+ * @example Integration with Ant Design Theme
+ * ```tsx
+ * import { ConfigProvider } from 'antd';
+ * import { Link } from '@rottay/design-system';
+ *
+ * <ConfigProvider theme={{ token: { colorPrimary: '#00b96b' } }}>
+ *   <Link type="primary" href="/dashboard">
+ *     Uses Ant Design's theme token
+ *   </Link>
+ * </ConfigProvider>
+ * ```
+ *
+ * @see {@link LinkProps} for prop documentation
+ * @see {@link https://ant.design/components/typography#typographylink Ant Design Typography.Link}
+ *
+ * @module Link/engines/titan
+ * @category Navigation
+ * @package @rottay/design-system
  */
 
 'use client';
@@ -9,9 +51,63 @@ import { Typography } from 'antd';
 import type { LinkProps } from '../../types';
 import { LINK_DEFAULTS } from '../../types';
 
+// ============================================================================
+// Ant Design Link Reference
+// ============================================================================
+
+/** Extract Link component from Ant Design Typography */
 const { Link: AntLink } = Typography;
 
+// ============================================================================
+// Color Mapping
+// ============================================================================
+
+/**
+ * Maps semantic link types to color values.
+ * Used to apply custom colors while leveraging Ant Design's Link component.
+ */
+const typeColorMap: Record<string, string> = {
+  default: '#1890ff',
+  primary: '#1677ff',
+  secondary: '#722ed1',
+  success: '#52c41a',
+  warning: '#faad14',
+  danger: '#ff4d4f',
+};
+
+// ============================================================================
+// Titan Link Component
+// ============================================================================
+
+/**
+ * Titan engine Link component using Ant Design's Typography.Link.
+ *
+ * @description
+ * Wraps Ant Design's Typography.Link component to provide consistent
+ * styling with the Rottay Design System's Link API. Supports all standard
+ * Link props while leveraging Ant Design's built-in features.
+ *
+ * @remarks
+ * - Uses Ant Design's disabled and underline props natively
+ * - Applies custom colors via style prop for type support
+ * - Handles external links with security attributes
+ * - Prevents click events when disabled
+ *
+ * @param props - {@link LinkProps}
+ * @returns Ant Design Typography.Link element
+ *
+ * @example
+ * ```tsx
+ * <TitanLink href="/dashboard" type="primary" underline>
+ *   Go to Dashboard
+ * </TitanLink>
+ * ```
+ */
 export default function TitanLink(props: LinkProps): React.ReactElement {
+  // ========================================================================
+  // Props Destructuring
+  // ========================================================================
+
   const {
     children,
     href,
@@ -25,15 +121,14 @@ export default function TitanLink(props: LinkProps): React.ReactElement {
     ...rest
   } = props;
 
-  const typeColorMap: Record<string, string> = {
-    default: '#1890ff',
-    primary: '#1677ff',
-    secondary: '#722ed1',
-    success: '#52c41a',
-    warning: '#faad14',
-    danger: '#ff4d4f',
-  };
+  // ========================================================================
+  // Event Handlers
+  // ========================================================================
 
+  /**
+   * Handle click events on the link.
+   * Prevents navigation when the link is disabled.
+   */
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (disabled) {
       e.preventDefault();
@@ -42,9 +137,18 @@ export default function TitanLink(props: LinkProps): React.ReactElement {
     onClick?.(e as any);
   };
 
+  // ========================================================================
+  // External Link Attributes
+  // ========================================================================
+
+  /** Security attributes for external links */
   const externalProps = external
     ? { target: '_blank', rel: 'noopener noreferrer' }
     : {};
+
+  // ========================================================================
+  // Render
+  // ========================================================================
 
   return (
     <AntLink
@@ -65,4 +169,9 @@ export default function TitanLink(props: LinkProps): React.ReactElement {
   );
 }
 
+// ============================================================================
+// Display Name
+// ============================================================================
+
+/** Set display name for React DevTools debugging */
 TitanLink.displayName = 'TitanLink';
