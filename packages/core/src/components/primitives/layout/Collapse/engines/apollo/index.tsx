@@ -49,11 +49,11 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 1,
+    gap: 'var(--ds-collapse-gap, 1px)',
   } as React.CSSProperties,
   panel: {
-    border: '1px solid #d9d9d9',
-    borderRadius: 4,
+    border: '1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9))',
+    borderRadius: 'var(--ds-collapse-radius, 4px)',
     overflow: 'hidden',
   } as React.CSSProperties,
   panelGhost: {
@@ -67,9 +67,9 @@ const styles = {
   header: {
     display: 'flex',
     alignItems: 'center',
-    gap: 8,
-    padding: '12px 16px',
-    backgroundColor: '#fafafa',
+    gap: 'var(--ds-collapse-header-gap, 8px)',
+    padding: 'var(--ds-collapse-header-padding, 12px 16px)',
+    backgroundColor: 'var(--ds-collapse-header-bg, var(--ds-color-neutral-50, #fafafa))',
     cursor: 'pointer',
     userSelect: 'none',
   } as React.CSSProperties,
@@ -89,11 +89,11 @@ const styles = {
   content: {
     overflow: 'hidden',
     transition: 'max-height 0.2s, padding 0.2s',
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--ds-collapse-content-bg, #fff)',
   } as React.CSSProperties,
   contentActive: {
     maxHeight: 1000,
-    padding: '16px',
+    padding: 'var(--ds-collapse-content-padding, 16px)',
   } as React.CSSProperties,
   contentInactive: {
     maxHeight: 0,

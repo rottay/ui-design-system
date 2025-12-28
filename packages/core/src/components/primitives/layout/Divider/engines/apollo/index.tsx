@@ -140,11 +140,11 @@ const ApolloDivider = forwardRef<HTMLDivElement, DividerProps>(
     // Text style
     const textStyle: React.CSSProperties = {
       display: 'inline-block',
-      padding: '0 1rem',
+      padding: 'var(--ds-divider-text-padding, 0 1rem)',
       whiteSpace: 'nowrap',
-      fontSize: plain ? 'inherit' : '0.875rem',
+      fontSize: plain ? 'inherit' : 'var(--ds-divider-text-size, 0.875rem)',
       fontWeight: plain ? 'inherit' : 500,
-      color: plain ? 'inherit' : '#555',
+      color: plain ? 'inherit' : 'var(--ds-divider-text-color, var(--ds-color-neutral-600, #555))',
       lineHeight: 1.5,
     };
 

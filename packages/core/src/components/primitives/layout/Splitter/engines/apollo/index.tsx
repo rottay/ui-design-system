@@ -62,19 +62,19 @@ const styles = {
   } as React.CSSProperties,
   gutter: {
     flexShrink: 0,
-    backgroundColor: '#e8e8e8',
+    backgroundColor: 'var(--ds-splitter-gutter-bg, var(--ds-color-neutral-200, #e8e8e8))',
     transition: 'background-color 0.2s',
   } as React.CSSProperties,
   gutterHorizontal: {
-    width: 8,
+    width: 'var(--ds-splitter-gutter-size, 8px)',
     cursor: 'col-resize',
   } as React.CSSProperties,
   gutterVertical: {
-    height: 8,
+    height: 'var(--ds-splitter-gutter-size, 8px)',
     cursor: 'row-resize',
   } as React.CSSProperties,
   gutterHover: {
-    backgroundColor: '#1890ff',
+    backgroundColor: 'var(--ds-splitter-gutter-hover-bg, var(--ds-color-primary-500, #1890ff))',
   } as React.CSSProperties,
 };
 
