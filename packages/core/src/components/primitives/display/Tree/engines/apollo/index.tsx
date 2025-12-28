@@ -69,11 +69,11 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     padding: '4px 8px',
     paddingLeft,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    borderRadius: '4px',
-    backgroundColor: isSelected ? 'rgba(24, 144, 255, 0.1)' : 'transparent',
-    color: isSelected ? '#1890ff' : 'inherit',
+    borderRadius: 'var(--ds-tree-node-radius, 4px)',
+    backgroundColor: isSelected ? 'var(--ds-tree-node-selected-bg, rgba(24, 144, 255, 0.1))' : 'transparent',
+    color: isSelected ? 'var(--ds-tree-node-selected-color, var(--ds-color-primary-500, #1890ff))' : 'inherit',
     opacity: disabled ? 0.5 : 1,
-    transition: 'background-color 0.2s ease',
+    transition: 'var(--ds-tree-transition, background-color 0.2s ease)',
   };
 
   const switcherStyle: React.CSSProperties = {
@@ -93,7 +93,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     width: '16px',
     height: '16px',
     cursor: disabled ? 'not-allowed' : 'pointer',
-    accentColor: '#1890ff',
+    accentColor: 'var(--ds-tree-checkbox-color, var(--ds-color-primary-500, #1890ff))',
     flexShrink: 0,
   };
 
@@ -105,7 +105,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
   };
 
   const childrenStyle: React.CSSProperties = {
-    borderLeft: showLine ? '1px solid #e8e8e8' : 'none',
+    borderLeft: showLine ? '1px solid var(--ds-tree-line-color, #e8e8e8)' : 'none',
     marginLeft: paddingLeft + 10,
   };
 
@@ -132,7 +132,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isSelected && !disabled) {
-      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.04)';
+      e.currentTarget.style.backgroundColor = 'var(--ds-tree-node-hover-bg, rgba(0, 0, 0, 0.04))';
     }
   };
 

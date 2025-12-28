@@ -110,10 +110,10 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
     display: 'inline-block',
     position: 'relative',
     ...(bordered && {
-      border: '1px solid #d9d9d9',
-      padding: '12px',
-      borderRadius: '8px',
-      backgroundColor: '#ffffff',
+      border: '1px solid var(--ds-qrcode-border-color, #d9d9d9)',
+      padding: 'var(--ds-qrcode-padding, 12px)',
+      borderRadius: 'var(--ds-qrcode-radius, 8px)',
+      backgroundColor: 'var(--ds-qrcode-bg, #ffffff)',
     }),
     ...style,
   };
@@ -130,7 +130,7 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'var(--ds-qrcode-overlay-bg, rgba(255, 255, 255, 0.9))',
   };
 
   // Icon wrapper styles
@@ -141,7 +141,7 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
     transform: 'translate(-50%, -50%)',
     width: iconSize,
     height: iconSize,
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--ds-qrcode-icon-bg, #fff)',
     padding: 4,
     borderRadius: 4,
   };
@@ -149,10 +149,10 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
   // Button styles
   const buttonStyle: React.CSSProperties = {
     padding: '4px 12px',
-    border: '1px solid #1890ff',
+    border: '1px solid var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff))',
     borderRadius: 4,
     background: 'transparent',
-    color: '#1890ff',
+    color: 'var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff))',
     cursor: 'pointer',
     fontSize: 14,
     fontFamily: 'inherit',
@@ -162,8 +162,8 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
   const spinnerStyle: React.CSSProperties = {
     width: 24,
     height: 24,
-    border: '3px solid #f3f3f3',
-    borderTop: '3px solid #1890ff',
+    border: '3px solid var(--ds-qrcode-spinner-track, #f3f3f3)',
+    borderTop: '3px solid var(--ds-qrcode-spinner-color, var(--ds-color-primary-500, #1890ff))',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   };
@@ -182,7 +182,7 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
       case 'expired':
         return (
           <div style={overlayStyle} role="alert">
-            <p style={{ margin: 0, color: '#666', fontSize: 14 }}>QR Code expired</p>
+            <p style={{ margin: 0, color: 'var(--ds-qrcode-expired-color, #666)', fontSize: 14 }}>QR Code expired</p>
             {onRefresh && (
               <button
                 onClick={onRefresh}
@@ -198,7 +198,7 @@ export default function ApolloQRCode(props: QRCodeProps): React.ReactElement {
       case 'scanned':
         return (
           <div style={overlayStyle} role="status" aria-label="QR code scanned">
-            <svg width={48} height={48} fill="#52c41a" viewBox="0 0 20 20" aria-hidden="true">
+            <svg width={48} height={48} fill="var(--ds-qrcode-success-color, var(--ds-color-success-500, #52c41a))" viewBox="0 0 20 20" aria-hidden="true">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
