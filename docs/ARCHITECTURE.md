@@ -247,6 +247,8 @@ html[data-tenant] .ant-btn-primary {
 |------|--------|--------|
 | 2025-12-28 | Eliminadas 60 carpetas `base/` | -60 files, Apollo es el fallback vanilla |
 | 2025-12-28 | Removidos exports de Base* en index.ts | 39 files limpiados |
+| 2025-12-28 | Apollo engines migrados a CSS vars (display/) | 10 components: Calendar, Carousel, Descriptions, Empty, Image, List, QRCode, Statistic, Timeline, Tree |
+| 2025-12-28 | Apollo engines migrados a CSS vars (feedback/) | 11 components: Alert, Drawer, Message, Modal, Notification, Progress, Rate, Result, Skeleton, Spinner, Toast |
 
 ---
 
@@ -324,7 +326,7 @@ Para cada componente, seguir estos pasos EN ORDEN:
 - 🔄 IN PROGRESS - En proceso (indicar quién)
 - ✅ COMPLETE - Migración completa y verificada
 
-**Resumen:** 2/76 completados (2.6%)
+**Resumen:** 8/76 completados (10.5%) + 21 Apollo engines migrados a CSS vars
 
 ---
 
@@ -364,32 +366,32 @@ Para cada componente, seguir estos pasos EN ORDEN:
 | 5 | Tag | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, apollo uses var(--ds-tag-*) |
 | 6 | Tooltip | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +17 tokens, engines rewritten (no base) |
 | 7 | Typography | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | SIZE_MAP uses CSS vars, apollo rewritten |
-| 8 | Calendar | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 9 | Carousel | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 10 | Descriptions | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 11 | Empty | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 12 | Image | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 13 | List | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 14 | QRCode | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 15 | Statistic | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 16 | Timeline | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 17 | Tree | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 8 | Calendar | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-calendar-* vars |
+| 9 | Carousel | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-carousel-* vars |
+| 10 | Descriptions | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-descriptions-* vars |
+| 11 | Empty | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-empty-* vars |
+| 12 | Image | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-image-* vars |
+| 13 | List | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-list-* vars |
+| 14 | QRCode | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-qrcode-* vars |
+| 15 | Statistic | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-statistic-* vars |
+| 16 | Timeline | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-timeline-* vars |
+| 17 | Tree | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-tree-* vars |
 
 #### FEEDBACK (11) - Prioridad MEDIA
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Modal | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 2 | Alert | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 3 | Message | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 4 | Notification | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 5 | Progress | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 6 | Skeleton | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 7 | Spinner | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 8 | Result | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 9 | Rate | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 10 | Drawer | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 11 | Toast | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 1 | Modal | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-modal-* vars |
+| 2 | Alert | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-alert-* vars with type colors |
+| 3 | Message | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-message-* vars |
+| 4 | Notification | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-notification-* vars |
+| 5 | Progress | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-progress-* vars |
+| 6 | Skeleton | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-skeleton-* vars |
+| 7 | Spinner | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-spinner-* vars |
+| 8 | Result | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-result-* with status colors |
+| 9 | Rate | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-rate-* vars |
+| 10 | Drawer | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-drawer-* vars |
+| 11 | Toast | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-toast-* vars |
 
 #### NAVIGATION (12) - Prioridad MEDIA
 
@@ -531,5 +533,5 @@ Crear `/docs/BACKEND_API.md` documentando:
 
 ---
 
-*Document Version: 0.6.0*
+*Document Version: 0.7.0*
 *Last Updated: 2025-12-28*
