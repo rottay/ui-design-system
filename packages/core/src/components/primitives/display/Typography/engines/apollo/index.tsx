@@ -100,15 +100,16 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       ...style,
     };
 
+    const HeadingElement = Tag as React.ElementType;
     return (
-      <Tag
-        ref={ref as any}
+      <HeadingElement
+        ref={ref}
         className={`rottay-heading rottay-heading--${level} ${className}`.trim()}
         style={headingStyle}
         {...restProps}
       >
         {children}
-      </Tag>
+      </HeadingElement>
     );
   }
 );
@@ -170,15 +171,16 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       ...style,
     };
 
+    const TextElement = Tag as React.ElementType;
     return (
-      <Tag
-        ref={ref as any}
+      <TextElement
+        ref={ref}
         className={`rottay-text ${className}`.trim()}
         style={textStyle}
         {...restProps}
       >
         {children}
-      </Tag>
+      </TextElement>
     );
   }
 );

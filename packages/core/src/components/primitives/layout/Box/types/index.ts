@@ -72,7 +72,7 @@ export type BoxOverflow = CSSProperties['overflow'];
  * A versatile container component that provides a styled box with configurable spacing,
  * borders, shadows, and other layout properties.
  */
-export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseComponentProps, Omit<HTMLAttributes<HTMLElement>, 'style' | 'className'> {
+export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseComponentProps, Omit<HTMLAttributes<HTMLElement>, 'style' | 'className' | 'color'> {
   /**
    * The HTML element or React component to render as
    * @default 'div'

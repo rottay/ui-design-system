@@ -116,7 +116,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
 
-    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+    const sizeConfig = SIZE_CONFIG[size ?? 'default'] || SIZE_CONFIG.default;
 
     const getDisplayText = () => {
       if (!showText) return null;

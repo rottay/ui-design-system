@@ -154,7 +154,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       return labels.join(' / ');
     };
 
-    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+    const sizeConfig = SIZE_CONFIG[size ?? 'default'] || SIZE_CONFIG.default;
 
     const getBorderColor = () => {
       if (status === 'error') return 'var(--ds-cascader-border-error)';

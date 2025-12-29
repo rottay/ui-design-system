@@ -107,6 +107,12 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
   zIndex?: number;
 
   /**
+   * Maximum width of the tooltip.
+   * @default 200
+   */
+  maxWidth?: number | string;
+
+  /**
    * Tooltip trigger element.
    */
   children: ReactNode;

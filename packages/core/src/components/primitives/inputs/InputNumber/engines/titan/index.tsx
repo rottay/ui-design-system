@@ -43,7 +43,8 @@ import React from 'react';
 import { InputNumber as AntInputNumber } from 'antd';
 import type { InputNumberProps } from '../../types';
 
-export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const InputNumber = React.forwardRef<any, InputNumberProps>(
   (props, ref) => {
     const {
       value,

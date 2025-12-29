@@ -25,3 +25,15 @@ export * from './shared';
 // ============================================
 export * from './components/primitives';
 export * from './components/custom';
+
+// ============================================
+// ANTD COMPATIBILITY (Temporary exports for migration)
+// These are re-exports from antd for backward compatibility.
+// Applications should migrate to DS primitives over time.
+// ============================================
+export { Row, Col } from 'antd';
+export type { ColumnsType, TableProps } from 'antd/es/table';
+export type { DataNode, TreeProps as AntTreeProps } from 'antd/es/tree';
+
+// Alias for backward compatibility
+export { Spinner as Spin } from './components/primitives/feedback/Spinner';

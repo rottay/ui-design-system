@@ -3,12 +3,16 @@
  * Authentication layout component
  */
 
-import type { ReactNode } from 'react';
-import type { EngineAwareProps } from '../../../../types';
+import type { ReactNode, CSSProperties } from 'react';
+import type { EngineAwareProps } from '../../../../core/types';
 
 export type AuthLayoutPreset = 'minimal' | 'standard' | 'branded' | 'social' | 'enterprise';
 
 export interface AuthLayoutProps extends EngineAwareProps {
+  /** CSS class name */
+  className?: string;
+  /** Inline styles */
+  style?: CSSProperties;
   /** Preset to use */
   preset?: AuthLayoutPreset;
   /** Page title */

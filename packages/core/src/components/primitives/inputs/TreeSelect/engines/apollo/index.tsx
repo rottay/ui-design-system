@@ -295,7 +295,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       return titles.join(', ');
     };
 
-    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+    const sizeConfig = SIZE_CONFIG[size ?? 'default'] || SIZE_CONFIG.default;
 
     const getBorderColor = () => {
       if (status === 'error') return 'var(--ds-treeselect-border-error)';
