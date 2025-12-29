@@ -129,13 +129,18 @@ const preview: Preview = {
       const selectedTenant = (context.globals.tenant || 'rottay') as string;
       const selectedEngine = (context.globals.engine || 'titan') as EngineName;
 
+      // Apply data-tenant to html element for CSS selectors
+      React.useEffect(() => {
+        document.documentElement.setAttribute('data-tenant', selectedTenant);
+        return () => {
+          document.documentElement.removeAttribute('data-tenant');
+        };
+      }, [selectedTenant]);
+
       return (
         <EngineProvider defaultEngine={selectedEngine}>
           <ThemeProvider>
-            <div
-              data-tenant={selectedTenant}
-              style={{ padding: '20px', minHeight: '100%' }}
-            >
+            <div style={{ padding: '20px', minHeight: '100%' }}>
               <Story />
             </div>
           </ThemeProvider>
