@@ -1,10 +1,11 @@
 import type { SVGProps, ForwardRefExoticComponent, RefAttributes } from 'react';
-import { iconSize, type IconSize } from '../../tokens/ts/components/icon';
+import { iconSize, type IconSize } from '@/theme/tokens/ts/components/icon';
 
 /**
  * Props base para todos los iconos del sistema Rottay.
+ * Renamed to SvgIconProps to avoid conflict with IconProps from common types.
  */
-export interface IconProps extends SVGProps<SVGSVGElement> {
+export interface SvgIconProps extends SVGProps<SVGSVGElement> {
   /**
    * Tamaño del icono. Puede ser un valor predefinido o un número en pixels.
    * @default 'md'
@@ -33,8 +34,9 @@ export interface IconProps extends SVGProps<SVGSVGElement> {
  * Tipo para un componente de icono del sistema.
  */
 export type IconComponent = ForwardRefExoticComponent<
-  IconProps & RefAttributes<SVGSVGElement>
+  SvgIconProps & RefAttributes<SVGSVGElement>
 >;
+
 
 /**
  * Mapeo de tamaños a CSS variables.

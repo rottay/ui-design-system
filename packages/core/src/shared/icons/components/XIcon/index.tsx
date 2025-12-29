@@ -2,7 +2,7 @@
 
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
-import type { IconProps } from '../../types';
+import type { SvgIconProps as IconProps } from '../../types';
 
 /**
  * Icono de X/close/error - usado en botones de cerrar y estados de error.

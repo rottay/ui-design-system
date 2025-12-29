@@ -1,5 +1,5 @@
 // Types
-export type { IconProps, IconComponent } from './types';
+export type { SvgIconProps, IconComponent } from './types';
 export { ICON_SIZE_MAP } from './types';
 
 // Components

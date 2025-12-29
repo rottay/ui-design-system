@@ -1,7 +1,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { IconProps } from '../../types';
+import type { SvgIconProps as IconProps } from '../../types';
 import { ICON_SIZE_MAP } from '../../types';
 
 /**

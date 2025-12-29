@@ -2,7 +2,7 @@
 
 import { forwardRef } from 'react';
 import { BaseIcon } from '../BaseIcon';
-import type { IconProps } from '../../types';
+import type { SvgIconProps as IconProps } from '../../types';
 
 /**
  * Icono de loading/spinner - usado en estados de carga.
