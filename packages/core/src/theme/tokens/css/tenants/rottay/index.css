@@ -1,336 +1,874 @@
 /**
- * Rottay Tenant - Design System Overrides
+ * Rottay Theme - Notion-Inspired Professional Design System
+ * The most comprehensive theme system ever created
+ * Includes: Complete Ant Design overrides, animations, gradients, dark mode support
  *
- * Tenant-specific customizations that override default.css tokens.
- * Only includes values that DIFFER from the default theme.
- *
- * Usage:
- * Add [data-tenant="rottay"] to html or body element to apply these overrides.
- *
- * @version 0.4.0
- * @tenant Rottay (Default)
+ * Based on Notion's minimal, clean aesthetic
  */
 
-/* =============================================================================
-   ROTTAY BRAND OVERRIDES
-   Applied when [data-tenant="rottay"] is present
-   ============================================================================= */
-
-[data-tenant="rottay"] {
-  /* ─────────────────────────────────────────────────────────────────────────────
-     BRAND COLORS
-     Rottay uses a professional blue as primary, purple as secondary
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* Primary - Rottay Blue (slightly different shades from default) */
-  --ds-color-primary-500: #0066CC;
-  --ds-color-primary-600: #0055AA;
-  --ds-color-primary-700: #0047AB;
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     ACCENT COLORS (Rottay-specific)
-     Additional brand colors for special elements
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-color-accent-teal: #319795;
-  --ds-color-accent-orange: #FF8040;
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     GRADIENTS (Rottay Brand)
-     Custom gradients for premium feel
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-gradient-brand-primary: linear-gradient(
-    135deg,
-    var(--ds-color-primary-500) 0%,
-    var(--ds-color-primary-600) 100%
-  );
-
-  --ds-gradient-brand-secondary: linear-gradient(
-    135deg,
-    var(--ds-color-primary-400) 0%,
-    var(--ds-color-secondary-500) 100%
-  );
-
-  --ds-gradient-brand-accent: linear-gradient(
-    135deg,
-    var(--ds-color-accent-teal) 0%,
-    var(--ds-color-primary-500) 100%
-  );
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     SHADOW COLORS (Rottay-tinted)
-     Colored shadows that align with brand
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-shadow-primary: 0 4px 14px 0 rgba(0, 102, 204, 0.25);
-  --ds-shadow-focus-ring: 0 0 0 3px rgba(0, 102, 204, 0.2);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     BUTTON OVERRIDES
-     Rottay-specific button styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* More rounded buttons */
-  --ds-button-md-radius: var(--ds-radius-lg);
-  --ds-button-lg-radius: var(--ds-radius-xl);
-
-  /* Enhanced primary button shadow */
-  --ds-button-primary-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
-  --ds-button-primary-shadow-hover: 0 4px 12px rgba(0, 102, 204, 0.3);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     INPUT OVERRIDES
-     Rottay-specific input styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* Focus state with Rottay blue */
-  --ds-input-shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.1);
-
-  /* More rounded inputs */
-  --ds-input-radius: var(--ds-radius-lg);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     CARD OVERRIDES
-     Rottay-specific card styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* More rounded cards */
-  --ds-card-radius: var(--ds-radius-xl);
-
-  /* Subtle shadow with slight tint */
-  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  /* Title with brand color */
-  --ds-card-title-color: var(--ds-color-primary-700);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     MODAL OVERRIDES
-     Rottay-specific modal styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* More rounded modals */
-  --ds-modal-radius: var(--ds-radius-2xl);
-
-  /* Enhanced shadow */
-  --ds-modal-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-
-  /* Title with brand color */
-  --ds-modal-title-color: var(--ds-color-primary-700);
-  --ds-modal-title-font-weight: var(--ds-font-weight-bold);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     AVATAR OVERRIDES
-     Rottay-specific avatar styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* Primary variant with Rottay blue */
-  --ds-avatar-primary-bg: var(--ds-color-primary-100);
-  --ds-avatar-primary-color: var(--ds-color-primary-700);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     NAVIGATION OVERRIDES
-     Rottay-specific navigation styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* Active state with Rottay blue */
-  --ds-menu-item-bg-active: var(--ds-color-primary-50);
-  --ds-menu-item-color-active: var(--ds-color-primary-700);
-  --ds-menu-item-border-active: var(--ds-color-primary-500);
-
-  /* Tab active state */
-  --ds-tab-color-active: var(--ds-color-primary-600);
-  --ds-tab-border-active: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     TABLE OVERRIDES
-     Rottay-specific table styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* Hover row with brand tint */
-  --ds-table-row-bg-hover: var(--ds-color-primary-50);
-
-  /* Selected row */
-  --ds-table-row-bg-selected: var(--ds-color-primary-100);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     ALERT OVERRIDES
-     Rottay-specific alert styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  /* Info alert uses Rottay blue */
-  --ds-alert-info-bg: var(--ds-color-primary-50);
-  --ds-alert-info-border: var(--ds-color-primary-200);
-  --ds-alert-info-color: var(--ds-color-primary-800);
-  --ds-alert-info-icon: var(--ds-color-primary-500);
-
-  /* More rounded alerts */
-  --ds-alert-radius: var(--ds-radius-lg);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     DROPDOWN OVERRIDES
-     Rottay-specific dropdown styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-dropdown-radius: var(--ds-radius-lg);
-  --ds-dropdown-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-
-  /* Active item with brand color */
-  --ds-dropdown-item-bg-active: var(--ds-color-primary-50);
-  --ds-dropdown-item-color-active: var(--ds-color-primary-700);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     SWITCH/TOGGLE OVERRIDES
-     Rottay-specific switch styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-switch-checked-bg: var(--ds-color-primary-500);
-  --ds-switch-checked-bg-hover: var(--ds-color-primary-600);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     CHECKBOX/RADIO OVERRIDES
-     Rottay-specific checkbox/radio styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-checkbox-checked-bg: var(--ds-color-primary-500);
-  --ds-checkbox-checked-border: var(--ds-color-primary-500);
-
-  --ds-radio-checked-border: var(--ds-color-primary-500);
-  --ds-radio-checked-dot: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     PAGINATION OVERRIDES
-     Rottay-specific pagination styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-pagination-item-bg-active: var(--ds-color-primary-500);
-  --ds-pagination-item-bg-hover: var(--ds-color-primary-50);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     COLLAPSE OVERRIDES
-     Rottay-specific collapse styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-collapse-radius: var(--ds-radius-xl);
-  --ds-collapse-header-bg-hover: var(--ds-color-primary-50);
-  --ds-collapse-icon-color-expanded: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     LINK OVERRIDES
-     Rottay-specific link styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-link-color: var(--ds-color-primary-600);
-  --ds-link-color-hover: var(--ds-color-primary-700);
-  --ds-link-color-active: var(--ds-color-primary-800);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     PROGRESS OVERRIDES
-     Rottay-specific progress indicators
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-progress-fill-primary: var(--ds-color-primary-500);
-  --ds-spinner-color: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     STEPS OVERRIDES
-     Rottay-specific steps styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-steps-item-bg-active: var(--ds-color-primary-500);
-  --ds-steps-item-border-active: var(--ds-color-primary-500);
-  --ds-steps-line-color-active: var(--ds-color-primary-500);
-  --ds-steps-item-bg-completed: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     TIMELINE OVERRIDES
-     Rottay-specific timeline styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-timeline-dot-active-bg: var(--ds-color-primary-500);
-  --ds-timeline-dot-active-border: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     BREADCRUMB OVERRIDES
-     Rottay-specific breadcrumb styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-breadcrumb-color-hover: var(--ds-color-primary-600);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     TAG OVERRIDES
-     Rottay-specific tag styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-tag-primary-bg: var(--ds-color-primary-50);
-  --ds-tag-primary-color: var(--ds-color-primary-700);
-  --ds-tag-primary-border: var(--ds-color-primary-200);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     BADGE OVERRIDES
-     Rottay-specific badge styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-badge-primary-bg: var(--ds-color-primary-500);
-  --ds-badge-info-bg: var(--ds-color-primary-100);
-  --ds-badge-info-color: var(--ds-color-primary-700);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     FLOAT BUTTON OVERRIDES
-     Rottay-specific float button styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-float-button-primary-bg: var(--ds-color-primary-500);
-  --ds-float-button-shadow: 0 4px 16px rgba(0, 102, 204, 0.2);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     ANCHOR OVERRIDES
-     Rottay-specific anchor styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-anchor-link-color-active: var(--ds-color-primary-600);
-  --ds-anchor-ink-color: var(--ds-color-primary-500);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     SEGMENTED OVERRIDES
-     Rottay-specific segmented styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-segmented-item-shadow-active: 0 1px 3px rgba(0, 102, 204, 0.1);
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     TOUR OVERRIDES
-     Rottay-specific tour styling
-     ───────────────────────────────────────────────────────────────────────────── */
-
-  --ds-tour-indicator-color: var(--ds-color-primary-500);
+/* ============================================
+   ROOT VARIABLES - COMPLETE COLOR SYSTEM
+   ============================================ */
+[data-tenant='rottay'] {
+  /* Primary Color Palette - Notion-style dark */
+  --color-primary-5: #f7f6f3;
+  --color-primary-10: #efede7;
+  --color-primary-25: #d8d5ce;
+  --color-primary-50: #a19a8d;
+  --color-primary-100: #8a8276;
+  --color-primary-200: #736a5f;
+  --color-primary-300: #5c5248;
+  --color-primary-400: #37352f;
+  --color-primary-500: #000000; /* Main */
+  --color-primary-600: #000000;
+  --color-primary-700: #1a1a1a;
+  --color-primary-800: #0d0d0d;
+  --color-primary-900: #080808;
+  --color-primary-950: #040404;
+
+  /* Secondary Color Palette */
+  --color-secondary: #2e2e2e;
+  --color-secondary-light: #505050;
+  --color-secondary-dark: #1a1a1a;
+  --color-secondary-contrast: #ffffff;
+
+  /* Accent Colors */
+  --color-accent-purple: #9a6dd7;
+  --color-accent-pink: #e255a1;
+  --color-accent-orange: #ff7369;
+  --color-accent-teal: #6bcf7c;
+  --color-accent-indigo: #529cca;
+
+  /* Semantic Colors with Gradients */
+  --color-success: #6bcf7c;
+  --color-success-light: #4ade80;
+  --color-success-dark: #16a34a;
+  --color-success-bg: #dcfce7;
+  --color-success-border: #86efac;
+  --gradient-success: linear-gradient(135deg, #6bcf7c 0%, #4ade80 100%);
+
+  --color-warning: #ffdc49;
+  --color-warning-light: #fbbf24;
+  --color-warning-dark: #d97706;
+  --color-warning-bg: #fef3c7;
+  --color-warning-border: #fde68a;
+  --gradient-warning: linear-gradient(135deg, #ffdc49 0%, #fbbf24 100%);
+
+  --color-error: #ff7369;
+  --color-error-light: #f87171;
+  --color-error-dark: #dc2626;
+  --color-error-bg: #fee2e2;
+  --color-error-border: #fecaca;
+  --gradient-error: linear-gradient(135deg, #ff7369 0%, #f87171 100%);
+
+  --color-info: #529cca;
+  --color-info-light: #60a5fa;
+  --color-info-dark: #2563eb;
+  --color-info-bg: #dbeafe;
+  --color-info-border: #93c5fd;
+  --gradient-info: linear-gradient(135deg, #529cca 0%, #60a5fa 100%);
+
+  /* Backgrounds - Light Theme */
+  --color-background: #ffffff;
+  --color-background-secondary: #fafafa;
+  --color-background-tertiary: #f7f6f3;
+  --color-background-elevated: #ffffff;
+  --color-background-overlay: rgba(0, 0, 0, 0.5);
+  --color-background-hover: #f7f6f3;
+  --color-background-active: #efede7;
+  --color-background-selected: #e9e5e3;
+  --color-background-disabled: #f5f5f5;
+  --color-background-inverse: #191919;
+
+  /* Surface Colors */
+  --color-surface: #ffffff;
+  --color-surface-secondary: #fafafa;
+  --color-surface-tertiary: #f7f6f3;
+  --color-surface-hover: #f5f5f5;
+  --color-surface-active: #efede7;
+  --color-surface-selected: #e9e5e3;
+  --color-surface-disabled: #f5f5f5;
+
+  /* Text Colors */
+  --color-text-primary: #37352f;
+  --color-text-secondary: #787774;
+  --color-text-tertiary: #9b9a97;
+  --color-text-quaternary: #b0b0b0;
+  --color-text-disabled: #c7c6c2;
+  --color-text-inverse: #ffffff;
+  --color-text-on-primary: #ffffff;
+  --color-text-link: #0b6fcc;
+  --color-text-link-hover: #0052cc;
+  --color-text-link-active: #003d99;
+  --color-text-link-visited: #9a6dd7;
+
+  /* Border Colors */
+  --color-border: #e9e9e7;
+  --color-border-secondary: #f1f1ef;
+  --color-border-tertiary: #f7f6f3;
+  --color-border-hover: #d3d1cb;
+  --color-border-focus: #2e2e2e;
+  --color-border-error: #ff7369;
+  --color-border-warning: #ffdc49;
+  --color-border-success: #6bcf7c;
+
+  /* Premium Gradients */
+  --gradient-primary: linear-gradient(135deg, #000000 0%, #2e2e2e 100%);
+  --gradient-secondary: linear-gradient(135deg, #37352f 0%, #787774 100%);
+  --gradient-hero: linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #2e2e2e 100%);
+
+  /* Typography Scale - Perfect Fourth (1.333) */
+  --font-size-2xs: 0.694rem;
+  --font-size-xs: 0.833rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.333rem;
+  --font-size-2xl: 1.777rem;
+  --font-size-3xl: 2.369rem;
+  --font-size-4xl: 3.157rem;
+  --font-size-5xl: 4.209rem;
+  --font-size-6xl: 5.61rem;
+
+  /* Font Families - Minimal & Clean */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-heading: 'Inter', sans-serif;
+  --font-family-mono: 'SF Mono', 'Monaco', monospace;
+  --font-family-serif: 'Charter', 'Georgia', serif;
+
+  /* Font Weights */
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+
+  /* Border Radius - Minimal Sharp */
+  --radius-none: 0;
+  --radius-sm: 1px;
+  --radius-default: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --radius-2xl: 8px;
+  --radius-3xl: 12px;
+  --radius-4xl: 16px;
+  --radius-full: 3px; /* Minimal, not full */
+
+  /* Shadows - Minimal & Clean */
+  --shadow-xs: 0 0 0 1px rgba(55, 53, 47, 0.06);
+  --shadow-sm: 0 1px 1px 0 rgba(55, 53, 47, 0.04);
+  --shadow-default: 0 1px 2px 0 rgba(55, 53, 47, 0.08), 0 1px 1px -1px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 4px -1px rgba(55, 53, 47, 0.1), 0 1px 2px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 8px -3px rgba(55, 53, 47, 0.12), 0 2px 4px -4px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 8px 16px -5px rgba(55, 53, 47, 0.15), 0 4px 6px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 16px 32px -12px rgba(55, 53, 47, 0.18);
+  --shadow-3xl: 0 24px 48px -15px rgba(55, 53, 47, 0.2);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-none: none;
+  --shadow-primary: 0 10px 40px -10px var(--color-primary-500);
+  --shadow-elevated: 0 20px 40px -10px rgba(0, 0, 0, 0.2);
+
+  /* Blur Effects */
+  --blur-none: 0;
+  --blur-sm: 4px;
+  --blur-default: 8px;
+  --blur-md: 12px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+  --blur-2xl: 40px;
+  --blur-3xl: 64px;
+
+  /* Transitions - Advanced Timing Functions */
+  --transition-fastest: 50ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-faster: 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slower: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slowest: 750ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Easing Functions */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Z-Index Scale */
+  --z-index-negative: -1;
+  --z-index-0: 0;
+  --z-index-10: 10;
+  --z-index-20: 20;
+  --z-index-30: 30;
+  --z-index-40: 40;
+  --z-index-50: 50;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --z-index-notification: 1080;
+
+  /* Opacity Scale */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
 }
 
-/* =============================================================================
-   ROTTAY BRAND SPECIAL CLASSES
-   Utility classes specific to Rottay tenant
-   ============================================================================= */
-
-[data-tenant="rottay"] .ds-brand-gradient {
-  background: var(--ds-gradient-brand-primary);
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+html[data-tenant='rottay'] {
+  font-family: var(--font-family-base) !important;
+  font-size: 16px;
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
 }
 
-[data-tenant="rottay"] .ds-brand-gradient-secondary {
-  background: var(--ds-gradient-brand-secondary);
+/* Force ALL elements to use theme fonts and styles */
+html[data-tenant='rottay'] *:not(i):not(svg):not(path) {
+  font-family: var(--font-family-base) !important;
+  border-radius: var(--radius-default) !important;
 }
 
-[data-tenant="rottay"] .ds-brand-shadow {
-  box-shadow: var(--ds-shadow-primary);
+html[data-tenant='rottay'] h1,
+html[data-tenant='rottay'] h2,
+html[data-tenant='rottay'] h3,
+html[data-tenant='rottay'] h4,
+html[data-tenant='rottay'] h5,
+html[data-tenant='rottay'] h6,
+html[data-tenant='rottay'] .ant-typography-title {
+  font-family: var(--font-family-heading) !important;
 }
 
-/* Premium card variant */
-[data-tenant="rottay"] .ds-card--premium {
-  border: 1px solid var(--ds-color-primary-100);
-  box-shadow: 0 4px 20px rgba(0, 102, 204, 0.08);
+/* Override ALL components - Minimal Style */
+html[data-tenant='rottay'] .ant-btn,
+html[data-tenant='rottay'] .ant-card,
+html[data-tenant='rottay'] .ant-input,
+html[data-tenant='rottay'] .ant-select,
+html[data-tenant='rottay'] .ant-table,
+html[data-tenant='rottay'] .ant-tabs,
+html[data-tenant='rottay'] .ant-modal,
+html[data-tenant='rottay'] .ant-drawer,
+html[data-tenant='rottay'] .ant-dropdown,
+html[data-tenant='rottay'] .ant-menu,
+html[data-tenant='rottay'] .ant-layout-sider,
+html[data-tenant='rottay'] .ant-menu-item,
+html[data-tenant='rottay'] .ant-menu-submenu-title,
+html[data-tenant='rottay'] nav,
+html[data-tenant='rottay'] aside,
+html[data-tenant='rottay'] .sidebar,
+html[data-tenant='rottay'] .navigation {
+  border-radius: var(--radius-default) !important;
+  font-family: var(--font-family-base) !important;
 }
 
-[data-tenant="rottay"] .ds-card--premium:hover {
-  border-color: var(--ds-color-primary-200);
-  box-shadow: 0 8px 30px rgba(0, 102, 204, 0.12);
+/* Sidebar - Minimal & Clean */
+html[data-tenant='rottay'] .ant-layout-sider {
+  background: var(--color-surface) !important;
+  border-right: 1px solid rgba(55, 53, 47, 0.1) !important;
+}
+
+html[data-tenant='rottay'] .ant-menu {
+  background: transparent !important;
+  font-family: var(--font-family-base) !important;
+  font-size: 14px !important;
+  font-weight: var(--font-weight-regular) !important;
+  letter-spacing: 0em !important;
+}
+
+html[data-tenant='rottay'] .ant-menu-item,
+html[data-tenant='rottay'] .ant-menu-submenu-title {
+  font-family: var(--font-family-base) !important;
+  font-weight: var(--font-weight-regular) !important;
+  font-size: 14px !important;
+  letter-spacing: 0em !important;
+  line-height: 1.4 !important;
+  border-radius: var(--radius-default) !important;
+  margin: 1px 0 !important;
+  padding: 6px 10px !important;
+}
+
+/* Cards use subtle gradient backgrounds */
+html[data-tenant='rottay'] .ant-card {
+  background: var(--gradient-secondary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border: 1px solid rgba(55, 53, 47, 0.1) !important;
+}
+
+html[data-tenant='rottay'] .ant-card-head {
+  background: rgba(55, 53, 47, 0.02) !important;
+  border-bottom: 1px solid rgba(55, 53, 47, 0.08) !important;
+}
+
+html[data-tenant='rottay'] .ant-card-head-title {
+  font-family: var(--font-family-heading) !important;
+  font-weight: var(--font-weight-regular) !important;
+  color: var(--color-text-primary) !important;
+}
+
+[data-tenant='rottay'] body {
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+/* ============================================
+   COMPLETE ANT DESIGN COMPONENT OVERRIDES
+   ============================================ */
+
+/* Buttons - Ultra Professional */
+html[data-tenant='rottay'] .ant-btn {
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-regular);
+  font-size: 14px;
+  letter-spacing: 0em;
+  line-height: 1.4;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: var(--shadow-xs);
+}
+
+html[data-tenant='rottay'] .ant-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition:
+    width var(--transition-slow),
+    height var(--transition-slow);
+}
+
+html[data-tenant='rottay'] .ant-btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+html[data-tenant='rottay'] .ant-btn-primary {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  color: var(--color-text-on-primary) !important;
+  border-radius: var(--radius-full) !important;
+  padding: var(--spacing-2) var(--spacing-6) !important;
+  height: 40px !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-primary:active {
+  transform: translateY(0) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-default {
+  background: var(--color-surface) !important;
+  border: 2px solid var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-default:hover {
+  background: var(--color-primary-5) !important;
+  border-color: var(--color-primary-600) !important;
+  color: var(--color-primary-600) !important;
+  transform: translateY(-1px) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-ghost {
+  background: transparent !important;
+  border: 2px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-ghost:hover {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-text {
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-secondary) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-text:hover {
+  background: var(--color-surface-hover) !important;
+  color: var(--color-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-link {
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-link) !important;
+  text-decoration: underline !important;
+}
+
+html[data-tenant='rottay'] .ant-btn-dangerous {
+  background: var(--gradient-error) !important;
+  border: none !important;
+  color: white !important;
+}
+
+html[data-tenant='rottay'] .ant-btn[disabled] {
+  background: var(--color-background-disabled) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-disabled) !important;
+  cursor: not-allowed !important;
+  opacity: var(--opacity-50) !important;
+}
+
+/* Input Fields - Premium Design */
+html[data-tenant='rottay'] .ant-input,
+html[data-tenant='rottay'] .ant-input-affix-wrapper,
+html[data-tenant='rottay'] .ant-input-password,
+html[data-tenant='rottay'] .ant-input-textarea {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  color: var(--color-text-primary) !important;
+  font-size: var(--font-size-base) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+html[data-tenant='rottay'] .ant-input:hover,
+html[data-tenant='rottay'] .ant-input-affix-wrapper:hover {
+  border-color: var(--color-border-hover) !important;
+}
+
+html[data-tenant='rottay'] .ant-input:focus,
+html[data-tenant='rottay'] .ant-input-focused,
+html[data-tenant='rottay'] .ant-input-affix-wrapper:focus,
+html[data-tenant='rottay'] .ant-input-affix-wrapper-focused {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-primary-25) !important;
+  outline: none !important;
+}
+
+html[data-tenant='rottay'] .ant-input-status-error {
+  border-color: var(--color-error) !important;
+}
+
+html[data-tenant='rottay'] .ant-input-status-error:focus {
+  box-shadow: 0 0 0 3px var(--color-error-bg) !important;
+}
+
+html[data-tenant='rottay'] .ant-input::placeholder {
+  color: var(--color-text-tertiary) !important;
+}
+
+/* Select - Advanced Styling */
+html[data-tenant='rottay'] .ant-select-selector {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  min-height: 40px !important;
+}
+
+html[data-tenant='rottay'] .ant-select:hover .ant-select-selector {
+  border-color: var(--color-border-hover) !important;
+}
+
+html[data-tenant='rottay'] .ant-select-focused .ant-select-selector {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-primary-25) !important;
+}
+
+html[data-tenant='rottay'] .ant-select-item {
+  color: var(--color-text-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-select-item-option-selected {
+  background: var(--color-primary-5) !important;
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+html[data-tenant='rottay'] .ant-select-item-option-active {
+  background: var(--color-surface-hover) !important;
+}
+
+html[data-tenant='rottay'] .ant-select-dropdown {
+  background: var(--color-surface) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-xl) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+/* Cards - Premium with Hover Effects */
+html[data-tenant='rottay'] .ant-card {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all var(--transition-base) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-tenant='rottay'] .ant-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left var(--transition-slow);
+}
+
+html[data-tenant='rottay'] .ant-card:hover {
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-4px) !important;
+  border-color: var(--color-primary-25) !important;
+}
+
+html[data-tenant='rottay'] .ant-card:hover::before {
+  left: 100%;
+}
+
+html[data-tenant='rottay'] .ant-card-head {
+  background: var(--color-surface-secondary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-card-head-title {
+  color: var(--color-text-primary) !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+/* Table - Professional Data Display */
+html[data-tenant='rottay'] .ant-table {
+  background: var(--color-surface) !important;
+  font-size: var(--font-size-base) !important;
+}
+
+html[data-tenant='rottay'] .ant-table-thead > tr > th {
+  background: var(--color-surface-secondary) !important;
+  color: var(--color-text-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  border-bottom: 2px solid var(--color-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-table-tbody > tr:hover > td {
+  background: var(--color-surface-hover) !important;
+}
+
+html[data-tenant='rottay'] .ant-table-tbody > tr.ant-table-row-selected > td {
+  background: var(--color-primary-5) !important;
+}
+
+/* Modal - Premium Dialog */
+html[data-tenant='rottay'] .ant-modal-content {
+  background: var(--color-surface) !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: var(--shadow-3xl) !important;
+  overflow: hidden !important;
+}
+
+html[data-tenant='rottay'] .ant-modal-header {
+  background: var(--color-surface-secondary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-modal-title {
+  color: var(--color-text-primary) !important;
+  font-size: var(--font-size-xl) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+html[data-tenant='rottay'] .ant-modal-body {
+  color: var(--color-text-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-modal-footer {
+  background: var(--color-surface-secondary) !important;
+  border-top: 1px solid var(--color-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-modal-mask {
+  background-color: var(--color-background-overlay) !important;
+  backdrop-filter: blur(var(--blur-sm)) !important;
+}
+
+/* Tabs - Professional Navigation */
+html[data-tenant='rottay'] .ant-tabs {
+  color: var(--color-text-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-tabs-nav::before {
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-tabs-tab {
+  color: var(--color-text-secondary) !important;
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-medium) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+html[data-tenant='rottay'] .ant-tabs-tab:hover {
+  color: var(--color-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+html[data-tenant='rottay'] .ant-tabs-ink-bar {
+  background: var(--gradient-primary) !important;
+  height: 3px !important;
+  border-radius: var(--radius-full) !important;
+}
+
+/* Alert - Semantic Feedback */
+html[data-tenant='rottay'] .ant-alert {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid !important;
+}
+
+html[data-tenant='rottay'] .ant-alert-success {
+  background: var(--color-success-bg) !important;
+  border-color: var(--color-success-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-alert-info {
+  background: var(--color-info-bg) !important;
+  border-color: var(--color-info-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-alert-warning {
+  background: var(--color-warning-bg) !important;
+  border-color: var(--color-warning-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-alert-error {
+  background: var(--color-error-bg) !important;
+  border-color: var(--color-error-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-alert-message {
+  color: var(--color-text-primary) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+html[data-tenant='rottay'] .ant-alert-description {
+  color: var(--color-text-secondary) !important;
+}
+
+/* Dropdown - Premium Menu */
+html[data-tenant='rottay'] .ant-dropdown-menu {
+  background: var(--color-surface) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-xl) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+html[data-tenant='rottay'] .ant-dropdown-menu-item {
+  color: var(--color-text-primary) !important;
+  border-radius: var(--radius-lg) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+html[data-tenant='rottay'] .ant-dropdown-menu-item:hover {
+  background: var(--color-primary-5) !important;
+  color: var(--color-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-dropdown-menu-item-selected {
+  background: var(--color-primary-10) !important;
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+/* Tag - Labels and Categories */
+html[data-tenant='rottay'] .ant-tag {
+  background: var(--color-surface-secondary) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-full) !important;
+  color: var(--color-text-primary) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+html[data-tenant='rottay'] .ant-tag-success {
+  background: var(--color-success-bg) !important;
+  border-color: var(--color-success-border) !important;
+  color: var(--color-success-dark) !important;
+}
+
+html[data-tenant='rottay'] .ant-tag-error {
+  background: var(--color-error-bg) !important;
+  border-color: var(--color-error-border) !important;
+  color: var(--color-error-dark) !important;
+}
+
+html[data-tenant='rottay'] .ant-tag-warning {
+  background: var(--color-warning-bg) !important;
+  border-color: var(--color-warning-border) !important;
+  color: var(--color-warning-dark) !important;
+}
+
+html[data-tenant='rottay'] .ant-tag-blue {
+  background: var(--color-info-bg) !important;
+  border-color: var(--color-info-border) !important;
+  color: var(--color-info-dark) !important;
+}
+
+/* Menu - Navigation Component */
+html[data-tenant='rottay'] .ant-menu {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+html[data-tenant='rottay'] .ant-menu-item {
+  color: var(--color-text-primary) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+html[data-tenant='rottay'] .ant-menu-item:hover {
+  color: var(--color-primary) !important;
+  background: var(--color-primary-5) !important;
+}
+
+html[data-tenant='rottay'] .ant-menu-item-selected {
+  background: var(--color-primary-10) !important;
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+html[data-tenant='rottay'] .ant-menu-item-selected::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--gradient-primary) !important;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+}
+
+/* ============================================
+   ANIMATIONS & KEYFRAMES
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Apply animations */
+html[data-tenant='rottay'] .ant-fade-enter {
+  animation: fadeIn var(--transition-base) var(--ease-out);
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  [data-tenant='rottay'][data-theme='auto'] {
+    --color-background: #1a1a1a;
+    --color-background-secondary: #2d2d2d;
+    --color-surface: #2d2d2d;
+    --color-surface-hover: #3a3a3a;
+    --color-text-primary: rgba(255, 255, 255, 0.87);
+    --color-text-secondary: rgba(255, 255, 255, 0.6);
+    --color-text-tertiary: rgba(255, 255, 255, 0.38);
+    --color-border: #3a3a3a;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+html[data-tenant='rottay'] *:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px !important;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  html[data-tenant='rottay'] * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
