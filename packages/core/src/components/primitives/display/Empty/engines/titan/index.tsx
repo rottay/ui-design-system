@@ -49,6 +49,7 @@ import { forwardRef } from 'react';
 import { Empty as AntEmpty } from 'antd';
 import type { EmptyProps } from '../../types';
 import { EMPTY_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 /**
  * Titan implementation of the Empty component.
@@ -79,14 +80,19 @@ import { EMPTY_DEFAULTS } from '../../types';
  */
 const TitanEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {
+    const { t } = useTranslation('components');
+
     const {
       image = EMPTY_DEFAULTS.image,
       imageStyle,
-      description = EMPTY_DEFAULTS.description,
+      description,
       children,
       className,
       style,
     } = props;
+
+    // Use translation as default, allow prop override
+    const displayDescription = description ?? t('empty.description');
 
     /**
      * Maps the image prop to Ant Design's expected format.
@@ -111,7 +117,7 @@ const TitanEmpty = forwardRef<HTMLDivElement, EmptyProps>(
         <AntEmpty
           image={resolveImage()}
           imageStyle={imageStyle}
-          description={description}
+          description={displayDescription}
         >
           {children}
         </AntEmpty>

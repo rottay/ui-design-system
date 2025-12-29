@@ -69,6 +69,7 @@ import React from 'react';
 import { Select as AntSelect } from 'antd';
 import type { SelectProps, SelectOption } from '../../types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 /**
  * Utility to get label text from option
@@ -105,6 +106,8 @@ const ANT_STATUS_MAP = {
 };
 
 export default function TitanSelect(props: SelectProps): React.ReactElement {
+  const { t } = useTranslation('components');
+
   const {
     value,
     defaultValue,
@@ -136,6 +139,10 @@ export default function TitanSelect(props: SelectProps): React.ReactElement {
     showSearch,
     ...rest
   } = props;
+
+  // Use translation as default, allow prop override
+  const displayPlaceholder = placeholder ?? t('select.placeholder');
+  const noOptionsText = t('select.no_options');
 
   // Resolve aliases
   const isClearable = clearable || allowClear;
@@ -217,7 +224,8 @@ export default function TitanSelect(props: SelectProps): React.ReactElement {
       value={value}
       defaultValue={defaultValue}
       options={antOptions}
-      placeholder={placeholder}
+      placeholder={displayPlaceholder}
+      notFoundContent={noOptionsText}
       size={ANT_SIZE_MAP[size]}
       variant={ANT_VARIANT_MAP[variant]}
       status={ANT_STATUS_MAP[effectiveStatus]}

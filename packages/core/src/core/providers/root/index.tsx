@@ -149,13 +149,12 @@ export function DesignSystemProvider({
       return;
     }
 
-    // For now, use default config
-    // In the future, this will call resolveTenant() and getTenantConfig()
+    // Async tenant resolution placeholder.
+    // Currently uses DEFAULT_TENANT_CONFIG for standalone mode.
+    // Future enhancement: integrate with external tenant resolution service
+    // using resolveTenant() and getTenantConfig() APIs when available.
     const loadTenant = async () => {
       try {
-        // TODO: Implement actual tenant resolution
-        // const slug = await resolveTenant();
-        // const config = await getTenantConfig(slug);
         const config = DEFAULT_TENANT_CONFIG;
         setTenantConfig(config);
         onTenantResolved?.(config);

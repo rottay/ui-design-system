@@ -68,6 +68,7 @@
 
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 // Styles using CSS variables
 const styles = {
@@ -161,6 +162,7 @@ interface FormContextValue {
   colon?: boolean;
   requiredMark?: boolean | 'optional';
   validateField: (name: string, rules?: FormRule[]) => Promise<string[]>;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const FormContext = createContext<FormContextValue | null>(null);
@@ -235,6 +237,8 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
 
 // Form component
 const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
+  const { t } = useTranslation('components');
+
   const {
     form,
     initialValues = {},
@@ -287,16 +291,16 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
     for (const rule of rules) {
       if (rule.required && (value === undefined || value === null || value === '')) {
-        fieldErrors.push(rule.message || `${fieldName} is required`);
+        fieldErrors.push(rule.message || t('form.required_with_name', { name: fieldName }));
       }
       if (rule.min !== undefined && typeof value === 'string' && value.length < rule.min) {
-        fieldErrors.push(rule.message || `Minimum ${rule.min} characters`);
+        fieldErrors.push(rule.message || t('form.min_length', { min: rule.min }));
       }
       if (rule.max !== undefined && typeof value === 'string' && value.length > rule.max) {
-        fieldErrors.push(rule.message || `Maximum ${rule.max} characters`);
+        fieldErrors.push(rule.message || t('form.max_length', { max: rule.max }));
       }
       if (rule.pattern && typeof value === 'string' && !rule.pattern.test(value)) {
-        fieldErrors.push(rule.message || 'Invalid format');
+        fieldErrors.push(rule.message || t('form.invalid_format'));
       }
       if (rule.validator) {
         try {
@@ -309,7 +313,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
     setError(fieldName, fieldErrors);
     return fieldErrors;
-  }, [values, setError]);
+  }, [values, setError, t]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -342,7 +346,8 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     colon,
     requiredMark,
     validateField,
-  }), [values, errors, touched, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, validateField]);
+    t,
+  }), [values, errors, touched, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, validateField, t]);
 
   useImperativeHandle(ref, () => form as FormInstance, [form]);
 

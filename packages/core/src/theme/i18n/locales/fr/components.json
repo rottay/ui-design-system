@@ -89,7 +89,11 @@
   },
   "form": {
     "required_field": "Ce champ est requis",
+    "required_with_name": "{name} est requis",
     "invalid_field": "Champ invalide",
+    "min_length": "Minimum {min} caractères",
+    "max_length": "Maximum {max} caractères",
+    "invalid_format": "Format invalide",
     "submit": "Soumettre",
     "reset": "Réinitialiser"
   },
@@ -109,5 +113,8 @@
   },
   "alert": {
     "close": "Fermer"
+  },
+  "empty": {
+    "description": "Aucune donnée"
   }
 }

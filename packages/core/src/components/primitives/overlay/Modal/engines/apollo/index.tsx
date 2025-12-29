@@ -10,8 +10,11 @@ import { MODAL_DEFAULTS, SIZE_MAP, MAX_HEIGHT_MAP, PADDING_MAP, RADIUS_MAP } fro
 import { Portal } from '../../utils/Portal';
 import { Overlay } from '../../utils/Overlay';
 import { FocusTrap } from '../../utils/FocusTrap';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 export default function ApolloModal(props: ModalProps): React.ReactElement | null {
+  const { t } = useTranslation('components');
+
   const {
     open,
     onClose,
@@ -240,7 +243,7 @@ export default function ApolloModal(props: ModalProps): React.ReactElement | nul
                       type="button"
                       style={closeButtonStyle}
                       onClick={onClose}
-                      aria-label="Close modal"
+                      aria-label={t('modal.close')}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.06)';
                         e.currentTarget.style.color = 'rgba(0, 0, 0, 0.88)';

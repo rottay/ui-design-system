@@ -89,7 +89,11 @@
   },
   "form": {
     "required_field": "This field is required",
+    "required_with_name": "{name} is required",
     "invalid_field": "Invalid field",
+    "min_length": "Minimum {min} characters",
+    "max_length": "Maximum {max} characters",
+    "invalid_format": "Invalid format",
     "submit": "Submit",
     "reset": "Reset"
   },
@@ -109,5 +113,8 @@
   },
   "alert": {
     "close": "Close"
+  },
+  "empty": {
+    "description": "No data"
   }
 }

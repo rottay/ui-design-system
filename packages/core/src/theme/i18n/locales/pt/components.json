@@ -89,7 +89,11 @@
   },
   "form": {
     "required_field": "Este campo é obrigatório",
+    "required_with_name": "{name} é obrigatório",
     "invalid_field": "Campo inválido",
+    "min_length": "Mínimo {min} caracteres",
+    "max_length": "Máximo {max} caracteres",
+    "invalid_format": "Formato inválido",
     "submit": "Enviar",
     "reset": "Resetar"
   },
@@ -109,5 +113,8 @@
   },
   "alert": {
     "close": "Fechar"
+  },
+  "empty": {
+    "description": "Sem dados"
   }
 }

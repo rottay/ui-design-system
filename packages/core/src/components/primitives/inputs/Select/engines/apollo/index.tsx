@@ -18,6 +18,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { SelectProps, SelectOption } from '../../types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 /**
  * Utility to get label text from option
@@ -29,11 +30,13 @@ function getLabelText(label: React.ReactNode): string {
 }
 
 export default function ApolloSelect(props: SelectProps): React.ReactElement {
+  const { t } = useTranslation('components');
+
   const {
     value,
     defaultValue,
     options = [],
-    placeholder = 'Select...',
+    placeholder,
     size = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
     multiple = SELECT_DEFAULTS.multiple,
@@ -58,6 +61,10 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
     allowClear,
     showSearch,
   } = props;
+
+  // Use translation as default, allow prop override
+  const displayPlaceholder = placeholder ?? t('select.placeholder');
+  const noOptionsText = t('select.no_options');
 
   // Resolve aliases
   const isClearable = clearable || allowClear;
@@ -443,7 +450,7 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
               onSearch?.(e.target.value);
               setFocusedIndex(0);
             }}
-            placeholder={selectedOptions.length === 0 ? placeholder : ''}
+            placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
             style={{
               border: 'none',
               outline: 'none',
@@ -458,7 +465,7 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
             aria-controls={`${id || 'select'}-listbox`}
           />
         ) : displayValue || (
-          <span style={{ color: 'var(--ds-select-color-placeholder)' }}>{placeholder}</span>
+          <span style={{ color: 'var(--ds-select-color-placeholder)' }}>{displayPlaceholder}</span>
         )}
 
         {/* Spacer */}
@@ -470,7 +477,7 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
             type="button"
             className="rottay-select__clear"
             onClick={handleClear}
-            aria-label="Clear selection"
+            aria-label={t('select.clear')}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -545,7 +552,7 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
                 textAlign: 'center',
               }}
             >
-              No options
+              {noOptionsText}
             </div>
           ) : (
             filteredOptions.map((option, index) => {

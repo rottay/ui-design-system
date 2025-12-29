@@ -37,8 +37,9 @@ describe('Toast', () => {
     });
   });
 
-  // TODO: These tests require the full Toast compound system with engine factory working
-  // The Toast.Container uses useToastContext and renders via portal which doesn't work in jsdom
+  // Skipped: Toast.Container uses useToastContext and renders via React portal.
+  // Portals and the compound component system don't work reliably in jsdom.
+  // Test these scenarios in browser environment (e.g., Storybook, Playwright).
   describe.skip('Toast Methods', () => {
     it('shows success toast', async () => {
       let toastApi: any;

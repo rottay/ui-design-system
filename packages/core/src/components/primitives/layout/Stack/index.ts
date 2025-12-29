@@ -142,18 +142,12 @@ export {
 } from './types';
 
 // ============================================================================
-// BASE COMPONENT EXPORTS
+// NOTE ON UTILITY FUNCTIONS
 // ============================================================================
 
-// NOTE: Base component exports temporarily disabled - base file needs implementation
-// These functions are referenced in engines but not yet implemented in types
-// TODO: Create base file with shared utility functions
-// export {
-//   BaseStack,
-//   buildStackStyles,
-//   filterStackProps,
-//   renderStackChildren,
-// } from './base';
+// Utility functions (buildStackStyles, renderStackChildren, resolveSpacing)
+// are implemented within each engine file to allow engine-specific optimizations.
+// The resolveSpacing function is exported from './types' for external use.
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

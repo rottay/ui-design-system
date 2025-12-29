@@ -174,7 +174,8 @@ describe('Message', () => {
       });
     });
 
-    // TODO: This test requires full Ant Design integration which doesn't work in jsdom
+    // Skipped: Ant Design's destroy() method relies on internal state management
+    // that doesn't work reliably in jsdom. Test in browser environment instead.
     it.skip('destroys all messages', async () => {
       let messageApi: any;
       render(
@@ -205,7 +206,8 @@ describe('Message', () => {
   });
 
   describe('Accessibility', () => {
-    // TODO: This test requires full Ant Design integration - message renders in portal
+    // Skipped: Ant Design's message component renders via portal which
+    // doesn't work reliably in jsdom. Test in browser environment instead.
     it.skip('message has alert role', async () => {
       let messageApi: any;
       render(

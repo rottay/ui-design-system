@@ -51,5 +51,6 @@
 
 export type { FloatButtonGroupProps, FloatButtonBackTopProps } from '../types';
 
-// TODO: FloatButtonGroup and FloatButtonBackTop need engine-based implementations
-// These were previously in base/ which has been removed
+// Note: FloatButtonGroup and FloatButtonBackTop are implemented as compound components
+// on the main FloatButton export via the engine factory pattern.
+// See ../index.ts for FloatButton.Group and FloatButton.BackTop implementations.

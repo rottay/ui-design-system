@@ -64,6 +64,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { SelectProps, SelectOption } from '../../types';
 import { SELECT_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 /**
  * Utility to get label text from option
@@ -92,11 +93,13 @@ const DAISY_STATUS_MAP = {
 };
 
 export default function HermesSelect(props: SelectProps): React.ReactElement {
+  const { t } = useTranslation('components');
+
   const {
     value,
     defaultValue,
     options = [],
-    placeholder = 'Select...',
+    placeholder,
     size = SELECT_DEFAULTS.size,
     variant = SELECT_DEFAULTS.variant,
     multiple = SELECT_DEFAULTS.multiple,
@@ -123,6 +126,10 @@ export default function HermesSelect(props: SelectProps): React.ReactElement {
     showSearch,
     ...rest
   } = props;
+
+  // Use translation as default, allow prop override
+  const displayPlaceholder = placeholder ?? t('select.placeholder');
+  const noOptionsText = t('select.no_options');
 
   // Resolve aliases
   const isClearable = clearable || allowClear;
@@ -278,9 +285,9 @@ export default function HermesSelect(props: SelectProps): React.ReactElement {
           } : undefined}
           {...htmlProps}
         >
-          {placeholder && (
+          {displayPlaceholder && (
             <option value="" disabled>
-              {placeholder}
+              {displayPlaceholder}
             </option>
           )}
           {options.map((option) => (
@@ -377,11 +384,11 @@ export default function HermesSelect(props: SelectProps): React.ReactElement {
                 setSearchValue(e.target.value);
                 onSearch?.(e.target.value);
               }}
-              placeholder={selectedOptions.length === 0 ? placeholder : ''}
+              placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
               onClick={(e) => e.stopPropagation()}
             />
           ) : displayValue || (
-            <span className="text-base-content/50">{placeholder}</span>
+            <span className="text-base-content/50">{displayPlaceholder}</span>
           )}
         </div>
 
@@ -421,7 +428,7 @@ export default function HermesSelect(props: SelectProps): React.ReactElement {
         <ul className="menu bg-base-100 rounded-box shadow-lg border border-base-300 absolute top-full left-0 right-0 mt-1 z-50 max-h-60 overflow-y-auto p-2">
           {filteredOptions.length === 0 ? (
             <li className="disabled">
-              <span className="text-base-content/50">No options</span>
+              <span className="text-base-content/50">{noOptionsText}</span>
             </li>
           ) : (
             filteredOptions.map((option) => {

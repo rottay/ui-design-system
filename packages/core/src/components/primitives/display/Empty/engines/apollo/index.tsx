@@ -56,6 +56,7 @@
 import React, { forwardRef } from 'react';
 import type { EmptyProps } from '../../types';
 import { EMPTY_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 /**
  * Default SVG image for empty states.
@@ -152,14 +153,19 @@ const SimpleImage: React.FC = () => (
  */
 const ApolloEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {
+    const { t } = useTranslation('components');
+
     const {
       image = EMPTY_DEFAULTS.image,
       imageStyle,
-      description = EMPTY_DEFAULTS.description,
+      description,
       children,
       className,
       style,
     } = props;
+
+    // Use translation as default, allow prop override
+    const displayDescription = description ?? t('empty.description');
 
     /**
      * Renders the appropriate image based on the image prop.
@@ -212,7 +218,7 @@ const ApolloEmpty = forwardRef<HTMLDivElement, EmptyProps>(
         className={`rottay-empty rottay-empty--apollo ${className || ''}`}
         style={containerStyle}
         role="status"
-        aria-label={typeof description === 'string' ? description : 'Empty state'}
+        aria-label={typeof displayDescription === 'string' ? displayDescription : 'Empty state'}
       >
         {image && (
           <div className="rottay-empty__image" style={imageContainerStyle}>
@@ -220,9 +226,9 @@ const ApolloEmpty = forwardRef<HTMLDivElement, EmptyProps>(
           </div>
         )}
 
-        {description && (
+        {displayDescription && (
           <p className="rottay-empty__description" style={descriptionStyle}>
-            {description}
+            {displayDescription}
           </p>
         )}
 

@@ -8,6 +8,7 @@ import React, { useEffect, useCallback, useRef } from 'react';
 import type { ModalProps } from '../../../../../../types/primitives/feedback/Modal';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../types';
 import { Portal } from '../../utils/Portal';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 // DaisyUI size class mapping
 const SIZE_CLASS_MAP: Record<string, string> = {
@@ -24,6 +25,8 @@ const SIZE_CLASS_MAP: Record<string, string> = {
 };
 
 export default function HermesModal(props: ModalProps): React.ReactElement | null {
+  const { t } = useTranslation('components');
+
   const {
     open,
     onClose,
@@ -182,7 +185,7 @@ export default function HermesModal(props: ModalProps): React.ReactElement | nul
                   type="button"
                   className="btn btn-sm btn-circle btn-ghost"
                   onClick={onClose}
-                  aria-label="Close modal"
+                  aria-label={t('modal.close')}
                 >
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

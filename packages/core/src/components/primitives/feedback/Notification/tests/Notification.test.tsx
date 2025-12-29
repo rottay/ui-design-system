@@ -172,7 +172,8 @@ describe('Notification', () => {
       });
     });
 
-    // TODO: This test requires full Ant Design integration which doesn't work in jsdom
+    // Skipped: Ant Design's destroy() method relies on internal state management
+    // that doesn't work reliably in jsdom. Test in browser environment instead.
     it.skip('destroys all notifications', async () => {
       let notificationApi: any;
       render(

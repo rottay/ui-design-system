@@ -49,6 +49,7 @@
 import React, { forwardRef } from 'react';
 import type { EmptyProps } from '../../types';
 import { EMPTY_DEFAULTS } from '../../types';
+import { useTranslation } from '../../../../../../theme/i18n';
 
 /**
  * Default SVG image using DaisyUI color tokens.
@@ -132,14 +133,19 @@ const SimpleImage: React.FC = () => (
  */
 const HermesEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {
+    const { t } = useTranslation('components');
+
     const {
       image = EMPTY_DEFAULTS.image,
       imageStyle,
-      description = EMPTY_DEFAULTS.description,
+      description,
       children,
       className = '',
       style,
     } = props;
+
+    // Use translation as default, allow prop override
+    const displayDescription = description ?? t('empty.description');
 
     /**
      * Renders the appropriate image based on the image prop.
@@ -160,7 +166,7 @@ const HermesEmpty = forwardRef<HTMLDivElement, EmptyProps>(
         className={`rottay-empty rottay-empty--hermes flex flex-col items-center justify-center py-8 ${className}`}
         style={style}
         role="status"
-        aria-label={typeof description === 'string' ? description : 'Empty state'}
+        aria-label={typeof displayDescription === 'string' ? displayDescription : 'Empty state'}
       >
         {image && (
           <div className="mb-4" style={imageStyle}>
@@ -168,9 +174,9 @@ const HermesEmpty = forwardRef<HTMLDivElement, EmptyProps>(
           </div>
         )}
 
-        {description && (
+        {displayDescription && (
           <p className="text-base-content/50 text-sm mb-4 text-center">
-            {description}
+            {displayDescription}
           </p>
         )}
 
