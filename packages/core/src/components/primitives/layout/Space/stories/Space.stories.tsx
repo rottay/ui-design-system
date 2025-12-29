@@ -5,7 +5,9 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Space } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
+import React from 'react';
 
 const meta: Meta<typeof Space> = {
   title: 'Primitives/Layout/Space',
@@ -175,19 +177,36 @@ export const WithSplit: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Space across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Space rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Space engine={engine} size="middle">
+    <EngineComparisonHelper
+      component={Space}
+      props={{
+        children: (
+          <>
             <Box>Item 1</Box>
             <Box>Item 2</Box>
             <Box>Item 3</Box>
-          </Space>
-        </div>
-      ))}
-    </div>
+          </>
+        ),
+        size: 'middle',
+      }}
+      showDescriptions
+    />
   ),
 };

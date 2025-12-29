@@ -16,7 +16,7 @@ export type {
   ModalFooterProps,
   ModalButtonConfig,
   ModalConfirmProps,
-} from '../../../../../types/primitives/feedback/Modal';
+} from '../../../../../core/types/primitives/feedback/Modal';
 
 /**
  * Props for the Modal CloseButton component.

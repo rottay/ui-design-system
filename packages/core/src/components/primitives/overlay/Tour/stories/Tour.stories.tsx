@@ -10,7 +10,8 @@
 import React, { useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tour } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Tour component metadata for Storybook.
@@ -442,10 +443,22 @@ export const Placements: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison demonstration.
+ * Side-by-side comparison of Tour across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Tour rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => {
     const [open, setOpen] = useState<string | null>(null);
 

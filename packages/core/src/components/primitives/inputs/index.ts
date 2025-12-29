@@ -5,7 +5,7 @@
 export { Button } from './Button';
 export type { ButtonProps, ButtonVariant, ButtonSize } from './Button';
 
-export { Input, InputGroup, InputAddon, BaseInput } from './Input';
+export { Input, InputGroup, InputAddon } from './Input';
 export type {
   InputProps,
   InputVariant,

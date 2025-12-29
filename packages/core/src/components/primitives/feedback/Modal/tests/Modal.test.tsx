@@ -8,7 +8,7 @@ import React from 'react';
 import { Modal } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockModal = React.forwardRef<HTMLDivElement, any>(({
       open,

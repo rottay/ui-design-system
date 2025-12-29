@@ -9,7 +9,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Typography, Heading, Text, Paragraph } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Typography component family for rendering headings, text, and paragraphs.
@@ -299,43 +300,52 @@ export const ParagraphColors: Story = {
 // ============================================================================
 
 /**
- * Compare all three engines side by side.
+ * Side-by-side comparison of Heading across all 3 engines.
  */
-export const EngineComparison: Story = {
-  name: 'Engine Comparison',
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Typography.Heading rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine} style={{ borderBottom: '1px solid #eee', paddingBottom: 24 }}>
-          <Typography.Heading engine={engine} level="h3" style={{ marginBottom: 12 }}>
-            {engine.charAt(0).toUpperCase() + engine.slice(1)} Engine
-          </Typography.Heading>
+    <EngineComparisonHelper
+      component={Heading}
+      props={{
+        level: 'h2',
+        children: 'Sample Heading Text',
+        color: 'primary',
+      }}
+      showDescriptions
+    />
+  ),
+};
 
-          <Typography.Heading engine={engine} level="h4" color="primary">
-            Sample Heading
-          </Typography.Heading>
-
-          <Typography.Text engine={engine} color="muted">
-            Sample text with{' '}
-          </Typography.Text>
-          <Typography.Text engine={engine} underline color="primary">
-            underlined link
-          </Typography.Text>
-          <Typography.Text engine={engine} color="muted">
-            {' '}and{' '}
-          </Typography.Text>
-          <Typography.Text engine={engine} monospace color="error">
-            code snippet
-          </Typography.Text>
-
-          <Typography.Paragraph engine={engine}>
-            This is a sample paragraph rendered with the {engine} engine.
-            It demonstrates the paragraph styling with proper line-height
-            and spacing for readable body text.
-          </Typography.Paragraph>
-        </div>
-      ))}
-    </div>
+/**
+ * Matrix showing all color variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Heading color variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Heading}
+      baseProps={{
+        level: 'h3',
+        children: 'Heading Text',
+      }}
+      variantProp="color"
+      variants={['default', 'muted', 'primary', 'success', 'warning', 'error']}
+    />
   ),
 };
 

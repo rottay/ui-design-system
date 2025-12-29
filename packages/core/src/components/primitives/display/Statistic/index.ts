@@ -72,7 +72,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { StatisticProps, CountdownProps } from './types';
 import { Countdown } from './compound';
 
@@ -88,6 +88,44 @@ export { STATISTIC_DEFAULTS, CSS_VARS } from './types';
 
 // Re-export compound components
 export { Countdown };
+
+/**
+ * Formats a number with custom separators and precision.
+ *
+ * @param value - The value to format (number or string)
+ * @param precision - Number of decimal places (default: 0)
+ * @param groupSeparator - Thousands separator (default: ',')
+ * @param decimalSeparator - Decimal separator (default: '.')
+ * @returns Formatted string representation
+ *
+ * @example
+ * ```ts
+ * formatNumber(1234567, 0, ',', '.') // "1,234,567"
+ * formatNumber(1234.5678, 2, ',', '.') // "1,234.57"
+ * formatNumber(1234567.89, 2, '.', ',') // "1.234.567,89"
+ * ```
+ */
+export function formatNumber(
+  value: number | string,
+  precision: number = 0,
+  groupSeparator: string = ',',
+  decimalSeparator: string = '.'
+): string {
+  const num = typeof value === 'string' ? parseFloat(value) : value;
+
+  if (isNaN(num)) {
+    return String(value);
+  }
+
+  const fixed = num.toFixed(precision);
+  const [intPart, decPart] = fixed.split('.');
+
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
+
+  return decPart !== undefined
+    ? `${formattedInt}${decimalSeparator}${decPart}`
+    : formattedInt;
+}
 
 // Re-export base component for custom implementations
 

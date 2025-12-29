@@ -5,6 +5,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Modal } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Modal> = {
   title: 'Primitives/Feedback/Modal',
@@ -175,26 +176,101 @@ export const ConfirmLoading: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Modal trigger buttons across all 3 engines.
+ * Click each button to open a modal rendered with that engine.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Modal rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS). Click each button to open the modal.',
+      },
+    },
+  },
   render: () => {
     const [engine, setEngine] = useState<'titan' | 'hermes' | 'apollo' | null>(null);
     return (
       <>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {(['titan', 'hermes', 'apollo'] as const).map((e) => (
-            <button key={e} onClick={() => setEngine(e)} style={{ textTransform: 'capitalize' }}>
-              {e}
+        <EngineComparisonHelper
+          component={({ engineName }: { engineName: 'titan' | 'hermes' | 'apollo' }) => (
+            <button onClick={() => setEngine(engineName)} style={{ padding: '8px 16px' }}>
+              Open {engineName} Modal
             </button>
-          ))}
-        </div>
+          )}
+          props={{ engineName: 'titan' }}
+          showDescriptions
+        />
         <Modal
           open={!!engine}
           engine={engine || 'titan'}
-          title={`${engine} Engine Modal`}
+          title={`${engine?.charAt(0).toUpperCase()}${engine?.slice(1)} Engine Modal`}
           onClose={() => setEngine(null)}
         >
           <p>This modal uses the {engine} engine.</p>
+          <p>Click outside or press ESC to close.</p>
         </Modal>
+      </>
+    );
+  },
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Since Modal is an overlay component, use the CompareEngines story above to test different engines interactively.',
+      },
+    },
+  },
+  render: () => {
+    const [config, setConfig] = useState<{ engine: 'titan' | 'hermes' | 'apollo'; size: 'sm' | 'md' | 'lg' | 'xl' } | null>(null);
+    const engines = ['titan', 'hermes', 'apollo'] as const;
+    const sizes = ['sm', 'md', 'lg', 'xl'] as const;
+
+    return (
+      <>
+        <div style={{ display: 'grid', gridTemplateColumns: '120px repeat(3, 1fr)', gap: 16 }}>
+          <div style={{ fontWeight: 600 }}>Size</div>
+          {engines.map((e) => (
+            <div key={e} style={{ textAlign: 'center', fontWeight: 600, textTransform: 'capitalize' }}>{e}</div>
+          ))}
+          {sizes.map((size) => (
+            <>
+              <div key={`label-${size}`} style={{ textTransform: 'uppercase' }}>{size}</div>
+              {engines.map((engine) => (
+                <button
+                  key={`${engine}-${size}`}
+                  onClick={() => setConfig({ engine, size })}
+                  style={{ padding: '8px 12px' }}
+                >
+                  Open
+                </button>
+              ))}
+            </>
+          ))}
+        </div>
+        {config && (
+          <Modal
+            open={true}
+            engine={config.engine}
+            size={config.size}
+            title={`${config.engine} - ${config.size}`}
+            onClose={() => setConfig(null)}
+          >
+            <p>Engine: {config.engine}</p>
+            <p>Size: {config.size}</p>
+          </Modal>
+        )}
       </>
     );
   },

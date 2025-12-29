@@ -4,6 +4,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Skeleton } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Skeleton> = {
   title: 'Primitives/Feedback/Skeleton',
@@ -157,21 +158,42 @@ export const WithChildren: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Skeleton across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Skeleton rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ marginBottom: 8, textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-            <Skeleton engine={engine} variant="circular" width={48} height={48} />
-            <div style={{ flex: 1 }}>
-              <Skeleton engine={engine} width="40%" height={16} style={{ marginBottom: 8 }} />
-              <Skeleton engine={engine} width="80%" height={14} />
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Skeleton}
+      props={{ variant: 'text', width: 200, height: 20 }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Skeleton}
+      baseProps={{ width: 80, height: 80 }}
+      variantProp="variant"
+      variants={['text', 'circular', 'rectangular', 'rounded']}
+    />
   ),
 };

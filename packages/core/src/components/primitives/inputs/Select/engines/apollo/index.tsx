@@ -1,70 +1,13 @@
 /**
  * @fileoverview Select Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Select component.
+ * @description Pure HTML/CSS implementation of the Select component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
  * The Apollo engine provides a headless select implementation using only
- * native HTML elements and inline styles. This offers maximum flexibility
- * for custom styling and ensures full keyboard navigation compliance.
+ * native HTML elements and CSS variables for theming. This ensures
+ * multi-tenant support through the CSS cascade.
  *
- * **Key Features:**
- * - Zero UI library dependencies
- * - Full keyboard navigation (Arrow keys, Enter, Escape, Home, End, Tab)
- * - Search/filter functionality
- * - Single and multiple selection modes
- * - Option scrolling into view
- * - Focus management
- * - Click outside handling
- * - Hidden input for form submission
- *
- * **Inline Style Approach:**
- * Uses computed inline styles for complete control over appearance,
- * ensuring styles work without requiring any external CSS files.
- *
- * **Accessibility:**
- * - ARIA combobox pattern with proper roles
- * - aria-expanded, aria-haspopup, aria-controls
- * - aria-selected on options
- * - aria-disabled for disabled states
- * - aria-activedescendant for focused option
- * - Keyboard-accessible selection and navigation
- *
- * **CSS Custom Properties:**
- * - `--select-height` - Trigger height based on size
- * - `--select-font-size` - Font size based on size
- * - `--select-border-color` - Status-aware border color
- * - `--select-option-hover-bg` - Option hover background
- * - `--select-option-selected-bg` - Selected option background
- *
- * @example Using Apollo Engine
- * ```tsx
- * import { Select } from '@rottay/design-system';
- *
- * // Explicit Apollo engine
- * <Select
- *   engine="apollo"
- *   options={options}
- *   placeholder="Select..."
- *   searchable
- * />
- *
- * // With full customization
- * <Select
- *   engine="apollo"
- *   options={options}
- *   multiple
- *   searchable
- *   clearable
- *   maxTagCount={2}
- *   status="success"
- *   style={{ maxWidth: '300px' }}
- * />
- * ```
- *
- * @see {@link Select} for the main component
- * @see {@link TitanSelect} for Ant Design implementation
- * @see {@link HermesSelect} for DaisyUI implementation
  * @module ApolloSelect
  * @category Inputs
  * @package @rottay/design-system
@@ -84,29 +27,6 @@ function getLabelText(label: React.ReactNode): string {
   if (typeof label === 'number') return String(label);
   return '';
 }
-
-// CSS class mappings
-const SIZE_CLASS_MAP = {
-  xs: 'rottay-select--xs',
-  sm: 'rottay-select--sm',
-  md: 'rottay-select--md',
-  lg: 'rottay-select--lg',
-  xl: 'rottay-select--xl',
-};
-
-const VARIANT_CLASS_MAP: Record<string, string> = {
-  outline: 'rottay-select--outline',
-  filled: 'rottay-select--filled',
-  flushed: 'rottay-select--flushed',
-  default: 'rottay-select--outline',
-};
-
-const STATUS_CLASS_MAP = {
-  default: '',
-  error: 'rottay-select--error',
-  warning: 'rottay-select--warning',
-  success: 'rottay-select--success',
-};
 
 export default function ApolloSelect(props: SelectProps): React.ReactElement {
   const {
@@ -135,7 +55,6 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
     name,
     id,
     autoFocus,
-    // Aliases
     allowClear,
     showSearch,
   } = props;
@@ -249,7 +168,6 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
         } else {
           setFocusedIndex((prev) => {
             const next = prev < filteredOptions.length - 1 ? prev + 1 : 0;
-            // Scroll option into view
             scrollOptionIntoView(next);
             return next;
           });
@@ -297,9 +215,9 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
   // Scroll focused option into view
   const scrollOptionIntoView = useCallback((index: number) => {
     if (listRef.current) {
-      const options = listRef.current.querySelectorAll('[role="option"]');
-      if (options[index]) {
-        options[index].scrollIntoView({ block: 'nearest' });
+      const optionElements = listRef.current.querySelectorAll('[role="option"]');
+      if (optionElements[index]) {
+        optionElements[index].scrollIntoView({ block: 'nearest' });
       }
     }
   }, []);
@@ -329,40 +247,20 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
     setFocusedIndex(-1);
   }, [filteredOptions.length]);
 
-  // CSS Variables
+  // Get size values
   const sizeConfig = SIZE_MAP[size];
-  const cssVars: React.CSSProperties = {
-    '--select-height': `${sizeConfig.height}px`,
-    '--select-font-size': `${sizeConfig.fontSize}px`,
-    '--select-padding': sizeConfig.padding,
-    '--select-bg': variant === 'filled' ? '#f5f5f5' : '#ffffff',
-    '--select-border-color': effectiveStatus === 'error' ? '#ff4d4f' :
-                             effectiveStatus === 'warning' ? '#faad14' :
-                             effectiveStatus === 'success' ? '#52c41a' :
-                             '#d9d9d9',
-    '--select-border-radius': variant === 'flushed' ? '0' : '6px',
-    '--select-dropdown-bg': '#ffffff',
-    '--select-dropdown-shadow': '0 6px 16px rgba(0, 0, 0, 0.08)',
-    '--select-option-hover-bg': '#f5f5f5',
-    '--select-option-selected-bg': '#e6f7ff',
-    '--select-transition': 'all 0.2s ease',
-  } as React.CSSProperties;
 
-  // Build classes
-  const containerClasses = [
-    'rottay-select',
-    SIZE_CLASS_MAP[size],
-    VARIANT_CLASS_MAP[variant],
-    STATUS_CLASS_MAP[effectiveStatus],
-    isOpen ? 'rottay-select--open' : '',
-    disabled ? 'rottay-select--disabled' : '',
-    loading ? 'rottay-select--loading' : '',
-    className,
-  ].filter(Boolean).join(' ');
+  // Determine border color based on status
+  const getBorderColor = () => {
+    if (effectiveStatus === 'error') return 'var(--ds-select-error-border)';
+    if (effectiveStatus === 'warning') return 'var(--ds-select-warning-border)';
+    if (effectiveStatus === 'success') return 'var(--ds-select-success-border)';
+    if (isOpen) return 'var(--ds-select-border-focus)';
+    return 'var(--ds-select-border)';
+  };
 
-  // Styles
+  // Container styles using CSS variables
   const containerStyle: React.CSSProperties = {
-    ...cssVars,
     position: 'relative',
     display: 'inline-block',
     width: '100%',
@@ -372,18 +270,24 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
   const triggerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
-    gap: '8px',
-    minHeight: 'var(--select-height)',
-    padding: 'var(--select-padding)',
-    backgroundColor: 'var(--select-bg)',
-    border: variant === 'flushed' ? 'none' : '1px solid var(--select-border-color)',
-    borderBottom: variant === 'flushed' ? '2px solid var(--select-border-color)' : undefined,
-    borderRadius: 'var(--select-border-radius)',
-    fontSize: 'var(--select-font-size)',
+    gap: '0.5rem',
+    minHeight: `${sizeConfig.height}px`,
+    padding: sizeConfig.padding,
+    backgroundColor: disabled
+      ? 'var(--ds-select-bg-disabled)'
+      : variant === 'filled'
+        ? 'var(--ds-select-filled-bg)'
+        : 'var(--ds-select-bg)',
+    border: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
+    borderBottom: variant === 'flushed' ? `2px solid ${getBorderColor()}` : undefined,
+    borderRadius: variant === 'flushed' ? 0 : 'var(--ds-select-radius)',
+    fontSize: `${sizeConfig.fontSize}px`,
+    color: 'var(--ds-select-color)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
-    transition: 'var(--select-transition)',
+    transition: 'var(--ds-select-transition)',
     outline: 'none',
+    boxShadow: isOpen ? 'var(--ds-select-shadow-focus)' : 'none',
   };
 
   const dropdownStyle: React.CSSProperties = {
@@ -391,16 +295,29 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
     top: '100%',
     left: 0,
     right: 0,
-    marginTop: '4px',
-    padding: '4px 0',
-    backgroundColor: 'var(--select-dropdown-bg)',
-    border: '1px solid var(--select-border-color)',
-    borderRadius: 'var(--select-border-radius)',
-    boxShadow: 'var(--select-dropdown-shadow)',
-    maxHeight: '256px',
+    marginTop: '0.25rem',
+    padding: '0.25rem 0',
+    backgroundColor: 'var(--ds-select-dropdown-bg)',
+    border: `1px solid var(--ds-select-dropdown-border)`,
+    borderRadius: 'var(--ds-select-dropdown-radius)',
+    boxShadow: 'var(--ds-select-dropdown-shadow)',
+    maxHeight: '16rem',
     overflowY: 'auto',
     zIndex: 1050,
   };
+
+  // Build class names
+  const containerClasses = [
+    'rottay-select',
+    'rottay-select--apollo',
+    `rottay-select--${size}`,
+    `rottay-select--${variant}`,
+    isOpen && 'rottay-select--open',
+    disabled && 'rottay-select--disabled',
+    loading && 'rottay-select--loading',
+    effectiveStatus !== 'default' && `rottay-select--${effectiveStatus}`,
+    className,
+  ].filter(Boolean).join(' ');
 
   // Display value
   const displayValue = useMemo(() => {
@@ -413,17 +330,18 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
       const hiddenCount = selectedOptions.length - visibleTags.length;
 
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
           {visibleTags.map((opt) => (
             <span
               key={opt.value}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '4px',
-                padding: '2px 8px',
-                backgroundColor: '#f0f0f0',
-                borderRadius: '4px',
+                gap: '0.25rem',
+                padding: '0.125rem 0.5rem',
+                backgroundColor: 'var(--ds-select-tag-bg)',
+                color: 'var(--ds-select-tag-color)',
+                borderRadius: 'var(--ds-select-tag-radius)',
                 fontSize: '0.875em',
               }}
             >
@@ -439,13 +357,14 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
                   border: 'none',
                   background: 'none',
                   cursor: 'pointer',
-                  padding: '0 2px',
-                  fontSize: '12px',
+                  padding: '0 0.125rem',
+                  fontSize: '0.75rem',
                   lineHeight: 1,
+                  color: 'var(--ds-select-clear-color)',
                 }}
                 aria-label={`Remove ${opt.label}`}
               >
-                x
+                ×
               </button>
             </span>
           ))}
@@ -454,9 +373,10 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                padding: '2px 8px',
-                backgroundColor: '#e6e6e6',
-                borderRadius: '4px',
+                padding: '0.125rem 0.5rem',
+                backgroundColor: 'var(--ds-select-tag-bg)',
+                color: 'var(--ds-select-tag-color)',
+                borderRadius: 'var(--ds-select-tag-radius)',
                 fontSize: '0.875em',
               }}
             >
@@ -468,7 +388,7 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
     }
 
     return (
-      <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {selectedOptions[0].icon && <span>{selectedOptions[0].icon}</span>}
         {selectedOptions[0].label}
       </span>
@@ -501,8 +421,8 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
             setIsOpen(!isOpen);
           }
         }}
-        onFocus={onFocus as any}
-        onBlur={onBlur as any}
+        onFocus={onFocus as React.FocusEventHandler<HTMLDivElement>}
+        onBlur={onBlur as React.FocusEventHandler<HTMLDivElement>}
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
@@ -530,14 +450,15 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
               backgroundColor: 'transparent',
               flex: 1,
               fontSize: 'inherit',
-              minWidth: '50px',
+              minWidth: '3rem',
+              color: 'var(--ds-select-color)',
             }}
             onClick={(e) => e.stopPropagation()}
             aria-autocomplete="list"
             aria-controls={`${id || 'select'}-listbox`}
           />
         ) : displayValue || (
-          <span style={{ color: '#999' }}>{placeholder}</span>
+          <span style={{ color: 'var(--ds-select-color-placeholder)' }}>{placeholder}</span>
         )}
 
         {/* Spacer */}
@@ -554,16 +475,16 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '16px',
-              height: '16px',
+              width: '1rem',
+              height: '1rem',
               border: 'none',
               background: 'none',
               cursor: 'pointer',
-              opacity: 0.5,
-              fontSize: '12px',
+              color: 'var(--ds-select-clear-color)',
+              fontSize: '0.75rem',
             }}
           >
-            x
+            ×
           </button>
         )}
 
@@ -593,11 +514,11 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
           height="12"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="currentColor"
+          stroke="var(--ds-select-arrow-color)"
           strokeWidth="2"
           style={{
-            marginLeft: '8px',
-            transition: 'transform 0.2s',
+            marginLeft: '0.5rem',
+            transition: 'var(--ds-select-transition)',
             transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
         >
@@ -619,8 +540,8 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
           {filteredOptions.length === 0 ? (
             <div
               style={{
-                padding: '8px 12px',
-                color: '#999',
+                padding: '0.5rem 0.75rem',
+                color: 'var(--ds-select-color-placeholder)',
                 textAlign: 'center',
               }}
             >
@@ -637,24 +558,29 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
                   id={`${id || 'select'}-option-${index}`}
                   className={[
                     'rottay-select__option',
-                    isSelected ? 'rottay-select__option--selected' : '',
-                    option.disabled ? 'rottay-select__option--disabled' : '',
-                    isFocused ? 'rottay-select__option--focused' : '',
+                    isSelected && 'rottay-select__option--selected',
+                    option.disabled && 'rottay-select__option--disabled',
+                    isFocused && 'rottay-select__option--focused',
                   ].filter(Boolean).join(' ')}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    padding: '8px 12px',
-                    fontSize: 'var(--select-font-size)',
+                    gap: '0.5rem',
+                    padding: '0.5rem 0.75rem',
+                    fontSize: `${sizeConfig.fontSize}px`,
                     backgroundColor: isSelected
-                      ? 'var(--select-option-selected-bg)'
+                      ? 'var(--ds-select-option-bg-selected)'
                       : isFocused
-                        ? 'var(--select-option-hover-bg)'
+                        ? 'var(--ds-select-option-bg-hover)'
                         : 'transparent',
+                    color: isSelected
+                      ? 'var(--ds-select-option-color-selected)'
+                      : option.disabled
+                        ? 'var(--ds-select-option-color-disabled)'
+                        : 'var(--ds-select-color)',
                     cursor: option.disabled ? 'not-allowed' : 'pointer',
                     opacity: option.disabled ? 0.5 : 1,
-                    transition: 'var(--select-transition)',
+                    transition: 'var(--ds-select-transition)',
                   }}
                   onClick={() => handleSelect(option.value, option)}
                   onMouseEnter={() => setFocusedIndex(index)}
@@ -665,27 +591,27 @@ export default function ApolloSelect(props: SelectProps): React.ReactElement {
                   {multiple && (
                     <span
                       style={{
-                        width: '16px',
-                        height: '16px',
-                        border: '1px solid #d9d9d9',
-                        borderRadius: '3px',
+                        width: '1rem',
+                        height: '1rem',
+                        border: `1px solid var(--ds-select-border)`,
+                        borderRadius: '0.1875rem',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: isSelected ? '#1890ff' : 'transparent',
+                        backgroundColor: isSelected ? 'var(--ds-select-check-color)' : 'transparent',
                         color: 'white',
-                        fontSize: '10px',
+                        fontSize: '0.625rem',
                         flexShrink: 0,
                       }}
                     >
-                      {isSelected && '\u2713'}
+                      {isSelected && '✓'}
                     </span>
                   )}
                   {option.icon && <span style={{ flexShrink: 0 }}>{option.icon}</span>}
                   <span>{option.label}</span>
                   {!multiple && isSelected && (
-                    <span style={{ marginLeft: 'auto', color: '#1890ff' }}>
-                      \u2713
+                    <span style={{ marginLeft: 'auto', color: 'var(--ds-select-check-color)' }}>
+                      ✓
                     </span>
                   )}
                 </div>

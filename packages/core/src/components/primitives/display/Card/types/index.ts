@@ -45,7 +45,7 @@ export type {
   CardCoverProps,
   CardMetaProps,
   CardImageProps,
-} from '../../../../../types/primitives/display/Card';
+} from '../../../../../core/types/primitives/display/Card';
 
 /**
  * Default values for Card component properties.

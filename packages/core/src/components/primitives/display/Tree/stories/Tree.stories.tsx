@@ -9,7 +9,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tree } from '../';
 import type { TreeDataNode } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Sample tree data for stories
@@ -213,26 +214,58 @@ export const WithDisabledNodes: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of all three engines
+ * Side-by-side comparison of Tree across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Tree rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize', fontWeight: 600 }}>
-            {engine} Engine
-          </h4>
-          <Tree
-            engine={engine}
-            treeData={sampleTreeData}
-            defaultExpandedKeys={['0', '0-0']}
-            checkable
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Tree}
+      props={{
+        treeData: sampleTreeData,
+        defaultExpandedKeys: ['0', '0-0'],
+        checkable: true,
+      }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing Tree with different options across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix comparing Tree options (showLine) across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Tree}
+      baseProps={{
+        treeData: sampleTreeData,
+        defaultExpandedKeys: ['0', '0-0'],
+      }}
+      variantProp="showLine"
+      variants={['false', 'true']}
+    />
   ),
 };
 

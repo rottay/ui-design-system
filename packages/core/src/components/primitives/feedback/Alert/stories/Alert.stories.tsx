@@ -5,6 +5,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Alert } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Alert> = {
   title: 'Primitives/Feedback/Alert',
@@ -89,21 +90,42 @@ export const CustomIcon: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Alert across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Alert rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ marginBottom: 8, textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Alert
-            engine={engine}
-            type="success"
-            message={`${engine} Alert`}
-            description="This alert uses the specified engine"
-            closable
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Alert}
+      props={{ type: 'success', message: 'Success Alert', description: 'This is a success alert message.', closable: true }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all types across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Alert}
+      baseProps={{ message: 'Alert Message', description: 'This is an alert description.' }}
+      variantProp="type"
+      variants={['info', 'success', 'warning', 'error']}
+    />
   ),
 };

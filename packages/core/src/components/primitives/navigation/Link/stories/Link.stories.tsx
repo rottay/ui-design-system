@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Link } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Link> = {
   title: 'Primitives/Navigation/Link',
@@ -106,20 +107,31 @@ export const NoUnderline: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Link across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Link rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <Link engine={engine} href="#">Default</Link>
-            <Link engine={engine} href="#" type="primary">Primary</Link>
-            <Link engine={engine} href="#" disabled>Disabled</Link>
-            <Link engine={engine} href="#" underline={false}>No underline</Link>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Link}
+      props={{
+        href: '#',
+        children: 'Example Link',
+        type: 'primary',
+      }}
+      showDescriptions
+    />
   ),
 };

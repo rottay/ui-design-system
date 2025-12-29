@@ -9,7 +9,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Popover } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Popover component metadata for Storybook.
@@ -236,21 +237,32 @@ export const Controlled: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison demonstration.
+ * Side-by-side comparison of Popover across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Popover rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Popover engine={engine} content={`${engine} popover content`} title={engine}>
-            <button style={{ padding: '8px 16px' }}>Open Popover</button>
-          </Popover>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Popover}
+      props={{
+        title: 'Popover Title',
+        content: 'This is the popover content',
+        children: <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Hover me</button>,
+      }}
+      showDescriptions
+    />
   ),
 };
 

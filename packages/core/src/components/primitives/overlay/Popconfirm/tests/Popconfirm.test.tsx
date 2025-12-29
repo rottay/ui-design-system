@@ -12,7 +12,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Popconfirm } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockPopconfirm = ({
       children,

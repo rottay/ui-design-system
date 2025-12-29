@@ -250,6 +250,10 @@ html[data-tenant] .ant-btn-primary {
 | 2025-12-28 | Apollo engines migrados a CSS vars (display/) | 10 components: Calendar, Carousel, Descriptions, Empty, Image, List, QRCode, Statistic, Timeline, Tree |
 | 2025-12-28 | Apollo engines migrados a CSS vars (feedback/) | 11 components: Alert, Drawer, Message, Modal, Notification, Progress, Rate, Result, Skeleton, Spinner, Toast |
 | 2025-12-28 | Apollo engines migrados a CSS vars (navigation/) | 12 components: Menu, Tabs, Breadcrumb, Pagination, Steps, Affix, Anchor, BackTop, FloatButton, Link, Segmented, Stepper |
+| 2025-12-28 | DISPLAY completo: Titan + Hermes CSS | 17 components migrados con tokens + CSS variables para multi-tenant |
+| 2025-12-28 | NAVIGATION completo: Titan + Hermes CSS | 12 components migrados + Stepper tokens agregados |
+| 2025-12-28 | OVERLAY completo: Titan + Hermes CSS | 5 components migrados (Dropdown, Popconfirm, Popover, Tour, Watermark) |
+| 2025-12-28 | FEEDBACK completo: Tokens + Titan CSS + Hermes CSS | 11 components: +78 tokens nuevos (Drawer, Message, Notification, Toast), todos los engines usan --ds-* vars |
 
 ---
 
@@ -327,114 +331,114 @@ Para cada componente, seguir estos pasos EN ORDEN:
 - 🔄 IN PROGRESS - En proceso (indicar quién)
 - ✅ COMPLETE - Migración completa y verificada
 
-**Resumen:** 8/76 completados (10.5%) + 33 Apollo engines migrados a CSS vars
+**Resumen:** 76/76 completados (100%) - INPUTS 20/20 ✅ + DISPLAY 17/17 ✅ + FEEDBACK 11/11 ✅ + NAVIGATION 12/12 ✅ + LAYOUT 10/10 ✅ + OVERLAY 6/6 ✅
 
 ---
 
-#### INPUTS (20) - Prioridad ALTA
+#### INPUTS (20) - Prioridad ALTA ✅ COMPLETADO
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
 | 1 | Button | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, fixed primitives, added active states |
-| 2 | Input | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 3 | Select | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 4 | Checkbox | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 5 | Radio | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 6 | Switch | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 7 | Slider | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 8 | DatePicker | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 9 | TimePicker | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 10 | Form | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 11 | InputNumber | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 12 | Textarea | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 13 | Upload | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 14 | AutoComplete | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 15 | Cascader | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 16 | ColorPicker | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 17 | Mentions | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 18 | Transfer | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 19 | TreeSelect | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 20 | Toggle | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 2 | Input | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +12 tokens (filled, addon, clear), Apollo uses var(--ds-input-*) |
+| 3 | Select | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (status, tag, dropdown), Apollo uses var(--ds-select-*) |
+| 4 | Checkbox | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens (sizes, error, label), Apollo uses var(--ds-checkbox-*) |
+| 5 | Radio | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (sizes, button style), Apollo uses var(--ds-radio-*) |
+| 6 | Switch | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Apollo uses var(--ds-switch-*) |
+| 7 | Slider | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Apollo uses var(--ds-slider-*) |
+| 8 | DatePicker | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Apollo uses var(--ds-datepicker-*) |
+| 9 | TimePicker | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +35 tokens, Titan/Hermes time panel styles |
+| 10 | Form | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +7 tokens (item, label, error), Apollo inline styles |
+| 11 | InputNumber | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (controls, addon, affix) |
+| 12 | Textarea | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens (sizes, filled, count) |
+| 13 | Upload | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, Apollo uses var(--ds-upload-*) |
+| 14 | AutoComplete | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +8 tokens (dropdown, options) |
+| 15 | Cascader | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +8 tokens (menu, item states) |
+| 16 | ColorPicker | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +30 tokens (swatch, palette, slider, presets) |
+| 17 | Mentions | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +7 tokens (dropdown, option, highlight) |
+| 18 | Transfer | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +10 tokens (list, header, item) |
+| 19 | TreeSelect | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +25 tokens (trigger, dropdown, nodes) |
+| 20 | Toggle | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +25 tokens, Titan Switch mapping
 
-#### DISPLAY (17) - Prioridad MEDIA
+#### DISPLAY (17) - Prioridad MEDIA ✅ COMPLETADO
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
 | 1 | Card | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Engines use var(--ds-card-*) |
-| 2 | Table | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 2 | Table | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Engines use var(--ds-table-*) |
 | 3 | Avatar | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, engines use var(--ds-*) |
 | 4 | Badge | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +9 tokens, engines use var(--ds-badge-*) |
 | 5 | Tag | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, apollo uses var(--ds-tag-*) |
 | 6 | Tooltip | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +17 tokens, engines rewritten (no base) |
 | 7 | Typography | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | SIZE_MAP uses CSS vars, apollo rewritten |
-| 8 | Calendar | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-calendar-* vars |
-| 9 | Carousel | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-carousel-* vars |
-| 10 | Descriptions | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-descriptions-* vars |
-| 11 | Empty | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-empty-* vars |
-| 12 | Image | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-image-* vars |
-| 13 | List | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-list-* vars |
-| 14 | QRCode | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-qrcode-* vars |
-| 15 | Statistic | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-statistic-* vars |
-| 16 | Timeline | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-timeline-* vars |
-| 17 | Tree | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-tree-* vars |
+| 8 | Calendar | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +22 tokens, all engines use --ds-calendar-* |
+| 9 | Carousel | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +12 tokens, all engines use --ds-carousel-* |
+| 10 | Descriptions | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-descriptions-* |
+| 11 | Empty | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-empty-* |
+| 12 | Image | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +12 tokens, all engines use --ds-image-* |
+| 13 | List | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-list-* |
+| 14 | QRCode | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-qrcode-* |
+| 15 | Statistic | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-statistic-* |
+| 16 | Timeline | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-timeline-* |
+| 17 | Tree | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +14 tokens, all engines use --ds-tree-* |
 
-#### FEEDBACK (11) - Prioridad MEDIA
-
-| # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Modal | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-modal-* vars |
-| 2 | Alert | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-alert-* vars with type colors |
-| 3 | Message | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-message-* vars |
-| 4 | Notification | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-notification-* vars |
-| 5 | Progress | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-progress-* vars |
-| 6 | Skeleton | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-skeleton-* vars |
-| 7 | Spinner | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-spinner-* vars |
-| 8 | Result | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-result-* with status colors |
-| 9 | Rate | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-rate-* vars |
-| 10 | Drawer | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-drawer-* vars |
-| 11 | Toast | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-toast-* vars |
-
-#### NAVIGATION (12) - Prioridad MEDIA
+#### FEEDBACK (11) - Prioridad MEDIA ✅ COMPLETADO
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Menu | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-menu-* vars |
-| 2 | Tabs | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-tabs-* vars |
-| 3 | Breadcrumb | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-breadcrumb-* vars |
-| 4 | Pagination | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-pagination-* vars |
-| 5 | Steps | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-steps-* vars |
-| 6 | Affix | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-affix-* vars |
-| 7 | Anchor | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-anchor-* vars |
-| 8 | BackTop | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-backtop-* vars |
-| 9 | FloatButton | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-floatbutton-* vars |
-| 10 | Link | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-link-* vars |
-| 11 | Segmented | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-segmented-* vars |
-| 12 | Stepper | 🔄 | ⬜ | ⬜ | ⬜ | IN PROGRESS | 2025-12-28 | Apollo uses --ds-stepper-* vars |
+| 1 | Modal | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-modal-* vars |
+| 2 | Alert | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-alert-* vars with type colors |
+| 3 | Message | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +20 tokens, all engines use --ds-message-* vars |
+| 4 | Notification | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, all engines use --ds-notification-* vars |
+| 5 | Progress | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-progress-* vars |
+| 6 | Skeleton | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-skeleton-* vars |
+| 7 | Spinner | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-spinner-* vars |
+| 8 | Result | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-result-* with status colors |
+| 9 | Rate | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-rate-* vars |
+| 10 | Drawer | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +18 tokens, all engines use --ds-drawer-* vars |
+| 11 | Toast | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +25 tokens, all engines use --ds-toast-* vars |
 
-#### LAYOUT (10) - Prioridad BAJA
-
-| # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
-|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Box | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 2 | Collapse | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 3 | Container | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 4 | Divider | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 5 | Flex | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 6 | Grid | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 7 | Layout | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 8 | Space | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 9 | Splitter | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 10 | Stack | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-
-#### OVERLAY (6) - Prioridad BAJA
+#### NAVIGATION (12) - Prioridad MEDIA ✅ COMPLETADO
 
 | # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
 |---|------------|--------|-----------|------------|--------------|--------|-------|-------|
-| 1 | Dropdown | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 2 | Popconfirm | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 3 | Popover | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 4 | Tour | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
-| 5 | Watermark | ⬜ | ⬜ | ⬜ | ⬜ | PENDING | - | - |
+| 1 | Menu | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-menu-* vars |
+| 2 | Tabs | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-tabs-* vars |
+| 3 | Breadcrumb | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-breadcrumb-* vars |
+| 4 | Pagination | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-pagination-* vars |
+| 5 | Steps | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-steps-* vars |
+| 6 | Affix | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-affix-* vars |
+| 7 | Anchor | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-anchor-* vars |
+| 8 | BackTop | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-back-top-* vars |
+| 9 | FloatButton | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-float-button-* vars |
+| 10 | Link | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-link-* vars |
+| 11 | Segmented | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-segmented-* vars |
+| 12 | Stepper | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +17 tokens, all engines use --ds-stepper-* vars |
+
+#### LAYOUT (10) - Prioridad BAJA ✅ COMPLETADO
+
+| # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
+|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
+| 1 | Box | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
+| 2 | Collapse | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +5 tokens, all engines use --ds-collapse-* vars |
+| 3 | Container | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +7 tokens, all engines use --ds-container-* vars |
+| 4 | Divider | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +4 tokens, all engines use --ds-divider-* vars |
+| 5 | Flex | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
+| 6 | Grid | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
+| 7 | Layout | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +15 tokens, all engines use --ds-layout-* vars |
+| 8 | Space | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-space-* vars |
+| 9 | Splitter | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | +5 tokens, all engines use --ds-splitter-* vars |
+| 10 | Stack | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | Utility component, uses inline styles |
+
+#### OVERLAY (6) - Prioridad BAJA ✅ COMPLETADO
+
+| # | Componente | Tokens | Titan CSS | Hermes CSS | Multi-tenant | Status | Fecha | Notas |
+|---|------------|--------|-----------|------------|--------------|--------|-------|-------|
+| 1 | Dropdown | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-dropdown-* vars |
+| 2 | Popconfirm | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-popconfirm-* vars |
+| 3 | Popover | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-popover-* vars |
+| 4 | Tour | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-tour-* vars |
+| 5 | Watermark | ✅ | ✅ | ✅ | ✅ | COMPLETE | 2025-12-28 | All engines use --ds-watermark-* vars |
 
 ---
 

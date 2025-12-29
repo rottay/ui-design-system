@@ -202,13 +202,13 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
             top: targetRect ? targetRect.bottom + padding + 8 : '50%',
             left: targetRect ? targetRect.left + targetRect.width / 2 : '50%',
             transform: targetRect ? 'translateX(-50%)' : 'translate(-50%, -50%)',
-            backgroundColor: '#fff',
-            borderRadius: '12px',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-            padding: '20px',
-            maxWidth: '360px',
-            minWidth: '280px',
-            border: isPrimary ? '2px solid #3b82f6' : 'none',
+            backgroundColor: 'var(--ds-tour-bg, #fff)',
+            borderRadius: 'var(--ds-tour-radius, 12px)',
+            boxShadow: 'var(--ds-tour-shadow, 0 8px 24px rgba(0, 0, 0, 0.15))',
+            padding: 'var(--ds-tour-padding, 20px)',
+            maxWidth: 'var(--ds-tour-max-width, 360px)',
+            minWidth: 'var(--ds-tour-min-width, 280px)',
+            border: isPrimary ? '2px solid var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6))' : 'none',
             zIndex: zIndex! + 2,
           }}
         >
@@ -225,7 +225,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               cursor: 'pointer',
               padding: '4px',
               fontSize: '16px',
-              color: '#9ca3af',
+              color: 'var(--ds-tour-close-color, var(--ds-color-neutral-400, #9ca3af))',
             }}
           >
             ✕
@@ -233,11 +233,11 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
           {/* Content */}
           {step?.cover && <div style={{ marginBottom: '12px' }}>{step.cover}</div>}
-          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#111827' }}>
+          <h3 style={{ margin: 0, fontSize: 'var(--ds-tour-title-size, 18px)', fontWeight: 600, color: 'var(--ds-tour-title-color, var(--ds-color-neutral-900, #111827))' }}>
             {step?.title}
           </h3>
           {step?.description && (
-            <p style={{ margin: '8px 0 0', fontSize: '14px', color: '#6b7280' }}>
+            <p style={{ margin: '8px 0 0', fontSize: 'var(--ds-tour-description-size, 14px)', color: 'var(--ds-tour-description-color, var(--ds-color-neutral-500, #6b7280))' }}>
               {step.description}
             </p>
           )}

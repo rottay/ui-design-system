@@ -5,7 +5,14 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import {
+  EngineComparison,
+  VariantEngineMatrix,
+  InteractiveEngineShowcase,
+  TenantSwitcher,
+  ComponentPlayground,
+} from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Button> = {
   title: 'Primitives/Inputs/Button',
@@ -20,7 +27,19 @@ const meta: Meta<typeof Button> = {
   parameters: {
     docs: {
       description: {
-        component: 'A versatile button component supporting multiple variants, sizes, and states with multi-engine support.',
+        component: `
+A versatile button component supporting multiple variants, sizes, and states with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Styling | CSS-in-JS | Tailwind | CSS Variables |
+| Bundle | Heavier | Medium | Lightest |
+| Ripple Effect | Yes | No | No |
+| Icon Animation | Yes | Yes | Basic |
+`,
       },
     },
   },
@@ -67,6 +86,10 @@ const meta: Meta<typeof Button> = {
 
 export default meta;
 type Story = StoryObj<typeof Button>;
+
+// ============================================================================
+// Default Stories
+// ============================================================================
 
 export const Default: Story = {
   args: {
@@ -185,24 +208,104 @@ export const IconButton: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Button component across all 3 engines.
+ * Shows how Titan, Hermes, and Apollo render the same props differently.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Button rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-            <Button engine={engine} variant="primary">Primary</Button>
-            <Button engine={engine} variant="secondary">Secondary</Button>
-            <Button engine={engine} variant="outline">Outline</Button>
-            <Button engine={engine} loading>Loading</Button>
-            <Button engine={engine} disabled>Disabled</Button>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Button}
+      props={{ children: 'Click Me', variant: 'primary', size: 'md' }}
+      showDescriptions
+    />
   ),
 };
+
+/**
+ * Matrix showing all variants across all engines.
+ * Perfect for visual regression testing and ensuring consistency.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all button variants across all engines. Useful for visual QA.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Button}
+      baseProps={{ children: 'Button' }}
+      variantProp="variant"
+      variants={['primary', 'secondary', 'outline', 'ghost', 'link', 'danger']}
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all button sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Button}
+      baseProps={{ children: 'Button', variant: 'primary' }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
+  ),
+};
+
+/**
+ * Full matrix with both variants and sizes across engines.
+ */
+export const FullMatrix: Story = {
+  name: '🎯 Full Variant × Size Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix showing variants and sizes across all engines. Most comprehensive view.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Button}
+      baseProps={{ children: 'Btn' }}
+      variantProp="variant"
+      variants={['primary', 'secondary', 'outline']}
+      sizeProp="size"
+      sizes={['sm', 'md', 'lg']}
+    />
+  ),
+};
+
+// ============================================================================
+// State Stories
+// ============================================================================
 
 export const AllStates: Story = {
   render: () => (
@@ -223,5 +326,132 @@ export const AllStates: Story = {
         <Button variant="outline" disabled>Disabled</Button>
       </div>
     </div>
+  ),
+};
+
+/**
+ * Loading state comparison across engines.
+ */
+export const LoadingComparison: Story = {
+  name: '⏳ Loading State Comparison',
+  render: () => (
+    <EngineComparison
+      component={Button}
+      props={{ children: 'Loading', variant: 'primary', loading: true }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Disabled state comparison across engines.
+ */
+export const DisabledComparison: Story = {
+  name: '🚫 Disabled State Comparison',
+  render: () => (
+    <EngineComparison
+      component={Button}
+      props={{ children: 'Disabled', variant: 'primary', disabled: true }}
+      showDescriptions
+    />
+  ),
+};
+
+// ============================================================================
+// Interactive Stories
+// ============================================================================
+
+/**
+ * Full interactive playground with engine and theme switching.
+ * Switch between engines and themes in real-time.
+ */
+export const Playground: Story = {
+  name: '🎮 Interactive Playground',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Full interactive playground to test the Button across all engines and themes. Use the controls to switch views and configurations.',
+      },
+    },
+  },
+  render: () => (
+    <ComponentPlayground
+      component={Button}
+      props={{ children: 'Click Me', variant: 'primary', size: 'md' }}
+      componentName="Button"
+      initialView="single"
+    />
+  ),
+};
+
+/**
+ * Interactive engine comparison with multiple layout modes.
+ */
+export const InteractiveEngines: Story = {
+  name: '🎛️ Interactive Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive comparison with layout modes (horizontal, vertical, cards, tabs, slider) and zoom controls.',
+      },
+    },
+  },
+  render: () => (
+    <InteractiveEngineShowcase
+      component={Button}
+      props={{ children: 'Button', variant: 'primary', size: 'md' }}
+      title="Button Engine Comparison"
+      description="Compare how the Button renders across different engines"
+      showLayoutControls
+      showZoomControls
+      initialLayout="cards"
+    />
+  ),
+};
+
+/**
+ * Theme/tenant switching with live preview.
+ */
+export const ThemeSwitcher: Story = {
+  name: '🎨 Theme Switcher',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Switch between different themes (Spotify, Stripe, Airbnb, etc.) to see how the Button adapts to brand colors.',
+      },
+    },
+  },
+  render: () => (
+    <TenantSwitcher
+      component={Button}
+      props={{ children: 'Themed Button', variant: 'primary', size: 'md' }}
+      title="Button Theme Preview"
+      showEngineSelector
+      initialEngine="titan"
+      initialTenant="base"
+    />
+  ),
+};
+
+/**
+ * Grid preview of all themes.
+ */
+export const AllThemes: Story = {
+  name: '🌈 All Themes Grid',
+  parameters: {
+    docs: {
+      description: {
+        story: 'See the Button rendered in all available themes at once.',
+      },
+    },
+  },
+  render: () => (
+    <TenantSwitcher
+      component={Button}
+      props={{ children: 'Button', variant: 'primary', size: 'md' }}
+      title="Button in All Themes"
+      gridPreview
+      showEngineSelector
+    />
   ),
 };

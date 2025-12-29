@@ -69,30 +69,31 @@
 import React, { createContext, useContext, useState, useCallback, useMemo, useRef, useImperativeHandle } from 'react';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps, FormInstance, FormRule, FieldData } from '../../types';
 
+// Styles using CSS variables
 const styles = {
   formHorizontal: {
     display: 'flex',
     flexDirection: 'row' as const,
     flexWrap: 'wrap' as const,
     alignItems: 'flex-start',
-    gap: '16px',
+    gap: 'var(--ds-form-gap)',
   },
   formVertical: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '16px',
+    gap: 'var(--ds-form-gap)',
   },
   formInline: {
     display: 'flex',
     flexDirection: 'row' as const,
     flexWrap: 'wrap' as const,
     alignItems: 'flex-end',
-    gap: '16px',
+    gap: 'var(--ds-form-gap)',
   },
   formItem: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: '4px',
+    gap: 'var(--ds-form-item-gap)',
     width: '100%',
   },
   formItemHorizontal: {
@@ -100,47 +101,48 @@ const styles = {
     alignItems: 'center',
   },
   label: {
-    fontSize: '14px',
-    fontWeight: 500,
-    color: '#333',
-    marginBottom: '4px',
+    fontSize: 'var(--ds-form-label-font-size)',
+    fontWeight: 'var(--ds-form-label-font-weight)' as unknown as number,
+    color: 'var(--ds-form-label-color)',
+    marginBottom: 'var(--ds-form-item-gap)',
   },
   labelHorizontal: {
-    width: '25%',
+    width: 'var(--ds-form-label-width)',
     textAlign: 'right' as const,
     paddingRight: '8px',
   },
   required: {
-    color: '#ff4d4f',
+    color: 'var(--ds-form-required-color)',
     marginLeft: '2px',
   },
   inputWrapper: {
     flex: 1,
   },
   extra: {
-    fontSize: '12px',
-    color: '#999',
-    marginTop: '4px',
+    fontSize: 'var(--ds-form-extra-font-size)',
+    color: 'var(--ds-form-extra-color)',
+    marginTop: 'var(--ds-form-item-gap)',
   },
   help: {
-    fontSize: '12px',
-    marginTop: '4px',
+    fontSize: 'var(--ds-form-help-font-size)',
+    marginTop: 'var(--ds-form-item-gap)',
+    color: 'var(--ds-form-help-color)',
   },
   helpError: {
-    color: '#ff4d4f',
+    color: 'var(--ds-form-error-color)',
   },
   helpWarning: {
-    color: '#faad14',
+    color: 'var(--ds-form-warning-color)',
   },
   helpSuccess: {
-    color: '#52c41a',
+    color: 'var(--ds-form-success-color)',
   },
   errorList: {
     listStyle: 'disc',
     paddingLeft: '16px',
     margin: 0,
-    fontSize: '12px',
-    color: '#ff4d4f',
+    fontSize: 'var(--ds-form-help-font-size)',
+    color: 'var(--ds-form-error-color)',
   },
 };
 

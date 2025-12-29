@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Checkbox } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Checkbox> = {
   title: 'Primitives/Inputs/Checkbox',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Checkbox> = {
   parameters: {
     docs: {
       description: {
-        component: 'A checkbox component for selecting one or multiple options with multi-engine support.',
+        component: `
+A checkbox component for selecting one or multiple options with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Animation | Smooth | CSS | Basic |
+| Indeterminate | Full | Partial | Full |
+| Group | Built-in | Custom | Custom |
+`,
       },
     },
   },
@@ -50,19 +62,19 @@ const meta: Meta<typeof Checkbox> = {
 export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    children: 'Accept terms and conditions',
-  },
+  args: { children: 'Accept terms and conditions' },
 };
 
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
-        <Checkbox key={size} size={size}>
-          Size: {size}
-        </Checkbox>
+        <Checkbox key={size} size={size}>Size: {size}</Checkbox>
       ))}
     </div>
   ),
@@ -72,19 +84,14 @@ export const Colors: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {(['default', 'primary', 'secondary', 'success', 'warning', 'error'] as const).map((color) => (
-        <Checkbox key={color} color={color} defaultChecked>
-          Color: {color}
-        </Checkbox>
+        <Checkbox key={color} color={color} defaultChecked>Color: {color}</Checkbox>
       ))}
     </div>
   ),
 };
 
 export const Checked: Story = {
-  args: {
-    children: 'This is checked',
-    checked: true,
-  },
+  args: { children: 'This is checked', checked: true },
 };
 
 export const Disabled: Story = {
@@ -97,10 +104,7 @@ export const Disabled: Story = {
 };
 
 export const Indeterminate: Story = {
-  args: {
-    children: 'Select all',
-    indeterminate: true,
-  },
+  args: { children: 'Select all', indeterminate: true },
 };
 
 export const CheckboxGroup: Story = {
@@ -117,19 +121,92 @@ export const CheckboxGroup: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Checkbox component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Checkbox rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
+  render: () => (
+    <EngineComparison
+      component={Checkbox}
+      props={{ children: 'Check me', defaultChecked: true }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all checkbox sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Checkbox}
+      baseProps={{ children: 'Checkbox', defaultChecked: true }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
+  ),
+};
+
+/**
+ * Color comparison across engines.
+ */
+export const ColorMatrix: Story = {
+  name: '🎨 Color × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Checkbox}
+      baseProps={{ children: 'Checkbox', defaultChecked: true }}
+      variantProp="color"
+      variants={['primary', 'secondary', 'success', 'warning', 'error']}
+    />
+  ),
+};
+
+/**
+ * States comparison across engines.
+ */
+export const StatesComparison: Story = {
+  name: '📋 States Comparison',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <Checkbox engine={engine}>Unchecked</Checkbox>
-            <Checkbox engine={engine} defaultChecked>Checked</Checkbox>
-            <Checkbox engine={engine} disabled>Disabled</Checkbox>
-          </div>
-        </div>
-      ))}
+      <EngineComparison
+        component={Checkbox}
+        props={{ children: 'Unchecked' }}
+        showDescriptions
+      />
+      <EngineComparison
+        component={Checkbox}
+        props={{ children: 'Checked', defaultChecked: true }}
+      />
+      <EngineComparison
+        component={Checkbox}
+        props={{ children: 'Disabled', disabled: true }}
+      />
+      <EngineComparison
+        component={Checkbox}
+        props={{ children: 'Indeterminate', indeterminate: true }}
+      />
     </div>
   ),
 };

@@ -7,7 +7,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Image } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Image> = {
   title: 'Primitives/Display/Image',
@@ -283,48 +284,61 @@ export const AspectRatio: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison across all three engines.
+ * Side-by-side comparison of Image across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Image rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px', textTransform: 'capitalize', color: '#333' }}>
-            {engine} Engine
-          </h4>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <Image
-              engine={engine}
-              src="https://picsum.photos/200/150"
-              alt={`${engine} engine image`}
-              width={200}
-              height={150}
-              radius="md"
-            />
-            <Image
-              engine={engine}
-              src="https://picsum.photos/150/150"
-              alt={`${engine} engine circular`}
-              width={150}
-              height={150}
-              radius="full"
-            />
-            <Image
-              engine={engine}
-              src="https://picsum.photos/200/150"
-              alt={`${engine} engine with effects`}
-              width={200}
-              height={150}
-              bordered
-              shadow
-              radius="lg"
-            />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Image}
+      props={{
+        src: 'https://picsum.photos/200/150',
+        alt: 'Sample image',
+        width: 200,
+        height: 150,
+        radius: 'md',
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all radius variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Image radius variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Image}
+      baseProps={{
+        src: 'https://picsum.photos/150/150',
+        alt: 'Sample image',
+        width: 150,
+        height: 150,
+      }}
+      variantProp="radius"
+      variants={['none', 'sm', 'md', 'lg', 'full']}
+    />
   ),
 };
 

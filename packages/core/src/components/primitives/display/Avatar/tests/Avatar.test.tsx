@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import { Avatar } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockAvatar = ({ children, src, alt, size, shape, variant, ...props }: any) => (
       <div

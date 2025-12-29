@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { DatePicker } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof DatePicker> = {
   title: 'Primitives/Inputs/DatePicker',
@@ -20,7 +21,18 @@ const meta: Meta<typeof DatePicker> = {
   parameters: {
     docs: {
       description: {
-        component: 'A date picker component with various modes and multi-engine support.',
+        component: `
+A date picker component with various modes and multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Calendar | Built-in | Browser | Custom |
+| Range Picker | Full | Limited | Full |
+| Time Selection | Built-in | Separate | Combined |
+`,
       },
     },
   },
@@ -55,10 +67,12 @@ const meta: Meta<typeof DatePicker> = {
 export default meta;
 type Story = StoryObj<typeof DatePicker>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    placeholder: 'Select date',
-  },
+  args: { placeholder: 'Select date' },
 };
 
 export const Sizes: Story = {
@@ -72,10 +86,7 @@ export const Sizes: Story = {
 };
 
 export const Disabled: Story = {
-  args: {
-    disabled: true,
-    placeholder: 'Disabled picker',
-  },
+  args: { disabled: true, placeholder: 'Disabled picker' },
 };
 
 export const PickerModes: Story = {
@@ -91,19 +102,7 @@ export const PickerModes: Story = {
 };
 
 export const WithTime: Story = {
-  args: {
-    showTime: true,
-    placeholder: 'Select date and time',
-  },
-};
-
-export const WithPresets: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <p style={{ margin: 0, color: '#666' }}>DatePicker with preset ranges (today, this week, etc.)</p>
-      <DatePicker placeholder="Select date" />
-    </div>
-  ),
+  args: { showTime: true, placeholder: 'Select date and time' },
 };
 
 export const DateRange: Story = {
@@ -111,21 +110,6 @@ export const DateRange: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <p style={{ margin: 0, color: '#666' }}>RangePicker for selecting date ranges</p>
       <DatePicker.RangePicker placeholder={['Start date', 'End date']} />
-    </div>
-  ),
-};
-
-export const DisabledDates: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <p style={{ margin: 0, color: '#666' }}>Weekends disabled</p>
-      <DatePicker
-        placeholder="Select date"
-        disabledDate={(current) => {
-          const day = current.getDay();
-          return day === 0 || day === 6;
-        }}
-      />
     </div>
   ),
 };
@@ -145,24 +129,61 @@ export const CustomFormat: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <DatePicker format="DD/MM/YYYY" placeholder="DD/MM/YYYY" />
       <DatePicker format="MM-DD-YYYY" placeholder="MM-DD-YYYY" />
-      <DatePicker format="YYYY年MM月DD日" placeholder="YYYY年MM月DD日" />
     </div>
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the DatePicker component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same DatePicker rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <DatePicker engine={engine} placeholder="Select date" />
-            <DatePicker engine={engine} disabled placeholder="Disabled" />
-            <DatePicker engine={engine} status="error" placeholder="Error" />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={DatePicker}
+      props={{ placeholder: 'Select date', style: { width: 200 } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={DatePicker}
+      baseProps={{ placeholder: 'Date', style: { width: 150 } }}
+      sizeProp="size"
+      sizes={['small', 'default', 'large']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={DatePicker}
+      baseProps={{ placeholder: 'Date', style: { width: 150 } }}
+      variantProp="status"
+      variants={['default', 'error', 'warning']}
+    />
   ),
 };

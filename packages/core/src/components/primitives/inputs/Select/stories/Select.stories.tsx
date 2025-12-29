@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Select } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Select> = {
   title: 'Primitives/Inputs/Select',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Select> = {
   parameters: {
     docs: {
       description: {
-        component: 'A flexible select component supporting single/multiple selection, search, and custom options with multi-engine support.',
+        component: `
+A flexible select component supporting single/multiple selection, search, and custom options with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Search | Built-in | Native | Custom |
+| Virtual Scroll | Yes | No | No |
+| Custom Render | Full | Partial | Full |
+`,
       },
     },
   },
@@ -45,26 +57,11 @@ const meta: Meta<typeof Select> = {
       options: ['titan', 'hermes', 'apollo'],
       description: 'Rendering engine to use',
     },
-    disabled: {
-      control: 'boolean',
-      description: 'Disabled state',
-    },
-    loading: {
-      control: 'boolean',
-      description: 'Loading state',
-    },
-    multiple: {
-      control: 'boolean',
-      description: 'Allow multiple selection',
-    },
-    searchable: {
-      control: 'boolean',
-      description: 'Enable search functionality',
-    },
-    clearable: {
-      control: 'boolean',
-      description: 'Show clear button',
-    },
+    disabled: { control: 'boolean', description: 'Disabled state' },
+    loading: { control: 'boolean', description: 'Loading state' },
+    multiple: { control: 'boolean', description: 'Allow multiple selection' },
+    searchable: { control: 'boolean', description: 'Enable search functionality' },
+    clearable: { control: 'boolean', description: 'Show clear button' },
   },
   tags: ['autodocs'],
 };
@@ -80,6 +77,10 @@ const defaultOptions = [
   { value: 'solid', label: 'Solid' },
 ];
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
   args: {
     options: defaultOptions,
@@ -93,12 +94,7 @@ export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
-        <Select
-          key={size}
-          size={size}
-          options={defaultOptions}
-          placeholder={`Size: ${size}`}
-        />
+        <Select key={size} size={size} options={defaultOptions} placeholder={`Size: ${size}`} />
       ))}
     </div>
   ),
@@ -108,12 +104,7 @@ export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 300 }}>
       {(['outline', 'filled', 'flushed', 'default'] as const).map((variant) => (
-        <Select
-          key={variant}
-          variant={variant}
-          options={defaultOptions}
-          placeholder={`Variant: ${variant}`}
-        />
+        <Select key={variant} variant={variant} options={defaultOptions} placeholder={`Variant: ${variant}`} />
       ))}
     </div>
   ),
@@ -131,46 +122,23 @@ export const ValidationStatus: Story = {
 };
 
 export const Disabled: Story = {
-  args: {
-    options: defaultOptions,
-    placeholder: 'Disabled select',
-    disabled: true,
-  },
+  args: { options: defaultOptions, placeholder: 'Disabled select', disabled: true },
 };
 
 export const Loading: Story = {
-  args: {
-    options: defaultOptions,
-    placeholder: 'Loading...',
-    loading: true,
-  },
+  args: { options: defaultOptions, placeholder: 'Loading...', loading: true },
 };
 
 export const Searchable: Story = {
-  args: {
-    options: defaultOptions,
-    placeholder: 'Search frameworks...',
-    searchable: true,
-    showSearch: true,
-  },
+  args: { options: defaultOptions, placeholder: 'Search frameworks...', searchable: true, showSearch: true },
 };
 
 export const Clearable: Story = {
-  args: {
-    options: defaultOptions,
-    placeholder: 'Select to clear',
-    clearable: true,
-    allowClear: true,
-    defaultValue: 'react',
-  },
+  args: { options: defaultOptions, placeholder: 'Select to clear', clearable: true, allowClear: true, defaultValue: 'react' },
 };
 
 export const Multiple: Story = {
-  args: {
-    options: defaultOptions,
-    placeholder: 'Select multiple',
-    multiple: true,
-  },
+  args: { options: defaultOptions, placeholder: 'Select multiple', multiple: true },
 };
 
 export const WithOptionGroups: Story = {
@@ -203,49 +171,65 @@ export const WithDisabledOptions: Story = {
   },
 };
 
-export const WithIcons: Story = {
-  args: {
-    options: [
-      { value: 'react', label: 'React', icon: '⚛️' },
-      { value: 'vue', label: 'Vue', icon: '💚' },
-      { value: 'angular', label: 'Angular', icon: '🅰️' },
-      { value: 'svelte', label: 'Svelte', icon: '🔥' },
-    ],
-    placeholder: 'Select with icons',
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Select component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Select rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
   },
+  render: () => (
+    <EngineComparison
+      component={Select}
+      props={{ options: defaultOptions, placeholder: 'Select...', style: { width: 200 } }}
+      showDescriptions
+    />
+  ),
 };
 
-export const EngineComparison: Story = {
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all select sizes across all engines.',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <Select
-              engine={engine}
-              options={defaultOptions}
-              placeholder="Default"
-              style={{ width: 180 }}
-            />
-            <Select
-              engine={engine}
-              options={defaultOptions}
-              placeholder="Disabled"
-              disabled
-              style={{ width: 180 }}
-            />
-            <Select
-              engine={engine}
-              options={defaultOptions}
-              placeholder="With value"
-              defaultValue="react"
-              style={{ width: 180 }}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
+    <VariantEngineMatrix
+      component={Select}
+      baseProps={{ options: defaultOptions, placeholder: 'Select', style: { width: 150 } }}
+      sizeProp="size"
+      sizes={['sm', 'md', 'lg']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Select}
+      baseProps={{ options: defaultOptions, placeholder: 'Select', style: { width: 150 } }}
+      variantProp="status"
+      variants={['default', 'error', 'warning', 'success']}
+    />
   ),
 };
 

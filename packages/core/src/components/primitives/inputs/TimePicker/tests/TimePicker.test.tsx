@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { TimePicker } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: (name: string) => {
     if (name === 'TimeRangePicker') {
       const MockRangePicker = ({

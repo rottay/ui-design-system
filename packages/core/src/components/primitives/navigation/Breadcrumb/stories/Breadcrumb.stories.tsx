@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Breadcrumb } from '../';
 import type { BreadcrumbItem } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Breadcrumb> = {
   title: 'Primitives/Navigation/Breadcrumb',
@@ -143,18 +144,29 @@ export const LongLabels: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Breadcrumb across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Breadcrumb rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Breadcrumb
-            engine={engine}
-            items={defaultItems}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Breadcrumb}
+      props={{
+        items: defaultItems,
+      }}
+      showDescriptions
+    />
   ),
 };

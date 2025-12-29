@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: <P extends object>(_name: string) => {
     const MockAffix = React.forwardRef<HTMLDivElement, P & { children?: React.ReactNode }>(
       ({ children, ...props }, ref) => {

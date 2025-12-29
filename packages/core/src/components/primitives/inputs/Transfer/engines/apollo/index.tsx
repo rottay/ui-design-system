@@ -1,8 +1,15 @@
 'use client';
 
 /**
- * Transfer - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Transfer Apollo Engine - Rottay Design System
+ * @description Pure vanilla HTML/CSS implementation of the Transfer component
+ * using CSS variables for multi-tenant theming.
+ *
+ * @module ApolloTransfer
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TransferProps, TransferItem } from '../../types';
 import { TRANSFER_DEFAULTS } from '../../types';
@@ -64,29 +71,78 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     onSelectChange(newSelected);
   };
 
+  const containerStyle: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    border: `1px solid var(--ds-transfer-border)`,
+    borderRadius: 'var(--ds-transfer-radius)',
+    width: 'var(--ds-transfer-width)',
+    backgroundColor: 'var(--ds-transfer-bg)',
+    fontFamily: 'var(--ds-font-family-base)',
+    ...listStyle,
+  };
+
+  const headerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 'var(--ds-transfer-header-padding)',
+    borderBottom: `1px solid var(--ds-transfer-header-border)`,
+    backgroundColor: 'var(--ds-transfer-header-bg)',
+  };
+
+  const titleStyle: React.CSSProperties = {
+    fontWeight: 'var(--ds-transfer-header-font-weight)' as React.CSSProperties['fontWeight'],
+    fontSize: 'var(--ds-font-size-sm)',
+  };
+
+  const countStyle: React.CSSProperties = {
+    fontSize: 'var(--ds-transfer-count-font-size)',
+    color: 'var(--ds-transfer-count-color)',
+  };
+
+  const searchContainerStyle: React.CSSProperties = {
+    padding: 'var(--ds-transfer-search-padding)',
+    borderBottom: `1px solid var(--ds-transfer-header-border)`,
+  };
+
+  const searchInputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '6px 10px',
+    border: `1px solid var(--ds-transfer-search-input-border)`,
+    borderRadius: 'var(--ds-transfer-search-input-radius)',
+    fontSize: 'var(--ds-font-size-sm)',
+    outline: 'none',
+  };
+
+  const itemsContainerStyle: React.CSSProperties = {
+    flex: 1,
+    overflow: 'auto',
+    maxHeight: 'var(--ds-transfer-list-max-height)',
+    padding: '4px',
+  };
+
+  const getItemStyle = (): React.CSSProperties => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    padding: 'var(--ds-transfer-item-padding)',
+    borderRadius: 'var(--ds-transfer-item-radius)',
+    fontSize: 'var(--ds-font-size-sm)',
+    transition: 'background-color 0.15s',
+  });
+
+  const emptyStyle: React.CSSProperties = {
+    padding: '16px',
+    textAlign: 'center',
+    color: 'var(--ds-transfer-empty-color)',
+    fontSize: 'var(--ds-font-size-sm)',
+  };
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        border: '1px solid #e5e7eb',
-        borderRadius: '8px',
-        width: '200px',
-        backgroundColor: '#fff',
-        ...listStyle,
-      }}
-    >
+    <div className="rottay-transfer__list" style={containerStyle}>
       {/* Header */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '8px 12px',
-          borderBottom: '1px solid #e5e7eb',
-          backgroundColor: '#f9fafb',
-        }}
-      >
+      <div className="rottay-transfer__header" style={headerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {showSelectAll && (
             <input
@@ -96,51 +152,42 @@ const TransferListComponent: React.FC<TransferListProps> = ({
               disabled={disabled || selectableItems.length === 0}
             />
           )}
-          <span style={{ fontWeight: 500 }}>{title}</span>
+          <span style={titleStyle}>{title}</span>
         </div>
-        <span style={{ fontSize: '12px', color: '#6b7280' }}>
+        <span style={countStyle}>
           {selectedKeys.size}/{items.length}
         </span>
       </div>
 
       {/* Search */}
       {showSearch && (
-        <div style={{ padding: '8px', borderBottom: '1px solid #e5e7eb' }}>
+        <div className="rottay-transfer__search" style={searchContainerStyle}>
           <input
             type="text"
             placeholder={locale?.searchPlaceholder}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
             disabled={disabled}
-            style={{
-              width: '100%',
-              padding: '6px 10px',
-              border: '1px solid #d1d5db',
-              borderRadius: '4px',
-              fontSize: '14px',
-            }}
+            style={searchInputStyle}
           />
         </div>
       )}
 
       {/* Items */}
-      <div style={{ flex: 1, overflow: 'auto', maxHeight: '240px', padding: '4px' }}>
+      <div className="rottay-transfer__items" style={itemsContainerStyle}>
         {filteredItems.length > 0 ? (
           filteredItems.map((item) => (
             <label
               key={item.key}
+              className="rottay-transfer__item"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 8px',
+                ...getItemStyle(),
                 cursor: item.disabled || disabled ? 'not-allowed' : 'pointer',
                 opacity: item.disabled ? 0.5 : 1,
-                borderRadius: '4px',
               }}
               onMouseEnter={(e) => {
                 if (!item.disabled && !disabled) {
-                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.backgroundColor = 'var(--ds-transfer-item-bg-hover)';
                 }
               }}
               onMouseLeave={(e) => {
@@ -159,7 +206,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
             </label>
           ))
         ) : (
-          <div style={{ padding: '16px', textAlign: 'center', color: '#9ca3af' }}>
+          <div className="rottay-transfer__empty" style={emptyStyle}>
             {locale?.notFoundContent}
           </div>
         )}
@@ -187,7 +234,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       locale = TRANSFER_DEFAULTS.locale,
       showSelectAll = TRANSFER_DEFAULTS.showSelectAll,
       oneWay,
-      className,
+      className = '',
       style,
     } = props;
 
@@ -249,14 +296,32 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       onSearch?.('right', value);
     };
 
+    // Build class names
+    const containerClasses = [
+      'rottay-transfer',
+      'rottay-transfer--apollo',
+      disabled && 'rottay-transfer--disabled',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const containerStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--ds-transfer-gap)',
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
+    };
+
     const buttonStyle: React.CSSProperties = {
-      padding: '8px 12px',
+      padding: 'var(--ds-transfer-button-padding)',
       border: 'none',
-      borderRadius: '6px',
-      backgroundColor: '#3b82f6',
-      color: '#fff',
+      borderRadius: 'var(--ds-transfer-button-radius)',
+      backgroundColor: 'var(--ds-transfer-button-bg)',
+      color: 'var(--ds-transfer-button-color)',
       cursor: 'pointer',
-      fontWeight: 500,
+      fontWeight: 'var(--ds-font-weight-medium)' as React.CSSProperties['fontWeight'],
+      fontSize: 'var(--ds-font-size-sm)',
+      transition: 'var(--ds-transition-fast)',
     };
 
     const disabledButtonStyle: React.CSSProperties = {
@@ -265,16 +330,17 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       cursor: 'not-allowed',
     };
 
+    const operationsContainerStyle: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '8px',
+    };
+
     return (
       <div
         ref={ref}
-        className={className}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          ...style,
-        }}
+        className={containerClasses}
+        style={containerStyle}
       >
         <TransferListComponent
           title={titles![0]}
@@ -292,9 +358,10 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           listStyle={listStyle}
         />
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div className="rottay-transfer__operations" style={operationsContainerStyle}>
           <button
             type="button"
+            className="rottay-transfer__button"
             style={disabled || sourceSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
@@ -304,6 +371,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           {!oneWay && (
             <button
               type="button"
+              className="rottay-transfer__button"
               style={disabled || targetSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}

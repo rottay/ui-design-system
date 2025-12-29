@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Slider } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Slider> = {
   title: 'Primitives/Inputs/Slider',
@@ -23,7 +24,18 @@ const meta: Meta<typeof Slider> = {
   parameters: {
     docs: {
       description: {
-        component: 'A slider component for selecting values from a range with multi-engine support.',
+        component: `
+A slider component for selecting values from a range with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Tooltip | Built-in | Native | Custom |
+| Range Mode | Full | Partial | Full |
+| Vertical | Yes | Limited | Yes |
+`,
       },
     },
   },
@@ -47,28 +59,21 @@ const meta: Meta<typeof Slider> = {
 export default meta;
 type Story = StoryObj<typeof Slider>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    defaultValue: 30,
-  },
+  args: { defaultValue: 30 },
 };
 
 export const Range: Story = {
-  args: {
-    range: true,
-    defaultValue: [20, 70],
-  },
+  args: { range: true, defaultValue: [20, 70] },
 };
 
 export const WithMarks: Story = {
   args: {
-    marks: {
-      0: '0%',
-      25: '25%',
-      50: '50%',
-      75: '75%',
-      100: '100%',
-    },
+    marks: { 0: '0%', 25: '25%', 50: '50%', 75: '75%', 100: '100%' },
     defaultValue: 50,
   },
 };
@@ -154,19 +159,55 @@ export const ControlledValue: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Slider component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Slider rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 16px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <Slider engine={engine} defaultValue={30} />
-            <Slider engine={engine} range defaultValue={[20, 70]} />
-            <Slider engine={engine} disabled defaultValue={40} />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Slider}
+      props={{ defaultValue: 50, style: { width: '100%' } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Range mode comparison across engines.
+ */
+export const RangeComparison: Story = {
+  name: '📊 Range Mode Comparison',
+  render: () => (
+    <EngineComparison
+      component={Slider}
+      props={{ range: true, defaultValue: [20, 70], style: { width: '100%' } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Disabled state comparison across engines.
+ */
+export const DisabledComparison: Story = {
+  name: '🚫 Disabled Comparison',
+  render: () => (
+    <EngineComparison
+      component={Slider}
+      props={{ disabled: true, defaultValue: 40, style: { width: '100%' } }}
+      showDescriptions
+    />
   ),
 };

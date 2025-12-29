@@ -8,7 +8,7 @@ import { render, screen } from '@testing-library/react';
 import { List } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: (name: string) => {
     if (name === 'List') {
       const MockList = ({

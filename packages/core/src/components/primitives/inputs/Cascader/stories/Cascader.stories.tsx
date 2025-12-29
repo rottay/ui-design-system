@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Cascader } from '../';
 import type { CascaderOption, CascaderValue } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Cascader> = {
   title: 'Primitives/Inputs/Cascader',
@@ -22,7 +23,18 @@ const meta: Meta<typeof Cascader> = {
   parameters: {
     docs: {
       description: {
-        component: 'Cascader component for hierarchical multi-level selection.',
+        component: `
+Cascader component for hierarchical multi-level selection.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Multi-level | Full | Limited | Full |
+| Search | Built-in | Custom | Custom |
+| Multiple | Full | Limited | Full |
+`,
       },
     },
   },
@@ -42,22 +54,10 @@ const meta: Meta<typeof Cascader> = {
       options: ['click', 'hover'],
       description: 'Expand trigger method',
     },
-    disabled: {
-      control: 'boolean',
-      description: 'Whether the input is disabled',
-    },
-    multiple: {
-      control: 'boolean',
-      description: 'Support multiple selection',
-    },
-    showSearch: {
-      control: 'boolean',
-      description: 'Show search input',
-    },
-    allowClear: {
-      control: 'boolean',
-      description: 'Allow clearing the selection',
-    },
+    disabled: { control: 'boolean', description: 'Whether the input is disabled' },
+    multiple: { control: 'boolean', description: 'Support multiple selection' },
+    showSearch: { control: 'boolean', description: 'Show search input' },
+    allowClear: { control: 'boolean', description: 'Allow clearing the selection' },
   },
   tags: ['autodocs'],
 };
@@ -81,9 +81,7 @@ const defaultOptions: CascaderOption[] = [
       {
         value: 'ningbo',
         label: 'Ningbo',
-        children: [
-          { value: 'jiangbei', label: 'Jiangbei' },
-        ],
+        children: [{ value: 'jiangbei', label: 'Jiangbei' }],
       },
     ],
   },
@@ -94,27 +92,23 @@ const defaultOptions: CascaderOption[] = [
       {
         value: 'nanjing',
         label: 'Nanjing',
-        children: [
-          { value: 'zhonghuamen', label: 'Zhonghuamen' },
-        ],
+        children: [{ value: 'zhonghuamen', label: 'Zhonghuamen' }],
       },
       {
         value: 'suzhou',
         label: 'Suzhou',
-        children: [
-          { value: 'gusu', label: 'Gusu' },
-        ],
+        children: [{ value: 'gusu', label: 'Gusu' }],
       },
     ],
   },
 ];
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    options: defaultOptions,
-    placeholder: 'Please select location',
-    style: { width: 300 },
-  },
+  args: { options: defaultOptions, placeholder: 'Please select location', style: { width: 300 } },
 };
 
 export const Controlled: Story = {
@@ -130,35 +124,21 @@ export const Controlled: Story = {
           placeholder="Select location"
           style={{ width: 300 }}
         />
-        <div style={{ marginTop: 16 }}>
-          Selected: {value.length ? value.join(' / ') : '(none)'}
-        </div>
+        <div style={{ marginTop: 16 }}>Selected: {value.length ? value.join(' / ') : '(none)'}</div>
       </div>
     );
   },
 };
 
 export const DefaultValue: Story = {
-  args: {
-    options: defaultOptions,
-    defaultValue: ['zhejiang', 'hangzhou', 'xihu'],
-    style: { width: 300 },
-  },
+  args: { options: defaultOptions, defaultValue: ['zhejiang', 'hangzhou', 'xihu'], style: { width: 300 } },
 };
 
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {(['small', 'middle', 'large'] as const).map((size) => (
-        <div key={size}>
-          <span style={{ display: 'inline-block', width: 80 }}>{size}:</span>
-          <Cascader
-            options={defaultOptions}
-            size={size}
-            placeholder={`Size ${size}`}
-            style={{ width: 250 }}
-          />
-        </div>
+        <Cascader key={size} options={defaultOptions} size={size} placeholder={`Size ${size}`} style={{ width: 250 }} />
       ))}
     </div>
   ),
@@ -167,93 +147,18 @@ export const Sizes: Story = {
 export const Status: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div>
-        <span style={{ display: 'inline-block', width: 80 }}>Error:</span>
-        <Cascader
-          options={defaultOptions}
-          status="error"
-          placeholder="Error state"
-          style={{ width: 250 }}
-        />
-      </div>
-      <div>
-        <span style={{ display: 'inline-block', width: 80 }}>Warning:</span>
-        <Cascader
-          options={defaultOptions}
-          status="warning"
-          placeholder="Warning state"
-          style={{ width: 250 }}
-        />
-      </div>
-    </div>
-  ),
-};
-
-export const ExpandTriggers: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div>
-        <span style={{ display: 'inline-block', width: 80 }}>Click:</span>
-        <Cascader
-          options={defaultOptions}
-          expandTrigger="click"
-          placeholder="Expand on click"
-          style={{ width: 250 }}
-        />
-      </div>
-      <div>
-        <span style={{ display: 'inline-block', width: 80 }}>Hover:</span>
-        <Cascader
-          options={defaultOptions}
-          expandTrigger="hover"
-          placeholder="Expand on hover"
-          style={{ width: 250 }}
-        />
-      </div>
+      <Cascader options={defaultOptions} status="error" placeholder="Error state" style={{ width: 250 }} />
+      <Cascader options={defaultOptions} status="warning" placeholder="Warning state" style={{ width: 250 }} />
     </div>
   ),
 };
 
 export const WithSearch: Story = {
-  args: {
-    options: defaultOptions,
-    showSearch: true,
-    placeholder: 'Search locations',
-    style: { width: 300 },
-  },
+  args: { options: defaultOptions, showSearch: true, placeholder: 'Search locations', style: { width: 300 } },
 };
 
 export const Disabled: Story = {
-  args: {
-    options: defaultOptions,
-    disabled: true,
-    defaultValue: ['zhejiang', 'hangzhou'],
-    style: { width: 300 },
-  },
-};
-
-export const DisabledOptions: Story = {
-  args: {
-    options: [
-      {
-        value: 'enabled',
-        label: 'Enabled Option',
-        children: [
-          { value: 'child1', label: 'Child 1' },
-        ],
-      },
-      {
-        value: 'disabled',
-        label: 'Disabled Option',
-        disabled: true,
-        children: [
-          { value: 'child2', label: 'Child 2' },
-        ],
-      },
-    ],
-    placeholder: 'Some options are disabled',
-    style: { width: 300 },
-  },
+  args: { options: defaultOptions, disabled: true, defaultValue: ['zhejiang', 'hangzhou'], style: { width: 300 } },
 };
 
 export const Multiple: Story = {
@@ -278,57 +183,57 @@ export const Multiple: Story = {
   },
 };
 
-export const CustomDisplayRender: Story = {
-  args: {
-    options: defaultOptions,
-    defaultValue: ['zhejiang', 'hangzhou', 'xihu'],
-    displayRender: (labels: string[]) => labels.join(' > '),
-    style: { width: 300 },
-  },
-};
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
 
-export const Loading: Story = {
-  args: {
-    options: [],
-    loading: true,
-    placeholder: 'Loading options...',
-    style: { width: 300 },
+/**
+ * Side-by-side comparison of the Cascader component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Cascader rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
   },
-};
-
-export const NoData: Story = {
-  args: {
-    options: [],
-    notFoundContent: 'No locations available',
-    placeholder: 'Select location',
-    style: { width: 300 },
-  },
-};
-
-export const WithClear: Story = {
-  args: {
-    options: defaultOptions,
-    defaultValue: ['jiangsu', 'nanjing', 'zhonghuamen'],
-    allowClear: true,
-    placeholder: 'Select location',
-    style: { width: 300 },
-  },
-};
-
-export const EngineComparison: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Cascader
-            engine={engine}
-            options={defaultOptions}
-            placeholder={`${engine} engine`}
-            style={{ width: 300 }}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Cascader}
+      props={{ options: defaultOptions, placeholder: 'Select...', style: { width: 200 } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Cascader}
+      baseProps={{ options: defaultOptions, placeholder: 'Select', style: { width: 150 } }}
+      sizeProp="size"
+      sizes={['small', 'middle', 'large']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Cascader}
+      baseProps={{ options: defaultOptions, placeholder: 'Select', style: { width: 150 } }}
+      variantProp="status"
+      variants={['error', 'warning']}
+    />
   ),
 };

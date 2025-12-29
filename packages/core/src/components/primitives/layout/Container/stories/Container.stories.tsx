@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Container } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 import React from 'react';
 
 const meta: Meta<typeof Container> = {
@@ -243,30 +244,44 @@ export const NestedContainers: Story = {
   ),
 };
 
-// Engine comparison
-export const EngineComparison: Story = {
-  name: 'Engine Comparison',
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Container across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Container rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize', fontWeight: 600 }}>
-            {engine} Engine
-          </h4>
-          <Container engine={engine} maxWidth="md" padding="md" style={{ background: '#dbeafe' }}>
-            <div style={{
-              background: '#3b82f6',
-              color: 'white',
-              padding: '16px',
-              borderRadius: '8px',
-              textAlign: 'center',
-            }}>
-              Container rendered with {engine} engine
-            </div>
-          </Container>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Container}
+      props={{
+        children: (
+          <div style={{
+            background: '#3b82f6',
+            color: 'white',
+            padding: '16px',
+            borderRadius: '8px',
+            textAlign: 'center',
+          }}>
+            Container Content
+          </div>
+        ),
+        maxWidth: 'md',
+        padding: 'md',
+        style: { background: '#dbeafe' },
+      }}
+      showDescriptions
+      direction="vertical"
+    />
   ),
 };
 

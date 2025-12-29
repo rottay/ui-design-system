@@ -96,7 +96,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { InputProps } from './types';
 import { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea } from './compound';
 

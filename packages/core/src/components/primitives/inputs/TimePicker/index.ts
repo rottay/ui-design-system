@@ -88,7 +88,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { TimePickerProps, TimeRangePickerProps } from './types';
 
 // Export types

@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Transfer } from '../';
 import type { TransferItem } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Transfer> = {
   title: 'Primitives/Inputs/Transfer',
@@ -22,7 +23,18 @@ const meta: Meta<typeof Transfer> = {
   parameters: {
     docs: {
       description: {
-        component: 'Transfer component for moving items between two lists.',
+        component: `
+Transfer component for moving items between two lists.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Search | Built-in | Custom | Custom |
+| Pagination | Built-in | Manual | Custom |
+| Custom Render | Full | Limited | Full |
+`,
       },
     },
   },
@@ -232,20 +244,28 @@ export const AsyncSearch: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Transfer component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Transfer rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Transfer
-            engine={engine}
-            dataSource={defaultDataSource.slice(0, 4)}
-            targetKeys={['2']}
-            style={{ width: 500 }}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Transfer}
+      props={{ dataSource: defaultDataSource.slice(0, 4), targetKeys: ['2'], style: { width: 450 } }}
+      showDescriptions
+      direction="vertical"
+    />
   ),
 };

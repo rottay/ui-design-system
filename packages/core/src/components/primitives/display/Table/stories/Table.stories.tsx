@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Table } from '../';
 import type { ColumnType, TableProps } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 // Sample data types
 interface User {
@@ -392,25 +393,62 @@ export const WithHiddenColumns: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Table across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Table rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>
-            {engine} Engine
-          </h4>
-          <Table<User>
-            engine={engine as any}
-            dataSource={data.slice(0, 3)}
-            columns={columns.slice(0, 4)}
-            size="small"
-            bordered
-            pagination={false}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Table}
+      props={{
+        dataSource: data.slice(0, 3),
+        columns: columns.slice(0, 4),
+        size: 'small',
+        bordered: true,
+        pagination: false,
+      }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Table sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Table}
+      baseProps={{
+        dataSource: data.slice(0, 2),
+        columns: columns.slice(0, 3),
+        pagination: false,
+        bordered: true,
+      }}
+      variantProp="size"
+      variants={['small', 'default', 'large']}
+    />
   ),
 };
 

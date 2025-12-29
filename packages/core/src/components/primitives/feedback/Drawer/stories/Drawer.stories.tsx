@@ -5,6 +5,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Drawer } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Drawer> = {
   title: 'Primitives/Feedback/Drawer',
@@ -180,26 +181,101 @@ export const FormDrawer: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Drawer trigger buttons across all 3 engines.
+ * Click each button to open a drawer rendered with that engine.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Drawer rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS). Click each button to open the drawer.',
+      },
+    },
+  },
   render: () => {
     const [engine, setEngine] = useState<'titan' | 'hermes' | 'apollo' | null>(null);
     return (
       <>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {(['titan', 'hermes', 'apollo'] as const).map((e) => (
-            <button key={e} onClick={() => setEngine(e)} style={{ textTransform: 'capitalize' }}>
-              {e}
+        <EngineComparisonHelper
+          component={({ engineName }: { engineName: 'titan' | 'hermes' | 'apollo' }) => (
+            <button onClick={() => setEngine(engineName)} style={{ padding: '8px 16px' }}>
+              Open {engineName} Drawer
             </button>
-          ))}
-        </div>
+          )}
+          props={{ engineName: 'titan' }}
+          showDescriptions
+        />
         <Drawer
           open={!!engine}
           engine={engine || 'titan'}
-          title={`${engine} Engine`}
+          title={`${engine?.charAt(0).toUpperCase()}${engine?.slice(1)} Engine Drawer`}
           onClose={() => setEngine(null)}
         >
           <p>This drawer uses the {engine} engine.</p>
+          <p>Click outside or press ESC to close.</p>
         </Drawer>
+      </>
+    );
+  },
+};
+
+/**
+ * Matrix showing all placements across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Since Drawer is an overlay component, use the CompareEngines story above to test different engines interactively.',
+      },
+    },
+  },
+  render: () => {
+    const [config, setConfig] = useState<{ engine: 'titan' | 'hermes' | 'apollo'; placement: 'left' | 'right' | 'top' | 'bottom' } | null>(null);
+    const engines = ['titan', 'hermes', 'apollo'] as const;
+    const placements = ['left', 'right', 'top', 'bottom'] as const;
+
+    return (
+      <>
+        <div style={{ display: 'grid', gridTemplateColumns: '120px repeat(3, 1fr)', gap: 16 }}>
+          <div style={{ fontWeight: 600 }}>Placement</div>
+          {engines.map((e) => (
+            <div key={e} style={{ textAlign: 'center', fontWeight: 600, textTransform: 'capitalize' }}>{e}</div>
+          ))}
+          {placements.map((placement) => (
+            <>
+              <div key={`label-${placement}`} style={{ textTransform: 'capitalize' }}>{placement}</div>
+              {engines.map((engine) => (
+                <button
+                  key={`${engine}-${placement}`}
+                  onClick={() => setConfig({ engine, placement })}
+                  style={{ padding: '8px 12px' }}
+                >
+                  Open
+                </button>
+              ))}
+            </>
+          ))}
+        </div>
+        {config && (
+          <Drawer
+            open={true}
+            engine={config.engine}
+            placement={config.placement}
+            title={`${config.engine} - ${config.placement}`}
+            onClose={() => setConfig(null)}
+          >
+            <p>Engine: {config.engine}</p>
+            <p>Placement: {config.placement}</p>
+          </Drawer>
+        )}
       </>
     );
   },

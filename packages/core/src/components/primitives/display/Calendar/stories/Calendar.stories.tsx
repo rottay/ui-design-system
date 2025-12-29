@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Calendar } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Calendar> = {
   title: 'Primitives/Display/Calendar',
@@ -118,16 +119,57 @@ export const WithCustomCellRender: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Calendar across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Calendar rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 16px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Calendar engine={engine} fullscreen={false} defaultValue={new Date(2024, 6, 15)} />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Calendar}
+      props={{
+        fullscreen: false,
+        defaultValue: new Date(2024, 6, 15),
+      }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all modes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Calendar modes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Calendar}
+      baseProps={{
+        fullscreen: false,
+        defaultValue: new Date(2024, 6, 15),
+      }}
+      variantProp="mode"
+      variants={['month', 'year']}
+    />
   ),
 };
 

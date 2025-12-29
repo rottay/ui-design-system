@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FloatButton } from '../';
 
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: (name: string) => {
     if (name === 'FloatButton.Group') {
       const MockGroup = ({ children, trigger, open, onOpenChange, icon, shape, type, className, style, ...props }: any) => (

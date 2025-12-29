@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { TreeSelect } from '../';
 import type { TreeSelectNode, TreeSelectValue } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof TreeSelect> = {
   title: 'Primitives/Inputs/TreeSelect',
@@ -22,7 +23,18 @@ const meta: Meta<typeof TreeSelect> = {
   parameters: {
     docs: {
       description: {
-        component: 'TreeSelect component for selecting from hierarchical tree data.',
+        component: `
+TreeSelect component for selecting from hierarchical tree data.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Tree Display | Built-in | Custom | Custom |
+| Checkable | Full | Limited | Full |
+| Search | Built-in | Custom | Custom |
+`,
       },
     },
   },
@@ -310,20 +322,57 @@ export const NoData: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the TreeSelect component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same TreeSelect rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <TreeSelect
-            engine={engine}
-            treeData={defaultTreeData}
-            placeholder={`${engine} engine`}
-            style={{ width: 300 }}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={TreeSelect}
+      props={{ treeData: defaultTreeData, placeholder: 'Select node', style: { width: 200 } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={TreeSelect}
+      baseProps={{ treeData: defaultTreeData, placeholder: 'Select', style: { width: 150 } }}
+      sizeProp="size"
+      sizes={['small', 'middle', 'large']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={TreeSelect}
+      baseProps={{ treeData: defaultTreeData, placeholder: 'Select', style: { width: 150 } }}
+      variantProp="status"
+      variants={['error', 'warning']}
+    />
   ),
 };

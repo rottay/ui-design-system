@@ -8,7 +8,7 @@ import React from 'react';
 import { Progress } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockProgress = React.forwardRef<HTMLDivElement, any>(({
       percent = 0,

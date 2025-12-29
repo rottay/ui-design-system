@@ -11,7 +11,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Empty } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * The Empty component displays a placeholder when there is no data
@@ -173,44 +174,55 @@ export const CustomImage: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of all three rendering engines side by side.
+ * Side-by-side comparison of Empty across all 3 engines.
  */
-export const EngineComparison: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4
-            style={{
-              margin: '0 0 16px 0',
-              textTransform: 'capitalize',
-              fontWeight: 600,
-              color: '#333',
-            }}
-          >
-            {engine} Engine
-          </h4>
-          <div
-            style={{
-              border: '1px solid #e8e8e8',
-              borderRadius: '8px',
-              padding: '16px',
-            }}
-          >
-            <Empty engine={engine} description={`Empty state using ${engine} engine`} />
-          </div>
-        </div>
-      ))}
-    </div>
-  ),
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
   parameters: {
     docs: {
       description: {
-        story: 'Side-by-side comparison of the Empty component rendered with different engines.',
+        story: 'Compare the same Empty rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
       },
     },
   },
+  render: () => (
+    <EngineComparisonHelper
+      component={Empty}
+      props={{
+        description: 'No Data Available',
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all image variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Empty image variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Empty}
+      baseProps={{
+        description: 'No Data',
+      }}
+      variantProp="image"
+      variants={['default', 'simple']}
+    />
+  ),
 };
 
 /**

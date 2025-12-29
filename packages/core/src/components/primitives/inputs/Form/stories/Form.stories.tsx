@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Form } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Form> = {
   title: 'Primitives/Inputs/Form',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Form> = {
   parameters: {
     docs: {
       description: {
-        component: 'A form component with validation and layout support with multi-engine support.',
+        component: `
+A form component with validation and layout support with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Validation | Built-in | Manual | Custom |
+| Layouts | All | Limited | All |
+| Form.Item | Full | Partial | Full |
+`,
       },
     },
   },
@@ -206,22 +218,71 @@ export const FormSizes: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Form across all 3 engines.
+ * Note: Form requires Form.Item children, so we use a custom render.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Form rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Form engine={engine} layout="vertical" style={{ maxWidth: 300 }}>
+    <EngineComparisonHelper
+      component={Form}
+      props={{
+        layout: 'vertical',
+        style: { width: '100%' },
+        children: (
+          <>
             <Form.Item name="name" label="Name">
               <input type="text" placeholder="Enter name" style={{ width: '100%', padding: 8 }} />
             </Form.Item>
             <Form.Item>
               <button type="submit" style={{ padding: '8px 16px' }}>Submit</button>
             </Form.Item>
-          </Form>
-        </div>
-      ))}
-    </div>
+          </>
+        ),
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all layouts across all engines.
+ */
+export const LayoutMatrix: Story = {
+  name: '📊 Layout × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all form layouts across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Form}
+      baseProps={{
+        children: (
+          <>
+            <Form.Item name="field" label="Field">
+              <input type="text" style={{ padding: 8 }} />
+            </Form.Item>
+          </>
+        ),
+      }}
+      variantProp="layout"
+      variants={['horizontal', 'vertical', 'inline']}
+    />
   ),
 };

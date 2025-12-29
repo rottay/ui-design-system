@@ -3,40 +3,13 @@
 /**
  * @fileoverview Upload Apollo Engine - Rottay Design System
  * @description Pure vanilla HTML/CSS implementation of the Upload component
- * with zero external dependencies for maximum portability.
+ * using CSS variables for multi-tenant theming.
  *
- * @remarks
- * The Apollo engine provides a dependency-free upload using:
- * - **Native file input**: Standard HTML file input
- * - **Custom dragger**: Pure CSS drag-and-drop zone
- * - **Inline styles**: No CSS framework dependencies
- * - **Full control**: Complete customization flexibility
- *
- * Ideal for environments where bundle size and dependency count are critical.
- *
- * @example Basic upload
- * ```tsx
- * <Upload engine="apollo">
- *   <button>Select Files</button>
- * </Upload>
- * ```
- *
- * @example Dragger with validation
- * ```tsx
- * <Upload.Dragger
- *   engine="apollo"
- *   beforeUpload={(file) => file.size < 5 * 1024 * 1024}
- * >
- *   <p>Drop files here (max 5MB)</p>
- * </Upload.Dragger>
- * ```
- *
- * @see {@link Upload} - Main component
- * @see {@link UploadProps} - Component props
- * @module Upload/Engines/Apollo
+ * @module ApolloUpload
  * @category Inputs
  * @package @rottay/design-system
  */
+
 import React, { useState, useRef } from 'react';
 import type { UploadProps, DraggerProps, UploadFile } from '../../types';
 import { UPLOAD_DEFAULTS } from '../../types';
@@ -55,7 +28,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       onChange,
       onRemove,
       children,
-      className,
+      className = '',
       style,
     } = props;
 
@@ -102,17 +75,55 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       onChange?.({ file: { ...file, status: 'removed' }, fileList: newFileList });
     };
 
+    // Build class names
+    const containerClasses = [
+      'rottay-upload',
+      'rottay-upload--apollo',
+      disabled && 'rottay-upload--disabled',
+      className,
+    ].filter(Boolean).join(' ');
+
     const buttonStyle: React.CSSProperties = {
-      padding: '8px 16px',
-      border: '1px solid #d9d9d9',
-      borderRadius: '4px',
-      background: '#fff',
+      padding: 'var(--ds-upload-button-padding)',
+      border: `1px solid var(--ds-upload-button-border)`,
+      borderRadius: 'var(--ds-upload-button-radius)',
+      background: 'var(--ds-upload-button-bg)',
+      color: 'var(--ds-upload-button-color)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
+      fontFamily: 'var(--ds-font-family-base)',
+      transition: 'var(--ds-transition-fast)',
+    };
+
+    const fileItemStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '8px',
+      background: 'var(--ds-upload-file-bg)',
+      borderRadius: 'var(--ds-upload-file-radius)',
+      marginBottom: '4px',
+    };
+
+    const fileNameStyle: React.CSSProperties = {
+      fontSize: 'var(--ds-font-size-sm)',
+      color: 'var(--ds-upload-file-color)',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    };
+
+    const removeButtonStyle: React.CSSProperties = {
+      border: 'none',
+      background: 'transparent',
+      color: 'var(--ds-upload-file-remove-color)',
+      cursor: 'pointer',
+      fontSize: '16px',
+      padding: '0 4px',
     };
 
     return (
-      <div ref={ref} className={className} style={style}>
+      <div ref={ref} className={containerClasses} style={style}>
         <input
           ref={inputRef}
           type="file"
@@ -123,15 +134,26 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           style={{ display: 'none' }}
         />
         <div onClick={() => !disabled && inputRef.current?.click()}>
-          {children || <button type="button" style={buttonStyle} disabled={disabled}>Upload</button>}
+          {children || (
+            <button type="button" style={buttonStyle} disabled={disabled}>
+              Upload
+            </button>
+          )}
         </div>
 
         {showUploadList && actualFileList.length > 0 && (
-          <div style={{ marginTop: 8 }}>
+          <div className="rottay-upload__file-list" style={{ marginTop: 8 }}>
             {actualFileList.map(file => (
-              <div key={file.uid} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px', background: '#fafafa', borderRadius: 4, marginBottom: 4 }}>
-                <span style={{ fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
-                <button type="button" onClick={() => handleRemove(file)} style={{ border: 'none', background: 'transparent', color: '#ff4d4f', cursor: 'pointer', fontSize: 16 }}>×</button>
+              <div key={file.uid} style={fileItemStyle}>
+                <span style={fileNameStyle}>{file.name}</span>
+                <button
+                  type="button"
+                  onClick={() => handleRemove(file)}
+                  style={removeButtonStyle}
+                  aria-label={`Remove ${file.name}`}
+                >
+                  ×
+                </button>
               </div>
             ))}
           </div>
@@ -158,7 +180,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       onRemove,
       onDrop,
       children,
-      className,
+      className = '',
       style,
       height = 200,
     } = props;
@@ -210,22 +232,70 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       onChange?.({ file: { ...file, status: 'removed' }, fileList: newFileList });
     };
 
+    // Build class names
+    const containerClasses = [
+      'rottay-upload-dragger',
+      'rottay-upload-dragger--apollo',
+      disabled && 'rottay-upload-dragger--disabled',
+      isDragOver && 'rottay-upload-dragger--drag-over',
+      className,
+    ].filter(Boolean).join(' ');
+
     const dropzoneStyle: React.CSSProperties = {
       height,
-      border: `2px dashed ${isDragOver ? '#1890ff' : '#d9d9d9'}`,
-      borderRadius: 8,
+      border: `2px dashed ${isDragOver ? 'var(--ds-upload-dragger-border-active)' : 'var(--ds-upload-dragger-border)'}`,
+      borderRadius: 'var(--ds-upload-dragger-radius)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: disabled ? 'not-allowed' : 'pointer',
-      background: isDragOver ? 'rgba(24, 144, 255, 0.05)' : '#fafafa',
-      transition: 'all 0.2s',
+      background: isDragOver ? 'var(--ds-upload-dragger-bg-hover)' : 'var(--ds-upload-dragger-bg)',
+      transition: 'var(--ds-transition-fast)',
       opacity: disabled ? 0.5 : 1,
+      fontFamily: 'var(--ds-font-family-base)',
+    };
+
+    const iconStyle: React.CSSProperties = {
+      color: 'var(--ds-upload-dragger-icon-color)',
+      marginBottom: '8px',
+    };
+
+    const textStyle: React.CSSProperties = {
+      margin: 0,
+      color: 'var(--ds-upload-dragger-text-color)',
+      fontSize: 'var(--ds-font-size-sm)',
+    };
+
+    const fileItemStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '8px',
+      background: 'var(--ds-upload-file-bg)',
+      borderRadius: 'var(--ds-upload-file-radius)',
+      marginBottom: '4px',
+    };
+
+    const fileNameStyle: React.CSSProperties = {
+      fontSize: 'var(--ds-font-size-sm)',
+      color: 'var(--ds-upload-file-color)',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    };
+
+    const removeButtonStyle: React.CSSProperties = {
+      border: 'none',
+      background: 'transparent',
+      color: 'var(--ds-upload-file-remove-color)',
+      cursor: 'pointer',
+      fontSize: '16px',
+      padding: '0 4px',
     };
 
     return (
-      <div ref={ref} className={className} style={style}>
+      <div ref={ref} className={containerClasses} style={style}>
         <div
           onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
           onDragLeave={() => setIsDragOver(false)}
@@ -244,20 +314,39 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           />
           {children || (
             <>
-              <svg width={48} height={48} fill="none" stroke="#999" strokeWidth={1.5} viewBox="0 0 24 24" style={{ marginBottom: 8 }}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              <svg
+                width={48}
+                height={48}
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+                style={iconStyle}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
               </svg>
-              <p style={{ margin: 0, color: '#666' }}>Click or drag files to upload</p>
+              <p style={textStyle}>Click or drag files to upload</p>
             </>
           )}
         </div>
 
         {showUploadList && actualFileList.length > 0 && (
-          <div style={{ marginTop: 8 }}>
+          <div className="rottay-upload-dragger__file-list" style={{ marginTop: 8 }}>
             {actualFileList.map(file => (
-              <div key={file.uid} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px', background: '#fafafa', borderRadius: 4, marginBottom: 4 }}>
-                <span style={{ fontSize: 14, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
-                <button type="button" onClick={() => handleRemove(file)} style={{ border: 'none', background: 'transparent', color: '#ff4d4f', cursor: 'pointer', fontSize: 16 }}>×</button>
+              <div key={file.uid} style={fileItemStyle}>
+                <span style={fileNameStyle}>{file.name}</span>
+                <button
+                  type="button"
+                  onClick={() => handleRemove(file)}
+                  style={removeButtonStyle}
+                  aria-label={`Remove ${file.name}`}
+                >
+                  ×
+                </button>
               </div>
             ))}
           </div>

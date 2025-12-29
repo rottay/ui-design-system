@@ -5,8 +5,9 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Modal } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
 import React, { useState } from 'react';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Modal> = {
   title: 'Primitives/Overlay/Modal',
@@ -546,9 +547,22 @@ export const NestedModals: Story = {
   },
 };
 
-// Engine comparison
-export const EngineComparison: Story = {
-  name: 'Engine Comparison',
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Modal across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Modal rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', gap: '12px' }}>
       {(['titan', 'hermes', 'apollo'] as const).map((engine) => (

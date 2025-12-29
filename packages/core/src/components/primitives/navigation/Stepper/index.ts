@@ -106,7 +106,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { StepperProps } from './types';
 import { StepperStep, StepperContent } from './compound';
 

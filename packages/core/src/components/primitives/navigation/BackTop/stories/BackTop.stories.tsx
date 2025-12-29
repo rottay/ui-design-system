@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useRef } from 'react';
 import { BackTop } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof BackTop> = {
   title: 'Primitives/Navigation/BackTop',
@@ -32,7 +33,7 @@ The BackTop component provides a button that scrolls to the top of the page when
 - **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
 
 ## Usage
-\\`\\`\\`tsx
+\`\`\`tsx
 import { BackTop } from '@rottay/design-system';
 
 <BackTop />
@@ -44,7 +45,7 @@ import { BackTop } from '@rottay/design-system';
 <BackTop>
   <div>Back to Top</div>
 </BackTop>
-\\`\\`\\`
+\`\`\`
         `,
       },
     },
@@ -185,22 +186,30 @@ export const WithCustomTarget: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison
+ * Side-by-side comparison of BackTop across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same BackTop rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', gap: 16 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine} style={{ flex: 1 }}>
-          <h4 style={{ margin: '0 0 8px', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <ScrollContainer>
-            <LongContent />
-            <BackTop engine={engine} visibilityHeight={50} />
-          </ScrollContainer>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={BackTop}
+      props={{
+        visibilityHeight: 50,
+      }}
+      showDescriptions
+    />
   ),
 };
 

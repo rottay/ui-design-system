@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs } from '../';
 import type { TabItem } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Primitives/Navigation/Tabs',
@@ -192,19 +193,31 @@ export const CardWithContent: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Tabs across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Tabs rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Tabs
-            engine={engine}
-            items={defaultItems}
-            defaultActiveKey="1"
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Tabs}
+      props={{
+        items: defaultItems,
+        defaultActiveKey: '1',
+      }}
+      showDescriptions
+      direction="vertical"
+    />
   ),
 };

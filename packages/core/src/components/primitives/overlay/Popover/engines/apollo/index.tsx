@@ -239,12 +239,12 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           style={{
             position: 'fixed',
             zIndex,
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            padding: '12px 16px',
-            minWidth: '150px',
-            maxWidth: '350px',
+            backgroundColor: 'var(--ds-popover-bg, #fff)',
+            borderRadius: 'var(--ds-popover-radius, 8px)',
+            boxShadow: 'var(--ds-popover-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
+            padding: 'var(--ds-popover-padding, 12px 16px)',
+            minWidth: 'var(--ds-popover-min-width, 150px)',
+            maxWidth: 'var(--ds-popover-max-width, 350px)',
             ...position,
             ...overlayStyle,
           }}
@@ -257,7 +257,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
                 fontWeight: 600,
                 marginBottom: '8px',
                 paddingBottom: '8px',
-                borderBottom: '1px solid #e5e7eb',
+                borderBottom: '1px solid var(--ds-popover-title-border, var(--ds-color-neutral-200, #e5e7eb))',
+                color: 'var(--ds-popover-title-color, inherit)',
               }}
             >
               {title}
@@ -268,11 +269,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
             <div
               style={{
                 position: 'absolute',
-                width: '10px',
-                height: '10px',
-                backgroundColor: '#fff',
+                width: 'var(--ds-popover-arrow-size, 10px)',
+                height: 'var(--ds-popover-arrow-size, 10px)',
+                backgroundColor: 'var(--ds-popover-bg, #fff)',
                 transform: 'rotate(45deg)',
-                boxShadow: '-2px -2px 4px rgba(0, 0, 0, 0.05)',
+                boxShadow: 'var(--ds-popover-arrow-shadow, -2px -2px 4px rgba(0, 0, 0, 0.05))',
               }}
             />
           )}

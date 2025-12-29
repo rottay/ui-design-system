@@ -45,10 +45,10 @@ export type {
   TimelineMode,
   TimelineItemColor,
   TimelineItemPosition,
-} from '../../../../../types/primitives/display/Timeline';
+} from '../../../../../core/types/primitives/display/Timeline';
 
 export {
   TIMELINE_DEFAULTS,
   TIMELINE_COLOR_MAP,
   TIMELINE_SIZE_MAP,
-} from '../../../../../types/primitives/display/Timeline';
+} from '../../../../../core/types/primitives/display/Timeline';

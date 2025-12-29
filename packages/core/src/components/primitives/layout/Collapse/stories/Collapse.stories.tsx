@@ -6,7 +6,8 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Collapse } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Collapse> = {
   title: 'Primitives/Layout/Collapse',
@@ -280,22 +281,40 @@ export const NestedCollapse: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Collapse across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Collapse rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Collapse engine={engine} defaultActiveKey={['1']}>
-            <Collapse.Panel engine={engine} header="Panel 1" panelKey="1">
-              <p>Content for {engine} engine</p>
+    <EngineComparisonHelper
+      component={Collapse}
+      props={{
+        children: (
+          <>
+            <Collapse.Panel header="Panel 1" panelKey="1">
+              <p>Content for the first panel</p>
             </Collapse.Panel>
-            <Collapse.Panel engine={engine} header="Panel 2" panelKey="2">
-              <p>More content</p>
+            <Collapse.Panel header="Panel 2" panelKey="2">
+              <p>Content for the second panel</p>
             </Collapse.Panel>
-          </Collapse>
-        </div>
-      ))}
-    </div>
+          </>
+        ),
+        defaultActiveKey: ['1'],
+      }}
+      showDescriptions
+      direction="vertical"
+    />
   ),
 };

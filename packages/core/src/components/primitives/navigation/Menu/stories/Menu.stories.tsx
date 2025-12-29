@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Menu } from '../';
 import type { MenuItem } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Menu> = {
   title: 'Primitives/Navigation/Menu',
@@ -213,19 +214,30 @@ export const InlineCollapsed: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Menu across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Menu rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Menu
-            engine={engine}
-            items={defaultItems}
-            defaultSelectedKeys={['1']}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Menu}
+      props={{
+        items: defaultItems,
+        defaultSelectedKeys: ['1'],
+      }}
+      showDescriptions
+    />
   ),
 };

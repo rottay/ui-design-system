@@ -5,8 +5,8 @@
 
 import React, { ComponentType, useMemo } from 'react';
 import type { EngineName, TenantConfig, DesignTokens } from '../../../types';
-import { useTenant } from '../../../system/hooks/tenant';
-import { useTokens } from '../../../system/hooks/tokens';
+import { useTenant } from '../../../core/hooks/tenant';
+import { useTokens } from '../../../core/hooks/tokens';
 
 // Re-export primitives for use in presets
 import * as Primitives from '../../primitives';

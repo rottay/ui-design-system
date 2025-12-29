@@ -56,7 +56,38 @@
 import { forwardRef, useState, useEffect, useCallback } from 'react';
 import type { StatisticProps, CountdownProps } from '../../types';
 import { STATISTIC_DEFAULTS } from '../../types';
-import { formatNumber } from '../../base';
+
+/**
+ * Formats a number with precision and custom separators.
+ *
+ * @param value - The value to format (string or number)
+ * @param precision - Number of decimal places
+ * @param groupSeparator - Character used to separate thousands
+ * @param decimalSeparator - Character used as decimal separator
+ * @returns Formatted string with thousands separators
+ */
+function formatNumber(
+  value: string | number,
+  precision: number = STATISTIC_DEFAULTS.precision,
+  groupSeparator: string = STATISTIC_DEFAULTS.groupSeparator,
+  decimalSeparator: string = STATISTIC_DEFAULTS.decimalSeparator
+): string {
+  const num = typeof value === 'string' ? parseFloat(value) : value;
+
+  if (isNaN(num)) {
+    return String(value);
+  }
+
+  const fixed = num.toFixed(precision);
+  const [integerPart, decimalPart] = fixed.split('.');
+
+  // Add thousands separators to integer part
+  const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
+
+  return decimalPart !== undefined
+    ? `${formattedInteger}${decimalSeparator}${decimalPart}`
+    : formattedInteger;
+}
 
 /**
  * Maps valueType to Tailwind CSS text color classes.

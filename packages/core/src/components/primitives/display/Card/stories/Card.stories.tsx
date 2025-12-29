@@ -11,7 +11,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Card } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Card component meta configuration for Storybook.
@@ -311,44 +312,50 @@ export const RadiusSizes: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of all three rendering engines.
+ * Side-by-side comparison of Card across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Card rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>
-            {engine} Engine
-          </h4>
-          <Card engine={engine} variant="elevated" hoverable>
-            <Card.Header
-              title={`${engine.charAt(0).toUpperCase() + engine.slice(1)} Card`}
-              subtitle="Engine-specific implementation"
-            />
-            <Card.Body>
-              <p style={{ margin: 0 }}>
-                This card is rendered using the {engine} engine.
-              </p>
-            </Card.Body>
-            <Card.Footer divider>
-              <button
-                style={{
-                  padding: '6px 12px',
-                  borderRadius: '4px',
-                  border: '1px solid #d9d9d9',
-                  background: '#fff',
-                  cursor: 'pointer',
-                }}
-              >
-                Action
-              </button>
-            </Card.Footer>
-          </Card>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Card}
+      props={{ children: <p style={{ margin: 0 }}>Card content</p>, variant: 'elevated' }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all card variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Card}
+      baseProps={{ children: <p style={{ margin: 0 }}>Content</p>, padding: 'md' }}
+      variantProp="variant"
+      variants={['elevated', 'outlined', 'filled', 'ghost']}
+    />
   ),
 };
 

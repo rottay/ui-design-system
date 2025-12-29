@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Textarea } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Textarea> = {
   title: 'Primitives/Inputs/Textarea',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Textarea> = {
   parameters: {
     docs: {
       description: {
-        component: 'A multi-line text input component with multi-engine support.',
+        component: `
+A multi-line text input component with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Auto Resize | Built-in | Manual | Custom |
+| Character Count | Built-in | Custom | Custom |
+| Clear Button | Yes | No | Yes |
+`,
       },
     },
   },
@@ -58,10 +70,12 @@ const meta: Meta<typeof Textarea> = {
 export default meta;
 type Story = StoryObj<typeof Textarea>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    placeholder: 'Enter your message here...',
-  },
+  args: { placeholder: 'Enter your message here...' },
 };
 
 export const Sizes: Story = {
@@ -95,17 +109,11 @@ export const Statuses: Story = {
 };
 
 export const Disabled: Story = {
-  args: {
-    placeholder: 'This textarea is disabled',
-    disabled: true,
-  },
+  args: { placeholder: 'This textarea is disabled', disabled: true },
 };
 
 export const ReadOnly: Story = {
-  args: {
-    value: 'This content is read-only and cannot be modified.',
-    readOnly: true,
-  },
+  args: { value: 'This content is read-only and cannot be modified.', readOnly: true },
 };
 
 export const WithCounter: Story = {
@@ -135,19 +143,57 @@ export const WithAllowClear: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Textarea component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Textarea rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <Textarea engine={engine} placeholder={`${engine} - default`} />
-            <Textarea engine={engine} placeholder={`${engine} - disabled`} disabled />
-            <Textarea engine={engine} placeholder={`${engine} - with counter`} showCount maxLength={50} />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Textarea}
+      props={{ placeholder: 'Enter text...', rows: 3 }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Textarea}
+      baseProps={{ placeholder: 'Textarea', rows: 2 }}
+      sizeProp="size"
+      sizes={['sm', 'md', 'lg']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Textarea}
+      baseProps={{ placeholder: 'Textarea', rows: 2 }}
+      variantProp="status"
+      variants={['default', 'error', 'warning', 'success']}
+    />
   ),
 };

@@ -108,7 +108,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { GridProps } from './types';
 import { GridItem } from './compound';
 
@@ -170,23 +170,6 @@ export { GridItem };
 /**
  * Re-export base components for custom extensions.
  */
-
-// ============================================================================
-// UTILITY FUNCTION EXPORTS
-// ============================================================================
-
-/**
- * Re-export utility functions for custom grid implementations.
- * These can be used to build grid styles programmatically.
- */
-export {
-  buildGridStyles,
-  buildGridItemStyles,
-  filterGridProps,
-  filterGridItemProps,
-  resolveGap,
-  resolveColumns,
-  getResponsiveColumnsStyles,
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

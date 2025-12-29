@@ -9,7 +9,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Watermark } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Watermark component metadata for Storybook.
@@ -259,23 +260,35 @@ export const HighZIndex: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison demonstration.
+ * Side-by-side comparison of Watermark across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Watermark rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Watermark engine={engine} content={`${engine} watermark`}>
-            <div style={{ height: '150px', backgroundColor: '#f5f5f5', padding: '16px', borderRadius: '8px' }}>
-              <p>Content with {engine} engine watermark</p>
-            </div>
-          </Watermark>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Watermark}
+      props={{
+        content: 'Watermark',
+        children: (
+          <div style={{ height: '150px', backgroundColor: '#f5f5f5', padding: '16px', borderRadius: '8px' }}>
+            <p>Content with watermark overlay</p>
+          </div>
+        ),
+      }}
+      showDescriptions
+    />
   ),
 };
 

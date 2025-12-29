@@ -1,12 +1,26 @@
 'use client';
 
 /**
- * Cascader - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Cascader Apollo Engine - Rottay Design System
+ * @description Pure vanilla HTML/CSS implementation of the Cascader component
+ * using CSS variables for multi-tenant theming.
+ *
+ * @module ApolloCascader
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { CascaderProps, CascaderOption, CascaderValue } from '../../types';
 import { CASCADER_DEFAULTS } from '../../types';
+
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { height: string }> = {
+  small: { height: 'var(--ds-cascader-sm-height)' },
+  default: { height: 'var(--ds-cascader-md-height)' },
+  large: { height: 'var(--ds-cascader-lg-height)' },
+};
 
 export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
   (props, ref) => {
@@ -25,7 +39,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       notFoundContent = 'No data',
       open: controlledOpen,
       onDropdownVisibleChange,
-      className,
+      className = '',
       style,
     } = props;
 
@@ -34,6 +48,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const [activeColumns, setActiveColumns] = useState<CascaderOption[][]>([options]);
     const [selectedPath, setSelectedPath] = useState<CascaderOption[]>([]);
     const [position, setPosition] = useState({ top: 0, left: 0 });
+    const [isFocused, setIsFocused] = useState(false);
 
     const isControlled = controlledValue !== undefined;
     const value = (isControlled ? controlledValue : internalValue) as CascaderValue;
@@ -47,6 +62,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         setInternalOpen(newOpen);
       }
       onDropdownVisibleChange?.(newOpen);
+      setIsFocused(newOpen);
     }, [controlledOpen, onDropdownVisibleChange]);
 
     // Update position
@@ -138,47 +154,119 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       return labels.join(' / ');
     };
 
-    const getInputHeight = () => {
-      switch (size) {
-        case 'small': return '32px';
-        case 'large': return '48px';
-        default: return '40px';
-      }
-    };
+    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
 
     const getBorderColor = () => {
-      if (status === 'error') return '#ef4444';
-      if (status === 'warning') return '#f59e0b';
-      return '#d1d5db';
+      if (status === 'error') return 'var(--ds-cascader-border-error)';
+      if (status === 'warning') return 'var(--ds-cascader-border-warning)';
+      if (isFocused) return 'var(--ds-cascader-border-focus)';
+      return 'var(--ds-cascader-border)';
+    };
+
+    // Build class names
+    const containerClasses = [
+      'rottay-cascader',
+      'rottay-cascader--apollo',
+      `rottay-cascader--${size}`,
+      status && `rottay-cascader--${status}`,
+      disabled && 'rottay-cascader--disabled',
+      isOpen && 'rottay-cascader--open',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const triggerStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      height: sizeConfig.height,
+      padding: '0 12px',
+      border: `1px solid ${getBorderColor()}`,
+      borderRadius: 'var(--ds-cascader-radius)',
+      backgroundColor: 'var(--ds-cascader-bg)',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      fontFamily: 'var(--ds-font-family-base)',
+      transition: 'var(--ds-transition-fast)',
+      ...style,
+    };
+
+    const valueStyle: React.CSSProperties = {
+      flex: 1,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      color: selectedPath.length > 0 ? 'inherit' : 'var(--ds-cascader-placeholder-color)',
+      fontSize: 'var(--ds-font-size-sm)',
+    };
+
+    const clearButtonStyle: React.CSSProperties = {
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: 'var(--ds-cascader-clear-color)',
+      padding: '0 4px',
+      fontSize: '14px',
+    };
+
+    const arrowStyle: React.CSSProperties = {
+      marginLeft: '8px',
+      transition: 'transform 0.2s',
+      transform: isOpen ? 'rotate(180deg)' : 'none',
+      fontSize: '10px',
+      color: 'var(--ds-cascader-arrow-color)',
+    };
+
+    const dropdownStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: position.top,
+      left: position.left,
+      display: 'flex',
+      backgroundColor: 'var(--ds-cascader-dropdown-bg)',
+      borderRadius: 'var(--ds-cascader-dropdown-radius)',
+      boxShadow: 'var(--ds-cascader-dropdown-shadow)',
+      zIndex: 1050,
+    };
+
+    const menuStyle = (colIndex: number, totalCols: number): React.CSSProperties => ({
+      listStyle: 'none',
+      margin: 0,
+      padding: '4px 0',
+      minWidth: 'var(--ds-cascader-menu-width)',
+      maxHeight: 'var(--ds-cascader-menu-height)',
+      overflowY: 'auto',
+      borderRight: colIndex < totalCols - 1 ? `1px solid var(--ds-cascader-menu-border)` : 'none',
+    });
+
+    const getItemStyle = (isSelected: boolean, isDisabled?: boolean): React.CSSProperties => ({
+      padding: 'var(--ds-cascader-item-padding)',
+      cursor: isDisabled ? 'not-allowed' : 'pointer',
+      backgroundColor: isSelected ? 'var(--ds-cascader-item-bg-selected)' : 'transparent',
+      opacity: isDisabled ? 0.5 : 1,
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      fontSize: 'var(--ds-font-size-sm)',
+      transition: 'background-color 0.15s',
+    });
+
+    const emptyStyle: React.CSSProperties = {
+      padding: 'var(--ds-cascader-item-padding)',
+      color: 'var(--ds-cascader-empty-color)',
+      textAlign: 'center',
+      fontSize: 'var(--ds-font-size-sm)',
     };
 
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div
           ref={dropdownRef}
-          style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
-            display: 'flex',
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            zIndex: 1050,
-          }}
+          className="rottay-cascader__dropdown"
+          style={dropdownStyle}
         >
           {activeColumns.map((column, colIndex) => (
             <ul
               key={colIndex}
-              style={{
-                listStyle: 'none',
-                margin: 0,
-                padding: '4px 0',
-                minWidth: '160px',
-                maxHeight: '240px',
-                overflowY: 'auto',
-                borderRight: colIndex < activeColumns.length - 1 ? '1px solid #e5e7eb' : 'none',
-              }}
+              className="rottay-cascader__menu"
+              style={menuStyle(colIndex, activeColumns.length)}
             >
               {column.length > 0 ? (
                 column.map((option) => {
@@ -186,19 +274,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                   return (
                     <li
                       key={String(option.value)}
+                      className="rottay-cascader__item"
                       onClick={() => handleOptionClick(option, colIndex)}
-                      style={{
-                        padding: '8px 12px',
-                        cursor: option.disabled ? 'not-allowed' : 'pointer',
-                        backgroundColor: isSelected ? '#f3f4f6' : 'transparent',
-                        opacity: option.disabled ? 0.5 : 1,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
+                      style={getItemStyle(isSelected, option.disabled)}
                       onMouseEnter={(e) => {
-                        if (!option.disabled) {
-                          e.currentTarget.style.backgroundColor = '#f3f4f6';
+                        if (!option.disabled && !isSelected) {
+                          e.currentTarget.style.backgroundColor = 'var(--ds-cascader-item-bg-hover)';
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -209,15 +290,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                     >
                       <span>{option.label}</span>
                       {option.children && option.children.length > 0 && (
-                        <span style={{ color: '#9ca3af' }}>›</span>
+                        <span style={{ color: 'var(--ds-cascader-arrow-color)' }}>›</span>
                       )}
                     </li>
                   );
                 })
               ) : (
-                <li style={{ padding: '8px 12px', color: '#9ca3af', textAlign: 'center' }}>
-                  {notFoundContent}
-                </li>
+                <li style={emptyStyle}>{notFoundContent}</li>
               )}
             </ul>
           ))}
@@ -234,57 +313,24 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
-          className={className}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: getInputHeight(),
-            padding: '0 12px',
-            border: `1px solid ${getBorderColor()}`,
-            borderRadius: '6px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            opacity: disabled ? 0.5 : 1,
-            ...style,
-          }}
+          className={containerClasses}
+          style={triggerStyle}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
         >
-          <span
-            style={{
-              flex: 1,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              color: selectedPath.length > 0 ? 'inherit' : '#9ca3af',
-            }}
-          >
+          <span style={valueStyle}>
             {selectedPath.length > 0 ? getDisplayValue() : placeholder}
           </span>
           {allowClear && selectedPath.length > 0 && !disabled && (
             <button
               type="button"
               onClick={handleClear}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#9ca3af',
-                padding: '0 4px',
-              }}
+              style={clearButtonStyle}
+              aria-label="Clear"
             >
               ✕
             </button>
           )}
-          <span
-            style={{
-              marginLeft: '8px',
-              transition: 'transform 0.2s',
-              transform: isOpen ? 'rotate(180deg)' : 'none',
-              fontSize: '10px',
-              color: '#9ca3af',
-            }}
-          >
-            ▼
-          </span>
+          <span style={arrowStyle}>▼</span>
         </div>
         {dropdownContent}
       </>

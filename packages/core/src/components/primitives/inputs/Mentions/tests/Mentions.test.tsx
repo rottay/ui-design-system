@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Mentions } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockMentions = ({
       options,

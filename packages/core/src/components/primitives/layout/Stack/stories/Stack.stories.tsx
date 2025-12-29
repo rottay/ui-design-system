@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Stack } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 import React from 'react';
 
 const meta: Meta<typeof Stack> = {
@@ -475,24 +476,39 @@ export const NestedStacks: Story = {
   ),
 };
 
-// Engine comparison
-export const EngineComparison: Story = {
-  name: 'Engine Comparison',
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Stack across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Stack rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <Stack spacing="xl">
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize', fontWeight: 600 }}>
-            {engine} Engine
-          </h4>
-          <Stack engine={engine} direction="horizontal" spacing="md" align="center">
-            <Item>Basic</Item>
-            <Item color="#10b981">Colored</Item>
-            <Item color="#8b5cf6">Items</Item>
-          </Stack>
-        </div>
-      ))}
-    </Stack>
+    <EngineComparisonHelper
+      component={Stack}
+      props={{
+        children: (
+          <>
+            <Item>Item 1</Item>
+            <Item color="#10b981">Item 2</Item>
+            <Item color="#8b5cf6">Item 3</Item>
+          </>
+        ),
+        direction: 'horizontal',
+        spacing: 'md',
+        align: 'center',
+      }}
+      showDescriptions
+    />
   ),
 };
 

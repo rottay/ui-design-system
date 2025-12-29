@@ -5,7 +5,9 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Flex } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
+import React from 'react';
 
 const meta: Meta<typeof Flex> = {
   title: 'Primitives/Layout/Flex',
@@ -226,25 +228,38 @@ export const CombinedLayout: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Flex across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Flex rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Flex
-            engine={engine}
-            gap={8}
-            justify="center"
-            align="center"
-            style={{ backgroundColor: '#f0f0f0', padding: 16 }}
-          >
+    <EngineComparisonHelper
+      component={Flex}
+      props={{
+        children: (
+          <>
             <Box>Item 1</Box>
             <Box color="#52c41a">Item 2</Box>
             <Box color="#faad14">Item 3</Box>
-          </Flex>
-        </div>
-      ))}
-    </div>
+          </>
+        ),
+        gap: 8,
+        justify: 'center',
+        align: 'center',
+      }}
+      showDescriptions
+    />
   ),
 };

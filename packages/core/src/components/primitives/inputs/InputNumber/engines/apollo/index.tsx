@@ -2,45 +2,9 @@
 
 /**
  * @fileoverview InputNumber Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the InputNumber component.
+ * @description Pure HTML/CSS implementation of the InputNumber component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Apollo engine provides a zero-dependency numeric input using pure HTML
- * and inline CSS. It includes custom step controls with full accessibility.
- *
- * **Pure CSS Features:**
- * - Native number input with custom styling
- * - Inline style objects for all states
- * - Focus ring with shadow
- * - Status colors (error, warning)
- * - Size variants via style objects
- *
- * **Custom Step Controls:**
- * - ▲/▼ buttons with aria-labels
- * - Keyboard navigation support
- * - Disabled state handling
- *
- * **Accessibility:**
- * - aria-valuemin/max/now attributes
- * - aria-label on step buttons
- * - Keyboard increment/decrement
- *
- * @example Using Apollo Engine
- * ```tsx
- * <InputNumber
- *   engine="apollo"
- *   min={1}
- *   max={10}
- *   step={1}
- *   prefix="#"
- *   size="default"
- * />
- * ```
- *
- * @see {@link InputNumber} for the main component
- * @see {@link TitanInputNumber} for Ant Design implementation
- * @see {@link HermesInputNumber} for DaisyUI implementation
  * @module ApolloInputNumber
  * @category Inputs
  * @package @rottay/design-system
@@ -49,96 +13,22 @@
 import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../../types';
 
-const styles = {
-  wrapper: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '4px',
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; width: string }> = {
+  small: {
+    padding: 'var(--ds-inputnumber-sm-padding)',
+    fontSize: 'var(--ds-inputnumber-sm-font-size)',
+    width: 'var(--ds-inputnumber-sm-width)',
   },
-  inputWrapper: {
-    position: 'relative' as const,
-    display: 'inline-flex',
-    alignItems: 'center',
+  default: {
+    padding: 'var(--ds-inputnumber-md-padding)',
+    fontSize: 'var(--ds-inputnumber-md-font-size)',
+    width: 'var(--ds-inputnumber-md-width)',
   },
-  input: {
-    padding: '8px 12px',
-    fontSize: '14px',
-    border: '1px solid #d9d9d9',
-    borderRadius: '6px',
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-    width: '120px',
-  },
-  inputSmall: {
-    padding: '4px 8px',
-    fontSize: '12px',
-    width: '100px',
-  },
-  inputLarge: {
-    padding: '12px 16px',
-    fontSize: '16px',
-    width: '140px',
-  },
-  inputFocused: {
-    borderColor: 'var(--primary-color, #1890ff)',
-    boxShadow: '0 0 0 2px rgba(24, 144, 255, 0.2)',
-  },
-  inputError: {
-    borderColor: '#ff4d4f',
-  },
-  inputWarning: {
-    borderColor: '#faad14',
-  },
-  inputDisabled: {
-    backgroundColor: '#f5f5f5',
-    cursor: 'not-allowed',
-    opacity: 0.6,
-  },
-  prefix: {
-    position: 'absolute' as const,
-    left: '8px',
-    color: '#999',
-    pointerEvents: 'none' as const,
-  },
-  suffix: {
-    position: 'absolute' as const,
-    right: '32px',
-    color: '#999',
-    pointerEvents: 'none' as const,
-  },
-  controls: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    position: 'absolute' as const,
-    right: '4px',
-    gap: '1px',
-  },
-  controlButton: {
-    width: '20px',
-    height: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    border: 'none',
-    background: 'transparent',
-    cursor: 'pointer',
-    fontSize: '8px',
-    color: '#666',
-    padding: 0,
-  },
-  addon: {
-    padding: '8px 12px',
-    backgroundColor: '#fafafa',
-    border: '1px solid #d9d9d9',
-    fontSize: '14px',
-  },
-  addonBefore: {
-    borderRight: 'none',
-    borderRadius: '6px 0 0 6px',
-  },
-  addonAfter: {
-    borderLeft: 'none',
-    borderRadius: '0 6px 6px 0',
+  large: {
+    padding: 'var(--ds-inputnumber-lg-padding)',
+    fontSize: 'var(--ds-inputnumber-lg-font-size)',
+    width: 'var(--ds-inputnumber-lg-width)',
   },
 };
 
@@ -173,7 +63,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
 
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState<number | string | null>(defaultValue ?? null);
-    const [focused, setFocused] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     const currentValue = isControlled ? value : internalValue;
 
     const parseNumber = (val: string): number | null => {
@@ -233,34 +123,132 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
     };
 
-    const getInputStyle = (): React.CSSProperties => {
-      const base: React.CSSProperties = { ...styles.input };
-      if (size === 'small') Object.assign(base, styles.inputSmall);
-      if (size === 'large') Object.assign(base, styles.inputLarge);
-      if (focused) Object.assign(base, styles.inputFocused);
-      if (status === 'error') Object.assign(base, styles.inputError);
-      if (status === 'warning') Object.assign(base, styles.inputWarning);
-      if (disabled) Object.assign(base, styles.inputDisabled);
-      if (prefix) base.paddingLeft = '28px';
-      if (suffix || controls) base.paddingRight = controls ? '36px' : '28px';
-      if (addonBefore) base.borderRadius = '0';
-      if (addonAfter) base.borderRadius = '0';
-      if (addonBefore && !addonAfter) base.borderRadius = '0 6px 6px 0';
-      if (addonAfter && !addonBefore) base.borderRadius = '6px 0 0 6px';
-      return base;
+    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+
+    // Build class names
+    const containerClasses = [
+      'rottay-inputnumber',
+      'rottay-inputnumber--apollo',
+      `rottay-inputnumber--${size}`,
+      status && `rottay-inputnumber--${status}`,
+      disabled && 'rottay-inputnumber--disabled',
+      isFocused && 'rottay-inputnumber--focused',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const getBorderColor = () => {
+      if (status === 'error') return 'var(--ds-inputnumber-error-border)';
+      if (status === 'warning') return 'var(--ds-inputnumber-warning-border)';
+      if (isFocused) return 'var(--ds-inputnumber-border-focus)';
+      return 'var(--ds-inputnumber-border)';
+    };
+
+    const wrapperStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '4px',
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
+    };
+
+    const inputWrapperStyle: React.CSSProperties = {
+      position: 'relative',
+      display: 'inline-flex',
+      alignItems: 'center',
+    };
+
+    const inputStyle: React.CSSProperties = {
+      padding: sizeConfig.padding,
+      paddingLeft: prefix ? '28px' : undefined,
+      paddingRight: suffix || controls ? (controls ? '36px' : '28px') : undefined,
+      fontSize: sizeConfig.fontSize,
+      border: `1px solid ${getBorderColor()}`,
+      borderRadius: addonBefore && addonAfter ? '0' : addonBefore ? '0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0' : addonAfter ? 'var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius)' : 'var(--ds-inputnumber-radius)',
+      outline: 'none',
+      transition: 'var(--ds-inputnumber-transition)',
+      width: sizeConfig.width,
+      backgroundColor: disabled ? 'var(--ds-inputnumber-bg-disabled)' : 'var(--ds-inputnumber-bg)',
+      color: 'var(--ds-inputnumber-color)',
+      cursor: disabled ? 'not-allowed' : 'text',
+      opacity: disabled ? 0.6 : 1,
+      boxShadow: isFocused ? 'var(--ds-inputnumber-shadow-focus)' : 'none',
+    };
+
+    const prefixStyle: React.CSSProperties = {
+      position: 'absolute',
+      left: '8px',
+      color: 'var(--ds-inputnumber-affix-color)',
+      pointerEvents: 'none',
+    };
+
+    const suffixStyle: React.CSSProperties = {
+      position: 'absolute',
+      right: controls ? '32px' : '8px',
+      color: 'var(--ds-inputnumber-affix-color)',
+      pointerEvents: 'none',
+    };
+
+    const controlsStyle: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      position: 'absolute',
+      right: '4px',
+      gap: '1px',
+    };
+
+    const controlButtonStyle: React.CSSProperties = {
+      width: '20px',
+      height: '12px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: 'none',
+      background: 'var(--ds-inputnumber-control-bg)',
+      cursor: 'pointer',
+      fontSize: '8px',
+      color: 'var(--ds-inputnumber-control-color)',
+      padding: 0,
+      transition: 'color 0.2s',
+    };
+
+    const addonStyle: React.CSSProperties = {
+      padding: sizeConfig.padding,
+      backgroundColor: 'var(--ds-inputnumber-addon-bg)',
+      border: `1px solid var(--ds-inputnumber-addon-border)`,
+      fontSize: sizeConfig.fontSize,
+      color: 'var(--ds-inputnumber-addon-color)',
+    };
+
+    const addonBeforeStyle: React.CSSProperties = {
+      ...addonStyle,
+      borderRight: 'none',
+      borderRadius: 'var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius)',
+    };
+
+    const addonAfterStyle: React.CSSProperties = {
+      ...addonStyle,
+      borderLeft: 'none',
+      borderRadius: '0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0',
     };
 
     return (
-      <div className={className} style={{ ...styles.wrapper, ...style }}>
+      <div className={containerClasses} style={wrapperStyle}>
         {addonBefore && (
-          <span style={{ ...styles.addon, ...styles.addonBefore }}>{addonBefore}</span>
+          <span className="rottay-inputnumber__addon-before" style={addonBeforeStyle}>
+            {addonBefore}
+          </span>
         )}
-        <div style={styles.inputWrapper}>
-          {prefix && <span style={styles.prefix}>{prefix}</span>}
+        <div style={inputWrapperStyle}>
+          {prefix && (
+            <span className="rottay-inputnumber__prefix" style={prefixStyle}>
+              {prefix}
+            </span>
+          )}
           <input
             ref={ref}
             type="number"
-            style={getInputStyle()}
+            className="rottay-inputnumber__input"
+            style={inputStyle}
             value={formatValue(currentValue)}
             min={min}
             max={max}
@@ -270,8 +258,8 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             placeholder={placeholder}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             autoFocus={autoFocus}
             id={id}
             name={name}
@@ -279,12 +267,16 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             aria-valuemax={max}
             aria-valuenow={typeof currentValue === 'number' ? currentValue : undefined}
           />
-          {suffix && <span style={{ ...styles.suffix, right: controls ? '32px' : '8px' }}>{suffix}</span>}
+          {suffix && (
+            <span className="rottay-inputnumber__suffix" style={suffixStyle}>
+              {suffix}
+            </span>
+          )}
           {controls && !disabled && !readOnly && (
-            <div style={styles.controls}>
+            <div className="rottay-inputnumber__controls" style={controlsStyle}>
               <button
                 type="button"
-                style={styles.controlButton}
+                style={controlButtonStyle}
                 onClick={() => handleStep('up')}
                 tabIndex={-1}
                 aria-label="Increase"
@@ -293,7 +285,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
               </button>
               <button
                 type="button"
-                style={styles.controlButton}
+                style={controlButtonStyle}
                 onClick={() => handleStep('down')}
                 tabIndex={-1}
                 aria-label="Decrease"
@@ -304,7 +296,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
           )}
         </div>
         {addonAfter && (
-          <span style={{ ...styles.addon, ...styles.addonAfter }}>{addonAfter}</span>
+          <span className="rottay-inputnumber__addon-after" style={addonAfterStyle}>
+            {addonAfter}
+          </span>
         )}
       </div>
     );

@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Mentions } from '../';
 import type { MentionsOption } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Mentions> = {
   title: 'Primitives/Inputs/Mentions',
@@ -22,7 +23,18 @@ const meta: Meta<typeof Mentions> = {
   parameters: {
     docs: {
       description: {
-        component: 'Mentions component for @mentions in text input with dropdown suggestions.',
+        component: `
+Mentions component for @mentions in text input with dropdown suggestions.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Dropdown | Built-in | Custom | Custom |
+| Multi Prefix | Full | Limited | Full |
+| Async Search | Built-in | Manual | Built-in |
+`,
       },
     },
   },
@@ -311,20 +323,42 @@ export const AsyncSearch: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Mentions component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Mentions rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <Mentions
-            engine={engine}
-            options={defaultOptions}
-            placeholder={`${engine} engine - Type @`}
-            style={{ width: 400 }}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Mentions}
+      props={{ options: defaultOptions, placeholder: 'Type @ to mention', style: { width: 300 } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Mentions}
+      baseProps={{ options: defaultOptions, placeholder: 'Type @', style: { width: 200 } }}
+      variantProp="status"
+      variants={['error', 'warning']}
+    />
   ),
 };

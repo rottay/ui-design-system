@@ -1,9 +1,11 @@
 import type { Preview } from '@storybook/react-vite'
-import { ThemeProvider } from '../src/providers/ThemeProvider';
-import { EngineProvider } from '../src/system/providers';
+import { ThemeProvider, EngineProvider } from '../src/system/providers';
 import type { TemplateName } from '../src/themes/types';
 import type { EngineName } from '../src/types/engine';
 import React from 'react';
+
+// Storybook preview styles for engine comparison components
+import './preview-styles.css';
 
 const preview: Preview = {
   // Global types para el toolbar

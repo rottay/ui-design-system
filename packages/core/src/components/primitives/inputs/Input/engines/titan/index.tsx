@@ -162,13 +162,13 @@ const TitanInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const computedStatus = error ? 'error' : status;
   const hasError = error || status === 'error';
 
-  // Flushed variant custom styles
+  // Flushed variant custom styles using CSS variables
   const flushedStyles: React.CSSProperties = variant === 'flushed' ? {
     borderRadius: 0,
     borderTop: 'none',
     borderLeft: 'none',
     borderRight: 'none',
-    borderBottom: '1px solid #d9d9d9',
+    borderBottom: '1px solid var(--ds-input-border)',
   } : {};
 
   // Common props
@@ -219,9 +219,9 @@ const TitanInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           <span
             style={{
               display: 'block',
-              marginTop: '4px',
-              fontSize: '12px',
-              color: '#ff4d4f',
+              marginTop: '0.25rem',
+              fontSize: 'var(--ds-input-helper-font-size)',
+              color: 'var(--ds-input-error-color)',
             }}
           >
             {errorMessage}
@@ -246,9 +246,9 @@ const TitanInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           <span
             style={{
               display: 'block',
-              marginTop: '4px',
-              fontSize: '12px',
-              color: '#ff4d4f',
+              marginTop: '0.25rem',
+              fontSize: 'var(--ds-input-helper-font-size)',
+              color: 'var(--ds-input-error-color)',
             }}
           >
             {errorMessage}
@@ -279,9 +279,9 @@ const TitanInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           <span
             style={{
               display: 'block',
-              marginTop: '4px',
-              fontSize: '12px',
-              color: '#ff4d4f',
+              marginTop: '0.25rem',
+              fontSize: 'var(--ds-input-helper-font-size)',
+              color: 'var(--ds-input-error-color)',
             }}
           >
             {errorMessage}
@@ -306,9 +306,9 @@ const TitanInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         <span
           style={{
             display: 'block',
-            marginTop: '4px',
-            fontSize: '12px',
-            color: '#ff4d4f',
+            marginTop: '0.25rem',
+            fontSize: 'var(--ds-input-helper-font-size)',
+            color: 'var(--ds-input-error-color)',
           }}
         >
           {errorMessage}

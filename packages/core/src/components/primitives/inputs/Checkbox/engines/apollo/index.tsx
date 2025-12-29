@@ -1,62 +1,8 @@
 /**
  * @fileoverview Checkbox Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Checkbox component.
+ * @description Pure HTML/CSS implementation of the Checkbox component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Apollo engine provides a headless checkbox implementation using only
- * native HTML elements and inline styles. This offers maximum flexibility
- * for custom styling and ensures full accessibility compliance.
- *
- * **Key Features:**
- * - Zero UI library dependencies
- * - Custom SVG checkmark rendering
- * - Indeterminate state with horizontal line
- * - Focus ring management
- * - Keyboard navigation (Space, Enter)
- * - Full ARIA compliance
- *
- * **Visual Elements:**
- * - CheckmarkIcon: SVG path for checked state
- * - IndeterminateLine: Horizontal line for mixed state
- * - Focus outline with color matching
- *
- * **Accessibility:**
- * - Native input element with proper ARIA attributes
- * - aria-checked with "mixed" for indeterminate
- * - aria-invalid for error state
- * - aria-describedby linking to label
- * - Keyboard accessible via Space/Enter
- *
- * **Group Support:**
- * Includes ApolloCheckboxGroup for fully accessible group management.
- *
- * @example Using Apollo Engine
- * ```tsx
- * import { Checkbox } from '@rottay/design-system';
- *
- * // Explicit Apollo engine
- * <Checkbox
- *   engine="apollo"
- *   label="Accessible Checkbox"
- *   color="primary"
- *   radius="md"
- * />
- *
- * // With full customization
- * <Checkbox
- *   engine="apollo"
- *   size="lg"
- *   color="success"
- *   radius="full"
- *   labelPlacement="start"
- *   indeterminate={hasPartialSelection}
- * />
- * ```
- *
- * @see {@link Checkbox} for the main component
- * @see {@link TitanCheckbox} for Ant Design implementation
- * @see {@link HermesCheckbox} for DaisyUI implementation
  * @module ApolloCheckbox
  * @category Inputs
  * @package @rottay/design-system
@@ -66,7 +12,25 @@
 
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
 import type { CheckboxProps, CheckboxGroupProps } from '../../types';
-import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP, RADIUS_MAP } from '../../types';
+import { CHECKBOX_DEFAULTS, CHECKBOX_GROUP_DEFAULTS } from '../../types';
+
+// Size mapping using CSS variables
+const SIZE_VAR_MAP: Record<string, string> = {
+  xs: 'var(--ds-checkbox-size-sm)',
+  sm: 'var(--ds-checkbox-size-sm)',
+  md: 'var(--ds-checkbox-size-md)',
+  lg: 'var(--ds-checkbox-size-lg)',
+  xl: 'var(--ds-checkbox-size-xl)',
+};
+
+// Numeric sizes for SVG scaling
+const SIZE_NUMERIC_MAP: Record<string, number> = {
+  xs: 14,
+  sm: 14,
+  md: 16,
+  lg: 20,
+  xl: 24,
+};
 
 export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement {
   const {
@@ -125,19 +89,38 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
     }
   }, [disabled]);
 
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
-  const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.sm;
+  // Get size values
+  const sizeVar = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
+  const sizeNumeric = SIZE_NUMERIC_MAP[size] || SIZE_NUMERIC_MAP.md;
+
+  // Determine radius based on prop
+  const getRadius = () => {
+    if (radius === 'full') return '50%';
+    if (radius === 'none') return '0';
+    if (radius === 'sm') return 'var(--ds-radius-sm)';
+    if (radius === 'md') return 'var(--ds-radius-md)';
+    if (radius === 'lg') return 'var(--ds-radius-lg)';
+    return 'var(--ds-checkbox-radius)';
+  };
+
+  // Get colors based on color prop (for theming flexibility)
+  const getCheckedBg = () => {
+    if (color === 'primary') return 'var(--ds-checkbox-checked-bg)';
+    if (color === 'success') return 'var(--ds-color-success-500)';
+    if (color === 'warning') return 'var(--ds-color-warning-500)';
+    if (color === 'error') return 'var(--ds-color-error-500)';
+    if (color === 'secondary') return 'var(--ds-color-secondary-500)';
+    return 'var(--ds-checkbox-checked-bg)';
+  };
 
   const containerStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: '8px',
+    gap: 'var(--ds-checkbox-label-gap)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     flexDirection: labelPlacement === 'start' ? 'row-reverse' : 'row',
-    fontFamily: 'inherit',
+    fontFamily: 'var(--ds-font-family-base)',
     ...style,
   };
 
@@ -146,13 +129,21 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: sizeValue,
-    height: sizeValue,
-    borderRadius: radiusValue,
-    border: `2px solid ${error ? 'var(--color-error, #ff4d4f)' : (isChecked || indeterminate ? colors.border : '#d9d9d9')}`,
-    backgroundColor: isChecked || indeterminate ? colors.bg : 'transparent',
-    transition: 'all 0.2s ease-in-out',
-    outline: isFocused ? `2px solid ${colors.bg}` : 'none',
+    width: sizeVar,
+    height: sizeVar,
+    borderRadius: getRadius(),
+    border: `2px solid ${error
+      ? 'var(--ds-checkbox-error-border)'
+      : (isChecked || indeterminate
+          ? getCheckedBg()
+          : 'var(--ds-checkbox-border)')}`,
+    backgroundColor: isChecked || indeterminate
+      ? getCheckedBg()
+      : disabled
+        ? 'var(--ds-checkbox-bg-disabled)'
+        : 'var(--ds-checkbox-bg)',
+    transition: 'var(--ds-checkbox-transition)',
+    outline: isFocused ? 'var(--ds-checkbox-focus-ring)' : 'none',
     outlineOffset: '2px',
   };
 
@@ -167,8 +158,12 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: sizeNumeric * 0.9,
-    color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+    fontSize: `${sizeNumeric * 0.9}px`,
+    color: error
+      ? 'var(--ds-checkbox-error-color)'
+      : disabled
+        ? 'var(--ds-checkbox-label-color-disabled)'
+        : 'var(--ds-checkbox-label-color)',
     userSelect: 'none',
   };
 
@@ -185,7 +180,7 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
     >
       <path
         d="M2 6L5 9L10 3"
-        stroke={colors.check}
+        stroke="var(--ds-checkbox-checked-color)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -200,15 +195,28 @@ export default function ApolloCheckbox(props: CheckboxProps): React.ReactElement
         display: indeterminate ? 'block' : 'none',
         width: sizeNumeric * 0.6,
         height: 2,
-        backgroundColor: colors.check,
+        backgroundColor: 'var(--ds-checkbox-checked-color)',
         borderRadius: 1,
       }}
     />
   );
 
+  // Build class names
+  const containerClasses = [
+    'rottay-checkbox',
+    'rottay-checkbox--apollo',
+    `rottay-checkbox--${size}`,
+    `rottay-checkbox--${color}`,
+    isChecked && 'rottay-checkbox--checked',
+    indeterminate && 'rottay-checkbox--indeterminate',
+    disabled && 'rottay-checkbox--disabled',
+    error && 'rottay-checkbox--error',
+    className,
+  ].filter(Boolean).join(' ');
+
   return (
     <label
-      className={`rottay-checkbox-apollo rottay-checkbox--${size} rottay-checkbox--${color} ${isChecked ? 'rottay-checkbox--checked' : ''} ${indeterminate ? 'rottay-checkbox--indeterminate' : ''} ${disabled ? 'rottay-checkbox--disabled' : ''} ${error ? 'rottay-checkbox--error' : ''} ${className}`}
+      className={containerClasses}
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
@@ -291,11 +299,11 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
     onChange?.(newValue);
   };
 
-  // Spacing values
+  // Spacing values using CSS variables
   const spacingMap: Record<string, string> = {
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
+    sm: 'var(--ds-spacing-2)',
+    md: 'var(--ds-spacing-3)',
+    lg: 'var(--ds-spacing-4)',
   };
 
   const groupStyle: React.CSSProperties = {
@@ -306,9 +314,18 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
     ...style,
   };
 
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+  const sizeVar = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
+  const sizeNumeric = SIZE_NUMERIC_MAP[size] || SIZE_NUMERIC_MAP.md;
+
+  // Get colors based on color prop
+  const getCheckedBg = () => {
+    if (color === 'primary') return 'var(--ds-checkbox-checked-bg)';
+    if (color === 'success') return 'var(--ds-color-success-500)';
+    if (color === 'warning') return 'var(--ds-color-warning-500)';
+    if (color === 'error') return 'var(--ds-color-error-500)';
+    if (color === 'secondary') return 'var(--ds-color-secondary-500)';
+    return 'var(--ds-checkbox-checked-bg)';
+  };
 
   const renderOptions = () => {
     if (options.length === 0) return children;
@@ -323,7 +340,7 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
           style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: 'var(--ds-checkbox-label-gap)',
             cursor: isDisabled ? 'not-allowed' : 'pointer',
             opacity: isDisabled ? 0.5 : 1,
           }}
@@ -334,12 +351,16 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: sizeValue,
-              height: sizeValue,
-              borderRadius: '2px',
-              border: `2px solid ${isChecked ? colors.border : '#d9d9d9'}`,
-              backgroundColor: isChecked ? colors.bg : 'transparent',
-              transition: 'all 0.2s ease-in-out',
+              width: sizeVar,
+              height: sizeVar,
+              borderRadius: 'var(--ds-checkbox-radius)',
+              border: `2px solid ${isChecked ? getCheckedBg() : 'var(--ds-checkbox-border)'}`,
+              backgroundColor: isChecked
+                ? getCheckedBg()
+                : isDisabled
+                  ? 'var(--ds-checkbox-bg-disabled)'
+                  : 'var(--ds-checkbox-bg)',
+              transition: 'var(--ds-checkbox-transition)',
             }}
           >
             <input
@@ -368,7 +389,7 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
               >
                 <path
                   d="M2 6L5 9L10 3"
-                  stroke={colors.check}
+                  stroke="var(--ds-checkbox-checked-color)"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -376,7 +397,15 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
               </svg>
             )}
           </span>
-          <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none' }}>
+          <span
+            style={{
+              fontSize: `${sizeNumeric * 0.9}px`,
+              userSelect: 'none',
+              color: isDisabled
+                ? 'var(--ds-checkbox-label-color-disabled)'
+                : 'var(--ds-checkbox-label-color)',
+            }}
+          >
             {option.label}
           </span>
         </label>
@@ -386,7 +415,7 @@ export function ApolloCheckboxGroup(props: CheckboxGroupProps): React.ReactEleme
 
   return (
     <div
-      className={`rottay-checkbox-group-apollo ${className}`}
+      className={`rottay-checkbox-group rottay-checkbox-group--apollo ${className}`}
       style={groupStyle}
       role="group"
       aria-label="Checkbox group"

@@ -9,7 +9,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Dropdown } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Dropdown component metadata for Storybook.
@@ -249,21 +250,31 @@ export const ArrowOptions: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison demonstration.
+ * Side-by-side comparison of Dropdown across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Dropdown rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Dropdown engine={engine} menu={defaultMenu}>
-            <button style={{ padding: '8px 16px' }}>Open Menu</button>
-          </Dropdown>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Dropdown}
+      props={{
+        menu: defaultMenu,
+        children: <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Open Menu</button>,
+      }}
+      showDescriptions
+    />
   ),
 };
 

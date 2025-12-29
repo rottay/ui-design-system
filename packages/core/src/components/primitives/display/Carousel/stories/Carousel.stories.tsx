@@ -7,7 +7,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Carousel } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Sample slide content for demonstrations
@@ -227,25 +228,67 @@ export const DotPositions: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison - shows the same carousel rendered by different engines
+ * Side-by-side comparison of Carousel across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Carousel rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>
-            {engine} Engine
-          </h4>
-          <Carousel engine={engine} dots arrows>
-            <div style={slideStyle('#1890ff')}>Slide 1</div>
-            <div style={slideStyle('#52c41a')}>Slide 2</div>
-            <div style={slideStyle('#faad14')}>Slide 3</div>
-          </Carousel>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Carousel}
+      props={{
+        dots: true,
+        arrows: true,
+        children: [
+          <div key="1" style={slideStyle('#1890ff')}>Slide 1</div>,
+          <div key="2" style={slideStyle('#52c41a')}>Slide 2</div>,
+          <div key="3" style={slideStyle('#faad14')}>Slide 3</div>,
+        ],
+      }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all dot positions across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Carousel dotPosition variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Carousel}
+      baseProps={{
+        dots: true,
+        style: { height: '150px' },
+        children: [
+          <div key="1" style={slideStyle('#1890ff')}>1</div>,
+          <div key="2" style={slideStyle('#52c41a')}>2</div>,
+          <div key="3" style={slideStyle('#faad14')}>3</div>,
+        ],
+      }}
+      variantProp="dotPosition"
+      variants={['top', 'bottom', 'left', 'right']}
+    />
   ),
 };
 

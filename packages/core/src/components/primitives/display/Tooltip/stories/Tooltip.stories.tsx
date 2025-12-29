@@ -9,7 +9,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tooltip } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Tooltip component metadata for Storybook.
@@ -252,30 +253,57 @@ export const Disabled: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison demonstration.
- * Shows the same tooltip rendered with different engines.
+ * Side-by-side comparison of Tooltip across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Tooltip rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <Tooltip engine={engine} content={`${engine} default`}>
-              <button style={{ padding: '8px 16px' }}>Default</button>
-            </Tooltip>
-            <Tooltip engine={engine} content={`${engine} primary`} color="primary">
-              <button style={{ padding: '8px 16px' }}>Primary</button>
-            </Tooltip>
-            <Tooltip engine={engine} content={`${engine} success`} color="success">
-              <button style={{ padding: '8px 16px' }}>Success</button>
-            </Tooltip>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Tooltip}
+      props={{
+        content: 'This is a tooltip message',
+        children: <button style={{ padding: '8px 16px', cursor: 'pointer' }}>Hover me</button>,
+        placement: 'top',
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all color variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Tooltip color variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Tooltip}
+      baseProps={{
+        content: 'Tooltip content',
+        children: <button style={{ padding: '8px 16px' }}>Hover</button>,
+      }}
+      variantProp="color"
+      variants={['default', 'primary', 'secondary', 'success', 'warning', 'error']}
+    />
   ),
 };
 

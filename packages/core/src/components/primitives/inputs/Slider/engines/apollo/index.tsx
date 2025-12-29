@@ -2,45 +2,9 @@
 
 /**
  * @fileoverview Slider Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Slider component.
+ * @description Pure HTML/CSS implementation of the Slider component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Apollo engine provides a zero-dependency slider using hidden range
- * inputs with custom visual overlays for track, rail, and handles.
- *
- * **Pure CSS Features:**
- * - Hidden native range inputs for interaction
- * - Custom rail with absolute positioning
- * - Active track showing selection range
- * - Visual handles with box shadow
- * - Marks with custom label positioning
- *
- * **Component Structure:**
- * - Container div with relative positioning
- * - Rail (full width/height background)
- * - Track (selection area, positioned dynamically)
- * - Hidden range input(s) for interaction
- * - Visual handles at current value positions
- * - Optional marks with labels
- *
- * **Range Mode:**
- * Uses two overlapping hidden inputs, each controlling one handle.
- *
- * @example Using Apollo Engine
- * ```tsx
- * <Slider
- *   engine="apollo"
- *   min={0}
- *   max={100}
- *   step={10}
- *   marks={{ 0: '0', 50: '50', 100: '100' }}
- * />
- * ```
- *
- * @see {@link Slider} for the main component
- * @see {@link TitanSlider} for Ant Design implementation
- * @see {@link HermesSlider} for DaisyUI implementation
  * @module ApolloSlider
  * @category Inputs
  * @package @rottay/design-system
@@ -67,7 +31,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       trackStyle,
       railStyle,
       handleStyle,
-      className,
+      className = '',
       style,
     } = props;
 
@@ -78,6 +42,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     };
 
     const [internalValue, setInternalValue] = useState<number | [number, number]>(getInitialValue);
+    const [isFocused, setIsFocused] = useState(false);
 
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : internalValue;
@@ -97,69 +62,135 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       return ((val - min!) / (max! - min!)) * 100;
     };
 
-    const trackColor = '#3b82f6';
-    const railColor = '#e5e7eb';
+    // Build class names
+    const containerClasses = [
+      'rottay-slider',
+      'rottay-slider--apollo',
+      disabled && 'rottay-slider--disabled',
+      vertical && 'rottay-slider--vertical',
+      isFocused && 'rottay-slider--focused',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const containerStyle: React.CSSProperties = {
+      position: 'relative',
+      width: vertical ? '20px' : '100%',
+      height: vertical ? '100%' : '20px',
+      padding: vertical ? '0' : '8px 0',
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
+    };
+
+    const railBaseStyle: React.CSSProperties = {
+      position: 'absolute',
+      backgroundColor: 'var(--ds-slider-rail-color)',
+      borderRadius: 'var(--ds-slider-track-radius)',
+      ...(vertical ? {
+        width: 'var(--ds-slider-track-height)',
+        height: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+      } : {
+        height: 'var(--ds-slider-track-height)',
+        width: '100%',
+        top: '50%',
+        transform: 'translateY(-50%)',
+      }),
+      ...railStyle,
+    };
+
+    const getHandleBaseStyle = (position: number, extraStyle?: React.CSSProperties): React.CSSProperties => ({
+      position: 'absolute',
+      width: 'var(--ds-slider-handle-size)',
+      height: 'var(--ds-slider-handle-size)',
+      backgroundColor: disabled
+        ? 'var(--ds-slider-handle-bg-disabled)'
+        : 'var(--ds-slider-handle-bg)',
+      borderRadius: '50%',
+      border: `var(--ds-slider-handle-border-width) solid var(--ds-slider-handle-border)`,
+      boxShadow: 'var(--ds-slider-handle-shadow)',
+      pointerEvents: 'none',
+      transition: 'box-shadow 0.15s ease',
+      outline: isFocused ? 'var(--ds-slider-focus-ring)' : 'none',
+      outlineOffset: '2px',
+      ...(vertical ? {
+        left: '50%',
+        bottom: `${position}%`,
+        transform: 'translate(-50%, 50%)',
+      } : {
+        top: '50%',
+        left: `${position}%`,
+        transform: 'translate(-50%, -50%)',
+      }),
+      ...extraStyle,
+    });
+
+    const inputStyle: React.CSSProperties = {
+      position: 'absolute',
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      opacity: 0,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+    };
+
+    const markStyle = (percent: number, customStyle?: React.CSSProperties): React.CSSProperties => ({
+      position: 'absolute',
+      fontSize: 'var(--ds-slider-mark-font-size)',
+      color: 'var(--ds-slider-mark-color)',
+      whiteSpace: 'nowrap',
+      ...(vertical ? {
+        left: '100%',
+        bottom: `${percent}%`,
+        marginLeft: '8px',
+        transform: 'translateY(50%)',
+      } : {
+        top: '100%',
+        left: `${percent}%`,
+        marginTop: '4px',
+        transform: 'translateX(-50%)',
+      }),
+      ...customStyle,
+    });
 
     if (range) {
       const [start, end] = currentValue as [number, number];
       const startPercent = getPercentage(start);
       const endPercent = getPercentage(end);
 
+      const trackActiveStyle: React.CSSProperties = {
+        position: 'absolute',
+        backgroundColor: disabled
+          ? 'var(--ds-slider-track-color-disabled)'
+          : 'var(--ds-slider-track-color)',
+        borderRadius: 'var(--ds-slider-track-radius)',
+        ...(vertical ? {
+          width: 'var(--ds-slider-track-height)',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          bottom: `${startPercent}%`,
+          height: `${endPercent - startPercent}%`,
+        } : {
+          height: 'var(--ds-slider-track-height)',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          left: `${startPercent}%`,
+          width: `${endPercent - startPercent}%`,
+        }),
+        ...(Array.isArray(trackStyle) ? trackStyle[0] : trackStyle),
+      };
+
       return (
         <div
           ref={ref}
-          className={className}
-          style={{
-            position: 'relative',
-            width: vertical ? '20px' : '100%',
-            height: vertical ? '100%' : '20px',
-            padding: vertical ? '0' : '8px 0',
-            ...style,
-          }}
+          className={containerClasses}
+          style={containerStyle}
         >
           {/* Rail */}
-          <div
-            style={{
-              position: 'absolute',
-              backgroundColor: railColor,
-              borderRadius: '4px',
-              ...(vertical ? {
-                width: '4px',
-                height: '100%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              } : {
-                height: '4px',
-                width: '100%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-              }),
-              ...railStyle,
-            }}
-          />
+          <div className="rottay-slider__rail" style={railBaseStyle} />
 
           {/* Track (active range) */}
-          <div
-            style={{
-              position: 'absolute',
-              backgroundColor: trackColor,
-              borderRadius: '4px',
-              ...(vertical ? {
-                width: '4px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                bottom: `${startPercent}%`,
-                height: `${endPercent - startPercent}%`,
-              } : {
-                height: '4px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                left: `${startPercent}%`,
-                width: `${endPercent - startPercent}%`,
-              }),
-              ...(Array.isArray(trackStyle) ? trackStyle[0] : trackStyle),
-            }}
-          />
+          <div className="rottay-slider__track" style={trackActiveStyle} />
 
           {/* Range inputs */}
           <input
@@ -171,14 +202,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onChange={(e) => handleChange([Number(e.target.value), end])}
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             disabled={disabled}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              opacity: 0,
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              pointerEvents: 'auto',
-            }}
+            style={inputStyle}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-valuenow={start}
           />
           <input
             type="range"
@@ -189,60 +219,23 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onChange={(e) => handleChange([start, Number(e.target.value)])}
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             disabled={disabled}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              opacity: 0,
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              pointerEvents: 'auto',
-            }}
+            style={inputStyle}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-valuenow={end}
           />
 
           {/* Handles */}
           <div
-            style={{
-              position: 'absolute',
-              width: '16px',
-              height: '16px',
-              backgroundColor: trackColor,
-              borderRadius: '50%',
-              border: '2px solid white',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-              pointerEvents: 'none',
-              ...(vertical ? {
-                left: '50%',
-                bottom: `${startPercent}%`,
-                transform: 'translate(-50%, 50%)',
-              } : {
-                top: '50%',
-                left: `${startPercent}%`,
-                transform: 'translate(-50%, -50%)',
-              }),
-              ...(Array.isArray(handleStyle) ? handleStyle[0] : handleStyle),
-            }}
+            className="rottay-slider__handle"
+            style={getHandleBaseStyle(startPercent, Array.isArray(handleStyle) ? handleStyle[0] : handleStyle)}
           />
           <div
-            style={{
-              position: 'absolute',
-              width: '16px',
-              height: '16px',
-              backgroundColor: trackColor,
-              borderRadius: '50%',
-              border: '2px solid white',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-              pointerEvents: 'none',
-              ...(vertical ? {
-                left: '50%',
-                bottom: `${endPercent}%`,
-                transform: 'translate(-50%, 50%)',
-              } : {
-                top: '50%',
-                left: `${endPercent}%`,
-                transform: 'translate(-50%, -50%)',
-              }),
-              ...(Array.isArray(handleStyle) ? handleStyle[1] : handleStyle),
-            }}
+            className="rottay-slider__handle"
+            style={getHandleBaseStyle(endPercent, Array.isArray(handleStyle) ? handleStyle[1] : handleStyle)}
           />
 
           {/* Marks */}
@@ -250,29 +243,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             const markValue = Number(key);
             const percent = getPercentage(markValue);
             const label = typeof mark === 'object' ? mark.label : mark;
-            const markStyle = typeof mark === 'object' ? mark.style : undefined;
+            const customMarkStyle = typeof mark === 'object' ? mark.style : undefined;
 
             return (
               <div
                 key={key}
-                style={{
-                  position: 'absolute',
-                  fontSize: '12px',
-                  color: '#6b7280',
-                  whiteSpace: 'nowrap',
-                  ...(vertical ? {
-                    left: '100%',
-                    bottom: `${percent}%`,
-                    marginLeft: '8px',
-                    transform: 'translateY(50%)',
-                  } : {
-                    top: '100%',
-                    left: `${percent}%`,
-                    marginTop: '4px',
-                    transform: 'translateX(-50%)',
-                  }),
-                  ...markStyle,
-                }}
+                className="rottay-slider__mark"
+                style={markStyle(percent, customMarkStyle)}
               >
                 {label}
               </div>
@@ -286,61 +263,39 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const singleValue = currentValue as number;
     const percent = getPercentage(singleValue);
 
+    const trackActiveStyle: React.CSSProperties = {
+      position: 'absolute',
+      backgroundColor: disabled
+        ? 'var(--ds-slider-track-color-disabled)'
+        : 'var(--ds-slider-track-color)',
+      borderRadius: 'var(--ds-slider-track-radius)',
+      ...(vertical ? {
+        width: 'var(--ds-slider-track-height)',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        bottom: 0,
+        height: `${percent}%`,
+      } : {
+        height: 'var(--ds-slider-track-height)',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        left: 0,
+        width: `${percent}%`,
+      }),
+      ...(Array.isArray(trackStyle) ? trackStyle[0] : trackStyle),
+    };
+
     return (
       <div
         ref={ref}
-        className={className}
-        style={{
-          position: 'relative',
-          width: vertical ? '20px' : '100%',
-          height: vertical ? '100%' : '20px',
-          padding: vertical ? '0' : '8px 0',
-          ...style,
-        }}
+        className={containerClasses}
+        style={containerStyle}
       >
         {/* Rail */}
-        <div
-          style={{
-            position: 'absolute',
-            backgroundColor: railColor,
-            borderRadius: '4px',
-            ...(vertical ? {
-              width: '4px',
-              height: '100%',
-              left: '50%',
-              transform: 'translateX(-50%)',
-            } : {
-              height: '4px',
-              width: '100%',
-              top: '50%',
-              transform: 'translateY(-50%)',
-            }),
-            ...railStyle,
-          }}
-        />
+        <div className="rottay-slider__rail" style={railBaseStyle} />
 
         {/* Track */}
-        <div
-          style={{
-            position: 'absolute',
-            backgroundColor: trackColor,
-            borderRadius: '4px',
-            ...(vertical ? {
-              width: '4px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              bottom: 0,
-              height: `${percent}%`,
-            } : {
-              height: '4px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              left: 0,
-              width: `${percent}%`,
-            }),
-            ...(Array.isArray(trackStyle) ? trackStyle[0] : trackStyle),
-          }}
-        />
+        <div className="rottay-slider__track" style={trackActiveStyle} />
 
         {/* Input */}
         <input
@@ -352,39 +307,19 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           onChange={(e) => handleChange(Number(e.target.value))}
           onMouseUp={handleMouseUp}
           onTouchEnd={handleMouseUp}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           disabled={disabled}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            opacity: 0,
-            cursor: disabled ? 'not-allowed' : 'pointer',
-          }}
+          style={inputStyle}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={singleValue}
         />
 
         {/* Handle */}
         <div
-          style={{
-            position: 'absolute',
-            width: '16px',
-            height: '16px',
-            backgroundColor: disabled ? '#9ca3af' : trackColor,
-            borderRadius: '50%',
-            border: '2px solid white',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-            pointerEvents: 'none',
-            ...(vertical ? {
-              left: '50%',
-              bottom: `${percent}%`,
-              transform: 'translate(-50%, 50%)',
-            } : {
-              top: '50%',
-              left: `${percent}%`,
-              transform: 'translate(-50%, -50%)',
-            }),
-            ...(Array.isArray(handleStyle) ? handleStyle[0] : handleStyle),
-          }}
+          className="rottay-slider__handle"
+          style={getHandleBaseStyle(percent, Array.isArray(handleStyle) ? handleStyle[0] : handleStyle)}
         />
 
         {/* Marks */}
@@ -392,29 +327,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           const markValue = Number(key);
           const markPercent = getPercentage(markValue);
           const label = typeof mark === 'object' ? mark.label : mark;
-          const markStyle = typeof mark === 'object' ? mark.style : undefined;
+          const customMarkStyle = typeof mark === 'object' ? mark.style : undefined;
 
           return (
             <div
               key={key}
-              style={{
-                position: 'absolute',
-                fontSize: '12px',
-                color: '#6b7280',
-                whiteSpace: 'nowrap',
-                ...(vertical ? {
-                  left: '100%',
-                  bottom: `${markPercent}%`,
-                  marginLeft: '8px',
-                  transform: 'translateY(50%)',
-                } : {
-                  top: '100%',
-                  left: `${markPercent}%`,
-                  marginTop: '4px',
-                  transform: 'translateX(-50%)',
-                }),
-                ...markStyle,
-              }}
+              className="rottay-slider__mark"
+              style={markStyle(markPercent, customMarkStyle)}
             >
               {label}
             </div>

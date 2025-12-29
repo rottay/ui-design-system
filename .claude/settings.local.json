@@ -72,7 +72,16 @@
       "Read(//c/Users/Emmanuel/Github/bithire/**)",
       "Read(//c/Users/Emmanuel/Github/desing-system/**)",
       "WebFetch(domain:ant.design)",
-      "WebFetch(domain:daisyui.com)"
+      "WebFetch(domain:daisyui.com)",
+      "Bash(timeout 30 npm run storybook:*)",
+      "Bash(pkill:*)",
+      "Bash(xargs kill:*)",
+      "Bash(npm test:*)",
+      "Bash(xargs:*)",
+      "Bash(for f in /Users/danielavila/Documents/GitHub/Rottay/desing-system-aux/packages/core/src/components/primitives/**/tests/*.test.tsx)",
+      "Bash(do if ! grep -q titan.*hermes.*apollo $f)",
+      "Bash(then dirname $f)",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

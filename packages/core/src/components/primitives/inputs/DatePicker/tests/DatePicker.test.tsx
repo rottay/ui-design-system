@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { DatePicker } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockDatePicker = ({
       value,

@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Anchor } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Anchor> = {
   title: 'Primitives/Navigation/Anchor',
@@ -32,7 +33,7 @@ The Anchor component provides navigation within a page by linking to different s
 - **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
 
 ## Usage
-\\`\\`\\`tsx
+\`\`\`tsx
 import { Anchor } from '@rottay/design-system';
 
 <Anchor>
@@ -42,7 +43,7 @@ import { Anchor } from '@rottay/design-system';
     <Anchor.Link href="#section3-1" title="Section 3.1" />
   </Anchor.Link>
 </Anchor>
-\\`\\`\\`
+\`\`\`
         `,
       },
     },
@@ -170,23 +171,37 @@ export const Horizontal: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison
+ * Side-by-side comparison of Anchor across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Anchor rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Anchor engine={engine} direction="horizontal">
-            <Anchor.Link href={`#${engine}-1`} title="Section 1" />
-            <Anchor.Link href={`#${engine}-2`} title="Section 2" />
-            <Anchor.Link href={`#${engine}-3`} title="Section 3" />
-          </Anchor>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Anchor}
+      props={{
+        direction: 'horizontal',
+        children: (
+          <>
+            <Anchor.Link href="#section-1" title="Section 1" />
+            <Anchor.Link href="#section-2" title="Section 2" />
+            <Anchor.Link href="#section-3" title="Section 3" />
+          </>
+        ),
+      }}
+      showDescriptions
+    />
   ),
 };
 

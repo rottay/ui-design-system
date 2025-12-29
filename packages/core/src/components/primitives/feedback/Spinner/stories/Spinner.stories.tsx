@@ -24,6 +24,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Spinner } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 // ============================================================================
 // Meta Configuration
@@ -106,18 +107,42 @@ export const CustomColor: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Compares spinner rendering across all three engines.
+ * Side-by-side comparison of Spinner across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Spinner rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', gap: 48, alignItems: 'center' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine} style={{ textAlign: 'center' }}>
-          <Spinner engine={engine} size="lg" />
-          <p style={{ marginTop: 8, textTransform: 'capitalize' }}>{engine}</p>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Spinner}
+      props={{ size: 'lg' }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Spinner}
+      baseProps={{}}
+      sizeProp="size"
+      sizes={['sm', 'md', 'lg', 'xl']}
+    />
   ),
 };

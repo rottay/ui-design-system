@@ -1,0 +1,2506 @@
+/**
+ * Default Theme - Rottay Design System
+ *
+ * Centralized design tokens for the entire system.
+ * All variables use the --ds-* prefix for namespacing.
+ *
+ * Structure:
+ * 1. PRIMITIVES - Colors, Typography, Spacing, Shadows, Borders, Z-Index
+ * 2. SEMANTIC TOKENS - Text, Backgrounds, Borders (contextual)
+ * 3. COMPONENT TOKENS - Per-component design tokens
+ *
+ * @version 0.4.0
+ * @author Rottay Design System
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════════════
+     1. PRIMITIVES
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.1 COLORS - Primary Palette
+     Main brand color used for primary actions, links, and highlights
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-primary-50: #E8F4FF;
+  --ds-color-primary-100: #C8E2FF;
+  --ds-color-primary-200: #A1CBFF;
+  --ds-color-primary-300: #73AEFF;
+  --ds-color-primary-400: #4A91FF;
+  --ds-color-primary-500: #0066CC;
+  --ds-color-primary-600: #0055AA;
+  --ds-color-primary-700: #0047AB;
+  --ds-color-primary-800: #003380;
+  --ds-color-primary-900: #002255;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.2 COLORS - Secondary Palette
+     Secondary brand color for accents and complementary elements
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-secondary-50: #F5F5FF;
+  --ds-color-secondary-100: #EBEBFF;
+  --ds-color-secondary-200: #D4D4FF;
+  --ds-color-secondary-300: #B0B0F0;
+  --ds-color-secondary-400: #8F8FE0;
+  --ds-color-secondary-500: #6B6BD4;
+  --ds-color-secondary-600: #5555BB;
+  --ds-color-secondary-700: #4B4B9E;
+  --ds-color-secondary-800: #3A3A7A;
+  --ds-color-secondary-900: #2A2A5A;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.3 COLORS - Neutral Palette
+     Used for text, backgrounds, borders, and dividers
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-neutral-50: #FAFAFA;
+  --ds-color-neutral-100: #F5F5F5;
+  --ds-color-neutral-200: #E5E5E5;
+  --ds-color-neutral-300: #D4D4D4;
+  --ds-color-neutral-400: #A3A3A3;
+  --ds-color-neutral-500: #737373;
+  --ds-color-neutral-600: #525252;
+  --ds-color-neutral-700: #404040;
+  --ds-color-neutral-800: #262626;
+  --ds-color-neutral-900: #171717;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.4 COLORS - Success Palette
+     Used for success states, confirmations, and positive actions
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-success-50: #F0FDF4;
+  --ds-color-success-100: #DCFCE7;
+  --ds-color-success-200: #BBF7D0;
+  --ds-color-success-300: #86EFAC;
+  --ds-color-success-400: #4ADE80;
+  --ds-color-success-500: #22C55E;
+  --ds-color-success-600: #16A34A;
+  --ds-color-success-700: #15803D;
+  --ds-color-success-800: #166534;
+  --ds-color-success-900: #14532D;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.5 COLORS - Warning Palette
+     Used for warning states, cautions, and attention-needed actions
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-warning-50: #FFFBEB;
+  --ds-color-warning-100: #FEF3C7;
+  --ds-color-warning-200: #FDE68A;
+  --ds-color-warning-300: #FCD34D;
+  --ds-color-warning-400: #FBBF24;
+  --ds-color-warning-500: #F59E0B;
+  --ds-color-warning-600: #D97706;
+  --ds-color-warning-700: #B45309;
+  --ds-color-warning-800: #92400E;
+  --ds-color-warning-900: #78350F;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.6 COLORS - Error Palette
+     Used for error states, destructive actions, and critical alerts
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-error-50: #FEF2F2;
+  --ds-color-error-100: #FEE2E2;
+  --ds-color-error-200: #FECACA;
+  --ds-color-error-300: #FCA5A5;
+  --ds-color-error-400: #F87171;
+  --ds-color-error-500: #EF4444;
+  --ds-color-error-600: #DC2626;
+  --ds-color-error-700: #B91C1C;
+  --ds-color-error-800: #991B1B;
+  --ds-color-error-900: #7F1D1D;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.7 COLORS - Info Palette
+     Used for informational states and neutral notifications
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-info-50: #EFF6FF;
+  --ds-color-info-100: #DBEAFE;
+  --ds-color-info-200: #BFDBFE;
+  --ds-color-info-300: #93C5FD;
+  --ds-color-info-400: #60A5FA;
+  --ds-color-info-500: #3B82F6;
+  --ds-color-info-600: #2563EB;
+  --ds-color-info-700: #1D4ED8;
+  --ds-color-info-800: #1E40AF;
+  --ds-color-info-900: #1E3A8A;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.8 COLORS - Common
+     Pure black and white for absolute values
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-white: #FFFFFF;
+  --ds-color-black: #000000;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     1.9 COLORS - Alpha (Transparency)
+     Used for overlays, modals, and transparent backgrounds
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-color-alpha-black-5: rgba(0, 0, 0, 0.05);
+  --ds-color-alpha-black-10: rgba(0, 0, 0, 0.1);
+  --ds-color-alpha-black-20: rgba(0, 0, 0, 0.2);
+  --ds-color-alpha-black-30: rgba(0, 0, 0, 0.3);
+  --ds-color-alpha-black-40: rgba(0, 0, 0, 0.4);
+  --ds-color-alpha-black-50: rgba(0, 0, 0, 0.5);
+  --ds-color-alpha-black-60: rgba(0, 0, 0, 0.6);
+  --ds-color-alpha-black-70: rgba(0, 0, 0, 0.7);
+  --ds-color-alpha-black-80: rgba(0, 0, 0, 0.8);
+  --ds-color-alpha-black-90: rgba(0, 0, 0, 0.9);
+
+  --ds-color-alpha-white-5: rgba(255, 255, 255, 0.05);
+  --ds-color-alpha-white-10: rgba(255, 255, 255, 0.1);
+  --ds-color-alpha-white-20: rgba(255, 255, 255, 0.2);
+  --ds-color-alpha-white-30: rgba(255, 255, 255, 0.3);
+  --ds-color-alpha-white-40: rgba(255, 255, 255, 0.4);
+  --ds-color-alpha-white-50: rgba(255, 255, 255, 0.5);
+  --ds-color-alpha-white-60: rgba(255, 255, 255, 0.6);
+  --ds-color-alpha-white-70: rgba(255, 255, 255, 0.7);
+  --ds-color-alpha-white-80: rgba(255, 255, 255, 0.8);
+  --ds-color-alpha-white-90: rgba(255, 255, 255, 0.9);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     2. TYPOGRAPHY
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Font Families */
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                         'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+                         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+                         'Noto Color Emoji';
+  --ds-font-family-heading: var(--ds-font-family-base);
+  --ds-font-family-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco,
+                         Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  /* Font Sizes */
+  --ds-font-size-xs: 0.75rem;
+  --ds-font-size-sm: 0.875rem;
+  --ds-font-size-base: 1rem;
+  --ds-font-size-lg: 1.125rem;
+  --ds-font-size-xl: 1.25rem;
+  --ds-font-size-2xl: 1.5rem;
+  --ds-font-size-3xl: 1.875rem;
+  --ds-font-size-4xl: 2.25rem;
+  --ds-font-size-5xl: 3rem;
+  --ds-font-size-6xl: 3.75rem;
+
+  /* Font Weights */
+  --ds-font-weight-thin: 100;
+  --ds-font-weight-light: 300;
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+  --ds-font-weight-extrabold: 800;
+  --ds-font-weight-black: 900;
+
+  /* Line Heights */
+  --ds-line-height-none: 1;
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-snug: 1.375;
+  --ds-line-height-normal: 1.5;
+  --ds-line-height-relaxed: 1.625;
+  --ds-line-height-loose: 2;
+
+  /* Letter Spacing */
+  --ds-letter-spacing-tighter: -0.05em;
+  --ds-letter-spacing-tight: -0.025em;
+  --ds-letter-spacing-normal: 0;
+  --ds-letter-spacing-wide: 0.025em;
+  --ds-letter-spacing-wider: 0.05em;
+  --ds-letter-spacing-widest: 0.1em;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     3. SPACING - 4px Grid System
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-spacing-0: 0;
+  --ds-spacing-1: 0.25rem;
+  --ds-spacing-2: 0.5rem;
+  --ds-spacing-3: 0.75rem;
+  --ds-spacing-4: 1rem;
+  --ds-spacing-5: 1.25rem;
+  --ds-spacing-6: 1.5rem;
+  --ds-spacing-8: 2rem;
+  --ds-spacing-10: 2.5rem;
+  --ds-spacing-12: 3rem;
+  --ds-spacing-16: 4rem;
+  --ds-spacing-20: 5rem;
+  --ds-spacing-24: 6rem;
+  --ds-spacing-32: 8rem;
+  --ds-spacing-40: 10rem;
+  --ds-spacing-48: 12rem;
+  --ds-spacing-64: 16rem;
+
+  /* Semantic Spacing */
+  --ds-spacing-xs: var(--ds-spacing-1);
+  --ds-spacing-sm: var(--ds-spacing-2);
+  --ds-spacing-md: var(--ds-spacing-4);
+  --ds-spacing-lg: var(--ds-spacing-6);
+  --ds-spacing-xl: var(--ds-spacing-8);
+  --ds-spacing-2xl: var(--ds-spacing-12);
+  --ds-spacing-3xl: var(--ds-spacing-16);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     4. BORDERS
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Border Widths */
+  --ds-border-width-0: 0;
+  --ds-border-width-1: 1px;
+  --ds-border-width-2: 2px;
+  --ds-border-width-4: 4px;
+
+  /* Border Radius */
+  --ds-radius-none: 0;
+  --ds-radius-xs: 0.125rem;
+  --ds-radius-sm: 0.25rem;
+  --ds-radius-md: 0.5rem;
+  --ds-radius-lg: 0.75rem;
+  --ds-radius-xl: 1rem;
+  --ds-radius-2xl: 1.5rem;
+  --ds-radius-3xl: 2rem;
+  --ds-radius-full: 9999px;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     5. SHADOWS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-shadow-none: none;
+  --ds-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --ds-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --ds-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --ds-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --ds-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --ds-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+  /* Colored Shadows */
+  --ds-shadow-primary: 0 4px 14px 0 rgba(0, 102, 204, 0.25);
+  --ds-shadow-success: 0 4px 14px 0 rgba(34, 197, 94, 0.25);
+  --ds-shadow-warning: 0 4px 14px 0 rgba(245, 158, 11, 0.25);
+  --ds-shadow-error: 0 4px 14px 0 rgba(239, 68, 68, 0.25);
+
+  /* Focus Ring */
+  --ds-shadow-focus-ring: 0 0 0 3px rgba(0, 102, 204, 0.2);
+  --ds-shadow-focus-ring-error: 0 0 0 3px rgba(239, 68, 68, 0.2);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     6. Z-INDEX
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-z-index-base: 0;
+  --ds-z-index-dropdown: 1000;
+  --ds-z-index-sticky: 1100;
+  --ds-z-index-fixed: 1200;
+  --ds-z-index-overlay: 1300;
+  --ds-z-index-drawer: 1400;
+  --ds-z-index-modal: 1500;
+  --ds-z-index-popover: 1600;
+  --ds-z-index-tooltip: 1700;
+  --ds-z-index-notification: 1800;
+  --ds-z-index-max: 9999;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     7. TRANSITIONS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-transition-fast: 150ms ease;
+  --ds-transition-normal: 200ms ease;
+  --ds-transition-slow: 300ms ease;
+  --ds-transition-slower: 500ms ease;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     8. RESPONSIVE BREAKPOINTS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-breakpoint-sm: 640px;
+  --ds-breakpoint-md: 768px;
+  --ds-breakpoint-lg: 1024px;
+  --ds-breakpoint-xl: 1280px;
+  --ds-breakpoint-2xl: 1536px;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     2. SEMANTIC TOKENS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* Text Colors */
+  --ds-text-primary: rgba(0, 0, 0, 0.85);
+  --ds-text-secondary: rgba(0, 0, 0, 0.65);
+  --ds-text-tertiary: rgba(0, 0, 0, 0.45);
+  --ds-text-disabled: rgba(0, 0, 0, 0.25);
+  --ds-text-inverse: var(--ds-color-white);
+
+  /* Background Colors */
+  --ds-bg-primary: var(--ds-color-white);
+  --ds-bg-secondary: var(--ds-color-neutral-50);
+  --ds-bg-tertiary: var(--ds-color-neutral-100);
+  --ds-bg-hover: var(--ds-color-neutral-100);
+  --ds-bg-active: var(--ds-color-neutral-200);
+  --ds-bg-disabled: var(--ds-color-neutral-100);
+
+  /* Border Colors */
+  --ds-border-color: var(--ds-color-neutral-200);
+  --ds-border-color-hover: var(--ds-color-neutral-300);
+  --ds-border-color-focus: var(--ds-color-primary-500);
+  --ds-border-color-disabled: var(--ds-color-neutral-200);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     3. COMPONENT TOKENS
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BUTTON
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Button Sizes */
+  --ds-button-xs-height: 1.5rem;
+  --ds-button-xs-padding-x: 0.5rem;
+  --ds-button-xs-font-size: 0.75rem;
+  --ds-button-xs-radius: var(--ds-radius-sm);
+
+  --ds-button-sm-height: 2rem;
+  --ds-button-sm-padding-x: 0.75rem;
+  --ds-button-sm-font-size: 0.875rem;
+  --ds-button-sm-radius: var(--ds-radius-md);
+
+  --ds-button-md-height: 2.5rem;
+  --ds-button-md-padding-x: 1rem;
+  --ds-button-md-font-size: 1rem;
+  --ds-button-md-radius: var(--ds-radius-md);
+
+  --ds-button-lg-height: 3rem;
+  --ds-button-lg-padding-x: 1.5rem;
+  --ds-button-lg-font-size: 1.125rem;
+  --ds-button-lg-radius: var(--ds-radius-lg);
+
+  --ds-button-xl-height: 3.5rem;
+  --ds-button-xl-padding-x: 2rem;
+  --ds-button-xl-font-size: 1.25rem;
+  --ds-button-xl-radius: var(--ds-radius-lg);
+
+  /* Button Primary Variant */
+  --ds-button-primary-bg: var(--ds-color-primary-500);
+  --ds-button-primary-bg-hover: var(--ds-color-primary-600);
+  --ds-button-primary-bg-active: var(--ds-color-primary-700);
+  --ds-button-primary-color: var(--ds-color-white);
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-shadow: var(--ds-shadow-xs);
+  --ds-button-primary-shadow-hover: var(--ds-shadow-sm);
+
+  /* Button Secondary Variant */
+  --ds-button-secondary-bg: var(--ds-color-secondary-500);
+  --ds-button-secondary-bg-hover: var(--ds-color-secondary-600);
+  --ds-button-secondary-bg-active: var(--ds-color-secondary-700);
+  --ds-button-secondary-color: var(--ds-color-white);
+  --ds-button-secondary-border: transparent;
+
+  /* Button Default Variant */
+  --ds-button-default-bg: var(--ds-color-white);
+  --ds-button-default-bg-hover: var(--ds-color-neutral-50);
+  --ds-button-default-bg-active: var(--ds-color-neutral-100);
+  --ds-button-default-color: var(--ds-color-neutral-900);
+  --ds-button-default-color-hover: var(--ds-color-primary-500);
+  --ds-button-default-color-active: var(--ds-color-primary-600);
+  --ds-button-default-border: var(--ds-color-neutral-300);
+  --ds-button-default-border-hover: var(--ds-color-primary-400);
+  --ds-button-default-border-active: var(--ds-color-primary-600);
+
+  /* Button Ghost Variant */
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: var(--ds-color-neutral-100);
+  --ds-button-ghost-bg-active: var(--ds-color-neutral-200);
+  --ds-button-ghost-color: var(--ds-color-neutral-700);
+  --ds-button-ghost-color-hover: var(--ds-color-primary-500);
+  --ds-button-ghost-color-active: var(--ds-color-primary-600);
+  --ds-button-ghost-border: transparent;
+  --ds-button-ghost-border-hover: var(--ds-color-primary-500);
+  --ds-button-ghost-border-active: var(--ds-color-primary-600);
+
+  /* Button Text Variant */
+  --ds-button-text-bg: transparent;
+  --ds-button-text-bg-hover: var(--ds-color-neutral-100);
+  --ds-button-text-bg-active: var(--ds-color-neutral-200);
+  --ds-button-text-color: var(--ds-color-primary-600);
+  --ds-button-text-color-hover: var(--ds-color-primary-700);
+  --ds-button-text-color-active: var(--ds-color-primary-800);
+
+  /* Button Link Variant */
+  --ds-button-link-color: var(--ds-color-primary-600);
+  --ds-button-link-color-hover: var(--ds-color-primary-700);
+  --ds-button-link-color-active: var(--ds-color-primary-800);
+  --ds-button-link-decoration: none;
+  --ds-button-link-decoration-hover: underline;
+
+  /* Button Semantic Variants */
+  --ds-button-success-bg: var(--ds-color-success-500);
+  --ds-button-success-bg-hover: var(--ds-color-success-600);
+  --ds-button-success-bg-active: var(--ds-color-success-700);
+  --ds-button-success-color: var(--ds-color-white);
+  --ds-button-success-border: transparent;
+
+  --ds-button-warning-bg: var(--ds-color-warning-500);
+  --ds-button-warning-bg-hover: var(--ds-color-warning-600);
+  --ds-button-warning-bg-active: var(--ds-color-warning-700);
+  --ds-button-warning-color: var(--ds-color-white);
+  --ds-button-warning-border: transparent;
+
+  --ds-button-error-bg: var(--ds-color-error-500);
+  --ds-button-error-bg-hover: var(--ds-color-error-600);
+  --ds-button-error-bg-active: var(--ds-color-error-700);
+  --ds-button-error-color: var(--ds-color-white);
+  --ds-button-error-border: transparent;
+
+  --ds-button-info-bg: var(--ds-color-info-500);
+  --ds-button-info-bg-hover: var(--ds-color-info-600);
+  --ds-button-info-bg-active: var(--ds-color-info-700);
+  --ds-button-info-color: var(--ds-color-white);
+  --ds-button-info-border: transparent;
+
+  /* Button States */
+  --ds-button-disabled-bg: var(--ds-color-neutral-100);
+  --ds-button-disabled-color: var(--ds-color-neutral-400);
+  --ds-button-disabled-border: var(--ds-color-neutral-200);
+  --ds-button-disabled-opacity: 0.6;
+
+  /* Button Common */
+  --ds-button-font-weight: var(--ds-font-weight-medium);
+  --ds-button-line-height: var(--ds-line-height-tight);
+  --ds-button-transition: var(--ds-transition-fast);
+  --ds-button-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-button-icon-gap: 0.5rem;
+  --ds-button-icon-only-padding: 0;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     INPUT
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Input Sizes */
+  --ds-input-xs-height: 1.5rem;
+  --ds-input-xs-padding-x: 0.5rem;
+  --ds-input-xs-font-size: 0.75rem;
+
+  --ds-input-sm-height: 2rem;
+  --ds-input-sm-padding-x: 0.625rem;
+  --ds-input-sm-font-size: 0.8125rem;
+
+  --ds-input-md-height: 2.5rem;
+  --ds-input-md-padding-x: 0.75rem;
+  --ds-input-md-font-size: 0.875rem;
+
+  --ds-input-lg-height: 3rem;
+  --ds-input-lg-padding-x: 0.875rem;
+  --ds-input-lg-font-size: 1rem;
+
+  --ds-input-xl-height: 3.5rem;
+  --ds-input-xl-padding-x: 1rem;
+  --ds-input-xl-font-size: 1.125rem;
+
+  /* Input Base */
+  --ds-input-bg: var(--ds-color-white);
+  --ds-input-bg-hover: var(--ds-color-white);
+  --ds-input-bg-focus: var(--ds-color-white);
+  --ds-input-bg-disabled: var(--ds-color-neutral-50);
+
+  --ds-input-color: var(--ds-color-neutral-900);
+  --ds-input-color-placeholder: var(--ds-color-neutral-400);
+  --ds-input-color-disabled: var(--ds-color-neutral-400);
+
+  --ds-input-border: var(--ds-color-neutral-300);
+  --ds-input-border-hover: var(--ds-color-neutral-400);
+  --ds-input-border-focus: var(--ds-color-primary-500);
+  --ds-input-border-disabled: var(--ds-color-neutral-200);
+
+  --ds-input-radius: var(--ds-radius-md);
+  --ds-input-shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.1);
+
+  /* Input Status Colors */
+  --ds-input-success-border: var(--ds-color-success-500);
+  --ds-input-success-shadow-focus: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  --ds-input-warning-border: var(--ds-color-warning-500);
+  --ds-input-warning-shadow-focus: 0 0 0 3px rgba(234, 179, 8, 0.1);
+  --ds-input-error-border: var(--ds-color-error-500);
+  --ds-input-error-shadow-focus: 0 0 0 3px rgba(239, 68, 68, 0.1);
+
+  /* Input Filled Variant */
+  --ds-input-filled-bg: var(--ds-color-neutral-100);
+  --ds-input-filled-bg-hover: var(--ds-color-neutral-200);
+  --ds-input-filled-bg-focus: var(--ds-color-neutral-50);
+
+  /* Input Addon (prefix/suffix containers) */
+  --ds-input-addon-bg: var(--ds-color-neutral-50);
+  --ds-input-addon-color: var(--ds-color-neutral-500);
+  --ds-input-addon-border: var(--ds-color-neutral-300);
+
+  /* Input Clear Button */
+  --ds-input-clear-color: var(--ds-color-neutral-400);
+  --ds-input-clear-color-hover: var(--ds-color-neutral-600);
+
+  /* Input Label */
+  --ds-input-label-color: var(--ds-color-neutral-700);
+  --ds-input-label-font-size: var(--ds-font-size-sm);
+  --ds-input-label-font-weight: var(--ds-font-weight-medium);
+  --ds-input-label-margin-bottom: 0.375rem;
+
+  /* Input Helper */
+  --ds-input-helper-color: var(--ds-color-neutral-600);
+  --ds-input-helper-font-size: var(--ds-font-size-sm);
+  --ds-input-error-color: var(--ds-color-error-600);
+
+  /* Input Common */
+  --ds-input-transition: var(--ds-transition-fast);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CARD
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Card Sizes */
+  --ds-card-padding-sm: 0.75rem;
+  --ds-card-padding-md: 1rem;
+  --ds-card-padding-lg: 1.5rem;
+  --ds-card-padding-xl: 2rem;
+
+  /* Card Base */
+  --ds-card-bg: var(--ds-color-white);
+  --ds-card-bg-hover: var(--ds-color-neutral-50);
+  --ds-card-color: var(--ds-color-neutral-900);
+  --ds-card-border: var(--ds-color-neutral-200);
+  --ds-card-radius: var(--ds-radius-lg);
+
+  /* Card Shadows */
+  --ds-card-shadow: var(--ds-shadow-sm);
+  --ds-card-shadow-hover: var(--ds-shadow-md);
+  --ds-card-shadow-elevated: var(--ds-shadow-lg);
+
+  /* Card Header */
+  --ds-card-header-padding: var(--ds-card-padding-md);
+  --ds-card-header-border: var(--ds-color-neutral-200);
+  --ds-card-title-font-size: var(--ds-font-size-lg);
+  --ds-card-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-card-title-color: var(--ds-color-neutral-900);
+  --ds-card-subtitle-color: var(--ds-color-neutral-600);
+
+  /* Card Body */
+  --ds-card-body-padding: var(--ds-card-padding-md);
+  --ds-card-body-color: var(--ds-color-neutral-700);
+
+  /* Card Footer */
+  --ds-card-footer-padding: var(--ds-card-padding-md);
+  --ds-card-footer-border: var(--ds-color-neutral-200);
+  --ds-card-footer-bg: var(--ds-color-neutral-50);
+
+  /* Card Common */
+  --ds-card-transition: var(--ds-transition-normal);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     MODAL
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Modal Sizes */
+  --ds-modal-xs-width: 320px;
+  --ds-modal-sm-width: 400px;
+  --ds-modal-md-width: 500px;
+  --ds-modal-lg-width: 640px;
+  --ds-modal-xl-width: 800px;
+  --ds-modal-2xl-width: 960px;
+  --ds-modal-full-width: 100%;
+
+  /* Modal Base */
+  --ds-modal-bg: var(--ds-color-white);
+  --ds-modal-color: var(--ds-color-neutral-900);
+  --ds-modal-radius: var(--ds-radius-xl);
+  --ds-modal-shadow: var(--ds-shadow-2xl);
+  --ds-modal-padding: 1.5rem;
+
+  /* Modal Overlay */
+  --ds-modal-overlay-bg: rgba(0, 0, 0, 0.5);
+  --ds-modal-overlay-backdrop: blur(4px);
+
+  /* Modal Header */
+  --ds-modal-header-padding: var(--ds-modal-padding);
+  --ds-modal-header-border: var(--ds-color-neutral-200);
+  --ds-modal-title-font-size: var(--ds-font-size-xl);
+  --ds-modal-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-modal-title-color: var(--ds-color-neutral-900);
+  --ds-modal-subtitle-color: var(--ds-color-neutral-600);
+
+  /* Modal Body */
+  --ds-modal-body-padding: var(--ds-modal-padding);
+  --ds-modal-body-color: var(--ds-color-neutral-700);
+
+  /* Modal Footer */
+  --ds-modal-footer-padding: var(--ds-modal-padding);
+  --ds-modal-footer-border: var(--ds-color-neutral-200);
+  --ds-modal-footer-bg: var(--ds-color-neutral-50);
+  --ds-modal-footer-gap: 0.75rem;
+
+  /* Modal Close */
+  --ds-modal-close-size: 2rem;
+  --ds-modal-close-color: var(--ds-color-neutral-500);
+  --ds-modal-close-color-hover: var(--ds-color-neutral-700);
+  --ds-modal-close-bg-hover: var(--ds-color-neutral-100);
+
+  /* Modal Animation */
+  --ds-modal-animation-duration: 0.3s;
+  --ds-modal-animation-timing: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     AVATAR
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Avatar Sizes */
+  --ds-avatar-xs-size: 1.5rem;
+  --ds-avatar-xs-font-size: 0.625rem;
+
+  --ds-avatar-sm-size: 2rem;
+  --ds-avatar-sm-font-size: 0.75rem;
+
+  --ds-avatar-md-size: 2.5rem;
+  --ds-avatar-md-font-size: 0.875rem;
+
+  --ds-avatar-lg-size: 3rem;
+  --ds-avatar-lg-font-size: 1rem;
+
+  --ds-avatar-xl-size: 3.5rem;
+  --ds-avatar-xl-font-size: 1.125rem;
+
+  --ds-avatar-2xl-size: 4rem;
+  --ds-avatar-2xl-font-size: 1.25rem;
+
+  --ds-avatar-3xl-size: 6rem;
+  --ds-avatar-3xl-font-size: 1.75rem;
+
+  /* Avatar Shapes */
+  --ds-avatar-radius-circle: 50%;
+  --ds-avatar-radius-square: 0;
+  --ds-avatar-radius-rounded: var(--ds-radius-md);
+
+  /* Avatar Variants */
+  --ds-avatar-default-bg: var(--ds-color-neutral-100);
+  --ds-avatar-default-color: var(--ds-color-neutral-600);
+  --ds-avatar-default-border: var(--ds-color-neutral-200);
+
+  --ds-avatar-primary-bg: var(--ds-color-primary-100);
+  --ds-avatar-primary-color: var(--ds-color-primary-700);
+  --ds-avatar-primary-border: var(--ds-color-primary-200);
+
+  --ds-avatar-secondary-bg: var(--ds-color-secondary-100);
+  --ds-avatar-secondary-color: var(--ds-color-secondary-700);
+  --ds-avatar-secondary-border: var(--ds-color-secondary-200);
+
+  --ds-avatar-success-bg: var(--ds-color-success-100);
+  --ds-avatar-success-color: var(--ds-color-success-700);
+  --ds-avatar-success-border: var(--ds-color-success-200);
+
+  --ds-avatar-warning-bg: var(--ds-color-warning-100);
+  --ds-avatar-warning-color: var(--ds-color-warning-700);
+  --ds-avatar-warning-border: var(--ds-color-warning-200);
+
+  --ds-avatar-error-bg: var(--ds-color-error-100);
+  --ds-avatar-error-color: var(--ds-color-error-700);
+  --ds-avatar-error-border: var(--ds-color-error-200);
+
+  --ds-avatar-gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --ds-avatar-gradient-color: var(--ds-color-white);
+  --ds-avatar-gradient-border: transparent;
+
+  /* Avatar Status */
+  --ds-avatar-status-online: var(--ds-color-success-500);
+  --ds-avatar-status-offline: var(--ds-color-neutral-400);
+  --ds-avatar-status-away: var(--ds-color-warning-500);
+  --ds-avatar-status-busy: var(--ds-color-error-500);
+  --ds-avatar-status-size: 0.625rem;
+  --ds-avatar-status-border: var(--ds-color-white);
+  --ds-avatar-status-border-width: 2px;
+
+  /* Avatar Ring */
+  --ds-avatar-ring-color: var(--ds-color-primary-500);
+  --ds-avatar-ring-width: 2px;
+  --ds-avatar-ring-offset: 2px;
+
+  /* Avatar Border */
+  --ds-avatar-border-width: 2px;
+  --ds-avatar-border-color: rgba(0, 0, 0, 0.1);
+
+  /* Avatar Group */
+  --ds-avatar-group-spacing: -0.5rem;
+  --ds-avatar-group-border-color: var(--ds-color-white);
+  --ds-avatar-group-overflow-bg: var(--ds-color-neutral-200);
+  --ds-avatar-group-overflow-color: var(--ds-color-neutral-700);
+
+  /* Avatar Common */
+  --ds-avatar-transition: var(--ds-transition-fast);
+  --ds-avatar-font-weight: 500;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BADGE
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Badge Sizes */
+  --ds-badge-xs-height: 0.875rem;
+  --ds-badge-xs-min-width: 0.875rem;
+  --ds-badge-xs-font-size: 0.5625rem;
+
+  --ds-badge-sm-height: 1rem;
+  --ds-badge-sm-min-width: 1rem;
+  --ds-badge-sm-font-size: 0.625rem;
+
+  --ds-badge-md-height: 1.25rem;
+  --ds-badge-md-min-width: 1.25rem;
+  --ds-badge-md-font-size: 0.75rem;
+
+  --ds-badge-lg-height: 1.5rem;
+  --ds-badge-lg-min-width: 1.5rem;
+  --ds-badge-lg-font-size: 0.875rem;
+
+  --ds-badge-xl-height: 1.75rem;
+  --ds-badge-xl-min-width: 1.75rem;
+  --ds-badge-xl-font-size: 1rem;
+
+  /* Badge Dot Sizes */
+  --ds-badge-dot-xs-size: 0.375rem;
+  --ds-badge-dot-sm-size: 0.5rem;
+  --ds-badge-dot-md-size: 0.625rem;
+  --ds-badge-dot-lg-size: 0.75rem;
+  --ds-badge-dot-xl-size: 0.875rem;
+
+  /* Badge Variants */
+  --ds-badge-default-bg: var(--ds-color-neutral-400);
+  --ds-badge-default-color: var(--ds-color-white);
+
+  --ds-badge-primary-bg: var(--ds-color-primary-500);
+  --ds-badge-primary-color: var(--ds-color-white);
+
+  --ds-badge-secondary-bg: var(--ds-color-secondary-500);
+  --ds-badge-secondary-color: var(--ds-color-white);
+
+  --ds-badge-success-bg: var(--ds-color-success-500);
+  --ds-badge-success-color: var(--ds-color-white);
+
+  --ds-badge-warning-bg: var(--ds-color-warning-500);
+  --ds-badge-warning-color: var(--ds-color-white);
+
+  --ds-badge-error-bg: var(--ds-color-error-500);
+  --ds-badge-error-color: var(--ds-color-white);
+
+  --ds-badge-info-bg: var(--ds-color-info-500);
+  --ds-badge-info-color: var(--ds-color-white);
+
+  /* Badge Common */
+  --ds-badge-radius: var(--ds-radius-full);
+  --ds-badge-border-radius: var(--ds-radius-full);
+  --ds-badge-padding: 0 0.5rem;
+  --ds-badge-padding-x: 0.375rem;
+  --ds-badge-font-weight: var(--ds-font-weight-medium);
+  --ds-badge-text-color: var(--ds-color-white);
+  --ds-badge-border-width: 2px;
+  --ds-badge-border-color: var(--ds-color-white);
+  --ds-badge-transition: var(--ds-transition-fast);
+  --ds-badge-z-index: 1;
+
+  /* Badge Radius Variants */
+  --ds-badge-radius-none: 0;
+  --ds-badge-radius-sm: var(--ds-radius-sm);
+  --ds-badge-radius-md: var(--ds-radius-md);
+  --ds-badge-radius-lg: var(--ds-radius-lg);
+  --ds-badge-radius-full: var(--ds-radius-full);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TAG
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Tag Sizes */
+  --ds-tag-xs-height: 1rem;
+  --ds-tag-xs-padding: 0 0.375rem;
+  --ds-tag-xs-font-size: 0.6875rem;
+
+  --ds-tag-sm-height: 1.25rem;
+  --ds-tag-sm-padding: 0 0.5rem;
+  --ds-tag-sm-padding-x: 0.5rem;
+  --ds-tag-sm-font-size: 0.75rem;
+
+  --ds-tag-md-height: 1.5rem;
+  --ds-tag-md-padding: 0 0.625rem;
+  --ds-tag-md-padding-x: 0.625rem;
+  --ds-tag-md-font-size: 0.8125rem;
+
+  --ds-tag-lg-height: 1.75rem;
+  --ds-tag-lg-padding: 0 0.75rem;
+  --ds-tag-lg-padding-x: 0.75rem;
+  --ds-tag-lg-font-size: 0.875rem;
+
+  --ds-tag-xl-height: 2rem;
+  --ds-tag-xl-padding: 0 0.875rem;
+  --ds-tag-xl-font-size: 1rem;
+
+  /* Tag Variants */
+  --ds-tag-default-bg: var(--ds-color-neutral-100);
+  --ds-tag-default-color: var(--ds-color-neutral-700);
+  --ds-tag-default-border: var(--ds-color-neutral-300);
+
+  --ds-tag-primary-bg: var(--ds-color-primary-50);
+  --ds-tag-primary-color: var(--ds-color-primary-700);
+  --ds-tag-primary-border: var(--ds-color-primary-200);
+
+  --ds-tag-secondary-bg: var(--ds-color-secondary-50);
+  --ds-tag-secondary-color: var(--ds-color-secondary-700);
+  --ds-tag-secondary-border: var(--ds-color-secondary-200);
+
+  --ds-tag-success-bg: var(--ds-color-success-50);
+  --ds-tag-success-color: var(--ds-color-success-700);
+  --ds-tag-success-border: var(--ds-color-success-200);
+
+  --ds-tag-warning-bg: var(--ds-color-warning-50);
+  --ds-tag-warning-color: var(--ds-color-warning-700);
+  --ds-tag-warning-border: var(--ds-color-warning-200);
+
+  --ds-tag-error-bg: var(--ds-color-error-50);
+  --ds-tag-error-color: var(--ds-color-error-700);
+  --ds-tag-error-border: var(--ds-color-error-200);
+
+  /* Tag Common */
+  --ds-tag-radius: var(--ds-radius-sm);
+  --ds-tag-font-weight: var(--ds-font-weight-medium);
+  --ds-tag-transition: var(--ds-transition-fast);
+
+  /* Tag Radius Variants */
+  --ds-tag-radius-none: 0;
+  --ds-tag-radius-sm: var(--ds-radius-xs);
+  --ds-tag-radius-md: var(--ds-radius-sm);
+  --ds-tag-radius-lg: var(--ds-radius-md);
+  --ds-tag-radius-full: var(--ds-radius-full);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     ALERT
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Alert Base */
+  --ds-alert-padding: 1rem;
+  --ds-alert-radius: var(--ds-radius-md);
+  --ds-alert-font-size: var(--ds-font-size-sm);
+
+  /* Alert Variants */
+  --ds-alert-info-bg: var(--ds-color-info-50);
+  --ds-alert-info-border: var(--ds-color-info-200);
+  --ds-alert-info-color: var(--ds-color-info-800);
+  --ds-alert-info-icon: var(--ds-color-info-500);
+
+  --ds-alert-success-bg: var(--ds-color-success-50);
+  --ds-alert-success-border: var(--ds-color-success-200);
+  --ds-alert-success-color: var(--ds-color-success-800);
+  --ds-alert-success-icon: var(--ds-color-success-500);
+
+  --ds-alert-warning-bg: var(--ds-color-warning-50);
+  --ds-alert-warning-border: var(--ds-color-warning-200);
+  --ds-alert-warning-color: var(--ds-color-warning-800);
+  --ds-alert-warning-icon: var(--ds-color-warning-500);
+
+  --ds-alert-error-bg: var(--ds-color-error-50);
+  --ds-alert-error-border: var(--ds-color-error-200);
+  --ds-alert-error-color: var(--ds-color-error-800);
+  --ds-alert-error-icon: var(--ds-color-error-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TOOLTIP
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Tooltip Base */
+  --ds-tooltip-bg: var(--ds-color-neutral-900);
+  --ds-tooltip-color: var(--ds-color-white);
+  --ds-tooltip-radius: var(--ds-radius-md);
+  --ds-tooltip-padding: 0.5rem 0.75rem;
+  --ds-tooltip-font-size: var(--ds-font-size-sm);
+  --ds-tooltip-shadow: var(--ds-shadow-md);
+  --ds-tooltip-max-width: 300px;
+  --ds-tooltip-z-index: 1070;
+  --ds-tooltip-arrow-size: 6px;
+  --ds-tooltip-offset: 8px;
+  --ds-tooltip-transition: var(--ds-transition-fast);
+
+  /* Tooltip Color Variants */
+  --ds-tooltip-default-bg: var(--ds-color-neutral-900);
+  --ds-tooltip-default-color: var(--ds-color-white);
+
+  --ds-tooltip-primary-bg: var(--ds-color-primary-500);
+  --ds-tooltip-primary-color: var(--ds-color-white);
+
+  --ds-tooltip-secondary-bg: var(--ds-color-secondary-500);
+  --ds-tooltip-secondary-color: var(--ds-color-white);
+
+  --ds-tooltip-success-bg: var(--ds-color-success-500);
+  --ds-tooltip-success-color: var(--ds-color-white);
+
+  --ds-tooltip-warning-bg: var(--ds-color-warning-500);
+  --ds-tooltip-warning-color: var(--ds-color-neutral-900);
+
+  --ds-tooltip-error-bg: var(--ds-color-error-500);
+  --ds-tooltip-error-color: var(--ds-color-white);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CHECKBOX & RADIO
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Checkbox Sizes */
+  --ds-checkbox-size-sm: 0.875rem;
+  --ds-checkbox-size-md: 1rem;
+  --ds-checkbox-size-lg: 1.25rem;
+  --ds-checkbox-size-xl: 1.5rem;
+
+  /* Checkbox Base */
+  --ds-checkbox-bg: var(--ds-color-white);
+  --ds-checkbox-bg-disabled: var(--ds-color-neutral-100);
+  --ds-checkbox-border: var(--ds-color-neutral-300);
+  --ds-checkbox-border-hover: var(--ds-color-neutral-400);
+  --ds-checkbox-border-disabled: var(--ds-color-neutral-200);
+  --ds-checkbox-radius: var(--ds-radius-sm);
+  --ds-checkbox-transition: var(--ds-transition-fast);
+
+  /* Checkbox Checked State */
+  --ds-checkbox-checked-bg: var(--ds-color-primary-500);
+  --ds-checkbox-checked-border: var(--ds-color-primary-500);
+  --ds-checkbox-checked-color: var(--ds-color-white);
+
+  /* Checkbox Focus */
+  --ds-checkbox-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-checkbox-focus-ring-color: var(--ds-color-primary-200);
+
+  /* Checkbox Error State */
+  --ds-checkbox-error-border: var(--ds-color-error-500);
+  --ds-checkbox-error-color: var(--ds-color-error-600);
+
+  /* Checkbox Label */
+  --ds-checkbox-label-color: var(--ds-color-neutral-700);
+  --ds-checkbox-label-color-disabled: var(--ds-color-neutral-400);
+  --ds-checkbox-label-gap: 0.5rem;
+
+  /* Radio Sizes */
+  --ds-radio-size-sm: 0.875rem;
+  --ds-radio-size-md: 1rem;
+  --ds-radio-size-lg: 1.25rem;
+  --ds-radio-size-xl: 1.5rem;
+
+  /* Radio Base */
+  --ds-radio-bg: var(--ds-color-white);
+  --ds-radio-bg-disabled: var(--ds-color-neutral-100);
+  --ds-radio-border: var(--ds-color-neutral-300);
+  --ds-radio-border-hover: var(--ds-color-neutral-400);
+  --ds-radio-border-disabled: var(--ds-color-neutral-200);
+  --ds-radio-transition: var(--ds-transition-fast);
+
+  /* Radio Checked State */
+  --ds-radio-checked-bg: var(--ds-color-white);
+  --ds-radio-checked-border: var(--ds-color-primary-500);
+  --ds-radio-checked-dot: var(--ds-color-primary-500);
+
+  /* Radio Focus */
+  --ds-radio-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-radio-focus-ring-color: var(--ds-color-primary-200);
+
+  /* Radio Error State */
+  --ds-radio-error-border: var(--ds-color-error-500);
+  --ds-radio-error-color: var(--ds-color-error-600);
+
+  /* Radio Label */
+  --ds-radio-label-color: var(--ds-color-neutral-700);
+  --ds-radio-label-color-disabled: var(--ds-color-neutral-400);
+  --ds-radio-label-gap: 0.5rem;
+  --ds-radio-description-color: var(--ds-color-neutral-500);
+
+  /* Radio Button Style */
+  --ds-radio-button-bg: var(--ds-color-white);
+  --ds-radio-button-bg-checked: var(--ds-color-primary-500);
+  --ds-radio-button-border: var(--ds-color-neutral-300);
+  --ds-radio-button-color-checked: var(--ds-color-white);
+  --ds-radio-button-radius: var(--ds-radius-sm);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SWITCH
+     ───────────────────────────────────────────────────────────────────────────── */
+  /* Switch Sizes */
+  --ds-switch-sm-width: 1.75rem;
+  --ds-switch-sm-height: 1rem;
+  --ds-switch-sm-thumb-size: 0.75rem;
+
+  --ds-switch-md-width: 2.75rem;
+  --ds-switch-md-height: 1.375rem;
+  --ds-switch-md-thumb-size: 1.125rem;
+
+  --ds-switch-lg-width: 3.5rem;
+  --ds-switch-lg-height: 1.75rem;
+  --ds-switch-lg-thumb-size: 1.5rem;
+
+  /* Switch Base */
+  --ds-switch-bg: var(--ds-color-neutral-300);
+  --ds-switch-bg-hover: var(--ds-color-neutral-400);
+  --ds-switch-bg-disabled: var(--ds-color-neutral-200);
+  --ds-switch-radius: 9999px;
+  --ds-switch-transition: var(--ds-transition-fast);
+
+  /* Switch Checked State */
+  --ds-switch-checked-bg: var(--ds-color-primary-500);
+  --ds-switch-checked-bg-hover: var(--ds-color-primary-600);
+
+  /* Switch Thumb */
+  --ds-switch-thumb-bg: var(--ds-color-white);
+  --ds-switch-thumb-shadow: var(--ds-shadow-sm);
+  --ds-switch-thumb-offset: 0.125rem;
+
+  /* Switch Focus */
+  --ds-switch-focus-ring: var(--ds-shadow-focus-ring);
+
+  /* Switch Label */
+  --ds-switch-label-color: var(--ds-color-neutral-700);
+  --ds-switch-label-gap: 0.5rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SLIDER
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Slider Track & Rail */
+  --ds-slider-track-color: var(--ds-color-primary-500);
+  --ds-slider-track-color-disabled: var(--ds-color-neutral-400);
+  --ds-slider-rail-color: var(--ds-color-neutral-200);
+  --ds-slider-track-height: 4px;
+  --ds-slider-track-radius: var(--ds-radius-full);
+
+  /* Slider Handle */
+  --ds-slider-handle-size: 16px;
+  --ds-slider-handle-bg: var(--ds-color-primary-500);
+  --ds-slider-handle-bg-disabled: var(--ds-color-neutral-400);
+  --ds-slider-handle-border: var(--ds-color-white);
+  --ds-slider-handle-border-width: 2px;
+  --ds-slider-handle-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --ds-slider-handle-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  /* Slider Focus */
+  --ds-slider-focus-ring: var(--ds-shadow-focus-ring);
+
+  /* Slider Marks */
+  --ds-slider-mark-color: var(--ds-color-neutral-500);
+  --ds-slider-mark-font-size: var(--ds-font-size-xs);
+
+  /* Slider Tooltip */
+  --ds-slider-tooltip-bg: var(--ds-color-neutral-800);
+  --ds-slider-tooltip-color: var(--ds-color-white);
+  --ds-slider-tooltip-radius: var(--ds-radius-sm);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SELECT
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Select Base */
+  --ds-select-bg: var(--ds-color-white);
+  --ds-select-bg-disabled: var(--ds-color-neutral-50);
+  --ds-select-color: var(--ds-color-neutral-900);
+  --ds-select-color-placeholder: var(--ds-color-neutral-400);
+  --ds-select-color-disabled: var(--ds-color-neutral-400);
+  --ds-select-border: var(--ds-color-neutral-300);
+  --ds-select-border-hover: var(--ds-color-neutral-400);
+  --ds-select-border-focus: var(--ds-color-primary-500);
+  --ds-select-radius: var(--ds-radius-md);
+  --ds-select-shadow-focus: var(--ds-input-shadow-focus);
+  --ds-select-transition: var(--ds-transition-fast);
+
+  /* Select Status Colors */
+  --ds-select-error-border: var(--ds-color-error-500);
+  --ds-select-warning-border: var(--ds-color-warning-500);
+  --ds-select-success-border: var(--ds-color-success-500);
+
+  /* Select Filled Variant */
+  --ds-select-filled-bg: var(--ds-color-neutral-100);
+
+  /* Select Dropdown */
+  --ds-select-dropdown-bg: var(--ds-color-white);
+  --ds-select-dropdown-border: var(--ds-color-neutral-200);
+  --ds-select-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-select-dropdown-radius: var(--ds-radius-md);
+
+  /* Select Option */
+  --ds-select-option-bg-hover: var(--ds-color-neutral-100);
+  --ds-select-option-bg-selected: var(--ds-color-primary-50);
+  --ds-select-option-color-selected: var(--ds-color-primary-700);
+  --ds-select-option-color-disabled: var(--ds-color-neutral-400);
+
+  /* Select Tag (multiple mode) */
+  --ds-select-tag-bg: var(--ds-color-neutral-100);
+  --ds-select-tag-color: var(--ds-color-neutral-700);
+  --ds-select-tag-radius: var(--ds-radius-sm);
+
+  /* Select Arrow/Icon */
+  --ds-select-arrow-color: var(--ds-color-neutral-400);
+  --ds-select-clear-color: var(--ds-color-neutral-400);
+  --ds-select-clear-color-hover: var(--ds-color-neutral-600);
+  --ds-select-check-color: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     DATEPICKER
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* DatePicker Base */
+  --ds-datepicker-bg: var(--ds-color-white);
+  --ds-datepicker-bg-disabled: var(--ds-color-neutral-50);
+  --ds-datepicker-color: var(--ds-color-neutral-900);
+  --ds-datepicker-color-placeholder: var(--ds-color-neutral-400);
+  --ds-datepicker-border: var(--ds-color-neutral-300);
+  --ds-datepicker-border-hover: var(--ds-color-neutral-400);
+  --ds-datepicker-border-focus: var(--ds-color-primary-500);
+  --ds-datepicker-radius: var(--ds-radius-md);
+  --ds-datepicker-shadow-focus: var(--ds-input-shadow-focus);
+  --ds-datepicker-transition: var(--ds-transition-fast);
+
+  /* DatePicker Status */
+  --ds-datepicker-error-border: var(--ds-color-error-500);
+  --ds-datepicker-warning-border: var(--ds-color-warning-500);
+
+  /* DatePicker Sizes */
+  --ds-datepicker-sm-padding: 0.25rem 0.5rem;
+  --ds-datepicker-sm-font-size: var(--ds-font-size-xs);
+  --ds-datepicker-md-padding: 0.5rem 0.75rem;
+  --ds-datepicker-md-font-size: var(--ds-font-size-sm);
+  --ds-datepicker-lg-padding: 0.75rem 1rem;
+  --ds-datepicker-lg-font-size: var(--ds-font-size-base);
+
+  /* DatePicker Icon */
+  --ds-datepicker-icon-color: var(--ds-color-neutral-400);
+  --ds-datepicker-clear-color: var(--ds-color-neutral-400);
+  --ds-datepicker-clear-color-hover: var(--ds-color-neutral-600);
+
+  /* DatePicker Separator */
+  --ds-datepicker-separator-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     INPUTNUMBER
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* InputNumber Base */
+  --ds-inputnumber-bg: var(--ds-color-white);
+  --ds-inputnumber-bg-disabled: var(--ds-color-neutral-50);
+  --ds-inputnumber-color: var(--ds-color-neutral-900);
+  --ds-inputnumber-border: var(--ds-color-neutral-300);
+  --ds-inputnumber-border-hover: var(--ds-color-neutral-400);
+  --ds-inputnumber-border-focus: var(--ds-color-primary-500);
+  --ds-inputnumber-radius: var(--ds-radius-md);
+  --ds-inputnumber-shadow-focus: var(--ds-input-shadow-focus);
+  --ds-inputnumber-transition: var(--ds-transition-fast);
+
+  /* InputNumber Status */
+  --ds-inputnumber-error-border: var(--ds-color-error-500);
+  --ds-inputnumber-warning-border: var(--ds-color-warning-500);
+
+  /* InputNumber Sizes */
+  --ds-inputnumber-sm-padding: 0.25rem 0.5rem;
+  --ds-inputnumber-sm-font-size: var(--ds-font-size-xs);
+  --ds-inputnumber-sm-width: 100px;
+  --ds-inputnumber-md-padding: 0.5rem 0.75rem;
+  --ds-inputnumber-md-font-size: var(--ds-font-size-sm);
+  --ds-inputnumber-md-width: 120px;
+  --ds-inputnumber-lg-padding: 0.75rem 1rem;
+  --ds-inputnumber-lg-font-size: var(--ds-font-size-base);
+  --ds-inputnumber-lg-width: 140px;
+
+  /* InputNumber Controls */
+  --ds-inputnumber-control-bg: transparent;
+  --ds-inputnumber-control-color: var(--ds-color-neutral-500);
+  --ds-inputnumber-control-color-hover: var(--ds-color-primary-500);
+
+  /* InputNumber Addon */
+  --ds-inputnumber-addon-bg: var(--ds-color-neutral-50);
+  --ds-inputnumber-addon-border: var(--ds-color-neutral-300);
+  --ds-inputnumber-addon-color: var(--ds-color-neutral-600);
+
+  /* InputNumber Prefix/Suffix */
+  --ds-inputnumber-affix-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TEXTAREA
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Textarea Base */
+  --ds-textarea-bg: var(--ds-color-white);
+  --ds-textarea-bg-disabled: var(--ds-color-neutral-50);
+  --ds-textarea-color: var(--ds-color-neutral-900);
+  --ds-textarea-color-placeholder: var(--ds-color-neutral-400);
+  --ds-textarea-border: var(--ds-color-neutral-300);
+  --ds-textarea-border-hover: var(--ds-color-neutral-400);
+  --ds-textarea-border-focus: var(--ds-color-primary-500);
+  --ds-textarea-radius: var(--ds-radius-md);
+  --ds-textarea-shadow-focus: var(--ds-input-shadow-focus);
+  --ds-textarea-transition: var(--ds-transition-fast);
+
+  /* Textarea Status */
+  --ds-textarea-error-border: var(--ds-color-error-500);
+  --ds-textarea-warning-border: var(--ds-color-warning-500);
+  --ds-textarea-success-border: var(--ds-color-success-500);
+
+  /* Textarea Sizes */
+  --ds-textarea-sm-padding: 0.375rem 0.5rem;
+  --ds-textarea-sm-font-size: var(--ds-font-size-xs);
+  --ds-textarea-md-padding: 0.5rem 0.75rem;
+  --ds-textarea-md-font-size: var(--ds-font-size-sm);
+  --ds-textarea-lg-padding: 0.75rem 1rem;
+  --ds-textarea-lg-font-size: var(--ds-font-size-base);
+
+  /* Textarea Filled Variant */
+  --ds-textarea-filled-bg: var(--ds-color-neutral-100);
+
+  /* Textarea Count */
+  --ds-textarea-count-color: var(--ds-color-neutral-400);
+  --ds-textarea-count-font-size: var(--ds-font-size-xs);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TIMEPICKER
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* TimePicker Base */
+  --ds-timepicker-bg: var(--ds-color-white);
+  --ds-timepicker-bg-disabled: var(--ds-color-neutral-50);
+  --ds-timepicker-color: var(--ds-color-neutral-900);
+  --ds-timepicker-border: var(--ds-color-neutral-300);
+  --ds-timepicker-border-focus: var(--ds-color-primary-500);
+  --ds-timepicker-radius: var(--ds-radius-md);
+  --ds-timepicker-shadow-focus: var(--ds-input-shadow-focus);
+  --ds-timepicker-transition: var(--ds-transition-fast);
+
+  /* TimePicker Status */
+  --ds-timepicker-error-border: var(--ds-color-error-500);
+  --ds-timepicker-warning-border: var(--ds-color-warning-500);
+
+  /* TimePicker Sizes */
+  --ds-timepicker-sm-padding: 0.25rem 0.5rem;
+  --ds-timepicker-sm-font-size: var(--ds-font-size-xs);
+  --ds-timepicker-md-padding: 0.5rem 0.75rem;
+  --ds-timepicker-md-font-size: var(--ds-font-size-sm);
+  --ds-timepicker-lg-padding: 0.75rem 1rem;
+  --ds-timepicker-lg-font-size: var(--ds-font-size-base);
+
+  /* TimePicker Icon */
+  --ds-timepicker-icon-color: var(--ds-color-neutral-400);
+  --ds-timepicker-clear-color: var(--ds-color-neutral-400);
+  --ds-timepicker-separator-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     FORM
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Form Layout */
+  --ds-form-gap: var(--ds-spacing-4);
+  --ds-form-item-gap: var(--ds-spacing-1);
+
+  /* Form Label */
+  --ds-form-label-font-size: var(--ds-font-size-sm);
+  --ds-form-label-font-weight: var(--ds-font-weight-medium);
+  --ds-form-label-color: var(--ds-color-neutral-700);
+  --ds-form-label-width: 25%;
+
+  /* Form Required Mark */
+  --ds-form-required-color: var(--ds-color-error-500);
+
+  /* Form Help Text */
+  --ds-form-help-font-size: var(--ds-font-size-xs);
+  --ds-form-help-color: var(--ds-color-neutral-500);
+  --ds-form-error-color: var(--ds-color-error-500);
+  --ds-form-warning-color: var(--ds-color-warning-500);
+  --ds-form-success-color: var(--ds-color-success-500);
+
+  /* Form Extra */
+  --ds-form-extra-font-size: var(--ds-font-size-xs);
+  --ds-form-extra-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     UPLOAD
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Upload Button */
+  --ds-upload-button-padding: 0.5rem 1rem;
+  --ds-upload-button-bg: var(--ds-color-white);
+  --ds-upload-button-border: var(--ds-color-neutral-300);
+  --ds-upload-button-radius: var(--ds-radius-sm);
+  --ds-upload-button-color: var(--ds-color-neutral-700);
+
+  /* Upload Dragger */
+  --ds-upload-dragger-bg: var(--ds-color-neutral-50);
+  --ds-upload-dragger-bg-hover: rgba(59, 130, 246, 0.05);
+  --ds-upload-dragger-border: var(--ds-color-neutral-300);
+  --ds-upload-dragger-border-active: var(--ds-color-primary-500);
+  --ds-upload-dragger-radius: var(--ds-radius-lg);
+  --ds-upload-dragger-icon-color: var(--ds-color-neutral-400);
+  --ds-upload-dragger-text-color: var(--ds-color-neutral-600);
+
+  /* Upload File List */
+  --ds-upload-file-bg: var(--ds-color-neutral-50);
+  --ds-upload-file-radius: var(--ds-radius-sm);
+  --ds-upload-file-color: var(--ds-color-neutral-700);
+  --ds-upload-file-remove-color: var(--ds-color-error-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     AUTOCOMPLETE
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* AutoComplete Input */
+  --ds-autocomplete-bg: var(--ds-color-white);
+  --ds-autocomplete-border: var(--ds-color-neutral-300);
+  --ds-autocomplete-border-focus: var(--ds-color-primary-500);
+  --ds-autocomplete-radius: var(--ds-radius-md);
+  --ds-autocomplete-error-border: var(--ds-color-error-500);
+  --ds-autocomplete-warning-border: var(--ds-color-warning-500);
+
+  /* AutoComplete Sizes */
+  --ds-autocomplete-sm-height: 32px;
+  --ds-autocomplete-md-height: 40px;
+  --ds-autocomplete-lg-height: 48px;
+
+  /* AutoComplete Dropdown */
+  --ds-autocomplete-dropdown-bg: var(--ds-color-white);
+  --ds-autocomplete-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-autocomplete-dropdown-radius: var(--ds-radius-md);
+  --ds-autocomplete-option-bg-hover: var(--ds-color-neutral-100);
+  --ds-autocomplete-option-bg-selected: var(--ds-color-primary-50);
+  --ds-autocomplete-empty-color: var(--ds-color-neutral-400);
+  --ds-autocomplete-clear-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TOGGLE
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Toggle Track */
+  --ds-toggle-track-bg: var(--ds-color-neutral-300);
+  --ds-toggle-track-bg-checked: var(--ds-color-primary-500);
+  --ds-toggle-track-radius: 9999px;
+  --ds-toggle-transition: all 0.2s ease-in-out;
+
+  /* Toggle Sizes */
+  --ds-toggle-sm-width: 32px;
+  --ds-toggle-sm-height: 18px;
+  --ds-toggle-sm-dot: 14px;
+  --ds-toggle-md-width: 44px;
+  --ds-toggle-md-height: 24px;
+  --ds-toggle-md-dot: 20px;
+  --ds-toggle-lg-width: 56px;
+  --ds-toggle-lg-height: 30px;
+  --ds-toggle-lg-dot: 26px;
+
+  /* Toggle Dot */
+  --ds-toggle-dot-bg: var(--ds-color-white);
+  --ds-toggle-dot-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  /* Toggle Focus */
+  --ds-toggle-focus-ring: var(--ds-shadow-focus-ring);
+
+  /* Toggle Colors */
+  --ds-toggle-success-bg: var(--ds-color-success-500);
+  --ds-toggle-warning-bg: var(--ds-color-warning-500);
+  --ds-toggle-error-bg: var(--ds-color-error-500);
+
+  /* Toggle Label */
+  --ds-toggle-label-color: var(--ds-color-neutral-700);
+  --ds-toggle-label-font-size: var(--ds-font-size-sm);
+  --ds-toggle-description-color: var(--ds-color-neutral-500);
+  --ds-toggle-description-font-size: var(--ds-font-size-xs);
+  --ds-toggle-error-color: var(--ds-color-error-500);
+  --ds-toggle-inner-label-color: var(--ds-color-white);
+  --ds-toggle-inner-label-font-size: 10px;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TABLE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-table-bg: var(--ds-color-white);
+  --ds-table-border: var(--ds-color-neutral-200);
+  --ds-table-radius: var(--ds-radius-lg);
+
+  /* Table Header */
+  --ds-table-header-bg: var(--ds-color-neutral-50);
+  --ds-table-header-color: var(--ds-color-neutral-700);
+  --ds-table-header-font-weight: var(--ds-font-weight-semibold);
+  --ds-table-header-font-size: var(--ds-font-size-sm);
+
+  /* Table Row */
+  --ds-table-row-bg: var(--ds-color-white);
+  --ds-table-row-bg-hover: var(--ds-color-neutral-50);
+  --ds-table-row-bg-striped: var(--ds-color-neutral-50);
+  --ds-table-row-bg-selected: var(--ds-color-primary-50);
+  --ds-table-row-border: var(--ds-color-neutral-200);
+
+  /* Table Cell */
+  --ds-table-cell-padding: 0.75rem 1rem;
+  --ds-table-cell-font-size: var(--ds-font-size-sm);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TABS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-tabs-border: var(--ds-color-neutral-200);
+
+  /* Tab Item */
+  --ds-tab-color: var(--ds-color-neutral-600);
+  --ds-tab-color-hover: var(--ds-color-neutral-900);
+  --ds-tab-color-active: var(--ds-color-primary-600);
+  --ds-tab-bg-hover: var(--ds-color-neutral-100);
+  --ds-tab-border-active: var(--ds-color-primary-500);
+  --ds-tab-font-weight: var(--ds-font-weight-medium);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     PROGRESS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-progress-height: 0.5rem;
+  --ds-progress-height-sm: 0.25rem;
+  --ds-progress-height-lg: 0.75rem;
+  --ds-progress-bg: var(--ds-color-neutral-200);
+  --ds-progress-radius: var(--ds-radius-full);
+
+  /* Progress Fill */
+  --ds-progress-fill-primary: var(--ds-color-primary-500);
+  --ds-progress-fill-success: var(--ds-color-success-500);
+  --ds-progress-fill-warning: var(--ds-color-warning-500);
+  --ds-progress-fill-error: var(--ds-color-error-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SKELETON
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-skeleton-bg: var(--ds-color-neutral-200);
+  --ds-skeleton-highlight: var(--ds-color-neutral-100);
+  --ds-skeleton-radius: var(--ds-radius-md);
+  --ds-skeleton-animation-duration: 1.5s;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SPINNER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-spinner-color: var(--ds-color-primary-500);
+  --ds-spinner-track: var(--ds-color-neutral-200);
+
+  --ds-spinner-xs-size: 1rem;
+  --ds-spinner-sm-size: 1.25rem;
+  --ds-spinner-md-size: 1.5rem;
+  --ds-spinner-lg-size: 2rem;
+  --ds-spinner-xl-size: 2.5rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     DIVIDER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-divider-color: var(--ds-color-neutral-200);
+  --ds-divider-width: 1px;
+  --ds-divider-spacing: var(--ds-spacing-4);
+  --ds-divider-text-padding: 0 1rem;
+  --ds-divider-text-size: var(--ds-font-size-sm);
+  --ds-divider-text-color: var(--ds-color-neutral-600);
+  --ds-divider-text-font-weight: var(--ds-font-weight-medium);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     DROPDOWN
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-dropdown-bg: var(--ds-color-white);
+  --ds-dropdown-border: var(--ds-color-neutral-200);
+  --ds-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-dropdown-radius: var(--ds-radius-lg);
+  --ds-dropdown-padding: 0.25rem;
+
+  /* Dropdown Item */
+  --ds-dropdown-item-padding: 0.5rem 0.75rem;
+  --ds-dropdown-item-radius: var(--ds-radius-md);
+  --ds-dropdown-item-color: var(--ds-color-neutral-700);
+  --ds-dropdown-item-bg-hover: var(--ds-color-neutral-100);
+  --ds-dropdown-item-color-hover: var(--ds-color-neutral-900);
+  --ds-dropdown-item-bg-active: var(--ds-color-primary-50);
+  --ds-dropdown-item-color-active: var(--ds-color-primary-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     POPOVER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-popover-bg: var(--ds-color-white);
+  --ds-popover-border: var(--ds-color-neutral-200);
+  --ds-popover-shadow: var(--ds-shadow-lg);
+  --ds-popover-radius: var(--ds-radius-lg);
+  --ds-popover-padding: 1rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     DRAWER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-drawer-bg: var(--ds-color-white);
+  --ds-drawer-shadow: var(--ds-shadow-2xl);
+  --ds-drawer-width: 24rem;
+  --ds-drawer-width-sm: 20rem;
+  --ds-drawer-width-lg: 32rem;
+  --ds-drawer-width-xl: 40rem;
+  --ds-drawer-z-index: var(--ds-z-index-drawer);
+  --ds-drawer-transition: transform 0.3s ease-in-out;
+
+  /* Drawer Header */
+  --ds-drawer-header-padding: 1rem 1.5rem;
+  --ds-drawer-header-border: var(--ds-color-neutral-200);
+  --ds-drawer-title-font-size: var(--ds-font-size-lg);
+  --ds-drawer-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-drawer-title-color: var(--ds-color-neutral-900);
+
+  /* Drawer Body */
+  --ds-drawer-body-padding: 1.5rem;
+
+  /* Drawer Footer */
+  --ds-drawer-footer-padding: 0.75rem 1rem;
+  --ds-drawer-footer-border: var(--ds-color-neutral-200);
+  --ds-drawer-footer-bg: var(--ds-color-neutral-50);
+  --ds-drawer-footer-gap: 0.5rem;
+
+  /* Drawer Close */
+  --ds-drawer-close-size: 1.25rem;
+  --ds-drawer-close-color: var(--ds-color-neutral-500);
+  --ds-drawer-close-color-hover: var(--ds-color-neutral-700);
+  --ds-drawer-close-bg-hover: var(--ds-color-neutral-100);
+
+  /* Drawer Overlay */
+  --ds-drawer-overlay-bg: rgba(0, 0, 0, 0.45);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BREADCRUMB
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-breadcrumb-color: var(--ds-color-neutral-600);
+  --ds-breadcrumb-color-hover: var(--ds-color-primary-600);
+  --ds-breadcrumb-color-active: var(--ds-color-neutral-900);
+  --ds-breadcrumb-separator-color: var(--ds-color-neutral-400);
+  --ds-breadcrumb-font-size: var(--ds-font-size-sm);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     PAGINATION
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-pagination-item-size: 2rem;
+  --ds-pagination-item-bg: var(--ds-color-white);
+  --ds-pagination-item-border: var(--ds-color-neutral-300);
+  --ds-pagination-item-color: var(--ds-color-neutral-700);
+  --ds-pagination-item-bg-hover: var(--ds-color-neutral-100);
+  --ds-pagination-item-bg-active: var(--ds-color-primary-500);
+  --ds-pagination-item-color-active: var(--ds-color-white);
+  --ds-pagination-item-radius: var(--ds-radius-md);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     MENU
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-menu-bg: var(--ds-color-white);
+  --ds-menu-border: var(--ds-color-neutral-200);
+
+  /* Menu Item */
+  --ds-menu-item-padding: 0.5rem 1rem;
+  --ds-menu-item-color: var(--ds-color-neutral-700);
+  --ds-menu-item-bg-hover: var(--ds-color-neutral-100);
+  --ds-menu-item-color-hover: var(--ds-color-neutral-900);
+  --ds-menu-item-bg-active: var(--ds-color-primary-50);
+  --ds-menu-item-color-active: var(--ds-color-primary-700);
+  --ds-menu-item-border-active: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     COLLAPSE / ACCORDION
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-collapse-bg: var(--ds-color-white);
+  --ds-collapse-border: var(--ds-color-neutral-200);
+  --ds-collapse-border-color: var(--ds-color-neutral-300);
+  --ds-collapse-radius: var(--ds-radius-lg);
+  --ds-collapse-gap: 1px;
+
+  /* Collapse Header */
+  --ds-collapse-header-padding: 0.75rem 1rem;
+  --ds-collapse-header-gap: 0.5rem;
+  --ds-collapse-header-bg: var(--ds-color-neutral-50);
+  --ds-collapse-header-bg-hover: var(--ds-color-neutral-100);
+  --ds-collapse-header-color: var(--ds-color-neutral-900);
+  --ds-collapse-header-font-weight: var(--ds-font-weight-medium);
+
+  /* Collapse Content */
+  --ds-collapse-content-padding: 1rem;
+  --ds-collapse-content-bg: var(--ds-color-white);
+
+  /* Collapse Icon */
+  --ds-collapse-icon-color: var(--ds-color-neutral-500);
+  --ds-collapse-icon-color-expanded: var(--ds-color-primary-500);
+  --ds-collapse-icon-size: 0.75rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     FORM
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-form-item-margin-bottom: 1.5rem;
+  --ds-form-label-color: var(--ds-color-neutral-700);
+  --ds-form-label-font-size: var(--ds-font-size-sm);
+  --ds-form-label-font-weight: var(--ds-font-weight-medium);
+  --ds-form-required-color: var(--ds-color-error-500);
+  --ds-form-helper-color: var(--ds-color-neutral-600);
+  --ds-form-error-color: var(--ds-color-error-600);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SLIDER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-slider-track-height: 0.25rem;
+  --ds-slider-track-bg: var(--ds-color-neutral-200);
+  --ds-slider-track-fill: var(--ds-color-primary-500);
+  --ds-slider-thumb-size: 1rem;
+  --ds-slider-thumb-bg: var(--ds-color-white);
+  --ds-slider-thumb-border: var(--ds-color-primary-500);
+  --ds-slider-thumb-shadow: var(--ds-shadow-sm);
+  --ds-slider-focus-ring: var(--ds-shadow-focus-ring);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TIMELINE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-timeline-line-color: var(--ds-color-neutral-200);
+  --ds-timeline-line-width: 2px;
+  --ds-timeline-dot-size: 0.75rem;
+  --ds-timeline-dot-bg: var(--ds-color-white);
+  --ds-timeline-dot-border: var(--ds-color-neutral-300);
+  --ds-timeline-dot-active-bg: var(--ds-color-primary-500);
+  --ds-timeline-dot-active-border: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     STEPS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-steps-item-size: 2rem;
+  --ds-steps-line-color: var(--ds-color-neutral-200);
+  --ds-steps-line-color-active: var(--ds-color-primary-500);
+
+  /* Steps Item */
+  --ds-steps-item-bg: var(--ds-color-white);
+  --ds-steps-item-border: var(--ds-color-neutral-300);
+  --ds-steps-item-color: var(--ds-color-neutral-500);
+  --ds-steps-item-bg-active: var(--ds-color-primary-500);
+  --ds-steps-item-border-active: var(--ds-color-primary-500);
+  --ds-steps-item-color-active: var(--ds-color-white);
+  --ds-steps-item-bg-completed: var(--ds-color-primary-500);
+  --ds-steps-item-color-completed: var(--ds-color-white);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     RATE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-rate-size: 1.25rem;
+  --ds-rate-size-sm: 1rem;
+  --ds-rate-size-lg: 1.5rem;
+  --ds-rate-color: var(--ds-color-neutral-300);
+  --ds-rate-color-active: #fadb14;
+  --ds-rate-color-hover: #ffdf3d;
+  --ds-rate-gap: 0.25rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     EMPTY STATE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-empty-icon-size: 4rem;
+  --ds-empty-icon-color: var(--ds-color-neutral-300);
+  --ds-empty-title-color: var(--ds-color-neutral-700);
+  --ds-empty-description-color: var(--ds-color-neutral-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     NOTIFICATION
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-notification-bg: var(--ds-color-white);
+  --ds-notification-border: var(--ds-color-neutral-200);
+  --ds-notification-shadow: var(--ds-shadow-lg);
+  --ds-notification-radius: var(--ds-radius-lg);
+  --ds-notification-padding: 1rem 1.5rem;
+  --ds-notification-width: 24rem;
+  --ds-notification-min-width: 300px;
+  --ds-notification-max-width: 400px;
+  --ds-notification-z-index: 1050;
+  --ds-notification-gap: 0.75rem;
+
+  /* Notification Content */
+  --ds-notification-title-size: var(--ds-font-size-base);
+  --ds-notification-title-color: var(--ds-color-neutral-900);
+  --ds-notification-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-notification-desc-size: var(--ds-font-size-sm);
+  --ds-notification-desc-color: var(--ds-color-neutral-600);
+
+  /* Notification Close */
+  --ds-notification-close-color: var(--ds-color-neutral-400);
+  --ds-notification-close-color-hover: var(--ds-color-neutral-600);
+
+  /* Notification Type Colors */
+  --ds-notification-success-color: var(--ds-color-success-500);
+  --ds-notification-success-bg: var(--ds-color-success-50);
+  --ds-notification-error-color: var(--ds-color-error-500);
+  --ds-notification-error-bg: var(--ds-color-error-50);
+  --ds-notification-warning-color: var(--ds-color-warning-500);
+  --ds-notification-warning-bg: var(--ds-color-warning-50);
+  --ds-notification-info-color: var(--ds-color-primary-500);
+  --ds-notification-info-bg: var(--ds-color-primary-50);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     MESSAGE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-message-bg: var(--ds-color-white);
+  --ds-message-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --ds-message-radius: var(--ds-radius-lg);
+  --ds-message-padding: 0.625rem 1rem;
+  --ds-message-z-index: 1010;
+  --ds-message-gap: 0.5rem;
+  --ds-message-max-width: 400px;
+  --ds-message-min-width: 200px;
+  --ds-message-font-size: var(--ds-font-size-sm);
+  --ds-message-line-height: 1.5rem;
+  --ds-message-text-color: var(--ds-color-neutral-800);
+
+  /* Message Close */
+  --ds-message-close-color: var(--ds-color-neutral-400);
+  --ds-message-close-color-hover: var(--ds-color-neutral-600);
+
+  /* Message Type Colors */
+  --ds-message-success-color: var(--ds-color-success-500);
+  --ds-message-success-bg: var(--ds-color-success-50);
+  --ds-message-success-border: var(--ds-color-success-200);
+  --ds-message-error-color: var(--ds-color-error-500);
+  --ds-message-error-bg: var(--ds-color-error-50);
+  --ds-message-error-border: var(--ds-color-error-200);
+  --ds-message-warning-color: var(--ds-color-warning-500);
+  --ds-message-warning-bg: var(--ds-color-warning-50);
+  --ds-message-warning-border: var(--ds-color-warning-200);
+  --ds-message-info-color: var(--ds-color-primary-500);
+  --ds-message-info-bg: var(--ds-color-primary-50);
+  --ds-message-info-border: var(--ds-color-primary-200);
+  --ds-message-loading-color: var(--ds-color-primary-500);
+  --ds-message-loading-bg: var(--ds-color-primary-50);
+  --ds-message-loading-border: var(--ds-color-primary-200);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TOAST
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-toast-bg: var(--ds-color-white);
+  --ds-toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --ds-toast-radius-sm: var(--ds-radius-sm);
+  --ds-toast-radius-md: var(--ds-radius-md);
+  --ds-toast-radius-lg: var(--ds-radius-lg);
+  --ds-toast-padding: 0.75rem 1rem;
+  --ds-toast-gap: 0.75rem;
+  --ds-toast-max-width: 400px;
+  --ds-toast-z-index: 1060;
+
+  /* Toast Content */
+  --ds-toast-title-size: var(--ds-font-size-sm);
+  --ds-toast-desc-size: var(--ds-font-size-sm);
+
+  /* Toast Close */
+  --ds-toast-close-opacity: 0.5;
+  --ds-toast-close-opacity-hover: 0.8;
+
+  /* Toast Action */
+  --ds-toast-action-padding: 0.25rem 0.75rem;
+  --ds-toast-action-size: var(--ds-font-size-xs);
+  --ds-toast-action-radius: var(--ds-radius-sm);
+
+  /* Toast Progress */
+  --ds-toast-progress-height: 3px;
+  --ds-toast-progress-opacity: 0.5;
+
+  /* Toast Type Colors */
+  --ds-toast-success-bg: var(--ds-color-success-50);
+  --ds-toast-success-color: var(--ds-color-success-800);
+  --ds-toast-success-border: var(--ds-color-success-200);
+  --ds-toast-success-icon: var(--ds-color-success-500);
+  --ds-toast-error-bg: var(--ds-color-error-50);
+  --ds-toast-error-color: var(--ds-color-error-800);
+  --ds-toast-error-border: var(--ds-color-error-200);
+  --ds-toast-error-icon: var(--ds-color-error-500);
+  --ds-toast-warning-bg: var(--ds-color-warning-50);
+  --ds-toast-warning-color: var(--ds-color-warning-800);
+  --ds-toast-warning-border: var(--ds-color-warning-200);
+  --ds-toast-warning-icon: var(--ds-color-warning-500);
+  --ds-toast-info-bg: var(--ds-color-info-50);
+  --ds-toast-info-color: var(--ds-color-info-800);
+  --ds-toast-info-border: var(--ds-color-info-200);
+  --ds-toast-info-icon: var(--ds-color-info-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     LINK
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-link-color: var(--ds-color-primary-600);
+  --ds-link-color-hover: var(--ds-color-primary-700);
+  --ds-link-color-active: var(--ds-color-primary-800);
+  --ds-link-color-visited: var(--ds-color-secondary-600);
+  --ds-link-decoration: none;
+  --ds-link-decoration-hover: underline;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     ICON
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-icon-xs-size: 0.75rem;
+  --ds-icon-sm-size: 1rem;
+  --ds-icon-md-size: 1.25rem;
+  --ds-icon-lg-size: 1.5rem;
+  --ds-icon-xl-size: 2rem;
+  --ds-icon-2xl-size: 3rem;
+  --ds-icon-default-size: var(--ds-icon-md-size);
+  --ds-icon-color: currentColor;
+  --ds-icon-stroke-width: 2;
+  --ds-icon-transition: var(--ds-transition-fast);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     LIST
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* List Sizes */
+  --ds-list-sm-padding-y: 0.5rem;
+  --ds-list-sm-padding-x: 1rem;
+  --ds-list-sm-font-size: var(--ds-font-size-xs);
+
+  --ds-list-md-padding-y: 0.75rem;
+  --ds-list-md-padding-x: 1rem;
+  --ds-list-md-font-size: var(--ds-font-size-sm);
+
+  --ds-list-lg-padding-y: 1rem;
+  --ds-list-lg-padding-x: 1.5rem;
+  --ds-list-lg-font-size: var(--ds-font-size-base);
+
+  /* List Base */
+  --ds-list-bg: var(--ds-color-white);
+  --ds-list-border: var(--ds-color-neutral-200);
+  --ds-list-radius: var(--ds-radius-md);
+
+  /* List Item */
+  --ds-list-item-bg: transparent;
+  --ds-list-item-bg-hover: var(--ds-color-neutral-50);
+  --ds-list-item-color: var(--ds-color-neutral-900);
+  --ds-list-item-color-secondary: var(--ds-color-neutral-500);
+  --ds-list-item-divider: var(--ds-color-neutral-200);
+
+  /* List Header/Footer */
+  --ds-list-header-bg: var(--ds-color-neutral-50);
+  --ds-list-header-font-weight: var(--ds-font-weight-semibold);
+  --ds-list-footer-bg: var(--ds-color-neutral-50);
+
+  /* List Meta */
+  --ds-list-meta-title-color: var(--ds-color-neutral-900);
+  --ds-list-meta-title-font-weight: var(--ds-font-weight-medium);
+  --ds-list-meta-description-color: var(--ds-color-neutral-500);
+
+  /* List Empty */
+  --ds-list-empty-color: var(--ds-color-neutral-400);
+  --ds-list-empty-padding: 2rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     QRCODE
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* QRCode Sizes */
+  --ds-qrcode-xs-size: 80px;
+  --ds-qrcode-sm-size: 120px;
+  --ds-qrcode-md-size: 160px;
+  --ds-qrcode-lg-size: 200px;
+  --ds-qrcode-xl-size: 256px;
+  --ds-qrcode-2xl-size: 320px;
+
+  /* QRCode Base */
+  --ds-qrcode-fg: #000000;
+  --ds-qrcode-bg: var(--ds-color-white);
+  --ds-qrcode-border: var(--ds-color-neutral-200);
+  --ds-qrcode-radius: var(--ds-radius-md);
+
+  /* QRCode Status */
+  --ds-qrcode-loading-opacity: 0.5;
+  --ds-qrcode-loading-bg: var(--ds-color-neutral-100);
+  --ds-qrcode-expired-opacity: 0.3;
+  --ds-qrcode-expired-overlay: rgba(0, 0, 0, 0.5);
+  --ds-qrcode-scanned-overlay: rgba(82, 196, 26, 0.1);
+  --ds-qrcode-scanned-icon: var(--ds-color-success-500);
+
+  /* QRCode Refresh */
+  --ds-qrcode-refresh-bg: var(--ds-color-primary-500);
+  --ds-qrcode-refresh-color: var(--ds-color-white);
+  --ds-qrcode-refresh-size: 2rem;
+
+  /* QRCode Icon */
+  --ds-qrcode-icon-bg: var(--ds-color-white);
+  --ds-qrcode-icon-padding: 0.25rem;
+  --ds-qrcode-icon-radius: var(--ds-radius-sm);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SPACE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-space-xs: 0.25rem;
+  --ds-space-sm: 0.5rem;
+  --ds-space-md: 1rem;
+  --ds-space-lg: 1.5rem;
+  --ds-space-xl: 2rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     LAYOUT
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Layout Header */
+  --ds-layout-header-height: 64px;
+  --ds-layout-header-padding: 0 1rem;
+  --ds-layout-header-bg: #001529;
+  --ds-layout-header-color: var(--ds-color-white);
+
+  /* Layout Sider */
+  --ds-layout-sider-width: 200px;
+  --ds-layout-sider-collapsed-width: 80px;
+  --ds-layout-sider-bg: #001529;
+  --ds-layout-sider-color: var(--ds-color-white);
+  --ds-layout-sider-light-bg: var(--ds-color-white);
+  --ds-layout-sider-light-color: var(--ds-color-neutral-900);
+  --ds-layout-sider-light-border: var(--ds-color-neutral-100);
+
+  /* Layout Content */
+  --ds-layout-content-padding: 1rem;
+  --ds-layout-content-bg: var(--ds-color-white);
+
+  /* Layout Footer */
+  --ds-layout-footer-padding: 1rem;
+  --ds-layout-footer-bg: var(--ds-color-neutral-100);
+  --ds-layout-footer-color: var(--ds-color-neutral-600);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SPLITTER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-splitter-gutter-size: 8px;
+  --ds-splitter-gutter-bg: var(--ds-color-neutral-200);
+  --ds-splitter-gutter-hover-bg: var(--ds-color-primary-500);
+  --ds-splitter-panel-min-size: 0;
+  --ds-splitter-transition: background-color 0.2s;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CONTAINER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-container-xs-max-width: 100%;
+  --ds-container-sm-max-width: 540px;
+  --ds-container-md-max-width: 720px;
+  --ds-container-lg-max-width: 960px;
+  --ds-container-xl-max-width: 1140px;
+  --ds-container-2xl-max-width: 1320px;
+  --ds-container-padding-x: 1rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TOGGLE
+     ───────────────────────────────────────────────────────────────────────────── */
+
+  /* Toggle Sizes */
+  --ds-toggle-xs-width: 1.75rem;
+  --ds-toggle-xs-height: 1rem;
+  --ds-toggle-xs-thumb: 0.75rem;
+
+  --ds-toggle-sm-width: 2.25rem;
+  --ds-toggle-sm-height: 1.25rem;
+  --ds-toggle-sm-thumb: 1rem;
+
+  --ds-toggle-md-width: 2.75rem;
+  --ds-toggle-md-height: 1.5rem;
+  --ds-toggle-md-thumb: 1.25rem;
+
+  --ds-toggle-lg-width: 3.25rem;
+  --ds-toggle-lg-height: 1.75rem;
+  --ds-toggle-lg-thumb: 1.5rem;
+
+  --ds-toggle-xl-width: 3.75rem;
+  --ds-toggle-xl-height: 2rem;
+  --ds-toggle-xl-thumb: 1.75rem;
+
+  /* Toggle Base */
+  --ds-toggle-bg: var(--ds-color-neutral-300);
+  --ds-toggle-bg-hover: var(--ds-color-neutral-400);
+  --ds-toggle-checked-bg: var(--ds-color-primary-500);
+  --ds-toggle-checked-bg-hover: var(--ds-color-primary-600);
+
+  /* Toggle Thumb */
+  --ds-toggle-thumb-bg: var(--ds-color-white);
+  --ds-toggle-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --ds-toggle-thumb-offset: 0.125rem;
+
+  /* Toggle Variants */
+  --ds-toggle-success-bg: var(--ds-color-success-500);
+  --ds-toggle-warning-bg: var(--ds-color-warning-500);
+  --ds-toggle-error-bg: var(--ds-color-error-500);
+
+  /* Toggle Label */
+  --ds-toggle-label-color: var(--ds-color-neutral-700);
+  --ds-toggle-label-color-disabled: var(--ds-color-neutral-400);
+  --ds-toggle-label-gap: 0.5rem;
+
+  /* Toggle States */
+  --ds-toggle-disabled-opacity: 0.5;
+  --ds-toggle-disabled-bg: var(--ds-color-neutral-200);
+  --ds-toggle-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-toggle-transition: var(--ds-transition-fast);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TEXTAREA
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-textarea-min-height: 5rem;
+  --ds-textarea-padding: 0.75rem;
+  --ds-textarea-resize: vertical;
+  --ds-textarea-line-height: var(--ds-line-height-normal);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     UPLOAD
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-upload-bg: var(--ds-color-neutral-50);
+  --ds-upload-border: var(--ds-color-neutral-300);
+  --ds-upload-border-hover: var(--ds-color-primary-400);
+  --ds-upload-border-active: var(--ds-color-primary-500);
+  --ds-upload-radius: var(--ds-radius-lg);
+  --ds-upload-padding: 2rem;
+  --ds-upload-icon-size: 3rem;
+  --ds-upload-icon-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     RESULT
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-result-icon-size: 4rem;
+  --ds-result-title-font-size: var(--ds-font-size-2xl);
+  --ds-result-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-result-title-color: var(--ds-color-neutral-900);
+  --ds-result-subtitle-color: var(--ds-color-neutral-600);
+  --ds-result-success-icon: var(--ds-color-success-500);
+  --ds-result-error-icon: var(--ds-color-error-500);
+  --ds-result-warning-icon: var(--ds-color-warning-500);
+  --ds-result-info-icon: var(--ds-color-info-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     SEGMENTED
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-segmented-bg: var(--ds-color-neutral-100);
+  --ds-segmented-radius: var(--ds-radius-md);
+  --ds-segmented-padding: 0.25rem;
+  --ds-segmented-item-padding: 0.5rem 1rem;
+  --ds-segmented-item-radius: var(--ds-radius-sm);
+  --ds-segmented-item-color: var(--ds-color-neutral-600);
+  --ds-segmented-item-color-active: var(--ds-color-neutral-900);
+  --ds-segmented-item-bg-active: var(--ds-color-white);
+  --ds-segmented-item-shadow-active: var(--ds-shadow-sm);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     ANCHOR
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-anchor-link-padding: 0.25rem 0.75rem;
+  --ds-anchor-link-color: var(--ds-color-neutral-600);
+  --ds-anchor-link-color-hover: var(--ds-color-neutral-900);
+  --ds-anchor-link-color-active: var(--ds-color-primary-600);
+  --ds-anchor-ink-color: var(--ds-color-primary-500);
+  --ds-anchor-ink-width: 2px;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     AFFIX
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-affix-z-index: var(--ds-z-index-fixed);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     FLOAT BUTTON
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-float-button-size: 3rem;
+  --ds-float-button-size-sm: 2.5rem;
+  --ds-float-button-size-lg: 3.5rem;
+  --ds-float-button-bg: var(--ds-color-white);
+  --ds-float-button-bg-hover: var(--ds-color-neutral-50);
+  --ds-float-button-color: var(--ds-color-neutral-700);
+  --ds-float-button-shadow: var(--ds-shadow-lg);
+  --ds-float-button-radius: var(--ds-radius-full);
+  --ds-float-button-primary-bg: var(--ds-color-primary-500);
+  --ds-float-button-primary-color: var(--ds-color-white);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     BACK TOP
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-back-top-size: 2.5rem;
+  --ds-back-top-bg: var(--ds-color-neutral-100);
+  --ds-back-top-bg-hover: var(--ds-color-neutral-200);
+  --ds-back-top-color: var(--ds-color-neutral-600);
+  --ds-back-top-radius: var(--ds-radius-full);
+  --ds-back-top-shadow: var(--ds-shadow-md);
+  --ds-back-top-z-index: var(--ds-z-index-fixed);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     STEPPER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-stepper-item-size: 2rem;
+  --ds-stepper-line-color: var(--ds-color-neutral-200);
+  --ds-stepper-line-color-active: var(--ds-color-primary-500);
+  --ds-stepper-line-width: 2px;
+  --ds-stepper-item-bg: var(--ds-color-white);
+  --ds-stepper-item-border: var(--ds-color-neutral-300);
+  --ds-stepper-item-color: var(--ds-color-neutral-500);
+  --ds-stepper-item-bg-active: var(--ds-color-primary-500);
+  --ds-stepper-item-border-active: var(--ds-color-primary-500);
+  --ds-stepper-item-color-active: var(--ds-color-white);
+  --ds-stepper-item-bg-completed: var(--ds-color-primary-500);
+  --ds-stepper-item-color-completed: var(--ds-color-white);
+  --ds-stepper-item-bg-error: var(--ds-color-error-500);
+  --ds-stepper-item-color-error: var(--ds-color-white);
+  --ds-stepper-title-color: var(--ds-color-neutral-900);
+  --ds-stepper-title-color-active: var(--ds-color-primary-600);
+  --ds-stepper-description-color: var(--ds-color-neutral-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TOUR
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-tour-bg: var(--ds-color-white);
+  --ds-tour-color: var(--ds-color-neutral-700);
+  --ds-tour-radius: var(--ds-radius-lg);
+  --ds-tour-shadow: var(--ds-shadow-xl);
+  --ds-tour-padding: 1rem;
+  --ds-tour-title-font-weight: var(--ds-font-weight-semibold);
+  --ds-tour-mask-bg: rgba(0, 0, 0, 0.5);
+  --ds-tour-indicator-color: var(--ds-color-primary-500);
+  --ds-tour-indicator-inactive: var(--ds-color-neutral-300);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     WATERMARK
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-watermark-color: rgba(0, 0, 0, 0.1);
+  --ds-watermark-font-size: var(--ds-font-size-sm);
+  --ds-watermark-z-index: 9;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     POPCONFIRM
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-popconfirm-bg: var(--ds-color-white);
+  --ds-popconfirm-shadow: var(--ds-shadow-lg);
+  --ds-popconfirm-radius: var(--ds-radius-lg);
+  --ds-popconfirm-padding: 1rem;
+  --ds-popconfirm-title-font-weight: var(--ds-font-weight-medium);
+  --ds-popconfirm-icon-warning: var(--ds-color-warning-500);
+  --ds-popconfirm-icon-error: var(--ds-color-error-500);
+  --ds-popconfirm-buttons-gap: 0.5rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     STATISTIC
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-statistic-title-color: var(--ds-color-neutral-600);
+  --ds-statistic-title-font-size: var(--ds-font-size-sm);
+  --ds-statistic-value-color: var(--ds-color-neutral-900);
+  --ds-statistic-value-font-size: var(--ds-font-size-3xl);
+  --ds-statistic-value-font-weight: var(--ds-font-weight-semibold);
+  --ds-statistic-prefix-color: var(--ds-color-neutral-700);
+  --ds-statistic-suffix-color: var(--ds-color-neutral-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     DESCRIPTIONS
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-descriptions-bg: var(--ds-color-white);
+  --ds-descriptions-border: var(--ds-color-neutral-200);
+  --ds-descriptions-label-bg: var(--ds-color-neutral-50);
+  --ds-descriptions-label-color: var(--ds-color-neutral-600);
+  --ds-descriptions-label-font-weight: var(--ds-font-weight-medium);
+  --ds-descriptions-content-color: var(--ds-color-neutral-900);
+  --ds-descriptions-padding: 0.75rem 1rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TRANSFER
+     ───────────────────────────────────────────────────────────────────────────── */
+  /* Transfer List */
+  --ds-transfer-width: 200px;
+  --ds-transfer-height: 300px;
+  --ds-transfer-bg: var(--ds-color-white);
+  --ds-transfer-border: var(--ds-color-neutral-200);
+  --ds-transfer-radius: var(--ds-radius-lg);
+
+  /* Transfer Header */
+  --ds-transfer-header-bg: var(--ds-color-neutral-50);
+  --ds-transfer-header-padding: 8px 12px;
+  --ds-transfer-header-border: var(--ds-color-neutral-200);
+  --ds-transfer-header-font-weight: var(--ds-font-weight-medium);
+  --ds-transfer-count-color: var(--ds-color-neutral-500);
+  --ds-transfer-count-font-size: var(--ds-font-size-xs);
+
+  /* Transfer Search */
+  --ds-transfer-search-padding: 8px;
+  --ds-transfer-search-input-border: var(--ds-color-neutral-300);
+  --ds-transfer-search-input-radius: var(--ds-radius-sm);
+
+  /* Transfer Items */
+  --ds-transfer-item-padding: 6px 8px;
+  --ds-transfer-item-radius: var(--ds-radius-sm);
+  --ds-transfer-item-bg-hover: var(--ds-color-neutral-100);
+  --ds-transfer-item-bg-selected: var(--ds-color-primary-50);
+  --ds-transfer-list-max-height: 240px;
+
+  /* Transfer Buttons */
+  --ds-transfer-button-bg: var(--ds-color-primary-500);
+  --ds-transfer-button-color: var(--ds-color-white);
+  --ds-transfer-button-radius: var(--ds-radius-md);
+  --ds-transfer-button-padding: 8px 12px;
+  --ds-transfer-gap: 12px;
+
+  /* Transfer Empty */
+  --ds-transfer-empty-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TREE SELECT
+     ───────────────────────────────────────────────────────────────────────────── */
+  /* TreeSelect Input */
+  --ds-treeselect-bg: var(--ds-color-white);
+  --ds-treeselect-border: var(--ds-color-neutral-300);
+  --ds-treeselect-border-focus: var(--ds-color-primary-500);
+  --ds-treeselect-border-error: var(--ds-color-error-500);
+  --ds-treeselect-border-warning: var(--ds-color-warning-500);
+  --ds-treeselect-radius: var(--ds-radius-md);
+  --ds-treeselect-placeholder-color: var(--ds-color-neutral-400);
+  --ds-treeselect-arrow-color: var(--ds-color-neutral-400);
+  --ds-treeselect-clear-color: var(--ds-color-neutral-400);
+
+  /* TreeSelect Sizes */
+  --ds-treeselect-sm-height: 32px;
+  --ds-treeselect-md-height: 40px;
+  --ds-treeselect-lg-height: 48px;
+
+  /* TreeSelect Dropdown */
+  --ds-treeselect-dropdown-bg: var(--ds-color-white);
+  --ds-treeselect-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-treeselect-dropdown-radius: var(--ds-radius-lg);
+  --ds-treeselect-dropdown-max-height: 240px;
+
+  /* TreeSelect Nodes */
+  --ds-treeselect-node-padding: 6px 8px;
+  --ds-treeselect-node-radius: var(--ds-radius-sm);
+  --ds-treeselect-node-bg-hover: var(--ds-color-neutral-100);
+  --ds-treeselect-node-bg-selected: var(--ds-color-primary-50);
+  --ds-treeselect-node-color-selected: var(--ds-color-primary-500);
+  --ds-treeselect-expand-color: var(--ds-color-neutral-500);
+  --ds-treeselect-empty-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CASCADER
+     ───────────────────────────────────────────────────────────────────────────── */
+  /* Cascader Input */
+  --ds-cascader-bg: var(--ds-color-white);
+  --ds-cascader-border: var(--ds-color-neutral-300);
+  --ds-cascader-border-focus: var(--ds-color-primary-500);
+  --ds-cascader-border-error: var(--ds-color-error-500);
+  --ds-cascader-border-warning: var(--ds-color-warning-500);
+  --ds-cascader-radius: var(--ds-radius-md);
+  --ds-cascader-placeholder-color: var(--ds-color-neutral-400);
+  --ds-cascader-arrow-color: var(--ds-color-neutral-400);
+  --ds-cascader-clear-color: var(--ds-color-neutral-400);
+
+  /* Cascader Sizes */
+  --ds-cascader-sm-height: 32px;
+  --ds-cascader-md-height: 40px;
+  --ds-cascader-lg-height: 48px;
+
+  /* Cascader Dropdown */
+  --ds-cascader-dropdown-bg: var(--ds-color-white);
+  --ds-cascader-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-cascader-dropdown-radius: var(--ds-radius-lg);
+  --ds-cascader-menu-width: 160px;
+  --ds-cascader-menu-height: 240px;
+  --ds-cascader-menu-border: var(--ds-color-neutral-200);
+
+  /* Cascader Items */
+  --ds-cascader-item-padding: 8px 12px;
+  --ds-cascader-item-bg-hover: var(--ds-color-neutral-100);
+  --ds-cascader-item-bg-selected: var(--ds-color-neutral-100);
+  --ds-cascader-item-color-selected: var(--ds-color-primary-700);
+  --ds-cascader-item-color-disabled: var(--ds-color-neutral-400);
+  --ds-cascader-empty-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     AUTOCOMPLETE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-autocomplete-dropdown-bg: var(--ds-color-white);
+  --ds-autocomplete-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-autocomplete-dropdown-radius: var(--ds-radius-md);
+  --ds-autocomplete-dropdown-max-height: 300px;
+  --ds-autocomplete-option-padding: 0.5rem 0.75rem;
+  --ds-autocomplete-option-bg-hover: var(--ds-color-neutral-100);
+  --ds-autocomplete-option-bg-selected: var(--ds-color-primary-50);
+  --ds-autocomplete-option-color-selected: var(--ds-color-primary-700);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     MENTIONS
+     ───────────────────────────────────────────────────────────────────────────── */
+  /* Mentions Input */
+  --ds-mentions-bg: var(--ds-color-white);
+  --ds-mentions-border: var(--ds-color-neutral-300);
+  --ds-mentions-border-focus: var(--ds-color-primary-500);
+  --ds-mentions-border-error: var(--ds-color-error-500);
+  --ds-mentions-border-warning: var(--ds-color-warning-500);
+  --ds-mentions-radius: var(--ds-radius-md);
+  --ds-mentions-padding: 8px 12px;
+  --ds-mentions-font-size: var(--ds-font-size-sm);
+
+  /* Mentions Dropdown */
+  --ds-mentions-dropdown-bg: var(--ds-color-white);
+  --ds-mentions-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-mentions-dropdown-radius: var(--ds-radius-md);
+  --ds-mentions-dropdown-max-height: 192px;
+
+  /* Mentions Options */
+  --ds-mentions-option-padding: 8px 12px;
+  --ds-mentions-option-bg-hover: var(--ds-color-neutral-100);
+  --ds-mentions-option-bg-selected: var(--ds-color-primary-50);
+  --ds-mentions-empty-color: var(--ds-color-neutral-400);
+  --ds-mentions-highlight-color: var(--ds-color-primary-600);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CALENDAR
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-calendar-bg: var(--ds-color-white);
+  --ds-calendar-border: var(--ds-color-neutral-200);
+  --ds-calendar-radius: var(--ds-radius-lg);
+  --ds-calendar-padding: 1rem;
+  --ds-calendar-header-bg: var(--ds-color-white);
+  --ds-calendar-header-color: var(--ds-color-neutral-900);
+  --ds-calendar-header-font-weight: var(--ds-font-weight-semibold);
+  --ds-calendar-cell-size: 2.5rem;
+  --ds-calendar-cell-bg: transparent;
+  --ds-calendar-cell-bg-hover: var(--ds-color-neutral-100);
+  --ds-calendar-cell-bg-selected: var(--ds-color-primary-500);
+  --ds-calendar-cell-bg-today: var(--ds-color-primary-50);
+  --ds-calendar-cell-color: var(--ds-color-neutral-900);
+  --ds-calendar-cell-color-selected: var(--ds-color-white);
+  --ds-calendar-cell-color-today: var(--ds-color-primary-600);
+  --ds-calendar-cell-color-disabled: var(--ds-color-neutral-300);
+  --ds-calendar-cell-color-outside: var(--ds-color-neutral-400);
+  --ds-calendar-cell-radius: var(--ds-radius-full);
+  --ds-calendar-weekday-color: var(--ds-color-neutral-500);
+  --ds-calendar-weekday-font-size: var(--ds-font-size-xs);
+  --ds-calendar-nav-color: var(--ds-color-neutral-600);
+  --ds-calendar-nav-color-hover: var(--ds-color-primary-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     CAROUSEL
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-carousel-bg: var(--ds-color-neutral-100);
+  --ds-carousel-radius: var(--ds-radius-lg);
+  --ds-carousel-dot-size: 0.5rem;
+  --ds-carousel-dot-gap: 0.5rem;
+  --ds-carousel-dot-bg: var(--ds-color-alpha-white-50);
+  --ds-carousel-dot-bg-active: var(--ds-color-white);
+  --ds-carousel-dot-radius: var(--ds-radius-full);
+  --ds-carousel-arrow-size: 2.5rem;
+  --ds-carousel-arrow-bg: var(--ds-color-alpha-black-30);
+  --ds-carousel-arrow-bg-hover: var(--ds-color-alpha-black-50);
+  --ds-carousel-arrow-color: var(--ds-color-white);
+  --ds-carousel-arrow-radius: var(--ds-radius-full);
+  --ds-carousel-transition: var(--ds-transition-normal);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     IMAGE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-image-bg: var(--ds-color-neutral-100);
+  --ds-image-border: var(--ds-color-neutral-200);
+  --ds-image-radius: var(--ds-radius-md);
+  --ds-image-placeholder-bg: var(--ds-color-neutral-100);
+  --ds-image-placeholder-color: var(--ds-color-neutral-400);
+  --ds-image-mask-bg: var(--ds-color-alpha-black-50);
+  --ds-image-mask-color: var(--ds-color-white);
+  --ds-image-preview-bg: var(--ds-color-alpha-black-80);
+  --ds-image-preview-toolbar-bg: var(--ds-color-alpha-black-70);
+  --ds-image-preview-toolbar-color: var(--ds-color-white);
+  --ds-image-preview-toolbar-radius: var(--ds-radius-lg);
+  --ds-image-preview-icon-size: 2.5rem;
+  --ds-image-preview-close-size: 2.5rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TIMEPICKER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-timepicker-bg: var(--ds-color-white);
+  --ds-timepicker-bg-disabled: var(--ds-color-neutral-50);
+  --ds-timepicker-color: var(--ds-color-neutral-900);
+  --ds-timepicker-color-placeholder: var(--ds-color-neutral-400);
+  --ds-timepicker-border: var(--ds-color-neutral-300);
+  --ds-timepicker-border-hover: var(--ds-color-neutral-400);
+  --ds-timepicker-border-focus: var(--ds-color-primary-500);
+  --ds-timepicker-radius: var(--ds-radius-md);
+  --ds-timepicker-shadow-focus: var(--ds-input-shadow-focus);
+  --ds-timepicker-transition: var(--ds-transition-fast);
+  /* TimePicker status colors */
+  --ds-timepicker-error-border: var(--ds-color-error-500);
+  --ds-timepicker-warning-border: var(--ds-color-warning-500);
+  /* TimePicker size variants */
+  --ds-timepicker-sm-padding: 0.25rem 0.5rem;
+  --ds-timepicker-sm-font-size: var(--ds-font-size-xs);
+  --ds-timepicker-md-padding: 0.5rem 0.75rem;
+  --ds-timepicker-md-font-size: var(--ds-font-size-sm);
+  --ds-timepicker-lg-padding: 0.75rem 1rem;
+  --ds-timepicker-lg-font-size: var(--ds-font-size-base);
+  /* TimePicker icons */
+  --ds-timepicker-icon-color: var(--ds-color-neutral-400);
+  --ds-timepicker-clear-color: var(--ds-color-neutral-400);
+  --ds-timepicker-clear-color-hover: var(--ds-color-neutral-600);
+  /* TimePicker dropdown */
+  --ds-timepicker-dropdown-bg: var(--ds-color-white);
+  --ds-timepicker-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-timepicker-column-width: 56px;
+  --ds-timepicker-cell-height: 28px;
+  --ds-timepicker-cell-bg-hover: var(--ds-color-neutral-100);
+  --ds-timepicker-cell-bg-selected: var(--ds-color-primary-50);
+  --ds-timepicker-cell-color-selected: var(--ds-color-primary-600);
+  /* TimePicker separator */
+  --ds-timepicker-separator-color: var(--ds-color-neutral-400);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     COLORPICKER
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-colorpicker-swatch-size-sm: 24px;
+  --ds-colorpicker-swatch-size-md: 32px;
+  --ds-colorpicker-swatch-size-lg: 40px;
+  --ds-colorpicker-swatch-radius: var(--ds-radius-sm);
+  --ds-colorpicker-swatch-border: var(--ds-color-neutral-300);
+  --ds-colorpicker-swatch-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  /* ColorPicker dropdown */
+  --ds-colorpicker-dropdown-bg: var(--ds-color-white);
+  --ds-colorpicker-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-colorpicker-dropdown-radius: var(--ds-radius-lg);
+  --ds-colorpicker-dropdown-padding: 0.75rem;
+  --ds-colorpicker-dropdown-min-width: 200px;
+  /* ColorPicker palette */
+  --ds-colorpicker-palette-height: 140px;
+  --ds-colorpicker-slider-height: 12px;
+  --ds-colorpicker-slider-thumb-size: 14px;
+  --ds-colorpicker-slider-thumb-bg: var(--ds-color-white);
+  --ds-colorpicker-slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* ColorPicker input */
+  --ds-colorpicker-input-bg: var(--ds-color-white);
+  --ds-colorpicker-input-border: var(--ds-color-neutral-300);
+  --ds-colorpicker-input-radius: var(--ds-radius-sm);
+  /* ColorPicker presets */
+  --ds-colorpicker-preset-size: 20px;
+  --ds-colorpicker-preset-gap: 4px;
+  --ds-colorpicker-preset-border: var(--ds-color-neutral-300);
+  --ds-colorpicker-preset-radius: var(--ds-radius-sm);
+  /* ColorPicker text */
+  --ds-colorpicker-label-color: var(--ds-color-neutral-500);
+  --ds-colorpicker-label-font-size: var(--ds-font-size-xs);
+  --ds-colorpicker-text-font-size: var(--ds-font-size-sm);
+  /* ColorPicker buttons */
+  --ds-colorpicker-clear-bg: var(--ds-color-white);
+  --ds-colorpicker-clear-border: var(--ds-color-neutral-300);
+  --ds-colorpicker-clear-radius: var(--ds-radius-sm);
+  /* ColorPicker divider */
+  --ds-colorpicker-divider-color: var(--ds-color-neutral-200);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TREESELECT
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-treeselect-bg: var(--ds-color-white);
+  --ds-treeselect-border: var(--ds-color-neutral-300);
+  --ds-treeselect-border-hover: var(--ds-color-neutral-400);
+  --ds-treeselect-border-focus: var(--ds-color-primary-500);
+  --ds-treeselect-radius: var(--ds-radius-md);
+  --ds-treeselect-shadow-focus: var(--ds-input-shadow-focus);
+  /* TreeSelect status */
+  --ds-treeselect-error-border: var(--ds-color-error-500);
+  --ds-treeselect-warning-border: var(--ds-color-warning-500);
+  /* TreeSelect size variants */
+  --ds-treeselect-sm-height: 32px;
+  --ds-treeselect-sm-font-size: var(--ds-font-size-xs);
+  --ds-treeselect-md-height: 40px;
+  --ds-treeselect-md-font-size: var(--ds-font-size-sm);
+  --ds-treeselect-lg-height: 48px;
+  --ds-treeselect-lg-font-size: var(--ds-font-size-base);
+  /* TreeSelect dropdown */
+  --ds-treeselect-dropdown-bg: var(--ds-color-white);
+  --ds-treeselect-dropdown-shadow: var(--ds-shadow-lg);
+  --ds-treeselect-dropdown-radius: var(--ds-radius-lg);
+  --ds-treeselect-dropdown-max-height: 240px;
+  /* TreeSelect nodes */
+  --ds-treeselect-node-padding: 0.375rem 0.5rem;
+  --ds-treeselect-node-bg-hover: var(--ds-color-neutral-100);
+  --ds-treeselect-node-bg-selected: var(--ds-color-primary-50);
+  --ds-treeselect-node-color-selected: var(--ds-color-primary-600);
+  --ds-treeselect-node-indent: 1.25rem;
+  /* TreeSelect icons */
+  --ds-treeselect-arrow-color: var(--ds-color-neutral-400);
+  --ds-treeselect-clear-color: var(--ds-color-neutral-400);
+  --ds-treeselect-clear-color-hover: var(--ds-color-neutral-600);
+  --ds-treeselect-expand-icon-color: var(--ds-color-neutral-500);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
+     TREE
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-tree-bg: transparent;
+  --ds-tree-node-padding: 0.25rem 0;
+  --ds-tree-node-bg: transparent;
+  --ds-tree-node-bg-hover: var(--ds-color-neutral-100);
+  --ds-tree-node-bg-selected: var(--ds-color-primary-50);
+  --ds-tree-node-color: var(--ds-color-neutral-900);
+  --ds-tree-node-color-selected: var(--ds-color-primary-700);
+  --ds-tree-node-color-disabled: var(--ds-color-neutral-400);
+  --ds-tree-icon-size: 1rem;
+  --ds-tree-icon-color: var(--ds-color-neutral-500);
+  --ds-tree-line-color: var(--ds-color-neutral-200);
+  --ds-tree-line-width: 1px;
+  --ds-tree-indent: 1.5rem;
+  --ds-tree-checkbox-margin: 0.5rem;
+  --ds-tree-switcher-size: 1.5rem;
+}

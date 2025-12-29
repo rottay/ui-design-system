@@ -10,7 +10,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Tag } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Star icon for demonstration purposes.
@@ -299,35 +300,72 @@ export const TagGroupExample: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Compares all three engine implementations side by side.
+ * Side-by-side comparison of Tag across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Tag rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-            <Tag engine={engine} variant="default">
-              Default
-            </Tag>
-            <Tag engine={engine} variant="primary">
-              Primary
-            </Tag>
-            <Tag engine={engine} variant="success" icon={<CheckIcon />}>
-              With Icon
-            </Tag>
-            <Tag engine={engine} variant="warning" closable>
-              Closable
-            </Tag>
-            <Tag engine={engine} variant="error" outlined>
-              Outlined
-            </Tag>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Tag}
+      props={{ children: 'Tag', variant: 'primary' }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all tag variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Tag}
+      baseProps={{ children: 'Tag' }}
+      variantProp="variant"
+      variants={['default', 'primary', 'secondary', 'success', 'warning', 'error']}
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all tag sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Tag}
+      baseProps={{ children: 'Tag', variant: 'primary' }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
   ),
 };
 

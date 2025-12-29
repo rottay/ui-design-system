@@ -40,7 +40,7 @@ export type {
   ToastOptions,
   ToastMethods,
   ToastState,
-} from '../../../../../types/primitives/feedback/Toast';
+} from '../../../../../core/types/primitives/feedback/Toast';
 
 // ============================================================================
 // Default Values

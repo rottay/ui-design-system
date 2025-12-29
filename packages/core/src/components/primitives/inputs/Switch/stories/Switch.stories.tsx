@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Switch } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Switch> = {
   title: 'Primitives/Inputs/Switch',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Switch> = {
   parameters: {
     docs: {
       description: {
-        component: 'A switch component for binary on/off states with multi-engine support.',
+        component: `
+A switch component for binary on/off states with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Animation | Smooth | CSS | Basic |
+| Loading | Built-in | Custom | Custom |
+| Labels | Full | Partial | Full |
+`,
       },
     },
   },
@@ -45,6 +57,10 @@ const meta: Meta<typeof Switch> = {
 export default meta;
 type Story = StoryObj<typeof Switch>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
   args: {},
 };
@@ -65,9 +81,7 @@ export const Sizes: Story = {
 };
 
 export const Checked: Story = {
-  args: {
-    checked: true,
-  },
+  args: { checked: true },
 };
 
 export const Disabled: Story = {
@@ -110,20 +124,77 @@ export const WithLabels: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Switch component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Switch rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
+  render: () => (
+    <EngineComparison
+      component={Switch}
+      props={{ defaultChecked: true }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all switch sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Switch}
+      baseProps={{ defaultChecked: true }}
+      sizeProp="size"
+      sizes={['small', 'default']}
+    />
+  ),
+};
+
+/**
+ * States comparison across engines.
+ */
+export const StatesComparison: Story = {
+  name: '📋 States Comparison',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 24 }}>
-            <Switch engine={engine} />
-            <Switch engine={engine} defaultChecked />
-            <Switch engine={engine} disabled />
-            <Switch engine={engine} loading />
-          </div>
-        </div>
-      ))}
+      <EngineComparison
+        component={Switch}
+        props={{}}
+        showDescriptions
+      />
+      <EngineComparison
+        component={Switch}
+        props={{ defaultChecked: true }}
+      />
+      <EngineComparison
+        component={Switch}
+        props={{ disabled: true }}
+      />
+      <EngineComparison
+        component={Switch}
+        props={{ loading: true }}
+      />
     </div>
   ),
 };

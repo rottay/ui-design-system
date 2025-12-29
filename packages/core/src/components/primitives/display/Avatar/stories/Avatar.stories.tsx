@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Avatar } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Avatar> = {
   title: 'Primitives/Display/Avatar',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Avatar> = {
   parameters: {
     docs: {
       description: {
-        component: 'Avatar component for displaying user images or initials with support for multiple engines.',
+        component: `
+Avatar component for displaying user images or initials with support for multiple engines.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Styling | CSS-in-JS | Tailwind | CSS Variables |
+| Group Support | Full | Partial | Full |
+| Badge Position | Configurable | Fixed | Configurable |
+`,
       },
     },
   },
@@ -105,20 +117,72 @@ export const Variants: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Avatar across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Avatar rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Avatar engine={engine} src="https://i.pravatar.cc/150?img=1" />
-            <Avatar engine={engine} variant="primary">AB</Avatar>
-            <Avatar engine={engine} shape="square" src="https://i.pravatar.cc/150?img=2" />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Avatar}
+      props={{ children: 'JD', size: 'md', variant: 'primary' }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all avatar sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Avatar}
+      baseProps={{ children: 'AB' }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
+  ),
+};
+
+/**
+ * Matrix showing all variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all avatar variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Avatar}
+      baseProps={{ children: 'AB' }}
+      variantProp="variant"
+      variants={['default', 'primary', 'secondary', 'success', 'warning', 'danger']}
+    />
   ),
 };
 

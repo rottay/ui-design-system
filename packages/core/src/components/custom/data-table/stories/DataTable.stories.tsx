@@ -9,7 +9,7 @@ import {
   SelectableDataTable,
   FullDataTable,
 } from '../';
-import { DesignSystemProvider } from '../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../core/providers/root';
 
 const meta: Meta = {
   title: 'Custom/DataTable',

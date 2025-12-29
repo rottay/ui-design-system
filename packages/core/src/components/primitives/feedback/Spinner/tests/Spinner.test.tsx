@@ -38,7 +38,7 @@ import { Spinner } from '../';
  * Mock the engine factory to provide a testable spinner implementation.
  * This ensures consistent testing regardless of the actual engine.
  */
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockSpinner = React.forwardRef<HTMLDivElement, any>(({
       size = 'md',

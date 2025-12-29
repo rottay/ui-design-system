@@ -2,54 +2,9 @@
 
 /**
  * @fileoverview Switch Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Switch component.
+ * @description Pure HTML/CSS implementation of the Switch component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Apollo engine provides a zero-dependency switch implementation
- * using pure HTML and inline CSS. It offers maximum customization
- * and works without any CSS framework dependencies.
- *
- * **Pure CSS Features:**
- * - Custom sliding knob animation
- * - Size variants via inline styles
- * - Checked state color transition
- * - Disabled/loading opacity states
- *
- * **Component Structure:**
- * - Label wrapper with flex layout
- * - Hidden checkbox input with role="switch"
- * - Slider track with animated knob
- * - Conditional children labels
- * - Loading indicator emoji fallback
- *
- * **Style Objects:**
- * - `wrapper` - Flex container layout
- * - `switch`, `switchSmall`, `switchLarge` - Size variants
- * - `slider`, `sliderChecked`, `sliderDisabled` - Track states
- * - `knob`, `knobChecked*` - Handle states and transitions
- *
- * **Accessibility:**
- * - Hidden input with role="switch"
- * - aria-checked attribute
- * - Proper label association
- * - Keyboard activation
- *
- * @example Using Apollo Engine
- * ```tsx
- * import { Switch } from '@rottay/design-system';
- *
- * <Switch
- *   engine="apollo"
- *   size="large"
- *   checkedChildren="Enabled"
- *   unCheckedChildren="Disabled"
- * />
- * ```
- *
- * @see {@link Switch} for the main component
- * @see {@link TitanSwitch} for Ant Design implementation
- * @see {@link HermesSwitch} for DaisyUI implementation
  * @module ApolloSwitch
  * @category Inputs
  * @package @rottay/design-system
@@ -58,82 +13,25 @@
 import React, { useState } from 'react';
 import type { SwitchProps } from '../../types';
 
-const styles = {
-  wrapper: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '8px',
-    cursor: 'pointer',
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { width: string; height: string; thumbSize: string; translate: string }> = {
+  small: {
+    width: 'var(--ds-switch-sm-width)',
+    height: 'var(--ds-switch-sm-height)',
+    thumbSize: 'var(--ds-switch-sm-thumb-size)',
+    translate: 'calc(var(--ds-switch-sm-width) - var(--ds-switch-sm-thumb-size) - var(--ds-switch-thumb-offset) * 2)',
   },
-  switch: {
-    position: 'relative' as const,
-    display: 'inline-block',
-    width: '44px',
-    height: '22px',
+  default: {
+    width: 'var(--ds-switch-md-width)',
+    height: 'var(--ds-switch-md-height)',
+    thumbSize: 'var(--ds-switch-md-thumb-size)',
+    translate: 'calc(var(--ds-switch-md-width) - var(--ds-switch-md-thumb-size) - var(--ds-switch-thumb-offset) * 2)',
   },
-  switchSmall: {
-    width: '28px',
-    height: '16px',
-  },
-  switchLarge: {
-    width: '56px',
-    height: '28px',
-  },
-  input: {
-    opacity: 0,
-    width: 0,
-    height: 0,
-    position: 'absolute' as const,
-  },
-  slider: {
-    position: 'absolute' as const,
-    cursor: 'pointer',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#ccc',
-    transition: '0.3s',
-    borderRadius: '22px',
-  },
-  sliderChecked: {
-    backgroundColor: 'var(--primary-color, #1890ff)',
-  },
-  sliderDisabled: {
-    opacity: 0.5,
-    cursor: 'not-allowed',
-  },
-  knob: {
-    position: 'absolute' as const,
-    height: '18px',
-    width: '18px',
-    left: '2px',
-    bottom: '2px',
-    backgroundColor: 'white',
-    transition: '0.3s',
-    borderRadius: '50%',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-  },
-  knobSmall: {
-    height: '12px',
-    width: '12px',
-  },
-  knobLarge: {
-    height: '24px',
-    width: '24px',
-  },
-  knobChecked: {
-    transform: 'translateX(22px)',
-  },
-  knobCheckedSmall: {
-    transform: 'translateX(12px)',
-  },
-  knobCheckedLarge: {
-    transform: 'translateX(28px)',
-  },
-  label: {
-    fontSize: '14px',
-    userSelect: 'none' as const,
+  large: {
+    width: 'var(--ds-switch-lg-width)',
+    height: 'var(--ds-switch-lg-height)',
+    thumbSize: 'var(--ds-switch-lg-thumb-size)',
+    translate: 'calc(var(--ds-switch-lg-width) - var(--ds-switch-lg-thumb-size) - var(--ds-switch-thumb-offset) * 2)',
   },
 };
 
@@ -159,6 +57,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 
     const isControlled = checked !== undefined;
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const [isFocused, setIsFocused] = useState(false);
     const isChecked = isControlled ? checked : internalChecked;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,51 +74,97 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       onClick?.(isChecked, e as unknown as React.MouseEvent);
     };
 
-    const getSwitchStyle = () => {
-      const base = { ...styles.switch };
-      if (size === 'small') Object.assign(base, styles.switchSmall);
-      if (size === 'large') Object.assign(base, styles.switchLarge);
-      return base;
+    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+
+    // Build class names
+    const containerClasses = [
+      'rottay-switch',
+      'rottay-switch--apollo',
+      `rottay-switch--${size}`,
+      isChecked && 'rottay-switch--checked',
+      disabled && 'rottay-switch--disabled',
+      loading && 'rottay-switch--loading',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const wrapperStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 'var(--ds-switch-label-gap)',
+      cursor: disabled || loading ? 'not-allowed' : 'pointer',
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
     };
 
-    const getSliderStyle = () => {
-      const base = { ...styles.slider };
-      if (isChecked) Object.assign(base, styles.sliderChecked);
-      if (disabled || loading) Object.assign(base, styles.sliderDisabled);
-      return base;
+    const switchStyle: React.CSSProperties = {
+      position: 'relative',
+      display: 'inline-block',
+      width: sizeConfig.width,
+      height: sizeConfig.height,
     };
 
-    const getKnobStyle = () => {
-      const base = { ...styles.knob };
-      if (size === 'small') {
-        Object.assign(base, styles.knobSmall);
-        if (isChecked) Object.assign(base, styles.knobCheckedSmall);
-      } else if (size === 'large') {
-        Object.assign(base, styles.knobLarge);
-        if (isChecked) Object.assign(base, styles.knobCheckedLarge);
-      } else {
-        if (isChecked) Object.assign(base, styles.knobChecked);
-      }
-      return base;
+    const inputStyle: React.CSSProperties = {
+      opacity: 0,
+      width: 0,
+      height: 0,
+      position: 'absolute',
+    };
+
+    const sliderStyle: React.CSSProperties = {
+      position: 'absolute',
+      cursor: disabled || loading ? 'not-allowed' : 'pointer',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: isChecked
+        ? 'var(--ds-switch-checked-bg)'
+        : 'var(--ds-switch-bg)',
+      transition: 'var(--ds-switch-transition)',
+      borderRadius: 'var(--ds-switch-radius)',
+      opacity: disabled || loading ? 0.5 : 1,
+      outline: isFocused ? 'var(--ds-switch-focus-ring)' : 'none',
+      outlineOffset: '2px',
+    };
+
+    const knobStyle: React.CSSProperties = {
+      position: 'absolute',
+      height: sizeConfig.thumbSize,
+      width: sizeConfig.thumbSize,
+      left: 'var(--ds-switch-thumb-offset)',
+      bottom: 'var(--ds-switch-thumb-offset)',
+      backgroundColor: 'var(--ds-switch-thumb-bg)',
+      transition: 'var(--ds-switch-transition)',
+      borderRadius: '50%',
+      boxShadow: 'var(--ds-switch-thumb-shadow)',
+      transform: isChecked ? `translateX(${sizeConfig.translate})` : 'translateX(0)',
+    };
+
+    const labelStyle: React.CSSProperties = {
+      fontSize: 'var(--ds-font-size-sm)',
+      color: 'var(--ds-switch-label-color)',
+      userSelect: 'none',
     };
 
     return (
       <label
-        className={className}
-        style={{ ...styles.wrapper, ...style }}
+        className={containerClasses}
+        style={wrapperStyle}
         onClick={handleClick}
       >
         {!isChecked && unCheckedChildren && (
-          <span style={styles.label}>{unCheckedChildren}</span>
+          <span style={labelStyle}>{unCheckedChildren}</span>
         )}
-        <span style={getSwitchStyle()}>
+        <span style={switchStyle}>
           <input
             ref={ref}
             type="checkbox"
-            style={styles.input}
+            style={inputStyle}
             checked={isChecked}
             disabled={disabled || loading}
             onChange={handleChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             autoFocus={autoFocus}
             tabIndex={tabIndex}
             id={id}
@@ -227,16 +172,37 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             aria-checked={isChecked}
             role="switch"
           />
-          <span style={getSliderStyle()}>
-            <span style={getKnobStyle()} />
+          <span style={sliderStyle}>
+            <span style={knobStyle} />
           </span>
         </span>
         {isChecked && checkedChildren && (
-          <span style={styles.label}>{checkedChildren}</span>
+          <span style={labelStyle}>{checkedChildren}</span>
         )}
         {loading && (
-          <span style={{ marginLeft: '4px' }}>⏳</span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            style={{ marginLeft: '4px', animation: 'spin 1s linear infinite' }}
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="3"
+              fill="none"
+              strokeDasharray="31.4 31.4"
+            />
+          </svg>
         )}
+        <style>{`
+          @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
       </label>
     );
   }

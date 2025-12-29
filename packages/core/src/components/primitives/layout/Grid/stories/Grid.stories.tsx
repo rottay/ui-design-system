@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Grid } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 import React from 'react';
 
 const meta: Meta<typeof Grid> = {
@@ -472,30 +473,40 @@ export const PolymorphicElement: Story = {
   ),
 };
 
-// Engine comparison
-export const EngineComparison: Story = {
-  name: 'Engine Comparison',
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Grid across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Grid rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize', fontWeight: 600 }}>
-            {engine} Engine
-          </h4>
-          <Grid engine={engine} columns={4} gap="md">
-            <Grid.Item span={2}>
-              <GridItemBox bg="#8b5cf6">Span 2</GridItemBox>
-            </Grid.Item>
-            <GridItemBox>Item</GridItemBox>
-            <GridItemBox>Item</GridItemBox>
-            <GridItemBox>Item</GridItemBox>
-            <Grid.Item span={3}>
-              <GridItemBox bg="#ec4899">Span 3</GridItemBox>
-            </Grid.Item>
-          </Grid>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Grid}
+      props={{
+        children: (
+          <>
+            <GridItemBox>Item 1</GridItemBox>
+            <GridItemBox>Item 2</GridItemBox>
+            <GridItemBox>Item 3</GridItemBox>
+            <GridItemBox>Item 4</GridItemBox>
+          </>
+        ),
+        columns: 2,
+        gap: 'md',
+      }}
+      showDescriptions
+      direction="vertical"
+    />
   ),
 };
 

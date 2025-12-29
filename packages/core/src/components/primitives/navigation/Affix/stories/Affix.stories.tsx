@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useRef } from 'react';
 import { Affix } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Affix> = {
   title: 'Primitives/Navigation/Affix',
@@ -333,38 +334,31 @@ export const CustomStyling: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison - all three engines side by side
+ * Side-by-side comparison of Affix across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Affix rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', gap: 16 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine} style={{ flex: 1 }}>
-          <h4 style={{ margin: '0 0 8px', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <ScrollContainer height={250}>
-            <PlaceholderContent count={2} />
-            <Affix engine={engine} offsetTop={0}>
-              <div
-                style={{
-                  padding: '12px 16px',
-                  backgroundColor:
-                    engine === 'titan' ? '#1890ff' :
-                    engine === 'hermes' ? '#10b981' :
-                    '#6366f1',
-                  color: '#fff',
-                  borderRadius: 4,
-                  fontSize: 14,
-                }}
-              >
-                {engine.toUpperCase()} Affix
-              </div>
-            </Affix>
-            <PlaceholderContent count={8} />
-          </ScrollContainer>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Affix}
+      props={{
+        offsetTop: 0,
+        children: <AffixContent>Sticky Content</AffixContent>,
+      }}
+      showDescriptions
+    />
   ),
 };
 

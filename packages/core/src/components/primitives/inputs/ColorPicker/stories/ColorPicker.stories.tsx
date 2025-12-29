@@ -7,7 +7,8 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { ColorPicker } from '../';
 import type { Color, ColorFormat } from '../types';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof ColorPicker> = {
   title: 'Primitives/Inputs/ColorPicker',
@@ -22,7 +23,18 @@ const meta: Meta<typeof ColorPicker> = {
   parameters: {
     docs: {
       description: {
-        component: 'ColorPicker component for selecting colors with various formats and presets.',
+        component: `
+ColorPicker component for selecting colors with various formats and presets.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Color Panel | Built-in | Custom | Custom |
+| Formats | hex/rgb/hsb | hex/rgb | hex/rgb/hsb |
+| Presets | Full | Limited | Full |
+`,
       },
     },
   },
@@ -260,19 +272,42 @@ export const ColorPalette: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the ColorPicker component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same ColorPicker rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <ColorPicker
-            engine={engine}
-            defaultValue="#1677ff"
-            showText
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={ColorPicker}
+      props={{ defaultValue: '#1677ff', showText: true }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={ColorPicker}
+      baseProps={{ defaultValue: '#1677ff' }}
+      sizeProp="size"
+      sizes={['small', 'middle', 'large']}
+    />
   ),
 };

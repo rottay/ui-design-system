@@ -7,7 +7,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Statistic } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Statistic component for displaying numerical values with
@@ -163,41 +164,57 @@ export const CustomFormatting: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of all three engines.
+ * Side-by-side comparison of Statistic across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Statistic rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize', fontWeight: 600 }}>
-            {engine} Engine
-          </h4>
-          <div style={{ display: 'flex', gap: 24 }}>
-            <Statistic
-              engine={engine}
-              title="Users"
-              value={1128}
-            />
-            <Statistic
-              engine={engine}
-              title="Revenue"
-              value={125000}
-              prefix="$"
-              precision={2}
-            />
-            <Statistic
-              engine={engine}
-              title="Growth"
-              value={15.5}
-              suffix="%"
-              valueType="positive"
-            />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Statistic}
+      props={{
+        title: 'Active Users',
+        value: 112893,
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all valueType variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Statistic valueType variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Statistic}
+      baseProps={{
+        title: 'Metric',
+        value: 25.5,
+        suffix: '%',
+      }}
+      variantProp="valueType"
+      variants={['default', 'positive', 'negative', 'warning']}
+    />
   ),
 };
 

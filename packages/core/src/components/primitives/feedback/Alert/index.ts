@@ -100,7 +100,7 @@
 // Imports
 // ============================================================================
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { AlertProps } from './types';
 import { AlertDescription } from './compound';
 

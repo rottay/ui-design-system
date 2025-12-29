@@ -10,7 +10,7 @@ import { render, screen, act } from '@testing-library/react';
 import { Statistic, formatNumber } from '../';
 
 // Mock the engine factory to avoid async loading issues in tests
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: () => {
     const MockStatistic = ({
       children,

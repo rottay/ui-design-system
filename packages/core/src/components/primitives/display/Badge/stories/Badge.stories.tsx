@@ -8,7 +8,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Badge } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 /**
  * Badge component for displaying counts, status indicators, or labels.
@@ -370,40 +371,72 @@ export const Bordered: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of badge rendering across all three engines.
+ * Side-by-side comparison of Badge across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Badge rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize', fontWeight: 500 }}>
-            {engine} Engine
-          </h4>
-          <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <Badge engine={engine} count={5} variant="primary">
-              <div style={{
-                width: 40,
-                height: 40,
-                backgroundColor: '#f0f0f0',
-                borderRadius: 8,
-              }} />
-            </Badge>
-            <Badge engine={engine} content="New" variant="success" />
-            <Badge engine={engine} dot variant="error">
-              <div style={{
-                width: 40,
-                height: 40,
-                backgroundColor: '#f0f0f0',
-                borderRadius: 8,
-              }} />
-            </Badge>
-            <Badge engine={engine} content="Hot" badgeStyle="outline" variant="warning" />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Badge}
+      props={{ content: 'New', variant: 'primary' }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all badge variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Badge}
+      baseProps={{ content: 'Badge' }}
+      variantProp="variant"
+      variants={['default', 'primary', 'secondary', 'success', 'warning', 'error']}
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all badge sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Badge}
+      baseProps={{ content: '5', variant: 'primary' }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
   ),
 };
 

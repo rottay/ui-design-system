@@ -6,7 +6,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Descriptions } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Descriptions> = {
   title: 'Primitives/Display/Descriptions',
@@ -239,32 +240,66 @@ export const WithoutColon: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Engine comparison showing all three implementations.
+ * Side-by-side comparison of Descriptions across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Descriptions rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4
-            style={{
-              margin: '0 0 12px 0',
-              textTransform: 'capitalize',
-              fontWeight: 600,
-            }}
-          >
-            {engine} Engine
-          </h4>
-          <Descriptions engine={engine} title="User Profile" bordered column={2}>
-            <Descriptions.Item label="Name">John Doe</Descriptions.Item>
-            <Descriptions.Item label="Email">john@example.com</Descriptions.Item>
-            <Descriptions.Item label="Role">Developer</Descriptions.Item>
-            <Descriptions.Item label="Status">Active</Descriptions.Item>
-          </Descriptions>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Descriptions}
+      props={{
+        title: 'User Profile',
+        bordered: true,
+        column: 2,
+        items: [
+          { label: 'Name', children: 'John Doe' },
+          { label: 'Email', children: 'john@example.com' },
+        ],
+      }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all size variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Descriptions size variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Descriptions}
+      baseProps={{
+        title: 'Details',
+        bordered: true,
+        items: [
+          { label: 'Key', children: 'Value' },
+          { label: 'Status', children: 'Active' },
+        ],
+      }}
+      variantProp="size"
+      variants={['small', 'default', 'middle']}
+    />
   ),
 };
 

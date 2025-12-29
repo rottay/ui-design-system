@@ -1,15 +1,16 @@
 /**
  * @fileoverview Input Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Input component.
+ * @description Pure HTML/CSS implementation of the Input component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
  * The Apollo engine provides a headless input implementation using only
- * native HTML elements and inline styles. This offers maximum flexibility
- * for custom styling and ensures accessibility compliance.
+ * native HTML elements and CSS variables for theming. This ensures
+ * multi-tenant support through the CSS cascade.
  *
  * **Key Features:**
  * - Zero UI library dependencies
+ * - Full CSS variable theming (var(--ds-input-*))
  * - Controlled and uncontrolled modes
  * - Focus, hover, and disabled state handling
  * - Clear button with custom SVG icon
@@ -17,47 +18,6 @@
  * - Error message display
  * - Multiple variants and validation states
  *
- * **Inline Style Approach:**
- * Unlike CSS variable-based styling, Apollo uses computed inline styles
- * for complete control over appearance. This ensures styles work without
- * requiring any external CSS files.
- *
- * **State-Based Styling:**
- * - Border color changes based on focus, error, warning, success states
- * - Box-shadow for focus and error visual feedback
- * - Opacity reduction for disabled state
- *
- * **Accessibility:**
- * - Proper ARIA attributes (aria-invalid, aria-label, aria-describedby)
- * - Focus management for clear button
- * - Required attribute support
- *
- * @example Using Apollo Engine
- * ```tsx
- * import { Input } from '@rottay/design-system';
- *
- * // Explicit Apollo engine
- * <Input
- *   engine="apollo"
- *   placeholder="Vanilla input"
- *   variant="filled"
- * />
- *
- * // With full customization
- * <Input
- *   engine="apollo"
- *   placeholder="Custom styled"
- *   status="success"
- *   prefix={<MailIcon />}
- *   suffix={<CheckIcon />}
- *   clearable
- *   style={{ backgroundColor: '#f0fff4' }}
- * />
- * ```
- *
- * @see {@link Input} for the main component
- * @see {@link TitanInput} for Ant Design implementation
- * @see {@link HermesInput} for DaisyUI implementation
  * @module ApolloInput
  * @category Inputs
  * @package @rottay/design-system
@@ -174,7 +134,6 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       setInternalValue('');
     }
     onClear?.();
-    // Trigger onChange with empty value
     const syntheticEvent = {
       target: { value: '' },
     } as React.ChangeEvent<HTMLInputElement>;
@@ -184,35 +143,50 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   // Determine if error state
   const hasError = error || status === 'error';
+  const hasWarning = status === 'warning';
+  const hasSuccess = status === 'success';
 
-  // Get size values
+  // Get size values from CSS variables
   const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
 
-  // Determine colors based on state
+  // Determine border color based on state using CSS variables
   const getBorderColor = () => {
-    if (hasError) return '#ff4d4f';
-    if (status === 'warning') return '#faad14';
-    if (status === 'success') return '#52c41a';
-    if (isFocused) return '#1890ff';
-    return '#d9d9d9';
+    if (hasError) return 'var(--ds-input-error-border)';
+    if (hasWarning) return 'var(--ds-input-warning-border)';
+    if (hasSuccess) return 'var(--ds-input-success-border)';
+    if (isFocused) return 'var(--ds-input-border-focus)';
+    return 'var(--ds-input-border)';
   };
 
+  // Determine box shadow based on state
   const getBoxShadow = () => {
     if (variant === 'unstyled') return 'none';
-    if (hasError) return '0 0 0 2px rgba(255, 77, 79, 0.2)';
-    if (isFocused) return '0 0 0 2px rgba(24, 144, 255, 0.2)';
+    if (hasError && isFocused) return 'var(--ds-input-error-shadow-focus)';
+    if (hasWarning && isFocused) return 'var(--ds-input-warning-shadow-focus)';
+    if (hasSuccess && isFocused) return 'var(--ds-input-success-shadow-focus)';
+    if (isFocused) return 'var(--ds-input-shadow-focus)';
     return 'none';
   };
 
-  // Container styles
+  // Determine background based on variant
+  const getBackground = () => {
+    if (disabled) return 'var(--ds-input-bg-disabled)';
+    if (variant === 'filled') {
+      if (isFocused) return 'var(--ds-input-filled-bg-focus)';
+      return 'var(--ds-input-filled-bg)';
+    }
+    return 'var(--ds-input-bg)';
+  };
+
+  // Container styles using CSS variables
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
     width: '100%',
     height: sizeValues.height,
-    backgroundColor: variant === 'filled' ? '#f5f5f5' : 'transparent',
-    borderRadius: variant === 'flushed' ? 0 : 6,
+    backgroundColor: getBackground(),
+    borderRadius: variant === 'flushed' ? 0 : 'var(--ds-input-radius)',
     border: variant === 'flushed'
       ? 'none'
       : variant === 'unstyled'
@@ -221,14 +195,14 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     borderBottom: variant === 'flushed'
       ? `${isFocused ? 2 : 1}px solid ${getBorderColor()}`
       : undefined,
-    transition: 'all 0.2s ease',
+    transition: 'var(--ds-input-transition)',
     opacity: disabled ? 0.6 : 1,
     cursor: disabled ? 'not-allowed' : 'text',
     boxShadow: getBoxShadow(),
     ...style,
   };
 
-  // Input styles
+  // Input styles using CSS variables
   const inputStyle: React.CSSProperties = {
     flex: 1,
     width: '100%',
@@ -237,44 +211,44 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     paddingLeft: prefix ? 0 : undefined,
     paddingRight: suffix || (clearable && currentValue) ? 0 : undefined,
     fontSize: sizeValues.fontSize,
-    fontFamily: 'inherit',
+    fontFamily: 'var(--ds-font-family-base)',
     backgroundColor: 'transparent',
     border: 'none',
     outline: 'none',
-    color: disabled ? '#bfbfbf' : '#333333',
+    color: disabled ? 'var(--ds-input-color-disabled)' : 'var(--ds-input-color)',
     cursor: disabled ? 'not-allowed' : 'text',
   };
 
-  // Affix styles
+  // Affix styles using CSS variables
   const affixStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '0 8px',
-    color: '#bfbfbf',
+    padding: '0 0.5rem',
+    color: 'var(--ds-input-addon-color)',
     userSelect: 'none',
   };
 
-  // Clear button styles
+  // Clear button styles using CSS variables
   const clearButtonStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '0 8px',
-    color: '#bfbfbf',
+    padding: '0 0.5rem',
+    color: 'var(--ds-input-clear-color)',
     cursor: 'pointer',
-    transition: 'color 0.2s',
+    transition: 'var(--ds-input-transition)',
     background: 'none',
     border: 'none',
   };
 
-  // Character count styles
+  // Character count styles using CSS variables
   const countStyle: React.CSSProperties = {
     position: 'absolute',
     right: 0,
-    bottom: '-20px',
-    fontSize: 12,
-    color: hasError ? '#ff4d4f' : '#bfbfbf',
+    bottom: '-1.25rem',
+    fontSize: 'var(--ds-input-helper-font-size)',
+    color: hasError ? 'var(--ds-input-error-color)' : 'var(--ds-input-addon-color)',
   };
 
   const showClearButton = clearable && currentValue && !disabled && !readOnly;
@@ -287,6 +261,8 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     `rottay-input--${variant}`,
     isFocused && 'rottay-input--focused',
     hasError && 'rottay-input--error',
+    hasWarning && 'rottay-input--warning',
+    hasSuccess && 'rottay-input--success',
     disabled && 'rottay-input--disabled',
     readOnly && 'rottay-input--readonly',
     className,
@@ -373,9 +349,9 @@ const ApolloInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         <span
           style={{
             display: 'block',
-            marginTop: 4,
-            fontSize: 12,
-            color: '#ff4d4f',
+            marginTop: '0.25rem',
+            fontSize: 'var(--ds-input-helper-font-size)',
+            color: 'var(--ds-input-error-color)',
           }}
         >
           {errorMessage}

@@ -70,7 +70,7 @@ export type {
   ButtonGroupProps,
   IconButtonProps,
   ButtonLoadingConfig,
-} from '../../../../../types/primitives/inputs/Button';
+} from '../../../../../core/types/primitives/inputs/Button';
 
 // ============================================================================
 // DEFAULT VALUES

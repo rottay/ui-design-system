@@ -1,11 +1,25 @@
 'use client';
 
 /**
- * AutoComplete - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview AutoComplete Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the AutoComplete component using CSS variables.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @module ApolloAutoComplete
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { AutoCompleteProps, AutoCompleteOption } from '../../types';
 import { AUTOCOMPLETE_DEFAULTS } from '../../types';
+
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { height: string }> = {
+  small: { height: 'var(--ds-autocomplete-sm-height)' },
+  default: { height: 'var(--ds-autocomplete-md-height)' },
+  large: { height: 'var(--ds-autocomplete-lg-height)' },
+};
 
 export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
   (props, ref) => {
@@ -26,13 +40,14 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       size = AUTOCOMPLETE_DEFAULTS.size,
       status,
       notFoundContent = 'No results found',
-      className,
+      className = '',
       style,
     } = props;
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
+    const [isFocused, setIsFocused] = useState(false);
 
     const isControlled = controlledValue !== undefined;
     const value = isControlled ? controlledValue : internalValue;
@@ -123,18 +138,92 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       }
     };
 
-    const getInputHeight = () => {
-      switch (size) {
-        case 'small': return '32px';
-        case 'large': return '48px';
-        default: return '40px';
-      }
-    };
+    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+
+    // Build class names
+    const containerClasses = [
+      'rottay-autocomplete',
+      'rottay-autocomplete--apollo',
+      `rottay-autocomplete--${size}`,
+      status && `rottay-autocomplete--${status}`,
+      disabled && 'rottay-autocomplete--disabled',
+      isOpen && 'rottay-autocomplete--open',
+      className,
+    ].filter(Boolean).join(' ');
 
     const getBorderColor = () => {
-      if (status === 'error') return '#ef4444';
-      if (status === 'warning') return '#f59e0b';
-      return '#d1d5db';
+      if (status === 'error') return 'var(--ds-autocomplete-error-border)';
+      if (status === 'warning') return 'var(--ds-autocomplete-warning-border)';
+      if (isFocused) return 'var(--ds-autocomplete-border-focus)';
+      return 'var(--ds-autocomplete-border)';
+    };
+
+    const wrapperStyle: React.CSSProperties = {
+      position: 'relative',
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
+    };
+
+    const inputStyle: React.CSSProperties = {
+      width: '100%',
+      height: sizeConfig.height,
+      padding: '0 12px',
+      paddingRight: allowClear && value ? '32px' : '12px',
+      border: `1px solid ${getBorderColor()}`,
+      borderRadius: 'var(--ds-autocomplete-radius)',
+      fontSize: 'var(--ds-font-size-sm)',
+      outline: 'none',
+      opacity: disabled ? 0.5 : 1,
+      cursor: disabled ? 'not-allowed' : 'text',
+      backgroundColor: 'var(--ds-autocomplete-bg)',
+      color: 'var(--ds-color-neutral-900)',
+      transition: 'var(--ds-transition-fast)',
+    };
+
+    const clearButtonStyle: React.CSSProperties = {
+      position: 'absolute',
+      right: '8px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: 'var(--ds-autocomplete-clear-color)',
+      fontSize: '14px',
+      padding: '0 4px',
+    };
+
+    const dropdownStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: '100%',
+      left: 0,
+      right: 0,
+      marginTop: '4px',
+      backgroundColor: 'var(--ds-autocomplete-dropdown-bg)',
+      borderRadius: 'var(--ds-autocomplete-dropdown-radius)',
+      boxShadow: 'var(--ds-autocomplete-dropdown-shadow)',
+      maxHeight: '240px',
+      overflowY: 'auto',
+      zIndex: 1050,
+      listStyle: 'none',
+      padding: '4px 0',
+      margin: 0,
+    };
+
+    const optionStyle = (index: number, isDisabled?: boolean): React.CSSProperties => ({
+      padding: '8px 12px',
+      cursor: isDisabled ? 'not-allowed' : 'pointer',
+      backgroundColor: focusedIndex === index ? 'var(--ds-autocomplete-option-bg-hover)' : 'transparent',
+      opacity: isDisabled ? 0.5 : 1,
+      fontSize: 'var(--ds-font-size-sm)',
+      transition: 'background-color 0.15s',
+    });
+
+    const emptyStyle: React.CSSProperties = {
+      padding: '8px 12px',
+      color: 'var(--ds-autocomplete-empty-color)',
+      textAlign: 'center',
+      fontSize: 'var(--ds-font-size-sm)',
     };
 
     return (
@@ -144,47 +233,31 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={className}
-        style={{ position: 'relative', ...style }}
+        className={containerClasses}
+        style={wrapperStyle}
       >
         <div style={{ position: 'relative' }}>
           <input
             type="text"
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            onFocus={() => handleOpenChange(true)}
+            onFocus={() => { setIsFocused(true); handleOpenChange(true); }}
+            onBlur={() => setIsFocused(false)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={disabled}
             autoFocus={autoFocus}
-            style={{
-              width: '100%',
-              height: getInputHeight(),
-              padding: '0 12px',
-              paddingRight: allowClear && value ? '32px' : '12px',
-              border: `1px solid ${getBorderColor()}`,
-              borderRadius: '6px',
-              fontSize: '14px',
-              outline: 'none',
-              opacity: disabled ? 0.5 : 1,
-              cursor: disabled ? 'not-allowed' : 'text',
-            }}
+            style={inputStyle}
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
+            role="combobox"
           />
-          {allowClear && value && (
+          {allowClear && value && !disabled && (
             <button
               type="button"
               onClick={() => handleChange('')}
-              style={{
-                position: 'absolute',
-                right: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#9ca3af',
-                fontSize: '14px',
-              }}
+              style={clearButtonStyle}
+              aria-label="Clear"
             >
               ✕
             </button>
@@ -192,25 +265,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         </div>
 
         {isOpen && (
-          <ul
-            role="listbox"
-            style={{
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              right: 0,
-              marginTop: '4px',
-              backgroundColor: '#fff',
-              borderRadius: '6px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-              maxHeight: '240px',
-              overflowY: 'auto',
-              zIndex: 1050,
-              listStyle: 'none',
-              padding: '4px 0',
-              margin: 0,
-            }}
-          >
+          <ul role="listbox" style={dropdownStyle}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li
@@ -219,26 +274,13 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                   aria-selected={focusedIndex === index}
                   onClick={() => !option.disabled && handleSelect(option)}
                   onMouseEnter={() => setFocusedIndex(index)}
-                  style={{
-                    padding: '8px 12px',
-                    cursor: option.disabled ? 'not-allowed' : 'pointer',
-                    backgroundColor: focusedIndex === index ? '#f3f4f6' : 'transparent',
-                    opacity: option.disabled ? 0.5 : 1,
-                  }}
+                  style={optionStyle(index, option.disabled)}
                 >
                   {option.label ?? option.value}
                 </li>
               ))
             ) : (
-              <li
-                style={{
-                  padding: '8px 12px',
-                  color: '#9ca3af',
-                  textAlign: 'center',
-                }}
-              >
-                {notFoundContent}
-              </li>
+              <li style={emptyStyle}>{notFoundContent}</li>
             )}
           </ul>
         )}

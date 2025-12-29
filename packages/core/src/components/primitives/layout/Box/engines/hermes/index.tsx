@@ -39,10 +39,188 @@
 
 'use client';
 
-import React, { forwardRef, type ElementType, type Ref } from 'react';
+import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
 import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../../types';
 import { BOX_DEFAULTS } from '../../types';
-import { buildBoxStyles, filterBoxProps } from '../../base';
+
+/**
+ * Spacing value mapping (matches design tokens)
+ */
+const SPACING_MAP: Record<BoxSpacing, string> = {
+  none: '0',
+  xs: '0.25rem',
+  sm: '0.5rem',
+  md: '1rem',
+  lg: '1.5rem',
+  xl: '2rem',
+  '2xl': '2.5rem',
+  '3xl': '3rem',
+  '4xl': '4rem',
+};
+
+/**
+ * Border radius value mapping
+ */
+const RADIUS_MAP: Record<BoxBorderRadius, string> = {
+  none: '0',
+  xs: '0.125rem',
+  sm: '0.25rem',
+  md: '0.375rem',
+  lg: '0.5rem',
+  xl: '0.75rem',
+  '2xl': '1rem',
+  full: '9999px',
+};
+
+/**
+ * Shadow value mapping
+ */
+const SHADOW_MAP: Record<BoxShadow, string> = {
+  none: 'none',
+  xs: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  sm: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+  md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)',
+  lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)',
+  xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+  '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+};
+
+/**
+ * Builds CSSProperties from BoxProps
+ */
+function buildBoxStyles(props: BoxProps): CSSProperties {
+  const style: CSSProperties = {};
+
+  // Dimensions
+  const widthValue = props.width || props.w;
+  if (widthValue !== undefined) {
+    style.width = widthValue;
+  }
+  const heightValue = props.height || props.h;
+  if (heightValue !== undefined) {
+    style.height = heightValue;
+  }
+  const minWidthValue = props.minWidth || props.minW;
+  if (minWidthValue !== undefined) {
+    style.minWidth = minWidthValue;
+  }
+  const maxWidthValue = props.maxWidth || props.maxW;
+  if (maxWidthValue !== undefined) {
+    style.maxWidth = maxWidthValue;
+  }
+  const minHeightValue = props.minHeight || props.minH;
+  if (minHeightValue !== undefined) {
+    style.minHeight = minHeightValue;
+  }
+  const maxHeightValue = props.maxHeight || props.maxH;
+  if (maxHeightValue !== undefined) {
+    style.maxHeight = maxHeightValue;
+  }
+
+  // Background
+  const bgValue = props.background || props.bg;
+  if (bgValue !== undefined) {
+    style.background = bgValue;
+  }
+  const bgColorValue = props.backgroundColor || props.bgColor;
+  if (bgColorValue !== undefined) {
+    style.backgroundColor = bgColorValue;
+  }
+
+  // Border
+  if (props.border !== undefined) {
+    style.border = props.border;
+  }
+  if (props.borderWidth !== undefined) {
+    style.borderWidth = props.borderWidth;
+  }
+  if (props.borderColor !== undefined) {
+    style.borderColor = props.borderColor;
+  }
+  if (props.borderStyle !== undefined) {
+    style.borderStyle = props.borderStyle;
+  }
+
+  // Position offsets
+  if (props.top !== undefined) {
+    style.top = props.top;
+  }
+  if (props.right !== undefined) {
+    style.right = props.right;
+  }
+  if (props.bottom !== undefined) {
+    style.bottom = props.bottom;
+  }
+  if (props.left !== undefined) {
+    style.left = props.left;
+  }
+  if (props.zIndex !== undefined) {
+    style.zIndex = props.zIndex;
+  }
+
+  // Visual
+  if (props.opacity !== undefined) {
+    style.opacity = props.opacity;
+  }
+  if (props.transform !== undefined) {
+    style.transform = props.transform;
+  }
+  if (props.transition !== undefined) {
+    style.transition = props.transition;
+  }
+  if (props.cursor !== undefined) {
+    style.cursor = props.cursor;
+  }
+  if (props.visibility !== undefined) {
+    style.visibility = props.visibility;
+  }
+  if (props.pointerEvents !== undefined) {
+    style.pointerEvents = props.pointerEvents;
+  }
+  if (props.userSelect !== undefined) {
+    style.userSelect = props.userSelect;
+  }
+
+  // Flex
+  if (props.flex !== undefined) {
+    style.flex = props.flex;
+  }
+  if (props.flexGrow !== undefined) {
+    style.flexGrow = props.flexGrow;
+  }
+  if (props.flexShrink !== undefined) {
+    style.flexShrink = props.flexShrink;
+  }
+  if (props.flexBasis !== undefined) {
+    style.flexBasis = props.flexBasis;
+  }
+
+  // Grid
+  if (props.gridColumn !== undefined) {
+    style.gridColumn = props.gridColumn;
+  }
+  if (props.gridRow !== undefined) {
+    style.gridRow = props.gridRow;
+  }
+  if (props.gridArea !== undefined) {
+    style.gridArea = props.gridArea;
+  }
+
+  // Text
+  if (props.textAlign !== undefined) {
+    style.textAlign = props.textAlign;
+  }
+  if (props.color !== undefined) {
+    style.color = props.color;
+  }
+
+  // Merge with style prop
+  if (props.style) {
+    Object.assign(style, props.style);
+  }
+
+  return style;
+}
 
 /**
  * Maps spacing values to Tailwind classes
@@ -223,7 +401,6 @@ const HermesBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   } = props;
 
   const computedStyle = buildBoxStyles(props);
-  const filteredProps = filterBoxProps(props);
   const tailwindClasses = buildTailwindClasses(props);
 
   // Build class names with Hermes-specific prefixes and Tailwind classes
@@ -242,7 +419,6 @@ const HermesBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
       ref: ref as Ref<HTMLElement>,
       className: classNames,
       style: computedStyle,
-      ...filteredProps,
     },
     children
   );

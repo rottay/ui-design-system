@@ -67,7 +67,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { ImageProps } from './types';
 import { ImageFallback, ImageSkeleton } from './compound';
 

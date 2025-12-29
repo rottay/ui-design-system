@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { QRCode } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof QRCode> = {
   title: 'Primitives/Display/QRCode',
@@ -209,30 +210,56 @@ export const BorderVariants: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of all three rendering engines.
+ * Side-by-side comparison of QRCode across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same QRCode rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>
-            {engine} Engine
-          </h4>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <QRCode engine={engine} value="https://rottay.com" />
-            <QRCode engine={engine} value="https://rottay.com" status="loading" />
-            <QRCode
-              engine={engine}
-              value="https://rottay.com"
-              status="expired"
-              onRefresh={() => {}}
-            />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={QRCode}
+      props={{
+        value: 'https://rottay.com',
+        size: 160,
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all status variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all QRCode status variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={QRCode}
+      baseProps={{
+        value: 'https://rottay.com',
+        size: 120,
+      }}
+      variantProp="status"
+      variants={['active', 'loading', 'expired', 'scanned']}
+    />
   ),
 };
 

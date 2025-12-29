@@ -4,13 +4,31 @@
  */
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Input> = {
   title: 'Primitives/Inputs/Input',
   component: Input,
   decorators: [(Story) => (<DesignSystemProvider><Story /></DesignSystemProvider>)],
-  parameters: { docs: { description: { component: 'Input component for text entry with support for multiple engines, sizes, variants, and states.' } } },
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Input component for text entry with support for multiple engines, sizes, variants, and states.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Styling | CSS-in-JS | Tailwind | CSS Variables |
+| Clear Button | Ant Clear | Custom | Native |
+| Prefix/Suffix | Full Support | Partial | Full Support |
+`,
+      },
+    },
+  },
   argTypes: {
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'], description: 'Size of the input' },
     variant: { control: 'select', options: ['outline', 'filled', 'flushed', 'unstyled'], description: 'Visual variant' },
@@ -25,6 +43,10 @@ const meta: Meta<typeof Input> = {
 
 export default meta;
 type Story = StoryObj<typeof Input>;
+
+// ============================================================================
+// Default Stories
+// ============================================================================
 
 export const Default: Story = { args: { placeholder: "Enter text...", size: "md", variant: "outline" } };
 
@@ -68,21 +90,86 @@ export const WithIcons: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Input component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Input rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {(["titan", "hermes", "apollo"] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: "0 0 8px 0", textTransform: "capitalize" }}>{engine}</h4>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <Input engine={engine} placeholder="Default input" />
-            <Input engine={engine} variant="filled" placeholder="Filled variant" />
-            <Input engine={engine} error placeholder="Error state" />
-            <Input engine={engine} disabled placeholder="Disabled" />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Input}
+      props={{ placeholder: 'Enter text...', size: 'md' }}
+      showDescriptions
+    />
   ),
 };
 
+/**
+ * Matrix showing all variants across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all input variants across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Input}
+      baseProps={{ placeholder: 'Input' }}
+      variantProp="variant"
+      variants={['outline', 'filled', 'flushed', 'unstyled']}
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all input sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Input}
+      baseProps={{ placeholder: 'Input' }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusComparison: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Input}
+      baseProps={{ placeholder: 'Input' }}
+      variantProp="status"
+      variants={['default', 'error', 'warning', 'success']}
+    />
+  ),
+};

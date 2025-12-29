@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { List } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof List> = {
   title: 'Primitives/Display/List',
@@ -229,38 +230,63 @@ export const Grid: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of List across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same List rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <List engine={engine} bordered>
-            <List.Item
-              actions={[<a key="action">Action</a>]}
-            >
-              <List.Item.Meta
-                avatar={
-                  <img
-                    src={`https://i.pravatar.cc/40?img=${engine === 'titan' ? 1 : engine === 'hermes' ? 2 : 3}`}
-                    alt="avatar"
-                    style={{ borderRadius: '50%', width: 40, height: 40 }}
-                  />
-                }
-                title={`List Item - ${engine} engine`}
-                description="This is a description rendered with the selected engine"
-              />
-            </List.Item>
-            <List.Item>
-              <List.Item.Meta
-                title="Simple Item"
-                description="Without avatar"
-              />
-            </List.Item>
-          </List>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={List}
+      props={{
+        bordered: true,
+        dataSource: sampleData.slice(0, 2),
+        renderItem: (item: { title: string; description: string }) => (
+          <List.Item>
+            <List.Item.Meta title={item.title} description={item.description} />
+          </List.Item>
+        ),
+      }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all List sizes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={List}
+      baseProps={{
+        bordered: true,
+        dataSource: ['Item 1', 'Item 2'],
+        renderItem: (item: string) => <List.Item>{item}</List.Item>,
+      }}
+      variantProp="size"
+      variants={['small', 'default', 'large']}
+    />
   ),
 };
 

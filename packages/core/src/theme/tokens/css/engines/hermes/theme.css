@@ -1,0 +1,2778 @@
+/**
+ * Hermes Engine Theme - Rottay Design System
+ *
+ * Maps --ds-* design tokens to Tailwind CSS and DaisyUI component classes.
+ * This file bridges the centralized token system with Tailwind CSS 4.x / DaisyUI 5.x.
+ *
+ * Architecture:
+ * - Uses [data-tenant] selector for tenant-scoped overrides
+ * - All values reference --ds-* variables from default.css
+ * - Covers all interactive states: hover, focus, active, disabled
+ * - Maintains visual parity with Titan engine
+ *
+ * @version 0.4.0
+ * @engine Hermes (Tailwind CSS 4.x / DaisyUI 5.x)
+ */
+
+/* =============================================================================
+   CSS CUSTOM PROPERTIES FOR TAILWIND
+   These can be used with Tailwind's arbitrary value syntax: bg-[var(--ds-*)]
+   ============================================================================= */
+
+[data-tenant] {
+  /* Map design system colors to DaisyUI color system */
+  --p: var(--ds-color-primary-500);
+  --pf: var(--ds-color-primary-600);
+  --pc: var(--ds-color-white);
+
+  --s: var(--ds-color-secondary-500);
+  --sf: var(--ds-color-secondary-600);
+  --sc: var(--ds-color-white);
+
+  --a: var(--ds-color-info-500);
+  --af: var(--ds-color-info-600);
+  --ac: var(--ds-color-white);
+
+  --n: var(--ds-color-neutral-700);
+  --nf: var(--ds-color-neutral-800);
+  --nc: var(--ds-color-white);
+
+  --b1: var(--ds-color-white);
+  --b2: var(--ds-color-neutral-50);
+  --b3: var(--ds-color-neutral-100);
+  --bc: var(--ds-text-primary);
+
+  --su: var(--ds-color-success-500);
+  --wa: var(--ds-color-warning-500);
+  --er: var(--ds-color-error-500);
+  --in: var(--ds-color-info-500);
+
+  /* Border radius */
+  --rounded-box: var(--ds-radius-lg);
+  --rounded-btn: var(--ds-button-md-radius);
+  --rounded-badge: var(--ds-badge-radius);
+
+  /* Animation */
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+
+  /* Button */
+  --btn-focus-scale: 0.98;
+  --border-btn: 1px;
+  --tab-border: 2px;
+  --tab-radius: var(--ds-radius-md);
+}
+
+/* =============================================================================
+   BUTTON - .btn
+   ============================================================================= */
+
+[data-tenant] .btn {
+  font-family: var(--ds-font-family-base);
+  font-weight: var(--ds-button-font-weight);
+  border-radius: var(--ds-button-md-radius);
+  transition: var(--ds-button-transition);
+  height: var(--ds-button-md-height);
+  min-height: var(--ds-button-md-height);
+  padding-left: var(--ds-button-md-padding-x);
+  padding-right: var(--ds-button-md-padding-x);
+  font-size: var(--ds-button-md-font-size);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+[data-tenant] .btn:focus-visible {
+  box-shadow: var(--ds-button-focus-ring);
+  outline: none;
+}
+
+/* Button Sizes */
+[data-tenant] .btn-xs {
+  height: var(--ds-button-xs-height);
+  min-height: var(--ds-button-xs-height);
+  padding-left: var(--ds-button-xs-padding-x);
+  padding-right: var(--ds-button-xs-padding-x);
+  font-size: var(--ds-button-xs-font-size);
+  border-radius: var(--ds-button-xs-radius);
+}
+
+[data-tenant] .btn-sm {
+  height: var(--ds-button-sm-height);
+  min-height: var(--ds-button-sm-height);
+  padding-left: var(--ds-button-sm-padding-x);
+  padding-right: var(--ds-button-sm-padding-x);
+  font-size: var(--ds-button-sm-font-size);
+  border-radius: var(--ds-button-sm-radius);
+}
+
+[data-tenant] .btn-lg {
+  height: var(--ds-button-lg-height);
+  min-height: var(--ds-button-lg-height);
+  padding-left: var(--ds-button-lg-padding-x);
+  padding-right: var(--ds-button-lg-padding-x);
+  font-size: var(--ds-button-lg-font-size);
+  border-radius: var(--ds-button-lg-radius);
+}
+
+/* Primary Button */
+[data-tenant] .btn-primary {
+  background-color: var(--ds-button-primary-bg);
+  border-color: var(--ds-button-primary-border);
+  color: var(--ds-button-primary-color);
+  box-shadow: var(--ds-button-primary-shadow);
+}
+
+[data-tenant] .btn-primary:hover:not(:disabled) {
+  background-color: var(--ds-button-primary-bg-hover);
+  border-color: var(--ds-button-primary-bg-hover);
+  box-shadow: var(--ds-button-primary-shadow-hover);
+}
+
+[data-tenant] .btn-primary:active:not(:disabled) {
+  background-color: var(--ds-button-primary-bg-active);
+}
+
+/* Secondary Button */
+[data-tenant] .btn-secondary {
+  background-color: var(--ds-button-secondary-bg);
+  border-color: var(--ds-button-secondary-border);
+  color: var(--ds-button-secondary-color);
+}
+
+[data-tenant] .btn-secondary:hover:not(:disabled) {
+  background-color: var(--ds-button-secondary-bg-hover);
+}
+
+/* Ghost Button */
+[data-tenant] .btn-ghost {
+  background-color: var(--ds-button-ghost-bg);
+  border-color: var(--ds-button-ghost-border);
+  color: var(--ds-button-ghost-color);
+}
+
+[data-tenant] .btn-ghost:hover:not(:disabled) {
+  background-color: var(--ds-button-ghost-bg-hover);
+  color: var(--ds-button-ghost-color-hover);
+}
+
+[data-tenant] .btn-ghost:active:not(:disabled) {
+  background-color: var(--ds-button-ghost-bg-active);
+  color: var(--ds-button-ghost-color-active);
+}
+
+/* Outline Button */
+[data-tenant] .btn-outline {
+  background-color: transparent;
+  border-color: var(--ds-button-default-border);
+  color: var(--ds-button-default-color);
+}
+
+[data-tenant] .btn-outline:hover:not(:disabled) {
+  background-color: var(--ds-button-default-bg-hover);
+  border-color: var(--ds-button-default-border-hover);
+  color: var(--ds-button-default-color-hover);
+}
+
+[data-tenant] .btn-outline:active:not(:disabled) {
+  background-color: var(--ds-button-default-bg-active);
+  border-color: var(--ds-button-default-border-active);
+  color: var(--ds-button-default-color-active);
+}
+
+/* Link Button */
+[data-tenant] .btn-link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ds-button-link-color);
+  text-decoration: var(--ds-button-link-decoration);
+}
+
+[data-tenant] .btn-link:hover:not(:disabled) {
+  color: var(--ds-button-link-color-hover);
+  text-decoration: var(--ds-button-link-decoration-hover);
+}
+
+[data-tenant] .btn-link:active:not(:disabled) {
+  color: var(--ds-button-link-color-active);
+}
+
+/* Semantic Buttons */
+[data-tenant] .btn-success {
+  background-color: var(--ds-button-success-bg);
+  border-color: var(--ds-button-success-border);
+  color: var(--ds-button-success-color);
+}
+
+[data-tenant] .btn-success:hover:not(:disabled) {
+  background-color: var(--ds-button-success-bg-hover);
+}
+
+[data-tenant] .btn-success:active:not(:disabled) {
+  background-color: var(--ds-button-success-bg-active);
+}
+
+[data-tenant] .btn-warning {
+  background-color: var(--ds-button-warning-bg);
+  border-color: var(--ds-button-warning-border);
+  color: var(--ds-button-warning-color);
+}
+
+[data-tenant] .btn-warning:hover:not(:disabled) {
+  background-color: var(--ds-button-warning-bg-hover);
+}
+
+[data-tenant] .btn-warning:active:not(:disabled) {
+  background-color: var(--ds-button-warning-bg-active);
+}
+
+[data-tenant] .btn-error {
+  background-color: var(--ds-button-error-bg);
+  border-color: var(--ds-button-error-border);
+  color: var(--ds-button-error-color);
+}
+
+[data-tenant] .btn-error:hover:not(:disabled) {
+  background-color: var(--ds-button-error-bg-hover);
+}
+
+[data-tenant] .btn-error:active:not(:disabled) {
+  background-color: var(--ds-button-error-bg-active);
+}
+
+/* Info Button */
+[data-tenant] .btn-info {
+  background-color: var(--ds-button-info-bg);
+  border-color: var(--ds-button-info-border);
+  color: var(--ds-button-info-color);
+}
+
+[data-tenant] .btn-info:hover:not(:disabled) {
+  background-color: var(--ds-button-info-bg-hover);
+}
+
+[data-tenant] .btn-info:active:not(:disabled) {
+  background-color: var(--ds-button-info-bg-active);
+}
+
+/* Disabled Button */
+[data-tenant] .btn:disabled,
+[data-tenant] .btn-disabled {
+  background-color: var(--ds-button-disabled-bg) !important;
+  border-color: var(--ds-button-disabled-border) !important;
+  color: var(--ds-button-disabled-color) !important;
+  opacity: var(--ds-button-disabled-opacity);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   INPUT - .input
+   ============================================================================= */
+
+[data-tenant] .input {
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-input-md-font-size);
+  height: var(--ds-input-md-height);
+  padding-left: var(--ds-input-md-padding-x);
+  padding-right: var(--ds-input-md-padding-x);
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  color: var(--ds-input-color);
+  transition: var(--ds-input-transition);
+}
+
+[data-tenant] .input::placeholder {
+  color: var(--ds-input-color-placeholder);
+}
+
+[data-tenant] .input:hover:not(:disabled) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .input:focus {
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
+  outline: none;
+}
+
+[data-tenant] .input:disabled {
+  background-color: var(--ds-input-bg-disabled);
+  border-color: var(--ds-input-border-disabled);
+  color: var(--ds-input-color-disabled);
+  cursor: not-allowed;
+}
+
+/* Input Sizes */
+[data-tenant] .input-sm {
+  height: var(--ds-input-sm-height);
+  padding-left: var(--ds-input-sm-padding-x);
+  padding-right: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+}
+
+[data-tenant] .input-lg {
+  height: var(--ds-input-lg-height);
+  padding-left: var(--ds-input-lg-padding-x);
+  padding-right: var(--ds-input-lg-padding-x);
+  font-size: var(--ds-input-lg-font-size);
+}
+
+/* Input States */
+[data-tenant] .input-error {
+  border-color: var(--ds-input-error-border) !important;
+}
+
+[data-tenant] .input-error:focus {
+  box-shadow: var(--ds-input-error-shadow-focus);
+}
+
+[data-tenant] .input-warning {
+  border-color: var(--ds-input-warning-border) !important;
+}
+
+[data-tenant] .input-success {
+  border-color: var(--ds-input-success-border) !important;
+}
+
+/* =============================================================================
+   SELECT - .select
+   ============================================================================= */
+
+[data-tenant] .select {
+  background-color: var(--ds-select-bg);
+  border-color: var(--ds-select-border);
+  border-radius: var(--ds-select-radius);
+  font-family: var(--ds-font-family-base);
+  height: var(--ds-input-md-height);
+  min-height: var(--ds-input-md-height);
+  padding-left: var(--ds-input-md-padding-x);
+  transition: var(--ds-input-transition);
+}
+
+[data-tenant] .select:hover:not(:disabled) {
+  border-color: var(--ds-select-border-hover);
+}
+
+[data-tenant] .select:focus {
+  border-color: var(--ds-select-border-focus);
+  box-shadow: var(--ds-select-shadow-focus);
+  outline: none;
+}
+
+/* =============================================================================
+   CHECKBOX - .checkbox
+   ============================================================================= */
+
+[data-tenant] .checkbox {
+  width: var(--ds-checkbox-size);
+  height: var(--ds-checkbox-size);
+  border-color: var(--ds-checkbox-border);
+  border-radius: var(--ds-checkbox-radius);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .checkbox:hover:not(:disabled) {
+  border-color: var(--ds-checkbox-border-hover);
+}
+
+[data-tenant] .checkbox:checked {
+  background-color: var(--ds-checkbox-checked-bg);
+  border-color: var(--ds-checkbox-checked-border);
+}
+
+[data-tenant] .checkbox:focus-visible {
+  box-shadow: var(--ds-checkbox-focus-ring);
+  outline: none;
+}
+
+/* =============================================================================
+   RADIO - .radio
+   ============================================================================= */
+
+[data-tenant] .radio {
+  width: var(--ds-radio-size);
+  height: var(--ds-radio-size);
+  border-color: var(--ds-radio-border);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .radio:hover:not(:disabled) {
+  border-color: var(--ds-radio-border-hover);
+}
+
+[data-tenant] .radio:checked {
+  background-color: var(--ds-radio-checked-bg);
+  border-color: var(--ds-radio-checked-border);
+}
+
+[data-tenant] .radio:focus-visible {
+  box-shadow: var(--ds-radio-focus-ring);
+  outline: none;
+}
+
+/* =============================================================================
+   TOGGLE - .toggle
+   ============================================================================= */
+
+[data-tenant] .toggle {
+  width: var(--ds-toggle-md-width);
+  height: var(--ds-toggle-md-height);
+  background-color: var(--ds-toggle-bg);
+  border-radius: var(--ds-radius-full);
+  transition: var(--ds-toggle-transition);
+}
+
+[data-tenant] .toggle:hover:not(:disabled) {
+  background-color: var(--ds-toggle-bg-hover);
+}
+
+[data-tenant] .toggle:checked {
+  background-color: var(--ds-toggle-checked-bg);
+}
+
+[data-tenant] .toggle:checked:hover:not(:disabled) {
+  background-color: var(--ds-toggle-checked-bg-hover);
+}
+
+[data-tenant] .toggle:focus-visible {
+  box-shadow: var(--ds-toggle-focus-ring);
+  outline: none;
+}
+
+[data-tenant] .toggle:disabled {
+  opacity: var(--ds-toggle-disabled-opacity);
+  background-color: var(--ds-toggle-disabled-bg);
+}
+
+/* Toggle Sizes */
+[data-tenant] .toggle-sm {
+  width: var(--ds-toggle-sm-width);
+  height: var(--ds-toggle-sm-height);
+}
+
+[data-tenant] .toggle-lg {
+  width: var(--ds-toggle-lg-width);
+  height: var(--ds-toggle-lg-height);
+}
+
+/* =============================================================================
+   CARD - .card
+   ============================================================================= */
+
+[data-tenant] .card {
+  background-color: var(--ds-card-bg);
+  border-color: var(--ds-card-border);
+  border-radius: var(--ds-card-radius);
+  box-shadow: var(--ds-card-shadow);
+  transition: var(--ds-card-transition);
+}
+
+[data-tenant] .card:hover {
+  box-shadow: var(--ds-card-shadow-hover);
+}
+
+[data-tenant] .card-title {
+  font-size: var(--ds-card-title-font-size);
+  font-weight: var(--ds-card-title-font-weight);
+  color: var(--ds-card-title-color);
+}
+
+[data-tenant] .card-body {
+  padding: var(--ds-card-body-padding);
+  color: var(--ds-card-body-color);
+}
+
+[data-tenant] .card-compact .card-body {
+  padding: var(--ds-card-padding-sm);
+}
+
+/* =============================================================================
+   MODAL - .modal
+   ============================================================================= */
+
+[data-tenant] .modal-box {
+  background-color: var(--ds-modal-bg);
+  border-radius: var(--ds-modal-radius);
+  box-shadow: var(--ds-modal-shadow);
+  padding: var(--ds-modal-padding);
+}
+
+[data-tenant] .modal-backdrop {
+  background-color: var(--ds-modal-overlay-bg);
+  backdrop-filter: var(--ds-modal-overlay-backdrop);
+}
+
+[data-tenant] .modal-action {
+  margin-top: var(--ds-modal-footer-padding);
+  gap: var(--ds-modal-footer-gap);
+}
+
+/* =============================================================================
+   ALERT - .alert
+   ============================================================================= */
+
+[data-tenant] .alert {
+  padding: var(--ds-alert-padding);
+  border-radius: var(--ds-alert-radius);
+  font-size: var(--ds-alert-font-size);
+}
+
+[data-tenant] .alert-info {
+  background-color: var(--ds-alert-info-bg);
+  border-color: var(--ds-alert-info-border);
+  color: var(--ds-alert-info-color);
+}
+
+[data-tenant] .alert-success {
+  background-color: var(--ds-alert-success-bg);
+  border-color: var(--ds-alert-success-border);
+  color: var(--ds-alert-success-color);
+}
+
+[data-tenant] .alert-warning {
+  background-color: var(--ds-alert-warning-bg);
+  border-color: var(--ds-alert-warning-border);
+  color: var(--ds-alert-warning-color);
+}
+
+[data-tenant] .alert-error {
+  background-color: var(--ds-alert-error-bg);
+  border-color: var(--ds-alert-error-border);
+  color: var(--ds-alert-error-color);
+}
+
+/* =============================================================================
+   TOOLTIP - .tooltip
+   ============================================================================= */
+
+[data-tenant] .tooltip::before {
+  background-color: var(--ds-tooltip-bg);
+  color: var(--ds-tooltip-color);
+  border-radius: var(--ds-tooltip-radius);
+  padding: var(--ds-tooltip-padding);
+  font-size: var(--ds-tooltip-font-size);
+  max-width: var(--ds-tooltip-max-width);
+}
+
+/* =============================================================================
+   BADGE - .badge
+   ============================================================================= */
+
+[data-tenant] .badge {
+  font-size: var(--ds-badge-md-font-size);
+  height: var(--ds-badge-md-height);
+  padding-left: var(--ds-badge-padding-x);
+  padding-right: var(--ds-badge-padding-x);
+  border-radius: var(--ds-badge-radius);
+  font-weight: var(--ds-badge-font-weight);
+}
+
+[data-tenant] .badge-primary {
+  background-color: var(--ds-badge-primary-bg);
+  color: var(--ds-badge-primary-color);
+}
+
+[data-tenant] .badge-secondary {
+  background-color: var(--ds-badge-secondary-bg);
+  color: var(--ds-badge-secondary-color);
+}
+
+[data-tenant] .badge-success {
+  background-color: var(--ds-badge-success-bg);
+  color: var(--ds-badge-success-color);
+}
+
+[data-tenant] .badge-warning {
+  background-color: var(--ds-badge-warning-bg);
+  color: var(--ds-badge-warning-color);
+}
+
+[data-tenant] .badge-error {
+  background-color: var(--ds-badge-error-bg);
+  color: var(--ds-badge-error-color);
+}
+
+[data-tenant] .badge-info {
+  background-color: var(--ds-badge-info-bg);
+  color: var(--ds-badge-info-color);
+}
+
+/* Badge Sizes */
+[data-tenant] .badge-sm {
+  font-size: var(--ds-badge-sm-font-size);
+  height: var(--ds-badge-sm-height);
+}
+
+[data-tenant] .badge-lg {
+  font-size: var(--ds-badge-lg-font-size);
+  height: var(--ds-badge-lg-height);
+}
+
+/* =============================================================================
+   AVATAR - .avatar
+   ============================================================================= */
+
+[data-tenant] .avatar > div {
+  background-color: var(--ds-avatar-default-bg);
+  color: var(--ds-avatar-default-color);
+}
+
+[data-tenant] .avatar.placeholder > div {
+  background-color: var(--ds-avatar-default-bg);
+  color: var(--ds-avatar-default-color);
+}
+
+/* =============================================================================
+   PROGRESS - .progress
+   ============================================================================= */
+
+[data-tenant] .progress {
+  background-color: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
+  height: var(--ds-progress-height);
+}
+
+[data-tenant] .progress::-webkit-progress-bar {
+  background-color: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
+}
+
+[data-tenant] .progress::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-primary);
+  border-radius: var(--ds-progress-radius);
+}
+
+[data-tenant] .progress-primary::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-primary);
+}
+
+[data-tenant] .progress-success::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-success);
+}
+
+[data-tenant] .progress-warning::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-warning);
+}
+
+[data-tenant] .progress-error::-webkit-progress-value {
+  background-color: var(--ds-progress-fill-error);
+}
+
+/* =============================================================================
+   LOADING / SPINNER - .loading
+   ============================================================================= */
+
+[data-tenant] .loading {
+  color: var(--ds-spinner-color);
+}
+
+[data-tenant] .loading-sm {
+  width: var(--ds-spinner-sm-size);
+  height: var(--ds-spinner-sm-size);
+}
+
+[data-tenant] .loading-md {
+  width: var(--ds-spinner-md-size);
+  height: var(--ds-spinner-md-size);
+}
+
+[data-tenant] .loading-lg {
+  width: var(--ds-spinner-lg-size);
+  height: var(--ds-spinner-lg-size);
+}
+
+/* =============================================================================
+   DIVIDER - .divider
+   ============================================================================= */
+
+[data-tenant] .divider {
+  margin: var(--ds-divider-spacing) 0;
+}
+
+[data-tenant] .divider::before,
+[data-tenant] .divider::after {
+  background-color: var(--ds-divider-color);
+  height: var(--ds-divider-width);
+}
+
+/* =============================================================================
+   DROPDOWN - .dropdown
+   ============================================================================= */
+
+[data-tenant] .dropdown-content {
+  background-color: var(--ds-dropdown-bg);
+  border-radius: var(--ds-dropdown-radius);
+  box-shadow: var(--ds-dropdown-shadow);
+  padding: var(--ds-dropdown-padding);
+}
+
+[data-tenant] .menu li > a,
+[data-tenant] .menu li > button {
+  padding: var(--ds-dropdown-item-padding);
+  border-radius: var(--ds-dropdown-item-radius);
+  color: var(--ds-dropdown-item-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .menu li > a:hover,
+[data-tenant] .menu li > button:hover {
+  background-color: var(--ds-dropdown-item-bg-hover);
+  color: var(--ds-dropdown-item-color-hover);
+}
+
+[data-tenant] .menu li > a.active,
+[data-tenant] .menu li > button.active {
+  background-color: var(--ds-dropdown-item-bg-active);
+  color: var(--ds-dropdown-item-color-active);
+}
+
+/* =============================================================================
+   TABS - .tabs
+   ============================================================================= */
+
+[data-tenant] .tabs {
+  border-color: var(--ds-tabs-border);
+}
+
+[data-tenant] .tab {
+  color: var(--ds-tab-color);
+  font-weight: var(--ds-tab-font-weight);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .tab:hover {
+  color: var(--ds-tab-color-hover);
+  background-color: var(--ds-tab-bg-hover);
+}
+
+[data-tenant] .tab-active {
+  color: var(--ds-tab-color-active);
+  border-color: var(--ds-tab-border-active);
+}
+
+/* =============================================================================
+   TABLE - .table
+   ============================================================================= */
+
+[data-tenant] .table {
+  background-color: var(--ds-table-bg);
+  border-radius: var(--ds-table-radius);
+}
+
+[data-tenant] .table :where(thead, tfoot) {
+  background-color: var(--ds-table-header-bg);
+}
+
+[data-tenant] .table :where(thead, tfoot) :where(th, td) {
+  background-color: var(--ds-table-header-bg);
+  color: var(--ds-table-header-color);
+  font-weight: var(--ds-table-header-font-weight);
+  font-size: var(--ds-table-header-font-size);
+}
+
+[data-tenant] .table :where(tbody th, tbody td) {
+  background-color: var(--ds-table-row-bg);
+  font-size: var(--ds-table-cell-font-size);
+}
+
+[data-tenant] .table-zebra tbody tr:nth-child(even) :where(th, td) {
+  background-color: var(--ds-table-row-bg-striped);
+}
+
+[data-tenant] .table tr:hover :where(th, td) {
+  background-color: var(--ds-table-row-bg-hover);
+}
+
+/* =============================================================================
+   BREADCRUMBS - .breadcrumbs
+   ============================================================================= */
+
+[data-tenant] .breadcrumbs {
+  font-size: var(--ds-breadcrumb-font-size);
+}
+
+[data-tenant] .breadcrumbs li a {
+  color: var(--ds-breadcrumb-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .breadcrumbs li a:hover {
+  color: var(--ds-breadcrumb-color-hover);
+}
+
+[data-tenant] .breadcrumbs li + li::before {
+  color: var(--ds-breadcrumb-separator-color);
+}
+
+[data-tenant] .breadcrumbs li:last-child {
+  color: var(--ds-breadcrumb-color-active);
+}
+
+/* =============================================================================
+   PAGINATION - .join (used for pagination)
+   ============================================================================= */
+
+[data-tenant] .join .btn {
+  min-width: var(--ds-pagination-item-size);
+  height: var(--ds-pagination-item-size);
+  padding: 0;
+  background-color: var(--ds-pagination-item-bg);
+  border-color: var(--ds-pagination-item-border);
+  color: var(--ds-pagination-item-color);
+  border-radius: var(--ds-pagination-item-radius);
+}
+
+[data-tenant] .join .btn:hover {
+  background-color: var(--ds-pagination-item-bg-hover);
+}
+
+[data-tenant] .join .btn.btn-active {
+  background-color: var(--ds-pagination-item-bg-active);
+  color: var(--ds-pagination-item-color-active);
+  border-color: var(--ds-pagination-item-bg-active);
+}
+
+/* =============================================================================
+   STEPS - .steps
+   ============================================================================= */
+
+[data-tenant] .steps .step::before {
+  background-color: var(--ds-steps-line-color);
+}
+
+[data-tenant] .steps .step-primary::before {
+  background-color: var(--ds-steps-line-color-active);
+}
+
+[data-tenant] .steps .step::after {
+  background-color: var(--ds-steps-item-bg);
+  color: var(--ds-steps-item-color);
+}
+
+[data-tenant] .steps .step-primary::after {
+  background-color: var(--ds-steps-item-bg-active);
+  color: var(--ds-steps-item-color-active);
+}
+
+/* =============================================================================
+   COLLAPSE / ACCORDION - .collapse
+   ============================================================================= */
+
+[data-tenant] .collapse {
+  background-color: var(--ds-collapse-bg);
+  border-color: var(--ds-collapse-border);
+  border-radius: var(--ds-collapse-radius);
+}
+
+[data-tenant] .collapse-title {
+  padding: var(--ds-collapse-header-padding);
+  background-color: var(--ds-collapse-header-bg);
+  font-weight: var(--ds-collapse-header-font-weight);
+  color: var(--ds-collapse-header-color);
+}
+
+[data-tenant] .collapse-title:hover {
+  background-color: var(--ds-collapse-header-bg-hover);
+}
+
+[data-tenant] .collapse-content {
+  padding: var(--ds-collapse-content-padding);
+  background-color: var(--ds-collapse-content-bg);
+}
+
+/* =============================================================================
+   DRAWER - .drawer
+   ============================================================================= */
+
+[data-tenant] .drawer-side {
+  z-index: var(--ds-drawer-z-index);
+}
+
+[data-tenant] .drawer-side > .drawer-overlay {
+  background-color: var(--ds-drawer-overlay-bg);
+}
+
+[data-tenant] .drawer-side > *:not(.drawer-overlay) {
+  background-color: var(--ds-drawer-bg);
+  width: var(--ds-drawer-width);
+  box-shadow: var(--ds-drawer-shadow);
+}
+
+[data-tenant] .drawer-content .drawer-header {
+  padding: var(--ds-drawer-header-padding);
+  border-bottom: 1px solid var(--ds-drawer-header-border);
+}
+
+[data-tenant] .drawer-content .drawer-title {
+  font-size: var(--ds-drawer-title-font-size);
+  font-weight: var(--ds-drawer-title-font-weight);
+  color: var(--ds-drawer-title-color);
+}
+
+[data-tenant] .drawer-content .drawer-body {
+  padding: var(--ds-drawer-body-padding);
+}
+
+[data-tenant] .drawer-content .drawer-footer {
+  padding: var(--ds-drawer-footer-padding);
+  border-top: 1px solid var(--ds-drawer-footer-border);
+  background-color: var(--ds-drawer-footer-bg);
+}
+
+/* =============================================================================
+   TEXTAREA - .textarea
+   ============================================================================= */
+
+[data-tenant] .textarea {
+  min-height: var(--ds-textarea-min-height);
+  padding: var(--ds-textarea-padding);
+  line-height: var(--ds-textarea-line-height);
+  font-family: var(--ds-font-family-base);
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+  color: var(--ds-input-color);
+  transition: var(--ds-input-transition);
+}
+
+[data-tenant] .textarea:hover:not(:disabled) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .textarea:focus {
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
+  outline: none;
+}
+
+/* =============================================================================
+   FILE INPUT - .file-input
+   ============================================================================= */
+
+[data-tenant] .file-input {
+  background-color: var(--ds-input-bg);
+  border-color: var(--ds-input-border);
+  border-radius: var(--ds-input-radius);
+}
+
+[data-tenant] .file-input:hover:not(:disabled) {
+  border-color: var(--ds-input-border-hover);
+}
+
+[data-tenant] .file-input:focus {
+  border-color: var(--ds-input-border-focus);
+  box-shadow: var(--ds-input-shadow-focus);
+  outline: none;
+}
+
+/* =============================================================================
+   RANGE / SLIDER - .range
+   ============================================================================= */
+
+[data-tenant] .range {
+  height: var(--ds-slider-thumb-size);
+}
+
+[data-tenant] .range::-webkit-slider-runnable-track {
+  background-color: var(--ds-slider-track-bg);
+  height: var(--ds-slider-track-height);
+  border-radius: var(--ds-radius-full);
+}
+
+[data-tenant] .range::-webkit-slider-thumb {
+  width: var(--ds-slider-thumb-size);
+  height: var(--ds-slider-thumb-size);
+  background-color: var(--ds-slider-thumb-bg);
+  border-color: var(--ds-slider-thumb-border);
+  box-shadow: var(--ds-slider-thumb-shadow);
+}
+
+[data-tenant] .range:focus::-webkit-slider-thumb {
+  box-shadow: var(--ds-slider-focus-ring);
+}
+
+/* =============================================================================
+   RATING - .rating
+   ============================================================================= */
+
+[data-tenant] .rating input {
+  background-color: var(--ds-rate-color);
+}
+
+[data-tenant] .rating input:checked ~ input {
+  background-color: var(--ds-rate-color);
+}
+
+[data-tenant] .rating input:checked,
+[data-tenant] .rating input:checked ~ input:checked {
+  background-color: var(--ds-rate-color-active);
+}
+
+[data-tenant] .rating:hover input:hover,
+[data-tenant] .rating:hover input:hover ~ input {
+  background-color: var(--ds-rate-color-hover);
+}
+
+/* =============================================================================
+   SKELETON - .skeleton
+   ============================================================================= */
+
+[data-tenant] .skeleton {
+  background-color: var(--ds-skeleton-bg);
+  border-radius: var(--ds-skeleton-radius);
+}
+
+/* =============================================================================
+   TOAST - .toast
+   ============================================================================= */
+
+[data-tenant] .toast {
+  background-color: var(--ds-toast-bg);
+  border-radius: var(--ds-toast-radius-md);
+  box-shadow: var(--ds-toast-shadow);
+  padding: var(--ds-toast-padding);
+  gap: var(--ds-toast-gap);
+  max-width: var(--ds-toast-max-width);
+}
+
+[data-tenant] .toast-start,
+[data-tenant] .toast-center,
+[data-tenant] .toast-end {
+  z-index: var(--ds-toast-z-index);
+}
+
+/* Toast Variants */
+[data-tenant] .toast .alert-success {
+  background-color: var(--ds-toast-success-bg);
+  color: var(--ds-toast-success-color);
+  border-color: var(--ds-toast-success-border);
+}
+
+[data-tenant] .toast .alert-error {
+  background-color: var(--ds-toast-error-bg);
+  color: var(--ds-toast-error-color);
+  border-color: var(--ds-toast-error-border);
+}
+
+[data-tenant] .toast .alert-warning {
+  background-color: var(--ds-toast-warning-bg);
+  color: var(--ds-toast-warning-color);
+  border-color: var(--ds-toast-warning-border);
+}
+
+[data-tenant] .toast .alert-info {
+  background-color: var(--ds-toast-info-bg);
+  color: var(--ds-toast-info-color);
+  border-color: var(--ds-toast-info-border);
+}
+
+/* =============================================================================
+   MESSAGE - Custom message component using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-message {
+  background-color: var(--ds-message-bg);
+  border-radius: var(--ds-message-radius);
+  box-shadow: var(--ds-message-shadow);
+  padding: var(--ds-message-padding);
+  font-size: var(--ds-message-font-size);
+  line-height: var(--ds-message-line-height);
+  color: var(--ds-message-text-color);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-message-gap);
+  max-width: var(--ds-message-max-width);
+}
+
+[data-tenant] .ds-message-success {
+  background-color: var(--ds-message-success-bg);
+  border: 1px solid var(--ds-message-success-border);
+}
+
+[data-tenant] .ds-message-success .ds-message-icon {
+  color: var(--ds-message-success-color);
+}
+
+[data-tenant] .ds-message-error {
+  background-color: var(--ds-message-error-bg);
+  border: 1px solid var(--ds-message-error-border);
+}
+
+[data-tenant] .ds-message-error .ds-message-icon {
+  color: var(--ds-message-error-color);
+}
+
+[data-tenant] .ds-message-warning {
+  background-color: var(--ds-message-warning-bg);
+  border: 1px solid var(--ds-message-warning-border);
+}
+
+[data-tenant] .ds-message-warning .ds-message-icon {
+  color: var(--ds-message-warning-color);
+}
+
+[data-tenant] .ds-message-info {
+  background-color: var(--ds-message-info-bg);
+  border: 1px solid var(--ds-message-info-border);
+}
+
+[data-tenant] .ds-message-info .ds-message-icon {
+  color: var(--ds-message-info-color);
+}
+
+[data-tenant] .ds-message-loading .ds-message-icon {
+  color: var(--ds-message-loading-color);
+}
+
+/* =============================================================================
+   NOTIFICATION - Custom notification component using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-notification {
+  background-color: var(--ds-notification-bg);
+  border-radius: var(--ds-notification-radius);
+  box-shadow: var(--ds-notification-shadow);
+  padding: var(--ds-notification-padding);
+  width: var(--ds-notification-width);
+  max-width: var(--ds-notification-max-width);
+  display: flex;
+  gap: var(--ds-notification-gap);
+}
+
+[data-tenant] .ds-notification-title {
+  font-size: var(--ds-notification-title-size);
+  font-weight: var(--ds-notification-title-font-weight);
+  color: var(--ds-notification-title-color);
+}
+
+[data-tenant] .ds-notification-description {
+  font-size: var(--ds-notification-desc-size);
+  color: var(--ds-notification-desc-color);
+}
+
+[data-tenant] .ds-notification-close {
+  color: var(--ds-notification-close-color);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-notification-close:hover {
+  color: var(--ds-notification-close-color-hover);
+}
+
+[data-tenant] .ds-notification-success .ds-notification-icon {
+  color: var(--ds-notification-success-color);
+}
+
+[data-tenant] .ds-notification-error .ds-notification-icon {
+  color: var(--ds-notification-error-color);
+}
+
+[data-tenant] .ds-notification-warning .ds-notification-icon {
+  color: var(--ds-notification-warning-color);
+}
+
+[data-tenant] .ds-notification-info .ds-notification-icon {
+  color: var(--ds-notification-info-color);
+}
+
+/* =============================================================================
+   RESULT - Custom result component using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+[data-tenant] .ds-result-icon {
+  font-size: var(--ds-result-icon-size);
+  margin-bottom: 1.5rem;
+}
+
+[data-tenant] .ds-result-success .ds-result-icon {
+  color: var(--ds-result-success-icon);
+}
+
+[data-tenant] .ds-result-error .ds-result-icon {
+  color: var(--ds-result-error-icon);
+}
+
+[data-tenant] .ds-result-warning .ds-result-icon {
+  color: var(--ds-result-warning-icon);
+}
+
+[data-tenant] .ds-result-info .ds-result-icon {
+  color: var(--ds-result-info-icon);
+}
+
+[data-tenant] .ds-result-title {
+  font-size: var(--ds-result-title-font-size);
+  font-weight: var(--ds-result-title-font-weight);
+  color: var(--ds-result-title-color);
+  margin-bottom: 0.5rem;
+}
+
+[data-tenant] .ds-result-subtitle {
+  color: var(--ds-result-subtitle-color);
+  margin-bottom: 1.5rem;
+}
+
+[data-tenant] .ds-result-extra {
+  margin-top: 1.5rem;
+}
+
+/* =============================================================================
+   LINK - a
+   ============================================================================= */
+
+[data-tenant] a.link {
+  color: var(--ds-link-color);
+  text-decoration: var(--ds-link-decoration);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] a.link:hover {
+  color: var(--ds-link-color-hover);
+  text-decoration: var(--ds-link-decoration-hover);
+}
+
+[data-tenant] a.link:active {
+  color: var(--ds-link-color-active);
+}
+
+/* =============================================================================
+   FORM CONTROL
+   ============================================================================= */
+
+[data-tenant] .form-control {
+  margin-bottom: var(--ds-form-item-margin-bottom);
+}
+
+[data-tenant] .label-text {
+  color: var(--ds-form-label-color);
+  font-size: var(--ds-form-label-font-size);
+  font-weight: var(--ds-form-label-font-weight);
+}
+
+[data-tenant] .label-text-alt {
+  color: var(--ds-form-helper-color);
+  font-size: var(--ds-input-helper-font-size);
+}
+
+/* =============================================================================
+   HERO
+   ============================================================================= */
+
+[data-tenant] .hero-content {
+  text-align: center;
+}
+
+/* =============================================================================
+   STAT
+   ============================================================================= */
+
+[data-tenant] .stat-title {
+  color: var(--ds-statistic-title-color);
+  font-size: var(--ds-statistic-title-font-size);
+}
+
+[data-tenant] .stat-value {
+  color: var(--ds-statistic-value-color);
+  font-size: var(--ds-statistic-value-font-size);
+  font-weight: var(--ds-statistic-value-font-weight);
+}
+
+/* =============================================================================
+   TIMELINE
+   ============================================================================= */
+
+[data-tenant] .timeline::before {
+  background-color: var(--ds-timeline-line-color);
+  width: var(--ds-timeline-line-width);
+}
+
+[data-tenant] .timeline-start,
+[data-tenant] .timeline-middle,
+[data-tenant] .timeline-end {
+  color: var(--ds-text-primary);
+}
+
+/* =============================================================================
+   CALENDAR
+   ============================================================================= */
+
+[data-tenant] .calendar {
+  background-color: var(--ds-calendar-bg);
+  border-radius: var(--ds-calendar-radius);
+  padding: var(--ds-calendar-padding);
+}
+
+[data-tenant] .calendar-header {
+  background-color: var(--ds-calendar-header-bg);
+  color: var(--ds-calendar-header-color);
+  font-weight: var(--ds-calendar-header-font-weight);
+}
+
+[data-tenant] .calendar-weekday {
+  color: var(--ds-calendar-weekday-color);
+  font-size: var(--ds-calendar-weekday-font-size);
+}
+
+[data-tenant] .calendar-day {
+  min-width: var(--ds-calendar-cell-size);
+  min-height: var(--ds-calendar-cell-size);
+  background-color: var(--ds-calendar-cell-bg);
+  color: var(--ds-calendar-cell-color);
+  border-radius: var(--ds-calendar-cell-radius);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .calendar-day:hover {
+  background-color: var(--ds-calendar-cell-bg-hover);
+}
+
+[data-tenant] .calendar-day.today {
+  background-color: var(--ds-calendar-cell-bg-today);
+  color: var(--ds-calendar-cell-color-today);
+}
+
+[data-tenant] .calendar-day.selected {
+  background-color: var(--ds-calendar-cell-bg-selected);
+  color: var(--ds-calendar-cell-color-selected);
+}
+
+[data-tenant] .calendar-day.disabled {
+  color: var(--ds-calendar-cell-color-disabled);
+}
+
+[data-tenant] .calendar-day.outside {
+  color: var(--ds-calendar-cell-color-outside);
+}
+
+[data-tenant] .calendar-nav {
+  color: var(--ds-calendar-nav-color);
+}
+
+[data-tenant] .calendar-nav:hover {
+  color: var(--ds-calendar-nav-color-hover);
+}
+
+/* =============================================================================
+   CAROUSEL
+   ============================================================================= */
+
+[data-tenant] .carousel {
+  border-radius: var(--ds-carousel-radius);
+  overflow: hidden;
+}
+
+[data-tenant] .carousel-item {
+  transition: var(--ds-carousel-transition);
+}
+
+[data-tenant] .carousel-dot {
+  width: var(--ds-carousel-dot-size);
+  height: var(--ds-carousel-dot-size);
+  background-color: var(--ds-carousel-dot-bg);
+  border-radius: var(--ds-carousel-dot-radius);
+  margin: 0 var(--ds-carousel-dot-gap);
+}
+
+[data-tenant] .carousel-dot.active {
+  background-color: var(--ds-carousel-dot-bg-active);
+  width: calc(var(--ds-carousel-dot-size) * 2);
+}
+
+[data-tenant] .carousel-arrow {
+  width: var(--ds-carousel-arrow-size);
+  height: var(--ds-carousel-arrow-size);
+  background-color: var(--ds-carousel-arrow-bg);
+  color: var(--ds-carousel-arrow-color);
+  border-radius: var(--ds-carousel-arrow-radius);
+}
+
+[data-tenant] .carousel-arrow:hover {
+  background-color: var(--ds-carousel-arrow-bg-hover);
+}
+
+/* =============================================================================
+   IMAGE
+   ============================================================================= */
+
+[data-tenant] .image-wrapper {
+  border-radius: var(--ds-image-radius);
+  overflow: hidden;
+}
+
+[data-tenant] .image-placeholder {
+  background-color: var(--ds-image-placeholder-bg);
+  color: var(--ds-image-placeholder-color);
+}
+
+[data-tenant] .image-mask {
+  background-color: var(--ds-image-mask-bg);
+  color: var(--ds-image-mask-color);
+  border-radius: var(--ds-image-radius);
+}
+
+[data-tenant] .image-preview-overlay {
+  background-color: var(--ds-image-preview-bg);
+}
+
+[data-tenant] .image-preview-toolbar {
+  background-color: var(--ds-image-preview-toolbar-bg);
+  color: var(--ds-image-preview-toolbar-color);
+  border-radius: var(--ds-image-preview-toolbar-radius);
+}
+
+[data-tenant] .image-preview-icon {
+  width: var(--ds-image-preview-icon-size);
+  height: var(--ds-image-preview-icon-size);
+  color: var(--ds-image-preview-toolbar-color);
+}
+
+[data-tenant] .image-preview-close {
+  width: var(--ds-image-preview-close-size);
+  height: var(--ds-image-preview-close-size);
+  color: var(--ds-image-preview-toolbar-color);
+}
+
+/* =============================================================================
+   TREE
+   ============================================================================= */
+
+[data-tenant] .tree {
+  background-color: var(--ds-tree-bg);
+}
+
+[data-tenant] .tree-node {
+  padding: var(--ds-tree-node-padding);
+  background-color: var(--ds-tree-node-bg);
+  color: var(--ds-tree-node-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .tree-node:hover {
+  background-color: var(--ds-tree-node-bg-hover);
+}
+
+[data-tenant] .tree-node.selected {
+  background-color: var(--ds-tree-node-bg-selected);
+  color: var(--ds-tree-node-color-selected);
+}
+
+[data-tenant] .tree-node.disabled {
+  color: var(--ds-tree-node-color-disabled);
+}
+
+[data-tenant] .tree-icon {
+  width: var(--ds-tree-icon-size);
+  height: var(--ds-tree-icon-size);
+  color: var(--ds-tree-icon-color);
+}
+
+[data-tenant] .tree-switcher {
+  width: var(--ds-tree-switcher-size);
+  height: var(--ds-tree-switcher-size);
+}
+
+[data-tenant] .tree-indent {
+  width: var(--ds-tree-indent);
+}
+
+[data-tenant] .tree-line {
+  border-color: var(--ds-tree-line-color);
+  border-width: var(--ds-tree-line-width);
+}
+
+[data-tenant] .tree-checkbox {
+  margin-right: var(--ds-tree-checkbox-margin);
+}
+
+/* =============================================================================
+   DESCRIPTIONS
+   ============================================================================= */
+
+[data-tenant] .descriptions {
+  background-color: var(--ds-descriptions-bg);
+}
+
+[data-tenant] .descriptions-label {
+  background-color: var(--ds-descriptions-label-bg);
+  color: var(--ds-descriptions-label-color);
+  font-weight: var(--ds-descriptions-label-font-weight);
+  padding: var(--ds-descriptions-padding);
+  border-color: var(--ds-descriptions-border);
+}
+
+[data-tenant] .descriptions-content {
+  color: var(--ds-descriptions-content-color);
+  padding: var(--ds-descriptions-padding);
+  border-color: var(--ds-descriptions-border);
+}
+
+/* =============================================================================
+   EMPTY
+   ============================================================================= */
+
+[data-tenant] .empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+[data-tenant] .empty-icon {
+  font-size: var(--ds-empty-icon-size);
+  color: var(--ds-empty-icon-color);
+}
+
+[data-tenant] .empty-title {
+  color: var(--ds-empty-title-color);
+  margin-top: 1rem;
+}
+
+[data-tenant] .empty-description {
+  color: var(--ds-empty-description-color);
+}
+
+/* =============================================================================
+   LIST
+   ============================================================================= */
+
+[data-tenant] .list {
+  background-color: var(--ds-list-bg);
+  border-radius: var(--ds-list-radius);
+}
+
+[data-tenant] .list-bordered {
+  border-color: var(--ds-list-border);
+}
+
+[data-tenant] .list-item {
+  padding: var(--ds-list-md-padding-y) var(--ds-list-md-padding-x);
+  color: var(--ds-list-item-color);
+  border-color: var(--ds-list-item-divider);
+  background-color: var(--ds-list-item-bg);
+}
+
+[data-tenant] .list-item:hover {
+  background-color: var(--ds-list-item-bg-hover);
+}
+
+[data-tenant] .list-item-sm {
+  padding: var(--ds-list-sm-padding-y) var(--ds-list-sm-padding-x);
+  font-size: var(--ds-list-sm-font-size);
+}
+
+[data-tenant] .list-item-lg {
+  padding: var(--ds-list-lg-padding-y) var(--ds-list-lg-padding-x);
+  font-size: var(--ds-list-lg-font-size);
+}
+
+[data-tenant] .list-header {
+  background-color: var(--ds-list-header-bg);
+  font-weight: var(--ds-list-header-font-weight);
+}
+
+[data-tenant] .list-footer {
+  background-color: var(--ds-list-footer-bg);
+}
+
+[data-tenant] .list-meta-title {
+  color: var(--ds-list-meta-title-color);
+  font-weight: var(--ds-list-meta-title-font-weight);
+}
+
+[data-tenant] .list-meta-description {
+  color: var(--ds-list-meta-description-color);
+}
+
+[data-tenant] .list-empty {
+  color: var(--ds-list-empty-color);
+  padding: var(--ds-list-empty-padding);
+}
+
+/* =============================================================================
+   QRCODE
+   ============================================================================= */
+
+[data-tenant] .qrcode {
+  border-radius: var(--ds-qrcode-radius);
+  border-color: var(--ds-qrcode-border);
+  background-color: var(--ds-qrcode-bg);
+}
+
+[data-tenant] .qrcode-xs {
+  width: var(--ds-qrcode-xs-size);
+  height: var(--ds-qrcode-xs-size);
+}
+
+[data-tenant] .qrcode-sm {
+  width: var(--ds-qrcode-sm-size);
+  height: var(--ds-qrcode-sm-size);
+}
+
+[data-tenant] .qrcode-md {
+  width: var(--ds-qrcode-md-size);
+  height: var(--ds-qrcode-md-size);
+}
+
+[data-tenant] .qrcode-lg {
+  width: var(--ds-qrcode-lg-size);
+  height: var(--ds-qrcode-lg-size);
+}
+
+[data-tenant] .qrcode-xl {
+  width: var(--ds-qrcode-xl-size);
+  height: var(--ds-qrcode-xl-size);
+}
+
+[data-tenant] .qrcode-loading {
+  opacity: var(--ds-qrcode-loading-opacity);
+  background-color: var(--ds-qrcode-loading-bg);
+}
+
+[data-tenant] .qrcode-expired {
+  opacity: var(--ds-qrcode-expired-opacity);
+}
+
+[data-tenant] .qrcode-expired-overlay {
+  background-color: var(--ds-qrcode-expired-overlay);
+}
+
+[data-tenant] .qrcode-scanned-overlay {
+  background-color: var(--ds-qrcode-scanned-overlay);
+}
+
+[data-tenant] .qrcode-scanned-icon {
+  color: var(--ds-qrcode-scanned-icon);
+}
+
+[data-tenant] .qrcode-refresh {
+  width: var(--ds-qrcode-refresh-size);
+  height: var(--ds-qrcode-refresh-size);
+  background-color: var(--ds-qrcode-refresh-bg);
+  color: var(--ds-qrcode-refresh-color);
+}
+
+[data-tenant] .qrcode-icon {
+  background-color: var(--ds-qrcode-icon-bg);
+  padding: var(--ds-qrcode-icon-padding);
+  border-radius: var(--ds-qrcode-icon-radius);
+}
+
+/* =============================================================================
+   AFFIX
+   ============================================================================= */
+
+[data-tenant] .affix {
+  position: fixed;
+  z-index: var(--ds-affix-z-index);
+}
+
+/* =============================================================================
+   ANCHOR
+   ============================================================================= */
+
+[data-tenant] .anchor {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-tenant] .anchor-link {
+  padding: var(--ds-anchor-link-padding);
+  color: var(--ds-anchor-link-color);
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .anchor-link:hover {
+  color: var(--ds-anchor-link-color-hover);
+}
+
+[data-tenant] .anchor-link.active {
+  color: var(--ds-anchor-link-color-active);
+}
+
+[data-tenant] .anchor-ink {
+  width: var(--ds-anchor-ink-width);
+  background-color: var(--ds-anchor-ink-color);
+}
+
+/* =============================================================================
+   BACK TOP
+   ============================================================================= */
+
+[data-tenant] .back-top {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: var(--ds-back-top-z-index);
+}
+
+[data-tenant] .back-top-content {
+  width: var(--ds-back-top-size);
+  height: var(--ds-back-top-size);
+  background-color: var(--ds-back-top-bg);
+  color: var(--ds-back-top-color);
+  border-radius: var(--ds-back-top-radius);
+  box-shadow: var(--ds-back-top-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .back-top-content:hover {
+  background-color: var(--ds-back-top-bg-hover);
+}
+
+/* =============================================================================
+   FLOAT BUTTON
+   ============================================================================= */
+
+[data-tenant] .float-btn {
+  width: var(--ds-float-button-size);
+  height: var(--ds-float-button-size);
+  background-color: var(--ds-float-button-bg);
+  color: var(--ds-float-button-color);
+  border-radius: var(--ds-float-button-radius);
+  box-shadow: var(--ds-float-button-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .float-btn:hover {
+  background-color: var(--ds-float-button-bg-hover);
+}
+
+[data-tenant] .float-btn-sm {
+  width: var(--ds-float-button-size-sm);
+  height: var(--ds-float-button-size-sm);
+}
+
+[data-tenant] .float-btn-lg {
+  width: var(--ds-float-button-size-lg);
+  height: var(--ds-float-button-size-lg);
+}
+
+[data-tenant] .float-btn-primary {
+  background-color: var(--ds-float-button-primary-bg);
+  color: var(--ds-float-button-primary-color);
+}
+
+/* =============================================================================
+   SEGMENTED
+   ============================================================================= */
+
+[data-tenant] .segmented {
+  display: inline-flex;
+  background-color: var(--ds-segmented-bg);
+  border-radius: var(--ds-segmented-radius);
+  padding: var(--ds-segmented-padding);
+}
+
+[data-tenant] .segmented-item {
+  padding: var(--ds-segmented-item-padding);
+  border-radius: var(--ds-segmented-item-radius);
+  color: var(--ds-segmented-item-color);
+  cursor: pointer;
+  transition: var(--ds-transition-fast);
+}
+
+[data-tenant] .segmented-item.active,
+[data-tenant] .segmented-item-selected {
+  background-color: var(--ds-segmented-item-bg-active);
+  color: var(--ds-segmented-item-color-active);
+  box-shadow: var(--ds-segmented-item-shadow-active);
+}
+
+/* =============================================================================
+   STEPPER
+   ============================================================================= */
+
+[data-tenant] .stepper {
+  display: flex;
+  gap: 1rem;
+}
+
+[data-tenant] .stepper-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+[data-tenant] .stepper-icon {
+  width: var(--ds-stepper-item-size);
+  height: var(--ds-stepper-item-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--ds-stepper-item-bg);
+  border: 2px solid var(--ds-stepper-item-border);
+  color: var(--ds-stepper-item-color);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+[data-tenant] .stepper-item.active .stepper-icon {
+  background-color: var(--ds-stepper-item-bg-active);
+  border-color: var(--ds-stepper-item-border-active);
+  color: var(--ds-stepper-item-color-active);
+}
+
+[data-tenant] .stepper-item.completed .stepper-icon {
+  background-color: var(--ds-stepper-item-bg-completed);
+  border-color: var(--ds-stepper-item-bg-completed);
+  color: var(--ds-stepper-item-color-completed);
+}
+
+[data-tenant] .stepper-item.error .stepper-icon {
+  background-color: var(--ds-stepper-item-bg-error);
+  border-color: var(--ds-stepper-item-bg-error);
+  color: var(--ds-stepper-item-color-error);
+}
+
+[data-tenant] .stepper-content {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-tenant] .stepper-title {
+  color: var(--ds-stepper-title-color);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+[data-tenant] .stepper-item.active .stepper-title {
+  color: var(--ds-stepper-title-color-active);
+}
+
+[data-tenant] .stepper-description {
+  color: var(--ds-stepper-description-color);
+  font-size: var(--ds-font-size-sm);
+}
+
+[data-tenant] .stepper-line {
+  flex: 1;
+  height: var(--ds-stepper-line-width);
+  background-color: var(--ds-stepper-line-color);
+}
+
+[data-tenant] .stepper-item.completed + .stepper-line,
+[data-tenant] .stepper-line.completed {
+  background-color: var(--ds-stepper-line-color-active);
+}
+
+/* =============================================================================
+   POPOVER
+   ============================================================================= */
+
+[data-tenant] .popover {
+  background-color: var(--ds-popover-bg);
+  border: 1px solid var(--ds-popover-border);
+  border-radius: var(--ds-popover-radius);
+  box-shadow: var(--ds-popover-shadow);
+  padding: var(--ds-popover-padding);
+}
+
+[data-tenant] .popover-arrow {
+  background-color: var(--ds-popover-bg);
+  border-color: var(--ds-popover-border);
+}
+
+/* =============================================================================
+   POPCONFIRM
+   ============================================================================= */
+
+[data-tenant] .popconfirm {
+  background-color: var(--ds-popconfirm-bg);
+  border-radius: var(--ds-popconfirm-radius);
+  box-shadow: var(--ds-popconfirm-shadow);
+  padding: var(--ds-popconfirm-padding);
+}
+
+[data-tenant] .popconfirm-title {
+  font-weight: var(--ds-popconfirm-title-font-weight);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+[data-tenant] .popconfirm-icon-warning {
+  color: var(--ds-popconfirm-icon-warning);
+}
+
+[data-tenant] .popconfirm-icon-error {
+  color: var(--ds-popconfirm-icon-error);
+}
+
+[data-tenant] .popconfirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-popconfirm-buttons-gap);
+  margin-top: 1rem;
+}
+
+/* =============================================================================
+   TOUR
+   ============================================================================= */
+
+[data-tenant] .tour {
+  position: fixed;
+  z-index: var(--ds-z-index-popover);
+}
+
+[data-tenant] .tour-content {
+  background-color: var(--ds-tour-bg);
+  color: var(--ds-tour-color);
+  border-radius: var(--ds-tour-radius);
+  box-shadow: var(--ds-tour-shadow);
+  padding: var(--ds-tour-padding);
+}
+
+[data-tenant] .tour-title {
+  font-weight: var(--ds-tour-title-font-weight);
+  margin-bottom: 0.5rem;
+}
+
+[data-tenant] .tour-mask {
+  position: fixed;
+  inset: 0;
+  background-color: var(--ds-tour-mask-bg);
+  z-index: var(--ds-z-index-overlay);
+}
+
+[data-tenant] .tour-indicators {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+
+[data-tenant] .tour-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--ds-tour-indicator-inactive);
+}
+
+[data-tenant] .tour-indicator.active {
+  background-color: var(--ds-tour-indicator-color);
+}
+
+/* =============================================================================
+   WATERMARK
+   ============================================================================= */
+
+[data-tenant] .watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--ds-watermark-z-index);
+  overflow: hidden;
+}
+
+[data-tenant] .watermark-content {
+  color: var(--ds-watermark-color);
+  font-size: var(--ds-watermark-font-size);
+  transform: rotate(-22deg);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* =============================================================================
+   LAYOUT - Custom layout component using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+[data-tenant] .ds-layout-has-sider {
+  flex-direction: row;
+}
+
+[data-tenant] .ds-layout-header {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: var(--ds-layout-header-height);
+  padding: var(--ds-layout-header-padding);
+  background-color: var(--ds-layout-header-bg);
+  color: var(--ds-layout-header-color);
+}
+
+[data-tenant] .ds-layout-sider {
+  flex-shrink: 0;
+  overflow: auto;
+  background-color: var(--ds-layout-sider-bg);
+  color: var(--ds-layout-sider-color);
+  width: var(--ds-layout-sider-width);
+  transition: width 0.3s;
+}
+
+[data-tenant] .ds-layout-sider-light {
+  background-color: var(--ds-layout-sider-light-bg);
+  color: var(--ds-layout-sider-light-color);
+  border-right: 1px solid var(--ds-layout-sider-light-border);
+}
+
+[data-tenant] .ds-layout-sider-collapsed {
+  width: var(--ds-layout-sider-collapsed-width);
+}
+
+[data-tenant] .ds-layout-content {
+  flex: 1;
+  padding: var(--ds-layout-content-padding);
+  background-color: var(--ds-layout-content-bg);
+  overflow: auto;
+}
+
+[data-tenant] .ds-layout-footer {
+  flex-shrink: 0;
+  padding: var(--ds-layout-footer-padding);
+  background-color: var(--ds-layout-footer-bg);
+  color: var(--ds-layout-footer-color);
+  text-align: center;
+}
+
+/* =============================================================================
+   SPLITTER - Custom splitter component using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-splitter {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+[data-tenant] .ds-splitter-vertical {
+  flex-direction: column;
+}
+
+[data-tenant] .ds-splitter-panel {
+  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+[data-tenant] .ds-splitter-gutter {
+  flex-shrink: 0;
+  background-color: var(--ds-splitter-gutter-bg);
+  transition: var(--ds-splitter-transition);
+}
+
+[data-tenant] .ds-splitter-gutter:hover {
+  background-color: var(--ds-splitter-gutter-hover-bg);
+}
+
+[data-tenant] .ds-splitter-gutter-horizontal {
+  width: var(--ds-splitter-gutter-size);
+  cursor: col-resize;
+}
+
+[data-tenant] .ds-splitter-gutter-vertical {
+  height: var(--ds-splitter-gutter-size);
+  cursor: row-resize;
+}
+
+/* =============================================================================
+   DIVIDER - .divider
+   ============================================================================= */
+
+[data-tenant] .divider {
+  border-color: var(--ds-divider-color);
+  margin: var(--ds-divider-spacing) 0;
+}
+
+[data-tenant] .divider-horizontal {
+  width: 100%;
+  height: 0;
+  border-top: var(--ds-divider-width) solid var(--ds-divider-color);
+}
+
+[data-tenant] .divider-vertical {
+  display: inline-block;
+  height: 1em;
+  width: 0;
+  border-left: var(--ds-divider-width) solid var(--ds-divider-color);
+  margin: 0 var(--ds-divider-spacing);
+  vertical-align: middle;
+}
+
+[data-tenant] .divider-text {
+  display: flex;
+  align-items: center;
+  color: var(--ds-divider-text-color);
+  font-size: var(--ds-divider-text-size);
+  font-weight: var(--ds-divider-text-font-weight);
+}
+
+[data-tenant] .divider-text::before,
+[data-tenant] .divider-text::after {
+  content: '';
+  flex: 1;
+  border-top: var(--ds-divider-width) solid var(--ds-divider-color);
+}
+
+[data-tenant] .divider-text-inner {
+  padding: var(--ds-divider-text-padding);
+}
+
+/* =============================================================================
+   CONTAINER
+   ============================================================================= */
+
+[data-tenant] .container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--ds-container-padding-x);
+  padding-right: var(--ds-container-padding-x);
+}
+
+[data-tenant] .container-sm {
+  max-width: var(--ds-container-sm-max-width);
+}
+
+[data-tenant] .container-md {
+  max-width: var(--ds-container-md-max-width);
+}
+
+[data-tenant] .container-lg {
+  max-width: var(--ds-container-lg-max-width);
+}
+
+[data-tenant] .container-xl {
+  max-width: var(--ds-container-xl-max-width);
+}
+
+[data-tenant] .container-2xl {
+  max-width: var(--ds-container-2xl-max-width);
+}
+
+[data-tenant] .container-fluid {
+  max-width: 100%;
+}
+
+/* =============================================================================
+   TIMEPICKER - Custom time picker using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-timepicker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+[data-tenant] .ds-timepicker-input {
+  background-color: var(--ds-timepicker-bg);
+  border: 1px solid var(--ds-timepicker-border);
+  border-radius: var(--ds-timepicker-radius);
+  color: var(--ds-timepicker-color);
+  padding: var(--ds-timepicker-md-padding);
+  font-size: var(--ds-timepicker-md-font-size);
+  transition: var(--ds-timepicker-transition);
+}
+
+[data-tenant] .ds-timepicker-input:hover:not(:disabled) {
+  border-color: var(--ds-timepicker-border-hover);
+}
+
+[data-tenant] .ds-timepicker-input:focus {
+  border-color: var(--ds-timepicker-border-focus);
+  box-shadow: var(--ds-timepicker-shadow-focus);
+  outline: none;
+}
+
+[data-tenant] .ds-timepicker-input:disabled {
+  background-color: var(--ds-timepicker-bg-disabled);
+  cursor: not-allowed;
+}
+
+[data-tenant] .ds-timepicker-input-sm {
+  padding: var(--ds-timepicker-sm-padding);
+  font-size: var(--ds-timepicker-sm-font-size);
+}
+
+[data-tenant] .ds-timepicker-input-lg {
+  padding: var(--ds-timepicker-lg-padding);
+  font-size: var(--ds-timepicker-lg-font-size);
+}
+
+[data-tenant] .ds-timepicker-error .ds-timepicker-input {
+  border-color: var(--ds-timepicker-error-border);
+}
+
+[data-tenant] .ds-timepicker-warning .ds-timepicker-input {
+  border-color: var(--ds-timepicker-warning-border);
+}
+
+[data-tenant] .ds-timepicker-dropdown {
+  background-color: var(--ds-timepicker-dropdown-bg);
+  box-shadow: var(--ds-timepicker-dropdown-shadow);
+  border-radius: var(--ds-radius-md);
+}
+
+[data-tenant] .ds-timepicker-column {
+  width: var(--ds-timepicker-column-width);
+  overflow-y: auto;
+}
+
+[data-tenant] .ds-timepicker-cell {
+  height: var(--ds-timepicker-cell-height);
+  line-height: var(--ds-timepicker-cell-height);
+  text-align: center;
+  cursor: pointer;
+}
+
+[data-tenant] .ds-timepicker-cell:hover {
+  background-color: var(--ds-timepicker-cell-bg-hover);
+}
+
+[data-tenant] .ds-timepicker-cell-selected {
+  background-color: var(--ds-timepicker-cell-bg-selected);
+  color: var(--ds-timepicker-cell-color-selected);
+}
+
+/* =============================================================================
+   COLORPICKER - Custom color picker using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-colorpicker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+[data-tenant] .ds-colorpicker-swatch {
+  border: 1px solid var(--ds-colorpicker-swatch-border);
+  border-radius: var(--ds-colorpicker-swatch-radius);
+  box-shadow: var(--ds-colorpicker-swatch-shadow);
+}
+
+[data-tenant] .ds-colorpicker-swatch-sm {
+  width: var(--ds-colorpicker-swatch-size-sm);
+  height: var(--ds-colorpicker-swatch-size-sm);
+}
+
+[data-tenant] .ds-colorpicker-swatch-md {
+  width: var(--ds-colorpicker-swatch-size-md);
+  height: var(--ds-colorpicker-swatch-size-md);
+}
+
+[data-tenant] .ds-colorpicker-swatch-lg {
+  width: var(--ds-colorpicker-swatch-size-lg);
+  height: var(--ds-colorpicker-swatch-size-lg);
+}
+
+[data-tenant] .ds-colorpicker-dropdown {
+  background-color: var(--ds-colorpicker-dropdown-bg);
+  box-shadow: var(--ds-colorpicker-dropdown-shadow);
+  border-radius: var(--ds-colorpicker-dropdown-radius);
+  padding: var(--ds-colorpicker-dropdown-padding);
+  min-width: var(--ds-colorpicker-dropdown-min-width);
+}
+
+[data-tenant] .ds-colorpicker-palette {
+  height: var(--ds-colorpicker-palette-height);
+  border-radius: var(--ds-radius-sm);
+}
+
+[data-tenant] .ds-colorpicker-slider {
+  height: var(--ds-colorpicker-slider-height);
+  border-radius: var(--ds-radius-sm);
+}
+
+[data-tenant] .ds-colorpicker-slider-handle {
+  width: var(--ds-colorpicker-slider-thumb-size);
+  height: var(--ds-colorpicker-slider-thumb-size);
+  background-color: var(--ds-colorpicker-slider-thumb-bg);
+  box-shadow: var(--ds-colorpicker-slider-thumb-shadow);
+  border-radius: 50%;
+}
+
+[data-tenant] .ds-colorpicker-input {
+  background-color: var(--ds-colorpicker-input-bg);
+  border: 1px solid var(--ds-colorpicker-input-border);
+  border-radius: var(--ds-colorpicker-input-radius);
+  font-family: monospace;
+}
+
+[data-tenant] .ds-colorpicker-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-colorpicker-preset-gap);
+}
+
+[data-tenant] .ds-colorpicker-preset {
+  width: var(--ds-colorpicker-preset-size);
+  height: var(--ds-colorpicker-preset-size);
+  border: 1px solid var(--ds-colorpicker-preset-border);
+  border-radius: var(--ds-colorpicker-preset-radius);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-colorpicker-label {
+  color: var(--ds-colorpicker-label-color);
+  font-size: var(--ds-colorpicker-label-font-size);
+}
+
+/* =============================================================================
+   AUTOCOMPLETE - Custom autocomplete using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-autocomplete {
+  position: relative;
+}
+
+[data-tenant] .ds-autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--ds-autocomplete-dropdown-bg);
+  box-shadow: var(--ds-autocomplete-dropdown-shadow);
+  border-radius: var(--ds-autocomplete-dropdown-radius);
+  max-height: var(--ds-autocomplete-dropdown-max-height);
+  overflow-y: auto;
+  z-index: 1050;
+}
+
+[data-tenant] .ds-autocomplete-option {
+  padding: var(--ds-autocomplete-option-padding);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-autocomplete-option:hover {
+  background-color: var(--ds-autocomplete-option-bg-hover);
+}
+
+[data-tenant] .ds-autocomplete-option-selected {
+  background-color: var(--ds-autocomplete-option-bg-selected);
+  color: var(--ds-autocomplete-option-color-selected);
+}
+
+/* =============================================================================
+   CASCADER - Custom cascader using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-cascader-dropdown {
+  display: flex;
+  background-color: var(--ds-cascader-dropdown-bg);
+  box-shadow: var(--ds-cascader-dropdown-shadow);
+  border-radius: var(--ds-radius-lg);
+}
+
+[data-tenant] .ds-cascader-menu {
+  min-width: var(--ds-cascader-menu-width);
+  max-height: var(--ds-cascader-menu-height);
+  overflow-y: auto;
+  border-right: 1px solid var(--ds-color-neutral-200);
+}
+
+[data-tenant] .ds-cascader-menu:last-child {
+  border-right: none;
+}
+
+[data-tenant] .ds-cascader-item {
+  padding: var(--ds-cascader-item-padding);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+[data-tenant] .ds-cascader-item:hover {
+  background-color: var(--ds-cascader-item-bg-hover);
+}
+
+[data-tenant] .ds-cascader-item-selected {
+  background-color: var(--ds-cascader-item-bg-selected);
+  color: var(--ds-cascader-item-color-selected);
+}
+
+/* =============================================================================
+   MENTIONS - Custom mentions using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-mentions {
+  position: relative;
+}
+
+[data-tenant] .ds-mentions-dropdown {
+  position: absolute;
+  background-color: var(--ds-mentions-dropdown-bg);
+  box-shadow: var(--ds-mentions-dropdown-shadow);
+  border-radius: var(--ds-mentions-dropdown-radius);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1050;
+}
+
+[data-tenant] .ds-mentions-option {
+  padding: var(--ds-mentions-option-padding);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-mentions-option:hover {
+  background-color: var(--ds-mentions-option-bg-hover);
+}
+
+[data-tenant] .ds-mentions-option-selected {
+  background-color: var(--ds-mentions-option-bg-selected);
+}
+
+[data-tenant] .ds-mentions-highlight {
+  color: var(--ds-mentions-highlight-color);
+  font-weight: 500;
+}
+
+/* =============================================================================
+   TRANSFER - Custom transfer using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-transfer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+[data-tenant] .ds-transfer-list {
+  width: var(--ds-transfer-width);
+  height: var(--ds-transfer-height);
+  background-color: var(--ds-transfer-bg);
+  border: 1px solid var(--ds-transfer-border);
+  border-radius: var(--ds-transfer-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-tenant] .ds-transfer-header {
+  background-color: var(--ds-transfer-header-bg);
+  height: var(--ds-transfer-header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid var(--ds-transfer-border);
+}
+
+[data-tenant] .ds-transfer-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+[data-tenant] .ds-transfer-item {
+  padding: var(--ds-transfer-item-padding);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+[data-tenant] .ds-transfer-item:hover {
+  background-color: var(--ds-transfer-item-bg-hover);
+}
+
+[data-tenant] .ds-transfer-item-selected {
+  background-color: var(--ds-transfer-item-bg-selected);
+}
+
+[data-tenant] .ds-transfer-operations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* =============================================================================
+   TREESELECT - Custom tree select using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-treeselect-trigger {
+  display: flex;
+  align-items: center;
+  background-color: var(--ds-treeselect-bg);
+  border: 1px solid var(--ds-treeselect-border);
+  border-radius: var(--ds-treeselect-radius);
+  cursor: pointer;
+  padding: 0 0.75rem;
+}
+
+[data-tenant] .ds-treeselect-trigger:hover:not(.ds-treeselect-disabled) {
+  border-color: var(--ds-treeselect-border-hover);
+}
+
+[data-tenant] .ds-treeselect-trigger:focus-within {
+  border-color: var(--ds-treeselect-border-focus);
+  box-shadow: var(--ds-treeselect-shadow-focus);
+}
+
+[data-tenant] .ds-treeselect-trigger-sm {
+  height: var(--ds-treeselect-sm-height);
+  font-size: var(--ds-treeselect-sm-font-size);
+}
+
+[data-tenant] .ds-treeselect-trigger-md {
+  height: var(--ds-treeselect-md-height);
+  font-size: var(--ds-treeselect-md-font-size);
+}
+
+[data-tenant] .ds-treeselect-trigger-lg {
+  height: var(--ds-treeselect-lg-height);
+  font-size: var(--ds-treeselect-lg-font-size);
+}
+
+[data-tenant] .ds-treeselect-error .ds-treeselect-trigger {
+  border-color: var(--ds-treeselect-error-border);
+}
+
+[data-tenant] .ds-treeselect-warning .ds-treeselect-trigger {
+  border-color: var(--ds-treeselect-warning-border);
+}
+
+[data-tenant] .ds-treeselect-dropdown {
+  background-color: var(--ds-treeselect-dropdown-bg);
+  box-shadow: var(--ds-treeselect-dropdown-shadow);
+  border-radius: var(--ds-treeselect-dropdown-radius);
+  max-height: var(--ds-treeselect-dropdown-max-height);
+  overflow-y: auto;
+}
+
+[data-tenant] .ds-treeselect-node {
+  padding: var(--ds-treeselect-node-padding);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+[data-tenant] .ds-treeselect-node:hover {
+  background-color: var(--ds-treeselect-node-bg-hover);
+}
+
+[data-tenant] .ds-treeselect-node-selected {
+  background-color: var(--ds-treeselect-node-bg-selected);
+  color: var(--ds-treeselect-node-color-selected);
+}
+
+[data-tenant] .ds-treeselect-node-indent {
+  width: var(--ds-treeselect-node-indent);
+}
+
+[data-tenant] .ds-treeselect-arrow {
+  color: var(--ds-treeselect-arrow-color);
+}
+
+[data-tenant] .ds-treeselect-clear {
+  color: var(--ds-treeselect-clear-color);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-treeselect-clear:hover {
+  color: var(--ds-treeselect-clear-color-hover);
+}
+
+[data-tenant] .ds-treeselect-expand-icon {
+  color: var(--ds-treeselect-expand-icon-color);
+}
+
+/* =============================================================================
+   DATEPICKER - Custom date picker using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-datepicker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+[data-tenant] .ds-datepicker-input {
+  background-color: var(--ds-datepicker-bg);
+  border: 1px solid var(--ds-datepicker-border);
+  border-radius: var(--ds-datepicker-radius);
+  color: var(--ds-datepicker-color);
+  padding: var(--ds-datepicker-md-padding);
+  font-size: var(--ds-datepicker-md-font-size);
+  transition: var(--ds-datepicker-transition);
+}
+
+[data-tenant] .ds-datepicker-input::placeholder {
+  color: var(--ds-datepicker-color-placeholder);
+}
+
+[data-tenant] .ds-datepicker-input:hover:not(:disabled) {
+  border-color: var(--ds-datepicker-border-hover);
+}
+
+[data-tenant] .ds-datepicker-input:focus {
+  border-color: var(--ds-datepicker-border-focus);
+  box-shadow: var(--ds-datepicker-shadow-focus);
+  outline: none;
+}
+
+[data-tenant] .ds-datepicker-input:disabled {
+  background-color: var(--ds-datepicker-bg-disabled);
+  cursor: not-allowed;
+}
+
+[data-tenant] .ds-datepicker-input-sm {
+  padding: var(--ds-datepicker-sm-padding);
+  font-size: var(--ds-datepicker-sm-font-size);
+}
+
+[data-tenant] .ds-datepicker-input-lg {
+  padding: var(--ds-datepicker-lg-padding);
+  font-size: var(--ds-datepicker-lg-font-size);
+}
+
+[data-tenant] .ds-datepicker-error .ds-datepicker-input {
+  border-color: var(--ds-datepicker-error-border);
+}
+
+[data-tenant] .ds-datepicker-warning .ds-datepicker-input {
+  border-color: var(--ds-datepicker-warning-border);
+}
+
+[data-tenant] .ds-datepicker-icon {
+  color: var(--ds-datepicker-icon-color);
+  position: absolute;
+  right: 0.75rem;
+  pointer-events: none;
+}
+
+[data-tenant] .ds-datepicker-clear {
+  color: var(--ds-datepicker-clear-color);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-datepicker-clear:hover {
+  color: var(--ds-datepicker-clear-color-hover);
+}
+
+[data-tenant] .ds-datepicker-separator {
+  color: var(--ds-datepicker-separator-color);
+  margin: 0 0.5rem;
+}
+
+/* =============================================================================
+   INPUTNUMBER - Custom input number using DS tokens
+   ============================================================================= */
+
+[data-tenant] .ds-inputnumber {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+[data-tenant] .ds-inputnumber-input {
+  background-color: var(--ds-inputnumber-bg);
+  border: 1px solid var(--ds-inputnumber-border);
+  border-radius: var(--ds-inputnumber-radius);
+  color: var(--ds-inputnumber-color);
+  padding: var(--ds-inputnumber-md-padding);
+  font-size: var(--ds-inputnumber-md-font-size);
+  width: var(--ds-inputnumber-md-width);
+  transition: var(--ds-inputnumber-transition);
+  text-align: center;
+}
+
+[data-tenant] .ds-inputnumber-input:hover:not(:disabled) {
+  border-color: var(--ds-inputnumber-border-hover);
+}
+
+[data-tenant] .ds-inputnumber-input:focus {
+  border-color: var(--ds-inputnumber-border-focus);
+  box-shadow: var(--ds-inputnumber-shadow-focus);
+  outline: none;
+}
+
+[data-tenant] .ds-inputnumber-input:disabled {
+  background-color: var(--ds-inputnumber-bg-disabled);
+  cursor: not-allowed;
+}
+
+[data-tenant] .ds-inputnumber-input-sm {
+  padding: var(--ds-inputnumber-sm-padding);
+  font-size: var(--ds-inputnumber-sm-font-size);
+  width: var(--ds-inputnumber-sm-width);
+}
+
+[data-tenant] .ds-inputnumber-input-lg {
+  padding: var(--ds-inputnumber-lg-padding);
+  font-size: var(--ds-inputnumber-lg-font-size);
+  width: var(--ds-inputnumber-lg-width);
+}
+
+[data-tenant] .ds-inputnumber-error .ds-inputnumber-input {
+  border-color: var(--ds-inputnumber-error-border);
+}
+
+[data-tenant] .ds-inputnumber-warning .ds-inputnumber-input {
+  border-color: var(--ds-inputnumber-warning-border);
+}
+
+[data-tenant] .ds-inputnumber-controls {
+  display: flex;
+  flex-direction: column;
+  margin-left: -1px;
+}
+
+[data-tenant] .ds-inputnumber-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 50%;
+  background-color: var(--ds-inputnumber-control-bg);
+  border: 1px solid var(--ds-inputnumber-border);
+  color: var(--ds-inputnumber-control-color);
+  cursor: pointer;
+}
+
+[data-tenant] .ds-inputnumber-control:hover:not(:disabled) {
+  color: var(--ds-inputnumber-control-color-hover);
+}
+
+[data-tenant] .ds-inputnumber-control-up {
+  border-radius: 0 var(--ds-inputnumber-radius) 0 0;
+  border-bottom: none;
+}
+
+[data-tenant] .ds-inputnumber-control-down {
+  border-radius: 0 0 var(--ds-inputnumber-radius) 0;
+}
+
+[data-tenant] .ds-inputnumber-addon {
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  background-color: var(--ds-inputnumber-addon-bg);
+  border: 1px solid var(--ds-inputnumber-addon-border);
+  color: var(--ds-inputnumber-addon-color);
+}
+
+[data-tenant] .ds-inputnumber-addon-before {
+  border-radius: var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius);
+  border-right: none;
+}
+
+[data-tenant] .ds-inputnumber-addon-after {
+  border-radius: 0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0;
+  border-left: none;
+}
+
+[data-tenant] .ds-inputnumber-prefix,
+[data-tenant] .ds-inputnumber-suffix {
+  color: var(--ds-inputnumber-affix-color);
+}

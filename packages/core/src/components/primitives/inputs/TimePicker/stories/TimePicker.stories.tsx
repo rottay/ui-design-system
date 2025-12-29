@@ -6,7 +6,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { TimePicker } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof TimePicker> = {
   title: 'Primitives/Inputs/TimePicker',
@@ -21,8 +22,18 @@ const meta: Meta<typeof TimePicker> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'TimePicker component for selecting time values with support for multiple engines, 12/24 hour formats, and time ranges.',
+        component: `
+TimePicker component for selecting time values with support for multiple engines, 12/24 hour formats, and time ranges.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Time Panel | Built-in | Browser | Custom |
+| 12/24h Format | Full | Limited | Full |
+| Range Picker | Built-in | Custom | Custom |
+`,
       },
     },
   },
@@ -156,21 +167,58 @@ export const HideSeconds: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the TimePicker component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same TimePicker rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <TimePicker engine={engine} placeholder="Default" />
-            <TimePicker engine={engine} size="small" placeholder="Small" />
-            <TimePicker engine={engine} size="large" placeholder="Large" />
-            <TimePicker engine={engine} status="error" placeholder="Error" />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={TimePicker}
+      props={{ placeholder: 'Select time', style: { width: 150 } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={TimePicker}
+      baseProps={{ placeholder: 'Time', style: { width: 130 } }}
+      sizeProp="size"
+      sizes={['small', 'default', 'large']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={TimePicker}
+      baseProps={{ placeholder: 'Time', style: { width: 130 } }}
+      variantProp="status"
+      variants={['error', 'warning']}
+    />
   ),
 };
 

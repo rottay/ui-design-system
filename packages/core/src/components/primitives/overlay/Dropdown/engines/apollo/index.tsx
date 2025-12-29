@@ -59,7 +59,7 @@ const MenuItem: React.FC<{
         role="separator"
         style={{
           height: '1px',
-          backgroundColor: '#e5e7eb',
+          backgroundColor: 'var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb))',
           margin: '4px 0',
         }}
       />
@@ -72,7 +72,7 @@ const MenuItem: React.FC<{
         style={{
           padding: '4px 12px',
           fontSize: '12px',
-          color: '#6b7280',
+          color: 'var(--ds-dropdown-group-color, var(--ds-color-neutral-500, #6b7280))',
           fontWeight: 500,
         }}
       >
@@ -100,13 +100,13 @@ const MenuItem: React.FC<{
         background: 'transparent',
         cursor: item.disabled ? 'not-allowed' : 'pointer',
         opacity: item.disabled ? 0.5 : 1,
-        color: item.danger ? '#ef4444' : 'inherit',
+        color: item.danger ? 'var(--ds-dropdown-danger-color, var(--ds-color-error-500, #ef4444))' : 'inherit',
         textAlign: 'left',
         fontSize: '14px',
       }}
       onMouseEnter={(e) => {
         if (!item.disabled) {
-          e.currentTarget.style.backgroundColor = '#f3f4f6';
+          e.currentTarget.style.backgroundColor = 'var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6))';
         }
       }}
       onMouseLeave={(e) => {
@@ -237,11 +237,11 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             position: 'absolute',
             top: position.top,
             left: position.left,
-            zIndex: 1050,
-            minWidth: '160px',
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            zIndex: 'var(--ds-dropdown-z-index, 1050)' as unknown as number,
+            minWidth: 'var(--ds-dropdown-min-width, 160px)',
+            backgroundColor: 'var(--ds-dropdown-bg, #fff)',
+            borderRadius: 'var(--ds-dropdown-radius, 8px)',
+            boxShadow: 'var(--ds-dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
             padding: '4px 0',
             transform: placement?.includes('top') ? 'translateY(-100%)' : undefined,
             ...overlayStyle,

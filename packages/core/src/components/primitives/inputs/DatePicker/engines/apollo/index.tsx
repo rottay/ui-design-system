@@ -1,70 +1,34 @@
 'use client';
 
 /**
- * DatePicker - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview DatePicker Apollo Engine - Rottay Design System
+ * @description Pure HTML/CSS implementation of the DatePicker component using CSS variables.
+ * Part of the Rottay Design System's input primitives collection.
+ *
+ * @module ApolloDatePicker
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState } from 'react';
 import type { DatePickerProps, RangePickerProps } from '../../types';
 
-const styles = {
-  wrapper: {
-    position: 'relative' as const,
-    display: 'inline-flex',
-    alignItems: 'center',
-  },
-  input: {
-    padding: '8px 32px 8px 12px',
-    fontSize: '14px',
-    border: '1px solid #d9d9d9',
-    borderRadius: '6px',
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-    minWidth: '140px',
-  },
-  inputSmall: {
-    padding: '4px 28px 4px 8px',
-    fontSize: '12px',
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { padding: string; fontSize: string; minWidth: string }> = {
+  small: {
+    padding: 'var(--ds-datepicker-sm-padding)',
+    fontSize: 'var(--ds-datepicker-sm-font-size)',
     minWidth: '120px',
   },
-  inputLarge: {
-    padding: '12px 36px 12px 16px',
-    fontSize: '16px',
+  default: {
+    padding: 'var(--ds-datepicker-md-padding)',
+    fontSize: 'var(--ds-datepicker-md-font-size)',
+    minWidth: '140px',
+  },
+  large: {
+    padding: 'var(--ds-datepicker-lg-padding)',
+    fontSize: 'var(--ds-datepicker-lg-font-size)',
     minWidth: '160px',
-  },
-  inputError: {
-    borderColor: '#ff4d4f',
-  },
-  inputWarning: {
-    borderColor: '#faad14',
-  },
-  inputDisabled: {
-    backgroundColor: '#f5f5f5',
-    cursor: 'not-allowed',
-    opacity: 0.6,
-  },
-  icon: {
-    position: 'absolute' as const,
-    right: '8px',
-    color: '#999',
-    pointerEvents: 'none' as const,
-  },
-  clearBtn: {
-    position: 'absolute' as const,
-    right: '28px',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    color: '#999',
-    fontSize: '14px',
-    padding: '0 4px',
-  },
-  rangeWrapper: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  separator: {
-    color: '#999',
   },
 };
 
@@ -95,7 +59,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
     }
     return '';
   });
-  const [focused, setFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
   const displayValue = isControlled
     ? (value instanceof Date ? value.toISOString().split('T')[0] : String(value || ''))
@@ -131,32 +95,82 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
     }
   };
 
-  const getInputStyle = (): React.CSSProperties => {
-    const base: React.CSSProperties = { ...styles.input };
-    if (size === 'small') Object.assign(base, styles.inputSmall);
-    if (size === 'large') Object.assign(base, styles.inputLarge);
-    if (status === 'error') Object.assign(base, styles.inputError);
-    if (status === 'warning') Object.assign(base, styles.inputWarning);
-    if (disabled) Object.assign(base, styles.inputDisabled);
-    if (focused) {
-      base.borderColor = 'var(--primary-color, #1890ff)';
-      base.boxShadow = '0 0 0 2px rgba(24, 144, 255, 0.2)';
-    }
-    return base;
+  const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+
+  // Build class names
+  const containerClasses = [
+    'rottay-datepicker',
+    'rottay-datepicker--apollo',
+    `rottay-datepicker--${size}`,
+    status && `rottay-datepicker--${status}`,
+    disabled && 'rottay-datepicker--disabled',
+    isFocused && 'rottay-datepicker--focused',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const wrapperStyle: React.CSSProperties = {
+    position: 'relative',
+    display: 'inline-flex',
+    alignItems: 'center',
+    fontFamily: 'var(--ds-font-family-base)',
+    ...style,
+  };
+
+  const getBorderColor = () => {
+    if (status === 'error') return 'var(--ds-datepicker-error-border)';
+    if (status === 'warning') return 'var(--ds-datepicker-warning-border)';
+    if (isFocused) return 'var(--ds-datepicker-border-focus)';
+    return 'var(--ds-datepicker-border)';
+  };
+
+  const inputStyle: React.CSSProperties = {
+    padding: sizeConfig.padding,
+    paddingRight: '2rem',
+    fontSize: sizeConfig.fontSize,
+    border: `1px solid ${getBorderColor()}`,
+    borderRadius: 'var(--ds-datepicker-radius)',
+    outline: 'none',
+    transition: 'var(--ds-datepicker-transition)',
+    minWidth: sizeConfig.minWidth,
+    backgroundColor: disabled ? 'var(--ds-datepicker-bg-disabled)' : 'var(--ds-datepicker-bg)',
+    color: 'var(--ds-datepicker-color)',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.6 : 1,
+    boxShadow: isFocused ? 'var(--ds-datepicker-shadow-focus)' : 'none',
+  };
+
+  const iconStyle: React.CSSProperties = {
+    position: 'absolute',
+    right: '8px',
+    color: 'var(--ds-datepicker-icon-color)',
+    pointerEvents: 'none',
+    fontSize: sizeConfig.fontSize,
+  };
+
+  const clearBtnStyle: React.CSSProperties = {
+    position: 'absolute',
+    right: '28px',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    color: 'var(--ds-datepicker-clear-color)',
+    fontSize: sizeConfig.fontSize,
+    padding: '0 4px',
+    transition: 'color 0.2s',
   };
 
   return (
-    <div className={className} style={{ ...styles.wrapper, ...style }}>
+    <div className={containerClasses} style={wrapperStyle}>
       <input
         ref={ref}
         type={getInputType()}
-        style={getInputStyle()}
+        style={inputStyle}
         value={displayValue}
         disabled={disabled}
         placeholder={placeholder}
         onChange={handleChange}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         autoFocus={autoFocus}
         id={id}
         name={name}
@@ -167,7 +181,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
       {allowClear && displayValue && !disabled && (
         <button
           type="button"
-          style={styles.clearBtn}
+          style={clearBtnStyle}
           onClick={handleClear}
           tabIndex={-1}
           aria-label="Clear"
@@ -175,7 +189,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
           ×
         </button>
       )}
-      <span style={styles.icon}>📅</span>
+      <span style={iconStyle}>📅</span>
     </div>
   );
 });
@@ -208,6 +222,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
     }
     return ['', ''];
   });
+  const [focusedInput, setFocusedInput] = useState<'start' | 'end' | null>(null);
 
   const displayValue = isControlled
     ? [
@@ -244,35 +259,75 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
     );
   };
 
-  const getInputStyle = () => {
-    const base = { ...styles.input };
-    if (size === 'small') Object.assign(base, styles.inputSmall);
-    if (size === 'large') Object.assign(base, styles.inputLarge);
-    if (status === 'error') Object.assign(base, styles.inputError);
-    if (status === 'warning') Object.assign(base, styles.inputWarning);
-    if (disabled) Object.assign(base, styles.inputDisabled);
-    return base;
+  const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
+
+  // Build class names
+  const containerClasses = [
+    'rottay-datepicker-range',
+    'rottay-datepicker-range--apollo',
+    `rottay-datepicker-range--${size}`,
+    status && `rottay-datepicker-range--${status}`,
+    disabled && 'rottay-datepicker-range--disabled',
+    className,
+  ].filter(Boolean).join(' ');
+
+  const wrapperStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontFamily: 'var(--ds-font-family-base)',
+    ...style,
+  };
+
+  const getBorderColor = (isFocused: boolean) => {
+    if (status === 'error') return 'var(--ds-datepicker-error-border)';
+    if (status === 'warning') return 'var(--ds-datepicker-warning-border)';
+    if (isFocused) return 'var(--ds-datepicker-border-focus)';
+    return 'var(--ds-datepicker-border)';
+  };
+
+  const getInputStyle = (inputType: 'start' | 'end'): React.CSSProperties => ({
+    padding: sizeConfig.padding,
+    fontSize: sizeConfig.fontSize,
+    border: `1px solid ${getBorderColor(focusedInput === inputType)}`,
+    borderRadius: 'var(--ds-datepicker-radius)',
+    outline: 'none',
+    transition: 'var(--ds-datepicker-transition)',
+    minWidth: sizeConfig.minWidth,
+    backgroundColor: disabled ? 'var(--ds-datepicker-bg-disabled)' : 'var(--ds-datepicker-bg)',
+    color: 'var(--ds-datepicker-color)',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.6 : 1,
+    boxShadow: focusedInput === inputType ? 'var(--ds-datepicker-shadow-focus)' : 'none',
+  });
+
+  const separatorStyle: React.CSSProperties = {
+    color: 'var(--ds-datepicker-separator-color)',
   };
 
   return (
-    <div ref={ref} className={className} style={{ ...styles.rangeWrapper, ...style }} id={id}>
+    <div ref={ref} className={containerClasses} style={wrapperStyle} id={id}>
       <input
         type="date"
-        style={getInputStyle()}
+        style={getInputStyle('start')}
         value={displayValue[0]}
         disabled={disabled}
         placeholder={placeholder[0]}
         onChange={handleStartChange}
+        onFocus={() => setFocusedInput('start')}
+        onBlur={() => setFocusedInput(null)}
         aria-label={placeholder[0]}
       />
-      <span style={styles.separator}>{separator}</span>
+      <span style={separatorStyle}>{separator}</span>
       <input
         type="date"
-        style={getInputStyle()}
+        style={getInputStyle('end')}
         value={displayValue[1]}
         disabled={disabled}
         placeholder={placeholder[1]}
         onChange={handleEndChange}
+        onFocus={() => setFocusedInput('end')}
+        onBlur={() => setFocusedInput(null)}
         aria-label={placeholder[1]}
       />
     </div>

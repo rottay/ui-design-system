@@ -40,9 +40,9 @@ export type {
   CountdownProps,
   StatisticValue,
   StatisticValueType,
-} from '../../../../../types/primitives/display/Statistic';
+} from '../../../../../core/types/primitives/display/Statistic';
 
-export { STATISTIC_DEFAULTS } from '../../../../../types/primitives/display/Statistic';
+export { STATISTIC_DEFAULTS } from '../../../../../core/types/primitives/display/Statistic';
 
 /**
  * CSS variable mapping for Statistic component theming.

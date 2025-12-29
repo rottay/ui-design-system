@@ -43,7 +43,7 @@ export type {
   CarouselSize,
   CarouselItemProps,
   CarouselRef,
-} from '../../../../../types/primitives/display/Carousel';
+} from '../../../../../core/types/primitives/display/Carousel';
 
 /**
  * Default configuration values for the Carousel component.

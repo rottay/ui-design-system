@@ -1,8 +1,15 @@
 'use client';
 
 /**
- * Mentions - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview Mentions Apollo Engine - Rottay Design System
+ * @description Pure vanilla HTML/CSS implementation of the Mentions component
+ * using CSS variables for multi-tenant theming.
+ *
+ * @module ApolloMentions
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { MentionsProps, MentionsOption } from '../../types';
 import { MENTIONS_DEFAULTS } from '../../types';
@@ -26,12 +33,13 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       placement = MENTIONS_DEFAULTS.placement,
       notFoundContent = 'No results',
       filterOption = MENTIONS_DEFAULTS.filterOption,
-      className,
+      className = '',
       style,
     } = props;
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [currentPrefix, setCurrentPrefix] = useState('');
     const [mentionStart, setMentionStart] = useState(-1);
@@ -158,16 +166,81 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     }, [isOpen]);
 
     const getBorderColor = () => {
-      if (status === 'error') return '#ef4444';
-      if (status === 'warning') return '#f59e0b';
-      return '#d1d5db';
+      if (status === 'error') return 'var(--ds-mentions-border-error)';
+      if (status === 'warning') return 'var(--ds-mentions-border-warning)';
+      if (isFocused) return 'var(--ds-mentions-border-focus)';
+      return 'var(--ds-mentions-border)';
+    };
+
+    // Build class names
+    const containerClasses = [
+      'rottay-mentions',
+      'rottay-mentions--apollo',
+      status && `rottay-mentions--${status}`,
+      disabled && 'rottay-mentions--disabled',
+      isOpen && 'rottay-mentions--open',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const wrapperStyle: React.CSSProperties = {
+      position: 'relative',
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
+    };
+
+    const textareaStyle: React.CSSProperties = {
+      width: '100%',
+      padding: 'var(--ds-mentions-padding)',
+      border: `1px solid ${getBorderColor()}`,
+      borderRadius: 'var(--ds-mentions-radius)',
+      fontSize: 'var(--ds-mentions-font-size)',
+      backgroundColor: 'var(--ds-mentions-bg)',
+      resize: 'vertical',
+      outline: 'none',
+      opacity: disabled ? 0.5 : 1,
+      cursor: disabled ? 'not-allowed' : 'text',
+      transition: 'var(--ds-transition-fast)',
+    };
+
+    const dropdownStyle: React.CSSProperties = {
+      position: 'absolute',
+      [placement === 'top' ? 'bottom' : 'top']: '100%',
+      left: 0,
+      right: 0,
+      marginTop: placement === 'top' ? 0 : '4px',
+      marginBottom: placement === 'top' ? '4px' : 0,
+      backgroundColor: 'var(--ds-mentions-dropdown-bg)',
+      borderRadius: 'var(--ds-mentions-dropdown-radius)',
+      boxShadow: 'var(--ds-mentions-dropdown-shadow)',
+      maxHeight: 'var(--ds-mentions-dropdown-max-height)',
+      overflowY: 'auto',
+      zIndex: 1050,
+      listStyle: 'none',
+      padding: '4px 0',
+      margin: 0,
+    };
+
+    const getOptionStyle = (index: number, isDisabled?: boolean): React.CSSProperties => ({
+      padding: 'var(--ds-mentions-option-padding)',
+      cursor: isDisabled ? 'not-allowed' : 'pointer',
+      backgroundColor: focusedIndex === index ? 'var(--ds-mentions-option-bg-hover)' : 'transparent',
+      opacity: isDisabled ? 0.5 : 1,
+      fontSize: 'var(--ds-font-size-sm)',
+      transition: 'background-color 0.15s',
+    });
+
+    const emptyStyle: React.CSSProperties = {
+      padding: '12px',
+      textAlign: 'center',
+      color: 'var(--ds-mentions-empty-color)',
+      fontSize: 'var(--ds-font-size-sm)',
     };
 
     return (
       <div
         ref={containerRef}
-        className={className}
-        style={{ position: 'relative', ...style }}
+        className={containerClasses}
+        style={wrapperStyle}
       >
         <textarea
           ref={(node) => {
@@ -178,60 +251,38 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
           rows={rows}
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            border: `1px solid ${getBorderColor()}`,
-            borderRadius: '6px',
-            fontSize: '14px',
-            resize: 'vertical',
-            outline: 'none',
-            opacity: disabled ? 0.5 : 1,
-          }}
+          style={textareaStyle}
+          className="rottay-mentions__input"
         />
 
         {isOpen && (
           <ul
-            style={{
-              position: 'absolute',
-              [placement === 'top' ? 'bottom' : 'top']: '100%',
-              left: 0,
-              right: 0,
-              marginTop: placement === 'top' ? 0 : '4px',
-              marginBottom: placement === 'top' ? '4px' : 0,
-              backgroundColor: '#fff',
-              borderRadius: '6px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-              maxHeight: '192px',
-              overflowY: 'auto',
-              zIndex: 1050,
-              listStyle: 'none',
-              padding: '4px 0',
-              margin: 0,
-            }}
+            className="rottay-mentions__dropdown"
+            style={dropdownStyle}
+            role="listbox"
           >
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li
                   key={option.value}
+                  role="option"
+                  aria-selected={focusedIndex === index}
                   onClick={() => !option.disabled && handleSelect(option)}
                   onMouseEnter={() => setFocusedIndex(index)}
-                  style={{
-                    padding: '8px 12px',
-                    cursor: option.disabled ? 'not-allowed' : 'pointer',
-                    backgroundColor: focusedIndex === index ? '#f3f4f6' : 'transparent',
-                    opacity: option.disabled ? 0.5 : 1,
-                  }}
+                  style={getOptionStyle(index, option.disabled)}
+                  className="rottay-mentions__option"
                 >
                   {option.label ?? option.value}
                 </li>
               ))
             ) : (
-              <li style={{ padding: '12px', textAlign: 'center', color: '#9ca3af' }}>
+              <li style={emptyStyle} className="rottay-mentions__empty">
                 {notFoundContent}
               </li>
             )}

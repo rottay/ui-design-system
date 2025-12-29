@@ -46,7 +46,7 @@ export type {
   AvatarBadgeProps,
   AvatarFallbackProps,
   AvatarStatusConfig,
-} from '../../../../../types/primitives/display/Avatar';
+} from '../../../../../core/types/primitives/display/Avatar';
 
 /**
  * Default values for Avatar component props.

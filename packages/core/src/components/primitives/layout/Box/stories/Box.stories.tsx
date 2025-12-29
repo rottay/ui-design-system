@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 import React from 'react';
 
 const meta: Meta<typeof Box> = {
@@ -482,37 +483,33 @@ export const NestedBoxes: Story = {
   ),
 };
 
-// Engine comparison
-export const EngineComparison: Story = {
-  name: 'Engine Comparison',
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Box across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Box rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize', fontWeight: 600 }}>
-            {engine} Engine
-          </h4>
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            <Box engine={engine} padding="md" background="#dbeafe" borderRadius="md">
-              Basic
-            </Box>
-            <Box engine={engine} padding="md" background="#d1fae5" borderRadius="lg" shadow="md">
-              Shadow + Radius
-            </Box>
-            <Box
-              engine={engine}
-              padding="lg"
-              bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-              borderRadius="xl"
-              shadow="lg"
-              style={{ color: 'white' }}
-            >
-              Gradient
-            </Box>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Box}
+      props={{
+        children: 'Box Content',
+        padding: 'md',
+        background: '#dbeafe',
+        borderRadius: 'md',
+      }}
+      showDescriptions
+    />
   ),
 };
 

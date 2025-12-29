@@ -1,12 +1,26 @@
 'use client';
 
 /**
- * TreeSelect - Apollo Engine (Vanilla HTML/CSS)
+ * @fileoverview TreeSelect Apollo Engine - Rottay Design System
+ * @description Pure vanilla HTML/CSS implementation of the TreeSelect component
+ * using CSS variables for multi-tenant theming.
+ *
+ * @module ApolloTreeSelect
+ * @category Inputs
+ * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../../types';
 import { TREESELECT_DEFAULTS } from '../../types';
+
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { height: string }> = {
+  small: { height: 'var(--ds-treeselect-sm-height)' },
+  default: { height: 'var(--ds-treeselect-md-height)' },
+  large: { height: 'var(--ds-treeselect-lg-height)' },
+};
 
 interface TreeNodeProps {
   node: TreeSelectNode;
@@ -32,23 +46,37 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
   const isSelected = selectedKeys.has(node.value);
   const hasChildren = node.children && node.children.length > 0;
 
+  const nodeStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    padding: 'var(--ds-treeselect-node-padding)',
+    paddingLeft: `${level * 20 + 8}px`,
+    cursor: node.disabled ? 'not-allowed' : 'pointer',
+    backgroundColor: isSelected ? 'var(--ds-treeselect-node-bg-selected)' : 'transparent',
+    opacity: node.disabled ? 0.5 : 1,
+    borderRadius: 'var(--ds-treeselect-node-radius)',
+    fontSize: 'var(--ds-font-size-sm)',
+    transition: 'background-color 0.15s',
+  };
+
+  const expandButtonStyle: React.CSSProperties = {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    marginRight: '4px',
+    fontSize: '10px',
+    color: 'var(--ds-treeselect-expand-color)',
+  };
+
   return (
     <li style={{ listStyle: 'none' }}>
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '6px 8px',
-          paddingLeft: `${level * 20 + 8}px`,
-          cursor: node.disabled ? 'not-allowed' : 'pointer',
-          backgroundColor: isSelected ? '#eff6ff' : 'transparent',
-          opacity: node.disabled ? 0.5 : 1,
-          borderRadius: '4px',
-        }}
+        className="rottay-treeselect__node"
+        style={nodeStyle}
         onClick={() => !node.disabled && onSelect(node)}
         onMouseEnter={(e) => {
           if (!node.disabled && !isSelected) {
-            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.backgroundColor = 'var(--ds-treeselect-node-bg-hover)';
           }
         }}
         onMouseLeave={(e) => {
@@ -64,14 +92,8 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
               e.stopPropagation();
               onToggle(key);
             }}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              marginRight: '4px',
-              fontSize: '10px',
-              color: '#6b7280',
-            }}
+            style={expandButtonStyle}
+            aria-label={isExpanded ? 'Collapse' : 'Expand'}
           >
             {isExpanded ? '▼' : '▶'}
           </button>
@@ -88,7 +110,9 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
             style={{ marginRight: '8px' }}
           />
         )}
-        <span style={{ color: isSelected ? '#3b82f6' : 'inherit' }}>{node.title}</span>
+        <span style={{ color: isSelected ? 'var(--ds-treeselect-node-color-selected)' : 'inherit' }}>
+          {node.title}
+        </span>
       </div>
       {hasChildren && isExpanded && (
         <ul style={{ margin: 0, padding: 0 }}>
@@ -129,7 +153,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       notFoundContent = 'No data',
       open: controlledOpen,
       onDropdownVisibleChange,
-      className,
+      className = '',
       style,
     } = props;
 
@@ -159,6 +183,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     );
     const [expandedKeys, setExpandedKeys] = useState<Set<string | number>>(getInitialExpanded);
     const [internalOpen, setInternalOpen] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
 
     const isControlled = controlledValue !== undefined;
@@ -173,6 +198,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         setInternalOpen(newOpen);
       }
       onDropdownVisibleChange?.(newOpen);
+      setIsFocused(newOpen);
     }, [controlledOpen, onDropdownVisibleChange]);
 
     // Update position
@@ -269,36 +295,93 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       return titles.join(', ');
     };
 
-    const getInputHeight = () => {
-      switch (size) {
-        case 'small': return '32px';
-        case 'large': return '48px';
-        default: return '40px';
-      }
-    };
+    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
 
     const getBorderColor = () => {
-      if (status === 'error') return '#ef4444';
-      if (status === 'warning') return '#f59e0b';
-      return '#d1d5db';
+      if (status === 'error') return 'var(--ds-treeselect-border-error)';
+      if (status === 'warning') return 'var(--ds-treeselect-border-warning)';
+      if (isFocused) return 'var(--ds-treeselect-border-focus)';
+      return 'var(--ds-treeselect-border)';
+    };
+
+    // Build class names
+    const containerClasses = [
+      'rottay-treeselect',
+      'rottay-treeselect--apollo',
+      `rottay-treeselect--${size}`,
+      status && `rottay-treeselect--${status}`,
+      disabled && 'rottay-treeselect--disabled',
+      isOpen && 'rottay-treeselect--open',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const triggerStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      height: sizeConfig.height,
+      padding: '0 12px',
+      border: `1px solid ${getBorderColor()}`,
+      borderRadius: 'var(--ds-treeselect-radius)',
+      backgroundColor: 'var(--ds-treeselect-bg)',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      fontFamily: 'var(--ds-font-family-base)',
+      transition: 'var(--ds-transition-fast)',
+      ...style,
+    };
+
+    const valueStyle: React.CSSProperties = {
+      flex: 1,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      color: selectedKeys.size > 0 ? 'inherit' : 'var(--ds-treeselect-placeholder-color)',
+      fontSize: 'var(--ds-font-size-sm)',
+    };
+
+    const clearButtonStyle: React.CSSProperties = {
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: 'var(--ds-treeselect-clear-color)',
+      padding: '0 4px',
+      fontSize: '14px',
+    };
+
+    const arrowStyle: React.CSSProperties = {
+      marginLeft: '8px',
+      transition: 'transform 0.2s',
+      transform: isOpen ? 'rotate(180deg)' : 'none',
+      fontSize: '10px',
+      color: 'var(--ds-treeselect-arrow-color)',
+    };
+
+    const dropdownStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: position.top,
+      left: position.left,
+      width: position.width,
+      backgroundColor: 'var(--ds-treeselect-dropdown-bg)',
+      borderRadius: 'var(--ds-treeselect-dropdown-radius)',
+      boxShadow: 'var(--ds-treeselect-dropdown-shadow)',
+      maxHeight: 'var(--ds-treeselect-dropdown-max-height)',
+      overflowY: 'auto',
+      zIndex: 1050,
+    };
+
+    const emptyStyle: React.CSSProperties = {
+      padding: '16px',
+      textAlign: 'center',
+      color: 'var(--ds-treeselect-empty-color)',
+      fontSize: 'var(--ds-font-size-sm)',
     };
 
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div
           ref={dropdownRef}
-          style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
-            width: position.width,
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            maxHeight: '240px',
-            overflowY: 'auto',
-            zIndex: 1050,
-          }}
+          className="rottay-treeselect__dropdown"
+          style={dropdownStyle}
         >
           {treeData.length > 0 ? (
             <ul style={{ margin: 0, padding: '8px' }}>
@@ -316,7 +399,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               ))}
             </ul>
           ) : (
-            <div style={{ padding: '16px', textAlign: 'center', color: '#9ca3af' }}>
+            <div className="rottay-treeselect__empty" style={emptyStyle}>
               {notFoundContent}
             </div>
           )}
@@ -333,57 +416,24 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
-          className={className}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: getInputHeight(),
-            padding: '0 12px',
-            border: `1px solid ${getBorderColor()}`,
-            borderRadius: '6px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            opacity: disabled ? 0.5 : 1,
-            ...style,
-          }}
+          className={containerClasses}
+          style={triggerStyle}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
         >
-          <span
-            style={{
-              flex: 1,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              color: selectedKeys.size > 0 ? 'inherit' : '#9ca3af',
-            }}
-          >
+          <span style={valueStyle}>
             {selectedKeys.size > 0 ? getDisplayValue() : placeholder}
           </span>
           {allowClear && selectedKeys.size > 0 && !disabled && (
             <button
               type="button"
               onClick={handleClear}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#9ca3af',
-                padding: '0 4px',
-              }}
+              style={clearButtonStyle}
+              aria-label="Clear"
             >
               ✕
             </button>
           )}
-          <span
-            style={{
-              marginLeft: '8px',
-              transition: 'transform 0.2s',
-              transform: isOpen ? 'rotate(180deg)' : 'none',
-              fontSize: '10px',
-              color: '#9ca3af',
-            }}
-          >
-            ▼
-          </span>
+          <span style={arrowStyle}>▼</span>
         </div>
         {dropdownContent}
       </>

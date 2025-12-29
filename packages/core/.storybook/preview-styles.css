@@ -1,0 +1,185 @@
+/**
+ * Storybook Preview Styles - Rottay Design System
+ * Styles for engine comparison and variant matrix components
+ */
+
+/* Engine Comparison Container */
+.storybook-engine-comparison {
+  margin: 16px 0;
+}
+
+/* Engine Panel Styling */
+.storybook-engine-panel {
+  transition: box-shadow 0.2s ease;
+}
+
+.storybook-engine-panel:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Engine-specific panel borders */
+.storybook-engine-panel--titan {
+  border-color: #bfdbfe;
+}
+
+.storybook-engine-panel--hermes {
+  border-color: #ddd6fe;
+}
+
+.storybook-engine-panel--apollo {
+  border-color: #a7f3d0;
+}
+
+/* Variant Matrix Container */
+.storybook-variant-engine-matrix {
+  margin: 16px 0;
+}
+
+/* Engine Label Badges */
+.storybook-engine-label {
+  user-select: none;
+  white-space: nowrap;
+}
+
+.storybook-engine-label--titan {
+  background-color: #e6f4ff;
+  color: #1677ff;
+  border-color: rgba(22, 119, 255, 0.2);
+}
+
+.storybook-engine-label--hermes {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+  border-color: rgba(124, 58, 237, 0.2);
+}
+
+.storybook-engine-label--apollo {
+  background-color: #d1fae5;
+  color: #059669;
+  border-color: rgba(5, 150, 105, 0.2);
+}
+
+/* Story Documentation Table Styles */
+.sbdocs .docblock-argstable-body td:first-child code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Engine Differences Table in MDX */
+.engine-differences-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.engine-differences-table th,
+.engine-differences-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+}
+
+.engine-differences-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.engine-differences-table tr:hover td {
+  background-color: #f9fafb;
+}
+
+/* Component Preview Section */
+.component-preview {
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ee 100%);
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+/* Story Section Headers */
+.story-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 24px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Interactive Controls Section */
+.interactive-controls {
+  padding: 16px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.interactive-controls label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+/* State Indicators */
+.state-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.state-indicator--active {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.state-indicator--inactive {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .storybook-engine-comparison {
+    grid-template-columns: 1fr !important;
+  }
+
+  .storybook-variant-engine-matrix > div > div {
+    grid-template-columns: 100px repeat(3, 1fr) !important;
+  }
+}
+
+/* Dark mode support (if Storybook dark theme is used) */
+@media (prefers-color-scheme: dark) {
+  .storybook-engine-panel {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  .storybook-engine-panel > div:last-child {
+    background-color: #111827;
+  }
+}
+
+/* Animation for state changes */
+@keyframes highlightCell {
+  0% {
+    background-color: #fef3c7;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.highlight-change {
+  animation: highlightCell 0.5s ease-out;
+}

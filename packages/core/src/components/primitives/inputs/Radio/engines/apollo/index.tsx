@@ -1,60 +1,8 @@
 /**
  * @fileoverview Radio Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Radio component.
+ * @description Pure HTML/CSS implementation of the Radio component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Apollo engine provides a headless radio implementation using only
- * native HTML elements and inline styles. This offers maximum flexibility
- * for custom styling and ensures full accessibility compliance.
- *
- * **Key Features:**
- * - Zero UI library dependencies
- * - Circular dot indicator for checked state
- * - Focus ring management
- * - Keyboard navigation (Space, Enter)
- * - Full ARIA compliance
- * - Button style variant support
- * - Option descriptions
- *
- * **Visual Elements:**
- * - Outer circle with border
- * - Inner dot when selected
- * - Focus outline with color matching
- * - Button-style rendering when buttonStyle prop is used
- *
- * **Accessibility:**
- * - Native radio input with proper ARIA attributes
- * - aria-checked for selection state
- * - aria-invalid for error state
- * - role="radiogroup" on group container
- * - Keyboard accessible via Space/Enter
- *
- * @example Using Apollo Engine
- * ```tsx
- * import { Radio } from '@rottay/design-system';
- *
- * // Explicit Apollo engine
- * <Radio
- *   engine="apollo"
- *   name="option"
- *   value="a"
- *   label="Accessible Radio"
- *   description="With description support"
- * />
- *
- * // Button style group
- * <Radio.Group
- *   engine="apollo"
- *   options={options}
- *   buttonStyle="solid"
- *   direction="horizontal"
- * />
- * ```
- *
- * @see {@link Radio} for the main component
- * @see {@link TitanRadio} for Ant Design implementation
- * @see {@link HermesRadio} for DaisyUI implementation
  * @module ApolloRadio
  * @category Inputs
  * @package @rottay/design-system
@@ -64,7 +12,25 @@
 
 import React, { useState, useId, useCallback } from 'react';
 import type { RadioProps, RadioGroupProps } from '../../types';
-import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../types';
+import { RADIO_DEFAULTS, RADIO_GROUP_DEFAULTS } from '../../types';
+
+// Size mapping using CSS variables
+const SIZE_VAR_MAP: Record<string, string> = {
+  xs: 'var(--ds-radio-size-sm)',
+  sm: 'var(--ds-radio-size-sm)',
+  md: 'var(--ds-radio-size-md)',
+  lg: 'var(--ds-radio-size-lg)',
+  xl: 'var(--ds-radio-size-xl)',
+};
+
+// Numeric sizes for dot scaling
+const SIZE_NUMERIC_MAP: Record<string, number> = {
+  xs: 14,
+  sm: 14,
+  md: 16,
+  lg: 20,
+  xl: 24,
+};
 
 export default function ApolloRadio(props: RadioProps): React.ReactElement {
   const {
@@ -89,7 +55,6 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
   const generatedId = useId();
   const inputId = `radio-apollo-${generatedId}`;
 
-  // Internal state for uncontrolled mode
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const [isFocused, setIsFocused] = useState(false);
   const isControlled = controlledChecked !== undefined;
@@ -115,18 +80,27 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
     }
   }, [disabled, value, handleChange]);
 
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+  const sizeVar = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
+  const sizeNumeric = SIZE_NUMERIC_MAP[size] || SIZE_NUMERIC_MAP.md;
+
+  // Get checked dot color based on color prop
+  const getCheckedDot = () => {
+    if (color === 'primary') return 'var(--ds-radio-checked-dot)';
+    if (color === 'success') return 'var(--ds-color-success-500)';
+    if (color === 'warning') return 'var(--ds-color-warning-500)';
+    if (color === 'error') return 'var(--ds-color-error-500)';
+    if (color === 'secondary') return 'var(--ds-color-secondary-500)';
+    return 'var(--ds-radio-checked-dot)';
+  };
 
   const containerStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'flex-start',
-    gap: '8px',
+    gap: 'var(--ds-radio-label-gap)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     flexDirection: labelPlacement === 'start' ? 'row-reverse' : 'row',
-    fontFamily: 'inherit',
+    fontFamily: 'var(--ds-font-family-base)',
     ...style,
   };
 
@@ -135,15 +109,21 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: sizeValue,
-    height: sizeValue,
+    width: sizeVar,
+    height: sizeVar,
     borderRadius: '50%',
-    border: `2px solid ${error ? 'var(--color-error, #ff4d4f)' : (isChecked ? colors.border : '#d9d9d9')}`,
-    backgroundColor: 'transparent',
-    transition: 'all 0.2s ease-in-out',
+    border: `2px solid ${error
+      ? 'var(--ds-radio-error-border)'
+      : isChecked
+        ? getCheckedDot()
+        : 'var(--ds-radio-border)'}`,
+    backgroundColor: disabled
+      ? 'var(--ds-radio-bg-disabled)'
+      : 'var(--ds-radio-bg)',
+    transition: 'var(--ds-radio-transition)',
     flexShrink: 0,
     marginTop: description ? '2px' : 0,
-    outline: isFocused ? `2px solid ${colors.bg}` : 'none',
+    outline: isFocused ? 'var(--ds-radio-focus-ring)' : 'none',
     outlineOffset: '2px',
   };
 
@@ -162,8 +142,8 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
     width: sizeNumeric * 0.5,
     height: sizeNumeric * 0.5,
     borderRadius: '50%',
-    backgroundColor: colors.bg,
-    transition: 'transform 0.15s ease-in-out',
+    backgroundColor: getCheckedDot(),
+    transition: 'var(--ds-radio-transition)',
   };
 
   const labelContainerStyle: React.CSSProperties = {
@@ -173,24 +153,40 @@ export default function ApolloRadio(props: RadioProps): React.ReactElement {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: sizeNumeric * 0.9,
-    color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+    fontSize: `${sizeNumeric * 0.9}px`,
+    color: error
+      ? 'var(--ds-radio-error-color)'
+      : disabled
+        ? 'var(--ds-radio-label-color-disabled)'
+        : 'var(--ds-radio-label-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
 
   const descriptionStyle: React.CSSProperties = {
-    fontSize: sizeNumeric * 0.75,
-    color: 'var(--color-text-secondary, #666)',
+    fontSize: `${sizeNumeric * 0.75}px`,
+    color: 'var(--ds-radio-description-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
 
   const displayLabel = label || children;
 
+  // Build class names
+  const containerClasses = [
+    'rottay-radio',
+    'rottay-radio--apollo',
+    `rottay-radio--${size}`,
+    `rottay-radio--${color}`,
+    isChecked && 'rottay-radio--checked',
+    disabled && 'rottay-radio--disabled',
+    error && 'rottay-radio--error',
+    className,
+  ].filter(Boolean).join(' ');
+
   return (
     <label
-      className={`rottay-radio-apollo rottay-radio--${size} rottay-radio--${color} ${isChecked ? 'rottay-radio--checked' : ''} ${disabled ? 'rottay-radio--disabled' : ''} ${error ? 'rottay-radio--error' : ''} ${className}`}
+      className={containerClasses}
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
@@ -261,7 +257,6 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
   const generatedId = useId();
   const name = providedName || `radio-group-${generatedId}`;
 
-  // Internal state for uncontrolled mode
   const [internalValue, setInternalValue] = useState<string | number | undefined>(defaultValue);
   const isControlled = controlledValue !== undefined;
   const currentValue = isControlled ? controlledValue : internalValue;
@@ -273,11 +268,11 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
     onChange?.(newValue);
   };
 
-  // Spacing values
+  // Spacing values using CSS variables
   const spacingMap: Record<string, string> = {
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
+    sm: 'var(--ds-spacing-2)',
+    md: 'var(--ds-spacing-3)',
+    lg: 'var(--ds-spacing-4)',
   };
 
   const groupStyle: React.CSSProperties = {
@@ -288,9 +283,18 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
     ...style,
   };
 
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+  const sizeVar = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
+  const sizeNumeric = SIZE_NUMERIC_MAP[size] || SIZE_NUMERIC_MAP.md;
+
+  // Get checked dot color based on color prop
+  const getCheckedDot = () => {
+    if (color === 'primary') return 'var(--ds-radio-checked-dot)';
+    if (color === 'success') return 'var(--ds-color-success-500)';
+    if (color === 'warning') return 'var(--ds-color-warning-500)';
+    if (color === 'error') return 'var(--ds-color-error-500)';
+    if (color === 'secondary') return 'var(--ds-color-secondary-500)';
+    return 'var(--ds-radio-checked-dot)';
+  };
 
   const renderOptions = () => {
     if (options.length === 0) return children;
@@ -301,11 +305,11 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
         const isDisabled = disabled || option.disabled;
 
         const paddingMap: Record<string, string> = {
-          xs: '4px 8px',
-          sm: '6px 12px',
-          md: '8px 16px',
-          lg: '10px 20px',
-          xl: '12px 24px',
+          xs: '0.25rem 0.5rem',
+          sm: '0.375rem 0.75rem',
+          md: '0.5rem 1rem',
+          lg: '0.625rem 1.25rem',
+          xl: '0.75rem 1.5rem',
         };
 
         return (
@@ -318,12 +322,16 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
               padding: paddingMap[size] || paddingMap.md,
               cursor: isDisabled ? 'not-allowed' : 'pointer',
               opacity: isDisabled ? 0.5 : 1,
-              border: `1px solid ${isChecked ? colors.border : '#d9d9d9'}`,
-              borderRadius: '4px',
-              backgroundColor: buttonStyle === 'solid' && isChecked ? colors.bg : 'transparent',
-              color: buttonStyle === 'solid' && isChecked ? colors.dot : 'inherit',
-              transition: 'all 0.2s ease-in-out',
-              fontSize: sizeNumeric * 0.85,
+              border: `1px solid ${isChecked ? getCheckedDot() : 'var(--ds-radio-button-border)'}`,
+              borderRadius: 'var(--ds-radio-button-radius)',
+              backgroundColor: buttonStyle === 'solid' && isChecked
+                ? 'var(--ds-radio-button-bg-checked)'
+                : 'var(--ds-radio-button-bg)',
+              color: buttonStyle === 'solid' && isChecked
+                ? 'var(--ds-radio-button-color-checked)'
+                : 'var(--ds-radio-label-color)',
+              transition: 'var(--ds-radio-transition)',
+              fontSize: `${sizeNumeric * 0.85}px`,
               fontWeight: 500,
               userSelect: 'none',
             }}
@@ -358,7 +366,7 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
           style={{
             display: 'inline-flex',
             alignItems: 'flex-start',
-            gap: '8px',
+            gap: 'var(--ds-radio-label-gap)',
             cursor: isDisabled ? 'not-allowed' : 'pointer',
             opacity: isDisabled ? 0.5 : 1,
           }}
@@ -369,12 +377,14 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: sizeValue,
-              height: sizeValue,
+              width: sizeVar,
+              height: sizeVar,
               borderRadius: '50%',
-              border: `2px solid ${isChecked ? colors.border : '#d9d9d9'}`,
-              backgroundColor: 'transparent',
-              transition: 'all 0.2s ease-in-out',
+              border: `2px solid ${isChecked ? getCheckedDot() : 'var(--ds-radio-border)'}`,
+              backgroundColor: isDisabled
+                ? 'var(--ds-radio-bg-disabled)'
+                : 'var(--ds-radio-bg)',
+              transition: 'var(--ds-radio-transition)',
               flexShrink: 0,
               marginTop: option.description ? '2px' : 0,
             }}
@@ -402,17 +412,33 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
                   width: sizeNumeric * 0.5,
                   height: sizeNumeric * 0.5,
                   borderRadius: '50%',
-                  backgroundColor: colors.bg,
+                  backgroundColor: getCheckedDot(),
                 }}
               />
             )}
           </span>
           <span style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none', lineHeight: 1.4 }}>
+            <span
+              style={{
+                fontSize: `${sizeNumeric * 0.9}px`,
+                userSelect: 'none',
+                lineHeight: 1.4,
+                color: isDisabled
+                  ? 'var(--ds-radio-label-color-disabled)'
+                  : 'var(--ds-radio-label-color)',
+              }}
+            >
               {option.label}
             </span>
             {option.description && (
-              <span style={{ fontSize: sizeNumeric * 0.75, color: '#666', userSelect: 'none', lineHeight: 1.4 }}>
+              <span
+                style={{
+                  fontSize: `${sizeNumeric * 0.75}px`,
+                  color: 'var(--ds-radio-description-color)',
+                  userSelect: 'none',
+                  lineHeight: 1.4,
+                }}
+              >
                 {option.description}
               </span>
             )}
@@ -424,7 +450,7 @@ export function ApolloRadioGroup(props: RadioGroupProps): React.ReactElement {
 
   return (
     <div
-      className={`rottay-radio-group-apollo ${className}`}
+      className={`rottay-radio-group rottay-radio-group--apollo ${className}`}
       style={groupStyle}
       role="radiogroup"
       aria-label="Radio group"

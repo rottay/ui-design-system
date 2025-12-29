@@ -149,7 +149,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { ModalProps } from './types';
 import { ModalHeader, ModalBody, ModalFooter, ModalCloseButton } from './compound';
 

@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Timeline } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Timeline> = {
   title: 'Primitives/Display/Timeline',
@@ -169,25 +170,62 @@ export const WithItemsProp: Story = {
   },
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of the same timeline across all three engines.
+ * Side-by-side comparison of Timeline across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Timeline rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 16px 0', textTransform: 'capitalize' }}>
-            {engine} Engine
-          </h4>
-          <Timeline engine={engine}>
-            <Timeline.Item color="green">Task completed</Timeline.Item>
-            <Timeline.Item color="blue">Task in progress</Timeline.Item>
-            <Timeline.Item color="gray">Task pending</Timeline.Item>
-          </Timeline>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Timeline}
+      props={{
+        items: [
+          { children: 'Task completed', color: 'green' },
+          { children: 'Task in progress', color: 'blue' },
+          { children: 'Task pending', color: 'gray' },
+        ],
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all modes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant x Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Complete matrix of all Timeline modes across all engines.',
+      },
+    },
+  },
+  render: () => (
+    <VariantEngineMatrix
+      component={Timeline}
+      baseProps={{
+        items: [
+          { children: 'First event' },
+          { children: 'Second event' },
+          { children: 'Third event' },
+        ],
+      }}
+      variantProp="mode"
+      variants={['left', 'right', 'alternate']}
+    />
   ),
 };
 

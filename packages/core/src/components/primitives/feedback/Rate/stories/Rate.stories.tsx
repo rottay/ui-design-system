@@ -7,7 +7,8 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Rate } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Rate> = {
   title: 'Primitives/Feedback/Rate',
@@ -372,25 +373,42 @@ export const WithCallbacks: Story = {
 };
 
 // ============================================================================
-// Engine Comparison
+// Engine Comparison Stories
 // ============================================================================
 
-export const EngineComparison: Story = {
+/**
+ * Side-by-side comparison of Rate across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Rate rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize', fontSize: 14 }}>
-            {engine} Engine
-          </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <Rate engine={engine} defaultValue={3} />
-            <Rate engine={engine} defaultValue={2.5} allowHalf />
-            <Rate engine={engine} defaultValue={4} disabled />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Rate}
+      props={{ defaultValue: 3, count: 5 }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Rate}
+      baseProps={{ defaultValue: 3 }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
   ),
 };
 

@@ -123,7 +123,36 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
 
   const sizeTokens = SIZE_MAP[size] || SIZE_MAP.md;
   const sizeValues = SIZE_VALUES[size] || SIZE_VALUES.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+
+  // Size CSS variable mapping
+  const SIZE_VAR_MAP: Record<string, { width: string; height: string; dot: string }> = {
+    sm: {
+      width: 'var(--ds-toggle-sm-width)',
+      height: 'var(--ds-toggle-sm-height)',
+      dot: 'var(--ds-toggle-sm-dot)',
+    },
+    md: {
+      width: 'var(--ds-toggle-md-width)',
+      height: 'var(--ds-toggle-md-height)',
+      dot: 'var(--ds-toggle-md-dot)',
+    },
+    lg: {
+      width: 'var(--ds-toggle-lg-width)',
+      height: 'var(--ds-toggle-lg-height)',
+      dot: 'var(--ds-toggle-lg-dot)',
+    },
+  };
+
+  const sizeVars = SIZE_VAR_MAP[size] || SIZE_VAR_MAP.md;
+
+  // Get track background color based on state and color
+  const getTrackBg = () => {
+    if (!isChecked) return 'var(--ds-toggle-track-bg)';
+    if (color === 'success') return 'var(--ds-toggle-success-bg)';
+    if (color === 'warning') return 'var(--ds-toggle-warning-bg)';
+    if (color === 'error') return 'var(--ds-toggle-error-bg)';
+    return 'var(--ds-toggle-track-bg-checked)';
+  };
 
   const containerStyle: React.CSSProperties = {
     display: 'inline-flex',
@@ -132,7 +161,7 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
     cursor: disabled || loading ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     flexDirection: labelPlacement === 'start' ? 'row-reverse' : 'row',
-    fontFamily: 'inherit',
+    fontFamily: 'var(--ds-font-family-base)',
     ...style,
   };
 
@@ -140,14 +169,14 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
     position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
-    width: sizeTokens.width,
-    height: sizeTokens.height,
-    borderRadius: 'var(--toggle-track-border-radius, 9999px)',
-    backgroundColor: isChecked ? colors.bgChecked : colors.bg,
-    transition: 'all 0.2s ease-in-out',
+    width: sizeVars.width,
+    height: sizeVars.height,
+    borderRadius: 'var(--ds-toggle-track-radius)',
+    backgroundColor: getTrackBg(),
+    transition: 'var(--ds-toggle-transition)',
     flexShrink: 0,
-    border: error ? '2px solid var(--color-error, #ff4d4f)' : 'none',
-    outline: isFocused ? `2px solid ${colors.bgChecked}` : 'none',
+    border: error ? '2px solid var(--ds-toggle-error-color)' : 'none',
+    outline: isFocused ? 'var(--ds-toggle-focus-ring)' : 'none',
     outlineOffset: '2px',
   };
 
@@ -156,12 +185,12 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
     top: '50%',
     left: isChecked ? `calc(100% - ${sizeTokens.dot} - 2px)` : '2px',
     transform: 'translateY(-50%)',
-    width: sizeTokens.dot,
-    height: sizeTokens.dot,
+    width: sizeVars.dot,
+    height: sizeVars.dot,
     borderRadius: '50%',
-    backgroundColor: '#ffffff',
-    transition: 'all 0.2s ease-in-out',
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+    backgroundColor: 'var(--ds-toggle-dot-bg)',
+    transition: 'var(--ds-toggle-transition)',
+    boxShadow: 'var(--ds-toggle-dot-shadow)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -184,15 +213,15 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: sizeValues.height * 0.6,
-    color: error ? 'var(--color-error, #ff4d4f)' : 'inherit',
+    fontSize: 'var(--ds-toggle-label-font-size)',
+    color: error ? 'var(--ds-toggle-error-color)' : 'var(--ds-toggle-label-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
 
   const descriptionStyle: React.CSSProperties = {
-    fontSize: sizeValues.height * 0.5,
-    color: 'var(--color-text-secondary, #666)',
+    fontSize: 'var(--ds-toggle-description-font-size)',
+    color: 'var(--ds-toggle-description-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
@@ -260,8 +289,8 @@ export default function ApolloToggle(props: ToggleProps): React.ReactElement {
               position: 'absolute',
               left: isChecked ? '6px' : 'auto',
               right: isChecked ? 'auto' : '6px',
-              fontSize: sizeValues.dot * 0.5,
-              color: '#ffffff',
+              fontSize: 'var(--ds-toggle-inner-label-font-size)',
+              color: 'var(--ds-toggle-inner-label-color)',
               fontWeight: 500,
               userSelect: 'none',
             }}

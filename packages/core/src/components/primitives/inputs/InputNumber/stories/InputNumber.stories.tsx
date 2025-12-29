@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { InputNumber } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof InputNumber> = {
   title: 'Primitives/Inputs/InputNumber',
@@ -20,7 +21,18 @@ const meta: Meta<typeof InputNumber> = {
   parameters: {
     docs: {
       description: {
-        component: 'A numeric input component with increment/decrement controls and multi-engine support.',
+        component: `
+A numeric input component with increment/decrement controls and multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Controls | Built-in | Native | Custom |
+| Formatter | Full | Limited | Full |
+| Precision | Built-in | Manual | Built-in |
+`,
       },
     },
   },
@@ -55,11 +67,12 @@ const meta: Meta<typeof InputNumber> = {
 export default meta;
 type Story = StoryObj<typeof InputNumber>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    placeholder: 'Enter number',
-    defaultValue: 0,
-  },
+  args: { placeholder: 'Enter number', defaultValue: 0 },
 };
 
 export const Sizes: Story = {
@@ -73,17 +86,11 @@ export const Sizes: Story = {
 };
 
 export const Disabled: Story = {
-  args: {
-    disabled: true,
-    defaultValue: 100,
-  },
+  args: { disabled: true, defaultValue: 100 },
 };
 
 export const ReadOnly: Story = {
-  args: {
-    readOnly: true,
-    defaultValue: 50,
-  },
+  args: { readOnly: true, defaultValue: 50 },
 };
 
 export const WithRange: Story = {
@@ -157,10 +164,7 @@ export const WithPrefixSuffix: Story = {
 };
 
 export const WithoutControls: Story = {
-  args: {
-    controls: false,
-    defaultValue: 42,
-  },
+  args: { controls: false, defaultValue: 42 },
 };
 
 export const StatusVariants: Story = {
@@ -173,19 +177,57 @@ export const StatusVariants: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the InputNumber component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same InputNumber rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <InputNumber engine={engine} defaultValue={10} />
-            <InputNumber engine={engine} disabled defaultValue={20} />
-            <InputNumber engine={engine} status="error" defaultValue={30} />
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={InputNumber}
+      props={{ defaultValue: 42, style: { width: 150 } }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={InputNumber}
+      baseProps={{ defaultValue: 10, style: { width: 120 } }}
+      sizeProp="size"
+      sizes={['small', 'default', 'large']}
+    />
+  ),
+};
+
+/**
+ * Status comparison across engines.
+ */
+export const StatusMatrix: Story = {
+  name: '⚠️ Status × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={InputNumber}
+      baseProps={{ defaultValue: 10, style: { width: 120 } }}
+      variantProp="status"
+      variants={['default', 'error', 'warning']}
+    />
   ),
 };

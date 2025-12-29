@@ -46,6 +46,6 @@ export type {
   CalendarSelectInfo,
   CalendarLocale,
   CalendarProps,
-} from '../../../../../types/primitives/display/Calendar';
+} from '../../../../../core/types/primitives/display/Calendar';
 
-export { CALENDAR_DEFAULTS, CALENDAR_DAYS, CALENDAR_MONTHS } from '../../../../../types/primitives/display/Calendar';
+export { CALENDAR_DEFAULTS, CALENDAR_DAYS, CALENDAR_MONTHS } from '../../../../../core/types/primitives/display/Calendar';

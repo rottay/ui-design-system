@@ -161,21 +161,21 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
 
     const getOkButtonStyle = (): React.CSSProperties => {
       const baseStyle: React.CSSProperties = {
-        padding: '6px 16px',
-        borderRadius: '6px',
+        padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
+        borderRadius: 'var(--ds-popconfirm-button-radius, 6px)',
         border: 'none',
         cursor: 'pointer',
         fontWeight: 500,
-        fontSize: '14px',
+        fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
       };
 
       switch (okType) {
         case 'danger':
-          return { ...baseStyle, backgroundColor: '#ef4444', color: '#fff' };
+          return { ...baseStyle, backgroundColor: 'var(--ds-popconfirm-danger-bg, var(--ds-color-error-500, #ef4444))', color: 'var(--ds-popconfirm-danger-color, #fff)' };
         case 'primary':
-          return { ...baseStyle, backgroundColor: '#3b82f6', color: '#fff' };
+          return { ...baseStyle, backgroundColor: 'var(--ds-popconfirm-primary-bg, var(--ds-color-primary-500, #3b82f6))', color: 'var(--ds-popconfirm-primary-color, #fff)' };
         default:
-          return { ...baseStyle, backgroundColor: '#f3f4f6', color: '#374151' };
+          return { ...baseStyle, backgroundColor: 'var(--ds-popconfirm-default-bg, var(--ds-color-neutral-100, #f3f4f6))', color: 'var(--ds-popconfirm-default-color, var(--ds-color-neutral-700, #374151))' };
       }
     };
 
@@ -191,26 +191,26 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             top: position.top,
             left: position.left,
             transform: placement?.includes('bottom') ? 'translateX(-50%)' : 'translate(-50%, -100%)',
-            zIndex: 1050,
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
-            padding: '16px',
-            minWidth: '220px',
-            maxWidth: '350px',
+            zIndex: 'var(--ds-popconfirm-z-index, 1050)' as unknown as number,
+            backgroundColor: 'var(--ds-popconfirm-bg, #fff)',
+            borderRadius: 'var(--ds-popconfirm-radius, 8px)',
+            boxShadow: 'var(--ds-popconfirm-shadow, 0 4px 16px rgba(0, 0, 0, 0.15))',
+            padding: 'var(--ds-popconfirm-padding, 16px)',
+            minWidth: 'var(--ds-popconfirm-min-width, 220px)',
+            maxWidth: 'var(--ds-popconfirm-max-width, 350px)',
             ...overlayStyle,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
             {icon && (
-              <span style={{ color: '#f59e0b', marginTop: '2px' }}>
+              <span style={{ color: 'var(--ds-popconfirm-icon-color, var(--ds-color-warning-500, #f59e0b))', marginTop: '2px' }}>
                 {icon}
               </span>
             )}
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500, color: '#111827' }}>{title}</div>
+              <div style={{ fontWeight: 500, color: 'var(--ds-popconfirm-title-color, var(--ds-color-neutral-900, #111827))' }}>{title}</div>
               {description && (
-                <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '4px' }}>
+                <div style={{ fontSize: '14px', color: 'var(--ds-popconfirm-description-color, var(--ds-color-neutral-500, #6b7280))', marginTop: '4px' }}>
                   {description}
                 </div>
               )}
@@ -228,13 +228,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
               type="button"
               onClick={handleCancel}
               style={{
-                padding: '6px 16px',
-                borderRadius: '6px',
-                border: '1px solid #d1d5db',
-                backgroundColor: '#fff',
+                padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
+                borderRadius: 'var(--ds-popconfirm-button-radius, 6px)',
+                border: '1px solid var(--ds-popconfirm-cancel-border, var(--ds-color-neutral-300, #d1d5db))',
+                backgroundColor: 'var(--ds-popconfirm-cancel-bg, #fff)',
                 cursor: 'pointer',
                 fontWeight: 500,
-                fontSize: '14px',
+                fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
               }}
             >
               {cancelText}

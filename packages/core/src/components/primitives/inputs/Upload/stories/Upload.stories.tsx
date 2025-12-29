@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Upload } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Upload> = {
   title: 'Primitives/Inputs/Upload',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Upload> = {
   parameters: {
     docs: {
       description: {
-        component: 'Upload component for file selection and upload with support for drag-and-drop, file lists, and multiple engines.',
+        component: `
+Upload component for file selection and upload with support for drag-and-drop, file lists, and multiple engines.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Dragger | Built-in | Custom | Custom |
+| File List | Full | Limited | Full |
+| Preview | Built-in | Custom | Custom |
+`,
       },
     },
   },
@@ -168,26 +180,54 @@ export const DraggerMultiple: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Upload component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Upload rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <Upload engine={engine}>
-              <button type="button" style={{ padding: '8px 16px', cursor: 'pointer' }}>
-                Upload
-              </button>
-            </Upload>
-            <Upload.Dragger engine={engine} height={120} style={{ width: 300 }}>
-              <div style={{ textAlign: 'center' }}>
-                <p style={{ margin: 0 }}>Drop files here</p>
-              </div>
-            </Upload.Dragger>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparison
+      component={Upload}
+      props={{
+        children: (
+          <button type="button" style={{ padding: '8px 16px', cursor: 'pointer' }}>
+            Click to Upload
+          </button>
+        ),
+      }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all list types across all engines.
+ */
+export const ListTypeMatrix: Story = {
+  name: '📋 List Type × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Upload}
+      baseProps={{
+        children: (
+          <button type="button" style={{ padding: '8px 16px', cursor: 'pointer' }}>
+            Upload
+          </button>
+        ),
+      }}
+      variantProp="listType"
+      variants={['text', 'picture', 'picture-card']}
+    />
   ),
 };

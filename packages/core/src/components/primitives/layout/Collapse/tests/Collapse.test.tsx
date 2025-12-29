@@ -8,7 +8,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Collapse } from '../';
 
 // Mock the engine factory
-vi.mock('../../../../../system/engines/factory', () => ({
+vi.mock('../../../../../core/engines/factory', () => ({
   createEngineComponent: (name: string) => {
     if (name === 'Collapse') {
       const MockCollapse = ({

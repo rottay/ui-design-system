@@ -6,7 +6,8 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Splitter } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Splitter> = {
   title: 'Primitives/Layout/Splitter',
@@ -233,24 +234,41 @@ export const IDELayout: Story = {
   ),
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Splitter across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Splitter rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ height: 200 }}>
-            <Splitter engine={engine} layout="horizontal">
-              <Splitter.Panel engine={engine} defaultSize={50}>
-                <div style={panelStyle}>Panel 1</div>
-              </Splitter.Panel>
-              <Splitter.Panel engine={engine} defaultSize={50}>
-                <div style={panelStyle}>Panel 2</div>
-              </Splitter.Panel>
-            </Splitter>
-          </div>
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Splitter}
+      props={{
+        children: (
+          <>
+            <Splitter.Panel defaultSize={50}>
+              <div style={panelStyle}>Panel 1</div>
+            </Splitter.Panel>
+            <Splitter.Panel defaultSize={50}>
+              <div style={panelStyle}>Panel 2</div>
+            </Splitter.Panel>
+          </>
+        ),
+        layout: 'horizontal',
+        style: { height: 200 },
+      }}
+      showDescriptions
+      direction="vertical"
+    />
   ),
 };

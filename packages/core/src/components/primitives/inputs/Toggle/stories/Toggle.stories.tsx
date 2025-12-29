@@ -5,7 +5,8 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Toggle } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Toggle> = {
   title: 'Primitives/Inputs/Toggle',
@@ -20,7 +21,18 @@ const meta: Meta<typeof Toggle> = {
   parameters: {
     docs: {
       description: {
-        component: 'A toggle/switch component for binary on/off states with multi-engine support.',
+        component: `
+A toggle/switch component for binary on/off states with multi-engine support.
+
+## Engine Differences
+
+| Feature | Titan | Hermes | Apollo |
+|---------|-------|--------|--------|
+| Library | Ant Design | DaisyUI | Vanilla CSS |
+| Animation | Smooth | CSS | Basic |
+| Inner Labels | Full | Partial | Full |
+| Loading State | Built-in | Custom | Custom |
+`,
       },
     },
   },
@@ -50,10 +62,12 @@ const meta: Meta<typeof Toggle> = {
 export default meta;
 type Story = StoryObj<typeof Toggle>;
 
+// ============================================================================
+// Default Stories
+// ============================================================================
+
 export const Default: Story = {
-  args: {
-    label: 'Enable feature',
-  },
+  args: { label: 'Enable feature' },
 };
 
 export const Sizes: Story = {
@@ -77,10 +91,7 @@ export const Colors: Story = {
 };
 
 export const Checked: Story = {
-  args: {
-    label: 'Notifications enabled',
-    checked: true,
-  },
+  args: { label: 'Notifications enabled', checked: true },
 };
 
 export const Disabled: Story = {
@@ -118,20 +129,85 @@ export const WithDescription: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of the Toggle component across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Toggle rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
+  render: () => (
+    <EngineComparison
+      component={Toggle}
+      props={{ label: 'Toggle me', defaultChecked: true }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all sizes across all engines.
+ */
+export const SizeMatrix: Story = {
+  name: '📏 Size × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Toggle}
+      baseProps={{ label: 'Toggle', defaultChecked: true }}
+      sizeProp="size"
+      sizes={['xs', 'sm', 'md', 'lg', 'xl']}
+    />
+  ),
+};
+
+/**
+ * Color comparison across engines.
+ */
+export const ColorMatrix: Story = {
+  name: '🎨 Color × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Toggle}
+      baseProps={{ label: 'Toggle', defaultChecked: true }}
+      variantProp="color"
+      variants={['primary', 'secondary', 'success', 'warning', 'error']}
+    />
+  ),
+};
+
+/**
+ * States comparison across engines.
+ */
+export const StatesComparison: Story = {
+  name: '📋 States Comparison',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 12px 0', textTransform: 'capitalize' }}>{engine}</h4>
-          <div style={{ display: 'flex', gap: 24 }}>
-            <Toggle engine={engine} label="Off" />
-            <Toggle engine={engine} defaultChecked label="On" />
-            <Toggle engine={engine} disabled label="Disabled" />
-            <Toggle engine={engine} loading label="Loading" />
-          </div>
-        </div>
-      ))}
+      <EngineComparison
+        component={Toggle}
+        props={{ label: 'Off' }}
+        showDescriptions
+      />
+      <EngineComparison
+        component={Toggle}
+        props={{ label: 'On', defaultChecked: true }}
+      />
+      <EngineComparison
+        component={Toggle}
+        props={{ label: 'Disabled', disabled: true }}
+      />
+      <EngineComparison
+        component={Toggle}
+        props={{ label: 'Loading', loading: true }}
+      />
     </div>
   ),
 };

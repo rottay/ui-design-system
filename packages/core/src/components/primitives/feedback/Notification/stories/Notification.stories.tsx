@@ -4,6 +4,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { NotificationProvider, useNotification } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta = {
   title: 'Primitives/Feedback/Notification',
@@ -263,33 +264,97 @@ export const WithCallback: Story = {
   },
 };
 
-export const EngineComparison: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <NotificationProvider key={engine} engine={engine}>
-          <EngineNotificationDemo engine={engine} />
-        </NotificationProvider>
-      ))}
-    </div>
-  ),
-};
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
 
 const EngineNotificationDemo = ({ engine }: { engine: string }) => {
   const notification = useNotification();
   return (
-    <div>
-      <h4 style={{ marginBottom: 8, textTransform: 'capitalize' }}>{engine}</h4>
-      <button
-        onClick={() =>
-          notification.success({
-            message: `${engine} Notification`,
-            description: `Using ${engine} engine.`,
-          })
-        }
-      >
-        Show {engine} Notification
-      </button>
-    </div>
+    <button
+      onClick={() =>
+        notification.success({
+          message: `${engine} Notification`,
+          description: `Using ${engine} engine.`,
+        })
+      }
+      style={{ padding: '8px 16px' }}
+    >
+      Show {engine} Notification
+    </button>
   );
+};
+
+/**
+ * Side-by-side comparison of Notification across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Notification rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS). Click each button to trigger a notification.',
+      },
+    },
+  },
+  render: () => (
+    <EngineComparisonHelper
+      component={({ engineName }: { engineName: 'titan' | 'hermes' | 'apollo' }) => (
+        <NotificationProvider engine={engineName}>
+          <EngineNotificationDemo engine={engineName} />
+        </NotificationProvider>
+      )}
+      props={{ engineName: 'titan' }}
+      showDescriptions
+    />
+  ),
+};
+
+/**
+ * Matrix showing all notification types across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Click buttons to show notifications of different types across engines.',
+      },
+    },
+  },
+  render: () => {
+    const engines = ['titan', 'hermes', 'apollo'] as const;
+    const types = ['success', 'error', 'warning', 'info'] as const;
+
+    const TypeButton = ({ engine, type }: { engine: typeof engines[number]; type: typeof types[number] }) => {
+      const notification = useNotification();
+      return (
+        <button
+          onClick={() => notification[type]({ message: `${type} Notification`, description: `${engine} engine` })}
+          style={{ padding: '6px 12px', textTransform: 'capitalize' }}
+        >
+          {type}
+        </button>
+      );
+    };
+
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: '120px repeat(3, 1fr)', gap: 16 }}>
+        <div style={{ fontWeight: 600 }}>Type</div>
+        {engines.map((e) => (
+          <div key={e} style={{ textAlign: 'center', fontWeight: 600, textTransform: 'capitalize' }}>{e}</div>
+        ))}
+        {types.map((type) => (
+          <>
+            <div key={`label-${type}`} style={{ textTransform: 'capitalize' }}>{type}</div>
+            {engines.map((engine) => (
+              <NotificationProvider key={`${engine}-${type}`} engine={engine}>
+                <TypeButton engine={engine} type={type} />
+              </NotificationProvider>
+            ))}
+          </>
+        ))}
+      </div>
+    );
+  },
 };

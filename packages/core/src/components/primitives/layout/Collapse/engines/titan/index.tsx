@@ -44,7 +44,7 @@
 import React, { useMemo } from 'react';
 import { Collapse as AntCollapse } from 'antd';
 import type { CollapseProps, CollapsePanelProps } from '../../types';
-import { useCollapseTokens } from '../../../../../../system/hooks/components';
+import { useCollapseTokens } from '../../../../../../core/hooks/components';
 
 /**
  * Titan (Ant Design) implementation of Collapse with token architecture.

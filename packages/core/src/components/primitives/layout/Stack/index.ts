@@ -105,7 +105,7 @@
  * @package @rottay/design-system
  */
 
-import { createEngineComponent } from '../../../../system/engines/factory';
+import { createEngineComponent } from '../../../../core/engines/factory';
 import type { StackProps } from './types';
 
 // ============================================================================
@@ -145,15 +145,15 @@ export {
 // BASE COMPONENT EXPORTS
 // ============================================================================
 
-/**
- * Re-export base component and utility functions.
- * These can be used to create custom Stack variants or extend functionality.
- */
-export {
-  BaseStack,
-  buildStackStyles,
-  filterStackProps,
-  renderStackChildren,
+// NOTE: Base component exports temporarily disabled - base file needs implementation
+// These functions are referenced in engines but not yet implemented in types
+// TODO: Create base file with shared utility functions
+// export {
+//   BaseStack,
+//   buildStackStyles,
+//   filterStackProps,
+//   renderStackChildren,
+// } from './base';
 
 // ============================================================================
 // ENGINE-AWARE COMPONENT

@@ -26,6 +26,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Result } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 // ============================================================================
 // Meta Configuration
@@ -337,23 +338,38 @@ export const InCard: Story = {
 // ============================================================================
 
 /**
- * Engine Comparison story.
- * Displays the same result rendered with all three engines.
+ * Side-by-side comparison of Result across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Result rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ marginBottom: 16, textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Result
-            engine={engine}
-            status="success"
-            title="Operation Successful"
-            subTitle={`Using ${engine} engine`}
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Result}
+      props={{ status: 'success', title: 'Operation Successful', subTitle: 'Your operation was completed successfully.' }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all status types across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Result}
+      baseProps={{ title: 'Result Title', subTitle: 'Result description' }}
+      variantProp="status"
+      variants={['success', 'error', 'info', 'warning']}
+    />
   ),
 };

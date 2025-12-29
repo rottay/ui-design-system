@@ -3,37 +3,24 @@
 /**
  * @fileoverview ColorPicker Apollo Engine - Rottay Design System
  * @description Pure vanilla HTML/CSS implementation of the ColorPicker component
- * with zero external dependencies for maximum portability.
+ * using CSS variables for multi-tenant theming.
  *
- * @remarks
- * The Apollo engine provides a dependency-free color picker using:
- * - **Native browser input**: Uses HTML5 color input type
- * - **Portal rendering**: Dropdown renders to document.body
- * - **Inline styles**: No CSS framework dependencies
- * - **Full accessibility**: Keyboard navigation and screen reader support
- *
- * Ideal for environments where bundle size and dependency count are critical.
- *
- * @example Basic usage
- * ```tsx
- * <ColorPicker engine="apollo" defaultValue="#faad14" />
- * ```
- *
- * @example With text display
- * ```tsx
- * <ColorPicker engine="apollo" defaultValue="#1677ff" showText format="rgb" />
- * ```
- *
- * @see {@link ColorPicker} - Main component
- * @see {@link ColorPickerProps} - Component props
- * @module ColorPicker/Engines/Apollo
+ * @module ApolloColorPicker
  * @category Inputs
  * @package @rottay/design-system
  */
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { ColorPickerProps, Color } from '../../types';
 import { COLORPICKER_DEFAULTS } from '../../types';
+
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { width: string; height: string }> = {
+  small: { width: 'var(--ds-colorpicker-swatch-size-sm)', height: 'var(--ds-colorpicker-swatch-size-sm)' },
+  default: { width: 'var(--ds-colorpicker-swatch-size-md)', height: 'var(--ds-colorpicker-swatch-size-md)' },
+  large: { width: 'var(--ds-colorpicker-swatch-size-lg)', height: 'var(--ds-colorpicker-swatch-size-lg)' },
+};
 
 const createColor = (hex: string): Color => ({
   toHexString: () => hex,
@@ -62,7 +49,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       trigger = COLORPICKER_DEFAULTS.trigger,
       open: controlledOpen,
       onOpenChange,
-      className,
+      className = '',
       style,
     } = props;
 
@@ -129,13 +116,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
 
-    const getSwatchSize = () => {
-      switch (size) {
-        case 'small': return { width: '24px', height: '24px' };
-        case 'large': return { width: '40px', height: '40px' };
-        default: return { width: '32px', height: '32px' };
-      }
-    };
+    const sizeConfig = SIZE_CONFIG[size] || SIZE_CONFIG.default;
 
     const getDisplayText = () => {
       if (!showText) return null;
@@ -150,21 +131,109 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
     const displayText = getDisplayText();
 
+    // Build class names
+    const containerClasses = [
+      'rottay-colorpicker',
+      'rottay-colorpicker--apollo',
+      `rottay-colorpicker--${size}`,
+      disabled && 'rottay-colorpicker--disabled',
+      isOpen && 'rottay-colorpicker--open',
+      className,
+    ].filter(Boolean).join(' ');
+
+    const triggerStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      fontFamily: 'var(--ds-font-family-base)',
+      ...style,
+    };
+
+    const swatchStyle: React.CSSProperties = {
+      ...sizeConfig,
+      borderRadius: 'var(--ds-colorpicker-swatch-radius)',
+      border: `1px solid var(--ds-colorpicker-swatch-border)`,
+      boxShadow: 'var(--ds-colorpicker-swatch-shadow)',
+      backgroundColor: currentValue || 'var(--ds-color-white)',
+    };
+
+    const textStyle: React.CSSProperties = {
+      fontSize: 'var(--ds-colorpicker-text-font-size)',
+    };
+
+    const dropdownStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: position.top,
+      left: position.left,
+      padding: 'var(--ds-colorpicker-dropdown-padding)',
+      backgroundColor: 'var(--ds-colorpicker-dropdown-bg)',
+      borderRadius: 'var(--ds-colorpicker-dropdown-radius)',
+      boxShadow: 'var(--ds-colorpicker-dropdown-shadow)',
+      zIndex: 1050,
+      minWidth: 'var(--ds-colorpicker-dropdown-min-width)',
+    };
+
+    const colorInputStyle: React.CSSProperties = {
+      width: '100%',
+      height: 'var(--ds-colorpicker-palette-height)',
+      cursor: 'pointer',
+      border: 'none',
+      padding: 0,
+    };
+
+    const hexInputStyle: React.CSSProperties = {
+      width: '100%',
+      padding: '6px 10px',
+      border: `1px solid var(--ds-colorpicker-input-border)`,
+      borderRadius: 'var(--ds-colorpicker-input-radius)',
+      fontSize: 'var(--ds-font-size-sm)',
+      fontFamily: 'monospace',
+      backgroundColor: 'var(--ds-colorpicker-input-bg)',
+    };
+
+    const presetLabelStyle: React.CSSProperties = {
+      fontSize: 'var(--ds-colorpicker-label-font-size)',
+      color: 'var(--ds-colorpicker-label-color)',
+      marginBottom: '4px',
+    };
+
+    const presetContainerStyle: React.CSSProperties = {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: 'var(--ds-colorpicker-preset-gap)',
+    };
+
+    const getPresetButtonStyle = (): React.CSSProperties => ({
+      width: 'var(--ds-colorpicker-preset-size)',
+      height: 'var(--ds-colorpicker-preset-size)',
+      borderRadius: 'var(--ds-colorpicker-preset-radius)',
+      border: `1px solid var(--ds-colorpicker-preset-border)`,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+    });
+
+    const dividerStyle: React.CSSProperties = {
+      borderTop: `1px solid var(--ds-colorpicker-divider-color)`,
+      marginTop: '12px',
+      paddingTop: '12px',
+    };
+
+    const clearButtonStyle: React.CSSProperties = {
+      padding: '4px 12px',
+      border: `1px solid var(--ds-colorpicker-clear-border)`,
+      borderRadius: 'var(--ds-colorpicker-clear-radius)',
+      backgroundColor: 'var(--ds-colorpicker-clear-bg)',
+      cursor: 'pointer',
+      fontSize: 'var(--ds-font-size-sm)',
+    };
+
     const dropdownContent = isOpen && typeof document !== 'undefined' ? (
       createPortal(
         <div
           ref={dropdownRef}
-          style={{
-            position: 'absolute',
-            top: position.top,
-            left: position.left,
-            padding: '12px',
-            backgroundColor: '#fff',
-            borderRadius: '8px',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
-            zIndex: 1050,
-            minWidth: '200px',
-          }}
+          className="rottay-colorpicker__dropdown"
+          style={dropdownStyle}
         >
           {/* Color input */}
           <input
@@ -172,13 +241,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             value={currentValue || '#000000'}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
-            style={{
-              width: '100%',
-              height: '140px',
-              cursor: 'pointer',
-              border: 'none',
-              padding: 0,
-            }}
+            style={colorInputStyle}
           />
 
           {/* Hex input */}
@@ -189,28 +252,21 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
               onChange={(e) => handleChange(e.target.value)}
               placeholder="#000000"
               disabled={disabled}
-              style={{
-                width: '100%',
-                padding: '6px 10px',
-                border: '1px solid #d1d5db',
-                borderRadius: '4px',
-                fontSize: '14px',
-                fontFamily: 'monospace',
-              }}
+              style={hexInputStyle}
             />
           </div>
 
           {/* Presets */}
           {presets && presets.length > 0 && (
-            <div style={{ marginTop: '12px', borderTop: '1px solid #e5e7eb', paddingTop: '12px' }}>
+            <div style={dividerStyle}>
               {presets.map((preset, idx) => (
                 <div key={idx} style={{ marginBottom: '8px' }}>
                   {preset.label && (
-                    <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '4px' }}>
+                    <div style={presetLabelStyle}>
                       {preset.label}
                     </div>
                   )}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                  <div style={presetContainerStyle}>
                     {preset.colors.map((color) => (
                       <button
                         key={color}
@@ -218,13 +274,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                         onClick={() => handleChange(color)}
                         disabled={disabled}
                         style={{
-                          width: '20px',
-                          height: '20px',
-                          borderRadius: '4px',
-                          border: '1px solid #d1d5db',
+                          ...getPresetButtonStyle(),
                           backgroundColor: color,
-                          cursor: disabled ? 'not-allowed' : 'pointer',
                         }}
+                        aria-label={`Select color ${color}`}
                       />
                     ))}
                   </div>
@@ -235,19 +288,12 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
           {/* Clear button */}
           {allowClear && (
-            <div style={{ marginTop: '8px', borderTop: '1px solid #e5e7eb', paddingTop: '8px' }}>
+            <div style={{ ...dividerStyle, marginTop: '8px', paddingTop: '8px' }}>
               <button
                 type="button"
                 onClick={handleClear}
                 disabled={disabled}
-                style={{
-                  padding: '4px 12px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  backgroundColor: '#fff',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                }}
+                style={clearButtonStyle}
               >
                 Clear
               </button>
@@ -266,30 +312,15 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
-          className={className}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            opacity: disabled ? 0.5 : 1,
-            ...style,
-          }}
+          className={containerClasses}
+          style={triggerStyle}
           onClick={() => !disabled && trigger === 'click' && handleOpenChange(!isOpen)}
           onMouseEnter={() => !disabled && trigger === 'hover' && handleOpenChange(true)}
           onMouseLeave={() => !disabled && trigger === 'hover' && handleOpenChange(false)}
         >
-          <div
-            style={{
-              ...getSwatchSize(),
-              borderRadius: '4px',
-              border: '1px solid #d1d5db',
-              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
-              backgroundColor: currentValue || '#fff',
-            }}
-          />
+          <div className="rottay-colorpicker__swatch" style={swatchStyle} />
           {displayText && (
-            <span style={{ fontSize: '14px' }}>{displayText}</span>
+            <span className="rottay-colorpicker__text" style={textStyle}>{displayText}</span>
           )}
         </div>
         {dropdownContent}

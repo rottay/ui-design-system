@@ -4,6 +4,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react';
 import { Progress } from '../';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Progress> = {
   title: 'Primitives/Feedback/Progress',
@@ -99,15 +100,43 @@ export const WithoutInfo: Story = {
   },
 };
 
-export const EngineComparison: Story = {
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
+/**
+ * Side-by-side comparison of Progress across all 3 engines.
+ */
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Progress rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 400 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ marginBottom: 8, textTransform: 'capitalize' }}>{engine}</h4>
-          <Progress engine={engine} percent={60} />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Progress}
+      props={{ percent: 60, type: 'line' }}
+      showDescriptions
+      direction="vertical"
+    />
+  ),
+};
+
+/**
+ * Matrix showing all status types across all engines.
+ */
+export const VariantMatrix: Story = {
+  name: '📊 Variant × Engine Matrix',
+  render: () => (
+    <VariantEngineMatrix
+      component={Progress}
+      baseProps={{ percent: 60 }}
+      variantProp="status"
+      variants={['normal', 'active', 'success', 'error']}
+    />
   ),
 };

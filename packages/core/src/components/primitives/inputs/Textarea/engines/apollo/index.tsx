@@ -1,76 +1,33 @@
+'use client';
+
 /**
  * @fileoverview Textarea Apollo Engine - Rottay Design System
- * @description Pure HTML/CSS implementation of the Textarea component.
+ * @description Pure HTML/CSS implementation of the Textarea component using CSS variables.
  * Part of the Rottay Design System's input primitives collection.
  *
- * @remarks
- * The Apollo engine provides a zero-dependency textarea implementation
- * using pure HTML and CSS classes. It includes custom character count
- * display with full accessibility.
- *
- * **Pure CSS Features:**
- * - Native textarea with custom class styling
- * - Character count display (showCount)
- * - Size variants via CSS classes
- * - Status colors via CSS classes
- * - Variant styles (outlined, filled, borderless)
- *
- * **CSS Classes Generated:**
- * - `rottay-textarea` - Base class
- * - `rottay-textarea--{size}` - Size modifier
- * - `rottay-textarea--{variant}` - Variant modifier
- * - `rottay-textarea--{status}` - Status modifier
- * - `rottay-textarea--disabled` - Disabled state
- * - `rottay-textarea--readonly` - Read-only state
- *
- * **Character Count:**
- * When `showCount` is enabled, displays:
- * - Current character count
- * - Max length if specified (e.g., "150 / 500")
- *
- * @example Using Apollo Engine
- * ```tsx
- * import { Textarea } from '@rottay/design-system';
- *
- * <Textarea
- *   engine="apollo"
- *   placeholder="Add notes..."
- *   rows={5}
- *   showCount
- *   maxLength={1000}
- *   status="default"
- * />
- * ```
- *
- * @see {@link Textarea} for the main component
- * @see {@link TitanTextarea} for Ant Design implementation
- * @see {@link HermesTextarea} for DaisyUI implementation
  * @module ApolloTextarea
  * @category Inputs
  * @package @rottay/design-system
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { TextareaProps } from '../../types';
 import { TEXTAREA_DEFAULTS } from '../../types';
 
-const SIZE_MAP = {
-  sm: 'rottay-textarea--sm',
-  md: 'rottay-textarea--md',
-  lg: 'rottay-textarea--lg',
-};
-
-const STATUS_MAP = {
-  default: 'rottay-textarea--default',
-  error: 'rottay-textarea--error',
-  warning: 'rottay-textarea--warning',
-  success: 'rottay-textarea--success',
-};
-
-const VARIANT_MAP = {
-  outlined: 'rottay-textarea--outlined',
-  filled: 'rottay-textarea--filled',
-  borderless: 'rottay-textarea--borderless',
+// Size configuration using CSS variables
+const SIZE_CONFIG: Record<string, { padding: string; fontSize: string }> = {
+  sm: {
+    padding: 'var(--ds-textarea-sm-padding)',
+    fontSize: 'var(--ds-textarea-sm-font-size)',
+  },
+  md: {
+    padding: 'var(--ds-textarea-md-padding)',
+    fontSize: 'var(--ds-textarea-md-font-size)',
+  },
+  lg: {
+    padding: 'var(--ds-textarea-lg-padding)',
+    fontSize: 'var(--ds-textarea-lg-font-size)',
+  },
 };
 
 export default function ApolloTextarea(props: TextareaProps): React.ReactElement {
@@ -90,7 +47,7 @@ export default function ApolloTextarea(props: TextareaProps): React.ReactElement
     onChange,
     onFocus,
     onBlur,
-    className,
+    className = '',
     style,
     name,
     id,
@@ -99,7 +56,8 @@ export default function ApolloTextarea(props: TextareaProps): React.ReactElement
     ...rest
   } = props;
 
-  const [charCount, setCharCount] = React.useState(value?.length || defaultValue?.length || 0);
+  const [charCount, setCharCount] = useState(value?.length || defaultValue?.length || 0);
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
@@ -109,22 +67,81 @@ export default function ApolloTextarea(props: TextareaProps): React.ReactElement
     }
   };
 
-  const classes = [
+  const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
+
+  const sizeConfig = SIZE_CONFIG[size!] || SIZE_CONFIG.md;
+
+  // Build class names
+  const containerClasses = [
     'rottay-textarea',
-    SIZE_MAP[size!],
-    VARIANT_MAP[variant!],
-    STATUS_MAP[status!],
+    'rottay-textarea--apollo',
+    `rottay-textarea--${size}`,
+    `rottay-textarea--${variant}`,
+    status !== 'default' && `rottay-textarea--${status}`,
     disabled && 'rottay-textarea--disabled',
     readOnly && 'rottay-textarea--readonly',
+    isFocused && 'rottay-textarea--focused',
     className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  ].filter(Boolean).join(' ');
+
+  const getBorderColor = () => {
+    if (status === 'error') return 'var(--ds-textarea-error-border)';
+    if (status === 'warning') return 'var(--ds-textarea-warning-border)';
+    if (status === 'success') return 'var(--ds-textarea-success-border)';
+    if (isFocused) return 'var(--ds-textarea-border-focus)';
+    return 'var(--ds-textarea-border)';
+  };
+
+  const getBackground = () => {
+    if (disabled) return 'var(--ds-textarea-bg-disabled)';
+    if (variant === 'filled') return 'var(--ds-textarea-filled-bg)';
+    return 'var(--ds-textarea-bg)';
+  };
+
+  const wrapperStyle: React.CSSProperties = {
+    display: 'inline-flex',
+    flexDirection: 'column',
+    gap: '4px',
+    fontFamily: 'var(--ds-font-family-base)',
+  };
+
+  const textareaStyle: React.CSSProperties = {
+    padding: sizeConfig.padding,
+    fontSize: sizeConfig.fontSize,
+    border: variant === 'borderless' ? 'none' : `1px solid ${getBorderColor()}`,
+    borderRadius: 'var(--ds-textarea-radius)',
+    outline: 'none',
+    transition: 'var(--ds-textarea-transition)',
+    backgroundColor: getBackground(),
+    color: 'var(--ds-textarea-color)',
+    cursor: disabled ? 'not-allowed' : 'text',
+    opacity: disabled ? 0.6 : 1,
+    boxShadow: isFocused && variant !== 'borderless' ? 'var(--ds-textarea-shadow-focus)' : 'none',
+    resize: 'vertical',
+    minHeight: '80px',
+    width: '100%',
+    ...style,
+  };
+
+  const countStyle: React.CSSProperties = {
+    fontSize: 'var(--ds-textarea-count-font-size)',
+    color: 'var(--ds-textarea-count-color)',
+    textAlign: 'right',
+    userSelect: 'none',
+  };
 
   return (
-    <div className="rottay-textarea-wrapper">
+    <div className="rottay-textarea-wrapper" style={wrapperStyle}>
       <textarea
-        className={classes}
+        className={containerClasses}
         placeholder={placeholder}
         value={value}
         defaultValue={defaultValue}
@@ -134,17 +151,18 @@ export default function ApolloTextarea(props: TextareaProps): React.ReactElement
         maxLength={maxLength}
         rows={rows}
         onChange={handleChange}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        style={style}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        style={textareaStyle}
         name={name}
         id={id}
         autoComplete={autoComplete}
         autoFocus={autoFocus}
+        aria-invalid={status === 'error'}
         {...rest}
       />
       {showCount && (
-        <div className="rottay-textarea-count">
+        <div className="rottay-textarea__count" style={countStyle}>
           {charCount}
           {maxLength && ` / ${maxLength}`}
         </div>
@@ -152,3 +170,5 @@ export default function ApolloTextarea(props: TextareaProps): React.ReactElement
     </div>
   );
 }
+
+ApolloTextarea.displayName = 'Textarea.Apollo';

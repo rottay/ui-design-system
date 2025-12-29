@@ -6,7 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Segmented } from '../';
-import { DesignSystemProvider } from '../../../../../system/providers/root';
+import { DesignSystemProvider } from '../../../../../core/providers/root';
+import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from '../../../../../../.storybook/helpers';
 
 const meta: Meta<typeof Segmented> = {
   title: 'Primitives/Navigation/Segmented',
@@ -34,14 +35,14 @@ The Segmented component is used to display multiple options and allows users to 
 - **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
 
 ## Usage
-\\`\\`\\`tsx
+\`\`\`tsx
 import { Segmented } from '@rottay/design-system';
 
 <Segmented
   options={['Daily', 'Weekly', 'Monthly']}
   onChange={(value) => console.log(value)}
 />
-\\`\\`\\`
+\`\`\`
         `,
       },
     },
@@ -164,23 +165,31 @@ export const IndividualDisabled: Story = {
   ),
 };
 
+// ============================================================================
+// Engine Comparison Stories
+// ============================================================================
+
 /**
- * Comparison of all three engines
+ * Side-by-side comparison of Segmented across all 3 engines.
  */
-export const EngineComparison: Story = {
+export const CompareEngines: Story = {
+  name: '🔄 Engine Comparison',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compare the same Segmented rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
-        <div key={engine}>
-          <h4 style={{ margin: '0 0 8px', textTransform: 'capitalize' }}>{engine} Engine</h4>
-          <Segmented
-            engine={engine}
-            options={['Option 1', 'Option 2', 'Option 3']}
-            defaultValue="Option 1"
-          />
-        </div>
-      ))}
-    </div>
+    <EngineComparisonHelper
+      component={Segmented}
+      props={{
+        options: ['Option 1', 'Option 2', 'Option 3'],
+        defaultValue: 'Option 1',
+      }}
+      showDescriptions
+    />
   ),
 };
 
