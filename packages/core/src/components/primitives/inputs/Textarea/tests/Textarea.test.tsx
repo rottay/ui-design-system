@@ -185,3 +185,12 @@ describe('Textarea engines', () => {
     expect(screen.getByTestId('textarea-wrapper')).toBeInTheDocument();
   });
 });
+
+describe('Textarea tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Textarea />);
+    expect(screen.getByTestId('textarea-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

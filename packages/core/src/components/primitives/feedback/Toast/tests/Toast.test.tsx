@@ -232,3 +232,16 @@ describe('Toast', () => {
     });
   });
 });
+
+describe('Toast tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <ToastProvider>
+        <div>Test content</div>
+      </ToastProvider>
+    );
+    expect(screen.getByText('Test content')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

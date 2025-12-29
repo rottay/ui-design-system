@@ -1,0 +1,81 @@
+/**
+ * Default Tenant CSS Fixture for Testing
+ * Simplified version of the default theme tokens
+ */
+
+:root {
+  /* Colors */
+  --ds-color-primary-50: #E6F0FA;
+  --ds-color-primary-100: #CCE0F5;
+  --ds-color-primary-200: #99C2EB;
+  --ds-color-primary-300: #66A3E0;
+  --ds-color-primary-400: #3385D6;
+  --ds-color-primary-500: #0066CC;
+  --ds-color-primary-600: #0052A3;
+  --ds-color-primary-700: #003D7A;
+  --ds-color-primary-800: #002952;
+  --ds-color-primary-900: #001429;
+
+  --ds-color-secondary-500: #6B7280;
+  --ds-color-success-500: #10B981;
+  --ds-color-warning-500: #F59E0B;
+  --ds-color-error-500: #EF4444;
+
+  --ds-color-neutral-50: #F9FAFB;
+  --ds-color-neutral-100: #F3F4F6;
+  --ds-color-neutral-200: #E5E7EB;
+  --ds-color-neutral-900: #111827;
+
+  /* Typography */
+  --ds-font-size-sm: 0.875rem;
+  --ds-font-size-md: 1rem;
+  --ds-font-size-lg: 1.125rem;
+
+  /* Spacing */
+  --ds-spacing-xs: 0.25rem;
+  --ds-spacing-sm: 0.5rem;
+  --ds-spacing-md: 1rem;
+  --ds-spacing-lg: 1.5rem;
+  --ds-spacing-xl: 2rem;
+
+  /* Radius */
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  --ds-radius-xl: 16px;
+  --ds-radius-full: 9999px;
+
+  /* Button */
+  --ds-button-primary-bg: var(--ds-color-primary-500);
+  --ds-button-primary-color: #FFFFFF;
+  --ds-button-primary-border: var(--ds-color-primary-500);
+  --ds-button-primary-bg-hover: var(--ds-color-primary-600);
+
+  --ds-button-xs-height: 24px;
+  --ds-button-sm-height: 32px;
+  --ds-button-md-height: 40px;
+  --ds-button-lg-height: 48px;
+  --ds-button-xl-height: 56px;
+
+  --ds-button-xs-padding: 0 8px;
+  --ds-button-sm-padding: 0 12px;
+  --ds-button-md-padding: 0 16px;
+  --ds-button-lg-padding: 0 24px;
+  --ds-button-xl-padding: 0 32px;
+
+  --ds-button-md-radius: var(--ds-radius-md);
+  --ds-button-lg-radius: var(--ds-radius-md);
+
+  /* Input */
+  --ds-input-height: 40px;
+  --ds-input-radius: var(--ds-radius-md);
+  --ds-input-border: var(--ds-color-neutral-200);
+  --ds-input-border-focus: var(--ds-color-primary-500);
+  --ds-input-shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.1);
+
+  /* Card */
+  --ds-card-bg: #FFFFFF;
+  --ds-card-radius: var(--ds-radius-lg);
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ds-card-padding: var(--ds-spacing-lg);
+}

@@ -369,3 +369,27 @@ describe('Tooltip.Content', () => {
     expect(screen.getByTestId('content')).toHaveClass('custom-content');
   });
 });
+
+describe('Tooltip engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Tooltip engine={engine} content="Test">
+        <button>Trigger</button>
+      </Tooltip>
+    );
+    expect(screen.getByTestId('tooltip-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Tooltip tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Tooltip content="Test">
+        <button>Trigger</button>
+      </Tooltip>
+    );
+    expect(screen.getByTestId('tooltip-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

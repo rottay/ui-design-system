@@ -173,3 +173,19 @@ describe('Flex', () => {
     });
   });
 });
+
+describe('Flex engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Flex engine={engine}>Test</Flex>);
+    expect(screen.getByTestId('flex')).toBeInTheDocument();
+  });
+});
+
+describe('Flex tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Flex>Test</Flex>);
+    expect(screen.getByTestId('flex')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

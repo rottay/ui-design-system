@@ -238,3 +238,19 @@ describe('Stepper', () => {
     expect(stepper).toHaveAttribute('aria-label', 'Progress steps');
   });
 });
+
+describe('Stepper engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Stepper engine={engine} items={[{ title: 'Test' }]} />);
+    expect(screen.getByTestId('stepper')).toBeInTheDocument();
+  });
+});
+
+describe('Stepper tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Stepper items={[{ title: 'Test' }]} />);
+    expect(screen.getByTestId('stepper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

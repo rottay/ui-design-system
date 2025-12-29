@@ -310,3 +310,19 @@ describe('Cascader', () => {
     expect(screen.getByTestId('cascader')).toHaveStyle({ width: '300px' });
   });
 });
+
+describe('Cascader engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Cascader engine={engine} options={defaultOptions} />);
+    expect(screen.getByTestId('cascader')).toBeInTheDocument();
+  });
+});
+
+describe('Cascader tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Cascader options={defaultOptions} />);
+    expect(screen.getByTestId('cascader')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

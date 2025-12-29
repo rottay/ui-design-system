@@ -175,4 +175,13 @@ describe('Progress', () => {
       expect(container.querySelector('[class*="progress"]')).toBeInTheDocument();
     });
   });
+
+  describe('Progress tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      render(<Progress percent={50} />);
+      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

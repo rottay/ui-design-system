@@ -351,6 +351,29 @@ describe('Type exports', () => {
   it('exports COLOR_MAP', async () => {
     const module = await import('../types');
     expect(module.COLOR_MAP).toBeDefined();
-    expect(module.COLOR_MAP.primary).toContain('--color-primary');
+    expect(module.COLOR_MAP.primary).toBe('var(--ds-color-primary-500)');
+  });
+});
+
+describe('Typography tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders Heading with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Heading>Test</Heading>);
+    expect(screen.getByTestId('heading')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+
+  it.each(['rottay', 'bithire', 'default'] as const)('renders Text with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Text>Test</Text>);
+    expect(screen.getByTestId('text')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+
+  it.each(['rottay', 'bithire', 'default'] as const)('renders Paragraph with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Paragraph>Test</Paragraph>);
+    expect(screen.getByTestId('paragraph')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
   });
 });

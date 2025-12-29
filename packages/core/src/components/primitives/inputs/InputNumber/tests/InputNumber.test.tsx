@@ -230,3 +230,12 @@ describe('InputNumber engines', () => {
     expect(screen.getByTestId('input-number')).toBeInTheDocument();
   });
 });
+
+describe('InputNumber tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<InputNumber />);
+    expect(screen.getByTestId('input-number')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

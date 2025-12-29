@@ -193,3 +193,27 @@ describe('Timeline edge cases', () => {
     expect(screen.getByText('Description paragraph')).toBeInTheDocument();
   });
 });
+
+describe('Timeline engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Timeline engine={engine}>
+        <Timeline.Item>Test</Timeline.Item>
+      </Timeline>
+    );
+    expect(screen.getByTestId('timeline')).toBeInTheDocument();
+  });
+});
+
+describe('Timeline tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Timeline>
+        <Timeline.Item>Test</Timeline.Item>
+      </Timeline>
+    );
+    expect(screen.getByTestId('timeline')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

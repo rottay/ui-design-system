@@ -316,3 +316,19 @@ describe('Card Accessibility', () => {
     expect(heading).toHaveTextContent('Semantic Title');
   });
 });
+
+describe('Card engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Card engine={engine}>Test</Card>);
+    expect(screen.getByTestId('card')).toBeInTheDocument();
+  });
+});
+
+describe('Card tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Card>Test</Card>);
+    expect(screen.getByTestId('card')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

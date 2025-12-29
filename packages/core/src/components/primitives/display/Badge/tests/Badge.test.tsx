@@ -286,3 +286,19 @@ describe('Badge', () => {
     });
   });
 });
+
+describe('Badge engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Badge engine={engine} count={5} />);
+    expect(screen.getByTestId('badge')).toBeInTheDocument();
+  });
+});
+
+describe('Badge tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Badge count={5} />);
+    expect(screen.getByTestId('badge')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

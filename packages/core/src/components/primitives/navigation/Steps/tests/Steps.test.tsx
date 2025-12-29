@@ -226,3 +226,19 @@ describe('Steps', () => {
     expect(steps).toHaveAttribute('aria-label', 'Steps');
   });
 });
+
+describe('Steps engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Steps engine={engine} items={[{ title: 'Test' }]} />);
+    expect(screen.getByTestId('steps')).toBeInTheDocument();
+  });
+});
+
+describe('Steps tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Steps items={[{ title: 'Test' }]} />);
+    expect(screen.getByTestId('steps')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -209,3 +209,19 @@ describe('Pagination', () => {
     expect(screen.getByTestId('pagination')).toHaveStyle({ marginTop: '20px' });
   });
 });
+
+describe('Pagination engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Pagination engine={engine} current={1} total={100} />);
+    expect(screen.getByTestId('pagination')).toBeInTheDocument();
+  });
+});
+
+describe('Pagination tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Pagination current={1} total={100} />);
+    expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

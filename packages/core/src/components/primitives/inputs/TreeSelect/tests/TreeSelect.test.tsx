@@ -332,3 +332,19 @@ describe('TreeSelect', () => {
     expect(screen.getByTestId('tree-select')).toHaveStyle({ width: '300px' });
   });
 });
+
+describe('TreeSelect engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<TreeSelect engine={engine} treeData={defaultTreeData} />);
+    expect(screen.getByTestId('tree-select')).toBeInTheDocument();
+  });
+});
+
+describe('TreeSelect tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<TreeSelect treeData={defaultTreeData} />);
+    expect(screen.getByTestId('tree-select')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

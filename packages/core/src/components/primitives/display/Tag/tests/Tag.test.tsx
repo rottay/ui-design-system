@@ -245,3 +245,19 @@ describe('Tag.Group', () => {
     expect(screen.getByRole('group')).toBeInTheDocument();
   });
 });
+
+describe('Tag engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Tag engine={engine}>Test</Tag>);
+    expect(screen.getByTestId('tag')).toBeInTheDocument();
+  });
+});
+
+describe('Tag tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Tag>Test</Tag>);
+    expect(screen.getByTestId('tag')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

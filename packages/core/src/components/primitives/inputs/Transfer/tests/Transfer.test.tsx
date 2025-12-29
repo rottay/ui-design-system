@@ -335,3 +335,19 @@ describe('Transfer', () => {
     expect(screen.getByTestId('transfer')).toHaveStyle({ width: '600px' });
   });
 });
+
+describe('Transfer engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Transfer engine={engine} dataSource={defaultDataSource} />);
+    expect(screen.getByTestId('transfer')).toBeInTheDocument();
+  });
+});
+
+describe('Transfer tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Transfer dataSource={defaultDataSource} />);
+    expect(screen.getByTestId('transfer')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -236,3 +236,27 @@ describe('Watermark', () => {
     });
   });
 });
+
+describe('Watermark engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Watermark engine={engine} content="Test">
+        <div>Test</div>
+      </Watermark>
+    );
+    expect(screen.getByTestId('watermark-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Watermark tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Watermark content="Test">
+        <div>Test</div>
+      </Watermark>
+    );
+    expect(screen.getByTestId('watermark-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

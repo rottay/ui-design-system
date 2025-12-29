@@ -379,3 +379,12 @@ describe('Table Accessibility', () => {
     expect(screen.getByLabelText('Select row 1')).toBeInTheDocument();
   });
 });
+
+describe('Table tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Table dataSource={mockData} columns={mockColumns} />);
+    expect(screen.getByTestId('table')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

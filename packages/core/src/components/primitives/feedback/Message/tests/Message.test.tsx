@@ -224,3 +224,16 @@ describe('Message', () => {
     });
   });
 });
+
+describe('Message tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <MessageProvider>
+        <div>Test content</div>
+      </MessageProvider>
+    );
+    expect(screen.getByText('Test content')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -161,3 +161,19 @@ describe('Space', () => {
     });
   });
 });
+
+describe('Space engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Space engine={engine}>Test</Space>);
+    expect(screen.getByTestId('space')).toBeInTheDocument();
+  });
+});
+
+describe('Space tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Space>Test</Space>);
+    expect(screen.getByTestId('space')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

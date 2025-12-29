@@ -155,3 +155,12 @@ describe('Toggle engines', () => {
     expect(screen.getByTestId('toggle')).toBeInTheDocument();
   });
 });
+
+describe('Toggle tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Toggle />);
+    expect(screen.getByTestId('toggle')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

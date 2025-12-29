@@ -1,0 +1,39 @@
+/**
+ * Rottay Tenant CSS Fixture for Testing
+ * Simplified version of Rottay-specific overrides
+ */
+
+[data-tenant="rottay"] {
+  /* Brand Colors - Rottay Blue */
+  --ds-color-primary-500: #0066CC;
+  --ds-color-primary-600: #0055AA;
+  --ds-color-primary-700: #0047AB;
+
+  /* Accent Colors */
+  --ds-color-accent-teal: #319795;
+  --ds-color-accent-orange: #FF8040;
+
+  /* Brand Gradient */
+  --ds-gradient-brand-primary: linear-gradient(
+    135deg,
+    var(--ds-color-primary-500) 0%,
+    var(--ds-color-primary-600) 100%
+  );
+
+  /* Shadows with brand tint */
+  --ds-shadow-primary: 0 4px 14px 0 rgba(0, 102, 204, 0.25);
+  --ds-shadow-focus-ring: 0 0 0 3px rgba(0, 102, 204, 0.2);
+
+  /* Button - More rounded */
+  --ds-button-md-radius: var(--ds-radius-lg);
+  --ds-button-lg-radius: var(--ds-radius-xl);
+  --ds-button-primary-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+  --ds-button-primary-shadow-hover: 0 4px 12px rgba(0, 102, 204, 0.3);
+
+  /* Input - Rottay focus */
+  --ds-input-shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  --ds-input-radius: var(--ds-radius-lg);
+
+  /* Card - More rounded */
+  --ds-card-radius: var(--ds-radius-xl);
+}

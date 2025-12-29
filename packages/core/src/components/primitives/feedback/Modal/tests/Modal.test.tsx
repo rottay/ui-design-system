@@ -214,4 +214,13 @@ describe('Modal', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
   });
+
+  describe('Modal tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      render(<Modal open>Content</Modal>);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

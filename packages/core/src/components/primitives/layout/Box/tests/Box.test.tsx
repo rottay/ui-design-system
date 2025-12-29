@@ -421,3 +421,19 @@ describe('Box Types', () => {
     expect(SHADOW_MAP.md).toContain('rgba');
   });
 });
+
+describe('Box engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Box engine={engine}>Test</Box>);
+    expect(screen.getByTestId('box')).toBeInTheDocument();
+  });
+});
+
+describe('Box tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Box>Test</Box>);
+    expect(screen.getByTestId('box')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

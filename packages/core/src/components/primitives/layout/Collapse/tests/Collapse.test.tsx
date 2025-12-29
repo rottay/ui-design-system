@@ -337,3 +337,27 @@ describe('Collapse composition', () => {
     expect(panels).toHaveLength(3);
   });
 });
+
+describe('Collapse engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Collapse engine={engine}>
+        <Collapse.Panel header="Panel" panelKey="1">Test</Collapse.Panel>
+      </Collapse>
+    );
+    expect(screen.getByTestId('collapse')).toBeInTheDocument();
+  });
+});
+
+describe('Collapse tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Collapse>
+        <Collapse.Panel header="Panel" panelKey="1">Test</Collapse.Panel>
+      </Collapse>
+    );
+    expect(screen.getByTestId('collapse')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -162,3 +162,19 @@ describe('Breadcrumb', () => {
     expect(screen.getByTestId('breadcrumb')).toHaveAttribute('aria-label', 'Breadcrumb');
   });
 });
+
+describe('Breadcrumb engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Breadcrumb engine={engine} items={[{ key: 'home', label: 'Home' }]} />);
+    expect(screen.getByTestId('breadcrumb')).toBeInTheDocument();
+  });
+});
+
+describe('Breadcrumb tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Breadcrumb items={[{ key: 'home', label: 'Home' }]} />);
+    expect(screen.getByTestId('breadcrumb')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

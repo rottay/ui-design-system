@@ -414,3 +414,19 @@ describe('Divider Edge Cases', () => {
     expect(screen.getByTestId('divider')).toHaveAttribute('data-has-children', 'true');
   });
 });
+
+describe('Divider engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Divider engine={engine} data-testid="divider" />);
+    expect(screen.getByTestId('divider')).toBeInTheDocument();
+  });
+});
+
+describe('Divider tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Divider data-testid="divider" />);
+    expect(screen.getByTestId('divider')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

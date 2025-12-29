@@ -166,4 +166,13 @@ describe('Alert', () => {
       }
     );
   });
+
+  describe('Alert tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      render(<Alert message="Test" />);
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

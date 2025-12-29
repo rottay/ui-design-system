@@ -409,4 +409,13 @@ describe('Result', () => {
       expect(screen.getByText('Information')).toBeInTheDocument();
     });
   });
+
+  describe('Result tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      render(<Result title="Test" />);
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

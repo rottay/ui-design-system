@@ -158,3 +158,54 @@ describe('Button engines', () => {
     expect(screen.getByTestId('button')).toBeInTheDocument();
   });
 });
+
+describe('Button tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Button>Test</Button>);
+    expect(screen.getByTestId('button')).toBeInTheDocument();
+  });
+});
+
+describe('Button engine x tenant matrix', () => {
+  const engines = ['titan', 'hermes', 'apollo'] as const;
+  const tenants = ['rottay', 'bithire', 'default'] as const;
+
+  engines.forEach((engine) => {
+    tenants.forEach((tenant) => {
+      it(`renders with ${engine} engine and ${tenant} tenant`, () => {
+        document.documentElement.setAttribute('data-tenant', tenant);
+        render(<Button engine={engine}>Matrix Test</Button>);
+        expect(screen.getByTestId('button')).toBeInTheDocument();
+        expect(screen.getByText('Matrix Test')).toBeInTheDocument();
+      });
+    });
+  });
+});
+
+describe('Button engine-specific behavior', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('%s engine handles click events', (engine) => {
+    const handleClick = vi.fn();
+    render(<Button engine={engine} onClick={handleClick}>Click</Button>);
+    fireEvent.click(screen.getByTestId('button'));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['titan', 'hermes', 'apollo'] as const)('%s engine respects disabled state', (engine) => {
+    const handleClick = vi.fn();
+    render(<Button engine={engine} onClick={handleClick} disabled>Disabled</Button>);
+    fireEvent.click(screen.getByTestId('button'));
+    expect(handleClick).not.toHaveBeenCalled();
+    expect(screen.getByTestId('button')).toBeDisabled();
+  });
+
+  it.each(['titan', 'hermes', 'apollo'] as const)('%s engine applies size prop', (engine) => {
+    render(<Button engine={engine} size="lg">Large</Button>);
+    expect(screen.getByTestId('button')).toHaveAttribute('data-size', 'lg');
+  });
+
+  it.each(['titan', 'hermes', 'apollo'] as const)('%s engine applies variant prop', (engine) => {
+    render(<Button engine={engine} variant="primary">Primary</Button>);
+    expect(screen.getByTestId('button')).toHaveAttribute('data-variant', 'primary');
+  });
+});

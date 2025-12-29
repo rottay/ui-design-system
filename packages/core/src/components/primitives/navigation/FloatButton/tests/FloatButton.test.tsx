@@ -158,3 +158,19 @@ describe('FloatButton.BackTop', () => {
     expect(handleClick).toHaveBeenCalled();
   });
 });
+
+describe('FloatButton engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<FloatButton engine={engine} />);
+    expect(screen.getByTestId('float-button')).toBeInTheDocument();
+  });
+});
+
+describe('FloatButton tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<FloatButton />);
+    expect(screen.getByTestId('float-button')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -146,3 +146,19 @@ describe('Input.TextArea', () => {
     expect(screen.getByPlaceholderText('Description')).toBeInTheDocument();
   });
 });
+
+describe('Input engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Input engine={engine} />);
+    expect(screen.getByTestId('input-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Input tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Input />);
+    expect(screen.getByTestId('input-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

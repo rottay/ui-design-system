@@ -221,3 +221,19 @@ describe('Empty Component Integration', () => {
     expect(screen.getByRole('button')).toHaveTextContent('Take Action');
   });
 });
+
+describe('Empty engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Empty engine={engine} />);
+    expect(screen.getByTestId('empty')).toBeInTheDocument();
+  });
+});
+
+describe('Empty tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Empty />);
+    expect(screen.getByTestId('empty')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

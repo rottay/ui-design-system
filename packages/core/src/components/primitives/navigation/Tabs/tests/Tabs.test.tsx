@@ -176,3 +176,19 @@ describe('Tabs', () => {
     expect(screen.getByTestId('tabs')).toHaveStyle({ marginTop: '20px' });
   });
 });
+
+describe('Tabs engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Tabs engine={engine} items={[{ key: '1', label: 'Test', children: 'Content' }]} />);
+    expect(screen.getByTestId('tabs')).toBeInTheDocument();
+  });
+});
+
+describe('Tabs tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Tabs items={[{ key: '1', label: 'Test', children: 'Content' }]} />);
+    expect(screen.getByTestId('tabs')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

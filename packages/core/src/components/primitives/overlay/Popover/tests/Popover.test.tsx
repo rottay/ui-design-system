@@ -301,3 +301,27 @@ describe('Popover', () => {
     });
   });
 });
+
+describe('Popover engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Popover engine={engine} content="Test content">
+        <button>Test</button>
+      </Popover>
+    );
+    expect(screen.getByTestId('popover-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Popover tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Popover content="Test content">
+        <button>Test</button>
+      </Popover>
+    );
+    expect(screen.getByTestId('popover-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

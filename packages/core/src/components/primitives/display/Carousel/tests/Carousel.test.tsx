@@ -392,3 +392,27 @@ describe('Carousel Configuration', () => {
     expect(carousel).toHaveAttribute('data-infinite', 'true');
   });
 });
+
+describe('Carousel engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Carousel engine={engine}>
+        <div>Slide 1</div>
+      </Carousel>
+    );
+    expect(screen.getByTestId('carousel')).toBeInTheDocument();
+  });
+});
+
+describe('Carousel tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Carousel>
+        <div>Slide 1</div>
+      </Carousel>
+    );
+    expect(screen.getByTestId('carousel')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

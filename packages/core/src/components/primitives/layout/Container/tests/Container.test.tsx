@@ -222,3 +222,19 @@ describe('Container Types', () => {
     expect(CONTAINER_PADDINGS.md).toBe('16px');
   });
 });
+
+describe('Container engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Container engine={engine}>Test</Container>);
+    expect(screen.getByTestId('container')).toBeInTheDocument();
+  });
+});
+
+describe('Container tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Container>Test</Container>);
+    expect(screen.getByTestId('container')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

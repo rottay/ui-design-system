@@ -264,3 +264,19 @@ describe('ColorPicker', () => {
     expect(screen.getByTestId('colorpicker')).toHaveStyle({ width: '200px' });
   });
 });
+
+describe('ColorPicker engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<ColorPicker engine={engine} />);
+    expect(screen.getByTestId('colorpicker')).toBeInTheDocument();
+  });
+});
+
+describe('ColorPicker tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<ColorPicker />);
+    expect(screen.getByTestId('colorpicker')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

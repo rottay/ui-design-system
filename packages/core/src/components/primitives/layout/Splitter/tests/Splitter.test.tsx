@@ -233,3 +233,27 @@ describe('Splitter composition', () => {
     expect(splitters).toHaveLength(2);
   });
 });
+
+describe('Splitter engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Splitter engine={engine}>
+        <Splitter.Panel>Test</Splitter.Panel>
+      </Splitter>
+    );
+    expect(screen.getByTestId('splitter')).toBeInTheDocument();
+  });
+});
+
+describe('Splitter tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Splitter>
+        <Splitter.Panel>Test</Splitter.Panel>
+      </Splitter>
+    );
+    expect(screen.getByTestId('splitter')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

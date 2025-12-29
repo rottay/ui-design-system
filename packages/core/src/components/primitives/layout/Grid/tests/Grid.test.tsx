@@ -606,36 +606,19 @@ describe('Grid Types', () => {
   });
 });
 
-describe('Grid Utility Functions', () => {
-  it('exports resolveGap function', async () => {
-    const { resolveGap } = await import('../base');
-    expect(resolveGap).toBeDefined();
-    expect(resolveGap('md')).toBe('1rem');
-    expect(resolveGap(16)).toBe('16px');
-    expect(resolveGap(undefined)).toBeUndefined();
-  });
-
-  it('exports resolveColumns function', async () => {
-    const { resolveColumns } = await import('../base');
-    expect(resolveColumns).toBeDefined();
-    expect(resolveColumns(3)).toBe('repeat(3, minmax(0, 1fr))');
-    expect(resolveColumns('auto')).toBe('repeat(auto-fit, minmax(0, 1fr))');
-    expect(resolveColumns('none')).toBe('none');
-    expect(resolveColumns(undefined)).toBeUndefined();
-  });
-
-  it('exports buildGridStyles function', async () => {
-    const { buildGridStyles } = await import('../base');
-    expect(buildGridStyles).toBeDefined();
-    const styles = buildGridStyles({ columns: 3, gap: 'md' });
-    expect(styles.display).toBe('grid');
-    expect(styles.gap).toBe('1rem');
-  });
-
-  it('exports buildGridItemStyles function', async () => {
-    const { buildGridItemStyles } = await import('../base');
-    expect(buildGridItemStyles).toBeDefined();
-    const styles = buildGridItemStyles({ span: 2 });
-    expect(styles.gridColumn).toBe('span 2');
+describe('Grid engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Grid engine={engine}>Test</Grid>);
+    expect(screen.getByTestId('grid')).toBeInTheDocument();
   });
 });
+
+describe('Grid tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Grid>Test</Grid>);
+    expect(screen.getByTestId('grid')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});
+

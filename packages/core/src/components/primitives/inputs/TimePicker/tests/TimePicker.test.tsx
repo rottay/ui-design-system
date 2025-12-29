@@ -221,3 +221,12 @@ describe('TimePicker.RangePicker', () => {
     }
   );
 });
+
+describe('TimePicker tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<TimePicker />);
+    expect(screen.getByTestId('time-picker')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

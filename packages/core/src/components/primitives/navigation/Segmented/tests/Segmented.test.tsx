@@ -109,3 +109,19 @@ describe('Segmented', () => {
     expect(screen.getByText('Object Option')).toBeInTheDocument();
   });
 });
+
+describe('Segmented engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Segmented engine={engine} options={['Test']} />);
+    expect(screen.getByTestId('segmented')).toBeInTheDocument();
+  });
+});
+
+describe('Segmented tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Segmented options={['Test']} />);
+    expect(screen.getByTestId('segmented')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

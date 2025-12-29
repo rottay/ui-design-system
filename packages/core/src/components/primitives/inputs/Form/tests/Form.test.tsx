@@ -252,3 +252,12 @@ describe('Form engines', () => {
     expect(screen.getByTestId('form')).toBeInTheDocument();
   });
 });
+
+describe('Form tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Form>Test</Form>);
+    expect(screen.getByTestId('form')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -240,3 +240,12 @@ describe('Slider engines', () => {
     expect(screen.getByTestId('slider-marks')).toBeInTheDocument();
   });
 });
+
+describe('Slider tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Slider />);
+    expect(screen.getByTestId('slider')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

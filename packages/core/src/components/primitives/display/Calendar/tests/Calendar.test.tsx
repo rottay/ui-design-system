@@ -168,3 +168,12 @@ describe('Calendar with date range', () => {
     expect(screen.getByTestId('calendar')).toBeInTheDocument();
   });
 });
+
+describe('Calendar tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Calendar />);
+    expect(screen.getByTestId('calendar')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

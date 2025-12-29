@@ -295,22 +295,50 @@ describe('Modal Types', () => {
   it('exports SIZE_MAP constant', async () => {
     const { SIZE_MAP } = await import('../types');
     expect(SIZE_MAP).toBeDefined();
-    expect(SIZE_MAP.xs).toBe('var(--modal-xs-width)');
-    expect(SIZE_MAP.md).toBe('var(--modal-md-width)');
-    expect(SIZE_MAP.full).toBe('var(--modal-full-width)');
+    expect(SIZE_MAP.xs).toBe('var(--ds-modal-xs-width)');
+    expect(SIZE_MAP.md).toBe('var(--ds-modal-md-width)');
+    expect(SIZE_MAP.full).toBe('var(--ds-modal-full-width)');
   });
 
   it('exports PADDING_MAP constant', async () => {
     const { PADDING_MAP } = await import('../types');
     expect(PADDING_MAP).toBeDefined();
-    expect(PADDING_MAP.none).toBe('var(--modal-padding-none)');
-    expect(PADDING_MAP.lg).toBe('var(--modal-padding-lg)');
+    expect(PADDING_MAP.none).toBe('var(--ds-modal-padding-none)');
+    expect(PADDING_MAP.lg).toBe('var(--ds-modal-padding-lg)');
   });
 
   it('exports RADIUS_MAP constant', async () => {
     const { RADIUS_MAP } = await import('../types');
     expect(RADIUS_MAP).toBeDefined();
-    expect(RADIUS_MAP.none).toBe('var(--modal-radius-none)');
-    expect(RADIUS_MAP.lg).toBe('var(--modal-radius-lg)');
+    expect(RADIUS_MAP.none).toBe('var(--ds-modal-radius-none)');
+    expect(RADIUS_MAP.lg).toBe('var(--ds-modal-radius-lg)');
+  });
+});
+
+describe('Modal engines', () => {
+  const mockOnClose = vi.fn();
+
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Modal engine={engine} open onClose={mockOnClose}>
+        Test
+      </Modal>
+    );
+    expect(screen.getByTestId('modal')).toBeInTheDocument();
+  });
+});
+
+describe('Modal tenants', () => {
+  const mockOnClose = vi.fn();
+
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Modal open onClose={mockOnClose}>
+        Test
+      </Modal>
+    );
+    expect(screen.getByTestId('modal')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
   });
 });

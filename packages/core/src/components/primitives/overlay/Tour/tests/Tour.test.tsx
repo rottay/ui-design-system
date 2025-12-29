@@ -296,3 +296,27 @@ describe('Tour', () => {
     });
   });
 });
+
+describe('Tour engines', () => {
+  const defaultSteps = [
+    { title: 'Step 1', description: 'First step description' },
+  ];
+
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Tour engine={engine} steps={defaultSteps} open={true} />);
+    expect(screen.getByTestId('tour-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Tour tenants', () => {
+  const defaultSteps = [
+    { title: 'Step 1', description: 'First step description' },
+  ];
+
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Tour steps={defaultSteps} open={true} />);
+    expect(screen.getByTestId('tour-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

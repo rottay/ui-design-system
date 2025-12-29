@@ -215,3 +215,12 @@ describe('Select engines', () => {
     expect(screen.getByTestId('select')).toBeInTheDocument();
   });
 });
+
+describe('Select tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Select options={mockOptions} />);
+    expect(screen.getByTestId('select')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

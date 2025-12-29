@@ -141,3 +141,12 @@ describe('Switch engines', () => {
     expect(screen.getByTestId('switch')).toBeInTheDocument();
   });
 });
+
+describe('Switch tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Switch />);
+    expect(screen.getByTestId('switch')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

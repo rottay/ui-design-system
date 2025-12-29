@@ -161,4 +161,13 @@ describe('Spinner', () => {
       expect(screen.getByText('Loading content')).toBeInTheDocument();
     });
   });
+
+  describe('Spinner tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      const { container } = render(<Spinner />);
+      expect(container.querySelector('[class*="spinner"]')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

@@ -121,3 +121,19 @@ describe('Anchor.Link', () => {
     expect(screen.getByRole('link')).toHaveAttribute('target', '_blank');
   });
 });
+
+describe('Anchor engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Anchor engine={engine}><Anchor.Link href="#test" title="Test" /></Anchor>);
+    expect(screen.getByTestId('anchor')).toBeInTheDocument();
+  });
+});
+
+describe('Anchor tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Anchor><Anchor.Link href="#test" title="Test" /></Anchor>);
+    expect(screen.getByTestId('anchor')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -257,3 +257,19 @@ describe('AutoComplete', () => {
     expect(screen.getByTestId('autocomplete')).toHaveStyle({ width: '200px' });
   });
 });
+
+describe('AutoComplete engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<AutoComplete engine={engine} options={defaultOptions} />);
+    expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+  });
+});
+
+describe('AutoComplete tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<AutoComplete options={defaultOptions} />);
+    expect(screen.getByTestId('autocomplete')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

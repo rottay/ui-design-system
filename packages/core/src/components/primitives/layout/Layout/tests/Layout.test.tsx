@@ -214,3 +214,19 @@ describe('Layout composition', () => {
     expect(screen.getByText('Footer')).toBeInTheDocument();
   });
 });
+
+describe('Layout engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Layout engine={engine}>Test</Layout>);
+    expect(screen.getByTestId('layout')).toBeInTheDocument();
+  });
+});
+
+describe('Layout tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Layout>Test</Layout>);
+    expect(screen.getByTestId('layout')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

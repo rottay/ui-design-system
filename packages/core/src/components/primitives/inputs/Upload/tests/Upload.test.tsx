@@ -172,3 +172,12 @@ describe('Upload.Dragger', () => {
     expect(screen.getByText(`Drag files to ${engine}`)).toBeInTheDocument();
   });
 });
+
+describe('Upload tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Upload>Upload</Upload>);
+    expect(screen.getByTestId('upload')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

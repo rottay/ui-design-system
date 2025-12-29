@@ -180,3 +180,12 @@ describe('Checkbox engines', () => {
     expect(screen.getByTestId('checkbox')).toBeInTheDocument();
   });
 });
+
+describe('Checkbox tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Checkbox>Test</Checkbox>);
+    expect(screen.getByTestId('checkbox')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

@@ -1,0 +1,48 @@
+/**
+ * BitHire Tenant CSS Fixture for Testing
+ * Simplified version of BitHire-specific overrides
+ */
+
+[data-tenant="bithire"] {
+  /* Brand Colors - BitHire Indigo/Purple */
+  --ds-color-primary-50: #EEF2FF;
+  --ds-color-primary-100: #E0E7FF;
+  --ds-color-primary-200: #C7D2FE;
+  --ds-color-primary-300: #A5B4FC;
+  --ds-color-primary-400: #818CF8;
+  --ds-color-primary-500: #6366F1;
+  --ds-color-primary-600: #4F46E5;
+  --ds-color-primary-700: #4338CA;
+  --ds-color-primary-800: #3730A3;
+  --ds-color-primary-900: #312E81;
+
+  /* Accent - Purple */
+  --ds-color-accent-500: #8B5CF6;
+  --ds-color-accent-600: #7C3AED;
+
+  /* Brand Gradient */
+  --ds-gradient-brand-primary: linear-gradient(
+    135deg,
+    var(--ds-color-primary-500) 0%,
+    var(--ds-color-accent-500) 100%
+  );
+
+  /* Shadows with brand tint */
+  --ds-shadow-primary: 0 4px 14px 0 rgba(99, 102, 241, 0.25);
+  --ds-shadow-focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.2);
+
+  /* Button - Brand colors */
+  --ds-button-primary-bg: var(--ds-color-primary-500);
+  --ds-button-primary-bg-hover: var(--ds-color-primary-600);
+  --ds-button-primary-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+  --ds-button-primary-shadow-hover: 0 4px 12px rgba(99, 102, 241, 0.3);
+  --ds-button-md-radius: var(--ds-radius-md);
+  --ds-button-lg-radius: var(--ds-radius-lg);
+
+  /* Input - BitHire focus */
+  --ds-input-border-focus: var(--ds-color-primary-500);
+  --ds-input-shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.1);
+
+  /* Card */
+  --ds-card-radius: var(--ds-radius-lg);
+}

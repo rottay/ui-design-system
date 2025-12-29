@@ -273,3 +273,27 @@ describe('Descriptions accessibility', () => {
     expect(screen.getByTestId('descriptions-content')).toBeInTheDocument();
   });
 });
+
+describe('Descriptions engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Descriptions engine={engine}>
+        <Descriptions.Item label="Name">John</Descriptions.Item>
+      </Descriptions>
+    );
+    expect(screen.getByTestId('descriptions')).toBeInTheDocument();
+  });
+});
+
+describe('Descriptions tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Descriptions>
+        <Descriptions.Item label="Name">John</Descriptions.Item>
+      </Descriptions>
+    );
+    expect(screen.getByTestId('descriptions')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

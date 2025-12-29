@@ -101,3 +101,19 @@ describe('Avatar.Badge', () => {
     expect(screen.getByText('JD')).toBeInTheDocument();
   });
 });
+
+describe('Avatar engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Avatar engine={engine}>Test</Avatar>);
+    expect(screen.getByTestId('avatar')).toBeInTheDocument();
+  });
+});
+
+describe('Avatar tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Avatar>Test</Avatar>);
+    expect(screen.getByTestId('avatar')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

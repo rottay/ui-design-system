@@ -174,3 +174,12 @@ describe('Radio engines', () => {
     expect(screen.getByTestId('radio')).toBeInTheDocument();
   });
 });
+
+describe('Radio tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Radio label="Test" />);
+    expect(screen.getByTestId('radio')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

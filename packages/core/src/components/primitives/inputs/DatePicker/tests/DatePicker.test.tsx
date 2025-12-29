@@ -216,3 +216,12 @@ describe('DatePicker engines', () => {
     expect(screen.getByTestId('range-picker')).toBeInTheDocument();
   });
 });
+
+describe('DatePicker tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<DatePicker />);
+    expect(screen.getByTestId('date-picker')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

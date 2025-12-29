@@ -275,3 +275,19 @@ describe('Tree accessibility', () => {
     expect(childNode).toHaveAttribute('data-level', '1');
   });
 });
+
+describe('Tree engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Tree engine={engine} treeData={sampleTreeData} />);
+    expect(screen.getByTestId('tree')).toBeInTheDocument();
+  });
+});
+
+describe('Tree tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Tree treeData={sampleTreeData} />);
+    expect(screen.getByTestId('tree')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

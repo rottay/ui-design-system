@@ -344,3 +344,41 @@ describe('Dropdown', () => {
     });
   });
 });
+
+describe('Dropdown engines', () => {
+  const defaultMenu = {
+    items: [
+      { key: '1', label: 'Item 1' },
+      { key: '2', label: 'Item 2' },
+    ],
+  };
+
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Dropdown engine={engine} menu={defaultMenu}>
+        <button>Test</button>
+      </Dropdown>
+    );
+    expect(screen.getByTestId('dropdown-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Dropdown tenants', () => {
+  const defaultMenu = {
+    items: [
+      { key: '1', label: 'Item 1' },
+      { key: '2', label: 'Item 2' },
+    ],
+  };
+
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Dropdown menu={defaultMenu}>
+        <button>Test</button>
+      </Dropdown>
+    );
+    expect(screen.getByTestId('dropdown-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

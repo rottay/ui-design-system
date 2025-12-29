@@ -255,3 +255,19 @@ describe('Statistic.Countdown', () => {
     expect(screen.getByTestId('statistic-suffix')).toHaveTextContent('left');
   });
 });
+
+describe('Statistic engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Statistic engine={engine} value={1000} />);
+    expect(screen.getByTestId('statistic')).toBeInTheDocument();
+  });
+});
+
+describe('Statistic tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Statistic value={1000} />);
+    expect(screen.getByTestId('statistic')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

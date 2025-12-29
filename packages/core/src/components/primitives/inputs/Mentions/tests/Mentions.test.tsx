@@ -286,3 +286,19 @@ describe('Mentions', () => {
     expect(screen.getByTestId('mentions')).toHaveStyle({ width: '400px' });
   });
 });
+
+describe('Mentions engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Mentions engine={engine} />);
+    expect(screen.getByTestId('mentions')).toBeInTheDocument();
+  });
+});
+
+describe('Mentions tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Mentions />);
+    expect(screen.getByTestId('mentions')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

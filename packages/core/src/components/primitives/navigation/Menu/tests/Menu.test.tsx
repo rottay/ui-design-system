@@ -225,3 +225,19 @@ describe('Menu', () => {
     expect(screen.getByTestId('menu')).toHaveAttribute('role', 'menu');
   });
 });
+
+describe('Menu engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Menu engine={engine} items={[{ key: '1', label: 'Test' }]} />);
+    expect(screen.getByTestId('menu')).toBeInTheDocument();
+  });
+});
+
+describe('Menu tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Menu items={[{ key: '1', label: 'Test' }]} />);
+    expect(screen.getByTestId('menu')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

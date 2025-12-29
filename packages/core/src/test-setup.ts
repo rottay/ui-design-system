@@ -76,4 +76,8 @@ Object.defineProperty(window, 'getComputedStyle', {
 // Cleanup after each test
 afterEach(() => {
   cleanup();
+  // Clean up tenant attribute to prevent leaks between tests
+  document.documentElement.removeAttribute('data-tenant');
+  document.documentElement.removeAttribute('data-theme');
+  document.documentElement.removeAttribute('data-engine');
 });

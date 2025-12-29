@@ -105,3 +105,19 @@ describe('BackTop', () => {
     expect(screen.getByTestId('backtop')).toBeInTheDocument();
   });
 });
+
+describe('BackTop engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<BackTop engine={engine}>Test</BackTop>);
+    expect(screen.getByTestId('backtop')).toBeInTheDocument();
+  });
+});
+
+describe('BackTop tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<BackTop>Test</BackTop>);
+    expect(screen.getByTestId('backtop')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

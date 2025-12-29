@@ -237,3 +237,19 @@ describe('Accessibility', () => {
     expect(screen.getByAltText('Descriptive alt text')).toBeInTheDocument();
   });
 });
+
+describe('Image engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Image engine={engine} src="https://example.com/image.jpg" alt="Test" />);
+    expect(screen.getByTestId('image-container')).toBeInTheDocument();
+  });
+});
+
+describe('Image tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Image src="https://example.com/image.jpg" alt="Test" />);
+    expect(screen.getByTestId('image-container')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

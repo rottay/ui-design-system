@@ -84,3 +84,19 @@ describe('Link', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('Link engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Link engine={engine} href="/test">Test</Link>);
+    expect(screen.getByTestId('link')).toBeInTheDocument();
+  });
+});
+
+describe('Link tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Link href="/test">Test</Link>);
+    expect(screen.getByTestId('link')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

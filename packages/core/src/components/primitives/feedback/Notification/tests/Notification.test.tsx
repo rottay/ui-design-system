@@ -271,4 +271,28 @@ describe('Notification', () => {
       }
     );
   });
+
+  describe('Notification tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', async (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      let notificationApi: any;
+      render(
+        <NotificationProvider>
+          <NotificationTester onMount={(api) => (notificationApi = api)} />
+        </NotificationProvider>
+      );
+
+      act(() => {
+        notificationApi.info({
+          message: 'Tenant notification',
+          description: 'Tenant test',
+        });
+      });
+
+      await waitFor(() => {
+        expect(screen.getByRole('alert')).toBeInTheDocument();
+      });
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

@@ -196,4 +196,13 @@ describe('Drawer', () => {
       }
     );
   });
+
+  describe('Drawer tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      render(<Drawer open>Content</Drawer>);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

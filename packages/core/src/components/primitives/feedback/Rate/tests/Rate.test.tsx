@@ -320,12 +320,12 @@ describe('Rate', () => {
       expect(rate).toHaveAttribute('aria-valuenow', '4');
     });
 
-    it('clears value when clicking the same star with allowClear', async () => {
+    it('clears value when clicking the same star with allowClear', () => {
       const handleChange = vi.fn();
       render(<Rate defaultValue={3} onChange={handleChange} />);
 
       const stars = screen.getAllByRole('radio');
-      await userEvent.click(stars[2]); // Click the already selected 3rd star
+      fireEvent.click(stars[2]); // Click the already selected 3rd star
 
       expect(handleChange).toHaveBeenCalledWith(0);
     });
@@ -629,5 +629,21 @@ describe('Rate', () => {
       const stars = screen.getAllByRole('radio');
       expect(stars).toHaveLength(1);
     });
+  });
+});
+
+describe('Rate engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Rate engine={engine} />);
+    expect(screen.getByTestId('rate')).toBeInTheDocument();
+  });
+});
+
+describe('Rate tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Rate />);
+    expect(screen.getByTestId('rate')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
   });
 });

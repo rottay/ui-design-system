@@ -377,3 +377,27 @@ describe('Popconfirm', () => {
     });
   });
 });
+
+describe('Popconfirm engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(
+      <Popconfirm engine={engine} title="Are you sure?">
+        <button>Test</button>
+      </Popconfirm>
+    );
+    expect(screen.getByTestId('popconfirm-wrapper')).toBeInTheDocument();
+  });
+});
+
+describe('Popconfirm tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(
+      <Popconfirm title="Are you sure?">
+        <button>Test</button>
+      </Popconfirm>
+    );
+    expect(screen.getByTestId('popconfirm-wrapper')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

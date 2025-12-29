@@ -200,4 +200,13 @@ describe('Skeleton', () => {
       }
     );
   });
+
+  describe('Skeleton tenants', () => {
+    it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+      document.documentElement.setAttribute('data-tenant', tenant);
+      const { container } = render(<Skeleton />);
+      expect(container.querySelector('[class*="skeleton"]')).toBeInTheDocument();
+      document.documentElement.removeAttribute('data-tenant');
+    });
+  });
 });

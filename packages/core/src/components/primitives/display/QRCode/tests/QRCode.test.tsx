@@ -209,3 +209,19 @@ describe('QRCode Defaults', () => {
     expect(QRCODE_DEFAULTS.bordered).toBe(true);
   });
 });
+
+describe('QRCode engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<QRCode engine={engine} value="https://example.com" />);
+    expect(screen.getByTestId('qrcode')).toBeInTheDocument();
+  });
+});
+
+describe('QRCode tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<QRCode value="https://example.com" />);
+    expect(screen.getByTestId('qrcode')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

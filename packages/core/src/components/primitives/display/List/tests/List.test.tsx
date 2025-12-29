@@ -256,3 +256,12 @@ describe('List.Item.Meta', () => {
     expect(screen.getByTestId('list-item-meta')).toHaveClass('custom-meta-class');
   });
 });
+
+describe('List tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<List><List.Item>Test</List.Item></List>);
+    expect(screen.getByTestId('list')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});

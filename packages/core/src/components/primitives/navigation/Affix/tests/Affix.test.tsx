@@ -442,3 +442,19 @@ describe('Affix target prop', () => {
     expect(screen.getByTestId('affix')).toBeInTheDocument();
   });
 });
+
+describe('Affix engines', () => {
+  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+    render(<Affix engine={engine}>Test</Affix>);
+    expect(screen.getByTestId('affix')).toBeInTheDocument();
+  });
+});
+
+describe('Affix tenants', () => {
+  it.each(['rottay', 'bithire', 'default'] as const)('renders with %s tenant', (tenant) => {
+    document.documentElement.setAttribute('data-tenant', tenant);
+    render(<Affix>Test</Affix>);
+    expect(screen.getByTestId('affix')).toBeInTheDocument();
+    document.documentElement.removeAttribute('data-tenant');
+  });
+});
