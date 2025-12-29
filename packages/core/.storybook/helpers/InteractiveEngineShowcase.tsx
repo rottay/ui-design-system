@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { EngineProvider } from '../system/providers';
+import { EngineProvider } from '../../src/core/providers';
 import type { EngineName } from '../types/engine';
 import { EngineLabel } from './EngineLabel';
 

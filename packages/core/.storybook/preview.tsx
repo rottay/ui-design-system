@@ -1,7 +1,9 @@
 import type { Preview } from '@storybook/react-vite'
-import { ThemeProvider, EngineProvider } from '../src/system/providers';
-import type { TemplateName } from '../src/themes/types';
-import type { EngineName } from '../src/types/engine';
+import { ThemeProvider, EngineProvider } from '../src/core/providers';
+import type { EngineName } from '../src/core/types/engine';
+
+// Theme template names for Storybook toolbar
+type TemplateName = string;
 import React from 'react';
 
 // Storybook preview styles for engine comparison components

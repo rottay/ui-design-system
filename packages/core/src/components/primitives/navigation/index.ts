@@ -12,7 +12,7 @@ export { Pagination } from './Pagination';
 export type { PaginationProps, PaginationSize } from './Pagination';
 
 // Menu
-export { Menu, MenuItem, MenuGroup, MenuSubMenu, MenuDivider, BaseMenu } from './Menu';
+export { Menu, MenuItem, MenuGroup, MenuSubMenu, MenuDivider } from './Menu';
 export type {
   MenuProps,
   MenuItemType as MenuItemInterface,
@@ -28,7 +28,7 @@ export type {
 export { MENU_DEFAULTS } from './Menu';
 
 // Stepper
-export { Stepper, StepperStep, StepperContent, BaseStepper } from './Stepper';
+export { Stepper, StepperStep, StepperContent } from './Stepper';
 export type {
   StepperProps,
   StepItem as StepperStepItem,

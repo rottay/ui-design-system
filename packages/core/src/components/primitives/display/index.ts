@@ -11,7 +11,7 @@ export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge';
 export { Card } from './Card';
 export type { CardProps, CardVariant } from './Card';
 
-export { Image, ImageFallback, ImageSkeleton, BaseImage } from './Image';
+export { Image, ImageFallback, ImageSkeleton } from './Image';
 export type { ImageProps, ImageFallbackProps, ImageSkeletonProps, ImageFit, ImageRadius, ImageStatus, ImageGroupProps, ImageLoadState } from './Image';
 
 export { Tag, TagGroup } from './Tag';

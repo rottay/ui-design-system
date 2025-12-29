@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import { ThemeProvider, EngineProvider } from '../system/providers';
+import { ThemeProvider, EngineProvider } from '../../src/core/providers';
 import type { EngineName } from '../types/engine';
 import type { TemplateName } from '../themes/types';
 

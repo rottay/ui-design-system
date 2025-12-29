@@ -81,7 +81,11 @@
       "Bash(for f in /Users/danielavila/Documents/GitHub/Rottay/desing-system-aux/packages/core/src/components/primitives/**/tests/*.test.tsx)",
       "Bash(do if ! grep -q titan.*hermes.*apollo $f)",
       "Bash(then dirname $f)",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(timeout 60 npm run storybook:*)",
+      "Bash(curl:*)",
+      "Bash(for f in *.tsx)",
+      "Bash(do sed -i '' \"s|from ''../system/providers''|from ''../../src/core/providers''|g\" \"$f\")"
     ],
     "deny": [],
     "ask": []

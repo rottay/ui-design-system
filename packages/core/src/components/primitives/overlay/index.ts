@@ -8,8 +8,6 @@
 // Re-export Modal with alias to avoid conflict with feedback/Modal
 export { Modal as OverlayModal } from './Modal';
 
-// Export base component with alias
-export { BaseModal as OverlayBaseModal } from './Modal';
 
 // Export utility components (unique to overlay)
 export {

@@ -65,5 +65,5 @@ export type {
 export { Result } from './Result';
 export type { ResultProps, ResultStatus } from './Result';
 
-export { Rate, BaseRate, RATE_DEFAULTS, RATE_SIZE_MAP } from './Rate';
+export { Rate, RATE_DEFAULTS, RATE_SIZE_MAP } from './Rate';
 export type { RateProps, RateSize, RateEngine, RateCharacterProps } from './Rate';
