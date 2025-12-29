@@ -11,15 +11,21 @@ export default defineConfig({
       insertTypesEntry: true,
     }),
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@types': resolve(__dirname, 'src/core/types'),
+      '@components': resolve(__dirname, 'src/components'),
+      '@core': resolve(__dirname, 'src/core'),
+    },
+  },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'DesignSystem',
-      formats: ['es', 'cjs'],
-      fileName: (format) => {
-        const ext = format === 'es' ? 'js' : 'cjs';
-        return `index.${ext}`;
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        icons: resolve(__dirname, 'src/icons.ts'),
       },
+      name: 'DesignSystem',
     },
     rollupOptions: {
       // External dependencies for tree-shaking
@@ -28,27 +34,44 @@ export default defineConfig({
         'react-dom',
         'react/jsx-runtime',
         'antd',
+        '@ant-design/icons',
         '@heroui/react',
         'framer-motion',
         'lucide-react',
-        // Externalize antd submodules for better tree-shaking
+        // Externalize submodules for better tree-shaking
         /^antd\/.*/,
+        /^@ant-design\/icons\/.*/,
         /^@heroui\/.*/,
         /^lucide-react\/.*/,
       ],
-      output: {
-        // Preserve module structure for tree-shaking
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-        // Use ESM entry points for better tree-shaking
-        entryFileNames: '[name].js',
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'jsxRuntime',
-          antd: 'antd',
+      output: [
+        {
+          // ESM output
+          format: 'es',
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+          entryFileNames: '[name].js',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'react/jsx-runtime': 'jsxRuntime',
+            antd: 'antd',
+          },
         },
-      },
+        {
+          // CJS output
+          format: 'cjs',
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+          entryFileNames: '[name].cjs',
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'react/jsx-runtime': 'jsxRuntime',
+            antd: 'antd',
+          },
+        },
+      ],
     },
     sourcemap: true,
     minify: 'esbuild',

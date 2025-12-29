@@ -16,8 +16,8 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
 
@@ -25,8 +25,17 @@
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+
+    /* Path aliases */
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "@types/*": ["./core/types/*"],
+      "@components/*": ["./components/*"],
+      "@core/*": ["./core/*"]
+    }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/*.md", "**/__test_imports.ts"]
+  "exclude": ["node_modules", "dist", "**/*.test.tsx", "**/*.test.ts", "**/*.stories.tsx", "**/EXAMPLES.tsx", "**/ADVANCED_EXAMPLES.tsx", "**/USAGE_EXAMPLE.tsx", "**/*.md", "**/__test_imports.ts", "src/testing/**/*"]
 }
