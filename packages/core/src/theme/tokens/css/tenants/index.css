@@ -10,14 +10,11 @@
  * 3. Apply tenant by adding data-tenant="x" to html element
  *
  * Current tenants:
- * - rottay: Default/primary tenant
+ * - rottay: Notion-inspired minimal design (default)
+ * - bithire: Tech recruitment platform (indigo/purple)
  *
- * @version 0.4.0
+ * @version 0.5.0
  */
 
 @import './rottay/index.css';
-
-/* Future tenants:
- * @import './bithire/index.css';
- * @import './clientname/index.css';
- */
+@import './bithire/index.css';
