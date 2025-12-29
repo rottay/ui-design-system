@@ -85,7 +85,10 @@
       "Bash(timeout 60 npm run storybook:*)",
       "Bash(curl:*)",
       "Bash(for f in *.tsx)",
-      "Bash(do sed -i '' \"s|from ''../system/providers''|from ''../../src/core/providers''|g\" \"$f\")"
+      "Bash(do sed -i '' \"s|from ''../system/providers''|from ''../../src/core/providers''|g\" \"$f\")",
+      "Bash(git clone:*)",
+      "Bash(npm publish)",
+      "Bash(export GITHUB_TOKEN=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)"
     ],
     "deny": [],
     "ask": []
