@@ -44,10 +44,10 @@
 
 import { forwardRef } from 'react';
 import { Typography as AntTypography } from 'antd';
-import type { HeadingProps, TextProps, ParagraphProps } from '../../types';
+import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../../types';
 import { TYPOGRAPHY_DEFAULTS } from '../../types';
 
-const { Title, Text: AntText, Paragraph: AntParagraph } = AntTypography;
+const { Title, Text: AntText, Paragraph: AntParagraph, Link: AntLink } = AntTypography;
 
 /**
  * Maps design system heading levels to Ant Design Title levels.
@@ -244,6 +244,65 @@ export const TitanParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
 );
 
 TitanParagraph.displayName = 'TitanParagraph';
+
+/**
+ * Titan (Ant Design) implementation of Link component.
+ *
+ * Wraps Ant Design's Link component with design system props interface.
+ * Provides styled anchor elements with consistent appearance.
+ *
+ * @example
+ * ```tsx
+ * <TitanLink href="/about">Learn more</TitanLink>
+ * <TitanLink href="https://example.com" target="_blank">External link</TitanLink>
+ * ```
+ */
+export const TitanLink = forwardRef<HTMLAnchorElement, LinkProps>(
+  (
+    {
+      href,
+      target,
+      rel,
+      size = TYPOGRAPHY_DEFAULTS.link.size,
+      weight,
+      color = TYPOGRAPHY_DEFAULTS.link.color,
+      underlineOnHover = TYPOGRAPHY_DEFAULTS.link.underlineOnHover,
+      underline = TYPOGRAPHY_DEFAULTS.link.underline,
+      disabled = TYPOGRAPHY_DEFAULTS.link.disabled,
+      strong = TYPOGRAPHY_DEFAULTS.link.strong,
+      onClick,
+      children,
+      className,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    // Auto-set rel for external links
+    const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
+
+    return (
+      <AntLink
+        ref={ref as React.Ref<HTMLElement>}
+        href={href}
+        target={target}
+        rel={computedRel}
+        type={TYPE_MAP[color]}
+        underline={underline || !underlineOnHover}
+        disabled={disabled}
+        strong={strong}
+        onClick={onClick}
+        style={style}
+        className={className}
+        {...props}
+      >
+        {children}
+      </AntLink>
+    );
+  }
+);
+
+TitanLink.displayName = 'TitanLink';
 
 /**
  * Default export for engine factory compatibility.

@@ -41,7 +41,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { HeadingProps, TextProps, ParagraphProps } from '../../types';
+import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../../types';
 import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP } from '../../types';
 
 /**
@@ -243,6 +243,74 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
 );
 
 ApolloParagraph.displayName = 'ApolloParagraph';
+
+/**
+ * Apollo (Vanilla/CSS) implementation of Link component.
+ *
+ * Pure CSS implementation using CSS variables and inline styles.
+ * Provides styled anchor elements with hover effects.
+ */
+export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
+  (props, ref) => {
+    const {
+      href,
+      target,
+      rel,
+      size = TYPOGRAPHY_DEFAULTS.link.size,
+      weight,
+      color = TYPOGRAPHY_DEFAULTS.link.color,
+      underlineOnHover = TYPOGRAPHY_DEFAULTS.link.underlineOnHover,
+      underline = TYPOGRAPHY_DEFAULTS.link.underline,
+      disabled = TYPOGRAPHY_DEFAULTS.link.disabled,
+      strong = TYPOGRAPHY_DEFAULTS.link.strong,
+      onClick,
+      children,
+      className = '',
+      style,
+      ...restProps
+    } = props;
+
+    // Auto-set rel for external links
+    const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
+
+    const linkStyle: React.CSSProperties = {
+      fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
+      fontWeight: strong ? WEIGHT_MAP.semibold : (weight ? WEIGHT_MAP[weight] : WEIGHT_MAP.normal),
+      color: COLOR_MAP[color] || COLOR_MAP.primary,
+      textDecoration: underline ? 'underline' : 'none',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      transition: 'color 0.2s, text-decoration 0.2s',
+      ...style,
+    };
+
+    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (disabled) {
+        e.preventDefault();
+        return;
+      }
+      onClick?.(e);
+    };
+
+    return (
+      <a
+        ref={ref}
+        href={disabled ? undefined : href}
+        target={target}
+        rel={computedRel}
+        onClick={handleClick}
+        className={`rottay-link ${className}`.trim()}
+        style={linkStyle}
+        aria-disabled={disabled}
+        {...restProps}
+      >
+        {children}
+      </a>
+    );
+  }
+);
+
+ApolloLink.displayName = 'ApolloLink';
 
 /**
  * Default export for engine factory compatibility.

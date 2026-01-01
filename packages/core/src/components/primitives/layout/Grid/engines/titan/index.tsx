@@ -40,9 +40,21 @@
 
 'use client';
 
-import React, { forwardRef, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { GridProps, GridItemProps, GridGap } from '../../types';
+import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
+import type { GridProps, GridItemProps, GridGap, ResponsiveValue } from '../../types';
 import { GRID_DEFAULTS, GRID_ITEM_DEFAULTS, GAP_MAP } from '../../types';
+
+// Breakpoint values (mobile-first)
+const BREAKPOINTS = {
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  '2xl': 1400,
+} as const;
+
+type BreakpointKey = keyof typeof BREAKPOINTS;
 
 // Inline utility functions
 const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
@@ -51,15 +63,61 @@ const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   return GAP_MAP[gap as GridGap] || String(gap);
 };
 
-const resolveColumns = (columns: number | 'auto' | 'none' | undefined): string | undefined => {
+const resolveColumns = (columns: number | string | 'auto' | 'none' | undefined): string | undefined => {
   if (columns === undefined) return undefined;
   if (columns === 'auto') return 'auto';
   if (columns === 'none') return 'none';
   if (typeof columns === 'number') return `repeat(${columns}, 1fr)`;
+  if (typeof columns === 'string') return columns; // Support for custom templates like '2fr 1fr'
   return undefined;
 };
 
-const buildGridStyles = (props: GridProps): CSSProperties => {
+// Check if value is a responsive object
+const isResponsiveValue = (value: unknown): value is ResponsiveValue<number | string> => {
+  if (typeof value !== 'object' || value === null) return false;
+  const keys = Object.keys(value);
+  return keys.some(k => ['xs', 'sm', 'md', 'lg', 'xl', '2xl'].includes(k));
+};
+
+// Generate responsive CSS for columns
+const generateResponsiveCSS = (
+  gridId: string,
+  columns: ResponsiveValue<number | string>,
+  rows?: ResponsiveValue<number | string>
+): string => {
+  const breakpointOrder: BreakpointKey[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+  let css = '';
+
+  // Mobile-first: start with xs (no media query needed for base)
+  const xsColumns = columns.xs;
+  if (xsColumns !== undefined) {
+    css += `[data-grid-id="${gridId}"] { grid-template-columns: ${resolveColumns(xsColumns)}; }\n`;
+  }
+
+  // Add media queries for larger breakpoints
+  for (const bp of breakpointOrder) {
+    if (bp === 'xs') continue; // Already handled as base
+    const colValue = columns[bp as keyof ResponsiveValue<number | string>];
+    const rowValue = rows ? rows[bp as keyof ResponsiveValue<number | string>] : undefined;
+
+    if (colValue !== undefined || rowValue !== undefined) {
+      css += `@media (min-width: ${BREAKPOINTS[bp]}px) {\n`;
+      css += `  [data-grid-id="${gridId}"] {\n`;
+      if (colValue !== undefined) {
+        css += `    grid-template-columns: ${resolveColumns(colValue)};\n`;
+      }
+      if (rowValue !== undefined) {
+        css += `    grid-template-rows: ${resolveColumns(rowValue)};\n`;
+      }
+      css += `  }\n`;
+      css += `}\n`;
+    }
+  }
+
+  return css;
+};
+
+const buildGridStyles = (props: GridProps, skipColumns = false): CSSProperties => {
   const {
     columns, rows, gap, spacing, columnGap, rowGap, templateColumns, templateRows,
     templateAreas, autoFlow, autoColumns, autoRows, alignItems, justifyItems,
@@ -67,10 +125,19 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
   } = props;
   const effectiveGap = gap ?? spacing ?? GRID_DEFAULTS.gap;
   const computedStyle: CSSProperties = { display: inline ? 'inline-grid' : 'grid', ...style };
-  if (templateColumns) computedStyle.gridTemplateColumns = templateColumns;
-  else if (columns !== undefined && typeof columns !== 'object') computedStyle.gridTemplateColumns = resolveColumns(columns as number | 'auto' | 'none');
-  if (templateRows) computedStyle.gridTemplateRows = templateRows;
-  else if (rows !== undefined && typeof rows !== 'object') computedStyle.gridTemplateRows = resolveColumns(rows as number | 'auto' | 'none');
+
+  if (templateColumns) {
+    computedStyle.gridTemplateColumns = templateColumns;
+  } else if (!skipColumns && columns !== undefined && !isResponsiveValue(columns)) {
+    computedStyle.gridTemplateColumns = resolveColumns(columns as number | 'auto' | 'none');
+  }
+
+  if (templateRows) {
+    computedStyle.gridTemplateRows = templateRows;
+  } else if (!skipColumns && rows !== undefined && !isResponsiveValue(rows)) {
+    computedStyle.gridTemplateRows = resolveColumns(rows as number | 'auto' | 'none');
+  }
+
   if (templateAreas) computedStyle.gridTemplateAreas = templateAreas;
   const resolvedGap = resolveGap(effectiveGap);
   if (resolvedGap) computedStyle.gap = resolvedGap;
@@ -118,6 +185,7 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
 /**
  * Titan Grid component
  * Uses Ant Design styling patterns with CSS Grid layout
+ * Supports responsive breakpoints via injected CSS
  */
 const TitanGrid = forwardRef<HTMLElement, GridProps>(
   (props, ref) => {
@@ -125,21 +193,50 @@ const TitanGrid = forwardRef<HTMLElement, GridProps>(
       as: Component = GRID_DEFAULTS.as,
       className = '',
       children,
+      columns,
+      rows,
     } = props;
 
-    const computedStyle = buildGridStyles(props);
+    // Generate unique ID for responsive grids
+    const reactId = useId();
+    const gridId = `grid-${reactId.replace(/:/g, '')}`;
+
+    // Check if we need responsive CSS
+    const hasResponsiveColumns = isResponsiveValue(columns);
+    const hasResponsiveRows = isResponsiveValue(rows);
+    const needsResponsiveCSS = hasResponsiveColumns || hasResponsiveRows;
+
+    // Build styles - skip columns if they're responsive (handled by CSS)
+    const computedStyle = buildGridStyles(props, needsResponsiveCSS);
+
+    // Generate responsive CSS if needed
+    const responsiveCSS = needsResponsiveCSS
+      ? generateResponsiveCSS(
+          gridId,
+          hasResponsiveColumns ? (columns as ResponsiveValue<number | string>) : { xs: columns as number },
+          hasResponsiveRows ? (rows as ResponsiveValue<number | string>) : undefined
+        )
+      : null;
 
     const ElementType = Component as ElementType;
 
-    return React.createElement(
-      ElementType,
-      {
-        ref: ref as Ref<HTMLElement>,
-        className: `rottay-grid rottay-grid--titan ${className}`.trim(),
-        style: computedStyle,
-        'data-component': 'grid',
-      },
-      children
+    return (
+      <>
+        {responsiveCSS && (
+          <style dangerouslySetInnerHTML={{ __html: responsiveCSS }} />
+        )}
+        {React.createElement(
+          ElementType,
+          {
+            ref: ref as Ref<HTMLElement>,
+            className: `rottay-grid rottay-grid--titan ${className}`.trim(),
+            style: computedStyle,
+            'data-component': 'grid',
+            'data-grid-id': needsResponsiveCSS ? gridId : undefined,
+          },
+          children
+        )}
+      </>
     );
   }
 );

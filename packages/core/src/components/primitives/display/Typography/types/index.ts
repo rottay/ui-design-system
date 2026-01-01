@@ -280,12 +280,93 @@ export interface ParagraphProps extends BaseComponentProps, EngineAwareProps {
 }
 
 /**
+ * Props for the Link component.
+ *
+ * Link provides styled anchor elements with consistent appearance
+ * and hover states across the design system.
+ *
+ * @example
+ * ```tsx
+ * <Typography.Link href="/about">Learn more</Typography.Link>
+ * <Typography.Link href="https://example.com" target="_blank">External</Typography.Link>
+ * ```
+ */
+export interface LinkProps extends BaseComponentProps, EngineAwareProps {
+  /**
+   * The URL the link points to.
+   */
+  href?: string;
+
+  /**
+   * Where to open the linked document.
+   * @default undefined (same tab)
+   */
+  target?: '_blank' | '_self' | '_parent' | '_top';
+
+  /**
+   * Relationship between current document and linked document.
+   * Automatically set to 'noopener noreferrer' when target="_blank".
+   */
+  rel?: string;
+
+  /**
+   * Text size.
+   * @default 'md'
+   */
+  size?: TextSize;
+
+  /**
+   * Font weight.
+   * @default 'normal'
+   */
+  weight?: TextWeight;
+
+  /**
+   * Semantic color variant.
+   * @default 'primary'
+   */
+  color?: TextColor;
+
+  /**
+   * Show underline on hover only.
+   * @default true
+   */
+  underlineOnHover?: boolean;
+
+  /**
+   * Always show underline.
+   * @default false
+   */
+  underline?: boolean;
+
+  /**
+   * Disable the link.
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Make the text bold/strong.
+   * @default false
+   */
+  strong?: boolean;
+
+  /**
+   * Click handler for the link.
+   */
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+
+  /** Link content */
+  children: React.ReactNode;
+}
+
+/**
  * Combined Typography component props.
  * Used when working with the Typography namespace directly.
  */
 export interface TypographyProps extends BaseComponentProps, EngineAwareProps {
   /** Typography variant to render */
-  variant?: 'heading' | 'text' | 'paragraph';
+  variant?: 'heading' | 'text' | 'paragraph' | 'link';
   /** Children content */
   children: React.ReactNode;
 }
@@ -320,6 +401,15 @@ export const TYPOGRAPHY_DEFAULTS = {
     align: 'left' as const,
     color: 'default' as const,
     truncate: false,
+  },
+  link: {
+    size: 'md' as const,
+    weight: 'normal' as const,
+    color: 'primary' as const,
+    underlineOnHover: true,
+    underline: false,
+    disabled: false,
+    strong: false,
   },
 } as const;
 

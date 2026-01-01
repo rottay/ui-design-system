@@ -20,8 +20,8 @@ export type { TagProps, TagSize, TagVariant, TagRadius, TagGroupProps } from './
 export { Tooltip } from './Tooltip';
 export type { TooltipProps, TooltipTriggerProps, TooltipContentProps, TooltipPlacement, TooltipTriggerType } from './Tooltip';
 
-export { Heading, Text, Paragraph, Typography } from './Typography';
-export type { HeadingProps, TextProps, ParagraphProps, HeadingLevel, TextSize, TextWeight, TextAlign, TextColor } from './Typography';
+export { Heading, Text, Paragraph, Link, Typography } from './Typography';
+export type { HeadingProps, TextProps, ParagraphProps, LinkProps, HeadingLevel, TextSize, TextWeight, TextAlign, TextColor } from './Typography';
 
 export { Table } from './Table';
 export type {

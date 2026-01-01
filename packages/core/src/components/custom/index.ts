@@ -41,3 +41,20 @@ export { AvatarUserMenu, NamedUserMenu, DetailedUserMenu } from './user-menu';
 export { Sidebar } from './sidebar';
 export type { SidebarProps, SidebarPreset, SidebarItem } from './sidebar';
 export { SlimSidebar, StandardSidebar, CollapsibleSidebar } from './sidebar';
+
+// NavigationEditor
+export { NavigationEditor } from './navigation-editor';
+export type {
+  NavigationEditorProps,
+  NavigationEditorPreset,
+  MenuItem as NavMenuItem,
+  MenuGroup as NavMenuGroup,
+  Role as NavRole,
+  Permission as NavPermission,
+  RoutePolicy,
+  MenuItemFormData,
+  DragItem,
+  EditorTab,
+} from './navigation-editor';
+export { StandardNavigationEditor, AdvancedNavigationEditor } from './navigation-editor';
+export { ICON_OPTIONS, BADGE_COLORS, NAVIGATION_EDITOR_DEFAULTS } from './navigation-editor';

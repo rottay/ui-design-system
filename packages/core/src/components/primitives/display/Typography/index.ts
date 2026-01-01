@@ -79,6 +79,7 @@ import {
   TypographyHeading,
   TypographyText,
   TypographyParagraph,
+  TypographyLink,
 } from './compound';
 
 // Export types
@@ -86,6 +87,7 @@ export type {
   HeadingProps,
   TextProps,
   ParagraphProps,
+  LinkProps,
   TypographyProps,
   HeadingLevel,
   TextSize,
@@ -97,7 +99,7 @@ export type {
 export { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP } from './types';
 
 // Export compound components individually
-export { TypographyHeading, TypographyText, TypographyParagraph };
+export { TypographyHeading, TypographyText, TypographyParagraph, TypographyLink };
 
 // Export base components for direct usage or extension
 
@@ -105,6 +107,7 @@ export { TypographyHeading, TypographyText, TypographyParagraph };
 export { TypographyHeading as Heading };
 export { TypographyText as Text };
 export { TypographyParagraph as Paragraph };
+export { TypographyLink as Link };
 
 /**
  * Typography compound component.
@@ -137,6 +140,12 @@ export const Typography = {
    * @see ParagraphProps
    */
   Paragraph: TypographyParagraph,
+
+  /**
+   * Styled anchor/link component.
+   * @see LinkProps
+   */
+  Link: TypographyLink,
 };
 
 // Default export for convenience

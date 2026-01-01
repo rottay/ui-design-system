@@ -98,7 +98,10 @@
  */
 
 import { createEngineComponent } from '../../../../core/engines/factory';
-import type { FormProps } from './types';
+import type { FormProps, FormItemProps, FormListProps, FormErrorListProps } from './types';
+
+// Import compound components from Titan engine (they work across all engines)
+import { Form as TitanForm } from './engines/titan';
 
 export {
   type FormProps,
@@ -129,7 +132,12 @@ const FormBase = createEngineComponent<FormProps>('Form', {
 // Note: In a real multi-engine scenario, you'd want to import based on current engine
 export { useForm } from './engines/titan';
 
-// Export the Form component
-// Note: Compound components (Form.Item, Form.List, etc.) are available
-// when using the specific engine exports
-export const Form = FormBase;
+// Export the Form component with compound components attached
+// Compound components (Item, List, ErrorList) are attached from the Titan engine
+// They work with any engine since they render children normally
+export const Form = Object.assign(FormBase, {
+  Item: TitanForm.Item,
+  List: TitanForm.List,
+  ErrorList: TitanForm.ErrorList,
+  useForm: TitanForm.useForm,
+});

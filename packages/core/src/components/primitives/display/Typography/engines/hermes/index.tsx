@@ -45,7 +45,7 @@
 'use client';
 
 import { forwardRef } from 'react';
-import type { HeadingProps, TextProps, ParagraphProps } from '../../types';
+import type { HeadingProps, TextProps, ParagraphProps, LinkProps } from '../../types';
 import { TYPOGRAPHY_DEFAULTS } from '../../types';
 
 /**
@@ -287,6 +287,77 @@ export const HermesParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
 );
 
 HermesParagraph.displayName = 'HermesParagraph';
+
+/**
+ * Hermes (DaisyUI/Tailwind) implementation of Link component.
+ *
+ * Uses Tailwind CSS utility classes for styling.
+ * Provides styled anchor elements with hover effects.
+ *
+ * @example
+ * ```tsx
+ * <HermesLink href="/about">Learn more</HermesLink>
+ * <HermesLink href="https://example.com" target="_blank">External link</HermesLink>
+ * ```
+ */
+export const HermesLink = forwardRef<HTMLAnchorElement, LinkProps>(
+  (
+    {
+      href,
+      target,
+      rel,
+      size = TYPOGRAPHY_DEFAULTS.link.size,
+      weight,
+      color = TYPOGRAPHY_DEFAULTS.link.color,
+      underlineOnHover = TYPOGRAPHY_DEFAULTS.link.underlineOnHover,
+      underline = TYPOGRAPHY_DEFAULTS.link.underline,
+      disabled = TYPOGRAPHY_DEFAULTS.link.disabled,
+      strong = TYPOGRAPHY_DEFAULTS.link.strong,
+      onClick,
+      children,
+      className,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    // Auto-set rel for external links
+    const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
+
+    // Build class list
+    const classes = [
+      TEXT_SIZE_CLASSES[size],
+      weight ? WEIGHT_CLASSES[weight] : '',
+      COLOR_CLASSES[color],
+      strong ? 'font-semibold' : '',
+      underline ? 'underline' : '',
+      underlineOnHover && !underline ? 'hover:underline' : '',
+      disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '',
+      'transition-colors',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    return (
+      <a
+        ref={ref}
+        href={disabled ? undefined : href}
+        target={target}
+        rel={computedRel}
+        onClick={disabled ? undefined : onClick}
+        className={classes}
+        style={style}
+        aria-disabled={disabled}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  }
+);
+
+HermesLink.displayName = 'HermesLink';
 
 /**
  * Default export for engine factory compatibility.
