@@ -50,7 +50,7 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useEffect } from 'react';
 import type { TenantConfig, TenantContextValue } from '../../types';
 
 const TenantContext = createContext<TenantContextValue | null>(null);
@@ -66,6 +66,21 @@ export function TenantProvider({
   config,
   isLoading = false,
 }: TenantProviderProps): React.ReactElement {
+  // Set data-tenant attribute on HTML element for CSS theming
+  useEffect(() => {
+    if (config?.slug && typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-tenant', config.slug);
+      console.log(`[TenantProvider] Set data-tenant="${config.slug}"`);
+    }
+
+    return () => {
+      // Cleanup: remove attribute on unmount
+      if (typeof document !== 'undefined') {
+        document.documentElement.removeAttribute('data-tenant');
+      }
+    };
+  }, [config?.slug]);
+
   const value: TenantContextValue = {
     config,
     isLoading,

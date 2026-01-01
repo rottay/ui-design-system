@@ -123,6 +123,12 @@ export interface ThemeProviderProps {
   onError?: (error: Error, tenant: string) => void;
   onFallback?: (originalTenant: string) => void;
   cssBaseUrl?: string; // Base URL for tenant CSS files (e.g., '/themes' or 'https://cdn.example.com/themes')
+  /**
+   * When true, skips loading individual tenant CSS files.
+   * Use this when importing the bundled CSS via @rottay/design-system/tokens/css
+   * which includes all tenant styles using html[data-tenant='x'] selectors.
+   */
+  skipCssLoading?: boolean;
 }
 
 export function ThemeProvider({
@@ -133,6 +139,7 @@ export function ThemeProvider({
   onError,
   onFallback,
   cssBaseUrl = '/themes',
+  skipCssLoading = false,
 }: ThemeProviderProps): React.ReactElement {
   const [theme, setThemeState] = useState(initialTheme);
   const [tenant, setTenantState] = useState(initialTenant);
@@ -273,6 +280,25 @@ export function ThemeProvider({
       setIsLoading(true);
       setIsFallback(false);
 
+      // When using bundled CSS (skipCssLoading=true), skip individual CSS loading
+      // The tenant styles are applied via html[data-tenant='x'] selectors
+      // which TenantProvider sets on the HTML element
+      if (skipCssLoading) {
+        setConfig({
+          name: tenantName,
+          tenant: tenantName,
+          cssUrl: 'bundled',
+          isLoaded: true,
+          isError: false,
+          isFallback: false,
+          variables: {},
+        });
+        setTenantState(tenantName);
+        setIsLoading(false);
+        console.log(`[ThemeProvider] Tenant "${tenantName}" activated (bundled CSS mode)`);
+        return;
+      }
+
       try {
         // Remove previous theme links (except the one we're loading)
         const allThemeLinks = document.querySelectorAll(`[id^="${THEME_LINK_ID_PREFIX}"]`);
@@ -327,7 +353,7 @@ export function ThemeProvider({
         setIsLoading(false);
       }
     },
-    [tenant, config, cssBaseUrl, loadTenantCSS, fallbackToRottay, injectEmergencyTokens, onError]
+    [tenant, config, cssBaseUrl, loadTenantCSS, fallbackToRottay, injectEmergencyTokens, onError, skipCssLoading]
   );
 
   /**

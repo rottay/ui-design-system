@@ -80,23 +80,20 @@ import { ThemeProvider } from '../theme';
 import { TenantProvider } from '../tenant';
 import { FeatureProvider } from '../features';
 import type { TenantConfig, EngineName } from '../../types';
-
-// Default tenant config for standalone mode
-const DEFAULT_TENANT_CONFIG: TenantConfig = {
-  slug: 'default',
-  name: 'Default Tenant',
-  engine: 'titan',
-  theme: 'base',
-  plan: 'starter',
-  features: ['*'],
-  branding: {
-    companyName: 'Rottay DS',
-  },
-};
+import { getTenantConfig as resolveTenantConfig, DEFAULT_TENANT_SLUG } from '../../../theme/tenants/storage';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
-  /** Provide tenant config directly (standalone mode) */
+  /**
+   * Tenant slug to resolve config from registry/API.
+   * Use this when you want the design system to handle config resolution.
+   * Falls back to default tenant (rottay) if not found.
+   */
+  tenantSlug?: string | null;
+  /**
+   * Provide tenant config directly (standalone mode).
+   * Takes precedence over tenantSlug if both are provided.
+   */
   tenantConfig?: TenantConfig;
   /** Force a specific engine */
   forceEngine?: EngineName;
@@ -106,6 +103,14 @@ export interface DesignSystemProviderProps {
   onTenantResolved?: (tenant: TenantConfig) => void;
   /** Callback on error */
   onError?: (error: Error) => void;
+  /**
+   * Skip loading individual tenant CSS files.
+   * Defaults to true - assumes you import @rottay/design-system/styles in your app.
+   * Set to false if you want to load tenant CSS dynamically from a URL.
+   */
+  skipCssLoading?: boolean;
+  /** Base URL for tenant CSS files (only used when skipCssLoading=false) */
+  cssBaseUrl?: string;
 }
 
 /**
@@ -129,11 +134,14 @@ const LoadingScreen: React.FC = () => {
 
 export function DesignSystemProvider({
   children,
+  tenantSlug: propTenantSlug,
   tenantConfig: propTenantConfig,
   forceEngine,
   forceTheme,
   onTenantResolved,
   onError,
+  skipCssLoading = true,
+  cssBaseUrl = '/themes',
 }: DesignSystemProviderProps): React.ReactElement {
   const [tenantConfig, setTenantConfig] = useState<TenantConfig | null>(
     propTenantConfig ?? null
@@ -141,7 +149,7 @@ export function DesignSystemProvider({
   const [loading, setLoading] = useState(!propTenantConfig);
 
   useEffect(() => {
-    // If tenant config provided via props, use it
+    // If tenant config provided via props, use it (takes precedence)
     if (propTenantConfig) {
       setTenantConfig(propTenantConfig);
       setLoading(false);
@@ -149,25 +157,25 @@ export function DesignSystemProvider({
       return;
     }
 
-    // Async tenant resolution placeholder.
-    // Currently uses DEFAULT_TENANT_CONFIG for standalone mode.
-    // Future enhancement: integrate with external tenant resolution service
-    // using resolveTenant() and getTenantConfig() APIs when available.
+    // Resolve tenant from slug or use default
     const loadTenant = async () => {
       try {
-        const config = DEFAULT_TENANT_CONFIG;
+        const slug = propTenantSlug ?? DEFAULT_TENANT_SLUG;
+        const config = await resolveTenantConfig(slug);
         setTenantConfig(config);
         onTenantResolved?.(config);
       } catch (error) {
         onError?.(error as Error);
-        setTenantConfig(DEFAULT_TENANT_CONFIG);
+        // Fallback to default tenant on error
+        const defaultConfig = await resolveTenantConfig(DEFAULT_TENANT_SLUG);
+        setTenantConfig(defaultConfig);
       } finally {
         setLoading(false);
       }
     };
 
     loadTenant();
-  }, [propTenantConfig, onTenantResolved, onError]);
+  }, [propTenantSlug, propTenantConfig, onTenantResolved, onError]);
 
   if (loading || !tenantConfig) {
     return <LoadingScreen />;
@@ -179,7 +187,13 @@ export function DesignSystemProvider({
   return (
     <TenantProvider config={tenantConfig}>
       <EngineProvider defaultEngine={engine}>
-        <ThemeProvider theme={theme} branding={tenantConfig.branding}>
+        <ThemeProvider
+          theme={theme}
+          tenant={tenantConfig.slug}
+          branding={tenantConfig.branding}
+          skipCssLoading={skipCssLoading}
+          cssBaseUrl={cssBaseUrl}
+        >
           <FeatureProvider features={tenantConfig.features ?? []}>
             {children}
           </FeatureProvider>
