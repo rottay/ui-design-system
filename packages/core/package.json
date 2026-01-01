@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "1.3.1",
+  "version": "1.3.8",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -13,6 +13,8 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./styles": "./src/theme/tokens/css/index.css",
+    "./styles.css": "./src/theme/tokens/css/index.css",
     "./icons": {
       "types": "./dist/icons.d.ts",
       "import": "./dist/icons.js",
@@ -33,6 +35,7 @@
   },
   "files": [
     "dist",
+    "src/theme/tokens/css",
     "README.md"
   ],
   "scripts": {
