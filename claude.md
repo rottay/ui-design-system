@@ -1,4 +1,4 @@
-# Claude Code Rules - Platform
+# Claude Code Rules - Design System
 
 ## GitHub Configuration
 
@@ -13,20 +13,6 @@
 
 ## Project Context
 
-- **Platform is BACKEND-ONLY** - No frontend/UI code
-- No antd, no UI components, no React components
-- Contains: API routes (`src/app/api/`), core modules (`packages/core`), platform modules (`packages/platform/*`)
-- Architecture: Hexagonal/Clean Architecture with DDD
-
-## What Platform Contains
-
-- `src/app/api/` - Next.js API routes only
-- `packages/core/` - Shared infrastructure (logging, errors, DI)
-- `packages/platform/` - Domain modules (auth-system, multi-tenant, access-control, etc.)
-
-## What Platform Does NOT Contain
-
-- No `src/ui/` folder
-- No frontend pages (no `(app)`, `(auth)`, `(public)` route groups)
-- No antd or UI libraries
-- No client-side stores (zustand, etc.)
+- Multi-engine design system (Titan/Ant Design, Hermes/Tailwind, Apollo/Vanilla)
+- Components in `packages/core/src/components/`
+- Follow existing component patterns for new additions
