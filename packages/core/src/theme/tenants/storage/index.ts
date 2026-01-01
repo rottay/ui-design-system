@@ -1,15 +1,25 @@
 /**
  * Tenant Storage
  * Facade with caching for tenant config retrieval
+ *
+ * Resolution priority:
+ * 1. Memory cache
+ * 2. localStorage cache
+ * 3. Known tenants registry (built-in configs)
+ * 4. Static files
+ * 5. Remote API
+ * 6. Default config (rottay)
  */
 
 import type { TenantConfig } from '../../../core/types';
 import { loadStaticTenantConfig } from './static';
 import { fetchRemoteTenantConfig } from './remote';
 import { getDefaultTenantConfig } from '../defaults';
+import { getKnownTenantConfig, getDefaultTenant } from '../registry';
 
 export { loadStaticTenantConfig } from './static';
 export { fetchRemoteTenantConfig, configureTenantApi } from './remote';
+export { getKnownTenantConfig, isKnownTenant, getKnownTenantSlugs, DEFAULT_TENANT_SLUG } from '../registry';
 
 // In-memory cache
 const cache = new Map<string, TenantConfig>();
@@ -59,44 +69,53 @@ function saveToLocalStorage(slug: string, config: TenantConfig): void {
 
 /**
  * Get tenant configuration
- * Priority: memory cache → localStorage → static files → remote API → default
+ * Priority: memory cache → localStorage → known registry → static files → remote API → default
  */
 export async function getTenantConfig(slug: string): Promise<TenantConfig> {
+  const normalizedSlug = slug.toLowerCase();
+
   // 1. Check memory cache
-  if (cache.has(slug)) {
-    return cache.get(slug)!;
+  if (cache.has(normalizedSlug)) {
+    return cache.get(normalizedSlug)!;
   }
 
   // 2. Check localStorage cache
-  const fromStorage = getFromLocalStorage(slug);
+  const fromStorage = getFromLocalStorage(normalizedSlug);
   if (fromStorage) {
-    cache.set(slug, fromStorage);
+    cache.set(normalizedSlug, fromStorage);
     return fromStorage;
   }
 
-  // 3. Try static files
+  // 3. Check known tenants registry (built-in configs)
+  const knownConfig = getKnownTenantConfig(normalizedSlug);
+  if (knownConfig) {
+    cache.set(normalizedSlug, knownConfig);
+    return knownConfig;
+  }
+
+  // 4. Try static files
   try {
-    const config = await loadStaticTenantConfig(slug);
-    cache.set(slug, config);
-    saveToLocalStorage(slug, config);
+    const config = await loadStaticTenantConfig(normalizedSlug);
+    cache.set(normalizedSlug, config);
+    saveToLocalStorage(normalizedSlug, config);
     return config;
   } catch {
     // Static file not found, continue
   }
 
-  // 4. Try remote API
+  // 5. Try remote API
   try {
-    const config = await fetchRemoteTenantConfig(slug);
-    cache.set(slug, config);
-    saveToLocalStorage(slug, config);
+    const config = await fetchRemoteTenantConfig(normalizedSlug);
+    cache.set(normalizedSlug, config);
+    saveToLocalStorage(normalizedSlug, config);
     return config;
   } catch {
     // API failed, continue
   }
 
-  // 5. Return default config
-  const defaultConfig = getDefaultTenantConfig({ slug, name: slug });
-  cache.set(slug, defaultConfig);
+  // 6. Return default tenant (rottay)
+  const defaultConfig = getDefaultTenant();
+  cache.set(normalizedSlug, defaultConfig);
   return defaultConfig;
 }
 

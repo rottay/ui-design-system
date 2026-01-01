@@ -35,3 +35,12 @@ export {
   clearTenantCache,
   preloadTenantConfig,
 } from './storage';
+
+// Registry (known tenants)
+export {
+  getKnownTenantConfig,
+  isKnownTenant,
+  getKnownTenantSlugs,
+  getDefaultTenant,
+  DEFAULT_TENANT_SLUG,
+} from './registry';

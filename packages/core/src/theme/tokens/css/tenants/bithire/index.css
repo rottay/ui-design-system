@@ -1,197 +1,844 @@
 /**
- * BitHire Theme - Tech Recruitment Platform
- * Indigo/Purple color scheme
+ * BitHire Theme - LinkedIn-Inspired Design
+ * Professional, corporate, clean with signature blue
+ *
+ * LinkedIn brand colors: #0A66C2 (primary blue), professional grays
+ * Since default.css is Vercel/Rottay styled, this file adds
+ * BitHire/LinkedIn-specific customizations and Ant Design component overrides.
  */
 
 /* ============================================
-   BITHIRE COLOR OVERRIDES
+   BITHIRE BRAND COLORS (LinkedIn-Inspired)
    ============================================ */
 html[data-tenant='bithire'] {
-  /* Primary Colors - Indigo */
-  --ds-color-primary-50: #eef2ff;
-  --ds-color-primary-100: #e0e7ff;
-  --ds-color-primary-200: #c7d2fe;
-  --ds-color-primary-300: #a5b4fc;
-  --ds-color-primary-400: #818cf8;
-  --ds-color-primary-500: #6366f1;
-  --ds-color-primary-600: #4f46e5;
-  --ds-color-primary-700: #4338ca;
-  --ds-color-primary-800: #3730a3;
-  --ds-color-primary-900: #312e81;
+  /* Primary - LinkedIn Blue */
+  --ds-color-primary-50: #f0f7ff;
+  --ds-color-primary-100: #e0efff;
+  --ds-color-primary-200: #b8dcff;
+  --ds-color-primary-300: #70b8ff;
+  --ds-color-primary-400: #378fe5;
+  --ds-color-primary-500: #0A66C2;
+  --ds-color-primary-600: #004182;
+  --ds-color-primary-700: #00315f;
+  --ds-color-primary-800: #002244;
+  --ds-color-primary-900: #001830;
 
-  /* Backgrounds */
+  /* Secondary - Professional Teal/Green (LinkedIn secondary) */
+  --ds-color-secondary-50: #f0fdf4;
+  --ds-color-secondary-100: #dcfce7;
+  --ds-color-secondary-200: #bbf7d0;
+  --ds-color-secondary-300: #86efac;
+  --ds-color-secondary-400: #4ade80;
+  --ds-color-secondary-500: #057642;
+  --ds-color-secondary-600: #046339;
+  --ds-color-secondary-700: #034d2d;
+  --ds-color-secondary-800: #023621;
+  --ds-color-secondary-900: #012416;
+
+  /* Accent - LinkedIn Orange/Amber for notifications */
+  --ds-color-accent: #e7a33e;
+  --ds-color-accent-hover: #c98b2f;
+
+  /* Neutral - LinkedIn Grays */
+  --ds-color-neutral-50: #f3f2ef;
+  --ds-color-neutral-100: #eae9e5;
+  --ds-color-neutral-200: #e0dfdb;
+  --ds-color-neutral-300: #c7c5c0;
+  --ds-color-neutral-400: #a8a6a0;
+  --ds-color-neutral-500: #86888a;
+  --ds-color-neutral-600: #666666;
+  --ds-color-neutral-700: #474747;
+  --ds-color-neutral-800: #2c2c2c;
+  --ds-color-neutral-900: #191919;
+
+  /* Backgrounds - LinkedIn style */
   --ds-color-bg-primary: #ffffff;
-  --ds-color-bg-secondary: #faf5ff;
-  --ds-color-bg-tertiary: #f3e8ff;
+  --ds-color-bg-secondary: #f3f2ef;
+  --ds-color-bg-tertiary: #eae9e5;
+  --ds-color-bg-elevated: #ffffff;
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.6);
 
-  /* Text */
-  --ds-color-text-primary: #1e1b4b;
-  --ds-color-text-secondary: #4c1d95;
-  --ds-color-text-tertiary: #6b7280;
+  /* Text - LinkedIn style */
+  --ds-color-text-primary: rgba(0, 0, 0, 0.9);
+  --ds-color-text-secondary: rgba(0, 0, 0, 0.6);
+  --ds-color-text-tertiary: rgba(0, 0, 0, 0.4);
+  --ds-color-text-disabled: rgba(0, 0, 0, 0.3);
+  --ds-color-text-on-primary: #ffffff;
 
-  /* Border */
-  --ds-color-border-primary: #e9d5ff;
-  --ds-color-border-secondary: #f3e8ff;
+  /* Borders - LinkedIn style */
+  --ds-color-border-primary: rgba(0, 0, 0, 0.08);
+  --ds-color-border-secondary: rgba(0, 0, 0, 0.15);
+  --ds-color-border-focus: #0A66C2;
 
-  /* Border Radius - Rounded */
+  /* Typography - LinkedIn uses system fonts */
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+
+  /* Border Radius - LinkedIn (moderately rounded) */
   --ds-radius-sm: 4px;
-  --ds-radius-md: 6px;
-  --ds-radius-lg: 8px;
-  --ds-radius-xl: 12px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  --ds-radius-xl: 16px;
+  --ds-radius-full: 9999px;
 
-  /* Shadows - Purple tinted */
-  --ds-shadow-sm: 0 1px 2px rgba(99, 102, 241, 0.08);
-  --ds-shadow-md: 0 2px 4px rgba(99, 102, 241, 0.1);
-  --ds-shadow-lg: 0 4px 8px rgba(99, 102, 241, 0.12);
+  /* Shadows - LinkedIn style (subtle, layered) */
+  --ds-shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --ds-shadow-md: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --ds-shadow-lg: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --ds-shadow-xl: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+
+  /* Button overrides */
+  --ds-button-primary-bg: #0A66C2;
+  --ds-button-primary-bg-hover: #004182;
+  --ds-button-primary-text: #ffffff;
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-border: #0A66C2;
+  --ds-button-secondary-text: #0A66C2;
+  --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
+
+  /* Card overrides */
+  --ds-card-bg: #ffffff;
+  --ds-card-border: rgba(0, 0, 0, 0.08);
+  --ds-card-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --ds-card-shadow-hover: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Input overrides */
+  --ds-input-bg: #ffffff;
+  --ds-input-border: rgba(0, 0, 0, 0.15);
+  --ds-input-border-focus: #0A66C2;
+  --ds-input-shadow-focus: 0 0 0 1px #0A66C2;
+
+  /* Link colors */
+  --ds-color-link: #0A66C2;
+  --ds-color-link-hover: #004182;
+  --ds-color-link-visited: #6b3fa0;
+
+  /* Status colors */
+  --ds-color-success: #057642;
+  --ds-color-success-bg: #f0fdf4;
+  --ds-color-warning: #e7a33e;
+  --ds-color-warning-bg: #fffbeb;
+  --ds-color-error: #cc1016;
+  --ds-color-error-bg: #fef2f2;
+  --ds-color-info: #0A66C2;
+  --ds-color-info-bg: #f0f7ff;
+
 }
 
 /* ============================================
-   ANT DESIGN OVERRIDES
+   ANT DESIGN OVERRIDES - LinkedIn Style
    ============================================ */
 
-/* Buttons */
+/* Buttons - LinkedIn Blue primary */
 html[data-tenant='bithire'] .ant-btn-primary {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+  background: #0A66C2 !important;
   border: none !important;
-  border-radius: 8px !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  padding: 0 24px !important;
+  height: 40px !important;
 }
 
 html[data-tenant='bithire'] .ant-btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%) !important;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+  background: #004182 !important;
+}
+
+html[data-tenant='bithire'] .ant-btn-primary:active:not(:disabled) {
+  background: #00315f !important;
 }
 
 html[data-tenant='bithire'] .ant-btn-default {
-  background: #ffffff !important;
-  border: 1px solid #6366f1 !important;
-  color: #6366f1 !important;
-  border-radius: 8px !important;
+  background: transparent !important;
+  border: 1px solid #0A66C2 !important;
+  color: #0A66C2 !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  padding: 0 24px !important;
+  height: 40px !important;
 }
 
-html[data-tenant='bithire'] .ant-btn-default:hover {
-  background: #eef2ff !important;
-  border-color: #4f46e5 !important;
-  color: #4f46e5 !important;
+html[data-tenant='bithire'] .ant-btn-default:hover:not(:disabled) {
+  background: rgba(10, 102, 194, 0.08) !important;
+  border-color: #004182 !important;
+  color: #004182 !important;
 }
 
-/* Cards */
+html[data-tenant='bithire'] .ant-btn-text {
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+}
+
+html[data-tenant='bithire'] .ant-btn-text:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-tenant='bithire'] .ant-btn-link {
+  color: #0A66C2 !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='bithire'] .ant-btn-link:hover:not(:disabled) {
+  color: #004182 !important;
+}
+
+/* Cards - LinkedIn style with border */
 html[data-tenant='bithire'] .ant-card {
   background: #ffffff !important;
-  border: 1px solid #e9d5ff !important;
-  border-radius: 12px !important;
-  box-shadow: 0 1px 2px rgba(99, 102, 241, 0.08) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
 }
 
 html[data-tenant='bithire'] .ant-card:hover {
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15) !important;
-  border-color: #c7d2fe !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Inputs */
+html[data-tenant='bithire'] .ant-card-head {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: transparent !important;
+}
+
+html[data-tenant='bithire'] .ant-card-head-title {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Inputs - LinkedIn style */
 html[data-tenant='bithire'] .ant-input,
 html[data-tenant='bithire'] .ant-input-affix-wrapper {
-  border: 1px solid #e9d5ff !important;
-  border-radius: 6px !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+}
+
+html[data-tenant='bithire'] .ant-input:hover,
+html[data-tenant='bithire'] .ant-input-affix-wrapper:hover {
+  border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
 html[data-tenant='bithire'] .ant-input:focus,
 html[data-tenant='bithire'] .ant-input-affix-wrapper-focused {
-  border-color: #6366f1 !important;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+  border-color: #0A66C2 !important;
+  box-shadow: 0 0 0 1px #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-input::placeholder {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Search Input - LinkedIn style */
+html[data-tenant='bithire'] .ant-input-search .ant-input-affix-wrapper {
+  background: #eae9e5 !important;
+  border: none !important;
+  border-radius: 4px !important;
+}
+
+html[data-tenant='bithire'] .ant-input-search .ant-input-affix-wrapper:focus,
+html[data-tenant='bithire'] .ant-input-search .ant-input-affix-wrapper-focused {
+  background: #ffffff !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Select */
 html[data-tenant='bithire'] .ant-select-selector {
-  border: 1px solid #e9d5ff !important;
-  border-radius: 6px !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+html[data-tenant='bithire'] .ant-select:hover .ant-select-selector {
+  border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
 html[data-tenant='bithire'] .ant-select-focused .ant-select-selector {
-  border-color: #6366f1 !important;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+  border-color: #0A66C2 !important;
+  box-shadow: 0 0 0 1px #0A66C2 !important;
 }
 
 html[data-tenant='bithire'] .ant-select-item-option-selected {
-  background: #eef2ff !important;
-  color: #4f46e5 !important;
+  background: #f0f7ff !important;
+  color: #0A66C2 !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='bithire'] .ant-select-item-option-active {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+html[data-tenant='bithire'] .ant-select-dropdown {
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Table */
+html[data-tenant='bithire'] .ant-table {
+  background: #ffffff !important;
+}
+
 html[data-tenant='bithire'] .ant-table-thead > tr > th {
-  background: #faf5ff !important;
-  border-bottom: 1px solid #e9d5ff !important;
-  color: #1e1b4b !important;
+  background: #f3f2ef !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+html[data-tenant='bithire'] .ant-table-tbody > tr > td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
 html[data-tenant='bithire'] .ant-table-tbody > tr:hover > td {
-  background: #f3e8ff !important;
+  background: #f3f2ef !important;
+}
+
+html[data-tenant='bithire'] .ant-table-tbody > tr.ant-table-row-selected > td {
+  background: #f0f7ff !important;
 }
 
 /* Tabs */
+html[data-tenant='bithire'] .ant-tabs-tab {
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='bithire'] .ant-tabs-tab:hover {
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
 html[data-tenant='bithire'] .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #6366f1 !important;
+  color: #057642 !important;
   font-weight: 600 !important;
 }
 
 html[data-tenant='bithire'] .ant-tabs-ink-bar {
-  background: linear-gradient(90deg, #6366f1, #a855f7) !important;
+  background: #057642 !important;
+  height: 2px !important;
 }
 
 /* Modal */
 html[data-tenant='bithire'] .ant-modal-content {
-  border-radius: 16px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 25px 50px -12px rgba(0, 0, 0, 0.2) !important;
+  overflow: hidden !important;
 }
 
 html[data-tenant='bithire'] .ant-modal-header {
-  background: #faf5ff !important;
-  border-bottom: 1px solid #e9d5ff !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  padding: 16px 24px !important;
+}
+
+html[data-tenant='bithire'] .ant-modal-title {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-tenant='bithire'] .ant-modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  padding: 12px 24px !important;
+}
+
+html[data-tenant='bithire'] .ant-modal-close {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+html[data-tenant='bithire'] .ant-modal-close:hover {
+  color: rgba(0, 0, 0, 0.9) !important;
+  background: rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Menu */
-html[data-tenant='bithire'] .ant-menu-item-selected {
-  background: #eef2ff !important;
-  color: #4f46e5 !important;
+html[data-tenant='bithire'] .ant-menu {
+  background: transparent !important;
+}
+
+html[data-tenant='bithire'] .ant-menu-item {
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 500 !important;
+  border-radius: 4px !important;
 }
 
 html[data-tenant='bithire'] .ant-menu-item:hover {
-  background: #f3e8ff !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+html[data-tenant='bithire'] .ant-menu-item-selected {
+  background: rgba(10, 102, 194, 0.08) !important;
+  color: #0A66C2 !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='bithire'] .ant-menu-item-selected::after {
+  border-right-color: #0A66C2 !important;
 }
 
 /* Checkbox */
+html[data-tenant='bithire'] .ant-checkbox-inner {
+  border-radius: 3px !important;
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
 html[data-tenant='bithire'] .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: #6366f1 !important;
-  border-color: #6366f1 !important;
+  background-color: #0A66C2 !important;
+  border-color: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-checkbox-indeterminate .ant-checkbox-inner::after {
+  background-color: #0A66C2 !important;
+}
+
+/* Radio */
+html[data-tenant='bithire'] .ant-radio-checked .ant-radio-inner {
+  border-color: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-radio-checked .ant-radio-inner::after {
+  background-color: #0A66C2 !important;
 }
 
 /* Switch */
 html[data-tenant='bithire'] .ant-switch-checked {
-  background: linear-gradient(90deg, #6366f1, #a855f7) !important;
+  background: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-switch-checked:hover:not(.ant-switch-disabled) {
+  background: #004182 !important;
 }
 
 /* Tags */
 html[data-tenant='bithire'] .ant-tag {
-  background: #eef2ff !important;
-  border: 1px solid #c7d2fe !important;
-  border-radius: 9999px !important;
-  color: #4f46e5 !important;
+  background: #f3f2ef !important;
+  border: none !important;
+  border-radius: 4px !important;
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 500 !important;
+}
+
+html[data-tenant='bithire'] .ant-tag-blue {
+  background: #f0f7ff !important;
+  color: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-tag-green {
+  background: #f0fdf4 !important;
+  color: #057642 !important;
+}
+
+html[data-tenant='bithire'] .ant-tag-orange {
+  background: #fffbeb !important;
+  color: #b45309 !important;
+}
+
+html[data-tenant='bithire'] .ant-tag-red {
+  background: #fef2f2 !important;
+  color: #cc1016 !important;
 }
 
 /* Alert */
 html[data-tenant='bithire'] .ant-alert {
   border-radius: 8px !important;
+  border: none !important;
+}
+
+html[data-tenant='bithire'] .ant-alert-info {
+  background: #f0f7ff !important;
+}
+
+html[data-tenant='bithire'] .ant-alert-success {
+  background: #f0fdf4 !important;
+}
+
+html[data-tenant='bithire'] .ant-alert-warning {
+  background: #fffbeb !important;
+}
+
+html[data-tenant='bithire'] .ant-alert-error {
+  background: #fef2f2 !important;
 }
 
 /* Progress */
 html[data-tenant='bithire'] .ant-progress-bg {
-  background: linear-gradient(90deg, #6366f1, #a855f7) !important;
+  background: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-progress-success-bg {
+  background: #057642 !important;
 }
 
 /* Pagination */
+html[data-tenant='bithire'] .ant-pagination-item {
+  border-radius: 4px !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+html[data-tenant='bithire'] .ant-pagination-item:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
 html[data-tenant='bithire'] .ant-pagination-item-active {
-  background: #6366f1 !important;
-  border-color: #6366f1 !important;
+  background: #0A66C2 !important;
+  border: none !important;
 }
 
 html[data-tenant='bithire'] .ant-pagination-item-active a {
   color: #ffffff !important;
+}
+
+html[data-tenant='bithire'] .ant-pagination-prev,
+html[data-tenant='bithire'] .ant-pagination-next {
+  border-radius: 4px !important;
+}
+
+html[data-tenant='bithire'] .ant-pagination-prev:hover,
+html[data-tenant='bithire'] .ant-pagination-next:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Dropdown */
+html[data-tenant='bithire'] .ant-dropdown-menu {
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+  padding: 4px !important;
+}
+
+html[data-tenant='bithire'] .ant-dropdown-menu-item {
+  border-radius: 4px !important;
+  padding: 8px 12px !important;
+}
+
+html[data-tenant='bithire'] .ant-dropdown-menu-item:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Tooltip */
+html[data-tenant='bithire'] .ant-tooltip-inner {
+  background: rgba(0, 0, 0, 0.9) !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+}
+
+html[data-tenant='bithire'] .ant-tooltip-arrow::before {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Popover */
+html[data-tenant='bithire'] .ant-popover-inner {
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Message */
+html[data-tenant='bithire'] .ant-message-notice-content {
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  padding: 10px 16px !important;
+}
+
+/* Notification */
+html[data-tenant='bithire'] .ant-notification-notice {
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Drawer */
+html[data-tenant='bithire'] .ant-drawer-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  padding: 16px 24px !important;
+}
+
+html[data-tenant='bithire'] .ant-drawer-title {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+html[data-tenant='bithire'] .ant-drawer-close {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+html[data-tenant='bithire'] .ant-drawer-close:hover {
+  color: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Form */
+html[data-tenant='bithire'] .ant-form-item-label > label {
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+html[data-tenant='bithire'] .ant-form-item-explain-error {
+  color: #cc1016 !important;
+  font-size: 12px !important;
+}
+
+/* Breadcrumb */
+html[data-tenant='bithire'] .ant-breadcrumb-link {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+html[data-tenant='bithire'] .ant-breadcrumb-link:hover {
+  color: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-breadcrumb-separator {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Steps */
+html[data-tenant='bithire'] .ant-steps-item-finish .ant-steps-item-icon {
+  background: #057642 !important;
+  border-color: #057642 !important;
+}
+
+html[data-tenant='bithire'] .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+  color: #ffffff !important;
+}
+
+html[data-tenant='bithire'] .ant-steps-item-process .ant-steps-item-icon {
+  background: #0A66C2 !important;
+  border-color: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
+  background: #057642 !important;
+}
+
+/* Avatar */
+html[data-tenant='bithire'] .ant-avatar {
+  background: #0A66C2 !important;
+  color: #ffffff !important;
+}
+
+html[data-tenant='bithire'] .ant-avatar-group .ant-avatar {
+  border: 2px solid #ffffff !important;
+}
+
+/* Badge */
+html[data-tenant='bithire'] .ant-badge-count {
+  background: #cc1016 !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='bithire'] .ant-badge-dot {
+  background: #cc1016 !important;
+}
+
+html[data-tenant='bithire'] .ant-badge-status-success {
+  background: #057642 !important;
+}
+
+html[data-tenant='bithire'] .ant-badge-status-processing {
+  background: #0A66C2 !important;
+}
+
+/* Skeleton */
+html[data-tenant='bithire'] .ant-skeleton-element .ant-skeleton-avatar,
+html[data-tenant='bithire'] .ant-skeleton-element .ant-skeleton-button,
+html[data-tenant='bithire'] .ant-skeleton-element .ant-skeleton-input {
+  background: linear-gradient(90deg, #f3f2ef 25%, #e0dfdb 50%, #f3f2ef 75%) !important;
+  background-size: 200% 100% !important;
+}
+
+/* Spin */
+html[data-tenant='bithire'] .ant-spin-dot-item {
+  background: #0A66C2 !important;
+}
+
+/* Divider */
+html[data-tenant='bithire'] .ant-divider {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Collapse */
+html[data-tenant='bithire'] .ant-collapse {
+  border-radius: 8px !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+}
+
+html[data-tenant='bithire'] .ant-collapse-header {
+  font-weight: 600 !important;
+}
+
+html[data-tenant='bithire'] .ant-collapse-item {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Timeline */
+html[data-tenant='bithire'] .ant-timeline-item-head-blue {
+  border-color: #0A66C2 !important;
+  background: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-timeline-item-head-green {
+  border-color: #057642 !important;
+  background: #057642 !important;
+}
+
+/* Rate */
+html[data-tenant='bithire'] .ant-rate-star.ant-rate-star-full .ant-rate-star-first,
+html[data-tenant='bithire'] .ant-rate-star.ant-rate-star-full .ant-rate-star-second {
+  color: #e7a33e !important;
+}
+
+/* DatePicker */
+html[data-tenant='bithire'] .ant-picker {
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+}
+
+html[data-tenant='bithire'] .ant-picker:hover {
+  border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+html[data-tenant='bithire'] .ant-picker-focused {
+  border-color: #0A66C2 !important;
+  box-shadow: 0 0 0 1px #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-picker-dropdown {
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+html[data-tenant='bithire'] .ant-picker-cell-selected .ant-picker-cell-inner {
+  background: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: #0A66C2 !important;
+}
+
+/* Upload */
+html[data-tenant='bithire'] .ant-upload-drag {
+  border: 2px dashed rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  background: #f3f2ef !important;
+}
+
+html[data-tenant='bithire'] .ant-upload-drag:hover {
+  border-color: #0A66C2 !important;
+}
+
+/* Empty */
+html[data-tenant='bithire'] .ant-empty-description {
+  color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Result */
+html[data-tenant='bithire'] .ant-result-success .ant-result-icon > .anticon {
+  color: #057642 !important;
+}
+
+html[data-tenant='bithire'] .ant-result-error .ant-result-icon > .anticon {
+  color: #cc1016 !important;
+}
+
+html[data-tenant='bithire'] .ant-result-info .ant-result-icon > .anticon {
+  color: #0A66C2 !important;
+}
+
+html[data-tenant='bithire'] .ant-result-warning .ant-result-icon > .anticon {
+  color: #e7a33e !important;
+}
+
+/* Segmented */
+html[data-tenant='bithire'] .ant-segmented {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 8px !important;
+}
+
+html[data-tenant='bithire'] .ant-segmented-item-selected {
+  background: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Statistic */
+html[data-tenant='bithire'] .ant-statistic-title {
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+html[data-tenant='bithire'] .ant-statistic-content {
+  color: rgba(0, 0, 0, 0.9) !important;
+  font-weight: 600 !important;
+}
+
+/* Tree */
+html[data-tenant='bithire'] .ant-tree-node-selected {
+  background: rgba(10, 102, 194, 0.08) !important;
+}
+
+html[data-tenant='bithire'] .ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+  background-color: #0A66C2 !important;
+  border-color: #0A66C2 !important;
+}
+
+/* Transfer */
+html[data-tenant='bithire'] .ant-transfer-list {
+  border-radius: 8px !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-tenant='bithire'] .ant-transfer-list-header {
+  background: #f3f2ef !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* ============================================
+   DARK SIDEBAR MENU - Uses CSS variables
+   ============================================ */
+html[data-tenant='bithire'] .app-sidebar-menu {
+  background: transparent !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-item {
+  color: var(--ds-sidebar-text-muted) !important;
+  margin: 4px 8px !important;
+  border-radius: 8px !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-item:hover {
+  background: var(--ds-sidebar-item-bg-hover) !important;
+  color: var(--ds-sidebar-text) !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-item-selected {
+  background: var(--ds-sidebar-item-bg-active) !important;
+  color: var(--ds-sidebar-text) !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-submenu-title {
+  color: var(--ds-sidebar-text-muted) !important;
+  margin: 4px 8px !important;
+  border-radius: 8px !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-submenu-title:hover {
+  background: var(--ds-sidebar-item-bg-hover) !important;
+  color: var(--ds-sidebar-text) !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: var(--ds-sidebar-text) !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-sub {
+  background: transparent !important;
+}
+
+html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-item-icon,
+html[data-tenant='bithire'] .app-sidebar-menu .anticon {
+  color: inherit !important;
 }

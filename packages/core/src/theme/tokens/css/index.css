@@ -6,8 +6,8 @@
  *
  * CSS Cascade Order (specificity matters):
  * 1. default.css      - Base tokens in :root (lowest specificity)
- * 2. tenants/         - Tenant overrides via [data-tenant="x"] selector
- * 3. engines/         - Engine themes mapping tokens to library classes
+ * 2. engines/         - Engine themes mapping tokens to library classes
+ * 3. tenants/         - Tenant overrides via [data-tenant="x"] selector (HIGHEST priority)
  * 4. responsive/      - Media query overrides (web-first, NOT mobile-first)
  * 5. animations/      - Transitions and keyframe animations
  *
@@ -39,20 +39,20 @@
 @import './components/index.css';
 
 /* =============================================================================
-   LAYER 3: TENANT OVERRIDES
-   Brand-specific customizations via [data-tenant="x"] selector
-   Only includes values that DIFFER from default.css
-   ============================================================================= */
-@import './tenants/index.css';
-
-/* =============================================================================
-   LAYER 4: ENGINE THEMES
+   LAYER 3: ENGINE THEMES
    Maps --ds-* tokens to library-specific classes
    - Titan: Ant Design (.ant-*) mappings
    - Hermes: DaisyUI/Tailwind (.btn, .card, etc.) mappings
    - Apollo: Vanilla CSS (.ds-*) classes
    ============================================================================= */
 @import './engines/index.css';
+
+/* =============================================================================
+   LAYER 4: TENANT OVERRIDES (MUST come AFTER engines to win cascade)
+   Brand-specific customizations via [data-tenant="x"] selector
+   Only includes values that DIFFER from default.css
+   ============================================================================= */
+@import './tenants/index.css';
 
 /* =============================================================================
    LAYER 5: RESPONSIVE OVERRIDES
