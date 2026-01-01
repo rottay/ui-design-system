@@ -1,46 +1,32 @@
-# Rottay Design System - Development Rules
+# Claude Code Rules - Platform
 
-## Core Principles
+## GitHub Configuration
 
-- **Web-First, Responsive** - Desktop primary, responsive down to mobile
-- **Performance Central** - Bundle size, lazy loading, tree-shaking
-- **Premium Quality** - Commercial-grade standards
+- **Token**: `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`
+- **Author**: davila23 <daniel.avila@rottay.com>
 
-## CSS
+## Git Rules
 
-- Prefix: `--ds-*`
-- Naming: `--ds-{category}-{element}-{variant}-{state}-{property}`
-- No hardcoded colors - use variables
-- Units: `rem` for sizing, `px` for borders
+- **NEVER include Co-Authored-By** in commit messages
+- **NEVER include "Generated with Claude Code"** in commit messages
+- Use conventional commit format: `type(scope): description`
 
-## Components
+## Project Context
 
-- `'use client'` directive
-- `forwardRef` + `displayName`
-- Props: `size`, `variant`, `disabled`, `className`, `style`
+- **Platform is BACKEND-ONLY** - No frontend/UI code
+- No antd, no UI components, no React components
+- Contains: API routes (`src/app/api/`), core modules (`packages/core`), platform modules (`packages/platform/*`)
+- Architecture: Hexagonal/Clean Architecture with DDD
 
-## Engines
+## What Platform Contains
 
-| Engine | Library | Priority |
-|--------|---------|----------|
-| Titan | Ant Design | CRITICAL |
-| Hermes | Tailwind | CRITICAL |
-| Apollo | Vanilla | Medium |
+- `src/app/api/` - Next.js API routes only
+- `packages/core/` - Shared infrastructure (logging, errors, DI)
+- `packages/platform/` - Domain modules (auth-system, multi-tenant, access-control, etc.)
 
-## Commits
+## What Platform Does NOT Contain
 
-- NO `Co-Authored-By: Claude`
-- NO `Generated with Claude Code`
-- Format: `feat:`, `fix:`, `refactor:`, `docs:`
-
-## Docs
-
-- JSDoc on public functions
-- Storybook story per component
-
-## Reference Files
-
-| File | Purpose |
-|------|---------|
-| `docs/ARCHITECTURE.md` | Full architecture + migration tasks + tracking |
-| `/design-system/themes/tenants/bithire/theme.css` | Reference CSS (~1600 lines) |
+- No `src/ui/` folder
+- No frontend pages (no `(app)`, `(auth)`, `(public)` route groups)
+- No antd or UI libraries
+- No client-side stores (zustand, etc.)
