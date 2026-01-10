@@ -133,6 +133,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       style,
       overlayClassName,
       overlayStyle,
+      getPopupContainer,
     } = props;
 
     const [internalOpen, setInternalOpen] = useState(false);
@@ -157,11 +158,25 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         let top = rect.bottom + window.scrollY + 4;
         let left = rect.left + window.scrollX;
 
-        if (placement?.includes('top')) {
-          top = rect.top + window.scrollY - 4;
+        // Handle vertical placement
+        switch (placement) {
+          case 'top':
+          case 'topLeft':
+          case 'topRight':
+            top = rect.top + window.scrollY - 4;
+            break;
         }
-        if (placement?.includes('Right')) {
-          left = rect.right + window.scrollX;
+
+        // Handle horizontal alignment
+        switch (placement) {
+          case 'topRight':
+          case 'bottomRight':
+            left = rect.right + window.scrollX - (menuRef.current?.offsetWidth || 0);
+            break;
+          case 'topLeft':
+          case 'bottomLeft':
+            // left already set correctly
+            break;
         }
 
         setPosition({ top, left });

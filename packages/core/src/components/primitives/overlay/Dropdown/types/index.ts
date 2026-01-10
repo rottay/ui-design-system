@@ -135,8 +135,6 @@ export interface DropdownProps {
   children: ReactNode;
   /** Arrow pointing to trigger */
   arrow?: boolean | { pointAtCenter: boolean };
-  /** Destroy popup when hidden */
-  destroyPopupOnHide?: boolean;
   /** Auto adjust popup position */
   autoAdjustOverflow?: boolean;
   /** Additional class name */
@@ -147,6 +145,8 @@ export interface DropdownProps {
   overlayClassName?: string;
   /** Overlay styles */
   overlayStyle?: CSSProperties;
+  /** Container for the dropdown popup (prevents positioning issues in scrollable containers) */
+  getPopupContainer?: (triggerNode: HTMLElement) => HTMLElement;
 }
 
 /**
@@ -162,8 +162,6 @@ export const DROPDOWN_DEFAULTS: Partial<DropdownProps> = {
   disabled: false,
   /** No arrow by default */
   arrow: false,
-  /** Keep popup mounted when hidden */
-  destroyPopupOnHide: false,
   /** Auto-adjust position to stay in viewport */
   autoAdjustOverflow: true,
 };

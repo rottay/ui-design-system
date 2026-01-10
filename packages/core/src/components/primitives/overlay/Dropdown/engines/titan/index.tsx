@@ -45,12 +45,13 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       disabled,
       children,
       arrow,
-      destroyPopupOnHide,
       autoAdjustOverflow,
+      getPopupContainer,
       className,
       overlayClassName,
       overlayStyle,
     } = props;
+
 
     return (
       <div ref={ref} className={className}>
@@ -62,8 +63,8 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           onOpenChange={onOpenChange}
           disabled={disabled}
           arrow={arrow}
-          destroyPopupOnHide={destroyPopupOnHide}
           autoAdjustOverflow={autoAdjustOverflow}
+          getPopupContainer={getPopupContainer}
           overlayClassName={overlayClassName}
           overlayStyle={overlayStyle}
         >

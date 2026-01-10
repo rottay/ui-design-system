@@ -38,8 +38,7 @@ export const TitanDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       layout = DESCRIPTIONS_DEFAULTS.layout,
       size = DESCRIPTIONS_DEFAULTS.size,
       colon = DESCRIPTIONS_DEFAULTS.colon,
-      labelStyle,
-      contentStyle,
+      styles,
       children,
       className,
       style,
@@ -55,8 +54,7 @@ export const TitanDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
           layout={layout}
           size={size}
           colon={colon}
-          labelStyle={labelStyle}
-          contentStyle={contentStyle}
+          styles={styles}
         >
           {children}
         </AntDescriptions>
@@ -84,8 +82,7 @@ export const TitanItem = forwardRef<HTMLDivElement, DescriptionsItemProps>(
       label,
       children,
       span,
-      labelStyle,
-      contentStyle,
+      styles,
       className,
       style,
     } = props;
@@ -94,8 +91,7 @@ export const TitanItem = forwardRef<HTMLDivElement, DescriptionsItemProps>(
       <AntDescriptions.Item
         label={label}
         span={span}
-        labelStyle={labelStyle}
-        contentStyle={contentStyle}
+        styles={styles}
         className={className}
         style={style}
       >

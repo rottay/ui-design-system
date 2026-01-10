@@ -47,8 +47,7 @@ export const HermesDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       layout = DESCRIPTIONS_DEFAULTS.layout,
       size = DESCRIPTIONS_DEFAULTS.size,
       colon = DESCRIPTIONS_DEFAULTS.colon,
-      labelStyle,
-      contentStyle,
+      styles,
       children,
       className = '',
       style,
@@ -108,14 +107,14 @@ export const HermesDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                   >
                     <div
                       className="text-base-content/60 text-sm mb-1"
-                      style={itemProps.labelStyle || labelStyle}
+                      style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
                     </div>
                     <div
                       className="text-base-content"
-                      style={itemProps.contentStyle || contentStyle}
+                      style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
                     </div>
@@ -134,14 +133,14 @@ export const HermesDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                   <div className="flex p-3">
                     <div
                       className="text-base-content/60 w-1/3"
-                      style={itemProps.labelStyle || labelStyle}
+                      style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
                     </div>
                     <div
                       className="flex-1 text-base-content"
-                      style={itemProps.contentStyle || contentStyle}
+                      style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
                     </div>

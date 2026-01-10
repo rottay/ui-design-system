@@ -89,6 +89,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
       className,
       overlayClassName,
       overlayStyle,
+      getPopupContainer,
     } = props;
 
     const [internalOpen, setInternalOpen] = useState(false);
@@ -124,17 +125,16 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
 
     const getPlacementClass = () => {
-      switch (placement) {
-        case 'top':
-        case 'topLeft':
-        case 'topRight':
-          return 'dropdown-top';
-        case 'bottomRight':
-        case 'topRight':
-          return 'dropdown-end';
-        default:
-          return '';
-      }
+      if (!placement) return '';
+
+      // Handle vertical placement (top/bottom)
+      const verticalClass = placement.startsWith('top') ? 'dropdown-top' : '';
+
+      // Handle horizontal alignment (left/right)
+      const horizontalClass = placement.endsWith('Right') ? 'dropdown-end' :
+                             placement.endsWith('Left') ? 'dropdown-start' : '';
+
+      return `${verticalClass} ${horizontalClass}`.trim();
     };
 
     const handleClick = () => {

@@ -304,21 +304,25 @@ export const VariantMatrix: Story = {
 };
 
 /**
- * Custom styling with labelStyle and contentStyle.
+ * Custom styling with the styles prop.
  */
 export const CustomStyling: Story = {
   render: () => (
     <Descriptions
       title="Styled Descriptions"
       bordered
-      labelStyle={{ fontWeight: 600, backgroundColor: '#fafafa' }}
-      contentStyle={{ color: '#1890ff' }}
+      styles={{
+        label: { fontWeight: 600, backgroundColor: '#fafafa' },
+        content: { color: '#1890ff' }
+      }}
     >
       <Descriptions.Item label="Primary">Blue Text</Descriptions.Item>
       <Descriptions.Item
         label="Custom"
-        labelStyle={{ color: 'green' }}
-        contentStyle={{ color: 'red' }}
+        styles={{
+          label: { color: 'green' },
+          content: { color: 'red' }
+        }}
       >
         Red Content
       </Descriptions.Item>

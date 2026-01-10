@@ -57,8 +57,7 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       layout = DESCRIPTIONS_DEFAULTS.layout,
       size = DESCRIPTIONS_DEFAULTS.size,
       colon = DESCRIPTIONS_DEFAULTS.colon,
-      labelStyle,
-      contentStyle,
+      styles,
       children,
       className = '',
       style,
@@ -110,13 +109,13 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       color: 'var(--ds-descriptions-label-color, var(--ds-color-text-secondary, #666))',
       fontSize: 'var(--ds-descriptions-label-font-size, 13px)',
       marginBottom: layout === 'vertical' ? '4px' : '0',
-      ...labelStyle,
+      ...styles?.label,
     };
 
     // Base content styles
     const contentBaseStyle: React.CSSProperties = {
       color: 'var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333))',
-      ...contentStyle,
+      ...styles?.content,
     };
 
     /**
@@ -138,11 +137,11 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 paddingBottom: bordered ? '12px' : '0',
               }}
             >
-              <div style={{ ...labelBaseStyle, ...itemProps.labelStyle }}>
+              <div style={{ ...labelBaseStyle, ...itemProps.styles?.label }}>
                 {itemProps.label}
                 {colon ? ':' : ''}
               </div>
-              <div style={{ ...contentBaseStyle, ...itemProps.contentStyle }}>
+              <div style={{ ...contentBaseStyle, ...itemProps.styles?.content }}>
                 {itemProps.children}
               </div>
             </div>
@@ -173,7 +172,7 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 style={{
                   width: '33%',
                   ...labelBaseStyle,
-                  ...itemProps.labelStyle,
+                  ...itemProps.styles?.label,
                 }}
               >
                 {itemProps.label}
@@ -183,7 +182,7 @@ export const ApolloDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 style={{
                   flex: 1,
                   ...contentBaseStyle,
-                  ...itemProps.contentStyle,
+                  ...itemProps.styles?.content,
                 }}
               >
                 {itemProps.children}

@@ -51,14 +51,13 @@ export interface DescriptionsItemProps extends BaseComponentProps, WithChildren 
   span?: number;
 
   /**
-   * Custom styles applied to the label element.
+   * Custom styles applied to label and content elements.
+   * Replaces deprecated labelStyle and contentStyle props.
    */
-  labelStyle?: CSSProperties;
-
-  /**
-   * Custom styles applied to the content/value element.
-   */
-  contentStyle?: CSSProperties;
+  styles?: {
+    label?: CSSProperties;
+    content?: CSSProperties;
+  };
 }
 
 /**
@@ -109,14 +108,12 @@ export interface DescriptionsProps
   colon?: boolean;
 
   /**
-   * Custom styles applied to all label elements.
-   * Can be overridden by individual item labelStyle.
+   * Custom styles applied to all label and content elements.
+   * Can be overridden by individual item styles.
+   * Replaces deprecated labelStyle and contentStyle props.
    */
-  labelStyle?: CSSProperties;
-
-  /**
-   * Custom styles applied to all content elements.
-   * Can be overridden by individual item contentStyle.
-   */
-  contentStyle?: CSSProperties;
+  styles?: {
+    label?: CSSProperties;
+    content?: CSSProperties;
+  };
 }
