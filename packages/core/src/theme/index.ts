@@ -5,5 +5,5 @@
 
 export * from './tenants';
 export * from './presets';
+export * from './i18n';
 // Tokens are CSS files, exported via package.json
-// i18n is exported separately when needed

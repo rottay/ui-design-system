@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
+import preserveDirectives from 'rollup-plugin-preserve-directives';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
       include: ['src/**/*'],
       insertTypesEntry: true,
     }),
+    preserveDirectives(),
   ],
   resolve: {
     alias: {
