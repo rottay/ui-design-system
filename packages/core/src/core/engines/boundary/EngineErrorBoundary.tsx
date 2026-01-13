@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview EngineErrorBoundary Component - Rottay Design System
  * @description React error boundary that catches and handles errors during

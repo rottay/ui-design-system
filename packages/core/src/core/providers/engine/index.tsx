@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview EngineProvider - Rottay Design System
  * @description Provides the current UI rendering engine context, enabling
@@ -88,12 +90,21 @@ export function EngineProvider({
   );
 }
 
+/**
+ * Default context value used when no EngineProvider is present.
+ * This allows components to work in SSR and non-provider scenarios.
+ */
+const defaultContextValue: EngineContextValue = {
+  engine: getDefaultEngine(),
+  setEngine: () => {
+    console.warn('setEngine called outside of EngineProvider. Wrap your app with EngineProvider to enable engine switching.');
+  },
+};
+
 export function useEngineContext(): EngineContextValue {
   const context = useContext(EngineContext);
-  if (!context) {
-    throw new Error('useEngineContext must be used within EngineProvider');
-  }
-  return context;
+  // Return default context if no provider is present (SSR-safe)
+  return context || defaultContextValue;
 }
 
 export { EngineContext };
