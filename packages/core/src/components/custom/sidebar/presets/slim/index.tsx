@@ -10,13 +10,13 @@ export const SlimSidebar = createPreset<SidebarProps>({
   name: 'Sidebar.Slim',
   render: ({ primitives, props, tokens }: PresetContext<SidebarProps>) => {
     const { Box, Stack } = primitives;
-    const { items, activeKey, header, footer, collapsedWidth = 72, className, style } = props;
+    const { items, activeKey, header, footer, collapsedWidth = 72, itemSpacing = 'xs', className, style } = props;
 
     return (
       <Box className={className} style={{ width: `${collapsedWidth}px`, height: '100vh', backgroundColor: tokens.colors.neutral[50], borderRight: `1px solid ${tokens.colors.neutral[200]}`, display: 'flex', flexDirection: 'column', ...style }}>
         {header && <Box style={{ padding: tokens.spacing[4], borderBottom: `1px solid ${tokens.colors.neutral[200]}`, display: 'flex', justifyContent: 'center' }}>{header}</Box>}
         <Box style={{ flex: 1, overflowY: 'auto', padding: tokens.spacing[2] }}>
-          <Stack direction="vertical" spacing="xs">
+          <Stack direction="vertical" spacing={itemSpacing}>
             {items.map((item) => {
               const isActive = item.key === activeKey;
               return (

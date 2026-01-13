@@ -10,7 +10,7 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
   name: 'Sidebar.Collapsible',
   render: ({ primitives, props, tokens }: PresetContext<SidebarProps>) => {
     const { Box, Stack } = primitives;
-    const { items, activeKey, collapsed: controlledCollapsed, onCollapse, header, footer, width = 260, collapsedWidth = 72, className, style } = props;
+    const { items, activeKey, collapsed: controlledCollapsed, onCollapse, header, footer, width = 260, collapsedWidth = 72, itemSpacing = 'xs', className, style } = props;
     const [internalCollapsed, setInternalCollapsed] = useState(false);
     const collapsed = controlledCollapsed ?? internalCollapsed;
 
@@ -31,7 +31,7 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
           </Box>
         )}
         <Box style={{ flex: 1, overflowY: 'auto', padding: tokens.spacing[collapsed ? 2 : 3] }}>
-          <Stack direction="vertical" spacing="xs">
+          <Stack direction="vertical" spacing={itemSpacing}>
             {items.map((item) => {
               const isActive = item.key === activeKey;
               if (collapsed) {

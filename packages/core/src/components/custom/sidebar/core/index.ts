@@ -27,6 +27,8 @@ export interface SidebarProps extends EngineAwareProps {
   footer?: ReactNode;
   width?: number;
   collapsedWidth?: number;
+  /** Spacing between sidebar items. Defaults to 'xs'. Use 'sm', 'md', 'lg', etc. for more space */
+  itemSpacing?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export const SIDEBAR_DEFAULTS: Partial<SidebarProps> = {
