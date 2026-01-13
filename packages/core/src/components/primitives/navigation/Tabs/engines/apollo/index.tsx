@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tabs Apollo Engine - Rottay Design System
  * @description Pure HTML/CSS implementation of the Tabs component.

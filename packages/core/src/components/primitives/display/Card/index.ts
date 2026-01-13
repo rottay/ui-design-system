@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Card - Rottay Design System
  * @description Container component for grouping related content and actions.

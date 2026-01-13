@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tabs Hermes Engine - Rottay Design System
  * @description DaisyUI/Tailwind implementation of the Tabs component.
