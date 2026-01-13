@@ -149,6 +149,24 @@ function getColumnsClass(columns: GridProps['columns']): string {
 }
 
 /**
+ * Build responsive data attributes for CSS-based responsive columns
+ */
+function getResponsiveDataAttributes(columns: GridProps['columns']): Record<string, string> {
+  if (!columns || typeof columns !== 'object') return {};
+
+  const attrs: Record<string, string> = {};
+  const responsiveColumns = columns as { xs?: number; sm?: number; md?: number; lg?: number; xl?: number };
+
+  if (responsiveColumns.xs !== undefined) attrs['data-cols-xs'] = String(responsiveColumns.xs);
+  if (responsiveColumns.sm !== undefined) attrs['data-cols-sm'] = String(responsiveColumns.sm);
+  if (responsiveColumns.md !== undefined) attrs['data-cols-md'] = String(responsiveColumns.md);
+  if (responsiveColumns.lg !== undefined) attrs['data-cols-lg'] = String(responsiveColumns.lg);
+  if (responsiveColumns.xl !== undefined) attrs['data-cols-xl'] = String(responsiveColumns.xl);
+
+  return attrs;
+}
+
+/**
  * Hermes Grid component
  * Uses DaisyUI/Tailwind styling patterns with CSS Grid layout
  */
@@ -163,6 +181,7 @@ const HermesGrid = forwardRef<HTMLElement, GridProps>(
     } = props;
 
     const computedStyle = buildGridStyles(props);
+    const responsiveAttrs = getResponsiveDataAttributes(columns);
 
     // Build Tailwind classes
     const tailwindClasses = [
@@ -180,6 +199,7 @@ const HermesGrid = forwardRef<HTMLElement, GridProps>(
         className: `rottay-grid rottay-grid--hermes ${tailwindClasses} ${className}`.trim(),
         style: computedStyle,
         'data-component': 'grid',
+        ...responsiveAttrs,
       },
       children
     );

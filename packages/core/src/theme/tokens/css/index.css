@@ -5,6 +5,7 @@
  * Import this single file to get all tokens, themes, and engine styles.
  *
  * CSS Cascade Order (specificity matters):
+ * 0. antd/reset       - Ant Design base styles (for icons support)
  * 1. default.css      - Base tokens in :root (lowest specificity)
  * 2. engines/         - Engine themes mapping tokens to library classes
  * 3. tenants/         - Tenant overrides via [data-tenant="x"] selector (HIGHEST priority)
@@ -23,6 +24,12 @@
  *
  * @version 0.4.0
  */
+
+/* =============================================================================
+   LAYER 0: ANT DESIGN BASE STYLES
+   Required for Ant Design icons (@ant-design/icons) to render correctly
+   ============================================================================= */
+@import 'antd/dist/reset.css';
 
 /* =============================================================================
    LAYER 1: DEFAULT THEME (Base Tokens)

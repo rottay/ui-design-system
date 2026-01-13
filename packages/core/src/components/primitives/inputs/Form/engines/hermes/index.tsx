@@ -90,7 +90,7 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
   const touchedRef = useRef<Record<string, boolean>>({});
   const listenersRef = useRef<Set<() => void>>(new Set());
 
-  const instance = useMemo<FormInstance<T>>(() => ({
+  const instance = useMemo<FormInstance<T> & { __subscribe?: (fn: () => void) => () => void; __getValues?: () => Record<string, unknown> }>(() => ({
     getFieldValue: (name) => {
       const key = Array.isArray(name) ? name.join('.') : String(name);
       return valuesRef.current[key];
@@ -151,6 +151,12 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
     },
     isFieldValidating: () => false,
     scrollToField: () => {},
+    // Internal methods for Form component to subscribe to changes
+    __subscribe: (fn: () => void) => {
+      listenersRef.current.add(fn);
+      return () => listenersRef.current.delete(fn);
+    },
+    __getValues: () => ({ ...valuesRef.current }),
   }), []);
 
   return [instance];
@@ -179,6 +185,63 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const [values, setValues] = useState<Record<string, unknown>>(initialValues as Record<string, unknown>);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  // Wrap form instance methods to sync with component state
+  // This works with ANY form instance (Titan/Ant Design, Hermes, or Apollo)
+  React.useEffect(() => {
+    if (form) {
+      // Store original methods
+      const originalSetFieldsValue = form.setFieldsValue;
+      const originalSetFieldValue = form.setFieldValue;
+      const originalResetFields = form.resetFields;
+
+      // Wrap setFieldsValue to also update component state
+      form.setFieldsValue = (newValues: Record<string, unknown>) => {
+        console.log('[HermesForm] setFieldsValue called with:', newValues);
+        // Call original method
+        originalSetFieldsValue.call(form, newValues);
+        // Update component state
+        setValues(prev => ({ ...prev, ...newValues }));
+      };
+
+      // Wrap setFieldValue to also update component state
+      form.setFieldValue = (fieldName: string | number | (string | number)[], value: unknown) => {
+        console.log('[HermesForm] setFieldValue called:', fieldName, value);
+        // Call original method
+        originalSetFieldValue.call(form, fieldName, value);
+        // Update component state
+        const key = Array.isArray(fieldName) ? fieldName.join('.') : String(fieldName);
+        setValues(prev => ({ ...prev, [key]: value }));
+      };
+
+      // Wrap resetFields to also reset component state
+      form.resetFields = (fields?: (string | number | (string | number)[])[]) => {
+        console.log('[HermesForm] resetFields called:', fields);
+        // Call original method
+        originalResetFields.call(form, fields);
+        // Reset component state
+        if (fields) {
+          setValues(prev => {
+            const newValues = { ...prev };
+            fields.forEach(field => {
+              const key = Array.isArray(field) ? field.join('.') : String(field);
+              delete newValues[key];
+            });
+            return newValues;
+          });
+        } else {
+          setValues(initialValues as Record<string, unknown>);
+        }
+      };
+
+      // Cleanup: restore original methods
+      return () => {
+        form.setFieldsValue = originalSetFieldsValue;
+        form.setFieldValue = originalSetFieldValue;
+        form.resetFields = originalResetFields;
+      };
+    }
+  }, [form, initialValues]);
 
   const setValue = useCallback((fieldName: string, value: unknown) => {
     setValues((prev) => {

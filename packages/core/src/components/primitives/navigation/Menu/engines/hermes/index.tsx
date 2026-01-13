@@ -98,7 +98,7 @@ function renderDaisyMenuItems(
         <li key={item.key}>
           <details>
             <summary className={item.disabled ? 'disabled' : ''}>
-              {item.icon && <span className="menu-icon">{item.icon}</span>}
+              {item.icon}
               {item.label}
             </summary>
             <ul>
@@ -129,7 +129,7 @@ function renderDaisyMenuItems(
           }}
           aria-disabled={item.disabled}
         >
-          {item.icon && <span className="menu-icon">{item.icon}</span>}
+          {item.icon}
           {item.label}
         </a>
       </li>

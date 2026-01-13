@@ -53,6 +53,9 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     } = props;
 
 
+    // Default to document.body to avoid clipping inside overflow containers (tables, cards, etc.)
+    const defaultGetPopupContainer = () => document.body;
+
     return (
       <div ref={ref} className={className}>
         <AntDropdown
@@ -64,7 +67,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           disabled={disabled}
           arrow={arrow}
           autoAdjustOverflow={autoAdjustOverflow}
-          getPopupContainer={getPopupContainer}
+          getPopupContainer={getPopupContainer || defaultGetPopupContainer}
           overlayClassName={overlayClassName}
           overlayStyle={overlayStyle}
         >

@@ -5,8 +5,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { DesignSystemProvider } from '../root';
 import { FeatureGate } from '../../features/gate';
-import { Button } from '../../../components/primitives/inputs/button';
-import { Alert } from '../../../components/primitives/feedback/alert';
+import { Button } from '../../../components/primitives/inputs/Button';
+import { Alert } from '../../../components/primitives/feedback/Alert';
 
 const meta: Meta = {
   title: 'System/Providers',
