@@ -6,7 +6,7 @@
 import type { ReactNode } from 'react';
 import type { EngineAwareProps, BaseComponentProps } from '../../../../types';
 
-export type DataTablePreset = 'simple' | 'searchable' | 'selectable' | 'full';
+export type DataTablePreset = 'simple' | 'searchable' | 'selectable' | 'full' | 'expandable' | 'professional';
 
 export interface DataTableColumn<T = unknown> {
   key: string;
