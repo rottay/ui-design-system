@@ -39,6 +39,7 @@ export type {
   CardProps,
   CardSize,
   CardVariant,
+  CardColorVariant,
   CardHeaderProps,
   CardBodyProps,
   CardFooterProps,
@@ -65,6 +66,7 @@ export type {
  */
 export const CARD_DEFAULTS = {
   variant: 'elevated' as const,
+  colorVariant: 'default' as const,
   size: 'md' as const,
   shadow: 'md' as const,
   padding: 'md' as const,
@@ -126,4 +128,38 @@ export const RADIUS_MAP: Record<string, string> = {
   md: 'var(--ds-card-radius, 8px)',
   lg: 'var(--ds-card-radius-lg, 12px)',
   xl: 'var(--ds-card-radius-xl, 16px)',
+};
+
+/**
+ * Mapping of color variants to CSS styles.
+ * Each variant provides border-left color and background tint.
+ *
+ * @constant
+ * @type {Record<string, { borderColor: string; background: string }>}
+ */
+export const COLOR_VARIANT_MAP: Record<string, { borderColor: string; background: string }> = {
+  default: {
+    borderColor: 'transparent',
+    background: 'transparent',
+  },
+  primary: {
+    borderColor: 'var(--ds-color-primary-500, #3b82f6)',
+    background: 'var(--ds-color-primary-50, rgba(59, 130, 246, 0.05))',
+  },
+  success: {
+    borderColor: 'var(--ds-color-success-500, #22c55e)',
+    background: 'var(--ds-color-success-50, rgba(34, 197, 94, 0.05))',
+  },
+  warning: {
+    borderColor: 'var(--ds-color-warning-500, #f59e0b)',
+    background: 'var(--ds-color-warning-50, rgba(245, 158, 11, 0.05))',
+  },
+  error: {
+    borderColor: 'var(--ds-color-error-500, #ef4444)',
+    background: 'var(--ds-color-error-50, rgba(239, 68, 68, 0.05))',
+  },
+  info: {
+    borderColor: 'var(--ds-color-info-500, #3b82f6)',
+    background: 'var(--ds-color-info-50, rgba(59, 130, 246, 0.05))',
+  },
 };

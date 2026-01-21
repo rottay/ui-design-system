@@ -82,11 +82,11 @@ html[data-tenant='bithire'] {
   --ds-radius-xl: 16px;
   --ds-radius-full: 9999px;
 
-  /* Shadows - LinkedIn style (subtle, layered) */
-  --ds-shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.08);
-  --ds-shadow-md: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --ds-shadow-lg: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-  --ds-shadow-xl: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  /* Shadows - Visible, professional depth */
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --ds-shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+  --ds-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
 
   /* Button overrides */
   --ds-button-primary-bg: #0A66C2;
@@ -97,11 +97,11 @@ html[data-tenant='bithire'] {
   --ds-button-secondary-text: #0A66C2;
   --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
 
-  /* Card overrides */
+  /* Card overrides - Visible shadows (NO !important in rules below) */
   --ds-card-bg: #ffffff;
   --ds-card-border: rgba(0, 0, 0, 0.08);
-  --ds-card-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
-  --ds-card-shadow-hover: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.1);
+  --ds-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --ds-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
 
   /* Input overrides */
   --ds-input-bg: #ffffff;
@@ -123,6 +123,33 @@ html[data-tenant='bithire'] {
   --ds-color-error-bg: #fef2f2;
   --ds-color-info: #0A66C2;
   --ds-color-info-bg: #f0f7ff;
+
+  /* ============================================
+     SIDEBAR NAVIGATION
+     Compact style with section dividers
+     ============================================ */
+
+  /* Group Headers - Bold, slightly larger than items */
+  --ds-sidebar-group-font-size: 11px;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-color: rgba(0, 0, 0, 0.55);
+  --ds-sidebar-group-letter-spacing: 0.04em;
+  --ds-sidebar-group-margin-top: 8px;
+  --ds-sidebar-group-margin-bottom: 4px;
+  --ds-sidebar-group-padding-top: 10px;
+  --ds-sidebar-group-border: 1px solid rgba(0, 0, 0, 0.08);
+
+  /* Nav Items - Compact, smaller than header */
+  --ds-sidebar-item-font-size: 13px;
+  --ds-sidebar-item-font-weight: 400;
+  --ds-sidebar-item-font-weight-active: 500;
+  --ds-sidebar-item-color: rgba(0, 0, 0, 0.65);
+  --ds-sidebar-item-color-active: #0A66C2;
+  --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
+  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-sidebar-item-indent: 6px;
+  --ds-sidebar-item-padding: 6px 10px;
+  --ds-sidebar-icon-size: 16px;
 
 }
 
@@ -185,21 +212,33 @@ html[data-tenant='bithire'] .ant-btn-link:hover:not(:disabled) {
   color: #004182 !important;
 }
 
-/* Cards - LinkedIn style with border */
-html[data-tenant='bithire'] .ant-card {
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  border-radius: 8px !important;
-  box-shadow: none !important;
+/* Cards - Professional with visible shadow (uses CSS variables, no !important) */
+html[data-tenant='bithire'] .ant-card,
+html[data-tenant='bithire'] .rottay-card {
+  background: var(--ds-card-bg);
+  border: 1px solid var(--ds-card-border);
+  border-radius: 12px;
+  box-shadow: var(--ds-card-shadow);
+  transition: all 0.2s ease;
 }
 
-html[data-tenant='bithire'] .ant-card:hover {
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+html[data-tenant='bithire'] .ant-card:hover,
+html[data-tenant='bithire'] .rottay-card:hover {
+  box-shadow: var(--ds-card-shadow-hover);
 }
 
 html[data-tenant='bithire'] .ant-card-head {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
   background: transparent !important;
+}
+
+/* Card Body - More padding for breathing room */
+html[data-tenant='bithire'] .ant-card-body {
+  padding: 24px !important;
+}
+
+html[data-tenant='bithire'] .rottay-card-body {
+  padding: 24px !important;
 }
 
 html[data-tenant='bithire'] .ant-card-head-title {
@@ -841,4 +880,20 @@ html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-sub {
 html[data-tenant='bithire'] .app-sidebar-menu .ant-menu-item-icon,
 html[data-tenant='bithire'] .app-sidebar-menu .anticon {
   color: inherit !important;
+}
+
+/* ============================================
+   DS SIDEBAR COMPONENT OVERRIDES
+   ============================================ */
+
+/* Sidebar item hover state */
+html[data-tenant='bithire'] .ds-sidebar-item:hover {
+  background-color: var(--ds-sidebar-item-bg-hover) !important;
+  color: var(--ds-color-text-primary) !important;
+}
+
+/* Ensure active state takes precedence over hover */
+html[data-tenant='bithire'] .ds-sidebar-item-active:hover {
+  background-color: var(--ds-sidebar-item-bg-active) !important;
+  color: var(--ds-sidebar-item-color-active) !important;
 }

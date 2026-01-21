@@ -52,7 +52,7 @@
 import React from 'react';
 import { Card as AntCard, Skeleton } from 'antd';
 import type { CardProps } from '../../types';
-import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from '../../types';
+import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../../types';
 
 /**
  * Titan engine Card component using Ant Design.
@@ -97,6 +97,7 @@ export default function TitanCard(props: CardProps): React.ReactElement {
     extra,
     actions,
     variant = CARD_DEFAULTS.variant,
+    colorVariant = CARD_DEFAULTS.colorVariant,
     size: _size = CARD_DEFAULTS.size,
     hoverable = CARD_DEFAULTS.hoverable,
     clickable = CARD_DEFAULTS.clickable,
@@ -111,8 +112,13 @@ export default function TitanCard(props: CardProps): React.ReactElement {
     style,
   } = props;
 
-  // Determine border based on variant
-  const showBorder = variant === 'outlined' || bordered;
+  // Determine Ant Design variant based on our variant prop
+  // AntD 5.x uses variant="borderless" instead of bordered={false}
+  const antVariant = (variant === 'outlined' || bordered) ? undefined : 'borderless';
+
+  // Get color variant styles
+  const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
+  const hasColorVariant = colorVariant && colorVariant !== 'default';
 
   // Build body style
   const bodyStyle: React.CSSProperties = {
@@ -154,7 +160,7 @@ export default function TitanCard(props: CardProps): React.ReactElement {
       extra={extra}
       cover={coverElement}
       actions={actions}
-      bordered={showBorder}
+      variant={antVariant}
       hoverable={hoverable || clickable}
       loading={loading}
       onClick={onClick}
@@ -167,6 +173,11 @@ export default function TitanCard(props: CardProps): React.ReactElement {
         borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
         cursor: clickable || onClick ? 'pointer' : undefined,
         ...shadowStyle,
+        // Apply color variant styles
+        ...(hasColorVariant && {
+          borderLeft: `4px solid ${colorStyles.borderColor}`,
+          backgroundColor: colorStyles.background,
+        }),
         ...style,
       }}
     >

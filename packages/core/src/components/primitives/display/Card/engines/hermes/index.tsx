@@ -48,7 +48,7 @@
 
 import React, { useState } from 'react';
 import type { CardProps } from '../../types';
-import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP } from '../../types';
+import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../../types';
 
 /**
  * Hermes engine Card component using DaisyUI/Tailwind CSS.
@@ -95,6 +95,7 @@ export default function HermesCard(props: CardProps): React.ReactElement {
     extra,
     actions,
     variant = CARD_DEFAULTS.variant,
+    colorVariant = CARD_DEFAULTS.colorVariant,
     size: _size = CARD_DEFAULTS.size,
     hoverable = CARD_DEFAULTS.hoverable,
     clickable = CARD_DEFAULTS.clickable,
@@ -131,10 +132,19 @@ export default function HermesCard(props: CardProps): React.ReactElement {
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
 
+  // Get color variant styles
+  const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
+  const hasColorVariant = colorVariant && colorVariant !== 'default';
+
   // Card style
   const cardStyle: React.CSSProperties = {
     borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
     cursor: clickable || onClick ? 'pointer' : undefined,
+    // Apply color variant styles
+    ...(hasColorVariant && {
+      borderLeft: `4px solid ${colorStyles.borderColor}`,
+      backgroundColor: colorStyles.background,
+    }),
     ...style,
   };
 

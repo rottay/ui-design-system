@@ -77,6 +77,7 @@ import { CardHeader, CardBody, CardFooter, CardImage } from './compound';
 export type {
   CardProps,
   CardVariant,
+  CardColorVariant,
   CardSize,
   CardHeaderProps,
   CardBodyProps,
@@ -84,7 +85,7 @@ export type {
   CardImageProps,
 } from './types';
 
-export { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from './types';
+export { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from './types';
 
 // Export compound components
 export { CardHeader, CardBody, CardFooter, CardImage };

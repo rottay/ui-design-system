@@ -57,7 +57,7 @@
 
 import React, { useState } from 'react';
 import type { CardProps } from '../../types';
-import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP } from '../../types';
+import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../../types';
 
 /**
  * Apollo engine Card component using pure HTML/CSS.
@@ -105,6 +105,7 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
     extra,
     actions,
     variant = CARD_DEFAULTS.variant,
+    colorVariant = CARD_DEFAULTS.colorVariant,
     size: _size = CARD_DEFAULTS.size,
     hoverable = CARD_DEFAULTS.hoverable,
     clickable = CARD_DEFAULTS.clickable,
@@ -124,6 +125,10 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
   const borderRadiusValue = RADIUS_MAP[radius] || RADIUS_MAP.md;
+
+  // Get color variant styles
+  const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
+  const hasColorVariant = colorVariant && colorVariant !== 'default';
 
   // Variant-specific styles using design system tokens
   const variantStyles: Record<string, React.CSSProperties> = {
@@ -161,6 +166,11 @@ export default function ApolloCard(props: CardProps): React.ReactElement {
     opacity: loading ? 0.7 : 1,
     pointerEvents: loading ? 'none' : 'auto',
     ...variantStyles[variant],
+    // Apply color variant styles
+    ...(hasColorVariant && {
+      borderLeft: `4px solid ${colorStyles.borderColor}`,
+      backgroundColor: colorStyles.background,
+    }),
     ...style,
   };
 

@@ -558,6 +558,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                   color: 'var(--ds-color-text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {col.title}

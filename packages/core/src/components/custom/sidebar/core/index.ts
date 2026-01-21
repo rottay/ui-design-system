@@ -15,6 +15,8 @@ export interface SidebarItem {
   onClick?: () => void;
   badge?: string | number;
   children?: SidebarItem[];
+  /** When true, renders as a section header/divider instead of a clickable item */
+  disabled?: boolean;
 }
 
 export interface SidebarProps extends EngineAwareProps {

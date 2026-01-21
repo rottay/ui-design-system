@@ -25,7 +25,8 @@ export { CompactDashboardCard, TrendingDashboardCard, ChartDashboardCard, Detail
 // DataTable
 export { DataTable } from './data-table';
 export type { DataTableProps, DataTablePreset, DataTableColumn } from './data-table';
-export { SimpleDataTable, SearchableDataTable, SelectableDataTable, FullDataTable } from './data-table';
+export { SimpleDataTable, SearchableDataTable, SelectableDataTable, FullDataTable, ExpandableDataTable, ProfessionalDataTable } from './data-table';
+export type { ExpandableDataTableProps, ProfessionalDataTableProps, FilterOption, RowAction, BulkAction } from './data-table';
 
 // SearchBar
 export { SearchBar } from './search-bar';

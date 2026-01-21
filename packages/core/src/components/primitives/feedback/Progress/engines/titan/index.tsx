@@ -90,7 +90,7 @@ import { PROGRESS_DEFAULTS } from '../../types';
  * | status | status (mapped) |
  * | showInfo | showInfo |
  * | strokeColor | strokeColor |
- * | strokeWidth | strokeWidth |
+ * | strokeWidth | size |
  *
  * @param props - {@link ProgressProps}
  * @returns The rendered Ant Design Progress
@@ -132,7 +132,7 @@ export default function TitanProgress(props: ProgressProps): React.ReactElement 
       status={status === 'error' ? 'exception' : status === 'success' ? 'success' : undefined}
       showInfo={showInfo}
       strokeColor={strokeColor}
-      strokeWidth={strokeWidth}
+      size={strokeWidth}
       className={className}
       style={style}
     />

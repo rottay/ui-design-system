@@ -13,6 +13,12 @@ export type CardSize = Size;
 export type CardVariant = 'elevated' | 'outlined' | 'filled' | 'ghost';
 
 /**
+ * Card color variants for semantic styling.
+ * Applies a colored left border and subtle background tint.
+ */
+export type CardColorVariant = 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info';
+
+/**
  * Card component props.
  */
 export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChildren, ClickableProps, ShadowedProps, BorderedProps {
@@ -23,10 +29,17 @@ export interface CardProps extends BaseComponentProps, EngineAwareProps, WithChi
   size?: CardSize;
 
   /**
-   * Card color variant.
-   * @default 'default'
+   * Card visual variant.
+   * @default 'elevated'
    */
   variant?: CardVariant;
+
+  /**
+   * Card color variant for semantic styling.
+   * Applies a colored left border and subtle background tint.
+   * @default 'default'
+   */
+  colorVariant?: CardColorVariant;
 
   /**
    * Card title.

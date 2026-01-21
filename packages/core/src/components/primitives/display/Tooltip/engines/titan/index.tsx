@@ -143,8 +143,8 @@ const TitanTooltip = forwardRef<HTMLDivElement, TooltipProps>(
         onOpenChange={onVisibleChange}
         color={color ? colorMap[color] : undefined}
         zIndex={zIndex}
-        overlayStyle={style}
-        overlayClassName={className}
+        styles={style ? { root: style } : undefined}
+        classNames={className ? { root: className } : undefined}
         {...restProps}
       >
         {children}
