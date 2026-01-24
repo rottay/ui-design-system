@@ -12,9 +12,11 @@
  * Current tenants:
  * - rottay: Notion-inspired minimal design (default)
  * - bithire: Tech recruitment platform (indigo/purple)
+ * - evnto: Event management platform (black/grey monochromatic)
  *
  * @version 0.5.0
  */
 
 @import './rottay/index.css';
 @import './bithire/index.css';
+@import './evnto/index.css';

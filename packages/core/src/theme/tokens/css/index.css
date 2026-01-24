@@ -28,8 +28,9 @@
 /* =============================================================================
    LAYER 0: ANT DESIGN BASE STYLES
    Required for Ant Design icons (@ant-design/icons) to render correctly
+   NOTE: Commented out - apps should import antd/dist/reset.css directly
    ============================================================================= */
-@import 'antd/dist/reset.css';
+/* @import 'antd/dist/reset.css'; */
 
 /* =============================================================================
    LAYER 1: DEFAULT THEME (Base Tokens)

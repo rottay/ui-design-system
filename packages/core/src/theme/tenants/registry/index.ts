@@ -54,6 +54,25 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
       logo: undefined,
     },
   },
+
+  /**
+   * Evnto - Event management platform
+   * Notion-inspired monochromatic (black/grey scale)
+   */
+  evnto: {
+    slug: 'evnto',
+    name: 'Evnto',
+    engine: 'titan' as EngineName,
+    theme: 'base',
+    plan: 'enterprise',
+    features: ['*'],
+    branding: {
+      companyName: 'Evnto',
+      primaryColor: '#191919',
+      accentColor: '#6b6b6b',
+      logo: undefined,
+    },
+  },
 };
 
 /**

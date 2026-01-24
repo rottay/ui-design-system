@@ -5,15 +5,18 @@
 import type { ThemeConfig } from '../../../core/types';
 import { bithireTheme } from './bithire';
 import { corporateTheme } from './corporate';
+import { evntoTheme } from './evnto';
 import { minimalTheme } from './minimal';
 
 export { bithireTheme } from './bithire';
 export { corporateTheme } from './corporate';
+export { evntoTheme } from './evnto';
 export { minimalTheme } from './minimal';
 
 export const themePresets: Record<string, ThemeConfig> = {
   bithire: bithireTheme,
   corporate: corporateTheme,
+  evnto: evntoTheme,
   minimal: minimalTheme,
 };
 
