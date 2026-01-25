@@ -1,5 +1,12 @@
 # Claude Code Rules - Design System
 
+## AI Documentation
+
+- **Catálogo Central**: `/.ai-docs/CATALOG.md`
+- **Component Reference**: `/.ai-docs/design-system/COMPONENTS.md`
+
+---
+
 ## GitHub Configuration
 
 - **Token**: `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`
