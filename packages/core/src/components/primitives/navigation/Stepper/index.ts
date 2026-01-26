@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Stepper Component - Rottay Design System
  * @description A navigation component that guides users through multi-step processes

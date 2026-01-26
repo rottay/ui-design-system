@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Watermark Component - Rottay Design System
  * @description A canvas-based watermark overlay component that renders repeating text or image

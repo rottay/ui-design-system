@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview FloatButton Component - Rottay Design System
  * @description A floating action button component that provides quick access to primary actions.

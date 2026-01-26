@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview TimePicker Component - Rottay Design System
  * @description A time selection input component that provides clock-based picking

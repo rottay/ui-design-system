@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Progress Component - Rottay Design System
  * @description A visual indicator that displays the current progress of an operation.

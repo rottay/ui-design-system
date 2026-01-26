@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Segmented Component - Rottay Design System
  * @description A segmented control component for switching between different views or options.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Radio - Rottay Design System
  * @description Single-selection input component for choosing one option from a set.

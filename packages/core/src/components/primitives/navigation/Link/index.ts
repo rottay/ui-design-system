@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Link Component - Rottay Design System
  * @description A styled anchor element for navigation with multi-engine support.

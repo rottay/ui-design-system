@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Badge - Rottay Design System
  * @description Notification indicator with counts, dots, and status labels.

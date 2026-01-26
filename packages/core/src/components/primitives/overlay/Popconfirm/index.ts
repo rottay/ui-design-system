@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Popconfirm Component - Rottay Design System
  * @description A compact confirmation dialog that appears as a popover. Perfect for

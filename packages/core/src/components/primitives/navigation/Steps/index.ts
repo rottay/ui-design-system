@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Steps Component - Rottay Design System
  * @description A navigation component that displays progress through a sequence

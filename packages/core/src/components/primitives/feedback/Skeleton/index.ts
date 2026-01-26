@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Skeleton Component - Rottay Design System
  * @description A placeholder loading component that mimics content structure.

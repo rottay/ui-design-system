@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Statistic Component - Rottay Design System
  * @description Numerical data display with formatting, countdown, and value types.

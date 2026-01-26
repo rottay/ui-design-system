@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Toggle - Rottay Design System
  * @description Boolean toggle switch for on/off states with visual feedback.

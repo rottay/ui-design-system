@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview DatePicker Component - Rottay Design System
  * @description A date selection input component that provides calendar-based picking

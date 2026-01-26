@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Container Component - Rottay Design System
  * @description A centered, max-width constrained layout container with configurable

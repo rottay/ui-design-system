@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Descriptions Component - Rottay Design System
  * @description Key-value pair display with grid layout and bordered variants.

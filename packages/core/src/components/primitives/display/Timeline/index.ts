@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Timeline Component - Rottay Design System
  * @description A component for displaying a sequence of events or activities

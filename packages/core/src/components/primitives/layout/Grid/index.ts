@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Grid Component - Rottay Design System
  * @description A powerful CSS Grid layout component with responsive column support,

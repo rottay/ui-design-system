@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview ColorPicker Component - Rottay Design System
  * @description A color selection interface with support for multiple formats,

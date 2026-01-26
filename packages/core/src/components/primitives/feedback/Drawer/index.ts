@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Drawer Component - Rottay Design System
  * @description A sliding panel component that emerges from the edge of the screen.

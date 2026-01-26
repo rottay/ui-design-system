@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Pagination Component - Rottay Design System
  * @description A navigation component for traversing through paginated content.

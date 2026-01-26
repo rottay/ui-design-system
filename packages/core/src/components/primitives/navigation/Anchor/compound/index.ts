@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Anchor Compound Components - Rottay Design System
  * @description Re-exports all compound components for the Anchor primitive.

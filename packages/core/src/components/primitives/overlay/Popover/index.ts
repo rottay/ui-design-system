@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Popover Component - Rottay Design System
  * @description A floating content panel that displays additional information or controls

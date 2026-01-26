@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Collapse Component - Rottay Design System
  * @description An expandable/collapsible panel component for organizing content

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview QRCode Component - Rottay Design System
  * @description A QR code generation component that encodes text, URLs, or data

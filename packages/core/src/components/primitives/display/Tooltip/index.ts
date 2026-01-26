@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tooltip - Rottay Design System
  * @description Contextual information overlay triggered by user interaction.

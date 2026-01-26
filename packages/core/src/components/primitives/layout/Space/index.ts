@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Space Component - Rottay Design System
  * @description A layout component that adds consistent spacing between child elements.

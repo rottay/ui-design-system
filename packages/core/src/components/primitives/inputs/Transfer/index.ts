@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Transfer Component - Rottay Design System
  * @description A double-column interface for moving items between two lists,

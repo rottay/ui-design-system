@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Box Component - Rottay Design System
  * @description A fundamental layout primitive that provides a styled container

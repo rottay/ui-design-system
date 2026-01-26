@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview List - Rottay Design System
  * @description Versatile list component for displaying collections of items.

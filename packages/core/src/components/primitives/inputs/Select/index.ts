@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Select - Rottay Design System
  * @description Dropdown selection component for choosing from a list of options.

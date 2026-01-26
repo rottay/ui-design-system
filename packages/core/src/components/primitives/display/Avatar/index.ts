@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Avatar - Rottay Design System
  * @description User profile display with image, initials, and status indicators.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tag - Rottay Design System
  * @description Label component for categorization and status indication.

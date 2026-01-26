@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Empty Component - Rottay Design System
  * @description Empty state placeholder with customizable image and description.

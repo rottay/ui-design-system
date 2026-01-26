@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Input - Rottay Design System
  * @description Text input field for capturing user input in forms.

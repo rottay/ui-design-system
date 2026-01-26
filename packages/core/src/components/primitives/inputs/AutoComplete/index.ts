@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview AutoComplete Component - Rottay Design System
  * @description An input component with dropdown suggestions that provides

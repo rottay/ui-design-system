@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Splitter Component - Rottay Design System
  * @description A resizable panel layout component with draggable gutters between panels.

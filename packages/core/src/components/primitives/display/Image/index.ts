@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Image - Rottay Design System
  * @description Enhanced image component with loading states and zoom support.

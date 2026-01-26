@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview InputNumber - Rottay Design System
  * @description Numeric input with step controls for precise number entry.

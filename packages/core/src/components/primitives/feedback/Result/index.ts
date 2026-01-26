@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Result Component - Rottay Design System
  * @description A feedback component for displaying operation outcomes and status pages.

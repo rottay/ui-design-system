@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview BackTop Component - Rottay Design System
  * @description A floating button that scrolls the page back to the top when clicked.

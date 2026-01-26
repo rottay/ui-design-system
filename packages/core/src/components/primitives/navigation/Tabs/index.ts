@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tabs Component - Rottay Design System
  * @description A tabbed interface component for organizing and switching between content sections.

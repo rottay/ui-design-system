@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Checkbox - Rottay Design System
  * @description Boolean input component for toggling options on or off.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Table - Rottay Design System
  * @description Data table component for displaying tabular data with advanced features.

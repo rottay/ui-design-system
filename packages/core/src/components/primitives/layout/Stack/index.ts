@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Stack Component - Rottay Design System
  * @description A layout primitive for stacking elements vertically or horizontally

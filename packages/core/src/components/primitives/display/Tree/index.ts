@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tree Component - Rottay Design System
  * @description A hierarchical list structure component that displays data in a tree format.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Breadcrumb Component - Rottay Design System
  * @description A navigation component that shows the current page's location within a hierarchy.

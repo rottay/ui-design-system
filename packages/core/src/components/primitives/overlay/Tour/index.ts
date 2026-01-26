@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Tour Component - Rottay Design System
  * @description A multi-step guided tour component that highlights elements and displays

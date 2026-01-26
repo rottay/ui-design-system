@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Textarea - Rottay Design System
  * @description Multi-line text input for longer form content.

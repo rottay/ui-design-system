@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview BackTop Engine Exports - Rottay Design System
  * @description Barrel export file for all BackTop engine implementations.

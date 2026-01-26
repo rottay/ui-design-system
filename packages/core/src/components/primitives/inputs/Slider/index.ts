@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Slider - Rottay Design System
  * @description Range slider for selecting values within a numeric range.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Button - Rottay Design System
  * @description Primary interactive element for user actions and form submissions.

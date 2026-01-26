@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Divider Component - Rottay Design System
  * @description A visual separator that creates horizontal or vertical lines to divide

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Dropdown Component - Rottay Design System
  * @description A floating menu component that displays a list of actions or options.

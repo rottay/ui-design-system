@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Mentions Component - Rottay Design System
  * @description A textarea input with @mention functionality that provides dropdown

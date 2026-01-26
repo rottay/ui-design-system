@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview TreeSelect Component - Rottay Design System
  * @description A dropdown selection component that displays hierarchical tree data,

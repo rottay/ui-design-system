@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Calendar - Rottay Design System
  * @description Date and month selection component with panel navigation.

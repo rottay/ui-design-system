@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Modal (Overlay) Component - Rottay Design System
  * @description A flexible modal dialog component for displaying overlay content.

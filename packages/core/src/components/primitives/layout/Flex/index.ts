@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Flex Component - Rottay Design System
  * @description A flexible box layout container that provides fine-grained control

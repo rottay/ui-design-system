@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Upload Component - Rottay Design System
  * @description A file upload component with drag-and-drop support, progress tracking,

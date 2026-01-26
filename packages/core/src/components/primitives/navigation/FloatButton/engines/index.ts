@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview FloatButton Engine Exports - Rottay Design System
  * @description Barrel exports for all FloatButton engine implementations.

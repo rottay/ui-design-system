@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Spinner Component - Rottay Design System
  * @description A loading indicator component that provides visual feedback during async operations.

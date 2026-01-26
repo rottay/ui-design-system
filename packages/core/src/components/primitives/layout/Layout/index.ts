@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Layout Component - Rottay Design System
  * @description A compound layout component for creating complete page structures

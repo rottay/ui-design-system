@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Alert Component - Rottay Design System
  * @description Contextual feedback messages for user actions and system status.

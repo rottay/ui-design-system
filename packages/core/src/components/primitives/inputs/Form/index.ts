@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Form - Rottay Design System
  * @description Form component for handling user input, validation, and submission.

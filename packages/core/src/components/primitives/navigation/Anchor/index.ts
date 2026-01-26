@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Anchor Component - Rottay Design System
  * @description A navigation component that creates links to sections within a page.

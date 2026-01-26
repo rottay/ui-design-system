@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Menu Component - Rottay Design System
  * @description A versatile navigation menu component supporting horizontal, vertical,

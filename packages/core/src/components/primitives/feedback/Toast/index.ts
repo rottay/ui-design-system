@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Toast Component - Rottay Design System
  * @description A notification component that displays brief, auto-dismissing messages.

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Cascader Component - Rottay Design System
  * @description A hierarchical multi-level selection component for navigating

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Carousel Component - Rottay Design System
  * @description Responsive slideshow with navigation, autoplay, and transitions.

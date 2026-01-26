@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Rate Component - Rottay Design System
  * @description A star rating component for collecting user ratings and feedback.

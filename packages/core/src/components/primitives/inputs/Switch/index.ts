@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Switch - Rottay Design System
  * @description Binary toggle control for on/off states.
