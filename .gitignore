@@ -8,7 +8,7 @@ node_modules/
 dist/
 build/
 .next/
-out/
+/out/
 
 # Test coverage
 coverage/
@@ -52,7 +52,7 @@ tsconfig.tsbuildinfo
 
 # Secrets
 secrets/
-**/secrets/
+# **/secrets/ removed - was blocking source code
 *.pem
 *.key
 
