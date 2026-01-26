@@ -1,231 +1,234 @@
 /**
- * Evnto Theme - Notion-Inspired Design
- * Minimal, clean, black/grey scale with subtle borders
+ * Evnto Theme - Light Minimal Design
+ * White backgrounds, black text, grey and beige accents
  *
- * Inspired by Notion's design: monochromatic, clean typography,
- * subtle borders, minimal shadows, flat design
+ * Design Philosophy: Light-first, clean, modern
+ * Primary: White backgrounds with black text
+ * Accents: Warm beige/sand tones for highlights
  */
 
 /* ============================================
-   EVNTO BRAND COLORS (Notion-Inspired)
+   EVNTO BRAND COLORS (Light Mode Default)
    ============================================ */
 html[data-tenant='evnto'] {
-  /* Primary - Deep Black/Charcoal */
-  --ds-color-primary-50: #fafafa;
-  --ds-color-primary-100: #f4f4f5;
-  --ds-color-primary-200: #e4e4e7;
-  --ds-color-primary-300: #d4d4d8;
-  --ds-color-primary-400: #a1a1aa;
-  --ds-color-primary-500: #71717a;
-  --ds-color-primary-600: #52525b;
-  --ds-color-primary-700: #3f3f46;
-  --ds-color-primary-800: #27272a;
-  --ds-color-primary-900: #18181b;
+  /* Primary - Black to White scale (inverted for light theme) */
+  --ds-color-primary-50: #171717;
+  --ds-color-primary-100: #262626;
+  --ds-color-primary-200: #404040;
+  --ds-color-primary-300: #525252;
+  --ds-color-primary-400: #737373;
+  --ds-color-primary-500: #a3a3a3;
+  --ds-color-primary-600: #d4d4d4;
+  --ds-color-primary-700: #e5e5e5;
+  --ds-color-primary-800: #f5f5f5;
+  --ds-color-primary-900: #fafafa;
 
   /* Primary main color - Black */
-  --ds-color-primary: #191919;
-  --ds-color-primary-hover: #2f2f2f;
+  --ds-color-primary: #171717;
+  --ds-color-primary-hover: #262626;
 
-  /* Secondary - Warm Beige/Brown (Notion accent) */
-  --ds-color-secondary-50: #faf7f5;
-  --ds-color-secondary-100: #f5f0eb;
-  --ds-color-secondary-200: #ebe0d6;
-  --ds-color-secondary-300: #dccbb8;
-  --ds-color-secondary-400: #c9aa8f;
-  --ds-color-secondary-500: #b08968;
-  --ds-color-secondary-600: #9a7356;
-  --ds-color-secondary-700: #7a5a44;
-  --ds-color-secondary-800: #5c4333;
-  --ds-color-secondary-900: #3d2c22;
+  /* Secondary - Warm Beige/Sand */
+  --ds-color-secondary-50: #fdfcfb;
+  --ds-color-secondary-100: #f9f7f4;
+  --ds-color-secondary-200: #f3efe8;
+  --ds-color-secondary-300: #e8e2d9;
+  --ds-color-secondary-400: #d4ccc0;
+  --ds-color-secondary-500: #b8a898;
+  --ds-color-secondary-600: #9a8a7a;
+  --ds-color-secondary-700: #7a6a5a;
+  --ds-color-secondary-800: #5a4a3a;
+  --ds-color-secondary-900: #3a2a1a;
 
-  /* Accent - Subtle coral/orange for notifications */
-  --ds-color-accent: #eb5757;
-  --ds-color-accent-hover: #d94343;
+  /* Accent - Sand/Beige for highlights */
+  --ds-color-accent: #b8a898;
+  --ds-color-accent-hover: #9a8a7a;
 
-  /* Neutral - Pure Grays (Notion style) */
-  --ds-color-neutral-50: #ffffff;
-  --ds-color-neutral-100: #fafafa;
-  --ds-color-neutral-200: #f5f5f5;
-  --ds-color-neutral-300: #ebebeb;
-  --ds-color-neutral-400: #d4d4d4;
-  --ds-color-neutral-500: #9e9e9e;
-  --ds-color-neutral-600: #6b6b6b;
-  --ds-color-neutral-700: #454545;
-  --ds-color-neutral-800: #2d2d2d;
-  --ds-color-neutral-900: #1a1a1a;
+  /* Neutral - Light grays */
+  --ds-color-neutral-50: #fafafa;
+  --ds-color-neutral-100: #f5f5f5;
+  --ds-color-neutral-200: #e5e5e5;
+  --ds-color-neutral-300: #d4d4d4;
+  --ds-color-neutral-400: #a3a3a3;
+  --ds-color-neutral-500: #737373;
+  --ds-color-neutral-600: #525252;
+  --ds-color-neutral-700: #404040;
+  --ds-color-neutral-800: #262626;
+  --ds-color-neutral-900: #171717;
 
-  /* Backgrounds - Clean white/light gray */
+  /* Backgrounds - Light theme */
   --ds-color-bg-primary: #ffffff;
   --ds-color-bg-secondary: #fafafa;
   --ds-color-bg-tertiary: #f5f5f5;
   --ds-color-bg-elevated: #ffffff;
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.4);
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.5);
 
-  /* Text - Notion style (softer black) */
-  --ds-color-text-primary: #191919;
-  --ds-color-text-secondary: #6b6b6b;
-  --ds-color-text-tertiary: #9e9e9e;
-  --ds-color-text-muted: #afafaf;
-  --ds-color-text-disabled: #c4c4c4;
+  /* Text - Dark on light */
+  --ds-color-text-primary: #171717;
+  --ds-color-text-secondary: #525252;
+  --ds-color-text-tertiary: #737373;
+  --ds-color-text-muted: #a3a3a3;
+  --ds-color-text-disabled: #d4d4d4;
   --ds-color-text-on-primary: #ffffff;
 
-  /* Borders - Very subtle (Notion style) */
-  --ds-color-border: rgba(0, 0, 0, 0.06);
-  --ds-color-border-primary: rgba(0, 0, 0, 0.06);
-  --ds-color-border-secondary: rgba(0, 0, 0, 0.1);
-  --ds-color-border-focus: #191919;
+  /* Borders - Subtle on light */
+  --ds-color-border: rgba(0, 0, 0, 0.08);
+  --ds-color-border-primary: rgba(0, 0, 0, 0.08);
+  --ds-color-border-secondary: rgba(0, 0, 0, 0.12);
+  --ds-color-border-focus: #171717;
 
-  /* Typography - Inter for clean, modern look */
+  /* Typography - Inter */
   --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --ds-font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace;
 
-  /* Border Radius - More square (Notion style) */
-  --ds-radius-sm: 3px;
-  --ds-radius-md: 4px;
-  --ds-radius-lg: 6px;
-  --ds-radius-xl: 8px;
+  /* Border Radius - Slightly rounded */
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 6px;
+  --ds-radius-lg: 8px;
+  --ds-radius-xl: 12px;
   --ds-radius-full: 9999px;
 
-  /* Shadows - Very subtle or none (Notion style) */
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --ds-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --ds-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
-  --ds-shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
+  /* Shadows - Subtle for light theme */
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --ds-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --ds-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --ds-shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
 
   /* Button overrides */
-  --ds-button-primary-bg: #191919;
-  --ds-button-primary-bg-hover: #2f2f2f;
+  --ds-button-primary-bg: #171717;
+  --ds-button-primary-bg-hover: #262626;
   --ds-button-primary-text: #ffffff;
   --ds-button-secondary-bg: transparent;
   --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
-  --ds-button-secondary-text: #191919;
+  --ds-button-secondary-text: #171717;
   --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
 
-  /* Card overrides - Minimal, border-focused (no shadow) */
+  /* Card overrides */
   --ds-card-bg: #ffffff;
   --ds-card-border: rgba(0, 0, 0, 0.08);
-  --ds-card-shadow: none;
-  --ds-card-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.04);
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   /* Input overrides */
   --ds-input-bg: #ffffff;
-  --ds-input-border: rgba(0, 0, 0, 0.1);
-  --ds-input-border-focus: #191919;
-  --ds-input-shadow-focus: none;
+  --ds-input-border: rgba(0, 0, 0, 0.12);
+  --ds-input-border-focus: #171717;
+  --ds-input-shadow-focus: 0 0 0 1px rgba(23, 23, 23, 0.2);
 
   /* Link colors */
-  --ds-color-link: #191919;
-  --ds-color-link-hover: #454545;
-  --ds-color-link-visited: #6b6b6b;
+  --ds-color-link: #171717;
+  --ds-color-link-hover: #525252;
+  --ds-color-link-visited: #737373;
 
-  /* Status colors - Notion style (muted, pastel) */
-  --ds-color-success: #2f9e44;
-  --ds-color-success-bg: #ebfbee;
-  --ds-color-warning: #f08c00;
-  --ds-color-warning-bg: #fff9db;
-  --ds-color-error: #e03131;
-  --ds-color-error-bg: #fff5f5;
-  --ds-color-info: #1971c2;
-  --ds-color-info-bg: #e7f5ff;
+  /* Status colors - Muted for light theme */
+  --ds-color-success: #16a34a;
+  --ds-color-success-bg: #f0fdf4;
+  --ds-color-warning: #ca8a04;
+  --ds-color-warning-bg: #fefce8;
+  --ds-color-error: #dc2626;
+  --ds-color-error-bg: #fef2f2;
+  --ds-color-info: #2563eb;
+  --ds-color-info-bg: #eff6ff;
 
   /* ============================================
      SIDEBAR NAVIGATION
-     Clean, minimal style
+     Light, minimal style
      ============================================ */
 
-  /* Group Headers - Subtle, small */
+  /* Group Headers */
   --ds-sidebar-group-font-size: 11px;
-  --ds-sidebar-group-font-weight: 500;
-  --ds-sidebar-group-color: #9e9e9e;
-  --ds-sidebar-group-letter-spacing: 0.02em;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-color: #a3a3a3;
+  --ds-sidebar-group-letter-spacing: 0.04em;
   --ds-sidebar-group-margin-top: 12px;
   --ds-sidebar-group-margin-bottom: 4px;
   --ds-sidebar-group-padding-top: 12px;
-  --ds-sidebar-group-border: 1px solid rgba(0, 0, 0, 0.04);
+  --ds-sidebar-group-border: 1px solid rgba(0, 0, 0, 0.06);
 
-  /* Nav Items - Clean, minimal */
+  /* Nav Items */
   --ds-sidebar-item-font-size: 14px;
   --ds-sidebar-item-font-weight: 400;
   --ds-sidebar-item-font-weight-active: 500;
-  --ds-sidebar-item-color: #6b6b6b;
-  --ds-sidebar-item-color-active: #191919;
-  --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.04);
-  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.02);
+  --ds-sidebar-item-color: #525252;
+  --ds-sidebar-item-color-active: #171717;
+  --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.06);
+  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
   --ds-sidebar-item-indent: 8px;
   --ds-sidebar-item-padding: 8px 12px;
   --ds-sidebar-icon-size: 18px;
 
+  /* Sidebar specific */
+  --ds-sidebar-bg: #fafafa;
+  --ds-sidebar-text: #171717;
+  --ds-sidebar-text-muted: #525252;
 }
 
 /* ============================================
-   ANT DESIGN OVERRIDES - Notion Style
+   ANT DESIGN OVERRIDES - Light Theme
    ============================================ */
 
-/* Buttons - Black primary, square corners */
+/* Buttons - Black primary on light */
 html[data-tenant='evnto'] .ant-btn-primary {
-  background: #191919 !important;
+  background: #171717 !important;
   border: none !important;
-  border-radius: 4px !important;
+  border-radius: 6px !important;
   font-weight: 500 !important;
+  color: #ffffff !important;
   box-shadow: none !important;
-  padding: 0 16px !important;
-  height: 36px !important;
+  transition: all 0.2s ease !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-primary:hover:not(:disabled) {
-  background: #2f2f2f !important;
+  background: #262626 !important;
+  color: #ffffff !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-primary:active:not(:disabled) {
-  background: #454545 !important;
+  background: #404040 !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-default {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.15) !important;
-  color: #191919 !important;
-  border-radius: 4px !important;
+  color: #171717 !important;
+  border-radius: 6px !important;
   font-weight: 500 !important;
-  padding: 0 16px !important;
-  height: 36px !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-default:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.02) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
   border-color: rgba(0, 0, 0, 0.2) !important;
-  color: #191919 !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-text {
-  color: #6b6b6b !important;
+  color: #525252 !important;
   font-weight: 500 !important;
   border-radius: 4px !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-text:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.02) !important;
-  color: #191919 !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-link {
-  color: #191919 !important;
+  color: #171717 !important;
   font-weight: 500 !important;
-  text-decoration: underline !important;
 }
 
 html[data-tenant='evnto'] .ant-btn-link:hover:not(:disabled) {
-  color: #454545 !important;
+  color: #525252 !important;
 }
 
-/* Cards - Border focus, minimal shadow */
+/* Cards - Light with subtle border */
 html[data-tenant='evnto'] .ant-card,
 html[data-tenant='evnto'] .rottay-card {
   background: var(--ds-card-bg);
   border: 1px solid var(--ds-card-border);
-  border-radius: 6px;
+  border-radius: 8px;
   box-shadow: var(--ds-card-shadow);
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 html[data-tenant='evnto'] .ant-card:hover,
@@ -240,24 +243,25 @@ html[data-tenant='evnto'] .ant-card-head {
 }
 
 html[data-tenant='evnto'] .ant-card-body {
-  padding: 20px !important;
+  padding: 24px !important;
 }
 
 html[data-tenant='evnto'] .rottay-card-body {
-  padding: 20px !important;
+  padding: 24px !important;
 }
 
 html[data-tenant='evnto'] .ant-card-head-title {
-  font-weight: 500 !important;
-  color: #191919 !important;
+  font-weight: 600 !important;
+  color: #171717 !important;
 }
 
-/* Inputs - Subtle border, clean */
+/* Inputs - Light background */
 html[data-tenant='evnto'] .ant-input,
 html[data-tenant='evnto'] .ant-input-affix-wrapper {
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-radius: 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: 6px !important;
   background: #ffffff !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-input:hover,
@@ -267,32 +271,32 @@ html[data-tenant='evnto'] .ant-input-affix-wrapper:hover {
 
 html[data-tenant='evnto'] .ant-input:focus,
 html[data-tenant='evnto'] .ant-input-affix-wrapper-focused {
-  border-color: #191919 !important;
-  box-shadow: none !important;
+  border-color: #171717 !important;
+  box-shadow: 0 0 0 1px rgba(23, 23, 23, 0.15) !important;
 }
 
 html[data-tenant='evnto'] .ant-input::placeholder {
-  color: #9e9e9e !important;
+  color: #a3a3a3 !important;
 }
 
-/* Search Input - Notion style */
+/* Search Input */
 html[data-tenant='evnto'] .ant-input-search .ant-input-affix-wrapper {
   background: #fafafa !important;
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
-  border-radius: 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 6px !important;
 }
 
 html[data-tenant='evnto'] .ant-input-search .ant-input-affix-wrapper:focus,
 html[data-tenant='evnto'] .ant-input-search .ant-input-affix-wrapper-focused {
   background: #ffffff !important;
   border-color: rgba(0, 0, 0, 0.15) !important;
-  box-shadow: none !important;
 }
 
 /* Select */
 html[data-tenant='evnto'] .ant-select-selector {
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-radius: 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
 }
 
 html[data-tenant='evnto'] .ant-select:hover .ant-select-selector {
@@ -300,42 +304,49 @@ html[data-tenant='evnto'] .ant-select:hover .ant-select-selector {
 }
 
 html[data-tenant='evnto'] .ant-select-focused .ant-select-selector {
-  border-color: #191919 !important;
-  box-shadow: none !important;
+  border-color: #171717 !important;
+  box-shadow: 0 0 0 1px rgba(23, 23, 23, 0.15) !important;
 }
 
 html[data-tenant='evnto'] .ant-select-item-option-selected {
-  background: rgba(0, 0, 0, 0.04) !important;
-  color: #191919 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #171717 !important;
   font-weight: 500 !important;
 }
 
 html[data-tenant='evnto'] .ant-select-item-option-active {
-  background: rgba(0, 0, 0, 0.02) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
 }
 
 html[data-tenant='evnto'] .ant-select-dropdown {
-  border-radius: 6px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-tenant='evnto'] .ant-select-item {
+  color: #171717 !important;
 }
 
 /* Table */
 html[data-tenant='evnto'] .ant-table {
   background: #ffffff !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-table-thead > tr > th {
   background: #fafafa !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-  color: #6b6b6b !important;
-  font-weight: 500 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #525252 !important;
+  font-weight: 600 !important;
   font-size: 12px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.3px !important;
+  letter-spacing: 0.5px !important;
 }
 
 html[data-tenant='evnto'] .ant-table-tbody > tr > td {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-table-tbody > tr:hover > td {
@@ -348,193 +359,235 @@ html[data-tenant='evnto'] .ant-table-tbody > tr.ant-table-row-selected > td {
 
 /* Tabs */
 html[data-tenant='evnto'] .ant-tabs-tab {
-  color: #6b6b6b !important;
+  color: #525252 !important;
   font-weight: 500 !important;
 }
 
 html[data-tenant='evnto'] .ant-tabs-tab:hover {
-  color: #191919 !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #191919 !important;
+  color: #171717 !important;
   font-weight: 500 !important;
 }
 
 html[data-tenant='evnto'] .ant-tabs-ink-bar {
-  background: #191919 !important;
+  background: #171717 !important;
   height: 2px !important;
 }
 
 /* Modal */
 html[data-tenant='evnto'] .ant-modal-content {
-  border-radius: 6px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 16px 32px rgba(0, 0, 0, 0.12) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 25px 50px rgba(0, 0, 0, 0.15) !important;
   overflow: hidden !important;
 }
 
 html[data-tenant='evnto'] .ant-modal-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
   background: #ffffff !important;
-  padding: 16px 20px !important;
+  padding: 16px 24px !important;
 }
 
 html[data-tenant='evnto'] .ant-modal-title {
-  font-weight: 500 !important;
-  font-size: 16px !important;
-  color: #191919 !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-modal-body {
+  background: #ffffff !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-modal-footer {
   border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
-  padding: 12px 20px !important;
+  background: #ffffff !important;
+  padding: 12px 24px !important;
 }
 
 html[data-tenant='evnto'] .ant-modal-close {
-  color: #9e9e9e !important;
+  color: #737373 !important;
 }
 
 html[data-tenant='evnto'] .ant-modal-close:hover {
-  color: #191919 !important;
-  background: rgba(0, 0, 0, 0.02) !important;
+  color: #171717 !important;
+  background: rgba(0, 0, 0, 0.03) !important;
 }
 
 /* Menu */
 html[data-tenant='evnto'] .ant-menu {
   background: transparent !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-menu-item {
-  color: #6b6b6b !important;
-  font-weight: 400 !important;
-  border-radius: 4px !important;
+  color: #525252 !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
 }
 
 html[data-tenant='evnto'] .ant-menu-item:hover {
-  background: rgba(0, 0, 0, 0.02) !important;
-  color: #191919 !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-menu-item-selected {
-  background: rgba(0, 0, 0, 0.04) !important;
-  color: #191919 !important;
-  font-weight: 500 !important;
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #171717 !important;
+  font-weight: 600 !important;
 }
 
 html[data-tenant='evnto'] .ant-menu-item-selected::after {
-  border-right-color: #191919 !important;
+  border-right-color: #171717 !important;
 }
 
 /* Checkbox */
 html[data-tenant='evnto'] .ant-checkbox-inner {
   border-radius: 3px !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  background: #ffffff !important;
 }
 
 html[data-tenant='evnto'] .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: #191919 !important;
-  border-color: #191919 !important;
+  background-color: #171717 !important;
+  border-color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: #ffffff !important;
 }
 
 html[data-tenant='evnto'] .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-  background-color: #191919 !important;
+  background-color: #171717 !important;
 }
 
 /* Radio */
+html[data-tenant='evnto'] .ant-radio-inner {
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  background: #ffffff !important;
+}
+
 html[data-tenant='evnto'] .ant-radio-checked .ant-radio-inner {
-  border-color: #191919 !important;
+  border-color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-radio-checked .ant-radio-inner::after {
-  background-color: #191919 !important;
+  background-color: #171717 !important;
 }
 
 /* Switch */
+html[data-tenant='evnto'] .ant-switch {
+  background: rgba(0, 0, 0, 0.25) !important;
+}
+
 html[data-tenant='evnto'] .ant-switch-checked {
-  background: #191919 !important;
+  background: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-switch-checked:hover:not(.ant-switch-disabled) {
-  background: #2f2f2f !important;
+  background: #262626 !important;
 }
 
-/* Tags - Notion style (light backgrounds) */
+/* Tags */
 html[data-tenant='evnto'] .ant-tag {
   background: rgba(0, 0, 0, 0.04) !important;
   border: none !important;
-  border-radius: 3px !important;
-  color: #6b6b6b !important;
+  border-radius: 4px !important;
+  color: #525252 !important;
   font-weight: 500 !important;
 }
 
 html[data-tenant='evnto'] .ant-tag-blue {
-  background: #e7f5ff !important;
-  color: #1971c2 !important;
+  background: #eff6ff !important;
+  color: #2563eb !important;
 }
 
 html[data-tenant='evnto'] .ant-tag-green {
-  background: #ebfbee !important;
-  color: #2f9e44 !important;
+  background: #f0fdf4 !important;
+  color: #16a34a !important;
 }
 
 html[data-tenant='evnto'] .ant-tag-orange {
-  background: #fff9db !important;
-  color: #e67700 !important;
+  background: #fefce8 !important;
+  color: #ca8a04 !important;
 }
 
 html[data-tenant='evnto'] .ant-tag-red {
-  background: #fff5f5 !important;
-  color: #e03131 !important;
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
 }
 
 /* Alert */
 html[data-tenant='evnto'] .ant-alert {
-  border-radius: 4px !important;
+  border-radius: 6px !important;
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
 html[data-tenant='evnto'] .ant-alert-info {
-  background: #e7f5ff !important;
-  border-color: #a5d8ff !important;
+  background: #eff6ff !important;
+  border-color: #bfdbfe !important;
 }
 
 html[data-tenant='evnto'] .ant-alert-success {
-  background: #ebfbee !important;
-  border-color: #8ce99a !important;
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
 }
 
 html[data-tenant='evnto'] .ant-alert-warning {
-  background: #fff9db !important;
-  border-color: #ffe066 !important;
+  background: #fefce8 !important;
+  border-color: #fef08a !important;
 }
 
 html[data-tenant='evnto'] .ant-alert-error {
-  background: #fff5f5 !important;
-  border-color: #ffa8a8 !important;
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+}
+
+html[data-tenant='evnto'] .ant-alert-message {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-alert-description {
+  color: #525252 !important;
 }
 
 /* Progress */
 html[data-tenant='evnto'] .ant-progress-bg {
-  background: #191919 !important;
+  background: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-progress-success-bg {
-  background: #2f9e44 !important;
+  background: #16a34a !important;
+}
+
+html[data-tenant='evnto'] .ant-progress-inner {
+  background: rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Pagination */
 html[data-tenant='evnto'] .ant-pagination-item {
-  border-radius: 4px !important;
+  border-radius: 6px !important;
   border: none !important;
   background: transparent !important;
 }
 
+html[data-tenant='evnto'] .ant-pagination-item a {
+  color: #525252 !important;
+}
+
 html[data-tenant='evnto'] .ant-pagination-item:hover {
-  background: rgba(0, 0, 0, 0.02) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+html[data-tenant='evnto'] .ant-pagination-item:hover a {
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-pagination-item-active {
-  background: #191919 !important;
+  background: #171717 !important;
   border: none !important;
 }
 
@@ -544,99 +597,139 @@ html[data-tenant='evnto'] .ant-pagination-item-active a {
 
 html[data-tenant='evnto'] .ant-pagination-prev,
 html[data-tenant='evnto'] .ant-pagination-next {
-  border-radius: 4px !important;
+  border-radius: 6px !important;
 }
 
 html[data-tenant='evnto'] .ant-pagination-prev:hover,
 html[data-tenant='evnto'] .ant-pagination-next:hover {
-  background: rgba(0, 0, 0, 0.02) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+}
+
+html[data-tenant='evnto'] .ant-pagination-prev button,
+html[data-tenant='evnto'] .ant-pagination-next button {
+  color: #525252 !important;
 }
 
 /* Dropdown */
 html[data-tenant='evnto'] .ant-dropdown-menu {
-  border-radius: 6px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
   padding: 4px !important;
 }
 
 html[data-tenant='evnto'] .ant-dropdown-menu-item {
+  color: #171717 !important;
   border-radius: 4px !important;
   padding: 8px 12px !important;
 }
 
 html[data-tenant='evnto'] .ant-dropdown-menu-item:hover {
-  background: rgba(0, 0, 0, 0.02) !important;
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: #171717 !important;
 }
 
 /* Tooltip */
 html[data-tenant='evnto'] .ant-tooltip-inner {
-  background: #191919 !important;
-  border-radius: 4px !important;
-  font-size: 13px !important;
-  padding: 8px 12px !important;
+  background: #171717 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
 }
 
 html[data-tenant='evnto'] .ant-tooltip-arrow::before {
-  background: #191919 !important;
+  background: #171717 !important;
 }
 
 /* Popover */
 html[data-tenant='evnto'] .ant-popover-inner {
-  border-radius: 6px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-tenant='evnto'] .ant-popover-inner-content {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-popover-title {
+  color: #171717 !important;
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Message */
 html[data-tenant='evnto'] .ant-message-notice-content {
-  border-radius: 4px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   padding: 10px 16px !important;
+  color: #171717 !important;
 }
 
 /* Notification */
 html[data-tenant='evnto'] .ant-notification-notice {
-  border-radius: 6px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-tenant='evnto'] .ant-notification-notice-message {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-notification-notice-description {
+  color: #525252 !important;
 }
 
 /* Drawer */
+html[data-tenant='evnto'] .ant-drawer-content {
+  background: #ffffff !important;
+}
+
 html[data-tenant='evnto'] .ant-drawer-header {
+  background: #ffffff !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
-  padding: 16px 20px !important;
+  padding: 16px 24px !important;
 }
 
 html[data-tenant='evnto'] .ant-drawer-title {
-  font-weight: 500 !important;
-  font-size: 16px !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-drawer-body {
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-drawer-close {
-  color: #9e9e9e !important;
+  color: #737373 !important;
 }
 
 html[data-tenant='evnto'] .ant-drawer-close:hover {
-  color: #191919 !important;
+  color: #171717 !important;
 }
 
 /* Form */
 html[data-tenant='evnto'] .ant-form-item-label > label {
-  color: #6b6b6b !important;
-  font-weight: 500 !important;
+  color: #525252 !important;
+  font-weight: 600 !important;
   font-size: 14px !important;
 }
 
 html[data-tenant='evnto'] .ant-form-item-explain-error {
-  color: #e03131 !important;
+  color: #dc2626 !important;
   font-size: 12px !important;
 }
 
 /* Breadcrumb */
 html[data-tenant='evnto'] .ant-breadcrumb-link {
-  color: #9e9e9e !important;
+  color: #a3a3a3 !important;
 }
 
 html[data-tenant='evnto'] .ant-breadcrumb-link:hover {
-  color: #191919 !important;
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-breadcrumb-separator {
@@ -645,8 +738,8 @@ html[data-tenant='evnto'] .ant-breadcrumb-separator {
 
 /* Steps */
 html[data-tenant='evnto'] .ant-steps-item-finish .ant-steps-item-icon {
-  background: #2f9e44 !important;
-  border-color: #2f9e44 !important;
+  background: #16a34a !important;
+  border-color: #16a34a !important;
 }
 
 html[data-tenant='evnto'] .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
@@ -654,18 +747,39 @@ html[data-tenant='evnto'] .ant-steps-item-finish .ant-steps-item-icon > .ant-ste
 }
 
 html[data-tenant='evnto'] .ant-steps-item-process .ant-steps-item-icon {
-  background: #191919 !important;
-  border-color: #191919 !important;
+  background: #171717 !important;
+  border-color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
+  color: #ffffff !important;
+}
+
+html[data-tenant='evnto'] .ant-steps-item-wait .ant-steps-item-icon {
+  background: transparent !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+html[data-tenant='evnto'] .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+  color: #a3a3a3 !important;
+}
+
+html[data-tenant='evnto'] .ant-steps-item-title {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-steps-item-description {
+  color: #737373 !important;
 }
 
 html[data-tenant='evnto'] .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
-  background: #2f9e44 !important;
+  background: #16a34a !important;
 }
 
 /* Avatar */
 html[data-tenant='evnto'] .ant-avatar {
-  background: #6b6b6b !important;
-  color: #ffffff !important;
+  background: #f5f5f5 !important;
+  color: #525252 !important;
 }
 
 html[data-tenant='evnto'] .ant-avatar-group .ant-avatar {
@@ -674,33 +788,35 @@ html[data-tenant='evnto'] .ant-avatar-group .ant-avatar {
 
 /* Badge */
 html[data-tenant='evnto'] .ant-badge-count {
-  background: #e03131 !important;
-  font-weight: 500 !important;
+  background: #dc2626 !important;
+  font-weight: 600 !important;
 }
 
 html[data-tenant='evnto'] .ant-badge-dot {
-  background: #e03131 !important;
+  background: #dc2626 !important;
 }
 
 html[data-tenant='evnto'] .ant-badge-status-success {
-  background: #2f9e44 !important;
+  background: #16a34a !important;
 }
 
 html[data-tenant='evnto'] .ant-badge-status-processing {
-  background: #191919 !important;
+  background: #171717 !important;
 }
 
 /* Skeleton */
 html[data-tenant='evnto'] .ant-skeleton-element .ant-skeleton-avatar,
 html[data-tenant='evnto'] .ant-skeleton-element .ant-skeleton-button,
-html[data-tenant='evnto'] .ant-skeleton-element .ant-skeleton-input {
-  background: linear-gradient(90deg, #f5f5f5 25%, #ebebeb 50%, #f5f5f5 75%) !important;
+html[data-tenant='evnto'] .ant-skeleton-element .ant-skeleton-input,
+html[data-tenant='evnto'] .ant-skeleton-content .ant-skeleton-title,
+html[data-tenant='evnto'] .ant-skeleton-content .ant-skeleton-paragraph > li {
+  background: linear-gradient(90deg, #f5f5f5 25%, #e5e5e5 50%, #f5f5f5 75%) !important;
   background-size: 200% 100% !important;
 }
 
 /* Spin */
 html[data-tenant='evnto'] .ant-spin-dot-item {
-  background: #191919 !important;
+  background: #171717 !important;
 }
 
 /* Divider */
@@ -708,15 +824,26 @@ html[data-tenant='evnto'] .ant-divider {
   border-color: rgba(0, 0, 0, 0.06) !important;
 }
 
+html[data-tenant='evnto'] .ant-divider-inner-text {
+  color: #a3a3a3 !important;
+}
+
 /* Collapse */
 html[data-tenant='evnto'] .ant-collapse {
-  border-radius: 6px !important;
-  border-color: rgba(0, 0, 0, 0.06) !important;
   background: #ffffff !important;
+  border-radius: 8px !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
 html[data-tenant='evnto'] .ant-collapse-header {
-  font-weight: 500 !important;
+  color: #171717 !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='evnto'] .ant-collapse-content {
+  background: #ffffff !important;
+  color: #525252 !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
 }
 
 html[data-tenant='evnto'] .ant-collapse-item {
@@ -725,25 +852,42 @@ html[data-tenant='evnto'] .ant-collapse-item {
 
 /* Timeline */
 html[data-tenant='evnto'] .ant-timeline-item-head-blue {
-  border-color: #191919 !important;
-  background: #191919 !important;
+  border-color: #171717 !important;
+  background: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-timeline-item-head-green {
-  border-color: #2f9e44 !important;
-  background: #2f9e44 !important;
+  border-color: #16a34a !important;
+  background: #16a34a !important;
+}
+
+html[data-tenant='evnto'] .ant-timeline-item-tail {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+html[data-tenant='evnto'] .ant-timeline-item-content {
+  color: #525252 !important;
 }
 
 /* Rate */
 html[data-tenant='evnto'] .ant-rate-star.ant-rate-star-full .ant-rate-star-first,
 html[data-tenant='evnto'] .ant-rate-star.ant-rate-star-full .ant-rate-star-second {
-  color: #f59f00 !important;
+  color: #b8a898 !important;
 }
 
 /* DatePicker */
 html[data-tenant='evnto'] .ant-picker {
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-radius: 4px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-radius: 6px !important;
+}
+
+html[data-tenant='evnto'] .ant-picker input {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-picker input::placeholder {
+  color: #a3a3a3 !important;
 }
 
 html[data-tenant='evnto'] .ant-picker:hover {
@@ -751,103 +895,182 @@ html[data-tenant='evnto'] .ant-picker:hover {
 }
 
 html[data-tenant='evnto'] .ant-picker-focused {
-  border-color: #191919 !important;
-  box-shadow: none !important;
+  border-color: #171717 !important;
+  box-shadow: 0 0 0 1px rgba(23, 23, 23, 0.15) !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-suffix {
+  color: #737373 !important;
 }
 
 html[data-tenant='evnto'] .ant-picker-dropdown {
-  border-radius: 6px !important;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-panel {
+  background: #ffffff !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-header {
+  color: #171717 !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-header button {
+  color: #525252 !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-header button:hover {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-content th {
+  color: #a3a3a3 !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-cell {
+  color: #525252 !important;
+}
+
+html[data-tenant='evnto'] .ant-picker-cell:hover:not(.ant-picker-cell-selected) .ant-picker-cell-inner {
+  background: rgba(0, 0, 0, 0.04) !important;
 }
 
 html[data-tenant='evnto'] .ant-picker-cell-selected .ant-picker-cell-inner {
-  background: #191919 !important;
+  background: #171717 !important;
+  color: #ffffff !important;
 }
 
 html[data-tenant='evnto'] .ant-picker-cell-today .ant-picker-cell-inner::before {
-  border-color: #191919 !important;
+  border-color: #171717 !important;
 }
 
 /* Upload */
 html[data-tenant='evnto'] .ant-upload-drag {
-  border: 1px dashed rgba(0, 0, 0, 0.15) !important;
-  border-radius: 6px !important;
   background: #fafafa !important;
+  border: 2px dashed rgba(0, 0, 0, 0.12) !important;
+  border-radius: 8px !important;
 }
 
 html[data-tenant='evnto'] .ant-upload-drag:hover {
-  border-color: #191919 !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+html[data-tenant='evnto'] .ant-upload-text {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-upload-hint {
+  color: #737373 !important;
 }
 
 /* Empty */
 html[data-tenant='evnto'] .ant-empty-description {
-  color: #9e9e9e !important;
+  color: #a3a3a3 !important;
+}
+
+html[data-tenant='evnto'] .ant-empty-image svg {
+  fill: rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Result */
+html[data-tenant='evnto'] .ant-result-title {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-result-subtitle {
+  color: #525252 !important;
+}
+
 html[data-tenant='evnto'] .ant-result-success .ant-result-icon > .anticon {
-  color: #2f9e44 !important;
+  color: #16a34a !important;
 }
 
 html[data-tenant='evnto'] .ant-result-error .ant-result-icon > .anticon {
-  color: #e03131 !important;
+  color: #dc2626 !important;
 }
 
 html[data-tenant='evnto'] .ant-result-info .ant-result-icon > .anticon {
-  color: #1971c2 !important;
+  color: #2563eb !important;
 }
 
 html[data-tenant='evnto'] .ant-result-warning .ant-result-icon > .anticon {
-  color: #f08c00 !important;
+  color: #ca8a04 !important;
 }
 
 /* Segmented */
 html[data-tenant='evnto'] .ant-segmented {
-  background: rgba(0, 0, 0, 0.02) !important;
-  border-radius: 4px !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-radius: 6px !important;
+}
+
+html[data-tenant='evnto'] .ant-segmented-item {
+  color: #525252 !important;
+}
+
+html[data-tenant='evnto'] .ant-segmented-item:hover {
+  color: #171717 !important;
 }
 
 html[data-tenant='evnto'] .ant-segmented-item-selected {
   background: #ffffff !important;
+  color: #171717 !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Statistic */
 html[data-tenant='evnto'] .ant-statistic-title {
-  color: #9e9e9e !important;
+  color: #a3a3a3 !important;
   font-size: 12px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.3px !important;
+  letter-spacing: 0.5px !important;
 }
 
 html[data-tenant='evnto'] .ant-statistic-content {
-  color: #191919 !important;
-  font-weight: 500 !important;
+  color: #171717 !important;
+  font-weight: 600 !important;
 }
 
 /* Tree */
+html[data-tenant='evnto'] .ant-tree {
+  background: transparent !important;
+  color: #171717 !important;
+}
+
 html[data-tenant='evnto'] .ant-tree-node-selected {
   background: rgba(0, 0, 0, 0.04) !important;
 }
 
 html[data-tenant='evnto'] .ant-tree-checkbox-checked .ant-tree-checkbox-inner {
-  background-color: #191919 !important;
-  border-color: #191919 !important;
+  background-color: #171717 !important;
+  border-color: #171717 !important;
 }
 
 /* Transfer */
 html[data-tenant='evnto'] .ant-transfer-list {
-  border-radius: 6px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
   border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
 html[data-tenant='evnto'] .ant-transfer-list-header {
   background: #fafafa !important;
   border-color: rgba(0, 0, 0, 0.06) !important;
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-transfer-list-content-item {
+  color: #171717 !important;
+}
+
+html[data-tenant='evnto'] .ant-transfer-list-content-item:hover {
+  background: rgba(0, 0, 0, 0.03) !important;
 }
 
 /* ============================================
-   SIDEBAR MENU - Uses CSS variables
+   SIDEBAR MENU - Light Theme
    ============================================ */
 html[data-tenant='evnto'] .app-sidebar-menu {
   background: transparent !important;
@@ -855,8 +1078,8 @@ html[data-tenant='evnto'] .app-sidebar-menu {
 
 html[data-tenant='evnto'] .app-sidebar-menu .ant-menu-item {
   color: var(--ds-sidebar-text-muted) !important;
-  margin: 2px 8px !important;
-  border-radius: 4px !important;
+  margin: 4px 8px !important;
+  border-radius: 6px !important;
 }
 
 html[data-tenant='evnto'] .app-sidebar-menu .ant-menu-item:hover {
@@ -871,8 +1094,8 @@ html[data-tenant='evnto'] .app-sidebar-menu .ant-menu-item-selected {
 
 html[data-tenant='evnto'] .app-sidebar-menu .ant-menu-submenu-title {
   color: var(--ds-sidebar-text-muted) !important;
-  margin: 2px 8px !important;
-  border-radius: 4px !important;
+  margin: 4px 8px !important;
+  border-radius: 6px !important;
 }
 
 html[data-tenant='evnto'] .app-sidebar-menu .ant-menu-submenu-title:hover {
@@ -910,48 +1133,36 @@ html[data-tenant='evnto'] .ds-sidebar-item-active:hover {
 }
 
 /* ============================================
-   EVNTO SPECIFIC - Event/Ticket Colors
+   EVNTO SPECIFIC - Beige Accent Colors
    ============================================ */
 html[data-tenant='evnto'] {
-  /* Ticket status colors - Notion-style pastels */
-  --ds-ticket-available: #ebfbee;
-  --ds-ticket-available-text: #2f9e44;
-  --ds-ticket-sold: #fff5f5;
-  --ds-ticket-sold-text: #e03131;
-  --ds-ticket-pending: #fff9db;
-  --ds-ticket-pending-text: #e67700;
-  --ds-ticket-reserved: #e7f5ff;
-  --ds-ticket-reserved-text: #1971c2;
+  /* Highlight accents with beige */
+  --ds-accent-primary: #b8a898;
+  --ds-accent-secondary: #9a8a7a;
+  --ds-accent-light: #f3efe8;
 
-  /* Event status colors */
+  /* Special states */
+  --ds-highlight-bg: rgba(184, 168, 152, 0.08);
+  --ds-highlight-border: rgba(184, 168, 152, 0.25);
+
+  /* Event-specific colors */
+  --ds-ticket-available: #f0fdf4;
+  --ds-ticket-available-text: #16a34a;
+  --ds-ticket-sold: #fef2f2;
+  --ds-ticket-sold-text: #dc2626;
+  --ds-ticket-pending: #fefce8;
+  --ds-ticket-pending-text: #ca8a04;
+  --ds-ticket-reserved: #eff6ff;
+  --ds-ticket-reserved-text: #2563eb;
+
   --ds-event-draft: rgba(0, 0, 0, 0.04);
-  --ds-event-draft-text: #6b6b6b;
-  --ds-event-published: #ebfbee;
-  --ds-event-published-text: #2f9e44;
-  --ds-event-live: #e7f5ff;
-  --ds-event-live-text: #1971c2;
+  --ds-event-draft-text: #737373;
+  --ds-event-published: #f0fdf4;
+  --ds-event-published-text: #16a34a;
+  --ds-event-live: #eff6ff;
+  --ds-event-live-text: #2563eb;
   --ds-event-ended: rgba(0, 0, 0, 0.04);
-  --ds-event-ended-text: #9e9e9e;
-  --ds-event-cancelled: #fff5f5;
-  --ds-event-cancelled-text: #e03131;
-
-  /* Staff credential zones */
-  --ds-zone-vip: #f3d9fa;
-  --ds-zone-vip-text: #9c36b5;
-  --ds-zone-backstage: #191919;
-  --ds-zone-backstage-text: #ffffff;
-  --ds-zone-general: #e7f5ff;
-  --ds-zone-general-text: #1971c2;
-  --ds-zone-restricted: #fff5f5;
-  --ds-zone-restricted-text: #e03131;
-
-  /* Bar/Inventory alerts */
-  --ds-stock-ok: #ebfbee;
-  --ds-stock-ok-text: #2f9e44;
-  --ds-stock-low: #fff9db;
-  --ds-stock-low-text: #e67700;
-  --ds-stock-critical: #fff5f5;
-  --ds-stock-critical-text: #e03131;
-  --ds-stock-out: #191919;
-  --ds-stock-out-text: #ffffff;
+  --ds-event-ended-text: #a3a3a3;
+  --ds-event-cancelled: #fef2f2;
+  --ds-event-cancelled-text: #dc2626;
 }
