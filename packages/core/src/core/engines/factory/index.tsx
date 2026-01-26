@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Engine Component Factory - Rottay Design System
  * @description Factory function for creating engine-aware components that
