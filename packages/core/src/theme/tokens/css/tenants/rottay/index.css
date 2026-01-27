@@ -1,10 +1,11 @@
 /**
- * Rottay Theme - Dark Minimal Design
- * Black backgrounds, white text, grey and beige accents
+ * Rottay Theme - AI/Tech Dark Design
+ * Black backgrounds, white/gray text, beige accents
  *
- * Design Philosophy: Dark-first, minimal, professional
- * Primary: Black backgrounds with white text
- * Accents: Warm beige/sand tones for highlights
+ * Design Philosophy: Dark-first, minimal, AI-tech professional
+ * Primary: Black backgrounds with crisp white/gray text
+ * Accents: Warm beige/sand tones for highlights and breadcrumbs
+ * Inspired by: Vercel, Linear, Notion dark modes
  */
 
 /* ============================================
@@ -25,56 +26,66 @@ html[data-tenant='rottay'] {
 
   /* Primary main color - White (for dark bg) */
   --ds-color-primary: #ffffff;
-  --ds-color-primary-hover: #f5f5f5;
+  --ds-color-primary-hover: #e5e5e5;
 
-  /* Secondary - Warm Beige/Sand */
+  /* Secondary - Warm Beige/Sand (for accents, breadcrumbs, highlights) */
   --ds-color-secondary-50: #fdfcfb;
   --ds-color-secondary-100: #f9f7f4;
   --ds-color-secondary-200: #f3efe8;
   --ds-color-secondary-300: #e8e2d9;
   --ds-color-secondary-400: #d4ccc0;
-  --ds-color-secondary-500: #b8a898;
-  --ds-color-secondary-600: #9a8a7a;
-  --ds-color-secondary-700: #7a6a5a;
-  --ds-color-secondary-800: #5a4a3a;
-  --ds-color-secondary-900: #3a2a1a;
+  --ds-color-secondary-500: #c4b5a5;
+  --ds-color-secondary-600: #a89888;
+  --ds-color-secondary-700: #8a7a6a;
+  --ds-color-secondary-800: #6a5a4a;
+  --ds-color-secondary-900: #4a3a2a;
 
   /* Accent - Sand/Beige for highlights */
-  --ds-color-accent: #b8a898;
+  --ds-color-accent: #c4b5a5;
   --ds-color-accent-hover: #d4ccc0;
 
-  /* Neutral - Dark grays */
+  /* Neutral - Refined grays for better contrast */
   --ds-color-neutral-50: #fafafa;
-  --ds-color-neutral-100: #f5f5f5;
-  --ds-color-neutral-200: #e5e5e5;
-  --ds-color-neutral-300: #d4d4d4;
-  --ds-color-neutral-400: #a3a3a3;
-  --ds-color-neutral-500: #737373;
-  --ds-color-neutral-600: #525252;
-  --ds-color-neutral-700: #404040;
-  --ds-color-neutral-800: #262626;
-  --ds-color-neutral-900: #171717;
+  --ds-color-neutral-100: #f4f4f5;
+  --ds-color-neutral-200: #e4e4e7;
+  --ds-color-neutral-300: #d4d4d8;
+  --ds-color-neutral-400: #a1a1aa;
+  --ds-color-neutral-500: #71717a;
+  --ds-color-neutral-600: #52525b;
+  --ds-color-neutral-700: #3f3f46;
+  --ds-color-neutral-800: #27272a;
+  --ds-color-neutral-900: #18181b;
 
-  /* Backgrounds - Dark theme */
-  --ds-color-bg-primary: #0a0a0a;
-  --ds-color-bg-secondary: #171717;
-  --ds-color-bg-tertiary: #262626;
-  --ds-color-bg-elevated: #1a1a1a;
-  --ds-color-bg-overlay: rgba(0, 0, 0, 0.8);
+  /* Backgrounds - Dark theme with visual hierarchy */
+  --ds-color-bg-primary: #0c0c0e;
+  --ds-color-bg-secondary: #141416;
+  --ds-color-bg-tertiary: #1c1c20;
+  --ds-color-bg-elevated: #1f1f24;
+  --ds-color-bg-surface: #242428;
+  --ds-color-bg-overlay: rgba(0, 0, 0, 0.85);
 
-  /* Text - Light on dark */
-  --ds-color-text-primary: #ffffff;
-  --ds-color-text-secondary: rgba(255, 255, 255, 0.7);
-  --ds-color-text-tertiary: rgba(255, 255, 255, 0.5);
-  --ds-color-text-muted: rgba(255, 255, 255, 0.4);
-  --ds-color-text-disabled: rgba(255, 255, 255, 0.25);
-  --ds-color-text-on-primary: #0a0a0a;
+  /* Text - High contrast for readability */
+  /* Legacy naming (--ds-color-text-*) */
+  --ds-color-text-primary: #fafafa;
+  --ds-color-text-secondary: #a1a1aa;
+  --ds-color-text-tertiary: #71717a;
+  --ds-color-text-muted: #52525b;
+  --ds-color-text-disabled: #3f3f46;
+  --ds-color-text-on-primary: #09090b;
 
-  /* Borders - Subtle on dark */
-  --ds-color-border: rgba(255, 255, 255, 0.1);
-  --ds-color-border-primary: rgba(255, 255, 255, 0.1);
-  --ds-color-border-secondary: rgba(255, 255, 255, 0.15);
-  --ds-color-border-focus: #ffffff;
+  /* Engine-compatible naming (--ds-text-*) - REQUIRED for Titan engine */
+  --ds-text-primary: var(--ds-color-text-primary);
+  --ds-text-secondary: var(--ds-color-text-secondary);
+  --ds-text-tertiary: var(--ds-color-text-tertiary);
+  --ds-text-muted: var(--ds-color-text-muted);
+  --ds-text-disabled: var(--ds-color-text-disabled);
+
+  /* Borders - Subtle but visible for structure */
+  --ds-color-border: #28282d;
+  --ds-color-border-primary: #28282d;
+  --ds-color-border-secondary: #35353b;
+  --ds-color-border-tertiary: #42424a;
+  --ds-color-border-focus: rgba(255, 255, 255, 0.4);
 
   /* Typography - Geist/Inter */
   --ds-font-family-base: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -103,32 +114,78 @@ html[data-tenant='rottay'] {
   --ds-button-secondary-text: #ffffff;
   --ds-button-secondary-bg-hover: rgba(255, 255, 255, 0.05);
 
-  /* Card overrides */
-  --ds-card-bg: #171717;
-  --ds-card-border: rgba(255, 255, 255, 0.1);
-  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+  /* Card overrides - lighter than background for depth */
+  --ds-card-bg: #1a1a1e;
+  --ds-card-bg-hover: #1f1f24;
+  --ds-card-border: #2a2a30;
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+  --ds-card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.3);
 
   /* Input overrides */
-  --ds-input-bg: #171717;
-  --ds-input-border: rgba(255, 255, 255, 0.15);
-  --ds-input-border-focus: #ffffff;
-  --ds-input-shadow-focus: 0 0 0 1px rgba(255, 255, 255, 0.3);
+  --ds-input-bg: #18181c;
+  --ds-input-border: #2a2a30;
+  --ds-input-border-hover: #38383f;
+  --ds-input-border-focus: rgba(255, 255, 255, 0.5);
+  --ds-input-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.08);
+  --ds-input-color: var(--ds-color-text-primary);
+  --ds-input-color-placeholder: var(--ds-color-text-tertiary);
 
-  /* Link colors */
-  --ds-color-link: #ffffff;
-  --ds-color-link-hover: #b8a898;
-  --ds-color-link-visited: #a3a3a3;
+  /* Table - Clean professional look */
+  --ds-table-bg: #18181c;
+  --ds-table-border: #28282d;
+  --ds-table-radius: var(--ds-radius-lg);
+  --ds-table-header-bg: #1e1e23;
+  --ds-table-header-color: var(--ds-color-text-secondary);
+  --ds-table-header-font-weight: 600;
+  --ds-table-header-font-size: 0.6875rem;
+  --ds-table-row-bg: #18181c;
+  --ds-table-row-bg-hover: #1e1e23;
+  --ds-table-row-bg-striped: #1a1a1f;
+  --ds-table-row-bg-selected: rgba(255, 255, 255, 0.05);
+  --ds-table-row-border: #242429;
+  --ds-table-cell-padding: 0.875rem 1rem;
+  --ds-table-cell-font-size: 0.875rem;
+  --ds-table-cell-color: var(--ds-color-text-primary);
 
-  /* Status colors - Muted for dark theme */
-  --ds-color-success: #4ade80;
-  --ds-color-success-bg: rgba(74, 222, 128, 0.1);
-  --ds-color-warning: #fbbf24;
-  --ds-color-warning-bg: rgba(251, 191, 36, 0.1);
-  --ds-color-error: #f87171;
-  --ds-color-error-bg: rgba(248, 113, 113, 0.1);
-  --ds-color-info: #60a5fa;
-  --ds-color-info-bg: rgba(96, 165, 250, 0.1);
+  /* Link colors - soft teal for accent links */
+  --ds-color-link: #6bb5a5;
+  --ds-color-link-hover: #7cc4b5;
+  --ds-color-link-visited: var(--ds-color-neutral-400);
+
+  /* Interactive states - white with opacity */
+  --ds-color-interactive-border: rgba(255, 255, 255, 0.3);
+  --ds-color-interactive-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-color-interactive-bg-active: rgba(255, 255, 255, 0.1);
+  --ds-color-interactive-bg-muted: rgba(255, 255, 255, 0.2);
+
+  /* Status colors - Soft, professional tones (not neon) */
+  --ds-color-success: #5cb395;
+  --ds-color-success-50: rgba(92, 179, 149, 0.08);
+  --ds-color-success-100: rgba(92, 179, 149, 0.15);
+  --ds-color-success-bg: rgba(92, 179, 149, 0.1);
+  --ds-color-success-border: rgba(92, 179, 149, 0.25);
+
+  --ds-color-warning: #d4a54a;
+  --ds-color-warning-50: rgba(212, 165, 74, 0.08);
+  --ds-color-warning-100: rgba(212, 165, 74, 0.15);
+  --ds-color-warning-bg: rgba(212, 165, 74, 0.1);
+  --ds-color-warning-border: rgba(212, 165, 74, 0.25);
+
+  --ds-color-error: #d4645a;
+  --ds-color-error-50: rgba(212, 100, 90, 0.08);
+  --ds-color-error-100: rgba(212, 100, 90, 0.15);
+  --ds-color-error-bg: rgba(212, 100, 90, 0.1);
+  --ds-color-error-border: rgba(212, 100, 90, 0.25);
+
+  --ds-color-info: #6b9dc9;
+  --ds-color-info-50: rgba(107, 157, 201, 0.08);
+  --ds-color-info-100: rgba(107, 157, 201, 0.15);
+  --ds-color-info-bg: rgba(107, 157, 201, 0.1);
+  --ds-color-info-border: rgba(107, 157, 201, 0.25);
+
+  /* Accent for live indicators - soft teal */
+  --ds-color-accent-live: #6bb5a5;
+  --ds-color-accent-live-bg: rgba(107, 181, 165, 0.12);
 
   /* ============================================
      SIDEBAR NAVIGATION
@@ -157,10 +214,29 @@ html[data-tenant='rottay'] {
   --ds-sidebar-item-padding: 6px 10px;
   --ds-sidebar-icon-size: 16px;
 
-  /* Sidebar specific */
-  --ds-sidebar-bg: #0a0a0a;
+  /* Sidebar specific - slightly elevated from main bg */
+  --ds-sidebar-bg: #111113;
+  --ds-sidebar-border: #1e1e22;
   --ds-sidebar-text: #ffffff;
-  --ds-sidebar-text-muted: rgba(255, 255, 255, 0.6);
+  --ds-sidebar-text-muted: rgba(255, 255, 255, 0.55);
+}
+
+/* ============================================
+   GLOBAL LINK STYLING
+   ============================================ */
+html[data-tenant='rottay'] a {
+  color: #6bb5a5;
+  text-decoration: none;
+}
+
+html[data-tenant='rottay'] a:hover {
+  color: #7cc4b5;
+}
+
+/* Links that should be white (navigation, etc) */
+html[data-tenant='rottay'] .ant-menu a,
+html[data-tenant='rottay'] nav a {
+  color: inherit;
 }
 
 /* ============================================
@@ -221,39 +297,48 @@ html[data-tenant='rottay'] .ant-btn-link:hover:not(:disabled) {
   color: #b8a898 !important;
 }
 
-/* Cards - Dark with subtle border */
+/* Cards - Professional with clear visual hierarchy */
 html[data-tenant='rottay'] .ant-card,
 html[data-tenant='rottay'] .rottay-card {
-  background: var(--ds-card-bg);
-  border: 1px solid var(--ds-card-border);
-  border-radius: 8px;
-  box-shadow: var(--ds-card-shadow);
-  transition: all 0.2s ease;
+  background: #1a1a1e !important;
+  border: 1px solid #2a2a30 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
 }
 
 html[data-tenant='rottay'] .ant-card:hover,
 html[data-tenant='rottay'] .rottay-card:hover {
-  box-shadow: var(--ds-card-shadow-hover);
-  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  border-color: #35353b !important;
 }
 
 html[data-tenant='rottay'] .ant-card-head {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: 1px solid #28282d !important;
   background: transparent !important;
-  color: #ffffff !important;
+  color: #fafafa !important;
+  padding: 16px 20px !important;
+  min-height: auto !important;
 }
 
 html[data-tenant='rottay'] .ant-card-body {
-  padding: 24px !important;
+  padding: 20px !important;
+  color: #e4e4e7 !important;
 }
 
 html[data-tenant='rottay'] .rottay-card-body {
-  padding: 24px !important;
+  padding: 20px !important;
 }
 
 html[data-tenant='rottay'] .ant-card-head-title {
   font-weight: 600 !important;
-  color: #ffffff !important;
+  color: #fafafa !important;
+  font-size: 14px !important;
+}
+
+/* Card with beige accent border on hover */
+html[data-tenant='rottay'] .ant-card.card-accent:hover {
+  border-color: rgba(196, 181, 165, 0.4) !important;
 }
 
 /* Inputs - Dark background */
@@ -330,485 +415,574 @@ html[data-tenant='rottay'] .ant-select-item {
   color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* Table */
+/* Table - High contrast for readability */
 html[data-tenant='rottay'] .ant-table {
-  background: #171717 !important;
-  color: #ffffff !important;
+  background: var(--ds-color-bg-secondary) !important;
+  color: var(--ds-color-neutral-200) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  overflow: hidden !important;
+}
+
+html[data-tenant='rottay'] .ant-table-container {
+  border: 1px solid var(--ds-color-border) !important;
+  border-radius: var(--ds-radius-lg) !important;
 }
 
 html[data-tenant='rottay'] .ant-table-thead > tr > th {
-  background: #1a1a1a !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: rgba(255, 255, 255, 0.6) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-bottom: 1px solid var(--ds-color-border-secondary) !important;
+  color: var(--ds-color-text-secondary) !important;
   font-weight: 600 !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.05em !important;
+  padding: 12px 16px !important;
 }
 
 html[data-tenant='rottay'] .ant-table-tbody > tr > td {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
-  color: #ffffff !important;
+  border-bottom: 1px solid var(--ds-color-border) !important;
+  color: var(--ds-color-neutral-200) !important;
+  padding: 14px 16px !important;
+  background: var(--ds-color-bg-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-table-tbody > tr:hover > td {
-  background: rgba(255, 255, 255, 0.03) !important;
+  background: var(--ds-color-bg-elevated) !important;
 }
 
 html[data-tenant='rottay'] .ant-table-tbody > tr.ant-table-row-selected > td {
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(196, 181, 165, 0.08) !important;
+}
+
+/* Table cell text visibility fix - CRITICAL */
+html[data-tenant='rottay'] .ant-table-tbody > tr > td,
+html[data-tenant='rottay'] .ant-table-tbody > tr > td *,
+html[data-tenant='rottay'] .ant-table-tbody > tr > td span,
+html[data-tenant='rottay'] .ant-table-tbody > tr > td p,
+html[data-tenant='rottay'] .ant-table-tbody > tr > td div,
+html[data-tenant='rottay'] .ant-table-tbody .ant-table-cell,
+html[data-tenant='rottay'] .ant-table-tbody .ant-table-cell *,
+html[data-tenant='rottay'] .ant-table-cell {
+  color: var(--ds-color-neutral-200) !important;
+}
+
+/* Ensure links in table are visible */
+html[data-tenant='rottay'] .ant-table-tbody a {
+  color: var(--ds-color-accent) !important;
+}
+
+html[data-tenant='rottay'] .ant-table-tbody a:hover {
+  color: var(--ds-color-accent-hover) !important;
+}
+
+/* Empty table text */
+html[data-tenant='rottay'] .ant-table-placeholder {
+  color: var(--ds-color-text-tertiary) !important;
+}
+
+html[data-tenant='rottay'] .ant-empty-description {
+  color: var(--ds-color-text-tertiary) !important;
 }
 
 /* Tabs */
 html[data-tenant='rottay'] .ant-tabs-tab {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--ds-color-text-secondary) !important;
   font-weight: 500 !important;
 }
 
 html[data-tenant='rottay'] .ant-tabs-tab:hover {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
   font-weight: 500 !important;
 }
 
 html[data-tenant='rottay'] .ant-tabs-ink-bar {
-  background: #ffffff !important;
+  background: var(--ds-color-primary) !important;
   height: 2px !important;
 }
 
 /* Modal */
 html[data-tenant='rottay'] .ant-modal-content {
-  background: #1a1a1a !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 25px 50px rgba(0, 0, 0, 0.6) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-border), 0 25px 50px rgba(0, 0, 0, 0.6) !important;
   overflow: hidden !important;
 }
 
 html[data-tenant='rottay'] .ant-modal-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: #1a1a1a !important;
+  border-bottom: 1px solid var(--ds-color-border) !important;
+  background: var(--ds-color-bg-elevated) !important;
   padding: 16px 24px !important;
 }
 
 html[data-tenant='rottay'] .ant-modal-title {
   font-weight: 600 !important;
   font-size: 18px !important;
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-modal-body {
-  background: #1a1a1a !important;
-  color: #ffffff !important;
+  background: var(--ds-color-bg-elevated) !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-modal-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  background: #1a1a1a !important;
+  border-top: 1px solid var(--ds-color-border) !important;
+  background: var(--ds-color-bg-elevated) !important;
   padding: 12px 24px !important;
 }
 
 html[data-tenant='rottay'] .ant-modal-close {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-modal-close:hover {
-  color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--ds-color-primary) !important;
+  background: var(--ds-color-bg-tertiary) !important;
 }
 
 /* Menu */
 html[data-tenant='rottay'] .ant-menu {
   background: transparent !important;
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-menu-item {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--ds-color-text-secondary) !important;
   font-weight: 500 !important;
-  border-radius: 6px !important;
+  border-radius: var(--ds-radius-md) !important;
 }
 
 html[data-tenant='rottay'] .ant-menu-item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #ffffff !important;
+  background: var(--ds-color-bg-tertiary) !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-menu-item-selected {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
+  background: var(--ds-color-bg-tertiary) !important;
+  color: var(--ds-color-primary) !important;
   font-weight: 600 !important;
 }
 
 html[data-tenant='rottay'] .ant-menu-item-selected::after {
-  border-right-color: #ffffff !important;
+  border-right-color: var(--ds-color-primary) !important;
 }
 
 /* Checkbox */
 html[data-tenant='rottay'] .ant-checkbox-inner {
   border-radius: 3px !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: var(--ds-color-interactive-border) !important;
   background: transparent !important;
 }
 
 html[data-tenant='rottay'] .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: #ffffff !important;
-  border-color: #ffffff !important;
+  background-color: var(--ds-color-primary) !important;
+  border-color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-checkbox-checked .ant-checkbox-inner::after {
-  border-color: #0a0a0a !important;
+  border-color: var(--ds-color-bg-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-checkbox-indeterminate .ant-checkbox-inner::after {
-  background-color: #ffffff !important;
+  background-color: var(--ds-color-primary) !important;
 }
 
 /* Radio */
 html[data-tenant='rottay'] .ant-radio-inner {
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: var(--ds-color-interactive-border) !important;
   background: transparent !important;
 }
 
 html[data-tenant='rottay'] .ant-radio-checked .ant-radio-inner {
-  border-color: #ffffff !important;
+  border-color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-radio-checked .ant-radio-inner::after {
-  background-color: #ffffff !important;
+  background-color: var(--ds-color-primary) !important;
 }
 
 /* Switch */
 html[data-tenant='rottay'] .ant-switch {
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: var(--ds-color-interactive-bg-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-switch-checked {
-  background: #ffffff !important;
+  background: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-switch-checked .ant-switch-handle::before {
-  background: #0a0a0a !important;
+  background: var(--ds-color-bg-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-switch-checked:hover:not(.ant-switch-disabled) {
-  background: #e5e5e5 !important;
+  background: var(--ds-color-primary-hover) !important;
 }
 
-/* Tags */
+/* Tags - AI/Tech minimal style */
 html[data-tenant='rottay'] .ant-tag {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: none !important;
-  border-radius: 4px !important;
-  color: rgba(255, 255, 255, 0.8) !important;
+  background: var(--ds-color-bg-tertiary) !important;
+  border: 1px solid var(--ds-color-border-secondary) !important;
+  border-radius: var(--ds-radius-sm) !important;
+  color: var(--ds-color-text-secondary) !important;
   font-weight: 500 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.02em !important;
 }
 
 html[data-tenant='rottay'] .ant-tag-blue {
-  background: rgba(96, 165, 250, 0.15) !important;
-  color: #60a5fa !important;
+  background: var(--ds-color-info-bg) !important;
+  border-color: var(--ds-color-info-border) !important;
+  color: var(--ds-color-info) !important;
 }
 
 html[data-tenant='rottay'] .ant-tag-green {
-  background: rgba(74, 222, 128, 0.15) !important;
-  color: #4ade80 !important;
+  background: var(--ds-color-success-bg) !important;
+  border-color: var(--ds-color-success-border) !important;
+  color: var(--ds-color-success) !important;
 }
 
-html[data-tenant='rottay'] .ant-tag-orange {
-  background: rgba(251, 191, 36, 0.15) !important;
-  color: #fbbf24 !important;
+html[data-tenant='rottay'] .ant-tag-orange,
+html[data-tenant='rottay'] .ant-tag-gold {
+  background: var(--ds-color-warning-bg) !important;
+  border-color: var(--ds-color-warning-border) !important;
+  color: var(--ds-color-warning) !important;
 }
 
 html[data-tenant='rottay'] .ant-tag-red {
-  background: rgba(248, 113, 113, 0.15) !important;
-  color: #f87171 !important;
+  background: var(--ds-color-error-bg) !important;
+  border-color: var(--ds-color-error-border) !important;
+  color: var(--ds-color-error) !important;
+}
+
+/* Special beige accent tag */
+html[data-tenant='rottay'] .ant-tag-default,
+html[data-tenant='rottay'] .ant-tag-processing {
+  background: var(--ds-color-accent-live-bg) !important;
+  border-color: var(--ds-color-accent) !important;
+  color: var(--ds-color-accent) !important;
 }
 
 /* Alert */
 html[data-tenant='rottay'] .ant-alert {
-  border-radius: 6px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: var(--ds-radius-md) !important;
+  border: 1px solid var(--ds-color-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-alert-info {
-  background: rgba(96, 165, 250, 0.1) !important;
-  border-color: rgba(96, 165, 250, 0.2) !important;
+  background: var(--ds-color-info-bg) !important;
+  border-color: var(--ds-color-info-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-alert-success {
-  background: rgba(74, 222, 128, 0.1) !important;
-  border-color: rgba(74, 222, 128, 0.2) !important;
+  background: var(--ds-color-success-bg) !important;
+  border-color: var(--ds-color-success-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-alert-warning {
-  background: rgba(251, 191, 36, 0.1) !important;
-  border-color: rgba(251, 191, 36, 0.2) !important;
+  background: var(--ds-color-warning-bg) !important;
+  border-color: var(--ds-color-warning-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-alert-error {
-  background: rgba(248, 113, 113, 0.1) !important;
-  border-color: rgba(248, 113, 113, 0.2) !important;
+  background: var(--ds-color-error-bg) !important;
+  border-color: var(--ds-color-error-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-alert-message {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-alert-description {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
-/* Progress */
+/* Progress - soft teal accent */
 html[data-tenant='rottay'] .ant-progress-bg {
-  background: #ffffff !important;
+  background: #6bb5a5 !important;
 }
 
 html[data-tenant='rottay'] .ant-progress-success-bg {
-  background: #4ade80 !important;
+  background: var(--ds-color-success) !important;
 }
 
 html[data-tenant='rottay'] .ant-progress-inner {
-  background: rgba(255, 255, 255, 0.1) !important;
+  background: #242428 !important;
 }
 
-/* Pagination */
+html[data-tenant='rottay'] .ant-progress-text {
+  color: var(--ds-color-text-secondary) !important;
+}
+
+/* Pagination - subtle dark style */
 html[data-tenant='rottay'] .ant-pagination-item {
-  border-radius: 6px !important;
-  border: none !important;
+  border-radius: var(--ds-radius-md) !important;
+  border: 1px solid transparent !important;
   background: transparent !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-item a {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: #242428 !important;
+  border-color: #35353b !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-item:hover a {
-  color: #ffffff !important;
+  color: #fafafa !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-item-active {
-  background: #ffffff !important;
-  border: none !important;
+  background: #2a2a30 !important;
+  border: 1px solid #3a3a42 !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-item-active a {
-  color: #0a0a0a !important;
+  color: #fafafa !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-prev,
 html[data-tenant='rottay'] .ant-pagination-next {
-  border-radius: 6px !important;
-  color: rgba(255, 255, 255, 0.7) !important;
+  border-radius: var(--ds-radius-md) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-prev:hover,
 html[data-tenant='rottay'] .ant-pagination-next:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: #242428 !important;
 }
 
 html[data-tenant='rottay'] .ant-pagination-prev button,
 html[data-tenant='rottay'] .ant-pagination-next button {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
+}
+
+html[data-tenant='rottay'] .ant-pagination-options {
+  color: var(--ds-color-text-secondary) !important;
+}
+
+html[data-tenant='rottay'] .ant-pagination-options .ant-select-selector {
+  background: #1e1e23 !important;
+  border-color: #2a2a30 !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 /* Dropdown */
 html[data-tenant='rottay'] .ant-dropdown-menu {
-  background: #1a1a1a !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-border), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
   padding: 4px !important;
 }
 
 html[data-tenant='rottay'] .ant-dropdown-menu-item {
-  color: rgba(255, 255, 255, 0.8) !important;
-  border-radius: 4px !important;
+  color: var(--ds-color-text-secondary) !important;
+  border-radius: var(--ds-radius-sm) !important;
   padding: 8px 12px !important;
 }
 
 html[data-tenant='rottay'] .ant-dropdown-menu-item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #ffffff !important;
+  background: var(--ds-color-interactive-bg-hover) !important;
+  color: var(--ds-color-primary) !important;
 }
 
 /* Tooltip */
 html[data-tenant='rottay'] .ant-tooltip-inner {
-  background: #ffffff !important;
-  color: #0a0a0a !important;
-  border-radius: 6px !important;
+  background: var(--ds-color-primary) !important;
+  color: var(--ds-color-bg-primary) !important;
+  border-radius: var(--ds-radius-md) !important;
   font-size: 12px !important;
   padding: 6px 10px !important;
 }
 
 html[data-tenant='rottay'] .ant-tooltip-arrow::before {
-  background: #ffffff !important;
+  background: var(--ds-color-primary) !important;
 }
 
 /* Popover */
 html[data-tenant='rottay'] .ant-popover-inner {
-  background: #1a1a1a !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-border), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 html[data-tenant='rottay'] .ant-popover-inner-content {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-popover-title {
-  color: #ffffff !important;
-  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--ds-color-primary) !important;
+  border-bottom-color: var(--ds-color-border) !important;
 }
 
 /* Message */
 html[data-tenant='rottay'] .ant-message-notice-content {
-  background: #1a1a1a !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-border), 0 4px 12px rgba(0, 0, 0, 0.5) !important;
   padding: 10px 16px !important;
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 /* Notification */
 html[data-tenant='rottay'] .ant-notification-notice {
-  background: #1a1a1a !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-border), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 html[data-tenant='rottay'] .ant-notification-notice-message {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-notification-notice-description {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 /* Drawer */
 html[data-tenant='rottay'] .ant-drawer-content {
-  background: #1a1a1a !important;
+  background: var(--ds-color-bg-elevated) !important;
 }
 
 html[data-tenant='rottay'] .ant-drawer-header {
-  background: #1a1a1a !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-bottom: 1px solid var(--ds-color-border) !important;
   padding: 16px 24px !important;
 }
 
 html[data-tenant='rottay'] .ant-drawer-title {
   font-weight: 600 !important;
   font-size: 18px !important;
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-drawer-body {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-drawer-close {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-drawer-close:hover {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 /* Form */
 html[data-tenant='rottay'] .ant-form-item-label > label {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
   font-weight: 600 !important;
   font-size: 14px !important;
 }
 
 html[data-tenant='rottay'] .ant-form-item-explain-error {
-  color: #f87171 !important;
+  color: var(--ds-color-error) !important;
   font-size: 12px !important;
 }
 
-/* Breadcrumb */
+/* Breadcrumb - Beige accent style */
+html[data-tenant='rottay'] .ant-breadcrumb {
+  font-size: 13px !important;
+}
+
 html[data-tenant='rottay'] .ant-breadcrumb-link {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--ds-color-text-tertiary) !important;
+  transition: color 0.15s ease !important;
 }
 
 html[data-tenant='rottay'] .ant-breadcrumb-link:hover {
-  color: #ffffff !important;
+  color: var(--ds-color-accent) !important;
+}
+
+html[data-tenant='rottay'] .ant-breadcrumb-link a {
+  color: inherit !important;
+}
+
+html[data-tenant='rottay'] .ant-breadcrumb-link a:hover {
+  color: var(--ds-color-accent) !important;
+}
+
+html[data-tenant='rottay'] .ant-breadcrumb li:last-child .ant-breadcrumb-link {
+  color: var(--ds-color-accent) !important;
+  font-weight: 500 !important;
 }
 
 html[data-tenant='rottay'] .ant-breadcrumb-separator {
-  color: rgba(255, 255, 255, 0.3) !important;
+  color: var(--ds-color-border-secondary) !important;
 }
 
 /* Steps */
 html[data-tenant='rottay'] .ant-steps-item-finish .ant-steps-item-icon {
-  background: #4ade80 !important;
-  border-color: #4ade80 !important;
+  background: var(--ds-color-success) !important;
+  border-color: var(--ds-color-success) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
-  color: #0a0a0a !important;
+  color: var(--ds-color-bg-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-process .ant-steps-item-icon {
-  background: #ffffff !important;
-  border-color: #ffffff !important;
+  background: var(--ds-color-primary) !important;
+  border-color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-process .ant-steps-item-icon > .ant-steps-icon {
-  color: #0a0a0a !important;
+  color: var(--ds-color-bg-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-wait .ant-steps-item-icon {
   background: transparent !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: var(--ds-color-interactive-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--ds-color-text-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-title {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-description {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--ds-color-text-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
-  background: #4ade80 !important;
+  background: var(--ds-color-success) !important;
 }
 
 /* Avatar */
 html[data-tenant='rottay'] .ant-avatar {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
+  background: var(--ds-color-interactive-bg-active) !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-avatar-group .ant-avatar {
-  border: 2px solid #171717 !important;
+  border: 2px solid var(--ds-color-primary-900) !important;
 }
 
 /* Badge */
 html[data-tenant='rottay'] .ant-badge-count {
-  background: #f87171 !important;
+  background: var(--ds-color-error) !important;
   font-weight: 600 !important;
 }
 
 html[data-tenant='rottay'] .ant-badge-dot {
-  background: #f87171 !important;
+  background: var(--ds-color-error) !important;
 }
 
 html[data-tenant='rottay'] .ant-badge-status-success {
-  background: #4ade80 !important;
+  background: var(--ds-color-success) !important;
 }
 
 html[data-tenant='rottay'] .ant-badge-status-processing {
-  background: #ffffff !important;
+  background: var(--ds-color-primary) !important;
 }
 
 /* Skeleton */
@@ -817,137 +991,137 @@ html[data-tenant='rottay'] .ant-skeleton-element .ant-skeleton-button,
 html[data-tenant='rottay'] .ant-skeleton-element .ant-skeleton-input,
 html[data-tenant='rottay'] .ant-skeleton-content .ant-skeleton-title,
 html[data-tenant='rottay'] .ant-skeleton-content .ant-skeleton-paragraph > li {
-  background: linear-gradient(90deg, #262626 25%, #333333 50%, #262626 75%) !important;
+  background: linear-gradient(90deg, var(--ds-color-primary-800) 25%, var(--ds-color-primary-700) 50%, var(--ds-color-primary-800) 75%) !important;
   background-size: 200% 100% !important;
 }
 
 /* Spin */
 html[data-tenant='rottay'] .ant-spin-dot-item {
-  background: #ffffff !important;
+  background: var(--ds-color-primary) !important;
 }
 
 /* Divider */
 html[data-tenant='rottay'] .ant-divider {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--ds-color-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-divider-inner-text {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--ds-color-text-muted) !important;
 }
 
 /* Collapse */
 html[data-tenant='rottay'] .ant-collapse {
-  background: #171717 !important;
-  border-radius: 8px !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: var(--ds-color-primary-900) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  border-color: var(--ds-color-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-collapse-header {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
   font-weight: 600 !important;
 }
 
 html[data-tenant='rottay'] .ant-collapse-content {
-  background: #171717 !important;
-  color: rgba(255, 255, 255, 0.8) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background: var(--ds-color-primary-900) !important;
+  color: var(--ds-color-text-secondary) !important;
+  border-color: var(--ds-color-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-collapse-item {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--ds-color-border) !important;
 }
 
 /* Timeline */
 html[data-tenant='rottay'] .ant-timeline-item-head-blue {
-  border-color: #ffffff !important;
-  background: #ffffff !important;
+  border-color: var(--ds-color-primary) !important;
+  background: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-timeline-item-head-green {
-  border-color: #4ade80 !important;
-  background: #4ade80 !important;
+  border-color: var(--ds-color-success) !important;
+  background: var(--ds-color-success) !important;
 }
 
 html[data-tenant='rottay'] .ant-timeline-item-tail {
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: var(--ds-color-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-timeline-item-content {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 /* Rate */
 html[data-tenant='rottay'] .ant-rate-star.ant-rate-star-full .ant-rate-star-first,
 html[data-tenant='rottay'] .ant-rate-star.ant-rate-star-full .ant-rate-star-second {
-  color: #b8a898 !important;
+  color: var(--ds-color-accent) !important;
 }
 
 /* DatePicker */
 html[data-tenant='rottay'] .ant-picker {
-  background: #171717 !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 6px !important;
+  background: var(--ds-color-primary-900) !important;
+  border: 1px solid var(--ds-color-border) !important;
+  border-radius: var(--ds-radius-md) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker input {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker input::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
+  color: var(--ds-color-text-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker:hover {
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  border-color: var(--ds-color-border-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-focused {
-  border-color: #ffffff !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2) !important;
+  border-color: var(--ds-color-primary) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-interactive-bg-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-suffix {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--ds-color-text-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-dropdown {
-  background: #1a1a1a !important;
-  border-radius: 8px !important;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
+  background: var(--ds-color-bg-elevated) !important;
+  border-radius: var(--ds-radius-lg) !important;
+  box-shadow: 0 0 0 1px var(--ds-color-border), 0 8px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-panel {
-  background: #1a1a1a !important;
+  background: var(--ds-color-bg-elevated) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-header {
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--ds-color-primary) !important;
+  border-color: var(--ds-color-border) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-header button {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-header button:hover {
-  color: #ffffff !important;
+  color: var(--ds-color-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-content th {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--ds-color-text-muted) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-cell {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--ds-color-text-secondary) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-cell:hover:not(.ant-picker-cell-selected) .ant-picker-cell-inner {
-  background: rgba(255, 255, 255, 0.1) !important;
+  background: var(--ds-color-interactive-bg-active) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-cell-selected .ant-picker-cell-inner {
-  background: #ffffff !important;
-  color: #0a0a0a !important;
+  background: var(--ds-color-primary) !important;
+  color: var(--ds-color-bg-primary) !important;
 }
 
 html[data-tenant='rottay'] .ant-picker-cell-today .ant-picker-cell-inner::before {
@@ -992,19 +1166,19 @@ html[data-tenant='rottay'] .ant-result-subtitle {
 }
 
 html[data-tenant='rottay'] .ant-result-success .ant-result-icon > .anticon {
-  color: #4ade80 !important;
+  color: var(--ds-color-success) !important;
 }
 
 html[data-tenant='rottay'] .ant-result-error .ant-result-icon > .anticon {
-  color: #f87171 !important;
+  color: var(--ds-color-error) !important;
 }
 
 html[data-tenant='rottay'] .ant-result-info .ant-result-icon > .anticon {
-  color: #60a5fa !important;
+  color: var(--ds-color-info) !important;
 }
 
 html[data-tenant='rottay'] .ant-result-warning .ant-result-icon > .anticon {
-  color: #fbbf24 !important;
+  color: var(--ds-color-warning) !important;
 }
 
 /* Segmented */
@@ -1027,17 +1201,31 @@ html[data-tenant='rottay'] .ant-segmented-item-selected {
   box-shadow: none !important;
 }
 
-/* Statistic */
+/* Statistic - High contrast for dashboard */
 html[data-tenant='rottay'] .ant-statistic-title {
-  color: rgba(255, 255, 255, 0.5) !important;
-  font-size: 12px !important;
+  color: #71717a !important;
+  font-size: 11px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 500 !important;
+  margin-bottom: 4px !important;
 }
 
 html[data-tenant='rottay'] .ant-statistic-content {
-  color: #ffffff !important;
-  font-weight: 600 !important;
+  color: #fafafa !important;
+  font-weight: 700 !important;
+}
+
+html[data-tenant='rottay'] .ant-statistic-content-value {
+  color: #fafafa !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+html[data-tenant='rottay'] .ant-statistic-content-prefix,
+html[data-tenant='rottay'] .ant-statistic-content-suffix {
+  color: #a1a1aa !important;
 }
 
 /* Tree */
@@ -1140,15 +1328,276 @@ html[data-tenant='rottay'] .ds-sidebar-item-active:hover {
 }
 
 /* ============================================
-   ROTTAY SPECIFIC - Beige Accent Colors
+   ROTTAY SPECIFIC - Professional Accent Colors
    ============================================ */
 html[data-tenant='rottay'] {
-  /* Highlight accents with beige */
-  --ds-accent-primary: #b8a898;
-  --ds-accent-secondary: #d4ccc0;
-  --ds-accent-light: #f3efe8;
+  /* Highlight accents - soft teal */
+  --ds-accent-primary: #6bb5a5;
+  --ds-accent-secondary: #7cc4b5;
+  --ds-accent-light: #a5d8cc;
 
   /* Special states */
-  --ds-highlight-bg: rgba(184, 168, 152, 0.1);
-  --ds-highlight-border: rgba(184, 168, 152, 0.3);
+  --ds-highlight-bg: rgba(107, 181, 165, 0.1);
+  --ds-highlight-border: rgba(107, 181, 165, 0.25);
+
+  /* Live/Online indicators - soft teal */
+  --ds-live-indicator: #6bb5a5;
+  --ds-live-indicator-bg: rgba(107, 181, 165, 0.1);
+  --ds-live-indicator-border: rgba(107, 181, 165, 0.25);
+
+  /* Icon colors for better visibility */
+  --ds-icon-color: #71717a;
+  --ds-icon-color-hover: #a1a1aa;
+  --ds-icon-color-active: #fafafa;
+}
+
+/* ============================================
+   GLOBAL ICON STYLING
+   ============================================ */
+
+/* Ant Design icons - default to gray */
+html[data-tenant='rottay'] .anticon {
+  color: #71717a;
+}
+
+html[data-tenant='rottay'] .anticon:hover {
+  color: #a1a1aa;
+}
+
+/* Lucide icons - default to gray */
+html[data-tenant='rottay'] svg.lucide,
+html[data-tenant='rottay'] [data-lucide] {
+  color: #71717a;
+}
+
+/* Icons inside buttons should be white */
+html[data-tenant='rottay'] .ant-btn .anticon,
+html[data-tenant='rottay'] .ant-btn svg.lucide {
+  color: inherit;
+}
+
+/* Icons in form controls */
+html[data-tenant='rottay'] .ant-input-prefix .anticon,
+html[data-tenant='rottay'] .ant-input-suffix .anticon,
+html[data-tenant='rottay'] .ant-input-prefix svg,
+html[data-tenant='rottay'] .ant-input-suffix svg {
+  color: #52525b !important;
+}
+
+/* Icons in menu items should inherit color */
+html[data-tenant='rottay'] .ant-menu-item .anticon,
+html[data-tenant='rottay'] .ant-menu-item svg {
+  color: inherit !important;
+}
+
+/* Card header icons */
+html[data-tenant='rottay'] .ant-card-head .anticon,
+html[data-tenant='rottay'] .ant-card-head svg {
+  color: #71717a !important;
+}
+
+/* Stat card icons - ensure they're visible with background */
+html[data-tenant='rottay'] .stat-card .anticon,
+html[data-tenant='rottay'] .stat-card svg,
+html[data-tenant='rottay'] .metric-card .anticon,
+html[data-tenant='rottay'] .metric-card svg {
+  color: #71717a !important;
+}
+
+/* Icon wrappers/containers in cards */
+html[data-tenant='rottay'] .icon-wrapper,
+html[data-tenant='rottay'] .stat-icon,
+html[data-tenant='rottay'] .icon-box {
+  background: #242428 !important;
+  border: 1px solid #2a2a30 !important;
+  color: #71717a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+html[data-tenant='rottay'] .icon-wrapper .anticon,
+html[data-tenant='rottay'] .stat-icon .anticon,
+html[data-tenant='rottay'] .icon-box .anticon,
+html[data-tenant='rottay'] .icon-wrapper svg,
+html[data-tenant='rottay'] .stat-icon svg,
+html[data-tenant='rottay'] .icon-box svg {
+  color: #71717a !important;
+}
+
+/* Success colored icons */
+html[data-tenant='rottay'] .anticon-check-circle,
+html[data-tenant='rottay'] .anticon-check {
+  color: #5cb395 !important;
+}
+
+/* Error colored icons */
+html[data-tenant='rottay'] .anticon-close-circle,
+html[data-tenant='rottay'] .anticon-close {
+  color: #d4645a !important;
+}
+
+/* Warning colored icons */
+html[data-tenant='rottay'] .anticon-warning,
+html[data-tenant='rottay'] .anticon-exclamation-circle {
+  color: #d4a54a !important;
+}
+
+/* Info colored icons */
+html[data-tenant='rottay'] .anticon-info-circle,
+html[data-tenant='rottay'] .anticon-question-circle {
+  color: #6b9dc9 !important;
+}
+
+/* ============================================
+   CUSTOM UTILITY CLASSES
+   ============================================ */
+
+/* Live/Online indicators - soft teal */
+html[data-tenant='rottay'] .status-live,
+html[data-tenant='rottay'] .indicator-live {
+  background: rgba(107, 181, 165, 0.1) !important;
+  color: #6bb5a5 !important;
+  border: 1px solid rgba(107, 181, 165, 0.25) !important;
+}
+
+/* Accent text */
+html[data-tenant='rottay'] .text-accent {
+  color: #6bb5a5 !important;
+}
+
+/* Stats cards text visibility */
+html[data-tenant='rottay'] .stat-value,
+html[data-tenant='rottay'] .stat-number {
+  color: #fafafa !important;
+  font-weight: 600 !important;
+}
+
+html[data-tenant='rottay'] .stat-label,
+html[data-tenant='rottay'] .stat-title {
+  color: #71717a !important;
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+}
+
+html[data-tenant='rottay'] .stat-change.positive {
+  color: #5cb395 !important;
+}
+
+html[data-tenant='rottay'] .stat-change.negative {
+  color: #d4645a !important;
+}
+
+/* Activity feed */
+html[data-tenant='rottay'] .activity-item {
+  border-bottom: 1px solid #27272a !important;
+}
+
+html[data-tenant='rottay'] .activity-time {
+  color: #52525b !important;
+  font-size: 12px !important;
+}
+
+/* Dashboard header badges */
+html[data-tenant='rottay'] .header-badge {
+  background: #1e1e23 !important;
+  border: 1px solid #2a2a30 !important;
+  color: #a1a1aa !important;
+  font-size: 11px !important;
+  padding: 4px 10px !important;
+  border-radius: 5px !important;
+}
+
+html[data-tenant='rottay'] .header-badge.active,
+html[data-tenant='rottay'] .header-badge.online {
+  background: rgba(107, 181, 165, 0.1) !important;
+  border-color: rgba(107, 181, 165, 0.25) !important;
+  color: #6bb5a5 !important;
+}
+
+/* Quick actions styling */
+html[data-tenant='rottay'] .quick-action-card {
+  background: #1a1a1e !important;
+  border: 1px solid #2a2a30 !important;
+  transition: all 0.15s ease !important;
+}
+
+html[data-tenant='rottay'] .quick-action-card:hover {
+  background: #1f1f24 !important;
+  border-color: #35353b !important;
+}
+
+html[data-tenant='rottay'] .quick-action-card .icon {
+  color: #71717a !important;
+}
+
+html[data-tenant='rottay'] .quick-action-card:hover .icon {
+  color: #9ca3af !important;
+}
+
+/* ============================================
+   TYPOGRAPHY - Ant Design Text Overrides
+   Critical for text visibility in dark theme
+   ============================================ */
+
+/*
+ * Base Typography - set default color WITHOUT !important
+ * This allows inline styles to work properly
+ * Inline styles have higher specificity than CSS rules
+ */
+html[data-tenant='rottay'] .ant-typography {
+  color: var(--ds-color-text-primary);
+}
+
+/* Type variants - these override the base only when no inline style */
+html[data-tenant='rottay'] .ant-typography.ant-typography-secondary {
+  color: var(--ds-color-text-secondary);
+}
+
+html[data-tenant='rottay'] .ant-typography.ant-typography-success {
+  color: var(--ds-color-success);
+}
+
+html[data-tenant='rottay'] .ant-typography.ant-typography-warning {
+  color: var(--ds-color-warning);
+}
+
+html[data-tenant='rottay'] .ant-typography.ant-typography-danger {
+  color: var(--ds-color-error);
+}
+
+/* Links */
+html[data-tenant='rottay'] .ant-typography a,
+html[data-tenant='rottay'] a.ant-typography {
+  color: var(--ds-color-accent);
+}
+
+html[data-tenant='rottay'] .ant-typography a:hover,
+html[data-tenant='rottay'] a.ant-typography:hover {
+  color: var(--ds-color-accent-hover);
+}
+
+/* Code/Monospace text */
+html[data-tenant='rottay'] .ant-typography code,
+html[data-tenant='rottay'] code.ant-typography {
+  background: var(--ds-color-bg-tertiary);
+  border: 1px solid var(--ds-color-border-secondary);
+  color: var(--ds-color-text-primary);
+  padding: 2px 6px;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* Headings - ensure they are visible */
+html[data-tenant='rottay'] h1.ant-typography,
+html[data-tenant='rottay'] h2.ant-typography,
+html[data-tenant='rottay'] h3.ant-typography,
+html[data-tenant='rottay'] h4.ant-typography,
+html[data-tenant='rottay'] h5.ant-typography {
+  color: var(--ds-color-text-primary);
+}
+
+/* Disabled state */
+html[data-tenant='rottay'] .ant-typography-disabled {
+  color: var(--ds-color-text-disabled);
 }
