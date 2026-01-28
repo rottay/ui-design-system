@@ -87,10 +87,24 @@ html[data-tenant='rottay'] {
   --ds-color-border-tertiary: #42424a;
   --ds-color-border-focus: rgba(255, 255, 255, 0.4);
 
-  /* Typography - Geist/Inter */
-  --ds-font-family-base: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --ds-font-family-heading: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --ds-font-family-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+  /* Typography - Axiom-inspired Terminal Tech */
+  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-family-heading: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  --ds-font-family-mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  --ds-font-family-display: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Letter Spacing - Tech Feel */
+  --ds-letter-spacing-display: -0.02em;
+  --ds-letter-spacing-heading: -0.01em;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-mono: 0;
+
+  /* Line Heights */
+  --ds-line-height-display: 1.1;
+  --ds-line-height-heading: 1.2;
+  --ds-line-height-body: 1.6;
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-relaxed: 1.75;
 
   /* Border Radius - Very Subtle */
   --ds-radius-sm: 4px;
@@ -1588,13 +1602,44 @@ html[data-tenant='rottay'] code.ant-typography {
   border-radius: var(--ds-radius-sm);
 }
 
-/* Headings - ensure they are visible */
+/* Headings - Axiom-style monospace with tech feel */
 html[data-tenant='rottay'] h1.ant-typography,
 html[data-tenant='rottay'] h2.ant-typography,
 html[data-tenant='rottay'] h3.ant-typography,
 html[data-tenant='rottay'] h4.ant-typography,
 html[data-tenant='rottay'] h5.ant-typography {
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading);
+  letter-spacing: var(--ds-letter-spacing-heading);
+  line-height: var(--ds-line-height-heading);
+}
+
+/* Display headings - larger hero text */
+html[data-tenant='rottay'] .display-heading,
+html[data-tenant='rottay'] .heading-display {
+  font-family: var(--ds-font-family-display);
+  letter-spacing: var(--ds-letter-spacing-display);
+  line-height: var(--ds-line-height-display);
+  font-weight: 700;
+}
+
+/* Terminal/Code style text */
+html[data-tenant='rottay'] .terminal-text,
+html[data-tenant='rottay'] .mono-text {
+  font-family: var(--ds-font-family-mono);
+  letter-spacing: var(--ds-letter-spacing-mono);
+}
+
+/* Native HTML headings */
+html[data-tenant='rottay'] h1,
+html[data-tenant='rottay'] h2,
+html[data-tenant='rottay'] h3,
+html[data-tenant='rottay'] h4,
+html[data-tenant='rottay'] h5,
+html[data-tenant='rottay'] h6 {
+  font-family: var(--ds-font-family-heading);
+  letter-spacing: var(--ds-letter-spacing-heading);
+  line-height: var(--ds-line-height-heading);
 }
 
 /* Disabled state */

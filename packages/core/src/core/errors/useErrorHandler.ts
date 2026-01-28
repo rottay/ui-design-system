@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * useErrorHandler - React hook for error handling
  */

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * UserMenu - Avatar Preset (Avatar only)
  */

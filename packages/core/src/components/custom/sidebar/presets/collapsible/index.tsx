@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Sidebar - Collapsible Preset (With toggle)
  */

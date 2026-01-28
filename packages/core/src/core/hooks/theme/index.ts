@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview useTheme Hook - Rottay Design System
  * @description React hook for accessing and controlling the current theme variant,

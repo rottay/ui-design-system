@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * DataTable - Professional Preset
  * Full-featured table built ONLY with DS primitives (no Ant Design Table)

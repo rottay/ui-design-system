@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview FeatureProvider - Rottay Design System
  * @description Manages feature flags for progressive feature rollout,

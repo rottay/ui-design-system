@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview useEngine Hook - Rottay Design System
  * @description React hook for accessing and controlling the UI rendering engine,

@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Custom Component Factory
  * Creates preset-based custom components

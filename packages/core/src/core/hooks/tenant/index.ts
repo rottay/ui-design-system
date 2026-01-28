@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview useTenant Hook - Rottay Design System
  * @description React hook for accessing tenant-specific configuration,

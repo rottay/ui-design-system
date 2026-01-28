@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview TenantProvider - Rottay Design System
  * @description Provides tenant-specific configuration context for multi-tenant

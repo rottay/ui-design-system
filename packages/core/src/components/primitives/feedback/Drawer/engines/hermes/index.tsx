@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Drawer Hermes Engine - Rottay Design System
  * @description DaisyUI/Tailwind implementation of the Drawer component.

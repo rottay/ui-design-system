@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * DataTable - Full Preset
  * Table with all features: search, selection, sorting, pagination

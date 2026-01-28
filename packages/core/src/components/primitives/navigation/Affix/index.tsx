@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Affix Component - Rottay Design System
  * @description A sticky positioning component that fixes elements to the viewport when scrolling.

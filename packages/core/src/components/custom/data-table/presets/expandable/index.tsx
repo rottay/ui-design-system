@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * DataTable - Expandable Preset
  * Full-featured table with expandable rows, sorting, filtering, search, selection and pagination

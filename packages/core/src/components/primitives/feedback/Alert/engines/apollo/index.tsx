@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Alert Apollo Engine - Rottay Design System
  * @description Vanilla HTML/CSS implementation of the Alert component.

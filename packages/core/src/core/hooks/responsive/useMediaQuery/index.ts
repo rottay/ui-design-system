@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview useMediaQuery Hook - Rottay Design System
  * @description SSR-safe React hook for subscribing to CSS media queries,

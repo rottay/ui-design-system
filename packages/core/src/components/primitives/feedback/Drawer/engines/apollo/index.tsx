@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Drawer Apollo Engine - Rottay Design System
  * @description Vanilla HTML/CSS implementation of the Drawer component.

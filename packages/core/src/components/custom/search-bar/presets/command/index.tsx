@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * SearchBar - Command Preset (cmd+k style)
  */

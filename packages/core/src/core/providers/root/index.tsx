@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview DesignSystemProvider - Rottay Design System
  * @description The root provider that composes all system providers into a single,

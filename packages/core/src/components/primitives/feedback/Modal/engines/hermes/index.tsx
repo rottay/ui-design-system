@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Modal Hermes Engine - Rottay Design System
  * @description DaisyUI/Tailwind implementation of the Modal component.

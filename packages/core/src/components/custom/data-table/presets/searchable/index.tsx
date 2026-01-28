@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * DataTable - Searchable Preset
  * Table with search input

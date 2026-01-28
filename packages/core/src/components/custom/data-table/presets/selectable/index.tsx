@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * DataTable - Selectable Preset
  * Table with row selection checkboxes

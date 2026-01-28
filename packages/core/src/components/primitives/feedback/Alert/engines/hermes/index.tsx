@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Alert Hermes Engine - Rottay Design System
  * @description DaisyUI/Tailwind implementation of the Alert component.

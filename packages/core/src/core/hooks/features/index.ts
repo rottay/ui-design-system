@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @fileoverview Feature Hooks - Rottay Design System
  * @description React hooks for accessing feature flags and implementing
