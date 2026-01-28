@@ -1646,3 +1646,511 @@ html[data-tenant='rottay'] h6 {
 html[data-tenant='rottay'] .ant-typography-disabled {
   color: var(--ds-color-text-disabled);
 }
+
+/* ============================================
+   ALIVE DASHBOARD AESTHETICS
+   Glows, animations, textures for AI-tech feel
+   ============================================ */
+
+/* Glow color variables */
+html[data-tenant='rottay'] {
+  --glow-cyan: rgba(0, 212, 255, 0.5);
+  --glow-green: rgba(0, 255, 136, 0.5);
+  --glow-violet: rgba(139, 92, 246, 0.5);
+  --glow-amber: rgba(255, 184, 0, 0.5);
+  --gradient-dark: linear-gradient(135deg, #0a0a0c 0%, #0f0f14 50%, #12121a 100%);
+}
+
+/* ============================================
+   NOISE TEXTURE OVERLAY
+   ============================================ */
+html[data-tenant='rottay']::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ============================================
+   GRADIENT BACKGROUNDS
+   ============================================ */
+html[data-tenant='rottay'] body {
+  background: var(--gradient-dark) !important;
+}
+
+html[data-tenant='rottay'] .ant-layout {
+  background: var(--gradient-dark) !important;
+}
+
+html[data-tenant='rottay'] .ant-layout-content {
+  background: transparent !important;
+  position: relative;
+}
+
+/* Subtle corner glows */
+html[data-tenant='rottay'] .ant-layout-content::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  right: -20%;
+  width: 60%;
+  height: 100%;
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+html[data-tenant='rottay'] .ant-layout-content::after {
+  content: '';
+  position: fixed;
+  bottom: -30%;
+  left: -10%;
+  width: 50%;
+  height: 80%;
+  background: radial-gradient(ellipse, rgba(0, 212, 255, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   CARD GLASSMORPHISM + GLOW
+   ============================================ */
+html[data-tenant='rottay'] .ant-card {
+  background: rgba(20, 20, 26, 0.8) !important;
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+html[data-tenant='rottay'] .ant-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+html[data-tenant='rottay'] .ant-card:hover {
+  border-color: rgba(139, 92, 246, 0.3) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(139, 92, 246, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   LIVE INDICATOR PULSE
+   ============================================ */
+@keyframes rottay-pulse-live {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+  }
+  50% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 8px rgba(0, 255, 136, 0);
+  }
+}
+
+@keyframes rottay-pulse-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+  50% {
+    filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 20px currentColor);
+  }
+}
+
+html[data-tenant='rottay'] .live-indicator,
+html[data-tenant='rottay'] [class*="live"],
+html[data-tenant='rottay'] [class*="Live"] {
+  animation: rottay-pulse-live 2s infinite;
+}
+
+/* ============================================
+   GLOW TEXT EFFECTS
+   ============================================ */
+html[data-tenant='rottay'] .glow-text {
+  text-shadow:
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 40px currentColor;
+}
+
+html[data-tenant='rottay'] .glow-cyan {
+  color: #00D4FF;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+html[data-tenant='rottay'] .glow-green {
+  color: #00FF88;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+html[data-tenant='rottay'] .glow-violet {
+  color: #8B5CF6;
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+html[data-tenant='rottay'] .glow-amber {
+  color: #FFB800;
+  text-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+}
+
+/* ============================================
+   ANIMATED BORDER BEAM
+   ============================================ */
+@keyframes rottay-border-beam {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+html[data-tenant='rottay'] .border-beam {
+  position: relative;
+}
+
+html[data-tenant='rottay'] .border-beam::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.5),
+    rgba(0, 212, 255, 0.5),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: rottay-border-beam 3s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ============================================
+   SHIMMER LOADING EFFECT
+   ============================================ */
+@keyframes rottay-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+html[data-tenant='rottay'] .shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: rottay-shimmer 2s infinite;
+}
+
+/* ============================================
+   FLOATING ANIMATION
+   ============================================ */
+@keyframes rottay-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px);
+    opacity: 0.5;
+  }
+}
+
+/* ============================================
+   AI THINKING ANIMATION
+   ============================================ */
+@keyframes rottay-thinking {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes rottay-thinking-dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+html[data-tenant='rottay'] .ai-thinking::after {
+  content: '...';
+  animation: rottay-thinking-dots 1.5s infinite;
+}
+
+/* ============================================
+   STATUS ORB INDICATORS
+   ============================================ */
+html[data-tenant='rottay'] .status-orb {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+html[data-tenant='rottay'] .status-orb.online {
+  background: #00FF88;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+  animation: rottay-pulse-live 2s infinite;
+}
+
+html[data-tenant='rottay'] .status-orb.offline {
+  background: #71717a;
+}
+
+html[data-tenant='rottay'] .status-orb.warning {
+  background: #FFB800;
+  box-shadow: 0 0 10px rgba(255, 184, 0, 0.6);
+  animation: rottay-pulse-live 1.5s infinite;
+}
+
+html[data-tenant='rottay'] .status-orb.error {
+  background: #FF4757;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.6);
+  animation: rottay-pulse-live 1s infinite;
+}
+
+/* ============================================
+   LIVE BADGE
+   ============================================ */
+html[data-tenant='rottay'] .live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #00FF88;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+html[data-tenant='rottay'] .live-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #00FF88;
+  border-radius: 50%;
+  animation: rottay-pulse-live 2s infinite;
+}
+
+/* ============================================
+   AI INSIGHT CARD
+   ============================================ */
+html[data-tenant='rottay'] .ai-insight-card {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes rottay-shimmer-slow {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(50%); }
+}
+
+html[data-tenant='rottay'] .ai-insight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+  animation: rottay-shimmer-slow 4s infinite;
+}
+
+/* ============================================
+   METRIC VALUE GLOW
+   ============================================ */
+html[data-tenant='rottay'] .metric-value-glow {
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.3),
+    0 0 30px rgba(139, 92, 246, 0.2);
+}
+
+/* ============================================
+   CHART/SPARKLINE GLOW
+   ============================================ */
+html[data-tenant='rottay'] .recharts-line {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+html[data-tenant='rottay'] .recharts-area {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+html[data-tenant='rottay'] svg path[stroke] {
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+/* ============================================
+   STAT CARD VARIANTS
+   ============================================ */
+html[data-tenant='rottay'] .stat-card-cyan {
+  border-left: 3px solid #00D4FF !important;
+}
+html[data-tenant='rottay'] .stat-card-cyan:hover {
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.2) !important;
+}
+
+html[data-tenant='rottay'] .stat-card-green {
+  border-left: 3px solid #00FF88 !important;
+}
+html[data-tenant='rottay'] .stat-card-green:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2) !important;
+}
+
+html[data-tenant='rottay'] .stat-card-violet {
+  border-left: 3px solid #8B5CF6 !important;
+}
+html[data-tenant='rottay'] .stat-card-violet:hover {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.2) !important;
+}
+
+html[data-tenant='rottay'] .stat-card-amber {
+  border-left: 3px solid #FFB800 !important;
+}
+html[data-tenant='rottay'] .stat-card-amber:hover {
+  box-shadow: 0 0 30px rgba(255, 184, 0, 0.2) !important;
+}
+
+/* ============================================
+   ANIMATED GRID BACKGROUND
+   ============================================ */
+@keyframes rottay-grid-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+html[data-tenant='rottay'] .animated-grid {
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: rottay-grid-move 20s linear infinite;
+}
+
+/* ============================================
+   TYPING CURSOR
+   ============================================ */
+@keyframes rottay-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+html[data-tenant='rottay'] .typing-cursor::after {
+  content: '|';
+  animation: rottay-blink 1s infinite;
+  color: #8B5CF6;
+  margin-left: 2px;
+}
+
+/* ============================================
+   HEARTBEAT ANIMATION
+   ============================================ */
+@keyframes rottay-heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.1); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  56% { transform: scale(1); }
+}
+
+html[data-tenant='rottay'] .heartbeat {
+  animation: rottay-heartbeat 2s infinite;
+}
+
+/* ============================================
+   SIDEBAR GLOW
+   ============================================ */
+html[data-tenant='rottay'] .ant-layout-sider {
+  background: linear-gradient(180deg, #0a0a0c 0%, #0f0f14 100%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ============================================
+   HEADER BACKDROP
+   ============================================ */
+html[data-tenant='rottay'] .ant-layout-header {
+  background: rgba(12, 12, 14, 0.9) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ============================================
+   BUTTON GLOW ON HOVER
+   ============================================ */
+html[data-tenant='rottay'] .ant-btn-primary:hover {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* ============================================
+   INPUT FOCUS GLOW
+   ============================================ */
+html[data-tenant='rottay'] .ant-input:focus,
+html[data-tenant='rottay'] .ant-input-affix-wrapper-focused {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1) !important;
+}
+
+/* ============================================
+   MODAL GLASSMORPHISM
+   ============================================ */
+html[data-tenant='rottay'] .ant-modal-content {
+  background: rgba(20, 20, 26, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ============================================
+   DROPDOWN GLASSMORPHISM
+   ============================================ */
+html[data-tenant='rottay'] .ant-dropdown-menu {
+  background: rgba(20, 20, 26, 0.95) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-tenant='rottay'] .ant-dropdown-menu-item:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+/* ============================================
+   MENU ITEM GLOW ON HOVER
+   ============================================ */
+html[data-tenant='rottay'] .ant-menu-item:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+html[data-tenant='rottay'] .ant-menu-item-selected {
+  background: rgba(139, 92, 246, 0.15) !important;
+  border-right: 2px solid #8B5CF6 !important;
+}
