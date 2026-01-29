@@ -68,9 +68,9 @@ html[data-tenant='rottay'] {
   /* Legacy naming (--ds-color-text-*) */
   --ds-color-text-primary: #fafafa;
   --ds-color-text-secondary: #a1a1aa;
-  --ds-color-text-tertiary: #71717a;
-  --ds-color-text-muted: #52525b;
-  --ds-color-text-disabled: #3f3f46;
+  --ds-color-text-tertiary: #8b8b94;
+  --ds-color-text-muted: #a1a1aa;
+  --ds-color-text-disabled: #52525b;
   --ds-color-text-on-primary: #09090b;
 
   /* Engine-compatible naming (--ds-text-*) - REQUIRED for Titan engine */
