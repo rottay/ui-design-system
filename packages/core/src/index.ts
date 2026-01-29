@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Rottay Design System
  * Multi-tenant, multi-engine UI component library
