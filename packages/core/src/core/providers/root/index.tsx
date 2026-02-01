@@ -116,23 +116,9 @@ export interface DesignSystemProviderProps {
 }
 
 /**
- * Simple loading component
+ * Simple loading component - minimal to avoid SSR issues
  */
-const LoadingScreen: React.FC = () => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        fontFamily: 'system-ui, sans-serif',
-      }}
-    >
-      Loading...
-    </div>
-  );
-};
+const LoadingScreen: React.FC = () => null;
 
 export function DesignSystemProvider({
   children,

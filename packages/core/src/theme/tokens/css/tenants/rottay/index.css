@@ -451,6 +451,7 @@ html[data-tenant='rottay'] .ant-table-thead > tr > th {
   text-transform: uppercase !important;
   letter-spacing: 0.05em !important;
   padding: 12px 16px !important;
+  border-inline-end: none !important;
 }
 
 html[data-tenant='rottay'] .ant-table-tbody > tr > td {
@@ -785,6 +786,15 @@ html[data-tenant='rottay'] .ant-pagination-options .ant-select-selector {
   background: #1e1e23 !important;
   border-color: #2a2a30 !important;
   color: var(--ds-color-text-secondary) !important;
+}
+
+html[data-tenant='rottay'] .ant-pagination-total-text {
+  color: var(--ds-color-text-secondary) !important;
+}
+
+html[data-tenant='rottay'] .ant-pagination-disabled .ant-pagination-item-link {
+  color: var(--ds-color-text-disabled) !important;
+  background: transparent !important;
 }
 
 /* Dropdown */
@@ -2143,14 +2153,10 @@ html[data-tenant='rottay'] .ant-dropdown-menu-item:hover {
   background: rgba(139, 92, 246, 0.1) !important;
 }
 
-/* ============================================
-   MENU ITEM GLOW ON HOVER
-   ============================================ */
-html[data-tenant='rottay'] .ant-menu-item:hover {
-  background: rgba(139, 92, 246, 0.1) !important;
-}
 
-html[data-tenant='rottay'] .ant-menu-item-selected {
-  background: rgba(139, 92, 246, 0.15) !important;
-  border-right: 2px solid #8B5CF6 !important;
+/* ============================================
+   ROTTAY BOX - Dark Background
+   ============================================ */
+html[data-tenant='rottay'] .rottay-box:not([style*="border-radius: 14"]) {
+  background-color: var(--ds-color-bg-primary) !important;
 }
