@@ -18,7 +18,7 @@
     "next:free": "kill-port 3000 && kill-port 6006 && kill-port 6007"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20"
   },
   "dependencies": {
     "kill-port": "^2.0.1"
