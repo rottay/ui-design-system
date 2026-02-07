@@ -441,8 +441,8 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   };
 
   const childrenWithProps = React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      return React.cloneElement(child as React.ReactElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean }>, {
+    if (React.isValidElement<{ value?: unknown; onChange?: (v: unknown) => void; disabled?: boolean }>(child)) {
+      return React.cloneElement(child, {
         value: fieldValue,
         onChange: handleChange,
         disabled: disabled || child.props.disabled,

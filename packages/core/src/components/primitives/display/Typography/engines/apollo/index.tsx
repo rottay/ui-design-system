@@ -66,7 +66,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       ...restProps
     } = props;
 
-    const Tag = level as keyof JSX.IntrinsicElements;
+    const Tag = level as keyof React.JSX.IntrinsicElements;
 
     // Map level to default size if not specified
     const defaultSizeMap: Record<string, keyof typeof SIZE_MAP.heading> = {
@@ -142,7 +142,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       ...restProps
     } = props;
 
-    const Tag = as as keyof JSX.IntrinsicElements;
+    const Tag = as as keyof React.JSX.IntrinsicElements;
 
     // Build text decorations
     const decorations: string[] = [];

@@ -108,7 +108,7 @@ function renderStackChildren(
       return [child];
     }
     const dividerElement = React.isValidElement(divider)
-      ? React.cloneElement(divider as React.ReactElement, {
+      ? React.cloneElement(divider as React.ReactElement<Record<string, unknown>>, {
           key: `divider-${index}`,
           'aria-hidden': true,
         })

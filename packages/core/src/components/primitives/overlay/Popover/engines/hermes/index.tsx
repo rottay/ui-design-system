@@ -66,8 +66,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const enterTimeoutRef = useRef<NodeJS.Timeout>();
-    const leaveTimeoutRef = useRef<NodeJS.Timeout>();
+    const enterTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {

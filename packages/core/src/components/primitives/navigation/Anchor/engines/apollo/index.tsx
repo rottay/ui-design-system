@@ -351,7 +351,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
       const anchors: string[] = [];
       const traverse = (nodes: React.ReactNode) => {
         Children.forEach(nodes, (child) => {
-          if (isValidElement(child) && child.props.href) {
+          if (isValidElement<{ href?: string; children?: React.ReactNode }>(child) && child.props.href) {
             anchors.push(child.props.href);
             if (child.props.children) {
               traverse(child.props.children);

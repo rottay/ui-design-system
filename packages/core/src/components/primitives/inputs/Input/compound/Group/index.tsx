@@ -27,7 +27,7 @@ export function InputGroup({
   const childArray = React.Children.toArray(children);
 
   const enhancedChildren = childArray.map((child, index) => {
-    if (!React.isValidElement(child)) return child;
+    if (!React.isValidElement<{ style?: CSSProperties; size?: string }>(child)) return child;
 
     const isFirst = index === 0;
     const isLast = index === childArray.length - 1;
@@ -59,7 +59,7 @@ export function InputGroup({
       }
     }
 
-    return React.cloneElement(child as React.ReactElement<any>, {
+    return React.cloneElement(child, {
       size: child.props.size || size,
       style: childStyle,
     });
