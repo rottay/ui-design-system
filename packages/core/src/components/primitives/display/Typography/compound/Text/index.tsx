@@ -55,9 +55,9 @@
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { TextProps } from '../../types';
-import { TitanText } from '../../engines/titan';
-import { HermesText } from '../../engines/hermes';
-import { ApolloText } from '../../engines/apollo';
+import { ClassicText } from '../../engines/classic';
+import { ModernText } from '../../engines/modern';
+import { RusticText } from '../../engines/rustic';
 
 /**
  * Map of engine names to their respective Text implementations.
@@ -66,9 +66,9 @@ const engineMap: Record<
   string,
   ForwardRefExoticComponent<TextProps & RefAttributes<HTMLElement>>
 > = {
-  titan: TitanText,
-  hermes: HermesText,
-  apollo: ApolloText,
+  classic: ClassicText,
+  modern: ModernText,
+  rustic: RusticText,
 };
 
 /**
@@ -94,14 +94,14 @@ const engineMap: Record<
  * </TypographyText>
  *
  * // With specific engine
- * <TypographyText engine="apollo" underline>
+ * <TypographyText engine="rustic" underline>
  *   Underlined link text
  * </TypographyText>
  * ```
  */
 export const TypographyText = forwardRef<HTMLElement, TextProps>(
-  ({ engine = 'titan', ...props }, ref) => {
-    const Component = engineMap[engine] || TitanText;
+  ({ engine = 'classic', ...props }, ref) => {
+    const Component = engineMap[engine] || ClassicText;
     return <Component ref={ref} {...props} />;
   }
 );

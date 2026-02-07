@@ -8,9 +8,9 @@
  * implementations. Each engine renders the same component API but uses
  * different underlying technologies:
  *
- * - **Titan**: Ant Design - Full-featured with native Result component
- * - **Hermes**: DaisyUI/Tailwind - Utility-first CSS styling
- * - **Apollo**: Vanilla HTML/CSS - Zero external dependencies
+ * - **Classic**: Ant Design - Full-featured with native Result component
+ * - **Modern**: DaisyUI/Tailwind - Utility-first CSS styling
+ * - **Rustic**: Vanilla HTML/CSS - Zero external dependencies
  *
  * **Usage Note:**
  * These exports are primarily used internally by the engine factory.
@@ -18,9 +18,9 @@
  *
  * @example Internal Engine Factory Usage
  * ```tsx
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
- * const engines = { titan, hermes, apollo };
+ * const engines = { classic, modern, rustic };
  * ```
  *
  * @example Application Usage (Recommended)
@@ -28,12 +28,12 @@
  * import { Result } from '@rottay/design-system';
  *
  * // Engine is selected automatically or via prop
- * <Result engine="titan" status="success" title="Done!" />
+ * <Result engine="classic" status="success" title="Done!" />
  * ```
  *
- * @see {@link TitanResult} - Ant Design implementation
- * @see {@link HermesResult} - DaisyUI implementation
- * @see {@link ApolloResult} - Vanilla implementation
+ * @see {@link ClassicResult} - Ant Design implementation
+ * @see {@link ModernResult} - DaisyUI implementation
+ * @see {@link RusticResult} - Vanilla implementation
  * @module Result/Engines
  * @category Feedback
  * @package @rottay/design-system
@@ -43,11 +43,11 @@
 // Engine Exports
 // ============================================================================
 
-/** Titan engine - Ant Design implementation */
-export { default as titan } from './titan';
+/** Classic engine - Ant Design implementation */
+export { default as classic } from './classic';
 
-/** Hermes engine - DaisyUI/Tailwind implementation */
-export { default as hermes } from './hermes';
+/** Modern engine - DaisyUI/Tailwind implementation */
+export { default as modern } from './modern';
 
-/** Apollo engine - Vanilla HTML/CSS implementation */
-export { default as apollo } from './apollo';
+/** Rustic engine - Vanilla HTML/CSS implementation */
+export { default as rustic } from './rustic';

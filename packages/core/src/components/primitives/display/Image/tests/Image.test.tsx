@@ -239,7 +239,7 @@ describe('Accessibility', () => {
 });
 
 describe('Image engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Image engine={engine} src="https://example.com/image.jpg" alt="Test" />);
     expect(screen.getByTestId('image-container')).toBeInTheDocument();
   });

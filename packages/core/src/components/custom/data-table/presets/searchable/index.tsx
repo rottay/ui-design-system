@@ -7,12 +7,13 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { DataTableProps } from '../../core';
 import { DATA_TABLE_DEFAULTS } from '../../core';
 
 export const SearchableDataTable = createPreset<DataTableProps & Record<string, unknown>>({
   name: 'DataTable.Searchable',
-  render: ({ primitives, props, tokens }: PresetContext<DataTableProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<DataTableProps>) => {
     const { Box, Card, Stack, Spinner } = primitives;
     const {
       columns,
@@ -48,6 +49,7 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
     };
 
     const cellPadding = compact ? tokens.spacing[2] : tokens.spacing[3];
+    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
 
     // Filter data locally if no onSearch provided
     const filteredData = onSearch ? data : data.filter((record) => {
@@ -62,7 +64,7 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
       <Card variant="outlined" padding="none" className={className} style={style}>
         <Stack direction="vertical" spacing="none">
           {/* Search Header */}
-          <Box style={{ padding: tokens.spacing[4], borderBottom: `1px solid ${tokens.colors.neutral[200]}` }}>
+          <Box style={{ padding: tokens.spacing[4], borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
             <input
               type="text"
               placeholder={searchPlaceholder}
@@ -72,8 +74,8 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
                 width: '100%',
                 maxWidth: '300px',
                 padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`,
-                border: `1px solid ${tokens.colors.neutral[300]}`,
-                borderRadius: '6px',
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
+                borderRadius: tokens.borderRadius.md,
                 fontSize: tokens.typography.fontSize.sm,
                 outline: 'none',
               }}
@@ -99,7 +101,7 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
                           fontWeight: 600,
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[600],
-                          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         }}
                       >
                         {col.title}
@@ -122,6 +124,13 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
                         style={{
                           backgroundColor: striped && index % 2 === 1 ? tokens.colors.neutral[50] : undefined,
                           cursor: onRowClick ? 'pointer' : undefined,
+                          transition: `all ${tokens.motion.hover}`,
+                        }}
+                        onMouseEnter={(e) => {
+                          if (onRowClick) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = striped && index % 2 === 1 ? tokens.colors.neutral[50] : '';
                         }}
                       >
                         {columns.map((col) => {
@@ -133,7 +142,7 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
                                 padding: cellPadding,
                                 textAlign: col.align || 'left',
                                 fontSize: tokens.typography.fontSize.sm,
-                                borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                               }}
                             >
                               {col.render ? col.render(value, record, index) : String(value ?? '')}

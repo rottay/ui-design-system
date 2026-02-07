@@ -11,9 +11,9 @@
  *
  * | Engine | Library | Bundle Size | Best For |
  * |--------|---------|-------------|----------|
- * | Titan | Ant Design | ~50KB | Enterprise apps |
- * | Hermes | DaisyUI | ~10KB | Tailwind projects |
- * | Apollo | Vanilla | ~2KB | Maximum control |
+ * | Classic | Ant Design | ~50KB | Enterprise apps |
+ * | Modern | DaisyUI | ~10KB | Tailwind projects |
+ * | Rustic | Vanilla | ~2KB | Maximum control |
  *
  * **Engine Selection:**
  * - Default engine is determined by EngineProvider
@@ -22,16 +22,16 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes engine explicitly
- * <Breadcrumb engine="hermes" items={items} />
+ * // Use Modern engine explicitly
+ * <Breadcrumb engine="modern" items={items} />
  *
- * // Use Apollo engine for lightweight rendering
- * <Breadcrumb engine="apollo" items={items} />
+ * // Use Rustic engine for lightweight rendering
+ * <Breadcrumb engine="rustic" items={items} />
  * ```
  *
- * @see {@link TitanBreadcrumb} - Ant Design implementation
- * @see {@link HermesBreadcrumb} - DaisyUI implementation
- * @see {@link ApolloBreadcrumb} - Vanilla implementation
+ * @see {@link ClassicBreadcrumb} - Ant Design implementation
+ * @see {@link ModernBreadcrumb} - DaisyUI implementation
+ * @see {@link RusticBreadcrumb} - Vanilla implementation
  * @module Breadcrumb/Engines
  * @category Navigation
  * @package @rottay/design-system
@@ -42,10 +42,10 @@
 // ============================================================================
 
 /** Ant Design implementation - full-featured with animations */
-export { default as titan } from './titan';
+export { default as classic } from './classic';
 
 /** DaisyUI/Tailwind implementation - utility-first styling */
-export { default as hermes } from './hermes';
+export { default as modern } from './modern';
 
 /** Vanilla HTML/CSS implementation - zero dependencies */
-export { default as apollo } from './apollo';
+export { default as rustic } from './rustic';

@@ -9,12 +9,12 @@
  * libraries and styling approaches.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Switch with all built-in features
- * - **Hermes**: DaisyUI/Tailwind CSS toggle with custom labels
- * - **Apollo**: Pure CSS with inline styles and sliding animation
+ * - **Classic**: Ant Design Switch with all built-in features
+ * - **Modern**: DaisyUI/Tailwind CSS toggle with custom labels
+ * - **Rustic**: Pure CSS with inline styles and sliding animation
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Loading spinner | ✅ | ✅ | ✅ |
  * | Size variants | ✅ | ✅ | ✅ |
@@ -23,21 +23,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for enterprise apps
- * <Switch engine="titan" loading={isSaving} />
+ * // Use Classic for enterprise apps
+ * <Switch engine="classic" loading={isSaving} />
  *
- * // Use Hermes for Tailwind projects
- * <Switch engine="hermes" className="toggle-primary" />
+ * // Use Modern for Tailwind projects
+ * <Switch engine="modern" className="toggle-primary" />
  * ```
  *
- * @see {@link TitanSwitch} for Ant Design implementation
- * @see {@link HermesSwitch} for DaisyUI implementation
- * @see {@link ApolloSwitch} for vanilla implementation
+ * @see {@link ClassicSwitch} for Ant Design implementation
+ * @see {@link ModernSwitch} for DaisyUI implementation
+ * @see {@link RusticSwitch} for vanilla implementation
  * @module SwitchEngines
  * @category Inputs
  * @package @rottay/design-system
  */
 
-export { Switch as TitanSwitch } from './titan';
-export { Switch as HermesSwitch } from './hermes';
-export { Switch as ApolloSwitch } from './apollo';
+export { Switch as ClassicSwitch } from './classic';
+export { Switch as ModernSwitch } from './modern';
+export { Switch as RusticSwitch } from './rustic';

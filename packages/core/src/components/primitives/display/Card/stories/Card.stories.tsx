@@ -37,7 +37,7 @@ Card component for displaying content in a contained, styled container.
 
 ## Features
 - Multiple visual variants (elevated, outlined, filled, ghost)
-- Three rendering engines (Titan, Hermes, Apollo)
+- Three rendering engines (Classic, Modern, Rustic)
 - Compound components (Header, Body, Footer, Image)
 - Loading state with skeleton
 - Hover and click interactions
@@ -112,7 +112,7 @@ import { Card } from '@es-rottay/designsystem-core';
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -324,7 +324,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Card rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Card rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

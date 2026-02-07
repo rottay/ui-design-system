@@ -385,11 +385,11 @@ export function ThemeProvider({
     }
   }, [branding]);
 
-  // Load initial tenant on mount
+  // Load tenant on mount and when initialTenant prop changes
   useEffect(() => {
     loadTenant(initialTenant);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initialTenant]);
 
   // Memoize context value
   const value: ThemeContextValue = useMemo(

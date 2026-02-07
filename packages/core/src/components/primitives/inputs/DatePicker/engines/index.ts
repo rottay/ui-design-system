@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design DatePicker with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla HTML/CSS date picker
+ * - **Classic**: Ant Design DatePicker with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla HTML/CSS date picker
  *
  * All engines implement:
  * - Date, week, month, quarter, year picker modes
@@ -18,10 +18,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { TitanDatePicker, HermesDatePicker } from './engines';
+ * import { ClassicDatePicker, ModernDatePicker } from './engines';
  *
  * // Component automatically selects engine
- * <DatePicker engine="hermes" picker="month" format="MMMM YYYY" />
+ * <DatePicker engine="modern" picker="month" format="MMMM YYYY" />
  * ```
  *
  * @see {@link DatePicker} - Main component with engine switching
@@ -29,6 +29,6 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-export { DatePicker as TitanDatePicker } from './titan';
-export { DatePicker as HermesDatePicker } from './hermes';
-export { DatePicker as ApolloDatePicker } from './apollo';
+export { DatePicker as ClassicDatePicker } from './classic';
+export { DatePicker as ModernDatePicker } from './modern';
+export { DatePicker as RusticDatePicker } from './rustic';

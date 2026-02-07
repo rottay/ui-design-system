@@ -10,9 +10,9 @@
  * supporting titles, prefixes, suffixes, value types, and countdown timers.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Statistic with full feature support
- * - **Hermes**: DaisyUI-styled statistic with Tailwind utilities
- * - **Apollo**: Pure HTML/CSS with WCAG-compliant colors
+ * - **Classic**: Ant Design Statistic with full feature support
+ * - **Modern**: DaisyUI-styled statistic with Tailwind utilities
+ * - **Rustic**: Pure HTML/CSS with WCAG-compliant colors
  *
  * **Key Features:**
  * - Number formatting with separators and precision
@@ -135,26 +135,26 @@ export function formatNumber(
  * Statistic component for displaying numerical data.
  *
  * Supports multiple rendering engines:
- * - **Titan**: Ant Design implementation (default)
- * - **Hermes**: DaisyUI/Tailwind implementation
- * - **Apollo**: Vanilla HTML/CSS implementation
+ * - **Classic**: Ant Design implementation (default)
+ * - **Modern**: DaisyUI/Tailwind implementation
+ * - **Rustic**: Vanilla HTML/CSS implementation
  *
  * @example
  * ```tsx
- * // Default engine (Titan)
+ * // Default engine (Classic)
  * <Statistic title="Users" value={1024} />
  *
  * // Specific engine
- * <Statistic engine="hermes" title="Users" value={1024} />
+ * <Statistic engine="modern" title="Users" value={1024} />
  *
  * // With value type for semantic coloring
  * <Statistic title="Growth" value={15.5} suffix="%" valueType="positive" />
  * ```
  */
 const StatisticBase = createEngineComponent<StatisticProps>('Statistic', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Statistic })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Statistic })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Statistic })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Statistic })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Statistic })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Statistic })),
 });
 
 /**
@@ -162,9 +162,9 @@ const StatisticBase = createEngineComponent<StatisticProps>('Statistic', {
  * Routes to the appropriate engine implementation.
  */
 const CountdownEngine = createEngineComponent<CountdownProps>('Statistic.Countdown', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Countdown })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Countdown })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Countdown })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Countdown })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Countdown })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Countdown })),
 });
 
 /**

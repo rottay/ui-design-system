@@ -5,7 +5,7 @@
  *
  * @remarks
  * The Notification component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -118,11 +118,11 @@
  * }
  * ```
  *
- * @example Static Methods (Titan Engine Only)
+ * @example Static Methods (Classic Engine Only)
  * ```tsx
  * import { notification } from '@rottay/design-system';
  *
- * // These static methods work without a provider (Titan engine only)
+ * // These static methods work without a provider (Classic engine only)
  * notification.success({ message: 'Success!', description: 'Details...' });
  * notification.error({ message: 'Error!', description: 'Details...' });
  * notification.info({ message: 'Info!', description: 'Details...' });
@@ -192,14 +192,14 @@ export {
 } from './types';
 
 // ============================================================================
-// Component Exports (Titan Engine - Default)
+// Component Exports (Classic Engine - Default)
 // ============================================================================
 
 /**
- * Exports from the default Titan engine.
+ * Exports from the default Classic engine.
  *
  * @remarks
- * The Titan engine uses Ant Design's notification API under the hood,
+ * The Classic engine uses Ant Design's notification API under the hood,
  * providing a full-featured implementation with animations and static methods.
  */
 export {
@@ -207,14 +207,14 @@ export {
   NotificationItem,
   useNotification,
   notification,
-} from './engines/titan';
+} from './engines/classic';
 
 // ============================================================================
 // Default Export
 // ============================================================================
 
 /**
- * Default export provides all Titan engine exports.
+ * Default export provides all Classic engine exports.
  *
  * @example
  * ```tsx
@@ -223,5 +223,5 @@ export {
  * const { NotificationProvider, useNotification, notification } = Notification;
  * ```
  */
-import * as titanEngine from './engines/titan';
-export default titanEngine;
+import * as classicEngine from './engines/classic';
+export default classicEngine;

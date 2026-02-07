@@ -22,7 +22,7 @@
  * const tenantConfig = {
  *   slug: 'acme',
  *   name: 'ACME Corp',
- *   engine: 'titan',
+ *   engine: 'classic',
  *   theme: 'light',
  *   plan: 'enterprise',
  *   features: ['advanced-charts', 'export-pdf'],

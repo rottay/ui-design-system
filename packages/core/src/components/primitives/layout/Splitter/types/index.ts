@@ -37,7 +37,7 @@ import type { ReactNode, CSSProperties } from 'react';
 /**
  * Supported rendering engines for Splitter components.
  */
-type SplitterEngine = 'titan' | 'hermes' | 'apollo';
+type SplitterEngine = 'classic' | 'modern' | 'rustic';
 
 /**
  * Props for the Splitter.Panel sub-component.

@@ -31,7 +31,7 @@
  * @example Engine selection
  * ```tsx
  * const { engine, setEngine } = useEngine();
- * setEngine('hermes'); // Switch to DaisyUI engine
+ * setEngine('modern'); // Switch to DaisyUI engine
  * ```
  *
  * @example Theme control

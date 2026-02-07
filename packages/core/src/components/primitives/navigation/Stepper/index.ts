@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Stepper component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -93,7 +93,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Stepper engine="hermes" items={steps} current={current}>
+ * <Stepper engine="modern" items={steps} current={current}>
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  * </Stepper>
  * ```
@@ -158,7 +158,7 @@ export { StepperStep, StepperContent };
  * @remarks
  * - Supports horizontal and vertical orientations
  * - Includes clickable step navigation
- * - Provides keyboard navigation (Apollo engine)
+ * - Provides keyboard navigation (Rustic engine)
  * - Fully accessible with ARIA attributes
  * - Adapts to tenant theming automatically
  * - Supports progress percentage display
@@ -182,11 +182,11 @@ export { StepperStep, StepperContent };
 export const Stepper = Object.assign(
   createEngineComponent<StepperProps>('Stepper', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - maximum accessibility */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

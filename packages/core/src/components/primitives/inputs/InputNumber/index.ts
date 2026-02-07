@@ -11,9 +11,9 @@
  * and custom formatting support.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Wraps Ant Design InputNumber with full feature support
- * - **Hermes**: DaisyUI input with custom step controls
- * - **Apollo**: Pure HTML number input with inline styling
+ * - **Classic**: Wraps Ant Design InputNumber with full feature support
+ * - **Modern**: DaisyUI input with custom step controls
+ * - **Rustic**: Pure HTML number input with inline styling
  *
  * **Key Features:**
  * - Step increment/decrement controls
@@ -87,7 +87,7 @@ export {
 } from './types';
 
 export const InputNumber = createEngineComponent<InputNumberProps>('InputNumber', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

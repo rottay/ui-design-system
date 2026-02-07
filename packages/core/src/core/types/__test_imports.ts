@@ -168,13 +168,13 @@ import type {
 } from './primitives/navigation';
 
 // Test that types can be used in declarations
-const testEngine: EngineName = 'titan';
+const testEngine: EngineName = 'classic';
 const testSize: Size = 'md';
 const testVariant: Variant = 'primary';
 
 // Test engine-aware props
 const testEngineAwareProps: EngineAwareProps = {
-  engine: 'hermes',
+  engine: 'modern',
 };
 
 // Test base component props

@@ -19,7 +19,7 @@ Input component for text entry with support for multiple engines, sizes, variant
 
 ## Engine Differences
 
-| Feature | Titan | Hermes | Apollo |
+| Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
 | Library | Ant Design | DaisyUI | Vanilla CSS |
 | Styling | CSS-in-JS | Tailwind | CSS Variables |
@@ -33,7 +33,7 @@ Input component for text entry with support for multiple engines, sizes, variant
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'], description: 'Size of the input' },
     variant: { control: 'select', options: ['outline', 'filled', 'flushed', 'unstyled'], description: 'Visual variant' },
     status: { control: 'select', options: ['default', 'error', 'warning', 'success'], description: 'Validation status' },
-    engine: { control: 'select', options: ['titan', 'hermes', 'apollo'], description: 'Rendering engine' },
+    engine: { control: 'select', options: ['classic', 'modern', 'rustic'], description: 'Rendering engine' },
     disabled: { control: 'boolean', description: 'Disabled state' },
     clearable: { control: 'boolean', description: 'Show clear button' },
     showCount: { control: 'boolean', description: 'Show character count' },
@@ -102,7 +102,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Input rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Input rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

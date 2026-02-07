@@ -17,9 +17,9 @@
  * - **Stack**: Uses semantic terminology (horizontal, vertical, spacing, dividers)
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Uses Ant Design's Flex component for consistent styling
- * - **Hermes**: Generates Tailwind CSS utility classes (flex, flex-row, justify-*, items-*)
- * - **Apollo**: Pure inline CSS with no external dependencies
+ * - **Classic**: Uses Ant Design's Flex component for consistent styling
+ * - **Modern**: Generates Tailwind CSS utility classes (flex, flex-row, justify-*, items-*)
+ * - **Rustic**: Pure inline CSS with no external dependencies
  *
  * @example Basic Horizontal Layout
  * ```tsx
@@ -110,8 +110,8 @@
  * ```tsx
  * import { Flex } from '@rottay/design-system';
  *
- * // Force Hermes engine for Tailwind classes
- * <Flex engine="hermes" justify="between" align="center">
+ * // Force Modern engine for Tailwind classes
+ * <Flex engine="modern" justify="between" align="center">
  *   Outputs: class="flex justify-between items-center"
  * </Flex>
  * ```
@@ -159,7 +159,7 @@ export {
  * The engine is determined in this order:
  * 1. `engine` prop passed directly to the component
  * 2. Nearest `EngineProvider` in the component tree
- * 3. Default engine (Titan)
+ * 3. Default engine (Classic)
  *
  * @example
  * ```tsx
@@ -170,15 +170,15 @@ export {
  * </Flex>
  *
  * // With engine override
- * <Flex engine="hermes" direction="column" gap={16}>
+ * <Flex engine="modern" direction="column" gap={16}>
  *   Uses Tailwind classes
  * </Flex>
  * ```
  */
 export const Flex = createEngineComponent<FlexProps>('Flex', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Flex;

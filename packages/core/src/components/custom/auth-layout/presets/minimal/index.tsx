@@ -1,22 +1,28 @@
 /**
  * AuthLayout - Minimal Preset
- * Simple email/password only
+ * Clean centered card with engine-differentiated surface styling
  */
 
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { AuthLayoutProps } from '../../core';
 
 export const MinimalAuthLayout = createPreset<AuthLayoutProps>({
   name: 'AuthLayout.Minimal',
-  render: ({ primitives, props, tokens }: PresetContext<AuthLayoutProps>) => {
-    const { Box, Stack, Card } = primitives;
+  render: ({ primitives, props, tokens, engine }: PresetContext<AuthLayoutProps>) => {
+    const { Box, Stack } = primitives;
     const { title, subtitle, children, className, style } = props;
+
+    const surfaceStyle = createSurfaceStyle(tokens, {
+      elevation: 'md',
+      glass: engine === 'modern',
+    });
 
     return (
       <Box
         className={className}
         style={{
-          minHeight: '100vh',
+          minHeight: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -25,34 +31,40 @@ export const MinimalAuthLayout = createPreset<AuthLayoutProps>({
           ...style,
         }}
       >
-        <Card
-          variant="elevated"
-          padding="lg"
-          style={{ width: '100%', maxWidth: '400px' }}
+        <Box
+          style={{
+            ...surfaceStyle,
+            width: '100%',
+            maxWidth: 400,
+            padding: tokens.spacing[6],
+            backgroundColor: tokens.colors.common.white,
+          }}
         >
           <Stack direction="vertical" spacing="md">
             {title && (
               <h1 style={{
                 fontSize: tokens.typography.fontSize['2xl'],
-                fontWeight: 600,
+                fontWeight: tokens.typography.fontWeight.semibold,
                 textAlign: 'center',
                 margin: 0,
+                color: tokens.colors.neutral[900],
               }}>
                 {title}
               </h1>
             )}
             {subtitle && (
               <p style={{
-                color: `var(--color-neutral-500)`,
+                color: tokens.colors.neutral[500],
                 textAlign: 'center',
                 margin: 0,
+                fontSize: tokens.typography.fontSize.sm,
               }}>
                 {subtitle}
               </p>
             )}
             {children}
           </Stack>
-        </Card>
+        </Box>
       </Box>
     );
   },

@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Progress component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -75,7 +75,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Progress engine="hermes" percent={50}>
+ * <Progress engine="modern" percent={50}>
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  * </Progress>
  * ```
@@ -152,11 +152,11 @@ export type { ProgressCircleProps, ProgressLineProps } from './compound';
 export const Progress = Object.assign(
   createEngineComponent<ProgressProps>('Progress', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

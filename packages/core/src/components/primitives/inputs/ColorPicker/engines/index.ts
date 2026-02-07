@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design ColorPicker with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla HTML/CSS color picker
+ * - **Classic**: Ant Design ColorPicker with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla HTML/CSS color picker
  *
  * All engines implement:
  * - Color selection panel with gradient picker
@@ -18,10 +18,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <ColorPicker engine="hermes" defaultValue="#1677ff" showText />
+ * <ColorPicker engine="modern" defaultValue="#1677ff" showText />
  * ```
  *
  * @see {@link ColorPicker} - Main component with engine switching
@@ -29,6 +29,6 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

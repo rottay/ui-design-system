@@ -7,9 +7,9 @@
  *
  * @remarks
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Table with full feature support
- * - **Hermes**: DaisyUI/Tailwind table with responsive design
- * - **Apollo**: Pure CSS table with maximum accessibility
+ * - **Classic**: Ant Design Table with full feature support
+ * - **Modern**: DaisyUI/Tailwind table with responsive design
+ * - **Rustic**: Pure CSS table with maximum accessibility
  *
  * **Key Features:**
  * - Column sorting (single and multiple)
@@ -101,7 +101,7 @@ export { TABLE_DEFAULTS } from './types';
 // Create engine-aware Table component
 // Note: Type assertions needed due to generic Table<T> component signature
 export const Table = createEngineComponent<TableProps>('Table', {
-  titan: () => import('./engines/titan') as Promise<{ default: React.ComponentType<TableProps> }>,
-  hermes: () => import('./engines/hermes') as Promise<{ default: React.ComponentType<TableProps> }>,
-  apollo: () => import('./engines/apollo') as Promise<{ default: React.ComponentType<TableProps> }>,
+  classic: () => import('./engines/classic') as Promise<{ default: React.ComponentType<TableProps> }>,
+  modern: () => import('./engines/modern') as Promise<{ default: React.ComponentType<TableProps> }>,
+  rustic: () => import('./engines/rustic') as Promise<{ default: React.ComponentType<TableProps> }>,
 });

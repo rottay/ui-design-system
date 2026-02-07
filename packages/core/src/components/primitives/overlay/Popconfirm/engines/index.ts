@@ -4,17 +4,17 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design Popconfirm with native theming
- * - **Hermes**: DaisyUI/Tailwind CSS implementation with cards
- * - **Apollo**: Pure vanilla HTML/CSS with portal rendering
+ * - **Classic**: Ant Design Popconfirm with native theming
+ * - **Modern**: DaisyUI/Tailwind CSS implementation with cards
+ * - **Rustic**: Pure vanilla HTML/CSS with portal rendering
  *
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <Popconfirm engine="hermes" title="Delete?" okType="danger">
+ * <Popconfirm engine="modern" title="Delete?" okType="danger">
  *   <Button>Delete</Button>
  * </Popconfirm>
  * ```
@@ -24,6 +24,6 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

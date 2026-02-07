@@ -16,9 +16,9 @@
  * - Customizable thickness and spacing
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Ant Design-compatible styling with `ant-divider` class structure
- * - **Hermes**: DaisyUI-compatible styling with `divider` classes
- * - **Apollo**: Pure HTML/CSS with ARIA `separator` role for accessibility
+ * - **Classic**: Ant Design-compatible styling with `ant-divider` class structure
+ * - **Modern**: DaisyUI-compatible styling with `divider` classes
+ * - **Rustic**: Pure HTML/CSS with ARIA `separator` role for accessibility
  *
  * @example Basic Horizontal Divider
  * ```tsx
@@ -93,8 +93,8 @@
  * ```tsx
  * import { Divider } from '@rottay/design-system';
  *
- * // Force Hermes engine for DaisyUI classes
- * <Divider engine="hermes">Section</Divider>
+ * // Force Modern engine for DaisyUI classes
+ * <Divider engine="modern">Section</Divider>
  * ```
  *
  * @see {@link Stack} - For stacking with automatic dividers
@@ -148,7 +148,7 @@ export {
  * The engine is determined in this order:
  * 1. `engine` prop passed directly to the component
  * 2. Nearest `EngineProvider` in the component tree
- * 3. Default engine (Titan)
+ * 3. Default engine (Classic)
  *
  * @example
  * ```tsx
@@ -159,11 +159,11 @@ export {
  * <Divider>Section Title</Divider>
  *
  * // Vertical with engine override
- * <Divider engine="hermes" orientation="vertical" />
+ * <Divider engine="modern" orientation="vertical" />
  * ```
  */
 export const Divider = createEngineComponent<DividerProps>('Divider', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

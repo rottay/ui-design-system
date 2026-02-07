@@ -126,7 +126,7 @@ export interface TransferProps {
   /** Additional styles */
   style?: CSSProperties;
   /** Rendering engine override */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

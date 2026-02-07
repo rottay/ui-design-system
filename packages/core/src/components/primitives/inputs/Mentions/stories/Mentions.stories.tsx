@@ -28,7 +28,7 @@ Mentions component for @mentions in text input with dropdown suggestions.
 
 ## Engine Differences
 
-| Feature | Titan | Hermes | Apollo |
+| Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
 | Library | Ant Design | DaisyUI | Vanilla CSS |
 | Dropdown | Built-in | Custom | Custom |
@@ -335,7 +335,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Mentions rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Mentions rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types define the contract for the Pagination component across all
- * rendering engines (Titan, Hermes, Apollo). They ensure type safety while
+ * rendering engines (Classic, Modern, Rustic). They ensure type safety while
  * allowing engine-specific implementations.
  *
  * @example Type Usage
@@ -85,7 +85,7 @@ export type PaginationSize = 'sm' | 'md' | 'lg';
  *   onChange: handleChange,
  *   className: 'my-pagination',
  *   style: { marginTop: 16 },
- *   engine: 'hermes',
+ *   engine: 'modern',
  * };
  * ```
  */

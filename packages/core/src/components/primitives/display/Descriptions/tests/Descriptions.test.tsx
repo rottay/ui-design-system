@@ -275,7 +275,7 @@ describe('Descriptions accessibility', () => {
 });
 
 describe('Descriptions engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Descriptions engine={engine}>
         <Descriptions.Item label="Name">John</Descriptions.Item>

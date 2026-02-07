@@ -4,7 +4,7 @@
  *
  * This file contains comprehensive tests for:
  * - Tenant-specific CSS variable overrides (rottay, bithire, default)
- * - Engine-specific CSS variables (titan, hermes, apollo)
+ * - Engine-specific CSS variables (classic, modern, rustic)
  * - CSS variable cascade order verification
  * - Component-specific token tests (button, input, card tokens)
  * - Dark mode / theme switching tests
@@ -152,27 +152,27 @@ describe('Theming System', () => {
 
 describe('Engine-Specific Behavior', () => {
   describe('Engine Class Patterns', () => {
-    it('Titan engine uses ant- prefix classes', () => {
-      // Titan (Ant Design) components should have ant-* classes
-      const titanPatterns = ['ant-btn', 'ant-input', 'ant-select', 'ant-modal'];
-      titanPatterns.forEach(pattern => {
+    it('Classic engine uses ant- prefix classes', () => {
+      // Classic (Ant Design) components should have ant-* classes
+      const classicPatterns = ['ant-btn', 'ant-input', 'ant-select', 'ant-modal'];
+      classicPatterns.forEach(pattern => {
         expect(pattern.startsWith('ant-')).toBe(true);
       });
     });
 
-    it('Hermes engine uses Tailwind utility classes', () => {
-      // Hermes (Tailwind) components should have utility classes
-      const hermesPatterns = ['flex', 'gap-4', 'rounded-md', 'bg-primary'];
-      hermesPatterns.forEach(pattern => {
+    it('Modern engine uses Tailwind utility classes', () => {
+      // Modern (Tailwind) components should have utility classes
+      const modernPatterns = ['flex', 'gap-4', 'rounded-md', 'bg-primary'];
+      modernPatterns.forEach(pattern => {
         expect(typeof pattern).toBe('string');
         expect(pattern.length).toBeGreaterThan(0);
       });
     });
 
-    it('Apollo engine uses ds- prefix classes', () => {
-      // Apollo (Vanilla) components should have ds-* classes
-      const apolloPatterns = ['ds-button', 'ds-input', 'ds-select', 'ds-modal'];
-      apolloPatterns.forEach(pattern => {
+    it('Rustic engine uses ds- prefix classes', () => {
+      // Rustic (Vanilla) components should have ds-* classes
+      const rusticPatterns = ['ds-button', 'ds-input', 'ds-select', 'ds-modal'];
+      rusticPatterns.forEach(pattern => {
         expect(pattern.startsWith('ds-')).toBe(true);
       });
     });
@@ -390,12 +390,12 @@ describe('Engine-Specific CSS Variables', () => {
   });
 
   describe('Engine Class Prefix Patterns', () => {
-    it('Titan engine uses ant- prefix pattern', () => {
-      expect(ENGINE_CLASS_PREFIXES.titan).toBe('ant-');
+    it('Classic engine uses ant- prefix pattern', () => {
+      expect(ENGINE_CLASS_PREFIXES.classic).toBe('ant-');
     });
 
-    it('Apollo engine uses ds- prefix pattern', () => {
-      expect(ENGINE_CLASS_PREFIXES.apollo).toBe('ds-');
+    it('Rustic engine uses ds- prefix pattern', () => {
+      expect(ENGINE_CLASS_PREFIXES.rustic).toBe('ds-');
     });
 
     it('all engines have defined class prefixes', () => {
@@ -442,8 +442,8 @@ describe('Engine-Specific CSS Variables', () => {
     });
   });
 
-  describe('Titan Engine (Ant Design) CSS Mapping', () => {
-    const titanSelectors = [
+  describe('Classic Engine (Ant Design) CSS Mapping', () => {
+    const classicSelectors = [
       'html[data-tenant] .ant-btn',
       'html[data-tenant] .ant-input',
       'html[data-tenant] .ant-select',
@@ -451,22 +451,22 @@ describe('Engine-Specific CSS Variables', () => {
       'html[data-tenant] .ant-modal',
     ];
 
-    it('Titan uses html[data-tenant] selector pattern', () => {
-      titanSelectors.forEach((selector) => {
+    it('Classic uses html[data-tenant] selector pattern', () => {
+      classicSelectors.forEach((selector) => {
         expect(selector.startsWith('html[data-tenant]')).toBe(true);
       });
     });
 
-    it('Titan maps to Ant Design class names', () => {
-      const antClasses = titanSelectors.map((s) => s.split(' ')[1]);
+    it('Classic maps to Ant Design class names', () => {
+      const antClasses = classicSelectors.map((s) => s.split(' ')[1]);
       antClasses.forEach((className) => {
         expect(className.startsWith('.ant-')).toBe(true);
       });
     });
   });
 
-  describe('Apollo Engine (Vanilla CSS) Variables', () => {
-    const apolloClasses = [
+  describe('Rustic Engine (Vanilla CSS) Variables', () => {
+    const rusticClasses = [
       '.ds-btn',
       '.ds-input',
       '.ds-select',
@@ -484,17 +484,17 @@ describe('Engine-Specific CSS Variables', () => {
       '.ds-spinner',
     ];
 
-    it('Apollo uses .ds- class prefix', () => {
-      apolloClasses.forEach((className) => {
+    it('Rustic uses .ds- class prefix', () => {
+      rusticClasses.forEach((className) => {
         expect(className.startsWith('.ds-')).toBe(true);
       });
     });
 
-    it('Apollo provides complete component set', () => {
-      expect(apolloClasses.length).toBeGreaterThanOrEqual(10);
+    it('Rustic provides complete component set', () => {
+      expect(rusticClasses.length).toBeGreaterThanOrEqual(10);
     });
 
-    it('Apollo BEM modifiers use -- pattern', () => {
+    it('Rustic BEM modifiers use -- pattern', () => {
       const bemModifiers = [
         '.ds-btn--primary',
         '.ds-btn--secondary',
@@ -606,7 +606,7 @@ describe('CSS Variable Cascade Order', () => {
       const importOrder = [
         'base tokens (:root)',
         'component tokens',
-        'engine themes (titan/hermes/apollo)',
+        'engine themes (classic/modern/rustic)',
         'tenant overrides',
       ];
 

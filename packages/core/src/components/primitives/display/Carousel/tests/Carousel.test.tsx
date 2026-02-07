@@ -394,7 +394,7 @@ describe('Carousel Configuration', () => {
 });
 
 describe('Carousel engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Carousel engine={engine}>
         <div>Slide 1</div>

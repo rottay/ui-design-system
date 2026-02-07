@@ -4,9 +4,9 @@
  *
  * @remarks
  * Each engine provides a Box implementation optimized for its styling paradigm:
- * - **Titan**: Ant Design styling conventions with comprehensive CSS-in-JS
- * - **Hermes**: DaisyUI/Tailwind utility classes for utility-first development
- * - **Apollo**: Pure HTML/CSS for maximum compatibility and accessibility
+ * - **Classic**: Ant Design styling conventions with comprehensive CSS-in-JS
+ * - **Modern**: DaisyUI/Tailwind utility classes for utility-first development
+ * - **Rustic**: Pure HTML/CSS for maximum compatibility and accessibility
  *
  * These exports are consumed by the engine factory for dynamic component resolution.
  *
@@ -16,6 +16,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

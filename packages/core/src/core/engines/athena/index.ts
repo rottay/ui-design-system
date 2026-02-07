@@ -30,7 +30,7 @@
  * import { configureAthena } from '@rottay/design-system';
  *
  * configureAthena({
- *   fallbackEngine: 'apollo',
+ *   fallbackEngine: 'rustic',
  *   warnOnFallback: false,
  * });
  * ```
@@ -66,7 +66,7 @@ const athenaRegistry: ComponentRegistry = new Map();
  */
 export interface AthenaConfig {
   /** Fallback engine when component is not registered */
-  fallbackEngine?: 'titan' | 'hermes' | 'apollo';
+  fallbackEngine?: 'classic' | 'modern' | 'rustic';
   /** Whether to warn when using fallback */
   warnOnFallback?: boolean;
   /** Custom logger for debugging */
@@ -74,7 +74,7 @@ export interface AthenaConfig {
 }
 
 let athenaConfig: AthenaConfig = {
-  fallbackEngine: 'titan',
+  fallbackEngine: 'classic',
   warnOnFallback: true,
 };
 
@@ -88,7 +88,7 @@ let athenaConfig: AthenaConfig = {
  *
  * // Configure at app initialization
  * configureAthena({
- *   fallbackEngine: 'apollo',
+ *   fallbackEngine: 'rustic',
  *   warnOnFallback: process.env.NODE_ENV === 'development',
  *   logger: (message, level) => {
  *     if (level === 'error') console.error(message);
@@ -110,7 +110,7 @@ export function configureAthena(config: Partial<AthenaConfig>): void {
  * import { getAthenaConfig } from '@rottay/design-system';
  *
  * const config = getAthenaConfig();
- * console.log(config.fallbackEngine); // 'titan'
+ * console.log(config.fallbackEngine); // 'classic'
  * console.log(config.warnOnFallback); // true
  * ```
  *
@@ -330,7 +330,7 @@ export function getRegisteredComponentCount(): number {
  * // Internal usage in engine factory
  * const athenaLoader = createAthenaWrapper<ButtonProps>(
  *   'Button',
- *   () => import('./engines/apollo')
+ *   () => import('./engines/rustic')
  * );
  *
  * // The wrapper returns a Promise for lazy loading

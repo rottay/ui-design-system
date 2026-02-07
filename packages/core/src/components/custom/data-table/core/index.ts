@@ -15,6 +15,7 @@ export interface DataTableColumn<T = unknown> {
   width?: number | string;
   align?: 'left' | 'center' | 'right';
   sortable?: boolean;
+  editable?: boolean;
   render?: (value: unknown, record: T, index: number) => ReactNode;
 }
 
@@ -64,6 +65,14 @@ export interface DataTableProps<T = Record<string, unknown>> extends EngineAware
   bordered?: boolean;
   /** Compact size */
   compact?: boolean;
+  /** Enable inline cell editing */
+  editable?: boolean;
+  /** Cell edit handler */
+  onCellEdit?: (rowKey: string, columnKey: string, value: unknown) => void;
+  /** Enable column reordering via drag */
+  columnReorderable?: boolean;
+  /** Column reorder handler */
+  onColumnReorder?: (columns: DataTableColumn<T>[]) => void;
 }
 
 export const DATA_TABLE_DEFAULTS: Partial<DataTableProps> = {

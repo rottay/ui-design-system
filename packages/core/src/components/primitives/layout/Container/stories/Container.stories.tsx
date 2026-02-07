@@ -31,7 +31,7 @@ It's commonly used as a wrapper for page content to maintain consistent margins 
 - Optional horizontal centering
 - Configurable padding
 - Fluid mode for full-width layouts
-- Support for all three engines (Titan, Hermes, Apollo)
+- Support for all three engines (Classic, Modern, Rustic)
         `,
       },
     },
@@ -57,7 +57,7 @@ It's commonly used as a wrapper for page content to maintain consistent margins 
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -256,7 +256,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Container rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Container rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

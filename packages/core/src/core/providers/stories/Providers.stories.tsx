@@ -28,7 +28,7 @@ export const DesignSystemProviderExample: StoryObj = {
       tenant={{
         slug: 'demo',
         name: 'Demo Tenant',
-        engine: 'titan',
+        engine: 'classic',
         theme: 'bithire',
         plan: 'pro',
         features: ['dashboard', 'analytics', 'api'],
@@ -62,24 +62,24 @@ export const DesignSystemProviderExample: StoryObj = {
 export const EngineSelection: StoryObj = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <DesignSystemProvider tenant={{ engine: 'titan' } as any}>
+      <DesignSystemProvider tenant={{ engine: 'classic' } as any}>
         <div style={{ padding: 16, border: '1px solid #e5e7eb', borderRadius: 8 }}>
-          <h4 style={{ margin: '0 0 8px' }}>Titan Engine (Ant Design)</h4>
-          <Button variant="primary">Titan Button</Button>
+          <h4 style={{ margin: '0 0 8px' }}>Classic Engine (Ant Design)</h4>
+          <Button variant="primary">Classic Button</Button>
         </div>
       </DesignSystemProvider>
 
-      <DesignSystemProvider tenant={{ engine: 'hermes' } as any}>
+      <DesignSystemProvider tenant={{ engine: 'modern' } as any}>
         <div style={{ padding: 16, border: '1px solid #e5e7eb', borderRadius: 8 }}>
-          <h4 style={{ margin: '0 0 8px' }}>Hermes Engine (DaisyUI)</h4>
-          <Button variant="primary">Hermes Button</Button>
+          <h4 style={{ margin: '0 0 8px' }}>Modern Engine (DaisyUI)</h4>
+          <Button variant="primary">Modern Button</Button>
         </div>
       </DesignSystemProvider>
 
-      <DesignSystemProvider tenant={{ engine: 'apollo' } as any}>
+      <DesignSystemProvider tenant={{ engine: 'rustic' } as any}>
         <div style={{ padding: 16, border: '1px solid #e5e7eb', borderRadius: 8 }}>
-          <h4 style={{ margin: '0 0 8px' }}>Apollo Engine (HTML)</h4>
-          <Button variant="primary">Apollo Button</Button>
+          <h4 style={{ margin: '0 0 8px' }}>Rustic Engine (HTML)</h4>
+          <Button variant="primary">Rustic Button</Button>
         </div>
       </DesignSystemProvider>
     </div>
@@ -99,7 +99,7 @@ export const FeatureGateExample: StoryObj = {
       tenant={{
         slug: 'demo',
         name: 'Demo',
-        engine: 'titan',
+        engine: 'classic',
         theme: 'default',
         plan: 'pro',
         features: ['dashboard', 'analytics'],

@@ -257,7 +257,7 @@ describe('Statistic.Countdown', () => {
 });
 
 describe('Statistic engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Statistic engine={engine} value={1000} />);
     expect(screen.getByTestId('statistic')).toBeInTheDocument();
   });

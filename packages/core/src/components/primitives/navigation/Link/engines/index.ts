@@ -1,7 +1,7 @@
 /**
  * @fileoverview Link Engine Implementations - Rottay Design System
  * @description Barrel export for all Link engine implementations.
- * Provides unified access to Titan, Hermes, and Apollo engine components.
+ * Provides unified access to Classic, Modern, and Rustic engine components.
  *
  * @remarks
  * This module aggregates all engine-specific implementations of the Link
@@ -9,26 +9,26 @@
  * implementation based on the current engine context.
  *
  * Engine implementations:
- * - **Titan**: Ant Design Typography.Link - full-featured with Ant styling
- * - **Hermes**: DaisyUI link classes - utility-first Tailwind approach
- * - **Apollo**: Pure HTML/CSS - zero dependencies, inline styles
+ * - **Classic**: Ant Design Typography.Link - full-featured with Ant styling
+ * - **Modern**: DaisyUI link classes - utility-first Tailwind approach
+ * - **Rustic**: Pure HTML/CSS - zero dependencies, inline styles
  *
  * @example Dynamic Import (used by engine factory)
  * ```tsx
  * // The engine factory uses dynamic imports for code splitting
  * const engineModules = {
- *   titan: () => import('./engines/titan'),
- *   hermes: () => import('./engines/hermes'),
- *   apollo: () => import('./engines/apollo'),
+ *   classic: () => import('./engines/classic'),
+ *   modern: () => import('./engines/modern'),
+ *   rustic: () => import('./engines/rustic'),
  * };
  * ```
  *
  * @example Direct Import (for testing or specialized use)
  * ```tsx
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Use a specific engine directly
- * const TitanLink = titan.default;
+ * const ClassicLink = classic.default;
  * ```
  *
  * @module Link/engines
@@ -41,19 +41,19 @@
 // ============================================================================
 
 /**
- * Titan engine implementation (Ant Design)
- * @see {@link TitanLink}
+ * Classic engine implementation (Ant Design)
+ * @see {@link ClassicLink}
  */
-export { default as titan } from './titan';
+export { default as classic } from './classic';
 
 /**
- * Hermes engine implementation (DaisyUI/Tailwind)
- * @see {@link HermesLink}
+ * Modern engine implementation (DaisyUI/Tailwind)
+ * @see {@link ModernLink}
  */
-export { default as hermes } from './hermes';
+export { default as modern } from './modern';
 
 /**
- * Apollo engine implementation (Vanilla HTML/CSS)
- * @see {@link ApolloLink}
+ * Rustic engine implementation (Vanilla HTML/CSS)
+ * @see {@link RusticLink}
  */
-export { default as apollo } from './apollo';
+export { default as rustic } from './rustic';

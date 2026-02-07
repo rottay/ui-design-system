@@ -6,7 +6,7 @@
  * @remarks
  * These compound components provide an alternative to the declarative `items` prop,
  * allowing more flexible and composable menu structures. They work seamlessly
- * across all engine implementations (Titan, Hermes, Apollo).
+ * across all engine implementations (Classic, Modern, Rustic).
  *
  * @example Using Compound Components
  * ```tsx

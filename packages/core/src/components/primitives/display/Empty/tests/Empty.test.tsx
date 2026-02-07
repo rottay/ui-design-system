@@ -223,7 +223,7 @@ describe('Empty Component Integration', () => {
 });
 
 describe('Empty engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Empty engine={engine} />);
     expect(screen.getByTestId('empty')).toBeInTheDocument();
   });

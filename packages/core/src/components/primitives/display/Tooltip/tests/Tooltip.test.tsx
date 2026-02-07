@@ -371,7 +371,7 @@ describe('Tooltip.Content', () => {
 });
 
 describe('Tooltip engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Tooltip engine={engine} content="Test">
         <button>Trigger</button>

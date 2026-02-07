@@ -7,7 +7,7 @@
  * This file provides comprehensive Storybook documentation for the Result
  * component, showcasing:
  * - All 7 status types (success, error, info, warning, 404, 403, 500)
- * - Multi-engine support (Titan, Hermes, Apollo)
+ * - Multi-engine support (Classic, Modern, Rustic)
  * - Custom icons and content
  * - Real-world usage patterns
  *
@@ -49,7 +49,7 @@ const meta: Meta<typeof Result> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
     },
   },
   tags: ['autodocs'],
@@ -345,7 +345,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Result rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Result rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

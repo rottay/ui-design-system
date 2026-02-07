@@ -8,12 +8,12 @@
  * Each engine renders consistent carousels with different underlying technologies.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Carousel with slick.js
- * - **Hermes**: DaisyUI carousel with Tailwind utilities
- * - **Apollo**: Pure CSS carousel with inline styles
+ * - **Classic**: Ant Design Carousel with slick.js
+ * - **Modern**: DaisyUI carousel with Tailwind utilities
+ * - **Rustic**: Pure CSS carousel with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Autoplay | ✅ | ✅ | ✅ |
  * | Dots | ✅ | ✅ | ✅ |
@@ -27,14 +27,14 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for slick.js features
- * <Carousel engine="titan" autoplay dots />
+ * // Use Classic for slick.js features
+ * <Carousel engine="classic" autoplay dots />
  *
- * // Use Hermes for DaisyUI styling
- * <Carousel engine="hermes" arrows />
+ * // Use Modern for DaisyUI styling
+ * <Carousel engine="modern" arrows />
  *
- * // Use Apollo for zero dependencies
- * <Carousel engine="apollo" dots />
+ * // Use Rustic for zero dependencies
+ * <Carousel engine="rustic" dots />
  * ```
  *
  * @module Carousel/engines
@@ -42,6 +42,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

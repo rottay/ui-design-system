@@ -240,7 +240,7 @@ describe('Stepper', () => {
 });
 
 describe('Stepper engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Stepper engine={engine} items={[{ title: 'Test' }]} />);
     expect(screen.getByTestId('stepper')).toBeInTheDocument();
   });

@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Tabs component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -95,7 +95,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Tabs engine="hermes" items={items}>
+ * <Tabs engine="modern" items={items}>
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  * </Tabs>
  * ```
@@ -192,11 +192,11 @@ export type { TabPaneProps } from './compound';
 export const Tabs = Object.assign(
   createEngineComponent<TabsProps>('Tabs', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

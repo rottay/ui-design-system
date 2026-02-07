@@ -216,7 +216,7 @@ describe('Layout composition', () => {
 });
 
 describe('Layout engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Layout engine={engine}>Test</Layout>);
     expect(screen.getByTestId('layout')).toBeInTheDocument();
   });

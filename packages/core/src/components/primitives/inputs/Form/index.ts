@@ -11,9 +11,9 @@
  * validation rules, and integrates with all input components in the design system.
  *
  * **Multi-Engine Architecture:**
- * - **Titan** (Ant Design): Full-featured form with async validation and rich feedback
- * - **Hermes** (DaisyUI/Tailwind): Lightweight form with custom validation
- * - **Apollo** (Vanilla HTML/CSS): Headless form with full accessibility
+ * - **Classic** (Ant Design): Full-featured form with async validation and rich feedback
+ * - **Modern** (DaisyUI/Tailwind): Lightweight form with custom validation
+ * - **Rustic** (Vanilla HTML/CSS): Headless form with full accessibility
  *
  * **Multi-Tenant Support:**
  * Form appearance adapts to tenant themes via CSS custom properties
@@ -102,8 +102,8 @@
 import { createEngineComponent } from '../../../../core/engines/factory';
 import type { FormProps, FormItemProps, FormListProps, FormErrorListProps } from './types';
 
-// Import compound components from Titan engine (they work across all engines)
-import { Form as TitanForm } from './engines/titan';
+// Import compound components from Classic engine (they work across all engines)
+import { Form as ClassicForm } from './engines/classic';
 
 export {
   type FormProps,
@@ -125,21 +125,21 @@ export {
 
 // Create the base Form component with engine routing
 const FormBase = createEngineComponent<FormProps>('Form', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 // Re-export useForm from each engine
 // Note: In a real multi-engine scenario, you'd want to import based on current engine
-export { useForm } from './engines/titan';
+export { useForm } from './engines/classic';
 
 // Export the Form component with compound components attached
-// Compound components (Item, List, ErrorList) are attached from the Titan engine
+// Compound components (Item, List, ErrorList) are attached from the Classic engine
 // They work with any engine since they render children normally
 export const Form = Object.assign(FormBase, {
-  Item: TitanForm.Item,
-  List: TitanForm.List,
-  ErrorList: TitanForm.ErrorList,
-  useForm: TitanForm.useForm,
+  Item: ClassicForm.Item,
+  List: ClassicForm.List,
+  ErrorList: ClassicForm.ErrorList,
+  useForm: ClassicForm.useForm,
 });

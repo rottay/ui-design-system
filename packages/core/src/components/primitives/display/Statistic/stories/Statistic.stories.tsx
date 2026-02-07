@@ -15,9 +15,9 @@ import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from 
  * formatting, prefixes, suffixes, and countdown functionality.
  *
  * Supports three rendering engines:
- * - **Titan**: Ant Design (enterprise, feature-rich)
- * - **Hermes**: DaisyUI/Tailwind (lightweight, utility-first)
- * - **Apollo**: Vanilla HTML/CSS (minimal, accessible)
+ * - **Classic**: Ant Design (enterprise, feature-rich)
+ * - **Modern**: DaisyUI/Tailwind (lightweight, utility-first)
+ * - **Rustic**: Vanilla HTML/CSS (minimal, accessible)
  */
 const meta: Meta<typeof Statistic> = {
   title: 'Primitives/Display/Statistic',
@@ -68,7 +68,7 @@ const meta: Meta<typeof Statistic> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -176,7 +176,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Statistic rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Statistic rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

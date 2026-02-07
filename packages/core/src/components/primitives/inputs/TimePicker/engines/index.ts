@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design TimePicker with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla HTML/CSS time picker
+ * - **Classic**: Ant Design TimePicker with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla HTML/CSS time picker
  *
  * All engines implement:
  * - Hour, minute, second selection columns
@@ -18,10 +18,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { TitanTimePicker, HermesTimePicker } from './engines';
+ * import { ClassicTimePicker, ModernTimePicker } from './engines';
  *
  * // Component automatically selects engine
- * <TimePicker engine="hermes" format="HH:mm" use12Hours />
+ * <TimePicker engine="modern" format="HH:mm" use12Hours />
  * ```
  *
  * @see {@link TimePicker} - Main component with engine switching
@@ -29,6 +29,6 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-export { TimePicker as TitanTimePicker } from './titan';
-export { TimePicker as HermesTimePicker } from './hermes';
-export { TimePicker as ApolloTimePicker } from './apollo';
+export { TimePicker as ClassicTimePicker } from './classic';
+export { TimePicker as ModernTimePicker } from './modern';
+export { TimePicker as RusticTimePicker } from './rustic';

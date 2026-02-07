@@ -8,12 +8,12 @@
  * Each engine renders consistent empty states with different underlying technologies.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Empty with built-in image presets
- * - **Hermes**: DaisyUI empty with theme-aware colors
- * - **Apollo**: Pure CSS empty with inline styles
+ * - **Classic**: Ant Design Empty with built-in image presets
+ * - **Modern**: DaisyUI empty with theme-aware colors
+ * - **Rustic**: Pure CSS empty with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Default image | ✅ | ✅ | ✅ |
  * | Simple image | ✅ | ✅ | ✅ |
@@ -26,14 +26,14 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for Ant Design ecosystem
- * <Empty engine="titan" />
+ * // Use Classic for Ant Design ecosystem
+ * <Empty engine="classic" />
  *
- * // Use Hermes for DaisyUI theming
- * <Empty engine="hermes" />
+ * // Use Modern for DaisyUI theming
+ * <Empty engine="modern" />
  *
- * // Use Apollo for zero dependencies
- * <Empty engine="apollo" />
+ * // Use Rustic for zero dependencies
+ * <Empty engine="rustic" />
  * ```
  *
  * @module Empty/engines
@@ -41,6 +41,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

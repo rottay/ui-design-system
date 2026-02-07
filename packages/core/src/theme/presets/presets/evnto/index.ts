@@ -28,7 +28,7 @@ export const evntoTheme: ThemeConfig = {
     'shadow-card': '0 0 0 1px rgba(0,0,0,.06)',
   },
   engineOverrides: {
-    titan: {
+    classic: {
       token: {
         colorPrimary: '#191919',
         borderRadius: 4,

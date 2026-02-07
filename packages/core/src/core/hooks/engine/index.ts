@@ -3,18 +3,18 @@
 /**
  * @fileoverview useEngine Hook - Rottay Design System
  * @description React hook for accessing and controlling the UI rendering engine,
- * enabling runtime switching between Titan, Hermes, and Apollo engines.
+ * enabling runtime switching between Classic, Modern, and Rustic engines.
  *
  * @remarks
  * The useEngine hook provides:
- * - **Engine access**: Get current engine (titan, hermes, apollo)
+ * - **Engine access**: Get current engine (classic, modern, rustic)
  * - **Engine switching**: Change rendering engine at runtime
  * - **Context integration**: Works with EngineProvider
  *
  * Engines differ in their underlying implementation:
- * - **Titan**: Ant Design (feature-rich)
- * - **Hermes**: DaisyUI/Tailwind (lightweight)
- * - **Apollo**: Vanilla HTML/CSS (zero dependencies)
+ * - **Classic**: Ant Design (feature-rich)
+ * - **Modern**: DaisyUI/Tailwind (lightweight)
+ * - **Rustic**: Vanilla HTML/CSS (zero dependencies)
  *
  * @example Engine switcher
  * ```tsx
@@ -22,9 +22,9 @@
  *   const { engine, setEngine } = useEngine();
  *   return (
  *     <select value={engine} onChange={(e) => setEngine(e.target.value)}>
- *       <option value="titan">Titan</option>
- *       <option value="hermes">Hermes</option>
- *       <option value="apollo">Apollo</option>
+ *       <option value="classic">Classic</option>
+ *       <option value="modern">Modern</option>
+ *       <option value="rustic">Rustic</option>
  *     </select>
  *   );
  * }
@@ -45,9 +45,9 @@ import type { EngineContextValue } from '../../types';
  *
  * The design system supports multiple engines that render components using different
  * underlying libraries:
- * - **titan**: Ant Design based (full-featured)
- * - **hermes**: DaisyUI/Tailwind based (utility-first)
- * - **apollo**: Vanilla HTML/CSS (headless, maximum accessibility)
+ * - **classic**: Ant Design based (full-featured)
+ * - **modern**: DaisyUI/Tailwind based (utility-first)
+ * - **rustic**: Vanilla HTML/CSS (headless, maximum accessibility)
  *
  * @example
  * ```tsx
@@ -58,16 +58,16 @@ import type { EngineContextValue } from '../../types';
  *
  *   return (
  *     <select value={engine} onChange={(e) => setEngine(e.target.value)}>
- *       <option value="titan">Titan (Ant Design)</option>
- *       <option value="hermes">Hermes (DaisyUI)</option>
- *       <option value="apollo">Apollo (Vanilla)</option>
+ *       <option value="classic">Classic (Ant Design)</option>
+ *       <option value="modern">Modern (DaisyUI)</option>
+ *       <option value="rustic">Rustic (Vanilla)</option>
  *     </select>
  *   );
  * }
  * ```
  *
  * @returns Object containing the current engine name and a function to change it
- * @returns {EngineName} returns.engine - The current engine name ('titan', 'hermes', or 'apollo')
+ * @returns {EngineName} returns.engine - The current engine name ('classic', 'modern', or 'rustic')
  * @returns {Function} returns.setEngine - Function to change the current engine
  *
  * @throws {Error} Throws an error if used outside of an EngineProvider

@@ -5,8 +5,8 @@
  *
  * @remarks
  * This module defines the core TypeScript interfaces for the Result component.
- * The types are designed to work across all three rendering engines (Titan,
- * Hermes, Apollo) while providing a consistent API for developers.
+ * The types are designed to work across all three rendering engines (Classic,
+ * Modern, Rustic) while providing a consistent API for developers.
  *
  * **Type Categories:**
  * - `ResultStatus`: Available status types for the result display

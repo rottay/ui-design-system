@@ -8,12 +8,12 @@
  * Each engine provides multi-line text input with different underlying libraries.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design TextArea with autoSize and showCount
- * - **Hermes**: DaisyUI/Tailwind CSS textarea classes
- * - **Apollo**: Pure HTML textarea with custom character count
+ * - **Classic**: Ant Design TextArea with autoSize and showCount
+ * - **Modern**: DaisyUI/Tailwind CSS textarea classes
+ * - **Rustic**: Pure HTML textarea with custom character count
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | autoSize | ✅ | ❌ | ❌ |
  * | showCount | ✅ | ❌ | ✅ |
@@ -22,21 +22,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for advanced auto-sizing
- * <Textarea engine="titan" autoSize={{ minRows: 2, maxRows: 6 }} />
+ * // Use Classic for advanced auto-sizing
+ * <Textarea engine="classic" autoSize={{ minRows: 2, maxRows: 6 }} />
  *
- * // Use Hermes for lightweight styling
- * <Textarea engine="hermes" rows={4} />
+ * // Use Modern for lightweight styling
+ * <Textarea engine="modern" rows={4} />
  * ```
  *
- * @see {@link TitanTextarea} for Ant Design implementation
- * @see {@link HermesTextarea} for DaisyUI implementation
- * @see {@link ApolloTextarea} for vanilla implementation
+ * @see {@link ClassicTextarea} for Ant Design implementation
+ * @see {@link ModernTextarea} for DaisyUI implementation
+ * @see {@link RusticTextarea} for vanilla implementation
  * @module TextareaEngines
  * @category Inputs
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

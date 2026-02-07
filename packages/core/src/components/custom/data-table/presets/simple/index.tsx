@@ -4,11 +4,12 @@
  */
 
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export const SimpleDataTable = createPreset<DataTableProps & Record<string, unknown>>({
   name: 'DataTable.Simple',
-  render: ({ primitives, props, tokens }: PresetContext<DataTableProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<DataTableProps>) => {
     const { Box, Spinner } = primitives;
     const {
       columns,
@@ -47,7 +48,7 @@ export const SimpleDataTable = createPreset<DataTableProps & Record<string, unkn
           <table style={{
             width: '100%',
             borderCollapse: 'collapse',
-            border: bordered ? `1px solid ${tokens.colors.neutral[200]}` : undefined,
+            border: bordered ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : undefined,
           }}>
             <thead>
               <tr style={{ backgroundColor: tokens.colors.neutral[50] }}>
@@ -60,7 +61,7 @@ export const SimpleDataTable = createPreset<DataTableProps & Record<string, unkn
                       fontWeight: 600,
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[600],
-                      borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       width: col.width,
                     }}
                   >
@@ -91,7 +92,7 @@ export const SimpleDataTable = createPreset<DataTableProps & Record<string, unkn
                     style={{
                       backgroundColor: striped && index % 2 === 1 ? tokens.colors.neutral[50] : undefined,
                       cursor: onRowClick ? 'pointer' : undefined,
-                      transition: 'background-color 0.2s',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                     onMouseEnter={(e) => {
                       if (onRowClick) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
@@ -109,7 +110,7 @@ export const SimpleDataTable = createPreset<DataTableProps & Record<string, unkn
                             padding: cellPadding,
                             textAlign: col.align || 'left',
                             fontSize: tokens.typography.fontSize.sm,
-                            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           }}
                         >
                           {col.render ? col.render(value, record, index) : String(value ?? '')}

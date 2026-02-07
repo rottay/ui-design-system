@@ -33,7 +33,7 @@ Modal is a dialog component that appears on top of the main content, requiring u
 - Focus trap for accessibility
 - Scroll lock on body
 - Portal rendering
-- Support for all three engines (Titan, Hermes, Apollo)
+- Support for all three engines (Classic, Modern, Rustic)
         `,
       },
     },
@@ -83,7 +83,7 @@ Modal is a dialog component that appears on top of the main content, requiring u
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -559,13 +559,13 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Modal rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Modal rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },
   render: () => (
     <div style={{ display: 'flex', gap: '12px' }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
+      {(['classic', 'modern', 'rustic'] as const).map((engine) => (
         <ModalDemo
           key={engine}
           engine={engine}

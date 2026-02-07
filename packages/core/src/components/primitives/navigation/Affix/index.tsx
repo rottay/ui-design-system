@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Affix component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -115,7 +115,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Affix engine="hermes" offsetTop={20}>
+ * <Affix engine="modern" offsetTop={20}>
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  *   <nav>Navigation</nav>
  * </Affix>
@@ -233,11 +233,11 @@ BaseAffix.displayName = 'BaseAffix';
  */
 export const Affix = createEngineComponent<AffixProps>('Affix', {
   /** Ant Design implementation - full-featured with native Affix support */
-  titan: () => import('./engines/titan'),
+  classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes'),
+  modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Affix;

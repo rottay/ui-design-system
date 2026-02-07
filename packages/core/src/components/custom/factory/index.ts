@@ -2,13 +2,14 @@
 
 /**
  * Custom Component Factory
- * Creates preset-based custom components
+ * Creates preset-based custom components with engine-aware context
  */
 
 import React, { ComponentType, useMemo } from 'react';
 import type { EngineName, TenantConfig, DesignTokens } from '../../../types';
 import { useTenant } from '../../../core/hooks/tenant';
 import { useTokens } from '../../../core/hooks/tokens';
+import { useEngineContext } from '../../../core/providers/engine';
 
 // Re-export primitives for use in presets
 import * as Primitives from '../../primitives';
@@ -21,10 +22,12 @@ export interface PresetContext<P = unknown> {
   primitives: typeof Primitives;
   /** Props passed to the component */
   props: P;
-  /** Design tokens with tenant overrides */
+  /** Design tokens with tenant overrides and engine differentiation */
   tokens: DesignTokens;
   /** Current tenant configuration */
   tenant: TenantConfig;
+  /** Active engine name for conditional rendering */
+  engine: EngineName;
 }
 
 /**
@@ -38,30 +41,54 @@ export interface PresetConfig<P = unknown> {
   /** Per-primitive engine overrides */
   engineOverrides?: Partial<Record<string, EngineName>>;
   /** The render function */
-  render: (context: PresetContext<P>) => React.ReactElement;
+  render: (context: PresetContext<P>) => React.ReactElement | null;
 }
 
 /**
- * Create a custom component from a preset config
+ * Create a custom component from a preset config object or a render function.
+ * Accepts either:
+ * - `PresetConfig<P>` (object with name + render)
+ * - A bare render function `(context: PresetContext<P>) => React.ReactElement`
+ * - A name string + render function pair `(name, renderFn)`
  */
 export function createPreset<P extends object>(
-  config: PresetConfig<P>
+  name: string,
+  renderFn: (context: PresetContext<P>) => React.ReactElement | null
+): ComponentType<P>;
+export function createPreset<P extends object>(
+  config: PresetConfig<P> | ((context: PresetContext<P>) => React.ReactElement | null)
+): ComponentType<P>;
+export function createPreset<P extends object>(
+  configOrName: string | PresetConfig<P> | ((context: PresetContext<P>) => React.ReactElement | null),
+  renderFn?: (context: PresetContext<P>) => React.ReactElement | null
 ): ComponentType<P> {
+  let resolved: PresetConfig<P>;
+  if (typeof configOrName === 'string') {
+    // Called as createPreset('name', renderFn)
+    resolved = { name: configOrName, render: renderFn! };
+  } else if (typeof configOrName === 'function') {
+    resolved = { name: 'Anonymous', render: configOrName };
+  } else {
+    resolved = configOrName;
+  }
+
   const PresetComponent: React.FC<P> = (props) => {
     const { config: tenant } = useTenant();
     const tokens = useTokens();
+    const { engine } = useEngineContext();
 
     const context = useMemo<PresetContext<P>>(() => ({
       primitives: Primitives,
       props,
       tokens,
       tenant,
-    }), [props, tokens, tenant]);
+      engine,
+    }), [props, tokens, tenant, engine]);
 
-    return config.render(context);
+    return resolved.render(context);
   };
 
-  PresetComponent.displayName = `Preset(${config.name})`;
+  PresetComponent.displayName = `Preset(${resolved.name})`;
 
   return PresetComponent;
 }

@@ -206,12 +206,12 @@ describe('DatePicker.RangePicker', () => {
 });
 
 describe('DatePicker engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<DatePicker engine={engine} />);
     expect(screen.getByTestId('date-picker')).toBeInTheDocument();
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('RangePicker works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('RangePicker works with %s engine', (engine) => {
     render(<DatePicker.RangePicker engine={engine} />);
     expect(screen.getByTestId('range-picker')).toBeInTheDocument();
   });

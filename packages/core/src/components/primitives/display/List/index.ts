@@ -7,9 +7,9 @@
  *
  * @remarks
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design List with full feature support
- * - **Hermes**: DaisyUI/Tailwind list with responsive design
- * - **Apollo**: Pure CSS list with maximum accessibility
+ * - **Classic**: Ant Design List with full feature support
+ * - **Modern**: DaisyUI/Tailwind list with responsive design
+ * - **Rustic**: Pure CSS list with maximum accessibility
  *
  * **Key Features:**
  * - Bordered and borderless variants
@@ -89,21 +89,21 @@ export {
 } from './types';
 
 const ListBase = createEngineComponent<ListProps>('List', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.List })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.List })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.List })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.List })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.List })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.List })),
 });
 
 const Item = createEngineComponent<ListItemProps>('List.Item', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Item })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Item })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Item })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Item })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Item })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Item })),
 });
 
 const Meta = createEngineComponent<ListItemMetaProps>('List.Item.Meta', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Meta })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Meta })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Meta })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Meta })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Meta })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Meta })),
 });
 
 export const List = Object.assign(ListBase, {

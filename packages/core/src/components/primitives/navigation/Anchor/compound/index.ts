@@ -23,7 +23,7 @@
  * **Multi-Engine Support:**
  * The AnchorLink component uses the engine factory to automatically
  * render with the appropriate styling based on the configured engine
- * (Titan, Hermes, or Apollo).
+ * (Classic, Modern, or Rustic).
  *
  * @example Basic Usage
  * ```tsx
@@ -104,11 +104,11 @@ import type { AnchorLinkProps } from '../types';
  */
 export const AnchorLink = createEngineComponent<AnchorLinkProps>('Anchor.Link', {
   /** Ant Design link implementation */
-  titan: () => import('../engines/titan').then(m => ({ default: m.Link })),
+  classic: () => import('../engines/classic').then(m => ({ default: m.Link })),
   /** DaisyUI/Tailwind link implementation */
-  hermes: () => import('../engines/hermes').then(m => ({ default: m.Link })),
+  modern: () => import('../engines/modern').then(m => ({ default: m.Link })),
   /** Vanilla HTML/CSS link implementation */
-  apollo: () => import('../engines/apollo').then(m => ({ default: m.Link })),
+  rustic: () => import('../engines/rustic').then(m => ({ default: m.Link })),
 });
 
 // ============================================================================

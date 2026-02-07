@@ -11,9 +11,9 @@
  * visual variants, sizes, shapes, and states to accommodate various use cases.
  *
  * **Multi-Engine Architecture:**
- * - **Titan** (Ant Design): Full-featured enterprise button with rich animations
- * - **Hermes** (DaisyUI/Tailwind): Lightweight utility-first button styling
- * - **Apollo** (Vanilla HTML/CSS): Headless implementation with maximum accessibility
+ * - **Classic** (Ant Design): Full-featured enterprise button with rich animations
+ * - **Modern** (DaisyUI/Tailwind): Lightweight utility-first button styling
+ * - **Rustic** (Vanilla HTML/CSS): Headless implementation with maximum accessibility
  *
  * **Multi-Tenant Support:**
  * Button appearance automatically adapts to the active tenant's theme through
@@ -112,9 +112,9 @@ export type { ButtonGroupProps, ButtonIconProps } from './compound';
 // Create engine-aware Button component with compound components attached
 export const Button = Object.assign(
   createEngineComponent<ButtonProps>('Button', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     Group: ButtonGroup,

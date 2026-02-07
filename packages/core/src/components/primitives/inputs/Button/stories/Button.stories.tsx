@@ -32,7 +32,7 @@ A versatile button component supporting multiple variants, sizes, and states wit
 
 ## Engine Differences
 
-| Feature | Titan | Hermes | Apollo |
+| Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
 | Library | Ant Design | DaisyUI | Vanilla CSS |
 | Styling | CSS-in-JS | Tailwind | CSS Variables |
@@ -61,7 +61,7 @@ A versatile button component supporting multiple variants, sizes, and states wit
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     disabled: {
@@ -214,14 +214,14 @@ export const IconButton: Story = {
 
 /**
  * Side-by-side comparison of the Button component across all 3 engines.
- * Shows how Titan, Hermes, and Apollo render the same props differently.
+ * Shows how Classic, Modern, and Rustic render the same props differently.
  */
 export const CompareEngines: Story = {
   name: '🔄 Engine Comparison',
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Button rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Button rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -427,7 +427,7 @@ export const ThemeSwitcher: Story = {
       props={{ children: 'Themed Button', variant: 'primary', size: 'md' }}
       title="Button Theme Preview"
       showEngineSelector
-      initialEngine="titan"
+      initialEngine="classic"
       initialTenant="base"
     />
   ),

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Steps Component Types - Rottay Design System
  * @description Type definitions for the Steps navigation component.
- * These types support the multi-engine architecture (Titan, Hermes, Apollo)
+ * These types support the multi-engine architecture (Classic, Modern, Rustic)
  * and multi-tenant theming system.
  *
  * @remarks
@@ -255,7 +255,7 @@ export interface ProgressDotInfo {
  *   onChange={handleChange}
  *   className="my-steps"
  *   style={{ marginTop: 24 }}
- *   engine="titan"
+ *   engine="classic"
  * />
  * ```
  */
@@ -355,7 +355,7 @@ export interface StepsProps {
    * Rendering engine override.
    * Overrides the global engine setting for this component.
    */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 // ============================================================================

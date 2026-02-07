@@ -8,7 +8,7 @@
  * a more declarative and JSX-native way to define tab content. This pattern
  * is familiar to users of other UI libraries and can improve code readability.
  *
- * The component works with all three engines (Titan, Hermes, Apollo) and
+ * The component works with all three engines (Classic, Modern, Rustic) and
  * inherits tenant theming automatically through the parent Tabs component.
  *
  * @example Basic Usage

@@ -13,7 +13,7 @@
  * - **Product classification**: Type → Brand → Model
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Expand triggers**: Click or hover to expand children
  * - **Multiple selection**: Select multiple leaf nodes
  * - **Search support**: Filter options with search input
@@ -81,14 +81,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Cascader engine="titan" options={options} showSearch />
+ * // Classic engine (Ant Design - default)
+ * <Cascader engine="classic" options={options} showSearch />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Cascader engine="hermes" options={options} size="large" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Cascader engine="modern" options={options} size="large" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Cascader engine="apollo" options={options} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <Cascader engine="rustic" options={options} />
  * ```
  *
  * @see {@link CascaderProps} for component props
@@ -117,14 +117,14 @@ export {
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const Cascader = createEngineComponent<CascaderProps>('Cascader', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Cascader;

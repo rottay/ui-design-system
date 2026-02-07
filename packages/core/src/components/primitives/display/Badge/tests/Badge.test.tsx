@@ -288,7 +288,7 @@ describe('Badge', () => {
 });
 
 describe('Badge engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Badge engine={engine} count={5} />);
     expect(screen.getByTestId('badge')).toBeInTheDocument();
   });

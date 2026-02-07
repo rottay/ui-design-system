@@ -5,8 +5,8 @@
  *
  * @remarks
  * These types support the multi-engine architecture of Rottay Design System,
- * ensuring consistent API across Titan (Ant Design), Hermes (DaisyUI), and
- * Apollo (Vanilla) implementations.
+ * ensuring consistent API across Classic (Ant Design), Modern (DaisyUI), and
+ * Rustic (Vanilla) implementations.
  *
  * @example Type Usage
  * ```tsx
@@ -200,12 +200,12 @@ export interface AffixProps {
    * Allows forcing a specific engine implementation regardless of the
    * EngineProvider context. Useful for testing or specific use cases.
    *
-   * @default Inherited from EngineProvider or 'titan'
+   * @default Inherited from EngineProvider or 'classic'
    *
    * @example
    * ```tsx
-   * // Force Hermes engine for Tailwind styling
-   * <Affix engine="hermes" offsetTop={0}>
+   * // Force Modern engine for Tailwind styling
+   * <Affix engine="modern" offsetTop={0}>
    *   <nav>Navigation</nav>
    * </Affix>
    * ```

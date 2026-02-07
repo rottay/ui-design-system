@@ -293,18 +293,18 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Notification rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS). Click each button to trigger a notification.',
+        story: 'Compare the same Notification rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS). Click each button to trigger a notification.',
       },
     },
   },
   render: () => (
     <EngineComparisonHelper
-      component={({ engineName }: { engineName: 'titan' | 'hermes' | 'apollo' }) => (
+      component={({ engineName }: { engineName: 'classic' | 'modern' | 'rustic' }) => (
         <NotificationProvider engine={engineName}>
           <EngineNotificationDemo engine={engineName} />
         </NotificationProvider>
       )}
-      props={{ engineName: 'titan' }}
+      props={{ engineName: 'classic' }}
       showDescriptions
     />
   ),
@@ -323,7 +323,7 @@ export const VariantMatrix: Story = {
     },
   },
   render: () => {
-    const engines = ['titan', 'hermes', 'apollo'] as const;
+    const engines = ['classic', 'modern', 'rustic'] as const;
     const types = ['success', 'error', 'warning', 'info'] as const;
 
     const TypeButton = ({ engine, type }: { engine: typeof engines[number]; type: typeof types[number] }) => {

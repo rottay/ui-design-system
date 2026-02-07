@@ -41,7 +41,7 @@ Supports text and image watermarks with customizable styling.
 - Font customization (color, size, weight, family)
 - Responsive sizing
 - Z-index control
-- Three engine implementations (Titan, Hermes, Apollo)
+- Three engine implementations (Classic, Modern, Rustic)
         `,
       },
     },
@@ -73,7 +73,7 @@ Supports text and image watermarks with customizable styling.
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -272,7 +272,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Watermark rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Watermark rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

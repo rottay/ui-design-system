@@ -284,7 +284,7 @@ export function SmallPaginationExample() {
 }
 
 /**
- * Example 12: Pagination with Size Changer (Titan only)
+ * Example 12: Pagination with Size Changer (Classic only)
  */
 export function PaginationWithSizeChangerExample() {
   const [current, setCurrent] = useState(1);

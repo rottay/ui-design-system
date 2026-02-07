@@ -16,7 +16,7 @@
  * - User identification watermarks
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (Tailwind), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (Tailwind), Rustic (Vanilla)
  * - **Canvas rendering**: High-quality pattern generation with device pixel ratio support
  * - **Text & image**: Supports text content (including multi-line) or image URLs
  * - **Customizable positioning**: Rotation, gap, and offset controls
@@ -60,18 +60,18 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Watermark engine="titan" content="Protected">
+ * // Classic engine (Ant Design - default)
+ * <Watermark engine="classic" content="Protected">
  *   <div>Content</div>
  * </Watermark>
  *
- * // Hermes engine (Tailwind CSS)
- * <Watermark engine="hermes" content="Draft" zIndex={50}>
+ * // Modern engine (Tailwind CSS)
+ * <Watermark engine="modern" content="Draft" zIndex={50}>
  *   <div>Content</div>
  * </Watermark>
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Watermark engine="apollo" content="Confidential" offset={[20, 20]}>
+ * // Rustic engine (Pure HTML/CSS)
+ * <Watermark engine="rustic" content="Confidential" offset={[20, 20]}>
  *   <div>Content</div>
  * </Watermark>
  * ```
@@ -109,9 +109,9 @@ export {
  * @returns The watermarked content container
  */
 export const Watermark = createEngineComponent<WatermarkProps>('Watermark', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Watermark;

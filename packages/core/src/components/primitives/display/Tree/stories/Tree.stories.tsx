@@ -96,7 +96,7 @@ Tree component for displaying hierarchical data structures.
 Supports multiple selection, checkboxes, drag-and-drop, and virtual scrolling.
 
 Features:
-- Multiple rendering engines (Titan, Hermes, Apollo)
+- Multiple rendering engines (Classic, Modern, Rustic)
 - Controlled and uncontrolled modes
 - Checkable nodes with cascade selection
 - Expandable/collapsible nodes
@@ -129,7 +129,7 @@ Features:
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -226,7 +226,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Tree rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Tree rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

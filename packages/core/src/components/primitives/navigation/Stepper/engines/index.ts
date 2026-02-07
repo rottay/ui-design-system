@@ -5,9 +5,9 @@
  *
  * @remarks
  * The Rottay Design System supports three rendering engines:
- * - **Titan**: Built on Ant Design's Steps component, full-featured with animations
- * - **Hermes**: Built on DaisyUI/Tailwind, utility-first and lightweight
- * - **Apollo**: Pure HTML/CSS with maximum accessibility and keyboard navigation
+ * - **Classic**: Built on Ant Design's Steps component, full-featured with animations
+ * - **Modern**: Built on DaisyUI/Tailwind, utility-first and lightweight
+ * - **Rustic**: Pure HTML/CSS with maximum accessibility and keyboard navigation
  *
  * The engine is selected automatically based on the EngineProvider context,
  * or can be overridden per-component using the `engine` prop.
@@ -17,7 +17,7 @@
  * import { EngineProvider, Stepper } from '@rottay/design-system';
  *
  * // All components use DaisyUI styling
- * <EngineProvider engine="hermes">
+ * <EngineProvider engine="modern">
  *   <Stepper items={steps} current={current} />
  * </EngineProvider>
  * ```
@@ -25,12 +25,12 @@
  * @example Per-Component Engine Override
  * ```tsx
  * // This stepper uses Ant Design regardless of provider
- * <Stepper engine="titan" items={steps} current={current} />
+ * <Stepper engine="classic" items={steps} current={current} />
  * ```
  *
- * @see {@link TitanStepper} for Ant Design implementation
- * @see {@link HermesStepper} for DaisyUI implementation
- * @see {@link ApolloStepper} for vanilla implementation
+ * @see {@link ClassicStepper} for Ant Design implementation
+ * @see {@link ModernStepper} for DaisyUI implementation
+ * @see {@link RusticStepper} for vanilla implementation
  *
  * @module Stepper/Engines
  * @category Navigation
@@ -42,19 +42,19 @@
 // ============================================================================
 
 /**
- * Titan engine implementation (Ant Design).
+ * Classic engine implementation (Ant Design).
  * Full-featured stepper with rich animations and Ant Design styling.
  */
-export { default as titan } from './titan';
+export { default as classic } from './classic';
 
 /**
- * Hermes engine implementation (DaisyUI/Tailwind).
+ * Modern engine implementation (DaisyUI/Tailwind).
  * Lightweight stepper with utility-first CSS styling.
  */
-export { default as hermes } from './hermes';
+export { default as modern } from './modern';
 
 /**
- * Apollo engine implementation (Pure HTML/CSS).
+ * Rustic engine implementation (Pure HTML/CSS).
  * Zero-dependency stepper with full keyboard navigation and accessibility.
  */
-export { default as apollo } from './apollo';
+export { default as rustic } from './rustic';

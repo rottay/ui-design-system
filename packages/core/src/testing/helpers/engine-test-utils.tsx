@@ -1,6 +1,6 @@
 /**
  * @fileoverview Engine Test Utilities
- * @description Utilities for testing components across multiple engines (Titan, Hermes, Apollo)
+ * @description Utilities for testing components across multiple engines (Classic, Modern, Rustic)
  */
 
 import React, { ReactElement, Suspense } from 'react';
@@ -11,7 +11,7 @@ import type { EngineName } from '../../core/types';
 /**
  * Stable engines for testing (excludes experimental 'athena')
  */
-export const STABLE_ENGINES: readonly EngineName[] = ['titan', 'hermes', 'apollo'] as const;
+export const STABLE_ENGINES: readonly EngineName[] = ['classic', 'modern', 'rustic'] as const;
 export type StableEngineName = (typeof STABLE_ENGINES)[number];
 
 /**
@@ -49,8 +49,8 @@ function createEngineWrapper(
  * import { renderWithEngine } from '@/__tests__/helpers/engine-test-utils';
  * import { Button } from '@/components/primitives/inputs/Button';
  *
- * it('renders button with titan engine', () => {
- *   const { getByRole } = renderWithEngine(<Button>Click me</Button>, 'titan');
+ * it('renders button with classic engine', () => {
+ *   const { getByRole } = renderWithEngine(<Button>Click me</Button>, 'classic');
  *   expect(getByRole('button')).toBeInTheDocument();
  * });
  * ```
@@ -72,9 +72,9 @@ export function renderWithEngine(
  * Result of renderWithAllEngines
  */
 export interface MultiEngineRenderResult {
-  titan: RenderResult;
-  hermes: RenderResult;
-  apollo: RenderResult;
+  classic: RenderResult;
+  modern: RenderResult;
+  rustic: RenderResult;
 }
 
 /**
@@ -87,9 +87,9 @@ export interface MultiEngineRenderResult {
  * it('all engines render button', () => {
  *   const results = renderWithAllEngines(<Button>Click</Button>);
  *
- *   expect(results.titan.getByRole('button')).toBeInTheDocument();
- *   expect(results.hermes.getByRole('button')).toBeInTheDocument();
- *   expect(results.apollo.getByRole('button')).toBeInTheDocument();
+ *   expect(results.classic.getByRole('button')).toBeInTheDocument();
+ *   expect(results.modern.getByRole('button')).toBeInTheDocument();
+ *   expect(results.rustic.getByRole('button')).toBeInTheDocument();
  * });
  * ```
  */
@@ -98,9 +98,9 @@ export function renderWithAllEngines(
   options: RenderWithEngineOptions = {}
 ): MultiEngineRenderResult {
   return {
-    titan: renderWithEngine(ui, 'titan', options),
-    hermes: renderWithEngine(ui, 'hermes', options),
-    apollo: renderWithEngine(ui, 'apollo', options),
+    classic: renderWithEngine(ui, 'classic', options),
+    modern: renderWithEngine(ui, 'modern', options),
+    rustic: renderWithEngine(ui, 'rustic', options),
   };
 }
 
@@ -179,9 +179,9 @@ export function isStableEngine(engine: string): engine is StableEngineName {
  */
 export function getEngineDisplayName(engine: EngineName): string {
   const names: Record<EngineName, string> = {
-    titan: 'Titan (Ant Design)',
-    hermes: 'Hermes (DaisyUI)',
-    apollo: 'Apollo (Vanilla)',
+    classic: 'Classic (Ant Design)',
+    modern: 'Modern (DaisyUI)',
+    rustic: 'Rustic (Vanilla)',
     athena: 'Athena (Custom)',
   };
   return names[engine];

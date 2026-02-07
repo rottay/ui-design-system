@@ -13,7 +13,7 @@
  * - **Batch operations**: Select multiple items for processing
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Search filtering**: Filter items in each list
  * - **One-way mode**: Only allow left-to-right transfer
  * - **Pagination**: Handle large datasets efficiently
@@ -72,14 +72,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Transfer engine="titan" dataSource={data} showSearch />
+ * // Classic engine (Ant Design - default)
+ * <Transfer engine="classic" dataSource={data} showSearch />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Transfer engine="hermes" dataSource={data} />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Transfer engine="modern" dataSource={data} />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Transfer engine="apollo" dataSource={data} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <Transfer engine="rustic" dataSource={data} />
  * ```
  *
  * @see {@link TransferProps} for component props
@@ -105,14 +105,14 @@ export {
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const Transfer = createEngineComponent<TransferProps>('Transfer', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Transfer;

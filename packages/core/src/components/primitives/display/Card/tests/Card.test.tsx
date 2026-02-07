@@ -318,7 +318,7 @@ describe('Card Accessibility', () => {
 });
 
 describe('Card engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Card engine={engine}>Test</Card>);
     expect(screen.getByTestId('card')).toBeInTheDocument();
   });

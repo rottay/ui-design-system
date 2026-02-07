@@ -5,9 +5,9 @@
  *
  * @remarks
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Typography with rich text features
- * - **Hermes**: DaisyUI/Tailwind utility classes
- * - **Apollo**: Pure CSS implementation with zero dependencies
+ * - **Classic**: Ant Design Typography with rich text features
+ * - **Modern**: DaisyUI/Tailwind utility classes
+ * - **Rustic**: Pure CSS implementation with zero dependencies
  *
  * **Key Features:**
  * - Semantic heading levels (h1-h6) with visual size override
@@ -60,7 +60,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Typography.Heading engine="hermes" level="h1">
+ * <Typography.Heading engine="modern" level="h1">
  *   Tailwind-styled Heading
  * </Typography.Heading>
  * ```

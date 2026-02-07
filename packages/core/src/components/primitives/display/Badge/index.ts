@@ -10,9 +10,9 @@
  * can be positioned over other elements or used standalone.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Badge with animation and ribbon support
- * - **Hermes**: DaisyUI indicator classes with Tailwind utilities
- * - **Apollo**: Pure CSS implementation with zero dependencies
+ * - **Classic**: Ant Design Badge with animation and ribbon support
+ * - **Modern**: DaisyUI indicator classes with Tailwind utilities
+ * - **Rustic**: Pure CSS implementation with zero dependencies
  *
  * **Key Features:**
  * - Numeric counts with overflow (e.g., "99+")
@@ -54,7 +54,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Badge engine="hermes" count={10}>
+ * <Badge engine="modern" count={10}>
  *   <MailIcon />
  * </Badge>
  * ```
@@ -96,13 +96,13 @@ export {
  *
  * This component uses the design system's engine factory to dynamically
  * load the appropriate implementation based on the current engine context
- * (Titan/Ant Design, Hermes/DaisyUI, or Apollo/Pure CSS).
+ * (Classic/Ant Design, Modern/DaisyUI, or Rustic/Pure CSS).
  *
  * @component
  * @see {@link BadgeProps} for available props
  */
 export const Badge = createEngineComponent<BadgeProps>('Badge', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

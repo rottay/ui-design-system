@@ -7,7 +7,7 @@
  *
  * @remarks
  * The BackTop component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -86,7 +86,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <BackTop engine="hermes" />
+ * <BackTop engine="modern" />
  * {/* Renders with DaisyUI/Tailwind styling *\/}
  * ```
  *
@@ -141,11 +141,11 @@ export { type BackTopProps, BACKTOP_DEFAULTS } from './types';
  */
 export const BackTop = createEngineComponent<BackTopProps>('BackTop', {
   /** Ant Design implementation - uses FloatButton.BackTop with full animations */
-  titan: () => import('./engines/titan'),
+  classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first styling with btn classes */
-  hermes: () => import('./engines/hermes'),
+  modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies, maximum control */
-  apollo: () => import('./engines/apollo'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default BackTop;

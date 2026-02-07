@@ -16,7 +16,7 @@
  * - Inline workflow approvals
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Async support**: onConfirm can return a Promise with loading state
  * - **Button customization**: Text, type (primary/danger/default), and loading
  * - **12 placement positions**: All sides with alignment variants
@@ -65,19 +65,19 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Popconfirm engine="titan" title="Confirm?" okType="danger">
- *   <Button>Titan Confirm</Button>
+ * // Classic engine (Ant Design - default)
+ * <Popconfirm engine="classic" title="Confirm?" okType="danger">
+ *   <Button>Classic Confirm</Button>
  * </Popconfirm>
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Popconfirm engine="hermes" title="Confirm?" okType="primary">
- *   <Button>Hermes Confirm</Button>
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Popconfirm engine="modern" title="Confirm?" okType="primary">
+ *   <Button>Modern Confirm</Button>
  * </Popconfirm>
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Popconfirm engine="apollo" title="Confirm?" placement="bottom">
- *   <Button>Apollo Confirm</Button>
+ * // Rustic engine (Pure HTML/CSS)
+ * <Popconfirm engine="rustic" title="Confirm?" placement="bottom">
+ *   <Button>Rustic Confirm</Button>
  * </Popconfirm>
  * ```
  *
@@ -116,9 +116,9 @@ export {
  * @returns The rendered Popconfirm component
  */
 export const Popconfirm = createEngineComponent<PopconfirmProps>('Popconfirm', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Popconfirm;

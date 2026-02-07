@@ -28,7 +28,7 @@ export const minimalTheme: ThemeConfig = {
     'shadow-card': 'rgba(15, 15, 15, 0.05) 0px 0px 0px 1px',
   },
   engineOverrides: {
-    titan: {
+    classic: {
       token: {
         colorPrimary: '#37352F',
         borderRadius: 4,

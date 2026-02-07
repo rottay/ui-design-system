@@ -10,9 +10,9 @@
  * with optional header, body, footer, and cover image sections.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Card with skeleton loading
- * - **Hermes**: DaisyUI card classes with Tailwind utilities
- * - **Apollo**: Pure CSS implementation with zero dependencies
+ * - **Classic**: Ant Design Card with skeleton loading
+ * - **Modern**: DaisyUI card classes with Tailwind utilities
+ * - **Rustic**: Pure CSS implementation with zero dependencies
  *
  * **Key Features:**
  * - Multiple variants (elevated, outlined, filled, ghost)
@@ -56,7 +56,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Card engine="hermes" variant="outlined">
+ * <Card engine="modern" variant="outlined">
  *   <p>DaisyUI styled card</p>
  * </Card>
  * ```
@@ -96,7 +96,7 @@ export { CardHeader, CardBody, CardFooter, CardImage };
  * Card component with engine-aware routing.
  *
  * The Card component automatically selects the appropriate rendering engine
- * (Titan, Hermes, or Apollo) based on the application's EngineProvider context
+ * (Classic, Modern, or Rustic) based on the application's EngineProvider context
  * or an explicit `engine` prop.
  *
  * Available compound components:
@@ -113,9 +113,9 @@ export { CardHeader, CardBody, CardFooter, CardImage };
  */
 export const Card = Object.assign(
   createEngineComponent<CardProps>('Card', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /** Header compound component for card title area */

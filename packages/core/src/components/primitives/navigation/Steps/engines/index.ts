@@ -1,7 +1,7 @@
 /**
  * @fileoverview Steps Engine Exports - Rottay Design System
  * @description Barrel export file for all Steps engine implementations.
- * Provides access to Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla)
+ * Provides access to Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla)
  * engine-specific implementations.
  *
  * @remarks
@@ -12,15 +12,15 @@
  * @example Direct Engine Import (Advanced)
  * ```tsx
  * // Direct imports are typically not needed - use the main Steps component
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // The main component handles engine selection automatically
  * import { Steps } from '@rottay/design-system';
  * ```
  *
- * @see {@link titan} for Ant Design implementation
- * @see {@link hermes} for DaisyUI/Tailwind implementation
- * @see {@link apollo} for Vanilla HTML/CSS implementation
+ * @see {@link classic} for Ant Design implementation
+ * @see {@link modern} for DaisyUI/Tailwind implementation
+ * @see {@link rustic} for Vanilla HTML/CSS implementation
  *
  * @module Steps/Engines
  * @category Navigation
@@ -32,11 +32,11 @@
 // Engine Exports
 // ============================================================================
 
-/** Titan engine - Ant Design implementation */
-export { default as titan } from './titan';
+/** Classic engine - Ant Design implementation */
+export { default as classic } from './classic';
 
-/** Hermes engine - DaisyUI/Tailwind implementation */
-export { default as hermes } from './hermes';
+/** Modern engine - DaisyUI/Tailwind implementation */
+export { default as modern } from './modern';
 
-/** Apollo engine - Vanilla HTML/CSS implementation */
-export { default as apollo } from './apollo';
+/** Rustic engine - Vanilla HTML/CSS implementation */
+export { default as rustic } from './rustic';

@@ -483,7 +483,8 @@ function PreviewPanel({
         style={{ marginBottom: 16 }}
       />
 
-      <div style={{ background: '#001529', borderRadius: 8, padding: 8 }}>
+      <div style={{
+        background: 'var(--color-neutral-900, #001529)', borderRadius: 8, padding: 8 }}>
         <AntMenu
           mode="inline"
           theme="dark"
@@ -639,7 +640,7 @@ export function AdvancedNavigationEditor({
                   return (
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: 4 }}>
                       <Space size={4}>
-                        {item.visible ? <EyeOutlined style={{ fontSize: 11, color: '#52c41a' }} /> : <EyeInvisibleOutlined style={{ fontSize: 11, color: '#999' }} />}
+                        {item.visible ? <EyeOutlined style={{ fontSize: 11, color: 'var(--color-success-500, #52c41a)' }} /> : <EyeInvisibleOutlined style={{ fontSize: 11, color: 'var(--color-neutral-400, #999)' }} />}
                         <span>{item.label}</span>
                         {item.badge && <Tag color={item.badgeColor || 'blue'} style={{ fontSize: 10, marginLeft: 4 }}>{item.badge}</Tag>}
                       </Space>
@@ -733,7 +734,7 @@ export function AdvancedNavigationEditor({
 
       {/* Delete Confirmation */}
       <Modal
-        title={<Space><ExclamationCircleOutlined style={{ color: '#ff4d4f' }} />Delete Menu Item</Space>}
+        title={<Space><ExclamationCircleOutlined style={{ color: 'var(--color-error-500, #ff4d4f)' }} />Delete Menu Item</Space>}
         open={!!deleteConfirmId}
         onOk={handleDelete}
         onCancel={() => setDeleteConfirmId(null)}

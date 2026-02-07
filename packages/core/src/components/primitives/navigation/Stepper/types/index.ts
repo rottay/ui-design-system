@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types support the multi-engine architecture of the Rottay Design System,
- * ensuring consistent API across Titan, Hermes, and Apollo implementations.
+ * ensuring consistent API across Classic, Modern, and Rustic implementations.
  *
  * @module Stepper/Types
  * @category Navigation

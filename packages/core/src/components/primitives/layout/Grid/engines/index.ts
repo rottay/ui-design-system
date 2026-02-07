@@ -4,9 +4,9 @@
  *
  * @remarks
  * Each engine provides Grid and GridItem implementations optimized for its styling paradigm:
- * - **Titan**: Ant Design styling conventions with inline CSS Grid properties
- * - **Hermes**: DaisyUI/Tailwind utility classes (grid, grid-cols-*, gap-*, col-span-*)
- * - **Apollo**: Pure HTML/CSS with inline grid styles and data attributes
+ * - **Classic**: Ant Design styling conventions with inline CSS Grid properties
+ * - **Modern**: DaisyUI/Tailwind utility classes (grid, grid-cols-*, gap-*, col-span-*)
+ * - **Rustic**: Pure HTML/CSS with inline grid styles and data attributes
  *
  * These exports are consumed by the engine factory for dynamic component resolution.
  *
@@ -17,6 +17,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan, TitanGrid, TitanGridItem } from './titan';
-export { default as hermes, HermesGrid, HermesGridItem } from './hermes';
-export { default as apollo, ApolloGrid, ApolloGridItem } from './apollo';
+export { default as classic, ClassicGrid, ClassicGridItem } from './classic';
+export { default as modern, ModernGrid, ModernGridItem } from './modern';
+export { default as rustic, RusticGrid, RusticGridItem } from './rustic';

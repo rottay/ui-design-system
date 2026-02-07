@@ -20,7 +20,7 @@ import { EngineComparison as EngineComparisonHelper, VariantEngineMatrix } from 
  * - **Text**: Inline text with decorations (underline, italic, etc.)
  * - **Paragraph**: Block-level text with optimized line-height
  *
- * All components support multiple engines (titan, hermes, apollo) for
+ * All components support multiple engines (classic, modern, rustic) for
  * consistent behavior across different styling frameworks.
  */
 const meta: Meta<typeof Typography.Heading> = {
@@ -69,7 +69,7 @@ const meta: Meta<typeof Typography.Heading> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -307,7 +307,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Typography.Heading rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Typography.Heading rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

@@ -11,9 +11,9 @@
  * It's ideal for forms, settings, and multi-select scenarios.
  *
  * **Multi-Engine Architecture:**
- * - **Titan** (Ant Design): Enterprise-grade checkbox with native Ant styling
- * - **Hermes** (DaisyUI/Tailwind): Lightweight utility-first checkbox
- * - **Apollo** (Vanilla HTML/CSS): Headless implementation with full a11y support
+ * - **Classic** (Ant Design): Enterprise-grade checkbox with native Ant styling
+ * - **Modern** (DaisyUI/Tailwind): Lightweight utility-first checkbox
+ * - **Rustic** (Vanilla HTML/CSS): Headless implementation with full a11y support
  *
  * **Multi-Tenant Support:**
  * Checkbox appearance adapts to tenant themes via CSS custom properties
@@ -110,9 +110,9 @@ export { CheckboxGroup };
 // Create engine-aware Checkbox component
 export const Checkbox = Object.assign(
   createEngineComponent<CheckboxProps>('Checkbox', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     Group: CheckboxGroup,

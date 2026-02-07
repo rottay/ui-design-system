@@ -8,12 +8,12 @@
  * Each engine provides the same card functionality with different styling.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Card with skeleton loading
- * - **Hermes**: DaisyUI card classes with Tailwind
- * - **Apollo**: Pure CSS with inline styles
+ * - **Classic**: Ant Design Card with skeleton loading
+ * - **Modern**: DaisyUI card classes with Tailwind
+ * - **Rustic**: Pure CSS with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Skeleton loading | ✅ | ✅ | ❌ |
  * | Spinner loading | ❌ | ❌ | ✅ |
@@ -24,21 +24,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes for DaisyUI styling
- * <Card engine="hermes" variant="outlined" />
+ * // Use Modern for DaisyUI styling
+ * <Card engine="modern" variant="outlined" />
  *
- * // Use Apollo for accessibility focus
- * <Card engine="apollo" clickable onClick={handle} />
+ * // Use Rustic for accessibility focus
+ * <Card engine="rustic" clickable onClick={handle} />
  * ```
  *
- * @see {@link TitanCard} for Ant Design implementation
- * @see {@link HermesCard} for DaisyUI implementation
- * @see {@link ApolloCard} for vanilla implementation
+ * @see {@link ClassicCard} for Ant Design implementation
+ * @see {@link ModernCard} for DaisyUI implementation
+ * @see {@link RusticCard} for vanilla implementation
  * @module CardEngines
  * @category Display
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

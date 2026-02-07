@@ -180,7 +180,7 @@ describe('Textarea', () => {
 });
 
 describe('Textarea engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Textarea engine={engine} />);
     expect(screen.getByTestId('textarea-wrapper')).toBeInTheDocument();
   });

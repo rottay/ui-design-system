@@ -13,7 +13,7 @@
  * - **Tag entry**: Suggesting existing tags while typing
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Custom filtering**: Built-in or custom filter functions
  * - **Async search**: Fetch suggestions dynamically via onSearch
  * - **Custom rendering**: Custom option labels and content
@@ -72,14 +72,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <AutoComplete engine="titan" options={options} allowClear />
+ * // Classic engine (Ant Design - default)
+ * <AutoComplete engine="classic" options={options} allowClear />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <AutoComplete engine="hermes" options={options} size="large" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <AutoComplete engine="modern" options={options} size="large" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <AutoComplete engine="apollo" options={options} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <AutoComplete engine="rustic" options={options} />
  * ```
  *
  * @see {@link AutoCompleteProps} for component props
@@ -106,14 +106,14 @@ export {
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const AutoComplete = createEngineComponent<AutoCompleteProps>('AutoComplete', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default AutoComplete;

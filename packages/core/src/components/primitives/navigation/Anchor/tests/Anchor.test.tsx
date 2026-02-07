@@ -123,7 +123,7 @@ describe('Anchor.Link', () => {
 });
 
 describe('Anchor engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Anchor engine={engine}><Anchor.Link href="#test" title="Test" /></Anchor>);
     expect(screen.getByTestId('anchor')).toBeInTheDocument();
   });

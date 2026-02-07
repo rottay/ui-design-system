@@ -23,6 +23,11 @@ export * from './theme';
 export * from './shared';
 
 // ============================================
+// ANIMATIONS
+// ============================================
+export * from './animations';
+
+// ============================================
 // COMPONENTS
 // ============================================
 export * from './components/primitives';

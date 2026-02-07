@@ -189,22 +189,22 @@ describe('Affix', () => {
 
   // Engine Override Tests
   describe('engine prop', () => {
-    it('accepts titan engine', () => {
-      render(<Affix engine="titan">Content</Affix>);
+    it('accepts classic engine', () => {
+      render(<Affix engine="classic">Content</Affix>);
       const affix = screen.getByTestId('affix');
-      expect(affix).toHaveAttribute('data-engine', 'titan');
+      expect(affix).toHaveAttribute('data-engine', 'classic');
     });
 
-    it('accepts hermes engine', () => {
-      render(<Affix engine="hermes">Content</Affix>);
+    it('accepts modern engine', () => {
+      render(<Affix engine="modern">Content</Affix>);
       const affix = screen.getByTestId('affix');
-      expect(affix).toHaveAttribute('data-engine', 'hermes');
+      expect(affix).toHaveAttribute('data-engine', 'modern');
     });
 
-    it('accepts apollo engine', () => {
-      render(<Affix engine="apollo">Content</Affix>);
+    it('accepts rustic engine', () => {
+      render(<Affix engine="rustic">Content</Affix>);
       const affix = screen.getByTestId('affix');
-      expect(affix).toHaveAttribute('data-engine', 'apollo');
+      expect(affix).toHaveAttribute('data-engine', 'rustic');
     });
   });
 
@@ -444,7 +444,7 @@ describe('Affix target prop', () => {
 });
 
 describe('Affix engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Affix engine={engine}>Test</Affix>);
     expect(screen.getByTestId('affix')).toBeInTheDocument();
   });

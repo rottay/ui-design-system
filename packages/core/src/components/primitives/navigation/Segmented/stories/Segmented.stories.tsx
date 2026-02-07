@@ -32,7 +32,7 @@ The Segmented component is used to display multiple options and allows users to 
 - **Block mode**: Full width layout
 - **Icons**: Support for icons in options
 - **Disabled**: Component or individual options
-- **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
+- **Engine support**: Works with Classic (Ant Design), Modern (Tailwind), and Rustic (Vanilla)
 
 ## Usage
 \`\`\`tsx
@@ -63,7 +63,7 @@ import { Segmented } from '@rottay/design-system';
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     onChange: {
@@ -177,7 +177,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Segmented rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Segmented rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

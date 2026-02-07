@@ -259,9 +259,9 @@ export interface TreeProps {
 
   /**
    * Engine override for rendering
-   * @example engine="hermes"
+   * @example engine="modern"
    */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

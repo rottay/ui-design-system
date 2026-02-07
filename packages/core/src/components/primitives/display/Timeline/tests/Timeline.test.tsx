@@ -195,7 +195,7 @@ describe('Timeline edge cases', () => {
 });
 
 describe('Timeline engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Timeline engine={engine}>
         <Timeline.Item>Test</Timeline.Item>

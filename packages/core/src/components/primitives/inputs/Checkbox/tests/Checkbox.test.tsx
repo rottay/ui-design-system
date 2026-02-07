@@ -175,7 +175,7 @@ describe('Checkbox.Group', () => {
 });
 
 describe('Checkbox engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Checkbox engine={engine}>Test</Checkbox>);
     expect(screen.getByTestId('checkbox')).toBeInTheDocument();
   });

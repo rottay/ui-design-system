@@ -42,7 +42,7 @@ Supports multiple placement positions, trigger types, and content configurations
 - Controlled and uncontrolled modes
 - Configurable show/hide delays
 - Arrow indicator support
-- Three engine implementations (Titan, Hermes, Apollo)
+- Three engine implementations (Classic, Modern, Rustic)
         `,
       },
     },
@@ -65,7 +65,7 @@ Supports multiple placement positions, trigger types, and content configurations
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     arrow: {
@@ -249,7 +249,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Popover rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Popover rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

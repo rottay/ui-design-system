@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Link component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -102,13 +102,13 @@
  * ```tsx
  * import { Link } from '@rottay/design-system';
  *
- * // Force Hermes engine (DaisyUI/Tailwind styling)
- * <Link engine="hermes" href="/docs" type="primary">
+ * // Force Modern engine (DaisyUI/Tailwind styling)
+ * <Link engine="modern" href="/docs" type="primary">
  *   Documentation
  * </Link>
  *
- * // Force Apollo engine (Vanilla CSS, zero dependencies)
- * <Link engine="apollo" href="/about">
+ * // Force Rustic engine (Vanilla CSS, zero dependencies)
+ * <Link engine="rustic" href="/about">
  *   About Us
  * </Link>
  * ```
@@ -173,9 +173,9 @@ export { LINK_DEFAULTS, LINK_TYPE_COLORS } from './types';
  */
 export const Link = createEngineComponent<LinkProps>('Link', {
   /** Ant Design implementation - uses Typography.Link with full Ant styling */
-  titan: () => import('./engines/titan'),
+  classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first with DaisyUI link classes */
-  hermes: () => import('./engines/hermes'),
+  modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies, pure inline styles */
-  apollo: () => import('./engines/apollo'),
+  rustic: () => import('./engines/rustic'),
 });

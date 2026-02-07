@@ -154,7 +154,7 @@ export interface ColorPickerProps {
   /** Custom render function for the color panel */
   panelRender?: (panel: ReactNode) => ReactNode;
   /** Rendering engine override */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

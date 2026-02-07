@@ -8,12 +8,12 @@
  * Each engine provides range selection with different underlying approaches.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Slider with full tooltip/marks support
- * - **Hermes**: DaisyUI range with custom track overlay
- * - **Apollo**: Pure CSS with hidden inputs and custom visuals
+ * - **Classic**: Ant Design Slider with full tooltip/marks support
+ * - **Modern**: DaisyUI range with custom track overlay
+ * - **Rustic**: Pure CSS with hidden inputs and custom visuals
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Range mode | ✅ | ✅ | ✅ |
  * | Marks | ✅ | ✅ | ✅ |
@@ -24,21 +24,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for full features
- * <Slider engine="titan" tooltip={{ formatter: (v) => `${v}%` }} />
+ * // Use Classic for full features
+ * <Slider engine="classic" tooltip={{ formatter: (v) => `${v}%` }} />
  *
- * // Use Hermes for Tailwind styling
- * <Slider engine="hermes" range className="w-64" />
+ * // Use Modern for Tailwind styling
+ * <Slider engine="modern" range className="w-64" />
  * ```
  *
- * @see {@link TitanSlider} for Ant Design implementation
- * @see {@link HermesSlider} for DaisyUI implementation
- * @see {@link ApolloSlider} for vanilla implementation
+ * @see {@link ClassicSlider} for Ant Design implementation
+ * @see {@link ModernSlider} for DaisyUI implementation
+ * @see {@link RusticSlider} for vanilla implementation
  * @module SliderEngines
  * @category Inputs
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

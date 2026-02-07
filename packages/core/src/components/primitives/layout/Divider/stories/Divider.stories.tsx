@@ -33,7 +33,7 @@ Divider is a visual separator component that can be used to divide content secti
 - Spacing presets for margin control
 - Custom color support
 - Plain text mode without styling
-- Support for all three engines (Titan, Hermes, Apollo)
+- Support for all three engines (Classic, Modern, Rustic)
         `,
       },
     },
@@ -78,7 +78,7 @@ Divider is a visual separator component that can be used to divide content secti
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -287,7 +287,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Divider rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Divider rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

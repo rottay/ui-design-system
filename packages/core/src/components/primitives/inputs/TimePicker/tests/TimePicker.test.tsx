@@ -162,7 +162,7 @@ describe('TimePicker', () => {
     expect(screen.getByTestId('time-picker')).toBeInTheDocument();
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)(
+  it.each(['classic', 'modern', 'rustic'] as const)(
     'works with %s engine',
     (engine) => {
       // Engine prop is passed but in tests we use the mock
@@ -213,7 +213,7 @@ describe('TimePicker.RangePicker', () => {
     expect(screen.getByTestId('time-range-picker')).toHaveClass('custom-range-class');
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)(
+  it.each(['classic', 'modern', 'rustic'] as const)(
     'works with %s engine',
     (engine) => {
       render(<TimePicker.RangePicker engine={engine} />);

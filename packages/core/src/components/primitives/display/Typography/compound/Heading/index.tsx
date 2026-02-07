@@ -45,9 +45,9 @@
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { HeadingProps } from '../../types';
-import { TitanHeading } from '../../engines/titan';
-import { HermesHeading } from '../../engines/hermes';
-import { ApolloHeading } from '../../engines/apollo';
+import { ClassicHeading } from '../../engines/classic';
+import { ModernHeading } from '../../engines/modern';
+import { RusticHeading } from '../../engines/rustic';
 
 /**
  * Map of engine names to their respective Heading implementations.
@@ -56,9 +56,9 @@ const engineMap: Record<
   string,
   ForwardRefExoticComponent<HeadingProps & RefAttributes<HTMLHeadingElement>>
 > = {
-  titan: TitanHeading,
-  hermes: HermesHeading,
-  apollo: ApolloHeading,
+  classic: ClassicHeading,
+  modern: ModernHeading,
+  rustic: RusticHeading,
 };
 
 /**
@@ -79,14 +79,14 @@ const engineMap: Record<
  * </TypographyHeading>
  *
  * // With specific engine
- * <TypographyHeading engine="hermes" level="h3" weight="semibold">
+ * <TypographyHeading engine="modern" level="h3" weight="semibold">
  *   Subsection
  * </TypographyHeading>
  * ```
  */
 export const TypographyHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
-  ({ engine = 'titan', ...props }, ref) => {
-    const Component = engineMap[engine] || TitanHeading;
+  ({ engine = 'classic', ...props }, ref) => {
+    const Component = engineMap[engine] || ClassicHeading;
     return <Component ref={ref} {...props} />;
   }
 );

@@ -34,7 +34,7 @@ It supports responsive columns, gap spacing, and advanced grid features.
 - Alignment and justification options
 - Grid.Item compound component for spanning and positioning
 - Polymorphic rendering with \`as\` prop
-- Support for all three engines (Titan, Hermes, Apollo)
+- Support for all three engines (Classic, Modern, Rustic)
         `,
       },
     },
@@ -67,7 +67,7 @@ It supports responsive columns, gap spacing, and advanced grid features.
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -485,7 +485,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Grid rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Grid rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

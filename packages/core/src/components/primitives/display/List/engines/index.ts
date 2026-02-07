@@ -8,12 +8,12 @@
  * Each engine provides List, Item, and Meta components.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design List with full features
- * - **Hermes**: DaisyUI list with Tailwind utilities
- * - **Apollo**: Pure CSS list with inline styles
+ * - **Classic**: Ant Design List with full features
+ * - **Modern**: DaisyUI list with Tailwind utilities
+ * - **Rustic**: Pure CSS list with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Bordered | ✅ | ✅ | ✅ |
  * | Header/Footer | ✅ | ✅ | ✅ |
@@ -26,20 +26,20 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for pagination
- * <List engine="titan" pagination={{ pageSize: 10 }} />
+ * // Use Classic for pagination
+ * <List engine="classic" pagination={{ pageSize: 10 }} />
  *
- * // Use Hermes for DaisyUI styling
- * <List engine="hermes" bordered />
+ * // Use Modern for DaisyUI styling
+ * <List engine="modern" bordered />
  *
- * // Use Apollo for zero dependencies
- * <List engine="apollo" size="small" />
+ * // Use Rustic for zero dependencies
+ * <List engine="rustic" size="small" />
  * ```
  *
  * @module List/engines
  * @category Display
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

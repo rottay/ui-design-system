@@ -121,7 +121,7 @@ describe('Upload', () => {
     expect(screen.getByTestId('upload')).toBeInTheDocument();
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Upload engine={engine}>Upload with {engine}</Upload>);
     expect(screen.getByTestId('upload')).toBeInTheDocument();
     expect(screen.getByText(`Upload with ${engine}`)).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe('Upload.Dragger', () => {
     expect(screen.getByTestId('upload-dragger')).toHaveClass('custom-dragger');
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Upload.Dragger engine={engine}>Drag files to {engine}</Upload.Dragger>);
     expect(screen.getByTestId('upload-dragger')).toBeInTheDocument();
     expect(screen.getByText(`Drag files to ${engine}`)).toBeInTheDocument();

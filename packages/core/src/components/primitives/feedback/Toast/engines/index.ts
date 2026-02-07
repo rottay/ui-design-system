@@ -4,9 +4,9 @@
  *
  * @remarks
  * This module exports all engine-specific Toast implementations:
- * - **Titan**: Ant Design implementation using message/notification APIs
- * - **Hermes**: DaisyUI/Tailwind implementation with utility classes
- * - **Apollo**: Vanilla HTML/CSS implementation with zero dependencies
+ * - **Classic**: Ant Design implementation using message/notification APIs
+ * - **Modern**: DaisyUI/Tailwind implementation with utility classes
+ * - **Rustic**: Vanilla HTML/CSS implementation with zero dependencies
  *
  * Each engine provides the same component interface but with different
  * underlying styling and behavior appropriate for that engine's framework.
@@ -14,12 +14,12 @@
  * @example Engine Selection
  * ```tsx
  * // Via EngineProvider (recommended)
- * <EngineProvider engine="titan">
+ * <EngineProvider engine="classic">
  *   <Toast variant="success" title="Hello" />
  * </EngineProvider>
  *
  * // Via direct prop
- * <Toast engine="hermes" variant="success" title="Hello" />
+ * <Toast engine="modern" variant="success" title="Hello" />
  * ```
  *
  * @module Toast/Engines
@@ -32,22 +32,22 @@
 // ============================================================================
 
 /**
- * Titan engine implementation - Ant Design based.
+ * Classic engine implementation - Ant Design based.
  * Full-featured with native message and notification APIs.
- * @see {@link TitanToast}
+ * @see {@link ClassicToast}
  */
-export { default as titan } from './titan';
+export { default as classic } from './classic';
 
 /**
- * Hermes engine implementation - DaisyUI/Tailwind based.
+ * Modern engine implementation - DaisyUI/Tailwind based.
  * Utility-first styling with alert component classes.
- * @see {@link HermesToast}
+ * @see {@link ModernToast}
  */
-export { default as hermes } from './hermes';
+export { default as modern } from './modern';
 
 /**
- * Apollo engine implementation - Vanilla HTML/CSS.
+ * Rustic engine implementation - Vanilla HTML/CSS.
  * Zero dependencies, pure inline styles, maximum accessibility.
- * @see {@link ApolloToast}
+ * @see {@link RusticToast}
  */
-export { default as apollo } from './apollo';
+export { default as rustic } from './rustic';

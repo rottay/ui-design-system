@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types support the multi-engine architecture of the Message component,
- * ensuring consistent interfaces across Titan, Hermes, and Apollo engines.
+ * ensuring consistent interfaces across Classic, Modern, and Rustic engines.
  *
  * @module Message/Types
  * @category Feedback

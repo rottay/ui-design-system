@@ -24,9 +24,9 @@
  * - Disable individual panels
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Wraps Ant Design Collapse with full feature parity
- * - **Hermes**: Tailwind CSS implementation with custom state management
- * - **Apollo**: Pure CSS with inline styles and transitions
+ * - **Classic**: Wraps Ant Design Collapse with full feature parity
+ * - **Modern**: Tailwind CSS implementation with custom state management
+ * - **Rustic**: Pure CSS with inline styles and transitions
  *
  * @example Basic Usage
  * ```tsx
@@ -118,9 +118,9 @@
  * ```tsx
  * import { Collapse } from '@rottay/design-system';
  *
- * // Force Hermes (Tailwind) implementation
- * <Collapse engine="hermes" accordion>
- *   <Collapse.Panel engine="hermes" header="Panel 1" panelKey="1">
+ * // Force Modern (Tailwind) implementation
+ * <Collapse engine="modern" accordion>
+ *   <Collapse.Panel engine="modern" header="Panel 1" panelKey="1">
  *     Content
  *   </Collapse.Panel>
  * </Collapse>
@@ -144,15 +144,15 @@ export {
 } from './types';
 
 const CollapseBase = createEngineComponent<CollapseProps>('Collapse', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Collapse })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Collapse })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Collapse })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Collapse })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Collapse })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Collapse })),
 });
 
 const Panel = createEngineComponent<CollapsePanelProps>('Collapse.Panel', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Panel })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Panel })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Panel })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Panel })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Panel })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Panel })),
 });
 
 export const Collapse = Object.assign(CollapseBase, {

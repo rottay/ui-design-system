@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types are designed to be engine-agnostic, ensuring consistent API
- * across Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla) implementations.
+ * across Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla) implementations.
  * The types extend native HTML anchor attributes while adding design system features.
  *
  * @example Importing Types
@@ -167,15 +167,15 @@ export interface LinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>,
    * Override the rendering engine for this specific link instance.
    * Useful for mixing engine styles within the same application.
    *
-   * @default undefined (uses context provider's engine or 'titan')
+   * @default undefined (uses context provider's engine or 'classic')
    *
    * @example
    * ```tsx
-   * <Link engine="hermes" href="/docs">DaisyUI Styled Link</Link>
-   * <Link engine="apollo" href="/about">Vanilla CSS Link</Link>
+   * <Link engine="modern" href="/docs">DaisyUI Styled Link</Link>
+   * <Link engine="rustic" href="/about">Vanilla CSS Link</Link>
    * ```
    */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 
   /**
    * Additional CSS class names to apply to the link element.
@@ -240,8 +240,8 @@ export const LINK_DEFAULTS: Required<Pick<LinkProps, 'type' | 'disabled' | 'unde
  *
  * @description
  * Defines the base color and hover color for each semantic link type.
- * Used by engines that require explicit color values (Apollo, BaseLink).
- * Titan and Hermes engines may use their own color tokens.
+ * Used by engines that require explicit color values (Rustic, BaseLink).
+ * Classic and Modern engines may use their own color tokens.
  *
  * @example
  * ```tsx

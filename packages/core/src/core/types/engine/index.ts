@@ -2,12 +2,12 @@ import type { ComponentType, CSSProperties } from 'react';
 
 /**
  * Nombres de engines disponibles en el sistema Rottay.
- * - titan: Ant Design (enterprise, feature-rich)
- * - hermes: DaisyUI/Tailwind (lightweight, utility-first)
- * - apollo: Vanilla HTML/CSS (minimal, accessible)
+ * - classic: Ant Design (enterprise, structured, corporate)
+ * - modern: DaisyUI/Tailwind (contemporary, rounded, glassmorphism)
+ * - rustic: Vanilla HTML/CSS (minimal, spacious, understated)
  * - athena: Pluggable custom implementations
  */
-export type EngineName = 'titan' | 'hermes' | 'apollo' | 'athena';
+export type EngineName = 'classic' | 'modern' | 'rustic' | 'athena';
 
 /**
  * Props que permiten seleccionar el engine de renderizado.
@@ -16,7 +16,7 @@ export interface EngineAwareProps {
   /**
    * Engine de UI a usar para este componente.
    * Si no se especifica, usa el engine del EngineProvider más cercano.
-   * @default 'titan'
+   * @default 'classic'
    */
   engine?: EngineName;
   /**

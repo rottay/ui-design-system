@@ -211,7 +211,7 @@ describe('QRCode Defaults', () => {
 });
 
 describe('QRCode engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<QRCode engine={engine} value="https://example.com" />);
     expect(screen.getByTestId('qrcode')).toBeInTheDocument();
   });

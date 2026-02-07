@@ -353,7 +353,7 @@ describe('Dropdown engines', () => {
     ],
   };
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Dropdown engine={engine} menu={defaultMenu}>
         <button>Test</button>

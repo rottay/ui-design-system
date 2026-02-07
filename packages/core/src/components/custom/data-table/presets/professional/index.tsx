@@ -6,8 +6,9 @@
  * Uses CSS Grid for table layout to ensure theme compatibility
  */
 
-import { useState, useMemo, useCallback, type ReactNode, type Key } from 'react';
+import React, { useState, useMemo, useCallback, type ReactNode, type Key } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { DataTableProps, DataTableColumn } from '../../core';
 import { ChevronUp, ChevronDown, ChevronRight, ChevronLeft, Search } from 'lucide-react';
 
@@ -38,7 +39,7 @@ export interface BulkAction<T = Record<string, unknown>> {
   danger?: boolean;
 }
 
-export interface ProfessionalDataTableProps<T = Record<string, unknown>> extends Omit<DataTableProps<T>, 'pagination' | 'selectedRowKeys'> {
+export interface ProfessionalDataTableProps<T = Record<string, unknown>> extends Omit<DataTableProps<T>, 'pagination' | 'selectedRowKeys' | 'editable' | 'onCellEdit' | 'columnReorderable' | 'onColumnReorder'> {
   /** Render function for expanded row content */
   expandedRowRender?: (record: T, index: number) => ReactNode;
   /** Default expanded row keys */
@@ -111,6 +112,15 @@ export interface ProfessionalDataTableProps<T = Record<string, unknown>> extends
   emptyState?: ReactNode;
   /** Hide toolbar */
   hideToolbar?: boolean;
+
+  /** Enable inline cell editing (double-click to edit) */
+  editable?: boolean;
+  /** Cell edit handler */
+  onCellEdit?: (rowKey: string, columnKey: string, value: unknown) => void;
+  /** Enable column reordering via drag */
+  columnReorderable?: boolean;
+  /** Column reorder handler */
+  onColumnReorder?: (columns: DataTableColumn[]) => void;
 }
 
 // ============================================================================
@@ -147,7 +157,7 @@ function compareValues(a: unknown, b: unknown, direction: 'asc' | 'desc'): numbe
 
 export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & Record<string, unknown>>({
   name: 'DataTable.Professional',
-  render: ({ primitives, props }: PresetContext<ProfessionalDataTableProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<ProfessionalDataTableProps>) => {
     const { Box, Flex, Stack, Text, Button, Input, Badge, Card, Spinner } = primitives;
     const {
       columns,
@@ -190,6 +200,12 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       // Empty
       emptyState,
       hideToolbar = false,
+      // Inline editing
+      editable = false,
+      onCellEdit,
+      // Column reorder
+      columnReorderable = false,
+      onColumnReorder,
     } = props;
 
     // ========================================================================
@@ -202,6 +218,11 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
     const [internalSelectedKeys, setInternalSelectedKeys] = useState<Key[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [hoveredRowKey, setHoveredRowKey] = useState<Key | null>(null);
+    const [editingCell, setEditingCell] = useState<{ rowKey: string; colKey: string } | null>(null);
+    const [editValue, setEditValue] = useState<string>('');
+    const [draggedColKey, setDraggedColKey] = useState<string | null>(null);
+    const [dragOverColKey, setDragOverColKey] = useState<string | null>(null);
+    const [columnOrder, setColumnOrder] = useState<string[]>(() => (columns as DataTableColumn<unknown>[]).map(c => c.key));
 
     // Controlled vs uncontrolled
     const filterValue = controlledFilterValue ?? internalFilter;
@@ -218,6 +239,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
     // Size-based styling
     const cellPadding = size === 'small' ? '8px 12px' : size === 'large' ? '16px 20px' : '12px 16px';
     const fontSize = size === 'small' ? 12 : size === 'large' ? 14 : 13;
+    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
 
     // ========================================================================
     // Handlers
@@ -279,6 +301,76 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       const newRecords = data.filter((r, i) => newKeys.includes(getRowKey(r as Record<string, unknown>, i)));
       handleSelectionChange(newKeys, newRecords);
     }, [selectedKeys, data, getRowKey, handleSelectionChange]);
+
+    // Inline editing handlers
+    const startEditing = useCallback((rKey: string, colKey: string, currentValue: unknown) => {
+      if (!editable) return;
+      const col = (columns as DataTableColumn<unknown>[]).find(c => c.key === colKey);
+      if (col && col.editable === false) return;
+      setEditingCell({ rowKey: rKey, colKey });
+      setEditValue(currentValue != null ? String(currentValue) : '');
+    }, [editable, columns]);
+
+    const commitEdit = useCallback(() => {
+      if (editingCell) {
+        onCellEdit?.(editingCell.rowKey, editingCell.colKey, editValue);
+        setEditingCell(null);
+        setEditValue('');
+      }
+    }, [editingCell, editValue, onCellEdit]);
+
+    const cancelEdit = useCallback(() => {
+      setEditingCell(null);
+      setEditValue('');
+    }, []);
+
+    // Column reorder handlers
+    const handleColumnDragStart = useCallback((e: React.DragEvent, colKey: string) => {
+      if (!columnReorderable) return;
+      setDraggedColKey(colKey);
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', colKey);
+    }, [columnReorderable]);
+
+    const handleColumnDragOver = useCallback((e: React.DragEvent, colKey: string) => {
+      if (!columnReorderable || !draggedColKey) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      setDragOverColKey(colKey);
+    }, [columnReorderable, draggedColKey]);
+
+    const handleColumnDrop = useCallback((e: React.DragEvent, targetColKey: string) => {
+      e.preventDefault();
+      if (!draggedColKey || draggedColKey === targetColKey) {
+        setDraggedColKey(null);
+        setDragOverColKey(null);
+        return;
+      }
+      const newOrder = [...columnOrder];
+      const fromIdx = newOrder.indexOf(draggedColKey);
+      const toIdx = newOrder.indexOf(targetColKey);
+      if (fromIdx === -1 || toIdx === -1) return;
+      newOrder.splice(fromIdx, 1);
+      newOrder.splice(toIdx, 0, draggedColKey);
+      setColumnOrder(newOrder);
+      const reorderedCols = newOrder.map(key => (columns as DataTableColumn<unknown>[]).find(c => c.key === key)!).filter(Boolean);
+      onColumnReorder?.(reorderedCols as DataTableColumn[]);
+      setDraggedColKey(null);
+      setDragOverColKey(null);
+    }, [draggedColKey, columnOrder, columns, onColumnReorder]);
+
+    const handleColumnDragEnd = useCallback(() => {
+      setDraggedColKey(null);
+      setDragOverColKey(null);
+    }, []);
+
+    // Ordered columns (respecting drag reorder)
+    const orderedColumns = useMemo(() => {
+      if (!columnReorderable) return columns as DataTableColumn<unknown>[];
+      return columnOrder
+        .map(key => (columns as DataTableColumn<unknown>[]).find(c => c.key === key))
+        .filter((c): c is DataTableColumn<unknown> => c != null);
+    }, [columns, columnOrder, columnReorderable]);
 
     // ========================================================================
     // Data Processing
@@ -344,7 +436,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       if (selectable) parts.push('40px');
 
       // Data columns
-      (columns as DataTableColumn<unknown>[]).forEach((col) => {
+      orderedColumns.forEach((col) => {
         if (col.width) {
           parts.push(typeof col.width === 'number' ? `${col.width}px` : col.width);
         } else {
@@ -356,7 +448,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       if (rowActions.length > 0) parts.push('100px');
 
       return parts.join(' ');
-    }, [columns, expandedRowRender, selectable, rowActions.length]);
+    }, [orderedColumns, expandedRowRender, selectable, rowActions.length]);
 
     // ========================================================================
     // Render: Toolbar
@@ -440,7 +532,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                       variant={isActive ? 'primary' : 'ghost'}
                       onClick={() => handleFilterChange(filter.value)}
                       style={{
-                        borderRadius: '6px',
+                        borderRadius: tokens.borderRadius.md,
                         padding: '6px 14px',
                         fontSize: 12,
                         fontWeight: 500,
@@ -448,7 +540,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                         letterSpacing: '0.5px',
                         border: isActive ? 'none' : '1px solid var(--ds-color-border-secondary)',
                         backgroundColor: isActive ? 'var(--ds-color-primary)' : 'transparent',
-                        color: isActive ? 'white' : 'var(--ds-color-text-secondary)',
+                        color: isActive ? tokens.colors.common.white : 'var(--ds-color-text-secondary)',
                       }}
                     >
                       {filter.icon}
@@ -536,20 +628,28 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
         )}
 
         {/* Column headers */}
-        {(columns as DataTableColumn<unknown>[]).map((col) => {
+        {orderedColumns.map((col) => {
           const isSorted = sortState?.key === col.key;
           const sortDirection = isSorted ? sortState.direction : null;
+          const isDragOver = dragOverColKey === col.key && draggedColKey !== col.key;
 
           return (
             <Box
               key={col.key}
+              draggable={columnReorderable}
+              onDragStart={columnReorderable ? (e: React.DragEvent) => handleColumnDragStart(e, col.key) : undefined}
+              onDragOver={columnReorderable ? (e: React.DragEvent) => handleColumnDragOver(e, col.key) : undefined}
+              onDrop={columnReorderable ? (e: React.DragEvent) => handleColumnDrop(e, col.key) : undefined}
+              onDragEnd={columnReorderable ? handleColumnDragEnd : undefined}
               style={{
                 padding: cellPadding,
-                cursor: col.sortable ? 'pointer' : 'default',
+                cursor: columnReorderable ? 'grab' : col.sortable ? 'pointer' : 'default',
                 userSelect: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
+                borderLeft: isDragOver ? '2px solid var(--ds-color-primary)' : '2px solid transparent',
+                opacity: draggedColKey === col.key ? 0.5 : 1,
               }}
               onClick={col.sortable ? () => handleSort(col.key) : undefined}
             >
@@ -631,7 +731,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                   : 'var(--ds-color-bg-primary)',
               borderBottom: isExpanded ? 'none' : '1px solid var(--ds-color-border-secondary)',
               cursor: (expandedRowRender || onRowClick) ? 'pointer' : 'default',
-              transition: 'background-color 0.15s ease',
+              transition: `all ${tokens.motion.hover}`,
             }}
             onClick={handleRowClick}
             onMouseEnter={() => setHoveredRowKey(key)}
@@ -662,16 +762,16 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    transition: 'all 0.15s ease',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   <ChevronDown
                     style={{
                       width: 14,
                       height: 14,
-                      color: isExpanded ? 'white' : 'var(--ds-color-text-muted)',
+                      color: isExpanded ? tokens.colors.common.white : 'var(--ds-color-text-muted)',
                       transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
-                      transition: 'transform 0.15s ease',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   />
                 </Box>
@@ -704,8 +804,47 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
             )}
 
             {/* Data cells */}
-            {(columns as DataTableColumn<unknown>[]).map((col) => {
+            {orderedColumns.map((col) => {
               const value = getValue(rec, col.dataIndex as string);
+              const isEditing = editable && editingCell?.rowKey === key && editingCell?.colKey === col.key;
+              const isColEditable = editable && col.editable !== false && !col.render;
+
+              if (isEditing) {
+                return (
+                  <Box
+                    key={col.key}
+                    style={{
+                      padding: '4px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                  >
+                    <input
+                      type="text"
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={commitEdit}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') commitEdit();
+                        if (e.key === 'Escape') cancelEdit();
+                      }}
+                      autoFocus
+                      style={{
+                        width: '100%',
+                        padding: '4px 8px',
+                        border: '2px solid var(--ds-color-primary)',
+                        borderRadius: 4,
+                        fontSize,
+                        outline: 'none',
+                        backgroundColor: tokens.colors.common.white,
+                        fontFamily: 'inherit',
+                      }}
+                    />
+                  </Box>
+                );
+              }
+
               const content = col.render
                 ? col.render(value, rec as Record<string, unknown>, index)
                 : String(value ?? '');
@@ -713,12 +852,14 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
               return (
                 <Box
                   key={col.key}
+                  onDoubleClick={isColEditable ? () => startEditing(String(key), col.key, value) : undefined}
                   style={{
                     padding: cellPadding,
                     display: 'flex',
                     alignItems: 'center',
                     overflow: 'hidden',
                     textAlign: col.align || 'left',
+                    cursor: isColEditable ? 'text' : 'default',
                   }}
                 >
                   {typeof content === 'string' ? (

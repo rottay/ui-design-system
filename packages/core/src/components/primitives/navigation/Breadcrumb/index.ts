@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Breadcrumb component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -102,10 +102,10 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Breadcrumb engine="hermes" items={items} />
+ * <Breadcrumb engine="modern" items={items} />
  * // Renders with DaisyUI/Tailwind styling
  *
- * <Breadcrumb engine="apollo" items={items} />
+ * <Breadcrumb engine="rustic" items={items} />
  * // Renders with pure HTML/CSS (zero dependencies)
  * ```
  *
@@ -185,11 +185,11 @@ export type { BreadcrumbItemProps } from './compound';
 export const Breadcrumb = Object.assign(
   createEngineComponent<BreadcrumbProps>('Breadcrumb', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

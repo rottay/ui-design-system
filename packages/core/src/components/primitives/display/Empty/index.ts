@@ -10,9 +10,9 @@
  * It supports multiple image variants and custom content.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Empty with built-in image presets
- * - **Hermes**: DaisyUI-styled empty with theme-aware colors
- * - **Apollo**: Pure HTML/CSS with maximum accessibility
+ * - **Classic**: Ant Design Empty with built-in image presets
+ * - **Modern**: DaisyUI-styled empty with theme-aware colors
+ * - **Rustic**: Pure HTML/CSS with maximum accessibility
  *
  * **Key Features:**
  * - Default and simple image variants
@@ -56,7 +56,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Empty engine="apollo" description="Custom engine" />
+ * <Empty engine="rustic" description="Custom engine" />
  * ```
  *
  * @see {@link EmptyProps} for component props
@@ -81,17 +81,17 @@ export { EMPTY_DEFAULTS } from './types';
  * Automatically selects the appropriate rendering engine based on:
  * 1. The `engine` prop passed directly to the component
  * 2. The nearest EngineProvider context
- * 3. The default engine (Titan)
+ * 3. The default engine (Classic)
  *
  * Each engine provides a different implementation:
- * - **Titan**: Ant Design Empty component
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure HTML/CSS implementation
+ * - **Classic**: Ant Design Empty component
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure HTML/CSS implementation
  */
 export const Empty = createEngineComponent<EmptyProps>('Empty', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Empty;

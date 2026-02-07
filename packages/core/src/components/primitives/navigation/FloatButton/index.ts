@@ -7,7 +7,7 @@
  *
  * @remarks
  * The FloatButton component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -82,7 +82,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <FloatButton engine="hermes" icon={<PlusOutlined />}>
+ * <FloatButton engine="modern" icon={<PlusOutlined />}>
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  * </FloatButton>
  * ```
@@ -120,11 +120,11 @@ export {
  */
 const FloatButtonBase = createEngineComponent<FloatButtonProps>('FloatButton', {
   /** Ant Design implementation - full-featured with animations */
-  titan: () => import('./engines/titan').then(m => ({ default: m.FloatButton })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.FloatButton })),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.FloatButton })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.FloatButton })),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.FloatButton })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.FloatButton })),
 });
 
 /**
@@ -134,11 +134,11 @@ const FloatButtonBase = createEngineComponent<FloatButtonProps>('FloatButton', {
  */
 const Group = createEngineComponent<FloatButtonGroupProps>('FloatButton.Group', {
   /** Ant Design implementation - full-featured with animations */
-  titan: () => import('./engines/titan').then(m => ({ default: m.Group })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Group })),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Group })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Group })),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Group })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Group })),
 });
 
 /**
@@ -148,11 +148,11 @@ const Group = createEngineComponent<FloatButtonGroupProps>('FloatButton.Group', 
  */
 const BackTop = createEngineComponent<FloatButtonBackTopProps>('FloatButton.BackTop', {
   /** Ant Design implementation - full-featured with animations */
-  titan: () => import('./engines/titan').then(m => ({ default: m.BackTop })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.BackTop })),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.BackTop })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.BackTop })),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.BackTop })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.BackTop })),
 });
 
 // ============================================================================

@@ -8,12 +8,12 @@
  * Each engine provides the same table functionality with different styling.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Table with full features
- * - **Hermes**: DaisyUI table with Tailwind utilities
- * - **Apollo**: Pure CSS table with inline styles
+ * - **Classic**: Ant Design Table with full features
+ * - **Modern**: DaisyUI table with Tailwind utilities
+ * - **Rustic**: Pure CSS table with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Sorting | ✅ | ✅ | ✅ |
  * | Filtering | ✅ | ❌ | ❌ |
@@ -26,23 +26,23 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for full features
- * <Table engine="titan" expandable virtual />
+ * // Use Classic for full features
+ * <Table engine="classic" expandable virtual />
  *
- * // Use Hermes for DaisyUI styling
- * <Table engine="hermes" bordered />
+ * // Use Modern for DaisyUI styling
+ * <Table engine="modern" bordered />
  *
- * // Use Apollo for zero dependencies
- * <Table engine="apollo" size="small" />
+ * // Use Rustic for zero dependencies
+ * <Table engine="rustic" size="small" />
  * ```
  *
- * @see {@link TitanTable} for Ant Design implementation
- * @see {@link HermesTable} for DaisyUI implementation
- * @see {@link ApolloTable} for vanilla implementation
+ * @see {@link ClassicTable} for Ant Design implementation
+ * @see {@link ModernTable} for DaisyUI implementation
+ * @see {@link RusticTable} for vanilla implementation
  * @module Table/engines
  * @category Display
  * @package @rottay/design-system
  */
-export { Table as TitanTable } from './titan';
-export { Table as HermesTable } from './hermes';
-export { Table as ApolloTable } from './apollo';
+export { Table as ClassicTable } from './classic';
+export { Table as ModernTable } from './modern';
+export { Table as RusticTable } from './rustic';

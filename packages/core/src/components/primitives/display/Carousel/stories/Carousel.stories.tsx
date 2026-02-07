@@ -42,7 +42,7 @@ const meta: Meta<typeof Carousel> = {
         component: `
 A flexible carousel/slider component for displaying rotating content such as
 images, cards, or any custom content. Supports multiple rendering engines
-(Titan/Ant Design, Hermes/DaisyUI, Apollo/Vanilla) with consistent API.
+(Classic/Ant Design, Modern/DaisyUI, Rustic/Vanilla) with consistent API.
 
 ## Features
 - Autoplay with configurable speed
@@ -106,7 +106,7 @@ images, cards, or any custom content. Supports multiple rendering engines
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -240,7 +240,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Carousel rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Carousel rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

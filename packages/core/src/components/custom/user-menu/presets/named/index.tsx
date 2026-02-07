@@ -1,24 +1,39 @@
 'use client';
 
 /**
- * UserMenu - Named Preset (Avatar + Name)
+ * UserMenu - Named Preset
+ * Avatar + Name + chevron trigger with dropdown menu.
+ * Default preset. Balanced between minimal and detailed.
  */
 
 import { useState, useRef, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { UserMenuProps } from '../../core';
 
 export const NamedUserMenu = createPreset<UserMenuProps>({
   name: 'UserMenu.Named',
-  render: ({ primitives, props, tokens }: PresetContext<UserMenuProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<UserMenuProps>) => {
     const { Box, Card, Stack, Avatar } = primitives;
-    const { user, items = [], onLogout, showLogout = true, className, style } = props;
+    const {
+      user,
+      items = [],
+      onLogout,
+      showLogout = true,
+      className,
+      style,
+    } = props;
+
     const [isOpen, setIsOpen] = useState(false);
+    const [isTriggerHovered, setIsTriggerHovered] = useState(false);
+    const [hoveredKey, setHoveredKey] = useState<string | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
-        if (menuRef.current && !menuRef.current.contains(e.target as Node)) setIsOpen(false);
+        if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+          setIsOpen(false);
+        }
       };
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -26,43 +41,148 @@ export const NamedUserMenu = createPreset<UserMenuProps>({
 
     const allItems = [...items];
     if (showLogout && onLogout) {
-      if (items.length > 0) allItems.push({ key: 'divider', label: '', divider: true });
-      allItems.push({ key: 'logout', label: 'Logout', danger: true, onClick: onLogout });
+      if (items.length > 0) {
+        allItems.push({ key: 'divider', label: '', divider: true });
+      }
+      allItems.push({
+        key: 'logout',
+        label: 'Logout',
+        danger: true,
+        onClick: onLogout,
+      });
     }
 
+    const dropdownSurface = createSurfaceStyle(tokens, {
+      elevation: 'lg',
+      glass: engine === 'modern',
+    });
+
     return (
-      <div ref={menuRef} className={className} style={{ position: 'relative', display: 'inline-block', ...style }}>
+      <div
+        ref={menuRef}
+        className={className}
+        style={{ position: 'relative', display: 'inline-block', ...style }}
+      >
+        {/* Named trigger: Avatar + Name + Arrow */}
         <div
           onClick={() => setIsOpen(!isOpen)}
+          onMouseEnter={() => setIsTriggerHovered(true)}
+          onMouseLeave={() => setIsTriggerHovered(false)}
           style={{
-            cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2],
-            padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`, borderRadius: '0.375rem',
-            transition: 'background-color 0.2s',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: tokens.spacing[2],
+            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+            borderRadius: tokens.borderRadius.md,
+            transition: `all ${tokens.motion.hover}`,
+            backgroundColor: isTriggerHovered ? tokens.colors.neutral[100] : 'transparent',
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[100]; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
         >
-          <Avatar src={user.avatar} size="sm">{!user.avatar && user.name.charAt(0).toUpperCase()}</Avatar>
-          <Box style={{ fontWeight: 500 }}>{user.name}</Box>
-          <Box style={{ fontSize: '12px', color: tokens.colors.neutral[400] }}>▼</Box>
+          <Avatar src={user.avatar} size="sm">
+            {!user.avatar && user.name.charAt(0).toUpperCase()}
+          </Avatar>
+          <Box style={{ fontWeight: tokens.typography.fontWeight.medium }}>
+            {user.name}
+          </Box>
+          <Box style={{
+            fontSize: tokens.typography.fontSize.xs,
+            color: tokens.colors.neutral[400],
+            transition: `all ${tokens.motion.hover}`,
+          }}>
+            {isOpen ? '\u25B2' : '\u25BC'}
+          </Box>
         </div>
 
+        {/* Dropdown menu */}
         {isOpen && (
-          <Card variant="elevated" padding="none" style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px', minWidth: '220px', zIndex: 1000 }}>
-            <Box style={{ padding: tokens.spacing[4], borderBottom: `1px solid ${tokens.colors.neutral[200]}` }}>
-              <Box style={{ fontWeight: 600, marginBottom: '4px' }}>{user.name}</Box>
-              {user.email && <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>{user.email}</Box>}
-              {user.role && <Box style={{ marginTop: '8px', padding: '2px 8px', backgroundColor: tokens.colors.neutral[100], borderRadius: '0.25rem', fontSize: tokens.typography.fontSize.xs, display: 'inline-block' }}>{user.role}</Box>}
+          <Card
+            variant="elevated"
+            padding="none"
+            style={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+              marginTop: tokens.spacing[2],
+              minWidth: '220px',
+              zIndex: 1000,
+              boxShadow: tokens.shadows.lg,
+              ...dropdownSurface,
+            }}
+          >
+            {/* User info header */}
+            <Box style={{
+              padding: tokens.spacing[4],
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+            }}>
+              <Box style={{
+                fontWeight: tokens.typography.fontWeight.semibold,
+                marginBottom: tokens.spacing[1],
+              }}>
+                {user.name}
+              </Box>
+              {user.email && (
+                <Box style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[500],
+                }}>
+                  {user.email}
+                </Box>
+              )}
+              {user.role && (
+                <Box style={{
+                  marginTop: tokens.spacing[2],
+                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                  backgroundColor: tokens.colors.neutral[100],
+                  borderRadius: tokens.borderRadius.sm,
+                  fontSize: tokens.typography.fontSize.xs,
+                  display: 'inline-block',
+                }}>
+                  {user.role}
+                </Box>
+              )}
             </Box>
+
+            {/* Menu items */}
             <Stack direction="vertical" spacing="none">
               {allItems.map((item) => {
-                if (item.divider) return <Box key={item.key} style={{ height: '1px', backgroundColor: tokens.colors.neutral[200], margin: `${tokens.spacing[2]} 0` }} />;
+                if (item.divider) {
+                  return (
+                    <Box
+                      key={item.key}
+                      style={{
+                        height: '1px',
+                        backgroundColor: tokens.colors.neutral[200],
+                        margin: `${tokens.spacing[2]}px 0`,
+                      }}
+                    />
+                  );
+                }
+
+                const isHovered = hoveredKey === item.key;
+
                 return (
-                  <div key={item.key} onClick={() => { item.onClick?.(); setIsOpen(false); }}
-                    style={{ padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: tokens.spacing[2], color: item.danger ? '#DC2626' : undefined, backgroundColor: 'transparent', transition: 'background-color 0.2s' }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[100]; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}>
-                    {item.icon}<span>{item.label}</span>
+                  <div
+                    key={item.key}
+                    onClick={() => {
+                      item.onClick?.();
+                      setIsOpen(false);
+                    }}
+                    style={{
+                      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: tokens.spacing[2],
+                      color: item.danger ? tokens.colors.errorScale[600] : undefined,
+                      backgroundColor: isHovered ? tokens.colors.neutral[100] : 'transparent',
+                      transition: `all ${tokens.motion.hover}`,
+                    }}
+                    onMouseEnter={() => setHoveredKey(item.key)}
+                    onMouseLeave={() => setHoveredKey(null)}
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
                   </div>
                 );
               })}

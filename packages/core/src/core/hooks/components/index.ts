@@ -13,7 +13,7 @@
  * @example Using component token hooks
  * ```tsx
  * // In an engine implementation
- * function CollapseTitan(props: CollapseProps) {
+ * function CollapseClassic(props: CollapseProps) {
  *   const { rootStyle, classNames, getSlotStyle } = useCollapseTokens(props);
  *
  *   return (

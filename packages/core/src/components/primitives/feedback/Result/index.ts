@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Result component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -138,7 +138,7 @@
  * import { Result } from '@rottay/design-system';
  *
  * // Force a specific rendering engine
- * <Result engine="hermes" status="info" title="Using DaisyUI styling">
+ * <Result engine="modern" status="info" title="Using DaisyUI styling">
  *   Renders with DaisyUI/Tailwind styling
  * </Result>
  * ```
@@ -206,11 +206,11 @@ export {
  */
 export const Result = createEngineComponent<ResultProps>('Result', {
   /** Ant Design implementation - full-featured with native result component */
-  titan: () => import('./engines/titan'),
+  classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes'),
+  modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Result;

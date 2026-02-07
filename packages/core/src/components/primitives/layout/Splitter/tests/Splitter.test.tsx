@@ -235,7 +235,7 @@ describe('Splitter composition', () => {
 });
 
 describe('Splitter engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Splitter engine={engine}>
         <Splitter.Panel>Test</Splitter.Panel>

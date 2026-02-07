@@ -288,7 +288,7 @@ describe('Mentions', () => {
 });
 
 describe('Mentions engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Mentions engine={engine} />);
     expect(screen.getByTestId('mentions')).toBeInTheDocument();
   });

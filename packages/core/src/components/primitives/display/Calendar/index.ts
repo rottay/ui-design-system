@@ -7,9 +7,9 @@
  *
  * @remarks
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Calendar with dayjs integration
- * - **Hermes**: DaisyUI/Tailwind calendar with responsive design
- * - **Apollo**: Pure CSS calendar with maximum accessibility
+ * - **Classic**: Ant Design Calendar with dayjs integration
+ * - **Modern**: DaisyUI/Tailwind calendar with responsive design
+ * - **Rustic**: Pure CSS calendar with maximum accessibility
  *
  * **Key Features:**
  * - Month and year view modes
@@ -72,7 +72,7 @@ export {
 } from './types';
 
 export const Calendar = createEngineComponent<CalendarProps>('Calendar', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

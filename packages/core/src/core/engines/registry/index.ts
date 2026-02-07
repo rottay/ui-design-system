@@ -11,15 +11,15 @@
  * - **Defaults**: Get default engine configuration
  *
  * Available engines:
- * - `titan`: Ant Design (stable) - Full-featured
- * - `hermes`: DaisyUI (stable) - Lightweight
- * - `apollo`: Vanilla (stable) - Zero dependencies
+ * - `classic`: Ant Design (stable) - Enterprise, structured
+ * - `modern`: DaisyUI (stable) - Contemporary, rounded
+ * - `rustic`: Vanilla (stable) - Minimal, spacious
  * - `athena`: Pluggable (experimental) - Custom implementations
  *
  * @example Get engine info
  * ```tsx
- * const config = getEngine('titan');
- * console.log(config.displayName); // 'Titan (Ant Design)'
+ * const config = getEngine('classic');
+ * console.log(config.displayName); // 'Classic (Ant Design)'
  * ```
  *
  * @example Validate engine name
@@ -43,27 +43,27 @@ import type { EngineName, EngineConfig } from '../../types';
  * Registry of all available engines
  *
  * Engines:
- * - titan: Ant Design - Full-featured enterprise UI
- * - hermes: DaisyUI/Tailwind - Utility-first styling
- * - apollo: Pure HTML/CSS - Minimal, framework-agnostic
+ * - classic: Ant Design - Enterprise, structured, corporate feel
+ * - modern: DaisyUI/Tailwind - Contemporary, rounded, glassmorphism
+ * - rustic: Pure HTML/CSS - Minimal, spacious, understated
  * - athena: Pluggable - Custom implementation support
  */
 export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
-  titan: {
-    name: 'titan',
-    displayName: 'Titan (Ant Design)',
+  classic: {
+    name: 'classic',
+    displayName: 'Classic (Ant Design)',
     library: 'antd',
     status: 'stable',
   },
-  hermes: {
-    name: 'hermes',
-    displayName: 'Hermes (DaisyUI)',
+  modern: {
+    name: 'modern',
+    displayName: 'Modern (DaisyUI)',
     library: 'daisyui',
     status: 'stable',
   },
-  apollo: {
-    name: 'apollo',
-    displayName: 'Apollo (HTML)',
+  rustic: {
+    name: 'rustic',
+    displayName: 'Rustic (HTML)',
     library: 'html',
     status: 'stable',
   },
@@ -78,16 +78,7 @@ export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
 /**
  * Retrieves the configuration for a specific engine by name.
  *
- * @example
- * ```tsx
- * import { getEngine } from '@rottay/design-system';
- *
- * const titanConfig = getEngine('titan');
- * console.log(titanConfig.displayName); // 'Titan (Ant Design)'
- * console.log(titanConfig.status); // 'stable'
- * ```
- *
- * @param name - The engine name ('titan', 'hermes', 'apollo', or 'athena')
+ * @param name - The engine name ('classic', 'modern', 'rustic', or 'athena')
  * @returns The engine configuration object containing name, displayName, library, and status
  */
 export const getEngine = (name: EngineName): EngineConfig => {
@@ -96,17 +87,6 @@ export const getEngine = (name: EngineName): EngineConfig => {
 
 /**
  * Returns a list of all available engine names in the design system.
- *
- * @example
- * ```tsx
- * import { getAvailableEngines } from '@rottay/design-system';
- *
- * const engines = getAvailableEngines();
- * // ['titan', 'hermes', 'apollo', 'athena']
- *
- * // Use in a select dropdown
- * <Select options={engines.map(e => ({ value: e, label: e }))} />
- * ```
  *
  * @returns Array of all engine names including experimental ones
  */
@@ -118,20 +98,6 @@ export const getAvailableEngines = (): EngineName[] => {
  * Returns only the production-ready (stable) engines.
  * Excludes experimental or deprecated engines.
  *
- * @example
- * ```tsx
- * import { getStableEngines } from '@rottay/design-system';
- *
- * const stableEngines = getStableEngines();
- * // ['titan', 'hermes', 'apollo'] - excludes 'athena' (experimental)
- *
- * // Show only stable options to users
- * const engineOptions = stableEngines.map(engine => ({
- *   value: engine,
- *   label: getEngine(engine).displayName
- * }));
- * ```
- *
  * @returns Array of engine names with 'stable' status
  */
 export const getStableEngines = (): EngineName[] => {
@@ -142,26 +108,6 @@ export const getStableEngines = (): EngineName[] => {
 
 /**
  * Type guard to check if a string is a valid engine name.
- * Useful for validating user input or configuration values.
- *
- * @example
- * ```tsx
- * import { isValidEngine } from '@rottay/design-system';
- *
- * function setEngine(engineName: string) {
- *   if (isValidEngine(engineName)) {
- *     // TypeScript knows engineName is EngineName here
- *     return getEngine(engineName);
- *   }
- *   throw new Error(`Invalid engine: ${engineName}`);
- * }
- *
- * // Validate URL parameter
- * const urlEngine = searchParams.get('engine');
- * if (urlEngine && isValidEngine(urlEngine)) {
- *   useEngine(urlEngine);
- * }
- * ```
  *
  * @param name - String value to validate as an engine name
  * @returns True if the name is a valid EngineName, false otherwise
@@ -172,24 +118,10 @@ export const isValidEngine = (name: string): name is EngineName => {
 
 /**
  * Returns the default engine used when no engine is specified.
- * Currently defaults to 'titan' (Ant Design).
+ * Currently defaults to 'classic' (Ant Design).
  *
- * @example
- * ```tsx
- * import { getDefaultEngine, EngineProvider } from '@rottay/design-system';
- *
- * // Use default engine for the provider
- * <EngineProvider defaultEngine={getDefaultEngine()}>
- *   <App />
- * </EngineProvider>
- *
- * // Check if user has overridden the default
- * const userEngine = localStorage.getItem('preferredEngine');
- * const engine = userEngine || getDefaultEngine();
- * ```
- *
- * @returns The default engine name ('titan')
+ * @returns The default engine name ('classic')
  */
 export const getDefaultEngine = (): EngineName => {
-  return 'titan';
+  return 'classic';
 };

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Splitter Engine Exports - Rottay Design System
  * @description Barrel export for all Splitter engine implementations.
- * Provides Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla) engines
+ * Provides Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla) engines
  * with Splitter and Panel sub-components.
  *
  * @module Splitter/Engines
@@ -9,6 +9,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan, Splitter as TitanSplitter, Panel as TitanPanel } from './titan';
-export { default as hermes, Splitter as HermesSplitter, Panel as HermesPanel } from './hermes';
-export { default as apollo, Splitter as ApolloSplitter, Panel as ApolloPanel } from './apollo';
+export { default as classic, Splitter as ClassicSplitter, Panel as ClassicPanel } from './classic';
+export { default as modern, Splitter as ModernSplitter, Panel as ModernPanel } from './modern';
+export { default as rustic, Splitter as RusticSplitter, Panel as RusticPanel } from './rustic';

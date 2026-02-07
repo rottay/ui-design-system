@@ -5,23 +5,23 @@
  * @remarks
  * This file provides a unified export point for all three engine
  * implementations of the Affix component:
- * - **Titan**: Ant Design-based, full-featured implementation
- * - **Hermes**: DaisyUI/Tailwind-based, utility-first implementation
- * - **Apollo**: Vanilla HTML/CSS, zero-dependency implementation
+ * - **Classic**: Ant Design-based, full-featured implementation
+ * - **Modern**: DaisyUI/Tailwind-based, utility-first implementation
+ * - **Rustic**: Vanilla HTML/CSS, zero-dependency implementation
  *
  * These exports are consumed by the engine factory to dynamically
  * load the appropriate implementation based on context.
  *
  * @example Engine Factory Usage
  * ```tsx
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
- * const engines = { titan, hermes, apollo };
+ * const engines = { classic, modern, rustic };
  * ```
  *
- * @see {@link TitanAffix} for Ant Design implementation
- * @see {@link HermesAffix} for DaisyUI implementation
- * @see {@link ApolloAffix} for Vanilla implementation
+ * @see {@link ClassicAffix} for Ant Design implementation
+ * @see {@link ModernAffix} for DaisyUI implementation
+ * @see {@link RusticAffix} for Vanilla implementation
  *
  * @module Affix/Engines
  * @category Navigation
@@ -32,11 +32,11 @@
 // Engine Exports
 // ============================================================================
 
-/** Titan engine - Ant Design implementation */
-export { default as titan } from './titan';
+/** Classic engine - Ant Design implementation */
+export { default as classic } from './classic';
 
-/** Hermes engine - DaisyUI/Tailwind implementation */
-export { default as hermes } from './hermes';
+/** Modern engine - DaisyUI/Tailwind implementation */
+export { default as modern } from './modern';
 
-/** Apollo engine - Vanilla HTML/CSS implementation */
-export { default as apollo } from './apollo';
+/** Rustic engine - Vanilla HTML/CSS implementation */
+export { default as rustic } from './rustic';

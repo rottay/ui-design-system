@@ -1,7 +1,7 @@
 /**
  * @fileoverview Layout Engine Exports - Rottay Design System
  * @description Barrel export for all Layout engine implementations.
- * Provides Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla) engines
+ * Provides Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla) engines
  * with all sub-components (Layout, Header, Sider, Content, Footer).
  *
  * @module Layout/Engines
@@ -9,6 +9,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan, Layout as TitanLayout, Header as TitanHeader, Sider as TitanSider, Content as TitanContent, Footer as TitanFooter } from './titan';
-export { default as hermes, Layout as HermesLayout, Header as HermesHeader, Sider as HermesSider, Content as HermesContent, Footer as HermesFooter } from './hermes';
-export { default as apollo, Layout as ApolloLayout, Header as ApolloHeader, Sider as ApolloSider, Content as ApolloContent, Footer as ApolloFooter } from './apollo';
+export { default as classic, Layout as ClassicLayout, Header as ClassicHeader, Sider as ClassicSider, Content as ClassicContent, Footer as ClassicFooter } from './classic';
+export { default as modern, Layout as ModernLayout, Header as ModernHeader, Sider as ModernSider, Content as ModernContent, Footer as ModernFooter } from './modern';
+export { default as rustic, Layout as RusticLayout, Header as RusticHeader, Sider as RusticSider, Content as RusticContent, Footer as RusticFooter } from './rustic';

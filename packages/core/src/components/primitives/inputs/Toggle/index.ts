@@ -11,9 +11,9 @@
  * controlled and uncontrolled modes, inline labels, and loading states.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Wraps Ant Design Switch with full feature support
- * - **Hermes**: Uses DaisyUI toggle classes with Tailwind styling
- * - **Apollo**: Pure CSS implementation with comprehensive a11y support
+ * - **Classic**: Wraps Ant Design Switch with full feature support
+ * - **Modern**: Uses DaisyUI toggle classes with Tailwind styling
+ * - **Rustic**: Pure CSS implementation with comprehensive a11y support
  *
  * **Key Features:**
  * - Controlled and uncontrolled state management
@@ -91,9 +91,9 @@ export {
 
 
 export const Toggle = createEngineComponent<ToggleProps>('Toggle', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 Toggle.displayName = 'Toggle';

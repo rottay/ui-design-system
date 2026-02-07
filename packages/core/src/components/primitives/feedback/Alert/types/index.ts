@@ -5,8 +5,8 @@
  *
  * @remarks
  * This module defines the core TypeScript interfaces for the Alert component.
- * The types are designed to work across all three rendering engines (Titan,
- * Hermes, Apollo) while providing a consistent API for developers.
+ * The types are designed to work across all three rendering engines (Classic,
+ * Modern, Rustic) while providing a consistent API for developers.
  *
  * **Type Categories:**
  * - `AlertType`: Semantic variants (info, success, warning, error)

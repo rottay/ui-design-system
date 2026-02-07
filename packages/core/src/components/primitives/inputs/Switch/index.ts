@@ -11,9 +11,9 @@
  * used for settings that take effect immediately without confirmation.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Wraps Ant Design Switch with all features
- * - **Hermes**: Uses DaisyUI toggle classes with custom layout
- * - **Apollo**: Pure CSS implementation with sliding knob animation
+ * - **Classic**: Wraps Ant Design Switch with all features
+ * - **Modern**: Uses DaisyUI toggle classes with custom layout
+ * - **Rustic**: Pure CSS implementation with sliding knob animation
  *
  * **Key Features:**
  * - Controlled and uncontrolled modes
@@ -83,7 +83,7 @@ export {
 } from './types';
 
 export const Switch = createEngineComponent<SwitchProps>('Switch', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

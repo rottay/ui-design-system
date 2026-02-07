@@ -13,7 +13,7 @@
  * - **Data entry**: Any date-based information collection
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Picker modes**: Date, week, month, quarter, year
  * - **Time support**: Optional time picker integration
  * - **Range picker**: DatePicker.RangePicker for date ranges
@@ -71,14 +71,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <DatePicker engine="titan" showToday showNow />
+ * // Classic engine (Ant Design - default)
+ * <DatePicker engine="classic" showToday showNow />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <DatePicker engine="hermes" size="lg" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <DatePicker engine="modern" size="lg" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <DatePicker engine="apollo" variant="borderless" />
+ * // Rustic engine (Pure HTML/CSS)
+ * <DatePicker engine="rustic" variant="borderless" />
  * ```
  *
  * @see {@link DatePickerProps} for component props
@@ -110,15 +110,15 @@ export {
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  *
  * Compound components:
  * - **DatePicker.RangePicker**: Select a date range with start and end
  */
 export const DatePicker = createEngineComponent<DatePickerProps>('DatePicker', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

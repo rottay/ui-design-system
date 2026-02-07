@@ -336,7 +336,7 @@ describe('Table', () => {
 });
 
 describe('Table Engine Compatibility', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)(
+  it.each(['classic', 'modern', 'rustic'] as const)(
     'works with %s engine',
     (engine) => {
       render(

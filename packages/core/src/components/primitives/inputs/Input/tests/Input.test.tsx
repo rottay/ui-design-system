@@ -148,7 +148,7 @@ describe('Input.TextArea', () => {
 });
 
 describe('Input engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Input engine={engine} />);
     expect(screen.getByTestId('input-wrapper')).toBeInTheDocument();
   });

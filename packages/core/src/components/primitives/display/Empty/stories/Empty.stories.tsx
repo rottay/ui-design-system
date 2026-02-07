@@ -3,7 +3,7 @@
  *
  * This file contains all Storybook stories for the Empty component.
  * Stories demonstrate various use cases and configurations across
- * all three rendering engines (Titan, Hermes, Apollo).
+ * all three rendering engines (Classic, Modern, Rustic).
  *
  * @module Empty/stories
  * @category Display
@@ -40,7 +40,7 @@ It typically appears in data tables, search results, or any container that may b
 - Multiple image variants (default, simple, custom)
 - Customizable description text
 - Support for action buttons
-- Works with all three engines (Titan, Hermes, Apollo)
+- Works with all three engines (Classic, Modern, Rustic)
 - Accessible with proper ARIA attributes
         `,
       },
@@ -66,11 +66,11 @@ It typically appears in data tables, search results, or any container that may b
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'The rendering engine to use',
       table: {
         type: { summary: 'EngineType' },
-        defaultValue: { summary: 'titan' },
+        defaultValue: { summary: 'classic' },
       },
     },
     className: {
@@ -186,7 +186,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Empty rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Empty rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

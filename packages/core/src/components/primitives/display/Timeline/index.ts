@@ -16,7 +16,7 @@
  * - Changelog and version history
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Display modes**: Left, right, or alternating item positions
  * - **Color presets**: Blue, red, green, gray, and semantic colors
  * - **Custom dots**: Replace default dots with icons or custom elements
@@ -63,18 +63,18 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Timeline engine="titan" mode="left">
+ * // Classic engine (Ant Design - default)
+ * <Timeline engine="classic" mode="left">
  *   <Timeline.Item>Event</Timeline.Item>
  * </Timeline>
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Timeline engine="hermes" mode="alternate">
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Timeline engine="modern" mode="alternate">
  *   <Timeline.Item color="primary">Event</Timeline.Item>
  * </Timeline>
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Timeline engine="apollo" reverse>
+ * // Rustic engine (Pure HTML/CSS)
+ * <Timeline engine="rustic" reverse>
  *   <Timeline.Item>Newest first</Timeline.Item>
  * </Timeline>
  * ```
@@ -111,9 +111,9 @@ export type { TimelineItemProps as TimelineItemComponentProps } from './compound
 // Create engine-aware Timeline component
 export const Timeline = Object.assign(
   createEngineComponent<TimelineProps>('Timeline', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     Item: TimelineItem,

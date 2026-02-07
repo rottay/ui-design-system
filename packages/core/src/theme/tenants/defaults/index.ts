@@ -8,7 +8,7 @@ import type { TenantConfig } from '../../../core/types';
 export const DEFAULT_TENANT_CONFIG: TenantConfig = {
   slug: 'default',
   name: 'Default Tenant',
-  engine: 'titan',
+  engine: 'classic',
   theme: 'base',
   plan: 'starter',
   features: ['*'],  // All features enabled by default

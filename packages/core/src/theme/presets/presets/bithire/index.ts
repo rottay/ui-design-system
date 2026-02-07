@@ -28,7 +28,7 @@ export const bithireTheme: ThemeConfig = {
     'shadow-card': '0 0 0 1px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.04)',
   },
   engineOverrides: {
-    titan: {
+    classic: {
       token: {
         colorPrimary: '#0A66C2',
         borderRadius: 8,

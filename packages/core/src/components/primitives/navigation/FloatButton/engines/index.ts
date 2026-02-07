@@ -3,42 +3,42 @@
 /**
  * @fileoverview FloatButton Engine Exports - Rottay Design System
  * @description Barrel exports for all FloatButton engine implementations.
- * Provides access to Titan, Hermes, and Apollo engine components.
+ * Provides access to Classic, Modern, and Rustic engine components.
  *
  * @remarks
  * This module exports all three engine implementations of the FloatButton
  * component family. Each engine provides the same API but with different
  * underlying implementations:
  *
- * - **Titan**: Ant Design implementation - full-featured with rich animations
- * - **Hermes**: DaisyUI/Tailwind implementation - utility-first styling
- * - **Apollo**: Vanilla HTML/CSS implementation - zero dependencies
+ * - **Classic**: Ant Design implementation - full-featured with rich animations
+ * - **Modern**: DaisyUI/Tailwind implementation - utility-first styling
+ * - **Rustic**: Vanilla HTML/CSS implementation - zero dependencies
  *
  * The engine factory in the main index.ts uses these exports for dynamic
  * loading based on the active engine context.
  *
  * @example Importing specific engine
  * ```tsx
- * import { TitanFloatButton, HermesGroup, ApolloBackTop } from './engines';
+ * import { ClassicFloatButton, ModernGroup, RusticBackTop } from './engines';
  *
  * // Direct engine usage (advanced)
- * <TitanFloatButton icon={<PlusOutlined />} />
+ * <ClassicFloatButton icon={<PlusOutlined />} />
  * ```
  *
  * @example Dynamic engine loading
  * ```tsx
  * // The main FloatButton component uses these exports internally
  * const FloatButtonBase = createEngineComponent('FloatButton', {
- *   titan: () => import('./engines/titan'),
- *   hermes: () => import('./engines/hermes'),
- *   apollo: () => import('./engines/apollo'),
+ *   classic: () => import('./engines/classic'),
+ *   modern: () => import('./engines/modern'),
+ *   rustic: () => import('./engines/rustic'),
  * });
  * ```
  *
  * @see {@link FloatButton} for main component with automatic engine selection
- * @see {@link TitanFloatButton} for Ant Design implementation
- * @see {@link HermesFloatButton} for DaisyUI implementation
- * @see {@link ApolloFloatButton} for Vanilla implementation
+ * @see {@link ClassicFloatButton} for Ant Design implementation
+ * @see {@link ModernFloatButton} for DaisyUI implementation
+ * @see {@link RusticFloatButton} for Vanilla implementation
  *
  * @module FloatButton/Engines
  * @category Navigation
@@ -46,46 +46,46 @@
  */
 
 // ============================================================================
-// Titan Engine Exports (Ant Design)
+// Classic Engine Exports (Ant Design)
 // ============================================================================
 
 export {
-  /** Default export from Titan engine */
-  default as titan,
-  /** Titan FloatButton component */
-  FloatButton as TitanFloatButton,
-  /** Titan FloatButton.Group component */
-  Group as TitanGroup,
-  /** Titan FloatButton.BackTop component */
-  BackTop as TitanBackTop,
-} from './titan';
+  /** Default export from Classic engine */
+  default as classic,
+  /** Classic FloatButton component */
+  FloatButton as ClassicFloatButton,
+  /** Classic FloatButton.Group component */
+  Group as ClassicGroup,
+  /** Classic FloatButton.BackTop component */
+  BackTop as ClassicBackTop,
+} from './classic';
 
 // ============================================================================
-// Hermes Engine Exports (DaisyUI/Tailwind)
-// ============================================================================
-
-export {
-  /** Default export from Hermes engine */
-  default as hermes,
-  /** Hermes FloatButton component */
-  FloatButton as HermesFloatButton,
-  /** Hermes FloatButton.Group component */
-  Group as HermesGroup,
-  /** Hermes FloatButton.BackTop component */
-  BackTop as HermesBackTop,
-} from './hermes';
-
-// ============================================================================
-// Apollo Engine Exports (Vanilla HTML/CSS)
+// Modern Engine Exports (DaisyUI/Tailwind)
 // ============================================================================
 
 export {
-  /** Default export from Apollo engine */
-  default as apollo,
-  /** Apollo FloatButton component */
-  FloatButton as ApolloFloatButton,
-  /** Apollo FloatButton.Group component */
-  Group as ApolloGroup,
-  /** Apollo FloatButton.BackTop component */
-  BackTop as ApolloBackTop,
-} from './apollo';
+  /** Default export from Modern engine */
+  default as modern,
+  /** Modern FloatButton component */
+  FloatButton as ModernFloatButton,
+  /** Modern FloatButton.Group component */
+  Group as ModernGroup,
+  /** Modern FloatButton.BackTop component */
+  BackTop as ModernBackTop,
+} from './modern';
+
+// ============================================================================
+// Rustic Engine Exports (Vanilla HTML/CSS)
+// ============================================================================
+
+export {
+  /** Default export from Rustic engine */
+  default as rustic,
+  /** Rustic FloatButton component */
+  FloatButton as RusticFloatButton,
+  /** Rustic FloatButton.Group component */
+  Group as RusticGroup,
+  /** Rustic FloatButton.BackTop component */
+  BackTop as RusticBackTop,
+} from './rustic';

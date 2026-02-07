@@ -557,7 +557,7 @@ describe.skip('Stack Base Utilities', () => {
 });
 
 describe('Stack engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Stack engine={engine}>Test</Stack>);
     expect(screen.getByTestId('stack')).toBeInTheDocument();
   });

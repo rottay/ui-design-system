@@ -286,7 +286,8 @@ export function StandardNavigationEditor({
   if (loading) {
     return (
       <Card>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
+        <div style={{
+          display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
           <Spin size="large" />
         </div>
       </Card>
@@ -343,7 +344,7 @@ export function StandardNavigationEditor({
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: 8 }}>
                   <Space size={4}>
                     <span style={{ opacity: item.visible ? 1 : 0.5 }}>
-                      {item.visible ? <EyeOutlined style={{ fontSize: 12, color: '#52c41a' }} /> : <EyeInvisibleOutlined style={{ fontSize: 12, color: '#999' }} />}
+                      {item.visible ? <EyeOutlined style={{ fontSize: 12, color: 'var(--color-success-500, #52c41a)' }} /> : <EyeInvisibleOutlined style={{ fontSize: 12, color: 'var(--color-neutral-400, #999)' }} />}
                     </span>
                     <span style={{ fontWeight: 500 }}>{item.label}</span>
                     {item.badge && <Tag color={item.badgeColor || 'blue'} style={{ fontSize: 10 }}>{item.badge}</Tag>}
@@ -395,7 +396,7 @@ export function StandardNavigationEditor({
         okButtonProps={{ danger: true }}
       >
         <p>Are you sure you want to delete this menu item? This action cannot be undone.</p>
-        <p style={{ color: '#ff4d4f' }}>All child items will also be deleted.</p>
+        <p style={{ color: 'var(--color-error-500, #ff4d4f)' }}>All child items will also be deleted.</p>
       </Modal>
     </div>
   );

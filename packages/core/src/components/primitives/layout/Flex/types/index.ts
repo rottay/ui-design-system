@@ -63,7 +63,7 @@ export interface FlexProps {
   /** Inline styles */
   style?: CSSProperties;
   /** Rendering engine override */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 export const FLEX_DEFAULTS: Partial<FlexProps> = {

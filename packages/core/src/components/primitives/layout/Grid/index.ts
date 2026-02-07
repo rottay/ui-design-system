@@ -14,9 +14,9 @@
  * - Template areas for complex named-region layouts
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Full-featured implementation using Ant Design patterns
- * - **Hermes**: Utility-first implementation using Tailwind grid classes
- * - **Apollo**: Pure HTML/CSS implementation with inline grid styles
+ * - **Classic**: Full-featured implementation using Ant Design patterns
+ * - **Modern**: Utility-first implementation using Tailwind grid classes
+ * - **Rustic**: Pure HTML/CSS implementation with inline grid styles
  *
  * @example Basic Grid
  * ```tsx
@@ -94,8 +94,8 @@
  * ```tsx
  * import { Grid } from '@rottay/design-system';
  *
- * // Force Hermes engine for Tailwind grid classes
- * <Grid engine="hermes" columns={3} gap="md">
+ * // Force Modern engine for Tailwind grid classes
+ * <Grid engine="modern" columns={3} gap="md">
  *   Outputs: class="grid grid-cols-3 gap-4"
  * </Grid>
  * ```
@@ -185,26 +185,26 @@ export { GridItem };
  * The engine is determined in this order:
  * 1. `engine` prop passed directly to the component
  * 2. Nearest `EngineProvider` in the component tree
- * 3. Default engine (Titan)
+ * 3. Default engine (Classic)
  *
  * @example
  * ```tsx
- * // Uses default engine (Titan)
+ * // Uses default engine (Classic)
  * <Grid columns={3} gap="md">
  *   <Grid.Item>...</Grid.Item>
  * </Grid>
  *
  * // Override with specific engine
- * <Grid engine="hermes" columns={4}>
+ * <Grid engine="modern" columns={4}>
  *   <Grid.Item span={2}>...</Grid.Item>
  * </Grid>
  * ```
  */
 export const Grid = Object.assign(
   createEngineComponent<GridProps>('Grid', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /** Grid.Item compound component for positioning items within the grid */

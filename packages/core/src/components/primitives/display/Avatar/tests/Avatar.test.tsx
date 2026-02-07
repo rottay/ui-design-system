@@ -103,7 +103,7 @@ describe('Avatar.Badge', () => {
 });
 
 describe('Avatar engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Avatar engine={engine}>Test</Avatar>);
     expect(screen.getByTestId('avatar')).toBeInTheDocument();
   });

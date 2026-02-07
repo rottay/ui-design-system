@@ -7,9 +7,9 @@
  *
  * @remarks
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Tooltip with collision detection
- * - **Hermes**: DaisyUI tooltip classes with Tailwind utilities
- * - **Apollo**: Pure CSS implementation with zero dependencies
+ * - **Classic**: Ant Design Tooltip with collision detection
+ * - **Modern**: DaisyUI tooltip classes with Tailwind utilities
+ * - **Rustic**: Pure CSS implementation with zero dependencies
  *
  * **Key Features:**
  * - 12 placement positions (top, bottom, left, right with start/end variants)
@@ -65,7 +65,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Tooltip engine="hermes" content="DaisyUI styled tooltip">
+ * <Tooltip engine="modern" content="DaisyUI styled tooltip">
  *   <span>Hover for info</span>
  * </Tooltip>
  * ```
@@ -105,17 +105,17 @@ export { TooltipTrigger, TooltipContent };
  * component pattern with Tooltip.Trigger and Tooltip.Content.
  *
  * Available engines:
- * - **titan**: Full-featured Ant Design implementation
- * - **hermes**: Lightweight DaisyUI/Tailwind implementation
- * - **apollo**: Vanilla HTML/CSS headless implementation
+ * - **classic**: Full-featured Ant Design implementation
+ * - **modern**: Lightweight DaisyUI/Tailwind implementation
+ * - **rustic**: Vanilla HTML/CSS headless implementation
  *
  * @see {@link TooltipProps} for available props
  */
 export const Tooltip = Object.assign(
   createEngineComponent<TooltipProps>('Tooltip', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /** Compound component for wrapping trigger elements */

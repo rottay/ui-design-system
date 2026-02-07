@@ -11,9 +11,9 @@
  * consistent API and user experience.
  *
  * **Available Engines:**
- * - **Titan** (Ant Design): Full-featured with advanced animations and focus trapping
- * - **Hermes** (DaisyUI): Utility-first styling with Tailwind CSS
- * - **Apollo** (Vanilla): Zero-dependency implementation with maximum control
+ * - **Classic** (Ant Design): Full-featured with advanced animations and focus trapping
+ * - **Modern** (DaisyUI): Utility-first styling with Tailwind CSS
+ * - **Rustic** (Vanilla): Zero-dependency implementation with maximum control
  *
  * **Compound Components:**
  * The Modal supports a compound component pattern for flexible layouts:
@@ -128,13 +128,13 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes engine for this specific modal
- * <Modal engine="hermes" open={open} onClose={onClose}>
+ * // Use Modern engine for this specific modal
+ * <Modal engine="modern" open={open} onClose={onClose}>
  *   DaisyUI-styled modal content
  * </Modal>
  *
  * // Global engine via provider
- * <EngineProvider engine="apollo">
+ * <EngineProvider engine="rustic">
  *   <Modal open={open} onClose={onClose}>
  *     All modals use vanilla implementation
  *   </Modal>
@@ -198,9 +198,9 @@ export { ModalHeader, ModalBody, ModalFooter, ModalCloseButton };
  *
  * @remarks
  * The Modal uses the engine factory pattern for rendering flexibility:
- * - Titan: Ant Design's Modal with full feature set
- * - Hermes: DaisyUI modal with Tailwind utilities
- * - Apollo: Pure vanilla implementation
+ * - Classic: Ant Design's Modal with full feature set
+ * - Modern: DaisyUI modal with Tailwind utilities
+ * - Rustic: Pure vanilla implementation
  *
  * **Compound Components:**
  * - `Modal.Header`: Structured header with title and close
@@ -225,11 +225,11 @@ export { ModalHeader, ModalBody, ModalFooter, ModalCloseButton };
 export const Modal = Object.assign(
   createEngineComponent<ModalProps>('Modal', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

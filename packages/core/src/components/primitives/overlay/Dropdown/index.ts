@@ -25,9 +25,9 @@
  * - Auto-adjust overflow positioning
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Wraps Ant Design Dropdown with full feature parity
- * - **Hermes**: Tailwind CSS/DaisyUI dropdown implementation
- * - **Apollo**: Pure CSS dropdown with portal rendering
+ * - **Classic**: Wraps Ant Design Dropdown with full feature parity
+ * - **Modern**: Tailwind CSS/DaisyUI dropdown implementation
+ * - **Rustic**: Pure CSS dropdown with portal rendering
  *
  * @example Basic Dropdown with Hover Trigger
  * ```tsx
@@ -124,9 +124,9 @@
  * ```tsx
  * import { Dropdown, Button } from '@rottay/design-system';
  *
- * // Force Hermes (Tailwind) implementation
+ * // Force Modern (Tailwind) implementation
  * <Dropdown
- *   engine="hermes"
+ *   engine="modern"
  *   trigger={['click']}
  *   menu={{ items: [{ key: '1', label: 'Tailwind styled' }] }}
  * >
@@ -174,9 +174,9 @@ export {
  * @returns The rendered Dropdown component
  */
 export const Dropdown = createEngineComponent<DropdownProps>('Dropdown', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Dropdown;

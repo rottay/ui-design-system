@@ -2,15 +2,17 @@
 
 /**
  * SearchBar - Basic Preset
+ * Clean input with focus ring, loading spinner, and engine-aware transitions
  */
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { SearchBarProps } from '../../core';
 
 export const BasicSearchBar = createPreset<SearchBarProps>({
   name: 'SearchBar.Basic',
-  render: ({ primitives, props, tokens }: PresetContext<SearchBarProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<SearchBarProps>) => {
     const { Box, Spinner } = primitives;
     const {
       placeholder = 'Search...',
@@ -26,12 +28,13 @@ export const BasicSearchBar = createPreset<SearchBarProps>({
     } = props;
 
     const [internalValue, setInternalValue] = useState(defaultValue);
+    const [isFocused, setIsFocused] = useState(false);
     const value = controlledValue ?? internalValue;
 
     const sizeStyles = {
-      sm: { padding: `${tokens.spacing[1]} ${tokens.spacing[2]}`, fontSize: tokens.typography.fontSize.sm },
-      md: { padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`, fontSize: tokens.typography.fontSize.md },
-      lg: { padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`, fontSize: tokens.typography.fontSize.lg },
+      sm: { padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, fontSize: tokens.typography.fontSize.sm },
+      md: { padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontSize: tokens.typography.fontSize.md },
+      lg: { padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, fontSize: tokens.typography.fontSize.lg },
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,18 +55,27 @@ export const BasicSearchBar = createPreset<SearchBarProps>({
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           autoFocus={autoFocus}
           style={{
             width: '100%',
             ...sizeStyles[size],
-            border: `1px solid ${tokens.colors.neutral[300]}`,
-            borderRadius: '0.375rem',
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isFocused ? tokens.colors.primaryScale[400] : tokens.colors.neutral[300]}`,
+            borderRadius: tokens.borderRadius.md,
             outline: 'none',
             paddingRight: loading ? '40px' : undefined,
+            color: tokens.colors.neutral[900],
+            backgroundColor: tokens.colors.common.white,
+            fontFamily: 'inherit',
+            transition: `all ${tokens.motion.hover}`,
+            ...(isFocused ? {
+              boxShadow: `0 0 0 2px ${tokens.colors.primaryScale[100]}`,
+            } : {}),
           }}
         />
         {loading && (
-          <Box style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)' }}>
+          <Box style={{ position: 'absolute', right: tokens.spacing[3], top: '50%', transform: 'translateY(-50%)' }}>
             <Spinner size="sm" />
           </Box>
         )}

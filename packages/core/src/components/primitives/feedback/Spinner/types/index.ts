@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types ensure type safety across all three rendering engines
- * (Titan, Hermes, Apollo) while maintaining a consistent API surface.
+ * (Classic, Modern, Rustic) while maintaining a consistent API surface.
  *
  * @module Spinner/Types
  * @category Feedback
@@ -56,7 +56,7 @@ export type SpinnerSize = 'sm' | 'md' | 'lg' | 'xl';
  *   size: 'lg',
  *   color: '#1890ff',
  *   label: 'Loading...',
- *   engine: 'hermes',
+ *   engine: 'modern',
  * };
  * ```
  */

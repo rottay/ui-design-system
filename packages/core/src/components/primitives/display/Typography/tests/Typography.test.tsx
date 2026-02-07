@@ -12,96 +12,96 @@ import { render, screen } from '@testing-library/react';
 import { Typography, Heading, Text, Paragraph } from '../';
 
 // Mock the engine implementations to avoid async loading issues in tests
-vi.mock('../engines/titan', () => ({
-  TitanHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
+vi.mock('../engines/classic', () => ({
+  ClassicHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="titan" {...props}>
+      <Component data-testid="heading" data-engine="classic" {...props}>
         {children}
       </Component>
     );
   }),
-  TitanText: vi.fn(({ children, as = 'span', ...props }: any) => {
+  ClassicText: vi.fn(({ children, as = 'span', ...props }: any) => {
     const Component = as;
     return (
-      <Component data-testid="text" data-engine="titan" {...props}>
+      <Component data-testid="text" data-engine="classic" {...props}>
         {children}
       </Component>
     );
   }),
-  TitanParagraph: vi.fn(({ children, ...props }: any) => (
-    <p data-testid="paragraph" data-engine="titan" {...props}>
+  ClassicParagraph: vi.fn(({ children, ...props }: any) => (
+    <p data-testid="paragraph" data-engine="classic" {...props}>
       {children}
     </p>
   )),
   default: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="titan" {...props}>
+      <Component data-testid="heading" data-engine="classic" {...props}>
         {children}
       </Component>
     );
   }),
 }));
 
-vi.mock('../engines/hermes', () => ({
-  HermesHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
+vi.mock('../engines/modern', () => ({
+  ModernHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="hermes" {...props}>
+      <Component data-testid="heading" data-engine="modern" {...props}>
         {children}
       </Component>
     );
   }),
-  HermesText: vi.fn(({ children, as = 'span', ...props }: any) => {
+  ModernText: vi.fn(({ children, as = 'span', ...props }: any) => {
     const Component = as;
     return (
-      <Component data-testid="text" data-engine="hermes" {...props}>
+      <Component data-testid="text" data-engine="modern" {...props}>
         {children}
       </Component>
     );
   }),
-  HermesParagraph: vi.fn(({ children, ...props }: any) => (
-    <p data-testid="paragraph" data-engine="hermes" {...props}>
+  ModernParagraph: vi.fn(({ children, ...props }: any) => (
+    <p data-testid="paragraph" data-engine="modern" {...props}>
       {children}
     </p>
   )),
   default: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="hermes" {...props}>
+      <Component data-testid="heading" data-engine="modern" {...props}>
         {children}
       </Component>
     );
   }),
 }));
 
-vi.mock('../engines/apollo', () => ({
-  ApolloHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
+vi.mock('../engines/rustic', () => ({
+  RusticHeading: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="apollo" {...props}>
+      <Component data-testid="heading" data-engine="rustic" {...props}>
         {children}
       </Component>
     );
   }),
-  ApolloText: vi.fn(({ children, as = 'span', ...props }: any) => {
+  RusticText: vi.fn(({ children, as = 'span', ...props }: any) => {
     const Component = as;
     return (
-      <Component data-testid="text" data-engine="apollo" {...props}>
+      <Component data-testid="text" data-engine="rustic" {...props}>
         {children}
       </Component>
     );
   }),
-  ApolloParagraph: vi.fn(({ children, ...props }: any) => (
-    <p data-testid="paragraph" data-engine="apollo" {...props}>
+  RusticParagraph: vi.fn(({ children, ...props }: any) => (
+    <p data-testid="paragraph" data-engine="rustic" {...props}>
       {children}
     </p>
   )),
   default: vi.fn(({ children, level = 'h2', ...props }: any) => {
     const Component = level;
     return (
-      <Component data-testid="heading" data-engine="apollo" {...props}>
+      <Component data-testid="heading" data-engine="rustic" {...props}>
         {children}
       </Component>
     );
@@ -143,7 +143,7 @@ describe('Typography.Heading', () => {
     expect(screen.getByTestId('heading')).toBeInTheDocument();
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)(
+  it.each(['classic', 'modern', 'rustic'] as const)(
     'renders with %s engine',
     (engine) => {
       render(<Heading engine={engine}>Engine Test</Heading>);
@@ -217,7 +217,7 @@ describe('Typography.Text', () => {
     expect(screen.getByTestId('text')).toHaveClass('custom-text');
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)(
+  it.each(['classic', 'modern', 'rustic'] as const)(
     'renders with %s engine',
     (engine) => {
       render(<Text engine={engine}>Engine Test</Text>);
@@ -281,7 +281,7 @@ describe('Typography.Paragraph', () => {
     expect(screen.getByTestId('paragraph')).toHaveClass('custom-paragraph');
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)(
+  it.each(['classic', 'modern', 'rustic'] as const)(
     'renders with %s engine',
     (engine) => {
       render(<Paragraph engine={engine}>Engine Test</Paragraph>);

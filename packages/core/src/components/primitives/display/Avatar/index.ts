@@ -11,9 +11,9 @@
  * and badge overlays for notifications.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Wraps Ant Design Avatar with Badge for status
- * - **Hermes**: DaisyUI avatar classes with mask shapes
- * - **Apollo**: Pure CSS implementation with inline styling
+ * - **Classic**: Wraps Ant Design Avatar with Badge for status
+ * - **Modern**: DaisyUI avatar classes with mask shapes
+ * - **Rustic**: Pure CSS implementation with inline styling
  *
  * **Key Features:**
  * - Image with automatic error fallback to initials
@@ -110,9 +110,9 @@ export type { AvatarGroupProps, AvatarBadgeProps, BadgeStatus, AvatarFallbackPro
  */
 export const Avatar = Object.assign(
   createEngineComponent<AvatarProps>('Avatar', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /** Compound component for displaying multiple avatars in a stack */

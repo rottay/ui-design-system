@@ -20,7 +20,7 @@ const meta: Meta<typeof Modal> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
     },
     closable: {
       control: 'boolean',
@@ -189,26 +189,26 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Modal rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS). Click each button to open the modal.',
+        story: 'Compare the same Modal rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS). Click each button to open the modal.',
       },
     },
   },
   render: () => {
-    const [engine, setEngine] = useState<'titan' | 'hermes' | 'apollo' | null>(null);
+    const [engine, setEngine] = useState<'classic' | 'modern' | 'rustic' | null>(null);
     return (
       <>
         <EngineComparisonHelper
-          component={({ engineName }: { engineName: 'titan' | 'hermes' | 'apollo' }) => (
+          component={({ engineName }: { engineName: 'classic' | 'modern' | 'rustic' }) => (
             <button onClick={() => setEngine(engineName)} style={{ padding: '8px 16px' }}>
               Open {engineName} Modal
             </button>
           )}
-          props={{ engineName: 'titan' }}
+          props={{ engineName: 'classic' }}
           showDescriptions
         />
         <Modal
           open={!!engine}
-          engine={engine || 'titan'}
+          engine={engine || 'classic'}
           title={`${engine?.charAt(0).toUpperCase()}${engine?.slice(1)} Engine Modal`}
           onClose={() => setEngine(null)}
         >
@@ -233,8 +233,8 @@ export const VariantMatrix: Story = {
     },
   },
   render: () => {
-    const [config, setConfig] = useState<{ engine: 'titan' | 'hermes' | 'apollo'; size: 'sm' | 'md' | 'lg' | 'xl' } | null>(null);
-    const engines = ['titan', 'hermes', 'apollo'] as const;
+    const [config, setConfig] = useState<{ engine: 'classic' | 'modern' | 'rustic'; size: 'sm' | 'md' | 'lg' | 'xl' } | null>(null);
+    const engines = ['classic', 'modern', 'rustic'] as const;
     const sizes = ['sm', 'md', 'lg', 'xl'] as const;
 
     return (

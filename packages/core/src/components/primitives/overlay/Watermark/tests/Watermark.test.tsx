@@ -238,7 +238,7 @@ describe('Watermark', () => {
 });
 
 describe('Watermark engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Watermark engine={engine} content="Test">
         <div>Test</div>

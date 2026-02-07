@@ -7,7 +7,7 @@
  * The Rottay Design System uses a layered provider architecture:
  *
  * - **DesignSystemProvider**: Root provider that composes all others
- * - **EngineProvider**: Manages UI rendering engine (Titan, Hermes, Apollo)
+ * - **EngineProvider**: Manages UI rendering engine (Classic, Modern, Rustic)
  * - **ThemeProvider**: Handles theme variants and CSS token injection
  * - **TenantProvider**: Multi-tenant configuration and branding
  * - **FeatureProvider**: Feature flags for progressive rollout
@@ -21,7 +21,7 @@
  * function App() {
  *   return (
  *     <DesignSystemProvider
- *       engine="titan"
+ *       engine="classic"
  *       tenant="rottay"
  *       theme="light"
  *     >
@@ -35,7 +35,7 @@
  * ```tsx
  * import { ThemeProvider, EngineProvider } from '@rottay/design-system';
  *
- * <EngineProvider defaultEngine="hermes">
+ * <EngineProvider defaultEngine="modern">
  *   <ThemeProvider tenant="acme" theme="dark">
  *     <App />
  *   </ThemeProvider>

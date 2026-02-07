@@ -633,7 +633,7 @@ describe('Rate', () => {
 });
 
 describe('Rate engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Rate engine={engine} />);
     expect(screen.getByTestId('rate')).toBeInTheDocument();
   });

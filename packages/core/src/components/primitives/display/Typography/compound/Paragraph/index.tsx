@@ -49,9 +49,9 @@
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { ParagraphProps } from '../../types';
-import { TitanParagraph } from '../../engines/titan';
-import { HermesParagraph } from '../../engines/hermes';
-import { ApolloParagraph } from '../../engines/apollo';
+import { ClassicParagraph } from '../../engines/classic';
+import { ModernParagraph } from '../../engines/modern';
+import { RusticParagraph } from '../../engines/rustic';
 
 /**
  * Map of engine names to their respective Paragraph implementations.
@@ -60,9 +60,9 @@ const engineMap: Record<
   string,
   ForwardRefExoticComponent<ParagraphProps & RefAttributes<HTMLParagraphElement>>
 > = {
-  titan: TitanParagraph,
-  hermes: HermesParagraph,
-  apollo: ApolloParagraph,
+  classic: ClassicParagraph,
+  modern: ModernParagraph,
+  rustic: RusticParagraph,
 };
 
 /**
@@ -92,8 +92,8 @@ const engineMap: Record<
  * ```
  */
 export const TypographyParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
-  ({ engine = 'titan', ...props }, ref) => {
-    const Component = engineMap[engine] || TitanParagraph;
+  ({ engine = 'classic', ...props }, ref) => {
+    const Component = engineMap[engine] || ClassicParagraph;
     return <Component ref={ref} {...props} />;
   }
 );

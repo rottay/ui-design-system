@@ -6,7 +6,7 @@
  * @remarks
  * The AlertDescription component provides supplementary information below
  * the main alert message. It's designed to work seamlessly with all three
- * engines (Titan, Hermes, Apollo) and inherits styling from the parent Alert.
+ * engines (Classic, Modern, Rustic) and inherits styling from the parent Alert.
  *
  * **Visual Characteristics:**
  * - Smaller font size than the main message

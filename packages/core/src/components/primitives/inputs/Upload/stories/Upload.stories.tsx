@@ -26,7 +26,7 @@ Upload component for file selection and upload with support for drag-and-drop, f
 
 ## Engine Differences
 
-| Feature | Titan | Hermes | Apollo |
+| Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
 | Library | Ant Design | DaisyUI | Vanilla CSS |
 | Dragger | Built-in | Custom | Custom |
@@ -64,7 +64,7 @@ Upload component for file selection and upload with support for drag-and-drop, f
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -192,7 +192,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Upload rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Upload rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

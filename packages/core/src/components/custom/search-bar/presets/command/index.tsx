@@ -2,15 +2,18 @@
 
 /**
  * SearchBar - Command Preset (cmd+k style)
+ * Command palette overlay with backdrop, grouped suggestions, keyboard navigation,
+ * hover states, glass effect for modern engine, and fully tokenized styles
  */
 
 import { useState, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { SearchBarProps } from '../../core';
 
 export const CommandSearchBar = createPreset<SearchBarProps>({
   name: 'SearchBar.Command',
-  render: ({ primitives, props, tokens }: PresetContext<SearchBarProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<SearchBarProps>) => {
     const { Box, Spinner } = primitives;
     const {
       placeholder = 'Type a command or search...',
@@ -28,6 +31,7 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
+    const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
     const value = controlledValue ?? internalValue;
 
     useEffect(() => {
@@ -56,6 +60,16 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
       return acc;
     }, {} as Record<string, typeof suggestions>);
 
+    // Glass effect styles for modern engine
+    const glassStyles = engine === 'modern' && tokens.surface.useGlass && tokens.glass
+      ? {
+          backdropFilter: tokens.glass.blur,
+          WebkitBackdropFilter: tokens.glass.blur,
+          backgroundColor: tokens.glass.bg,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
+        }
+      : {};
+
     if (!isOpen) {
       return (
         <div
@@ -65,24 +79,29 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`,
-            border: `1px solid ${tokens.colors.neutral[300]}`,
-            borderRadius: '0.375rem',
+            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
+            borderRadius: tokens.borderRadius.md,
             cursor: 'pointer',
             color: tokens.colors.neutral[400],
+            backgroundColor: tokens.colors.common.white,
+            transition: `all ${tokens.motion.hover}`,
+            fontFamily: 'inherit',
             ...style,
           }}
         >
           <span>{placeholder}</span>
           {showShortcut && (
             <Box style={{
-              padding: '2px 6px',
+              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
               backgroundColor: tokens.colors.neutral[100],
-              borderRadius: '4px',
+              borderRadius: tokens.borderRadius.sm,
               fontSize: tokens.typography.fontSize.xs,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: tokens.colors.neutral[600],
               fontFamily: 'monospace',
             }}>
-              ⌘{shortcutKey}
+              {shortcutKey}
             </Box>
           )}
         </div>
@@ -97,7 +116,7 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'rgba(0,0,0,0.4)',
             zIndex: 999,
           }}
         />
@@ -111,15 +130,20 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
             transform: 'translateX(-50%)',
             width: '100%',
             maxWidth: '600px',
-            backgroundColor: 'white',
-            borderRadius: '0.5rem',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            backgroundColor: tokens.colors.common.white,
+            borderRadius: tokens.borderRadius.lg,
+            boxShadow: tokens.shadows.xl,
             zIndex: 1000,
             overflow: 'hidden',
+            ...glassStyles,
             ...style,
           }}
         >
-          <Box style={{ padding: tokens.spacing[4], borderBottom: `1px solid ${tokens.colors.neutral[200]}` }}>
+          {/* Search input */}
+          <Box style={{
+            padding: tokens.spacing[4],
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+          }}>
             <input
               type="text"
               placeholder={placeholder}
@@ -132,6 +156,9 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
                 border: 'none',
                 fontSize: tokens.typography.fontSize.lg,
                 outline: 'none',
+                color: tokens.colors.neutral[900],
+                backgroundColor: 'transparent',
+                fontFamily: 'inherit',
               }}
             />
           </Box>
@@ -144,25 +171,52 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
             <Box style={{ maxHeight: '400px', overflow: 'auto' }}>
               {Object.entries(grouped).map(([category, items]) => (
                 <Box key={category}>
-                  <Box style={{ padding: `${tokens.spacing[2]} ${tokens.spacing[4]}`, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], fontWeight: 600, textTransform: 'uppercase' }}>
+                  <Box style={{
+                    padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: tokens.colors.neutral[500],
+                    fontWeight: tokens.typography.fontWeight.semibold,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}>
                     {category}
                   </Box>
                   {items.map((item) => (
                     <div
                       key={item.id}
                       onClick={() => { onSuggestionSelect?.(item); setIsOpen(false); }}
+                      onMouseEnter={() => setHoveredItemId(item.id)}
+                      onMouseLeave={() => setHoveredItemId(null)}
                       style={{
-                        padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`,
+                        padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: tokens.spacing[3],
+                        backgroundColor: hoveredItemId === item.id ? tokens.colors.primaryScale[50] : undefined,
+                        transition: `background-color ${tokens.motion.hover}`,
                       }}
                     >
-                      {item.icon && <Box style={{ color: tokens.colors.neutral[500] }}>{item.icon}</Box>}
-                      <Box>
-                        <Box style={{ fontWeight: 500 }}>{item.label}</Box>
-                        {item.description && <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>{item.description}</Box>}
+                      {item.icon && (
+                        <Box style={{ flexShrink: 0, color: tokens.colors.neutral[500] }}>
+                          {item.icon}
+                        </Box>
+                      )}
+                      <Box style={{ flex: 1, minWidth: 0 }}>
+                        <Box style={{
+                          fontWeight: tokens.typography.fontWeight.medium,
+                          color: tokens.colors.neutral[900],
+                        }}>
+                          {item.label}
+                        </Box>
+                        {item.description && (
+                          <Box style={{
+                            fontSize: tokens.typography.fontSize.sm,
+                            color: tokens.colors.neutral[500],
+                          }}>
+                            {item.description}
+                          </Box>
+                        )}
                       </Box>
                     </div>
                   ))}
@@ -170,8 +224,13 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
               ))}
             </Box>
           ) : value && (
-            <Box style={{ padding: tokens.spacing[8], textAlign: 'center', color: tokens.colors.neutral[500] }}>
-              No results for "{value}"
+            <Box style={{
+              padding: tokens.spacing[8],
+              textAlign: 'center',
+              color: tokens.colors.neutral[500],
+              fontSize: tokens.typography.fontSize.sm,
+            }}>
+              No results for &ldquo;{value}&rdquo;
             </Box>
           )}
         </Box>

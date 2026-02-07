@@ -339,7 +339,7 @@ describe('Collapse composition', () => {
 });
 
 describe('Collapse engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Collapse engine={engine}>
         <Collapse.Panel header="Panel" panelKey="1">Test</Collapse.Panel>

@@ -72,7 +72,7 @@ interface State {
  * @example
  * ```tsx
  * <EngineErrorBoundary
- *   fallbackEngine="apollo"
+ *   fallbackEngine="rustic"
  *   onError={(error) => console.error('Engine failed:', error)}
  * >
  *   <Button>Click me</Button>

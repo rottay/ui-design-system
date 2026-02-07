@@ -11,9 +11,9 @@
  * marks, tooltips, and customizable track styling.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Wraps Ant Design Slider with all features
- * - **Hermes**: DaisyUI range input with custom track overlay
- * - **Apollo**: Pure CSS implementation with dual-range support
+ * - **Classic**: Wraps Ant Design Slider with all features
+ * - **Modern**: DaisyUI range input with custom track overlay
+ * - **Rustic**: Pure CSS implementation with dual-range support
  *
  * **Key Features:**
  * - Single value or range mode (dual handles)
@@ -88,9 +88,9 @@ export {
 } from './types';
 
 export const Slider = createEngineComponent<SliderProps>('Slider', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Slider;

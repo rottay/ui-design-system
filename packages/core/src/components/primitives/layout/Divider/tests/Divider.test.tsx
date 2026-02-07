@@ -416,7 +416,7 @@ describe('Divider Edge Cases', () => {
 });
 
 describe('Divider engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Divider engine={engine} data-testid="divider" />);
     expect(screen.getByTestId('divider')).toBeInTheDocument();
   });

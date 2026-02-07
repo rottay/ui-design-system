@@ -249,7 +249,7 @@ describe('Notification', () => {
   });
 
   describe('Engine Support', () => {
-    it.each(['titan', 'hermes', 'apollo'] as const)(
+    it.each(['classic', 'modern', 'rustic'] as const)(
       'works with %s engine provider',
       async (engine) => {
         let notificationApi: any;

@@ -127,7 +127,7 @@ export interface SpaceProps {
    * Rendering engine override.
    * Overrides the engine from EngineProvider context.
    */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

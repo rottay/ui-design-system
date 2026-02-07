@@ -188,7 +188,7 @@ describe('Drawer', () => {
   });
 
   describe('Engine Support', () => {
-    it.each(['titan', 'hermes', 'apollo'] as const)(
+    it.each(['classic', 'modern', 'rustic'] as const)(
       'renders with %s engine',
       (engine) => {
         render(<Drawer open engine={engine}>Content</Drawer>);

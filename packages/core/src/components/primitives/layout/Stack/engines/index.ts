@@ -4,9 +4,9 @@
  *
  * @remarks
  * Each engine provides a Stack implementation optimized for its styling paradigm:
- * - **Titan**: Ant Design styling conventions with CSS flexbox
- * - **Hermes**: DaisyUI/Tailwind utility classes (flex, gap-*, items-*, justify-*)
- * - **Apollo**: Pure HTML/CSS with inline flexbox styles
+ * - **Classic**: Ant Design styling conventions with CSS flexbox
+ * - **Modern**: DaisyUI/Tailwind utility classes (flex, gap-*, items-*, justify-*)
+ * - **Rustic**: Pure HTML/CSS with inline flexbox styles
  *
  * These exports are consumed by the engine factory for dynamic component resolution.
  *
@@ -16,6 +16,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

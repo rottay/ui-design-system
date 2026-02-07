@@ -30,7 +30,7 @@ The Anchor component provides navigation within a page by linking to different s
 - **Scroll tracking**: Automatically highlights current section
 - **Affix mode**: Sticky positioning during scroll
 - **Direction**: Vertical or horizontal layout
-- **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
+- **Engine support**: Works with Classic (Ant Design), Modern (Tailwind), and Rustic (Vanilla)
 
 ## Usage
 \`\`\`tsx
@@ -68,7 +68,7 @@ import { Anchor } from '@rottay/design-system';
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine',
     },
     onChange: {
@@ -183,7 +183,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Anchor rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Anchor rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

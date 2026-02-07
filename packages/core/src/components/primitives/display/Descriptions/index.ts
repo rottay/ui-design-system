@@ -10,9 +10,9 @@
  * with configurable columns, layout directions, and styling options.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Descriptions with responsive columns
- * - **Hermes**: DaisyUI-styled descriptions with Tailwind utilities
- * - **Apollo**: Pure HTML/CSS with semantic list markup
+ * - **Classic**: Ant Design Descriptions with responsive columns
+ * - **Modern**: DaisyUI-styled descriptions with Tailwind utilities
+ * - **Rustic**: Pure HTML/CSS with semantic list markup
  *
  * **Key Features:**
  * - Multi-column grid layout
@@ -59,7 +59,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Descriptions engine="hermes" bordered>
+ * <Descriptions engine="modern" bordered>
  *   <Descriptions.Item label="Status">Active</Descriptions.Item>
  * </Descriptions>
  * ```
@@ -98,9 +98,9 @@ export { DescriptionsItem };
  * the EngineProvider context or explicit engine prop.
  */
 const DescriptionsBase = createEngineComponent<DescriptionsProps>('Descriptions', {
-  titan: () => import('./engines/titan').then((m) => ({ default: m.Descriptions })),
-  hermes: () => import('./engines/hermes').then((m) => ({ default: m.Descriptions })),
-  apollo: () => import('./engines/apollo').then((m) => ({ default: m.Descriptions })),
+  classic: () => import('./engines/classic').then((m) => ({ default: m.Descriptions })),
+  modern: () => import('./engines/modern').then((m) => ({ default: m.Descriptions })),
+  rustic: () => import('./engines/rustic').then((m) => ({ default: m.Descriptions })),
 });
 
 /**
@@ -108,9 +108,9 @@ const DescriptionsBase = createEngineComponent<DescriptionsProps>('Descriptions'
  * Automatically routes to the appropriate engine implementation.
  */
 const Item = createEngineComponent<DescriptionsItemProps>('Descriptions.Item', {
-  titan: () => import('./engines/titan').then((m) => ({ default: m.Item })),
-  hermes: () => import('./engines/hermes').then((m) => ({ default: m.Item })),
-  apollo: () => import('./engines/apollo').then((m) => ({ default: m.Item })),
+  classic: () => import('./engines/classic').then((m) => ({ default: m.Item })),
+  modern: () => import('./engines/modern').then((m) => ({ default: m.Item })),
+  rustic: () => import('./engines/rustic').then((m) => ({ default: m.Item })),
 });
 
 /**

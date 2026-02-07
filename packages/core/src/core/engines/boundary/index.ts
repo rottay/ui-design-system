@@ -13,7 +13,7 @@
  * @example Basic usage (internal)
  * ```tsx
  * <EngineErrorBoundary
- *   fallbackEngine="apollo"
+ *   fallbackEngine="rustic"
  *   onError={(error, info) => logToSentry(error, info)}
  * >
  *   <EngineComponent />

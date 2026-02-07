@@ -224,7 +224,7 @@ describe('Container Types', () => {
 });
 
 describe('Container engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Container engine={engine}>Test</Container>);
     expect(screen.getByTestId('container')).toBeInTheDocument();
   });

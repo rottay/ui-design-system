@@ -15,9 +15,9 @@
  * - Any linear arrangement of elements
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Full-featured implementation using Ant Design patterns
- * - **Hermes**: Utility-first implementation using Tailwind flex classes
- * - **Apollo**: Pure HTML/CSS implementation with inline flexbox styles
+ * - **Classic**: Full-featured implementation using Ant Design patterns
+ * - **Modern**: Utility-first implementation using Tailwind flex classes
+ * - **Rustic**: Pure HTML/CSS implementation with inline flexbox styles
  *
  * @example Basic Vertical Stack
  * ```tsx
@@ -161,24 +161,24 @@ export {
  * The engine is determined in this order:
  * 1. `engine` prop passed directly to the component
  * 2. Nearest `EngineProvider` in the component tree
- * 3. Default engine (Titan)
+ * 3. Default engine (Classic)
  *
  * @example
  * ```tsx
- * // Uses default engine (Titan)
+ * // Uses default engine (Classic)
  * <Stack spacing="md">...</Stack>
  *
  * // Override with specific engine
- * <Stack engine="hermes" spacing="md">...</Stack>
+ * <Stack engine="modern" spacing="md">...</Stack>
  *
  * // Or wrap with EngineProvider
- * <EngineProvider engine="apollo">
+ * <EngineProvider engine="rustic">
  *   <Stack spacing="md">...</Stack>
  * </EngineProvider>
  * ```
  */
 export const Stack = createEngineComponent<StackProps>('Stack', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

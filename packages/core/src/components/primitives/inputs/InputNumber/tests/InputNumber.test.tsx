@@ -225,7 +225,7 @@ describe('InputNumber', () => {
 });
 
 describe('InputNumber engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<InputNumber engine={engine} />);
     expect(screen.getByTestId('input-number')).toBeInTheDocument();
   });

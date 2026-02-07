@@ -4,17 +4,17 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design Popover with full theming support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla HTML/CSS with portal rendering
+ * - **Classic**: Ant Design Popover with full theming support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla HTML/CSS with portal rendering
  *
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <Popover engine="hermes" content="Tailwind styled">
+ * <Popover engine="modern" content="Tailwind styled">
  *   <Button>Open</Button>
  * </Popover>
  * ```
@@ -24,6 +24,6 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

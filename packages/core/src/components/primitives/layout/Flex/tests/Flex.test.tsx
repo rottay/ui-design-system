@@ -175,7 +175,7 @@ describe('Flex', () => {
 });
 
 describe('Flex engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Flex engine={engine}>Test</Flex>);
     expect(screen.getByTestId('flex')).toBeInTheDocument();
   });

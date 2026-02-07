@@ -337,7 +337,7 @@ describe('Transfer', () => {
 });
 
 describe('Transfer engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Transfer engine={engine} dataSource={defaultDataSource} />);
     expect(screen.getByTestId('transfer')).toBeInTheDocument();
   });

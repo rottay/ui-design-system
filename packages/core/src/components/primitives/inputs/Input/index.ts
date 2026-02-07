@@ -11,9 +11,9 @@
  * decorative elements (prefix, suffix, clearable button).
  *
  * **Multi-Engine Architecture:**
- * - **Titan** (Ant Design): Enterprise-grade input with rich validation states
- * - **Hermes** (DaisyUI/Tailwind): Lightweight utility-first input styling
- * - **Apollo** (Vanilla HTML/CSS): Headless implementation with CSS variables
+ * - **Classic** (Ant Design): Enterprise-grade input with rich validation states
+ * - **Modern** (DaisyUI/Tailwind): Lightweight utility-first input styling
+ * - **Rustic** (Vanilla HTML/CSS): Headless implementation with CSS variables
  *
  * **Multi-Tenant Support:**
  * Input appearance adapts to tenant themes via CSS custom properties
@@ -122,9 +122,9 @@ export { InputGroup, InputAddon, InputPassword, InputSearch, InputTextArea };
 // Create engine-aware Input component
 export const Input = Object.assign(
   createEngineComponent<InputProps>('Input', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     Group: InputGroup,

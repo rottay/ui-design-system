@@ -199,7 +199,7 @@ describe('Modal', () => {
   });
 
   describe('Engine Support', () => {
-    it.each(['titan', 'hermes', 'apollo'] as const)(
+    it.each(['classic', 'modern', 'rustic'] as const)(
       'renders with %s engine',
       (engine) => {
         render(<Modal open engine={engine}>Content</Modal>);

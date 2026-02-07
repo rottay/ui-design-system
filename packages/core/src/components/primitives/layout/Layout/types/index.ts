@@ -38,7 +38,7 @@ import type { ReactNode, CSSProperties } from 'react';
 /**
  * Supported rendering engines for Layout components.
  */
-type LayoutEngine = 'titan' | 'hermes' | 'apollo';
+type LayoutEngine = 'classic' | 'modern' | 'rustic';
 
 /**
  * Props for the main Layout container component.
@@ -181,7 +181,7 @@ export interface LayoutSiderProps {
 
   /**
    * Color theme of the sider.
-   * @default 'light' (Hermes) or 'dark' (Apollo)
+   * @default 'light' (Modern) or 'dark' (Rustic)
    */
   theme?: 'light' | 'dark';
 

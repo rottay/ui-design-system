@@ -11,9 +11,9 @@
  * messages. It supports auto-sizing, character counting, and validation.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Wraps Ant Design TextArea with full feature support
- * - **Hermes**: Uses DaisyUI textarea classes with Tailwind
- * - **Apollo**: Pure HTML textarea with custom styling
+ * - **Classic**: Wraps Ant Design TextArea with full feature support
+ * - **Modern**: Uses DaisyUI textarea classes with Tailwind
+ * - **Rustic**: Pure HTML textarea with custom styling
  *
  * **Key Features:**
  * - Controlled and uncontrolled modes
@@ -84,7 +84,7 @@ export {
 } from './types';
 
 export const Textarea = createEngineComponent<TextareaProps>('Textarea', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

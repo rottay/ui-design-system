@@ -7,11 +7,12 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export const FullDataTable = createPreset<DataTableProps & Record<string, unknown>>({
   name: 'DataTable.Full',
-  render: ({ primitives, props, tokens }: PresetContext<DataTableProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<DataTableProps>) => {
     const { Box, Card, Stack, Badge, Spinner, Pagination } = primitives;
     const {
       columns,
@@ -70,6 +71,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
 
     const cellPadding = compact ? tokens.spacing[2] : tokens.spacing[3];
     const allSelected = data.length > 0 && selectedKeys.length === data.length;
+    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
 
     return (
       <Card variant="outlined" padding="none" className={className} style={style}>
@@ -77,7 +79,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
           {/* Toolbar */}
           <Box style={{
             padding: tokens.spacing[4],
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -91,8 +93,8 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
               onChange={(e) => { setSearchQuery(e.target.value); onSearch?.(e.target.value); }}
               style={{
                 padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`,
-                border: `1px solid ${tokens.colors.neutral[300]}`,
-                borderRadius: '6px',
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
+                borderRadius: tokens.borderRadius.md,
                 fontSize: tokens.typography.fontSize.sm,
                 minWidth: '200px',
               }}
@@ -127,7 +129,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
                           fontWeight: 600,
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[600],
-                          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           cursor: col.sortable ? 'pointer' : undefined,
                           userSelect: 'none',
                         }}
@@ -154,14 +156,30 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
                       const key = getRowKey(record as Record<string, unknown>, index);
                       const isSelected = selectedKeys.includes(key);
                       return (
-                        <tr key={key} style={{ backgroundColor: isSelected ? `${tokens.colors.primary}08` : striped && index % 2 === 1 ? tokens.colors.neutral[50] : undefined }}>
+                        <tr
+                          key={key}
+                          style={{
+                            backgroundColor: isSelected ? `${tokens.colors.primaryScale[600]}08` : striped && index % 2 === 1 ? tokens.colors.neutral[50] : undefined,
+                            transition: `all ${tokens.motion.hover}`,
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isSelected) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = isSelected
+                              ? `${tokens.colors.primaryScale[600]}08`
+                              : striped && index % 2 === 1
+                                ? tokens.colors.neutral[50]
+                                : '';
+                          }}
+                        >
                           <td style={{ padding: cellPadding }}>
                             <input type="checkbox" checked={isSelected} onChange={(e) => handleSelectRow(key, e.target.checked)} />
                           </td>
                           {columns.map((col) => {
                             const value = getValue(record as Record<string, unknown>, col.dataIndex as string);
                             return (
-                              <td key={col.key} style={{ padding: cellPadding, textAlign: col.align || 'left', fontSize: tokens.typography.fontSize.sm, borderBottom: `1px solid ${tokens.colors.neutral[200]}` }}>
+                              <td key={col.key} style={{ padding: cellPadding, textAlign: col.align || 'left', fontSize: tokens.typography.fontSize.sm, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                                 {col.render ? col.render(value, record, index) : String(value ?? '')}
                               </td>
                             );
@@ -177,7 +195,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
 
           {/* Pagination */}
           {pagination && typeof pagination === 'object' && (
-            <Box style={{ padding: tokens.spacing[4], borderTop: `1px solid ${tokens.colors.neutral[200]}`, display: 'flex', justifyContent: 'flex-end' }}>
+            <Box style={{ padding: tokens.spacing[4], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, display: 'flex', justifyContent: 'flex-end' }}>
               <Pagination
                 current={pagination.current}
                 total={pagination.total}

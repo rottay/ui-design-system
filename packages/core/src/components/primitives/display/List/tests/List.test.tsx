@@ -155,7 +155,7 @@ describe('List', () => {
     expect(screen.getByTestId('list')).toBeInTheDocument();
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <List engine={engine}>
         <List.Item>Engine Test</List.Item>

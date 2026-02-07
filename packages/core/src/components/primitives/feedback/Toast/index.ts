@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Toast component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -131,7 +131,7 @@
  *
  * // Force a specific rendering engine
  * <Toast
- *   engine="hermes"
+ *   engine="modern"
  *   variant="success"
  *   title="DaisyUI styled toast"
  *   visible={true}
@@ -220,11 +220,11 @@ export type { ToastProviderProps, UseToastReturn } from './utils';
  */
 const ToastComponent = createEngineComponent<ToastProps>('Toast', {
   /** Ant Design implementation - uses message and notification APIs */
-  titan: () => import('./engines/titan'),
+  classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes'),
+  modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo'),
+  rustic: () => import('./engines/rustic'),
 });
 
 // ============================================================================

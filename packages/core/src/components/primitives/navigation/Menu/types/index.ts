@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types support the multi-engine architecture of the Menu component,
- * ensuring type safety across Titan, Hermes, and Apollo engine implementations.
+ * ensuring type safety across Classic, Modern, and Rustic engine implementations.
  *
  * @module Menu/Types
  * @category Navigation

@@ -31,7 +31,7 @@ const meta: Meta<typeof Badge> = {
         component: `
 The Badge component displays counts, status indicators, or labels that can be
 positioned over other elements or used as standalone elements. It supports
-multiple engines (Titan, Hermes, Apollo) for different UI library implementations.
+multiple engines (Classic, Modern, Rustic) for different UI library implementations.
 
 ## Features
 - Multiple size variants (xs, sm, md, lg, xl)
@@ -82,7 +82,7 @@ multiple engines (Titan, Hermes, Apollo) for different UI library implementation
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     count: {
@@ -383,7 +383,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Badge rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Badge rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

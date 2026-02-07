@@ -27,7 +27,7 @@ TimePicker component for selecting time values with support for multiple engines
 
 ## Engine Differences
 
-| Feature | Titan | Hermes | Apollo |
+| Feature | Classic | Modern | Rustic |
 |---------|-------|--------|--------|
 | Library | Ant Design | DaisyUI | Vanilla CSS |
 | Time Panel | Built-in | Browser | Custom |
@@ -70,7 +70,7 @@ TimePicker component for selecting time values with support for multiple engines
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -179,7 +179,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same TimePicker rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same TimePicker rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -249,7 +249,7 @@ export const RangePickerSizes: Story = {
 export const RangePickerEngineComparison: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
+      {(['classic', 'modern', 'rustic'] as const).map((engine) => (
         <div key={engine}>
           <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine}</h4>
           <TimePicker.RangePicker engine={engine} placeholder={['Start', 'End']} />

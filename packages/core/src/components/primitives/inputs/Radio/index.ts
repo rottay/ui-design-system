@@ -11,9 +11,9 @@
  * can be selected at a time.
  *
  * **Multi-Engine Architecture:**
- * - **Titan** (Ant Design): Enterprise-grade radio with button style support
- * - **Hermes** (DaisyUI/Tailwind): Lightweight utility-first radio styling
- * - **Apollo** (Vanilla HTML/CSS): Headless implementation with full a11y
+ * - **Classic** (Ant Design): Enterprise-grade radio with button style support
+ * - **Modern** (DaisyUI/Tailwind): Lightweight utility-first radio styling
+ * - **Rustic** (Vanilla HTML/CSS): Headless implementation with full a11y
  *
  * **Multi-Tenant Support:**
  * Radio appearance adapts to tenant themes via CSS custom properties
@@ -115,9 +115,9 @@ export { RadioGroup } from './compound';
 
 export const Radio = Object.assign(
   createEngineComponent<RadioProps>('Radio', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     Group: RadioGroup,

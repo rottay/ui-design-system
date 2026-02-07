@@ -19,9 +19,9 @@
  * - **Fluid mode**: Full-width container without max-width constraint
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Inline CSS styles for maximum compatibility
- * - **Hermes**: Tailwind CSS classes (max-w-screen-*, mx-auto, p-*)
- * - **Apollo**: Pure inline CSS for dependency-free usage
+ * - **Classic**: Inline CSS styles for maximum compatibility
+ * - **Modern**: Tailwind CSS classes (max-w-screen-*, mx-auto, p-*)
+ * - **Rustic**: Pure inline CSS for dependency-free usage
  *
  * @example Basic Container
  * ```tsx
@@ -97,8 +97,8 @@
  * ```tsx
  * import { Container } from '@rottay/design-system';
  *
- * // Force Hermes engine for Tailwind classes
- * <Container engine="hermes" maxWidth="lg" padding="md">
+ * // Force Modern engine for Tailwind classes
+ * <Container engine="modern" maxWidth="lg" padding="md">
  *   Outputs: class="max-w-screen-lg mx-auto p-4 w-full box-border"
  * </Container>
  * ```
@@ -141,7 +141,7 @@ export {
  * The engine is determined in this order:
  * 1. `engine` prop passed directly to the component
  * 2. Nearest `EngineProvider` in the component tree
- * 3. Default engine (Titan)
+ * 3. Default engine (Classic)
  *
  * @example
  * ```tsx
@@ -157,9 +157,9 @@ export {
  * ```
  */
 export const Container = createEngineComponent<ContainerProps>('Container', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Container;

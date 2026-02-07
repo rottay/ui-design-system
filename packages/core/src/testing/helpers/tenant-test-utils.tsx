@@ -23,7 +23,7 @@ export const TENANT_CONFIGS: Record<TestTenantName, TenantConfig> = {
   rottay: {
     slug: 'rottay',
     name: 'Rottay',
-    engine: 'titan',
+    engine: 'classic',
     theme: 'light',
     plan: 'enterprise' as TenantPlan,
     features: ['all'],
@@ -36,7 +36,7 @@ export const TENANT_CONFIGS: Record<TestTenantName, TenantConfig> = {
   bithire: {
     slug: 'bithire',
     name: 'BitHire',
-    engine: 'titan',
+    engine: 'classic',
     theme: 'light',
     plan: 'enterprise' as TenantPlan,
     features: ['all'],
@@ -49,7 +49,7 @@ export const TENANT_CONFIGS: Record<TestTenantName, TenantConfig> = {
   default: {
     slug: 'default',
     name: 'Default',
-    engine: 'titan',
+    engine: 'classic',
     theme: 'light',
     plan: 'starter' as TenantPlan,
     features: [],
@@ -65,7 +65,7 @@ export const TENANT_CONFIGS: Record<TestTenantName, TenantConfig> = {
  */
 export interface RenderWithTenantOptions extends Omit<RenderOptions, 'wrapper'> {
   /**
-   * Engine to use (defaults to titan)
+   * Engine to use (defaults to classic)
    */
   engine?: EngineName;
   /**
@@ -136,7 +136,7 @@ export function renderWithTenant(
   options: RenderWithTenantOptions = {}
 ): RenderResult {
   const {
-    engine = 'titan',
+    engine = 'classic',
     tenantConfig = {},
     suspenseFallback = <div data-testid="loading">Loading...</div>,
     ...renderOptions

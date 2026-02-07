@@ -1,13 +1,13 @@
 /**
  * @fileoverview Spinner Engine Implementations - Rottay Design System
  * @description Barrel export for all Spinner engine implementations.
- * Provides unified access to Titan, Hermes, and Apollo engine variants.
+ * Provides unified access to Classic, Modern, and Rustic engine variants.
  *
  * @remarks
  * Each engine provides a distinct implementation:
- * - **Titan**: Leverages Ant Design's Spin component for enterprise features
- * - **Hermes**: Uses DaisyUI/Tailwind CSS for utility-first styling
- * - **Apollo**: Pure HTML/CSS implementation for zero-dependency scenarios
+ * - **Classic**: Leverages Ant Design's Spin component for enterprise features
+ * - **Modern**: Uses DaisyUI/Tailwind CSS for utility-first styling
+ * - **Rustic**: Pure HTML/CSS implementation for zero-dependency scenarios
  *
  * The engine factory automatically selects the appropriate implementation
  * based on the global engine context or component-level override.
@@ -15,15 +15,15 @@
  * @example Engine selection via context
  * ```tsx
  * // Global engine selection
- * <EngineProvider engine="hermes">
- *   <Spinner /> {/* Uses HermesSpinner *\/}
+ * <EngineProvider engine="modern">
+ *   <Spinner /> {/* Uses ModernSpinner *\/}
  * </EngineProvider>
  * ```
  *
  * @example Engine selection via prop
  * ```tsx
  * // Component-level override
- * <Spinner engine="apollo" size="lg" />
+ * <Spinner engine="rustic" size="lg" />
  * ```
  *
  * @module Spinner/Engines
@@ -35,11 +35,11 @@
 // Engine Exports
 // ============================================================================
 
-/** Titan engine - Ant Design implementation with Spin component */
-export { default as titan } from './titan';
+/** Classic engine - Ant Design implementation with Spin component */
+export { default as classic } from './classic';
 
-/** Hermes engine - DaisyUI/Tailwind implementation with utility classes */
-export { default as hermes } from './hermes';
+/** Modern engine - DaisyUI/Tailwind implementation with utility classes */
+export { default as modern } from './modern';
 
-/** Apollo engine - Pure HTML/CSS implementation with keyframe animations */
-export { default as apollo } from './apollo';
+/** Rustic engine - Pure HTML/CSS implementation with keyframe animations */
+export { default as rustic } from './rustic';

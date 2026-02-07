@@ -251,7 +251,7 @@ export function getThicknessValue(thickness: DividerThickness | undefined): stri
  * Default colors for different themes/engines.
  */
 export const DEFAULT_COLORS = {
-  titan: '#d9d9d9',
-  hermes: 'oklch(var(--bc) / 0.2)',
-  apollo: '#e0e0e0',
+  classic: '#d9d9d9',
+  modern: 'oklch(var(--bc) / 0.2)',
+  rustic: '#e0e0e0',
 };

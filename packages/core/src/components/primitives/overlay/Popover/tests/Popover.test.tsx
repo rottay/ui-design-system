@@ -303,7 +303,7 @@ describe('Popover', () => {
 });
 
 describe('Popover engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Popover engine={engine} content="Test content">
         <button>Test</button>

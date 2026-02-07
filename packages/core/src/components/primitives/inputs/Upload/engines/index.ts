@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design Upload with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla HTML/CSS upload
+ * - **Classic**: Ant Design Upload with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla HTML/CSS upload
  *
  * All engines implement:
  * - File selection via click or drag-and-drop
@@ -18,10 +18,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { TitanUpload, HermesDragger } from './engines';
+ * import { ClassicUpload, ModernDragger } from './engines';
  *
  * // Component automatically selects engine
- * <Upload engine="hermes" action="/api/upload" />
+ * <Upload engine="modern" action="/api/upload" />
  * ```
  *
  * @see {@link Upload} - Main component
@@ -30,6 +30,6 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-export { Upload as TitanUpload, Dragger as TitanDragger } from './titan';
-export { Upload as HermesUpload, Dragger as HermesDragger } from './hermes';
-export { Upload as ApolloUpload, Dragger as ApolloDragger } from './apollo';
+export { Upload as ClassicUpload, Dragger as ClassicDragger } from './classic';
+export { Upload as ModernUpload, Dragger as ModernDragger } from './modern';
+export { Upload as RusticUpload, Dragger as RusticDragger } from './rustic';

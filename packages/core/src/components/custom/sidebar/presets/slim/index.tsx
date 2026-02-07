@@ -1,35 +1,155 @@
+'use client';
+
 /**
- * Sidebar - Slim Preset (Icons only)
+ * Sidebar - Slim Preset (Icons only, tooltip labels)
+ * Premium: hover elevation, active indicator dot, badge pulse, engine-differentiated
  */
 
-// import React from 'react';
+import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SidebarProps } from '../../core';
 
 export const SlimSidebar = createPreset<SidebarProps>({
   name: 'Sidebar.Slim',
-  render: ({ primitives, props, tokens }: PresetContext<SidebarProps>) => {
-    const { Box, Stack } = primitives;
-    const { items, activeKey, header, footer, collapsedWidth = 72, itemSpacing = 'xs', className, style } = props;
+  render: ({ primitives, props, tokens, engine }: PresetContext<SidebarProps>) => {
+    const { Box, Stack, Badge, Tooltip } = primitives;
+    const {
+      items,
+      activeKey,
+      header,
+      footer,
+      collapsedWidth = 72,
+      itemSpacing = 'xs',
+      className,
+      style,
+    } = props;
+
+    const [hoveredKey, setHoveredKey] = useState<string | null>(null);
 
     return (
-      <Box className={className} style={{ width: `${collapsedWidth}px`, height: '100vh', backgroundColor: tokens.colors.neutral[50], borderRight: `1px solid ${tokens.colors.neutral[200]}`, display: 'flex', flexDirection: 'column', ...style }}>
-        {header && <Box style={{ padding: tokens.spacing[4], borderBottom: `1px solid ${tokens.colors.neutral[200]}`, display: 'flex', justifyContent: 'center' }}>{header}</Box>}
+      <Box
+        className={className}
+        style={{
+          width: `${collapsedWidth}px`,
+          height: '100%',
+          backgroundColor: tokens.colors.common.white,
+          borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: engine === 'modern' ? tokens.shadows.sm : 'none',
+          ...style,
+        }}
+      >
+        {header && (
+          <Box
+            style={{
+              padding: tokens.spacing[3],
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              display: 'flex',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            {header}
+          </Box>
+        )}
+
         <Box style={{ flex: 1, overflowY: 'auto', padding: tokens.spacing[2] }}>
           <Stack direction="vertical" spacing={itemSpacing}>
-            {items.map((item) => {
+            {items.filter(i => !i.disabled).map((item) => {
               const isActive = item.key === activeKey;
-              return (
-                <div key={item.key} onClick={item.onClick} style={{ position: 'relative', padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`, cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: tokens.spacing[1], borderRadius: '0.375rem', backgroundColor: isActive ? '#EFF6FF' : 'transparent', color: isActive ? '#2563EB' : tokens.colors.neutral[600], transition: 'all 0.2s' }}>
-                  {item.icon && <Box style={{ fontSize: '20px' }}>{item.icon}</Box>}
-                  <Box style={{ fontSize: tokens.typography.fontSize.xs, textAlign: 'center', fontWeight: isActive ? 600 : 400 }}>{item.label}</Box>
-                  {item.badge && <Box style={{ position: 'absolute', top: '8px', right: '8px', backgroundColor: '#DC2626', color: 'white', borderRadius: '12px', padding: '2px 6px', fontSize: tokens.typography.fontSize.xs, fontWeight: 600, minWidth: '20px', textAlign: 'center' }}>{item.badge}</Box>}
+              const isHovered = hoveredKey === item.key;
+
+              const itemContent = (
+                <div
+                  key={item.key}
+                  onMouseEnter={() => setHoveredKey(item.key)}
+                  onMouseLeave={() => setHoveredKey(null)}
+                  onClick={item.onClick}
+                  title={item.label}
+                  style={{
+                    position: 'relative',
+                    padding: `${tokens.spacing[2]}px`,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: tokens.spacing[1],
+                    borderRadius: tokens.borderRadius.md,
+                    backgroundColor: isActive
+                      ? tokens.colors.primaryScale[50]
+                      : isHovered
+                        ? tokens.colors.neutral[100]
+                        : 'transparent',
+                    color: isActive
+                      ? tokens.colors.primaryScale[600]
+                      : isHovered
+                        ? tokens.colors.neutral[800]
+                        : tokens.colors.neutral[500],
+                    transition: `all ${tokens.motion.hover}`,
+                    transform: isHovered ? tokens.motion.transform : 'none',
+                    minHeight: '44px',
+                  }}
+                >
+                  {/* Active indicator dot */}
+                  {isActive && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: '4px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '4px',
+                        height: '4px',
+                        borderRadius: tokens.borderRadius.full,
+                        backgroundColor: tokens.colors.primaryScale[500],
+                      }}
+                    />
+                  )}
+
+                  {item.icon && (
+                    <Box style={{ fontSize: '20px', display: 'flex', alignItems: 'center' }}>
+                      {item.icon}
+                    </Box>
+                  )}
+
+                  {/* Badge dot */}
+                  {item.badge && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '6px',
+                        right: '6px',
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: tokens.borderRadius.full,
+                        backgroundColor: tokens.colors.errorScale[500],
+                        border: `2px solid ${tokens.colors.common.white}`,
+                      }}
+                    />
+                  )}
                 </div>
               );
+
+              return <Box key={item.key}>{itemContent}</Box>;
             })}
           </Stack>
         </Box>
-        {footer && <Box style={{ padding: tokens.spacing[4], borderTop: `1px solid ${tokens.colors.neutral[200]}`, display: 'flex', justifyContent: 'center' }}>{footer}</Box>}
+
+        {footer && (
+          <Box
+            style={{
+              padding: tokens.spacing[3],
+              borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              display: 'flex',
+              justifyContent: 'center',
+              flexShrink: 0,
+            }}
+          >
+            {footer}
+          </Box>
+        )}
       </Box>
     );
   },

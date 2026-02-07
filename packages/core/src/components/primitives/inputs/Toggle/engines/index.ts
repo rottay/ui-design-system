@@ -9,9 +9,9 @@
  * libraries and styling approaches.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Switch with enterprise features
- * - **Hermes**: DaisyUI/Tailwind CSS toggle classes
- * - **Apollo**: Pure CSS with comprehensive accessibility
+ * - **Classic**: Ant Design Switch with enterprise features
+ * - **Modern**: DaisyUI/Tailwind CSS toggle classes
+ * - **Rustic**: Pure CSS with comprehensive accessibility
  *
  * **Engine Selection:**
  * The engine is selected via the `engine` prop or inherited from the
@@ -19,21 +19,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes engine for lightweight styling
- * <Toggle engine="hermes" label="Enable" />
+ * // Use Modern engine for lightweight styling
+ * <Toggle engine="modern" label="Enable" />
  *
- * // Use Titan engine for enterprise features
- * <Toggle engine="titan" loading label="Processing" />
+ * // Use Classic engine for enterprise features
+ * <Toggle engine="classic" loading label="Processing" />
  * ```
  *
- * @see {@link TitanToggle} for Ant Design implementation
- * @see {@link HermesToggle} for DaisyUI implementation
- * @see {@link ApolloToggle} for vanilla implementation
+ * @see {@link ClassicToggle} for Ant Design implementation
+ * @see {@link ModernToggle} for DaisyUI implementation
+ * @see {@link RusticToggle} for vanilla implementation
  * @module ToggleEngines
  * @category Inputs
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

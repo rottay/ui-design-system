@@ -134,7 +134,7 @@ export interface MentionsProps {
   /** Popup class name */
   popupClassName?: string;
   /** Rendering engine override */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

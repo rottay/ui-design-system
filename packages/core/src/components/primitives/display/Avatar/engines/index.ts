@@ -8,12 +8,12 @@
  * Each engine provides the same avatar functionality with different styling.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Avatar with Badge for status
- * - **Hermes**: DaisyUI avatar/mask classes
- * - **Apollo**: Pure CSS with inline styles
+ * - **Classic**: Ant Design Avatar with Badge for status
+ * - **Modern**: DaisyUI avatar/mask classes
+ * - **Rustic**: Pure CSS with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Image loading | ✅ | ✅ | ✅ |
  * | Initials fallback | ✅ | ✅ | ✅ |
@@ -23,21 +23,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes for DaisyUI styling
- * <Avatar engine="hermes" src="/user.jpg" status="online" />
+ * // Use Modern for DaisyUI styling
+ * <Avatar engine="modern" src="/user.jpg" status="online" />
  *
- * // Use Apollo for zero dependencies
- * <Avatar engine="apollo" name="JD" variant="primary" />
+ * // Use Rustic for zero dependencies
+ * <Avatar engine="rustic" name="JD" variant="primary" />
  * ```
  *
- * @see {@link TitanAvatar} for Ant Design implementation
- * @see {@link HermesAvatar} for DaisyUI implementation
- * @see {@link ApolloAvatar} for vanilla implementation
+ * @see {@link ClassicAvatar} for Ant Design implementation
+ * @see {@link ModernAvatar} for DaisyUI implementation
+ * @see {@link RusticAvatar} for vanilla implementation
  * @module AvatarEngines
  * @category Display
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

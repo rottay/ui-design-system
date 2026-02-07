@@ -24,7 +24,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   rottay: {
     slug: 'rottay',
     name: 'Rottay',
-    engine: 'titan' as EngineName,
+    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
@@ -43,7 +43,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   bithire: {
     slug: 'bithire',
     name: 'BitHire',
-    engine: 'titan' as EngineName,
+    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
@@ -62,7 +62,7 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   evnto: {
     slug: 'evnto',
     name: 'Evnto',
-    engine: 'titan' as EngineName,
+    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],

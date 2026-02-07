@@ -356,7 +356,7 @@ describe('Result', () => {
     /**
      * Verifies the component renders with each engine.
      */
-    it.each(['titan', 'hermes', 'apollo'] as const)(
+    it.each(['classic', 'modern', 'rustic'] as const)(
       'renders with %s engine',
       (engine) => {
         render(<Result engine={engine} title={`${engine} Result`} />);

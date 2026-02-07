@@ -10,7 +10,7 @@
  * - Custom className and style application
  * - All size variants (sm, md, lg, xl)
  * - Custom color support
- * - Multi-engine rendering (titan, hermes, apollo)
+ * - Multi-engine rendering (classic, modern, rustic)
  * - Accessibility attributes (role, aria-busy)
  *
  * @example Running tests
@@ -136,7 +136,7 @@ describe('Spinner', () => {
   // ==========================================================================
 
   describe('Engine Support', () => {
-    it.each(['titan', 'hermes', 'apollo'] as const)(
+    it.each(['classic', 'modern', 'rustic'] as const)(
       'renders with %s engine',
       (engine) => {
         const { container } = render(<Spinner engine={engine} />);

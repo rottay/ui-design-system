@@ -13,7 +13,7 @@
  * - **Form submissions**: File attachments in forms
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Drag and drop**: Upload.Dragger for drag-drop interface
  * - **Multiple files**: Upload multiple files at once
  * - **Progress tracking**: Real-time upload progress display
@@ -93,14 +93,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Upload engine="titan" action="/api/upload" listType="picture" />
+ * // Classic engine (Ant Design - default)
+ * <Upload engine="classic" action="/api/upload" listType="picture" />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Upload engine="hermes" action="/api/upload" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Upload engine="modern" action="/api/upload" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Upload engine="apollo" action="/api/upload" />
+ * // Rustic engine (Pure HTML/CSS)
+ * <Upload engine="rustic" action="/api/upload" />
  * ```
  *
  * @see {@link UploadProps} for component props
@@ -124,15 +124,15 @@ export {
 } from './types';
 
 const UploadBase = createEngineComponent<UploadProps>('Upload', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Upload })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Upload })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Upload })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Upload })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Upload })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Upload })),
 });
 
 const Dragger = createEngineComponent<DraggerProps>('Upload.Dragger', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Dragger })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Dragger })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Dragger })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Dragger })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Dragger })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Dragger })),
 });
 
 export const Upload = Object.assign(UploadBase, {

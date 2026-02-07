@@ -22,9 +22,9 @@
  * - Nested layouts for complex structures
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Wraps Ant Design Layout components with full feature parity
- * - **Hermes**: Tailwind CSS implementation with DaisyUI theming
- * - **Apollo**: Pure CSS flexbox layout with inline styles
+ * - **Classic**: Wraps Ant Design Layout components with full feature parity
+ * - **Modern**: Tailwind CSS implementation with DaisyUI theming
+ * - **Rustic**: Pure CSS flexbox layout with inline styles
  *
  * @example Basic Page Layout
  * ```tsx
@@ -113,10 +113,10 @@
  * ```tsx
  * import { Layout } from '@rottay/design-system';
  *
- * // Force Hermes (Tailwind) implementation
- * <Layout engine="hermes">
- *   <Layout.Header engine="hermes">Header</Layout.Header>
- *   <Layout.Content engine="hermes">Content</Layout.Content>
+ * // Force Modern (Tailwind) implementation
+ * <Layout engine="modern">
+ *   <Layout.Header engine="modern">Header</Layout.Header>
+ *   <Layout.Content engine="modern">Content</Layout.Content>
  * </Layout>
  * ```
  *
@@ -147,33 +147,33 @@ export {
 } from './types';
 
 const LayoutBase = createEngineComponent<LayoutProps>('Layout', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Layout })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Layout })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Layout })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Layout })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Layout })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Layout })),
 });
 
 const Header = createEngineComponent<LayoutHeaderProps>('Layout.Header', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Header })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Header })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Header })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Header })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Header })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Header })),
 });
 
 const Sider = createEngineComponent<LayoutSiderProps>('Layout.Sider', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Sider })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Sider })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Sider })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Sider })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Sider })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Sider })),
 });
 
 const Content = createEngineComponent<LayoutContentProps>('Layout.Content', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Content })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Content })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Content })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Content })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Content })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Content })),
 });
 
 const Footer = createEngineComponent<LayoutFooterProps>('Layout.Footer', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Footer })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Footer })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Footer })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Footer })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Footer })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Footer })),
 });
 
 export const Layout = Object.assign(LayoutBase, {

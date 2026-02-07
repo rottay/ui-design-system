@@ -5,7 +5,7 @@
  *
  * @remarks
  * The Message component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -90,11 +90,11 @@
  * }
  * ```
  *
- * @example Static Methods (Titan Engine Only)
+ * @example Static Methods (Classic Engine Only)
  * ```tsx
  * import { message } from '@rottay/design-system';
  *
- * // These work globally without context (Titan engine only)
+ * // These work globally without context (Classic engine only)
  * message.success('Success!');
  * message.error('Error!');
  * message.info('Info!');
@@ -170,31 +170,31 @@ export {
 } from './types';
 
 // ============================================================================
-// Component Exports (Default: Titan Engine)
+// Component Exports (Default: Classic Engine)
 // ============================================================================
 
 /**
- * Re-exports from the Titan engine (Ant Design implementation).
+ * Re-exports from the Classic engine (Ant Design implementation).
  *
  * @remarks
- * The Titan engine is the default and provides the richest feature set,
+ * The Classic engine is the default and provides the richest feature set,
  * including static message methods that work without a provider context.
- * For Hermes and Apollo engines, use the MessageProvider and useMessage hook.
+ * For Modern and Rustic engines, use the MessageProvider and useMessage hook.
  */
 export {
   MessageProvider,
   MessageItem,
   useMessage,
   message,
-} from './engines/titan';
+} from './engines/classic';
 
 // ============================================================================
 // Default Export
 // ============================================================================
 
 /**
- * Default export containing all Titan engine exports.
+ * Default export containing all Classic engine exports.
  * Includes MessageProvider, MessageItem, useMessage hook, and static message API.
  */
-import * as titanEngine from './engines/titan';
-export default titanEngine;
+import * as classicEngine from './engines/classic';
+export default classicEngine;

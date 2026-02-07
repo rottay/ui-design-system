@@ -14,7 +14,7 @@
  * - **Product tracking**: Inventory, shipping, and tracking codes
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Render types**: Canvas (performance) or SVG (scalability)
  * - **Error correction**: Four levels (L, M, Q, H) for damage tolerance
  * - **Center icons**: Logo or branding in the QR code center
@@ -59,14 +59,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <QRCode engine="titan" value={url} bordered />
+ * // Classic engine (Ant Design - default)
+ * <QRCode engine="classic" value={url} bordered />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <QRCode engine="hermes" value={url} type="svg" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <QRCode engine="modern" value={url} type="svg" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <QRCode engine="apollo" value={url} size={180} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <QRCode engine="rustic" value={url} size={180} />
  * ```
  *
  * @see {@link QRCodeProps} for component props
@@ -99,14 +99,14 @@ export { QRCODE_DEFAULTS, SIZE_MAP } from './types';
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const QRCode = createEngineComponent<QRCodeProps>('QRCode', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default QRCode;

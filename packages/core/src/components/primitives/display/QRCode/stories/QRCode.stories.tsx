@@ -25,7 +25,7 @@ const meta: Meta<typeof QRCode> = {
 QRCode component for generating and displaying QR codes.
 
 ## Features
-- Multiple render engines (Titan/Ant Design, Hermes/DaisyUI, Apollo/Vanilla)
+- Multiple render engines (Classic/Ant Design, Modern/DaisyUI, Rustic/Vanilla)
 - Customizable size, colors, and error correction levels
 - Support for center icons/logos
 - Status states (active, loading, expired, scanned)
@@ -74,7 +74,7 @@ import { QRCode } from '@es-rottay/designsystem-core';
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -222,7 +222,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same QRCode rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same QRCode rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

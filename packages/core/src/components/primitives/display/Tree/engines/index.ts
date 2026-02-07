@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design Tree with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla HTML/CSS with recursive rendering
+ * - **Classic**: Ant Design Tree with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla HTML/CSS with recursive rendering
  *
  * All engines implement:
  * - Hierarchical data rendering with expand/collapse
@@ -17,10 +17,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <Tree engine="hermes" treeData={data} checkable>
+ * <Tree engine="modern" treeData={data} checkable>
  *   Tree content
  * </Tree>
  * ```
@@ -30,6 +30,6 @@
  * @category Display
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

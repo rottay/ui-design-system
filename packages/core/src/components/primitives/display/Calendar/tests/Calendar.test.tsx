@@ -140,7 +140,7 @@ describe('Calendar', () => {
     expect(screen.getByTestId('calendar')).toHaveAttribute('id', 'my-calendar');
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     // Engine is passed to the component but mock renders the same for all engines
     render(<Calendar engine={engine} />);
     expect(screen.getByTestId('calendar')).toBeInTheDocument();

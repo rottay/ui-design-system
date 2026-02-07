@@ -227,7 +227,7 @@ describe('Menu', () => {
 });
 
 describe('Menu engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Menu engine={engine} items={[{ key: '1', label: 'Test' }]} />);
     expect(screen.getByTestId('menu')).toBeInTheDocument();
   });

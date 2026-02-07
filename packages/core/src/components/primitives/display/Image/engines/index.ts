@@ -8,12 +8,12 @@
  * Each engine provides the same image functionality with different features.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Image with preview/lightbox
- * - **Hermes**: Tailwind utilities with hover effects
- * - **Apollo**: Pure CSS with custom zoom modal
+ * - **Classic**: Ant Design Image with preview/lightbox
+ * - **Modern**: Tailwind utilities with hover effects
+ * - **Rustic**: Pure CSS with custom zoom modal
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Loading skeleton | ✅ | ✅ | ✅ |
  * | Error fallback | ✅ | ✅ | ✅ |
@@ -24,21 +24,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes for Tailwind styling
- * <Image engine="hermes" src="/photo.jpg" shadow />
+ * // Use Modern for Tailwind styling
+ * <Image engine="modern" src="/photo.jpg" shadow />
  *
- * // Use Apollo for custom zoom
- * <Image engine="apollo" src="/photo.jpg" zoomable />
+ * // Use Rustic for custom zoom
+ * <Image engine="rustic" src="/photo.jpg" zoomable />
  * ```
  *
- * @see {@link TitanImage} for Ant Design implementation
- * @see {@link HermesImage} for DaisyUI implementation
- * @see {@link ApolloImage} for vanilla implementation
+ * @see {@link ClassicImage} for Ant Design implementation
+ * @see {@link ModernImage} for DaisyUI implementation
+ * @see {@link RusticImage} for vanilla implementation
  * @module ImageEngines
  * @category Display
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

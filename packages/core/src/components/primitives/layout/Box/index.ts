@@ -12,9 +12,9 @@
  * (like `p`, `m`, `bg`, `rounded`) for rapid prototyping and consistent styling.
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Full-featured implementation using Ant Design patterns
- * - **Hermes**: Utility-first implementation using DaisyUI/Tailwind classes
- * - **Apollo**: Pure HTML/CSS implementation for maximum compatibility
+ * - **Classic**: Full-featured implementation using Ant Design patterns
+ * - **Modern**: Utility-first implementation using DaisyUI/Tailwind classes
+ * - **Rustic**: Pure HTML/CSS implementation for maximum compatibility
  *
  * All engines produce visually consistent output while leveraging their
  * respective styling paradigms.
@@ -79,8 +79,8 @@
  * ```tsx
  * import { Box } from '@rottay/design-system';
  *
- * // Force Hermes engine for Tailwind classes
- * <Box engine="hermes" p="md" rounded="lg">
+ * // Force Modern engine for Tailwind classes
+ * <Box engine="modern" p="md" rounded="lg">
  *   Uses Tailwind utility classes
  * </Box>
  * ```
@@ -145,24 +145,24 @@ export { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from './types';
  * The engine is determined in this order:
  * 1. `engine` prop passed directly to the component
  * 2. Nearest `EngineProvider` in the component tree
- * 3. Default engine (Titan)
+ * 3. Default engine (Classic)
  *
  * @example
  * ```tsx
- * // Uses default engine (Titan)
+ * // Uses default engine (Classic)
  * <Box p="md">Default engine</Box>
  *
  * // Override with specific engine
- * <Box engine="hermes" p="md">Hermes engine</Box>
+ * <Box engine="modern" p="md">Modern engine</Box>
  *
  * // Or wrap with EngineProvider
- * <EngineProvider engine="apollo">
- *   <Box p="md">Apollo engine</Box>
+ * <EngineProvider engine="rustic">
+ *   <Box p="md">Rustic engine</Box>
  * </EngineProvider>
  * ```
  */
 export const Box = createEngineComponent<BoxProps>('Box', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });

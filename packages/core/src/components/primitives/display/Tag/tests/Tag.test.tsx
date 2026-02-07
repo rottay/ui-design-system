@@ -247,7 +247,7 @@ describe('Tag.Group', () => {
 });
 
 describe('Tag engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Tag engine={engine}>Test</Tag>);
     expect(screen.getByTestId('tag')).toBeInTheDocument();
   });

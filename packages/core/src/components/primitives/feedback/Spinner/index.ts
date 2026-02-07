@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Spinner component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -74,10 +74,10 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Spinner engine="hermes" size="lg" />
+ * <Spinner engine="modern" size="lg" />
  * // Renders with DaisyUI/Tailwind styling
  *
- * <Spinner engine="apollo" size="lg" color="#1890ff" />
+ * <Spinner engine="rustic" size="lg" color="#1890ff" />
  * // Renders with pure CSS animation
  * ```
  *
@@ -156,9 +156,9 @@ export {
  */
 export const Spinner = createEngineComponent<SpinnerProps>('Spinner', {
   /** Ant Design implementation - uses Spin component with native animations */
-  titan: () => import('./engines/titan'),
+  classic: () => import('./engines/classic'),
   /** DaisyUI/Tailwind implementation - utility-first with loading classes */
-  hermes: () => import('./engines/hermes'),
+  modern: () => import('./engines/modern'),
   /** Vanilla HTML/CSS implementation - pure CSS keyframe animations */
-  apollo: () => import('./engines/apollo'),
+  rustic: () => import('./engines/rustic'),
 });

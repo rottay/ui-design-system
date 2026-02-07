@@ -8,12 +8,12 @@
  * Each engine provides the same tag functionality with different styling.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Tag with preset colors
- * - **Hermes**: DaisyUI badge classes
- * - **Apollo**: Pure CSS with inline styles
+ * - **Classic**: Ant Design Tag with preset colors
+ * - **Modern**: DaisyUI badge classes
+ * - **Rustic**: Pure CSS with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Closable | ✅ | ✅ | ✅ |
  * | Icons | ✅ | ✅ | ✅ |
@@ -23,21 +23,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Hermes for DaisyUI styling
- * <Tag engine="hermes" variant="primary" />
+ * // Use Modern for DaisyUI styling
+ * <Tag engine="modern" variant="primary" />
  *
- * // Use Apollo for zero dependencies
- * <Tag engine="apollo" closable onClose={fn} />
+ * // Use Rustic for zero dependencies
+ * <Tag engine="rustic" closable onClose={fn} />
  * ```
  *
- * @see {@link TitanTag} for Ant Design implementation
- * @see {@link HermesTag} for DaisyUI implementation
- * @see {@link ApolloTag} for vanilla implementation
+ * @see {@link ClassicTag} for Ant Design implementation
+ * @see {@link ModernTag} for DaisyUI implementation
+ * @see {@link RusticTag} for vanilla implementation
  * @module TagEngines
  * @category Display
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

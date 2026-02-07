@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types are designed to be engine-agnostic, ensuring consistent prop
- * interfaces across Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla)
+ * interfaces across Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla)
  * implementations. All engines must satisfy these type contracts.
  *
  * @example Type Usage
@@ -113,7 +113,7 @@ export interface BackTopProps {
 
   /**
    * Duration of the scroll animation in milliseconds.
-   * Only applies to the Titan engine (Ant Design).
+   * Only applies to the Classic engine (Ant Design).
    *
    * @default 450
    *

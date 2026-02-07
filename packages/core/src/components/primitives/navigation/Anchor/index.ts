@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Anchor component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -101,7 +101,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Anchor engine="hermes">
+ * <Anchor engine="modern">
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  *   <Anchor.Link href="#section" title="Section" />
  * </Anchor>
@@ -141,11 +141,11 @@ export {
  */
 const AnchorBase = createEngineComponent<AnchorProps>('Anchor', {
   /** Ant Design implementation - full-featured with animations */
-  titan: () => import('./engines/titan').then(m => ({ default: m.Anchor })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Anchor })),
   /** DaisyUI/Tailwind implementation - utility-first styling */
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Anchor })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Anchor })),
   /** Vanilla HTML/CSS implementation - zero dependencies */
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Anchor })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Anchor })),
 });
 
 /**
@@ -156,11 +156,11 @@ const AnchorBase = createEngineComponent<AnchorProps>('Anchor', {
  */
 const Link = createEngineComponent<AnchorLinkProps>('Anchor.Link', {
   /** Ant Design link implementation */
-  titan: () => import('./engines/titan').then(m => ({ default: m.Link })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Link })),
   /** DaisyUI/Tailwind link implementation */
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Link })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Link })),
   /** Vanilla HTML/CSS link implementation */
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Link })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Link })),
 });
 
 // ============================================================================

@@ -13,7 +13,7 @@
  * - **Tagging systems**: #hashtags, #topics, #categories
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Custom prefixes**: Support for @, #, or any custom trigger
  * - **Multiple prefixes**: Different suggestions for different triggers
  * - **Async search**: Fetch suggestions dynamically
@@ -70,14 +70,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Mentions engine="titan" options={users} autoSize />
+ * // Classic engine (Ant Design - default)
+ * <Mentions engine="classic" options={users} autoSize />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Mentions engine="hermes" options={users} rows={5} />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Mentions engine="modern" options={users} rows={5} />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Mentions engine="apollo" options={users} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <Mentions engine="rustic" options={users} />
  * ```
  *
  * @see {@link MentionsProps} for component props
@@ -105,14 +105,14 @@ export {
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const Mentions = createEngineComponent<MentionsProps>('Mentions', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Mentions;

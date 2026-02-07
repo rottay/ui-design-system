@@ -423,7 +423,7 @@ describe('Box Types', () => {
 });
 
 describe('Box engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Box engine={engine}>Test</Box>);
     expect(screen.getByTestId('box')).toBeInTheDocument();
   });

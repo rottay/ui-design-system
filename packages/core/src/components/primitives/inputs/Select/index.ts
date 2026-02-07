@@ -11,9 +11,9 @@
  * rendering, and keyboard navigation.
  *
  * **Multi-Engine Architecture:**
- * - **Titan** (Ant Design): Full-featured select with advanced filtering
- * - **Hermes** (DaisyUI/Tailwind): Lightweight utility-first select styling
- * - **Apollo** (Vanilla HTML/CSS): Headless implementation with full keyboard support
+ * - **Classic** (Ant Design): Full-featured select with advanced filtering
+ * - **Modern** (DaisyUI/Tailwind): Lightweight utility-first select styling
+ * - **Rustic** (Vanilla HTML/CSS): Headless implementation with full keyboard support
  *
  * **Multi-Tenant Support:**
  * Select appearance adapts to tenant themes via CSS custom properties
@@ -131,9 +131,9 @@ export { SelectOption, SelectOptGroup };
 // Create engine-aware Select component
 export const Select = Object.assign(
   createEngineComponent<SelectProps>('Select', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     Option: SelectOption,

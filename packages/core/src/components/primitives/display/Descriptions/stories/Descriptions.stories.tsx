@@ -23,7 +23,7 @@ const meta: Meta<typeof Descriptions> = {
     docs: {
       description: {
         component:
-          'Descriptions component for displaying key-value pairs in a structured layout. Supports multiple engines (Titan, Hermes, Apollo), horizontal/vertical layouts, bordered styles, and responsive column configurations.',
+          'Descriptions component for displaying key-value pairs in a structured layout. Supports multiple engines (Classic, Modern, Rustic), horizontal/vertical layouts, bordered styles, and responsive column configurations.',
       },
     },
   },
@@ -56,7 +56,7 @@ const meta: Meta<typeof Descriptions> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -252,7 +252,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Descriptions rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Descriptions rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

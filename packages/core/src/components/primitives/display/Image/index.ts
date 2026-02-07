@@ -10,9 +10,9 @@
  * states, error fallbacks, lazy loading, and optional zoom/lightbox functionality.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Image with built-in preview
- * - **Hermes**: Tailwind utilities with DaisyUI patterns
- * - **Apollo**: Pure CSS with custom zoom overlay
+ * - **Classic**: Ant Design Image with built-in preview
+ * - **Modern**: Tailwind utilities with DaisyUI patterns
+ * - **Rustic**: Pure CSS with custom zoom overlay
  *
  * **Key Features:**
  * - Automatic loading skeleton placeholder
@@ -59,7 +59,7 @@
  *
  * @example Engine Override
  * ```tsx
- * <Image engine="hermes" src="/photo.jpg" alt="Photo" />
+ * <Image engine="modern" src="/photo.jpg" alt="Photo" />
  * ```
  *
  * @see {@link ImageProps} for available props
@@ -130,7 +130,7 @@ export { ImageFallback, ImageSkeleton };
  *
  * // With specific engine
  * <Image
- *   engine="hermes"
+ *   engine="modern"
  *   src="/photo.jpg"
  *   alt="Description"
  * />
@@ -138,9 +138,9 @@ export { ImageFallback, ImageSkeleton };
  */
 export const Image = Object.assign(
   createEngineComponent<ImageProps>('Image', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

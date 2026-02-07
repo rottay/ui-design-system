@@ -7,11 +7,12 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export const SelectableDataTable = createPreset<DataTableProps & Record<string, unknown>>({
   name: 'DataTable.Selectable',
-  render: ({ primitives, props, tokens }: PresetContext<DataTableProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<DataTableProps>) => {
     const { Box, Card, Stack, Badge, Spinner } = primitives;
     const {
       columns,
@@ -58,6 +59,7 @@ export const SelectableDataTable = createPreset<DataTableProps & Record<string, 
     const allSelected = data.length > 0 && selectedKeys.length === data.length;
     const someSelected = selectedKeys.length > 0 && selectedKeys.length < data.length;
     const cellPadding = compact ? tokens.spacing[2] : tokens.spacing[3];
+    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
 
     return (
       <Card variant="outlined" padding="none" className={className} style={style}>
@@ -66,8 +68,8 @@ export const SelectableDataTable = createPreset<DataTableProps & Record<string, 
           {selectedKeys.length > 0 && (
             <Box style={{
               padding: tokens.spacing[3],
-              backgroundColor: `${tokens.colors.primary}10`,
-              borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+              backgroundColor: `${tokens.colors.primaryScale[600]}10`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               display: 'flex',
               alignItems: 'center',
               gap: tokens.spacing[2],
@@ -106,7 +108,7 @@ export const SelectableDataTable = createPreset<DataTableProps & Record<string, 
                           fontWeight: 600,
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[600],
-                          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         }}
                       >
                         {col.title}
@@ -129,7 +131,18 @@ export const SelectableDataTable = createPreset<DataTableProps & Record<string, 
                         <tr
                           key={key}
                           style={{
-                            backgroundColor: isSelected ? `${tokens.colors.primary}08` : striped && index % 2 === 1 ? tokens.colors.neutral[50] : undefined,
+                            backgroundColor: isSelected ? `${tokens.colors.primaryScale[600]}08` : striped && index % 2 === 1 ? tokens.colors.neutral[50] : undefined,
+                            transition: `all ${tokens.motion.hover}`,
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isSelected) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = isSelected
+                              ? `${tokens.colors.primaryScale[600]}08`
+                              : striped && index % 2 === 1
+                                ? tokens.colors.neutral[50]
+                                : '';
                           }}
                         >
                           <td style={{ padding: cellPadding }}>
@@ -148,7 +161,7 @@ export const SelectableDataTable = createPreset<DataTableProps & Record<string, 
                                   padding: cellPadding,
                                   textAlign: col.align || 'left',
                                   fontSize: tokens.typography.fontSize.sm,
-                                  borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                                  borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 }}
                               >
                                 {col.render ? col.render(value, record, index) : String(value ?? '')}

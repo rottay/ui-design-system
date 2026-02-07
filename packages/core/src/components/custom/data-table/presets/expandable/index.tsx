@@ -7,6 +7,7 @@
 
 import { useState, useMemo, useCallback, type ReactNode, type ChangeEvent, type MouseEvent as ReactMouseEvent } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export interface FilterOption {
@@ -77,7 +78,7 @@ export interface ExpandableDataTableProps<T = Record<string, unknown>> extends D
 
 export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Record<string, unknown>>({
   name: 'DataTable.Expandable',
-  render: ({ primitives, props, tokens }: PresetContext<ExpandableDataTableProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<ExpandableDataTableProps>) => {
     const { Box, Card, Stack, Button, Badge, Spinner, Checkbox } = primitives;
     const {
       columns,
@@ -247,6 +248,8 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
       [data, selectedKeys, getRowKey]
     );
 
+    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
+
     // Styling
     const cellPadding = dense
       ? `${tokens.spacing[1]} ${tokens.spacing[2]}`
@@ -259,7 +262,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
       fontWeight: 600,
       fontSize: tokens.typography.fontSize.xs,
       color: tokens.colors.neutral[500],
-      borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
       whiteSpace: 'nowrap' as const,
@@ -272,7 +275,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
     const bodyCellStyle = {
       padding: cellPadding,
       fontSize: tokens.typography.fontSize.sm,
-      borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       color: tokens.colors.neutral[700],
     };
 
@@ -287,7 +290,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
           {/* Toolbar */}
           <Box style={{
             padding: tokens.spacing[4],
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -394,17 +397,17 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                   onChange={(e) => handleSearch(e.target.value)}
                   style={{
                     padding: `${tokens.spacing[2]} ${tokens.spacing[3]} ${tokens.spacing[2]} ${tokens.spacing[8]}`,
-                    border: `1px solid ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     borderRadius: '8px',
                     fontSize: tokens.typography.fontSize.sm,
                     minWidth: '220px',
                     outline: 'none',
-                    transition: 'border-color 0.2s, box-shadow 0.2s',
-                    backgroundColor: '#ffffff',
+                    transition: `all ${tokens.motion.hover}`,
+                    backgroundColor: tokens.colors.common.white,
                   }}
                   onFocus={(e) => {
-                    e.target.style.borderColor = tokens.colors.primary;
-                    e.target.style.boxShadow = `0 0 0 3px ${tokens.colors.primary}20`;
+                    e.target.style.borderColor = tokens.colors.primaryScale[600];
+                    e.target.style.boxShadow = `0 0 0 3px ${tokens.colors.primaryScale[600]}20`;
                   }}
                   onBlur={(e) => {
                     e.target.style.borderColor = tokens.colors.neutral[300];
@@ -500,7 +503,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                                 height: '14px',
                                 opacity: sortState?.key === col.key ? 1 : 0.3,
                                 transform: sortState?.key === col.key && sortState.direction === 'desc' ? 'rotate(180deg)' : undefined,
-                                transition: 'transform 0.2s, opacity 0.2s',
+                                transition: `all ${tokens.motion.hover}`,
                               }}
                               fill="none"
                               stroke="currentColor"
@@ -533,11 +536,11 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                           key={key}
                           style={{
                             backgroundColor: isSelected
-                              ? `${tokens.colors.primary}08`
+                              ? `${tokens.colors.primaryScale[600]}08`
                               : striped && index % 2 === 1
                                 ? tokens.colors.neutral[50]
                                 : undefined,
-                            transition: 'background-color 0.15s',
+                            transition: `all ${tokens.motion.hover}`,
                           }}
                           onMouseEnter={(e) => {
                             if (!isSelected) {
@@ -546,7 +549,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = isSelected
-                              ? `${tokens.colors.primary}08`
+                              ? `${tokens.colors.primaryScale[600]}08`
                               : striped && index % 2 === 1
                                 ? tokens.colors.neutral[50]
                                 : '';
@@ -580,7 +583,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                                   width: '16px',
                                   height: '16px',
                                   color: tokens.colors.neutral[400],
-                                  transition: 'transform 0.2s',
+                                  transition: `all ${tokens.motion.hover}`,
                                   transform: isExpanded ? 'rotate(90deg)' : undefined,
                                 }}
                                 fill="none"
@@ -623,7 +626,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                                     }}
                                     style={{
                                       padding: tokens.spacing[1],
-                                      color: action.danger ? tokens.colors.error : tokens.colors.neutral[500],
+                                      color: action.danger ? tokens.colors.errorScale[600] : tokens.colors.neutral[500],
                                     }}
                                     title={action.label}
                                   >
@@ -642,7 +645,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                               colSpan={totalCols}
                               style={{
                                 padding: 0,
-                                borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 backgroundColor: tokens.colors.neutral[50],
                               }}
                             >
@@ -664,7 +667,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
           {paginatedData.length > 0 && (
             <Box style={{
               padding: tokens.spacing[4],
-              borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+              borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -680,11 +683,11 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                   onChange={(e) => { setPageSize(Number(e.target.value)); setCurrentPage(1); }}
                   style={{
                     padding: `${tokens.spacing[1]} ${tokens.spacing[2]}`,
-                    border: `1px solid ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     borderRadius: '4px',
                     fontSize: tokens.typography.fontSize.sm,
                     cursor: 'pointer',
-                    backgroundColor: '#ffffff',
+                    backgroundColor: tokens.colors.common.white,
                   }}
                 >
                   {pageSizeOptions.map((size) => (

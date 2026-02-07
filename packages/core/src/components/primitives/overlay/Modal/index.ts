@@ -24,9 +24,9 @@
  * - Smooth enter/exit animations
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Wraps Ant Design Modal with full feature parity
- * - **Hermes**: Tailwind CSS/DaisyUI modal implementation
- * - **Apollo**: Pure CSS modal with inline styles
+ * - **Classic**: Wraps Ant Design Modal with full feature parity
+ * - **Modern**: Tailwind CSS/DaisyUI modal implementation
+ * - **Rustic**: Pure CSS modal with inline styles
  *
  * @example Basic Modal
  * ```tsx
@@ -107,8 +107,8 @@
  * ```tsx
  * import { Modal } from '@rottay/design-system';
  *
- * // Force Hermes (Tailwind) implementation
- * <Modal engine="hermes" open={isOpen} onClose={handleClose}>
+ * // Force Modern (Tailwind) implementation
+ * <Modal engine="modern" open={isOpen} onClose={handleClose}>
  *   <Modal.Header>Tailwind Modal</Modal.Header>
  *   <Modal.Body>DaisyUI styled content</Modal.Body>
  * </Modal>
@@ -178,9 +178,9 @@ export type { FocusTrapProps } from './utils/FocusTrap';
  */
 export const Modal = Object.assign(
   createEngineComponent<ModalProps>('Modal', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /** Compound component for the modal header section */

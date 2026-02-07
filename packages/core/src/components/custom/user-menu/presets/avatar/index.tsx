@@ -1,16 +1,19 @@
 'use client';
 
 /**
- * UserMenu - Avatar Preset (Avatar only)
+ * UserMenu - Avatar Preset
+ * Compact avatar-only trigger with dropdown menu.
+ * Modern engine gets glass effect on dropdown panel.
  */
 
 import { useState, useRef, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { UserMenuProps } from '../../core';
 
 export const AvatarUserMenu = createPreset<UserMenuProps>({
   name: 'UserMenu.Avatar',
-  render: ({ primitives, props, tokens }: PresetContext<UserMenuProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<UserMenuProps>) => {
     const { Box, Card, Stack, Avatar } = primitives;
     const {
       user,
@@ -18,10 +21,11 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
       onLogout,
       showLogout = true,
       className,
-      style
+      style,
     } = props;
 
     const [isOpen, setIsOpen] = useState(false);
+    const [hoveredKey, setHoveredKey] = useState<string | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -47,14 +51,25 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
       });
     }
 
+    const dropdownSurface = createSurfaceStyle(tokens, {
+      elevation: 'lg',
+      glass: engine === 'modern',
+    });
+
     return (
-      <div ref={menuRef} className={className} style={{ position: 'relative', display: 'inline-block', ...style }}>
+      <div
+        ref={menuRef}
+        className={className}
+        style={{ position: 'relative', display: 'inline-block', ...style }}
+      >
+        {/* Avatar trigger */}
         <div
           onClick={() => setIsOpen(!isOpen)}
           style={{
             cursor: 'pointer',
             display: 'inline-flex',
             alignItems: 'center',
+            transition: `all ${tokens.motion.hover}`,
           }}
         >
           <Avatar src={user.avatar} size="md">
@@ -62,6 +77,7 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
           </Avatar>
         </div>
 
+        {/* Dropdown menu */}
         {isOpen && (
           <Card
             variant="elevated"
@@ -70,28 +86,38 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
               position: 'absolute',
               top: '100%',
               right: 0,
-              marginTop: '8px',
+              marginTop: tokens.spacing[2],
               minWidth: '200px',
               zIndex: 1000,
+              boxShadow: tokens.shadows.lg,
+              ...dropdownSurface,
             }}
           >
             {/* User info header */}
             <Box style={{
               padding: tokens.spacing[4],
-              borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             }}>
-              <Box style={{ fontWeight: 600, marginBottom: '4px' }}>{user.name}</Box>
+              <Box style={{
+                fontWeight: tokens.typography.fontWeight.semibold,
+                marginBottom: tokens.spacing[1],
+              }}>
+                {user.name}
+              </Box>
               {user.email && (
-                <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                <Box style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[500],
+                }}>
                   {user.email}
                 </Box>
               )}
               {user.role && (
                 <Box style={{
-                  marginTop: '8px',
-                  padding: '2px 8px',
+                  marginTop: tokens.spacing[2],
+                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   backgroundColor: tokens.colors.neutral[100],
-                  borderRadius: '0.25rem',
+                  borderRadius: tokens.borderRadius.sm,
                   fontSize: tokens.typography.fontSize.xs,
                   display: 'inline-block',
                 }}>
@@ -110,11 +136,13 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
                       style={{
                         height: '1px',
                         backgroundColor: tokens.colors.neutral[200],
-                        margin: `${tokens.spacing[2]} 0`,
+                        margin: `${tokens.spacing[2]}px 0`,
                       }}
                     />
                   );
                 }
+
+                const isHovered = hoveredKey === item.key;
 
                 return (
                   <div
@@ -124,21 +152,17 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
                       setIsOpen(false);
                     }}
                     style={{
-                      padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`,
+                      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[2],
-                      color: item.danger ? '#DC2626' : undefined,
-                      backgroundColor: 'transparent',
-                      transition: 'background-color 0.2s',
+                      color: item.danger ? tokens.colors.errorScale[600] : undefined,
+                      backgroundColor: isHovered ? tokens.colors.neutral[100] : 'transparent',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
+                    onMouseEnter={() => setHoveredKey(item.key)}
+                    onMouseLeave={() => setHoveredKey(null)}
                   >
                     {item.icon}
                     <span>{item.label}</span>

@@ -107,7 +107,7 @@ describe('BackTop', () => {
 });
 
 describe('BackTop engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<BackTop engine={engine}>Test</BackTop>);
     expect(screen.getByTestId('backtop')).toBeInTheDocument();
   });

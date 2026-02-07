@@ -21,7 +21,7 @@ describe('Athena Engine', () => {
     clearAthenaRegistry();
     // Reset config to defaults
     configureAthena({
-      fallbackEngine: 'titan',
+      fallbackEngine: 'classic',
       warnOnFallback: true,
       logger: undefined,
     });
@@ -134,26 +134,26 @@ describe('Athena Engine', () => {
   describe('configureAthena', () => {
     it('should update configuration', () => {
       configureAthena({
-        fallbackEngine: 'hermes',
+        fallbackEngine: 'modern',
         warnOnFallback: false,
       });
 
       const config = getAthenaConfig();
-      expect(config.fallbackEngine).toBe('hermes');
+      expect(config.fallbackEngine).toBe('modern');
       expect(config.warnOnFallback).toBe(false);
     });
 
     it('should preserve unmodified config values', () => {
       configureAthena({ warnOnFallback: false });
       const config = getAthenaConfig();
-      expect(config.fallbackEngine).toBe('titan'); // default
+      expect(config.fallbackEngine).toBe('classic'); // default
     });
   });
 
   describe('getAthenaConfig', () => {
     it('should return default config', () => {
       const config = getAthenaConfig();
-      expect(config.fallbackEngine).toBe('titan');
+      expect(config.fallbackEngine).toBe('classic');
       expect(config.warnOnFallback).toBe(true);
     });
 

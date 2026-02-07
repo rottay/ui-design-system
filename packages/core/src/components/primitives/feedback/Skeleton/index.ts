@@ -7,7 +7,7 @@
  *
  * @remarks
  * The Skeleton component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -81,7 +81,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Skeleton engine="hermes" active avatar paragraph>
+ * <Skeleton engine="modern" active avatar paragraph>
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  * </Skeleton>
  * ```
@@ -162,11 +162,11 @@ export type { SkeletonAvatarProps, SkeletonTextProps, SkeletonButtonProps } from
 export const Skeleton = Object.assign(
   createEngineComponent<SkeletonProps>('Skeleton', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

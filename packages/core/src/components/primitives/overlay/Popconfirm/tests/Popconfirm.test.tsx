@@ -379,7 +379,7 @@ describe('Popconfirm', () => {
 });
 
 describe('Popconfirm engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Popconfirm engine={engine} title="Are you sure?">
         <button>Test</button>

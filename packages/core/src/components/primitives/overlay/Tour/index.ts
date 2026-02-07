@@ -16,7 +16,7 @@
  * - Contextual product education
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Flexible targeting**: CSS selectors, React refs, or getter functions
  * - **Spotlight effect**: Highlights target with mask overlay
  * - **Step navigation**: Previous/Next buttons with step indicators
@@ -75,14 +75,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Tour engine="titan" steps={steps} open={isOpen} mask />
+ * // Classic engine (Ant Design - default)
+ * <Tour engine="classic" steps={steps} open={isOpen} mask />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Tour engine="hermes" steps={steps} type="primary" open={isOpen} />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Tour engine="modern" steps={steps} type="primary" open={isOpen} />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Tour engine="apollo" steps={steps} open={isOpen} zIndex={2000} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <Tour engine="rustic" steps={steps} open={isOpen} zIndex={2000} />
  * ```
  *
  * @see {@link TourProps} for available props
@@ -121,9 +121,9 @@ export {
  * @returns The tour overlay with spotlight and popover
  */
 export const Tour = createEngineComponent<TourProps>('Tour', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Tour;

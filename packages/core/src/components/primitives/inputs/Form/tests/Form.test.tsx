@@ -247,7 +247,7 @@ describe('Form.ErrorList', () => {
 });
 
 describe('Form engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Form engine={engine}>Content</Form>);
     expect(screen.getByTestId('form')).toBeInTheDocument();
   });

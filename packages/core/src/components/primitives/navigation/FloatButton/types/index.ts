@@ -5,7 +5,7 @@
  *
  * @remarks
  * These types are designed to be engine-agnostic, providing a unified API across
- * Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla) implementations.
+ * Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla) implementations.
  * Each engine maps these props to its underlying implementation.
  *
  * @example Type usage

@@ -43,7 +43,7 @@ Displays a confirmation dialog with customizable title, description, and buttons
 - Custom icons
 - Async confirmation support with loading state
 - Controlled and uncontrolled modes
-- Three engine implementations (Titan, Hermes, Apollo)
+- Three engine implementations (Classic, Modern, Rustic)
         `,
       },
     },
@@ -66,7 +66,7 @@ Displays a confirmation dialog with customizable title, description, and buttons
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     showArrow: {
@@ -283,7 +283,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Popconfirm rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Popconfirm rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

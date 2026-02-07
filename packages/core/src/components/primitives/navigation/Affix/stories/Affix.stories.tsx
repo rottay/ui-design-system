@@ -30,7 +30,7 @@ The Affix component makes elements stick to the viewport when scrolling past a t
 - **offsetBottom**: Pixels from bottom of viewport (overrides offsetTop)
 - **target**: Custom scroll container
 - **onChange**: Callback when affixed state changes
-- **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
+- **Engine support**: Works with Classic (Ant Design), Modern (Tailwind), and Rustic (Vanilla)
 
 ## Usage
 \`\`\`tsx
@@ -67,7 +67,7 @@ import { Affix } from '@rottay/design-system';
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     onChange: {
@@ -346,7 +346,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Affix rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Affix rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

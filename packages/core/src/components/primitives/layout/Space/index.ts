@@ -18,9 +18,9 @@
  * - Support for asymmetric horizontal/vertical gaps via array syntax
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Wraps Ant Design's Space component with full feature parity
- * - **Hermes**: Tailwind CSS implementation using flex and gap utilities
- * - **Apollo**: Pure CSS flexbox with inline styles
+ * - **Classic**: Wraps Ant Design's Space component with full feature parity
+ * - **Modern**: Tailwind CSS implementation using flex and gap utilities
+ * - **Rustic**: Pure CSS flexbox with inline styles
  *
  * @example Basic Horizontal Spacing
  * ```tsx
@@ -94,8 +94,8 @@
  * ```tsx
  * import { Space } from '@rottay/design-system';
  *
- * // Force Hermes (Tailwind) implementation
- * <Space engine="hermes" size="middle" direction="vertical">
+ * // Force Modern (Tailwind) implementation
+ * <Space engine="modern" size="middle" direction="vertical">
  *   <span>Item 1</span>
  *   <span>Item 2</span>
  * </Space>
@@ -133,9 +133,9 @@ export {
  * @returns React element
  */
 export const Space = createEngineComponent<SpaceProps>('Space', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Space;

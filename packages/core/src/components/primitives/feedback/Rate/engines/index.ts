@@ -5,9 +5,9 @@
  *
  * @remarks
  * This module exports all three engine implementations of the Rate component:
- * - **Titan**: Ant Design-based, full-featured implementation
- * - **Hermes**: DaisyUI/Tailwind-based, utility-first implementation
- * - **Apollo**: Vanilla HTML/CSS, zero-dependency implementation
+ * - **Classic**: Ant Design-based, full-featured implementation
+ * - **Modern**: DaisyUI/Tailwind-based, utility-first implementation
+ * - **Rustic**: Vanilla HTML/CSS, zero-dependency implementation
  *
  * The engine factory uses these exports to dynamically load the appropriate
  * implementation based on the configured or requested engine.
@@ -17,25 +17,25 @@
  * // The factory automatically resolves engines
  * import { Rate } from '@rottay/design-system';
  *
- * // Uses default engine (Titan)
+ * // Uses default engine (Classic)
  * <Rate defaultValue={3} />
  *
  * // Override with specific engine
- * <Rate engine="hermes" defaultValue={3} />
+ * <Rate engine="modern" defaultValue={3} />
  * ```
  *
  * @example Direct Engine Import (Advanced)
  * ```tsx
  * // Import specific engine directly (not recommended for most cases)
- * import { titan as TitanRate } from './engines';
+ * import { classic as ClassicRate } from './engines';
  *
  * // Use directly without factory
- * <TitanRate defaultValue={3} />
+ * <ClassicRate defaultValue={3} />
  * ```
  *
- * @see {@link TitanRate} - Ant Design implementation
- * @see {@link HermesRate} - DaisyUI implementation
- * @see {@link ApolloRate} - Vanilla implementation
+ * @see {@link ClassicRate} - Ant Design implementation
+ * @see {@link ModernRate} - DaisyUI implementation
+ * @see {@link RusticRate} - Vanilla implementation
  * @module Rate/Engines
  * @category Feedback
  * @package @rottay/design-system
@@ -46,19 +46,19 @@
 // ============================================================================
 
 /**
- * Titan Engine - Ant Design implementation.
- * @see {@link ./titan/index.tsx}
+ * Classic Engine - Ant Design implementation.
+ * @see {@link ./classic/index.tsx}
  */
-export { default as titan } from './titan';
+export { default as classic } from './classic';
 
 /**
- * Hermes Engine - DaisyUI/Tailwind implementation.
- * @see {@link ./hermes/index.tsx}
+ * Modern Engine - DaisyUI/Tailwind implementation.
+ * @see {@link ./modern/index.tsx}
  */
-export { default as hermes } from './hermes';
+export { default as modern } from './modern';
 
 /**
- * Apollo Engine - Vanilla HTML/CSS implementation.
- * @see {@link ./apollo/index.tsx}
+ * Rustic Engine - Vanilla HTML/CSS implementation.
+ * @see {@link ./rustic/index.tsx}
  */
-export { default as apollo } from './apollo';
+export { default as rustic } from './rustic';

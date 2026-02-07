@@ -31,7 +31,7 @@ Timeline component for displaying a sequence of events or activities in chronolo
 - **Labels**: Display timestamps or metadata opposite to content
 - **Pending state**: Show loading indicator for upcoming items
 - **Reversible order**: Display items in reverse chronological order
-- **Multi-engine support**: Works with Titan (Ant Design), Hermes (DaisyUI), and Apollo (vanilla)
+- **Multi-engine support**: Works with Classic (Ant Design), Modern (DaisyUI), and Rustic (vanilla)
         `,
       },
     },
@@ -52,7 +52,7 @@ Timeline component for displaying a sequence of events or activities in chronolo
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
   },
@@ -182,7 +182,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Timeline rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Timeline rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

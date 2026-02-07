@@ -8,12 +8,12 @@
  * Each engine exports both Statistic and Countdown components.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Statistic with native countdown
- * - **Hermes**: DaisyUI statistic with Tailwind colors
- * - **Apollo**: Pure CSS with WCAG-compliant colors
+ * - **Classic**: Ant Design Statistic with native countdown
+ * - **Modern**: DaisyUI statistic with Tailwind colors
+ * - **Rustic**: Pure CSS with WCAG-compliant colors
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Value formatting | ✅ | ✅ | ✅ |
  * | Value types | ✅ | ✅ | ✅ |
@@ -26,14 +26,14 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for Ant Design ecosystem
- * <Statistic engine="titan" title="Users" value={1024} />
+ * // Use Classic for Ant Design ecosystem
+ * <Statistic engine="classic" title="Users" value={1024} />
  *
- * // Use Hermes for DaisyUI theming
- * <Statistic engine="hermes" title="Users" value={1024} />
+ * // Use Modern for DaisyUI theming
+ * <Statistic engine="modern" title="Users" value={1024} />
  *
- * // Use Apollo for zero dependencies
- * <Statistic engine="apollo" title="Users" value={1024} />
+ * // Use Rustic for zero dependencies
+ * <Statistic engine="rustic" title="Users" value={1024} />
  * ```
  *
  * @module Statistic/engines
@@ -41,6 +41,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design Tour with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation with cards
- * - **Apollo**: Pure vanilla HTML/CSS with portal rendering
+ * - **Classic**: Ant Design Tour with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation with cards
+ * - **Rustic**: Pure vanilla HTML/CSS with portal rendering
  *
  * All engines implement:
  * - Spotlight effect with mask overlay
@@ -17,10 +17,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <Tour engine="hermes" steps={tourSteps} open={isOpen}>
+ * <Tour engine="modern" steps={tourSteps} open={isOpen}>
  *   Start Tour
  * </Tour>
  * ```
@@ -30,6 +30,6 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

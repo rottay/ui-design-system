@@ -224,17 +224,17 @@ describe('Slider range mode', () => {
 });
 
 describe('Slider engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Slider engine={engine} />);
     expect(screen.getByTestId('slider')).toBeInTheDocument();
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('renders range mode with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('renders range mode with %s engine', (engine) => {
     render(<Slider engine={engine} range defaultValue={[10, 90]} />);
     expect(screen.getByTestId('slider')).toHaveAttribute('data-range', 'true');
   });
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('renders marks with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('renders marks with %s engine', (engine) => {
     const marks = { 0: 'Min', 100: 'Max' };
     render(<Slider engine={engine} marks={marks} />);
     expect(screen.getByTestId('slider-marks')).toBeInTheDocument();

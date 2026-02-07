@@ -57,7 +57,7 @@ const ExampleAvatar: React.FC<AvatarProps> = ({
   status,
   clickable,
   onClick,
-  engine = 'titan',
+  engine = 'classic',
   className,
   style,
   ...rest
@@ -97,7 +97,7 @@ const ExampleButton: React.FC<ButtonProps> = ({
   iconPosition = 'start',
   children,
   onClick,
-  engine = 'titan',
+  engine = 'classic',
   className,
   style,
   ...rest
@@ -142,7 +142,7 @@ const ExampleInput: React.FC<InputProps> = ({
   prefix,
   suffix,
   onChange,
-  engine = 'titan',
+  engine = 'classic',
   className,
   style,
   ...rest
@@ -193,7 +193,7 @@ const ExampleSelect: React.FC<SelectProps<string>> = ({
   searchable,
   multiple,
   onChange,
-  engine = 'titan',
+  engine = 'classic',
   className,
   style,
   ...rest
@@ -262,7 +262,7 @@ const ExampleModal: React.FC<ModalProps> = ({
   closable = true,
   closeOnBackdropClick = true,
   closeOnEscape = true,
-  engine = 'titan',
+  engine = 'classic',
   className,
   style,
   ...rest
@@ -380,7 +380,7 @@ interface MyComponentProps extends BaseComponentProps, EngineAwareProps {
 const ExampleEngineAwareComponent: React.FC<MyComponentProps> = ({
   title,
   description,
-  engine = 'titan',
+  engine = 'classic',
   className,
   style,
   ...rest
@@ -389,11 +389,11 @@ const ExampleEngineAwareComponent: React.FC<MyComponentProps> = ({
 
   const renderByEngine = () => {
     switch (engine) {
-      case 'titan':
+      case 'classic':
         return <div className="ant-design-style">{title}</div>;
-      case 'hermes':
+      case 'modern':
         return <div className="daisyui-style">{title}</div>;
-      case 'apollo':
+      case 'rustic':
         return <div className="vanilla-style">{title}</div>;
       default:
         return <div>{title}</div>;

@@ -13,7 +13,7 @@
  * - **Permission systems**: Role-based access with nested permissions
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Multiple selection**: Select multiple nodes with tags
  * - **Checkable nodes**: Checkbox mode with parent-child cascading
  * - **Search filtering**: Filter tree nodes by text search
@@ -76,14 +76,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <TreeSelect engine="titan" treeData={data} treeCheckable />
+ * // Classic engine (Ant Design - default)
+ * <TreeSelect engine="classic" treeData={data} treeCheckable />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <TreeSelect engine="hermes" treeData={data} size="large" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <TreeSelect engine="modern" treeData={data} size="large" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <TreeSelect engine="apollo" treeData={data} />
+ * // Rustic engine (Pure HTML/CSS)
+ * <TreeSelect engine="rustic" treeData={data} />
  * ```
  *
  * @see {@link TreeSelectProps} for component props
@@ -111,14 +111,14 @@ export {
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const TreeSelect = createEngineComponent<TreeSelectProps>('TreeSelect', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default TreeSelect;

@@ -44,9 +44,9 @@
 import { forwardRef } from 'react';
 import type { ForwardRefExoticComponent, RefAttributes } from 'react';
 import type { LinkProps } from '../../types';
-import { TitanLink } from '../../engines/titan';
-import { HermesLink } from '../../engines/hermes';
-import { ApolloLink } from '../../engines/apollo';
+import { ClassicLink } from '../../engines/classic';
+import { ModernLink } from '../../engines/modern';
+import { RusticLink } from '../../engines/rustic';
 
 /**
  * Map of engine names to their respective Link implementations.
@@ -55,9 +55,9 @@ const engineMap: Record<
   string,
   ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>
 > = {
-  titan: TitanLink,
-  hermes: HermesLink,
-  apollo: ApolloLink,
+  classic: ClassicLink,
+  modern: ModernLink,
+  rustic: RusticLink,
 };
 
 /**
@@ -82,14 +82,14 @@ const engineMap: Record<
  * </TypographyLink>
  *
  * // With specific engine
- * <TypographyLink engine="apollo" href="/about">
+ * <TypographyLink engine="rustic" href="/about">
  *   About
  * </TypographyLink>
  * ```
  */
 export const TypographyLink = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ engine = 'titan', ...props }, ref) => {
-    const Component = engineMap[engine] || TitanLink;
+  ({ engine = 'classic', ...props }, ref) => {
+    const Component = engineMap[engine] || ClassicLink;
     return <Component ref={ref} {...props} />;
   }
 );

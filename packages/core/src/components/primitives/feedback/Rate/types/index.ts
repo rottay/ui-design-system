@@ -5,8 +5,8 @@
  *
  * @remarks
  * This module defines the core TypeScript interfaces for the Rate component.
- * The types are designed to work across all three rendering engines (Titan,
- * Hermes, Apollo) while providing a consistent API for developers.
+ * The types are designed to work across all three rendering engines (Classic,
+ * Modern, Rustic) while providing a consistent API for developers.
  *
  * **Type Categories:**
  * - `RateSize`: Predefined size options for star icons
@@ -87,11 +87,11 @@ export type RateSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
  *
  * | Value | Implementation | Use Case |
  * |-------|---------------|----------|
- * | `titan` | Ant Design Rate | Full-featured, enterprise apps |
- * | `hermes` | DaisyUI/Tailwind | Utility-first styling |
- * | `apollo` | Vanilla HTML/CSS | Zero dependencies, max accessibility |
+ * | `classic` | Ant Design Rate | Full-featured, enterprise apps |
+ * | `modern` | DaisyUI/Tailwind | Utility-first styling |
+ * | `rustic` | Vanilla HTML/CSS | Zero dependencies, max accessibility |
  */
-export type RateEngine = 'titan' | 'hermes' | 'apollo';
+export type RateEngine = 'classic' | 'modern' | 'rustic';
 
 /**
  * Props passed to custom character render functions.
@@ -324,7 +324,7 @@ export interface RateProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
   /**
    * Engine override for this component instance.
    * Overrides the global engine setting from EngineProvider.
-   * @example 'titan' | 'hermes' | 'apollo'
+   * @example 'classic' | 'modern' | 'rustic'
    */
   engine?: RateEngine;
 }

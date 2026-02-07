@@ -24,7 +24,7 @@ const meta: Meta<typeof Drawer> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
     },
     closable: {
       control: 'boolean',
@@ -194,26 +194,26 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Drawer rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS). Click each button to open the drawer.',
+        story: 'Compare the same Drawer rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS). Click each button to open the drawer.',
       },
     },
   },
   render: () => {
-    const [engine, setEngine] = useState<'titan' | 'hermes' | 'apollo' | null>(null);
+    const [engine, setEngine] = useState<'classic' | 'modern' | 'rustic' | null>(null);
     return (
       <>
         <EngineComparisonHelper
-          component={({ engineName }: { engineName: 'titan' | 'hermes' | 'apollo' }) => (
+          component={({ engineName }: { engineName: 'classic' | 'modern' | 'rustic' }) => (
             <button onClick={() => setEngine(engineName)} style={{ padding: '8px 16px' }}>
               Open {engineName} Drawer
             </button>
           )}
-          props={{ engineName: 'titan' }}
+          props={{ engineName: 'classic' }}
           showDescriptions
         />
         <Drawer
           open={!!engine}
-          engine={engine || 'titan'}
+          engine={engine || 'classic'}
           title={`${engine?.charAt(0).toUpperCase()}${engine?.slice(1)} Engine Drawer`}
           onClose={() => setEngine(null)}
         >
@@ -238,8 +238,8 @@ export const VariantMatrix: Story = {
     },
   },
   render: () => {
-    const [config, setConfig] = useState<{ engine: 'titan' | 'hermes' | 'apollo'; placement: 'left' | 'right' | 'top' | 'bottom' } | null>(null);
-    const engines = ['titan', 'hermes', 'apollo'] as const;
+    const [config, setConfig] = useState<{ engine: 'classic' | 'modern' | 'rustic'; placement: 'left' | 'right' | 'top' | 'bottom' } | null>(null);
+    const engines = ['classic', 'modern', 'rustic'] as const;
     const placements = ['left', 'right', 'top', 'bottom'] as const;
 
     return (

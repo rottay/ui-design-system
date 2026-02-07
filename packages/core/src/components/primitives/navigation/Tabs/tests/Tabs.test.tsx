@@ -178,7 +178,7 @@ describe('Tabs', () => {
 });
 
 describe('Tabs engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Tabs engine={engine} items={[{ key: '1', label: 'Test', children: 'Content' }]} />);
     expect(screen.getByTestId('tabs')).toBeInTheDocument();
   });

@@ -9,29 +9,29 @@
  * maintaining consistent props and behavior.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design implementation with rich validation states
- * - **Hermes**: DaisyUI/Tailwind CSS implementation for utility-first styling
- * - **Apollo**: Pure HTML/CSS implementation for maximum customization
+ * - **Classic**: Ant Design implementation with rich validation states
+ * - **Modern**: DaisyUI/Tailwind CSS implementation for utility-first styling
+ * - **Rustic**: Pure HTML/CSS implementation for maximum customization
  *
  * The engine is selected via the `engine` prop or inherited from the nearest
- * `EngineProvider`. If no engine is specified, Titan is used by default.
+ * `EngineProvider`. If no engine is specified, Classic is used by default.
  *
  * @example Engine Selection
  * ```tsx
  * import { Input, EngineProvider } from '@rottay/design-system';
  *
  * // Per-component engine override
- * <Input engine="hermes" placeholder="DaisyUI Input" />
+ * <Input engine="modern" placeholder="DaisyUI Input" />
  *
  * // Global engine via provider
- * <EngineProvider engine="apollo">
- *   <Input placeholder="All inputs use Apollo" />
+ * <EngineProvider engine="rustic">
+ *   <Input placeholder="All inputs use Rustic" />
  * </EngineProvider>
  * ```
  *
- * @see {@link TitanInput} for Ant Design implementation
- * @see {@link HermesInput} for DaisyUI implementation
- * @see {@link ApolloInput} for vanilla implementation
+ * @see {@link ClassicInput} for Ant Design implementation
+ * @see {@link ModernInput} for DaisyUI implementation
+ * @see {@link RusticInput} for vanilla implementation
  * @module InputEngines
  * @category Inputs
  * @package @rottay/design-system
@@ -42,6 +42,6 @@
 // Each engine provides a default export of the Input component
 // ============================================================================
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

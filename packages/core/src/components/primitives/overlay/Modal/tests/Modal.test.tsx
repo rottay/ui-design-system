@@ -318,7 +318,7 @@ describe('Modal Types', () => {
 describe('Modal engines', () => {
   const mockOnClose = vi.fn();
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(
       <Modal engine={engine} open onClose={mockOnClose}>
         Test

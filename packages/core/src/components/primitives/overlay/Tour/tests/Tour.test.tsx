@@ -302,7 +302,7 @@ describe('Tour engines', () => {
     { title: 'Step 1', description: 'First step description' },
   ];
 
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Tour engine={engine} steps={defaultSteps} open={true} />);
     expect(screen.getByTestId('tour-wrapper')).toBeInTheDocument();
   });

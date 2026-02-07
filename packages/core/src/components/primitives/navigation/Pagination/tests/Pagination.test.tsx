@@ -211,7 +211,7 @@ describe('Pagination', () => {
 });
 
 describe('Pagination engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Pagination engine={engine} current={1} total={100} />);
     expect(screen.getByTestId('pagination')).toBeInTheDocument();
   });

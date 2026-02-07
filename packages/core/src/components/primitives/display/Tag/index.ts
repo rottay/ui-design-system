@@ -10,9 +10,9 @@
  * status indication with support for icons, closing, and clickable interactions.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Tag with preset colors
- * - **Hermes**: DaisyUI badge classes with Tailwind utilities
- * - **Apollo**: Pure CSS implementation with zero dependencies
+ * - **Classic**: Ant Design Tag with preset colors
+ * - **Modern**: DaisyUI badge classes with Tailwind utilities
+ * - **Rustic**: Pure CSS implementation with zero dependencies
  *
  * **Key Features:**
  * - Multiple sizes (xs, sm, md, lg, xl)
@@ -88,24 +88,24 @@ export type { TagGroupProps } from './compound';
  *
  * Automatically selects the appropriate engine implementation based on the
  * engine prop or EngineProvider context. Supports all three engines:
- * - titan: Ant Design implementation
- * - hermes: DaisyUI/Tailwind implementation
- * - apollo: Pure HTML/CSS implementation
+ * - classic: Ant Design implementation
+ * - modern: DaisyUI/Tailwind implementation
+ * - rustic: Pure HTML/CSS implementation
  *
  * @example
  * ```tsx
- * // Default engine (from context or titan)
+ * // Default engine (from context or classic)
  * <Tag variant="primary">Primary Tag</Tag>
  *
  * // Override engine per component
- * <Tag engine="hermes" variant="success">Hermes Tag</Tag>
+ * <Tag engine="modern" variant="success">Modern Tag</Tag>
  * ```
  */
 export const Tag = Object.assign(
   createEngineComponent<TagProps>('Tag', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

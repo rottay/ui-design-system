@@ -210,7 +210,7 @@ describe('Select.OptGroup', () => {
 });
 
 describe('Select engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Select options={mockOptions} engine={engine} />);
     expect(screen.getByTestId('select')).toBeInTheDocument();
   });

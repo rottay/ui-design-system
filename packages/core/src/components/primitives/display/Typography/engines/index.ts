@@ -8,12 +8,12 @@
  * Each engine exports Heading, Text, and Paragraph components.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Typography with rich text features
- * - **Hermes**: DaisyUI/Tailwind utility classes
- * - **Apollo**: Pure CSS with CSS variables
+ * - **Classic**: Ant Design Typography with rich text features
+ * - **Modern**: DaisyUI/Tailwind utility classes
+ * - **Rustic**: Pure CSS with CSS variables
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Heading (h1-h6) | ✅ | ✅ | ✅ |
  * | Text decorations | ✅ | ✅ | ✅ |
@@ -26,44 +26,44 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for rich text features
- * <Typography.Heading engine="titan" copyable />
+ * // Use Classic for rich text features
+ * <Typography.Heading engine="classic" copyable />
  *
- * // Use Hermes for Tailwind styling
- * <Typography.Text engine="hermes" color="primary" />
+ * // Use Modern for Tailwind styling
+ * <Typography.Text engine="modern" color="primary" />
  *
- * // Use Apollo for zero dependencies
- * <Typography.Paragraph engine="apollo" lineClamp={3} />
+ * // Use Rustic for zero dependencies
+ * <Typography.Paragraph engine="rustic" lineClamp={3} />
  * ```
  *
- * @see {@link TitanHeading} for Ant Design implementation
- * @see {@link HermesHeading} for DaisyUI implementation
- * @see {@link ApolloHeading} for vanilla implementation
+ * @see {@link ClassicHeading} for Ant Design implementation
+ * @see {@link ModernHeading} for DaisyUI implementation
+ * @see {@link RusticHeading} for vanilla implementation
  * @module Typography/engines
  * @category Display
  * @package @rottay/design-system
  */
 
-// Titan (Ant Design) engine exports
+// Classic (Ant Design) engine exports
 export {
-  default as titan,
-  TitanHeading,
-  TitanText,
-  TitanParagraph,
-} from './titan';
+  default as classic,
+  ClassicHeading,
+  ClassicText,
+  ClassicParagraph,
+} from './classic';
 
-// Hermes (DaisyUI/Tailwind) engine exports
+// Modern (DaisyUI/Tailwind) engine exports
 export {
-  default as hermes,
-  HermesHeading,
-  HermesText,
-  HermesParagraph,
-} from './hermes';
+  default as modern,
+  ModernHeading,
+  ModernText,
+  ModernParagraph,
+} from './modern';
 
-// Apollo (Vanilla/CSS) engine exports
+// Rustic (Vanilla/CSS) engine exports
 export {
-  default as apollo,
-  ApolloHeading,
-  ApolloText,
-  ApolloParagraph,
-} from './apollo';
+  default as rustic,
+  RusticHeading,
+  RusticText,
+  RusticParagraph,
+} from './rustic';

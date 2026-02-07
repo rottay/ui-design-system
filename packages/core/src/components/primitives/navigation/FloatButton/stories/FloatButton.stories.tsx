@@ -34,7 +34,7 @@ The FloatButton component provides a floating action button for quick actions.
 - **Badge**: Support for dot or count
 - **Group**: Multiple buttons with expand/collapse
 - **BackTop**: Scroll to top functionality
-- **Engine support**: Works with Titan (Ant Design), Hermes (Tailwind), and Apollo (Vanilla)
+- **Engine support**: Works with Classic (Ant Design), Modern (Tailwind), and Rustic (Vanilla)
 
 ## Usage
 \`\`\`tsx
@@ -72,7 +72,7 @@ import { FloatButton } from '@rottay/design-system';
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine',
     },
     onClick: {
@@ -219,7 +219,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same FloatButton rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same FloatButton rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

@@ -17,7 +17,7 @@
  * - Quick-edit forms
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Flexible triggering**: Click, hover, or focus activation
  * - **12 placement positions**: Top, bottom, left, right with alignment variants
  * - **Controlled/uncontrolled**: Full state control or automatic management
@@ -65,19 +65,19 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Popover engine="titan" content="Ant styled" title="Titan">
- *   <Button>Titan Popover</Button>
+ * // Classic engine (Ant Design - default)
+ * <Popover engine="classic" content="Ant styled" title="Classic">
+ *   <Button>Classic Popover</Button>
  * </Popover>
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Popover engine="hermes" content="Tailwind styled" title="Hermes">
- *   <Button>Hermes Popover</Button>
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Popover engine="modern" content="Tailwind styled" title="Modern">
+ *   <Button>Modern Popover</Button>
  * </Popover>
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Popover engine="apollo" content="Vanilla styled" title="Apollo">
- *   <Button>Apollo Popover</Button>
+ * // Rustic engine (Pure HTML/CSS)
+ * <Popover engine="rustic" content="Vanilla styled" title="Rustic">
+ *   <Button>Rustic Popover</Button>
  * </Popover>
  * ```
  *
@@ -115,9 +115,9 @@ export {
  * @returns The rendered Popover component
  */
 export const Popover = createEngineComponent<PopoverProps>('Popover', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default Popover;

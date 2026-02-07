@@ -158,7 +158,7 @@ describe('Alert', () => {
   });
 
   describe('Engine Support', () => {
-    it.each(['titan', 'hermes', 'apollo'] as const)(
+    it.each(['classic', 'modern', 'rustic'] as const)(
       'renders with %s engine',
       (engine) => {
         render(<Alert message="Test" engine={engine} />);

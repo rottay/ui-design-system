@@ -18,7 +18,7 @@ describe('Tenant Schema', () => {
       const config = {
         slug: 'acme',
         name: 'Acme Corp',
-        engine: 'titan' as const,
+        engine: 'classic' as const,
         theme: 'default',
         plan: 'pro' as const,
         features: ['dashboard'],
@@ -53,7 +53,7 @@ describe('Tenant Schema', () => {
       const config = {
         slug: 'test',
         name: 'Test',
-        engine: 'titan',
+        engine: 'classic',
         theme: 'default',
         plan: 'invalid',
         features: [],
@@ -72,7 +72,7 @@ describe('Tenant Schema', () => {
 
       expect(config.slug).toBe('test');
       expect(config.name).toBe('Test Company');
-      expect(config.engine).toBe('titan');
+      expect(config.engine).toBe('classic');
       expect(config.theme).toBe('base'); // default theme is 'base'
       expect(config.plan).toBe('starter');
       expect(config.features).toEqual([]);
@@ -83,11 +83,11 @@ describe('Tenant Schema', () => {
       const config = createTenantConfig({
         slug: 'acme',
         name: 'Acme',
-        engine: 'hermes',
+        engine: 'modern',
         plan: 'enterprise',
       });
 
-      expect(config.engine).toBe('hermes');
+      expect(config.engine).toBe('modern');
       expect(config.plan).toBe('enterprise');
     });
   });

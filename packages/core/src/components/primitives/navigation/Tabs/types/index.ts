@@ -4,7 +4,7 @@
  * Defines the contract for tabs across all engine implementations.
  *
  * @remarks
- * These types ensure consistency across Titan, Hermes, and Apollo engines
+ * These types ensure consistency across Classic, Modern, and Rustic engines
  * while providing full TypeScript intellisense and type safety.
  *
  * @module Tabs/Types

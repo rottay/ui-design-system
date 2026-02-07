@@ -23,9 +23,9 @@
  * - Multiple panels support
  *
  * This component supports the Rottay multi-engine architecture:
- * - **Titan**: Wraps Ant Design Splitter with full feature parity
- * - **Hermes**: Tailwind CSS implementation with custom drag handling
- * - **Apollo**: Pure CSS flexbox with inline styles and drag logic
+ * - **Classic**: Wraps Ant Design Splitter with full feature parity
+ * - **Modern**: Tailwind CSS implementation with custom drag handling
+ * - **Rustic**: Pure CSS flexbox with inline styles and drag logic
  *
  * @example Basic Horizontal Split
  * ```tsx
@@ -110,10 +110,10 @@
  * ```tsx
  * import { Splitter } from '@rottay/design-system';
  *
- * // Force Hermes (Tailwind) implementation
- * <Splitter engine="hermes" layout="vertical">
- *   <Splitter.Panel engine="hermes">Top</Splitter.Panel>
- *   <Splitter.Panel engine="hermes">Bottom</Splitter.Panel>
+ * // Force Modern (Tailwind) implementation
+ * <Splitter engine="modern" layout="vertical">
+ *   <Splitter.Panel engine="modern">Top</Splitter.Panel>
+ *   <Splitter.Panel engine="modern">Bottom</Splitter.Panel>
  * </Splitter>
  * ```
  *
@@ -135,15 +135,15 @@ export {
 } from './types';
 
 const SplitterBase = createEngineComponent<SplitterProps>('Splitter', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Splitter })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Splitter })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Splitter })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Splitter })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Splitter })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Splitter })),
 });
 
 const Panel = createEngineComponent<SplitterPanelProps>('Splitter.Panel', {
-  titan: () => import('./engines/titan').then(m => ({ default: m.Panel })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: m.Panel })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: m.Panel })),
+  classic: () => import('./engines/classic').then(m => ({ default: m.Panel })),
+  modern: () => import('./engines/modern').then(m => ({ default: m.Panel })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: m.Panel })),
 });
 
 export const Splitter = Object.assign(SplitterBase, {

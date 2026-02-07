@@ -55,7 +55,7 @@ Features:
 - Clickable state
 - Outline and bordered styles
 - Customizable border radius
-- Engine-agnostic (titan, hermes, apollo)
+- Engine-agnostic (classic, modern, rustic)
         `,
       },
     },
@@ -78,7 +78,7 @@ Features:
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     closable: {
@@ -312,7 +312,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Tag rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Tag rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

@@ -10,9 +10,9 @@
  * autoplay, fade/slide transitions, and vertical mode support.
  *
  * **Multi-Engine Architecture:**
- * - **Titan**: Ant Design Carousel with full feature support
- * - **Hermes**: DaisyUI-styled carousel with Tailwind utilities
- * - **Apollo**: Pure HTML/CSS with maximum accessibility
+ * - **Classic**: Ant Design Carousel with full feature support
+ * - **Modern**: DaisyUI-styled carousel with Tailwind utilities
+ * - **Rustic**: Pure HTML/CSS with maximum accessibility
  *
  * **Key Features:**
  * - Autoplay with configurable speed
@@ -114,14 +114,14 @@ export type { CarouselItemComponentProps } from './compound';
  *
  * @example
  * ```tsx
- * // Default engine (from context or Titan)
+ * // Default engine (from context or Classic)
  * <Carousel autoplay dots>
  *   <div>Slide 1</div>
  *   <div>Slide 2</div>
  * </Carousel>
  *
  * // Specific engine
- * <Carousel engine="hermes" arrows>
+ * <Carousel engine="modern" arrows>
  *   <div>Slide 1</div>
  *   <div>Slide 2</div>
  * </Carousel>
@@ -129,9 +129,9 @@ export type { CarouselItemComponentProps } from './compound';
  */
 export const Carousel = Object.assign(
   createEngineComponent<CarouselProps>('Carousel', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /** Styled wrapper for carousel slides */

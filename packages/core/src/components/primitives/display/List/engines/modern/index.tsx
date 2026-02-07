@@ -1,0 +1,179 @@
+'use client';
+
+/**
+ * @fileoverview List Modern Engine - Rottay Design System
+ * @description DaisyUI/Tailwind-based list with responsive design.
+ * Part of the Rottay Design System's display primitives collection.
+ *
+ * @remarks
+ * This engine uses DaisyUI classes with Tailwind utilities
+ * for a lightweight, responsive list implementation.
+ *
+ * **Exported Components:**
+ * - `List` - Main list container
+ * - `Item` - List item wrapper
+ * - `Meta` - Item metadata display
+ *
+ * **Implementation Details:**
+ * - Custom flex-based layout
+ * - DaisyUI color classes
+ * - Skeleton loading states
+ * - Grid layout support
+ * - Split dividers
+ *
+ * **Class Mappings:**
+ * - `border border-base-300` - Bordered variant
+ * - `text-sm`, `text-base`, `text-lg` - Sizes
+ * - `flex items-center` - Item layout
+ * - `animate-pulse` - Loading skeleton
+ *
+ * **Advantages:**
+ * - Lightweight CSS-only styling
+ * - Responsive by default
+ * - DaisyUI theme integration
+ * - Custom skeleton loading
+ *
+ * @example Basic Usage
+ * ```tsx
+ * import { List } from '@rottay/design-system';
+ *
+ * <List engine="modern" bordered>
+ *   <List.Item>Item content</List.Item>
+ * </List>
+ * ```
+ *
+ * @see {@link List} for the main component
+ * @see {@link https://daisyui.com/} DaisyUI
+ * @module List/engines/modern
+ * @category Display
+ * @package @rottay/design-system
+ */
+import React from 'react';
+import type { ListProps, ListItemProps, ListItemMetaProps } from '../../types';
+import { LIST_DEFAULTS } from '../../types';
+
+export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
+  (props, ref) => {
+    const { avatar, title, description, className = '', style } = props;
+    return (
+      <div ref={ref} className={`flex items-start gap-3 ${className}`} style={style}>
+        {avatar && <div className="flex-shrink-0">{avatar}</div>}
+        <div className="flex-1 min-w-0">
+          {title && <div className="font-medium text-base-content">{title}</div>}
+          {description && <div className="text-sm text-base-content/60">{description}</div>}
+        </div>
+      </div>
+    );
+  }
+);
+Meta.displayName = 'List.Item.Meta.Modern';
+
+export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
+  (props, ref) => {
+    const { actions, extra, children, className = '', style } = props;
+    return (
+      <li
+        ref={ref}
+        className={`flex items-center justify-between py-3 ${className}`}
+        style={style}
+      >
+        <div className="flex-1 min-w-0">{children}</div>
+        {extra && <div className="ml-4 flex-shrink-0">{extra}</div>}
+        {actions && actions.length > 0 && (
+          <div className="ml-4 flex items-center gap-2">
+            {actions.map((action, index) => (
+              <span key={index}>{action}</span>
+            ))}
+          </div>
+        )}
+      </li>
+    );
+  }
+);
+Item.displayName = 'List.Item.Modern';
+
+export const List = React.forwardRef<HTMLDivElement, ListProps>(
+  (props, ref) => {
+    const {
+      dataSource,
+      renderItem,
+      bordered = LIST_DEFAULTS.bordered,
+      header,
+      footer,
+      loading,
+      size = LIST_DEFAULTS.size,
+      split = LIST_DEFAULTS.split,
+      itemLayout = LIST_DEFAULTS.itemLayout,
+      grid,
+      children,
+      className = '',
+      style,
+    } = props;
+
+    const sizeClasses = {
+      small: 'text-sm',
+      default: 'text-base',
+      large: 'text-lg',
+    };
+
+    const listContent = dataSource && renderItem
+      ? dataSource.map((item, index) => renderItem(item, index))
+      : children;
+
+    if (loading) {
+      return (
+        <div ref={ref} className={`animate-pulse ${className}`} style={style}>
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="py-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-base-300 rounded-full" />
+                <div className="flex-1">
+                  <div className="h-4 bg-base-300 rounded w-1/3 mb-2" />
+                  <div className="h-3 bg-base-300 rounded w-2/3" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={`${bordered ? 'border border-base-300 rounded-lg' : ''} ${sizeClasses[size]} ${className}`}
+        style={style}
+      >
+        {header && (
+          <div className={`px-4 py-3 font-medium ${bordered ? 'border-b border-base-300' : ''}`}>
+            {header}
+          </div>
+        )}
+        <ul
+          className={`${grid ? 'grid' : ''} ${itemLayout === 'vertical' ? '' : ''}`}
+          style={grid ? {
+            gridTemplateColumns: `repeat(${grid.column || 1}, 1fr)`,
+            gap: grid.gutter || 16,
+          } : undefined}
+        >
+          {React.Children.map(listContent, (child, index) => (
+            <React.Fragment key={index}>
+              {child}
+              {split && index < React.Children.count(listContent) - 1 && !grid && (
+                <div className="border-b border-base-200" />
+              )}
+            </React.Fragment>
+          ))}
+        </ul>
+        {footer && (
+          <div className={`px-4 py-3 ${bordered ? 'border-t border-base-300' : ''}`}>
+            {footer}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+List.displayName = 'List.Modern';
+
+export default List;

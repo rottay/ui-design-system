@@ -13,7 +13,7 @@
  * - **Data visualization**: Chart colors, heatmaps
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Format options**: HEX, RGB, HSB color formats
  * - **Preset palettes**: Predefined color groups for quick selection
  * - **Alpha channel**: Transparency control with optional disable
@@ -72,14 +72,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <ColorPicker engine="titan" defaultValue="#1677ff" showText />
+ * // Classic engine (Ant Design - default)
+ * <ColorPicker engine="classic" defaultValue="#1677ff" showText />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <ColorPicker engine="hermes" defaultValue="#1677ff" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <ColorPicker engine="modern" defaultValue="#1677ff" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <ColorPicker engine="apollo" defaultValue="#1677ff" />
+ * // Rustic engine (Pure HTML/CSS)
+ * <ColorPicker engine="rustic" defaultValue="#1677ff" />
  * ```
  *
  * @see {@link ColorPickerProps} for component props
@@ -103,9 +103,9 @@ export {
 } from './types';
 
 export const ColorPicker = createEngineComponent<ColorPickerProps>('ColorPicker', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 export default ColorPicker;

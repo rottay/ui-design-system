@@ -13,7 +13,7 @@
  * - **Business hours**: Opening/closing times configuration
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Format options**: 12-hour (AM/PM) or 24-hour format
  * - **Step intervals**: Custom steps for hours, minutes, seconds
  * - **Range picker**: TimePicker.RangePicker for time ranges
@@ -73,14 +73,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <TimePicker engine="titan" showNow />
+ * // Classic engine (Ant Design - default)
+ * <TimePicker engine="classic" showNow />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <TimePicker engine="hermes" size="lg" />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <TimePicker engine="modern" size="lg" />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <TimePicker engine="apollo" variant="borderless" />
+ * // Rustic engine (Pure HTML/CSS)
+ * <TimePicker engine="rustic" variant="borderless" />
  * ```
  *
  * @see {@link TimePickerProps} for component props
@@ -105,16 +105,16 @@ export {
 
 // Create base TimePicker component
 const TimePickerBase = createEngineComponent<TimePickerProps>('TimePicker', {
-  titan: () => import('./engines/titan'),
-  hermes: () => import('./engines/hermes'),
-  apollo: () => import('./engines/apollo'),
+  classic: () => import('./engines/classic'),
+  modern: () => import('./engines/modern'),
+  rustic: () => import('./engines/rustic'),
 });
 
 // Create RangePicker component that uses the same engine routing
 const TimeRangePicker = createEngineComponent<TimeRangePickerProps>('TimeRangePicker', {
-  titan: () => import('./engines/titan').then(m => ({ default: (m.default as any).RangePicker })),
-  hermes: () => import('./engines/hermes').then(m => ({ default: (m.default as any).RangePicker })),
-  apollo: () => import('./engines/apollo').then(m => ({ default: (m.default as any).RangePicker })),
+  classic: () => import('./engines/classic').then(m => ({ default: (m.default as any).RangePicker })),
+  modern: () => import('./engines/modern').then(m => ({ default: (m.default as any).RangePicker })),
+  rustic: () => import('./engines/rustic').then(m => ({ default: (m.default as any).RangePicker })),
 });
 
 /**
@@ -124,9 +124,9 @@ const TimeRangePicker = createEngineComponent<TimeRangePickerProps>('TimeRangePi
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  *
  * Compound components:
  * - **TimePicker.RangePicker**: Select a time range with start and end

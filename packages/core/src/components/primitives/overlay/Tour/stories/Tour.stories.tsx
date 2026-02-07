@@ -44,7 +44,7 @@ Supports targeting specific elements, custom styling, and navigation controls.
 - Mask overlay with cutout
 - Custom indicators and buttons
 - Controlled and uncontrolled modes
-- Three engine implementations (Titan, Hermes, Apollo)
+- Three engine implementations (Classic, Modern, Rustic)
         `,
       },
     },
@@ -68,7 +68,7 @@ Supports targeting specific elements, custom styling, and navigation controls.
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
       description: 'Rendering engine to use',
     },
     mask: {
@@ -455,7 +455,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Tour rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Tour rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },
@@ -464,7 +464,7 @@ export const CompareEngines: Story = {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {(['titan', 'hermes', 'apollo'] as const).map((engine) => (
+        {(['classic', 'modern', 'rustic'] as const).map((engine) => (
           <div key={engine}>
             <h4 style={{ margin: '0 0 8px 0', textTransform: 'capitalize' }}>{engine} Engine</h4>
             <button onClick={() => setOpen(engine)} style={{ padding: '8px 16px' }}>

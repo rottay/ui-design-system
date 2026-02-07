@@ -8,12 +8,12 @@
  * Each engine provides the same tooltip functionality with different styling.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Tooltip with collision detection
- * - **Hermes**: DaisyUI tooltip classes with Tailwind utilities
- * - **Apollo**: Pure CSS with CSS variables
+ * - **Classic**: Ant Design Tooltip with collision detection
+ * - **Modern**: DaisyUI tooltip classes with Tailwind utilities
+ * - **Rustic**: Pure CSS with CSS variables
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Placement (12) | ✅ | ✅ | ✅ |
  * | Triggers | ✅ | ✅ | ✅ |
@@ -25,24 +25,24 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for advanced positioning
- * <Tooltip engine="titan" content="Smart positioning" />
+ * // Use Classic for advanced positioning
+ * <Tooltip engine="classic" content="Smart positioning" />
  *
- * // Use Hermes for DaisyUI styling
- * <Tooltip engine="hermes" color="primary" />
+ * // Use Modern for DaisyUI styling
+ * <Tooltip engine="modern" color="primary" />
  *
- * // Use Apollo for zero dependencies
- * <Tooltip engine="apollo" content="Lightweight" />
+ * // Use Rustic for zero dependencies
+ * <Tooltip engine="rustic" content="Lightweight" />
  * ```
  *
- * @see {@link TitanTooltip} for Ant Design implementation
- * @see {@link HermesTooltip} for DaisyUI implementation
- * @see {@link ApolloTooltip} for vanilla implementation
+ * @see {@link ClassicTooltip} for Ant Design implementation
+ * @see {@link ModernTooltip} for DaisyUI implementation
+ * @see {@link RusticTooltip} for vanilla implementation
  * @module Tooltip/engines
  * @category Display
  * @package @rottay/design-system
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

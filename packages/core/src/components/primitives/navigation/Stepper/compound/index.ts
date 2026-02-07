@@ -5,7 +5,7 @@
  *
  * @remarks
  * Compound components allow for flexible composition of stepper elements.
- * They work with all three engines (Titan, Hermes, Apollo) and inherit
+ * They work with all three engines (Classic, Modern, Rustic) and inherit
  * the parent Stepper's configuration automatically.
  *
  * @example Using Compound Components

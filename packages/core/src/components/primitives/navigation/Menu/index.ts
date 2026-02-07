@@ -8,7 +8,7 @@
  *
  * @remarks
  * The Menu component is built on Rottay's multi-engine architecture, allowing
- * seamless rendering across Titan (Ant Design), Hermes (DaisyUI), and Apollo
+ * seamless rendering across Classic (Ant Design), Modern (DaisyUI), and Rustic
  * (Vanilla) engines. This ensures consistent behavior while adapting to your
  * project's styling framework.
  *
@@ -148,7 +148,7 @@
  * @example Engine Override
  * ```tsx
  * // Force a specific rendering engine
- * <Menu engine="hermes" items={items} mode="vertical">
+ * <Menu engine="modern" items={items} mode="vertical">
  *   {/* Renders with DaisyUI/Tailwind styling *\/}
  * </Menu>
  * ```
@@ -242,11 +242,11 @@ export { MenuItem, MenuGroup, MenuSubMenu, MenuDivider };
 export const Menu = Object.assign(
   createEngineComponent<MenuProps>('Menu', {
     /** Ant Design implementation - full-featured with animations */
-    titan: () => import('./engines/titan'),
+    classic: () => import('./engines/classic'),
     /** DaisyUI/Tailwind implementation - utility-first styling */
-    hermes: () => import('./engines/hermes'),
+    modern: () => import('./engines/modern'),
     /** Vanilla HTML/CSS implementation - zero dependencies, full keyboard navigation */
-    apollo: () => import('./engines/apollo'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

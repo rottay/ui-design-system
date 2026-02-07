@@ -8,12 +8,12 @@
  * Each engine provides the same calendar functionality with different styling.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design Calendar with dayjs
- * - **Hermes**: DaisyUI calendar with Tailwind
- * - **Apollo**: Pure CSS calendar with inline styles
+ * - **Classic**: Ant Design Calendar with dayjs
+ * - **Modern**: DaisyUI calendar with Tailwind
+ * - **Rustic**: Pure CSS calendar with inline styles
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | Month view | ✅ | ✅ | ✅ |
  * | Year view | ✅ | ✅ | ✅ |
@@ -25,23 +25,23 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for full localization
- * <Calendar engine="titan" locale={enUS} />
+ * // Use Classic for full localization
+ * <Calendar engine="classic" locale={enUS} />
  *
- * // Use Hermes for DaisyUI styling
- * <Calendar engine="hermes" fullscreen />
+ * // Use Modern for DaisyUI styling
+ * <Calendar engine="modern" fullscreen />
  *
- * // Use Apollo for zero dependencies
- * <Calendar engine="apollo" />
+ * // Use Rustic for zero dependencies
+ * <Calendar engine="rustic" />
  * ```
  *
- * @see {@link TitanCalendar} for Ant Design implementation
- * @see {@link HermesCalendar} for DaisyUI implementation
- * @see {@link ApolloCalendar} for vanilla implementation
+ * @see {@link ClassicCalendar} for Ant Design implementation
+ * @see {@link ModernCalendar} for DaisyUI implementation
+ * @see {@link RusticCalendar} for vanilla implementation
  * @module Calendar/engines
  * @category Display
  * @package @rottay/design-system
  */
-export { Calendar as TitanCalendar } from './titan';
-export { Calendar as HermesCalendar } from './hermes';
-export { Calendar as ApolloCalendar } from './apollo';
+export { Calendar as ClassicCalendar } from './classic';
+export { Calendar as ModernCalendar } from './modern';
+export { Calendar as RusticCalendar } from './rustic';

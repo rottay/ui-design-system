@@ -9,7 +9,7 @@
  * - Size variants (sm, md, lg, xl)
  * - Label text support
  * - Custom color configuration
- * - Engine comparison (Titan, Hermes, Apollo)
+ * - Engine comparison (Classic, Modern, Rustic)
  *
  * @example Running Storybook
  * ```bash
@@ -46,7 +46,7 @@ const meta: Meta<typeof Spinner> = {
     },
     engine: {
       control: 'select',
-      options: ['titan', 'hermes', 'apollo'],
+      options: ['classic', 'modern', 'rustic'],
     },
     color: {
       control: 'color',
@@ -119,7 +119,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Spinner rendered by Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla CSS).',
+        story: 'Compare the same Spinner rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS).',
       },
     },
   },

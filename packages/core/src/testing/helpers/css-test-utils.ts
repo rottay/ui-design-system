@@ -147,9 +147,9 @@ export const TENANT_CSS_EXPECTATIONS: Record<TestTenantName, Record<string, stri
  * Expected class prefixes for each engine
  */
 export const ENGINE_CLASS_PREFIXES: Record<Exclude<EngineName, 'athena'>, string> = {
-  titan: 'ant-',
-  hermes: 'btn',
-  apollo: 'ds-',
+  classic: 'ant-',
+  modern: 'btn',
+  rustic: 'ds-',
 };
 
 /**

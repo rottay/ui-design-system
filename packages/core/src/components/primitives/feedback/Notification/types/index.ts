@@ -5,7 +5,7 @@
  *
  * @remarks
  * The Notification types are designed to work consistently across all three
- * rendering engines (Titan, Hermes, Apollo) while providing engine-specific
+ * rendering engines (Classic, Modern, Rustic) while providing engine-specific
  * optimizations when needed.
  *
  * @module Notification/Types

@@ -34,7 +34,7 @@
  * const tenantConfig = {
  *   slug: 'acme',
  *   name: 'ACME Corp',
- *   engine: 'titan',
+ *   engine: 'classic',
  *   theme: 'dark',
  *   plan: 'enterprise',
  *   features: ['advanced-analytics', 'export'],
@@ -50,7 +50,7 @@
  * ```tsx
  * <DesignSystemProvider
  *   tenantConfig={config}
- *   forceEngine="hermes"
+ *   forceEngine="modern"
  *   forceTheme="light"
  * >
  *   <App />
@@ -169,7 +169,7 @@ export function DesignSystemProvider({
     return <LoadingScreen />;
   }
 
-  const engine = forceEngine ?? tenantConfig.engine ?? 'titan';
+  const engine = forceEngine ?? tenantConfig.engine ?? 'classic';
   const theme = forceTheme ?? tenantConfig.theme ?? 'base';
 
   return (

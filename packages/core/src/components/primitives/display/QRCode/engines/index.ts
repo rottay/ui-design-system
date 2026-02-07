@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design QRCode with full feature support
- * - **Hermes**: DaisyUI/Tailwind CSS implementation
- * - **Apollo**: Pure vanilla canvas/SVG rendering
+ * - **Classic**: Ant Design QRCode with full feature support
+ * - **Modern**: DaisyUI/Tailwind CSS implementation
+ * - **Rustic**: Pure vanilla canvas/SVG rendering
  *
  * All engines implement:
  * - QR code generation from string values
@@ -18,10 +18,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <QRCode engine="hermes" value={url} errorLevel="H">
+ * <QRCode engine="modern" value={url} errorLevel="H">
  *   QR content
  * </QRCode>
  * ```
@@ -31,6 +31,6 @@
  * @category Display
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

@@ -3,47 +3,20 @@
 /**
  * @fileoverview EngineProvider - Rottay Design System
  * @description Provides the current UI rendering engine context, enabling
- * components to render using Titan (Ant Design), Hermes (DaisyUI), or Apollo (Vanilla).
+ * components to render using Classic (Ant Design), Modern (DaisyUI), or Rustic (Vanilla).
  *
  * @remarks
  * The EngineProvider is the core of the multi-engine architecture:
- * - **Titan**: Full-featured Ant Design-based engine with rich components
- * - **Hermes**: Lightweight DaisyUI/Tailwind CSS engine for smaller bundles
- * - **Apollo**: Zero-dependency vanilla HTML/CSS for maximum portability
- *
- * Components automatically use the engine from context, but can override
- * it with the `engine` prop for granular control.
+ * - **Classic**: Enterprise Ant Design-based engine with structured components
+ * - **Modern**: Contemporary DaisyUI/Tailwind CSS engine with glassmorphism
+ * - **Rustic**: Minimal vanilla HTML/CSS for maximum portability
  *
  * @example Basic usage
  * ```tsx
  * import { EngineProvider, Button } from '@rottay/design-system';
  *
- * <EngineProvider defaultEngine="titan">
- *   <Button>Uses Titan engine</Button>
- * </EngineProvider>
- * ```
- *
- * @example Changing engine at runtime
- * ```tsx
- * function ThemeSwitcher() {
- *   const { engine, setEngine } = useEngineContext();
- *
- *   return (
- *     <select value={engine} onChange={(e) => setEngine(e.target.value)}>
- *       <option value="titan">Titan (Ant Design)</option>
- *       <option value="hermes">Hermes (DaisyUI)</option>
- *       <option value="apollo">Apollo (Vanilla)</option>
- *     </select>
- *   );
- * }
- * ```
- *
- * @example Component-level override
- * ```tsx
- * <EngineProvider defaultEngine="titan">
- *   <Button>Uses Titan</Button>
- *   <Button engine="hermes">Uses Hermes</Button>
- *   <Button engine="apollo">Uses Apollo</Button>
+ * <EngineProvider defaultEngine="classic">
+ *   <Button>Uses Classic engine</Button>
  * </EngineProvider>
  * ```
  *
@@ -54,7 +27,7 @@
  * @package @rottay/design-system
  */
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import type { EngineName, EngineContextValue, EngineProviderProps } from '../../types';
 import { getDefaultEngine, isValidEngine } from '../../engines/registry';
 
@@ -69,6 +42,13 @@ export function EngineProvider({
 }: EngineProviderProps): React.ReactElement {
   const [engine, setEngineState] = useState<EngineName>(defaultEngine);
 
+  // Sync immediately when parent changes the defaultEngine prop.
+  // This is React's recommended pattern for adjusting state based on props
+  // (avoids the useEffect one-render delay anti-pattern).
+  if (defaultEngine !== engine && isValidEngine(defaultEngine)) {
+    setEngineState(defaultEngine);
+  }
+
   const setEngine = useCallback((newEngine: EngineName) => {
     if (isValidEngine(newEngine)) {
       setEngineState(newEngine);
@@ -78,10 +58,10 @@ export function EngineProvider({
     }
   }, []);
 
-  const value: EngineContextValue = {
+  const value = useMemo<EngineContextValue>(() => ({
     engine,
     setEngine,
-  };
+  }), [engine, setEngine]);
 
   return (
     <EngineContext.Provider value={value}>

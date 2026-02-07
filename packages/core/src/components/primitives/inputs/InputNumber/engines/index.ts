@@ -9,12 +9,12 @@
  * underlying libraries.
  *
  * **Available Engines:**
- * - **Titan**: Ant Design InputNumber with full features
- * - **Hermes**: DaisyUI input with custom controls
- * - **Apollo**: Pure HTML number input with styling
+ * - **Classic**: Ant Design InputNumber with full features
+ * - **Modern**: DaisyUI input with custom controls
+ * - **Rustic**: Pure HTML number input with styling
  *
  * **Feature Comparison:**
- * | Feature | Titan | Hermes | Apollo |
+ * | Feature | Classic | Modern | Rustic |
  * |---------|-------|--------|--------|
  * | formatter/parser | ✅ | ❌ | ❌ |
  * | stringMode | ✅ | ❌ | ❌ |
@@ -24,21 +24,21 @@
  *
  * @example Engine Override
  * ```tsx
- * // Use Titan for advanced formatting
- * <InputNumber engine="titan" formatter={(v) => `$ ${v}`} />
+ * // Use Classic for advanced formatting
+ * <InputNumber engine="classic" formatter={(v) => `$ ${v}`} />
  *
- * // Use Hermes for lightweight bundle
- * <InputNumber engine="hermes" min={0} max={100} />
+ * // Use Modern for lightweight bundle
+ * <InputNumber engine="modern" min={0} max={100} />
  * ```
  *
- * @see {@link TitanInputNumber} for Ant Design implementation
- * @see {@link HermesInputNumber} for DaisyUI implementation
- * @see {@link ApolloInputNumber} for vanilla implementation
+ * @see {@link ClassicInputNumber} for Ant Design implementation
+ * @see {@link ModernInputNumber} for DaisyUI implementation
+ * @see {@link RusticInputNumber} for vanilla implementation
  * @module InputNumberEngines
  * @category Inputs
  * @package @rottay/design-system
  */
 
-export { InputNumber as TitanInputNumber } from './titan';
-export { InputNumber as HermesInputNumber } from './hermes';
-export { InputNumber as ApolloInputNumber } from './apollo';
+export { InputNumber as ClassicInputNumber } from './classic';
+export { InputNumber as ModernInputNumber } from './modern';
+export { InputNumber as RusticInputNumber } from './rustic';

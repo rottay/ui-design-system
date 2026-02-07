@@ -25,7 +25,7 @@ export function isValidPlan(plan: unknown): plan is TenantPlan {
  * Validate engine name
  */
 export function isValidEngineName(engine: unknown): engine is EngineName {
-  return engine === 'titan' || engine === 'hermes' || engine === 'apollo' || engine === 'athena';
+  return engine === 'classic' || engine === 'modern' || engine === 'rustic' || engine === 'athena';
 }
 
 /**
@@ -55,7 +55,7 @@ export function createTenantConfig(partial: Partial<TenantConfig> & { slug: stri
     slug: partial.slug,
     name: partial.name,
     domain: partial.domain,
-    engine: partial.engine ?? 'titan',
+    engine: partial.engine ?? 'classic',
     theme: partial.theme ?? 'base',
     plan: partial.plan ?? 'starter',
     features: partial.features ?? [],

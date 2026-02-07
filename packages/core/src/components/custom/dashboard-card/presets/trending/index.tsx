@@ -1,42 +1,59 @@
+'use client';
+
 /**
  * DashboardCard - Trending Preset
- * Value + trend indicator
+ * Value + trend indicator + description, engine-differentiated
  */
 
-// import React from 'react';
+import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
+import { createCardStyle, createBadgeStyle } from '../../../helpers';
 import type { DashboardCardProps } from '../../core';
 
 export const TrendingDashboardCard = createPreset<DashboardCardProps>({
   name: 'DashboardCard.Trending',
-  render: ({ primitives, props, tokens }: PresetContext<DashboardCardProps>) => {
-    const { Card, Box, Stack, Spinner } = primitives;
+  render: ({ primitives, props, tokens, engine }: PresetContext<DashboardCardProps>) => {
+    const { Box, Stack, Spinner } = primitives;
     const { title, value, description, icon, trend, color = 'default', onClick, loading, className, style } = props;
+    const [isHovered, setIsHovered] = useState(false);
 
-    const colorMap = {
-      default: tokens.colors.neutral[700],
-      primary: tokens.colors.primary,
-      success: tokens.colors.success,
-      warning: tokens.colors.warning,
-      error: tokens.colors.error,
+    const scaleMap: Record<string, any> = {
+      default: tokens.colors.neutral,
+      primary: tokens.colors.primaryScale,
+      success: tokens.colors.successScale,
+      warning: tokens.colors.warningScale,
+      error: tokens.colors.errorScale,
     };
+    const scale = scaleMap[color] || tokens.colors.neutral;
 
-    const trendColor = trend?.direction === 'up' ? tokens.colors.success
-      : trend?.direction === 'down' ? tokens.colors.error
-      : tokens.colors.neutral[500];
+    const trendScale = trend?.direction === 'up'
+      ? tokens.colors.successScale
+      : trend?.direction === 'down'
+        ? tokens.colors.errorScale
+        : tokens.colors.neutral;
 
     const trendIcon = trend?.direction === 'up' ? '↑'
       : trend?.direction === 'down' ? '↓'
       : '→';
 
+    const cardStyle = createCardStyle(tokens, {
+      elevation: isHovered && onClick ? 'md' : 'sm',
+      padding: tokens.spacing[5],
+      interactive: !!onClick,
+      glass: engine === 'modern',
+    });
+
     return (
-      <Card
-        variant="elevated"
-        padding="lg"
-        hoverable={!!onClick}
-        onClick={onClick}
+      <div
         className={className}
-        style={style}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={onClick}
+        style={{
+          ...cardStyle,
+          transform: isHovered && onClick ? tokens.motion.transform : 'none',
+          ...style,
+        }}
       >
         {loading ? (
           <Box style={{ display: 'flex', justifyContent: 'center', padding: tokens.spacing[6] }}>
@@ -45,38 +62,66 @@ export const TrendingDashboardCard = createPreset<DashboardCardProps>({
         ) : (
           <Stack direction="vertical" spacing="md">
             <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], fontWeight: 500 }}>
+              <Box
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[500],
+                  fontWeight: tokens.typography.fontWeight.medium,
+                }}
+              >
                 {title}
               </Box>
               {icon && (
-                <Box style={{ color: colorMap[color], fontSize: '28px' }}>
+                <Box
+                  style={{
+                    color: scale[500],
+                    fontSize: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: tokens.borderRadius.md,
+                    backgroundColor: scale[50],
+                  }}
+                >
                   {icon}
                 </Box>
               )}
             </Box>
 
-            <Box style={{ fontSize: tokens.typography.fontSize['3xl'], fontWeight: 700 }}>
+            <Box
+              style={{
+                fontSize: tokens.typography.fontSize['3xl'],
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.neutral[900],
+                lineHeight: tokens.typography.lineHeight.tight,
+              }}
+            >
               {value}
             </Box>
 
             {(trend || description) && (
               <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                 {trend && (
-                  <Box style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    backgroundColor: `${trendColor}15`,
-                    color: trendColor,
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: 500,
-                  }}>
+                  <Box
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                      borderRadius: tokens.borderRadius.sm,
+                      backgroundColor: trendScale[50],
+                      color: trendScale[700],
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: tokens.typography.fontWeight.medium,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${trendScale[200]}`,
+                    }}
+                  >
                     {trendIcon} {trend.value}%
                   </Box>
                 )}
-                {description && (
+                {(trend?.label || description) && (
                   <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
                     {trend?.label || description}
                   </Box>
@@ -85,7 +130,7 @@ export const TrendingDashboardCard = createPreset<DashboardCardProps>({
             )}
           </Stack>
         )}
-      </Card>
+      </div>
     );
   },
 });

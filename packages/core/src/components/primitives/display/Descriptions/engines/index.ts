@@ -5,28 +5,28 @@
  * consistent API and functionality.
  */
 
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';
 
 // Named exports for direct engine access
 export {
-  TitanDescriptions,
-  TitanItem,
-  Descriptions as TitanDescriptionsAlias,
-  Item as TitanItemAlias,
-} from './titan';
+  ClassicDescriptions,
+  ClassicItem,
+  Descriptions as ClassicDescriptionsAlias,
+  Item as ClassicItemAlias,
+} from './classic';
 
 export {
-  HermesDescriptions,
-  HermesItem,
-  Descriptions as HermesDescriptionsAlias,
-  Item as HermesItemAlias,
-} from './hermes';
+  ModernDescriptions,
+  ModernItem,
+  Descriptions as ModernDescriptionsAlias,
+  Item as ModernItemAlias,
+} from './modern';
 
 export {
-  ApolloDescriptions,
-  ApolloItem,
-  Descriptions as ApolloDescriptionsAlias,
-  Item as ApolloItemAlias,
-} from './apollo';
+  RusticDescriptions,
+  RusticItem,
+  Descriptions as RusticDescriptionsAlias,
+  Item as RusticItemAlias,
+} from './rustic';

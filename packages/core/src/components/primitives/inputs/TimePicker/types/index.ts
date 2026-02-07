@@ -150,7 +150,7 @@ export interface TimePickerProps {
   /** Custom renderer for time cells */
   cellRender?: (current: number, info: { type: 'hour' | 'minute' | 'second' }) => ReactNode;
   /** Rendering engine override */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

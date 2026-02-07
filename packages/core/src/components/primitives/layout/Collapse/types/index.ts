@@ -36,7 +36,7 @@ import type { ReactNode, CSSProperties } from 'react';
 /**
  * Supported rendering engines for Collapse components.
  */
-type CollapseEngine = 'titan' | 'hermes' | 'apollo';
+type CollapseEngine = 'classic' | 'modern' | 'rustic';
 
 export interface CollapsePanelProps {
   /** Unique key for the panel */

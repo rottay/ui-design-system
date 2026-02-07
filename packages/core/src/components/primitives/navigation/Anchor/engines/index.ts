@@ -1,7 +1,7 @@
 /**
  * @fileoverview Anchor Engine Exports - Rottay Design System
  * @description Barrel file exporting all Anchor engine implementations.
- * Provides access to Titan, Hermes, and Apollo engines.
+ * Provides access to Classic, Modern, and Rustic engines.
  *
  * @remarks
  * This module provides direct access to individual engine implementations
@@ -15,9 +15,9 @@
  *
  * | Engine | Library | Best For |
  * |--------|---------|----------|
- * | Titan | Ant Design | Enterprise apps, full features |
- * | Hermes | DaisyUI/Tailwind | Tailwind projects, smaller bundle |
- * | Apollo | Vanilla HTML/CSS | Maximum control, accessibility |
+ * | Classic | Ant Design | Enterprise apps, full features |
+ * | Modern | DaisyUI/Tailwind | Tailwind projects, smaller bundle |
+ * | Rustic | Vanilla HTML/CSS | Maximum control, accessibility |
  *
  * **Recommended Usage:**
  * For most cases, use the main Anchor export which automatically
@@ -34,58 +34,58 @@
  * @example Direct Engine Import
  * ```tsx
  * // For testing or when you need a specific engine
- * import { TitanAnchor, TitanLink } from '@rottay/design-system/components/primitives/navigation/Anchor/engines';
+ * import { ClassicAnchor, ClassicLink } from '@rottay/design-system/components/primitives/navigation/Anchor/engines';
  *
- * <TitanAnchor>
- *   <TitanLink href="#section" title="Section" />
- * </TitanAnchor>
+ * <ClassicAnchor>
+ *   <ClassicLink href="#section" title="Section" />
+ * </ClassicAnchor>
  * ```
  *
  * @example Tree-Shaking Optimization
  * ```tsx
  * // Import only the engine you need
- * import { HermesAnchor, HermesLink } from '@rottay/design-system/components/primitives/navigation/Anchor/engines/hermes';
+ * import { ModernAnchor, ModernLink } from '@rottay/design-system/components/primitives/navigation/Anchor/engines/modern';
  *
- * <HermesAnchor direction="horizontal">
- *   <HermesLink href="#tab1" title="Tab 1" />
- *   <HermesLink href="#tab2" title="Tab 2" />
- * </HermesAnchor>
+ * <ModernAnchor direction="horizontal">
+ *   <ModernLink href="#tab1" title="Tab 1" />
+ *   <ModernLink href="#tab2" title="Tab 2" />
+ * </ModernAnchor>
  * ```
  *
- * @see {@link TitanAnchor} - Ant Design implementation
- * @see {@link HermesAnchor} - DaisyUI implementation
- * @see {@link ApolloAnchor} - Vanilla implementation
+ * @see {@link ClassicAnchor} - Ant Design implementation
+ * @see {@link ModernAnchor} - DaisyUI implementation
+ * @see {@link RusticAnchor} - Vanilla implementation
  * @module Anchor/Engines
  * @category Navigation
  * @package @rottay/design-system
  */
 
 // ============================================================================
-// Titan Engine Exports
+// Classic Engine Exports
 // ============================================================================
 
 /**
- * Titan (Ant Design) engine exports.
+ * Classic (Ant Design) engine exports.
  * Full-featured implementation with ink indicator and animations.
  */
-export { default as titan, Anchor as TitanAnchor, Link as TitanLink } from './titan';
+export { default as classic, Anchor as ClassicAnchor, Link as ClassicLink } from './classic';
 
 // ============================================================================
-// Hermes Engine Exports
+// Modern Engine Exports
 // ============================================================================
 
 /**
- * Hermes (DaisyUI/Tailwind) engine exports.
+ * Modern (DaisyUI/Tailwind) engine exports.
  * Utility-first implementation with semantic color classes.
  */
-export { default as hermes, Anchor as HermesAnchor, Link as HermesLink } from './hermes';
+export { default as modern, Anchor as ModernAnchor, Link as ModernLink } from './modern';
 
 // ============================================================================
-// Apollo Engine Exports
+// Rustic Engine Exports
 // ============================================================================
 
 /**
- * Apollo (Vanilla HTML/CSS) engine exports.
+ * Rustic (Vanilla HTML/CSS) engine exports.
  * Zero-dependency implementation with inline styles.
  */
-export { default as apollo, Anchor as ApolloAnchor, Link as ApolloLink } from './apollo';
+export { default as rustic, Anchor as RusticAnchor, Link as RusticLink } from './rustic';

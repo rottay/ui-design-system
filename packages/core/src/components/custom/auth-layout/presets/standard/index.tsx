@@ -1,15 +1,16 @@
 /**
  * AuthLayout - Standard Preset
- * Email/password + remember me + forgot password
+ * Email/password + remember me + forgot password with full token compliance
  */
 
 import { createPreset, PresetContext } from '../../../factory';
+import { createSurfaceStyle } from '../../../helpers';
 import type { AuthLayoutProps } from '../../core';
 import { AUTH_LAYOUT_DEFAULTS } from '../../core';
 
 export const StandardAuthLayout = createPreset<AuthLayoutProps>({
   name: 'AuthLayout.Standard',
-  render: ({ primitives, props, tokens }: PresetContext<AuthLayoutProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<AuthLayoutProps>) => {
     const { Box, Stack, Card, Divider } = primitives;
     const {
       title = AUTH_LAYOUT_DEFAULTS.title,
@@ -24,11 +25,16 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
       style,
     } = props;
 
+    const surfaceStyle = createSurfaceStyle(tokens, {
+      elevation: 'md',
+      glass: engine === 'modern',
+    });
+
     return (
       <Box
         className={className}
         style={{
-          minHeight: '100vh',
+          minHeight: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -40,14 +46,18 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
         <Card
           variant="elevated"
           padding="lg"
-          style={{ width: '100%', maxWidth: '420px' }}
+          style={{
+            width: '100%',
+            maxWidth: 420,
+            ...surfaceStyle,
+          }}
         >
           <Stack direction="vertical" spacing="lg">
             {/* Logo */}
             {logo && (
               <Box style={{ textAlign: 'center' }}>
                 {typeof logo === 'string' ? (
-                  <img src={logo} alt="Logo" style={{ height: '48px' }} />
+                  <img src={logo} alt="Logo" style={{ height: 48 }} />
                 ) : logo}
               </Box>
             )}
@@ -57,17 +67,19 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
               {title && (
                 <h1 style={{
                   fontSize: tokens.typography.fontSize['2xl'],
-                  fontWeight: 600,
+                  fontWeight: tokens.typography.fontWeight.semibold,
                   margin: 0,
+                  color: tokens.colors.neutral[900],
                 }}>
                   {title}
                 </h1>
               )}
               {subtitle && (
                 <p style={{
-                  color: `var(--color-neutral-500)`,
+                  color: tokens.colors.neutral[500],
                   marginTop: tokens.spacing[2],
                   marginBottom: 0,
+                  fontSize: tokens.typography.fontSize.sm,
                 }}>
                   {subtitle}
                 </p>
@@ -90,7 +102,13 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
                 }}
               >
                 {showRememberMe && (
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                  <label style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: tokens.spacing[2],
+                    cursor: 'pointer',
+                    color: tokens.colors.neutral[700],
+                  }}>
                     <input type="checkbox" />
                     Remember me
                   </label>
@@ -102,9 +120,13 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: tokens.colors.primary,
+                      color: tokens.colors.primaryScale[600],
                       cursor: 'pointer',
                       padding: 0,
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: tokens.typography.fontWeight.medium,
+                      fontFamily: 'inherit',
+                      transition: `color ${tokens.motion.hover}`,
                     }}
                   >
                     Forgot password?
@@ -117,7 +139,13 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
             {footer && (
               <>
                 <Divider />
-                <Box style={{ textAlign: 'center' }}>{footer}</Box>
+                <Box style={{
+                  textAlign: 'center',
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[500],
+                }}>
+                  {footer}
+                </Box>
               </>
             )}
           </Stack>

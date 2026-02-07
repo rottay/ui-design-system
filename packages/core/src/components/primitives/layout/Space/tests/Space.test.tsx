@@ -163,7 +163,7 @@ describe('Space', () => {
 });
 
 describe('Space engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Space engine={engine}>Test</Space>);
     expect(screen.getByTestId('space')).toBeInTheDocument();
   });

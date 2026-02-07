@@ -160,7 +160,7 @@ describe('FloatButton.BackTop', () => {
 });
 
 describe('FloatButton engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<FloatButton engine={engine} />);
     expect(screen.getByTestId('float-button')).toBeInTheDocument();
   });

@@ -182,7 +182,7 @@ export interface TreeSelectProps {
   /** Popup class name */
   popupClassName?: string;
   /** Rendering engine override */
-  engine?: 'titan' | 'hermes' | 'apollo';
+  engine?: 'classic' | 'modern' | 'rustic';
 }
 
 /**

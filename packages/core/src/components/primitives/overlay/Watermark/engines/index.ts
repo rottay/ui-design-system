@@ -4,9 +4,9 @@
  *
  * @remarks
  * Available engines:
- * - **Titan**: Ant Design Watermark with native theming
- * - **Hermes**: Tailwind CSS with canvas pattern generation
- * - **Apollo**: Pure vanilla HTML/CSS with canvas rendering
+ * - **Classic**: Ant Design Watermark with native theming
+ * - **Modern**: Tailwind CSS with canvas pattern generation
+ * - **Rustic**: Pure vanilla HTML/CSS with canvas rendering
  *
  * All engines implement:
  * - Canvas-based watermark pattern generation
@@ -17,10 +17,10 @@
  * @example Engine Import
  * ```tsx
  * // Direct engine import (internal use)
- * import { titan, hermes, apollo } from './engines';
+ * import { classic, modern, rustic } from './engines';
  *
  * // Component automatically selects engine
- * <Watermark engine="hermes" content="Draft">
+ * <Watermark engine="modern" content="Draft">
  *   <div>Content</div>
  * </Watermark>
  * ```
@@ -30,6 +30,6 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-export { default as titan } from './titan';
-export { default as hermes } from './hermes';
-export { default as apollo } from './apollo';
+export { default as classic } from './classic';
+export { default as modern } from './modern';
+export { default as rustic } from './rustic';

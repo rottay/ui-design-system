@@ -15,7 +15,7 @@
  * - Nested data visualization
  *
  * Key features:
- * - **Multi-engine support**: Titan (Ant Design), Hermes (DaisyUI), Apollo (Vanilla)
+ * - **Multi-engine support**: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla)
  * - **Selection modes**: Single select, multiple select, or checkbox selection
  * - **Drag and drop**: Reorganize tree structure with built-in DnD
  * - **Virtual scrolling**: Efficient rendering for large trees
@@ -67,14 +67,14 @@
  *
  * @example Multi-engine usage
  * ```tsx
- * // Titan engine (Ant Design - default)
- * <Tree engine="titan" treeData={data} checkable showLine />
+ * // Classic engine (Ant Design - default)
+ * <Tree engine="classic" treeData={data} checkable showLine />
  *
- * // Hermes engine (DaisyUI/Tailwind)
- * <Tree engine="hermes" treeData={data} showIcon />
+ * // Modern engine (DaisyUI/Tailwind)
+ * <Tree engine="modern" treeData={data} showIcon />
  *
- * // Apollo engine (Pure HTML/CSS)
- * <Tree engine="apollo" treeData={data} draggable />
+ * // Rustic engine (Pure HTML/CSS)
+ * <Tree engine="rustic" treeData={data} draggable />
  * ```
  *
  * @see {@link TreeProps} for component props
@@ -106,15 +106,15 @@ export type { TreeNodeProps as TreeNodeComponentProps } from './compound';
  * based on the current context or explicit engine prop.
  *
  * Engines:
- * - **titan**: Full-featured implementation using Ant Design (default)
- * - **hermes**: Lightweight implementation using DaisyUI/Tailwind
- * - **apollo**: Headless implementation using vanilla HTML/CSS
+ * - **classic**: Full-featured implementation using Ant Design (default)
+ * - **modern**: Lightweight implementation using DaisyUI/Tailwind
+ * - **rustic**: Headless implementation using vanilla HTML/CSS
  */
 export const Tree = Object.assign(
   createEngineComponent<TreeProps>('Tree', {
-    titan: () => import('./engines/titan'),
-    hermes: () => import('./engines/hermes'),
-    apollo: () => import('./engines/apollo'),
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
   }),
   {
     /**

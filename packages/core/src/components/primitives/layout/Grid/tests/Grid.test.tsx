@@ -607,7 +607,7 @@ describe('Grid Types', () => {
 });
 
 describe('Grid engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Grid engine={engine}>Test</Grid>);
     expect(screen.getByTestId('grid')).toBeInTheDocument();
   });

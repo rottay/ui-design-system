@@ -164,7 +164,7 @@ describe('Breadcrumb', () => {
 });
 
 describe('Breadcrumb engines', () => {
-  it.each(['titan', 'hermes', 'apollo'] as const)('works with %s engine', (engine) => {
+  it.each(['classic', 'modern', 'rustic'] as const)('works with %s engine', (engine) => {
     render(<Breadcrumb engine={engine} items={[{ key: 'home', label: 'Home' }]} />);
     expect(screen.getByTestId('breadcrumb')).toBeInTheDocument();
   });

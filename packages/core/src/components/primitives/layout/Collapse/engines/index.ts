@@ -1,7 +1,7 @@
 /**
  * @fileoverview Collapse Engine Exports - Rottay Design System
  * @description Barrel export for all Collapse engine implementations.
- * Provides Titan (Ant Design), Hermes (DaisyUI), and Apollo (Vanilla) engines
+ * Provides Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla) engines
  * with Collapse and Panel sub-components.
  *
  * @module Collapse/Engines
@@ -9,6 +9,6 @@
  * @package @rottay/design-system
  */
 
-export { default as titan, Collapse as TitanCollapse, Panel as TitanPanel } from './titan';
-export { default as hermes, Collapse as HermesCollapse, Panel as HermesPanel } from './hermes';
-export { default as apollo, Collapse as ApolloCollapse, Panel as ApolloPanel } from './apollo';
+export { default as classic, Collapse as ClassicCollapse, Panel as ClassicPanel } from './classic';
+export { default as modern, Collapse as ModernCollapse, Panel as ModernPanel } from './modern';
+export { default as rustic, Collapse as RusticCollapse, Panel as RusticPanel } from './rustic';
