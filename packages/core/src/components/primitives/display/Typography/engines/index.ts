@@ -63,7 +63,7 @@ export {
 // Rustic (Vanilla/CSS) engine exports
 export {
   default as rustic,
-  RusticHeading,
-  RusticText,
-  RusticParagraph,
+  ApolloHeading as RusticHeading,
+  ApolloText as RusticText,
+  ApolloParagraph as RusticParagraph,
 } from './rustic';

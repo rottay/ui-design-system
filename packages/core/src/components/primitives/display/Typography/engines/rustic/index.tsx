@@ -316,4 +316,10 @@ ApolloLink.displayName = 'ApolloLink';
  * Default export for engine factory compatibility.
  * Exports the primary Heading component for the Typography namespace.
  */
+// Aliases for rustic naming convention
+export { ApolloHeading as RusticHeading };
+export { ApolloText as RusticText };
+export { ApolloParagraph as RusticParagraph };
+export { ApolloLink as RusticLink };
+
 export default ApolloHeading;
