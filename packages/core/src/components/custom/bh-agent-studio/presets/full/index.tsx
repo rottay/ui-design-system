@@ -1,0 +1,2248 @@
+'use client';
+
+/**
+ * BhAgentStudio - Full Preset
+ * Complete AI agent builder with all configuration sections:
+ * agent header, language, voice, personality, LLM config, system prompt,
+ * script builder, tool configuration, call settings, and validation.
+ */
+
+import { useState, useMemo, useCallback } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
+import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import type {
+  BhAgentStudioProps,
+  AgentData,
+  AgentType,
+  VoiceProvider,
+  PersonalityTrait,
+  ScriptSection,
+  ToolConfig,
+  CallSettings,
+  ValidationResult,
+  ValidationStatus,
+} from '../../core';
+import {
+  DEFAULT_AGENT_DATA,
+  BH_AGENT_STUDIO_DEFAULTS,
+  getAgentTypeConfig,
+  getProviderConfig,
+  getValidationStatusColors,
+  SYSTEM_PROMPT_VARIABLES,
+  formatEstimatedCost,
+  getTemperatureLabel,
+  getToneLevelLabel,
+} from '../../core';
+import type { DesignTokens } from '../../../../../core/types/tokens';
+import {
+  Bot,
+  Phone,
+  MessageSquare,
+  Play,
+  Pause,
+  Plus,
+  Trash2,
+  GripVertical,
+  Save,
+  TestTube,
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp,
+  Settings,
+  Mic,
+  Globe,
+  Brain,
+  Code2,
+  FileText,
+  Wrench,
+  PhoneCall,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Volume2,
+  Sparkles,
+  DollarSign,
+  ToggleLeft,
+  ToggleRight,
+  Copy,
+} from 'lucide-react';
+
+/* ------------------------------------------------------------------ */
+/*  Helper: Generate waveform SVG polyline from seed                   */
+/* ------------------------------------------------------------------ */
+function generateWaveformPoints(width: number, height: number, bars: number, seed: number): string {
+  const points: string[] = [];
+  const barWidth = width / bars;
+  for (let i = 0; i < bars; i++) {
+    const x = i * barWidth + barWidth / 2;
+    const amplitude = (Math.sin(i * 0.6 + seed) * 0.4 + 0.5) * (height * 0.8);
+    const y = (height - amplitude) / 2;
+    points.push(`${x},${y}`);
+    points.push(`${x},${y + amplitude}`);
+  }
+  return points.join(' ');
+}
+
+/* ------------------------------------------------------------------ */
+/*  Helper: Section collapse wrapper                                   */
+/* ------------------------------------------------------------------ */
+interface SectionProps {
+  title: string;
+  icon: React.ReactNode;
+  tokens: DesignTokens;
+  isCollapsed: boolean;
+  onToggle: () => void;
+  glass: boolean;
+  children: React.ReactNode;
+  badge?: React.ReactNode;
+}
+
+function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass, children, badge }: SectionProps) {
+  return (
+    <div
+      style={{
+        ...createCardStyle(tokens, { elevation: 'sm', glass }),
+        marginBottom: tokens.spacing[4],
+        overflow: 'hidden',
+      }}
+    >
+      <button
+        onClick={onToggle}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+          backgroundColor: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          gap: tokens.spacing[2],
+          transition: `all ${tokens.motion.hover}`,
+        }}
+      >
+        <span style={{ color: tokens.colors.primaryScale[500], display: 'flex', alignItems: 'center' }}>
+          {icon}
+        </span>
+        <span
+          style={{
+            flex: 1,
+            textAlign: 'left',
+            fontSize: tokens.typography.fontSize.md,
+            fontWeight: tokens.typography.fontWeight.semibold,
+            color: tokens.colors.neutral[800],
+          }}
+        >
+          {title}
+        </span>
+        {badge}
+        <span style={{ color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center' }}>
+          {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
+        </span>
+      </button>
+      {!isCollapsed && (
+        <div style={{ padding: `0 ${tokens.spacing[4]}px ${tokens.spacing[4]}px` }}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Full Preset                                                        */
+/* ------------------------------------------------------------------ */
+export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
+  name: 'BhAgentStudio.Full',
+  render: ({ primitives, props, tokens, engine }: PresetContext<BhAgentStudioProps>) => {
+    const { Box, Text } = primitives;
+
+    const {
+      agentData: agentDataProp,
+      onChange,
+      onSave,
+      onTest,
+      onValidate,
+      validationResults = BH_AGENT_STUDIO_DEFAULTS.validationResults ?? [],
+      providers = BH_AGENT_STUDIO_DEFAULTS.providers ?? [],
+      languages = BH_AGENT_STUDIO_DEFAULTS.languages ?? [],
+      voices = BH_AGENT_STUDIO_DEFAULTS.voices ?? [],
+      models = BH_AGENT_STUDIO_DEFAULTS.models ?? [],
+      estimatedCost: estimatedCostProp = 0,
+      isDirty: isDirtyProp = false,
+      loading,
+      className,
+      style,
+    } = props;
+
+    /* ---------- State ---------- */
+    const [internalAgentData, setInternalAgentData] = useState<AgentData>(
+      agentDataProp ?? DEFAULT_AGENT_DATA,
+    );
+    const [activeSection, setActiveSection] = useState<string>('header');
+    const [internalValidation, setInternalValidation] = useState<ValidationResult[]>(validationResults);
+    const [isTestMode, setIsTestMode] = useState(false);
+    const [voicePreviewPlaying, setVoicePreviewPlaying] = useState(false);
+    const [dragState, setDragState] = useState<{ dragId: string | null; overId: string | null }>({
+      dragId: null,
+      overId: null,
+    });
+    const [internalIsDirty, setInternalIsDirty] = useState(isDirtyProp);
+    const [internalEstimatedCost, setInternalEstimatedCost] = useState(estimatedCostProp);
+    const [providerStatus, setProviderStatus] = useState<Record<VoiceProvider, 'idle' | 'loading' | 'ready' | 'error'>>({
+      elevenlabs: 'idle',
+      azure: 'idle',
+      google: 'idle',
+    });
+    const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+
+    const agentData = agentDataProp ?? internalAgentData;
+    const isDirty = isDirtyProp || internalIsDirty;
+    const estimatedCost = estimatedCostProp || internalEstimatedCost;
+
+    const isGlass = engine === 'modern' && !!tokens.glass;
+    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
+    const hoverStyle = createHoverStyle(tokens);
+    const hoverTransform = getHoverTransform(tokens);
+
+    const agentTypeConfig = useMemo(() => getAgentTypeConfig(tokens), [tokens]);
+    const providerConfig = useMemo(() => getProviderConfig(tokens), [tokens]);
+    const validationColors = useMemo(() => getValidationStatusColors(tokens), [tokens]);
+
+    /* ---------- Update helpers ---------- */
+    const updateAgent = useCallback(
+      (partial: Partial<AgentData>) => {
+        const updated = { ...agentData, ...partial };
+        if (onChange) {
+          onChange(updated);
+        } else {
+          setInternalAgentData(updated);
+        }
+        setInternalIsDirty(true);
+      },
+      [agentData, onChange],
+    );
+
+    const updateCallSettings = useCallback(
+      (partial: Partial<CallSettings>) => {
+        updateAgent({ callSettings: { ...agentData.callSettings, ...partial } });
+      },
+      [agentData.callSettings, updateAgent],
+    );
+
+    const toggleSection = useCallback((key: string) => {
+      setCollapsedSections((prev) => ({ ...prev, [key]: !prev[key] }));
+    }, []);
+
+    /* ---------- Script section helpers ---------- */
+    const addScriptSection = useCallback(() => {
+      const newSection: ScriptSection = {
+        id: `section-${Date.now()}`,
+        title: `Section ${agentData.scriptSections.length + 1}`,
+        promptText: '',
+        order: agentData.scriptSections.length,
+      };
+      updateAgent({ scriptSections: [...agentData.scriptSections, newSection] });
+    }, [agentData.scriptSections, updateAgent]);
+
+    const removeScriptSection = useCallback(
+      (id: string) => {
+        const updated = agentData.scriptSections
+          .filter((s) => s.id !== id)
+          .map((s, i) => ({ ...s, order: i }));
+        updateAgent({ scriptSections: updated });
+      },
+      [agentData.scriptSections, updateAgent],
+    );
+
+    const updateScriptSection = useCallback(
+      (id: string, partial: Partial<ScriptSection>) => {
+        const updated = agentData.scriptSections.map((s) =>
+          s.id === id ? { ...s, ...partial } : s,
+        );
+        updateAgent({ scriptSections: updated });
+      },
+      [agentData.scriptSections, updateAgent],
+    );
+
+    /* ---------- Script drag-and-drop ---------- */
+    const handleScriptDragStart = useCallback((e: React.DragEvent, id: string) => {
+      setDragState({ dragId: id, overId: null });
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', id);
+    }, []);
+
+    const handleScriptDragOver = useCallback(
+      (e: React.DragEvent, overId: string) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        setDragState((prev) => ({ ...prev, overId }));
+      },
+      [],
+    );
+
+    const handleScriptDrop = useCallback(
+      (e: React.DragEvent, targetId: string) => {
+        e.preventDefault();
+        const { dragId } = dragState;
+        if (!dragId || dragId === targetId) {
+          setDragState({ dragId: null, overId: null });
+          return;
+        }
+        const sections = [...agentData.scriptSections];
+        const fromIdx = sections.findIndex((s) => s.id === dragId);
+        const toIdx = sections.findIndex((s) => s.id === targetId);
+        if (fromIdx === -1 || toIdx === -1) return;
+        const [moved] = sections.splice(fromIdx, 1);
+        sections.splice(toIdx, 0, moved);
+        const reordered = sections.map((s, i) => ({ ...s, order: i }));
+        updateAgent({ scriptSections: reordered });
+        setDragState({ dragId: null, overId: null });
+      },
+      [dragState, agentData.scriptSections, updateAgent],
+    );
+
+    const handleScriptDragEnd = useCallback(() => {
+      setDragState({ dragId: null, overId: null });
+    }, []);
+
+    /* ---------- Tool toggle ---------- */
+    const toggleTool = useCallback(
+      (toolId: string) => {
+        const updated = agentData.tools.map((t) =>
+          t.id === toolId ? { ...t, enabled: !t.enabled } : t,
+        );
+        updateAgent({ tools: updated });
+      },
+      [agentData.tools, updateAgent],
+    );
+
+    /* ---------- Personality trait update ---------- */
+    const updateTrait = useCallback(
+      (name: string, value: number) => {
+        const updated = agentData.personalityTraits.map((t) =>
+          t.name === name ? { ...t, value } : t,
+        );
+        updateAgent({ personalityTraits: updated });
+      },
+      [agentData.personalityTraits, updateAgent],
+    );
+
+    /* ---------- Voice preview ---------- */
+    const handleVoicePreview = useCallback(() => {
+      setVoicePreviewPlaying((prev) => !prev);
+    }, []);
+
+    /* ---------- Insert variable into system prompt ---------- */
+    const insertVariable = useCallback(
+      (variable: string) => {
+        updateAgent({ systemPrompt: agentData.systemPrompt + ' ' + variable });
+      },
+      [agentData.systemPrompt, updateAgent],
+    );
+
+    /* ---------- Agent type icon ---------- */
+    const getAgentTypeIcon = (type: AgentType, size: number) => {
+      switch (type) {
+        case 'conversational':
+          return <Bot size={size} />;
+        case 'phone':
+          return <Phone size={size} />;
+        case 'chat':
+          return <MessageSquare size={size} />;
+      }
+    };
+
+    const sortedSections = useMemo(() => {
+      return [...agentData.scriptSections].sort((a, b) => a.order - b.order);
+    }, [agentData.scriptSections]);
+
+    const passCount = validationResults.filter((v) => v.status === 'pass').length;
+    const failCount = validationResults.filter((v) => v.status === 'fail').length;
+    const warnCount = validationResults.filter((v) => v.status === 'warning').length;
+
+    /* ================================================================ */
+    /*  Render                                                          */
+    /* ================================================================ */
+    return (
+      <Box
+        className={className}
+        style={{
+          height: '100%',
+          overflow: 'auto',
+          backgroundColor: tokens.colors.neutral[50],
+          padding: tokens.spacing[6],
+          ...style,
+        }}
+      >
+        {/* =========================================================== */}
+        {/*  Top Bar: Title + Action Buttons                            */}
+        {/* =========================================================== */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: tokens.spacing[6],
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            <div
+              style={{
+                width: tokens.spacing[10],
+                height: tokens.spacing[10],
+                borderRadius: tokens.borderRadius.lg,
+                backgroundColor: tokens.colors.primaryScale[100],
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: tokens.colors.primaryScale[600],
+              }}
+            >
+              <Sparkles size={24} />
+            </div>
+            <div>
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize['2xl'],
+                  fontWeight: tokens.typography.fontWeight.bold,
+                  color: tokens.colors.neutral[900],
+                  display: 'block',
+                }}
+              >
+                AI Agent Studio
+              </Text>
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[500],
+                }}
+              >
+                Configure and deploy intelligent interview agents
+              </Text>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+            {isDirty && (
+              <span
+                style={{
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.warningScale[600],
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  marginRight: tokens.spacing[2],
+                }}
+              >
+                Unsaved changes
+              </span>
+            )}
+            <button
+              onClick={() => onValidate?.(agentData)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: tokens.spacing[1],
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                backgroundColor: tokens.colors.common.white,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                cursor: 'pointer',
+                ...hoverStyle,
+              }}
+            >
+              <ShieldCheck size={14} />
+              Validate
+            </button>
+            <button
+              onClick={() => {
+                setIsTestMode(!isTestMode);
+                onTest?.(agentData);
+              }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: tokens.spacing[1],
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.secondaryScale[300]}`,
+                backgroundColor: isTestMode ? tokens.colors.secondaryScale[50] : tokens.colors.common.white,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.secondaryScale[700],
+                cursor: 'pointer',
+                ...hoverStyle,
+              }}
+            >
+              <TestTube size={14} />
+              {isTestMode ? 'Testing...' : 'Test Agent'}
+            </button>
+            <button
+              onClick={() => onSave?.(agentData)}
+              disabled={!isDirty}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: tokens.spacing[1],
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                border: 'none',
+                backgroundColor: isDirty ? tokens.colors.primaryScale[600] : tokens.colors.neutral[200],
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.semibold,
+                color: isDirty ? tokens.colors.common.white : tokens.colors.neutral[400],
+                cursor: isDirty ? 'pointer' : 'not-allowed',
+                ...hoverStyle,
+              }}
+            >
+              <Save size={14} />
+              Save Agent
+            </button>
+          </div>
+        </div>
+
+        {/* =========================================================== */}
+        {/*  1. Agent Header: Name, Description, Type                   */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Agent Identity"
+          icon={<Bot size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['header']}
+          onToggle={() => toggleSection('header')}
+          glass={isGlass}
+          badge={
+            agentData.name ? (
+              <span
+                style={{
+                  ...createBadgeStyle(tokens, 'primary'),
+                  fontSize: tokens.typography.fontSize.xs,
+                }}
+              >
+                {agentTypeConfig[agentData.type].label}
+              </span>
+            ) : undefined
+          }
+        >
+          {/* Name input */}
+          <div style={{ marginBottom: tokens.spacing[4] }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[1],
+              }}
+            >
+              Agent Name
+            </label>
+            <input
+              type="text"
+              value={agentData.name}
+              onChange={(e) => updateAgent({ name: e.target.value })}
+              placeholder="e.g. Technical Screen Agent"
+              style={{
+                width: '100%',
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${tokens.colors.neutral[300]}`,
+                fontSize: tokens.typography.fontSize.md,
+                color: tokens.colors.neutral[900],
+                backgroundColor: tokens.colors.common.white,
+                outline: 'none',
+                boxSizing: 'border-box',
+                transition: `border-color ${tokens.motion.hover}`,
+              }}
+            />
+          </div>
+
+          {/* Description */}
+          <div style={{ marginBottom: tokens.spacing[4] }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[1],
+              }}
+            >
+              Description
+            </label>
+            <textarea
+              value={agentData.description}
+              onChange={(e) => updateAgent({ description: e.target.value })}
+              placeholder="Describe the agent's purpose and role..."
+              rows={3}
+              style={{
+                width: '100%',
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${tokens.colors.neutral[300]}`,
+                fontSize: tokens.typography.fontSize.sm,
+                color: tokens.colors.neutral[800],
+                backgroundColor: tokens.colors.common.white,
+                outline: 'none',
+                resize: 'vertical',
+                fontFamily: 'inherit',
+                boxSizing: 'border-box',
+                transition: `border-color ${tokens.motion.hover}`,
+              }}
+            />
+          </div>
+
+          {/* Type selector cards */}
+          <div>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[2],
+              }}
+            >
+              Agent Type
+            </label>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: tokens.spacing[3],
+              }}
+            >
+              {(Object.keys(agentTypeConfig) as AgentType[]).map((type) => {
+                const config = agentTypeConfig[type];
+                const isSelected = agentData.type === type;
+                return (
+                  <button
+                    key={type}
+                    onClick={() => updateAgent({ type })}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: tokens.spacing[2],
+                      padding: tokens.spacing[4],
+                      borderRadius: tokens.borderRadius.lg,
+                      border: `2px solid ${isSelected ? config.color : tokens.colors.neutral[200]}`,
+                      backgroundColor: isSelected ? config.bgColor : tokens.colors.common.white,
+                      cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: tokens.spacing[10],
+                        height: tokens.spacing[10],
+                        borderRadius: tokens.borderRadius.full,
+                        backgroundColor: isSelected ? config.color : tokens.colors.neutral[100],
+                        color: isSelected ? tokens.colors.common.white : tokens.colors.neutral[500],
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: `all ${tokens.motion.hover}`,
+                      }}
+                    >
+                      {getAgentTypeIcon(type, 20)}
+                    </div>
+                    <span
+                      style={{
+                        fontSize: tokens.typography.fontSize.sm,
+                        fontWeight: tokens.typography.fontWeight.semibold,
+                        color: isSelected ? config.color : tokens.colors.neutral[700],
+                      }}
+                    >
+                      {config.label}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: tokens.typography.fontSize.xs,
+                        color: tokens.colors.neutral[500],
+                        textAlign: 'center',
+                        lineHeight: tokens.typography.lineHeight.normal,
+                      }}
+                    >
+                      {config.description}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  2. Language Panel                                           */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Language & Accent"
+          icon={<Globe size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['language']}
+          onToggle={() => toggleSection('language')}
+          glass={isGlass}
+        >
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                  marginBottom: tokens.spacing[1],
+                }}
+              >
+                Language
+              </label>
+              <select
+                value={agentData.language}
+                onChange={(e) => updateAgent({ language: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[800],
+                  backgroundColor: tokens.colors.common.white,
+                  outline: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                {languages.map((lang) => (
+                  <option key={lang} value={lang}>
+                    {lang}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                  marginBottom: tokens.spacing[1],
+                }}
+              >
+                Accent / Dialect
+              </label>
+              <input
+                type="text"
+                value={agentData.accent}
+                onChange={(e) => updateAgent({ accent: e.target.value })}
+                placeholder="e.g. US, British, Australian"
+                style={{
+                  width: '100%',
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[800],
+                  backgroundColor: tokens.colors.common.white,
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  3. Voice Panel                                              */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Voice Configuration"
+          icon={<Mic size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['voice']}
+          onToggle={() => toggleSection('voice')}
+          glass={isGlass}
+        >
+          {/* Provider selector cards */}
+          <div style={{ marginBottom: tokens.spacing[4] }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[2],
+              }}
+            >
+              Voice Provider
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
+              {providers.map((provider) => {
+                const config = providerConfig[provider];
+                const isSelected = agentData.voiceProvider === provider;
+                return (
+                  <button
+                    key={provider}
+                    onClick={() => updateAgent({ voiceProvider: provider })}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: tokens.spacing[1],
+                      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                      borderRadius: tokens.borderRadius.lg,
+                      border: `2px solid ${isSelected ? config.color : tokens.colors.neutral[200]}`,
+                      backgroundColor: isSelected ? config.bgColor : tokens.colors.common.white,
+                      cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
+                    }}
+                  >
+                    <Volume2
+                      size={20}
+                      style={{
+                        color: isSelected ? config.color : tokens.colors.neutral[400],
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: tokens.typography.fontSize.sm,
+                        fontWeight: tokens.typography.fontWeight.semibold,
+                        color: isSelected ? config.color : tokens.colors.neutral[700],
+                      }}
+                    >
+                      {config.label}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: tokens.typography.fontSize.xs,
+                        color: tokens.colors.neutral[500],
+                      }}
+                    >
+                      {config.description}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Voice ID input */}
+          <div style={{ marginBottom: tokens.spacing[4] }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[1],
+              }}
+            >
+              Voice ID
+            </label>
+            <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
+              <input
+                type="text"
+                value={agentData.voiceId}
+                onChange={(e) => updateAgent({ voiceId: e.target.value })}
+                placeholder="Enter voice ID or select from available voices"
+                style={{
+                  flex: 1,
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[800],
+                  backgroundColor: tokens.colors.common.white,
+                  outline: 'none',
+                }}
+              />
+              <button
+                onClick={() => {
+                  if (agentData.voiceId) {
+                    navigator.clipboard?.writeText(agentData.voiceId);
+                  }
+                }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  backgroundColor: tokens.colors.common.white,
+                  cursor: 'pointer',
+                  color: tokens.colors.neutral[500],
+                  ...hoverStyle,
+                }}
+              >
+                <Copy size={14} />
+              </button>
+            </div>
+          </div>
+
+          {/* Voice preview player with waveform SVG */}
+          <div
+            style={{
+              padding: tokens.spacing[4],
+              borderRadius: tokens.borderRadius.lg,
+              backgroundColor: tokens.colors.neutral[100],
+              border: `1px solid ${tokens.colors.neutral[200]}`,
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: tokens.spacing[3],
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                }}
+              >
+                Voice Preview
+              </Text>
+              <button
+                onClick={handleVoicePreview}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: tokens.spacing[1],
+                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.full,
+                  border: 'none',
+                  backgroundColor: voicePreviewPlaying
+                    ? tokens.colors.errorScale[500]
+                    : tokens.colors.primaryScale[600],
+                  color: tokens.colors.common.white,
+                  fontSize: tokens.typography.fontSize.xs,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  cursor: 'pointer',
+                  ...hoverStyle,
+                }}
+              >
+                {voicePreviewPlaying ? <Pause size={12} /> : <Play size={12} />}
+                {voicePreviewPlaying ? 'Stop' : 'Play Sample'}
+              </button>
+            </div>
+            {/* Waveform SVG */}
+            <svg
+              width="100%"
+              height="48"
+              viewBox="0 0 400 48"
+              preserveAspectRatio="none"
+              style={{ display: 'block' }}
+            >
+              {Array.from({ length: 50 }).map((_, i) => {
+                const x = (i / 50) * 400;
+                const barHeight = (Math.sin(i * 0.5 + 2.5) * 0.4 + 0.5) * 36;
+                const y = (48 - barHeight) / 2;
+                const isActive = voicePreviewPlaying && i < 25;
+                return (
+                  <rect
+                    key={i}
+                    x={x + 1}
+                    y={y}
+                    width={5}
+                    height={barHeight}
+                    rx={2}
+                    fill={
+                      isActive
+                        ? tokens.colors.primaryScale[500]
+                        : tokens.colors.neutral[300]
+                    }
+                    style={{
+                      transition: `fill ${tokens.motion.hover}`,
+                    }}
+                  />
+                );
+              })}
+            </svg>
+          </div>
+
+          {/* Available voices list */}
+          {voices.length > 0 && (
+            <div style={{ marginTop: tokens.spacing[4] }}>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                  marginBottom: tokens.spacing[2],
+                }}
+              >
+                Available Voices
+              </label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                {voices
+                  .filter((v) => v.provider === agentData.voiceProvider)
+                  .map((voice) => (
+                    <button
+                      key={voice.id}
+                      onClick={() => updateAgent({ voiceId: voice.id })}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                        borderRadius: tokens.borderRadius.md,
+                        border: `1px solid ${
+                          agentData.voiceId === voice.id
+                            ? tokens.colors.primaryScale[300]
+                            : tokens.colors.neutral[200]
+                        }`,
+                        backgroundColor:
+                          agentData.voiceId === voice.id
+                            ? tokens.colors.primaryScale[50]
+                            : tokens.colors.common.white,
+                        cursor: 'pointer',
+                        ...hoverStyle,
+                      }}
+                    >
+                      <div>
+                        <span
+                          style={{
+                            fontSize: tokens.typography.fontSize.sm,
+                            fontWeight: tokens.typography.fontWeight.medium,
+                            color: tokens.colors.neutral[800],
+                          }}
+                        >
+                          {voice.name}
+                        </span>
+                        {voice.accent && (
+                          <span
+                            style={{
+                              fontSize: tokens.typography.fontSize.xs,
+                              color: tokens.colors.neutral[500],
+                              marginLeft: tokens.spacing[2],
+                            }}
+                          >
+                            ({voice.accent})
+                          </span>
+                        )}
+                      </div>
+                      {agentData.voiceId === voice.id && (
+                        <CheckCircle
+                          size={16}
+                          style={{ color: tokens.colors.primaryScale[600] }}
+                        />
+                      )}
+                    </button>
+                  ))}
+              </div>
+            </div>
+          )}
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  4. Personality Panel                                        */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Personality & Tone"
+          icon={<Brain size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['personality']}
+          onToggle={() => toggleSection('personality')}
+          glass={isGlass}
+        >
+          {/* Tone selector with visual scale SVG */}
+          <div style={{ marginBottom: tokens.spacing[5] }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: tokens.spacing[2],
+              }}
+            >
+              <label
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                }}
+              >
+                Tone Level
+              </label>
+              <span
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.semibold,
+                  color: tokens.colors.primaryScale[600],
+                }}
+              >
+                {getToneLevelLabel(agentData.toneLevel)}
+              </span>
+            </div>
+            {/* Gradient bar SVG */}
+            <svg width="100%" height="32" viewBox="0 0 400 32" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="tone-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor={tokens.colors.primaryScale[700]} />
+                  <stop offset="50%" stopColor={tokens.colors.primaryScale[400]} />
+                  <stop offset="100%" stopColor={tokens.colors.secondaryScale[500]} />
+                </linearGradient>
+              </defs>
+              <rect x="0" y="10" width="400" height="12" rx="6" fill={tokens.colors.neutral[200]} />
+              <rect
+                x="0"
+                y="10"
+                width={agentData.toneLevel * 4}
+                height="12"
+                rx="6"
+                fill="url(#tone-gradient)"
+              />
+              <circle
+                cx={agentData.toneLevel * 4}
+                cy="16"
+                r="8"
+                fill={tokens.colors.common.white}
+                stroke={tokens.colors.primaryScale[500]}
+                strokeWidth="2"
+              />
+            </svg>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={agentData.toneLevel}
+              onChange={(e) => updateAgent({ toneLevel: parseInt(e.target.value, 10) })}
+              style={{
+                width: '100%',
+                marginTop: tokens.spacing[1],
+                accentColor: tokens.colors.primaryScale[600],
+              }}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: tokens.typography.fontSize.xs,
+                color: tokens.colors.neutral[500],
+                marginTop: tokens.spacing[1],
+              }}
+            >
+              <span>Formal</span>
+              <span>Casual</span>
+            </div>
+          </div>
+
+          {/* Personality trait sliders */}
+          <div>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[3],
+              }}
+            >
+              Personality Traits
+            </label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+              {agentData.personalityTraits.map((trait) => (
+                <div key={trait.name}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginBottom: tokens.spacing[1],
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: tokens.typography.fontSize.sm,
+                        color: tokens.colors.neutral[700],
+                      }}
+                    >
+                      {trait.name}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: tokens.typography.fontSize.sm,
+                        fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.primaryScale[600],
+                        minWidth: tokens.spacing[8],
+                        textAlign: 'right',
+                      }}
+                    >
+                      {trait.value}%
+                    </span>
+                  </div>
+                  <div style={{ position: 'relative' }}>
+                    <div
+                      style={{
+                        height: tokens.spacing[2],
+                        borderRadius: tokens.borderRadius.full,
+                        backgroundColor: tokens.colors.neutral[200],
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <div
+                        style={{
+                          height: '100%',
+                          width: `${trait.value}%`,
+                          borderRadius: tokens.borderRadius.full,
+                          backgroundColor: tokens.colors.primaryScale[500],
+                          transition: `width ${tokens.motion.hover}`,
+                        }}
+                      />
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={trait.value}
+                      onChange={(e) => updateTrait(trait.name, parseInt(e.target.value, 10))}
+                      style={{
+                        position: 'absolute',
+                        top: -4,
+                        left: 0,
+                        width: '100%',
+                        opacity: 0,
+                        cursor: 'pointer',
+                        height: tokens.spacing[4],
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  5. LLM Configuration Panel                                  */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="LLM Configuration"
+          icon={<Settings size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['llm']}
+          onToggle={() => toggleSection('llm')}
+          glass={isGlass}
+        >
+          {/* Model selector */}
+          <div style={{ marginBottom: tokens.spacing[4] }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[700],
+                marginBottom: tokens.spacing[1],
+              }}
+            >
+              Model
+            </label>
+            <select
+              value={agentData.model}
+              onChange={(e) => updateAgent({ model: e.target.value })}
+              style={{
+                width: '100%',
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderRadius: tokens.borderRadius.md,
+                border: `1px solid ${tokens.colors.neutral[300]}`,
+                fontSize: tokens.typography.fontSize.sm,
+                color: tokens.colors.neutral[800],
+                backgroundColor: tokens.colors.common.white,
+                outline: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              {models.map((model) => (
+                <option key={model.id} value={model.id}>
+                  {model.name} {model.description ? `- ${model.description}` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Temperature slider */}
+          <div style={{ marginBottom: tokens.spacing[4] }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: tokens.spacing[1],
+              }}
+            >
+              <label
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                }}
+              >
+                Temperature
+              </label>
+              <span
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.primaryScale[600],
+                  fontWeight: tokens.typography.fontWeight.semibold,
+                }}
+              >
+                {agentData.temperature.toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="2"
+              step="0.1"
+              value={agentData.temperature}
+              onChange={(e) => updateAgent({ temperature: parseFloat(e.target.value) })}
+              style={{
+                width: '100%',
+                accentColor: tokens.colors.primaryScale[600],
+              }}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: tokens.typography.fontSize.xs,
+                color: tokens.colors.neutral[500],
+                marginTop: tokens.spacing[1],
+              }}
+            >
+              <span>Deterministic</span>
+              <span>Balanced</span>
+              <span>Creative</span>
+            </div>
+          </div>
+
+          {/* Max tokens & Top-P in a grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: tokens.typography.fontSize.sm,
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[700],
+                  marginBottom: tokens.spacing[1],
+                }}
+              >
+                Max Tokens
+              </label>
+              <input
+                type="number"
+                value={agentData.maxTokens}
+                onChange={(e) => updateAgent({ maxTokens: parseInt(e.target.value, 10) || 0 })}
+                min={1}
+                max={200000}
+                style={{
+                  width: '100%',
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.md,
+                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[800],
+                  backgroundColor: tokens.colors.common.white,
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: tokens.spacing[1],
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[700],
+                  }}
+                >
+                  Top-P
+                </label>
+                <span
+                  style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: tokens.colors.neutral[500],
+                  }}
+                >
+                  {agentData.topP.toFixed(2)}
+                </span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={agentData.topP}
+                onChange={(e) => updateAgent({ topP: parseFloat(e.target.value) })}
+                style={{
+                  width: '100%',
+                  accentColor: tokens.colors.primaryScale[600],
+                  marginTop: tokens.spacing[1],
+                }}
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  6. System Prompt Editor                                     */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="System Prompt"
+          icon={<Code2 size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['prompt']}
+          onToggle={() => toggleSection('prompt')}
+          glass={isGlass}
+          badge={
+            agentData.systemPrompt ? (
+              <span
+                style={{
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.successScale[600],
+                  fontWeight: tokens.typography.fontWeight.medium,
+                }}
+              >
+                {agentData.systemPrompt.length} chars
+              </span>
+            ) : undefined
+          }
+        >
+          {/* Variable helpers */}
+          <div style={{ marginBottom: tokens.spacing[3] }}>
+            <label
+              style={{
+                display: 'block',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[500],
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                marginBottom: tokens.spacing[2],
+              }}
+            >
+              Available Variables
+            </label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
+              {SYSTEM_PROMPT_VARIABLES.map((variable) => (
+                <button
+                  key={variable}
+                  onClick={() => insertVariable(variable)}
+                  style={{
+                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                    borderRadius: tokens.borderRadius.md,
+                    border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                    backgroundColor: tokens.colors.primaryScale[50],
+                    color: tokens.colors.primaryScale[700],
+                    fontSize: tokens.typography.fontSize.xs,
+                    fontFamily: 'monospace',
+                    cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
+                  }}
+                >
+                  {variable}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Code-editor style textarea */}
+          <textarea
+            value={agentData.systemPrompt}
+            onChange={(e) => updateAgent({ systemPrompt: e.target.value })}
+            placeholder="You are an AI interview agent for {company_name}. Your role is to conduct a structured technical screening for the {job_title} position with {candidate_name}..."
+            rows={12}
+            style={{
+              width: '100%',
+              padding: tokens.spacing[4],
+              borderRadius: tokens.borderRadius.md,
+              border: `1px solid ${tokens.colors.neutral[700]}`,
+              fontSize: tokens.typography.fontSize.sm,
+              fontFamily: 'monospace',
+              lineHeight: tokens.typography.lineHeight.relaxed,
+              color: tokens.colors.neutral[100],
+              backgroundColor: tokens.colors.neutral[900],
+              outline: 'none',
+              resize: 'vertical',
+              boxSizing: 'border-box',
+              tabSize: 2,
+            }}
+          />
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  7. Script Builder                                           */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Interview Script"
+          icon={<FileText size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['script']}
+          onToggle={() => toggleSection('script')}
+          glass={isGlass}
+          badge={
+            <span
+              style={{
+                ...createBadgeStyle(tokens, 'secondary'),
+                fontSize: tokens.typography.fontSize.xs,
+              }}
+            >
+              {sortedSections.length} section{sortedSections.length !== 1 ? 's' : ''}
+            </span>
+          }
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+            {sortedSections.map((section, idx) => {
+              const isDragging = dragState.dragId === section.id;
+              const isDragOver = dragState.overId === section.id;
+              return (
+                <div key={section.id}>
+                  <div
+                    draggable
+                    onDragStart={(e) => handleScriptDragStart(e, section.id)}
+                    onDragOver={(e) => handleScriptDragOver(e, section.id)}
+                    onDrop={(e) => handleScriptDrop(e, section.id)}
+                    onDragEnd={handleScriptDragEnd}
+                    style={{
+                      padding: tokens.spacing[3],
+                      borderRadius: tokens.borderRadius.md,
+                      border: `1px solid ${
+                        isDragOver
+                          ? tokens.colors.primaryScale[400]
+                          : tokens.colors.neutral[200]
+                      }`,
+                      backgroundColor: isDragging
+                        ? tokens.colors.primaryScale[50]
+                        : tokens.colors.common.white,
+                      opacity: isDragging ? 0.6 : 1,
+                      transition: `all ${tokens.motion.hover}`,
+                    }}
+                  >
+                    {/* Section header */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: tokens.spacing[2],
+                        marginBottom: tokens.spacing[2],
+                      }}
+                    >
+                      <span
+                        style={{
+                          cursor: 'grab',
+                          color: tokens.colors.neutral[400],
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <GripVertical size={16} />
+                      </span>
+                      <span
+                        style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          color: tokens.colors.neutral[400],
+                          minWidth: tokens.spacing[6],
+                        }}
+                      >
+                        #{idx + 1}
+                      </span>
+                      <input
+                        type="text"
+                        value={section.title}
+                        onChange={(e) =>
+                          updateScriptSection(section.id, { title: e.target.value })
+                        }
+                        style={{
+                          flex: 1,
+                          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                          border: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderRadius: tokens.borderRadius.sm,
+                          fontSize: tokens.typography.fontSize.sm,
+                          fontWeight: tokens.typography.fontWeight.medium,
+                          color: tokens.colors.neutral[800],
+                          backgroundColor: tokens.colors.common.white,
+                          outline: 'none',
+                        }}
+                      />
+                      <button
+                        onClick={() => removeScriptSection(section.id)}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: tokens.spacing[1],
+                          border: 'none',
+                          backgroundColor: 'transparent',
+                          cursor: 'pointer',
+                          color: tokens.colors.neutral[400],
+                          transition: `color ${tokens.motion.hover}`,
+                          borderRadius: tokens.borderRadius.sm,
+                        }}
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+
+                    {/* Prompt textarea */}
+                    <textarea
+                      value={section.promptText}
+                      onChange={(e) =>
+                        updateScriptSection(section.id, { promptText: e.target.value })
+                      }
+                      placeholder="Enter the prompt for this interview section..."
+                      rows={4}
+                      style={{
+                        width: '100%',
+                        padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                        borderRadius: tokens.borderRadius.md,
+                        border: `1px solid ${tokens.colors.neutral[200]}`,
+                        fontSize: tokens.typography.fontSize.sm,
+                        color: tokens.colors.neutral[800],
+                        backgroundColor: tokens.colors.neutral[50],
+                        outline: 'none',
+                        resize: 'vertical',
+                        fontFamily: 'inherit',
+                        lineHeight: tokens.typography.lineHeight.relaxed,
+                        boxSizing: 'border-box',
+                      }}
+                    />
+
+                    {/* Branching conditions */}
+                    <div style={{ marginTop: tokens.spacing[2] }}>
+                      <input
+                        type="text"
+                        value={section.conditions ?? ''}
+                        onChange={(e) =>
+                          updateScriptSection(section.id, { conditions: e.target.value })
+                        }
+                        placeholder="Branching conditions (optional, e.g. 'if candidate has 5+ years experience')"
+                        style={{
+                          width: '100%',
+                          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                          borderRadius: tokens.borderRadius.sm,
+                          border: `1px dashed ${tokens.colors.neutral[300]}`,
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[600],
+                          backgroundColor: 'transparent',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Add section button between items */}
+                  {idx < sortedSections.length - 1 && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: `${tokens.spacing[1]}px 0`,
+                      }}
+                    >
+                      <div
+                        style={{
+                          flex: 1,
+                          height: 1,
+                          backgroundColor: tokens.colors.neutral[200],
+                        }}
+                      />
+                      <button
+                        onClick={addScriptSection}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: tokens.spacing[6],
+                          height: tokens.spacing[6],
+                          borderRadius: tokens.borderRadius.full,
+                          border: `1px dashed ${tokens.colors.neutral[300]}`,
+                          backgroundColor: tokens.colors.common.white,
+                          cursor: 'pointer',
+                          color: tokens.colors.neutral[400],
+                          transition: `all ${tokens.motion.hover}`,
+                          margin: `0 ${tokens.spacing[2]}px`,
+                        }}
+                      >
+                        <Plus size={14} />
+                      </button>
+                      <div
+                        style={{
+                          flex: 1,
+                          height: 1,
+                          backgroundColor: tokens.colors.neutral[200],
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Add first/last section button */}
+            <button
+              onClick={addScriptSection}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: tokens.spacing[2],
+                padding: tokens.spacing[3],
+                borderRadius: tokens.borderRadius.md,
+                border: `2px dashed ${tokens.colors.neutral[300]}`,
+                backgroundColor: 'transparent',
+                color: tokens.colors.neutral[500],
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.medium,
+                cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
+              }}
+            >
+              <Plus size={16} />
+              Add Section
+            </button>
+          </div>
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  8. Tool Configuration                                       */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Function Tools"
+          icon={<Wrench size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['tools']}
+          onToggle={() => toggleSection('tools')}
+          glass={isGlass}
+          badge={
+            agentData.tools.length > 0 ? (
+              <span
+                style={{
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.successScale[600],
+                  fontWeight: tokens.typography.fontWeight.medium,
+                }}
+              >
+                {agentData.tools.filter((t) => t.enabled).length}/{agentData.tools.length} enabled
+              </span>
+            ) : undefined
+          }
+        >
+          {agentData.tools.length === 0 ? (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: tokens.spacing[6],
+                color: tokens.colors.neutral[400],
+                fontSize: tokens.typography.fontSize.sm,
+              }}
+            >
+              No function tools configured. Add tools to extend agent capabilities.
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+              {agentData.tools.map((tool) => (
+                <div
+                  key={tool.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                    borderRadius: tokens.borderRadius.md,
+                    border: `1px solid ${
+                      tool.enabled
+                        ? tokens.colors.primaryScale[200]
+                        : tokens.colors.neutral[200]
+                    }`,
+                    backgroundColor: tool.enabled
+                      ? tokens.colors.primaryScale[50]
+                      : tokens.colors.common.white,
+                    transition: `all ${tokens.motion.hover}`,
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: tokens.typography.fontSize.sm,
+                        fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.neutral[800],
+                        marginBottom: tokens.spacing[1],
+                      }}
+                    >
+                      {tool.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: tokens.typography.fontSize.xs,
+                        color: tokens.colors.neutral[500],
+                        lineHeight: tokens.typography.lineHeight.normal,
+                      }}
+                    >
+                      {tool.description}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => toggleTool(tool.id)}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      border: 'none',
+                      backgroundColor: 'transparent',
+                      cursor: 'pointer',
+                      color: tool.enabled
+                        ? tokens.colors.primaryScale[600]
+                        : tokens.colors.neutral[400],
+                      transition: `color ${tokens.motion.hover}`,
+                      marginLeft: tokens.spacing[3],
+                      flexShrink: 0,
+                    }}
+                  >
+                    {tool.enabled ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  9. Call Settings                                            */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Call Settings"
+          icon={<PhoneCall size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['call']}
+          onToggle={() => toggleSection('call')}
+          glass={isGlass}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+            {/* Recording toggle */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                borderRadius: tokens.borderRadius.md,
+                backgroundColor: tokens.colors.neutral[50],
+                border: `1px solid ${tokens.colors.neutral[200]}`,
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[800],
+                  }}
+                >
+                  Call Recording
+                </div>
+                <div
+                  style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: tokens.colors.neutral[500],
+                  }}
+                >
+                  Record all agent calls for quality assurance
+                </div>
+              </div>
+              <button
+                onClick={() =>
+                  updateCallSettings({ recordingEnabled: !agentData.callSettings.recordingEnabled })
+                }
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  cursor: 'pointer',
+                  color: agentData.callSettings.recordingEnabled
+                    ? tokens.colors.primaryScale[600]
+                    : tokens.colors.neutral[400],
+                  transition: `color ${tokens.motion.hover}`,
+                }}
+              >
+                {agentData.callSettings.recordingEnabled ? (
+                  <ToggleRight size={28} />
+                ) : (
+                  <ToggleLeft size={28} />
+                )}
+              </button>
+            </div>
+
+            {/* Max duration slider */}
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: tokens.spacing[1],
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[700],
+                  }}
+                >
+                  Max Duration
+                </label>
+                <span
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.semibold,
+                    color: tokens.colors.primaryScale[600],
+                  }}
+                >
+                  {agentData.callSettings.maxDurationMinutes} min
+                </span>
+              </div>
+              <input
+                type="range"
+                min="5"
+                max="120"
+                step="5"
+                value={agentData.callSettings.maxDurationMinutes}
+                onChange={(e) =>
+                  updateCallSettings({ maxDurationMinutes: parseInt(e.target.value, 10) })
+                }
+                style={{
+                  width: '100%',
+                  accentColor: tokens.colors.primaryScale[600],
+                }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.neutral[500],
+                  marginTop: tokens.spacing[1],
+                }}
+              >
+                <span>5 min</span>
+                <span>120 min</span>
+              </div>
+            </div>
+
+            {/* Voicemail detection toggle */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                borderRadius: tokens.borderRadius.md,
+                backgroundColor: tokens.colors.neutral[50],
+                border: `1px solid ${tokens.colors.neutral[200]}`,
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[800],
+                  }}
+                >
+                  Voicemail Detection
+                </div>
+                <div
+                  style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: tokens.colors.neutral[500],
+                  }}
+                >
+                  Detect voicemail and leave a scripted message
+                </div>
+              </div>
+              <button
+                onClick={() =>
+                  updateCallSettings({
+                    voicemailDetection: !agentData.callSettings.voicemailDetection,
+                  })
+                }
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  cursor: 'pointer',
+                  color: agentData.callSettings.voicemailDetection
+                    ? tokens.colors.primaryScale[600]
+                    : tokens.colors.neutral[400],
+                  transition: `color ${tokens.motion.hover}`,
+                }}
+              >
+                {agentData.callSettings.voicemailDetection ? (
+                  <ToggleRight size={28} />
+                ) : (
+                  <ToggleLeft size={28} />
+                )}
+              </button>
+            </div>
+
+            {/* Retry config */}
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: tokens.spacing[1],
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[700],
+                  }}
+                >
+                  Retry Attempts
+                </label>
+                <span
+                  style={{
+                    fontSize: tokens.typography.fontSize.sm,
+                    fontWeight: tokens.typography.fontWeight.semibold,
+                    color: tokens.colors.primaryScale[600],
+                  }}
+                >
+                  {agentData.callSettings.retryCount}
+                </span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="5"
+                step="1"
+                value={agentData.callSettings.retryCount}
+                onChange={(e) =>
+                  updateCallSettings({ retryCount: parseInt(e.target.value, 10) })
+                }
+                style={{
+                  width: '100%',
+                  accentColor: tokens.colors.primaryScale[600],
+                }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.neutral[500],
+                  marginTop: tokens.spacing[1],
+                }}
+              >
+                <span>No retry</span>
+                <span>5 retries</span>
+              </div>
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* =========================================================== */}
+        {/*  10. Validation Panel                                        */}
+        {/* =========================================================== */}
+        <CollapsibleSection
+          title="Validation & Cost"
+          icon={<ShieldCheck size={18} />}
+          tokens={tokens}
+          isCollapsed={!!collapsedSections['validation']}
+          onToggle={() => toggleSection('validation')}
+          glass={isGlass}
+          badge={
+            validationResults.length > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                {passCount > 0 && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      fontSize: tokens.typography.fontSize.xs,
+                      color: tokens.colors.successScale[600],
+                      fontWeight: tokens.typography.fontWeight.medium,
+                    }}
+                  >
+                    <CheckCircle size={12} /> {passCount}
+                  </span>
+                )}
+                {failCount > 0 && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      fontSize: tokens.typography.fontSize.xs,
+                      color: tokens.colors.errorScale[600],
+                      fontWeight: tokens.typography.fontWeight.medium,
+                    }}
+                  >
+                    <XCircle size={12} /> {failCount}
+                  </span>
+                )}
+                {warnCount > 0 && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 2,
+                      fontSize: tokens.typography.fontSize.xs,
+                      color: tokens.colors.warningScale[600],
+                      fontWeight: tokens.typography.fontWeight.medium,
+                    }}
+                  >
+                    <AlertTriangle size={12} /> {warnCount}
+                  </span>
+                )}
+              </div>
+            ) : undefined
+          }
+        >
+          {/* Estimated cost */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: tokens.spacing[3],
+              padding: tokens.spacing[4],
+              borderRadius: tokens.borderRadius.lg,
+              backgroundColor: tokens.colors.primaryScale[50],
+              border: `1px solid ${tokens.colors.primaryScale[200]}`,
+              marginBottom: tokens.spacing[4],
+            }}
+          >
+            <div
+              style={{
+                width: tokens.spacing[10],
+                height: tokens.spacing[10],
+                borderRadius: tokens.borderRadius.full,
+                backgroundColor: tokens.colors.primaryScale[100],
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: tokens.colors.primaryScale[600],
+                flexShrink: 0,
+              }}
+            >
+              <DollarSign size={20} />
+            </div>
+            <div>
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.primaryScale[500],
+                  fontWeight: tokens.typography.fontWeight.medium,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  display: 'block',
+                }}
+              >
+                Estimated Cost per Interview
+              </Text>
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize.xl,
+                  fontWeight: tokens.typography.fontWeight.bold,
+                  color: tokens.colors.primaryScale[700],
+                }}
+              >
+                {formatEstimatedCost(estimatedCost)}
+              </Text>
+            </div>
+          </div>
+
+          {/* Validation checks */}
+          {validationResults.length === 0 ? (
+            <div
+              style={{
+                textAlign: 'center',
+                padding: tokens.spacing[6],
+                color: tokens.colors.neutral[400],
+                fontSize: tokens.typography.fontSize.sm,
+              }}
+            >
+              Click "Validate" to run configuration checks.
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+              {validationResults.map((result, idx) => {
+                const colors = validationColors[result.status];
+                const StatusIcon =
+                  result.status === 'pass'
+                    ? CheckCircle
+                    : result.status === 'fail'
+                    ? XCircle
+                    : AlertTriangle;
+                return (
+                  <div
+                    key={idx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: tokens.spacing[3],
+                      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                      borderRadius: tokens.borderRadius.md,
+                      backgroundColor: colors.bgColor,
+                      border: `1px solid ${colors.borderColor}`,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: 2,
+                        flexShrink: 0,
+                        color: colors.dotColor,
+                      }}
+                    >
+                      <StatusIcon size={16} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontSize: tokens.typography.fontSize.sm,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          color: colors.color,
+                          marginBottom: 2,
+                        }}
+                      >
+                        {result.check}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: colors.color,
+                          opacity: 0.8,
+                          lineHeight: tokens.typography.lineHeight.normal,
+                        }}
+                      >
+                        {result.message}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CollapsibleSection>
+      </Box>
+    );
+  },
+});

@@ -1,0 +1,90 @@
+/**
+ * BhInterviewPrep - Core Interface
+ * Interview Preparation Briefing for BitHire ATS platform
+ */
+
+import type { ReactNode, CSSProperties } from 'react';
+import type { EngineAwareProps } from '../../../../core/types';
+
+export type BhInterviewPrepPreset = 'standard';
+
+export interface InterviewBrief {
+  jobTitle: string;
+  stageName: string;
+  type: 'ai' | 'human';
+  dateTime: Date;
+  estimatedDuration: number;
+}
+
+export interface CandidateBrief {
+  name: string;
+  avatar?: string;
+  summary: string;
+  resumeHighlights: string[];
+  previousScores: { stage: string; score: number }[];
+}
+
+export interface EvaluationFocus {
+  dimensions: {
+    name: string;
+    weight: number;
+    isKnockout: boolean;
+  }[];
+}
+
+export interface ScriptOverview {
+  sections: {
+    title: string;
+    keyQuestions: string[];
+  }[];
+}
+
+export interface ChecklistItem {
+  key: string;
+  label: string;
+  status: 'pass' | 'fail' | 'pending';
+}
+
+export interface BhInterviewPrepProps extends EngineAwareProps {
+  preset?: BhInterviewPrepPreset;
+
+  /** Interview details and logistics */
+  interviewBrief?: InterviewBrief;
+
+  /** Candidate background briefing */
+  candidateBrief?: CandidateBrief;
+
+  /** Evaluation rubric focus areas */
+  evaluationFocus?: EvaluationFocus;
+
+  /** Interview script with key questions */
+  scriptOverview?: ScriptOverview;
+
+  /** Pre-interview checklist items */
+  checklist?: ChecklistItem[];
+
+  /** Callback when a checklist item status changes */
+  onChecklistUpdate?: (key: string, status: ChecklistItem['status']) => void;
+
+  /** Currently expanded script sections */
+  expandedSections?: string[];
+
+  /** Callback when a script section is toggled */
+  onSectionToggle?: (sectionTitle: string) => void;
+
+  /** Whether to show the full rubric details */
+  showFullRubric?: boolean;
+
+  /** Toggle full rubric view */
+  onRubricToggle?: (show: boolean) => void;
+
+  /** Additional CSS class name(s) */
+  className?: string;
+
+  /** Inline CSS styles */
+  style?: CSSProperties;
+}
+
+export const BH_INTERVIEW_PREP_DEFAULTS: Partial<BhInterviewPrepProps> = {
+  preset: 'standard',
+};
