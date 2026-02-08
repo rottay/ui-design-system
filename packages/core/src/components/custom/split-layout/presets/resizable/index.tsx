@@ -89,17 +89,19 @@ export default createPreset<SplitLayoutProps>((context) => {
           height: orientation === 'vertical' ? '4px' : '100%',
           backgroundColor: isDragging ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200],
           cursor: orientation === 'horizontal' ? 'col-resize' : 'row-resize',
-          transition: isDragging ? 'none' : `background-color ${tokens.motion.hover}`,
+          transition: isDragging ? 'none' : `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
           flexShrink: 0,
         }}
         onMouseEnter={(e) => {
           if (!isDragging) {
             e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[300];
+            e.currentTarget.style.transform = tokens.motion.transform;
           }
         }}
         onMouseLeave={(e) => {
           if (!isDragging) {
             e.currentTarget.style.backgroundColor = tokens.colors.neutral[200];
+            e.currentTarget.style.transform = 'none';
           }
         }}
       />

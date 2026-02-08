@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { LeaderboardProps } from '../../core';
 import { createCardStyle } from '../../../helpers';
 
 export const Avatar = createPreset<LeaderboardProps>((context: PresetContext<LeaderboardProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { entries, title, maxEntries = 10, unit, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const displayEntries = entries.slice(0, maxEntries);
 
@@ -99,7 +99,7 @@ export const Avatar = createPreset<LeaderboardProps>((context: PresetContext<Lea
                     height: '100%',
                     backgroundColor: tokens.colors.primaryScale[500],
                     borderRadius: tokens.borderRadius.full,
-                    transition: `width ${tokens.motion.hover}`,
+                    transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                   }}
                 />
               </Box>

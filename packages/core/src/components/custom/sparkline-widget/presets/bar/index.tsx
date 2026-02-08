@@ -3,7 +3,7 @@ import { createPreset, type PresetContext } from '../../../factory';
 import type { SparklineWidgetProps } from '../../core';
 
 export const Bar = createPreset<SparklineWidgetProps>((context: PresetContext<SparklineWidgetProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { data, color = 'primary', width = 100, height = 30, showValue, label, className, style } = props;

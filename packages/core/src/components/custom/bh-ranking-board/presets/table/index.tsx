@@ -8,7 +8,17 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhRankingBoardProps,
   RankedCandidate,
@@ -227,13 +237,13 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: isModern });
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isModern }), [tokens, isModern]);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ---- filtered + sorted candidates ---- */
@@ -592,6 +602,15 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>(
                 backgroundColor: 'transparent',
                 width: '100%',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </Box>
 
@@ -941,7 +960,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>(
               padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
               backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
               borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-              transition: `background-color ${tokens.motion.hover}`,
+              transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
             }}
           >
             {/* Checkbox */}
@@ -1065,7 +1084,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>(
                   height: '100%',
                   backgroundColor: scoreColor,
                   borderRadius: tokens.borderRadius.full,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }} />
               </Box>
               <Box style={{

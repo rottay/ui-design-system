@@ -8,7 +8,17 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhRecruiterHomeProps,
   KpiStat,
@@ -138,9 +148,9 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
 
     const isGlass = engine === 'modern' && !!tokens.glass;
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const filteredActivity = useMemo(() => {
@@ -276,6 +286,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[600],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 ...hoverStyle,
               }}
             >
@@ -477,7 +488,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                           borderRadius: tokens.borderRadius.md,
                           border:
                             selectedJob === job.id
-                              ? `1px solid ${tokens.colors.primaryScale[300]}`
+                              ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                               : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           backgroundColor:
                             selectedJob === job.id
@@ -493,6 +504,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               ? tokens.typography.fontWeight.semibold
                               : tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
                       >
@@ -589,7 +601,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                                     width: `${pct}%`,
                                     backgroundColor: color,
                                     borderRadius: tokens.borderRadius.sm,
-                                    transition: `width ${tokens.motion.hover}`,
+                                    transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                                   }}
                                 />
                               </div>
@@ -650,6 +662,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                           borderRadius: tokens.borderRadius.md,
                           backgroundColor: tokens.colors.neutral[50],
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
                         onMouseEnter={(e) => {
@@ -792,6 +805,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         backgroundColor: tokens.colors.common.white,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         ...hoverStyle,
                       }}
                       onMouseEnter={(e) => {
@@ -878,7 +892,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                           borderRadius: tokens.borderRadius.md,
                           border:
                             activityFilter === f
-                              ? `1px solid ${tokens.colors.primaryScale[300]}`
+                              ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                               : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           backgroundColor:
                             activityFilter === f ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
@@ -892,6 +906,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               ? tokens.typography.fontWeight.semibold
                               : tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           textTransform: 'capitalize' as const,
                           ...hoverStyle,
                         }}
@@ -916,15 +931,18 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                           padding: `${tokens.spacing[3]}px ${tokens.spacing[2]}px`,
                           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           borderRadius: tokens.borderRadius.sm,
                           ...hoverStyle,
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor =
                             tokens.colors.neutral[50];
+                          e.currentTarget.style.transform = tokens.motion.transform;
                         }}
                         onMouseLeave={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'none';
                         }}
                       >
                         <span
@@ -1022,7 +1040,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                           padding: tokens.spacing[3],
                           borderRadius: tokens.borderRadius.md,
                           backgroundColor: ns.bg,
-                          border: `1px solid ${ns.border}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${ns.border}`,
                           display: 'flex',
                           alignItems: 'flex-start',
                           gap: tokens.spacing[2],
@@ -1084,6 +1102,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                             background: 'none',
                             color: tokens.colors.neutral[400],
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             padding: tokens.spacing[1],
                             fontSize: tokens.typography.fontSize.sm,
                             flexShrink: 0,
@@ -1109,7 +1128,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                   background: isGlass
                     ? tokens.glass?.bg
                     : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
-                  border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                 }}
               >
                 <div
@@ -1153,7 +1172,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         : suggestion.confidence >= 50
                         ? 'warning'
                         : 'error';
-                    const confidenceBadge = createBadgeStyle(tokens, confidenceColor as 'success' | 'warning' | 'error');
+                    const confidenceBadge = useMemo(() => createBadgeStyle(tokens, confidenceColor as 'success' | 'warning' | 'error'), [tokens]);
 
                     return (
                       <div
@@ -1216,6 +1235,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               fontSize: tokens.typography.fontSize.xs,
                               fontWeight: tokens.typography.fontWeight.semibold,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -1233,6 +1253,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               fontSize: tokens.typography.fontSize.xs,
                               fontWeight: tokens.typography.fontWeight.medium,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >

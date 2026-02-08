@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { createPreset } from '../../../factory';
 import { createCardStyle } from '../../../helpers';
 import type { TeamSectionProps } from '../../core';
 
 export const CarouselPreset = createPreset<TeamSectionProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text, Button } = primitives;
   const { members, title, description, className, style } = props;
 
@@ -14,10 +15,11 @@ export const CarouselPreset = createPreset<TeamSectionProps>((context) => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const cardStyle = createCardStyle(tokens, {
+  const cardStyle = useMemo(() => createCardStyle(tokens, {
+    glass: isGlass,
     interactive: false,
     elevation: 'md',
-  });
+  }), [tokens]);
 
   const updateScrollButtons = () => {
     if (scrollContainerRef.current) {
@@ -236,7 +238,7 @@ export const CarouselPreset = createPreset<TeamSectionProps>((context) => {
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     color: tokens.colors.neutral[600],
-                    lineHeight: 1.6,
+                    lineHeight: tokens.typography.lineHeight.relaxed,
                     marginTop: tokens.spacing[1],
                   }}
                 >
@@ -275,10 +277,12 @@ export const CarouselPreset = createPreset<TeamSectionProps>((context) => {
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[100];
                         e.currentTarget.style.color = tokens.colors.primaryScale[600];
+                        e.currentTarget.style.transform = tokens.motion.transform;
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
                         e.currentTarget.style.color = tokens.colors.neutral[600];
+                        e.currentTarget.style.transform = 'none';
                       }}
                     >
                       {link.icon}

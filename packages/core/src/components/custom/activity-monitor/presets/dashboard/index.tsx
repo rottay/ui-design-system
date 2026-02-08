@@ -9,6 +9,13 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { ActivityMonitorProps, TimeRange, DetailTab } from '../../core';
 import { getLogStatusColors, getEvaluationColors, getTimeRangeOptions, calculateBarHeight } from '../../core';
+import {
+  createBadgeStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
   name: 'ActivityMonitor.Dashboard',
@@ -94,6 +101,7 @@ export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
                   backgroundColor: currentTimeRange === opt.value ? tokens.colors.common.white : 'transparent',
                   color: currentTimeRange === opt.value ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                   fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                   fontWeight: currentTimeRange === opt.value ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                   boxShadow: currentTimeRange === opt.value ? tokens.shadows.sm : 'none',
                 }}>
@@ -106,6 +114,7 @@ export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
               borderRadius: tokens.borderRadius.sm, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               backgroundColor: 'transparent', color: tokens.colors.neutral[600],
               fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               ↻
             </button>
@@ -162,7 +171,7 @@ export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
                       <tr key={log.id} onClick={() => handleLogSelect(log.id)} style={{
                         cursor: 'pointer',
                         backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}>
                         <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                           {new Date(log.timestamp).toLocaleTimeString()}
@@ -204,11 +213,12 @@ export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
                 {detailTabs.map((tab) => (
                   <button key={tab.key} onClick={() => handleDetailTab(tab.key)} style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`, border: 'none',
-                    borderBottom: activeDetailTab === tab.key ? `2px solid ${tokens.colors.neutral[900]}` : '2px solid transparent',
+                    borderBottom: activeDetailTab === tab.key ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[900]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                     backgroundColor: 'transparent',
                     color: activeDetailTab === tab.key ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                     fontWeight: activeDetailTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                    transition: `all ${tokens.motion.hover}`,
                   }}>
                     {tab.label}
                   </button>

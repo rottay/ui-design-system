@@ -9,7 +9,19 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhAnalyticsHubProps,
   DateRangePreset,
@@ -199,11 +211,11 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     };
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const chartColors = getChartColors(tokens);
 
     /* ---------- Funnel calculations ---------- */
@@ -333,7 +345,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                   backgroundColor: comparisonEnabled ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                   position: 'relative' as const,
                   flexShrink: 0,
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 <div
@@ -345,7 +357,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     position: 'absolute' as const,
                     top: 2,
                     left: comparisonEnabled ? 18 : 2,
-                    transition: `left ${tokens.motion.hover}`,
+                    transition: `left ${tokens.transitions?.normal || tokens.motion.hover}`,
                     boxShadow: tokens.shadows.sm,
                   }}
                 />
@@ -436,7 +448,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                         y={y + stageHeight / 2 + 12}
                         textAnchor="middle"
                         fontSize={tokens.typography.fontSize.xs}
-                        fill="rgba(255,255,255,0.85)"
+                        fill={tokens.overlay?.white}
                       >
                         {formatNumber(stage.count)}
                       </text>
@@ -542,7 +554,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                             alignItems: 'center',
                             justifyContent: 'flex-end',
                             paddingRight: tokens.spacing[2],
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }}
                         >
                           {barWidth > 40 && (
@@ -710,7 +722,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                 }}
               >
                 <thead>
-                  <tr style={{ borderBottom: `2px solid ${tokens.colors.neutral[200]}` }}>
+                  <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                     {['Rank', 'Recruiter', 'Hires', 'Velocity', 'Pipeline', 'Satisfaction', 'Trend'].map((col) => (
                       <th
                         key={col}
@@ -735,7 +747,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                       key={recruiter.name}
                       style={{
                         borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}

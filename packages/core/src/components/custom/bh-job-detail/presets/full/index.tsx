@@ -6,9 +6,22 @@
  * activity timeline, analytics charts, and settings panel
  */
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhJobDetailProps,
   JobDetailTab,
@@ -181,13 +194,13 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: isModern });
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isModern }), [tokens, isModern]);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ---- tabs config ---- */
@@ -306,6 +319,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                 borderRadius: tokens.borderRadius.md,
                 backgroundColor: tokens.colors.common.white,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[600],
                 ...hoverStyle,
               }}
@@ -345,6 +359,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                       border: 'none',
                       backgroundColor: 'transparent',
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[700],
                       fontFamily: 'inherit',
@@ -385,14 +400,13 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                 gap: tokens.spacing[2],
                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                 border: 'none',
-                borderBottom: `2px solid ${isActive ? tokens.colors.primaryScale[500] : 'transparent'}`,
+                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[500] : 'transparent'}`,
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                 color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 fontFamily: 'inherit',
-                transition: `all ${tokens.motion.hover}`,
                 marginBottom: -1,
               }}
             >
@@ -637,7 +651,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                         width: 16,
                         height: 16,
                         borderRadius: tokens.borderRadius.sm,
-                        border: `2px solid ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                         backgroundColor: isSelected ? tokens.colors.primaryScale[500] : tokens.colors.common.white,
                         display: 'flex',
                         alignItems: 'center',
@@ -712,7 +726,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                             ? tokens.colors.warningScale[500]
                             : tokens.colors.errorScale[500],
                           borderRadius: tokens.borderRadius.full,
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }} />
                       </Box>
                       <Box style={{
@@ -1072,7 +1086,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                         height: '100%',
                         backgroundColor: barColor,
                         borderRadius: tokens.borderRadius.sm,
-                        transition: `width ${tokens.motion.hover}`,
+                        transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                       }} />
                     </Box>
                     <Box style={{
@@ -1410,6 +1424,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                   ...hoverStyle,
                 }}

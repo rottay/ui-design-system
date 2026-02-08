@@ -77,6 +77,15 @@ export const TableToolbar = createPreset<TableToolbarProps>({
                 outline: 'none',
                 fontFamily: 'inherit',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </div>
         )}

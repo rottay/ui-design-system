@@ -8,7 +8,20 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhPositionDetailProps,
   PositionTab,
@@ -179,12 +192,12 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ---- derived values ---- */
@@ -328,6 +341,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
               ...hoverStyle,
             }}
@@ -360,14 +374,13 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                 gap: tokens.spacing[2],
                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                 border: 'none',
-                borderBottom: `2px solid ${isActive ? tokens.colors.primaryScale[500] : 'transparent'}`,
+                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[500] : 'transparent'}`,
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                 color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 fontFamily: 'inherit',
-                transition: `all ${tokens.motion.hover}`,
                 marginBottom: -1,
               }}
             >
@@ -673,6 +686,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -717,6 +731,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -787,6 +802,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                             border: 'none',
                             backgroundColor: 'transparent',
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             color: tokens.colors.neutral[400],
                             borderRadius: tokens.borderRadius.sm,
                           }}
@@ -808,7 +824,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                       height: '100%',
                       backgroundColor: barColor,
                       borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }} />
                   </Box>
                 </Box>
@@ -948,7 +964,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.common.white,
                   fontWeight: tokens.typography.fontWeight.semibold,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }}>
                   {formatCurrency(financials.projectedCost)}
                 </Box>
@@ -977,7 +993,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.common.white,
                   fontWeight: tokens.typography.fontWeight.semibold,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }}>
                   {formatCurrency(financials.actualCost)}
                 </Box>
@@ -1081,7 +1097,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
                   ? tokens.colors.warningScale[500]
                   : tokens.colors.errorScale[500],
                 borderRadius: tokens.borderRadius.full,
-                transition: `width ${tokens.motion.hover}`,
+                transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
               }} />
             </Box>
             <Box style={{

@@ -7,7 +7,19 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhCandidateOutreachProps, OutreachChannel, CampaignMetrics, OutreachRecipient } from '../../core';
 import {
   getChannelColors,
@@ -91,7 +103,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
       ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' });
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' }), [tokens, engine]);
 
     const channels: OutreachChannel[] = ['email', 'sms', 'whatsapp', 'linkedin'];
 
@@ -253,7 +265,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
                           height: '100%',
                           backgroundColor: scale[400],
                           borderRadius: tokens.borderRadius.full,
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }} />
                       </Box>
                     </Box>
@@ -293,6 +305,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
                         fontSize: tokens.typography.fontSize.xs,
                         fontWeight: timelineView === view ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                         textTransform: 'capitalize' as const,
                       }}
@@ -654,7 +667,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
                         <Box key={variant.id} style={{
                           ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
                           padding: tokens.spacing[3],
-                          border: isWinner && variant.metrics ? `2px solid ${tokens.colors.successScale[400]}` : undefined,
+                          border: isWinner && variant.metrics ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[400]}` : undefined,
                         }}>
                           <Box style={{
                             display: 'flex',

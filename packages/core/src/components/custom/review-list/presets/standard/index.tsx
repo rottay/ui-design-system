@@ -3,7 +3,12 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { ReviewListProps } from '../../core';
-import { formatDistanceToNow } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createHoverStyle,
+  formatDistanceToNow,
+} from '../../../helpers';
 
 export default createPreset<ReviewListProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -96,7 +101,7 @@ export default createPreset<ReviewListProps>((context) => {
                           width: `${percentage}%`,
                           height: '100%',
                           backgroundColor: tokens.colors.warningScale[500],
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }}
                       />
                     </Box>
@@ -224,9 +229,11 @@ export default createPreset<ReviewListProps>((context) => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                  e.currentTarget.style.transform = tokens.motion.transform;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+                  e.currentTarget.style.transform = 'none';
                 }}
               >
                 👍 Helpful ({review.helpful})

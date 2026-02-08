@@ -1,10 +1,14 @@
+import { useMemo } from 'react';
 /**
  * AuthLayout - Social Preset
  * Standard layout with OAuth provider buttons and divider
  */
 
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { AuthLayoutProps } from '../../core';
 
 export const SocialAuthLayout = createPreset<AuthLayoutProps>({
@@ -22,10 +26,10 @@ export const SocialAuthLayout = createPreset<AuthLayoutProps>({
       style,
     } = props;
 
-    const surfaceStyle = createSurfaceStyle(tokens, {
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'md',
       glass: engine === 'modern',
-    });
+    }), [tokens, engine]);
 
     return (
       <Box

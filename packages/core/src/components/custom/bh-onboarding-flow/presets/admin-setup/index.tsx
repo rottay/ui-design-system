@@ -7,9 +7,20 @@
  * help tooltips, and celebration animation on completion
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import {useState, useEffect, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createSurfaceStyle, createHoverStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { BhOnboardingFlowProps, FormField } from '../../core';
 import {
   Building2, CreditCard, Cpu, Users2, Mail, Briefcase,
@@ -64,8 +75,8 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
     const completedCount = steps.filter((s) => s.isComplete).length;
     const progressPercent = steps.length > 0 ? Math.round((completedCount / steps.length) * 100) : 0;
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const validateCurrentStep = useCallback((): boolean => {
       const errors: Record<string, string> = {};
@@ -329,7 +340,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                     backgroundColor: isPast
                       ? tokens.colors.successScale[300]
                       : tokens.colors.neutral[200],
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }} />
                 )}
               </div>
@@ -359,12 +370,12 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
         width: '100%',
         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
         borderRadius: tokens.borderRadius.md,
-        border: `1px solid ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
         fontSize: tokens.typography.fontSize.sm,
         color: tokens.colors.neutral[900],
         backgroundColor: tokens.colors.common.white,
         outline: 'none',
-        transition: `border-color ${tokens.motion.hover}`,
+        transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
         boxSizing: 'border-box' as const,
       };
 
@@ -427,6 +438,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                 backgroundColor: inputValue ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                 padding: 2,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -438,7 +450,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                 backgroundColor: tokens.colors.common.white,
                 boxShadow: tokens.shadows.sm,
                 transform: inputValue ? 'translateX(20px)' : 'translateX(0)',
-                transition: `transform ${tokens.motion.hover}`,
+                transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
               }} />
             </div>
           ) : (
@@ -587,6 +599,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       color: tokens.colors.infoScale[400],
                       padding: 0,
                       display: 'flex',
@@ -607,6 +620,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.infoScale[600],
                   padding: `${tokens.spacing[2]}px 0`,
@@ -640,12 +654,13 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                       ...hoverTransition,
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `1px solid ${tokens.colors.neutral[300]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                       backgroundColor: tokens.colors.common.white,
                       color: tokens.colors.neutral[700],
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: tokens.spacing[1],
@@ -671,6 +686,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: tokens.spacing[1],
@@ -693,6 +709,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: tokens.spacing[1],
@@ -767,7 +784,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                   </div>
                   {idx < previewItems.length - 1 && (
                     <div style={{
-                      borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                       marginTop: tokens.spacing[3],
                     }} />
                   )}
@@ -838,7 +855,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                         ? tokens.colors.successScale[500]
                         : tokens.colors.primaryScale[500],
                       borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }} />
                   </div>
                 </Stack>

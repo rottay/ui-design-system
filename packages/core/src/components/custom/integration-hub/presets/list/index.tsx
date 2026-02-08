@@ -3,6 +3,9 @@
 import React, { useState, useMemo } from 'react';
 import { createPreset } from '../../../factory';
 import type { IntegrationHubProps, Integration } from '../../core';
+import {
+  createCardStyle,
+} from '../../../helpers';
 
 export const ListPreset = createPreset<IntegrationHubProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -99,7 +102,7 @@ export const ListPreset = createPreset<IntegrationHubProps>((context) => {
               alignItems: 'center',
               gap: tokens.spacing[4],
               cursor: onSelect ? 'pointer' : 'default',
-              transition: `background-color ${tokens.motion.hover}`,
+              transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
             }}
             onClick={() => onSelect?.(integration.key)}
             onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {

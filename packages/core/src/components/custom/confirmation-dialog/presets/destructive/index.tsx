@@ -6,7 +6,7 @@ import { createSurfaceStyle } from '../../../helpers';
 import type { ConfirmationDialogProps } from '../../core';
 
 export const destructivePreset = createPreset<ConfirmationDialogProps>((context: PresetContext<ConfirmationDialogProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Button, Input } = primitives;
 
   const {
@@ -68,7 +68,7 @@ export const destructivePreset = createPreset<ConfirmationDialogProps>((context:
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: tokens.overlay?.medium,
         }}
       />
 
@@ -105,7 +105,7 @@ export const destructivePreset = createPreset<ConfirmationDialogProps>((context:
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: tokens.colors.errorScale[600],
-                fontSize: '20px',
+                fontSize: tokens.typography.fontSize.xl,
                 flexShrink: 0,
               }}
             >
@@ -190,10 +190,12 @@ export const destructivePreset = createPreset<ConfirmationDialogProps>((context:
             onMouseEnter={(e) => {
               if (!loading) {
                 e.currentTarget.style.backgroundColor = tokens.colors.neutral[200];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+              e.currentTarget.style.transform = 'none';
             }}
           >
             {cancelLabel}
@@ -217,10 +219,12 @@ export const destructivePreset = createPreset<ConfirmationDialogProps>((context:
             onMouseEnter={(e) => {
               if (!loading && !isConfirmDisabled) {
                 e.currentTarget.style.backgroundColor = tokens.colors.errorScale[700];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.errorScale[600];
+              e.currentTarget.style.transform = 'none';
             }}
           >
             {loading ? 'Loading...' : confirmLabel}

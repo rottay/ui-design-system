@@ -3,6 +3,9 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { AlertRuleBuilderProps } from '../../core';
+import {
+  createCardStyle,
+} from '../../../helpers';
 
 export const CompactPreset = createPreset<AlertRuleBuilderProps>((context) => {
   const { primitives, props, tokens } = context;

@@ -2,6 +2,11 @@
 
 import { createPreset } from '../../../factory';
 import type { ComparisonTableProps } from '../../core';
+import {
+  createCardStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const TablePreset = createPreset<ComparisonTableProps>((context) => {
   const { primitives, props, tokens } = context;

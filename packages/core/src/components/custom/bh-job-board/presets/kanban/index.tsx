@@ -8,7 +8,17 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode } from '../../core';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -291,14 +301,14 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
       backdropFilter: tokens.glass.blur,
       WebkitBackdropFilter: tokens.glass.blur,
       backgroundColor: tokens.glass.bg,
-      border: `1px solid ${tokens.glass.border}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
     } : {};
 
     const glassSurfaceStyle = isModern && tokens.glass ? {
       backdropFilter: tokens.glass.blurSm,
       WebkitBackdropFilter: tokens.glass.blurSm,
       backgroundColor: tokens.glass.bgLight,
-      border: `1px solid ${tokens.glass.borderLight}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
     } : {};
 
     // ─── Render: Candidate Mini-Bar ─────────────────────────────────────
@@ -365,7 +375,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 width: 20,
                 height: 20,
                 borderRadius: tokens.borderRadius.full,
-                border: `2px solid ${tokens.colors.common.white}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                 backgroundColor: tokens.colors.primaryScale[100],
                 backgroundImage: avatar ? `url(${avatar})` : 'none',
                 backgroundSize: 'cover',
@@ -389,7 +399,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
               width: 20,
               height: 20,
               borderRadius: tokens.borderRadius.full,
-              border: `2px solid ${tokens.colors.common.white}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
               backgroundColor: tokens.colors.neutral[100],
               marginLeft: -6,
               display: 'flex',
@@ -431,7 +441,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             transform: isHovered && !isDragging ? tokens.motion.transform : 'none',
             transition: `all ${tokens.motion.hover}`,
             border: isSelected
-              ? `2px solid ${tokens.colors.primaryScale[400]}`
+              ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
               : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             ...(isModern ? glassCardStyle : {}),
           }}
@@ -469,7 +479,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 width: 14,
                 height: 14,
                 borderRadius: tokens.borderRadius.sm,
-                border: `2px solid ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                 backgroundColor: isSelected ? tokens.colors.primaryScale[500] : tokens.colors.common.white,
                 display: 'flex',
                 alignItems: 'center',
@@ -559,7 +569,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             justifyContent: 'space-between',
             marginTop: tokens.spacing[2],
             paddingTop: tokens.spacing[2],
-            borderTop: `1px solid ${tokens.colors.neutral[100]}`,
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
           }}>
             <div style={{
               display: 'flex',
@@ -586,7 +596,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
               alignItems: 'center',
               gap: tokens.spacing[1],
               opacity: isHovered ? 1 : 0,
-              transition: `opacity ${tokens.motion.hover}`,
+              transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
             }}>
               <button
                 onClick={(e) => { e.stopPropagation(); onJobClick?.(job.id); }}
@@ -598,10 +608,11 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                   width: 22,
                   height: 22,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[600],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   outline: 'none',
                   padding: 0,
                 }}
@@ -618,10 +629,11 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                   width: 22,
                   height: 22,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[600],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   outline: 'none',
                   padding: 0,
                 }}
@@ -668,7 +680,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             display: 'flex',
             alignItems: 'center',
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             overflow: 'hidden' as const,
           }}>
             {([
@@ -746,7 +758,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
           gap: tokens.spacing[2],
           padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
           borderRadius: tokens.borderRadius.md,
-          border: `1px solid ${tokens.colors.neutral[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           backgroundColor: tokens.colors.common.white,
           minWidth: 220,
         }}>
@@ -764,6 +776,15 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
               backgroundColor: 'transparent',
               flex: 1,
               padding: 0,
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
           {searchQuery && (
@@ -784,13 +805,14 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             style={{
               padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
               borderRadius: tokens.borderRadius.md,
-              border: `1px solid ${filters.department ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.department ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
               backgroundColor: filters.department ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
               color: filters.department ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
               fontSize: tokens.typography.fontSize.xs,
               fontWeight: tokens.typography.fontWeight.medium,
               outline: 'none',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             <option value="">All Departments</option>
@@ -815,7 +837,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 borderRadius: tokens.borderRadius.full,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
-                border: `1px solid ${isActive ? cfg.color : tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? cfg.color : tokens.colors.neutral[200]}`,
                 backgroundColor: isActive ? cfg.bgColor : tokens.colors.common.white,
                 color: isActive ? cfg.color : tokens.colors.neutral[500],
                 cursor: 'pointer',
@@ -898,7 +920,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 fontWeight: tokens.typography.fontWeight.bold,
                 backgroundColor: colConfig.bgColor,
                 color: colConfig.color,
-                border: `1px solid ${colConfig.borderColor}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colConfig.borderColor}`,
               }}>
                 {columnJobs.length}
               </span>
@@ -914,7 +936,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                   width: 24,
                   height: 24,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[600],
                   cursor: 'pointer',
@@ -934,7 +956,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             backgroundColor: isDraggedOver
               ? tokens.colors.primaryScale[50]
               : tokens.colors.neutral[50],
-            border: `1px solid ${isDraggedOver ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isDraggedOver ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
             borderTop: 'none',
             borderRadius: `0 0 ${tokens.borderRadius.lg} ${tokens.borderRadius.lg}`,
             padding: tokens.spacing[2],

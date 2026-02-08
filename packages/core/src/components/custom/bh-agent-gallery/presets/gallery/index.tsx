@@ -8,7 +8,17 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhAgentGalleryProps,
   AgentSummary,
@@ -195,8 +205,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
     };
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ---- Filtering ---- */
@@ -265,6 +275,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.medium,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       outline: 'none',
       appearance: 'none' as const,
       WebkitAppearance: 'none' as const,
@@ -317,13 +328,14 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                   borderRadius: tokens.borderRadius.md,
                   border: isActive
-                    ? `1px solid ${tokens.colors.primaryScale[300]}`
+                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                     : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                   backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
                   color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -363,11 +375,12 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   height: tokens.spacing[8],
                   borderRadius: tokens.borderRadius.md,
                   border: viewMode === mode
-                    ? `1px solid ${tokens.colors.primaryScale[300]}`
+                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                     : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: viewMode === mode ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                   color: viewMode === mode ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -418,6 +431,15 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[800],
                 fontFamily: 'inherit',
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
           </div>
@@ -553,9 +575,10 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               ...cardBase,
                               padding: tokens.spacing[4],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               border: selectedAgent === agent.id
-                                ? `2px solid ${tokens.colors.primaryScale[400]}`
-                                : `1px solid ${tokens.colors.primaryScale[200]}`,
+                                ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
+                                : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                               background: isGlass
                                 ? tokens.glass?.bg
                                 : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
@@ -682,8 +705,9 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         ...cardBase,
                         padding: 0,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         border: isSelected
-                          ? `2px solid ${tokens.colors.primaryScale[400]}`
+                          ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
                           : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         overflow: 'hidden',
                         position: 'relative' as const,
@@ -874,6 +898,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             fontSize: tokens.typography.fontSize.sm,
                             fontWeight: tokens.typography.fontWeight.medium,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             ...hoverStyle,
                           }}
                         >
@@ -892,7 +917,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           display: 'flex',
                           gap: tokens.spacing[1],
                           opacity: 0,
-                          transition: `opacity ${tokens.motion.hover}`,
+                          transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
                         }}
                       >
                         {onDuplicate && (
@@ -911,6 +936,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               boxShadow: tokens.shadows.sm,
                               color: tokens.colors.neutral[600],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -933,6 +959,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               boxShadow: tokens.shadows.sm,
                               color: tokens.colors.neutral[600],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -955,6 +982,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               boxShadow: tokens.shadows.sm,
                               color: tokens.colors.warningScale[600],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -977,6 +1005,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               boxShadow: tokens.shadows.sm,
                               color: tokens.colors.successScale[600],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -999,6 +1028,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               boxShadow: tokens.shadows.sm,
                               color: tokens.colors.errorScale[600],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -1025,7 +1055,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              backgroundColor: tokens.overlay?.medium,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1050,7 +1080,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       backdropFilter: tokens.glass?.blurLg,
                       WebkitBackdropFilter: tokens.glass?.blurLg,
                       backgroundColor: tokens.glass?.bgHeavy,
-                      border: `1px solid ${tokens.glass?.border}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass?.border}`,
                     }
                   : { backgroundColor: tokens.colors.common.white }),
               }}
@@ -1121,6 +1151,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     backgroundColor: tokens.colors.common.white,
                     color: tokens.colors.neutral[500],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -1264,6 +1295,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               backgroundColor: tokens.colors.primaryScale[600],
                               color: tokens.colors.common.white,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -1296,7 +1328,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.infoScale[50],
-                        border: `1px solid ${tokens.colors.infoScale[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
                       }}
                     >
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.infoScale[700], fontWeight: tokens.typography.fontWeight.medium }}>
@@ -1352,6 +1384,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       ...hoverStyle,
                     }}
                   >
@@ -1374,6 +1407,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.semibold,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       marginLeft: 'auto',
                       ...hoverStyle,
                     }}

@@ -9,6 +9,12 @@ import { useState, useCallback } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SprintRetroProps, RetroNote, NoteColor } from '../../core';
 import { SPRINT_RETRO_DEFAULTS, getNoteColors } from '../../core';
+import {
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+} from '../../../helpers';
 
 const ROTATION_ANGLES = [-2.5, 1.8, -1.2, 2.1, -0.8, 1.5, -1.9, 0.6];
 
@@ -217,6 +223,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 color: tokens.colors.neutral[800],
@@ -252,6 +259,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                       height: `${tokens.spacing[7]}px`,
                       borderRadius: tokens.borderRadius.md,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       color: item.active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                       background: item.active ? tokens.colors.primaryScale[50] : 'transparent',
                     }}
@@ -320,6 +328,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 border: 'none',
               }}
             >
@@ -335,6 +344,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 height: `${tokens.spacing[7]}px`,
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
               }}
             >
@@ -349,6 +359,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 height: `${tokens.spacing[7]}px`,
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
               }}
             >
@@ -363,6 +374,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 height: `${tokens.spacing[7]}px`,
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
               }}
             >
@@ -411,6 +423,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                   height: '34px',
                   borderRadius: tokens.borderRadius.lg,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   color: tokens.colors.neutral[500],
                 }}
               >
@@ -499,7 +512,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                         style={{
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[500],
-                          lineHeight: 1.5,
+                          lineHeight: tokens.typography.lineHeight.relaxed,
                         }}
                       >
                         {column.subtitle}
@@ -565,7 +578,11 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                             <textarea
                               value={editingContent}
                               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingContent(e.target.value)}
-                              onBlur={handleSaveEdit}
+                              onBlur={(e) => {
+                                handleSaveEdit();
+                                e.currentTarget.style.boxShadow = 'none';
+                                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                              }}
                               onKeyDown={(e: React.KeyboardEvent) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
                                   e.preventDefault();
@@ -588,6 +605,11 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                                 outline: 'none',
                                 color: tokens.colors.neutral[800],
                                 flex: 1,
+                              }}
+                            
+                              onFocus={(e) => {
+                                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                               }}
                             />
                           ) : (
@@ -645,6 +667,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                                   alignItems: 'center',
                                   gap: '3px',
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                   color: note.voted ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                                   fontSize: tokens.typography.fontSize.xs,
                                 }}
@@ -664,6 +687,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                                     display: 'flex',
                                     alignItems: 'center',
                                     cursor: 'pointer',
+                                    transition: `all ${tokens.motion.hover}`,
                                     color: tokens.colors.neutral[300],
                                     fontSize: tokens.typography.fontSize.xs,
                                   }}
@@ -718,6 +742,15 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                               outline: 'none',
                               marginBottom: `${tokens.spacing[2]}px`,
                             }}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                           />
                           {/* Color picker */}
                           <Box
@@ -737,9 +770,10 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                                   borderRadius: tokens.borderRadius.full,
                                   background: NOTE_COLORS[color].bg,
                                   border: newNoteColor === color
-                                    ? `2px solid ${tokens.colors.primaryScale[600]}`
+                                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
                                     : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${NOTE_COLORS[color].border}`,
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                 }}
                               />
                             ))}
@@ -755,6 +789,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                                 borderRadius: tokens.borderRadius.md,
                                 fontSize: tokens.typography.fontSize.xs,
                                 cursor: 'pointer',
+                                transition: `all ${tokens.motion.hover}`,
                                 color: tokens.colors.neutral[500],
                                 background: tokens.colors.neutral[100],
                               }}
@@ -768,6 +803,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                                 borderRadius: tokens.borderRadius.md,
                                 fontSize: tokens.typography.fontSize.xs,
                                 cursor: 'pointer',
+                                transition: `all ${tokens.motion.hover}`,
                                 color: tokens.colors.common.white,
                                 background: tokens.colors.primaryScale[600],
                                 fontWeight: tokens.typography.fontWeight.medium,
@@ -836,7 +872,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.common.white,
                   fontWeight: tokens.typography.fontWeight.semibold,
-                  border: `2px solid ${tokens.colors.common.white}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                   marginLeft: idx > 0 ? '-6px' : '0',
                   position: 'relative',
                   zIndex: participants.length - idx,
@@ -872,7 +908,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[500],
                   fontWeight: tokens.typography.fontWeight.semibold,
-                  border: `2px solid ${tokens.colors.common.white}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                   marginLeft: '-6px',
                 }}
               >
@@ -889,6 +925,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[400],
                 marginLeft: `${tokens.spacing[1]}px`,
               }}
@@ -914,6 +951,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 height: '28px',
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
                 background: tokens.colors.neutral[100],
               }}
@@ -930,6 +968,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 background: tokens.colors.neutral[300],
                 borderRadius: tokens.borderRadius.sm,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
                 const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
@@ -959,7 +998,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                   height: `${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.full,
                   background: tokens.colors.primaryScale[600],
-                  border: `2px solid ${tokens.colors.common.white}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                   boxShadow: tokens.shadows.sm,
                 }}
               />
@@ -986,6 +1025,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                 height: '28px',
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
                 background: tokens.colors.neutral[100],
               }}
@@ -1001,7 +1041,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'rgba(0, 0, 0, 0.4)',
+              background: tokens.overlay?.light,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1063,6 +1103,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                     height: '28px',
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: tokens.colors.neutral[400],
                   }}
                 >
@@ -1085,8 +1126,9 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: shareTab === 'members' ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-                    borderBottom: shareTab === 'members' ? `2px solid ${tokens.colors.primaryScale[600]}` : '2px solid transparent',
+                    borderBottom: shareTab === 'members' ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                   }}
                 >
                   Members {shareConfig?.memberCount != null && `(${shareConfig.memberCount})`}
@@ -1098,8 +1140,9 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: shareTab === 'visitors' ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-                    borderBottom: shareTab === 'visitors' ? `2px solid ${tokens.colors.primaryScale[600]}` : '2px solid transparent',
+                    borderBottom: shareTab === 'visitors' ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                   }}
                 >
                   Visitors {shareConfig?.visitorCount != null && `(${shareConfig.visitorCount})`}
@@ -1143,6 +1186,15 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                             outline: 'none',
                             fontFamily: 'inherit',
                           }}
+                        
+                          onFocus={(e) => {
+                            e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                            e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                          }}
+                          onBlur={(e) => {
+                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                          }}
                         />
                         {passwordSaved && (
                           <Box
@@ -1174,6 +1226,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.medium,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                           }}
                         >
                           Save password
@@ -1188,6 +1241,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                               fontSize: tokens.typography.fontSize.xs,
                               fontWeight: tokens.typography.fontWeight.medium,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[500]}`,
                             }}
                           >
@@ -1224,6 +1278,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                           color: tokens.colors.neutral[800],
                           marginBottom: `${tokens.spacing[3]}px`,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           appearance: 'none',
                           backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
                           backgroundRepeat: 'no-repeat',
@@ -1246,6 +1301,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           textAlign: 'center',
                         }}
                       >
@@ -1272,6 +1328,15 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                           outline: 'none',
                           fontFamily: 'inherit',
                         }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                        }}
                       />
                       <Box
                         style={{
@@ -1282,6 +1347,7 @@ export const BoardSprintRetro = createPreset<SprintRetroProps>({
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         Invite

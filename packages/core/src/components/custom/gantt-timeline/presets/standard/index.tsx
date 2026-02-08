@@ -24,6 +24,17 @@ import {
   pixelOffsetToMs,
   msToDateString,
 } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<string, unknown>>({
   name: 'GanttTimeline.Standard',
@@ -337,6 +348,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -359,6 +371,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: filter.active ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -384,6 +397,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
                 display: 'flex',
                 alignItems: 'center',
@@ -415,6 +429,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: timeScale === opt.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -509,6 +524,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                   backgroundColor: rowBg,
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
+                  transform: isHovered ? tokens.motion.transform : 'none',
                 }}
               >
                 {/* Checkbox */}
@@ -526,6 +542,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                         width: 14,
                         height: 14,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         accentColor: tokens.colors.primaryScale[600],
                       }}
                     />
@@ -544,6 +561,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                         border: 'none',
                         background: 'none',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: 0,
                         color: tokens.colors.neutral[500],
                         fontSize: tokens.typography.fontSize.xs,
@@ -663,6 +681,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                   border: 'none',
                   background: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.sm,
                   color: tokens.colors.neutral[500],
@@ -877,7 +896,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                       cursor: 'col-resize',
                       zIndex: 3,
                       backgroundColor: isDragProgress ? tokens.colors.common.white : 'transparent',
-                      borderLeft: isDragProgress ? `2px solid ${tokens.colors.common.white}` : 'none',
+                      borderLeft: isDragProgress ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}` : 'none',
                     }}
                   />
                 )}
@@ -923,7 +942,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                       height: '100%',
                       cursor: 'ew-resize',
                       zIndex: 4,
-                      borderRight: isDragResize ? `2px solid ${tokens.colors.common.white}` : 'none',
+                      borderRight: isDragResize ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}` : 'none',
                     }}
                   />
                 )}
@@ -1076,6 +1095,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: timeScale === opt.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >

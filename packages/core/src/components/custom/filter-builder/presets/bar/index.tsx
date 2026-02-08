@@ -4,6 +4,10 @@ import { useMemo, useCallback } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { FilterBuilderProps } from '../../core';
 import { FILTER_BUILDER_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const BarFilterBuilder = createPreset<FilterBuilderProps>({
   name: 'FilterBuilder.Bar',
@@ -94,6 +98,15 @@ export const BarFilterBuilder = createPreset<FilterBuilderProps>({
                 outline: 'none',
                 fontFamily: 'inherit',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </div>
         )}
@@ -112,6 +125,7 @@ export const BarFilterBuilder = createPreset<FilterBuilderProps>({
               backgroundColor: tokens.colors.common.white,
               color: tokens.colors.neutral[900],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
               minWidth: field.minWidth ?? 120,
             }}
@@ -139,6 +153,7 @@ export const BarFilterBuilder = createPreset<FilterBuilderProps>({
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               borderRadius: tokens.borderRadius.md,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
             }}
           >
@@ -157,6 +172,7 @@ export const BarFilterBuilder = createPreset<FilterBuilderProps>({
               backgroundColor: 'transparent',
               border: 'none',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
               textDecoration: 'underline',
             }}

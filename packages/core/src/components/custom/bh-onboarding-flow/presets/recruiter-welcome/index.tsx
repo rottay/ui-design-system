@@ -6,9 +6,18 @@
  * Steps: Welcome -> Profile -> Explore Interface -> Create First Job -> Import Candidates
  */
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createSurfaceStyle, createHoverStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { BhOnboardingFlowProps, FormField } from '../../core';
 import {
   Sparkles, User, Compass, Briefcase, Upload,
@@ -65,8 +74,8 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
     const completedCount = steps.filter((s) => s.isComplete).length;
     const progressPercent = steps.length > 0 ? Math.round(((currentStep + 1) / steps.length) * 100) : 0;
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const currentTooltip = helpTooltips.find((t) => t.targetStep === currentStepData?.key);
 
@@ -282,7 +291,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                   backgroundColor: idx <= currentStep
                     ? (step.isComplete ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500])
                     : tokens.colors.neutral[200],
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               />
             ))}
@@ -454,9 +463,10 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     ...createCardStyle(tokens, { elevation: isExplored ? 'md' : 'sm', glass: isGlass, interactive: true }),
                     padding: tokens.spacing[4],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     textAlign: 'center' as const,
                     position: 'relative' as const,
-                    border: `2px solid ${isExplored ? tokens.colors.successScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isExplored ? tokens.colors.successScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isExplored ? tokens.colors.successScale[50] : tokens.colors.common.white,
                   }}
                 >
@@ -534,12 +544,12 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
         width: '100%',
         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
         borderRadius: tokens.borderRadius.md,
-        border: `1px solid ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
         fontSize: tokens.typography.fontSize.sm,
         color: tokens.colors.neutral[900],
         backgroundColor: tokens.colors.common.white,
         outline: 'none',
-        transition: `border-color ${tokens.motion.hover}`,
+        transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
         boxSizing: 'border-box' as const,
       };
 
@@ -598,6 +608,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
               padding: `${tokens.spacing[5]}px ${tokens.spacing[4]}px`,
               border: `2px dashed ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               textAlign: 'center' as const,
               flexDirection: 'column' as const,
               gap: tokens.spacing[2],
@@ -621,6 +632,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                 backgroundColor: inputValue ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                 padding: 2,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -632,7 +644,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                 backgroundColor: tokens.colors.common.white,
                 boxShadow: tokens.shadows.sm,
                 transform: inputValue ? 'translateX(20px)' : 'translateX(0)',
-                transition: `transform ${tokens.motion.hover}`,
+                transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
               }} />
             </div>
           ) : (
@@ -791,6 +803,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: tokens.colors.infoScale[400],
                     padding: 0,
                     display: 'flex',
@@ -810,6 +823,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontSize: tokens.typography.fontSize.xs,
                 color: tokens.colors.infoScale[600],
                 padding: `${tokens.spacing[2]}px 0`,
@@ -851,12 +865,13 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     ...hoverTransition,
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     backgroundColor: tokens.colors.common.white,
                     color: tokens.colors.neutral[700],
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: tokens.spacing[1],
@@ -882,6 +897,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: tokens.spacing[1],
@@ -904,6 +920,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: tokens.spacing[1],

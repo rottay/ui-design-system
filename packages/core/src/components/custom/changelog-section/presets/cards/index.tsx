@@ -1,9 +1,15 @@
+import { useMemo } from 'react';
 import { createPreset } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 import type { ChangelogSectionProps, ChangelogType } from '../../core';
 
 export const CardsPreset = createPreset<ChangelogSectionProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const { entries, title, className, style } = props;
 
@@ -49,9 +55,10 @@ export const CardsPreset = createPreset<ChangelogSectionProps>((context) => {
     }
   };
 
-  const cardStyle = createCardStyle(tokens, {
+  const cardStyle = useMemo(() => createCardStyle(tokens, {
+    glass: isGlass,
     interactive: false,
-  });
+  }), [tokens]);
 
   return (
     <Box
@@ -176,7 +183,7 @@ export const CardsPreset = createPreset<ChangelogSectionProps>((context) => {
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     color: tokens.colors.neutral[600],
-                    lineHeight: 1.6,
+                    lineHeight: tokens.typography.lineHeight.relaxed,
                   }}
                 >
                   {entry.description}
@@ -216,7 +223,7 @@ export const CardsPreset = createPreset<ChangelogSectionProps>((context) => {
                         style={{
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[700],
-                          lineHeight: 1.6,
+                          lineHeight: tokens.typography.lineHeight.relaxed,
                         }}
                       >
                         {item}

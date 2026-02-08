@@ -1,5 +1,8 @@
 import { createPreset } from '../../../factory';
 import type { BlogCardProps } from '../../core';
+import {
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const MinimalPreset = createPreset<BlogCardProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -14,18 +17,20 @@ export const MinimalPreset = createPreset<BlogCardProps>((context) => {
         gap: tokens.spacing[2],
         padding: tokens.spacing[4],
         paddingLeft: tokens.spacing[6],
-        borderLeft: `2px solid ${tokens.colors.neutral[200]}`,
+        borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
         transition: `all ${tokens.motion.hover}`,
         cursor: onClick || href ? 'pointer' : 'default',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderLeftColor = tokens.colors.primaryScale[500];
         e.currentTarget.style.paddingLeft = `${tokens.spacing[8]}`;
-      }}
+          e.currentTarget.style.transform = tokens.motion.transform;
+        }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderLeftColor = tokens.colors.neutral[200];
         e.currentTarget.style.paddingLeft = `${tokens.spacing[6]}`;
-      }}
+          e.currentTarget.style.transform = 'none';
+        }}
       onClick={onClick}
     >
       {/* Category badge */}
@@ -53,7 +58,7 @@ export const MinimalPreset = createPreset<BlogCardProps>((context) => {
           fontSize: tokens.typography.fontSize.lg,
           fontWeight: tokens.typography.fontWeight.semibold,
           color: tokens.colors.neutral[900],
-          lineHeight: 1.4,
+          lineHeight: tokens.typography.lineHeight.normal,
         }}
       >
         {title}
@@ -65,7 +70,7 @@ export const MinimalPreset = createPreset<BlogCardProps>((context) => {
           style={{
             fontSize: tokens.typography.fontSize.sm,
             color: tokens.colors.neutral[600],
-            lineHeight: 1.6,
+            lineHeight: tokens.typography.lineHeight.relaxed,
           }}
         >
           {description}

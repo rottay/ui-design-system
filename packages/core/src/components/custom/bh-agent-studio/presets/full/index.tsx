@@ -9,7 +9,16 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhAgentStudioProps,
   AgentData,
@@ -101,7 +110,7 @@ function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass,
   return (
     <div
       style={{
-        ...createCardStyle(tokens, { elevation: 'sm', glass }),
+        ...createCardStyle(tokens, { glass, elevation: 'sm' }),
         marginBottom: tokens.spacing[4],
         overflow: 'hidden',
       }}
@@ -200,8 +209,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
     const estimatedCost = estimatedCostProp || internalEstimatedCost;
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const agentTypeConfig = useMemo(() => getAgentTypeConfig(tokens), [tokens]);
@@ -449,6 +458,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 fontWeight: tokens.typography.fontWeight.medium,
                 color: tokens.colors.neutral[700],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 ...hoverStyle,
               }}
             >
@@ -472,6 +482,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 fontWeight: tokens.typography.fontWeight.medium,
                 color: tokens.colors.secondaryScale[700],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 ...hoverStyle,
               }}
             >
@@ -547,13 +558,22 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 width: '100%',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 fontSize: tokens.typography.fontSize.md,
                 color: tokens.colors.neutral[900],
                 backgroundColor: tokens.colors.common.white,
                 outline: 'none',
                 boxSizing: 'border-box',
-                transition: `border-color ${tokens.motion.hover}`,
+                transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
           </div>
@@ -580,7 +600,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 width: '100%',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[800],
                 backgroundColor: tokens.colors.common.white,
@@ -588,7 +608,16 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 resize: 'vertical',
                 fontFamily: 'inherit',
                 boxSizing: 'border-box',
-                transition: `border-color ${tokens.motion.hover}`,
+                transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
           </div>
@@ -627,7 +656,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       gap: tokens.spacing[2],
                       padding: tokens.spacing[4],
                       borderRadius: tokens.borderRadius.lg,
-                      border: `2px solid ${isSelected ? config.color : tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? config.color : tokens.colors.neutral[200]}`,
                       backgroundColor: isSelected ? config.bgColor : tokens.colors.common.white,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
@@ -705,12 +734,13 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   width: '100%',
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[800],
                   backgroundColor: tokens.colors.common.white,
                   outline: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 {languages.map((lang) => (
@@ -741,12 +771,21 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   width: '100%',
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[800],
                   backgroundColor: tokens.colors.common.white,
                   outline: 'none',
                   boxSizing: 'border-box',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
             </div>
@@ -792,7 +831,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       gap: tokens.spacing[1],
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.lg,
-                      border: `2px solid ${isSelected ? config.color : tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? config.color : tokens.colors.neutral[200]}`,
                       backgroundColor: isSelected ? config.bgColor : tokens.colors.common.white,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
@@ -850,11 +889,20 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   flex: 1,
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[800],
                   backgroundColor: tokens.colors.common.white,
                   outline: 'none',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
               <button
@@ -868,9 +916,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   alignItems: 'center',
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   backgroundColor: tokens.colors.common.white,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   color: tokens.colors.neutral[500],
                   ...hoverStyle,
                 }}
@@ -886,7 +935,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               padding: tokens.spacing[4],
               borderRadius: tokens.borderRadius.lg,
               backgroundColor: tokens.colors.neutral[100],
-              border: `1px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             }}
           >
             <div
@@ -922,6 +971,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -956,7 +1006,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         : tokens.colors.neutral[300]
                     }
                     style={{
-                      transition: `fill ${tokens.motion.hover}`,
+                      transition: `fill ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                   />
                 );
@@ -991,7 +1041,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         justifyContent: 'space-between',
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md,
-                        border: `1px solid ${
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                           agentData.voiceId === voice.id
                             ? tokens.colors.primaryScale[300]
                             : tokens.colors.neutral[200]
@@ -1001,6 +1051,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                             ? tokens.colors.primaryScale[50]
                             : tokens.colors.common.white,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         ...hoverStyle,
                       }}
                     >
@@ -1189,7 +1240,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           width: `${trait.value}%`,
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: tokens.colors.primaryScale[500],
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }}
                       />
                     </div>
@@ -1206,6 +1257,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         width: '100%',
                         opacity: 0,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         height: tokens.spacing[4],
                       }}
                     />
@@ -1247,12 +1299,13 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 width: '100%',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[800],
                 backgroundColor: tokens.colors.common.white,
                 outline: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               {models.map((model) => (
@@ -1342,12 +1395,21 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   width: '100%',
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[800],
                   backgroundColor: tokens.colors.common.white,
                   outline: 'none',
                   boxSizing: 'border-box',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
             </div>
@@ -1441,7 +1503,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                     backgroundColor: tokens.colors.primaryScale[50],
                     color: tokens.colors.primaryScale[700],
                     fontSize: tokens.typography.fontSize.xs,
@@ -1466,7 +1528,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               width: '100%',
               padding: tokens.spacing[4],
               borderRadius: tokens.borderRadius.md,
-              border: `1px solid ${tokens.colors.neutral[700]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[700]}`,
               fontSize: tokens.typography.fontSize.sm,
               fontFamily: 'monospace',
               lineHeight: tokens.typography.lineHeight.relaxed,
@@ -1476,6 +1538,15 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               resize: 'vertical',
               boxSizing: 'border-box',
               tabSize: 2,
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
         </CollapsibleSection>
@@ -1516,7 +1587,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     style={{
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
-                      border: `1px solid ${
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                         isDragOver
                           ? tokens.colors.primaryScale[400]
                           : tokens.colors.neutral[200]
@@ -1566,13 +1637,22 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         style={{
                           flex: 1,
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                          border: `1px solid ${tokens.colors.neutral[200]}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           borderRadius: tokens.borderRadius.sm,
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: tokens.typography.fontWeight.medium,
                           color: tokens.colors.neutral[800],
                           backgroundColor: tokens.colors.common.white,
                           outline: 'none',
+                        }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                         }}
                       />
                       <button
@@ -1585,7 +1665,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           backgroundColor: 'transparent',
                           cursor: 'pointer',
                           color: tokens.colors.neutral[400],
-                          transition: `color ${tokens.motion.hover}`,
+                          transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                           borderRadius: tokens.borderRadius.sm,
                         }}
                       >
@@ -1605,7 +1685,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         width: '100%',
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md,
-                        border: `1px solid ${tokens.colors.neutral[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         fontSize: tokens.typography.fontSize.sm,
                         color: tokens.colors.neutral[800],
                         backgroundColor: tokens.colors.neutral[50],
@@ -1614,6 +1694,15 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         fontFamily: 'inherit',
                         lineHeight: tokens.typography.lineHeight.relaxed,
                         boxSizing: 'border-box',
+                      }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                       }}
                     />
 
@@ -1630,12 +1719,21 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           width: '100%',
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                           borderRadius: tokens.borderRadius.sm,
-                          border: `1px dashed ${tokens.colors.neutral[300]}`,
+                          border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                           fontSize: tokens.typography.fontSize.xs,
                           color: tokens.colors.neutral[600],
                           backgroundColor: 'transparent',
                           outline: 'none',
                           boxSizing: 'border-box',
+                        }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                         }}
                       />
                     </div>
@@ -1667,7 +1765,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           width: tokens.spacing[6],
                           height: tokens.spacing[6],
                           borderRadius: tokens.borderRadius.full,
-                          border: `1px dashed ${tokens.colors.neutral[300]}`,
+                          border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                           backgroundColor: tokens.colors.common.white,
                           cursor: 'pointer',
                           color: tokens.colors.neutral[400],
@@ -1761,7 +1859,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     justifyContent: 'space-between',
                     padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                       tool.enabled
                         ? tokens.colors.primaryScale[200]
                         : tokens.colors.neutral[200]
@@ -1804,7 +1902,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       color: tool.enabled
                         ? tokens.colors.primaryScale[600]
                         : tokens.colors.neutral[400],
-                      transition: `color ${tokens.motion.hover}`,
+                      transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       marginLeft: tokens.spacing[3],
                       flexShrink: 0,
                     }}
@@ -1838,7 +1936,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                 borderRadius: tokens.borderRadius.md,
                 backgroundColor: tokens.colors.neutral[50],
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
               <div>
@@ -1873,7 +1971,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   color: agentData.callSettings.recordingEnabled
                     ? tokens.colors.primaryScale[600]
                     : tokens.colors.neutral[400],
-                  transition: `color ${tokens.motion.hover}`,
+                  transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 {agentData.callSettings.recordingEnabled ? (
@@ -1949,7 +2047,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                 borderRadius: tokens.borderRadius.md,
                 backgroundColor: tokens.colors.neutral[50],
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
               <div>
@@ -1986,7 +2084,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   color: agentData.callSettings.voicemailDetection
                     ? tokens.colors.primaryScale[600]
                     : tokens.colors.neutral[400],
-                  transition: `color ${tokens.motion.hover}`,
+                  transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 {agentData.callSettings.voicemailDetection ? (
@@ -2123,7 +2221,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               padding: tokens.spacing[4],
               borderRadius: tokens.borderRadius.lg,
               backgroundColor: tokens.colors.primaryScale[50],
-              border: `1px solid ${tokens.colors.primaryScale[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
               marginBottom: tokens.spacing[4],
             }}
           >
@@ -2199,7 +2297,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: colors.bgColor,
-                      border: `1px solid ${colors.borderColor}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.borderColor}`,
                     }}
                   >
                     <div

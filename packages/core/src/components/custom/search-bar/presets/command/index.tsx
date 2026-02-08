@@ -8,7 +8,12 @@
 
 import { useState, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { SearchBarProps } from '../../core';
 
 export const CommandSearchBar = createPreset<SearchBarProps>({
@@ -116,7 +121,7 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.4)',
+            backgroundColor: tokens.overlay?.light,
             zIndex: 999,
           }}
         />
@@ -160,6 +165,15 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
                 backgroundColor: 'transparent',
                 fontFamily: 'inherit',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </Box>
 
@@ -194,7 +208,8 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
                         alignItems: 'center',
                         gap: tokens.spacing[3],
                         backgroundColor: hoveredItemId === item.id ? tokens.colors.primaryScale[50] : undefined,
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transform: hoveredItemId === item.id ? tokens.motion.transform : 'none',
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                     >
                       {item.icon && (

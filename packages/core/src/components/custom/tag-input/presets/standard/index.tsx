@@ -3,6 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPreset } from '../../../factory';
 import type { TagInputProps, Tag } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const StandardPreset = createPreset<TagInputProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -98,6 +101,7 @@ export const StandardPreset = createPreset<TagInputProps>((context) => {
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 padding: 0,
                 display: 'flex',
                 alignItems: 'center',
@@ -125,6 +129,15 @@ export const StandardPreset = createPreset<TagInputProps>((context) => {
               minWidth: '120px',
               fontSize: tokens.typography.fontSize.md,
               backgroundColor: 'transparent',
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
         )}
@@ -154,13 +167,15 @@ export const StandardPreset = createPreset<TagInputProps>((context) => {
               style={{
                 padding: tokens.spacing[2],
                 cursor: 'pointer',
-                transition: `background-color ${tokens.motion.hover}`,
+                transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+                e.currentTarget.style.transform = 'none';
               }}
             >
               <Text>{suggestion.label}</Text>

@@ -1,9 +1,12 @@
 import React from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { AuditLogProps } from '../../core';
+import {
+  createCardStyle,
+} from '../../../helpers';
 
 export const Timeline = createPreset<AuditLogProps>((context: PresetContext<AuditLogProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { entries, className, style } = props;
@@ -61,7 +64,7 @@ export const Timeline = createPreset<AuditLogProps>((context: PresetContext<Audi
                     height: '12px',
                     borderRadius: tokens.borderRadius.full,
                     backgroundColor: getSeverityColor(entry.severity),
-                    border: `2px solid ${tokens.colors.common.white}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                     boxShadow: tokens.shadows.sm,
                   }}
                 />

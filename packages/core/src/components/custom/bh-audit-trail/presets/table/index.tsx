@@ -9,12 +9,18 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
-  getHoverTransform,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -171,9 +177,9 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     const isGlass = engine === 'modern';
     const entityColors = getEntityTypeColors(tokens);
     const actionColors = getActionTypeColors(tokens);
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -296,12 +302,13 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                   gap: tokens.spacing[1],
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${liveMode ? tokens.colors.successScale[300] : tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${liveMode ? tokens.colors.successScale[300] : tokens.colors.neutral[200]}`,
                   backgroundColor: liveMode ? tokens.colors.successScale[50] : tokens.colors.common.white,
                   color: liveMode ? tokens.colors.successScale[700] : tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <Radio size={12} style={liveMode ? { animation: 'bhAuditTablePulse 2s ease-in-out infinite' } : undefined} />
@@ -309,10 +316,10 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
               </button>
               {onExport && (
                 <>
-                  <button onClick={() => onExport('csv')} style={{ ...hoverTransition, display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer' }}>
+                  <button onClick={() => onExport('csv')} style={{ ...hoverTransition, display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer' }}>
                     <Download size={12} />CSV
                   </button>
-                  <button onClick={() => onExport('json')} style={{ ...hoverTransition, display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer' }}>
+                  <button onClick={() => onExport('json')} style={{ ...hoverTransition, display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer' }}>
                     <Download size={12} />JSON
                   </button>
                 </>
@@ -339,7 +346,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
             ...hoverTransition,
             padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
             textAlign: 'left' as const,
-            borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             color: active ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
             fontWeight: tokens.typography.fontWeight.semibold,
             fontSize: tokens.typography.fontSize.xs,
@@ -347,6 +354,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
             letterSpacing: '0.05em',
             whiteSpace: 'nowrap' as const,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             userSelect: 'none' as const,
           }}
         >
@@ -382,13 +390,13 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
           <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
             <thead>
               <tr>
-                <th style={{ width: 32, padding: `${tokens.spacing[3]}px ${tokens.spacing[2]}px`, borderBottom: `2px solid ${tokens.colors.neutral[200]}` }} />
+                <th style={{ width: 32, padding: `${tokens.spacing[3]}px ${tokens.spacing[2]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }} />
                 <SortHeader field="timestamp">Time</SortHeader>
                 <SortHeader field="userName">User</SortHeader>
                 <SortHeader field="actionType">Action</SortHeader>
                 <SortHeader field="entityType">Entity</SortHeader>
                 <SortHeader field="entityName">Name</SortHeader>
-                <th style={{ padding: `${tokens.spacing[3]}px`, borderBottom: `2px solid ${tokens.colors.neutral[200]}`, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>IP</th>
+                <th style={{ padding: `${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>IP</th>
               </tr>
             </thead>
             <tbody>
@@ -406,10 +414,11 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                       style={{
                         ...hoverTransition,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                       }}
                     >
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, textAlign: 'center' as const }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, textAlign: 'center' as const }}>
                         {hasDiff && (
                           <button
                             onClick={(e) => { e.stopPropagation(); toggleRow(event.id); }}
@@ -419,7 +428,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                           </button>
                         )}
                       </td>
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, whiteSpace: 'nowrap' as const }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, whiteSpace: 'nowrap' as const }}>
                         <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
                           <Clock size={12} color={tokens.colors.neutral[400]} />
                           <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
@@ -427,7 +436,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                           </span>
                         </Stack>
                       </td>
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}` }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                         <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
                           {event.userAvatar ? (
                             <img src={event.userAvatar} alt={event.userName} style={{ width: 24, height: 24, borderRadius: tokens.borderRadius.full, objectFit: 'cover' as const }} />
@@ -439,21 +448,21 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                           <span style={{ fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>{event.userName}</span>
                         </Stack>
                       </td>
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}` }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: aColor.bg, color: aColor.color }}>
                           {getActionLabel(event.actionType)}
                         </span>
                       </td>
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}` }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                         <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
                           <div style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: eColor.dot, flexShrink: 0 }} />
                           <span style={{ fontSize: tokens.typography.fontSize.xs, color: eColor.color, fontWeight: tokens.typography.fontWeight.medium }}>{event.entityType}</span>
                         </Stack>
                       </td>
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
                         {event.entityName}
                       </td>
-                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, fontFamily: 'monospace', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                      <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, fontFamily: 'monospace', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                         {event.ipAddress || '-'}
                       </td>
                     </tr>
@@ -461,17 +470,17 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                     {/* Expanded diff row */}
                     {isExpanded && hasDiff && event.beforeState && event.afterState && (
                       <tr>
-                        <td colSpan={7} style={{ padding: 0, borderBottom: `1px solid ${tokens.colors.neutral[100]}` }}>
+                        <td colSpan={7} style={{ padding: 0, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                           <div style={{ padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.neutral[50] }}>
-                            <div style={{ borderRadius: tokens.borderRadius.md, overflow: 'hidden', border: `1px solid ${tokens.colors.neutral[200]}` }}>
+                            <div style={{ borderRadius: tokens.borderRadius.md, overflow: 'hidden', border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                               {Object.keys({ ...event.beforeState, ...event.afterState }).map((key) => {
                                 const before = event.beforeState?.[key];
                                 const after = event.afterState?.[key];
                                 if (JSON.stringify(before) === JSON.stringify(after)) return null;
                                 return (
-                                  <div key={key} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', borderBottom: `1px solid ${tokens.colors.neutral[100]}`, fontSize: tokens.typography.fontSize.xs }}>
-                                    <div style={{ padding: `${tokens.spacing[2]}px`, backgroundColor: tokens.colors.neutral[50], fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], fontFamily: 'monospace', borderRight: `1px solid ${tokens.colors.neutral[200]}` }}>{key}</div>
-                                    <div style={{ padding: `${tokens.spacing[2]}px`, backgroundColor: tokens.colors.errorScale[50], color: tokens.colors.errorScale[700], fontFamily: 'monospace', borderRight: `1px solid ${tokens.colors.neutral[200]}`, wordBreak: 'break-all' as const }}>{before !== undefined ? String(before) : '(none)'}</div>
+                                  <div key={key} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, fontSize: tokens.typography.fontSize.xs }}>
+                                    <div style={{ padding: `${tokens.spacing[2]}px`, backgroundColor: tokens.colors.neutral[50], fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], fontFamily: 'monospace', borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>{key}</div>
+                                    <div style={{ padding: `${tokens.spacing[2]}px`, backgroundColor: tokens.colors.errorScale[50], color: tokens.colors.errorScale[700], fontFamily: 'monospace', borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, wordBreak: 'break-all' as const }}>{before !== undefined ? String(before) : '(none)'}</div>
                                     <div style={{ padding: `${tokens.spacing[2]}px`, backgroundColor: tokens.colors.successScale[50], color: tokens.colors.successScale[700], fontFamily: 'monospace', wordBreak: 'break-all' as const }}>{after !== undefined ? String(after) : '(none)'}</div>
                                   </div>
                                 );

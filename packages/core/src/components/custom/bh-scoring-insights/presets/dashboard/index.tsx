@@ -9,7 +9,16 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhScoringInsightsProps,
   ScoringKpi,
@@ -158,8 +167,8 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
       onChartTypeChange?.(type);
     }, [onChartTypeChange]);
 
-    const glassCard = createCardStyle(tokens, { glass: true, elevation: 'md' });
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'sm' });
+    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
 
     /* ---- Heatmap unique dimensions / jobs ---- */
     const heatmapDimensions = useMemo(() => [...new Set(heatmapData.map(c => c.dimension))], [heatmapData]);
@@ -255,6 +264,15 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600], fontFamily: 'inherit', backgroundColor: 'transparent',
                 }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
               />
               <span style={{ color: tokens.colors.neutral[400] }}>-</span>
               <input
@@ -264,6 +282,15 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 style={{
                   border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600], fontFamily: 'inherit', backgroundColor: 'transparent',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
             </Box>
@@ -276,6 +303,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               backgroundColor: filters.job ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
               display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.job ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
                 {filters.job ?? 'All Jobs'}
@@ -295,6 +323,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               backgroundColor: filters.stage ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
               display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.stage ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
                 {filters.stage ?? 'All Stages'}
@@ -314,6 +343,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               backgroundColor: filters.team ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
               display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.team ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
                 {filters.team ?? 'All Teams'}
@@ -333,6 +363,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
               backgroundColor: filters.rubric ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
               display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.rubric ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
                 {filters.rubric ?? 'All Rubrics'}
@@ -361,6 +392,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                     backgroundColor: isActive ? tokens.colors.common.white : 'transparent',
                     color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                     display: 'flex',
                     alignItems: 'center',
@@ -543,7 +575,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                               fontWeight: tokens.typography.fontWeight.semibold,
                               color: getScoreHeatText(score, tokens),
                               cursor: 'pointer',
-                              border: selectedDimension === dim ? `2px solid ${tokens.colors.primaryScale[400]}` : `1px solid ${getScoreHeatColor(score, tokens)}20`,
+                              border: selectedDimension === dim ? `2px solid ${tokens.colors.primaryScale[400]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getScoreHeatColor(score, tokens)}20`,
                               transition: `all ${tokens.motion.hover}`,
                               minHeight: tokens.spacing[8],
                               display: 'flex',
@@ -587,7 +619,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                             width: `${barWidth}%`,
                             borderRadius: tokens.borderRadius.sm,
                             backgroundColor: pct >= 30 ? tokens.colors.errorScale[400] : pct >= 15 ? tokens.colors.warningScale[400] : tokens.colors.neutral[300],
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }} />
                         </Box>
                         <Box style={{ width: 80, textAlign: 'right', flexShrink: 0 }}>
@@ -733,7 +765,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                             width: `${barWidth}%`,
                             borderRadius: tokens.borderRadius.sm,
                             backgroundColor: barColor,
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }} />
                         </Box>
                       </Box>
@@ -779,7 +811,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                               width: `${barWidth}%`,
                               borderRadius: tokens.borderRadius.sm,
                               backgroundColor: gapColor,
-                              transition: `width ${tokens.motion.hover}`,
+                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                               opacity: 0.7,
                             }} />
                           </Box>

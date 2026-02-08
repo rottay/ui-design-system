@@ -1,5 +1,6 @@
 import { createPreset } from '../../../factory';
 import type { LogoCloudProps } from '../../core';
+import { createEmptyStateStyle } from '../../../helpers';
 
 export const GridPreset = createPreset<LogoCloudProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -85,10 +86,12 @@ export const GridPreset = createPreset<LogoCloudProps>((context) => {
               onMouseEnter={(e) => {
                 e.currentTarget.style.filter = 'none';
                 e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.filter = 'grayscale(1)';
                 e.currentTarget.style.opacity = '0.6';
+                e.currentTarget.style.transform = 'none';
               }}
               onClick={item.onClick ? handleClick : undefined}
             >

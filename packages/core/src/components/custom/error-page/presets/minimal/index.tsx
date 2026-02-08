@@ -1,6 +1,10 @@
 import { createPreset } from '../../../factory';
 import type { ErrorPageProps, ErrorPageAction } from '../../core';
 import { ERROR_MESSAGES } from '../../core';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<ErrorPageProps>('minimal', (context) => {
   const { primitives, props, tokens } = context;

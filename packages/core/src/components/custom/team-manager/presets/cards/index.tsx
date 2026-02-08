@@ -3,9 +3,15 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { TeamManagerProps, TeamMember } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createHoverStyle,
+  getCardHoverShadow,
+} from '../../../helpers';
 
 export default createPreset<TeamManagerProps>((context: PresetContext<TeamManagerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -161,6 +167,15 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                   fontSize: tokens.typography.fontSize.sm,
                   outline: 'none',
                 }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
               />
             </Box>
             <Box style={{ width: '200px' }}>
@@ -186,6 +201,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                   fontSize: tokens.typography.fontSize.sm,
                   outline: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 {roles.map((role) => (
@@ -240,7 +256,8 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                 borderRadius: tokens.borderRadius.lg,
                 padding: tokens.spacing[4],
                 transition: `all ${tokens.motion.hover}`,
-                boxShadow: isHovered ? tokens.shadows.md : 'none',
+                boxShadow: isHovered ? getCardHoverShadow(tokens, 'sm') : 'none',
+                transform: isHovered ? tokens.motion.transform : 'none',
               }}
             >
               {/* Avatar and Name */}
@@ -285,7 +302,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                       height: '12px',
                       borderRadius: tokens.borderRadius.full,
                       backgroundColor: statusColors.bg,
-                      border: `2px solid ${tokens.colors.common.white}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                     }}
                   />
                 </Box>
@@ -330,7 +347,6 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                       justifyContent: 'center',
                       fontSize: tokens.typography.fontSize.lg,
                       color: tokens.colors.neutral[500],
-                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     •••
@@ -365,7 +381,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                             cursor: 'pointer',
                             fontSize: tokens.typography.fontSize.sm,
                             color: tokens.colors.neutral[900],
-                            transition: `background-color ${tokens.motion.hover}`,
+                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
@@ -392,7 +408,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                             cursor: 'pointer',
                             fontSize: tokens.typography.fontSize.sm,
                             color: tokens.colors.errorScale[600],
-                            transition: `background-color ${tokens.motion.hover}`,
+                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = tokens.colors.errorScale[50];

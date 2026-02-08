@@ -4,12 +4,15 @@
  */
 
 import { createPreset, PresetContext } from '../../../factory';
-import { createBadgeStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 import type { HeroSectionProps } from '../../core';
 
 export const SplitHeroSection = createPreset<HeroSectionProps>({
   name: 'HeroSection.Split',
-  render: ({ primitives, props, tokens }: PresetContext<HeroSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<HeroSectionProps>) => {
     const { Box, Stack, Button } = primitives;
     const { title, subtitle, description, actions = [], media, badge, className, style } = props;
 

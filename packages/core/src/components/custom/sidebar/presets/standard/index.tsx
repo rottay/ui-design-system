@@ -8,6 +8,11 @@
 import { useState, useCallback } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SidebarProps, SidebarItem } from '../../core';
+import {
+  createFilterPillStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const StandardSidebar = createPreset<SidebarProps>({
   name: 'Sidebar.Standard',
@@ -93,7 +98,6 @@ export const StandardSidebar = createPreset<SidebarProps>({
               color: isActive
                 ? tokens.colors.primaryScale[600]
                 : tokens.colors.neutral[700],
-              transition: `all ${tokens.motion.hover}`,
               fontWeight: isActive
                 ? tokens.typography.fontWeight.semibold
                 : tokens.typography.fontWeight.normal,
@@ -120,12 +124,12 @@ export const StandardSidebar = createPreset<SidebarProps>({
             {item.icon && (
               <Box
                 style={{
-                  fontSize: '18px',
+                  fontSize: tokens.typography.fontSize.lg,
                   flexShrink: 0,
                   display: 'flex',
                   alignItems: 'center',
                   color: isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[500],
-                  transition: `color ${tokens.motion.hover}`,
+                  transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 {item.icon}
@@ -149,9 +153,9 @@ export const StandardSidebar = createPreset<SidebarProps>({
             {hasChildren && (
               <Box
                 style={{
-                  fontSize: '12px',
+                  fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[400],
-                  transition: `transform ${tokens.motion.hover}`,
+                  transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
                   transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
                 }}
               >

@@ -9,6 +9,13 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { CrmTableProps, CrmColumnType, CompanySizeCategory } from '../../core';
 import { getSizeBadgeColors, getCrmBadgeColors, getValue, compareValues, categorizeSizeRange } from '../../core';
+import {
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const EnrichedCrmTable = createPreset<CrmTableProps>({
   name: 'CrmTable.Enriched',
@@ -195,6 +202,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                   backgroundColor: viewMode === 'table' ? tokens.colors.neutral[100] : 'transparent',
                   color: viewMode === 'table' ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                   fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   Table
                 </button>
@@ -203,6 +211,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                   backgroundColor: viewMode === 'graph' ? tokens.colors.neutral[100] : 'transparent',
                   color: viewMode === 'graph' ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                   fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   Graph
                 </button>
@@ -214,6 +223,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                   borderRadius: tokens.borderRadius.sm, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: 'transparent', color: tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   Columns ▼
                 </button>
@@ -240,6 +250,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                 backgroundColor: tokens.colors.primaryScale[50], color: tokens.colors.primaryScale[700],
                 fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 Enrich
               </button>
@@ -249,6 +260,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                 backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
                 fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
                 cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 Find People
               </button>
@@ -288,6 +300,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                     onContextMenu={(e) => handleContextMenu(e, idx)}
                     style={{
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       backgroundColor: selectedRows.includes(idx) ? tokens.colors.primaryScale[50] : 'transparent',
                     }}
                   >
@@ -305,7 +318,11 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                               type="text"
                               value={editValue}
                               onChange={(e) => setEditValue(e.target.value)}
-                              onBlur={commitEdit}
+                              onBlur={(e) => {
+                                commitEdit();
+                                e.currentTarget.style.boxShadow = 'none';
+                                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                              }}
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') commitEdit();
                                 if (e.key === 'Escape') cancelEdit();
@@ -314,12 +331,17 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                               style={{
                                 width: '100%',
                                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                                border: `2px solid ${tokens.colors.primaryScale[600]}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`,
                                 borderRadius: tokens.borderRadius.sm,
                                 fontSize: tokens.typography.fontSize.sm,
                                 outline: 'none',
                                 backgroundColor: tokens.colors.common.white,
                                 fontFamily: 'inherit',
+                              }}
+                            
+                              onFocus={(e) => {
+                                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                               }}
                             />
                           </td>
@@ -366,6 +388,7 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                     fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}>
                     {item.icon && <span>{item.icon}</span>}
                     {item.label}

@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle 
+} from '../../../helpers';
 import type { StatWidgetProps } from '../../core';
 
 export default createPreset<StatWidgetProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const {
     title,
@@ -22,7 +25,7 @@ export default createPreset<StatWidgetProps>((context) => {
   } = props;
   const [isHovered, setIsHovered] = useState(false);
 
-  const cardStyle = createCardStyle(tokens, { elevation: 'sm', interactive: !!onClick });
+  const cardStyle = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: 'sm', interactive: !!onClick }), [tokens, onClick]);
   const colorScale = tokens.colors[`${color}Scale`];
 
   // Ring calculations
@@ -65,6 +68,7 @@ export default createPreset<StatWidgetProps>((context) => {
         ...style,
       }}
     >
+      <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {/* Progress Ring */}
       <Box style={{ position: 'relative', flexShrink: 0 }}>
         <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>

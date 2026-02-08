@@ -4,6 +4,9 @@ import { useState, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { PermissionTreeProps } from '../../core';
 import { PERMISSION_TREE_DEFAULTS } from '../../core';
+import {
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const GridPermissionTree = createPreset<PermissionTreeProps>({
   name: 'PermissionTree.Grid',
@@ -85,6 +88,15 @@ export const GridPermissionTree = createPreset<PermissionTreeProps>({
               color: tokens.colors.neutral[900],
               outline: 'none',
               fontFamily: 'inherit',
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
         )}

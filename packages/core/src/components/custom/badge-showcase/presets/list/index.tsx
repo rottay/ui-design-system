@@ -70,9 +70,9 @@ export const ListPreset = createPreset<BadgeShowcaseProps>((context) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   borderRadius: tokens.borderRadius.full,
-                  border: `2px solid ${rarityColor}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rarityColor}`,
                   backgroundColor: tokens.colors.common.white,
-                  fontSize: '24px',
+                  fontSize: tokens.typography.fontSize['2xl'],
                   flexShrink: 0,
                 }}
               >

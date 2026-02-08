@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset } from '../../../factory';
 import { createSurfaceStyle } from '../../../helpers';
 import type { SkeletonPatternProps } from '../../core';
@@ -16,7 +16,7 @@ export default createPreset<SkeletonPatternProps>((context) => {
     background: tokens.colors.neutral[100],
   };
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   return (
     <>

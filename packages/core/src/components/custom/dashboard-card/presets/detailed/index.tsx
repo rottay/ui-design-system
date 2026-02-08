@@ -5,9 +5,14 @@
  * Value + trend + breakdown items with progress bars, engine-differentiated
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle,
+  createBadgeStyle,
+  createCardStyle,
+
+} from '../../../helpers';
 import type { DashboardCardProps } from '../../core';
 
 export const DetailedDashboardCard = createPreset<DashboardCardProps>({
@@ -35,12 +40,12 @@ export const DetailedDashboardCard = createPreset<DashboardCardProps>({
         ? tokens.colors.errorScale
         : tokens.colors.neutral;
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
       elevation: isHovered && onClick ? 'md' : 'sm',
       padding: tokens.spacing[5],
       interactive: !!onClick,
       glass: engine === 'modern',
-    });
+    }), [tokens, engine, onClick]);
 
     return (
       <div
@@ -54,6 +59,7 @@ export const DetailedDashboardCard = createPreset<DashboardCardProps>({
           ...style,
         }}
       >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
         {loading ? (
           <Box style={{ display: 'flex', justifyContent: 'center', padding: tokens.spacing[8] }}>
             <Spinner size="lg" />
@@ -184,7 +190,7 @@ export const DetailedDashboardCard = createPreset<DashboardCardProps>({
                               width: `${Math.min(100, Math.max(0, item.percentage))}%`,
                               backgroundColor: tokens.colors.primaryScale[500],
                               borderRadius: tokens.borderRadius.full,
-                              transition: `width ${tokens.motion.hover}`,
+                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                             }}
                           />
                         </Box>

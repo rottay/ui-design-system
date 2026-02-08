@@ -9,6 +9,11 @@ import { useState, useCallback } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SprintRetroProps, RetroNote, NoteColor } from '../../core';
 import { SPRINT_RETRO_DEFAULTS, getNoteColors } from '../../core';
+import {
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+} from '../../../helpers';
 
 const AVAILABLE_COLORS: NoteColor[] = ['yellow', 'green', 'pink', 'blue', 'orange', 'purple', 'white'];
 
@@ -158,7 +163,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.common.white,
                     fontWeight: tokens.typography.fontWeight.semibold,
-                    border: `2px solid ${tokens.colors.common.white}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                     marginLeft: idx > 0 ? '-6px' : '0',
                   }}
                 >
@@ -178,7 +183,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.neutral[500],
                     fontWeight: tokens.typography.fontWeight.semibold,
-                    border: `2px solid ${tokens.colors.common.white}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                     marginLeft: '-6px',
                   }}
                 >
@@ -198,6 +203,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Share
@@ -270,7 +276,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.neutral[400],
                       marginTop: `${tokens.spacing[2]}px`,
-                      lineHeight: 1.4,
+                      lineHeight: tokens.typography.lineHeight.normal,
                     }}
                   >
                     {column.subtitle}
@@ -330,7 +336,11 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                         <textarea
                           value={editingContent}
                           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingContent(e.target.value)}
-                          onBlur={handleSaveEdit}
+                          onBlur={(e) => {
+                            handleSaveEdit();
+                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                          }}
                           onKeyDown={(e: React.KeyboardEvent) => {
                             if (e.key === 'Enter' && !e.shiftKey) {
                               e.preventDefault();
@@ -352,6 +362,11 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                             resize: 'none',
                             outline: 'none',
                             color: tokens.colors.neutral[800],
+                          }}
+                        
+                          onFocus={(e) => {
+                            e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                            e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                           }}
                         />
                       ) : (
@@ -405,7 +420,6 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                               background: note.voted ? tokens.colors.primaryScale[50] : 'transparent',
                               color: note.voted ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                               fontSize: tokens.typography.fontSize.xs,
-                              transition: `all ${tokens.motion.hover}`,
                             }}
                           >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -493,6 +507,15 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                           outline: 'none',
                           marginBottom: `${tokens.spacing[2]}px`,
                         }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                        }}
                       />
                       {/* Color picker */}
                       <Box style={{ display: 'flex', gap: `${tokens.spacing[1]}px`, marginBottom: `${tokens.spacing[2]}px` }}>
@@ -506,7 +529,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                               borderRadius: tokens.borderRadius.full,
                               background: NOTE_COLOR_MAP[color].accent,
                               border: newNoteColor === color
-                                ? `2px solid ${tokens.colors.primaryScale[600]}`
+                                ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
                                 : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                               cursor: 'pointer',
                               transition: `all ${tokens.motion.hover}`,
@@ -526,6 +549,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                             borderRadius: tokens.borderRadius.md,
                             fontSize: tokens.typography.fontSize.xs,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             color: tokens.colors.neutral[500],
                             background: tokens.colors.neutral[100],
                           }}
@@ -539,6 +563,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                             borderRadius: tokens.borderRadius.md,
                             fontSize: tokens.typography.fontSize.xs,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             color: tokens.colors.common.white,
                             background: tokens.colors.primaryScale[600],
                             fontWeight: tokens.typography.fontWeight.medium,
@@ -558,7 +583,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
                         gap: `${tokens.spacing[2]}px`,
                         padding: `${tokens.spacing[2]}px`,
                         borderRadius: tokens.borderRadius.lg,
-                        border: `1px dashed ${tokens.colors.neutral[300]}`,
+                        border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                         color: tokens.colors.neutral[400],
                         fontSize: tokens.typography.fontSize.xs,
                         cursor: 'pointer',

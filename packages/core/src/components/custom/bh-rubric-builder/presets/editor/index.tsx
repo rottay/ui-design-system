@@ -9,10 +9,16 @@
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
-  createSurfaceStyle,
   createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
   getHoverTransform,
 } from '../../../helpers';
 import type {
@@ -225,9 +231,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const scorableColors = useMemo(() => getScorableTypeColors(tokens), [tokens]);
     const dimColors = useMemo(() => getDimensionColors(tokens), [tokens]);
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     /* ── Handlers ─────────────────────────────────────────────────── */
     const handleDimensionSelect = useCallback(
@@ -339,7 +345,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: tokens.spacing[4],
-            borderRadius: 0,
+            borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
           }}
@@ -365,6 +371,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 minWidth: 200,
               }}
               placeholder="Rubric Name"
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
 
             {/* Industry badge */}
@@ -438,6 +453,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               {localShowPreview ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -458,6 +474,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Save size={14} />
@@ -478,6 +495,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Send size={14} />
@@ -541,6 +559,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   <Plus size={12} />
@@ -713,7 +732,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               width: `${dim.weight * 100}%`,
                               backgroundColor: dimColors[idx % dimColors.length],
                               borderRadius: tokens.borderRadius.full,
-                              transition: `width ${tokens.motion.hover}`,
+                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                             }}
                           />
                         </div>
@@ -781,6 +800,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           border: 'none',
                           background: 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.md,
                         }}
@@ -950,6 +970,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               ? tokens.colors.primaryScale[50]
                               : 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
                         onClick={() => handleDimensionSelect(d.id)}
@@ -1066,6 +1087,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         padding: `${tokens.spacing[1]}px 0`,
                         width: '100%',
                       }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                      }}
                     />
                     {/* Min score */}
                     <input
@@ -1086,6 +1116,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       }}
                       min={0}
                       max={100}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                      }}
                     />
                   </div>
                 ))}
@@ -1290,7 +1329,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                                 width: `${sampleScore}%`,
                                 backgroundColor: matchingLevel?.color ?? tokens.colors.neutral[400],
                                 borderRadius: tokens.borderRadius.full,
-                                transition: `width ${tokens.motion.hover}`,
+                                transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                               }}
                             />
                           </div>

@@ -3,9 +3,12 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BannerAlertProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const standardPreset = createPreset<BannerAlertProps>((context: PresetContext<BannerAlertProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Button } = primitives;
 
   const {
@@ -99,7 +102,7 @@ export const standardPreset = createPreset<BannerAlertProps>((context: PresetCon
             alignItems: 'center',
             justifyContent: 'center',
             color: colors.icon,
-            fontSize: '20px',
+            fontSize: tokens.typography.fontSize.xl,
             flexShrink: 0,
           }}
         >
@@ -161,9 +164,11 @@ export const standardPreset = createPreset<BannerAlertProps>((context: PresetCon
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.opacity = '0.8';
+                  e.currentTarget.style.transform = tokens.motion.transform;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.transform = 'none';
                 }}
               >
                 {action.label}
@@ -190,13 +195,14 @@ export const standardPreset = createPreset<BannerAlertProps>((context: PresetCon
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: `all ${tokens.motion.hover}`,
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = tokens.colors.neutral[600];
+            e.currentTarget.style.transform = tokens.motion.transform;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = tokens.colors.neutral[400];
+            e.currentTarget.style.transform = 'none';
           }}
         >
           ×

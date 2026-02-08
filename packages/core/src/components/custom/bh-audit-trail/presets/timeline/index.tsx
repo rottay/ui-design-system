@@ -10,12 +10,17 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createEmptyStateStyle,
   createHoverStyle,
-  getHoverTransform,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -209,9 +214,9 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     const isGlass = engine === 'modern';
     const entityColors = getEntityTypeColors(tokens);
     const actionColors = getActionTypeColors(tokens);
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -364,13 +369,14 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.full,
                       border: isActive
-                        ? `1px solid ${eColor.border}`
-                        : `1px solid ${tokens.colors.neutral[200]}`,
+                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${eColor.border}`
+                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: isActive ? eColor.bg : tokens.colors.common.white,
                       color: isActive ? eColor.color : tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     {getEntityIcon(opt.value, 12)}
@@ -418,13 +424,14 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.full,
                       border: isActive
-                        ? `1px solid ${aColor.bg}`
-                        : `1px solid ${tokens.colors.neutral[200]}`,
+                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${aColor.bg}`
+                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: isActive ? aColor.bg : tokens.colors.common.white,
                       color: isActive ? aColor.color : tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     {getActionIcon(opt.value, 12)}
@@ -445,7 +452,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                   gap: tokens.spacing[1],
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                     liveMode
                       ? tokens.colors.successScale[300]
                       : tokens.colors.neutral[200]
@@ -459,6 +466,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <Radio
@@ -484,12 +492,13 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                       gap: tokens.spacing[1],
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `1px solid ${tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: tokens.colors.common.white,
                       color: tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <Download size={12} />
@@ -504,12 +513,13 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                       gap: tokens.spacing[1],
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `1px solid ${tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: tokens.colors.common.white,
                       color: tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <Download size={12} />
@@ -637,6 +647,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                       flex: 1,
                       borderLeft: `3px solid ${eColor.dot}`,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                     onClick={() => handleEventSelect(event.id)}
                   >
@@ -793,6 +804,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.medium,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                           }}
                         >
                           {isExpanded ? (
@@ -809,7 +821,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                               marginTop: tokens.spacing[2],
                               borderRadius: tokens.borderRadius.md,
                               overflow: 'hidden',
-                              border: `1px solid ${tokens.colors.neutral[200]}`,
+                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                             }}
                           >
                             {Object.keys({
@@ -827,7 +839,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                                   style={{
                                     display: 'grid',
                                     gridTemplateColumns: '120px 1fr 1fr',
-                                    borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                                     fontSize: tokens.typography.fontSize.xs,
                                   }}
                                 >
@@ -838,7 +850,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                                       fontWeight: tokens.typography.fontWeight.medium,
                                       color: tokens.colors.neutral[700],
                                       fontFamily: 'monospace',
-                                      borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+                                      borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                     }}
                                   >
                                     {key}
@@ -849,7 +861,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                                       backgroundColor: tokens.colors.errorScale[50],
                                       color: tokens.colors.errorScale[700],
                                       fontFamily: 'monospace',
-                                      borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+                                      borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                       wordBreak: 'break-all' as const,
                                     }}
                                   >
@@ -905,7 +917,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.4)',
+            backgroundColor: tokens.overlay?.light,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -986,6 +998,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                   borderRadius: tokens.borderRadius.md,
                   color: tokens.colors.neutral[600],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1083,7 +1096,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                   style={{
                     borderRadius: tokens.borderRadius.md,
                     overflow: 'hidden',
-                    border: `1px solid ${tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   }}
                 >
                   <div
@@ -1117,7 +1130,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                         style={{
                           display: 'grid',
                           gridTemplateColumns: '140px 1fr 1fr',
-                          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                           fontSize: tokens.typography.fontSize.xs,
                         }}
                       >
@@ -1128,7 +1141,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                             fontWeight: tokens.typography.fontWeight.medium,
                             color: tokens.colors.neutral[700],
                             backgroundColor: tokens.colors.neutral[50],
-                            borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+                            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           }}
                         >
                           {key}
@@ -1143,7 +1156,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                             backgroundColor: changed
                               ? tokens.colors.errorScale[50]
                               : tokens.colors.common.white,
-                            borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+                            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                             wordBreak: 'break-all' as const,
                           }}
                         >
@@ -1197,6 +1210,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                             padding: tokens.spacing[3],
                             backgroundColor: tokens.colors.common.white,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                           }}
                           onClick={() => handleEventSelect(relId)}
                         >

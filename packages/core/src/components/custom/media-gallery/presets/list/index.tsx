@@ -3,6 +3,10 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { MediaGalleryProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MediaGalleryProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -36,9 +40,11 @@ export default createPreset<MediaGalleryProps>((context) => {
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+            e.currentTarget.style.transform = tokens.motion.transform;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+            e.currentTarget.style.transform = 'none';
           }}
         >
           {/* Thumbnail */}
@@ -83,7 +89,7 @@ export default createPreset<MediaGalleryProps>((context) => {
                   width: '32px',
                   height: '32px',
                   borderRadius: tokens.borderRadius.full,
-                  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                  backgroundColor: tokens.overlay?.heavy,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

@@ -1,8 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { SettingsPageProps, SettingsSection } from '../../core';
 
 export default createPreset<SettingsPageProps>('sidebar-nav', (context) => {
@@ -35,7 +39,7 @@ export default createPreset<SettingsPageProps>('sidebar-nav', (context) => {
 
   const activeContent = sections.find((s: SettingsSection) => s.key === activeSection)?.content;
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   return (
     <Stack
@@ -102,7 +106,6 @@ export default createPreset<SettingsPageProps>('sidebar-nav', (context) => {
                     borderLeft: `3px solid ${
                       isActive ? tokens.colors.primaryScale[600] : 'transparent'
                     }`,
-                    transition: `all ${tokens.motion.hover}`,
                     display: 'flex',
                     alignItems: 'center',
                     gap: tokens.spacing[2],

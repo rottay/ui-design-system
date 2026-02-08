@@ -9,6 +9,11 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { ActivityMonitorProps, TimeRange, DetailTab } from '../../core';
 import { getLogStatusColors, getEvaluationColors, getTimeRangeOptions } from '../../core';
+import {
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const CompactActivityMonitor = createPreset<ActivityMonitorProps>({
   name: 'ActivityMonitor.Compact',
@@ -75,6 +80,7 @@ export const CompactActivityMonitor = createPreset<ActivityMonitorProps>({
                   backgroundColor: currentTimeRange === opt.value ? tokens.colors.neutral[100] : 'transparent',
                   color: currentTimeRange === opt.value ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                   fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   {opt.value}
                 </button>
@@ -85,6 +91,7 @@ export const CompactActivityMonitor = createPreset<ActivityMonitorProps>({
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, borderRadius: tokens.borderRadius.sm,
               backgroundColor: 'transparent', color: tokens.colors.neutral[600],
               fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               ↻
             </button>
@@ -109,7 +116,7 @@ export const CompactActivityMonitor = createPreset<ActivityMonitorProps>({
                       borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                       cursor: 'pointer',
                       backgroundColor: isExpanded ? tokens.colors.neutral[50] : 'transparent',
-                      transition: `background-color ${tokens.motion.hover}`,
+                      transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}>
                       <span style={{ fontSize: tokens.typography.fontSize.xs, transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)', transition: `all ${tokens.motion.hover}`, color: tokens.colors.neutral[400] }}>▶</span>
                       <span style={{ width: tokens.spacing[2], height: tokens.spacing[2], borderRadius: tokens.borderRadius.full, backgroundColor: sColors.dot, flexShrink: 0 }} />
@@ -130,6 +137,7 @@ export const CompactActivityMonitor = createPreset<ActivityMonitorProps>({
                               backgroundColor: activeDetailTab === tab.key ? tokens.colors.common.white : 'transparent',
                               color: activeDetailTab === tab.key ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                               fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                              transition: `all ${tokens.motion.hover}`,
                               boxShadow: activeDetailTab === tab.key ? tokens.shadows.sm : 'none',
                             }}>
                               {tab.label}

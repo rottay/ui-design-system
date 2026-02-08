@@ -6,14 +6,18 @@
  * metrics charts, alert feed, intervention controls, and recent completions.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import {useState, useEffect, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
   formatDistanceToNow,
 } from '../../../helpers';
 import type {
@@ -153,14 +157,14 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
 
     const isGlass = engine === 'modern';
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, {
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
       interactive: true,
-    });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -303,6 +307,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <RefreshCw
@@ -395,7 +400,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                       ? tokens.colors.primaryScale[50]
                       : tokens.colors.common.white,
                     border: isSelected
-                      ? `2px solid ${tokens.colors.primaryScale[300]}`
+                      ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                       : undefined,
                     borderLeftWidth: 4,
                     borderLeftStyle: 'solid' as const,
@@ -526,6 +531,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         <PhoneOff size={12} />
@@ -551,6 +557,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         <UserCheck size={12} />
@@ -673,6 +680,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         <RotateCcw size={10} />

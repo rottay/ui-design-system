@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { LeaderboardProps } from '../../core';
 import { createCardStyle } from '../../../helpers';
 
 export const Numbered = createPreset<LeaderboardProps>((context: PresetContext<LeaderboardProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { entries, title, maxEntries = 10, unit, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const displayEntries = entries.slice(0, maxEntries);
 

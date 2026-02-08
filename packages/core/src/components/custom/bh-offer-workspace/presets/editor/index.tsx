@@ -6,9 +6,16 @@
  * negotiation history, document management, and status pipeline tracker
  */
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhOfferWorkspaceProps,
   CompensationData,
@@ -76,9 +83,9 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const isGlass = engine === 'modern';
 
     /* ── Styles ──────────────────────────────────────────────── */
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const surfaceMd = createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const surfaceMd = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverLift = getHoverTransform(tokens);
     const statusConfig = getOfferStatusConfig(status);
 
@@ -112,19 +119,19 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       width: '100%',
       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
       borderRadius: tokens.borderRadius.md,
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       fontSize: tokens.typography.fontSize.sm,
       color: tokens.colors.neutral[900],
       backgroundColor: tokens.colors.common.white,
       outline: 'none',
-      transition: `border-color ${tokens.motion.hover}`,
+      transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
       boxSizing: 'border-box' as const,
     };
 
     const readOnlyStyle: React.CSSProperties = {
       ...inputStyle,
       backgroundColor: tokens.colors.neutral[50],
-      border: `1px solid ${tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       cursor: 'default',
     };
 
@@ -138,6 +145,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.semibold,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       display: 'inline-flex',
       alignItems: 'center',
       gap: tokens.spacing[2],
@@ -149,10 +157,11 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.medium,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       display: 'inline-flex',
       alignItems: 'center',
       gap: tokens.spacing[2],
@@ -167,6 +176,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
       fontSize: tokens.typography.fontSize.sm,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       border: 'none',
       display: 'flex',
       alignItems: 'center',
@@ -196,7 +206,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
 
     /* ── Header ──────────────────────────────────────────────── */
     const renderHeader = () => {
-      const badgeStyle = createBadgeStyle(tokens, statusConfig.color);
+      const badgeStyle = useMemo(() => createBadgeStyle(tokens, statusConfig.color), [tokens]);
 
       return (
         <div style={{
@@ -647,7 +657,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                     backgroundColor: item.included
                       ? tokens.colors.successScale[50]
                       : tokens.colors.neutral[50],
-                    border: `1px solid ${item.included
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${item.included
                       ? tokens.colors.successScale[200]
                       : tokens.colors.neutral[200]}`,
                   }}
@@ -667,6 +677,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: 0,
                         display: 'flex',
                         alignItems: 'center',
@@ -898,7 +909,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                         flex: 1,
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
                         borderRadius: tokens.borderRadius.md,
-                        border: `1px solid ${employmentTerms.workArrangement === arr
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${employmentTerms.workArrangement === arr
                           ? tokens.colors.primaryScale[300]
                           : tokens.colors.neutral[200]}`,
                         backgroundColor: employmentTerms.workArrangement === arr
@@ -910,6 +921,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                         fontSize: tokens.typography.fontSize.xs,
                         fontWeight: tokens.typography.fontWeight.medium,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         textTransform: 'capitalize' as const,
                       }}
                     >
@@ -985,7 +997,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                             height: 32,
                             borderRadius: tokens.borderRadius.full,
                             objectFit: 'cover' as const,
-                            border: `2px solid ${scale[200]}`,
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scale[200]}`,
                           }}
                         />
                       ) : (
@@ -1044,7 +1056,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                         backgroundColor: approvalStatus[idx + 1].status !== 'pending'
                           ? tokens.colors.successScale[300]
                           : tokens.colors.neutral[200],
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }} />
                     )}
                   </div>
@@ -1141,7 +1153,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
                   backgroundColor: tokens.colors.warningScale[50],
-                  border: `1px solid ${tokens.colors.warningScale[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                 }}>
                   <p style={{
                     fontSize: tokens.typography.fontSize.xs,
@@ -1192,6 +1204,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 ...cardBase,
                 ...hoverTransition,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 <div style={{
                   display: 'flex',
@@ -1246,6 +1259,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 borderRadius: tokens.borderRadius.lg,
                 border: `2px dashed ${tokens.colors.neutral[300]}`,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 minHeight: 100,
               }}>
                 <Upload size={24} color={tokens.colors.neutral[400]} />
@@ -1286,7 +1300,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 backgroundColor: localSignatureStatus.companySigned
                   ? tokens.colors.successScale[50]
                   : tokens.colors.neutral[50],
-                border: `1px solid ${localSignatureStatus.companySigned
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${localSignatureStatus.companySigned
                   ? tokens.colors.successScale[200]
                   : tokens.colors.neutral[200]}`,
               }}>
@@ -1318,7 +1332,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 backgroundColor: localSignatureStatus.candidateSigned
                   ? tokens.colors.successScale[50]
                   : tokens.colors.neutral[50],
-                border: `1px solid ${localSignatureStatus.candidateSigned
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${localSignatureStatus.candidateSigned
                   ? tokens.colors.successScale[200]
                   : tokens.colors.neutral[200]}`,
               }}>
@@ -1365,7 +1379,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             padding: `${tokens.spacing[3]}px`,
             borderRadius: tokens.borderRadius.md,
             backgroundColor: tokens.colors.infoScale[50],
-            border: `1px solid ${tokens.colors.infoScale[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
           }}>
             <input type="checkbox" style={{
               width: 18,
@@ -1486,7 +1500,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                         backgroundColor: isPast
                           ? tokens.colors.successScale[300]
                           : tokens.colors.neutral[200],
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                         marginLeft: tokens.spacing[2],
                         marginRight: tokens.spacing[2],
                       }} />
@@ -1503,7 +1517,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
                 backgroundColor: tokens.colors.warningScale[50],
-                border: `1px solid ${tokens.colors.warningScale[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing[2],

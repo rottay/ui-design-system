@@ -6,9 +6,17 @@
  * with a streamlined single-card layout and fewer fields
  */
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhTenantSetupProps,
   InvitationItem,
@@ -52,9 +60,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
     const [isComplete, setIsComplete] = useState(false);
 
     const isGlass = engine === 'modern';
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const surfaceMd = createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const surfaceMd = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...surfaceMd,
@@ -71,12 +79,12 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
       width: '100%',
       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
       borderRadius: tokens.borderRadius.md,
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       fontSize: tokens.typography.fontSize.sm,
       color: tokens.colors.neutral[900],
       backgroundColor: tokens.colors.common.white,
       outline: 'none',
-      transition: `border-color ${tokens.motion.hover}`,
+      transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
       boxSizing: 'border-box' as const,
     };
 
@@ -107,6 +115,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.semibold,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       display: 'inline-flex',
       alignItems: 'center',
       gap: tokens.spacing[2],
@@ -118,10 +127,11 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.medium,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       display: 'inline-flex',
       alignItems: 'center',
       gap: tokens.spacing[2],
@@ -177,7 +187,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
                   : isPast
                     ? tokens.colors.successScale[50]
                     : tokens.colors.neutral[50],
-                border: `1px solid ${isCurrent
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isCurrent
                   ? tokens.colors.primaryScale[300]
                   : isPast
                     ? tokens.colors.successScale[300]
@@ -304,7 +314,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
                       flex: 1,
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `2px solid ${isSelected
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected
                         ? tokens.colors.primaryScale[400]
                         : tokens.colors.neutral[200]}`,
                       backgroundColor: isSelected
@@ -318,6 +328,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
                         ? tokens.typography.fontWeight.semibold
                         : tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       textTransform: 'capitalize' as const,
                     }}
                   >
@@ -479,6 +490,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   padding: tokens.spacing[2],
                   display: 'flex',
                   marginBottom: tokens.spacing[1],
@@ -621,7 +633,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-            borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
           }}>
             <button

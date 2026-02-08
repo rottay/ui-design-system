@@ -9,10 +9,13 @@
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
-  createSurfaceStyle,
   createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
   createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
   getHoverTransform,
 } from '../../../helpers';
 import type {
@@ -155,8 +158,8 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
     const statusColors = useMemo(() => getStatusColors(tokens), [tokens]);
     const valColors = useMemo(() => getValidationStatusColors(tokens), [tokens]);
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     /* ── Handlers ─────────────────────────────────────────────────── */
     const toggleStageExpand = useCallback((stageId: string) => {
@@ -213,7 +216,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
         <div
           style={{
             ...cardBase,
-            borderRadius: 0,
+            borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             padding: tokens.spacing[4],
             display: 'flex',
@@ -243,6 +246,15 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 minWidth: 200,
               }}
               placeholder="Template Name"
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
             <span style={{ ...createBadgeStyle(tokens, 'primary') }}>{category}</span>
             <span style={{ ...createBadgeStyle(tokens, 'secondary') }}>{industry}</span>
@@ -292,6 +304,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Save size={14} />
@@ -312,6 +325,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Send size={14} />
@@ -363,6 +377,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <Plus size={12} />
@@ -394,6 +409,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                         gap: tokens.spacing[3],
                         padding: tokens.spacing[3],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                       }}
                     >
                       {isExpanded ? (
@@ -482,6 +498,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           border: 'none',
                           background: 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.md,
                         }}
@@ -611,6 +628,15 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                               outline: 'none',
                             }}
                             min={1}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                           />
                         </div>
 
@@ -644,6 +670,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                                   : tokens.colors.neutral[300],
                                 position: 'relative' as const,
                                 cursor: 'pointer',
+                                transition: `all ${tokens.motion.hover}`,
                                 ...hoverStyle,
                               }}
                               onClick={() => {
@@ -660,7 +687,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                                   position: 'absolute' as const,
                                   top: 2,
                                   left: stage.isKnockout ? 18 : 2,
-                                  transition: `left ${tokens.motion.hover}`,
+                                  transition: `left ${tokens.transitions?.normal || tokens.motion.hover}`,
                                   boxShadow: tokens.shadows.sm,
                                 }}
                               />
@@ -695,6 +722,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 justifyContent: 'space-between',
                 marginBottom: tokens.spacing[3],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -723,6 +751,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   <Plus size={12} />
@@ -797,6 +826,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           border: 'none',
                           background: 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.md,
                         }}
@@ -820,6 +850,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 justifyContent: 'space-between',
                 marginBottom: tokens.spacing[3],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -909,6 +940,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 justifyContent: 'space-between',
                 marginBottom: tokens.spacing[3],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -1003,6 +1035,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           color: tokens.colors.neutral[600],
                           fontSize: tokens.typography.fontSize.xs,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           flexShrink: 0,
                         }}
                       >

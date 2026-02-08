@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { ProductGalleryProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<ProductGalleryProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -55,7 +58,7 @@ export default createPreset<ProductGalleryProps>((context) => {
                 backgroundPosition: 'center',
                 backgroundColor: tokens.colors.neutral[100],
                 cursor: 'pointer',
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   selectedIndex === idx ? tokens.colors.primaryScale[600] : tokens.colors.neutral[200]
                 }`,
                 transition: `all ${tokens.motion.hover}`,
@@ -63,10 +66,12 @@ export default createPreset<ProductGalleryProps>((context) => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 if (selectedIndex !== idx) {
                   e.currentTarget.style.opacity = '0.6';
+                  e.currentTarget.style.transform = 'none';
                 }
               }}
             />

@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { ProductGalleryProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<ProductGalleryProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -54,22 +57,23 @@ export default createPreset<ProductGalleryProps>((context) => {
                 width: '40px',
                 height: '40px',
                 borderRadius: tokens.borderRadius.full,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                backgroundColor: tokens.overlay?.white || 'rgba(255,255,255,0.9)',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '20px',
+                fontSize: tokens.typography.fontSize.xl,
                 color: tokens.colors.neutral[700],
                 boxShadow: tokens.shadows.md,
-                transition: `all ${tokens.motion.hover}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                e.currentTarget.style.backgroundColor = tokens.overlay?.white || 'rgba(255,255,255,0.9)';
+                e.currentTarget.style.transform = 'none';
               }}
             >
               ‹
@@ -85,22 +89,21 @@ export default createPreset<ProductGalleryProps>((context) => {
                 width: '40px',
                 height: '40px',
                 borderRadius: tokens.borderRadius.full,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                backgroundColor: tokens.overlay?.white || 'rgba(255,255,255,0.9)',
                 border: 'none',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '20px',
+                fontSize: tokens.typography.fontSize.xl,
                 color: tokens.colors.neutral[700],
                 boxShadow: tokens.shadows.md,
-                transition: `all ${tokens.motion.hover}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.common.white;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                e.currentTarget.style.backgroundColor = tokens.overlay?.white || 'rgba(255,255,255,0.9)';
               }}
             >
               ›
@@ -129,7 +132,7 @@ export default createPreset<ProductGalleryProps>((context) => {
                   height: '8px',
                   borderRadius: tokens.borderRadius.full,
                   backgroundColor:
-                    selectedIndex === idx ? tokens.colors.common.white : 'rgba(255, 255, 255, 0.5)',
+                    selectedIndex === idx ? tokens.colors.common.white : tokens.overlay?.whiteMedium,
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                 }}
@@ -162,7 +165,7 @@ export default createPreset<ProductGalleryProps>((context) => {
                 backgroundPosition: 'center',
                 backgroundColor: tokens.colors.neutral[100],
                 cursor: 'pointer',
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   selectedIndex === idx ? tokens.colors.primaryScale[600] : tokens.colors.neutral[200]
                 }`,
                 transition: `all ${tokens.motion.hover}`,
@@ -170,10 +173,12 @@ export default createPreset<ProductGalleryProps>((context) => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 if (selectedIndex !== idx) {
                   e.currentTarget.style.opacity = '0.6';
+                  e.currentTarget.style.transform = 'none';
                 }
               }}
             />

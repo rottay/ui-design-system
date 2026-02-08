@@ -9,6 +9,16 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { FileManagerProps, FileItem, FileManagerViewMode } from '../../core';
 import { FILE_MANAGER_DEFAULTS } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const StandardFileManager = createPreset<FileManagerProps>({
   name: 'FileManager.Standard',
@@ -237,6 +247,7 @@ export const StandardFileManager = createPreset<FileManagerProps>({
                 color: item.danger ? tokens.colors.errorScale[600] : tokens.colors.neutral[700],
                 fontSize: tokens.typography.fontSize.sm,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 textAlign: 'left',
                 fontFamily: 'inherit',
               }}
@@ -306,7 +317,16 @@ export const StandardFileManager = createPreset<FileManagerProps>({
           {/* Search Bar */}
           <Box style={{ padding: `${tokens.spacing[3]} ${tokens.spacing[5]}`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
             <Box style={{ flex: 1, maxWidth: 560, position: 'relative' }}>
-              <input type="text" placeholder={searchPlaceholder} value={searchQuery} onChange={(e) => handleSearch(e.target.value)} style={{ width: '100%', padding: `${tokens.spacing[2]} ${tokens.spacing[3]} ${tokens.spacing[2]} ${tokens.spacing[9]}`, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, outline: 'none', backgroundColor: tokens.colors.neutral[50], color: tokens.colors.neutral[900] }} />
+              <input type="text" placeholder={searchPlaceholder} value={searchQuery} onChange={(e) => handleSearch(e.target.value)} style={{ width: '100%', padding: `${tokens.spacing[2]} ${tokens.spacing[3]} ${tokens.spacing[2]} ${tokens.spacing[9]}`, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, outline: 'none', backgroundColor: tokens.colors.neutral[50], color: tokens.colors.neutral[900] }} 
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
+              />
             </Box>
             {headerRight && <Box style={{ marginLeft: 'auto' }}>{headerRight}</Box>}
           </Box>
@@ -409,7 +429,11 @@ export const StandardFileManager = createPreset<FileManagerProps>({
                             autoFocus
                             value={renameValue}
                             onChange={(e) => setRenameValue(e.target.value)}
-                            onBlur={commitRename}
+                            onBlur={(e) => {
+                              commitRename();
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                             onKeyDown={(e) => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') { setRenamingFileId(null); setRenameValue(''); } }}
                             onClick={(e) => e.stopPropagation()}
                             style={{
@@ -422,6 +446,11 @@ export const StandardFileManager = createPreset<FileManagerProps>({
                               padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`,
                               outline: 'none',
                               fontFamily: 'inherit',
+                            }}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                             }}
                           />
                         ) : (
@@ -466,7 +495,7 @@ export const StandardFileManager = createPreset<FileManagerProps>({
                         alignItems: 'center',
                         backgroundColor: isDragTarget ? tokens.colors.primaryScale[50] : 'transparent',
                         opacity: isDragged ? 0.4 : 1,
-                        borderLeft: isDragTarget ? `2px solid ${tokens.colors.primaryScale[400]}` : '2px solid transparent',
+                        borderLeft: isDragTarget ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                       }}
                     >
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], overflow: 'hidden' }}>
@@ -476,7 +505,11 @@ export const StandardFileManager = createPreset<FileManagerProps>({
                             autoFocus
                             value={renameValue}
                             onChange={(e) => setRenameValue(e.target.value)}
-                            onBlur={commitRename}
+                            onBlur={(e) => {
+                              commitRename();
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                             onKeyDown={(e) => { if (e.key === 'Enter') commitRename(); if (e.key === 'Escape') { setRenamingFileId(null); setRenameValue(''); } }}
                             onClick={(e) => e.stopPropagation()}
                             style={{
@@ -489,6 +522,11 @@ export const StandardFileManager = createPreset<FileManagerProps>({
                               padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`,
                               outline: 'none',
                               fontFamily: 'inherit',
+                            }}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                             }}
                           />
                         ) : (

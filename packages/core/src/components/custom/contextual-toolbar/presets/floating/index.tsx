@@ -1,6 +1,9 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { ContextualToolbarProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const FloatingPreset = createPreset<ContextualToolbarProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -65,11 +68,13 @@ export const FloatingPreset = createPreset<ContextualToolbarProps>((context) => 
               onMouseEnter={(e) => {
                 if (!action.active) {
                   e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                  e.currentTarget.style.transform = tokens.motion.transform;
                 }
               }}
               onMouseLeave={(e) => {
                 if (!action.active) {
                   e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.transform = 'none';
                 }
               }}
             >

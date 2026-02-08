@@ -6,9 +6,12 @@
  * Modern engine gets glass effect on dropdown panel.
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { UserMenuProps } from '../../core';
 
 export const AvatarUserMenu = createPreset<UserMenuProps>({
@@ -51,10 +54,10 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
       });
     }
 
-    const dropdownSurface = createSurfaceStyle(tokens, {
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'lg',
       glass: engine === 'modern',
-    });
+    }), [tokens, engine]);
 
     return (
       <div
@@ -159,7 +162,6 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
                       gap: tokens.spacing[2],
                       color: item.danger ? tokens.colors.errorScale[600] : undefined,
                       backgroundColor: isHovered ? tokens.colors.neutral[100] : 'transparent',
-                      transition: `all ${tokens.motion.hover}`,
                     }}
                     onMouseEnter={() => setHoveredKey(item.key)}
                     onMouseLeave={() => setHoveredKey(null)}

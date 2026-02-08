@@ -5,9 +5,11 @@
  * Value + trend indicator + description, engine-differentiated
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle, createBadgeStyle 
+} from '../../../helpers';
 import type { DashboardCardProps } from '../../core';
 
 export const TrendingDashboardCard = createPreset<DashboardCardProps>({
@@ -36,12 +38,12 @@ export const TrendingDashboardCard = createPreset<DashboardCardProps>({
       : trend?.direction === 'down' ? '↓'
       : '→';
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
       elevation: isHovered && onClick ? 'md' : 'sm',
       padding: tokens.spacing[5],
       interactive: !!onClick,
       glass: engine === 'modern',
-    });
+    }), [tokens, engine, onClick]);
 
     return (
       <div
@@ -55,6 +57,7 @@ export const TrendingDashboardCard = createPreset<DashboardCardProps>({
           ...style,
         }}
       >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
         {loading ? (
           <Box style={{ display: 'flex', justifyContent: 'center', padding: tokens.spacing[6] }}>
             <Spinner size="lg" />
@@ -75,7 +78,7 @@ export const TrendingDashboardCard = createPreset<DashboardCardProps>({
                 <Box
                   style={{
                     color: scale[500],
-                    fontSize: '24px',
+                    fontSize: tokens.typography.fontSize['2xl'],
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

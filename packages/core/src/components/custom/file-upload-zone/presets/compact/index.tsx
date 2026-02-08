@@ -3,6 +3,11 @@
 import { useState, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { FileUploadZoneProps, UploadFile } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 const formatSize = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`;
@@ -11,7 +16,7 @@ const formatSize = (bytes: number) => {
 };
 
 export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUploadZoneProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -106,7 +111,7 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
             alignItems: 'center',
             gap: tokens.spacing[4],
             padding: tokens.spacing[4],
-            border: `1px dashed ${isDragging ? tokens.colors.primaryScale[400] : tokens.colors.neutral[300]}`,
+            border: `${tokens.surface.borderWidth} dashed ${isDragging ? tokens.colors.primaryScale[400] : tokens.colors.neutral[300]}`,
             borderRadius: tokens.borderRadius.md,
             backgroundColor: isDragging ? tokens.colors.primaryScale[50] : tokens.colors.neutral[50],
             transition: `all ${tokens.motion.hover}`,
@@ -118,7 +123,7 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
           {icon && (
             <Box
               style={{
-                fontSize: '24px',
+                fontSize: tokens.typography.fontSize['2xl'],
                 color: isDragging ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
               }}
             >
@@ -165,9 +170,11 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[50];
+              e.currentTarget.style.transform = tokens.motion.transform;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+              e.currentTarget.style.transform = 'none';
             }}
           >
             Browse
@@ -264,7 +271,7 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
                           height: '100%',
                           width: `${file.progress}%`,
                           backgroundColor: tokens.colors.primaryScale[500],
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }}
                       />
                     </Box>
@@ -297,9 +304,11 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[50];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     Retry
@@ -320,16 +329,17 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: tokens.typography.fontSize.md,
-                      transition: `all ${tokens.motion.hover}`,
                       flexShrink: 0,
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.color = tokens.colors.errorScale[600];
                       e.currentTarget.style.backgroundColor = tokens.colors.errorScale[50];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = tokens.colors.neutral[500];
                       e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     ×

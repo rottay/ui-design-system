@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { ImportExportPanelProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const Compact = createPreset<ImportExportPanelProps>((context: PresetContext<ImportExportPanelProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { mode, onImport, onExport, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   return (
     <Box style={cardStyle} className={className}>
@@ -45,6 +48,7 @@ export const Compact = createPreset<ImportExportPanelProps>((context: PresetCont
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             Import
@@ -63,6 +67,7 @@ export const Compact = createPreset<ImportExportPanelProps>((context: PresetCont
             fontSize: tokens.typography.fontSize.sm,
             fontWeight: tokens.typography.fontWeight.medium,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
           }}
         >
           Export Data

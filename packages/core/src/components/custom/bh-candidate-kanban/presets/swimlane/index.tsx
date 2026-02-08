@@ -8,7 +8,19 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCandidateKanbanProps,
   KanbanCandidate,
@@ -259,9 +271,9 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     }, [groupBy, filteredCandidates, collapsedLanes, tokens]);
 
     /* -- Styles ---------------------------------------------------------- */
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const surfaceBase = createSurfaceStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const surfaceBase = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const hasActiveFilters = !!(
@@ -291,7 +303,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
         <Box
           style={{
             ...surfaceBase,
-            borderRadius: 0,
+            borderRadius: tokens.borderRadius.none,
             padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
             backgroundColor: tokens.colors.common.white,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -387,6 +399,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     padding: 2,
                     color: tokens.colors.neutral[400],
                     display: 'flex',
@@ -498,6 +511,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     padding: 0,
                     color: tokens.colors.primaryScale[500],
                     display: 'flex',
@@ -582,7 +596,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                       borderRadius: tokens.borderRadius.full,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      border: active ? `1px solid ${srcConfig.text}` : `1px solid ${tokens.colors.neutral[200]}`,
+                      border: active ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${srcConfig.text}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: active ? srcConfig.bg : tokens.colors.common.white,
                       color: active ? srcConfig.text : tokens.colors.neutral[500],
                       cursor: 'pointer',
@@ -616,7 +630,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                       borderRadius: tokens.borderRadius.full,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      border: active ? `1px solid ${aiColor}` : `1px solid ${tokens.colors.neutral[200]}`,
+                      border: active ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${aiColor}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: active ? `${aiColor}15` : tokens.colors.common.white,
                       color: active ? aiColor : tokens.colors.neutral[500],
                       cursor: 'pointer',
@@ -664,7 +678,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             alignItems: 'center',
             padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
             backgroundColor: tokens.colors.common.white,
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             flexShrink: 0,
             ...(isModern && tokens.glass ? {
               backdropFilter: tokens.glass.blurSm,
@@ -754,7 +768,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
               <Box
                 key={group.key}
                 style={{
-                  borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                  borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 }}
               >
                 {/* Lane header */}
@@ -913,7 +927,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                   style={{
                                     padding: tokens.spacing[2],
                                     borderRadius: tokens.borderRadius.md,
-                                    border: `1px solid ${isSelected ? tokens.colors.primaryScale[400] : isBulkSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[400] : isBulkSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                                     backgroundColor: isSelected
                                       ? tokens.colors.primaryScale[50]
                                       : isBulkSelected
@@ -943,6 +957,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                           border: 'none',
                                           padding: 0,
                                           cursor: 'pointer',
+                                          transition: `all ${tokens.motion.hover}`,
                                           color: isBulkSelected ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                                           flexShrink: 0,
                                         }}
@@ -962,7 +977,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        fontSize: 10,
+                                        fontSize: tokens.typography.fontSize.xs,
                                         fontWeight: tokens.typography.fontWeight.semibold,
                                         overflow: 'hidden',
                                         flexShrink: 0,
@@ -1053,7 +1068,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                         display: 'inline-flex',
                                         alignItems: 'center',
                                         gap: 2,
-                                        fontSize: 10,
+                                        fontSize: tokens.typography.fontSize.xs,
                                         color: tokens.colors.neutral[400],
                                       }}
                                     >
@@ -1069,7 +1084,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                           alignItems: 'center',
                                           padding: `0 ${tokens.spacing[1]}px`,
                                           borderRadius: tokens.borderRadius.full,
-                                          fontSize: 9,
+                                          fontSize: tokens.typography.fontSize.xs,
                                           backgroundColor: tokens.colors.neutral[100],
                                           color: tokens.colors.neutral[500],
                                           maxWidth: 60,
@@ -1108,7 +1123,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                             borderRadius: tokens.borderRadius.md,
                                             backgroundColor: tokens.colors.neutral[900],
                                             color: tokens.colors.common.white,
-                                            fontSize: 10,
+                                            fontSize: tokens.typography.fontSize.xs,
                                             fontWeight: tokens.typography.fontWeight.medium,
                                             whiteSpace: 'nowrap' as const,
                                             zIndex: 10,
@@ -1143,10 +1158,11 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                           width: 20,
                                           height: 20,
                                           borderRadius: tokens.borderRadius.sm,
-                                          border: `1px solid ${tokens.colors.neutral[200]}`,
+                                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                           backgroundColor: tokens.colors.common.white,
                                           color: tokens.colors.primaryScale[600],
                                           cursor: 'pointer',
+                                          transition: `all ${tokens.motion.hover}`,
                                           padding: 0,
                                         }}
                                       >
@@ -1162,10 +1178,11 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                           width: 20,
                                           height: 20,
                                           borderRadius: tokens.borderRadius.sm,
-                                          border: `1px solid ${tokens.colors.neutral[200]}`,
+                                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                           backgroundColor: tokens.colors.common.white,
                                           color: tokens.colors.infoScale[600],
                                           cursor: 'pointer',
+                                          transition: `all ${tokens.motion.hover}`,
                                           padding: 0,
                                         }}
                                       >
@@ -1181,10 +1198,11 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                           width: 20,
                                           height: 20,
                                           borderRadius: tokens.borderRadius.sm,
-                                          border: `1px solid ${tokens.colors.neutral[200]}`,
+                                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                           backgroundColor: tokens.colors.common.white,
                                           color: tokens.colors.errorScale[600],
                                           cursor: 'pointer',
+                                          transition: `all ${tokens.motion.hover}`,
                                           padding: 0,
                                         }}
                                       >
@@ -1200,10 +1218,11 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                           width: 20,
                                           height: 20,
                                           borderRadius: tokens.borderRadius.sm,
-                                          border: `1px solid ${tokens.colors.neutral[200]}`,
+                                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                           backgroundColor: tokens.colors.common.white,
                                           color: tokens.colors.warningScale[600],
                                           cursor: 'pointer',
+                                          transition: `all ${tokens.motion.hover}`,
                                           padding: 0,
                                         }}
                                       >

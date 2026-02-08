@@ -7,7 +7,13 @@
 
 import { useState, useMemo, useCallback, type ReactNode, type ChangeEvent, type MouseEvent as ReactMouseEvent } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export interface FilterOption {
@@ -248,7 +254,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
       [data, selectedKeys, getRowKey]
     );
 
-    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens, engine]);
 
     // Styling
     const cellPadding = dense
@@ -259,7 +265,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
 
     const headerCellStyle = {
       padding: cellPadding,
-      fontWeight: 600,
+      fontWeight: tokens.typography.fontWeight.semibold,
       fontSize: tokens.typography.fontSize.xs,
       color: tokens.colors.neutral[500],
       borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -302,7 +308,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
               {title && (
                 <span style={{
                   fontSize: tokens.typography.fontSize.lg,
-                  fontWeight: 600,
+                  fontWeight: tokens.typography.fontWeight.semibold,
                   color: tokens.colors.neutral[900]
                 }}>
                   {title}
@@ -339,7 +345,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                     <span style={{
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[500],
-                      fontWeight: 500
+                      fontWeight: tokens.typography.fontWeight.medium
                     }}>
                       {filterLabel}
                     </span>
@@ -354,7 +360,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                         borderRadius: '16px',
                         padding: `${tokens.spacing[1]} ${tokens.spacing[3]}`,
                         fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: 500,
+                        fontWeight: tokens.typography.fontWeight.medium,
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: tokens.spacing[1],
@@ -448,7 +454,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <p style={{ margin: 0, fontWeight: 500 }}>{emptyText}</p>
+                  <p style={{ margin: 0, fontWeight: tokens.typography.fontWeight.medium }}>{emptyText}</p>
                   {searchQuery && (
                     <p style={{ margin: `${tokens.spacing[2]} 0 0`, fontSize: tokens.typography.fontSize.sm }}>
                       Try adjusting your search or filter criteria
@@ -545,6 +551,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                           onMouseEnter={(e) => {
                             if (!isSelected) {
                               e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                              e.currentTarget.style.transform = tokens.motion.transform;
                             }
                           }}
                           onMouseLeave={(e) => {
@@ -687,6 +694,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
                     borderRadius: '4px',
                     fontSize: tokens.typography.fontSize.sm,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     backgroundColor: tokens.colors.common.white,
                   }}
                 >

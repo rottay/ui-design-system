@@ -9,11 +9,17 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SchedulePickerProps } from '../../core';
 import { groupSlotsByPeriod, getSlotColors } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const CompactSchedulePicker = createPreset<SchedulePickerProps>({
   name: 'SchedulePicker.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<SchedulePickerProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const slotColors = getSlotColors(tokens);
 
     const now = new Date();
@@ -75,8 +81,7 @@ export const CompactSchedulePicker = createPreset<SchedulePickerProps>({
     const periodLabels = { morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening' } as const;
 
     return (
-      <Box className={className} style={{
-        boxShadow: tokens.shadows.md, padding: tokens.spacing[4], backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, maxWidth: 480, ...style }}>
+      <Box className={className} style={{ ...createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), ...style }}>
         {/* Header */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
           <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>{title}</h3>
@@ -89,6 +94,7 @@ export const CompactSchedulePicker = createPreset<SchedulePickerProps>({
                 backgroundColor: selectedDuration === d.minutes ? tokens.colors.primaryScale[50] : 'transparent',
                 color: selectedDuration === d.minutes ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
                 fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 {d.label}
               </button>
@@ -111,6 +117,7 @@ export const CompactSchedulePicker = createPreset<SchedulePickerProps>({
                   border: isSelected ? `2px solid ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
                   cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   <span style={{ fontSize: tokens.typography.fontSize.xs, color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500] }}>{day.dayName}</span>
                   <span style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[800] }}>{day.dayNum}</span>
@@ -171,6 +178,7 @@ export const CompactSchedulePicker = createPreset<SchedulePickerProps>({
               backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
               fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
               cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               {confirmLabel}
             </button>

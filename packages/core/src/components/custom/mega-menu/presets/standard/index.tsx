@@ -3,6 +3,11 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { MegaMenuProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export default createPreset<MegaMenuProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -65,7 +70,7 @@ export default createPreset<MegaMenuProps>((context) => {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              backgroundColor: tokens.overlay?.light,
               zIndex: 999,
             }}
           />

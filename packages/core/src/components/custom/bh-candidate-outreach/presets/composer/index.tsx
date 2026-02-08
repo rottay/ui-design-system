@@ -7,7 +7,19 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhCandidateOutreachProps, OutreachChannel, OutreachTemplate, OutreachRecipient, ABVariant, ScheduleConfig } from '../../core';
 import {
   getChannelColors,
@@ -60,6 +72,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
   name: 'BhCandidateOutreach.Composer',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateOutreachProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const channelColors = getChannelColors(tokens);
     const metricColors = getMetricColors(tokens);
 
@@ -195,7 +208,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
       ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' });
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' }), [tokens, engine]);
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, ...surfaceStyle, ...style }}>
@@ -344,6 +357,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: tokens.colors.neutral[500],
                     padding: tokens.spacing[1],
                     display: 'flex',
@@ -380,6 +394,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                       color: tokens.colors.neutral[800],
                       backgroundColor: tokens.colors.common.white,
                     }}
+                  
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                      e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                    }}
                   />
                 </Box>
               </Box>
@@ -398,6 +421,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                           gap: tokens.spacing[1],
                           padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.semibold,
                           color: tokens.colors.neutral[500],
@@ -418,6 +442,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                             padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px ${tokens.spacing[2]}px ${tokens.spacing[6]}px`,
                             cursor: 'pointer',
                             backgroundColor: selectedTemplate?.id === template.id ? tokens.colors.primaryScale[50] : hoveredTemplate?.id === template.id ? tokens.colors.neutral[50] : 'transparent',
+                            transform: hoveredTemplate ? tokens.motion.transform : 'none',
                             borderLeft: selectedTemplate?.id === template.id ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
                             ...createHoverStyle(tokens),
                           }}
@@ -550,6 +575,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         color: tokens.colors.neutral[400],
                         padding: 0,
                         display: 'flex',
@@ -569,11 +595,12 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                     gap: tokens.spacing[1],
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.full,
-                    border: `1px dashed ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                     backgroundColor: 'transparent',
                     color: tokens.colors.neutral[500],
                     fontSize: tokens.typography.fontSize.sm,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -602,7 +629,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                       gap: tokens.spacing[1],
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       border: 'none',
-                      borderBottom: isActive ? `2px solid ${colors.color}` : '2px solid transparent',
+                      borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.color}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                       backgroundColor: 'transparent',
                       color: isActive ? colors.color : tokens.colors.neutral[500],
                       fontSize: tokens.typography.fontSize.sm,
@@ -631,6 +658,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -656,12 +684,13 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                     gap: tokens.spacing[1],
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                     border: 'none',
-                    borderBottom: activePanel === tab ? `2px solid ${tokens.colors.primaryScale[500]}` : '2px solid transparent',
+                    borderBottom: activePanel === tab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                     backgroundColor: 'transparent',
                     color: activePanel === tab ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: activePanel === tab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                     textTransform: 'capitalize' as const,
                   }}
@@ -705,6 +734,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                           boxSizing: 'border-box' as const,
                           color: tokens.colors.neutral[800],
                           backgroundColor: tokens.colors.common.white,
+                        }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                         }}
                       />
                     </Box>
@@ -772,6 +810,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                         backgroundColor: tokens.colors.common.white,
                         resize: 'vertical' as const,
                         lineHeight: tokens.typography.lineHeight.relaxed,
+                      }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                       }}
                     />
                     {/* Character count for SMS/LinkedIn */}
@@ -855,6 +902,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                             color: previewRecipient?.id === r.id ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                             fontSize: tokens.typography.fontSize.xs,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             fontFamily: 'inherit',
                             fontWeight: tokens.typography.fontWeight.medium,
                           }}
@@ -867,7 +915,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
 
                   {/* Rendered preview */}
                   <Box style={{
-                    ...createCardStyle(tokens, { elevation: 'sm' }),
+                    ...createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }),
                     padding: tokens.spacing[4],
                   }}>
                     {channel === 'email' && subject && (
@@ -978,6 +1026,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                               fontSize: tokens.typography.fontSize.sm,
                               fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               fontFamily: 'inherit',
                               display: 'flex',
                               alignItems: 'center',
@@ -1021,6 +1070,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                           color: tokens.colors.neutral[800],
                           backgroundColor: tokens.colors.common.white,
                         }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                        }}
+                        onBlur={(e) => {
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                        }}
                       />
                     </Box>
                   )}
@@ -1053,6 +1111,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                         color: tokens.colors.neutral[800],
                         backgroundColor: tokens.colors.common.white,
                       }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                      }}
                     />
                   </Box>
 
@@ -1082,6 +1149,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                         boxSizing: 'border-box' as const,
                         color: tokens.colors.neutral[800],
                         backgroundColor: tokens.colors.common.white,
+                      }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                       }}
                     />
                   </Box>
@@ -1127,11 +1203,12 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                         gap: tokens.spacing[1],
                         padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
                         borderRadius: tokens.borderRadius.md,
-                        border: `1px dashed ${tokens.colors.neutral[300]}`,
+                        border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                         backgroundColor: 'transparent',
                         color: tokens.colors.neutral[600],
                         fontSize: tokens.typography.fontSize.xs,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                       }}
                     >
@@ -1143,7 +1220,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                   <Stack direction="vertical" spacing="sm">
                     {variants.map((variant, idx) => (
                       <Box key={variant.id} style={{
-                        ...createCardStyle(tokens, { elevation: 'sm' }),
+                        ...createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }),
                         padding: tokens.spacing[3],
                       }}>
                         <Box style={{
@@ -1168,6 +1245,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                               background: 'none',
                               border: 'none',
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               color: tokens.colors.neutral[400],
                               padding: 0,
                               display: 'flex',
@@ -1230,6 +1308,15 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                             color: tokens.colors.neutral[800],
                             backgroundColor: tokens.colors.common.white,
                             resize: 'vertical' as const,
+                          }}
+                        
+                          onFocus={(e) => {
+                            e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                            e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                          }}
+                          onBlur={(e) => {
+                            e.currentTarget.style.boxShadow = 'none';
+                            e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                           }}
                         />
 
@@ -1297,6 +1384,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: i === 0 ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                           }}>
                             {criteria}
                           </Box>
@@ -1318,7 +1406,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: tokens.overlay?.medium,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1445,6 +1533,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -1464,6 +1553,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >

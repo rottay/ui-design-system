@@ -4,6 +4,10 @@ import { useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { EntityFormProps, FormFieldConfig } from '../../core';
 import { ENTITY_FORM_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const StandardEntityForm = createPreset<EntityFormProps>({
   name: 'EntityForm.Standard',
@@ -165,7 +169,7 @@ export const StandardEntityForm = createPreset<EntityFormProps>({
                 alignItems: 'center',
                 justifyContent: 'center',
                 overflow: 'hidden',
-                border: `2px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}>
                 {value ? (
                   <img src={value as string} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

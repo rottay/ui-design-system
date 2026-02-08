@@ -4,7 +4,10 @@
  */
 
 import { createPreset, PresetContext } from '../../../factory';
-import { createBadgeStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 import type { HeroSectionProps } from '../../core';
 
 export const GradientHeroSection = createPreset<HeroSectionProps>({

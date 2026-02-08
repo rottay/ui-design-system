@@ -55,8 +55,16 @@ export const BasicSearchBar = createPreset<SearchBarProps>({
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={(e) => {
+            setIsFocused(true);
+            e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+            e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+          }}
+          onBlur={(e) => {
+            setIsFocused(false);
+            e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+          }}
           autoFocus={autoFocus}
           style={{
             width: '100%',

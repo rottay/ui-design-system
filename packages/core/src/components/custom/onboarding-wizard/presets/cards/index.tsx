@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle, createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { OnboardingWizardProps } from '../../core';
 
 export default createPreset<OnboardingWizardProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text, Button } = primitives;
   const {
     steps,
@@ -28,7 +33,7 @@ export default createPreset<OnboardingWizardProps>((context) => {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   const handleNext = () => {
     if (isLastStep) {
@@ -107,7 +112,7 @@ export default createPreset<OnboardingWizardProps>((context) => {
       >
         {steps.map((step, index) => {
           const isCurrent = index === currentStepIndex;
-          const cardStyle = createCardStyle(tokens, { elevation: isCurrent ? 'md' : 'sm' });
+          const cardStyle = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: isCurrent ? 'md' : 'sm' }), [tokens]);
 
           return (
             <Box

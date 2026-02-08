@@ -3,6 +3,7 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { ProfileCardProps } from '../../core';
+import { createAccentBarStyle } from '../../../helpers';
 
 export default createPreset<ProfileCardProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -20,6 +21,7 @@ export default createPreset<ProfileCardProps>((context) => {
         ...style,
       }}
     >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {/* Avatar */}
       <Box style={{ position: 'relative', flexShrink: 0 }}>
         {avatar ? (
@@ -66,7 +68,7 @@ export default createPreset<ProfileCardProps>((context) => {
               height: '10px',
               borderRadius: tokens.borderRadius.full,
               backgroundColor: online ? tokens.colors.successScale[500] : tokens.colors.neutral[400],
-              border: `2px solid ${tokens.colors.common.white}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
             }}
           />
         )}

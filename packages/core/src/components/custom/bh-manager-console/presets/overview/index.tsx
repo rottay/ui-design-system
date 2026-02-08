@@ -8,7 +8,18 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhManagerConsoleProps, DateRangeOption, MetricViewMode, TaskPriority, SlaStatus, AlertSeverity, TrendDirection } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 
@@ -86,6 +97,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
   name: 'BhManagerConsole.Overview',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhManagerConsoleProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const isModern = engine === 'modern';
 
     const {
@@ -170,8 +182,8 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
 
     const sprintProgress = sprint && sprint.total > 0 ? (sprint.completed / sprint.total) * 100 : 0;
 
-    const glassCardStyle = isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { elevation: 'sm' });
-    const hoverStyle = createHoverStyle(tokens);
+    const glassCardStyle = useMemo(() => isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const sectionTitleStyle: React.CSSProperties = {
@@ -309,7 +321,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: alertColors.bg,
-                      border: `1px solid ${alertColors.border}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${alertColors.border}`,
                     }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                         <span style={{ fontSize: tokens.typography.fontSize.lg, color: alertColors.icon }}>
@@ -327,11 +339,12 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       <button onClick={() => handleAlertDismiss(alert.id)} style={{
                         padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                         borderRadius: tokens.borderRadius.sm,
-                        border: `1px solid ${alertColors.border}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${alertColors.border}`,
                         backgroundColor: 'transparent',
                         color: alertColors.text,
                         fontSize: tokens.typography.fontSize.xs,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                       }}>
                         Dismiss
@@ -428,6 +441,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                       boxShadow: metricView === 'heatmap' ? tokens.shadows.sm : 'none',
                     }}>
@@ -442,6 +456,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                       boxShadow: metricView === 'list' ? tokens.shadows.sm : 'none',
                     }}>
@@ -461,7 +476,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.semibold,
                             color: tokens.colors.neutral[500],
-                            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                             width: 140,
                           }}>
                             Recruiter
@@ -473,7 +488,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                               fontSize: tokens.typography.fontSize.xs,
                               fontWeight: tokens.typography.fontWeight.semibold,
                               color: tokens.colors.neutral[500],
-                              borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                             }}>
                               {col}
                             </th>
@@ -490,7 +505,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                             }}>
                               <td style={{
                                 padding: `${tokens.spacing[2]}px`,
-                                borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: tokens.spacing[2],
@@ -531,7 +546,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                                 return (
                                   <td key={col} style={{
                                     padding: tokens.spacing[1],
-                                    borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                                     textAlign: 'center',
                                   }}>
                                     <Box style={{
@@ -565,8 +580,9 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                         justifyContent: 'space-between',
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md,
-                        border: `1px solid ${tokens.colors.neutral[100]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         ...hoverStyle,
                       }} onClick={() => onRecruiterClick?.(recruiter.recruiterId)}>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -685,7 +701,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                           minHeight: 80,
                           padding: tokens.spacing[2],
                           borderRadius: tokens.borderRadius.md,
-                          border: `1px dashed ${dragState ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                          border: `${tokens.surface.borderWidth} dashed ${dragState ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                           backgroundColor: dragState ? tokens.colors.primaryScale[50] : 'transparent',
                           transition: `all ${tokens.motion.hover}`,
                         }}
@@ -710,7 +726,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                                 borderRadius: tokens.borderRadius.md,
                                 backgroundColor: tokens.colors.common.white,
-                                border: `1px solid ${tokens.colors.neutral[200]}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 boxShadow: tokens.shadows.sm,
                                 cursor: 'grab',
                                 transition: `all ${tokens.motion.hover}`,
@@ -733,7 +749,7 @@ export const OverviewBhManagerConsole = createPreset<BhManagerConsoleProps>({
                                   fontWeight: tokens.typography.fontWeight.semibold,
                                   backgroundColor: prioColors.bg,
                                   color: prioColors.text,
-                                  border: `1px solid ${prioColors.border}`,
+                                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${prioColors.border}`,
                                   borderRadius: tokens.borderRadius.full,
                                   padding: `0 ${tokens.spacing[2]}px`,
                                   lineHeight: '1.6',

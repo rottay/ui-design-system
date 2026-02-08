@@ -9,7 +9,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhScorecardDetailProps,
   ScorecardDimension,
@@ -197,13 +206,13 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: isModern });
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isModern }), [tokens, isModern]);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ---- sorted dimensions ---- */
@@ -305,7 +314,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
             justifyContent: 'center',
             overflow: 'hidden',
             flexShrink: 0,
-            border: `2px solid ${tokens.colors.primaryScale[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
           }}>
             {header.candidateAvatar ? (
               <img
@@ -424,7 +433,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
                   height: '100%',
                   backgroundColor: getConfidenceColor(header.confidence, tokens),
                   borderRadius: tokens.borderRadius.full,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }} />
               </Box>
               <Box style={{
@@ -710,7 +719,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
                   height: '100%',
                   backgroundColor: scoreColor,
                   borderRadius: tokens.borderRadius.full,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }} />
               </Box>
               <Box style={{
@@ -935,7 +944,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
         <Box style={{
           padding: tokens.spacing[4],
           backgroundColor: tokens.colors.errorScale[50],
-          border: `2px solid ${tokens.colors.errorScale[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
           borderRadius: tokens.borderRadius.lg,
           marginBottom: tokens.spacing[4],
         }}>
@@ -1101,7 +1110,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
                     height: '100%',
                     backgroundColor: factor.color,
                     borderRadius: tokens.borderRadius.full,
-                    transition: `width ${tokens.motion.hover}`,
+                    transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                   }} />
                 </Box>
 
@@ -1131,7 +1140,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
           ...glassCard,
           padding: tokens.spacing[4],
           marginBottom: tokens.spacing[4],
-          border: `2px solid ${tokens.colors.warningScale[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
         }}>
           <Box style={{
             display: 'flex',
@@ -1189,7 +1198,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
               padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
               backgroundColor: tokens.colors.successScale[50],
               borderRadius: tokens.borderRadius.md,
-              border: `2px solid ${tokens.colors.successScale[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[200]}`,
             }}>
               <Box style={{
                 fontSize: tokens.typography.fontSize.xs,
@@ -1305,7 +1314,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
               width: `${cohortComparison.percentile}%`,
               background: `linear-gradient(90deg, ${tokens.colors.primaryScale[200]}, ${tokens.colors.primaryScale[500]})`,
               borderRadius: tokens.borderRadius.full,
-              transition: `width ${tokens.motion.hover}`,
+              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
             }} />
             {/* Position marker */}
             <Box style={{
@@ -1346,7 +1355,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
           ...cardBase,
           padding: tokens.spacing[4],
           marginBottom: tokens.spacing[4],
-          border: `2px solid ${tokens.colors.warningScale[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
           backgroundColor: tokens.colors.warningScale[50],
         }}>
           <Box style={{
@@ -1387,6 +1396,15 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
                 backgroundColor: tokens.colors.common.white,
                 resize: 'vertical' as const,
                 outline: 'none',
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
           </Box>

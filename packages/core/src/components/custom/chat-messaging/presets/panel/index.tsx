@@ -7,7 +7,12 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { ChatMessagingProps } from '../../core';
 import { getMessageBubbleColors, getBannerColors, formatMessageTime } from '../../core';
 
@@ -122,6 +127,7 @@ export const PanelChatMessaging = createPreset<ChatMessagingProps>({
                   width: tokens.spacing[7], height: tokens.spacing[7], border: 'none', borderRadius: tokens.borderRadius.sm,
                   backgroundColor: 'transparent', color: tokens.colors.neutral[500],
                   cursor: 'pointer', fontFamily: 'inherit', fontSize: tokens.typography.fontSize.sm,
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   {btn}
@@ -134,6 +140,7 @@ export const PanelChatMessaging = createPreset<ChatMessagingProps>({
               width: tokens.spacing[8], height: tokens.spacing[8], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               borderRadius: tokens.borderRadius.md, backgroundColor: 'transparent',
               color: tokens.colors.neutral[500], cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               📎
@@ -148,12 +155,22 @@ export const PanelChatMessaging = createPreset<ChatMessagingProps>({
                 borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 fontSize: tokens.typography.fontSize.sm, fontFamily: 'inherit', outline: 'none',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
             <button onClick={handleSend} style={{
               width: tokens.spacing[8], height: tokens.spacing[8], border: 'none',
               borderRadius: tokens.borderRadius.md,
               backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
               cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               ➤

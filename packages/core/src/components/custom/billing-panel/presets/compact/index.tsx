@@ -1,26 +1,29 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BillingPanelProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const Compact = createPreset<BillingPanelProps>((context: PresetContext<BillingPanelProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { plan, invoices = [], paymentMethod, onChangePlan, onUpdatePayment, onDownloadInvoice, className, style } = props;
 
   const [activeTab, setActiveTab] = useState<'plan' | 'payment' | 'invoices'>('plan');
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const tabStyle = (isActive: boolean) => ({
     padding: `${tokens.spacing[2]} ${tokens.spacing[4]}`,
     backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
     color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
     border: 'none',
-    borderBottom: isActive ? `2px solid ${tokens.colors.primaryScale[600]}` : '2px solid transparent',
+    borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
     fontSize: tokens.typography.fontSize.sm,
     fontWeight: tokens.typography.fontWeight.medium,
     cursor: 'pointer',
@@ -64,6 +67,7 @@ export const Compact = createPreset<BillingPanelProps>((context: PresetContext<B
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               Change Plan
@@ -94,6 +98,7 @@ export const Compact = createPreset<BillingPanelProps>((context: PresetContext<B
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               Update Payment
@@ -127,6 +132,7 @@ export const Compact = createPreset<BillingPanelProps>((context: PresetContext<B
                         border: 'none',
                         fontSize: tokens.typography.fontSize.xs,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                       }}
                     >
                       Download

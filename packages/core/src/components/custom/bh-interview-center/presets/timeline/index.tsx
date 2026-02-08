@@ -8,7 +8,20 @@
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+  getCardHoverShadow,
+} from '../../../helpers';
 import type {
   BhInterviewCenterProps,
   InterviewItem,
@@ -249,14 +262,14 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       backdropFilter: tokens.glass.blur,
       WebkitBackdropFilter: tokens.glass.blur,
       backgroundColor: tokens.glass.bg,
-      border: `1px solid ${tokens.glass.border}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
     } : {};
 
     const glassSurfaceStyle = isModern && tokens.glass ? {
       backdropFilter: tokens.glass.blurSm,
       WebkitBackdropFilter: tokens.glass.blurSm,
       backgroundColor: tokens.glass.bgLight,
-      border: `1px solid ${tokens.glass.borderLight}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
     } : {};
 
     // ─── Handlers ───────────────────────────────────────────────────────
@@ -458,7 +471,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     cursor: 'pointer',
@@ -497,7 +510,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     cursor: 'pointer',
@@ -522,7 +535,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             gap: tokens.spacing[2],
             padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
             minWidth: 180,
             transition: `all ${tokens.motion.hover}`,
@@ -541,6 +554,15 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 backgroundColor: 'transparent',
                 flex: 1,
                 padding: 0,
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
             {searchQuery && (
@@ -582,7 +604,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 width: 28,
                 height: 28,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[600],
                 cursor: 'pointer',
@@ -599,7 +621,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 alignItems: 'center',
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[700],
                 fontSize: tokens.typography.fontSize.xs,
@@ -620,7 +642,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 width: 28,
                 height: 28,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[600],
                 cursor: 'pointer',
@@ -663,7 +685,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           display: 'flex',
           marginLeft: 160,
           width: TIMELINE_WIDTH,
-          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           flexShrink: 0,
         }}>
           {hours.map(h => (
@@ -677,7 +699,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 color: tokens.colors.neutral[500],
                 fontWeight: tokens.typography.fontWeight.medium,
                 textAlign: 'center' as const,
-                borderLeft: `1px solid ${tokens.colors.neutral[100]}`,
+                borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
               }}
             >
               {h > 12 ? `${h - 12} PM` : h === 12 ? '12 PM' : `${h} AM`}
@@ -728,7 +750,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           style={{
             display: 'flex',
             minHeight: rowHeight,
-            borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
           }}
         >
           {/* Day label */}
@@ -740,7 +762,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             flexDirection: 'column' as const,
             justifyContent: 'center',
             backgroundColor: isToday ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-            borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           }}>
             <div style={{
               fontSize: tokens.typography.fontSize.sm,
@@ -860,8 +882,8 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                       backgroundColor: statusCfg.bgColor,
                       borderLeft: `3px solid ${statusCfg.accentColor}`,
                       border: isSelected
-                        ? `2px solid ${tokens.colors.primaryScale[500]}`
-                        : `1px solid ${statusCfg.borderColor}`,
+                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
+                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}`,
                       borderLeftWidth: 3,
                       borderLeftColor: statusCfg.accentColor,
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -873,7 +895,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                       gap: tokens.spacing[2],
                       zIndex: isHovered ? 5 : 1,
                       transform: isHovered ? tokens.motion.transform : 'none',
-                      boxShadow: isHovered ? tokens.shadows.md : 'none',
+                      boxShadow: isHovered ? getCardHoverShadow(tokens, 'sm') : 'none',
                     }}
                   >
                     {/* Type icon */}
@@ -952,7 +974,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.3)',
+            backgroundColor: tokens.overlay?.light,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -977,7 +999,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                 <div style={{
@@ -1023,7 +1045,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   width: 28,
                   height: 28,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[500],
                   cursor: 'pointer',
@@ -1040,7 +1062,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               display: 'flex',
               gap: tokens.spacing[2],
               padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
-              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}>
               <span style={{
                 display: 'inline-flex',
@@ -1052,7 +1074,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: typeCfg.bgColor,
                 color: typeCfg.color,
-                border: `1px solid ${typeCfg.borderColor}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${typeCfg.borderColor}`,
               }}>
                 {interview.type === 'ai' ? <Bot size={12} /> : <User size={12} />}
                 {typeCfg.label} Interview
@@ -1067,7 +1089,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: statusCfg.bgColor,
                 color: statusCfg.color,
-                border: `1px solid ${statusCfg.borderColor}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}`,
               }}>
                 <span style={{
                   width: 6,
@@ -1216,7 +1238,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               display: 'flex',
               gap: tokens.spacing[2],
               padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px ${tokens.spacing[4]}px`,
-              borderTop: `1px solid ${tokens.colors.neutral[100]}`,
+              borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}>
               <button
                 style={{
@@ -1252,7 +1274,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   fontWeight: tokens.typography.fontWeight.medium,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[700],
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                   outline: 'none',
@@ -1301,7 +1323,7 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             display: 'flex',
             alignItems: 'center',
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             overflow: 'hidden' as const,
           }}>
             {[

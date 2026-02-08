@@ -3,9 +3,13 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BannerAlertProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const compactPreset = createPreset<BannerAlertProps>((context: PresetContext<BannerAlertProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Button } = primitives;
 
   const {
@@ -71,7 +75,7 @@ export const compactPreset = createPreset<BannerAlertProps>((context: PresetCont
         boxShadow: tokens.shadows.sm,
         width: '100%',
         backgroundColor: tokens.colors.common.white,
-        borderLeft: `2px solid ${colors.border}`,
+        borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.border}`,
         borderRadius: tokens.borderRadius.sm,
         padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`,
         display: 'flex',
@@ -86,7 +90,7 @@ export const compactPreset = createPreset<BannerAlertProps>((context: PresetCont
           style={{
             flexShrink: 0,
             color: colors.icon,
-            fontSize: '16px',
+            fontSize: tokens.typography.fontSize.md,
             display: 'flex',
             alignItems: 'center',
           }}
@@ -135,9 +139,11 @@ export const compactPreset = createPreset<BannerAlertProps>((context: PresetCont
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.opacity = '0.8';
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'none';
               }}
             >
               {action.label}
@@ -163,13 +169,14 @@ export const compactPreset = createPreset<BannerAlertProps>((context: PresetCont
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            transition: `all ${tokens.motion.hover}`,
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = tokens.colors.neutral[600];
+            e.currentTarget.style.transform = tokens.motion.transform;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = tokens.colors.neutral[400];
+            e.currentTarget.style.transform = 'none';
           }}
         >
           ×

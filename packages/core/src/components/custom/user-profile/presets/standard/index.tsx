@@ -8,6 +8,15 @@
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { UserProfileProps, AvailabilityStatus } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 const SOCIAL_ICONS: Record<string, string> = {
   linkedin: 'in',
@@ -123,7 +132,9 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
                   {sec.items.map((item) => {
                     const isActive = item.key === activeNavKey;
                     return (
-                      <div key={item.key} onClick={() => onNavSelect?.(item.key)} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100]; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = isActive ? tokens.colors.neutral[200] : 'transparent'; }} style={{ padding: `${tokens.spacing[1]} ${tokens.spacing[3]}`, borderRadius: tokens.borderRadius.md, display: 'flex', alignItems: 'center', gap: tokens.spacing[2], cursor: 'pointer', backgroundColor: isActive ? tokens.colors.neutral[200] : 'transparent', color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[600], fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, fontSize: tokens.typography.fontSize.sm, transition: `all ${tokens.motion.hover}` }}>
+                      <div key={item.key} onClick={() => onNavSelect?.(item.key)} onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+          e.currentTarget.style.transform = tokens.motion.transform; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = isActive ? tokens.colors.neutral[200] : 'transparent';
+          e.currentTarget.style.transform = 'none'; }} style={{ padding: `${tokens.spacing[1]} ${tokens.spacing[3]}`, borderRadius: tokens.borderRadius.md, display: 'flex', alignItems: 'center', gap: tokens.spacing[2], cursor: 'pointer', backgroundColor: isActive ? tokens.colors.neutral[200] : 'transparent', color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[600], fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, fontSize: tokens.typography.fontSize.sm, transition: `all ${tokens.motion.hover}` }}>
                         {item.icon && <span>{item.icon}</span>}
                         <span style={{ flex: 1 }}>{item.label}</span>
                         {item.badge && (
@@ -174,14 +185,18 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
 
                 {/* Title / Bio */}
                 {user.title && (
-                  <p style={{ fontSize: tokens.typography.fontSize.md, color: tokens.colors.neutral[500], margin: `${tokens.spacing[1]} 0 0`, lineHeight: 1.5 }}>{user.title}</p>
+                  <p style={{ fontSize: tokens.typography.fontSize.md, color: tokens.colors.neutral[500], margin: `${tokens.spacing[1]} 0 0`, lineHeight: tokens.typography.lineHeight.relaxed }}>{user.title}</p>
                 )}
 
                 {/* Action buttons */}
                 {actions.length > 0 && (
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[4] }}>
                     {actions.map((action) => (
-                      <button key={action.key} onClick={action.onClick} onMouseEnter={(e) => { if (action.variant === 'toggle') { e.currentTarget.style.backgroundColor = action.active ? tokens.colors.neutral[900] : tokens.colors.neutral[300]; } else { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50]; } }} onMouseLeave={(e) => { if (action.variant === 'toggle') { e.currentTarget.style.backgroundColor = action.active ? tokens.colors.neutral[800] : tokens.colors.neutral[200]; } else { e.currentTarget.style.backgroundColor = tokens.colors.common.white; } }} style={{ padding: `${tokens.spacing[2]} ${tokens.spacing[4]}`, borderRadius: tokens.borderRadius.full, border: action.variant === 'toggle' ? 'none' : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`, backgroundColor: action.variant === 'toggle' ? (action.active ? tokens.colors.neutral[800] : tokens.colors.neutral[200]) : tokens.colors.common.white, color: action.variant === 'toggle' ? (action.active ? tokens.colors.common.white : tokens.colors.neutral[700]) : tokens.colors.neutral[700], fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: tokens.spacing[1], transition: `all ${tokens.motion.hover}` }}>
+                      <button key={action.key} onClick={action.onClick} onMouseEnter={(e) => { if (action.variant === 'toggle') { e.currentTarget.style.backgroundColor = action.active ? tokens.colors.neutral[900] : tokens.colors.neutral[300];
+          e.currentTarget.style.transform = tokens.motion.transform; } else { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+          e.currentTarget.style.transform = tokens.motion.transform; } }} onMouseLeave={(e) => { if (action.variant === 'toggle') { e.currentTarget.style.backgroundColor = action.active ? tokens.colors.neutral[800] : tokens.colors.neutral[200];
+          e.currentTarget.style.transform = 'none'; } else { e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+          e.currentTarget.style.transform = 'none'; } }} style={{ padding: `${tokens.spacing[2]} ${tokens.spacing[4]}`, borderRadius: tokens.borderRadius.full, border: action.variant === 'toggle' ? 'none' : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`, backgroundColor: action.variant === 'toggle' ? (action.active ? tokens.colors.neutral[800] : tokens.colors.neutral[200]) : tokens.colors.common.white, color: action.variant === 'toggle' ? (action.active ? tokens.colors.common.white : tokens.colors.neutral[700]) : tokens.colors.neutral[700], fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: tokens.spacing[1], transition: `all ${tokens.motion.hover}` }}>
                         {action.icon && <span>{action.icon}</span>}
                         {action.label}
                       </button>
@@ -208,7 +223,9 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
                 <Box style={{ marginTop: tokens.spacing[5], borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                   <div style={{ display: 'flex', gap: 0 }}>
                     {tabs.map((tab) => (
-                      <button key={tab.key} onClick={() => handleTabChange(tab.key)} onMouseEnter={(e) => { if (tab.key !== activeTab) e.currentTarget.style.color = tokens.colors.neutral[700]; }} onMouseLeave={(e) => { e.currentTarget.style.color = tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500]; }} style={{ padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`, border: 'none', borderBottom: tab.key === activeTab ? `2px solid ${tokens.colors.neutral[900]}` : '2px solid transparent', backgroundColor: 'transparent', fontSize: tokens.typography.fontSize.sm, fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer', transition: `all ${tokens.motion.hover}` }}>{tab.label}</button>
+                      <button key={tab.key} onClick={() => handleTabChange(tab.key)} onMouseEnter={(e) => { if (tab.key !== activeTab) e.currentTarget.style.color = tokens.colors.neutral[700];
+          e.currentTarget.style.transform = tokens.motion.transform; }} onMouseLeave={(e) => { e.currentTarget.style.color = tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500];
+          e.currentTarget.style.transform = 'none'; }} style={{ padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`, border: 'none', borderBottom: tab.key === activeTab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[900]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`, backgroundColor: 'transparent', fontSize: tokens.typography.fontSize.sm, fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer', transition: `all ${tokens.motion.hover}` }}>{tab.label}</button>
                     ))}
                   </div>
                 </Box>
@@ -232,7 +249,9 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
                   {user.socialLinks && user.socialLinks.length > 0 && (
                     <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
                       {user.socialLinks.map((link, i) => (
-                        <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[100]; e.currentTarget.style.borderColor = tokens.colors.primaryScale[300]; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = tokens.colors.neutral[300]; }} style={{ width: tokens.spacing[7], height: tokens.spacing[7], borderRadius: tokens.borderRadius.full, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: tokens.colors.neutral[700], fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, transition: `all ${tokens.motion.hover}` }}>
+                        <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[100]; e.currentTarget.style.borderColor = tokens.colors.primaryScale[300];
+          e.currentTarget.style.transform = tokens.motion.transform; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+          e.currentTarget.style.transform = 'none'; }} style={{ width: tokens.spacing[7], height: tokens.spacing[7], borderRadius: tokens.borderRadius.full, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: tokens.colors.neutral[700], fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, transition: `all ${tokens.motion.hover}` }}>
                           {link.icon ?? SOCIAL_ICONS[link.platform] ?? SOCIAL_ICONS.other}
                         </a>
                       ))}
@@ -247,9 +266,9 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
                   <Box style={{ border: `2px dashed ${tokens.colors.primaryScale[300]}`, borderRadius: tokens.borderRadius.xl, backgroundColor: tokens.colors.primaryScale[50], padding: tokens.spacing[8], display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 400, textAlign: 'center' }}>
                     {/* Placeholder icons */}
                     <Box style={{ display: 'flex', gap: tokens.spacing[3], marginBottom: tokens.spacing[4], opacity: 0.4 }}>
-                      <div style={{ width: 60, height: 60, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.primaryScale[200], border: `2px solid ${tokens.colors.primaryScale[300]}` }} />
-                      <div style={{ width: 70, height: 70, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.primaryScale[200], border: `2px solid ${tokens.colors.primaryScale[300]}`, marginTop: -10 }} />
-                      <div style={{ width: 60, height: 60, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.primaryScale[200], border: `2px solid ${tokens.colors.primaryScale[300]}` }} />
+                      <div style={{ width: 60, height: 60, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.primaryScale[200], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` }} />
+                      <div style={{ width: 70, height: 70, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.primaryScale[200], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`, marginTop: -10 }} />
+                      <div style={{ width: 60, height: 60, borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.primaryScale[200], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` }} />
                     </Box>
                     <p style={{ fontSize: tokens.typography.fontSize.md, color: tokens.colors.primaryScale[600], margin: 0 }}>
                       Drag and drop media, or <button onClick={mediaUpload.onBrowse} style={{ background: 'none', border: 'none', color: tokens.colors.primaryScale[600], textDecoration: 'underline', cursor: 'pointer', fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, padding: 0 }}>browse</button>
@@ -277,7 +296,9 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
                 <button onClick={onSave} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50]; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.common.white; }} style={{ flex: 1, padding: `${tokens.spacing[4]}`, border: 'none', backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[900], fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, cursor: 'pointer', borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, transition: `all ${tokens.motion.hover}` }}>Save</button>
               )}
               {onCopy && (
-                <button onClick={onCopy} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[900]; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[800]; }} style={{ flex: 1, padding: `${tokens.spacing[4]}`, border: 'none', backgroundColor: tokens.colors.neutral[800], color: tokens.colors.common.white, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, cursor: 'pointer', transition: `all ${tokens.motion.hover}` }}>Copy</button>
+                <button onClick={onCopy} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[900];
+          e.currentTarget.style.transform = tokens.motion.transform; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[800];
+          e.currentTarget.style.transform = 'none'; }} style={{ flex: 1, padding: `${tokens.spacing[4]}`, border: 'none', backgroundColor: tokens.colors.neutral[800], color: tokens.colors.common.white, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, cursor: 'pointer', transition: `all ${tokens.motion.hover}` }}>Copy</button>
               )}
             </Box>
           )}

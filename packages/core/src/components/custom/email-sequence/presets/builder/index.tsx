@@ -7,7 +7,14 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { EmailSequenceProps } from '../../core';
 import {
   getSequenceStatusColors,
@@ -130,6 +137,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                 color: tokens.colors.neutral[800],
                 backgroundColor: tokens.colors.common.white,
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </Box>
 
@@ -150,6 +166,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                       gap: tokens.spacing[3],
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
                       borderLeft: isSelected ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
                     }}
@@ -185,7 +202,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                         height: tokens.spacing[2],
                         borderRadius: tokens.borderRadius.full,
                         backgroundColor: sendColors.color,
-                        border: `2px solid ${tokens.colors.common.white}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                       }} />
                     </Box>
 
@@ -281,6 +298,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -374,6 +392,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                           backgroundColor: tokens.colors.common.white,
                           boxShadow: isActive ? `0 0 0 1px ${tokens.colors.primaryScale[200]}` : 'none',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         {/* Step header */}
@@ -431,6 +450,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                   backgroundColor: 'transparent',
                                   color: tokens.colors.neutral[400],
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                   fontFamily: 'inherit',
                                   fontSize: tokens.typography.fontSize.sm,
                                   padding: tokens.spacing[0],
@@ -465,6 +485,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                   color: tokens.colors.neutral[800],
                                   backgroundColor: tokens.colors.common.white,
                                 }}
+                              
+                                onFocus={(e) => {
+                                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.boxShadow = 'none';
+                                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                                }}
                               />
                             </Box>
                           )}
@@ -488,6 +517,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                 color: tokens.colors.neutral[800],
                                 backgroundColor: tokens.colors.common.white,
                               }}
+                            
+                              onFocus={(e) => {
+                                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                              }}
+                              onBlur={(e) => {
+                                e.currentTarget.style.boxShadow = 'none';
+                                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                              }}
                             />
                           </Box>
 
@@ -509,6 +547,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                   outline: 'none',
                                   color: tokens.colors.neutral[800],
                                   backgroundColor: tokens.colors.common.white,
+                                }}
+                              
+                                onFocus={(e) => {
+                                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.boxShadow = 'none';
+                                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                                 }}
                               />
                             </Box>
@@ -533,6 +580,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                   color: tokens.colors.neutral[800],
                                   backgroundColor: tokens.colors.common.white,
                                 }}
+                              
+                                onFocus={(e) => {
+                                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                                }}
+                                onBlur={(e) => {
+                                  e.currentTarget.style.boxShadow = 'none';
+                                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                                }}
                               />
                             </Box>
                           )}
@@ -556,6 +612,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                 boxSizing: 'border-box',
                                 color: tokens.colors.neutral[900],
                                 backgroundColor: tokens.colors.common.white,
+                              }}
+                            
+                              onFocus={(e) => {
+                                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                              }}
+                              onBlur={(e) => {
+                                e.currentTarget.style.boxShadow = 'none';
+                                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                               }}
                             />
                           </Box>
@@ -582,6 +647,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                                     backgroundColor: 'transparent',
                                     color: tokens.colors.neutral[500],
                                     cursor: 'pointer',
+                                    transition: `all ${tokens.motion.hover}`,
                                     fontFamily: 'inherit',
                                     fontSize: tokens.typography.fontSize.xs,
                                     fontWeight: tokens.typography.fontWeight.semibold,
@@ -617,6 +683,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                               color: tokens.colors.neutral[800],
                               backgroundColor: tokens.colors.common.white,
                             }}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                           />
                         </Box>
                       </Box>
@@ -647,6 +722,7 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                       display: 'flex',
                       alignItems: 'center',

@@ -9,12 +9,15 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createFilterPillStyle,
   createHoverStyle,
-  getHoverTransform,
+  createListItemStyle,
+  createPanelHeaderStyle,
   createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
 } from '../../../helpers';
 import type {
   BhSlaMonitorProps,
@@ -122,14 +125,14 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
 
     const isGlass = engine === 'modern';
     const slaColors = getSlaStatusColors(tokens);
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, {
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
       interactive: true,
-    });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -292,8 +295,8 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     borderRadius: tokens.borderRadius.md,
                     border:
                       timeRange === opt.value
-                        ? `1px solid ${tokens.colors.primaryScale[300]}`
-                        : `1px solid ${tokens.colors.neutral[200]}`,
+                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
+                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     backgroundColor:
                       timeRange === opt.value
                         ? tokens.colors.primaryScale[50]
@@ -305,6 +308,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   {opt.label}
@@ -316,7 +320,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                   ...hoverTransition,
                   padding: `${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: showConfig
                     ? tokens.colors.primaryScale[50]
                     : tokens.colors.common.white,
@@ -324,6 +328,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     ? tokens.colors.primaryScale[700]
                     : tokens.colors.neutral[600],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -388,6 +393,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   {opt.label}
@@ -1057,6 +1063,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                 backgroundColor: 'transparent',
                 color: tokens.colors.neutral[400],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -1083,7 +1090,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                         style={{
                           padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                           textAlign: 'left' as const,
-                          borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           color: tokens.colors.neutral[600],
                           fontWeight: tokens.typography.fontWeight.semibold,
                           fontSize: tokens.typography.fontSize.xs,
@@ -1104,7 +1111,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     <td
                       style={{
                         padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         fontWeight: tokens.typography.fontWeight.medium,
                         color: tokens.colors.neutral[900],
                       }}
@@ -1114,7 +1121,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     <td
                       style={{
                         padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         color: tokens.colors.neutral[700],
                       }}
                     >
@@ -1126,7 +1133,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     <td
                       style={{
                         padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                       }}
                     >
                       <Stack direction="horizontal" align="center" gap={tokens.spacing[1]} style={{ flexWrap: 'wrap' as const }}>
@@ -1154,7 +1161,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                     <td
                       style={{
                         padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         color: tokens.colors.neutral[600],
                       }}
                     >

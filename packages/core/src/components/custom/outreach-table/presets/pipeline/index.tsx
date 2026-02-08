@@ -30,6 +30,14 @@ import {
   GripVertical,
   ArrowRight,
 } from 'lucide-react';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  getCardHoverShadow,
+} from '../../../helpers';
 
 // ============================================================================
 // Helpers
@@ -201,6 +209,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
             justify="between"
             style={{
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
               borderRadius: tokens.borderRadius.md,
               backgroundColor: tokens.colors.neutral[800],
@@ -326,7 +335,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                       padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      lineHeight: 1.5,
+                      lineHeight: tokens.typography.lineHeight.relaxed,
                     }}
                   >
                     {item.badge}
@@ -467,6 +476,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600],
                   backgroundColor: tokens.colors.common.white,
@@ -488,6 +498,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600],
                   backgroundColor: tokens.colors.common.white,
@@ -508,6 +519,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.common.white,
                   backgroundColor: tokens.colors.primaryScale[600],
@@ -530,6 +542,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600],
                   backgroundColor: tokens.colors.common.white,
@@ -564,7 +577,8 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isHovered ? tokens.colors.neutral[300] : tokens.colors.neutral[200]}`,
             cursor: 'pointer',
             transition: `all ${tokens.motion.hover}`,
-            boxShadow: isHovered ? tokens.shadows.sm : 'none',
+            boxShadow: isHovered ? getCardHoverShadow(tokens, 'sm') : 'none',
+                transform: isHovered ? tokens.motion.transform : 'none',
           }}
           onMouseEnter={() => setHoveredCardId(contact.id)}
           onMouseLeave={() => setHoveredCardId(null)}
@@ -619,7 +633,11 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                   type="text"
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
-                  onBlur={commitEdit}
+                  onBlur={(e) => {
+                    commitEdit();
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') commitEdit();
                     if (e.key === 'Escape') cancelEdit();
@@ -629,13 +647,18 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                   style={{
                     width: '100%',
                     padding: '2px 4px',
-                    border: `2px solid ${tokens.colors.primaryScale[600]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`,
                     borderRadius: tokens.borderRadius.sm,
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     outline: 'none',
                     backgroundColor: tokens.colors.common.white,
                     fontFamily: 'inherit',
+                  }}
+                
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                    e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                   }}
                 />
               ) : (
@@ -700,7 +723,7 @@ export const PipelineOutreachTable = createPreset<OutreachTableProps & Record<st
                       height: '100%',
                       backgroundColor: tokens.colors.primaryScale[600],
                       borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
                 </Box>

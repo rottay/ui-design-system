@@ -8,7 +8,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 import type {
   BhTokenManagerProps,
   TokenBalance,
@@ -115,9 +124,9 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
     };
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     /* ---------- Filtered & sorted transactions ---------- */
     const processedTransactions = useMemo(() => {
@@ -537,7 +546,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                 }}
               >
                 <thead>
-                  <tr style={{ borderBottom: `2px solid ${tokens.colors.neutral[200]}` }}>
+                  <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                     {[
                       { key: 'date' as const, label: 'Date' },
                       { key: null, label: 'Type' },
@@ -574,7 +583,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                       key={tx.id}
                       style={{
                         borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
                       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}

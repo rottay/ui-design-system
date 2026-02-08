@@ -7,7 +7,13 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { ChatMessagingProps, ConversationTab } from '../../core';
 import { getMessageBubbleColors, getBannerColors, formatMessageTime, formatConversationDate } from '../../core';
 
@@ -70,11 +76,12 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
             {(['conversations', 'requests'] as ConversationTab[]).map((tab) => (
               <button key={tab} onClick={() => handleTabChange(tab)} style={{
                 flex: 1, padding: `${tokens.spacing[2]}px`, border: 'none',
-                borderBottom: currentTab === tab ? `2px solid ${tokens.colors.neutral[900]}` : '2px solid transparent',
+                borderBottom: currentTab === tab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[900]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 backgroundColor: 'transparent',
                 color: currentTab === tab ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                 fontWeight: currentTab === tab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                 fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
                 textTransform: 'capitalize',
               }}>
                 {tab}
@@ -93,6 +100,7 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
                     display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                     padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
                     borderLeft: isActive ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
                   }}>
@@ -105,7 +113,7 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
                         </Box>
                       )}
                       {participant?.online && (
-                        <Box style={{ position: 'absolute', bottom: 0, right: 0, width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.successScale[500], border: `2px solid ${tokens.colors.common.white}` }} />
+                        <Box style={{ position: 'absolute', bottom: 0, right: 0, width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.successScale[500], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}` }} />
                       )}
                     </Box>
                     <Box style={{ flex: 1, minWidth: 0 }}>
@@ -236,6 +244,7 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
                         width: tokens.spacing[7], height: tokens.spacing[7], border: 'none', borderRadius: tokens.borderRadius.sm,
                         backgroundColor: 'transparent', color: tokens.colors.neutral[500],
                         cursor: 'pointer', fontFamily: 'inherit', fontSize: tokens.typography.fontSize.sm,
+                        transition: `all ${tokens.motion.hover}`,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
                         {btn}
@@ -248,6 +257,7 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
                     width: tokens.spacing[8], height: tokens.spacing[8], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     borderRadius: tokens.borderRadius.md, backgroundColor: 'transparent',
                     color: tokens.colors.neutral[500], cursor: 'pointer', fontFamily: 'inherit',
+                    transition: `all ${tokens.motion.hover}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     📎
@@ -262,12 +272,22 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
                       borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       fontSize: tokens.typography.fontSize.sm, fontFamily: 'inherit', outline: 'none',
                     }}
+                  
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                      e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                    }}
                   />
                   <button onClick={handleSend} style={{
                     width: tokens.spacing[8], height: tokens.spacing[8], border: 'none',
                     borderRadius: tokens.borderRadius.md,
                     backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
                     cursor: 'pointer', fontFamily: 'inherit',
+                    transition: `all ${tokens.motion.hover}`,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     ➤

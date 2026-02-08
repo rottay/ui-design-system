@@ -7,6 +7,12 @@
 
 import { createPreset, PresetContext } from '../../../factory';
 import type { CommandHeaderProps } from '../../core';
+import {
+  createBadgeStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const CompactCommandHeader = createPreset<CommandHeaderProps>({
   name: 'CommandHeader.Compact',
@@ -112,6 +118,7 @@ export const CompactCommandHeader = createPreset<CommandHeaderProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
                 flexShrink: 0,
               }}

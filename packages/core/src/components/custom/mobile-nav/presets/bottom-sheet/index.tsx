@@ -3,6 +3,11 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { MobileNavProps } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MobileNavProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -41,6 +46,7 @@ export default createPreset<MobileNavProps>((context) => {
           justifyContent: 'center',
           gap: '6px',
           cursor: 'pointer',
+          transition: `all ${tokens.motion.hover}`,
           padding: tokens.spacing[1],
         }}
       >
@@ -81,7 +87,7 @@ export default createPreset<MobileNavProps>((context) => {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: tokens.overlay?.medium,
               zIndex: 998,
             }}
           />

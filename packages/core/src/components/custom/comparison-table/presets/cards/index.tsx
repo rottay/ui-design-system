@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import { createPreset } from '../../../factory';
 import { createCardStyle } from '../../../helpers';
 import type { ComparisonTableProps } from '../../core';
 
 export const CardsPreset = createPreset<ComparisonTableProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text, Button } = primitives;
   const { plans, features, title, className, style } = props;
 
@@ -63,9 +65,10 @@ export const CardsPreset = createPreset<ComparisonTableProps>((context) => {
         }}
       >
         {plans.map((plan) => {
-          const cardStyle = createCardStyle(tokens, {
+          const cardStyle = useMemo(() => createCardStyle(tokens, {
+            glass: isGlass,
             elevation: plan.popular ? 'md' : 'sm',
-          });
+          }), [tokens]);
 
           return (
             <Box
@@ -78,7 +81,7 @@ export const CardsPreset = createPreset<ComparisonTableProps>((context) => {
                 padding: tokens.spacing[8],
                 position: 'relative',
                 border: plan.popular
-                  ? `2px solid ${tokens.colors.primaryScale[500]}`
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
                   : cardStyle.border,
               }}
             >

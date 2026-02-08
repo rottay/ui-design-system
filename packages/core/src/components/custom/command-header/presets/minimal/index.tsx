@@ -7,6 +7,9 @@
 
 import { createPreset, PresetContext } from '../../../factory';
 import type { CommandHeaderProps } from '../../core';
+import {
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const MinimalCommandHeader = createPreset<CommandHeaderProps>({
   name: 'CommandHeader.Minimal',

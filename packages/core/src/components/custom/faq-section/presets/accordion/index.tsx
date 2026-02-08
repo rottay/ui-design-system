@@ -8,10 +8,14 @@
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { FaqSectionProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const AccordionFaqSection = createPreset<FaqSectionProps>({
   name: 'FaqSection.Accordion',
-  render: ({ primitives, props, tokens }: PresetContext<FaqSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<FaqSectionProps>) => {
     const { Box, Stack, Input } = primitives;
     const { items, title, description, searchable, className, style } = props;
     const [openItems, setOpenItems] = useState<Set<string>>(new Set());
@@ -111,9 +115,11 @@ export const AccordionFaqSection = createPreset<FaqSectionProps>({
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     <Box
@@ -129,9 +135,9 @@ export const AccordionFaqSection = createPreset<FaqSectionProps>({
 
                     <Box
                       style={{
-                        fontSize: '20px',
+                        fontSize: tokens.typography.fontSize.xl,
                         color: tokens.colors.neutral[400],
-                        transition: `transform ${tokens.motion.hover}`,
+                        transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
                         transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                       }}
                     >

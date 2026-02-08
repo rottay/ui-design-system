@@ -5,15 +5,17 @@
  * First feature is large (spans 2 cols), rest in normal grid with gradient background
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import { createCardStyle,
+  getCardHoverShadow,} from '../../../helpers';
 import type { FeatureGridProps } from '../../core';
 
 export const BentoFeatureGrid = createPreset<FeatureGridProps>({
   name: 'FeatureGrid.Bento',
-  render: ({ primitives, props, tokens }: PresetContext<FeatureGridProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<FeatureGridProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { features, columns = 3, title, description, className, style } = props;
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -77,7 +79,7 @@ export const BentoFeatureGrid = createPreset<FeatureGridProps>({
                   cursor: firstFeature.link ? 'pointer' : 'default',
                   transition: `all ${tokens.motion.hover}`,
                   transform: hoveredIndex === 0 && firstFeature.link ? tokens.motion.transform : 'none',
-                  boxShadow: hoveredIndex === 0 ? tokens.shadows.md : tokens.shadows.sm,
+                  boxShadow: hoveredIndex === 0 ? getCardHoverShadow(tokens, 'sm') : tokens.shadows.sm,
                 }}
               >
                 <Stack direction="vertical" spacing="lg">
@@ -141,11 +143,12 @@ export const BentoFeatureGrid = createPreset<FeatureGridProps>({
             {restFeatures.map((feature, index) => {
               const actualIndex = index + 1;
               const isHovered = hoveredIndex === actualIndex;
-              const cardStyle = createCardStyle(tokens, {
+              const cardStyle = useMemo(() => createCardStyle(tokens, {
+                glass: isGlass,
                 elevation: isHovered ? 'md' : 'sm',
                 padding: tokens.spacing[6],
                 interactive: !!feature.link,
-              });
+              }), [tokens]);
 
               return (
                 <div
@@ -170,7 +173,7 @@ export const BentoFeatureGrid = createPreset<FeatureGridProps>({
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: tokens.colors.primaryScale[50],
                           color: tokens.colors.primaryScale[600],
-                          fontSize: '24px',
+                          fontSize: tokens.typography.fontSize['2xl'],
                         }}
                       >
                         {feature.icon}

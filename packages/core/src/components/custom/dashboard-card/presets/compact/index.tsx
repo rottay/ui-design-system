@@ -5,15 +5,18 @@
  * Minimal value display with icon, engine-differentiated surface
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle 
+} from '../../../helpers';
 import type { DashboardCardProps } from '../../core';
 
 export const CompactDashboardCard = createPreset<DashboardCardProps>({
   name: 'DashboardCard.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<DashboardCardProps>) => {
     const { Box, Spinner } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { title, value, icon, color = 'default', onClick, loading, className, style } = props;
     const [isHovered, setIsHovered] = useState(false);
 
@@ -26,11 +29,12 @@ export const CompactDashboardCard = createPreset<DashboardCardProps>({
     };
     const scale = scaleMap[color] || tokens.colors.neutral;
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
+      glass: isGlass,
       elevation: isHovered && onClick ? 'md' : 'sm',
       padding: tokens.spacing[4],
       interactive: !!onClick,
-    });
+    }), [tokens, onClick]);
 
     return (
       <div
@@ -44,6 +48,7 @@ export const CompactDashboardCard = createPreset<DashboardCardProps>({
           ...style,
         }}
       >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
         {loading ? (
           <Box style={{ display: 'flex', justifyContent: 'center', padding: tokens.spacing[4] }}>
             <Spinner size="md" />

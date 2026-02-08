@@ -7,7 +7,13 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { CommentThreadProps, Comment, AuthorRole } from '../../core';
 import { getRoleBadgeColors, formatRelativeTime } from '../../core';
 
@@ -104,6 +110,7 @@ export const InlineCommentThread = createPreset<CommentThreadProps>({
                   backgroundColor: reaction.reacted ? tokens.colors.primaryScale[50] : 'transparent',
                   fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
                   cursor: 'pointer', fontFamily: 'inherit', height: tokens.spacing[6],
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   {reaction.emoji} {reaction.count}
                 </button>
@@ -112,6 +119,7 @@ export const InlineCommentThread = createPreset<CommentThreadProps>({
                 border: 'none', backgroundColor: 'transparent',
                 fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500],
                 cursor: 'pointer', fontFamily: 'inherit', fontWeight: tokens.typography.fontWeight.medium,
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 Reply
               </button>
@@ -128,12 +136,22 @@ export const InlineCommentThread = createPreset<CommentThreadProps>({
                     borderRadius: tokens.borderRadius.sm, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     fontSize: tokens.typography.fontSize.sm, fontFamily: 'inherit', outline: 'none',
                   }}
+                
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                    e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                  }}
                 />
                 <button onClick={() => handleSubmitReply(comment.id)} style={{
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.sm, border: 'none',
                   backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
                   fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+                  transition: `all ${tokens.motion.hover}`,
                 }}>
                   Reply
                 </button>
@@ -178,6 +196,15 @@ export const InlineCommentThread = createPreset<CommentThreadProps>({
                 borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 fontSize: tokens.typography.fontSize.sm, fontFamily: 'inherit', outline: 'none',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
             <button onClick={handleNewComment} style={{
               padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
@@ -185,6 +212,7 @@ export const InlineCommentThread = createPreset<CommentThreadProps>({
               backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
               fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
               cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               Post
             </button>

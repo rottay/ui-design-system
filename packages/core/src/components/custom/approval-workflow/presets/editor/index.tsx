@@ -9,6 +9,13 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { ApprovalWorkflowProps, Approver, ApprovalOutcome } from '../../core';
 import { getOutcomeColors, getStatusCategoryColors, formatApproverDisplay } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
   name: 'ApprovalWorkflow.Editor',
@@ -139,7 +146,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
               <Box style={{
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[500],
-                lineHeight: 1.5,
+                lineHeight: tokens.typography.lineHeight.relaxed,
               }}>
                 {subtitle}
                 {learnMoreUrl && (
@@ -171,6 +178,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               borderRadius: tokens.borderRadius.md,
               color: tokens.colors.neutral[400],
               fontSize: tokens.typography.fontSize.lg,
@@ -203,12 +211,13 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px dashed ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                     backgroundColor: 'transparent',
                     color: tokens.colors.primaryScale[600],
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -289,6 +298,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                         width: tokens.spacing[6], height: tokens.spacing[6],
                         border: 'none', borderRadius: tokens.borderRadius.sm,
                         backgroundColor: 'transparent', cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         color: tokens.colors.neutral[400], fontFamily: 'inherit',
                         flexShrink: 0,
                       }}
@@ -366,6 +376,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                             border: 'none',
                             backgroundColor: 'transparent',
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             color: tokens.colors.neutral[400],
                             borderRadius: tokens.borderRadius.full,
                             padding: 0,
@@ -399,6 +410,15 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                         outline: 'none',
                         fontFamily: 'inherit',
                       }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      }}
+                      onBlur={(e) => {
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                      }}
                     />
                   </Box>
 
@@ -424,6 +444,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                           backgroundColor: tokens.colors.common.white,
                           fontFamily: 'inherit',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         <option value={rule.approverField}>{rule.approverField}</option>
@@ -505,6 +526,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                               backgroundColor: tokens.colors.common.white,
                               fontFamily: 'inherit',
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               width: '100%',
                             }}
                           >
@@ -609,6 +631,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                               backgroundColor: tokens.colors.common.white,
                               fontFamily: 'inherit',
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               width: '100%',
                             }}
                           >
@@ -822,6 +845,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
             }}
           >
@@ -838,6 +862,7 @@ export const EditorApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.semibold,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
             }}
           >

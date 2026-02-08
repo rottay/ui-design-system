@@ -8,7 +8,17 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCalibrationViewProps,
   CalibrationSample,
@@ -109,8 +119,8 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
     const confidenceCorr = alignmentMetrics?.confidenceCorrelation ?? 0;
     const perDimAlignment = alignmentMetrics?.perDimensionAlignment ?? [];
 
-    const glassCard = createCardStyle(tokens, { glass: true, elevation: 'md' });
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'sm' });
+    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
 
     /* Aggregate stats across all samples */
     const sampleStats = useMemo(() => {
@@ -217,7 +227,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                   gap: tokens.spacing[2],
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                   border: 'none',
-                  borderBottom: isActive ? `2px solid ${tokens.colors.primaryScale[600]}` : '2px solid transparent',
+                  borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                   backgroundColor: 'transparent',
                   color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
@@ -359,7 +369,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             width: `${Math.min(item.avgHuman, 100)}%`,
                             borderRadius: tokens.borderRadius.sm,
                             backgroundColor: tokens.colors.primaryScale[400],
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }} />
                         </Box>
                         {/* AI bar */}
@@ -370,7 +380,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             width: `${Math.min(item.avgAI, 100)}%`,
                             borderRadius: tokens.borderRadius.sm,
                             backgroundColor: tokens.colors.secondaryScale[400],
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }} />
                         </Box>
                       </Box>
@@ -462,7 +472,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         backgroundColor: isExpanded ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                         cursor: 'pointer',
                         fontFamily: 'inherit',
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                     >
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
@@ -579,6 +589,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           border: 'none',
                           backgroundColor: 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           fontFamily: 'inherit',
                         }}
                       >
@@ -611,7 +622,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                               <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[700], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: tokens.spacing[1] }}>
                                 Suggested Tweak
                               </span>
-                              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: 1.6 }}>
+                              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.relaxed }}>
                                 {adj.suggestedTweak}
                               </span>
                             </Box>

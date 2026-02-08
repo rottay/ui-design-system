@@ -3,9 +3,13 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { MultiStepFormProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MultiStepFormProps>((context: PresetContext<MultiStepFormProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -124,7 +128,7 @@ export default createPreset<MultiStepFormProps>((context: PresetContext<MultiSte
                         flex: 1,
                         minHeight: '40px',
                         backgroundColor: index < currentStep ? tokens.colors.primaryScale[600] : tokens.colors.neutral[200],
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                     />
                   )}
@@ -235,9 +239,11 @@ export default createPreset<MultiStepFormProps>((context: PresetContext<MultiSte
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+              e.currentTarget.style.transform = tokens.motion.transform;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+              e.currentTarget.style.transform = 'none';
             }}
           >
             {cancelLabel}
@@ -263,11 +269,13 @@ export default createPreset<MultiStepFormProps>((context: PresetContext<MultiSte
                 onMouseEnter={(e) => {
                   if (!loading) {
                     e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!loading) {
                     e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+                    e.currentTarget.style.transform = 'none';
                   }
                 }}
               >
@@ -292,11 +300,15 @@ export default createPreset<MultiStepFormProps>((context: PresetContext<MultiSte
                 onMouseEnter={(e) => {
                   if (canProceed && !loading) {
                     e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[700];
+                    e.currentTarget.style.transform = tokens.motion.transform;
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (canProceed && !loading) {
                     e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.transform = 'none';
                   }
                 }}
               >

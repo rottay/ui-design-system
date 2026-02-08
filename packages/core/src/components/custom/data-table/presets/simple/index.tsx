@@ -4,7 +4,10 @@
  */
 
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export const SimpleDataTable = createPreset<DataTableProps & Record<string, unknown>>({
@@ -58,7 +61,7 @@ export const SimpleDataTable = createPreset<DataTableProps & Record<string, unkn
                     style={{
                       padding: cellPadding,
                       textAlign: col.align || 'left',
-                      fontWeight: 600,
+                      fontWeight: tokens.typography.fontWeight.semibold,
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[600],
                       borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -96,9 +99,11 @@ export const SimpleDataTable = createPreset<DataTableProps & Record<string, unkn
                     }}
                     onMouseEnter={(e) => {
                       if (onRowClick) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+          e.currentTarget.style.transform = tokens.motion.transform;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = striped && index % 2 === 1 ? tokens.colors.neutral[50] : '';
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     {columns.map((col) => {

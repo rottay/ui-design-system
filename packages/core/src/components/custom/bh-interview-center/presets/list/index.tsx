@@ -8,7 +8,19 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhInterviewCenterProps,
   InterviewItem,
@@ -212,14 +224,14 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       backdropFilter: tokens.glass.blur,
       WebkitBackdropFilter: tokens.glass.blur,
       backgroundColor: tokens.glass.bg,
-      border: `1px solid ${tokens.glass.border}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
     } : {};
 
     const glassSurfaceStyle = isModern && tokens.glass ? {
       backdropFilter: tokens.glass.blurSm,
       WebkitBackdropFilter: tokens.glass.blurSm,
       backgroundColor: tokens.glass.bgLight,
-      border: `1px solid ${tokens.glass.borderLight}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
     } : {};
 
     // ─── Handlers ───────────────────────────────────────────────────────
@@ -427,7 +439,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     cursor: 'pointer',
@@ -466,7 +478,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     cursor: 'pointer',
@@ -491,7 +503,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             gap: tokens.spacing[2],
             padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
             minWidth: 200,
             transition: `all ${tokens.motion.hover}`,
@@ -510,6 +522,15 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 backgroundColor: 'transparent',
                 flex: 1,
                 padding: 0,
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
             {searchQuery && (
@@ -541,7 +562,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 100px 90px 120px 160px 90px 80px 1fr 80px',
         padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-        borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
         backgroundColor: tokens.colors.neutral[50],
         borderRadius: `${tokens.borderRadius.lg} ${tokens.borderRadius.lg} 0 0`,
       }}>
@@ -597,7 +618,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 100px 90px 120px 160px 90px 80px 1fr 80px',
             padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-            borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             backgroundColor: isSelected
               ? tokens.colors.primaryScale[50]
               : isHovered
@@ -679,7 +700,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               fontWeight: tokens.typography.fontWeight.medium,
               backgroundColor: typeCfg.bgColor,
               color: typeCfg.color,
-              border: `1px solid ${typeCfg.borderColor}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${typeCfg.borderColor}`,
             }}>
               {interview.type === 'ai' ? <Bot size={10} /> : <User size={10} />}
               {typeCfg.label}
@@ -698,7 +719,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               fontWeight: tokens.typography.fontWeight.medium,
               backgroundColor: statusCfg.bgColor,
               color: statusCfg.color,
-              border: `1px solid ${statusCfg.borderColor}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}`,
             }}>
               <span style={{
                 width: 5,
@@ -798,7 +819,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             alignItems: 'center',
             gap: tokens.spacing[1],
             opacity: isHovered ? 1 : 0,
-            transition: `opacity ${tokens.motion.hover}`,
+            transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
             padding: `0 ${tokens.spacing[1]}px`,
           }}>
             <button
@@ -811,7 +832,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 width: 26,
                 height: 26,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[600],
                 cursor: 'pointer',
@@ -831,7 +852,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 width: 26,
                 height: 26,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[600],
                 cursor: 'pointer',
@@ -949,7 +970,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             display: 'flex',
             alignItems: 'center',
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             overflow: 'hidden' as const,
           }}>
             {[

@@ -52,7 +52,7 @@ export default createPreset<ContentCardProps>((context) => {
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              fontSize: '24px',
+              fontSize: tokens.typography.fontSize['2xl'],
             }}
           >
             {icon}

@@ -9,7 +9,19 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhFeedbackEditorProps,
   FeedbackChannel,
@@ -67,8 +79,8 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
     const channelConfig = getChannelConfig(tokens);
     const toneConfig = getToneConfig(tokens);
     const categoryConfig = getTemplateCategoryConfig(tokens);
-    const hoverStyle = createHoverStyle(tokens);
-    const cardStyle = createCardStyle(tokens, { elevation: 'sm', glass: engine !== 'classic' });
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const cardStyle = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: engine !== 'classic' }), [tokens, engine]);
 
     const {
       context,
@@ -182,7 +194,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
       linkedin: <Linkedin size={16} />,
     };
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine !== 'classic' });
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine !== 'classic' }), [tokens, engine]);
 
     return (
       <Box className={className} style={{
@@ -202,7 +214,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
           backgroundColor: tokens.colors.common.white,
           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           ...createSurfaceStyle(tokens, { elevation: 'sm' }),
-          borderRadius: 0,
+          borderRadius: tokens.borderRadius.none,
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
             <Box style={{
@@ -272,6 +284,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
                 ...hoverStyle,
               }}
@@ -430,6 +443,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                         border: 'none',
                         backgroundColor: 'transparent',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                         ...hoverStyle,
                       }}
@@ -479,7 +493,8 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                                 ? tokens.colors.neutral[50]
                                 : 'transparent',
                             cursor: 'pointer',
-                            borderLeft: isSelected ? `2px solid ${tokens.colors.primaryScale[500]}` : '2px solid transparent',
+                            transition: `all ${tokens.motion.hover}`,
+                            borderLeft: isSelected ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                             ...hoverStyle,
                           }}
                         >
@@ -521,7 +536,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                                   }} />
                                 </Box>
                                 <Box style={{
-                                  fontSize: 9,
+                                  fontSize: tokens.typography.fontSize.xs,
                                   color: tokens.colors.neutral[400],
                                 }}>
                                   {template.effectiveness}%
@@ -576,12 +591,13 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                       gap: tokens.spacing[2],
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       border: 'none',
-                      borderBottom: isActive ? `2px solid ${config.color}` : '2px solid transparent',
+                      borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${config.color}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                       backgroundColor: 'transparent',
                       color: isActive ? config.color : tokens.colors.neutral[500],
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                       ...hoverStyle,
                     }}
@@ -615,6 +631,15 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                     backgroundColor: tokens.colors.common.white,
                     fontFamily: 'inherit',
                     outline: 'none',
+                  }}
+                
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                    e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                   }}
                 />
               </Box>
@@ -651,9 +676,10 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                       alignItems: 'flex-start',
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `2px solid ${isActive ? config.borderColor : tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? config.borderColor : tokens.colors.neutral[200]}`,
                       backgroundColor: isActive ? config.bgColor : tokens.colors.common.white,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                       flex: 1,
                       ...hoverStyle,
@@ -671,7 +697,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                       {config.label}
                     </Box>
                     <Box style={{
-                      fontSize: 10,
+                      fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.neutral[400],
                       marginTop: 2,
                       textAlign: 'left',
@@ -720,6 +746,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'monospace',
                       ...hoverStyle,
                     }}
@@ -774,7 +801,16 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                   fontFamily: 'inherit',
                   resize: 'none',
                   outline: 'none',
-                  lineHeight: 1.6,
+                  lineHeight: tokens.typography.lineHeight.relaxed,
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
               {/* Character count bar (for SMS) */}
@@ -904,7 +940,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                   <Box style={{
                     fontSize: tokens.typography.fontSize.sm,
                     color: tokens.colors.neutral[700],
-                    lineHeight: 1.6,
+                    lineHeight: tokens.typography.lineHeight.relaxed,
                     whiteSpace: 'pre-wrap',
                     wordBreak: 'break-word',
                   }}>
@@ -939,7 +975,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                     <Box style={{
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.neutral[600],
-                      lineHeight: 1.5,
+                      lineHeight: tokens.typography.lineHeight.relaxed,
                       whiteSpace: 'pre-wrap',
                       maxHeight: 120,
                       overflow: 'hidden',

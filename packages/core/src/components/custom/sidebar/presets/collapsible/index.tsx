@@ -8,6 +8,11 @@
 import { useState, useCallback } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SidebarProps, SidebarItem } from '../../core';
+import {
+  createFilterPillStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const CollapsibleSidebar = createPreset<SidebarProps>({
   name: 'Sidebar.Collapsible',
@@ -96,12 +101,11 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
                 : isHovered
                   ? tokens.colors.neutral[800]
                   : tokens.colors.neutral[500],
-              transition: `all ${tokens.motion.hover}`,
               minHeight: '40px',
             }}
           >
             {item.icon && (
-              <Box style={{ fontSize: '20px', display: 'flex', alignItems: 'center' }}>
+              <Box style={{ fontSize: tokens.typography.fontSize.xl, display: 'flex', alignItems: 'center' }}>
                 {item.icon}
               </Box>
             )}
@@ -115,7 +119,7 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
                   height: '8px',
                   borderRadius: tokens.borderRadius.full,
                   backgroundColor: tokens.colors.errorScale[500],
-                  border: `2px solid ${tokens.colors.common.white}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                 }}
               />
             )}
@@ -145,7 +149,6 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
             color: isActive
               ? tokens.colors.primaryScale[600]
               : tokens.colors.neutral[700],
-            transition: `all ${tokens.motion.hover}`,
             fontWeight: isActive
               ? tokens.typography.fontWeight.semibold
               : tokens.typography.fontWeight.normal,
@@ -171,12 +174,12 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
           {item.icon && (
             <Box
               style={{
-                fontSize: '16px',
+                fontSize: tokens.typography.fontSize.md,
                 flexShrink: 0,
                 display: 'flex',
                 alignItems: 'center',
                 color: isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[500],
-                transition: `color ${tokens.motion.hover}`,
+                transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
               }}
             >
               {item.icon}

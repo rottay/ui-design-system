@@ -77,6 +77,21 @@ export interface MotionTokens {
   durationScale: number;
 }
 
+export interface OverlayTokens {
+  /** Light dark overlay - modals, dropdowns (opacity ~0.3) */
+  light: string;
+  /** Medium dark overlay - modal backdrops (opacity ~0.5) */
+  medium: string;
+  /** Heavy dark overlay - image overlays, dark backdrops (opacity ~0.7) */
+  heavy: string;
+  /** Light white overlay - frosted panels (opacity ~0.9) */
+  white: string;
+  /** Medium white overlay (opacity ~0.5) */
+  whiteMedium: string;
+  /** Subtle white overlay (opacity ~0.2) */
+  whiteLight: string;
+}
+
 export interface DesignTokens {
   colors: {
     /** Primary brand color (single value from tenant branding) */
@@ -159,4 +174,6 @@ export interface DesignTokens {
   surface: SurfaceTokens;
   /** Motion tokens - animation behavior per engine */
   motion: MotionTokens;
+  /** Overlay tokens for backdrops, modals, and translucent surfaces */
+  overlay?: OverlayTokens;
 }

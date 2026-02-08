@@ -150,7 +150,7 @@ export const PreviewEmailSequence = createPreset<EmailSequenceProps>({
                           height: tokens.spacing[3],
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: sColors.color,
-                          border: `2px solid ${tokens.colors.common.white}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                           boxShadow: `0 0 0 2px ${sColors.border}`,
                           flexShrink: 0,
                           marginTop: tokens.spacing[3],

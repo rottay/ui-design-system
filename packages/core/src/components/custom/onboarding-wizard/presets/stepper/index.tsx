@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { OnboardingWizardProps } from '../../core';
 
 export default createPreset<OnboardingWizardProps>((context) => {
@@ -28,7 +32,7 @@ export default createPreset<OnboardingWizardProps>((context) => {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   const handleNext = () => {
     if (isLastStep) {
@@ -110,7 +114,7 @@ export default createPreset<OnboardingWizardProps>((context) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   background: isCompleted || isCurrent ? tokens.colors.primaryScale[600] : tokens.colors.common.white,
-                  border: isFuture ? `2px solid ${tokens.colors.neutral[300]}` : 'none',
+                  border: isFuture ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}` : 'none',
                   color: isCompleted || isCurrent ? tokens.colors.common.white : tokens.colors.neutral[400],
                   fontWeight: tokens.typography.fontWeight.semibold,
                   fontSize: tokens.typography.fontSize.sm,

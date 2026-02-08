@@ -7,7 +7,20 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhTemplateLibraryProps, TemplateItem, TemplateFilter } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -271,6 +284,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       outline: 'none',
       appearance: 'none' as const,
       paddingRight: tokens.spacing[6],
@@ -322,7 +336,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
 
     const rowStyle = (id: string): React.CSSProperties => ({
       cursor: 'pointer',
-      transition: `background-color ${tokens.motion.hover}`,
+      transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
       backgroundColor:
         selectedTemplate?.id === id
           ? tokens.colors.primaryScale[50]
@@ -455,7 +469,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       fontSize: '9px',
       fontWeight: tokens.typography.fontWeight.semibold,
       marginLeft: index > 0 ? -6 : 0,
-      border: `2px solid ${tokens.colors.common.white}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
       position: 'relative' as const,
       zIndex: 10 - index,
     });
@@ -480,7 +494,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       return {
         flex: 1,
         backgroundColor: colors[index % colors.length],
-        borderRight: index < total - 1 ? `1px solid ${tokens.colors.common.white}` : 'none',
+        borderRight: index < total - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}` : 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -530,6 +544,15 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                 flex: 1,
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[700],
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
             {filters.search && (
@@ -623,6 +646,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   border: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   backgroundColor:
                     viewMode === 'cards'
                       ? tokens.colors.primaryScale[50]
@@ -645,6 +669,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   border: 'none',
                   borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   backgroundColor:
                     viewMode === 'table'
                       ? tokens.colors.primaryScale[50]
@@ -883,7 +908,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                                 alignItems: 'center',
                                 gap: tokens.spacing[1],
                                 opacity: hoveredRow === template.id ? 1 : 0,
-                                transition: `opacity ${tokens.motion.hover}`,
+                                transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
                               }}
                             >
                               <button

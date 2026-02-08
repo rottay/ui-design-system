@@ -3,7 +3,7 @@ import { createPreset, type PresetContext } from '../../../factory';
 import type { DataSummaryBarProps } from '../../core';
 
 export const Pills = createPreset<DataSummaryBarProps>((context: PresetContext<DataSummaryBarProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { metrics, className, style } = props;

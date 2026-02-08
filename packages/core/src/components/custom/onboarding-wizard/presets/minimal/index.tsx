@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { OnboardingWizardProps } from '../../core';
 
 export default createPreset<OnboardingWizardProps>((context) => {
@@ -28,7 +31,7 @@ export default createPreset<OnboardingWizardProps>((context) => {
   const isFirstStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   const handleNext = () => {
     if (isLastStep) {

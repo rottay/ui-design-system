@@ -1,10 +1,15 @@
+import { useMemo } from 'react';
 /**
  * AuthLayout - Enterprise Preset
  * Full-featured auth with SSO, social providers, terms acceptance, and tenant branding
  */
 
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { AuthLayoutProps } from '../../core';
 
 export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
@@ -26,10 +31,10 @@ export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
 
     const brandLogo = logo || tenant.branding.logo;
 
-    const surfaceStyle = createSurfaceStyle(tokens, {
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'lg',
       glass: engine === 'modern',
-    });
+    }), [tokens, engine]);
 
     return (
       <Box
@@ -143,6 +148,7 @@ export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[700],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 <input type="checkbox" style={{ marginTop: tokens.spacing[1] }} />
                 <span>
@@ -152,6 +158,7 @@ export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
                       <span style={{
                         color: tokens.colors.primaryScale[600],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontWeight: tokens.typography.fontWeight.medium,
                       }}>
                         Terms of Service
@@ -160,6 +167,7 @@ export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
                       <span style={{
                         color: tokens.colors.primaryScale[600],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontWeight: tokens.typography.fontWeight.medium,
                       }}>
                         Privacy Policy

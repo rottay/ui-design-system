@@ -1,8 +1,12 @@
 import { createPreset, type PresetContext } from '../../../factory';
 import type { EmptyStateProps } from '../../core';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const compactPreset = createPreset<EmptyStateProps>((context: PresetContext<EmptyStateProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Button } = primitives;
 
   const {
@@ -39,7 +43,7 @@ export const compactPreset = createPreset<EmptyStateProps>((context: PresetConte
             justifyContent: 'center',
             color: tokens.colors.neutral[400],
             marginBottom: tokens.spacing[2],
-            fontSize: '18px',
+            fontSize: tokens.typography.fontSize.lg,
           }}
         >
           {icon}
@@ -101,7 +105,6 @@ export const compactPreset = createPreset<EmptyStateProps>((context: PresetConte
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing[1],
-                transition: `all ${tokens.motion.hover}`,
                 backgroundColor:
                   action.variant === 'primary'
                     ? tokens.colors.primaryScale[600]
@@ -117,6 +120,7 @@ export const compactPreset = createPreset<EmptyStateProps>((context: PresetConte
                   action.variant === 'primary'
                     ? tokens.colors.primaryScale[700]
                     : tokens.colors.neutral[200];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 const target = e.currentTarget;
@@ -124,6 +128,7 @@ export const compactPreset = createPreset<EmptyStateProps>((context: PresetConte
                   action.variant === 'primary'
                     ? tokens.colors.primaryScale[600]
                     : tokens.colors.neutral[100];
+                e.currentTarget.style.transform = 'none';
               }}
             >
               {action.icon}

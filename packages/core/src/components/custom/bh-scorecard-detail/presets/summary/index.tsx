@@ -7,7 +7,15 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhScorecardDetailProps,
   ScorecardDimension,
@@ -75,12 +83,12 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const levelColors = getScoreLevelColors(header.overallLevel, tokens);
@@ -168,7 +176,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>(
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap' as const,
             minWidth: 0,
-            transition: `color ${tokens.motion.hover}`,
+            transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
           }}>
             {dim.name}
           </Box>
@@ -185,7 +193,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>(
               height: '100%',
               backgroundColor: scoreColor,
               borderRadius: tokens.borderRadius.full,
-              transition: `width ${tokens.motion.hover}`,
+              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
             }} />
           </Box>
           <Box style={{
@@ -222,7 +230,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>(
           justifyContent: 'center',
           overflow: 'hidden',
           flexShrink: 0,
-          border: `2px solid ${tokens.colors.primaryScale[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
         }}>
           {header.candidateAvatar ? (
             <img

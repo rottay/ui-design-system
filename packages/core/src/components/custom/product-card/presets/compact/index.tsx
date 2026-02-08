@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
 import { createCardStyle } from '../../../helpers';
 import type { ProductCardProps } from '../../core';
 import { PRODUCT_CARD_DEFAULTS } from '../../core';
 
 export const CompactPreset = createPreset<ProductCardProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text, Button } = primitives;
   const {
     title,
@@ -24,9 +25,10 @@ export const CompactPreset = createPreset<ProductCardProps>((context) => {
   } = props;
   const [isHovered, setIsHovered] = useState(false);
 
-  const cardStyle = createCardStyle(tokens, {
+  const cardStyle = useMemo(() => createCardStyle(tokens, {
+    glass: isGlass,
     interactive: !!onClick,
-  });
+  }), [tokens, onClick]);
 
   return (
     <Box

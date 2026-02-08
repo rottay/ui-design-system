@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { ImportExportPanelProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const Standard = createPreset<ImportExportPanelProps>((context: PresetContext<ImportExportPanelProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { mode, columns = [], formats = ['csv', 'json', 'xlsx'], onImport, onExport, className, style } = props;
@@ -14,7 +17,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
   const [step, setStep] = useState<'upload' | 'preview' | 'mapping' | 'confirm'>('upload');
   const [selectedFormat, setSelectedFormat] = useState(formats[0]);
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const renderImportSteps = () => {
     switch (step) {
@@ -46,6 +49,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Browse Files
@@ -63,6 +67,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Next
@@ -93,6 +98,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Back
@@ -108,6 +114,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Next
@@ -146,6 +153,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Back
@@ -161,6 +169,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Next
@@ -194,6 +203,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Back
@@ -209,6 +219,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Confirm Import
@@ -241,6 +252,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             {format.toUpperCase()}
@@ -258,6 +270,7 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
           fontSize: tokens.typography.fontSize.sm,
           fontWeight: tokens.typography.fontWeight.medium,
           cursor: 'pointer',
+          transition: `all ${tokens.motion.hover}`,
         }}
       >
         Export

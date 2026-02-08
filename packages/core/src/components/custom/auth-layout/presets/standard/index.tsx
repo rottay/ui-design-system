@@ -1,10 +1,14 @@
+import { useMemo } from 'react';
 /**
  * AuthLayout - Standard Preset
  * Email/password + remember me + forgot password with full token compliance
  */
 
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { AuthLayoutProps } from '../../core';
 import { AUTH_LAYOUT_DEFAULTS } from '../../core';
 
@@ -25,10 +29,10 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
       style,
     } = props;
 
-    const surfaceStyle = createSurfaceStyle(tokens, {
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'md',
       glass: engine === 'modern',
-    });
+    }), [tokens, engine]);
 
     return (
       <Box
@@ -107,6 +111,7 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
                     alignItems: 'center',
                     gap: tokens.spacing[2],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: tokens.colors.neutral[700],
                   }}>
                     <input type="checkbox" />
@@ -126,7 +131,7 @@ export const StandardAuthLayout = createPreset<AuthLayoutProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
                       fontFamily: 'inherit',
-                      transition: `color ${tokens.motion.hover}`,
+                      transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                   >
                     Forgot password?

@@ -10,7 +10,17 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { TransactionListProps, Transaction, TransactionStatus, TransactionSummary } from '../../core';
 import { TRANSACTION_LIST_DEFAULTS, getStatusConfig, defaultFormatAmount, generateDefaultSummaries } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -329,7 +339,6 @@ export const StandardTransactionList = createPreset<TransactionListProps>({
                 backgroundColor: item.active
                   ? tokens.colors.neutral[100]
                   : 'transparent',
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Box style={{ color: item.active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400], display: 'flex' }}>
@@ -513,10 +522,9 @@ export const StandardTransactionList = createPreset<TransactionListProps>({
                   ? tokens.colors.primaryScale[600]
                   : tokens.colors.neutral[500],
                 borderBottom: isActive
-                  ? `2px solid ${tokens.colors.primaryScale[600]}`
-                  : '2px solid transparent',
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
+                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 marginBottom: -1,
-                transition: `all ${tokens.motion.hover}`,
                 whiteSpace: 'nowrap',
                 display: 'flex',
                 alignItems: 'center',
@@ -623,6 +631,15 @@ export const StandardTransactionList = createPreset<TransactionListProps>({
               fontSize: tokens.typography.fontSize.sm,
               color: tokens.colors.neutral[900],
               outline: 'none',
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
         </Box>
@@ -913,6 +930,7 @@ export const StandardTransactionList = createPreset<TransactionListProps>({
                         fontSize: tokens.typography.fontSize.sm,
                         color: action.danger ? tokens.colors.errorScale[600] : tokens.colors.neutral[700],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         display: 'flex',
                         alignItems: 'center',
                         gap: tokens.spacing[2],

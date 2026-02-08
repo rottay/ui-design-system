@@ -9,10 +9,14 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
-  createSurfaceStyle,
   createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSurfaceStyle,
   getHoverTransform,
 } from '../../../helpers';
 import type {
@@ -347,7 +351,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
               justifyContent: 'center',
               overflow: 'hidden',
               flexShrink: 0,
-              border: `2px solid ${tokens.colors.primaryScale[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
             }}
           >
             {interviewInfo.candidateAvatar ? (
@@ -504,10 +508,12 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.backgroundColor =
                   tokens.colors.primaryScale[600];
+                (e.currentTarget as HTMLElement).style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLElement).style.backgroundColor =
                   tokens.colors.primaryScale[500];
+                (e.currentTarget as HTMLElement).style.transform = 'none';
               }}
             >
               {isPlaying ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: 2 }} />}
@@ -626,7 +632,6 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
                 alignItems: 'center',
                 padding: tokens.spacing[1],
                 borderRadius: tokens.borderRadius.sm,
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
@@ -642,6 +647,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
               overflow: 'hidden',
               backgroundColor: tokens.colors.neutral[50],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect();
@@ -738,7 +744,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
           <span
             key={`ev-${i}`}
             style={{
-              borderBottom: `2px solid ${dimScoreColor}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${dimScoreColor}`,
               backgroundColor:
                 isHighlighted || isSelectedDim
                   ? tokens.colors.primaryScale[50]
@@ -1175,7 +1181,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
                     width: `${Math.min(100, dim.score)}%`,
                     borderRadius: tokens.borderRadius.full,
                     background: `linear-gradient(90deg, ${gradient.start}, ${gradient.end})`,
-                    transition: `width ${tokens.motion.hover}`,
+                    transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                   }}
                 />
               </div>
@@ -1249,6 +1255,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[400],
                 display: 'flex',
                 padding: tokens.spacing[1],
@@ -1312,6 +1319,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[400],
                 display: 'flex',
                 padding: tokens.spacing[1],
@@ -1361,6 +1369,15 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
                       backgroundColor: tokens.colors.neutral[50],
                       outline: 'none',
                       boxSizing: 'border-box',
+                    }}
+                  
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                      e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                     }}
                   />
                 </div>

@@ -1,19 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { AuditLogProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const Table = createPreset<AuditLogProps>((context: PresetContext<AuditLogProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { entries, className, style } = props;
 
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const getSeverityColor = (severity?: string) => {
     switch (severity) {

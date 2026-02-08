@@ -8,7 +8,16 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhDecisionHubProps,
   DecisionCandidate,
@@ -214,7 +223,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
   render: ({ primitives, props, tokens, engine }: PresetContext<BhDecisionHubProps>) => {
     const { Box } = primitives;
     const actionConfig = getDecisionActionConfig(tokens);
-    const hoverStyle = createHoverStyle(tokens);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const {
@@ -316,8 +325,8 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
       }
     }, [selectedCandidateId, decision, onSubmitDecision, setShowConfirmation, setDecision]);
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine !== 'classic' });
-    const cardStyle = createCardStyle(tokens, { elevation: 'sm', glass: engine !== 'classic' });
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine !== 'classic' }), [tokens, engine]);
+    const cardStyle = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: engine !== 'classic' }), [tokens, engine]);
 
     // ─── Ranking badges ──────────────────────────────────────────────────
     const rankCounts = useMemo(() => {
@@ -350,7 +359,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
           backgroundColor: tokens.colors.common.white,
           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           ...createSurfaceStyle(tokens, { elevation: 'sm' }),
-          borderRadius: 0,
+          borderRadius: tokens.borderRadius.none,
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
             <Box style={{
@@ -425,6 +434,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                   ...hoverStyle,
                 }}
@@ -446,6 +456,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                   ...hoverStyle,
                 }}
@@ -508,6 +519,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                         backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[200] : 'transparent'}`,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         marginBottom: tokens.spacing[1],
                         ...hoverStyle,
                       }}
@@ -618,7 +630,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                         height: tokens.spacing[14],
                         borderRadius: tokens.borderRadius.full,
                         objectFit: 'cover',
-                        border: `2px solid ${tokens.colors.neutral[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       }}
                     />
                   ) : (
@@ -910,12 +922,13 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                             gap: tokens.spacing[2],
                             padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                             borderRadius: tokens.borderRadius.lg,
-                            border: `2px solid ${isActive ? config.borderColor : tokens.colors.neutral[200]}`,
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? config.borderColor : tokens.colors.neutral[200]}`,
                             backgroundColor: isActive ? config.bgColor : tokens.colors.common.white,
                             color: isActive ? config.color : tokens.colors.neutral[600],
                             fontSize: tokens.typography.fontSize.sm,
                             fontWeight: tokens.typography.fontWeight.semibold,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             fontFamily: 'inherit',
                             ...hoverStyle,
                           }}
@@ -949,6 +962,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                           backgroundColor: tokens.colors.common.white,
                           fontFamily: 'inherit',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         <option value="">Select next step...</option>
@@ -982,6 +996,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                             backgroundColor: tokens.colors.common.white,
                             fontFamily: 'inherit',
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                           }}
                         >
                           <option value="">Select category...</option>
@@ -1090,6 +1105,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.semibold,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                         ...hoverStyle,
                       }}
@@ -1167,6 +1183,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                   border: 'none',
                   backgroundColor: 'transparent',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   color: tokens.colors.neutral[400],
                   borderRadius: tokens.borderRadius.md,
                   fontFamily: 'inherit',
@@ -1202,6 +1219,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                         border: 'none',
                         backgroundColor: 'transparent',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         color: tokens.colors.neutral[400],
                         borderRadius: tokens.borderRadius.full,
                         fontFamily: 'inherit',
@@ -1303,6 +1321,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                       color: historyFilter === opt.value ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
                       fontSize: tokens.typography.fontSize.xs,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                     }}
                   >
@@ -1320,6 +1339,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                     border: 'none',
                     backgroundColor: 'transparent',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: tokens.colors.neutral[400],
                     borderRadius: tokens.borderRadius.md,
                     fontFamily: 'inherit',
@@ -1361,7 +1381,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                         height: tokens.spacing[2] + 2,
                         borderRadius: tokens.borderRadius.full,
                         backgroundColor: config.iconColor,
-                        border: `2px solid ${tokens.colors.common.white}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                       }} />
                       <Box style={{ flex: 1 }}>
                         <Box style={{
@@ -1426,7 +1446,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(0,0,0,0.4)',
+            backgroundColor: tokens.overlay?.light,
             zIndex: 1000,
           }}>
             <Box style={{
@@ -1462,6 +1482,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                     border: 'none',
                     backgroundColor: 'transparent',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     color: tokens.colors.neutral[400],
                     borderRadius: tokens.borderRadius.md,
                     fontFamily: 'inherit',
@@ -1501,7 +1522,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                     color: actionConfig[decision.action].color,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.semibold,
-                    border: `1px solid ${actionConfig[decision.action].borderColor}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${actionConfig[decision.action].borderColor}`,
                   }}>
                     {actionConfig[decision.action].label}
                   </Box>
@@ -1598,6 +1619,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -1614,6 +1636,7 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                     display: 'flex',
                     alignItems: 'center',

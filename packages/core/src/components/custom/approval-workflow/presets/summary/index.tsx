@@ -8,6 +8,12 @@
 import { createPreset, PresetContext } from '../../../factory';
 import type { ApprovalWorkflowProps } from '../../core';
 import { getOutcomeColors, getStatusCategoryColors } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const SummaryApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
   name: 'ApprovalWorkflow.Summary',
@@ -105,7 +111,7 @@ export const SummaryApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                         width: tokens.spacing[8],
                         height: tokens.spacing[8],
                         borderRadius: tokens.borderRadius.full,
-                        border: `2px solid ${tokens.colors.common.white}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                         marginLeft: index > 0 ? -tokens.spacing[2] : 0,
                         display: 'flex',
                         alignItems: 'center',
@@ -141,7 +147,7 @@ export const SummaryApprovalWorkflow = createPreset<ApprovalWorkflowProps>({
                       width: tokens.spacing[8],
                       height: tokens.spacing[8],
                       borderRadius: tokens.borderRadius.full,
-                      border: `2px solid ${tokens.colors.common.white}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                       marginLeft: -tokens.spacing[2],
                       backgroundColor: tokens.colors.neutral[100],
                       color: tokens.colors.neutral[600],

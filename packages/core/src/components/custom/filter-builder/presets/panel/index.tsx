@@ -4,6 +4,15 @@ import { useState, useMemo, useCallback } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { FilterBuilderProps, FilterFieldConfig } from '../../core';
 import { FILTER_BUILDER_DEFAULTS } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
   name: 'FilterBuilder.Panel',
@@ -88,6 +97,15 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                 fontFamily: 'inherit',
                 minWidth: field.minWidth ?? 160,
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           );
 
@@ -104,6 +122,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[900],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
                 minWidth: field.minWidth ?? 140,
               }}
@@ -136,6 +155,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${selected ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
                       borderRadius: tokens.borderRadius.full,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                     }}
                   >
@@ -256,6 +276,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       borderRadius: tokens.borderRadius.md,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                     }}
                   >
@@ -308,6 +329,15 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                   outline: 'none',
                   fontFamily: 'inherit',
                 }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
               />
             </div>
           )}
@@ -334,6 +364,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${showSecondary ? tokens.colors.primaryScale[200] : tokens.colors.neutral[300]}`,
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -363,6 +394,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                 backgroundColor: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
                 textDecoration: 'underline',
               }}
@@ -381,6 +413,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                 backgroundColor: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -412,6 +445,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -499,6 +533,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                         border: 'none',
                         color: tokens.colors.primaryScale[400],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontSize: tokens.typography.fontSize.xs,
                         padding: 0,
                         lineHeight: 1,
@@ -515,7 +550,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
         {/* Save filter modal */}
         {showSaveModal && (
           <>
-            <div onClick={() => setShowSaveModal(false)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.3)', zIndex: 999 }} />
+            <div onClick={() => setShowSaveModal(false)} style={{ position: 'fixed', inset: 0, backgroundColor: tokens.overlay?.light, zIndex: 999 }} />
             <div style={{
               position: 'fixed',
               top: '50%',
@@ -558,6 +593,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -579,6 +615,7 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
                     border: 'none',
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >

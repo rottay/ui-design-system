@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { ColorPalettePickerProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const CompactPreset = createPreset<ColorPalettePickerProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -44,12 +47,13 @@ export const CompactPreset = createPreset<ColorPalettePickerProps>((context) => 
                 height: '28px',
                 backgroundColor: color,
                 borderRadius: tokens.borderRadius.sm,
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   value === color
                     ? tokens.colors.primaryScale[600]
                     : tokens.colors.neutral[300]
                 }`,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             />
           ))}
@@ -63,12 +67,13 @@ export const CompactPreset = createPreset<ColorPalettePickerProps>((context) => 
                 height: '28px',
                 backgroundColor: color,
                 borderRadius: tokens.borderRadius.sm,
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   value === color
                     ? tokens.colors.primaryScale[600]
                     : tokens.colors.neutral[300]
                 }`,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             />
           ))}
@@ -86,6 +91,7 @@ export const CompactPreset = createPreset<ColorPalettePickerProps>((context) => 
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 borderRadius: tokens.borderRadius.sm,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 color: tokens.colors.neutral[700],

@@ -9,8 +9,9 @@ import type { TestimonialSectionProps } from '../../core';
 
 export const CardsTestimonialSection = createPreset<TestimonialSectionProps>({
   name: 'TestimonialSection.Cards',
-  render: ({ primitives, props, tokens }: PresetContext<TestimonialSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<TestimonialSectionProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { testimonials, title, description, className, style } = props;
 
     const renderStars = (rating?: number) => {
@@ -22,7 +23,7 @@ export const CardsTestimonialSection = createPreset<TestimonialSectionProps>({
               key={i}
               style={{
                 color: i < rating ? tokens.colors.warningScale[500] : tokens.colors.neutral[300],
-                fontSize: '16px',
+                fontSize: tokens.typography.fontSize.md,
               }}
             >
               ★
@@ -82,6 +83,7 @@ export const CardsTestimonialSection = createPreset<TestimonialSectionProps>({
                 key={testimonial.id}
                 style={{
                   ...createCardStyle(tokens, {
+                    glass: isGlass,
                     elevation: 'sm',
                     padding: tokens.spacing[6],
                   }),

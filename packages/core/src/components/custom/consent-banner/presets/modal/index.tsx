@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { ConsentBannerProps } from '../../core';
 import { DEFAULT_CATEGORIES, CONSENT_BANNER_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const ModalConsentBanner = createPreset<ConsentBannerProps>({
   name: 'ConsentBanner.Modal',
@@ -61,7 +65,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
         <div style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: tokens.overlay?.medium,
           zIndex: 999,
         }} />
 
@@ -92,7 +96,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
                 {title}
               </div>
             </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], lineHeight: 1.5 }}>
+            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], lineHeight: tokens.typography.lineHeight.relaxed }}>
               {description}
             </div>
           </div>
@@ -131,7 +135,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
                       </span>
                     )}
                   </div>
-                  <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1], lineHeight: 1.5 }}>
+                  <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1], lineHeight: tokens.typography.lineHeight.relaxed }}>
                     {cat.description}
                   </div>
                 </div>
@@ -158,6 +162,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -174,6 +179,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
                 border: 'none',
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -190,6 +196,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
                 border: 'none',
                 borderRadius: tokens.borderRadius.md,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >

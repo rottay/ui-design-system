@@ -8,7 +8,18 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhRankingBoardProps,
   RankedCandidate,
@@ -151,13 +162,13 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: isModern });
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isModern }), [tokens, isModern]);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ---- compared candidates ---- */
@@ -285,7 +296,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>(
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
                   backgroundColor: isSelected ? (overlayColor ? overlayColor.fill : tokens.colors.primaryScale[50]) : tokens.colors.common.white,
-                  border: `2px solid ${isSelected ? (overlayColor ? overlayColor.stroke : tokens.colors.primaryScale[400]) : tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? (overlayColor ? overlayColor.stroke : tokens.colors.primaryScale[400]) : tokens.colors.neutral[200]}`,
                   opacity: !isSelected && selected.length >= 5 ? 0.5 : 1,
                 }}
               >
@@ -479,6 +490,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>(
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.md,
                     backgroundColor: hoveredCandidate === c.id ? `${color.stroke}10` : 'transparent',
+                    transform: hoveredCandidate === c.id ? tokens.motion.transform : 'none',
                   }}
                 >
                   <Box style={{
@@ -545,7 +557,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>(
                     justifyContent: 'center',
                     overflow: 'hidden',
                     flexShrink: 0,
-                    border: `2px solid ${color.stroke}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${color.stroke}`,
                   }}>
                     {candidate.avatar ? (
                       <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -887,7 +899,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>(
                         height: '100%',
                         backgroundColor: color.stroke,
                         borderRadius: tokens.borderRadius.full,
-                        transition: `width ${tokens.motion.hover}`,
+                        transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                       }} />
                     </Box>
                     <Box style={{

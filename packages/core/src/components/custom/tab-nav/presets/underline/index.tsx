@@ -92,15 +92,17 @@ export default createPreset<TabNavProps>((context) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '12px',
+                fontSize: tokens.typography.fontSize.xs,
                 color: tokens.colors.neutral[500],
                 transition: `all ${tokens.motion.hover}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.transform = 'none';
               }}
             >
               ×

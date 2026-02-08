@@ -7,7 +7,16 @@
 
 import { useState, useCallback, useMemo, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { BhJobEditorProps } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
@@ -117,6 +126,7 @@ function generateJobCode(title: string): string {
 export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
   'SinglePageBhJobEditor',
   ({ props, tokens, engine }) => {
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const {
       formData: formDataProp,
       validationErrors: validationErrorsProp,
@@ -290,7 +300,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
       padding: tokens.spacing[6],
     };
 
-    const cardStyle = createCardStyle(tokens, { elevation: 'sm', padding: tokens.spacing[6] });
+    const cardStyle = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: 'sm', padding: tokens.spacing[6] }), [tokens]);
 
     const inputStyle: React.CSSProperties = {
       width: '100%',
@@ -338,6 +348,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
       alignItems: 'center',
       justifyContent: 'space-between',
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       marginBottom: tokens.spacing[4],
     };
 
@@ -517,7 +528,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
             gap: tokens.spacing[2],
             padding: tokens.spacing[3],
             backgroundColor: isDirty ? tokens.colors.warningScale[50] : tokens.colors.successScale[50],
-            border: `1px solid ${isDirty ? tokens.colors.warningScale[200] : tokens.colors.successScale[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isDirty ? tokens.colors.warningScale[200] : tokens.colors.successScale[200]}`,
             borderRadius: tokens.borderRadius.md,
             marginBottom: tokens.spacing[3],
           }}
@@ -620,7 +631,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                     fontWeight: isSelected ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                     backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    border: `1px solid ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[300]}`,
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
@@ -647,7 +658,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                     fontWeight: isSelected ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                     backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    border: `1px solid ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[300]}`,
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
@@ -680,7 +691,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                     fontWeight: isSelected ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     color: isSelected ? scale[700] : tokens.colors.neutral[600],
                     backgroundColor: isSelected ? scale[50] : tokens.colors.common.white,
-                    border: `1px solid ${isSelected ? scale[300] : tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? scale[300] : tokens.colors.neutral[300]}`,
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
@@ -751,7 +762,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                     fontWeight: tokens.typography.fontWeight.medium,
                     color: tokens.colors.secondaryScale[700],
                     backgroundColor: tokens.colors.secondaryScale[50],
-                    border: `1px solid ${tokens.colors.secondaryScale[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.secondaryScale[200]}`,
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
@@ -821,7 +832,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                       fontWeight: isSelected ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                       color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                       backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                      border: `2px solid ${isSelected ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200]}`,
                       borderRadius: tokens.borderRadius.lg,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
@@ -967,7 +978,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                       fontSize: tokens.typography.fontSize.sm,
                       color: isChecked ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                       backgroundColor: isChecked ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                      border: `1px solid ${isChecked ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isChecked ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
                       borderRadius: tokens.borderRadius.md,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
@@ -1034,7 +1045,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                     backgroundColor: profColor[50],
                     color: profColor[700],
-                    border: `1px solid ${profColor[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${profColor[200]}`,
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
@@ -1145,6 +1156,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                         fontSize: tokens.typography.fontSize.xs,
                         color: tokens.colors.neutral[500],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                       }}
                     >
                       <input
@@ -1169,6 +1181,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                       color: tokens.colors.errorScale[400],
                       borderRadius: tokens.borderRadius.sm,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                     onClick={() => removeScreeningQuestion(q.id)}
                   >
@@ -1187,7 +1200,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                   fontSize: tokens.typography.fontSize.sm,
                   backgroundColor: tokens.colors.neutral[50],
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px dashed ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                 }}
               >
                 <HelpCircle size={24} style={{ marginBottom: tokens.spacing[2] }} />
@@ -1226,7 +1239,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                       gap: tokens.spacing[3],
                       padding: tokens.spacing[4],
                       backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                      border: `2px solid ${isSelected ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200]}`,
                       borderRadius: tokens.borderRadius.lg,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
@@ -1260,7 +1273,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
                         width: 18,
                         height: 18,
                         borderRadius: tokens.borderRadius.full,
-                        border: `2px solid ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1326,7 +1339,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
               style={{
                 padding: tokens.spacing[4],
                 backgroundColor: tokens.colors.errorScale[50],
-                border: `1px solid ${tokens.colors.errorScale[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                 borderRadius: tokens.borderRadius.md,
                 marginBottom: tokens.spacing[5],
               }}

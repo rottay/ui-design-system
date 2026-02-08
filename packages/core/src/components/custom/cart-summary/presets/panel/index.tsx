@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { CartSummaryProps } from '../../core';
 import { CART_SUMMARY_DEFAULTS } from '../../core';
 
@@ -26,7 +31,7 @@ export const PanelPreset = createPreset<CartSummaryProps>((context) => {
 
   const [promoInput, setPromoInput] = useState('');
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   const formatPrice = (amount: number) => `${currency}${amount.toFixed(2)}`;
 
@@ -185,6 +190,7 @@ export const PanelPreset = createPreset<CartSummaryProps>((context) => {
                         border: 'none',
                         color: tokens.colors.neutral[600],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: 0,
                         width: '20px',
                         height: '20px',
@@ -212,6 +218,7 @@ export const PanelPreset = createPreset<CartSummaryProps>((context) => {
                         border: 'none',
                         color: tokens.colors.neutral[600],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: 0,
                         width: '20px',
                         height: '20px',
@@ -247,6 +254,7 @@ export const PanelPreset = createPreset<CartSummaryProps>((context) => {
                   border: 'none',
                   color: tokens.colors.neutral[400],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   padding: tokens.spacing[1],
                   alignSelf: 'flex-start',
                 }}

@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { FeatureFlagPanelProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const List = createPreset<FeatureFlagPanelProps>((context: PresetContext<FeatureFlagPanelProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { flags, onToggle, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   return (
     <Box style={cardStyle} className={className}>
@@ -74,7 +77,7 @@ export const List = createPreset<FeatureFlagPanelProps>((context: PresetContext<
                       width: `${flag.rolloutPercent}%`,
                       height: '100%',
                       backgroundColor: flag.enabled ? tokens.colors.successScale[500] : tokens.colors.neutral[400],
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
                 </Box>

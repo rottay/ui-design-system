@@ -3,6 +3,10 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { MobileNavProps, MobileNavItem } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MobileNavProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -55,7 +59,6 @@ export default createPreset<MobileNavProps>((context) => {
         activeKey === item.key ? tokens.colors.primaryScale[50] : 'transparent',
       color:
         activeKey === item.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[700],
-      transition: `all ${tokens.motion.hover}`,
       textDecoration: 'none',
     };
     const handleItemClick = () => {
@@ -101,7 +104,7 @@ export default createPreset<MobileNavProps>((context) => {
               alignItems: 'center',
               justifyContent: 'center',
               transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: `transform ${tokens.motion.hover}`,
+              transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
             }}
           >
             ▼
@@ -143,6 +146,7 @@ export default createPreset<MobileNavProps>((context) => {
           justifyContent: 'center',
           gap: '6px',
           cursor: 'pointer',
+          transition: `all ${tokens.motion.hover}`,
           padding: tokens.spacing[1],
         }}
       >
@@ -186,7 +190,7 @@ export default createPreset<MobileNavProps>((context) => {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: tokens.overlay?.medium,
               zIndex: 998,
             }}
           />

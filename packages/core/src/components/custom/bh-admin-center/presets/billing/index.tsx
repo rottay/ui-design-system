@@ -6,9 +6,19 @@
  * token usage trends, cost allocation, and spend forecasting.
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createSurfaceStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
 import {
   getProviderStatusColors,
@@ -92,10 +102,10 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
 
     /* ── Shared styles ─────────────────────────────────────────────── */
 
-    const cardBase = createCardStyle(tokens, {
+    const cardBase = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
-    });
+    }), [tokens, isGlass]);
 
     const sectionTitle: React.CSSProperties = {
       fontSize: tokens.typography.fontSize.lg,
@@ -125,9 +135,9 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
 
     const tabBtn = (active: boolean): React.CSSProperties => ({
       padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-      borderRadius: 0,
+      borderRadius: tokens.borderRadius.none,
       border: 'none',
-      borderBottom: `2px solid ${active ? tokens.colors.primaryScale[600] : 'transparent'}`,
+      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${active ? tokens.colors.primaryScale[600] : 'transparent'}`,
       backgroundColor: 'transparent',
       color: active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
       fontSize: tokens.typography.fontSize.sm,
@@ -248,7 +258,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
             d={d}
             fill={seg.color}
             opacity={selectedCostCategory && !isSelected ? 0.4 : 1}
-            style={{ cursor: 'pointer', transition: `opacity ${tokens.motion.hover}` }}
+            style={{ cursor: 'pointer', transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}` }}
             onClick={() => setSelectedCostCategory(isSelected ? null : seg.label)}
           />
         );
@@ -296,7 +306,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 width={barWidth} height={barH}
                 rx={3}
                 fill={isLast ? tokens.colors.primaryScale[500] : tokens.colors.primaryScale[200]}
-                style={{ transition: `height ${tokens.motion.hover}` }}
+                style={{ transition: `height ${tokens.transitions?.normal || tokens.motion.hover}` }}
               />
             );
           })}
@@ -402,6 +412,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 width: 32, height: 32, borderRadius: tokens.borderRadius.md,
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white, cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[600],
               }}>
                 <RefreshCw size={14} />
@@ -416,6 +427,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 <Download size={12} />
                 Export Report
@@ -457,7 +469,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <ChevronRight
                     size={14}
                     color={tokens.colors.warningScale[600]}
-                    style={{ transform: alertsExpanded ? 'rotate(90deg)' : 'none', transition: `transform ${tokens.motion.hover}` }}
+                    style={{ transform: alertsExpanded ? 'rotate(90deg)' : 'none', transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}` }}
                   />
                 </div>
                 {alertsExpanded && (
@@ -650,7 +662,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                             padding: `${tokens.spacing[1]}px 0`,
                             cursor: 'pointer',
                             opacity: selectedCostCategory && selectedCostCategory !== c.category ? 0.5 : 1,
-                            transition: `opacity ${tokens.motion.hover}`,
+                            transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                         >
                           <span style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: costColors[i % costColors.length], flexShrink: 0 }} />
@@ -692,7 +704,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                               style={{
                                 backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
                                 cursor: 'pointer',
-                                transition: `background-color ${tokens.motion.hover}`,
+                                transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                               }}
                             >
                               <td style={{
@@ -897,7 +909,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                           width={`${compliance.auditCompleteness}%`}
                           height="8" rx="4"
                           fill={compliance.auditCompleteness >= 90 ? tokens.colors.successScale[500] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}
-                          style={{ transition: `width ${tokens.motion.hover}` }}
+                          style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                         />
                       </svg>
                     </div>

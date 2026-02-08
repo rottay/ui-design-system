@@ -4,11 +4,18 @@ import { useState, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { PermissionTreeProps } from '../../core';
 import { PERMISSION_TREE_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const ListPermissionTree = createPreset<PermissionTreeProps>({
   name: 'PermissionTree.List',
   render: ({ primitives, props, tokens, engine }: PresetContext<PermissionTreeProps>) => {
     const { Box } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const {
       items,
       checkedKeys = [],
@@ -61,14 +68,7 @@ export const ListPermissionTree = createPreset<PermissionTreeProps>({
     return (
       <Box
         className={className}
-        style={{
-          boxShadow: tokens.shadows.md,
-          backgroundColor: tokens.colors.common.white,
-          borderRadius: tokens.borderRadius.lg,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          overflow: 'hidden',
-          ...style,
-        }}
+        style={{ ...createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), overflow: 'hidden' as const, ...style }}
       >
         {/* Search */}
         {searchable && (
@@ -92,6 +92,15 @@ export const ListPermissionTree = createPreset<PermissionTreeProps>({
                 outline: 'none',
                 fontFamily: 'inherit',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </div>
         )}
@@ -113,6 +122,7 @@ export const ListPermissionTree = createPreset<PermissionTreeProps>({
                   backgroundColor: tokens.colors.neutral[50],
                   borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   userSelect: 'none',
                 }}
               >

@@ -8,7 +8,7 @@ import type { CtaSectionProps } from '../../core';
 
 export const BannerCtaSection = createPreset<CtaSectionProps>({
   name: 'CtaSection.Banner',
-  render: ({ primitives, props, tokens }: PresetContext<CtaSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<CtaSectionProps>) => {
     const { Box, Button } = primitives;
     const { title, description, actions, className, style } = props;
 

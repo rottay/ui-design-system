@@ -3,9 +3,15 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { NotificationCenterProps, Notification } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<NotificationCenterProps>((context: PresetContext<NotificationCenterProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -110,9 +116,11 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+                e.currentTarget.style.transform = 'none';
               }}
             >
               Mark all read
@@ -247,7 +255,7 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
                   borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: isHovered ? tokens.colors.neutral[50] : tokens.colors.common.white,
                   cursor: notification.read ? 'default' : 'pointer',
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 {/* Unread Indicator */}
@@ -327,7 +335,7 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
                           fontWeight: tokens.typography.fontWeight.medium,
                           color: tokens.colors.primaryScale[600],
                           cursor: 'pointer',
-                          transition: `color ${tokens.motion.hover}`,
+                          transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.color = tokens.colors.primaryScale[700];
@@ -361,7 +369,6 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: tokens.typography.fontSize.lg,
-                      transition: `all ${tokens.motion.hover}`,
                       flexShrink: 0,
                     }}
                     onMouseEnter={(e) => {

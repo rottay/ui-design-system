@@ -3,24 +3,26 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { ProfileCardProps } from '../../core';
+import {
+  createAccentBarStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+
+} from '../../../helpers';
 
 export default createPreset<ProfileCardProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const { name, role, company, avatar, coverImage, bio, stats, actions, social, online, className, style } = props;
 
   return (
     <Box
       className={className}
-      style={{
-        boxShadow: tokens.shadows.md,
-        backgroundColor: tokens.colors.common.white,
-        borderRadius: tokens.borderRadius.lg,
-        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-        overflow: 'hidden',
-        ...style,
-      }}
+      style={{ ...createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), overflow: 'hidden' as const, ...style }}
     >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {/* Cover Image */}
       {coverImage && (
         <Box
@@ -91,7 +93,7 @@ export default createPreset<ProfileCardProps>((context) => {
                 height: '16px',
                 borderRadius: tokens.borderRadius.full,
                 backgroundColor: online ? tokens.colors.successScale[500] : tokens.colors.neutral[400],
-                border: `2px solid ${tokens.colors.common.white}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
               }}
             />
           )}
@@ -262,6 +264,7 @@ export default createPreset<ProfileCardProps>((context) => {
                 onMouseEnter={(e) => {
                   if (action.variant === 'primary') {
                     e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[700];
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   } else {
                     e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
                   }
@@ -269,6 +272,7 @@ export default createPreset<ProfileCardProps>((context) => {
                 onMouseLeave={(e) => {
                   if (action.variant === 'primary') {
                     e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+                    e.currentTarget.style.transform = 'none';
                   } else {
                     e.currentTarget.style.backgroundColor = tokens.colors.common.white;
                   }

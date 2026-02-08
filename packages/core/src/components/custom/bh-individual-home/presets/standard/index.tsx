@@ -6,9 +6,19 @@
  * wizard onboarding, recent candidates, and token balance
  */
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createSurfaceStyle, createHoverStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { BhIndividualHomeProps, ScheduleItem, RecentCandidate } from '../../core';
 import {
   User, Calendar, Briefcase, Target, Zap, ChevronRight, Clock,
@@ -68,9 +78,9 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
 
     const isGlass = engine === 'modern';
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const scheduleIconMap: Record<string, React.ReactNode> = {
       phone: <Phone size={14} />,
@@ -120,6 +130,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
       fontWeight: tokens.typography.fontWeight.medium,
       color: tokens.colors.primaryScale[600],
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       background: 'none',
       border: 'none',
       padding: 0,
@@ -246,6 +257,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     whiteSpace: 'nowrap' as const,
                   }}
                 >
@@ -417,6 +429,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: tokens.spacing[1],
@@ -463,6 +476,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[400],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   padding: 0,
                 }}
               >
@@ -485,7 +499,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
               height: '100%',
               backgroundColor: tokens.colors.primaryScale[500],
               borderRadius: tokens.borderRadius.full,
-              transition: `width ${tokens.motion.hover}`,
+              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
             }} />
           </div>
 
@@ -685,7 +699,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
             {displayed.map((candidate) => {
               const statusCfg = CANDIDATE_STATUS_MAP[candidate.status];
-              const badgeStyle = createBadgeStyle(tokens, statusCfg.colorKey);
+              const badgeStyle = useMemo(() => createBadgeStyle(tokens, statusCfg.colorKey), [tokens]);
 
               return (
                 <div
@@ -699,6 +713,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                     borderRadius: tokens.borderRadius.md,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     backgroundColor: tokens.colors.common.white,
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                   }}
@@ -793,6 +808,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: tokens.spacing[1],
                         borderRadius: tokens.borderRadius.sm,
                         color: tokens.colors.neutral[400],
@@ -809,6 +825,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: tokens.spacing[1],
                         borderRadius: tokens.borderRadius.sm,
                         color: tokens.colors.neutral[400],
@@ -825,6 +842,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         padding: tokens.spacing[1],
                         borderRadius: tokens.borderRadius.sm,
                         color: tokens.colors.neutral[400],
@@ -935,6 +953,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   Buy More

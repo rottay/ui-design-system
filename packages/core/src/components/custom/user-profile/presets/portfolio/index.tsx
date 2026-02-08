@@ -8,6 +8,12 @@
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { UserProfileProps, AvailabilityStatus } from '../../core';
+import {
+  createCardStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 const SOCIAL_ICONS: Record<string, string> = {
   linkedin: 'in',
@@ -198,7 +204,7 @@ export const PortfolioUserProfile = createPreset<UserProfileProps>({
               <Box style={{ marginTop: tokens.spacing[6], borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                 <div style={{ display: 'flex', gap: 0 }}>
                   {tabs.map((tab) => (
-                    <button key={tab.key} onClick={() => handleTabChange(tab.key)} style={{ padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`, border: 'none', borderBottom: tab.key === activeTab ? `2px solid ${tokens.colors.neutral[900]}` : '2px solid transparent', backgroundColor: 'transparent', fontSize: tokens.typography.fontSize.sm, fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer' }}>
+                    <button key={tab.key} onClick={() => handleTabChange(tab.key)} style={{ padding: `${tokens.spacing[3]} ${tokens.spacing[4]}`, border: 'none', borderBottom: tab.key === activeTab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[900]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`, backgroundColor: 'transparent', fontSize: tokens.typography.fontSize.sm, fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer' }}>
                       {tab.label}
                       {tab.count !== undefined && <span style={{ marginLeft: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>({tab.count})</span>}
                     </button>

@@ -4,6 +4,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPreset } from '../../../factory';
 import type { MentionInputProps, MentionUser } from '../../core';
 import { MENTION_INPUT_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MentionInputProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -119,12 +124,16 @@ export default createPreset<MentionInputProps>((context) => {
           color: tokens.colors.neutral[900],
           resize: 'vertical',
           outline: 'none',
-          transition: `border-color ${tokens.motion.hover}`,
+          transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
         }}
         onFocus={(e) => {
           e.currentTarget.style.borderColor = tokens.colors.primaryScale[500];
+          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
         }}
         onBlur={(e) => {
+          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+          e.currentTarget.style.boxShadow = 'none';
           e.currentTarget.style.borderColor = tokens.colors.neutral[300];
         }}
       />
@@ -238,9 +247,11 @@ export default createPreset<MentionInputProps>((context) => {
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[700];
+            e.currentTarget.style.transform = tokens.motion.transform;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+            e.currentTarget.style.transform = 'none';
           }}
         >
           {submitLabel}

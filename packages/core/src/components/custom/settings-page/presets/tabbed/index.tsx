@@ -1,8 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { SettingsPageProps, SettingsSection } from '../../core';
 
 export default createPreset<SettingsPageProps>('tabbed', (context) => {
@@ -35,7 +39,7 @@ export default createPreset<SettingsPageProps>('tabbed', (context) => {
 
   const activeContent = sections.find((s: SettingsSection) => s.key === activeSection)?.content;
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   return (
     <Stack
@@ -93,7 +97,7 @@ export default createPreset<SettingsPageProps>('tabbed', (context) => {
                   alignItems: 'center',
                   gap: tokens.spacing[1],
                   cursor: 'pointer',
-                  borderBottom: `2px solid ${
+                  borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                     isActive ? tokens.colors.primaryScale[600] : 'transparent'
                   }`,
                   color: isActive
@@ -103,7 +107,6 @@ export default createPreset<SettingsPageProps>('tabbed', (context) => {
                   fontWeight: isActive
                     ? tokens.typography.fontWeight.medium
                     : tokens.typography.fontWeight.normal,
-                  transition: `all ${tokens.motion.hover}`,
                   whiteSpace: 'nowrap',
                 }}
                 onClick={() => handleSectionChange(section.key)}

@@ -8,7 +8,19 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCandidateSearchProps,
   SearchResult,
@@ -89,6 +101,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
   name: 'BhCandidateSearch.Standard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateSearchProps>) => {
     const { Box, Text } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const isModern = engine === 'modern';
 
     const {
@@ -221,8 +234,8 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       return count;
     }, [activeFilters]);
 
-    const glassCardStyle = isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { elevation: 'sm' });
-    const hoverStyle = createHoverStyle(tokens);
+    const glassCardStyle = useMemo(() => isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const facetsByDimension = useMemo(() => {
@@ -256,8 +269,16 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               type="text"
               value={searchQuery}
               onChange={(e) => handleQueryChange(e.target.value)}
-              onFocus={() => setShowAutocomplete(true)}
-              onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
+              onFocus={(e) => {
+                setShowAutocomplete(true);
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                setTimeout(() => setShowAutocomplete(false), 200);
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
               placeholder="Search candidates by name, skills, role, location..."
               style={{
                 width: '100%',
@@ -281,6 +302,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   border: 'none',
                   backgroundColor: 'transparent',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'flex',
                   padding: tokens.spacing[1],
                 }}
@@ -306,7 +328,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               display: 'flex',
               alignItems: 'center',
               gap: tokens.spacing[1],
-              transition: `all ${tokens.motion.hover}`,
               whiteSpace: 'nowrap',
             }}
           >
@@ -339,7 +360,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
             left: tokens.spacing[5],
             right: tokens.spacing[5],
             backgroundColor: tokens.colors.common.white,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             borderRadius: tokens.borderRadius.md,
             boxShadow: tokens.shadows.lg,
             zIndex: 50,
@@ -359,7 +380,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.sm,
                   cursor: 'pointer',
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 <Clock size={14} color={tokens.colors.neutral[400]} />
@@ -383,6 +404,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 alignItems: 'center',
                 gap: tokens.spacing[1],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 {skill}
                 <X size={10} onClick={() => handleFilterChange('skills', (activeFilters.skills ?? []).filter(s => s !== skill))} />
@@ -396,6 +418,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 alignItems: 'center',
                 gap: tokens.spacing[1],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 <MapPin size={10} />
                 {activeFilters.location}
@@ -410,6 +433,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 alignItems: 'center',
                 gap: tokens.spacing[1],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 textTransform: 'capitalize',
               }}>
                 {s}
@@ -442,7 +466,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               gap: tokens.spacing[1],
               padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
               borderRadius: tokens.borderRadius.full,
-              border: `1px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               backgroundColor: tokens.colors.common.white,
               fontSize: tokens.typography.fontSize.xs,
               fontWeight: tokens.typography.fontWeight.medium,
@@ -461,6 +485,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 border: 'none',
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 padding: 0,
                 marginLeft: tokens.spacing[1],
@@ -483,12 +508,13 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   gap: tokens.spacing[1],
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.full,
-                  border: `1px dashed ${tokens.colors.primaryScale[300]}`,
+                  border: `${tokens.surface.borderWidth} dashed ${tokens.colors.primaryScale[300]}`,
                   backgroundColor: tokens.colors.primaryScale[50],
                   color: tokens.colors.primaryScale[600],
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                   whiteSpace: 'nowrap',
                 }}
@@ -512,11 +538,20 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.sm,
-                    border: `1px solid ${tokens.colors.primaryScale[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`,
                     fontSize: tokens.typography.fontSize.xs,
                     width: 120,
                     outline: 'none',
                     fontFamily: 'inherit',
+                  }}
+                
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                    e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                   }}
                 />
                 <button onClick={handleSaveSearch} style={{ border: 'none', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', padding: 2 }}>
@@ -537,7 +572,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       const isExpanded = expandedSections.has(key);
       return (
         <Box key={key} style={{
-          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
         }}>
           <Box
             onClick={() => toggleSection(key)}
@@ -547,6 +582,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               justifyContent: 'space-between',
               padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -577,7 +613,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       }}>
         <Box style={{
           padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -595,6 +631,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -623,7 +660,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     borderRadius: tokens.borderRadius.sm,
                     cursor: 'pointer',
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }}
                 >
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -631,7 +668,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                       width: 16,
                       height: 16,
                       borderRadius: tokens.borderRadius.sm,
-                      border: `2px solid ${isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                       backgroundColor: isActive ? tokens.colors.primaryScale[500] : 'transparent',
                       display: 'flex',
                       alignItems: 'center',
@@ -660,7 +697,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   flex: 1,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[700],
                   fontFamily: 'inherit',
@@ -678,7 +715,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   flex: 1,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[700],
                   fontFamily: 'inherit',
@@ -715,12 +752,21 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               style={{
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                 borderRadius: tokens.borderRadius.sm,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[700],
                 fontFamily: 'inherit',
                 outline: 'none',
                 width: '100%',
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
             {activeFilters.location && (
@@ -732,7 +778,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.sm,
-                    border: `1px solid ${tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     fontSize: tokens.typography.fontSize.xs,
                     fontFamily: 'inherit',
                     backgroundColor: tokens.colors.common.white,
@@ -756,7 +802,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   borderRadius: tokens.borderRadius.sm,
                   cursor: 'pointer',
                   backgroundColor: activeFilters.location === facet.value ? tokens.colors.primaryScale[50] : 'transparent',
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>{facet.value}</Text>
@@ -782,7 +828,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
                     color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                     fontSize: tokens.typography.fontSize.sm,
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }}
                 >
                   {opt}
@@ -804,7 +850,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.full,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                     fontSize: tokens.typography.fontSize.xs,
@@ -833,11 +879,20 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   flex: 1,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontFamily: 'inherit',
                   outline: 'none',
                   width: '100%',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>to</Text>
@@ -850,11 +905,20 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   flex: 1,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   fontSize: tokens.typography.fontSize.sm,
                   fontFamily: 'inherit',
                   outline: 'none',
                   width: '100%',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
             </Box>
@@ -894,7 +958,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     borderRadius: tokens.borderRadius.sm,
                     cursor: 'pointer',
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }}
                 >
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -902,7 +966,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                       width: 16,
                       height: 16,
                       borderRadius: tokens.borderRadius.sm,
-                      border: `2px solid ${isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                       backgroundColor: isActive ? tokens.colors.primaryScale[500] : 'transparent',
                       display: 'flex',
                       alignItems: 'center',
@@ -935,7 +999,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.full,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                     fontSize: tokens.typography.fontSize.xs,
@@ -973,7 +1037,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     borderRadius: tokens.borderRadius.sm,
                     cursor: 'pointer',
                     backgroundColor: isActive ? statusColors.bg : 'transparent',
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }}
                 >
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -1006,7 +1070,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 width: 18,
                 height: 18,
                 borderRadius: tokens.borderRadius.sm,
-                border: `2px solid ${selectedCandidates.length === results.length && results.length > 0 ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${selectedCandidates.length === results.length && results.length > 0 ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                 backgroundColor: selectedCandidates.length === results.length && results.length > 0 ? tokens.colors.primaryScale[500] : 'transparent',
                 display: 'flex',
                 alignItems: 'center',
@@ -1043,7 +1107,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   display: 'flex',
                   alignItems: 'center',
                   gap: tokens.spacing[4],
-                  border: `1px solid ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                   backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                   transition: `all ${tokens.motion.hover}`,
                   cursor: 'pointer',
@@ -1057,7 +1121,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     width: 18,
                     height: 18,
                     borderRadius: tokens.borderRadius.sm,
-                    border: `2px solid ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
                     backgroundColor: isSelected ? tokens.colors.primaryScale[500] : 'transparent',
                     display: 'flex',
                     alignItems: 'center',
@@ -1076,7 +1140,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   height: 48,
                   borderRadius: tokens.borderRadius.full,
                   backgroundColor: scoreColors.bg,
-                  border: `2px solid ${scoreColors.border}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scoreColors.border}`,
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -1123,7 +1187,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                       padding: `0 ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.full,
                       backgroundColor: statusColors.bg,
-                      border: `1px solid ${statusColors.border}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusColors.border}`,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       color: statusColors.text,
@@ -1152,7 +1216,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                           padding: `0 ${tokens.spacing[2]}px`,
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: isHighlighted ? tokens.colors.primaryScale[50] : tokens.colors.neutral[50],
-                          border: `1px solid ${isHighlighted ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isHighlighted ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: isHighlighted ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                           color: isHighlighted ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
@@ -1177,7 +1241,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.sm,
-                      border: `1px solid ${tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: tokens.colors.common.white,
                       color: tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.xs,
@@ -1186,7 +1250,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[1],
-                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <Mail size={12} />
@@ -1197,7 +1260,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                     style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.sm,
-                      border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                       backgroundColor: tokens.colors.primaryScale[50],
                       color: tokens.colors.primaryScale[700],
                       fontSize: tokens.typography.fontSize.xs,
@@ -1206,7 +1269,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[1],
-                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <Plus size={12} />
@@ -1249,6 +1311,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 color: tokens.colors.neutral[500],
                 fontSize: tokens.typography.fontSize.xs,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -1272,7 +1335,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing[1],
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Users size={14} />
@@ -1283,7 +1345,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               style={{
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[700],
                 fontSize: tokens.typography.fontSize.sm,
@@ -1293,7 +1355,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing[1],
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Mail size={14} />
@@ -1304,7 +1365,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
               style={{
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${tokens.colors.neutral[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
                 color: tokens.colors.neutral[700],
                 fontSize: tokens.typography.fontSize.sm,
@@ -1314,7 +1375,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing[1],
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Download size={14} />
@@ -1326,7 +1386,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 style={{
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[700],
                   fontSize: tokens.typography.fontSize.sm,
@@ -1336,7 +1396,6 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   display: 'flex',
                   alignItems: 'center',
                   gap: tokens.spacing[1],
-                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <GitCompare size={14} />

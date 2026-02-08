@@ -3,6 +3,12 @@
 import { useState, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { FileUploadZoneProps, UploadFile } from '../../core';
+import {
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  getCardHoverShadow,
+} from '../../../helpers';
 
 const formatSize = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`;
@@ -11,7 +17,7 @@ const formatSize = (bytes: number) => {
 };
 
 export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUploadZoneProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -229,7 +235,8 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
                   borderRadius: tokens.borderRadius.lg,
                   marginBottom: tokens.spacing[2],
                   transition: `all ${tokens.motion.hover}`,
-                  boxShadow: isHovered ? tokens.shadows.sm : 'none',
+                  boxShadow: isHovered ? getCardHoverShadow(tokens, 'sm') : 'none',
+                transform: isHovered ? tokens.motion.transform : 'none',
                 }}
               >
                 {/* Preview/Icon */}
@@ -325,7 +332,7 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
                           height: '100%',
                           width: `${file.progress}%`,
                           backgroundColor: tokens.colors.primaryScale[500],
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }}
                       />
                     </Box>
@@ -391,7 +398,6 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontSize: tokens.typography.fontSize.lg,
-                        transition: `all ${tokens.motion.hover}`,
                       }}
                     >
                       ×

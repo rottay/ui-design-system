@@ -9,10 +9,15 @@
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
-  createSurfaceStyle,
   createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
   createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
   getHoverTransform,
 } from '../../../helpers';
 import type {
@@ -231,10 +236,10 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
     const valColors = useMemo(() => getValidationStatusColors(tokens), [tokens]);
     const weightColors = useMemo(() => getWeightColors(tokens), [tokens]);
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ── Handlers ─────────────────────────────────────────────────── */
@@ -338,7 +343,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: tokens.spacing[4],
-            borderRadius: 0,
+            borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
           }}
@@ -366,6 +371,15 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   minWidth: 200,
                 }}
                 placeholder="Template Name"
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
               />
             </div>
 
@@ -437,6 +451,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <History size={14} />
@@ -457,6 +472,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Save size={14} />
@@ -477,6 +493,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Send size={14} />
@@ -558,6 +575,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           alignItems: 'center',
                           justifyContent: 'center',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: 0,
                           zIndex: 2,
                         }}
@@ -765,6 +783,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           border: 'none',
                           background: 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.md,
                           display: 'flex',
@@ -823,6 +842,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <Plus size={16} />
@@ -873,6 +893,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   <Plus size={12} />
@@ -983,6 +1004,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           border: 'none',
                           background: 'transparent',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.md,
                         }}
@@ -1126,6 +1148,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                       border: 'none',
                       background: 'transparent',
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       padding: tokens.spacing[1],
                       borderRadius: tokens.borderRadius.md,
                       color: tokens.colors.neutral[400],
@@ -1445,6 +1468,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                             : tokens.colors.neutral[300],
                           position: 'relative' as const,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
                         onClick={() => {
@@ -1461,7 +1485,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                             position: 'absolute' as const,
                             top: 2,
                             left: activeStage.isKnockout ? 16 : 2,
-                            transition: `left ${tokens.motion.hover}`,
+                            transition: `left ${tokens.transitions?.normal || tokens.motion.hover}`,
                             boxShadow: tokens.shadows.sm,
                           }}
                         />
@@ -1644,7 +1668,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                               selectedVersion === ver.version
                                 ? tokens.colors.primaryScale[500]
                                 : tokens.colors.neutral[300],
-                            border: `2px solid ${
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                               selectedVersion === ver.version
                                 ? tokens.colors.primaryScale[200]
                                 : tokens.colors.common.white
@@ -1724,6 +1748,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                               color: tokens.colors.neutral[600],
                               fontSize: tokens.typography.fontSize.xs,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               flexShrink: 0,
                             }}
                           >

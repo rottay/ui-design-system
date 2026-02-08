@@ -9,6 +9,12 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { PricingTableProps, BillingCycle } from '../../core';
 import { formatPrice, getHighlightColors, getCurrentPlanColors } from '../../core';
+import {
+  createBadgeStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const ComparisonPricingTable = createPreset<PricingTableProps>({
   name: 'PricingTable.Comparison',
@@ -63,6 +69,7 @@ export const ComparisonPricingTable = createPreset<PricingTableProps>({
               color: cycle === 'monthly' ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
               fontWeight: cycle === 'monthly' ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
               fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               boxShadow: cycle === 'monthly' ? tokens.shadows.sm : 'none',
             }}>
               Monthly
@@ -73,6 +80,7 @@ export const ComparisonPricingTable = createPreset<PricingTableProps>({
               color: cycle === 'yearly' ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
               fontWeight: cycle === 'yearly' ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
               fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               boxShadow: cycle === 'yearly' ? tokens.shadows.sm : 'none',
             }}>
               Yearly
@@ -100,7 +108,7 @@ export const ComparisonPricingTable = createPreset<PricingTableProps>({
                   return (
                     <th key={plan.id} style={{
                       textAlign: 'center', padding: `${tokens.spacing[4]}px ${tokens.spacing[3]}px`,
-                      borderBottom: `2px solid ${isHighlighted ? highlightColors.border : isCurrent ? currentPlanColors.border : tokens.colors.neutral[200]}`,
+                      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isHighlighted ? highlightColors.border : isCurrent ? currentPlanColors.border : tokens.colors.neutral[200]}`,
                       position: 'relative',
                     }}>
                       {isHighlighted && (

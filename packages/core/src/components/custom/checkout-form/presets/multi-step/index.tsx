@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { CheckoutFormProps } from '../../core';
 import { CHECKOUT_FORM_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<CheckoutFormProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -152,10 +156,12 @@ export default createPreset<CheckoutFormProps>((context) => {
             onMouseEnter={(e) => {
               if (currentStep > 0) {
                 e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+              e.currentTarget.style.transform = 'none';
             }}
           >
             Back
@@ -175,9 +181,11 @@ export default createPreset<CheckoutFormProps>((context) => {
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[700];
+              e.currentTarget.style.transform = tokens.motion.transform;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+              e.currentTarget.style.transform = 'none';
             }}
           >
             {currentStep === steps.length - 1 ? 'Complete Order' : 'Continue'}

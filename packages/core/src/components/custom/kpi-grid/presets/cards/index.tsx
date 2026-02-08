@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { KpiGridProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle 
+} from '../../../helpers';
 
 export const Cards = createPreset<KpiGridProps>((context: PresetContext<KpiGridProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { items, columns = 3, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const getTrendColor = (trend?: number) => {
     if (trend === undefined) return tokens.colors.neutral[600];
@@ -31,6 +33,7 @@ export const Cards = createPreset<KpiGridProps>((context: PresetContext<KpiGridP
         ...style,
       }}
     >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {items.map((item) => (
         <Box key={item.key} style={cardStyle}>
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: tokens.spacing[2] }}>

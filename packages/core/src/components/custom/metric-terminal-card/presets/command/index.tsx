@@ -11,6 +11,14 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { MetricTerminalCardProps } from '../../core';
 import { METRIC_TERMINAL_CARD_DEFAULTS } from '../../core';
+import {
+  createBadgeStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const CommandMetricTerminalCard = createPreset<MetricTerminalCardProps>({
   name: 'MetricTerminalCard.Command',
@@ -363,6 +371,7 @@ export const CommandMetricTerminalCard = createPreset<MetricTerminalCardProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'monospace',
                     }}
                   >

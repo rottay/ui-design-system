@@ -1,6 +1,7 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { MaintenancePageProps } from '../../core';
+import { createEmptyStateStyle } from '../../../helpers';
 
 export const MaintenancePreset = createPreset<MaintenancePageProps>((context) => {
   const { primitives, props, tokens } = context;

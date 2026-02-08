@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BillingPanelProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const Standard = createPreset<BillingPanelProps>((context: PresetContext<BillingPanelProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { plan, invoices = [], paymentMethod, onChangePlan, onUpdatePayment, onDownloadInvoice, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -130,6 +134,7 @@ export const Standard = createPreset<BillingPanelProps>((context: PresetContext<
                           border: 'none',
                           fontSize: tokens.typography.fontSize.sm,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           textDecoration: 'underline',
                         }}
                       >

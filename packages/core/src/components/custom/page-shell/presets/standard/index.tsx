@@ -2,6 +2,9 @@
 
 import { createPreset } from '../../../factory';
 import type { PageShellProps, PageShellBreadcrumb, PageShellAction, PageShellTab } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<PageShellProps>('standard', (context) => {
   const { primitives, props, tokens } = context;
@@ -233,11 +236,10 @@ export default createPreset<PageShellProps>('standard', (context) => {
                     alignItems: 'center',
                     gap: tokens.spacing[1],
                     cursor: 'pointer',
-                    borderBottom: `2px solid ${isActive ? tokens.colors.primaryScale[600] : 'transparent'}`,
+                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[600] : 'transparent'}`,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: isActive ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
-                    transition: `all ${tokens.motion.hover}`,
                   }}
                   onClick={() => handleTabClick(tab.key)}
                 >

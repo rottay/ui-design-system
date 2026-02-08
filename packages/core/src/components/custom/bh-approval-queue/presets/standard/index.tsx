@@ -9,12 +9,17 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
-  getHoverTransform,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
 } from '../../../helpers';
 import type {
   BhApprovalQueueProps,
@@ -182,10 +187,10 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
     const categoryColors = getCategoryColors(tokens);
     const outcomeColors = getOutcomeColors(tokens);
     const chainStepColors = getChainStepColors(tokens);
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -308,8 +313,8 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.md,
                       border: isActive
-                        ? `1px solid ${catColor.border}`
-                        : `1px solid transparent`,
+                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${catColor.border}`
+                        : `${tokens.surface.borderWidth} solid transparent`,
                       backgroundColor: isActive ? catColor.bg : 'transparent',
                       color: isActive ? catColor.color : tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.sm,
@@ -317,6 +322,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                         ? tokens.typography.fontWeight.semibold
                         : tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     {CATEGORY_ICONS[cat]}
@@ -356,7 +362,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                 gap: tokens.spacing[1],
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   showHistory
                     ? tokens.colors.primaryScale[300]
                     : tokens.colors.neutral[200]
@@ -370,6 +376,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <History size={14} />
@@ -449,8 +456,9 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   }),
                   borderLeft: `4px solid ${uColor.dot}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...(isSelected
-                    ? { outline: `2px solid ${tokens.colors.primaryScale[400]}` }
+                    ? { outline: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}` }
                     : {}),
                 }}
               >
@@ -680,6 +688,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                 backgroundColor: 'transparent',
                 color: tokens.colors.neutral[400],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -753,7 +762,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                     style={{
                       borderRadius: tokens.borderRadius.md,
                       overflow: 'hidden',
-                      border: `1px solid ${tokens.colors.neutral[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     }}
                   >
                     {externalDetail.relatedData.map((data, idx) => (
@@ -764,7 +773,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                           gridTemplateColumns: '160px 1fr',
                           borderBottom:
                             idx < externalDetail.relatedData.length - 1
-                              ? `1px solid ${tokens.colors.neutral[100]}`
+                              ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`
                               : 'none',
                         }}
                       >
@@ -775,7 +784,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                             fontSize: tokens.typography.fontSize.sm,
                             fontWeight: tokens.typography.fontWeight.medium,
                             color: tokens.colors.neutral[600],
-                            borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+                            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           }}
                         >
                           {data.label}
@@ -839,7 +848,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                                 height: 36,
                                 borderRadius: tokens.borderRadius.full,
                                 backgroundColor: stepColor.bg,
-                                border: `2px solid ${stepColor.border}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${stepColor.border}`,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -890,7 +899,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
           {/* Action Buttons */}
           <div
             style={{
-              borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+              borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               paddingTop: tokens.spacing[4],
             }}
           >
@@ -908,7 +917,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   minHeight: 60,
                   padding: tokens.spacing[3],
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[800],
@@ -916,6 +925,15 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   resize: 'vertical' as const,
                   outline: 'none',
                   boxSizing: 'border-box' as const,
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
               <button
@@ -933,6 +951,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   marginTop: tokens.spacing[2],
                 }}
               >
@@ -955,7 +974,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   minHeight: 60,
                   padding: tokens.spacing[3],
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                     rejectReason.trim()
                       ? tokens.colors.neutral[200]
                       : tokens.colors.errorScale[200]
@@ -967,6 +986,15 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                   resize: 'vertical' as const,
                   outline: 'none',
                   boxSizing: 'border-box' as const,
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
               <button
@@ -1012,12 +1040,13 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                     gap: tokens.spacing[2],
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     backgroundColor: tokens.colors.common.white,
                     color: tokens.colors.neutral[700],
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   <UserPlus size={16} />
@@ -1055,6 +1084,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                 backgroundColor: 'transparent',
                 color: tokens.colors.neutral[400],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -1128,7 +1158,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                             h.outcome === 'approved'
                               ? tokens.colors.successScale[500]
                               : tokens.colors.errorScale[500],
-                          border: `2px solid ${tokens.colors.common.white}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                         }}
                       />
                     </div>

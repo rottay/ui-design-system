@@ -1,0 +1,110 @@
+[
+  {
+    "file": "packages/core/src/components/custom/content-card/presets/document/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle",
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/content-card/presets/link-preview/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle",
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/feature-grid/presets/list/index.tsx",
+    "helpers": [
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/footer-section/presets/simple/index.tsx",
+    "helpers": [
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/integration-hub/presets/grid/index.tsx",
+    "helpers": [
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/logo-cloud/presets/grid/index.tsx",
+    "helpers": [
+      "createEmptyStateStyle",
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/logo-cloud/presets/scrolling/index.tsx",
+    "helpers": [
+      "createEmptyStateStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/maintenance-page/presets/coming-soon/index.tsx",
+    "helpers": [
+      "createEmptyStateStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/maintenance-page/presets/maintenance/index.tsx",
+    "helpers": [
+      "createEmptyStateStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/profile-card/presets/minimal/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/progress-tracker/presets/circular/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/progress-tracker/presets/linear/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle",
+      "createProgressBarStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/progress-tracker/presets/milestone/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/split-layout/presets/resizable/index.tsx",
+    "helpers": [
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/tab-nav/presets/boxed/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle",
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/tab-nav/presets/pills/index.tsx",
+    "helpers": [
+      "createCardStyle / createSurfaceStyle",
+      "createHoverStyle"
+    ]
+  },
+  {
+    "file": "packages/core/src/components/custom/tab-nav/presets/underline/index.tsx",
+    "helpers": [
+      "createHoverStyle"
+    ]
+  }
+]

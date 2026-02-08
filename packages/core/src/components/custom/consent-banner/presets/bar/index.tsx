@@ -4,6 +4,11 @@ import { useState, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { ConsentBannerProps } from '../../core';
 import { DEFAULT_CATEGORIES, CONSENT_BANNER_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createListItemStyle,
+} from '../../../helpers';
 
 export const BarConsentBanner = createPreset<ConsentBannerProps>({
   name: 'ConsentBanner.Bar',
@@ -109,6 +114,7 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -125,6 +131,7 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -141,6 +148,7 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
                   border: 'none',
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -209,6 +217,7 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -225,6 +234,7 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
                   border: 'none',
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >

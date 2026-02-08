@@ -9,6 +9,13 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { WorkflowOverviewProps, WorkflowNode } from '../../core';
 import { getNodeStatusColors, getNodeTypeColors, calculateConnectionPath } from '../../core';
+import {
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 const NODE_WIDTH = 220;
 const NODE_HEIGHT = 80;
@@ -303,6 +310,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                 backgroundColor: tokens.colors.errorScale[50], color: tokens.colors.errorScale[700],
                 fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 Delete
               </button>
@@ -313,6 +321,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
               backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
               fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
               cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               + Add node
             </button>
@@ -439,7 +448,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                         backgroundColor: tokens.colors.common.white,
                         borderRadius: tokens.borderRadius.lg,
                         border: isSelected
-                          ? `2px solid ${tokens.colors.primaryScale[500]}`
+                          ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
                           : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${sColors.border}`,
                         boxShadow: isDragging ? tokens.shadows.lg : isSelected ? tokens.shadows.md : tokens.shadows.sm,
                         cursor: isDragging ? 'grabbing' : 'grab',
@@ -459,7 +468,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                           height: 10,
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: tokens.colors.neutral[300],
-                          border: `2px solid ${tokens.colors.common.white}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                           zIndex: 2,
                         }}
                       />
@@ -475,7 +484,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                           height: 10,
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: tokens.colors.primaryScale[500],
-                          border: `2px solid ${tokens.colors.common.white}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                           cursor: 'crosshair',
                           zIndex: 2,
                         }}
@@ -502,7 +511,11 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                             autoFocus
                             value={editValue}
                             onChange={(e) => setEditValue(e.target.value)}
-                            onBlur={commitEdit}
+                            onBlur={(e) => {
+                              commitEdit();
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') commitEdit();
                               if (e.key === 'Escape') setEditingNodeId(null);
@@ -520,6 +533,11 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                               outline: 'none',
                               fontFamily: 'inherit',
                               background: tokens.colors.common.white,
+                            }}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                             }}
                           />
                         ) : (
@@ -573,6 +591,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
                                   borderRadius: tokens.borderRadius.sm,
                                   fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                 }}
                               >
                                 {action.icon && <span>{action.icon}</span>}
@@ -600,6 +619,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
               width: tokens.spacing[7], height: tokens.spacing[7], border: 'none',
               borderRadius: tokens.borderRadius.sm, backgroundColor: 'transparent',
               cursor: 'pointer', fontFamily: 'inherit', fontSize: tokens.typography.fontSize.md,
+              transition: `all ${tokens.motion.hover}`,
               color: tokens.colors.neutral[600], display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>−</button>
             <span style={{
@@ -610,6 +630,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
               width: tokens.spacing[7], height: tokens.spacing[7], border: 'none',
               borderRadius: tokens.borderRadius.sm, backgroundColor: 'transparent',
               cursor: 'pointer', fontFamily: 'inherit', fontSize: tokens.typography.fontSize.md,
+              transition: `all ${tokens.motion.hover}`,
               color: tokens.colors.neutral[600], display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>+</button>
           </div>
@@ -624,11 +645,12 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
             {tabs.map((tab) => (
               <button key={tab.key} onClick={() => onTabChange?.(tab.key)} style={{
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, border: 'none',
-                borderTop: tab.key === activeTab ? `2px solid ${tokens.colors.primaryScale[500]}` : '2px solid transparent',
+                borderTop: tab.key === activeTab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 backgroundColor: 'transparent',
                 color: tab.key === activeTab ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
                 fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                 fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 {tab.icon && <span style={{ marginRight: tokens.spacing[1] }}>{tab.icon}</span>}
                 {tab.label}

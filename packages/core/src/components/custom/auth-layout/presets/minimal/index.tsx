@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 /**
  * AuthLayout - Minimal Preset
  * Clean centered card with engine-differentiated surface styling
@@ -13,10 +14,10 @@ export const MinimalAuthLayout = createPreset<AuthLayoutProps>({
     const { Box, Stack } = primitives;
     const { title, subtitle, children, className, style } = props;
 
-    const surfaceStyle = createSurfaceStyle(tokens, {
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'md',
       glass: engine === 'modern',
-    });
+    }), [tokens, engine]);
 
     return (
       <Box

@@ -5,9 +5,20 @@
  * Tabbed summary version with key job information, condensed layout
  */
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhJobDetailProps,
   JobDetailTab,
@@ -135,12 +146,12 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const statusColors = getStatusColors(jobInfo.status, tokens);
     const urgencyColors = getUrgencyColors(jobInfo.urgency, tokens);
@@ -281,14 +292,13 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
               style={{
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 border: 'none',
-                borderBottom: `2px solid ${isActive ? tokens.colors.primaryScale[500] : 'transparent'}`,
+                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[500] : 'transparent'}`,
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                 color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 fontFamily: 'inherit',
-                transition: `all ${tokens.motion.hover}`,
                 marginBottom: -1,
               }}
             >
@@ -480,7 +490,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
                   height: '100%',
                   backgroundColor: stage.color || tokens.colors.primaryScale[400],
                   borderRadius: tokens.borderRadius.full,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }} />
               </Box>
               <Box style={{
@@ -522,6 +532,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
                 onClick={() => onCandidateClick?.(candidate.id)}

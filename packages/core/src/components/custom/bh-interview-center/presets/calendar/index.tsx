@@ -8,7 +8,19 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhInterviewCenterProps,
   InterviewItem,
@@ -250,14 +262,14 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       backdropFilter: tokens.glass.blur,
       WebkitBackdropFilter: tokens.glass.blur,
       backgroundColor: tokens.glass.bg,
-      border: `1px solid ${tokens.glass.border}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
     } : {};
 
     const glassSurfaceStyle = isModern && tokens.glass ? {
       backdropFilter: tokens.glass.blurSm,
       WebkitBackdropFilter: tokens.glass.blurSm,
       backgroundColor: tokens.glass.bgLight,
-      border: `1px solid ${tokens.glass.borderLight}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
     } : {};
 
     // ─── Handlers ───────────────────────────────────────────────────────
@@ -520,7 +532,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           display: 'flex',
           alignItems: 'center',
           borderRadius: tokens.borderRadius.md,
-          border: `1px solid ${tokens.colors.neutral[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           overflow: 'hidden' as const,
         }}>
           {views.map(({ key, icon, label }) => {
@@ -542,7 +554,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                   outline: 'none',
-                  borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+                  borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 }}
               >
                 {icon}
@@ -568,7 +580,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           display: 'flex',
           alignItems: 'center',
           borderRadius: tokens.borderRadius.md,
-          border: `1px solid ${tokens.colors.neutral[200]}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           overflow: 'hidden' as const,
         }}>
           {presetViews.map(({ key, icon }) => {
@@ -626,7 +638,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               width: 28,
               height: 28,
               borderRadius: tokens.borderRadius.md,
-              border: `1px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               backgroundColor: tokens.colors.common.white,
               color: tokens.colors.neutral[600],
               cursor: 'pointer',
@@ -643,7 +655,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               alignItems: 'center',
               padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
               borderRadius: tokens.borderRadius.md,
-              border: `1px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               backgroundColor: tokens.colors.common.white,
               color: tokens.colors.neutral[700],
               fontSize: tokens.typography.fontSize.xs,
@@ -664,7 +676,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               width: 28,
               height: 28,
               borderRadius: tokens.borderRadius.md,
-              border: `1px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               backgroundColor: tokens.colors.common.white,
               color: tokens.colors.neutral[600],
               cursor: 'pointer',
@@ -704,7 +716,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           fontWeight: tokens.typography.fontWeight.medium,
           backgroundColor: cfg.bgColor,
           color: cfg.color,
-          border: `1px solid ${cfg.borderColor}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${cfg.borderColor}`,
           whiteSpace: 'nowrap' as const,
         }}>
           {type === 'ai' ? <Bot size={iconSize} /> : <User size={iconSize} />}
@@ -728,7 +740,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           fontWeight: tokens.typography.fontWeight.medium,
           backgroundColor: cfg.bgColor,
           color: cfg.color,
-          border: `1px solid ${cfg.borderColor}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${cfg.borderColor}`,
         }}>
           <span style={{
             width: 6,
@@ -773,7 +785,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     cursor: 'pointer',
@@ -812,7 +824,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     borderRadius: tokens.borderRadius.full,
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
-                    border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
                     backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                     cursor: 'pointer',
@@ -855,7 +867,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(7, 1fr)',
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           }}>
             {dayNames.map(name => (
               <div
@@ -893,8 +905,8 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   style={{
                     minHeight: 90,
                     padding: tokens.spacing[2],
-                    borderRight: (idx + 1) % 7 !== 0 ? `1px solid ${tokens.colors.neutral[100]}` : 'none',
-                    borderBottom: idx < days.length - 7 ? `1px solid ${tokens.colors.neutral[100]}` : 'none',
+                    borderRight: (idx + 1) % 7 !== 0 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
+                    borderBottom: idx < days.length - 7 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
                     backgroundColor: isToday ? tokens.colors.primaryScale[50] : isCurrentMonth ? tokens.colors.common.white : tokens.colors.neutral[50],
                     cursor: dayInterviews.length > 0 ? 'pointer' : 'default',
                     transition: `all ${tokens.motion.hover}`,
@@ -1037,7 +1049,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           <div style={{
             display: 'grid',
             gridTemplateColumns: '60px repeat(7, 1fr)',
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           }}>
             <div style={{ padding: tokens.spacing[2] }} />
             {weekDays.map((day, idx) => {
@@ -1049,7 +1061,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[1]}px`,
                     textAlign: 'center' as const,
-                    borderLeft: `1px solid ${tokens.colors.neutral[100]}`,
+                    borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                     backgroundColor: isToday ? tokens.colors.primaryScale[50] : 'transparent',
                   }}
                 >
@@ -1091,7 +1103,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   display: 'grid',
                   gridTemplateColumns: '60px repeat(7, 1fr)',
                   minHeight: 60,
-                  borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                  borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                 }}
               >
                 {/* Time label */}
@@ -1120,7 +1132,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     <div
                       key={dayIdx}
                       style={{
-                        borderLeft: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         padding: 2,
                         backgroundColor: isToday ? `${tokens.colors.primaryScale[50]}33` : 'transparent',
                         position: 'relative' as const,
@@ -1191,7 +1203,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
           {/* Day header */}
           <div style={{
             padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: isToday ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
             display: 'flex',
             alignItems: 'center',
@@ -1239,7 +1251,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   display: 'grid',
                   gridTemplateColumns: '80px 1fr',
                   minHeight: 70,
-                  borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                  borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                 }}
               >
                 {/* Time label */}
@@ -1249,7 +1261,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   color: tokens.colors.neutral[400],
                   fontWeight: tokens.typography.fontWeight.medium,
                   textAlign: 'right' as const,
-                  borderRight: `1px solid ${tokens.colors.neutral[100]}`,
+                  borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                 }}>
                   {hour > 12 ? `${hour - 12}:00 PM` : hour === 12 ? '12:00 PM' : `${hour}:00 AM`}
                 </div>
@@ -1359,7 +1371,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.3)',
+            backgroundColor: tokens.overlay?.light,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1384,7 +1396,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}>
               <div style={{
                 fontSize: tokens.typography.fontSize.lg,
@@ -1402,7 +1414,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   width: 28,
                   height: 28,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[500],
                   cursor: 'pointer',
@@ -1420,7 +1432,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               display: 'flex',
               alignItems: 'center',
               gap: tokens.spacing[3],
-              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}>
               <div style={{
                 width: 48,
@@ -1604,7 +1616,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 gap: tokens.spacing[2],
                 marginTop: tokens.spacing[5],
                 paddingTop: tokens.spacing[4],
-                borderTop: `1px solid ${tokens.colors.neutral[100]}`,
+                borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
               }}>
                 <button
                   style={{
@@ -1640,7 +1652,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                     fontWeight: tokens.typography.fontWeight.medium,
                     backgroundColor: tokens.colors.common.white,
                     color: tokens.colors.neutral[700],
-                    border: `1px solid ${tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
                     outline: 'none',
@@ -1662,7 +1674,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                       fontWeight: tokens.typography.fontWeight.medium,
                       backgroundColor: tokens.colors.common.white,
                       color: tokens.colors.errorScale[600],
-                      border: `1px solid ${tokens.colors.errorScale[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
                       outline: 'none',
@@ -1702,7 +1714,6 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             alignItems: 'center',
             justifyContent: 'center',
             boxShadow: tokens.shadows.lg,
-            transition: `all ${tokens.motion.hover}`,
             outline: 'none',
             zIndex: 100,
           }}

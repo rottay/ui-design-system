@@ -5,15 +5,19 @@
  * Responsive grid of feature cards with icons, titles, and descriptions
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 import type { FeatureGridProps } from '../../core';
 
 export const GridFeatureGrid = createPreset<FeatureGridProps>({
   name: 'FeatureGrid.Grid',
-  render: ({ primitives, props, tokens }: PresetContext<FeatureGridProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<FeatureGridProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { features, columns = 3, title, description, className, style } = props;
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -63,11 +67,12 @@ export const GridFeatureGrid = createPreset<FeatureGridProps>({
           >
             {features.map((feature, index) => {
               const isHovered = hoveredIndex === index;
-              const cardStyle = createCardStyle(tokens, {
+              const cardStyle = useMemo(() => createCardStyle(tokens, {
+                glass: isGlass,
                 elevation: isHovered ? 'md' : 'sm',
                 padding: tokens.spacing[6],
                 interactive: !!feature.link,
-              });
+              }), [tokens]);
 
               return (
                 <div
@@ -92,7 +97,7 @@ export const GridFeatureGrid = createPreset<FeatureGridProps>({
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: tokens.colors.primaryScale[50],
                           color: tokens.colors.primaryScale[600],
-                          fontSize: '24px',
+                          fontSize: tokens.typography.fontSize['2xl'],
                         }}
                       >
                         {feature.icon}
@@ -132,6 +137,7 @@ export const GridFeatureGrid = createPreset<FeatureGridProps>({
                           fontWeight: tokens.typography.fontWeight.medium,
                           color: tokens.colors.primaryScale[600],
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       >
                         {feature.link.label} →

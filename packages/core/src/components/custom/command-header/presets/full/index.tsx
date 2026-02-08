@@ -9,6 +9,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { CommandHeaderProps } from '../../core';
+import {
+  createBadgeStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const FullCommandHeader = createPreset<CommandHeaderProps>({
   name: 'CommandHeader.Full',
@@ -173,6 +180,7 @@ export const FullCommandHeader = createPreset<CommandHeaderProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                     marginTop: tokens.spacing[3],
                   }}
@@ -198,7 +206,7 @@ export const FullCommandHeader = createPreset<CommandHeaderProps>({
                     {insight.title}
                   </span>
                 </div>
-                <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[300], lineHeight: 1.5 }}>
+                <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[300], lineHeight: tokens.typography.lineHeight.relaxed }}>
                   {insight.message}
                 </div>
               </div>
@@ -225,6 +233,7 @@ export const FullCommandHeader = createPreset<CommandHeaderProps>({
                         fontSize: tokens.typography.fontSize.xs,
                         fontWeight: tokens.typography.fontWeight.medium,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                       }}
                     >

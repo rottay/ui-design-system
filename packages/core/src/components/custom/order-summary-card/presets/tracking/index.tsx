@@ -3,10 +3,14 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { OrderSummaryCardProps } from '../../core';
-import { formatDistanceToNow } from '../../../helpers';
+import {
+  createCardStyle,
+  formatDistanceToNow,
+} from '../../../helpers';
 
 export default createPreset<OrderSummaryCardProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const { orderId, items, total, status, trackingSteps, shippingAddress, className, style } = props;
 
@@ -23,14 +27,7 @@ export default createPreset<OrderSummaryCardProps>((context) => {
   return (
     <Box
       className={className}
-      style={{
-        boxShadow: tokens.shadows.md,
-        padding: tokens.spacing[8],
-        backgroundColor: tokens.colors.common.white,
-        borderRadius: tokens.borderRadius.lg,
-        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-        ...style,
-      }}
+      style={{ ...createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), ...style, padding: tokens.spacing[8] }}
     >
       {/* Header */}
       <Box style={{ marginBottom: tokens.spacing[8] }}>

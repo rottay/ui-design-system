@@ -3,6 +3,10 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { MegaMenuProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MegaMenuProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -68,7 +72,7 @@ export default createPreset<MegaMenuProps>((context) => {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              backgroundColor: tokens.overlay?.light,
               zIndex: 999,
             }}
           />
@@ -115,16 +119,17 @@ export default createPreset<MegaMenuProps>((context) => {
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     marginBottom: tokens.spacing[1],
-                    transition: `all ${tokens.motion.hover}`,
                   }}
                   onMouseEnter={(e) => {
                     if (activeTab !== group.key) {
                       e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (activeTab !== group.key) {
                       e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'none';
                     }
                   }}
                 >

@@ -1,5 +1,8 @@
 import { createPreset } from '../../../factory';
 import type { AppShellProps } from '../../core';
+import {
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export default createPreset<AppShellProps>('horizontal', (context) => {
   const { primitives, props, tokens } = context;

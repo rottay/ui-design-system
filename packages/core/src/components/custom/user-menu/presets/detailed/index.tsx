@@ -6,9 +6,12 @@
  * Ideal for dashboards where user identity should be prominent.
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { UserMenuProps } from '../../core';
 
 export const DetailedUserMenu = createPreset<UserMenuProps>({
@@ -52,10 +55,10 @@ export const DetailedUserMenu = createPreset<UserMenuProps>({
       });
     }
 
-    const dropdownSurface = createSurfaceStyle(tokens, {
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'lg',
       glass: engine === 'modern',
-    });
+    }), [tokens, engine]);
 
     return (
       <div
@@ -75,8 +78,8 @@ export const DetailedUserMenu = createPreset<UserMenuProps>({
             gap: tokens.spacing[3],
             padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
             borderRadius: tokens.borderRadius.md,
-            transition: `all ${tokens.motion.hover}`,
             backgroundColor: isTriggerHovered ? tokens.colors.neutral[100] : 'transparent',
+            transform: isTriggerHovered ? tokens.motion.transform : 'none',
           }}
         >
           <Avatar src={user.avatar} size="md">
@@ -182,7 +185,6 @@ export const DetailedUserMenu = createPreset<UserMenuProps>({
                       gap: tokens.spacing[2],
                       color: item.danger ? tokens.colors.errorScale[600] : undefined,
                       backgroundColor: isHovered ? tokens.colors.neutral[100] : 'transparent',
-                      transition: `all ${tokens.motion.hover}`,
                     }}
                     onMouseEnter={() => setHoveredKey(item.key)}
                     onMouseLeave={() => setHoveredKey(null)}

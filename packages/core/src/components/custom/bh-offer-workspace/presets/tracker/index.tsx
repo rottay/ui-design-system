@@ -6,9 +6,17 @@
  * signature status, and timeline summary for offer management
  */
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhOfferWorkspaceProps,
   ApprovalStep,
@@ -55,9 +63,9 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     });
 
     const isGlass = engine === 'modern';
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const surfaceMd = createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const surfaceMd = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
     const statusConfig = getOfferStatusConfig(status);
 
     const toggleSection = (key: string) => {
@@ -79,10 +87,11 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       alignItems: 'center',
       justifyContent: 'space-between',
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.common.white,
-      border: `1px solid ${tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
     });
 
     const sectionTitleStyle: React.CSSProperties = {
@@ -97,7 +106,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
 
     /* ── Header Card ─────────────────────────────────────────── */
     const renderHeader = () => {
-      const badgeStyle = createBadgeStyle(tokens, statusConfig.color);
+      const badgeStyle = useMemo(() => createBadgeStyle(tokens, statusConfig.color), [tokens]);
 
       return (
         <div style={{
@@ -156,6 +165,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: tokens.spacing[2],
@@ -351,7 +361,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                           backgroundColor: isPast ? tokens.colors.successScale[300] : tokens.colors.neutral[200],
                           marginLeft: tokens.spacing[2],
                           marginRight: tokens.spacing[2],
-                          transition: `background-color ${tokens.motion.hover}`,
+                          transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                         }} />
                       )}
                     </div>
@@ -592,7 +602,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 justifyContent: 'space-between',
                 padding: `${tokens.spacing[2]}px 0`,
                 borderBottom: idx < documents.length - 1
-                  ? `1px solid ${tokens.colors.neutral[100]}`
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`
                   : 'none',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -622,7 +632,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
               backgroundColor: signatureStatus.candidateSigned && signatureStatus.companySigned
                 ? tokens.colors.successScale[50]
                 : tokens.colors.neutral[50],
-              border: `1px solid ${signatureStatus.candidateSigned && signatureStatus.companySigned
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${signatureStatus.candidateSigned && signatureStatus.companySigned
                 ? tokens.colors.successScale[200]
                 : tokens.colors.neutral[200]}`,
               display: 'flex',
@@ -679,7 +689,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 <div key={vIdx} style={{
                   padding: `${tokens.spacing[3]}px 0`,
                   borderBottom: vIdx < negotiationHistory.length - 1
-                    ? `1px solid ${tokens.colors.neutral[100]}`
+                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`
                     : 'none',
                 }}>
                   <div style={{

@@ -9,8 +9,9 @@ import type { StatsSectionProps } from '../../core';
 
 export const CardsStatsSection = createPreset<StatsSectionProps>({
   name: 'StatsSection.Cards',
-  render: ({ primitives, props, tokens }: PresetContext<StatsSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<StatsSectionProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { stats, title, description, className, style } = props;
 
     return (
@@ -63,6 +64,7 @@ export const CardsStatsSection = createPreset<StatsSectionProps>({
                 key={stat.key}
                 style={{
                   ...createCardStyle(tokens, {
+                    glass: isGlass,
                     elevation: 'sm',
                     padding: tokens.spacing[6],
                   }),
@@ -80,7 +82,7 @@ export const CardsStatsSection = createPreset<StatsSectionProps>({
                         borderRadius: tokens.borderRadius.full,
                         backgroundColor: tokens.colors.primaryScale[50],
                         color: tokens.colors.primaryScale[600],
-                        fontSize: '24px',
+                        fontSize: tokens.typography.fontSize['2xl'],
                       }}
                     >
                       {stat.icon}

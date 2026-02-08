@@ -35,7 +35,7 @@ export const ConfirmActionModal = createPreset<ConfirmActionModalProps>({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backgroundColor: tokens.overlay?.medium,
             zIndex: 999,
           }}
         />

@@ -8,6 +8,10 @@
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SidebarProps } from '../../core';
+import {
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const SlimSidebar = createPreset<SidebarProps>({
   name: 'Sidebar.Slim',
@@ -87,7 +91,6 @@ export const SlimSidebar = createPreset<SidebarProps>({
                       : isHovered
                         ? tokens.colors.neutral[800]
                         : tokens.colors.neutral[500],
-                    transition: `all ${tokens.motion.hover}`,
                     transform: isHovered ? tokens.motion.transform : 'none',
                     minHeight: '44px',
                   }}
@@ -109,7 +112,7 @@ export const SlimSidebar = createPreset<SidebarProps>({
                   )}
 
                   {item.icon && (
-                    <Box style={{ fontSize: '20px', display: 'flex', alignItems: 'center' }}>
+                    <Box style={{ fontSize: tokens.typography.fontSize.xl, display: 'flex', alignItems: 'center' }}>
                       {item.icon}
                     </Box>
                   )}
@@ -125,7 +128,7 @@ export const SlimSidebar = createPreset<SidebarProps>({
                         height: '8px',
                         borderRadius: tokens.borderRadius.full,
                         backgroundColor: tokens.colors.errorScale[500],
-                        border: `2px solid ${tokens.colors.common.white}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                       }}
                     />
                   )}

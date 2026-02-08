@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { AlertRuleBuilderProps, AlertRule, AlertCondition } from '../../core';
 import { ALERT_RULE_BUILDER_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+} from '../../../helpers';
 
 export const StandardPreset = createPreset<AlertRuleBuilderProps>((context) => {
   const { primitives, props, tokens } = context;

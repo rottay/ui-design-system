@@ -9,6 +9,12 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { CrmTableProps, CrmColumnType, CompanySizeCategory } from '../../core';
 import { getSizeBadgeColors, getCrmBadgeColors, getValue, compareValues, categorizeSizeRange } from '../../core';
+import {
+  createCardStyle,
+  createEmptyStateStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const StandardCrmTable = createPreset<CrmTableProps>({
   name: 'CrmTable.Standard',

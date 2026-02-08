@@ -5,9 +5,11 @@
  * Value + mini sparkline SVG chart, engine-differentiated
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle 
+} from '../../../helpers';
 import type { DashboardCardProps } from '../../core';
 
 function Sparkline({ data, color, gradientColor, width = 100, height = 40 }: {
@@ -77,12 +79,12 @@ export const ChartDashboardCard = createPreset<DashboardCardProps>({
         ? tokens.colors.errorScale
         : tokens.colors.neutral;
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
       elevation: isHovered && onClick ? 'md' : 'sm',
       padding: tokens.spacing[5],
       interactive: !!onClick,
       glass: engine === 'modern',
-    });
+    }), [tokens, engine, onClick]);
 
     return (
       <div
@@ -96,6 +98,7 @@ export const ChartDashboardCard = createPreset<DashboardCardProps>({
           ...style,
         }}
       >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
         {loading ? (
           <Box style={{ display: 'flex', justifyContent: 'center', padding: tokens.spacing[6] }}>
             <Spinner size="lg" />

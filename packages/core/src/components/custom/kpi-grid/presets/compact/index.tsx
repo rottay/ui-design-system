@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { KpiGridProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle 
+} from '../../../helpers';
 
 export const Compact = createPreset<KpiGridProps>((context: PresetContext<KpiGridProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { items, columns = 3, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   return (
     <Box
@@ -29,6 +31,7 @@ export const Compact = createPreset<KpiGridProps>((context: PresetContext<KpiGri
             padding: tokens.spacing[4],
           }}
         >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
           <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], marginBottom: tokens.spacing[1] }}>
             {item.label}
           </Text>

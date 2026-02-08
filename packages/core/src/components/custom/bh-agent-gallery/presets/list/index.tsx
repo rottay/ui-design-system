@@ -8,7 +8,18 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhAgentGalleryProps,
   AgentSummary,
@@ -173,8 +184,8 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
     const handleViewModeChange = (mode: AgentViewMode) => { onViewModeChange?.(mode); if (controlledViewMode === undefined) setLocalViewMode(mode); };
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     /* ---- Filtering ---- */
     const filteredAgents = useMemo(() => {
@@ -209,6 +220,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.medium,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       outline: 'none',
       appearance: 'none' as const,
       WebkitAppearance: 'none' as const,
@@ -270,12 +282,13 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   gap: tokens.spacing[2],
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: isActive ? `1px solid ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
+                  border: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                   backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
                   color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -310,10 +323,11 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   width: tokens.spacing[8],
                   height: tokens.spacing[8],
                   borderRadius: tokens.borderRadius.md,
-                  border: viewMode === mode ? `1px solid ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                  border: viewMode === mode ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: viewMode === mode ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                   color: viewMode === mode ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -363,6 +377,15 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[800],
                 fontFamily: 'inherit',
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
           </div>
@@ -454,6 +477,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         onClick={() => handleSelect(agent.id)}
                         style={{
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                           ...hoverStyle,
@@ -462,11 +486,13 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           if (!isSelected) {
                             (e.currentTarget as HTMLTableRowElement).style.backgroundColor = tokens.colors.neutral[50];
                           }
+                          e.currentTarget.style.transform = tokens.motion.transform;
                         }}
                         onMouseLeave={(e) => {
                           if (!isSelected) {
                             (e.currentTarget as HTMLTableRowElement).style.backgroundColor = tokens.colors.common.white;
                           }
+                          e.currentTarget.style.transform = 'none';
                         }}
                       >
                         {/* Agent name column */}
@@ -623,6 +649,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                 backgroundColor: tokens.colors.common.white,
                                 color: tokens.colors.neutral[500],
                                 cursor: 'pointer',
+                                transition: `all ${tokens.motion.hover}`,
                                 ...hoverStyle,
                               }}
                             >
@@ -643,6 +670,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                   backgroundColor: tokens.colors.common.white,
                                   color: tokens.colors.neutral[500],
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                   ...hoverStyle,
                                 }}
                               >
@@ -664,6 +692,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                   backgroundColor: tokens.colors.common.white,
                                   color: tokens.colors.neutral[500],
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                   ...hoverStyle,
                                 }}
                               >
@@ -685,6 +714,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                   backgroundColor: tokens.colors.errorScale[50],
                                   color: tokens.colors.errorScale[600],
                                   cursor: 'pointer',
+                                  transition: `all ${tokens.motion.hover}`,
                                   ...hoverStyle,
                                 }}
                               >
@@ -745,6 +775,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     backgroundColor: 'transparent',
                     color: tokens.colors.neutral[400],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -855,7 +886,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: tokens.colors.infoScale[50],
-                      border: `1px solid ${tokens.colors.infoScale[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
@@ -888,6 +919,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.semibold,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         ...hoverStyle,
                       }}
                     >
@@ -912,6 +944,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.medium,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         ...hoverStyle,
                       }}
                     >

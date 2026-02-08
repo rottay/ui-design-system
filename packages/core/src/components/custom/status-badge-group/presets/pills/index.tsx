@@ -1,6 +1,9 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { StatusBadgeGroupProps } from '../../core';
+import {
+  createBadgeStyle,
+} from '../../../helpers';
 
 export const PillsPreset = createPreset<StatusBadgeGroupProps>((context) => {
   const { primitives, props, tokens } = context;

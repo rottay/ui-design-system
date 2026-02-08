@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { ContentCardProps } from '../../core';
+import {
+  createCardStyle,
+} from '../../../helpers';
 
 export default createPreset<ContentCardProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -63,7 +66,7 @@ export default createPreset<ContentCardProps>((context) => {
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
-          fontSize: '20px',
+          fontSize: tokens.typography.fontSize.xl,
         }}
       >
         {getFileIcon(fileType)}
@@ -128,7 +131,7 @@ export default createPreset<ContentCardProps>((context) => {
           flexShrink: 0,
         }}
       >
-        <Text style={{ fontSize: '16px' }}>⬇️</Text>
+        <Text style={{ fontSize: tokens.typography.fontSize.md }}>⬇️</Text>
       </Box>
     </Box>
   );

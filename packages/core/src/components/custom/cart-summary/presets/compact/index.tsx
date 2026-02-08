@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { CartSummaryProps } from '../../core';
 import { CART_SUMMARY_DEFAULTS } from '../../core';
 
@@ -23,7 +26,7 @@ export const CompactPreset = createPreset<CartSummaryProps>((context) => {
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const surfaceStyle = createSurfaceStyle(tokens);
+  const surfaceStyle = useMemo(() => createSurfaceStyle(tokens), [tokens]);
 
   const formatPrice = (amount: number) => `${currency}${amount.toFixed(2)}`;
 
@@ -50,6 +53,7 @@ export const CompactPreset = createPreset<CartSummaryProps>((context) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           cursor: 'pointer',
+          transition: `all ${tokens.motion.hover}`,
         }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
@@ -103,7 +107,7 @@ export const CompactPreset = createPreset<CartSummaryProps>((context) => {
             style={{
               fontSize: tokens.typography.fontSize.sm,
               color: tokens.colors.neutral[400],
-              transition: `transform ${tokens.motion.hover}`,
+              transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
               transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
             }}
           >

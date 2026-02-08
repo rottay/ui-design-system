@@ -12,8 +12,9 @@ import type { TestimonialSectionProps } from '../../core';
 
 export const CarouselTestimonialSection = createPreset<TestimonialSectionProps>({
   name: 'TestimonialSection.Carousel',
-  render: ({ primitives, props, tokens }: PresetContext<TestimonialSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<TestimonialSectionProps>) => {
     const { Box, Stack, Button } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { testimonials, title, description, className, style } = props;
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -36,7 +37,7 @@ export const CarouselTestimonialSection = createPreset<TestimonialSectionProps>(
               key={i}
               style={{
                 color: i < rating ? tokens.colors.warningScale[500] : tokens.colors.neutral[300],
-                fontSize: '24px',
+                fontSize: tokens.typography.fontSize['2xl'],
               }}
             >
               ★
@@ -89,6 +90,7 @@ export const CarouselTestimonialSection = createPreset<TestimonialSectionProps>(
           <div
             style={{
               ...createCardStyle(tokens, {
+                glass: isGlass,
                 elevation: 'md',
                 padding: tokens.spacing[8],
               }),

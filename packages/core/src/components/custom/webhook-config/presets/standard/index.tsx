@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { WebhookConfigProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const Standard = createPreset<WebhookConfigProps>((context: PresetContext<WebhookConfigProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { webhooks, events, deliveryLogs = [], onCreate, onDelete, onToggle, onTest, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -39,6 +43,7 @@ export const Standard = createPreset<WebhookConfigProps>((context: PresetContext
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               Create Webhook
@@ -112,6 +117,7 @@ export const Standard = createPreset<WebhookConfigProps>((context: PresetContext
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     fontSize: tokens.typography.fontSize.xs,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   {webhook.active ? 'Disable' : 'Enable'}
@@ -128,6 +134,7 @@ export const Standard = createPreset<WebhookConfigProps>((context: PresetContext
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     fontSize: tokens.typography.fontSize.xs,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   Test
@@ -144,6 +151,7 @@ export const Standard = createPreset<WebhookConfigProps>((context: PresetContext
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                     fontSize: tokens.typography.fontSize.xs,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   Delete

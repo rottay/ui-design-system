@@ -8,7 +8,7 @@ import type { CtaSectionProps } from '../../core';
 
 export const SplitCtaSection = createPreset<CtaSectionProps>({
   name: 'CtaSection.Split',
-  render: ({ primitives, props, tokens }: PresetContext<CtaSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<CtaSectionProps>) => {
     const { Box, Stack, Button } = primitives;
     const { title, description, actions, media, className, style } = props;
 

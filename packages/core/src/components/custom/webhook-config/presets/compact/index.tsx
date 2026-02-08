@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { WebhookConfigProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const Compact = createPreset<WebhookConfigProps>((context: PresetContext<WebhookConfigProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { webhooks, onCreate, onDelete, onToggle, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   return (
     <Box style={cardStyle} className={className}>
@@ -29,6 +32,7 @@ export const Compact = createPreset<WebhookConfigProps>((context: PresetContext<
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             Add
@@ -75,6 +79,7 @@ export const Compact = createPreset<WebhookConfigProps>((context: PresetContext<
                   border: 'none',
                   fontSize: tokens.typography.fontSize.xs,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Toggle
@@ -90,6 +95,7 @@ export const Compact = createPreset<WebhookConfigProps>((context: PresetContext<
                   border: 'none',
                   fontSize: tokens.typography.fontSize.xs,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 Delete

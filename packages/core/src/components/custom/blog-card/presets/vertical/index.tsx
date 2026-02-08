@@ -1,20 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 import type { BlogCardProps } from '../../core';
 
 export const VerticalPreset = createPreset<BlogCardProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const { title, description, image, category, author, date, readTime, onClick, href, className, style } = props;
   const [isHovered, setIsHovered] = useState(false);
 
-  const cardStyle = createCardStyle(tokens, {
+  const cardStyle = useMemo(() => createCardStyle(tokens, {
+    glass: isGlass,
     interactive: !!(onClick || href),
     elevation: isHovered && (onClick || href) ? 'md' : 'sm',
-  });
+  }), [tokens, onClick]);
 
   const content = (
     <Box
@@ -95,7 +100,7 @@ export const VerticalPreset = createPreset<BlogCardProps>((context) => {
             fontSize: tokens.typography.fontSize.lg,
             fontWeight: tokens.typography.fontWeight.semibold,
             color: tokens.colors.neutral[900],
-            lineHeight: 1.4,
+            lineHeight: tokens.typography.lineHeight.normal,
           }}
         >
           {title}
@@ -107,7 +112,7 @@ export const VerticalPreset = createPreset<BlogCardProps>((context) => {
             style={{
               fontSize: tokens.typography.fontSize.sm,
               color: tokens.colors.neutral[600],
-              lineHeight: 1.6,
+              lineHeight: tokens.typography.lineHeight.relaxed,
               display: '-webkit-box',
               WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',

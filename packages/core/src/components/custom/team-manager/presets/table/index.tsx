@@ -3,9 +3,16 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { TeamManagerProps, TeamMember } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export default createPreset<TeamManagerProps>((context: PresetContext<TeamManagerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -122,9 +129,11 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[700];
+              e.currentTarget.style.transform = tokens.motion.transform;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+              e.currentTarget.style.transform = 'none';
             }}
           >
             Invite Member
@@ -169,6 +178,15 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                   fontSize: tokens.typography.fontSize.sm,
                   outline: 'none',
                 }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
               />
             </Box>
             <Box style={{ width: '200px' }}>
@@ -194,6 +212,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                   fontSize: tokens.typography.fontSize.sm,
                   outline: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 {roles.map((role) => (
@@ -309,7 +328,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                   onMouseLeave={() => setHoveredRow(null)}
                   style={{
                     backgroundColor: isHovered ? tokens.colors.neutral[50] : tokens.colors.common.white,
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }}
                 >
                   <td
@@ -422,7 +441,7 @@ export default createPreset<TeamManagerProps>((context: PresetContext<TeamManage
                                 cursor: 'pointer',
                                 fontSize: tokens.typography.fontSize.sm,
                                 color: tokens.colors.neutral[900],
-                                transition: `background-color ${tokens.motion.hover}`,
+                                transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                               }}
                               onMouseEnter={(e) => {
                                 if (role.key !== member.role) {

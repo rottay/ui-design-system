@@ -2,6 +2,10 @@
 
 import { createPreset } from '../../../factory';
 import type { PageShellProps, PageShellBreadcrumb, PageShellAction, PageShellTab } from '../../core';
+import {
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<PageShellProps>('compact', (context) => {
   const { primitives, props, tokens } = context;
@@ -197,7 +201,6 @@ export default createPreset<PageShellProps>('compact', (context) => {
                         borderRadius: tokens.borderRadius.md,
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: isActive ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
-                        transition: `all ${tokens.motion.hover}`,
                       }}
                       onClick={() => handleTabClick(tab.key)}
                     >

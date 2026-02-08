@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { KpiGridProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createAccentBarStyle, createCardStyle 
+} from '../../../helpers';
 
 export const Detailed = createPreset<KpiGridProps>((context: PresetContext<KpiGridProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { items, columns = 3, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const getTrendColor = (trend?: number) => {
     if (trend === undefined) return tokens.colors.neutral[600];
@@ -31,6 +33,7 @@ export const Detailed = createPreset<KpiGridProps>((context: PresetContext<KpiGr
         ...style,
       }}
     >
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {items.map((item) => {
         const currentValue = typeof item.value === 'number' ? item.value : 0;
         const targetValue = item.target || 0;
@@ -95,7 +98,7 @@ export const Detailed = createPreset<KpiGridProps>((context: PresetContext<KpiGr
                       height: '100%',
                       backgroundColor: progress >= 100 ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500],
                       borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
                 </Box>

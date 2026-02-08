@@ -3,7 +3,11 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { NewsFeedProps } from '../../core';
-import { formatDistanceToNow } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  formatDistanceToNow,
+} from '../../../helpers';
 
 export default createPreset<NewsFeedProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -45,9 +49,11 @@ export default createPreset<NewsFeedProps>((context) => {
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+            e.currentTarget.style.transform = tokens.motion.transform;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = tokens.colors.common.white;
+            e.currentTarget.style.transform = 'none';
           }}
         >
           {/* Avatar */}

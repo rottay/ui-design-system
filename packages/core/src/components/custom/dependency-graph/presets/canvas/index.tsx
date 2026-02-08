@@ -18,6 +18,13 @@ import {
   calculateLinkLabelPosition,
   calculateCanvasBounds,
 } from '../../core';
+import {
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 const NODE_WIDTH = 280;
 const NODE_HEIGHT = 100;
@@ -326,6 +333,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     color: tokens.colors.neutral[700],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -348,6 +356,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -367,6 +376,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontFamily: 'inherit',
                   }}
                 >
@@ -385,6 +395,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -531,7 +542,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                         backgroundColor: tokens.colors.common.white,
                         borderRadius: tokens.borderRadius.lg,
                         border: isSelected
-                          ? `2px solid ${tokens.colors.primaryScale[500]}`
+                          ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
                           : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         boxShadow: isDragging ? tokens.shadows.lg : isSelected ? tokens.shadows.md : tokens.shadows.sm,
                         cursor: onNodeMove ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
@@ -546,7 +557,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                         position: 'absolute', left: -5, top: NODE_HEIGHT / 2 - 5,
                         width: 10, height: 10, borderRadius: tokens.borderRadius.full,
                         backgroundColor: tokens.colors.neutral[300],
-                        border: `2px solid ${tokens.colors.common.white}`, zIndex: 2,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`, zIndex: 2,
                       }} />
 
                       {/* Output port (right) */}
@@ -556,7 +567,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                           position: 'absolute', right: -5, top: NODE_HEIGHT / 2 - 5,
                           width: 10, height: 10, borderRadius: tokens.borderRadius.full,
                           backgroundColor: tokens.colors.primaryScale[500],
-                          border: `2px solid ${tokens.colors.common.white}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                           cursor: onLinkCreate ? 'crosshair' : 'default', zIndex: 2,
                         }}
                       />
@@ -593,6 +604,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                                 width: tokens.spacing[5], height: tokens.spacing[5],
                                 border: 'none', borderRadius: tokens.borderRadius.sm,
                                 backgroundColor: 'transparent', cursor: 'pointer',
+                                transition: `all ${tokens.motion.hover}`,
                                 fontFamily: 'inherit', fontSize: tokens.typography.fontSize.md,
                                 color: tokens.colors.neutral[400],
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0,
@@ -626,6 +638,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
                                       fontSize: tokens.typography.fontSize.sm,
                                       color: action.destructive ? tokens.colors.errorScale[600] : tokens.colors.neutral[700],
                                       cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left',
+                                      transition: `all ${tokens.motion.hover}`,
                                     }}
                                   >
                                     {action.icon && <span>{action.icon}</span>}
@@ -696,6 +709,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
               width: tokens.spacing[7], height: tokens.spacing[7], border: 'none',
               borderRadius: tokens.borderRadius.sm, backgroundColor: 'transparent',
               cursor: 'pointer', fontFamily: 'inherit', fontSize: tokens.typography.fontSize.md,
+              transition: `all ${tokens.motion.hover}`,
               color: tokens.colors.neutral[600], display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               &minus;
@@ -705,6 +719,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
               width: tokens.spacing[7], height: tokens.spacing[7], border: 'none',
               borderRadius: tokens.borderRadius.sm, backgroundColor: 'transparent',
               cursor: 'pointer', fontFamily: 'inherit', fontSize: tokens.typography.fontSize.md,
+              transition: `all ${tokens.motion.hover}`,
               color: tokens.colors.neutral[600], display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               +
@@ -713,6 +728,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
             <button onClick={onZoomFit} style={{
               height: tokens.spacing[7], border: 'none', borderRadius: tokens.borderRadius.sm,
               backgroundColor: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
               padding: `0 ${tokens.spacing[2]}px`,
             }}>
@@ -721,6 +737,7 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
             <button onClick={onZoomReset} style={{
               height: tokens.spacing[7], border: 'none', borderRadius: tokens.borderRadius.sm,
               backgroundColor: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
               padding: `0 ${tokens.spacing[2]}px`,
             }}>

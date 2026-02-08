@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { ApiKeyManagerProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const Cards = createPreset<ApiKeyManagerProps>((context: PresetContext<ApiKeyManagerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { keys, onCreate, onRevoke, onCopy, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   return (
     <Box className={className} style={style}>
@@ -29,6 +32,7 @@ export const Cards = createPreset<ApiKeyManagerProps>((context: PresetContext<Ap
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             Create Key
@@ -116,6 +120,7 @@ export const Cards = createPreset<ApiKeyManagerProps>((context: PresetContext<Ap
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   Copy Key
@@ -134,6 +139,7 @@ export const Cards = createPreset<ApiKeyManagerProps>((context: PresetContext<Ap
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   Revoke

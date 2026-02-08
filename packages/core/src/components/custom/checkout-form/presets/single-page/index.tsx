@@ -3,6 +3,10 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { CheckoutFormProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<CheckoutFormProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -95,9 +99,11 @@ export default createPreset<CheckoutFormProps>((context) => {
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[700];
+          e.currentTarget.style.transform = tokens.motion.transform;
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+          e.currentTarget.style.transform = 'none';
         }}
       >
         Complete Order

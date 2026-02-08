@@ -7,7 +7,18 @@
 
 import { useState, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhClientDirectoryProps,
   ClientItem,
@@ -224,7 +235,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
@@ -316,7 +327,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       transition: `all ${tokens.motion.hover}`,
       backgroundColor: active ? tokens.colors.primaryScale[50] : tokens.colors.neutral[100],
       color: active ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-      border: `1px solid ${active ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${active ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
     });
 
     const selectStyle: React.CSSProperties = {
@@ -328,6 +339,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       outline: 'none',
     };
 
@@ -339,7 +351,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       cursor: 'pointer',
       transition: `all ${tokens.motion.hover}`,
       backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-      borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
       borderLeft: isSelected ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
     });
 
@@ -375,7 +387,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
         fontWeight: tokens.typography.fontWeight.medium,
         backgroundColor: scale[100],
         color: scale[700],
-        border: `1px solid ${scale[200]}`,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scale[200]}`,
         lineHeight: '1.6',
       };
     };
@@ -398,7 +410,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
     const contactCardStyle: React.CSSProperties = {
       padding: tokens.spacing[3],
       borderRadius: tokens.borderRadius.md,
-      border: `1px solid ${tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       backgroundColor: tokens.colors.neutral[50],
       marginBottom: tokens.spacing[2],
     };
@@ -437,7 +449,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.3)',
+      backgroundColor: tokens.overlay?.light,
       zIndex: 999,
       display: showForm ? 'block' : 'none',
     };
@@ -454,7 +466,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       overflowY: 'auto',
       padding: tokens.spacing[5],
       transform: showForm ? 'translateX(0)' : 'translateX(100%)',
-      transition: `transform ${tokens.motion.hover}`,
+      transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
       ...glassStyle,
     };
 
@@ -491,7 +503,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       fontWeight: tokens.typography.fontWeight.medium,
       backgroundColor: tokens.colors.neutral[100],
       color: tokens.colors.neutral[700],
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       cursor: 'pointer',
       transition: `all ${tokens.motion.hover}`,
     };
@@ -544,7 +556,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: bgColor,
-        border: `2px solid ${borderColor}`,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${borderColor}`,
         color: textColor,
         flexShrink: 0,
       };
@@ -559,7 +571,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
         flex: 1,
         height: '2px',
         backgroundColor: isCompleted ? tokens.colors.successScale[400] : tokens.colors.neutral[200],
-        transition: `background-color ${tokens.motion.hover}`,
+        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
       };
     };
 
@@ -571,7 +583,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
       padding: tokens.spacing[3],
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.neutral[50],
-      border: `1px solid ${tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       flex: 1,
     };
 
@@ -681,6 +693,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
                 transform: 'translateY(-50%)',
                 color: tokens.colors.neutral[400],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
               onClick={() => updateFilter({ search: '' })}
             />
@@ -789,7 +802,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
                   ...addButtonStyle,
                   backgroundColor: tokens.colors.neutral[100],
                   color: tokens.colors.neutral[700],
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 }}
                 onClick={openEditForm}
               >
@@ -966,7 +979,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
             </div>
             <div style={{
               borderRadius: tokens.borderRadius.md,
-              border: `1px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               overflow: 'hidden',
             }}>
               {/* Table header */}
@@ -978,7 +991,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 color: tokens.colors.neutral[600],
-                borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.04em',
               }}>
@@ -995,8 +1008,8 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[700],
-                  borderBottom: idx < Math.min(client.positionsCount, 5) - 1 ? `1px solid ${tokens.colors.neutral[100]}` : 'none',
-                  transition: `background-color ${tokens.motion.hover}`,
+                  borderBottom: idx < Math.min(client.positionsCount, 5) - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}>
                   <span style={{ fontWeight: tokens.typography.fontWeight.medium }}>
                     Position #{idx + 1}
@@ -1017,6 +1030,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
                   color: tokens.colors.primaryScale[600],
                   textAlign: 'center',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontWeight: tokens.typography.fontWeight.medium,
                 }}>
                   View all {client.positionsCount} positions
@@ -1179,7 +1193,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
           <div style={{
             padding: tokens.spacing[3],
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.neutral[50],
             marginBottom: tokens.spacing[4],
           }}>
@@ -1230,7 +1244,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
           </div>
 
           {/* Actions */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: tokens.spacing[3], paddingTop: tokens.spacing[3], borderTop: `1px solid ${tokens.colors.neutral[200]}` }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: tokens.spacing[3], paddingTop: tokens.spacing[3], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
             <button style={cancelBtnStyle} onClick={closeForm}>
               Cancel
             </button>

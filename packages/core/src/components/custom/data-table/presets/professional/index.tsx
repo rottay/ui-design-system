@@ -8,7 +8,11 @@
 
 import React, { useState, useMemo, useCallback, type ReactNode, type Key } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { DataTableProps, DataTableColumn } from '../../core';
 import { ChevronUp, ChevronDown, ChevronRight, ChevronLeft, Search } from 'lucide-react';
 
@@ -239,7 +243,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
     // Size-based styling
     const cellPadding = size === 'small' ? '8px 12px' : size === 'large' ? '16px 20px' : '12px 16px';
     const fontSize = size === 'small' ? 12 : size === 'large' ? 14 : 13;
-    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens, engine]);
 
     // ========================================================================
     // Handlers
@@ -463,7 +467,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
         <Box
           style={{
             padding: '16px 20px',
-            borderBottom: '1px solid var(--ds-color-border-secondary)',
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-border-secondary)`,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -477,8 +481,8 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
             {title && (
               <Text
                 style={{
-                  fontSize: 18,
-                  fontWeight: 600,
+                  fontSize: tokens.typography.fontSize.lg,
+                  fontWeight: tokens.typography.fontWeight.semibold,
                   color: 'var(--ds-color-text-primary)',
                 }}
               >
@@ -488,8 +492,8 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
 
             <Text
               style={{
-                fontSize: 13,
-                fontWeight: 600,
+                fontSize: tokens.typography.fontSize.sm,
+                fontWeight: tokens.typography.fontWeight.semibold,
                 color: 'var(--ds-color-text-secondary)',
                 letterSpacing: '0.5px',
               }}
@@ -534,11 +538,11 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                       style={{
                         borderRadius: tokens.borderRadius.md,
                         padding: '6px 14px',
-                        fontSize: 12,
-                        fontWeight: 500,
+                        fontSize: tokens.typography.fontSize.sm,
+                        fontWeight: tokens.typography.fontWeight.medium,
                         textTransform: 'uppercase',
                         letterSpacing: '0.5px',
-                        border: isActive ? 'none' : '1px solid var(--ds-color-border-secondary)',
+                        border: isActive ? 'none' : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-border-secondary)`,
                         backgroundColor: isActive ? 'var(--ds-color-primary)' : 'transparent',
                         color: isActive ? tokens.colors.common.white : 'var(--ds-color-text-secondary)',
                       }}
@@ -595,7 +599,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
           display: 'grid',
           gridTemplateColumns,
           backgroundColor: 'var(--ds-color-neutral-50)',
-          borderBottom: '1px solid var(--ds-color-border-secondary)',
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-border-secondary)`,
         }}
       >
         {/* Expand column header */}
@@ -621,6 +625,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                 width: 16,
                 height: 16,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 accentColor: 'var(--ds-color-primary)',
               }}
             />
@@ -648,15 +653,15 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
-                borderLeft: isDragOver ? '2px solid var(--ds-color-primary)' : '2px solid transparent',
+                borderLeft: isDragOver ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-primary)` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 opacity: draggedColKey === col.key ? 0.5 : 1,
               }}
               onClick={col.sortable ? () => handleSort(col.key) : undefined}
             >
               <Text
                 style={{
-                  fontSize: 11,
-                  fontWeight: 600,
+                  fontSize: tokens.typography.fontSize.xs,
+                  fontWeight: tokens.typography.fontWeight.semibold,
                   color: 'var(--ds-color-text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
@@ -729,9 +734,10 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                 : isHovered
                   ? 'var(--ds-color-bg-secondary)'
                   : 'var(--ds-color-bg-primary)',
-              borderBottom: isExpanded ? 'none' : '1px solid var(--ds-color-border-secondary)',
+              borderBottom: isExpanded ? 'none' : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-border-secondary)`,
               cursor: (expandedRowRender || onRowClick) ? 'pointer' : 'default',
               transition: `all ${tokens.motion.hover}`,
+              transform: isHovered ? tokens.motion.transform : 'none',
             }}
             onClick={handleRowClick}
             onMouseEnter={() => setHoveredRowKey(key)}
@@ -755,7 +761,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                   style={{
                     width: 20,
                     height: 20,
-                    borderRadius: 4,
+                    borderRadius: tokens.borderRadius.sm,
                     backgroundColor: isExpanded
                       ? 'var(--ds-color-primary)'
                       : 'var(--ds-color-neutral-200)',
@@ -797,6 +803,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                     width: 16,
                     height: 16,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     accentColor: 'var(--ds-color-primary)',
                   }}
                 />
@@ -824,7 +831,11 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                       type="text"
                       value={editValue}
                       onChange={(e) => setEditValue(e.target.value)}
-                      onBlur={commitEdit}
+                      onBlur={(e) => {
+                        commitEdit();
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                      }}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') commitEdit();
                         if (e.key === 'Escape') cancelEdit();
@@ -833,12 +844,17 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
                       style={{
                         width: '100%',
                         padding: '4px 8px',
-                        border: '2px solid var(--ds-color-primary)',
-                        borderRadius: 4,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-primary)`,
+                        borderRadius: tokens.borderRadius.sm,
                         fontSize,
                         outline: 'none',
                         backgroundColor: tokens.colors.common.white,
                         fontFamily: 'inherit',
+                      }}
+                    
+                      onFocus={(e) => {
+                        e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                       }}
                     />
                   </Box>
@@ -916,7 +932,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
             <Box
               style={{
                 backgroundColor: 'var(--ds-color-bg-secondary)',
-                borderBottom: '1px solid var(--ds-color-border-secondary)',
+                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-border-secondary)`,
                 padding: '20px 24px',
               }}
             >
@@ -940,7 +956,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
         }}
       >
         {emptyState || (
-          <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 14 }}>
+          <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: tokens.typography.fontSize.sm }}>
             {emptyText}
           </Text>
         )}
@@ -982,13 +998,13 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
           justify="between"
           style={{
             padding: '12px 20px',
-            borderTop: '1px solid var(--ds-color-border-secondary)',
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} var(--ds-color-border-secondary)`,
             backgroundColor: 'var(--ds-color-bg-primary)',
           }}
         >
           {/* Left: Showing X-Y of Z */}
           {showTotal && (
-            <Text style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: 'var(--ds-color-text-secondary)' }}>
               Showing {startRecord}-{endRecord} of {sortedData.length} results
             </Text>
           )}

@@ -1541,3 +1541,92 @@ export type {
 } from './bh-approval-queue';
 export { StandardBhApprovalQueue } from './bh-approval-queue';
 export { BH_APPROVAL_QUEUE_DEFAULTS } from './bh-approval-queue';
+
+// BhEvidenceBrowser
+export { BhEvidenceBrowser } from './bh-evidence-browser';
+export type {
+  BhEvidenceBrowserProps,
+  BhEvidenceBrowserPreset,
+  EvidenceItem,
+  TranscriptSegment,
+  EvidenceImpact,
+  SpeakerRole as EvidenceSpeakerRole,
+  EvidenceFilter,
+} from './bh-evidence-browser';
+export { SplitPaneBhEvidenceBrowser, CompactBhEvidenceBrowser } from './bh-evidence-browser';
+export { BH_EVIDENCE_BROWSER_DEFAULTS } from './bh-evidence-browser';
+
+// BhFraudMonitor
+export { BhFraudMonitor } from './bh-fraud-monitor';
+export type {
+  BhFraudMonitorProps,
+  BhFraudMonitorPreset,
+  ProctoringEvent,
+  SimilarityCheck,
+  FraudStats,
+  EventSeverity as FraudEventSeverity,
+  EventType as FraudEventType,
+  ReviewStatus,
+} from './bh-fraud-monitor';
+export { DashboardBhFraudMonitor, CompactBhFraudMonitor } from './bh-fraud-monitor';
+export { BH_FRAUD_MONITOR_DEFAULTS } from './bh-fraud-monitor';
+
+// BhSkillGapMap
+export { BhSkillGapMap } from './bh-skill-gap-map';
+export type {
+  BhSkillGapMapProps,
+  BhSkillGapMapPreset,
+  SkillGapItem,
+  DimensionHeatmapCell,
+  GapSummary,
+  GapPriority,
+} from './bh-skill-gap-map';
+export { HeatmapBhSkillGapMap, ListBhSkillGapMap } from './bh-skill-gap-map';
+export { BH_SKILL_GAP_MAP_DEFAULTS } from './bh-skill-gap-map';
+
+// BhCostAnalyzer
+export { BhCostAnalyzer } from './bh-cost-analyzer';
+export type {
+  BhCostAnalyzerProps,
+  BhCostAnalyzerPreset,
+  ProviderCost,
+  ModelCost,
+  CostTrendPoint,
+  TokenBalance as CostTokenBalance,
+  BudgetAlert,
+  CostSummary,
+  CostCategory,
+  TrendDirection as CostTrendDirection,
+} from './bh-cost-analyzer';
+export { DashboardBhCostAnalyzer, BreakdownBhCostAnalyzer } from './bh-cost-analyzer';
+export { BH_COST_ANALYZER_DEFAULTS } from './bh-cost-analyzer';
+
+// BhInterviewReplay
+export { BhInterviewReplay } from './bh-interview-replay';
+export type {
+  BhInterviewReplayProps,
+  BhInterviewReplayPreset,
+  TranscriptEntry,
+  ScoreOverlayPoint,
+  EvidenceMarker,
+  PersonaInfo,
+  ReplayScoreSummary,
+  SpeakerRole as ReplaySpeakerRole,
+} from './bh-interview-replay';
+export { FullBhInterviewReplay, CompactBhInterviewReplay } from './bh-interview-replay';
+export { BH_INTERVIEW_REPLAY_DEFAULTS } from './bh-interview-replay';
+
+// BhPanelCoordinator
+export { BhPanelCoordinator } from './bh-panel-coordinator';
+export type {
+  BhPanelCoordinatorProps,
+  BhPanelCoordinatorPreset,
+  PanelMember as CoordinatorPanelMember,
+  InterviewStage as CoordinatorInterviewStage,
+  PanelConsensus,
+  AggregationStrategy,
+  Recommendation,
+  StageStatus as CoordinatorStageStatus,
+} from './bh-panel-coordinator';
+export { TimelineBhPanelCoordinator, SummaryBhPanelCoordinator } from './bh-panel-coordinator';
+export { BH_PANEL_COORDINATOR_DEFAULTS } from './bh-panel-coordinator';

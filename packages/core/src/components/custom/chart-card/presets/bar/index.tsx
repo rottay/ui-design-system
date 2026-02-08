@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState, useMemo} from 'react';
 import { createPreset } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {  createAccentBarStyle,
+
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 import type { ChartCardProps } from '../../core';
 
 export default createPreset<ChartCardProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const {
     title,
@@ -24,7 +29,7 @@ export default createPreset<ChartCardProps>((context) => {
   } = props;
   const [isHovered, setIsHovered] = useState(false);
 
-  const cardStyle = createCardStyle(tokens, { elevation: 'sm', interactive: !!onClick });
+  const cardStyle = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: 'sm', interactive: !!onClick }), [tokens, onClick]);
   const colorScale = tokens.colors[`${color}Scale`];
 
   const max = Math.max(...data);
@@ -54,6 +59,8 @@ export default createPreset<ChartCardProps>((context) => {
       onMouseLeave={() => setIsHovered(false)}
       style={{
         ...cardStyle,
+        position: 'relative',
+        overflow: 'hidden',
         cursor: onClick ? 'pointer' : 'default',
         transition: `all ${tokens.motion.hover}`,
         transform: isHovered && onClick ? tokens.motion.transform : 'none',
@@ -62,6 +69,7 @@ export default createPreset<ChartCardProps>((context) => {
         ...style,
       }}
     >
+      <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {/* Header */}
       <Box
         style={{

@@ -484,7 +484,7 @@ function PreviewPanel({
       />
 
       <div style={{
-        background: 'var(--color-neutral-900, #001529)', borderRadius: 8, padding: 8 }}>
+        background: 'var(--color-neutral-900, #001529)', borderRadius: 'var(--border-radius-md, 8px)', padding: 8 }}>
         <AntMenu
           mode="inline"
           theme="dark"

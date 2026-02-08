@@ -5,9 +5,12 @@
  * Table with all features: search, selection, sorting, pagination
  */
 
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { DataTableProps } from '../../core';
 
 export const FullDataTable = createPreset<DataTableProps & Record<string, unknown>>({
@@ -71,7 +74,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
 
     const cellPadding = compact ? tokens.spacing[2] : tokens.spacing[3];
     const allSelected = data.length > 0 && selectedKeys.length === data.length;
-    const dropdownSurface = createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' });
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens]);
 
     return (
       <Card variant="outlined" padding="none" className={className} style={style}>
@@ -126,7 +129,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
                         style={{
                           padding: cellPadding,
                           textAlign: col.align || 'left',
-                          fontWeight: 600,
+                          fontWeight: tokens.typography.fontWeight.semibold,
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[600],
                           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -164,6 +167,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
                           }}
                           onMouseEnter={(e) => {
                             if (!isSelected) e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+          e.currentTarget.style.transform = tokens.motion.transform;
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = isSelected

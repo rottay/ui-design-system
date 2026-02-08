@@ -3,6 +3,9 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { KeyboardShortcutsProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const ModalPreset = createPreset<KeyboardShortcutsProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -63,6 +66,7 @@ export const ModalPreset = createPreset<KeyboardShortcutsProps>((context) => {
               background: 'none',
               border: 'none',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontSize: tokens.typography.fontSize.xl,
               padding: tokens.spacing[1],
               color: tokens.colors.neutral[600],

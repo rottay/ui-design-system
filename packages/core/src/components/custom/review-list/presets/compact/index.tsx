@@ -3,7 +3,11 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { ReviewListProps } from '../../core';
-import { formatDistanceToNow } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  formatDistanceToNow,
+} from '../../../helpers';
 
 export default createPreset<ReviewListProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -23,7 +27,7 @@ export default createPreset<ReviewListProps>((context) => {
           <Box
             key={star}
             style={{
-              fontSize: '14px',
+              fontSize: tokens.typography.fontSize.sm,
               color: star <= rating ? tokens.colors.warningScale[500] : tokens.colors.neutral[300],
             }}
           >
@@ -94,9 +98,11 @@ export default createPreset<ReviewListProps>((context) => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = tokens.colors.primaryScale[600];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = tokens.colors.neutral[600];
+                e.currentTarget.style.transform = 'none';
               }}
             >
               👍 {review.helpful}

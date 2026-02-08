@@ -1,6 +1,9 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { BadgeShowcaseProps } from '../../core';
+import {
+  createEmptyStateStyle,
+} from '../../../helpers';
 
 export const GridPreset = createPreset<BadgeShowcaseProps>((context) => {
   const { primitives, props, tokens } = context;

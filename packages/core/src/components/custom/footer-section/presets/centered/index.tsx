@@ -5,10 +5,14 @@
 
 import { createPreset, PresetContext } from '../../../factory';
 import type { FooterSectionProps } from '../../core';
+import {
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const CenteredFooterSection = createPreset<FooterSectionProps>({
   name: 'FooterSection.Centered',
-  render: ({ primitives, props, tokens }: PresetContext<FooterSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<FooterSectionProps>) => {
     const { Box, Stack } = primitives;
     const { columns = [], social = [], copyright, logo, className, style } = props;
 
@@ -51,15 +55,17 @@ export const CenteredFooterSection = createPreset<FooterSectionProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[600],
                       cursor: link.onClick || link.href ? 'pointer' : 'default',
-                      transition: `color ${tokens.motion.hover}`,
+                      transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                     onMouseEnter={(e) => {
                       if (link.onClick || link.href) {
                         e.currentTarget.style.color = tokens.colors.primaryScale[600];
+                        e.currentTarget.style.transform = tokens.motion.transform;
                       }
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.color = tokens.colors.neutral[600];
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     {link.label}
@@ -89,10 +95,12 @@ export const CenteredFooterSection = createPreset<FooterSectionProps>({
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[50];
                       e.currentTarget.style.color = tokens.colors.primaryScale[600];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
                       e.currentTarget.style.color = tokens.colors.neutral[600];
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     {link.icon}

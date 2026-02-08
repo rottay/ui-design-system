@@ -8,6 +8,15 @@
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SprintBoardProps, SprintTask, TaskStatus, TaskPriority } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const BySprintSprintBoard = createPreset<SprintBoardProps>({
   name: 'SprintBoard.BySprint',
@@ -198,7 +207,7 @@ export const BySprintSprintBoard = createPreset<SprintBoardProps>({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[0] }}>
               {tabs.map((tab) => (
-                <button key={tab.key} onClick={() => onTabChange?.(tab.key)} style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, border: 'none', borderBottom: tab.key === activeTab ? `2px solid ${tokens.colors.neutral[900]}` : '2px solid transparent', backgroundColor: 'transparent', fontSize: tokens.typography.fontSize.sm, fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer' }}>
+                <button key={tab.key} onClick={() => onTabChange?.(tab.key)} style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, border: 'none', borderBottom: tab.key === activeTab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[900]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`, backgroundColor: 'transparent', fontSize: tokens.typography.fontSize.sm, fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal, color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer' }}>
                   {tab.label}
                 </button>
               ))}
@@ -298,15 +307,15 @@ export const BySprintSprintBoard = createPreset<SprintBoardProps>({
                                 display: 'grid',
                                 gridTemplateColumns: defaultColumns.map(c => c.width ? `${c.width}px` : '1fr').join(' '),
                                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                                borderTop: isDragOver ? `2px solid ${tokens.colors.primaryScale[500]}` : '2px solid transparent',
+                                borderTop: isDragOver ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                                 padding: `${tokens.spacing[2]}px ${tokens.spacing[0]}px`,
                                 cursor: canDrag ? 'grab' : 'pointer',
                                 alignItems: 'center',
                                 opacity: isDragging ? 0.4 : 1,
                                 transition: `all ${tokens.motion.hover}`,
                               }}
-                              onMouseEnter={(e) => { if (!isDragging) (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50]; }}
-                              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent'; }}
+                              onMouseEnter={(e) => { if (!isDragging) (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];  e.currentTarget.style.transform = tokens.motion.transform; }}
+                              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';  e.currentTarget.style.transform = 'none'; }}
                             >
                               {defaultColumns.map((col) => (
                                 <div key={col.key} style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -332,8 +341,8 @@ export const BySprintSprintBoard = createPreset<SprintBoardProps>({
                               style={{
                                 padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
                                 borderTop: dragOverTarget?.groupId === group.id && dragOverTarget?.index === group.tasks.length
-                                  ? `2px solid ${tokens.colors.primaryScale[500]}`
-                                  : '2px solid transparent',
+                                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
+                                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                                 color: tokens.colors.primaryScale[400],
                                 fontSize: tokens.typography.fontSize.xs,
                                 textAlign: 'center',

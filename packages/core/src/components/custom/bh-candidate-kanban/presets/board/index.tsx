@@ -8,7 +8,18 @@
 
 import { useState, useMemo, useCallback, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCandidateKanbanProps,
   KanbanCandidate,
@@ -321,9 +332,9 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     }, [showConfirmReject, onReject]);
 
     /* -- Styles ---------------------------------------------------------- */
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isModern });
-    const surfaceBase = createSurfaceStyle(tokens, { elevation: 'sm', glass: isModern });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const surfaceBase = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     const hasActiveFilters = !!(
@@ -355,7 +366,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
         <Box
           style={{
             ...surfaceBase,
-            borderRadius: 0,
+            borderRadius: tokens.borderRadius.none,
             padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
             backgroundColor: tokens.colors.common.white,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -461,6 +472,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     padding: 2,
                     color: tokens.colors.neutral[400],
                     display: 'flex',
@@ -529,6 +541,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     padding: 0,
                     color: tokens.colors.primaryScale[500],
                     display: 'flex',
@@ -613,7 +626,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                       borderRadius: tokens.borderRadius.full,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      border: active ? `1px solid ${srcConfig.text}` : `1px solid ${tokens.colors.neutral[200]}`,
+                      border: active ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${srcConfig.text}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: active ? srcConfig.bg : tokens.colors.common.white,
                       color: active ? srcConfig.text : tokens.colors.neutral[500],
                       cursor: 'pointer',
@@ -648,7 +661,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                       borderRadius: tokens.borderRadius.full,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      border: active ? `1px solid ${aiColor}` : `1px solid ${tokens.colors.neutral[200]}`,
+                      border: active ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${aiColor}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: active ? aiBg : tokens.colors.common.white,
                       color: active ? aiColor : tokens.colors.neutral[500],
                       cursor: 'pointer',
@@ -724,7 +737,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                   backgroundColor: isDragOver ? tokens.colors.primaryScale[50] : tokens.colors.neutral[100],
                   border: isDragOver
                     ? `2px dashed ${tokens.colors.primaryScale[400]}`
-                    : `1px solid ${tokens.colors.neutral[200]}`,
+                    : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   transition: `all ${tokens.motion.hover}`,
                   overflow: 'hidden',
                 }}
@@ -736,7 +749,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                 <Box
                   style={{
                     padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px ${tokens.spacing[2]}px`,
-                    borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     backgroundColor: tokens.colors.common.white,
                     ...(isModern && tokens.glass ? {
                       backdropFilter: tokens.glass.blurSm,
@@ -918,6 +931,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                               border: 'none',
                               padding: 0,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               color: isBulkSelected ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                               zIndex: 2,
                             }}
@@ -1026,7 +1040,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: 10,
+                                fontSize: tokens.typography.fontSize.xs,
                                 fontWeight: tokens.typography.fontWeight.bold,
                                 color: scoreColor,
                               }}
@@ -1059,7 +1073,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                               alignItems: 'center',
                               padding: `1px ${tokens.spacing[2]}px`,
                               borderRadius: tokens.borderRadius.full,
-                              fontSize: 10,
+                              fontSize: tokens.typography.fontSize.xs,
                               fontWeight: tokens.typography.fontWeight.medium,
                               backgroundColor: sourceConfig.bg,
                               color: sourceConfig.text,
@@ -1107,7 +1121,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                   borderRadius: tokens.borderRadius.md,
                                   backgroundColor: tokens.colors.neutral[900],
                                   color: tokens.colors.common.white,
-                                  fontSize: 10,
+                                  fontSize: tokens.typography.fontSize.xs,
                                   fontWeight: tokens.typography.fontWeight.medium,
                                   whiteSpace: 'nowrap' as const,
                                   zIndex: 10,
@@ -1132,11 +1146,11 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                   gap: tokens.spacing[1],
                                   padding: `1px ${tokens.spacing[2]}px`,
                                   borderRadius: tokens.borderRadius.full,
-                                  fontSize: 10,
+                                  fontSize: tokens.typography.fontSize.xs,
                                   fontWeight: tokens.typography.fontWeight.medium,
                                   backgroundColor: tokens.colors.neutral[100],
                                   color: tokens.colors.neutral[600],
-                                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 }}
                               >
                                 <Tag size={10} />
@@ -1146,7 +1160,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                             {candidate.tags.length > 2 && (
                               <Box
                                 style={{
-                                  fontSize: 10,
+                                  fontSize: tokens.typography.fontSize.xs,
                                   color: tokens.colors.neutral[400],
                                   fontWeight: tokens.typography.fontWeight.medium,
                                 }}
@@ -1185,7 +1199,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                 width: 28,
                                 height: 28,
                                 borderRadius: tokens.borderRadius.md,
-                                border: `1px solid ${tokens.colors.neutral[200]}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 backgroundColor: tokens.colors.common.white,
                                 color: tokens.colors.primaryScale[600],
                                 cursor: 'pointer',
@@ -1207,7 +1221,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                 width: 28,
                                 height: 28,
                                 borderRadius: tokens.borderRadius.md,
-                                border: `1px solid ${tokens.colors.neutral[200]}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 backgroundColor: tokens.colors.common.white,
                                 color: tokens.colors.infoScale[600],
                                 cursor: 'pointer',
@@ -1229,7 +1243,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                 width: 28,
                                 height: 28,
                                 borderRadius: tokens.borderRadius.md,
-                                border: `1px solid ${tokens.colors.neutral[200]}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 backgroundColor: tokens.colors.common.white,
                                 color: tokens.colors.errorScale[600],
                                 cursor: 'pointer',
@@ -1251,7 +1265,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                                 width: 28,
                                 height: 28,
                                 borderRadius: tokens.borderRadius.md,
-                                border: `1px solid ${tokens.colors.neutral[200]}`,
+                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                                 backgroundColor: tokens.colors.common.white,
                                 color: tokens.colors.warningScale[600],
                                 cursor: 'pointer',
@@ -1350,7 +1364,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'rgba(0,0,0,0.4)',
+              backgroundColor: tokens.overlay?.light,
               zIndex: 1000,
             }}
             onClick={() => setShowConfirmReject(null)}
@@ -1414,7 +1428,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     backgroundColor: tokens.colors.common.white,
                     color: tokens.colors.neutral[700],
                     fontSize: tokens.typography.fontSize.sm,

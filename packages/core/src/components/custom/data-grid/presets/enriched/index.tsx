@@ -11,6 +11,14 @@ import React, { useState, useMemo, useCallback, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { DataGridProps, DataGridColumn } from '../../core';
 import { DATA_GRID_DEFAULTS, getValue, compareValues, getBadgeColors } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 // ============================================================================
 // Extended Props for Enriched Preset
@@ -398,7 +406,11 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
             type="text"
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
-            onBlur={commitEdit}
+            onBlur={(e) => {
+              commitEdit();
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') commitEdit();
               if (e.key === 'Escape') cancelEdit();
@@ -407,12 +419,17 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
             style={{
               width: '100%',
               padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`,
-              border: `2px solid ${tokens.colors.primaryScale[600]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`,
               borderRadius: tokens.borderRadius.sm,
               fontSize: tokens.typography.fontSize.sm,
               outline: 'none',
               backgroundColor: tokens.colors.common.white,
               fontFamily: 'inherit',
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
             }}
           />
         );
@@ -499,6 +516,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                     textDecoration: 'none',
                     fontWeight: idx === breadcrumbs.length - 1 ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   {crumb.label}
@@ -555,7 +573,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                   height: '100%',
                   backgroundColor: tokens.colors.primaryScale[600],
                   borderRadius: tokens.borderRadius.sm,
-                  transition: `width ${tokens.motion.hover}`,
+                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                 }}
               />
             </Box>
@@ -570,6 +588,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
               background: 'none',
               color: tokens.colors.neutral[400],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               padding: tokens.spacing[1],
               fontSize: tokens.typography.fontSize.sm,
               lineHeight: 1,
@@ -617,6 +636,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
             }}
           >
@@ -654,6 +674,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                   color: filter.active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.sm,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontWeight: filter.active ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
                   fontFamily: 'inherit',
                 }}
@@ -699,6 +720,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                 color: sortState ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 fontSize: tokens.typography.fontSize.sm,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontWeight: sortState ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
                 fontFamily: 'inherit',
               }}
@@ -736,6 +758,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 whiteSpace: 'nowrap',
                 fontFamily: 'inherit',
               }}
@@ -775,6 +798,15 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                   backgroundColor: tokens.colors.common.white,
                   outline: 'none',
                   fontFamily: 'inherit',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
             </Box>
@@ -880,7 +912,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                 color: tokens.colors.neutral[500],
                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 borderRight: bordered ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : undefined,
-                borderLeft: isDragOver ? `2px solid ${tokens.colors.primaryScale[600]}` : undefined,
+                borderLeft: isDragOver ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : undefined,
                 cursor: columnReorderable ? 'grab' : isColumnSortable ? 'pointer' : 'default',
                 userSelect: 'none',
                 whiteSpace: 'nowrap',
@@ -918,7 +950,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                       height: 18,
                       cursor: 'col-resize',
                       backgroundColor: 'transparent',
-                      borderRight: '2px solid transparent',
+                      borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                       marginLeft: 'auto',
                       flexShrink: 0,
                     }}
@@ -956,6 +988,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
               background: 'none',
               color: tokens.colors.neutral[400],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               padding: tokens.spacing[0],
               fontSize: tokens.typography.fontSize.md,
               lineHeight: 1,
@@ -1024,6 +1057,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
                 backgroundColor: rowBg,
                 cursor: onRowClick ? 'pointer' : 'default',
                 transition: `all ${tokens.motion.hover}`,
+                transform: isHovered ? tokens.motion.transform : 'none',
                 height: rowHeight,
               }}
             >
@@ -1179,6 +1213,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
             color: tokens.colors.neutral[500],
             fontSize: tokens.typography.fontSize.sm,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`,
             fontFamily: 'inherit',
           }}
@@ -1204,6 +1239,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
               background: 'none',
               color: tokens.colors.neutral[400],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               padding: tokens.spacing[1],
             }}
           >

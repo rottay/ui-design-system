@@ -9,7 +9,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 import type {
   BhAnalyticsHubProps,
   DateRangePreset,
@@ -156,9 +165,9 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     };
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const chartColors = getChartColors(tokens);
 
     /* ---------- Max values ---------- */
@@ -258,7 +267,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                   backgroundColor: comparisonEnabled ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                   position: 'relative' as const,
                   flexShrink: 0,
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }}
               >
                 <div
@@ -270,7 +279,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     position: 'absolute' as const,
                     top: 2,
                     left: comparisonEnabled ? 18 : 2,
-                    transition: `left ${tokens.motion.hover}`,
+                    transition: `left ${tokens.transitions?.normal || tokens.motion.hover}`,
                     boxShadow: tokens.shadows.sm,
                   }}
                 />
@@ -353,7 +362,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
           style={{
             display: 'flex',
             gap: tokens.spacing[1],
-            borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             paddingBottom: 0,
           }}
         >
@@ -368,8 +377,8 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                 fontWeight: activeTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                 color: activeTab === tab.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 borderBottom: activeTab === tab.key
-                  ? `2px solid ${tokens.colors.primaryScale[600]}`
-                  : '2px solid transparent',
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
+                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 marginBottom: -2,
               }}
             >
@@ -388,7 +397,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <div style={{ overflowX: 'auto' as const }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
                   <thead>
-                    <tr style={{ borderBottom: `2px solid ${tokens.colors.neutral[200]}` }}>
+                    <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                       {['Stage', 'Count', 'Conversion', comparisonEnabled ? 'Previous' : null, comparisonEnabled ? 'Change' : null, 'Funnel %'].filter(Boolean).map((col) => (
                         <th
                           key={col!}
@@ -419,7 +428,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                           key={stage.name}
                           style={{
                             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                            transition: `background-color ${tokens.motion.hover}`,
+                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
                           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
@@ -621,7 +630,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <div style={{ overflowX: 'auto' as const }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
                   <thead>
-                    <tr style={{ borderBottom: `2px solid ${tokens.colors.neutral[200]}` }}>
+                    <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                       {['Source', 'Candidates', 'Quality Score', 'Volume', 'Quality'].map((col) => (
                         <th
                           key={col}
@@ -646,7 +655,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                         key={source.source}
                         style={{
                           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                          transition: `background-color ${tokens.motion.hover}`,
+                          transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                         }}
                         onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
                         onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
@@ -783,7 +792,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <div style={{ overflowX: 'auto' as const }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
                   <thead>
-                    <tr style={{ borderBottom: `2px solid ${tokens.colors.neutral[200]}` }}>
+                    <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
                       {['Stage', 'Avg Days', 'SLA Limit', 'Status', 'Progress'].map((col) => (
                         <th
                           key={col}
@@ -811,7 +820,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                           key={stage.stage}
                           style={{
                             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                            transition: `background-color ${tokens.motion.hover}`,
+                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
                           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}

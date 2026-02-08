@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 /**
  * AuthLayout - Branded Preset
  * Split layout with left branding panel and right form, tenant-aware
@@ -33,10 +34,10 @@ export const BrandedAuthLayout = createPreset<AuthLayoutProps>({
         ? `linear-gradient(135deg, ${brandColor}, ${tokens.colors.primaryScale[800]})`
         : brandColor;
 
-    const formSurfaceStyle = createSurfaceStyle(tokens, {
+    const formSurfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'sm',
       glass: isModern,
-    });
+    }), [tokens, isModern]);
 
     return (
       <Box
@@ -65,7 +66,7 @@ export const BrandedAuthLayout = createPreset<AuthLayoutProps>({
             <Box style={{
               position: 'absolute',
               inset: 0,
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              backgroundColor: tokens.overlay?.light,
             }} />
           )}
           <Box style={{

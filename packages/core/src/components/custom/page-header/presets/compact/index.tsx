@@ -10,6 +10,9 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { PageHeaderProps } from '../../core';
 import { PAGE_HEADER_DEFAULTS } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const CompactPageHeader = createPreset<PageHeaderProps>({
   name: 'PageHeader.Compact',
@@ -95,6 +98,7 @@ export const CompactPageHeader = createPreset<PageHeaderProps>({
                             cursor: 'pointer',
                             textDecoration: isHovered ? 'underline' : 'none',
                             transition: `all ${tokens.motion.hover}`,
+                            transform: isHovered ? tokens.motion.transform : 'none',
                           }}
                         >
                           {item.label}

@@ -8,7 +8,19 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhTemplateLibraryProps, TemplateItem, TemplateFilter, IndustryGroup } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -212,8 +224,8 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
 
     /* ── Engine-aware styling ───────────────────────────────────────── */
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ── Styles ─────────────────────────────────────────────────────── */
@@ -280,6 +292,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       outline: 'none',
       appearance: 'none' as const,
       paddingRight: tokens.spacing[6],
@@ -304,6 +317,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       gap: tokens.spacing[2],
       padding: `${tokens.spacing[2]}px 0`,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       userSelect: 'none' as const,
       marginBottom: tokens.spacing[2],
     };
@@ -371,7 +385,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       fontSize: '10px',
       fontWeight: tokens.typography.fontWeight.semibold,
       marginLeft: index > 0 ? -8 : 0,
-      border: `2px solid ${tokens.colors.common.white}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
       position: 'relative' as const,
       zIndex: 10 - index,
     });
@@ -392,7 +406,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       backdropFilter: isGlass && tokens.glass ? tokens.glass.blur : undefined,
       WebkitBackdropFilter: isGlass && tokens.glass ? tokens.glass.blur : undefined,
       borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-      transition: `opacity ${tokens.motion.hover}`,
+      transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
     };
 
     const actionBtnStyle: React.CSSProperties = {
@@ -423,7 +437,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
       backgroundColor: tokens.colors.common.white,
       borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       overflowY: 'auto' as const,
-      transition: `transform ${tokens.motion.hover}`,
+      transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
       boxShadow: tokens.shadows.lg,
       ...(isGlass && tokens.glass
         ? {
@@ -510,7 +524,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
         backgroundColor: colors[index % colors.length],
         borderRight:
           index < total - 1
-            ? `1px solid ${tokens.colors.common.white}`
+            ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`
             : 'none',
         display: 'flex',
         alignItems: 'center',
@@ -587,6 +601,15 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                 flex: 1,
                 fontSize: tokens.typography.fontSize.sm,
                 color: tokens.colors.neutral[700],
+              }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
             {filters.search && (
@@ -684,6 +707,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   border: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   backgroundColor:
                     viewMode === 'cards'
                       ? tokens.colors.primaryScale[50]
@@ -706,6 +730,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   border: 'none',
                   borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   backgroundColor:
                     viewMode === 'table'
                       ? tokens.colors.primaryScale[50]

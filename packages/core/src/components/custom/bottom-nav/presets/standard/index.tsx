@@ -3,6 +3,10 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { BottomNavProps } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<BottomNavProps>((context) => {
   const { primitives, props, tokens } = context;

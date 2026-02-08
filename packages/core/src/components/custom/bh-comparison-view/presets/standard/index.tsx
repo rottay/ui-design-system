@@ -8,7 +8,19 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhComparisonViewProps, ComparisonCandidate, CandidateDecision } from '../../core';
 import {
   getRankColors,
@@ -48,6 +60,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
   name: 'BhComparisonView.Standard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhComparisonViewProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const rankColors = getRankColors(tokens);
     const decisionColors = getDecisionColors(tokens);
 
@@ -199,7 +212,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
       ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
       : {};
 
-    const surfaceStyle = createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' });
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' }), [tokens, engine]);
 
     const colWidth = candidates.length > 0 ? `${Math.floor(100 / (candidates.length + 1))}%` : '25%';
 
@@ -341,6 +354,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
                           background: 'none',
                           border: 'none',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           color: tokens.colors.neutral[400],
                           padding: tokens.spacing[1],
                           display: 'flex',
@@ -1009,6 +1023,15 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
                               backgroundColor: tokens.colors.common.white,
                               resize: 'vertical' as const,
                             }}
+                          
+                            onFocus={(e) => {
+                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                            }}
+                            onBlur={(e) => {
+                              e.currentTarget.style.boxShadow = 'none';
+                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                            }}
                           />
                         </Box>
                       </Box>
@@ -1020,7 +1043,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
               {/* Empty state */}
               {candidates.length === 0 && (
                 <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm' }),
+                  ...createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }),
                   padding: tokens.spacing[8],
                   textAlign: 'center' as const,
                   display: 'flex',

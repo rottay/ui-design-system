@@ -25,7 +25,7 @@
 import { useTenant } from '../tenant';
 import { useEngineContext } from '../../providers/engine';
 import { getEngineTokens } from './engine-tokens';
-import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens } from '../../types';
+import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens } from '../../types';
 
 export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';
 export type { EngineTokenOverrides } from './engine-tokens';
@@ -90,6 +90,16 @@ const TRANSITION_TOKENS: TransitionTokens = {
   spring: 'var(--ds-transition-spring)',
 };
 
+// Pre-computed overlay tokens (static)
+const OVERLAY_TOKENS: OverlayTokens = {
+  light: 'var(--ds-overlay-light)',
+  medium: 'var(--ds-overlay-medium)',
+  heavy: 'var(--ds-overlay-heavy)',
+  white: 'var(--ds-overlay-white)',
+  whiteMedium: 'var(--ds-overlay-white-medium)',
+  whiteLight: 'var(--ds-overlay-white-light)',
+};
+
 /**
  * Hook to access design tokens with tenant-specific overrides and engine differentiation.
  *
@@ -147,7 +157,9 @@ export function useTokens(): DesignTokens {
         black: 'var(--color-black)',
       },
     },
-    spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96],
+    spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
+      v => Math.round(v * engineOverrides.densityScale)
+    ),
     typography: {
       fontSize: {
         xs: '0.75rem',
@@ -180,6 +192,7 @@ export function useTokens(): DesignTokens {
     glass: GLASS_TOKENS,
     gradients: GRADIENT_TOKENS,
     transitions: TRANSITION_TOKENS,
+    overlay: OVERLAY_TOKENS,
   };
 
   return tokens;

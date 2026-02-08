@@ -34,6 +34,15 @@ import {
   XCircle,
   Archive,
 } from 'lucide-react';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 // ============================================================================
 // Component
@@ -240,6 +249,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
             justify="between"
             style={{
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
               borderRadius: tokens.borderRadius.md,
               backgroundColor: tokens.colors.neutral[800],
@@ -366,7 +376,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                       padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
-                      lineHeight: 1.5,
+                      lineHeight: tokens.typography.lineHeight.relaxed,
                     }}
                   >
                     {item.badge}
@@ -509,6 +519,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600],
                   backgroundColor: tokens.colors.common.white,
@@ -530,6 +541,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600],
                   backgroundColor: tokens.colors.common.white,
@@ -550,6 +562,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.common.white,
                   backgroundColor: tokens.colors.primaryScale[600],
@@ -572,6 +585,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                   borderRadius: tokens.borderRadius.md,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[600],
                   backgroundColor: tokens.colors.common.white,
@@ -617,11 +631,10 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                   gap: tokens.spacing[2],
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
                   cursor: 'pointer',
-                  borderBottom: isActive ? `2px solid ${tokens.colors.primaryScale[600]}` : '2px solid transparent',
+                  borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                   color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                  transition: `all ${tokens.motion.hover}`,
                 }}
                 onClick={() => handleFilterChange(stat.key)}
               >
@@ -732,6 +745,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
             backgroundColor: config.bgColor,
             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${config.borderColor}`,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             fontSize: tokens.typography.fontSize.xs,
             fontWeight: tokens.typography.fontWeight.medium,
             color: config.color,
@@ -845,6 +859,15 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                     outline: 'none',
                     backgroundColor: tokens.colors.neutral[50],
                   }}
+                
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                    e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                  }}
                 />
               </Box>
             </Box>
@@ -935,6 +958,7 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                       : tokens.colors.common.white,
                   cursor: onContactClick ? 'pointer' : 'default',
                   transition: `all ${tokens.motion.hover}`,
+                  transform: isHovered ? tokens.motion.transform : 'none',
                 }}
                 onMouseEnter={() => setHoveredRowId(contact.id)}
                 onMouseLeave={() => setHoveredRowId(null)}
@@ -981,7 +1005,11 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                         type="text"
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
-                        onBlur={commitEdit}
+                        onBlur={(e) => {
+                          commitEdit();
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                        }}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') commitEdit();
                           if (e.key === 'Escape') cancelEdit();
@@ -991,13 +1019,18 @@ export const StandardOutreachTable = createPreset<OutreachTableProps & Record<st
                         style={{
                           width: '100%',
                           padding: '2px 6px',
-                          border: `2px solid ${tokens.colors.primaryScale[600]}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`,
                           borderRadius: tokens.borderRadius.sm,
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: tokens.typography.fontWeight.semibold,
                           outline: 'none',
                           backgroundColor: tokens.colors.common.white,
                           fontFamily: 'inherit',
+                        }}
+                      
+                        onFocus={(e) => {
+                          e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                          e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                         }}
                       />
                     ) : (

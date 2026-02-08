@@ -8,7 +8,7 @@ import type { StatsSectionProps } from '../../core';
 
 export const LargeStatsSection = createPreset<StatsSectionProps>({
   name: 'StatsSection.Large',
-  render: ({ primitives, props, tokens }: PresetContext<StatsSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<StatsSectionProps>) => {
     const { Box, Stack } = primitives;
     const { stats, title, description, className, style } = props;
 

@@ -5,9 +5,20 @@
  * Card grid layout with expandable client cards
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhClientDirectoryProps,
   ClientItem,
@@ -198,7 +209,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,
           backgroundColor: tokens.glass.bg,
-          border: `1px solid ${tokens.glass.border}`,
+          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
         }
       : {};
 
@@ -275,7 +286,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       transition: `all ${tokens.motion.hover}`,
       backgroundColor: active ? tokens.colors.primaryScale[50] : tokens.colors.neutral[100],
       color: active ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-      border: `1px solid ${active ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${active ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
     });
 
     const selectStyle: React.CSSProperties = {
@@ -287,6 +298,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       outline: 'none',
     };
 
@@ -317,7 +329,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
         fontWeight: tokens.typography.fontWeight.medium,
         backgroundColor: scale[100],
         color: scale[700],
-        border: `1px solid ${scale[200]}`,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scale[200]}`,
         lineHeight: '1.6',
       };
     };
@@ -325,11 +337,11 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
     const cardBaseStyle = (id: string): React.CSSProperties => {
       const isHovered = hoveredCard === id;
       const isExpanded = expandedCard === id;
-      const baseCard = createCardStyle(tokens, {
+      const baseCard = useMemo(() => createCardStyle(tokens, {
         elevation: isHovered ? 'md' : 'sm',
         glass: isModern,
         interactive: true,
-      });
+      }), [tokens, isModern]);
 
       return {
         ...baseCard,
@@ -338,7 +350,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
         borderRadius: tokens.borderRadius.lg,
         transform: isHovered ? tokens.motion.transform : 'none',
         border: isExpanded
-          ? `2px solid ${tokens.colors.primaryScale[300]}`
+          ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
           : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       };
     };
@@ -349,6 +361,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       gap: tokens.spacing[3],
       padding: tokens.spacing[4],
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
     });
 
     const avatarStyle = (type: ClientType): React.CSSProperties => ({
@@ -375,7 +388,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       display: 'flex',
       gap: tokens.spacing[4],
       padding: `0 ${tokens.spacing[4]}px ${tokens.spacing[3]}px`,
-      borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
     };
 
     const cardStatStyle: React.CSSProperties = {
@@ -406,7 +419,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
 
     const expandedSectionStyle: React.CSSProperties = {
       padding: tokens.spacing[4],
-      borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+      borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       backgroundColor: tokens.colors.neutral[50],
     };
 
@@ -427,7 +440,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.common.white,
-      border: `1px solid ${tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       marginBottom: tokens.spacing[2],
     };
 
@@ -442,7 +455,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       padding: tokens.spacing[2],
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.common.white,
-      border: `1px solid ${tokens.colors.neutral[200]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
       textAlign: 'center',
     };
 
@@ -453,7 +466,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.3)',
+      backgroundColor: tokens.overlay?.light,
       zIndex: 999,
       display: showAddForm ? 'block' : 'none',
     };
@@ -470,7 +483,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
       overflowY: 'auto',
       padding: tokens.spacing[5],
       transform: showAddForm ? 'translateX(0)' : 'translateX(100%)',
-      transition: `transform ${tokens.motion.hover}`,
+      transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
       ...glassStyle,
     };
 
@@ -631,6 +644,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                         style={{
                           color: tokens.colors.primaryScale[500],
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       />
                       <Phone
@@ -638,6 +652,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                         style={{
                           color: tokens.colors.primaryScale[500],
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                         }}
                       />
                     </div>
@@ -669,7 +684,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                     padding: tokens.spacing[3],
                     borderRadius: tokens.borderRadius.md,
                     backgroundColor: tokens.colors.common.white,
-                    border: `1px solid ${tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   }}>
                     <div>
                       <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Terms</div>
@@ -712,7 +727,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                   padding: tokens.spacing[3],
                   borderRadius: tokens.borderRadius.md,
                   backgroundColor: tokens.colors.common.white,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 }}>
                   {(['pending', 'reviewed', 'approved'] as ApprovalStatus[]).map((step, idx) => {
                     const stepIndex = ['pending', 'reviewed', 'approved'].indexOf(step);
@@ -759,7 +774,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                               : isCompleted
                                 ? tokens.colors.successScale[600]
                                 : tokens.colors.neutral[400],
-                            border: `2px solid ${dotColor}`,
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${dotColor}`,
                           }}>
                             <StepIcon size={10} />
                           </div>
@@ -816,7 +831,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                 gap: tokens.spacing[2],
                 justifyContent: 'flex-end',
                 paddingTop: tokens.spacing[3],
-                borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+                borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}>
                 <button
                   style={{
@@ -829,7 +844,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                     fontWeight: tokens.typography.fontWeight.medium,
                     backgroundColor: tokens.colors.neutral[100],
                     color: tokens.colors.neutral[700],
-                    border: `1px solid ${tokens.colors.neutral[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
                   }}
@@ -966,6 +981,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                   transform: 'translateY(-50%)',
                   color: tokens.colors.neutral[400],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
                 onClick={() => updateFilter({ search: '' })}
               />
@@ -1069,7 +1085,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
           <div style={{
             padding: tokens.spacing[3],
             borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.neutral[50],
             marginBottom: tokens.spacing[4],
           }}>
@@ -1106,7 +1122,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
             justifyContent: 'flex-end',
             gap: tokens.spacing[3],
             paddingTop: tokens.spacing[3],
-            borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           }}>
             <button
               style={{
@@ -1116,7 +1132,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>(
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: tokens.colors.neutral[100],
                 color: tokens.colors.neutral[700],
-                border: `1px solid ${tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                 cursor: 'pointer',
                 transition: `all ${tokens.motion.hover}`,
               }}

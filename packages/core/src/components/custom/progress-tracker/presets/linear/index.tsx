@@ -3,7 +3,7 @@ import { createPreset, type PresetContext } from '../../../factory';
 import type { ProgressTrackerProps } from '../../core';
 
 export const Linear = createPreset<ProgressTrackerProps>((context: PresetContext<ProgressTrackerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { stages, title, className, style } = props;
@@ -37,7 +37,7 @@ export const Linear = createPreset<ProgressTrackerProps>((context: PresetContext
               height: '100%',
               backgroundColor: tokens.colors.primaryScale[500],
               borderRadius: tokens.borderRadius.full,
-              transition: `width ${tokens.motion.hover}`,
+              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
             }}
           />
         </Box>

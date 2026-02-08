@@ -1,16 +1,19 @@
+import { useMemo } from 'react';
 import { createPreset } from '../../../factory';
 import { createCardStyle } from '../../../helpers';
 import type { TeamSectionProps } from '../../core';
 import { TEAM_SECTION_DEFAULTS } from '../../core';
 
 export const GridPreset = createPreset<TeamSectionProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const { members, title, description, columns = TEAM_SECTION_DEFAULTS.columns, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens, {
+  const cardStyle = useMemo(() => createCardStyle(tokens, {
+    glass: isGlass,
     interactive: false,
-  });
+  }), [tokens]);
 
   return (
     <Box
@@ -153,7 +156,7 @@ export const GridPreset = createPreset<TeamSectionProps>((context) => {
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[600],
-                  lineHeight: 1.6,
+                  lineHeight: tokens.typography.lineHeight.relaxed,
                   marginTop: tokens.spacing[1],
                 }}
               >
@@ -192,10 +195,12 @@ export const GridPreset = createPreset<TeamSectionProps>((context) => {
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[100];
                       e.currentTarget.style.color = tokens.colors.primaryScale[600];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
                       e.currentTarget.style.color = tokens.colors.neutral[600];
+                      e.currentTarget.style.transform = 'none';
                     }}
                   >
                     {link.icon}

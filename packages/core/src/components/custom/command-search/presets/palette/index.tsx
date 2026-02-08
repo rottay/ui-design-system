@@ -9,6 +9,13 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { CommandSearchProps } from '../../core';
 import { COMMAND_SEARCH_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const PaletteCommandSearch = createPreset<CommandSearchProps>({
   name: 'CommandSearch.Palette',
@@ -132,7 +139,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
               fontSize: tokens.typography.fontSize.sm,
               cursor: 'pointer',
               fontFamily: 'inherit',
-              transition: `background-color ${tokens.motion.hover}`,
+              transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
             }}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -165,7 +172,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.4)',
+            backgroundColor: tokens.overlay?.light,
             zIndex: 999,
           }}
         />
@@ -223,6 +230,15 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
                 backgroundColor: 'transparent',
                 fontFamily: 'inherit',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
             {loading && (
               <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Searching...</span>
@@ -270,7 +286,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
                             textAlign: 'left',
                             fontFamily: 'inherit',
                             fontSize: tokens.typography.fontSize.sm,
-                            transition: `background-color ${tokens.motion.hover}`,
+                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                         >
                           {result.icon && <span style={{ flexShrink: 0, color: tokens.colors.neutral[500] }}>{result.icon}</span>}
@@ -346,7 +362,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
                       textAlign: 'left',
                       fontFamily: 'inherit',
                       fontSize: tokens.typography.fontSize.sm,
-                      transition: `background-color ${tokens.motion.hover}`,
+                      transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                   >
                     {action.icon && <span style={{ color: tokens.colors.neutral[500] }}>{action.icon}</span>}
@@ -383,6 +399,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
                         color: tokens.colors.neutral[400],
                         fontSize: tokens.typography.fontSize.xs,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         fontFamily: 'inherit',
                       }}
                     >
@@ -407,7 +424,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
                       textAlign: 'left',
                       fontFamily: 'inherit',
                       fontSize: tokens.typography.fontSize.sm,
-                      transition: `background-color ${tokens.motion.hover}`,
+                      transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                   >
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, color: tokens.colors.neutral[400] }}>

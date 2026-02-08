@@ -3,11 +3,18 @@
 import { createPreset, PresetContext } from '../../../factory';
 import type { ActivityFeedProps } from '../../core';
 import { ACTIVITY_FEED_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+} from '../../../helpers';
 
 export const TimelineActivityFeed = createPreset<ActivityFeedProps>({
   name: 'ActivityFeed.Timeline',
   render: ({ primitives, props, tokens, engine }: PresetContext<ActivityFeedProps>) => {
     const { Box } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const {
       events,
       title = ACTIVITY_FEED_DEFAULTS.title,
@@ -37,14 +44,7 @@ export const TimelineActivityFeed = createPreset<ActivityFeedProps>({
     return (
       <Box
         className={className}
-        style={{
-          boxShadow: tokens.shadows.md,
-          backgroundColor: tokens.colors.common.white,
-          borderRadius: tokens.borderRadius.lg,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          overflow: 'hidden',
-          ...style,
-        }}
+        style={{ ...createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), overflow: 'hidden' as const, ...style }}
       >
         {/* Header */}
         <div style={{
@@ -74,6 +74,7 @@ export const TimelineActivityFeed = createPreset<ActivityFeedProps>({
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   borderRadius: tokens.borderRadius.md,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontFamily: 'inherit',
                 }}
               >
@@ -131,7 +132,7 @@ export const TimelineActivityFeed = createPreset<ActivityFeedProps>({
                     padding: `${tokens.spacing[3]}px 0`,
                     cursor: onEventClick ? 'pointer' : 'default',
                     position: 'relative',
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                   }}
                 >
                   {/* Dot */}
@@ -144,7 +145,7 @@ export const TimelineActivityFeed = createPreset<ActivityFeedProps>({
                     marginTop: 4,
                     position: 'relative',
                     zIndex: 1,
-                    border: `2px solid ${tokens.colors.common.white}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                   }} />
 
                   {/* Content */}
@@ -153,7 +154,7 @@ export const TimelineActivityFeed = createPreset<ActivityFeedProps>({
                       <div style={{
                         fontSize: tokens.typography.fontSize.sm,
                         color: tokens.colors.neutral[700],
-                        lineHeight: 1.5,
+                        lineHeight: tokens.typography.lineHeight.relaxed,
                       }}>
                         {event.text}
                       </div>

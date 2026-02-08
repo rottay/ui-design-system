@@ -4,6 +4,9 @@ import React from 'react';
 import { createPreset } from '../../../factory';
 import type { MediaGalleryProps } from '../../core';
 import { MEDIA_GALLERY_DEFAULTS } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MediaGalleryProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -32,7 +35,6 @@ export default createPreset<MediaGalleryProps>((context) => {
             borderRadius: tokens.borderRadius.md,
             overflow: 'hidden',
             backgroundColor: tokens.colors.neutral[100],
-            transition: `all ${tokens.motion.hover}`,
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.02)';
@@ -71,7 +73,7 @@ export default createPreset<MediaGalleryProps>((context) => {
                 width: '48px',
                 height: '48px',
                 borderRadius: tokens.borderRadius.full,
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backgroundColor: tokens.overlay?.heavy,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -81,7 +83,7 @@ export default createPreset<MediaGalleryProps>((context) => {
                 style={{
                   width: 0,
                   height: 0,
-                  borderLeft: `12px solid ${tokens.colors.common.white}`,
+                  borderLeft: `10px solid ${tokens.colors.common.white}`,
                   borderTop: '8px solid transparent',
                   borderBottom: '8px solid transparent',
                   marginLeft: '4px',

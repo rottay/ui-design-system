@@ -9,6 +9,10 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { PricingTableProps, BillingCycle } from '../../core';
 import { formatPrice, getHighlightColors, getCurrentPlanColors } from '../../core';
+import {
+  createBadgeStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const CardsPricingTable = createPreset<PricingTableProps>({
   name: 'PricingTable.Cards',
@@ -54,6 +58,7 @@ export const CardsPricingTable = createPreset<PricingTableProps>({
               color: cycle === 'monthly' ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
               fontWeight: cycle === 'monthly' ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
               fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               boxShadow: cycle === 'monthly' ? tokens.shadows.sm : 'none',
             }}>
               Monthly
@@ -65,6 +70,7 @@ export const CardsPricingTable = createPreset<PricingTableProps>({
               color: cycle === 'yearly' ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
               fontWeight: cycle === 'yearly' ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
               fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
               boxShadow: cycle === 'yearly' ? tokens.shadows.sm : 'none',
             }}>
               Yearly
@@ -98,7 +104,7 @@ export const CardsPricingTable = createPreset<PricingTableProps>({
                 <Box key={plan.id} style={{
                   padding: tokens.spacing[5],
                   borderRadius: tokens.borderRadius.lg,
-                  border: `2px solid ${isHighlighted ? highlightColors.border : isCurrent ? currentPlanColors.border : tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isHighlighted ? highlightColors.border : isCurrent ? currentPlanColors.border : tokens.colors.neutral[200]}`,
                   backgroundColor: tokens.colors.common.white,
                   position: 'relative',
                   display: 'flex', flexDirection: 'column',

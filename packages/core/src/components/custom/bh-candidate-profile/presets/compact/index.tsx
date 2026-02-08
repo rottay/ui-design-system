@@ -8,7 +8,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCandidateProfileProps,
   CandidateTab,
@@ -100,12 +109,12 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const [expanded, setExpanded] = useState(false);
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const hoverStyle = createHoverStyle(tokens);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
-    });
+    }), [tokens, isGlass]);
 
     const candidateName = candidate?.name ?? 'Unknown Candidate';
     const initials = candidateName
@@ -418,6 +427,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     borderRadius: tokens.borderRadius.sm,
                     backgroundColor: tokens.colors.neutral[50],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -527,6 +537,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     borderRadius: tokens.borderRadius.sm,
                     backgroundColor: tokens.colors.neutral[50],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -569,6 +580,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             border: 'none',
             background: 'none',
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             fontSize: tokens.typography.fontSize.xs,
             fontWeight: tokens.typography.fontWeight.medium,
             color: tokens.colors.primaryScale[600],
@@ -800,6 +812,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                         borderRadius: tokens.borderRadius.sm,
                         backgroundColor: tokens.colors.neutral[50],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         ...hoverStyle,
                       }}
                     >

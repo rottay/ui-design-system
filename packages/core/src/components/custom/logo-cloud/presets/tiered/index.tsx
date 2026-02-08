@@ -1,18 +1,21 @@
+import { useMemo } from 'react';
 import { createPreset } from '../../../factory';
 import { createCardStyle } from '../../../helpers';
 import type { LogoCloudProps } from '../../core';
 
 export const TieredPreset = createPreset<LogoCloudProps>((context) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
+  const isGlass = engine === 'modern' && !!tokens.glass;
   const { Box, Text } = primitives;
   const { logos, title, description, className, style } = props;
 
   const featuredLogos = logos.slice(0, 3);
   const regularLogos = logos.slice(3);
 
-  const featuredCardStyle = createCardStyle(tokens, {
+  const featuredCardStyle = useMemo(() => createCardStyle(tokens, {
+    glass: isGlass,
     interactive: true,
-  });
+  }), [tokens]);
 
   return (
     <Box
@@ -171,10 +174,12 @@ export const TieredPreset = createPreset<LogoCloudProps>((context) => {
                   onMouseEnter={(e) => {
                     e.currentTarget.style.filter = 'none';
                     e.currentTarget.style.opacity = '1';
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.filter = 'grayscale(1)';
                     e.currentTarget.style.opacity = '0.6';
+                    e.currentTarget.style.transform = 'none';
                   }}
                   onClick={item.onClick ? handleClick : undefined}
                 >

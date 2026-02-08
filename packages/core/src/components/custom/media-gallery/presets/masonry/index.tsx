@@ -4,6 +4,9 @@ import React from 'react';
 import { createPreset } from '../../../factory';
 import type { MediaGalleryProps } from '../../core';
 import { MEDIA_GALLERY_DEFAULTS } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<MediaGalleryProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -38,12 +41,14 @@ export default createPreset<MediaGalleryProps>((context) => {
             if (overlay) {
               overlay.style.opacity = '1';
             }
+            (e.currentTarget as HTMLElement).style.transform = tokens.motion.transform;
           }}
           onMouseLeave={(e) => {
             const overlay = e.currentTarget.querySelector('[data-overlay="true"]') as HTMLElement;
             if (overlay) {
               overlay.style.opacity = '0';
             }
+            (e.currentTarget as HTMLElement).style.transform = 'none';
           }}
         >
           {item.type === 'image' ? (
@@ -79,7 +84,7 @@ export default createPreset<MediaGalleryProps>((context) => {
                 padding: tokens.spacing[4],
                 background: `linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent)`,
                 opacity: 0,
-                transition: `opacity ${tokens.motion.hover}`,
+                transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
               }}
             >
               <Text
@@ -114,7 +119,7 @@ export default createPreset<MediaGalleryProps>((context) => {
                 width: '48px',
                 height: '48px',
                 borderRadius: tokens.borderRadius.full,
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                backgroundColor: tokens.overlay?.medium,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -124,7 +129,7 @@ export default createPreset<MediaGalleryProps>((context) => {
                 style={{
                   width: 0,
                   height: 0,
-                  borderLeft: `12px solid ${tokens.colors.common.white}`,
+                  borderLeft: `10px solid ${tokens.colors.common.white}`,
                   borderTop: '8px solid transparent',
                   borderBottom: '8px solid transparent',
                   marginLeft: '4px',

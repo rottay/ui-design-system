@@ -9,6 +9,10 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { WorkflowOverviewProps } from '../../core';
 import { getNodeStatusColors, getNodeTypeColors } from '../../core';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
   name: 'WorkflowOverview.List',
@@ -115,6 +119,7 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                 backgroundColor: tokens.colors.errorScale[50], color: tokens.colors.errorScale[700],
                 fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 Delete
               </button>
@@ -125,6 +130,7 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
               backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
               fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
               cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               + Add step
             </button>
@@ -137,11 +143,12 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
             {tabs.map((tab) => (
               <button key={tab.key} onClick={() => onTabChange?.(tab.key)} style={{
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, border: 'none',
-                borderBottom: tab.key === activeTab ? `2px solid ${tokens.colors.neutral[900]}` : '2px solid transparent',
+                borderBottom: tab.key === activeTab ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[900]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 backgroundColor: 'transparent',
                 color: tab.key === activeTab ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
                 fontWeight: tab.key === activeTab ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                 fontSize: tokens.typography.fontSize.sm, cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}>
                 {tab.icon && <span style={{ marginRight: tokens.spacing[1] }}>{tab.icon}</span>}
                 {tab.label}
@@ -177,8 +184,8 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                       display: 'flex', gap: tokens.spacing[3],
                       opacity: isDragging ? 0.4 : 1,
                       borderTop: isDraggedOver && draggedNodeId !== node.id
-                        ? `2px solid ${tokens.colors.primaryScale[500]}`
-                        : '2px solid transparent',
+                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
+                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                       transition: `all ${tokens.motion.hover}`,
                     }}
                   >
@@ -188,7 +195,7 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                         width: tokens.spacing[3], height: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.full,
                         backgroundColor: sColors.color,
-                        border: `2px solid ${tokens.colors.common.white}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                         boxShadow: `0 0 0 2px ${sColors.border}`,
                         flexShrink: 0, marginTop: tokens.spacing[3],
                       }} />
@@ -205,7 +212,7 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                         flex: 1, padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         border: isSelected
-                          ? `2px solid ${tokens.colors.primaryScale[500]}`
+                          ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}`
                           : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         backgroundColor: tokens.colors.common.white,
                         marginBottom: tokens.spacing[2],
@@ -243,7 +250,11 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                                 autoFocus
                                 value={editValue}
                                 onChange={(e) => setEditValue(e.target.value)}
-                                onBlur={commitEdit}
+                                onBlur={(e) => {
+                                  commitEdit();
+                                  e.currentTarget.style.boxShadow = 'none';
+                                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                                }}
                                 onKeyDown={(e) => {
                                   if (e.key === 'Enter') commitEdit();
                                   if (e.key === 'Escape') setEditingNodeId(null);
@@ -261,6 +272,11 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                                   outline: 'none',
                                   fontFamily: 'inherit',
                                   background: tokens.colors.common.white,
+                                }}
+                              
+                                onFocus={(e) => {
+                                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                                 }}
                               />
                             ) : (
@@ -310,6 +326,7 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
                               backgroundColor: 'transparent',
                               fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
                               cursor: 'pointer', fontFamily: 'inherit',
+                              transition: `all ${tokens.motion.hover}`,
                               display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
                             }}>
                               {action.icon && <span>{action.icon}</span>}

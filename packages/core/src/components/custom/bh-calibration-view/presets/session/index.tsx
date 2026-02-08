@@ -9,7 +9,18 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCalibrationViewProps,
   CalibrationSample,
@@ -157,8 +168,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     }, [onSubmit]);
 
     /* ----- glass support ----- */
-    const glassCard = createCardStyle(tokens, { glass: true, elevation: 'md' });
-    const surfaceBorder = createSurfaceStyle(tokens, { elevation: 'sm' });
+    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
+    const surfaceBorder = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
 
     /* ----- alignment rate badge ----- */
     const alignmentRate = alignmentMetrics?.agreementRate ?? 0;
@@ -330,7 +341,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         marginBottom: tokens.spacing[2],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: idx % 2 === 0 ? tokens.colors.neutral[50] : tokens.colors.common.white,
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                     >
                       <Box style={{
@@ -365,7 +376,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         <span style={{
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[800],
-                          lineHeight: 1.6,
+                          lineHeight: tokens.typography.lineHeight.relaxed,
                         }}>
                           {line.text}
                         </span>
@@ -470,7 +481,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             height: '100%',
                             borderRadius: tokens.borderRadius.full,
                             backgroundColor: scoreColor,
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }} />
                           <input
                             type="range"
@@ -487,6 +498,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                               height: tokens.spacing[4],
                               opacity: 0,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               margin: 0,
                             }}
                           />
@@ -530,6 +542,15 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       resize: 'vertical',
                       outline: 'none',
                       boxSizing: 'border-box',
+                    }}
+                  
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                      e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                     }}
                   />
                 </Box>
@@ -918,7 +939,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         <span style={{
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[600],
-                          lineHeight: 1.5,
+                          lineHeight: tokens.typography.lineHeight.relaxed,
                         }}>
                           {adj.suggestedTweak}
                         </span>

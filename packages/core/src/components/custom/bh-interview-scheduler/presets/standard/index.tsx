@@ -9,11 +9,13 @@
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
   createSectionHeaderStyle,
+  createSurfaceStyle,
 } from '../../../helpers';
 import type {
   BhInterviewSchedulerProps,
@@ -137,14 +139,14 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
 
     const isGlass = engine === 'modern';
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, {
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
       interactive: true,
-    });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -186,6 +188,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
       appearance: 'none' as const,
       backgroundImage: 'none',
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
     };
 
     /* ---- Candidate Selector ---- */
@@ -289,6 +292,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                 gap: tokens.spacing[2],
                 color: tokens.colors.neutral[400],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Search size={14} />
@@ -336,7 +340,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                 backgroundColor: isAI
                   ? tokens.colors.primaryScale[50]
                   : tokens.colors.common.white,
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   isAI
                     ? tokens.colors.primaryScale[400]
                     : tokens.colors.neutral[200]
@@ -401,7 +405,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                 backgroundColor: isHuman
                   ? tokens.colors.primaryScale[50]
                   : tokens.colors.common.white,
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   isHuman
                     ? tokens.colors.primaryScale[400]
                     : tokens.colors.neutral[200]
@@ -490,6 +494,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                           : tokens.colors.neutral[200]
                       }`,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[3],
@@ -570,6 +575,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                           : tokens.colors.neutral[200]
                       }`,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       display: 'flex',
                       alignItems: 'center',
                       gap: tokens.spacing[3],
@@ -1158,6 +1164,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: tokens.spacing[2],
@@ -1182,6 +1189,7 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: tokens.spacing[2],

@@ -8,7 +8,20 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type { BhManagerConsoleProps, DateRangeOption, RecruiterWorkload, TrendDirection, AlertSeverity } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 
@@ -66,6 +79,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
   name: 'BhManagerConsole.Performance',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhManagerConsoleProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const isModern = engine === 'modern';
 
     const {
@@ -177,8 +191,8 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
 
     const selectedRecruiter = recruiters.find(r => r.recruiterId === selectedRecruiterId);
 
-    const glassCardStyle = isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { elevation: 'sm' });
-    const hoverStyle = createHoverStyle(tokens);
+    const glassCardStyle = useMemo(() => isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const sectionTitleStyle: React.CSSProperties = {
       margin: 0,
@@ -281,7 +295,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                     borderRadius: tokens.borderRadius.md,
                     backgroundColor: colors.bg,
-                    border: `1px solid ${colors.border}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.border}`,
                   }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                       <Box style={{
@@ -301,11 +315,12 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                     <button onClick={() => handleAlertDismiss(alert.id)} style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.sm,
-                      border: `1px solid ${colors.border}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.border}`,
                       backgroundColor: 'transparent',
                       color: colors.text,
                       fontSize: tokens.typography.fontSize.xs,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                     }}>
                       Dismiss
@@ -334,8 +349,9 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     color: tokens.colors.neutral[500],
-                    borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     userSelect: 'none',
                   }}>
                     Recruiter {sortField === 'name' ? (sortDir === 'asc' ? '\u2191' : '\u2193') : ''}
@@ -347,8 +363,9 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.semibold,
                       color: tokens.colors.neutral[500],
-                      borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+                      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       userSelect: 'none',
                     }}>
                       {col} {sortField === col ? (sortDir === 'asc' ? '\u2191' : '\u2193') : ''}
@@ -360,7 +377,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     color: tokens.colors.neutral[500],
-                    borderBottom: `2px solid ${tokens.colors.neutral[200]}`,
+                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   }}>
                     Rating
                   </th>
@@ -388,7 +405,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                     >
                       <td style={{
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                       }}>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                           <Box style={{
@@ -423,7 +440,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                         return (
                           <td key={col} style={{
                             padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                            borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                             textAlign: 'right',
                           }}>
                             <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: tokens.spacing[1] }}>
@@ -442,7 +459,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       })}
                       <td style={{
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         textAlign: 'center',
                       }}>
                         <span style={{
@@ -453,7 +470,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                           fontWeight: tokens.typography.fontWeight.medium,
                           backgroundColor: ratingColors.bg,
                           color: ratingColors.text,
-                          border: `1px solid ${ratingColors.border}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${ratingColors.border}`,
                         }}>
                           {rating.label}
                         </span>
@@ -512,7 +529,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   <Box key={col} style={{
                     padding: tokens.spacing[3],
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${tokens.colors.neutral[100]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -881,7 +898,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
                 fontFamily: 'inherit',
-                borderBottom: isActive ? `2px solid ${tokens.colors.primaryScale[500]}` : '2px solid transparent',
+                borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 transition: `all ${tokens.motion.hover}`,
                 marginBottom: -1,
               }}>

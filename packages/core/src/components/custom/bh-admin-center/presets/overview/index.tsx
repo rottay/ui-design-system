@@ -6,9 +6,19 @@
  * KPIs, users, events, cost breakdown, compliance, quick actions
  */
 
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createSurfaceStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
 import {
   getProviderStatusColors,
@@ -92,10 +102,10 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
 
     /* ── Shared styles ─────────────────────────────────────────────── */
 
-    const cardBase = createCardStyle(tokens, {
+    const cardBase = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
-    });
+    }), [tokens, isGlass]);
 
     const sectionTitle: React.CSSProperties = {
       fontSize: tokens.typography.fontSize.lg,
@@ -219,7 +229,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
       return (
         <svg width="100%" height="8" style={{ display: 'block' }}>
           <rect x="0" y="0" width="100%" height="8" rx="4" fill={tokens.colors.neutral[100]} />
-          <rect x="0" y="0" width={`${pct}%`} height="8" rx="4" fill={barColor} style={{ transition: `width ${tokens.motion.hover}` }} />
+          <rect x="0" y="0" width={`${pct}%`} height="8" rx="4" fill={barColor} style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }} />
         </svg>
       );
     };
@@ -336,7 +346,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     width: `${widthPct}%`,
                     backgroundColor: item.color,
                     borderRadius: tokens.borderRadius.sm,
-                    transition: `width ${tokens.motion.hover}`,
+                    transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                   }} />
                 </div>
                 <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], width: 60, flexShrink: 0 }}>
@@ -498,6 +508,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer', fontFamily: 'inherit',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <span style={{
@@ -527,6 +538,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
               fontSize: tokens.typography.fontSize.xs,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer', fontFamily: 'inherit',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               <FileText size={12} />
               Export
@@ -969,7 +981,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                           width={`${compliance.auditCompleteness}%`}
                           height="8" rx="4"
                           fill={compliance.auditCompleteness >= 90 ? tokens.colors.successScale[500] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}
-                          style={{ transition: `width ${tokens.motion.hover}` }}
+                          style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                         />
                       </svg>
                     </div>

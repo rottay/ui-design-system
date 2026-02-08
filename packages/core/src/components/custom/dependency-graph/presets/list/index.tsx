@@ -14,6 +14,13 @@ import {
   getLinkTypeLabel,
   formatLinkLabel,
 } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const ListDependencyGraph = createPreset<DependencyGraphProps>({
   name: 'DependencyGraph.List',
@@ -154,6 +161,7 @@ export const ListDependencyGraph = createPreset<DependencyGraphProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -185,6 +193,7 @@ export const ListDependencyGraph = createPreset<DependencyGraphProps>({
                         borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         backgroundColor: tokens.colors.neutral[50],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         userSelect: 'none',
                         width: col.width,
                       }}

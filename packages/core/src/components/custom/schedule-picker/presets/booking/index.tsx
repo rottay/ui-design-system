@@ -9,11 +9,19 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { SchedulePickerProps } from '../../core';
 import { groupSlotsByPeriod, getSlotColors, getCalendarDayColors, getDaysInMonth, getFirstDayOfMonth } from '../../core';
+import {
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
   name: 'SchedulePicker.Booking',
   render: ({ primitives, props, tokens, engine }: PresetContext<SchedulePickerProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const slotColors = getSlotColors(tokens);
     const dayColors = getCalendarDayColors(tokens);
 
@@ -99,8 +107,7 @@ export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
     const periodLabels = { morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening' } as const;
 
     return (
-      <Box className={className} style={{
-        boxShadow: tokens.shadows.md, display: 'flex', gap: tokens.spacing[6], padding: tokens.spacing[5], backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, ...style }}>
+      <Box className={className} style={{ ...createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), ...style, padding: tokens.spacing[5] }}>
         {/* Left: Calendar */}
         <Box style={{ flex: 1, minWidth: 300 }}>
           <h2 style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{title}</h2>
@@ -118,10 +125,12 @@ export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
                   onMouseEnter={(e) => {
                     if (!isDurationSelected) {
                       e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = durationBgColor;
+                    e.currentTarget.style.transform = 'none';
                   }}
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
@@ -178,11 +187,13 @@ export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
                   onMouseEnter={(e) => {
                     if (canHover) {
                       e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (canHover) {
                       e.currentTarget.style.backgroundColor = colors.bgColor;
+                      e.currentTarget.style.transform = 'none';
                     }
                   }}
                   style={{
@@ -246,12 +257,14 @@ export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
                               if (canSlotHover) {
                                 e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[50];
                                 e.currentTarget.style.borderColor = tokens.colors.primaryScale[300];
+                                e.currentTarget.style.transform = tokens.motion.transform;
                               }
                             }}
                             onMouseLeave={(e) => {
                               if (canSlotHover) {
                                 e.currentTarget.style.backgroundColor = colors.bgColor;
                                 e.currentTarget.style.borderColor = colors.border;
+                                e.currentTarget.style.transform = 'none';
                               }
                             }}
                             style={{
@@ -279,9 +292,11 @@ export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
                   onClick={onConfirm}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[600];
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = tokens.colors.primaryScale[500];
+                    e.currentTarget.style.transform = 'none';
                   }}
                   style={{
                     marginTop: tokens.spacing[4], width: '100%',

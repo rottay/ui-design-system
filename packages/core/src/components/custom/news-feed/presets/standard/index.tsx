@@ -3,7 +3,11 @@
 import React from 'react';
 import { createPreset } from '../../../factory';
 import type { NewsFeedProps } from '../../core';
-import { formatDistanceToNow } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  formatDistanceToNow,
+} from '../../../helpers';
 
 export default createPreset<NewsFeedProps>((context) => {
   const { primitives, props, tokens } = context;

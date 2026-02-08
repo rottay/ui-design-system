@@ -1,9 +1,12 @@
 import { createPreset, type PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { ToastManagerProps } from '../../core';
 
 export const minimalPreset = createPreset<ToastManagerProps>((context: PresetContext<ToastManagerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Button } = primitives;
 
   const {
@@ -82,7 +85,7 @@ export const minimalPreset = createPreset<ToastManagerProps>((context: PresetCon
               style={{
                 flexShrink: 0,
                 color: getTypeColor(toast.type),
-                fontSize: '16px',
+                fontSize: tokens.typography.fontSize.md,
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -122,9 +125,11 @@ export const minimalPreset = createPreset<ToastManagerProps>((context: PresetCon
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = tokens.colors.primaryScale[700];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = tokens.colors.primaryScale[600];
+                e.currentTarget.style.transform = 'none';
               }}
             >
               {toast.action.label}
@@ -147,13 +152,14 @@ export const minimalPreset = createPreset<ToastManagerProps>((context: PresetCon
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: `all ${tokens.motion.hover}`,
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = tokens.colors.neutral[600];
+              e.currentTarget.style.transform = tokens.motion.transform;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.color = tokens.colors.neutral[400];
+              e.currentTarget.style.transform = 'none';
             }}
           >
             ×

@@ -11,6 +11,13 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { MetricTerminalCardProps } from '../../core';
 import { METRIC_TERMINAL_CARD_DEFAULTS } from '../../core';
+import {
+  createBadgeStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const CircuitMetricTerminalCard = createPreset<MetricTerminalCardProps>({
   name: 'MetricTerminalCard.Circuit',
@@ -422,6 +429,7 @@ export const CircuitMetricTerminalCard = createPreset<MetricTerminalCardProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                     }}
                   >

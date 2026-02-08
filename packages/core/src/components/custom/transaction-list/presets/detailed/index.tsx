@@ -11,7 +11,17 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { TransactionListProps, Transaction, TransactionStatus, TransactionSummary } from '../../core';
 import { TRANSACTION_LIST_DEFAULTS, getStatusConfig, defaultFormatAmount, generateDefaultSummaries } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -83,7 +93,7 @@ function PaymentMethodIcon({ type, tokens }: { type: string; tokens: DesignToken
         fontSize: tokens.typography.fontSize.xs,
         fontWeight: tokens.typography.fontWeight.bold,
         letterSpacing: '0.5px',
-        border: type === 'bank' ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : '1px solid transparent',
+        border: type === 'bank' ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : `${tokens.surface.borderWidth} solid transparent`,
         backgroundColor: colorConfig.bg,
         color: colorConfig.color,
         flexShrink: 0,
@@ -402,7 +412,7 @@ function ExpandedRowContent({ transaction, formatAmount: fmt, tokens }: Expanded
                   backgroundColor: dotColors[event.status],
                   flexShrink: 0,
                   marginTop: 2,
-                  border: `2px solid ${tokens.colors.neutral[50]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[50]}`,
                   boxShadow: `0 0 0 2px ${dotColors[event.status]}33`,
                 }}
               />
@@ -655,7 +665,6 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 backgroundColor: item.active
                   ? tokens.colors.neutral[100]
                   : 'transparent',
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Box style={{ color: item.active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400], display: 'flex' }}>
@@ -755,6 +764,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             <BarChart3 style={{ width: 14, height: 14 }} />
@@ -772,6 +782,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               border: 'none',
             }}
           >
@@ -825,6 +836,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   color: tokens.colors.primaryScale[700],
                   backgroundColor: tokens.colors.common.white,
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
@@ -844,6 +856,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.errorScale[700],
                 backgroundColor: tokens.colors.common.white,
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
@@ -866,6 +879,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
                 backgroundColor: tokens.colors.common.white,
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -906,10 +920,9 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                   ? tokens.colors.primaryScale[600]
                   : tokens.colors.neutral[500],
                 borderBottom: isActive
-                  ? `2px solid ${tokens.colors.primaryScale[600]}`
-                  : '2px solid transparent',
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
+                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 marginBottom: -1,
-                transition: `all ${tokens.motion.hover}`,
                 whiteSpace: 'nowrap',
                 display: 'flex',
                 alignItems: 'center',
@@ -995,7 +1008,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
               borderRadius: tokens.borderRadius.md,
               border: showAdvancedFilters
                 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
-                : `1px dashed ${tokens.colors.neutral[200]}`,
+                : `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[200]}`,
               backgroundColor: showAdvancedFilters
                 ? tokens.colors.primaryScale[50]
                 : 'transparent',
@@ -1005,6 +1018,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             <Calendar style={{ width: 12, height: 12 }} />
@@ -1045,6 +1059,15 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 color: tokens.colors.neutral[900],
                 outline: 'none',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
           </Box>
         </Flex>
@@ -1077,6 +1100,15 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 backgroundColor: tokens.colors.common.white,
                 outline: 'none',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
             <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>to</Text>
             <input
@@ -1092,6 +1124,15 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 backgroundColor: tokens.colors.common.white,
                 outline: 'none',
               }}
+            
+              onFocus={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+              }}
             />
             <Box
               style={{
@@ -1105,6 +1146,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 border: 'none',
               }}
             >
@@ -1124,6 +1166,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[500],
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
@@ -1482,6 +1525,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                           fontSize: tokens.typography.fontSize.sm,
                           color: action.danger ? tokens.colors.errorScale[600] : tokens.colors.neutral[700],
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           display: 'flex',
                           alignItems: 'center',
                           gap: tokens.spacing[2],
@@ -1538,6 +1582,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Download style={{ width: 13, height: 13 }} />
@@ -1559,6 +1604,7 @@ export const DetailedTransactionList = createPreset<TransactionListProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Columns3 style={{ width: 13, height: 13 }} />

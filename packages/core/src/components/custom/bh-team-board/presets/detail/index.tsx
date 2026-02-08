@@ -7,7 +7,17 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhTeamBoardProps,
   TeamItem,
@@ -95,10 +105,10 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
     const activeTargetPeriod = controlledTargetPeriod !== undefined ? controlledTargetPeriod : internalTargetPeriod;
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const selectedTeamData = useMemo(
       () => teams.find((t) => t.id === activeSelectedTeam),
@@ -153,7 +163,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                   backdropFilter: tokens.glass.blurSm,
                   WebkitBackdropFilter: tokens.glass.blurSm,
                   backgroundColor: tokens.glass.bgLight,
-                  borderRight: `1px solid ${tokens.glass.borderLight}`,
+                  borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
                 }
               : {}),
           }}
@@ -182,12 +192,13 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                 width: '100%',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px dashed ${tokens.colors.primaryScale[300]}`,
+                border: `${tokens.surface.borderWidth} dashed ${tokens.colors.primaryScale[300]}`,
                 backgroundColor: tokens.colors.primaryScale[50],
                 color: tokens.colors.primaryScale[600],
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 ...hoverStyle,
               }}
             >
@@ -210,12 +221,13 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                     borderRadius: tokens.borderRadius.md,
                     marginBottom: tokens.spacing[1],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     backgroundColor: isSelected
                       ? tokens.colors.primaryScale[50]
                       : 'transparent',
                     border: isSelected
-                      ? `1px solid ${tokens.colors.primaryScale[300]}`
-                      : '1px solid transparent',
+                      ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
+                      : `${tokens.surface.borderWidth} solid transparent`,
                     ...hoverStyle,
                   }}
                   onMouseEnter={(e) => {
@@ -223,11 +235,13 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                       (e.currentTarget as HTMLDivElement).style.backgroundColor =
                         tokens.colors.neutral[50];
                     }
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   }}
                   onMouseLeave={(e) => {
                     if (!isSelected) {
                       (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
                     }
+                    e.currentTarget.style.transform = 'none';
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
@@ -389,6 +403,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       ...hoverStyle,
                     }}
                   >
@@ -405,6 +420,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.semibold,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       ...hoverStyle,
                     }}
                   >
@@ -445,7 +461,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                       style={{
                         ...cardBase,
                         backgroundColor: scale?.[50] || tokens.colors.neutral[50],
-                        border: `1px solid ${scale?.[200] || tokens.colors.neutral[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scale?.[200] || tokens.colors.neutral[200]}`,
                       }}
                     >
                       <Text
@@ -509,9 +525,11 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
+                          e.currentTarget.style.transform = tokens.motion.transform;
                         }}
                         onMouseLeave={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'none';
                         }}
                       >
                         <div
@@ -607,6 +625,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                               backgroundColor: tokens.colors.common.white,
                               color: tokens.colors.neutral[500],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               fontSize: tokens.typography.fontSize.xs,
                               display: 'flex',
                               alignItems: 'center',
@@ -629,6 +648,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                               backgroundColor: tokens.colors.errorScale[50],
                               color: tokens.colors.errorScale[500],
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               fontSize: tokens.typography.fontSize.xs,
                               display: 'flex',
                               alignItems: 'center',
@@ -745,12 +765,13 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                           style={{
                             padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                             borderRadius: tokens.borderRadius.md,
-                            border: activeTargetPeriod === p ? `1px solid ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                            border: activeTargetPeriod === p ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                             backgroundColor: activeTargetPeriod === p ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                             color: activeTargetPeriod === p ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: activeTargetPeriod === p ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             textTransform: 'capitalize' as const,
                             ...hoverStyle,
                           }}
@@ -777,7 +798,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                               </Text>
                             </div>
                             <div style={{ height: 8, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
-                              <div style={{ width: `${Math.min(pct, 100)}%`, height: '100%', backgroundColor: barColor, borderRadius: tokens.borderRadius.full, transition: `width ${tokens.motion.hover}` }} />
+                              <div style={{ width: `${Math.min(pct, 100)}%`, height: '100%', backgroundColor: barColor, borderRadius: tokens.borderRadius.full, transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }} />
                             </div>
                           </div>
                         );

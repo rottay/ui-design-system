@@ -43,11 +43,13 @@ export default createPreset<TabNavProps>((context) => {
           onMouseEnter={(e) => {
             if (!item.disabled && activeKey !== item.key) {
               e.currentTarget.style.backgroundColor = tokens.colors.neutral[100];
+              e.currentTarget.style.transform = tokens.motion.transform;
             }
           }}
           onMouseLeave={(e) => {
             if (activeKey !== item.key) {
               e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.transform = 'none';
             }
           }}
         >
@@ -81,7 +83,7 @@ export default createPreset<TabNavProps>((context) => {
                 height: '18px',
                 borderRadius: tokens.borderRadius.full,
                 backgroundColor:
-                  activeKey === item.key ? 'rgba(255, 255, 255, 0.2)' : tokens.colors.errorScale[100],
+                  activeKey === item.key ? tokens.overlay?.whiteLight : tokens.colors.errorScale[100],
                 color: activeKey === item.key ? tokens.colors.common.white : tokens.colors.errorScale[700],
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.bold,
@@ -107,17 +109,19 @@ export default createPreset<TabNavProps>((context) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: '14px',
+                fontSize: tokens.typography.fontSize.sm,
                 color: activeKey === item.key ? tokens.colors.common.white : tokens.colors.neutral[500],
                 transition: `all ${tokens.motion.hover}`,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = activeKey === item.key
-                  ? 'rgba(255, 255, 255, 0.2)'
+                  ? (tokens.overlay?.whiteLight || 'rgba(255,255,255,0.2)')
                   : tokens.colors.neutral[200];
+                e.currentTarget.style.transform = tokens.motion.transform;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.transform = 'none';
               }}
             >
               ×

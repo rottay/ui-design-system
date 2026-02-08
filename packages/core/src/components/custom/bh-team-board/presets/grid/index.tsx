@@ -8,7 +8,18 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhTeamBoardProps,
   TeamItem,
@@ -114,11 +125,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
     const activeMembers = members.length > 0 ? members : internalMembers;
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const selectedTeamData = useMemo(
       () => teams.find((t) => t.id === activeSelectedTeam),
@@ -241,6 +252,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         ? tokens.typography.fontWeight.semibold
                         : tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     textTransform: 'capitalize' as const,
                     ...hoverStyle,
                   }}
@@ -267,6 +279,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.semibold,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 ...hoverStyle,
               }}
             >
@@ -309,12 +322,13 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 style={{
                   ...cardInteractive,
                   border: isSelected
-                    ? `2px solid ${tokens.colors.primaryScale[400]}`
+                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
                     : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: isSelected
                     ? tokens.colors.primaryScale[50]
                     : tokens.colors.common.white,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   display: 'flex',
                   flexDirection: activeViewMode === 'list' ? 'row' : 'column',
                   gap: tokens.spacing[3],
@@ -515,7 +529,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       height="8"
                       rx="4"
                       fill={capacityColor}
-                      style={{ transition: `width ${tokens.motion.hover}` }}
+                      style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                     />
                   </svg>
                 </div>
@@ -535,6 +549,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       color: tokens.colors.neutral[600],
                       fontSize: tokens.typography.fontSize.xs,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       ...hoverStyle,
                     }}
                   >
@@ -591,6 +606,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -652,11 +668,13 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         if (!isEditing) {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
                         }
+                        e.currentTarget.style.transform = tokens.motion.transform;
                       }}
                       onMouseLeave={(e) => {
                         if (!isEditing) {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
                         }
+                        e.currentTarget.style.transform = 'none';
                       }}
                     >
                       {/* Member name + avatar */}
@@ -732,7 +750,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                                 height: '100%',
                                 backgroundColor: allocationColor,
                                 borderRadius: tokens.borderRadius.full,
-                                transition: `width ${tokens.motion.hover}`,
+                                transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                               }}
                             />
                           </div>
@@ -789,6 +807,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             backgroundColor: 'transparent',
                             color: tokens.colors.neutral[400],
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             fontSize: tokens.typography.fontSize.xs,
                             display: 'flex',
                             alignItems: 'center',
@@ -812,6 +831,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             backgroundColor: 'transparent',
                             color: tokens.colors.errorScale[400],
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             fontSize: tokens.typography.fontSize.xs,
                             display: 'flex',
                             alignItems: 'center',
@@ -890,7 +910,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             height="16"
                             rx="4"
                             fill={tokens.colors.primaryScale[500]}
-                            style={{ transition: `width ${tokens.motion.hover}` }}
+                            style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                           />
                         </svg>
                         <div
@@ -943,7 +963,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.successScale[50],
-                        border: `1px solid ${tokens.colors.successScale[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[200]}`,
                       }}
                     >
                       <Text
@@ -975,7 +995,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.infoScale[50],
-                        border: `1px solid ${tokens.colors.infoScale[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
                       }}
                     >
                       <Text
@@ -1007,7 +1027,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.primaryScale[50],
-                        border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                       }}
                     >
                       <Text
@@ -1051,7 +1071,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.warningScale[50],
-                        border: `1px solid ${tokens.colors.warningScale[200]}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                       }}
                     >
                       <Text
@@ -1212,7 +1232,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             height: '100%',
                             backgroundColor: item.color,
                             borderRadius: tokens.borderRadius.sm,
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }}
                         />
                       </div>
@@ -1325,6 +1345,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                           ? tokens.typography.fontWeight.semibold
                           : tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       textTransform: 'capitalize' as const,
                       ...hoverStyle,
                     }}
@@ -1370,7 +1391,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: targetBg,
-                        border: `1px solid ${
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                           pct >= 100
                             ? tokens.colors.successScale[200]
                             : pct >= 70
@@ -1432,7 +1453,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             height: '100%',
                             backgroundColor: targetColor,
                             borderRadius: tokens.borderRadius.full,
-                            transition: `width ${tokens.motion.hover}`,
+                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                           }}
                         />
                       </div>
@@ -1454,7 +1475,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              backgroundColor: tokens.overlay?.medium,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1475,7 +1496,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       backdropFilter: tokens.glass.blur,
                       WebkitBackdropFilter: tokens.glass.blur,
                       backgroundColor: tokens.glass.bg,
-                      border: `1px solid ${tokens.glass.border}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
                     }
                   : {}),
               }}
@@ -1504,6 +1525,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                     background: 'none',
                     color: tokens.colors.neutral[400],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontSize: tokens.typography.fontSize.lg,
                     padding: tokens.spacing[1],
                   }}
@@ -1693,6 +1715,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -1712,6 +1735,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >

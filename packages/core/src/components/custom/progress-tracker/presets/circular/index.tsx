@@ -3,7 +3,7 @@ import { createPreset, type PresetContext } from '../../../factory';
 import type { ProgressTrackerProps } from '../../core';
 
 export const Circular = createPreset<ProgressTrackerProps>((context: PresetContext<ProgressTrackerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { stages, title, className, style } = props;

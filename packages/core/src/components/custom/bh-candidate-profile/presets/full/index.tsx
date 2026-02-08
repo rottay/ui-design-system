@@ -8,7 +8,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCandidateProfileProps,
   CandidateTab,
@@ -162,13 +171,13 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const [activityFilter, setActivityFilter] = useState<string>('all');
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const hoverStyle = createHoverStyle(tokens);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
-    });
+    }), [tokens, isGlass]);
 
     const handleTabChange = (tab: CandidateTab) => {
       setActiveTab(tab);
@@ -388,6 +397,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               ...hoverStyle,
             }}
           >
@@ -545,7 +555,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
       <div
         style={{
           display: 'flex',
-          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           marginBottom: tokens.spacing[5],
           gap: tokens.spacing[1],
           overflow: 'auto',
@@ -566,11 +576,10 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                 color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 borderBottom: isActive
-                  ? `2px solid ${tokens.colors.primaryScale[600]}`
-                  : '2px solid transparent',
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
+                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                 marginBottom: -1,
                 whiteSpace: 'nowrap' as const,
-                transition: `all ${tokens.motion.hover}`,
               }}
             >
               {tab.label}
@@ -706,7 +715,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                         backgroundColor: exp.current
                           ? tokens.colors.primaryScale[500]
                           : tokens.colors.neutral[300],
-                        border: `2px solid ${tokens.colors.common.white}`,
+                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                       }}
                     />
                     <Text
@@ -1015,10 +1024,11 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             style={{
               ...cardStyle,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               ...hoverStyle,
               ...(selectedApplication === app.id
                 ? {
-                    border: `1px solid ${tokens.colors.primaryScale[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`,
                     backgroundColor: tokens.colors.primaryScale[50],
                   }
                 : {}),
@@ -1088,7 +1098,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                       width: `${app.pipelineProgress * 100}%`,
                       backgroundColor: tokens.colors.primaryScale[500],
                       borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
                 </div>
@@ -1172,6 +1182,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 alignItems: 'center',
                 gap: tokens.spacing[4],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 ...hoverStyle,
               }}
             >
@@ -1278,6 +1289,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     flexShrink: 0,
                     ...hoverStyle,
                   }}
@@ -1333,6 +1345,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   marginBottom: isExpanded ? tokens.spacing[4] : 0,
                 }}
               >
@@ -1376,7 +1389,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     style={{
                       color: tokens.colors.neutral[400],
                       transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-                      transition: `transform ${tokens.motion.hover}`,
+                      transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
                 </div>
@@ -1498,7 +1511,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                                 ? tokens.colors.warningScale[500]
                                 : tokens.colors.errorScale[500],
                               borderRadius: tokens.borderRadius.full,
-                              transition: `width ${tokens.motion.hover}`,
+                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                             }}
                           />
                         </div>
@@ -1529,12 +1542,13 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 gap: tokens.spacing[2],
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
-                border: `1px dashed ${tokens.colors.neutral[300]}`,
+                border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
                 backgroundColor: tokens.colors.neutral[50],
                 color: tokens.colors.neutral[600],
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 width: '100%',
                 ...hoverStyle,
               }}
@@ -1563,6 +1577,15 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   boxSizing: 'border-box' as const,
                   marginBottom: tokens.spacing[2],
                 }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                }}
               />
               <div style={{ display: 'flex', gap: tokens.spacing[2], justifyContent: 'flex-end' }}>
                 <button
@@ -1579,6 +1602,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   Cancel
@@ -1594,6 +1618,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -1681,6 +1706,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                           border: 'none',
                           background: 'none',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           color: tokens.colors.neutral[400],
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.sm,
@@ -1697,6 +1723,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                           border: 'none',
                           background: 'none',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           color: tokens.colors.errorScale[400],
                           padding: tokens.spacing[1],
                           borderRadius: tokens.borderRadius.sm,
@@ -1744,7 +1771,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.full,
                 border: activityFilter === type
-                  ? `1px solid ${tokens.colors.primaryScale[300]}`
+                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                   : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: activityFilter === type
                   ? tokens.colors.primaryScale[50]
@@ -1757,6 +1784,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   ? tokens.typography.fontWeight.semibold
                   : tokens.typography.fontWeight.medium,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 textTransform: 'capitalize' as const,
                 ...hoverStyle,
               }}
@@ -1821,7 +1849,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   height: 12,
                   borderRadius: tokens.borderRadius.full,
                   backgroundColor: eventDotColor(event.type),
-                  border: `2px solid ${tokens.colors.common.white}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
                   flexShrink: 0,
                 }}
               />
@@ -1899,6 +1927,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               alignItems: 'center',
               gap: tokens.spacing[3],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               ...hoverStyle,
             }}
           >

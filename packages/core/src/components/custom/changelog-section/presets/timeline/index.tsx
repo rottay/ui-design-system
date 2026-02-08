@@ -1,5 +1,9 @@
 import { createPreset } from '../../../factory';
 import type { ChangelogSectionProps, ChangelogType } from '../../core';
+import {
+  createCardStyle,
+  createSectionHeaderStyle,
+} from '../../../helpers';
 
 export const TimelinePreset = createPreset<ChangelogSectionProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -193,7 +197,7 @@ export const TimelinePreset = createPreset<ChangelogSectionProps>((context) => {
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[600],
-                      lineHeight: 1.6,
+                      lineHeight: tokens.typography.lineHeight.relaxed,
                     }}
                   >
                     {entry.description}
@@ -230,7 +234,7 @@ export const TimelinePreset = createPreset<ChangelogSectionProps>((context) => {
                           style={{
                             fontSize: tokens.typography.fontSize.sm,
                             color: tokens.colors.neutral[700],
-                            lineHeight: 1.6,
+                            lineHeight: tokens.typography.lineHeight.relaxed,
                           }}
                         >
                           {item}

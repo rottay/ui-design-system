@@ -11,6 +11,14 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { MetricTerminalCardProps } from '../../core';
 import { METRIC_TERMINAL_CARD_DEFAULTS } from '../../core';
+import {
+  createBadgeStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const HudMetricTerminalCard = createPreset<MetricTerminalCardProps>({
   name: 'MetricTerminalCard.HUD',
@@ -142,8 +150,8 @@ export const HudMetricTerminalCard = createPreset<MetricTerminalCardProps>({
             left: tokens.spacing[2],
             width: bracketSize,
             height: bracketSize,
-            borderTop: `2px solid ${bracketColor}`,
-            borderLeft: `2px solid ${bracketColor}`,
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
+            borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
             pointerEvents: 'none',
           }} />
           {/* Top-right */}
@@ -153,8 +161,8 @@ export const HudMetricTerminalCard = createPreset<MetricTerminalCardProps>({
             right: tokens.spacing[2],
             width: bracketSize,
             height: bracketSize,
-            borderTop: `2px solid ${bracketColor}`,
-            borderRight: `2px solid ${bracketColor}`,
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
+            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
             pointerEvents: 'none',
           }} />
           {/* Bottom-left */}
@@ -164,8 +172,8 @@ export const HudMetricTerminalCard = createPreset<MetricTerminalCardProps>({
             left: tokens.spacing[2],
             width: bracketSize,
             height: bracketSize,
-            borderBottom: `2px solid ${bracketColor}`,
-            borderLeft: `2px solid ${bracketColor}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
+            borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
             pointerEvents: 'none',
           }} />
           {/* Bottom-right */}
@@ -175,8 +183,8 @@ export const HudMetricTerminalCard = createPreset<MetricTerminalCardProps>({
             right: tokens.spacing[2],
             width: bracketSize,
             height: bracketSize,
-            borderBottom: `2px solid ${bracketColor}`,
-            borderRight: `2px solid ${bracketColor}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
+            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${bracketColor}`,
             pointerEvents: 'none',
           }} />
 
@@ -403,6 +411,7 @@ export const HudMetricTerminalCard = createPreset<MetricTerminalCardProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       fontFamily: 'inherit',
                     }}
                   >

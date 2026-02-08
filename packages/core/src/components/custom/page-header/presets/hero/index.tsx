@@ -11,6 +11,10 @@ import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { PageHeaderProps } from '../../core';
 import { PAGE_HEADER_DEFAULTS } from '../../core';
+import {
+  createEmptyStateStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const HeroPageHeader = createPreset<PageHeaderProps>({
   name: 'PageHeader.Hero',
@@ -84,6 +88,7 @@ export const HeroPageHeader = createPreset<PageHeaderProps>({
                         cursor: 'pointer',
                         textDecoration: isHovered ? 'underline' : 'none',
                         transition: `all ${tokens.motion.hover}`,
+                        transform: isHovered ? tokens.motion.transform : 'none',
                       }}
                     >
                       {item.label}
@@ -148,7 +153,7 @@ export const HeroPageHeader = createPreset<PageHeaderProps>({
               marginTop: tokens.spacing[3],
               fontSize: tokens.typography.fontSize.md,
               color: tokens.colors.neutral[500],
-              lineHeight: 1.6,
+              lineHeight: tokens.typography.lineHeight.relaxed,
             }}>
               {description}
             </Box>

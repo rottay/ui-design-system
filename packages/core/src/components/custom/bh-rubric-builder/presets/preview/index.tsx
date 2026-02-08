@@ -10,10 +10,14 @@
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
-  createSurfaceStyle,
   createBadgeStyle,
+  createCardStyle,
   createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  createSurfaceStyle,
   getHoverTransform,
 } from '../../../helpers';
 import type {
@@ -154,7 +158,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const scorableColors = useMemo(() => getScorableTypeColors(tokens), [tokens]);
     const dimColors = useMemo(() => getDimensionColors(tokens), [tokens]);
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
 
     /* ── Stable sample scores (using dimension order as seed) ────── */
     const sampleScores = useMemo(() => {
@@ -218,7 +222,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: tokens.spacing[4],
-            borderRadius: 0,
+            borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
           }}
@@ -461,6 +465,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         ...cardBase,
                         padding: tokens.spacing[3],
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         borderColor: isKnockoutFailed
                           ? tokens.colors.errorScale[300]
                           : selectedDim === sortedDimensions[idx].id

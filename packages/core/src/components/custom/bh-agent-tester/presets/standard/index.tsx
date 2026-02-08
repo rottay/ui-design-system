@@ -8,7 +8,17 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhAgentTesterProps,
   ChatMessage,
@@ -196,8 +206,8 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
     }, [messages, isTyping]);
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const waveformBars = useMemo(() => generateWaveformBars(60), []);
 
     /* ---- Speed options ---- */
@@ -359,7 +369,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
                 backgroundColor: tokens.colors.infoScale[50],
-                border: `1px solid ${tokens.colors.infoScale[200]}`,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
                 textAlign: 'center' as const,
               }}
             >
@@ -387,6 +397,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -408,6 +419,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
               >
@@ -429,6 +441,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   backgroundColor: tokens.colors.common.white,
                   color: tokens.colors.neutral[500],
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   ...hoverStyle,
                 }}
                 title="Reset"
@@ -597,6 +610,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                               color: tokens.colors.neutral[500],
                               fontSize: tokens.typography.fontSize.xs,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -695,6 +709,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     backgroundColor: tokens.colors.primaryScale[600],
                     color: tokens.colors.common.white,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     flexShrink: 0,
                     ...hoverStyle,
                   }}
@@ -716,6 +731,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     gap: 1,
                     height: 32,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     position: 'relative' as const,
                   }}
                   onClick={(e) => {
@@ -736,7 +752,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           height,
                           borderRadius: tokens.borderRadius.sm,
                           backgroundColor: isPlayed ? tokens.colors.primaryScale[500] : tokens.colors.neutral[200],
-                          transition: `background-color ${tokens.motion.hover}`,
+                          transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                         }}
                       />
                     );
@@ -756,6 +772,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     outline: 'none',
                     flexShrink: 0,
                     minWidth: 60,
@@ -810,6 +827,15 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     color: tokens.colors.neutral[800],
                     fontFamily: 'inherit',
                     opacity: isRunning ? 1 : 0.5,
+                  }}
+                
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                    e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                   }}
                 />
               </div>
@@ -875,12 +901,13 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       gap: tokens.spacing[1],
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[2]}px`,
                       border: 'none',
-                      borderBottom: isActive ? `2px solid ${tokens.colors.primaryScale[600]}` : '2px solid transparent',
+                      borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                       backgroundColor: 'transparent',
                       color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       ...hoverStyle,
                     }}
                   >
@@ -957,6 +984,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       style={{
                         ...inputFieldStyle,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         appearance: 'none' as const,
                         WebkitAppearance: 'none' as const,
                       }}
@@ -1127,9 +1155,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
+                          e.currentTarget.style.transform = tokens.motion.transform;
                         }}
                         onMouseLeave={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'none';
                         }}
                       >
                         <Text
@@ -1235,7 +1265,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       backgroundColor: isGlass
                         ? tokens.glass?.bg
                         : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
-                      border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                     }}
                   >
                     <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
@@ -1252,7 +1282,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: tokens.colors.warningScale[50],
-                      border: `1px solid ${tokens.colors.warningScale[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>
@@ -1300,7 +1330,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                                 style={{
                                   width: `${seg.pct}%`,
                                   backgroundColor: seg.color,
-                                  transition: `width ${tokens.motion.hover}`,
+                                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                                 }}
                               />
                             ))}

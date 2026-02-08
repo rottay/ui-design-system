@@ -3,6 +3,10 @@
 import React, { useState, useRef } from 'react';
 import { createPreset } from '../../../factory';
 import type { TagInputProps, Tag } from '../../core';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const CompactPreset = createPreset<TagInputProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -75,6 +79,7 @@ export const CompactPreset = createPreset<TagInputProps>((context) => {
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 padding: 0,
                 display: 'flex',
                 alignItems: 'center',
@@ -102,6 +107,15 @@ export const CompactPreset = createPreset<TagInputProps>((context) => {
               minWidth: '80px',
               fontSize: tokens.typography.fontSize.sm,
               backgroundColor: 'transparent',
+            }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
         )}

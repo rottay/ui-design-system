@@ -3,9 +3,15 @@
 import { useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { NotificationCenterProps, Notification } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export default createPreset<NotificationCenterProps>((context: PresetContext<NotificationCenterProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const {
@@ -127,11 +133,13 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
               if (activeCategory) {
                 e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
               }
+              e.currentTarget.style.transform = tokens.motion.transform;
             }}
             onMouseLeave={(e) => {
               if (activeCategory) {
                 e.currentTarget.style.backgroundColor = 'transparent';
               }
+              e.currentTarget.style.transform = 'none';
             }}
           >
             <span>All Notifications</span>
@@ -393,6 +401,7 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
                         width: '18px',
                         height: '18px',
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         marginTop: tokens.spacing[1],
                       }}
                     />
@@ -511,7 +520,6 @@ export default createPreset<NotificationCenterProps>((context: PresetContext<Not
                           alignItems: 'center',
                           justifyContent: 'center',
                           fontSize: tokens.typography.fontSize.xl,
-                          transition: `all ${tokens.motion.hover}`,
                           flexShrink: 0,
                         }}
                         onMouseEnter={(e) => {

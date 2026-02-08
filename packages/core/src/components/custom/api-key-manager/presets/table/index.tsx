@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { ApiKeyManagerProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 export const Table = createPreset<ApiKeyManagerProps>((context: PresetContext<ApiKeyManagerProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
   const { keys, onCreate, onRevoke, onCopy, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   return (
     <Box style={cardStyle} className={className}>
@@ -101,6 +105,7 @@ export const Table = createPreset<ApiKeyManagerProps>((context: PresetContext<Ap
                       border: 'none',
                       fontSize: tokens.typography.fontSize.xs,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       textDecoration: 'underline',
                     }}
                   >
@@ -117,6 +122,7 @@ export const Table = createPreset<ApiKeyManagerProps>((context: PresetContext<Ap
                       border: 'none',
                       fontSize: tokens.typography.fontSize.xs,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       textDecoration: 'underline',
                     }}
                   >

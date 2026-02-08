@@ -8,7 +8,7 @@ import type { FeatureGridProps } from '../../core';
 
 export const ListFeatureGrid = createPreset<FeatureGridProps>({
   name: 'FeatureGrid.List',
-  render: ({ primitives, props, tokens }: PresetContext<FeatureGridProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<FeatureGridProps>) => {
     const { Box, Stack } = primitives;
     const { features, title, description, className, style } = props;
 
@@ -67,10 +67,12 @@ export const ListFeatureGrid = createPreset<FeatureGridProps>({
                   onMouseEnter={(e) => {
                     if (feature.link) {
                       e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                      e.currentTarget.style.transform = tokens.motion.transform;
                     }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.transform = 'none';
                   }}
                 >
                   {feature.icon && (
@@ -84,7 +86,7 @@ export const ListFeatureGrid = createPreset<FeatureGridProps>({
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.primaryScale[50],
                         color: tokens.colors.primaryScale[600],
-                        fontSize: '20px',
+                        fontSize: tokens.typography.fontSize.xl,
                         flexShrink: 0,
                       }}
                     >

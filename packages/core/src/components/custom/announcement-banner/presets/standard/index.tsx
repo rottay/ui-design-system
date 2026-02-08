@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { AnnouncementBannerProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const StandardPreset = createPreset<AnnouncementBannerProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -57,6 +60,7 @@ export const StandardPreset = createPreset<AnnouncementBannerProps>((context) =>
               background: 'none',
               border: 'none',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             {link.label}
@@ -72,6 +76,7 @@ export const StandardPreset = createPreset<AnnouncementBannerProps>((context) =>
               background: 'none',
               border: 'none',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             {link.label}
@@ -89,6 +94,7 @@ export const StandardPreset = createPreset<AnnouncementBannerProps>((context) =>
             border: 'none',
             color: tokens.colors.common.white,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             fontSize: tokens.typography.fontSize.lg,
             padding: tokens.spacing[1],
             display: 'flex',

@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { createPreset } from '../../../factory';
 import type { ColorPalettePickerProps } from '../../core';
+import {
+  createHoverStyle,
+} from '../../../helpers';
 
 export const GridPreset = createPreset<ColorPalettePickerProps>((context) => {
   const { primitives, props, tokens } = context;
@@ -57,7 +60,7 @@ export const GridPreset = createPreset<ColorPalettePickerProps>((context) => {
                 height: '40px',
                 backgroundColor: color,
                 borderRadius: tokens.borderRadius.md,
-                border: `2px solid ${
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                   value === color
                     ? tokens.colors.primaryScale[600]
                     : tokens.colors.neutral[300]
@@ -116,7 +119,7 @@ export const GridPreset = createPreset<ColorPalettePickerProps>((context) => {
                   height: '32px',
                   backgroundColor: color,
                   borderRadius: tokens.borderRadius.sm,
-                  border: `2px solid ${
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
                     value === color
                       ? tokens.colors.primaryScale[600]
                       : tokens.colors.neutral[300]

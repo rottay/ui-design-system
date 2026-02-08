@@ -9,7 +9,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhTokenManagerProps,
   TokenBalance,
@@ -217,11 +226,11 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
     };
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const filteredTransactions = useMemo(() => {
       if (transactionFilter === 'all') return transactions;
@@ -735,7 +744,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                           height: '100%',
                           borderRadius: tokens.borderRadius.full,
                           backgroundColor: barColor,
-                          transition: `width ${tokens.motion.hover}`,
+                          transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }}
                       />
                     </div>
@@ -818,7 +827,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                     key={tx.id}
                     style={{
                       borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                      transition: `background-color ${tokens.motion.hover}`,
+                      transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
@@ -912,7 +921,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                       backgroundColor: alert.enabled ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                       position: 'relative' as const,
                       flexShrink: 0,
-                      transition: `background-color ${tokens.motion.hover}`,
+                      transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                     }}
                   >
                     <div
@@ -924,7 +933,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                         position: 'absolute' as const,
                         top: 2,
                         left: alert.enabled ? 18 : 2,
-                        transition: `left ${tokens.motion.hover}`,
+                        transition: `left ${tokens.transitions?.normal || tokens.motion.hover}`,
                         boxShadow: tokens.shadows.sm,
                       }}
                     />
@@ -1139,7 +1148,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
             <Text
               style={{
                 fontSize: tokens.typography.fontSize.sm,
-                color: 'rgba(255,255,255,0.8)',
+                color: tokens.overlay?.white,
               }}
             >
               Purchase additional tokens to keep your AI interviews running smoothly.
@@ -1170,7 +1179,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              backgroundColor: tokens.overlay?.medium,
             }}
             onClick={() => handleQuotaModal(false)}
           >

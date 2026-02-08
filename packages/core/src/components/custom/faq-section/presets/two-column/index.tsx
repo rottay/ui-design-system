@@ -7,13 +7,17 @@
 
 import { useState } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createCardStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createHoverStyle,
+} from '../../../helpers';
 import type { FaqSectionProps } from '../../core';
 
 export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
   name: 'FaqSection.TwoColumn',
-  render: ({ primitives, props, tokens }: PresetContext<FaqSectionProps>) => {
+  render: ({ primitives, props, tokens, engine }: PresetContext<FaqSectionProps>) => {
     const { Box, Stack } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const { items, categories, title, description, className, style } = props;
     const [selectedKey, setSelectedKey] = useState<string>(items[0]?.key || '');
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -74,7 +78,6 @@ export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
                   fontWeight: tokens.typography.fontWeight.medium,
                   backgroundColor: activeCategory === null ? tokens.colors.primaryScale[600] : tokens.colors.neutral[100],
                   color: activeCategory === null ? tokens.colors.common.white : tokens.colors.neutral[700],
-                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 All
@@ -91,7 +94,6 @@ export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
                     fontWeight: tokens.typography.fontWeight.medium,
                     backgroundColor: activeCategory === cat.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[100],
                     color: activeCategory === cat.key ? tokens.colors.common.white : tokens.colors.neutral[700],
-                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   {cat.label}
@@ -113,6 +115,7 @@ export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
             <Box
               style={{
                 ...createCardStyle(tokens, {
+                  glass: isGlass,
                   elevation: 'sm',
                   padding: tokens.spacing[4],
                 }),
@@ -135,17 +138,18 @@ export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
                         fontWeight: tokens.typography.fontWeight.medium,
                         backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
                         color: isSelected ? tokens.colors.primaryScale[600] : tokens.colors.neutral[700],
-                        transition: `all ${tokens.motion.hover}`,
                         borderLeft: isSelected ? `3px solid ${tokens.colors.primaryScale[600]}` : '3px solid transparent',
                       }}
                       onMouseEnter={(e) => {
                         if (!isSelected) {
                           e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                          e.currentTarget.style.transform = tokens.motion.transform;
                         }
                       }}
                       onMouseLeave={(e) => {
                         if (!isSelected) {
                           e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'none';
                         }
                       }}
                     >
@@ -161,6 +165,7 @@ export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
               <div
                 style={{
                   ...createCardStyle(tokens, {
+                    glass: isGlass,
                     elevation: 'sm',
                     padding: tokens.spacing[6],
                   }),

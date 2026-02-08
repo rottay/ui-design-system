@@ -7,7 +7,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import { createSurfaceStyle } from '../../../helpers';
+import {
+  createHoverStyle,
+  createSurfaceStyle,
+} from '../../../helpers';
 import type { SearchBarProps } from '../../core';
 
 export const SuggestionsSearchBar = createPreset<SearchBarProps>({
@@ -100,8 +103,14 @@ export const SuggestionsSearchBar = createPreset<SearchBarProps>({
             value={value}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            onFocus={() => { setShowSuggestions(true); setIsFocused(true); }}
-            onBlur={() => setIsFocused(false)}
+            onFocus={(e) => { setShowSuggestions(true); setIsFocused(true);
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400]; }}
+            onBlur={(e) => {
+              setIsFocused(false);
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+            }}
             autoFocus={autoFocus}
             style={{
               width: '100%',
@@ -155,7 +164,8 @@ export const SuggestionsSearchBar = createPreset<SearchBarProps>({
                     display: 'flex',
                     alignItems: 'center',
                     gap: tokens.spacing[2],
-                    transition: `background-color ${tokens.motion.hover}`,
+                    transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
+                    transform: index === hoveredIndex ? tokens.motion.transform : 'none',
                   }}
                 >
                   {suggestion.icon && (

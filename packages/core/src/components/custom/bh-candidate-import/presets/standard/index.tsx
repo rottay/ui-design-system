@@ -8,7 +8,18 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhCandidateImportProps,
   ImportMethod,
@@ -111,6 +122,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
   name: 'BhCandidateImport.Standard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateImportProps>) => {
     const { Box, Text } = primitives;
+    const isGlass = engine === 'modern' && !!tokens.glass;
     const isModern = engine === 'modern';
 
     const {
@@ -203,8 +215,8 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
     }, [currentValidation, onStartImport]);
 
     const stepColors = getStepStatusColors(tokens);
-    const glassCardStyle = isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { elevation: 'sm' });
-    const hoverStyle = createHoverStyle(tokens);
+    const glassCardStyle = useMemo(() => isModern ? createCardStyle(tokens, { elevation: 'md', glass: true }) : createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }), [tokens, isModern]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
     /* ─── Progress Stepper ─── */
@@ -277,7 +289,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                   marginRight: tokens.spacing[2],
                   marginBottom: tokens.spacing[4],
                   borderRadius: tokens.borderRadius.full,
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }} />
               )}
             </Box>
@@ -322,7 +334,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                     textAlign: 'center',
                     gap: tokens.spacing[3],
                     cursor: 'pointer',
-                    border: `2px solid ${isSelected ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[400] : tokens.colors.neutral[200]}`,
                     backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     transition: `all ${tokens.motion.hover}`,
                     ...(isModern && isSelected && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur } : {}),
@@ -428,6 +440,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}>
               <Upload size={16} />
               Browse Files
@@ -469,6 +482,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                 border: 'none',
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 display: 'flex',
                 alignItems: 'center',
               }}>
@@ -526,7 +540,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
               alignItems: 'center',
               padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
               backgroundColor: tokens.colors.neutral[50],
-              borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 Source Field
@@ -547,15 +561,15 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                 gridTemplateColumns: '1fr 40px 1fr 80px',
                 alignItems: 'center',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderBottom: idx < currentMapping.length - 1 ? `1px solid ${tokens.colors.neutral[100]}` : 'none',
+                borderBottom: idx < currentMapping.length - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
                 backgroundColor: tokens.colors.common.white,
-                transition: `background-color ${tokens.motion.hover}`,
+                transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
               }}>
                 <Box style={{
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   backgroundColor: tokens.colors.neutral[50],
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 }}>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], fontFamily: 'monospace' }}>
                     {mapping.sourceField}
@@ -572,12 +586,13 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `1px solid ${mapping.targetField ? tokens.colors.neutral[200] : tokens.colors.warningScale[300]}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${mapping.targetField ? tokens.colors.neutral[200] : tokens.colors.warningScale[300]}`,
                     backgroundColor: mapping.targetField ? tokens.colors.common.white : tokens.colors.warningScale[50],
                     fontSize: tokens.typography.fontSize.sm,
                     color: tokens.colors.neutral[700],
                     fontFamily: 'inherit',
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     outline: 'none',
                     width: '100%',
                   }}
@@ -658,7 +673,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
             alignItems: 'center',
             padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
             backgroundColor: tokens.colors.neutral[50],
-            borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           }}>
             <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Candidate
@@ -689,7 +704,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                 gridTemplateColumns: '1.5fr 1.5fr 120px 200px',
                 alignItems: 'center',
                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                borderBottom: idx < currentDedup.length - 1 ? `1px solid ${tokens.colors.neutral[100]}` : 'none',
+                borderBottom: idx < currentDedup.length - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
                 backgroundColor: tokens.colors.common.white,
               }}>
                 <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
@@ -734,7 +749,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                         style={{
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                           borderRadius: tokens.borderRadius.sm,
-                          border: `1px solid ${isActive ? tokens.colors[`${actionColors[action]}Scale`][300] : tokens.colors.neutral[200]}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors[`${actionColors[action]}Scale`][300] : tokens.colors.neutral[200]}`,
                           backgroundColor: isActive ? tokens.colors[`${actionColors[action]}Scale`][50] : tokens.colors.common.white,
                           color: isActive ? tokens.colors[`${actionColors[action]}Scale`][700] : tokens.colors.neutral[500],
                           fontSize: tokens.typography.fontSize.xs,
@@ -744,7 +759,6 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                           display: 'flex',
                           alignItems: 'center',
                           gap: tokens.spacing[1],
-                          transition: `all ${tokens.motion.hover}`,
                           textTransform: 'capitalize',
                         }}
                       >
@@ -835,8 +849,9 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                   justifyContent: 'space-between',
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   backgroundColor: tokens.colors.neutral[50],
-                  borderBottom: expandedErrors ? `1px solid ${tokens.colors.neutral[200]}` : 'none',
+                  borderBottom: expandedErrors ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : 'none',
                 }}
               >
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -855,7 +870,7 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                       gridTemplateColumns: '60px 100px 1fr',
                       alignItems: 'center',
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                      borderBottom: idx < currentValidation.details.length - 1 ? `1px solid ${tokens.colors.neutral[100]}` : 'none',
+                      borderBottom: idx < currentValidation.details.length - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
                       backgroundColor: tokens.colors.common.white,
                     }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], fontFamily: 'monospace' }}>
@@ -956,7 +971,6 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
                   display: 'flex',
                   alignItems: 'center',
                   gap: tokens.spacing[2],
-                  transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 <Upload size={18} />
@@ -1103,7 +1117,6 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
               display: 'flex',
               alignItems: 'center',
               gap: tokens.spacing[1],
-              transition: `all ${tokens.motion.hover}`,
             }}>
               <X size={14} />
               Cancel

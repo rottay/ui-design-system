@@ -9,6 +9,11 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { CommandSearchProps } from '../../core';
 import { COMMAND_SEARCH_DEFAULTS } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+} from '../../../helpers';
 
 export const InlineCommandSearch = createPreset<CommandSearchProps>({
   name: 'CommandSearch.Inline',
@@ -95,7 +100,7 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
           border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isFocused ? tokens.colors.primaryScale[400] : tokens.colors.neutral[300]}`,
           borderRadius: tokens.borderRadius.lg,
           backgroundColor: tokens.colors.common.white,
-          transition: `border-color ${tokens.motion.hover}`,
+          transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
           boxShadow: isFocused ? `0 0 0 3px ${tokens.colors.primaryScale[100]}` : 'none',
         }}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, color: tokens.colors.neutral[400] }}>
@@ -106,7 +111,11 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
             ref={inputRef}
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
-            onFocus={() => setIsFocused(true)}
+            onFocus={(e) => {
+              setIsFocused(true);
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             style={{
@@ -117,6 +126,11 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
               color: tokens.colors.neutral[900],
               backgroundColor: 'transparent',
               fontFamily: 'inherit',
+            }}
+          
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
           {loading && (
@@ -170,7 +184,7 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
                           textAlign: 'left',
                           fontFamily: 'inherit',
                           fontSize: tokens.typography.fontSize.sm,
-                          transition: `background-color ${tokens.motion.hover}`,
+                          transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                         }}
                       >
                         {result.icon && <span style={{ flexShrink: 0, color: tokens.colors.neutral[500] }}>{result.icon}</span>}
@@ -234,7 +248,7 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
                         textAlign: 'left',
                         fontFamily: 'inherit',
                         fontSize: tokens.typography.fontSize.sm,
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                     >
                       {action.icon && <span style={{ color: tokens.colors.neutral[500] }}>{action.icon}</span>}
@@ -275,7 +289,7 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
                         textAlign: 'left',
                         fontFamily: 'inherit',
                         fontSize: tokens.typography.fontSize.sm,
-                        transition: `background-color ${tokens.motion.hover}`,
+                        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                       }}
                     >
                       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0, color: tokens.colors.neutral[400] }}>

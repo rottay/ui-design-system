@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { ComparisonCardProps } from '../../core';
-import { createCardStyle } from '../../../helpers';
+import {  createAccentBarStyle,
+ createCardStyle } from '../../../helpers';
 
 export const Stacked = createPreset<ComparisonCardProps>((context: PresetContext<ComparisonCardProps>) => {
-  const { primitives, props, tokens } = context;
+  const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
 
   const { metrics, title, period = { current: 'Current', previous: 'Previous' }, className, style } = props;
 
-  const cardStyle = createCardStyle(tokens);
+  const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 
   const calculateChange = (current: number | string, previous: number | string) => {
     const curr = typeof current === 'number' ? current : parseFloat(String(current));
@@ -23,6 +24,7 @@ export const Stacked = createPreset<ComparisonCardProps>((context: PresetContext
 
   return (
     <Box style={cardStyle} className={className}>
+        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
       {title && (
         <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, marginBottom: tokens.spacing[4] }}>
           {title}

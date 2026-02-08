@@ -10,6 +10,14 @@ import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { DataGridProps, DataGridColumn } from '../../core';
 import { DATA_GRID_DEFAULTS, getValue, compareValues, getBadgeColors } from '../../core';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+} from '../../../helpers';
 
 // ============================================================================
 // Component
@@ -294,6 +302,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.medium,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               fontFamily: 'inherit',
             }}
           >
@@ -334,6 +343,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
                   color: filter.active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                   fontSize: tokens.typography.fontSize.sm,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   fontWeight: filter.active ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
                   fontFamily: 'inherit',
                 }}
@@ -379,6 +389,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
                 color: sortState ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                 fontSize: tokens.typography.fontSize.sm,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontWeight: sortState ? tokens.typography.fontWeight.medium : tokens.typography.fontWeight.normal,
                 fontFamily: 'inherit',
               }}
@@ -428,6 +439,15 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
                   backgroundColor: tokens.colors.common.white,
                   outline: 'none',
                   fontFamily: 'inherit',
+                }}
+              
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
             </Box>
@@ -578,6 +598,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
               backgroundColor: rowBg,
               cursor: onRowClick ? 'pointer' : 'default',
               transition: `all ${tokens.motion.hover}`,
+              transform: isHovered ? tokens.motion.transform : 'none',
               height: rowHeight,
             }}
           >
@@ -669,6 +690,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
             color: tokens.colors.neutral[500],
             fontSize: tokens.typography.fontSize.sm,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`,
             fontFamily: 'inherit',
           }}
@@ -694,6 +716,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
               background: 'none',
               color: tokens.colors.neutral[400],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               padding: tokens.spacing[1],
             }}
           >

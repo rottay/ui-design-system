@@ -8,7 +8,16 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhRecruiterHomeProps,
   KpiStat,
@@ -104,14 +113,14 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const [notificationDismissed, setNotificationDismissed] = useState<Set<string>>(new Set());
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const hoverStyle = createHoverStyle(tokens);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 
-    const cardStyle = createCardStyle(tokens, {
+    const cardStyle = useMemo(() => createCardStyle(tokens, {
       elevation: 'sm',
       glass: isGlass,
       padding: tokens.spacing[3] as unknown as number,
-    });
+    }), [tokens, isGlass]);
 
     const filteredActivity = useMemo(() => {
       if (activityFilter === 'all') return activityFeed;
@@ -214,6 +223,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
               fontSize: tokens.typography.fontSize.xs,
               color: tokens.colors.neutral[600],
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
             }}
           >
             {dateRange} &#9662;
@@ -360,7 +370,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         borderRadius: tokens.borderRadius.sm,
                         border:
                           selectedJob === job.id
-                            ? `1px solid ${tokens.colors.primaryScale[300]}`
+                            ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                             : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
                         backgroundColor:
                           selectedJob === job.id ? tokens.colors.primaryScale[50] : 'transparent',
@@ -374,6 +384,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                             ? tokens.typography.fontWeight.semibold
                             : tokens.typography.fontWeight.medium,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                       }}
                     >
                       {job.title}
@@ -395,7 +406,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         style={{
                           textAlign: 'left' as const,
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[1]}px`,
-                          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           color: tokens.colors.neutral[500],
                           fontWeight: tokens.typography.fontWeight.medium,
                         }}
@@ -406,7 +417,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         style={{
                           textAlign: 'right' as const,
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[1]}px`,
-                          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           color: tokens.colors.neutral[500],
                           fontWeight: tokens.typography.fontWeight.medium,
                           width: 40,
@@ -418,7 +429,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         style={{
                           textAlign: 'left' as const,
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[1]}px`,
-                          borderBottom: `1px solid ${tokens.colors.neutral[200]}`,
+                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           color: tokens.colors.neutral[500],
                           fontWeight: tokens.typography.fontWeight.medium,
                           width: '50%',
@@ -523,16 +534,19 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         backgroundColor: tokens.colors.common.white,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         textAlign: 'left' as const,
                         ...hoverStyle,
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLButtonElement).style.backgroundColor =
                           tokens.colors.neutral[50];
+                        e.currentTarget.style.transform = tokens.motion.transform;
                       }}
                       onMouseLeave={(e) => {
                         (e.currentTarget as HTMLButtonElement).style.backgroundColor =
                           tokens.colors.common.white;
+                        e.currentTarget.style.transform = 'none';
                       }}
                     >
                       <span
@@ -624,7 +638,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               width: `${pct * 100}%`,
                               backgroundColor: barColor,
                               borderRadius: tokens.borderRadius.full,
-                              transition: `width ${tokens.motion.hover}`,
+                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                             }}
                           />
                         </div>
@@ -656,15 +670,18 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[1]}px`,
                         borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                         borderRadius: tokens.borderRadius.sm,
                         ...hoverStyle,
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLDivElement).style.backgroundColor =
                           tokens.colors.neutral[50];
+                        e.currentTarget.style.transform = tokens.motion.transform;
                       }}
                       onMouseLeave={(e) => {
                         (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'none';
                       }}
                     >
                       {/* Avatar */}
@@ -782,6 +799,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       fontSize: '10px',
                       color: tokens.colors.neutral[600],
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <option value="all">All</option>
@@ -805,6 +823,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         padding: `${tokens.spacing[1]}px 0`,
                         borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         cursor: 'pointer',
+                        transition: `all ${tokens.motion.hover}`,
                       }}
                     >
                       <span style={{ fontSize: tokens.typography.fontSize.xs, flexShrink: 0 }}>
@@ -937,6 +956,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                             background: 'none',
                             color: tokens.colors.neutral[400],
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             padding: 0,
                             fontSize: tokens.typography.fontSize.xs,
                             lineHeight: 1,
@@ -962,7 +982,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                   background: isGlass
                     ? tokens.glass?.bg
                     : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
-                  border: `1px solid ${tokens.colors.primaryScale[200]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
                 }}
               >
                 <div
@@ -1047,6 +1067,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               fontSize: '10px',
                               fontWeight: tokens.typography.fontWeight.semibold,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                             }}
                           >
                             Accept
@@ -1063,6 +1084,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                               fontSize: '10px',
                               fontWeight: tokens.typography.fontWeight.medium,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                             }}
                           >
                             Skip

@@ -2,6 +2,7 @@
 
 import { createPreset } from '../../../factory';
 import type { LogoCloudProps } from '../../core';
+import { createEmptyStateStyle } from '../../../helpers';
 
 export const ScrollingPreset = createPreset<LogoCloudProps>((context) => {
   const { primitives, props, tokens } = context;

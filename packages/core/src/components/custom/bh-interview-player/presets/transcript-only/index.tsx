@@ -8,10 +8,14 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
-  createSurfaceStyle,
   createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
   createHoverStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSurfaceStyle,
   getHoverTransform,
 } from '../../../helpers';
 import type {
@@ -148,7 +152,7 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
             justifyContent: 'center',
             overflow: 'hidden',
             flexShrink: 0,
-            border: `2px solid ${tokens.colors.primaryScale[200]}`,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
           }}
         >
           {interviewInfo.candidateAvatar ? (
@@ -249,6 +253,7 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
               border: 'none',
               backgroundColor: 'transparent',
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               textAlign: 'left',
             }}
           >
@@ -490,6 +495,15 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
               color: tokens.colors.neutral[800],
               outline: 'none',
             }}
+          
+            onFocus={(e) => {
+              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = 'none';
+              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+            }}
           />
           {searchQuery && (
             <button
@@ -498,6 +512,7 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 color: tokens.colors.neutral[400],
                 display: 'flex',
                 padding: 0,
@@ -548,7 +563,7 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
           <span
             key={`ev-${i}`}
             style={{
-              borderBottom: `2px solid ${dimScoreColor}`,
+              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${dimScoreColor}`,
               backgroundColor:
                 isHighlighted || isSelectedDim
                   ? tokens.colors.primaryScale[50]
@@ -558,10 +573,14 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
               padding: `0 ${tokens.spacing[0]}px`,
               transition: `all ${tokens.motion.hover}`,
             }}
-            onMouseEnter={() =>
-              setHighlightedEvidence(`${line.id}-${highlight.dimensionId}`)
-            }
-            onMouseLeave={() => setHighlightedEvidence(null)}
+            onMouseEnter={(e) => {
+              setHighlightedEvidence(`${line.id}-${highlight.dimensionId}`);
+              e.currentTarget.style.transform = tokens.motion.transform;
+            }}
+            onMouseLeave={(e) => {
+              setHighlightedEvidence(null);
+              e.currentTarget.style.transform = 'none';
+            }}
             onClick={(e) => {
               e.stopPropagation();
               setSelectedDimension(highlight.dimensionId);

@@ -6,14 +6,16 @@
  * evaluation rubric, script overview, and pre-interview checklist.
  */
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createCardStyle,
   createBadgeStyle,
-  createSurfaceStyle,
+  createCardStyle,
+  createFilterPillStyle,
   createHoverStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
+  createSurfaceStyle,
 } from '../../../helpers';
 import type {
   BhInterviewPrepProps,
@@ -129,9 +131,9 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
 
     const isGlass = engine === 'modern';
 
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const containerStyle: React.CSSProperties = {
       ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
@@ -545,6 +547,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                 fontWeight: tokens.typography.fontWeight.medium,
                 color: tokens.colors.primaryScale[600],
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
               <Eye size={12} />
@@ -643,7 +646,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                         backgroundColor: dim.isKnockout
                           ? tokens.colors.errorScale[500]
                           : tokens.colors.primaryScale[500],
-                        transition: `width ${tokens.motion.hover}`,
+                        transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                       }}
                     />
                   </div>
@@ -701,6 +704,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                       alignItems: 'center',
                       justifyContent: 'space-between',
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <Stack
@@ -880,7 +884,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                     ? tokens.colors.successScale[500]
                     : tokens.colors.primaryScale[500],
                 borderRadius: tokens.borderRadius.full,
-                transition: `width ${tokens.motion.hover}`,
+                transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
               }}
             />
           </div>
@@ -938,6 +942,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                         : tokens.colors.neutral[200]
                     }`,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 >
                   <StatusIcon size={18} color={scale[500]} />

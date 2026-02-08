@@ -23,6 +23,15 @@ import {
   pixelOffsetToMs,
   msToDateString,
 } from '../../core';
+import {
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createStatusDotStyle,
+} from '../../../helpers';
 
 export const CompactGanttTimeline = createPreset<GanttTimelineProps & Record<string, unknown>>({
   name: 'GanttTimeline.Compact',
@@ -250,6 +259,7 @@ export const CompactGanttTimeline = createPreset<GanttTimelineProps & Record<str
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: timeScale === opt.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                 cursor: 'pointer',
+                transition: `all ${tokens.motion.hover}`,
                 fontFamily: 'inherit',
               }}
             >
@@ -370,6 +380,7 @@ export const CompactGanttTimeline = createPreset<GanttTimelineProps & Record<str
                   backgroundColor: bg,
                   borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                   transition: `all ${tokens.motion.hover}`,
+                  transform: isHovered ? tokens.motion.transform : 'none',
                 }}
               />
             );
@@ -466,7 +477,7 @@ export const CompactGanttTimeline = createPreset<GanttTimelineProps & Record<str
                       height: '100%',
                       cursor: 'ew-resize',
                       zIndex: 4,
-                      borderRight: isDragResize ? `2px solid ${tokens.colors.common.white}` : 'none',
+                      borderRight: isDragResize ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}` : 'none',
                     }}
                   />
                 )}

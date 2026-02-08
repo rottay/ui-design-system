@@ -6,9 +6,18 @@
  * Teams, Invitations, First Job, and Celebration animation
  */
 
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useMemo} from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, createBadgeStyle, createHoverStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createProgressBarStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhTenantSetupProps,
   SetupStep,
@@ -63,9 +72,9 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
     const [localIsComplete, setLocalIsComplete] = useState(propIsComplete);
 
     const isGlass = engine === 'modern';
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const surfaceMd = createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass });
-    const hoverTransition = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const surfaceMd = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
+    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverLift = getHoverTransform(tokens);
 
     const isLastStep = localCurrentStep >= steps.length - 1;
@@ -94,12 +103,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       width: '100%',
       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
       borderRadius: tokens.borderRadius.md,
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       fontSize: tokens.typography.fontSize.sm,
       color: tokens.colors.neutral[900],
       backgroundColor: tokens.colors.common.white,
       outline: 'none',
-      transition: `border-color ${tokens.motion.hover}`,
+      transition: `border-color ${tokens.transitions?.fast || tokens.motion.hover}`,
       boxSizing: 'border-box' as const,
     };
 
@@ -122,6 +131,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.semibold,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       display: 'inline-flex',
       alignItems: 'center',
       gap: tokens.spacing[2],
@@ -133,10 +143,11 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       borderRadius: tokens.borderRadius.md,
       backgroundColor: tokens.colors.common.white,
       color: tokens.colors.neutral[700],
-      border: `1px solid ${tokens.colors.neutral[300]}`,
+      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
       fontSize: tokens.typography.fontSize.sm,
       fontWeight: tokens.typography.fontWeight.medium,
       cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
       display: 'inline-flex',
       alignItems: 'center',
       gap: tokens.spacing[2],
@@ -314,7 +325,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   width: 2,
                   height: 12,
                   backgroundColor: isPast ? tokens.colors.successScale[300] : tokens.colors.neutral[200],
-                  transition: `background-color ${tokens.motion.hover}`,
+                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }} />
               )}
             </div>
@@ -369,6 +380,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             borderRadius: tokens.borderRadius.lg,
             border: `2px dashed ${tokens.colors.neutral[300]}`,
             cursor: 'pointer',
+            transition: `all ${tokens.motion.hover}`,
             backgroundColor: tokens.colors.common.white,
           }}>
             {localFormData.logo ? (
@@ -444,7 +456,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   ...hoverTransition,
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                   borderRadius: tokens.borderRadius.md,
-                  border: `1px solid ${localFormData.size === opt.value
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${localFormData.size === opt.value
                     ? tokens.colors.primaryScale[300]
                     : tokens.colors.neutral[200]}`,
                   backgroundColor: localFormData.size === opt.value
@@ -458,6 +470,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     ? tokens.typography.fontWeight.semibold
                     : tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   textAlign: 'center' as const,
                 }}
               >
@@ -557,7 +570,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     ...cardBase,
                     ...hoverTransition,
                     cursor: 'pointer',
-                    border: `2px solid ${isSelected
+                    transition: `all ${tokens.motion.hover}`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected
                       ? tokens.colors.primaryScale[400]
                       : tokens.colors.neutral[200]}`,
                     backgroundColor: isSelected
@@ -713,7 +727,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                       ...cardBase,
                       ...hoverTransition,
                       cursor: 'pointer',
-                      border: `2px solid ${isSelected
+                      transition: `all ${tokens.motion.hover}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected
                         ? tokens.colors.primaryScale[400]
                         : tokens.colors.neutral[200]}`,
                       backgroundColor: isSelected
@@ -809,7 +824,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   : testStatus === 'success'
                     ? tokens.colors.successScale[50]
                     : tokens.colors.errorScale[50],
-                border: `1px solid ${testStatus === 'testing'
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${testStatus === 'testing'
                   ? tokens.colors.infoScale[200]
                   : testStatus === 'success'
                     ? tokens.colors.successScale[200]
@@ -933,6 +948,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   padding: tokens.spacing[1],
                   borderRadius: tokens.borderRadius.sm,
                   display: 'flex',
@@ -961,7 +977,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   flexWrap: 'wrap' as const,
                   gap: tokens.spacing[1],
                   padding: `${tokens.spacing[2]}px`,
-                  border: `1px solid ${tokens.colors.neutral[300]}`,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
                   borderRadius: tokens.borderRadius.md,
                   backgroundColor: tokens.colors.common.white,
                   minHeight: 42,
@@ -982,6 +998,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                           background: 'none',
                           border: 'none',
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           padding: 0,
                           display: 'flex',
                           marginLeft: tokens.spacing[1],
@@ -1011,6 +1028,15 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                         (e.target as HTMLInputElement).value = '';
                       }
                     }}
+                  
+                    onFocus={(e) => {
+                      e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
+                      e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                    }}
                   />
                 </div>
               </div>
@@ -1031,6 +1057,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     accentColor: tokens.colors.primaryScale[600],
                     height: 6,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                   }}
                 />
                 <div style={{
@@ -1112,6 +1139,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   padding: tokens.spacing[1],
                   display: 'flex',
                 }}
@@ -1211,9 +1239,10 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               ...cardBase,
               ...hoverTransition,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               textAlign: 'center' as const,
               padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px`,
-              border: `2px solid ${tokens.colors.primaryScale[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
             }}
           >
             <div style={{
@@ -1256,9 +1285,10 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               ...cardBase,
               ...hoverTransition,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               textAlign: 'center' as const,
               padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px`,
-              border: `2px solid ${tokens.colors.neutral[200]}`,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             }}
           >
             <div style={{
@@ -1421,6 +1451,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   ...cardBase,
                   ...hoverTransition,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                   flex: 1,
                   textAlign: 'center' as const,
                 }}>
@@ -1490,7 +1521,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-        borderTop: `1px solid ${tokens.colors.neutral[200]}`,
+        borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
         backgroundColor: tokens.colors.common.white,
       }}>
         <button
@@ -1562,7 +1593,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
           {/* Sidebar Stepper */}
           <div style={{
             width: 280,
-            borderRight: `1px solid ${tokens.colors.neutral[200]}`,
+            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
             flexShrink: 0,
           }}>

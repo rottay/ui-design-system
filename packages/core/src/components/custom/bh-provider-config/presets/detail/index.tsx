@@ -7,7 +7,15 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createPanelHeaderStyle,
+  createSectionHeaderStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhProviderConfigProps,
   ProviderItem,
@@ -113,9 +121,9 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
     const activeModelFilter = controlledModelFilter !== undefined ? controlledModelFilter : internalModelFilter;
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const hoverStyle = createHoverStyle(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const selectedProviderData = useMemo(
       () => providers.find((p) => p.id === activeSelectedProvider),
@@ -203,7 +211,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                   backdropFilter: tokens.glass.blurSm,
                   WebkitBackdropFilter: tokens.glass.blurSm,
                   backgroundColor: tokens.glass.bgLight,
-                  borderRight: `1px solid ${tokens.glass.borderLight}`,
+                  borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
                 }
               : {}),
           }}
@@ -239,19 +247,22 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     borderRadius: tokens.borderRadius.md,
                     marginBottom: tokens.spacing[1],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
-                    border: isSelected ? `1px solid ${tokens.colors.primaryScale[300]}` : '1px solid transparent',
+                    border: isSelected ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} solid transparent`,
                     ...hoverStyle,
                   }}
                   onMouseEnter={(e) => {
                     if (!isSelected) {
                       (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
                     }
+                    e.currentTarget.style.transform = tokens.motion.transform;
                   }}
                   onMouseLeave={(e) => {
                     if (!isSelected) {
                       (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
                     }
+                    e.currentTarget.style.transform = 'none';
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
@@ -349,6 +360,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -369,7 +381,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     style={{
                       ...cardBase,
                       backgroundColor: stat.scale[50],
-                      border: `1px solid ${stat.scale[200]}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${stat.scale[200]}`,
                     }}
                   >
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: stat.scale[700], display: 'block', marginBottom: tokens.spacing[1] }}>
@@ -479,6 +491,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                               color: tokens.colors.neutral[600],
                               fontSize: tokens.typography.fontSize.xs,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -489,11 +502,12 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                             style={{
                               padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                               borderRadius: tokens.borderRadius.md,
-                              border: `1px solid ${tokens.colors.errorScale[200]}`,
+                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                               backgroundColor: tokens.colors.errorScale[50],
                               color: tokens.colors.errorScale[600],
                               fontSize: tokens.typography.fontSize.xs,
                               cursor: 'pointer',
+                              transition: `all ${tokens.motion.hover}`,
                               ...hoverStyle,
                             }}
                           >
@@ -521,12 +535,13 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           style={{
                             padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                             borderRadius: tokens.borderRadius.md,
-                            border: activeModelFilter === f ? `1px solid ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                            border: activeModelFilter === f ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                             backgroundColor: activeModelFilter === f ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                             color: activeModelFilter === f ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: activeModelFilter === f ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                             cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
                             textTransform: 'capitalize' as const,
                             ...hoverStyle,
                           }}
@@ -552,9 +567,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                         onMouseEnter={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
+                          e.currentTarget.style.transform = tokens.motion.transform;
                         }}
                         onMouseLeave={(e) => {
                           (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+                          e.currentTarget.style.transform = 'none';
                         }}
                       >
                         <div style={{ flex: 1, minWidth: 0 }}>

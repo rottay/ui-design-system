@@ -9,7 +9,19 @@
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle, createHoverStyle, getHoverTransform, createSectionHeaderStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  createHoverStyle,
+  createListItemStyle,
+  createPanelHeaderStyle,
+  createProgressBarStyle,
+  createSectionHeaderStyle,
+  createStatusDotStyle,
+  getHoverTransform,
+} from '../../../helpers';
 import type {
   BhProviderConfigProps,
   ProviderItem,
@@ -120,11 +132,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
     const activeDragState = controlledDragState !== undefined ? controlledDragState : internalDragState;
 
     const isGlass = engine === 'modern' && !!tokens.glass;
-    const cardBase = createCardStyle(tokens, { elevation: 'sm', glass: isGlass });
-    const cardInteractive = createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true });
-    const hoverStyle = createHoverStyle(tokens);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
-    const sectionHeader = createSectionHeaderStyle(tokens);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
     const handleProviderSelect = (providerId: string) => {
       setInternalSelectedProvider(providerId);
@@ -272,6 +284,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
               fontSize: tokens.typography.fontSize.sm,
               fontWeight: tokens.typography.fontWeight.semibold,
               cursor: 'pointer',
+              transition: `all ${tokens.motion.hover}`,
               ...hoverStyle,
             }}
           >
@@ -302,10 +315,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 style={{
                   ...cardInteractive,
                   border: isSelected
-                    ? `2px solid ${tokens.colors.primaryScale[400]}`
+                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
                     : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                   backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                   cursor: 'pointer',
+                  transition: `all ${tokens.motion.hover}`,
                 }}
                 onMouseEnter={(e) => {
                   Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
@@ -419,7 +433,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           ? tokens.colors.warningScale[500]
                           : tokens.colors.errorScale[500],
                       borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.motion.hover}`,
+                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
                 </div>
@@ -440,6 +454,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
+                      transition: `all ${tokens.motion.hover}`,
                       ...hoverStyle,
                     }}
                   >
@@ -667,7 +682,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             style={{
                               padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                               borderRadius: tokens.borderRadius.lg,
-                              border: `2px solid ${sc.color}`,
+                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${sc.color}`,
                               backgroundColor: sc.bg,
                               minWidth: 120,
                               textAlign: 'center' as const,
@@ -788,7 +803,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           borderRadius: tokens.borderRadius.md,
                           border:
                             activeModelFilter === f
-                              ? `1px solid ${tokens.colors.primaryScale[300]}`
+                              ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                               : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           backgroundColor:
                             activeModelFilter === f ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
@@ -800,6 +815,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               ? tokens.typography.fontWeight.semibold
                               : tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           textTransform: 'capitalize' as const,
                           ...hoverStyle,
                         }}
@@ -846,9 +862,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
+                        e.currentTarget.style.transform = tokens.motion.transform;
                       }}
                       onMouseLeave={(e) => {
                         (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
+                        e.currentTarget.style.transform = 'none';
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
@@ -975,6 +993,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               ? tokens.typography.fontWeight.semibold
                               : tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           textTransform: 'capitalize' as const,
                           ...hoverStyle,
                         }}
@@ -1040,7 +1059,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                                   height: '100%',
                                   backgroundColor: barColor,
                                   borderRadius: tokens.borderRadius.sm,
-                                  transition: `width ${tokens.motion.hover}`,
+                                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                                 }}
                               />
                             </div>
@@ -1139,6 +1158,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     color: tokens.colors.neutral[600],
                     fontSize: tokens.typography.fontSize.xs,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -1196,6 +1216,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
                       >
@@ -1210,12 +1231,13 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           justifyContent: 'center',
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                           borderRadius: tokens.borderRadius.md,
-                          border: `1px solid ${tokens.colors.errorScale[200]}`,
+                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                           backgroundColor: tokens.colors.errorScale[50],
                           color: tokens.colors.errorScale[600],
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.medium,
                           cursor: 'pointer',
+                          transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
                       >
@@ -1452,7 +1474,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              backgroundColor: tokens.overlay?.medium,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -1473,7 +1495,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       backdropFilter: tokens.glass.blur,
                       WebkitBackdropFilter: tokens.glass.blur,
                       backgroundColor: tokens.glass.bg,
-                      border: `1px solid ${tokens.glass.border}`,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
                     }
                   : {}),
               }}
@@ -1502,6 +1524,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     background: 'none',
                     color: tokens.colors.neutral[400],
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     fontSize: tokens.typography.fontSize.lg,
                     padding: tokens.spacing[1],
                   }}
@@ -1595,6 +1618,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
@@ -1611,6 +1635,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
+                    transition: `all ${tokens.motion.hover}`,
                     ...hoverStyle,
                   }}
                 >
