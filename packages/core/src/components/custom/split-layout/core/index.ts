@@ -1,7 +1,7 @@
 import type { EngineAwareProps } from '../../../../types';
 import type { ReactNode } from 'react';
 
-export type SplitLayoutPreset = 'resizable' | 'fixed' | 'responsive';
+export type SplitLayoutPreset = 'resizable';
 
 export interface SplitLayoutProps extends EngineAwareProps {
   preset?: SplitLayoutPreset;

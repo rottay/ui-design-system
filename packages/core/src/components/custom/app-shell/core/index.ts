@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { EngineAwareProps } from '../../../../types';
 
-export type AppShellPreset = 'standard' | 'stacked' | 'horizontal';
+export type AppShellPreset = 'standard' | 'stacked';
 
 export interface AppShellProps extends EngineAwareProps {
   preset?: AppShellPreset;

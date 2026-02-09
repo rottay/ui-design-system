@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { EngineAwareProps } from '../../../../types';
 
-export type EmptyStatePreset = 'standard' | 'compact' | 'illustration';
+export type EmptyStatePreset = 'standard' | 'illustration';
 
 export interface EmptyStateAction {
   key: string;

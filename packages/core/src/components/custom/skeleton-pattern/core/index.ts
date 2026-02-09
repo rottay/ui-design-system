@@ -1,6 +1,6 @@
 import type { EngineAwareProps } from '../../../../types';
 
-export type SkeletonPatternPreset = 'table' | 'card' | 'profile' | 'list';
+export type SkeletonPatternPreset = 'card' | 'profile';
 
 export interface SkeletonPatternProps extends EngineAwareProps {
   preset?: SkeletonPatternPreset;
@@ -13,7 +13,7 @@ export interface SkeletonPatternProps extends EngineAwareProps {
 }
 
 export const SKELETON_PATTERN_DEFAULTS: Partial<SkeletonPatternProps> = {
-  preset: 'table',
+  preset: 'card',
   rows: 5,
   columns: 4,
   animate: true,
