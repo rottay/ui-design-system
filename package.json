@@ -2,6 +2,35 @@
   "name": "@rottay/design-system",
   "version": "1.0.0",
   "private": true,
+  "main": "./packages/core/dist/index.cjs",
+  "module": "./packages/core/dist/index.js",
+  "types": "./packages/core/dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./packages/core/dist/index.d.ts",
+      "import": "./packages/core/dist/index.js",
+      "require": "./packages/core/dist/index.cjs"
+    },
+    "./styles": "./packages/core/src/theme/tokens/css/index.css",
+    "./styles.css": "./packages/core/src/theme/tokens/css/index.css",
+    "./icons": {
+      "types": "./packages/core/dist/icons.d.ts",
+      "import": "./packages/core/dist/icons.js",
+      "require": "./packages/core/dist/icons.js"
+    },
+    "./components/*": {
+      "types": "./packages/core/dist/components/*.d.ts",
+      "import": "./packages/core/dist/components/*.js"
+    },
+    "./system/*": {
+      "types": "./packages/core/dist/system/*.d.ts",
+      "import": "./packages/core/dist/system/*.js"
+    },
+    "./config/*": {
+      "types": "./packages/core/dist/config/*.d.ts",
+      "import": "./packages/core/dist/config/*.js"
+    }
+  },
   "workspaces": [
     "packages/*"
   ],
