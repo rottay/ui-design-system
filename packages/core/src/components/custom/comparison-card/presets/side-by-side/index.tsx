@@ -19,7 +19,7 @@ import {
 export const SideBySide = createPreset<ComparisonCardProps>((context: PresetContext<ComparisonCardProps>) => {
   const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const {
     metrics,

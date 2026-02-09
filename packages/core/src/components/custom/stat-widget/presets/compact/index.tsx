@@ -20,7 +20,7 @@ import type { StatWidgetProps } from '../../core';
 
 export default createPreset<StatWidgetProps>((context: PresetContext<StatWidgetProps>) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text, Spinner } = primitives;
 
   const {

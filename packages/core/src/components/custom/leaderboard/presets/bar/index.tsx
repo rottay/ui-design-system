@@ -45,7 +45,7 @@ export const Bar = createPreset<LeaderboardProps>((context: PresetContext<Leader
   const { Box, Text, Spinner } = primitives;
   const { entries, title, maxEntries = 10, unit, className, style } = props;
 
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isLoading] = useState(false);
 

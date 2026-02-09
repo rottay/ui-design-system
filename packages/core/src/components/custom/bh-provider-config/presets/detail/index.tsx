@@ -120,7 +120,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
     const activeTestResults = controlledTestResults !== undefined ? controlledTestResults : internalTestResults;
     const activeModelFilter = controlledModelFilter !== undefined ? controlledModelFilter : internalModelFilter;
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);

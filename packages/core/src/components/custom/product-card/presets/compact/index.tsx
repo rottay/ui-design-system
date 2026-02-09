@@ -8,7 +8,7 @@ import { PRODUCT_CARD_DEFAULTS } from '../../core';
 
 export const CompactPreset = createPreset<ProductCardProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text, Button } = primitives;
   const {
     title,

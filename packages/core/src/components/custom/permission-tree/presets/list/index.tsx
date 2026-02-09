@@ -15,7 +15,7 @@ export const ListPermissionTree = createPreset<PermissionTreeProps>({
   name: 'PermissionTree.List',
   render: ({ primitives, props, tokens, engine }: PresetContext<PermissionTreeProps>) => {
     const { Box } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       items,
       checkedKeys = [],

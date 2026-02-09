@@ -183,7 +183,7 @@ export const StandardSidebar = createPreset<SidebarProps>({
           borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: engine === 'modern' ? tokens.shadows.sm : 'none',
+          boxShadow: tokens.surface.useGlass ? tokens.shadows.sm : 'none',
           ...style,
         }}
       >

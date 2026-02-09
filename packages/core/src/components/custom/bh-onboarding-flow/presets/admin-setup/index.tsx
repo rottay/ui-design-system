@@ -69,7 +69,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
     const [showCelebration, setShowCelebration] = useState(false);
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const isLastStep = currentStep >= steps.length - 1;
     const currentStepData = steps[currentStep];
     const completedCount = steps.filter((s) => s.isComplete).length;

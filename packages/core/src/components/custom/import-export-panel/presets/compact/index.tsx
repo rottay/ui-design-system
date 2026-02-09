@@ -27,7 +27,7 @@ export const Compact = createPreset<ImportExportPanelProps>((context: PresetCont
     formats = ['csv', 'json', 'xlsx'], className, style,
   } = props;
 
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const [dropHovered, setDropHovered] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<string>(formats[0] || 'csv');
   const [loading] = useState(false);

@@ -170,7 +170,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const [expandedScorecard, setExpandedScorecard] = useState<string | null>(null);
     const [activityFilter, setActivityFilter] = useState<string>('all');
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
 

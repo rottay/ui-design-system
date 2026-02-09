@@ -22,7 +22,7 @@ export const FloatingPreset = createPreset<ContextualToolbarProps>((context) => 
   const { Box } = primitives;
   const { actions, visible = true, position, className, style } = props;
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const containerStyle = useMemo((): React.CSSProperties => ({
     ...createCardStyle(tokens, {

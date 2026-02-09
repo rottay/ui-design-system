@@ -182,7 +182,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
   name: 'BhInterviewCenter.List',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhInterviewCenterProps>) => {
     const { Box, Stack } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const STATUS_CONFIG = useMemo(() => getStatusConfig(tokens), [tokens]);
     const TYPE_CONFIG = useMemo(() => getTypeConfig(tokens), [tokens]);

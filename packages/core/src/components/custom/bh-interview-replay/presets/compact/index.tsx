@@ -109,7 +109,7 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
   name: 'BhInterviewReplay.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhInterviewReplayProps>) => {
     const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const speakerColors = getSpeakerColors(tokens);
     const { transcript, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
 

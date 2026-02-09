@@ -60,7 +60,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
   name: 'BhComparisonView.Standard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhComparisonViewProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const rankColors = getRankColors(tokens);
     const decisionColors = getDecisionColors(tokens);
 
@@ -208,11 +208,11 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
         .join(' ');
     };
 
-    const glassStyle = engine === 'modern' && tokens.surface.useGlass && tokens.glass
+    const glassStyle = tokens.surface.useGlass && tokens.glass
       ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
       : {};
 
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' }), [tokens, engine]);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: tokens.surface.useGlass }), [tokens, engine]);
 
     const colWidth = candidates.length > 0 ? `${Math.floor(100 / (candidates.length + 1))}%` : '25%';
 
@@ -338,7 +338,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
 
                   return (
                     <Box key={candidate.id} style={{
-                      ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                      ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                       padding: tokens.spacing[3],
                       textAlign: 'center' as const,
                       position: 'relative' as const,
@@ -456,7 +456,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
               {/* Radar chart */}
               {showRadar && candidates.length > 0 && dimensions.length >= 3 && (
                 <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                   padding: tokens.spacing[4],
                   marginBottom: tokens.spacing[4],
                   display: 'flex',
@@ -612,7 +612,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
               {/* Comparison grid */}
               {dimensions.length > 0 && candidates.length > 0 && (
                 <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                   padding: 0,
                   marginBottom: tokens.spacing[4],
                   overflow: 'hidden',
@@ -793,7 +793,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
                     const candColor = getCandidateColor(idx, tokens);
                     return (
                       <Box key={candidate.id} style={{
-                        ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                        ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                         padding: tokens.spacing[3],
                         borderTop: `3px solid ${candColor.stroke}`,
                       }}>
@@ -887,7 +887,7 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
               {/* Decision actions */}
               {candidates.length > 0 && (
                 <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                   padding: 0,
                   overflow: 'hidden',
                 }}>

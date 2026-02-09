@@ -18,7 +18,7 @@ import {
 export const ScrollingPreset = createPreset<LogoCloudProps>((context) => {
   const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { logos, title, description, className, style } = props;
 
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);

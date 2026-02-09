@@ -1,0 +1,629 @@
+'use client'
+
+import React from 'react'
+import { createPreset, type PresetContext } from '../../../factory'
+import {
+  createSurfaceStyle,
+  createHoverStyle,
+  getHoverTransform,
+} from '../../../helpers'
+import type { EvFloorPlanEditorProps, FloorElement } from '../../core'
+
+const MOCK_PLAN = {
+  id: 'plan-001',
+  name: 'Main Event Floor',
+  width: 800,
+  height: 600,
+  gridSize: 40,
+  elements: [
+    {
+      id: 'elem-1',
+      type: 'round-table' as const,
+      x: 100,
+      y: 100,
+      width: 80,
+      height: 80,
+      label: 'Table 1',
+      capacity: 8,
+      zone: 'VIP',
+      rotation: 0,
+    },
+    {
+      id: 'elem-2',
+      type: 'round-table' as const,
+      x: 220,
+      y: 100,
+      width: 80,
+      height: 80,
+      label: 'Table 2',
+      capacity: 8,
+      zone: 'VIP',
+      rotation: 0,
+    },
+    {
+      id: 'elem-3',
+      type: 'rect-table' as const,
+      x: 100,
+      y: 220,
+      width: 120,
+      height: 60,
+      label: 'Table 3',
+      capacity: 6,
+      zone: 'General',
+      rotation: 0,
+    },
+    {
+      id: 'elem-4',
+      type: 'booth' as const,
+      x: 400,
+      y: 100,
+      width: 100,
+      height: 80,
+      label: 'Booth A',
+      capacity: 4,
+      zone: 'VIP',
+      rotation: 0,
+    },
+    {
+      id: 'elem-5',
+      type: 'booth' as const,
+      x: 540,
+      y: 100,
+      width: 100,
+      height: 80,
+      label: 'Booth B',
+      capacity: 4,
+      zone: 'VIP',
+      rotation: 0,
+    },
+    {
+      id: 'elem-6',
+      type: 'bar' as const,
+      x: 100,
+      y: 450,
+      width: 200,
+      height: 60,
+      label: 'Bar',
+      capacity: 12,
+      zone: 'Service',
+      rotation: 0,
+    },
+    {
+      id: 'elem-7',
+      type: 'stage' as const,
+      x: 500,
+      y: 400,
+      width: 180,
+      height: 120,
+      label: 'Main Stage',
+      capacity: 0,
+      zone: 'Performance',
+      rotation: 0,
+    },
+    {
+      id: 'elem-8',
+      type: 'entrance' as const,
+      x: 360,
+      y: 20,
+      width: 80,
+      height: 40,
+      label: 'Main Entrance',
+      capacity: 0,
+      zone: 'Entry',
+      rotation: 0,
+    },
+  ],
+}
+
+const ELEMENT_TYPES = [
+  { type: 'round-table', label: 'Round Table', icon: '⭕' },
+  { type: 'rect-table', label: 'Rect Table', icon: '▭' },
+  { type: 'booth', label: 'Booth', icon: '🪑' },
+  { type: 'bar', label: 'Bar', icon: '🍸' },
+  { type: 'stage', label: 'Stage', icon: '🎭' },
+  { type: 'entrance', label: 'Entrance', icon: '🚪' },
+  { type: 'restroom', label: 'Restroom', icon: '🚻' },
+  { type: 'wall', label: 'Wall', icon: '🧱' },
+]
+
+export const DesignerEvFloorPlanEditor = createPreset<EvFloorPlanEditorProps>({
+  name: 'EvFloorPlanEditor.Designer',
+  render: (ctx: PresetContext<EvFloorPlanEditorProps>) => {
+    const { primitives, props, tokens, engine } = ctx
+    const { Box, Text } = primitives
+
+    const plan = props.floorPlan || MOCK_PLAN
+    const selectedElement = props.selectedElementId
+      ? plan.elements.find((e: FloorElement) => e.id === props.selectedElementId)
+      : plan.elements[0]
+
+    const containerStyle = {
+      ...createSurfaceStyle(tokens),
+      display: 'flex' as const,
+      flexDirection: 'column' as const,
+      height: '100%',
+      backgroundColor: tokens.colors.neutral[50],
+    }
+
+    const headerStyle = {
+      ...createSurfaceStyle(tokens),
+      display: 'flex' as const,
+      alignItems: 'center' as const,
+      justifyContent: 'space-between' as const,
+      padding: tokens.spacing[4],
+      backgroundColor: tokens.colors.common.white,
+      borderBottomWidth: tokens.surface.borderWidth,
+      borderBottomStyle: tokens.surface.borderStyle as React.CSSProperties['borderBottomStyle'],
+      borderBottomColor: tokens.colors.neutral[200],
+    }
+
+    const toolbarStyle = {
+      ...createSurfaceStyle(tokens),
+      display: 'flex' as const,
+      alignItems: 'center' as const,
+      gap: tokens.spacing[2],
+      padding: tokens.spacing[3],
+      backgroundColor: tokens.colors.common.white,
+      borderBottomWidth: tokens.surface.borderWidth,
+      borderBottomStyle: tokens.surface.borderStyle as React.CSSProperties['borderBottomStyle'],
+      borderBottomColor: tokens.colors.neutral[200],
+    }
+
+    const hoverStyle = createHoverStyle(tokens)
+
+    const toolButtonBaseStyle = {
+      ...hoverStyle,
+      display: 'flex' as const,
+      flexDirection: 'column' as const,
+      alignItems: 'center' as const,
+      gap: tokens.spacing[1],
+      padding: `${tokens.spacing[2]} ${tokens.spacing[3]}`,
+      borderRadius: tokens.borderRadius.md,
+      backgroundColor: tokens.colors.neutral[50],
+      borderWidth: tokens.surface.borderWidth,
+      borderStyle: tokens.surface.borderStyle,
+      borderColor: tokens.colors.neutral[200],
+    }
+
+    const toolButtonHoverStyle = {
+      backgroundColor: tokens.colors.primaryScale[50],
+      borderColor: tokens.colors.primaryScale[300],
+      ...getHoverTransform(tokens),
+    }
+
+    const contentStyle = {
+      display: 'flex' as const,
+      flex: 1,
+      overflow: 'hidden' as const,
+    }
+
+    const canvasContainerStyle = {
+      flex: 1,
+      display: 'flex' as const,
+      flexDirection: 'column' as const,
+      padding: tokens.spacing[4],
+      overflow: 'auto' as const,
+    }
+
+    const canvasStyle = {
+      ...createSurfaceStyle(tokens),
+      position: 'relative' as const,
+      width: `${plan.width}px`,
+      height: `${plan.height}px`,
+      backgroundColor: tokens.colors.common.white,
+      borderWidth: tokens.surface.borderWidth,
+      borderStyle: tokens.surface.borderStyle,
+      borderColor: tokens.colors.neutral[200],
+      borderRadius: tokens.borderRadius.md,
+      backgroundImage: `
+        linear-gradient(${tokens.colors.neutral[100]} 1px, transparent 1px),
+        linear-gradient(90deg, ${tokens.colors.neutral[100]} 1px, transparent 1px)
+      `,
+      backgroundSize: '40px 40px',
+    }
+
+    const propertiesPanelStyle = {
+      ...createSurfaceStyle(tokens),
+      width: '280px',
+      padding: tokens.spacing[4],
+      backgroundColor: tokens.colors.common.white,
+      borderLeftWidth: tokens.surface.borderWidth,
+      borderLeftStyle: tokens.surface.borderStyle as React.CSSProperties['borderLeftStyle'],
+      borderLeftColor: tokens.colors.neutral[200],
+      overflowY: 'auto' as const,
+    }
+
+    const saveButtonBaseStyle = {
+      ...hoverStyle,
+      padding: `${tokens.spacing[2]} ${tokens.spacing[4]}`,
+      backgroundColor: tokens.colors.primaryScale[600],
+      color: tokens.colors.common.white,
+      borderRadius: tokens.borderRadius.md,
+      fontSize: tokens.typography.fontSize.sm,
+      fontWeight: tokens.typography.fontWeight.semibold,
+      cursor: 'pointer' as const,
+      borderWidth: '0',
+    }
+
+    const saveButtonHoverStyle = {
+      backgroundColor: tokens.colors.primaryScale[700],
+      ...getHoverTransform(tokens),
+    }
+
+    const getElementStyle = (element: FloorElement) => {
+      const isSelected = element.id === selectedElement?.id
+      const baseStyle = {
+        position: 'absolute' as const,
+        left: `${element.x}px`,
+        top: `${element.y}px`,
+        width: `${element.width}px`,
+        height: `${element.height}px`,
+        borderWidth: tokens.surface.borderWidth,
+        borderStyle: tokens.surface.borderStyle,
+        borderColor: isSelected
+          ? tokens.colors.primaryScale[600]
+          : tokens.colors.neutral[300],
+        borderRadius:
+          element.type === 'round-table'
+            ? tokens.borderRadius.full
+            : element.type === 'booth'
+              ? tokens.borderRadius.lg
+              : tokens.borderRadius.md,
+        backgroundColor:
+          element.type === 'stage'
+            ? tokens.colors.primaryScale[100]
+            : element.type === 'bar'
+              ? tokens.colors.warningScale[100]
+              : element.type === 'entrance'
+                ? tokens.colors.successScale[100]
+                : tokens.colors.neutral[100],
+        cursor: 'pointer' as const,
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        transition: 'all 0.2s',
+        transform: `rotate(${element.rotation}deg)`,
+        boxShadow: isSelected ? tokens.shadows.md : 'none',
+      }
+
+      return baseStyle
+    }
+
+    const elementLabelStyle = {
+      fontSize: tokens.typography.fontSize.xs,
+      fontWeight: tokens.typography.fontWeight.medium,
+      color: tokens.colors.neutral[700],
+      textAlign: 'center' as const,
+      pointerEvents: 'none' as const,
+    }
+
+    const propertySectionStyle = {
+      marginBottom: tokens.spacing[4],
+    }
+
+    const propertyLabelStyle = {
+      fontSize: tokens.typography.fontSize.xs,
+      fontWeight: tokens.typography.fontWeight.semibold,
+      color: tokens.colors.neutral[600],
+      marginBottom: tokens.spacing[2],
+      textTransform: 'uppercase' as const,
+    }
+
+    const propertyValueStyle = {
+      ...createSurfaceStyle(tokens),
+      padding: tokens.spacing[2],
+      backgroundColor: tokens.colors.neutral[50],
+      borderRadius: tokens.borderRadius.sm,
+      fontSize: tokens.typography.fontSize.sm,
+      color: tokens.colors.neutral[800],
+    }
+
+    const inputStyle = {
+      ...createSurfaceStyle(tokens),
+      width: '100%',
+      padding: tokens.spacing[2],
+      borderWidth: tokens.surface.borderWidth,
+      borderStyle: tokens.surface.borderStyle,
+      borderColor: tokens.colors.neutral[300],
+      borderRadius: tokens.borderRadius.md,
+      fontSize: tokens.typography.fontSize.sm,
+      color: tokens.colors.neutral[800],
+      backgroundColor: tokens.colors.common.white,
+    }
+
+    return (
+      <Box style={containerStyle}>
+        <div style={headerStyle}>
+          <Box>
+            <Text
+              style={{
+                fontSize: tokens.typography.fontSize.lg,
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.neutral[900],
+              }}
+            >
+              {plan.name}
+            </Text>
+            <Text
+              style={{
+                fontSize: tokens.typography.fontSize.sm,
+                color: tokens.colors.neutral[600],
+                marginTop: tokens.spacing[1],
+              }}
+            >
+              {plan.width} x {plan.height} px
+            </Text>
+          </Box>
+          <button
+            style={saveButtonBaseStyle}
+            onClick={() => props.onSave?.(plan as any)}
+            onMouseEnter={(e: React.MouseEvent<HTMLElement>) =>
+              Object.assign(e.currentTarget.style, saveButtonHoverStyle)
+            }
+            onMouseLeave={(e: React.MouseEvent<HTMLElement>) =>
+              Object.assign(e.currentTarget.style, saveButtonBaseStyle)
+            }
+          >
+            Save Layout
+          </button>
+        </div>
+
+        <div style={toolbarStyle}>
+          <Text
+            style={{
+              fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.semibold,
+              color: tokens.colors.neutral[700],
+              marginRight: tokens.spacing[2],
+            }}
+          >
+            Add Element:
+          </Text>
+          {ELEMENT_TYPES.map((elementType) => (
+            <button
+              key={elementType.type}
+              style={toolButtonBaseStyle}
+              onClick={() =>
+                props.onElementAdd?.({
+                  id: `new-${Date.now()}`,
+                  type: elementType.type as FloorElement['type'],
+                  x: 0,
+                  y: 0,
+                  width: 80,
+                  height: 80,
+                  rotation: 0,
+                  label: elementType.label,
+                })
+              }
+              onMouseEnter={(e: React.MouseEvent<HTMLElement>) =>
+                Object.assign(e.currentTarget.style, toolButtonHoverStyle)
+              }
+              onMouseLeave={(e: React.MouseEvent<HTMLElement>) =>
+                Object.assign(e.currentTarget.style, toolButtonBaseStyle)
+              }
+            >
+              <Text style={{ fontSize: tokens.typography.fontSize.xl }}>
+                {elementType.icon}
+              </Text>
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize.xs,
+                  color: tokens.colors.neutral[700],
+                }}
+              >
+                {elementType.label}
+              </Text>
+            </button>
+          ))}
+        </div>
+
+        <Box style={contentStyle}>
+          <Box style={canvasContainerStyle}>
+            <Box style={canvasStyle}>
+              {plan.elements.map((element: FloorElement) => (
+                <div
+                  key={element.id}
+                  style={getElementStyle(element)}
+                  onClick={() => props.onElementSelect?.(element.id)}
+                  title={`${element.label} - Capacity: ${element.capacity}`}
+                >
+                  <Text style={elementLabelStyle}>{element.label}</Text>
+                </div>
+              ))}
+            </Box>
+          </Box>
+
+          <div style={propertiesPanelStyle}>
+            <Text
+              style={{
+                fontSize: tokens.typography.fontSize.md,
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.neutral[900],
+                marginBottom: tokens.spacing[4],
+              }}
+            >
+              Properties
+            </Text>
+
+            {selectedElement ? (
+              <>
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Type</Text>
+                  <Text style={propertyValueStyle}>
+                    {selectedElement.type.replace('-', ' ')}
+                  </Text>
+                </Box>
+
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Label</Text>
+                  <input
+                    type="text"
+                    value={selectedElement.label}
+                    style={inputStyle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      props.onElementSelect?.(selectedElement.id)
+                    }
+                  />
+                </Box>
+
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Capacity</Text>
+                  <input
+                    type="number"
+                    value={selectedElement.capacity}
+                    style={inputStyle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      props.onElementSelect?.(selectedElement.id)
+                    }
+                  />
+                </Box>
+
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Zone</Text>
+                  <input
+                    type="text"
+                    value={selectedElement.zone}
+                    style={inputStyle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      props.onElementSelect?.(selectedElement.id)
+                    }
+                  />
+                </Box>
+
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Rotation (deg)</Text>
+                  <input
+                    type="number"
+                    value={selectedElement.rotation}
+                    style={inputStyle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      props.onElementSelect?.(selectedElement.id)
+                    }
+                  />
+                </Box>
+
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Position</Text>
+                  <Box
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: tokens.spacing[2],
+                    }}
+                  >
+                    <Box>
+                      <Text
+                        style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[600],
+                          marginBottom: tokens.spacing[1],
+                        }}
+                      >
+                        X
+                      </Text>
+                      <input
+                        type="number"
+                        value={selectedElement.x}
+                        style={inputStyle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          props.onElementMove?.(
+                            selectedElement.id,
+                            parseInt(e.target.value),
+                            selectedElement.y
+                          )
+                        }
+                      />
+                    </Box>
+                    <Box>
+                      <Text
+                        style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[600],
+                          marginBottom: tokens.spacing[1],
+                        }}
+                      >
+                        Y
+                      </Text>
+                      <input
+                        type="number"
+                        value={selectedElement.y}
+                        style={inputStyle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          props.onElementMove?.(
+                            selectedElement.id,
+                            selectedElement.x,
+                            parseInt(e.target.value)
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box style={propertySectionStyle}>
+                  <Text style={propertyLabelStyle}>Size</Text>
+                  <Box
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: tokens.spacing[2],
+                    }}
+                  >
+                    <Box>
+                      <Text
+                        style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[600],
+                          marginBottom: tokens.spacing[1],
+                        }}
+                      >
+                        W
+                      </Text>
+                      <input
+                        type="number"
+                        value={selectedElement.width}
+                        style={inputStyle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          props.onElementSelect?.(selectedElement.id)
+                        }
+                      />
+                    </Box>
+                    <Box>
+                      <Text
+                        style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[600],
+                          marginBottom: tokens.spacing[1],
+                        }}
+                      >
+                        H
+                      </Text>
+                      <input
+                        type="number"
+                        value={selectedElement.height}
+                        style={inputStyle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          props.onElementSelect?.(selectedElement.id)
+                        }
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+              </>
+            ) : (
+              <Text
+                style={{
+                  fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[500],
+                  fontStyle: 'italic',
+                }}
+              >
+                Select an element to edit properties
+              </Text>
+            )}
+          </div>
+        </Box>
+      </Box>
+    )
+  },
+})

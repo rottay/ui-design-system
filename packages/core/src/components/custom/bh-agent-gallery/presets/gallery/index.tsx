@@ -204,7 +204,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       if (controlledViewMode === undefined) setLocalViewMode(mode);
     };
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);

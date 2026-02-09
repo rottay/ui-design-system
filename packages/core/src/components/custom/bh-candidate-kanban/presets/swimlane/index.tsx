@@ -146,7 +146,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
   name: 'BhCandidateKanban.Swimlane',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateKanbanProps>) => {
     const { Box, Stack } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       jobName,

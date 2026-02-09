@@ -125,7 +125,7 @@ const MilestoneMarker = ({ stage, index, tokens, engine, primitives }: {
 export const Milestone = createPreset<ProgressTrackerProps>((context: PresetContext<ProgressTrackerProps>) => {
   const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const { stages, title, className, style } = props;
 

@@ -12,7 +12,7 @@ export const Numbered = createPreset<LeaderboardProps>((context: PresetContext<L
   const { primitives, props, tokens, engine } = context;
   const { Box, Text, Flex } = primitives;
   const { entries, title, maxEntries = 10, valueLabel, unit, className, style } = props;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const containerStyle = useMemo(() => ({

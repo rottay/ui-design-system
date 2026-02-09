@@ -80,7 +80,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const [localShowComparison, setLocalShowComparison] = useState(showComparison);
     const [localSignatureStatus] = useState(signatureStatus);
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     /* ── Styles ──────────────────────────────────────────────── */
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

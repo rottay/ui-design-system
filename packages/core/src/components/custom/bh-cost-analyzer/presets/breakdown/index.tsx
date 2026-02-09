@@ -105,7 +105,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
   name: 'BhCostAnalyzer.Breakdown',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCostAnalyzerProps>) => {
     const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { providers, models = [], loading, className, style } = props;
 
     const { maxCost, totalCost, providerColorMap } = useMemo(() => {

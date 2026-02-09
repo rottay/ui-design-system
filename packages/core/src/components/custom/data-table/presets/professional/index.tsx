@@ -243,7 +243,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
     // Size-based styling
     const cellPadding = size === 'small' ? '8px 12px' : size === 'large' ? '16px 20px' : '12px 16px';
     const fontSize = size === 'small' ? 12 : size === 'large' ? 14 : 13;
-    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens, engine]);
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: tokens.surface.useGlass }), [tokens, engine]);
 
     // ========================================================================
     // Handlers

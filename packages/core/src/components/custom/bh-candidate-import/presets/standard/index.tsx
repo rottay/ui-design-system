@@ -122,8 +122,8 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
   name: 'BhCandidateImport.Standard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateImportProps>) => {
     const { Box, Text } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
-    const isModern = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const isModern = tokens.surface.useGlass;
 
     const {
       steps: stepsProp,

@@ -155,7 +155,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
       onAutoRefreshToggle?.(next);
     }, [autoRefresh, onAutoRefreshToggle]);
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, {

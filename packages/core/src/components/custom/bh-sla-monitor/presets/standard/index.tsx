@@ -123,7 +123,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
       [onBreachFilterChange]
     );
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const slaColors = getSlaStatusColors(tokens);
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, {

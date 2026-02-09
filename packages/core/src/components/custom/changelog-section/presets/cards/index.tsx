@@ -9,7 +9,7 @@ import type { ChangelogSectionProps, ChangelogType } from '../../core';
 
 export const CardsPreset = createPreset<ChangelogSectionProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const { entries, title, className, style } = props;
 

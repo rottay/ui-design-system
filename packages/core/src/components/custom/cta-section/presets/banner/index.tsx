@@ -18,7 +18,7 @@ export const BannerCtaSection = createPreset<CtaSectionProps>({
   name: 'CtaSection.Banner',
   render: ({ primitives, props, tokens, engine }: PresetContext<CtaSectionProps>) => {
     const { Box, Button, Text, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { title, description, actions, className, style } = props;
 
     const [hoveredAction, setHoveredAction] = useState<string | null>(null);

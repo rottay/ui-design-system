@@ -182,7 +182,7 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
       [onReject, rejectReason]
     );
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const urgencyColors = getUrgencyColors(tokens);
     const categoryColors = getCategoryColors(tokens);
     const outcomeColors = getOutcomeColors(tokens);

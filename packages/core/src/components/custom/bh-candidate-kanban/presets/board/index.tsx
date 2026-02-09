@@ -159,7 +159,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
   name: 'BhCandidateKanban.Board',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateKanbanProps>) => {
     const { Box, Stack } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       jobName,

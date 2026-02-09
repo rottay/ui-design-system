@@ -21,7 +21,7 @@ export const CompactDashboardCard = createPreset<DashboardCardProps>({
   name: 'DashboardCard.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<DashboardCardProps>) => {
     const { Box, Spinner } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       title,
       value,

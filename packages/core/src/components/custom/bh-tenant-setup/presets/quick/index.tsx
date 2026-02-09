@@ -59,7 +59,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
     const [showComplete, setShowComplete] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const surfaceMd = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
     const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);

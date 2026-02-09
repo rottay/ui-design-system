@@ -114,7 +114,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
   'BhJobDetail.Compact',
   ({ primitives, props, tokens, engine }: PresetContext<BhJobDetailProps>) => {
     const { Box } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       jobInfo,

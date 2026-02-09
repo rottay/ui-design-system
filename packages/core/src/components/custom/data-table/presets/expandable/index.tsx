@@ -254,7 +254,7 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
       [data, selectedKeys, getRowKey]
     );
 
-    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens, engine]);
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: tokens.surface.useGlass }), [tokens, engine]);
 
     // Styling
     const cellPadding = dense

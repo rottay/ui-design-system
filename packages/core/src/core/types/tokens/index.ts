@@ -2,6 +2,9 @@
  * Design token types
  */
 
+export type { PersonalityTokens, AnimationPersonalityTokens, ChartPersonalityTokens, TypographyPersonalityTokens, AccentPersonalityTokens, CardPersonalityTokens } from './personality';
+import type { PersonalityTokens } from './personality';
+
 /**
  * Color scale with 10 levels (50-900)
  * Used for semantic color categories that need background, text, and border variants
@@ -176,4 +179,6 @@ export interface DesignTokens {
   motion: MotionTokens;
   /** Overlay tokens for backdrops, modals, and translucent surfaces */
   overlay?: OverlayTokens;
+  /** Personality tokens (always present, merged with defaults) */
+  personality: PersonalityTokens;
 }

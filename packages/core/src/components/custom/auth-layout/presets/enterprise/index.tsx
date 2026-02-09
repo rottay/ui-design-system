@@ -33,7 +33,7 @@ export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
 
     const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'lg',
-      glass: engine === 'modern',
+      glass: tokens.surface.useGlass,
     }), [tokens, engine]);
 
     return (

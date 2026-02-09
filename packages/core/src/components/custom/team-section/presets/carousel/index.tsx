@@ -7,7 +7,7 @@ import type { TeamSectionProps } from '../../core';
 
 export const CarouselPreset = createPreset<TeamSectionProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text, Button } = primitives;
   const { members, title, description, className, style } = props;
 

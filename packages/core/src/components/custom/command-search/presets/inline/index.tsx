@@ -152,7 +152,7 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
             boxShadow: tokens.shadows.lg,
             zIndex: 50,
             overflow: 'hidden',
-            ...(engine === 'modern' && tokens.surface.useGlass && tokens.glass ? {
+            ...(tokens.surface.useGlass && tokens.glass ? {
               backdropFilter: tokens.glass.blur,
               WebkitBackdropFilter: tokens.glass.blur,
               backgroundColor: tokens.glass.bg,

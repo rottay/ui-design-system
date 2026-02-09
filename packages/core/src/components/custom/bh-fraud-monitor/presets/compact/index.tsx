@@ -23,7 +23,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
   name: 'BhFraudMonitor.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhFraudMonitorProps>) => {
     const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const sevColors = getSeverityColors(tokens);
     const { events, stats, selectedEventId, onEventSelect, loading, className, style } = props;
     const [hoveredId, setHoveredId] = useState<string | null>(null);

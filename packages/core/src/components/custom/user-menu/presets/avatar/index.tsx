@@ -56,7 +56,7 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
 
     const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'lg',
-      glass: engine === 'modern',
+      glass: tokens.surface.useGlass,
     }), [tokens, engine]);
 
     return (

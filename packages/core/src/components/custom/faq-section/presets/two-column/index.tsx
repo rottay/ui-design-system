@@ -17,7 +17,7 @@ export const TwoColumnFaqSection = createPreset<FaqSectionProps>({
   name: 'FaqSection.TwoColumn',
   render: ({ primitives, props, tokens, engine }: PresetContext<FaqSectionProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { items, categories, title, description, className, style } = props;
     const [selectedKey, setSelectedKey] = useState<string>(items[0]?.key || '');
     const [activeCategory, setActiveCategory] = useState<string | null>(null);

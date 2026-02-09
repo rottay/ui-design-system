@@ -23,7 +23,7 @@ export const Area = createPreset<SparklineWidgetProps>((context: PresetContext<S
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const uniqueId = useId();
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const scaleMap: Record<string, any> = {
     primary: tokens.colors.primaryScale,

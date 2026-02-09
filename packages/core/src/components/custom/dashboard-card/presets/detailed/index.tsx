@@ -44,7 +44,7 @@ export const DetailedDashboardCard = createPreset<DashboardCardProps>({
       elevation: isHovered && onClick ? 'md' : 'sm',
       padding: tokens.spacing[5],
       interactive: !!onClick,
-      glass: engine === 'modern',
+      glass: tokens.surface.useGlass,
     }), [tokens, engine, onClick]);
 
     return (

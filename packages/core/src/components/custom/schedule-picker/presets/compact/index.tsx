@@ -19,7 +19,7 @@ export const CompactSchedulePicker = createPreset<SchedulePickerProps>({
   name: 'SchedulePicker.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<SchedulePickerProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const slotColors = getSlotColors(tokens);
 
     const now = new Date();

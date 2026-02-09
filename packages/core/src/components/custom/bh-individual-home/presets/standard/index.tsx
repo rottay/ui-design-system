@@ -76,7 +76,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
     );
     const [timeRange, setTimeRange] = useState<'today' | 'week' | 'month'>('today');
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens]);

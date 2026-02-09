@@ -24,7 +24,7 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
   name: 'BhInterviewReplay.Full',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhInterviewReplayProps>) => {
     const { Box, Flex, Stack, Text } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const speakerColors = getSpeakerColors(tokens);
     const impactClrs = getImpactColors(tokens);
 

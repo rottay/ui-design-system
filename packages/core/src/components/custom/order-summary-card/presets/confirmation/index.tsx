@@ -9,7 +9,7 @@ import {
 
 export default createPreset<OrderSummaryCardProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const { orderId, items, total, shippingAddress, estimatedDelivery, className, style } = props;
 

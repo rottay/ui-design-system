@@ -129,7 +129,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
       onRubricToggle?.(next);
     }, [showFullRubric, onRubricToggle]);
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);

@@ -27,7 +27,7 @@ const KpiCardItem = ({ item, tokens, engine, primitives }: {
   const { Box, Text } = primitives;
   const [isHovered, setIsHovered] = useState(false);
   const ringId = useId();
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const colorKey = item.color || 'primary';
   const scaleMap: Record<string, any> = {

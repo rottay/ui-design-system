@@ -74,7 +74,7 @@ export const FullDataTable = createPreset<DataTableProps & Record<string, unknow
 
     const cellPadding = compact ? tokens.spacing[2] : tokens.spacing[3];
     const allSelected = data.length > 0 && selectedKeys.length === data.length;
-    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens]);
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: tokens.surface.useGlass }), [tokens]);
 
     return (
       <Card variant="outlined" padding="none" className={className} style={style}>

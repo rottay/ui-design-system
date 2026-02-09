@@ -6,7 +6,7 @@ import { TEAM_SECTION_DEFAULTS } from '../../core';
 
 export const GridPreset = createPreset<TeamSectionProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const { members, title, description, columns = TEAM_SECTION_DEFAULTS.columns, className, style } = props;
 

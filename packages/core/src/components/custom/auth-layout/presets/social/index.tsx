@@ -28,7 +28,7 @@ export const SocialAuthLayout = createPreset<AuthLayoutProps>({
 
     const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'md',
-      glass: engine === 'modern',
+      glass: tokens.surface.useGlass,
     }), [tokens, engine]);
 
     return (

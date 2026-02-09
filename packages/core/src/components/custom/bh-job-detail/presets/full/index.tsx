@@ -133,7 +133,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
   'BhJobDetail.Full',
   ({ primitives, props, tokens, engine }: PresetContext<BhJobDetailProps>) => {
     const { Box } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       jobInfo,

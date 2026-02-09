@@ -225,7 +225,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       return new Set(codes).size === codes.length;
     }, [localDimensions]);
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const statusColors = useMemo(() => getRubricStatusColors(tokens), [tokens]);
     const scorableColors = useMemo(() => getScorableTypeColors(tokens), [tokens]);

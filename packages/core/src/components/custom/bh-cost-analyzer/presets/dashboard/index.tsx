@@ -24,7 +24,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
   name: 'BhCostAnalyzer.Dashboard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCostAnalyzerProps>) => {
     const { Box, Flex, Stack, Text, Grid } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const alertColors = getAlertSeverityColors(tokens);
     const trendColors = getTrendColors(tokens);
 

@@ -72,7 +72,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
   name: 'BhCandidateOutreach.Composer',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateOutreachProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const channelColors = getChannelColors(tokens);
     const metricColors = getMetricColors(tokens);
 
@@ -204,11 +204,11 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
     const channels: OutreachChannel[] = ['email', 'sms', 'whatsapp', 'linkedin'];
     const commonVariables = ['name', 'job_title', 'company', 'first_name', 'role'];
 
-    const glassStyle = engine === 'modern' && tokens.surface.useGlass && tokens.glass
+    const glassStyle = tokens.surface.useGlass && tokens.glass
       ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
       : {};
 
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' }), [tokens, engine]);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: tokens.surface.useGlass }), [tokens, engine]);
 
     return (
       <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, ...surfaceStyle, ...style }}>
@@ -1413,7 +1413,7 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
             zIndex: 1000,
           }}>
             <Box style={{
-              ...createCardStyle(tokens, { elevation: 'xl', glass: engine === 'modern' }),
+              ...createCardStyle(tokens, { elevation: 'xl', glass: tokens.surface.useGlass }),
               padding: tokens.spacing[6],
               maxWidth: 420,
               width: '100%',

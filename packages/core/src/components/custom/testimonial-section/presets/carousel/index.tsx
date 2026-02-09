@@ -14,7 +14,7 @@ export const CarouselTestimonialSection = createPreset<TestimonialSectionProps>(
   name: 'TestimonialSection.Carousel',
   render: ({ primitives, props, tokens, engine }: PresetContext<TestimonialSectionProps>) => {
     const { Box, Stack, Button } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { testimonials, title, description, className, style } = props;
     const [currentIndex, setCurrentIndex] = useState(0);
 

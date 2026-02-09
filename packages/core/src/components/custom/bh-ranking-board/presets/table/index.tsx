@@ -144,7 +144,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>(
   'BhRankingBoard.Table',
   ({ primitives, props, tokens, engine }: PresetContext<BhRankingBoardProps>) => {
     const { Box } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       jobName,

@@ -142,7 +142,7 @@ const StatusDotItem = ({ badge, tokens, engine, primitives }: {
 export const DotsPreset = createPreset<StatusBadgeGroupProps>((context: PresetContext<StatusBadgeGroupProps>) => {
   const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const { badges, title, lastUpdated, className, style } = props;
 

@@ -13,7 +13,7 @@ export const CompactActivityFeed = createPreset<ActivityFeedProps>({
   name: 'ActivityFeed.Compact',
   render: ({ primitives, props, tokens, engine }: PresetContext<ActivityFeedProps>) => {
     const { Box } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       events,
       title = ACTIVITY_FEED_DEFAULTS.title,

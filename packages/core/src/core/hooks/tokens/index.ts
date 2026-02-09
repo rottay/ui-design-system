@@ -22,13 +22,16 @@
  * @package @rottay/design-system
  */
 
+import { useMemo } from 'react';
 import { useTenant } from '../tenant';
 import { useEngineContext } from '../../providers/engine';
 import { getEngineTokens } from './engine-tokens';
-import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens } from '../../types';
+import { DEFAULT_PERSONALITY } from './personality-defaults';
+import type { DesignTokens, ColorScale, GlassTokens, GradientTokens, TransitionTokens, OverlayTokens, PersonalityTokens } from '../../types';
 
 export { getEngineTokens, ENGINE_TOKENS } from './engine-tokens';
 export type { EngineTokenOverrides } from './engine-tokens';
+export { DEFAULT_PERSONALITY } from './personality-defaults';
 
 /**
  * Creates a CSS variable-based color scale for a semantic color category.
@@ -130,70 +133,100 @@ const OVERLAY_TOKENS: OverlayTokens = {
 export function useTokens(): DesignTokens {
   const { config } = useTenant();
   const { engine } = useEngineContext();
-  const engineOverrides = getEngineTokens(engine);
 
-  const tokens: DesignTokens = {
-    colors: {
-      // Single values (backwards compatible, from tenant branding)
-      primary: config.branding.primaryColor || 'var(--color-primary-500)',
-      secondary: config.branding.accentColor || 'var(--color-secondary-500)',
-      success: 'var(--color-success-500)',
-      warning: 'var(--color-warning-500)',
-      error: 'var(--color-error-500)',
-      info: 'var(--color-info-500)',
+  return useMemo(() => {
+    // 1. Engine base tokens
+    const engineOverrides = getEngineTokens(engine);
 
-      // Full color scales (CSS custom properties for white-labeling)
-      primaryScale: PRIMARY_SCALE,
-      secondaryScale: SECONDARY_SCALE,
-      neutral: NEUTRAL_SCALE,
-      successScale: SUCCESS_SCALE,
-      warningScale: WARNING_SCALE,
-      errorScale: ERROR_SCALE,
-      infoScale: INFO_SCALE,
+    // 2. Tenant token overrides on top of engine
+    const to = config.tokenOverrides;
+    const borderRadius = to?.borderRadius
+      ? { ...engineOverrides.borderRadius, ...to.borderRadius }
+      : engineOverrides.borderRadius;
+    const shadows = to?.shadows
+      ? { ...engineOverrides.shadows, ...to.shadows }
+      : engineOverrides.shadows;
+    const surface = to?.surface
+      ? { ...engineOverrides.surface, ...to.surface }
+      : engineOverrides.surface;
+    const motion = to?.motion
+      ? { ...engineOverrides.motion, ...to.motion }
+      : engineOverrides.motion;
+    const densityScale = to?.densityScale ?? engineOverrides.densityScale;
 
-      // Common colors
-      common: {
-        white: 'var(--color-white)',
-        black: 'var(--color-black)',
-      },
-    },
-    spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
-      v => Math.round(v * engineOverrides.densityScale)
-    ),
-    typography: {
-      fontSize: {
-        xs: '0.75rem',
-        sm: '0.875rem',
-        md: '1rem',
-        lg: '1.125rem',
-        xl: '1.25rem',
-        '2xl': '1.5rem',
-        '3xl': '1.875rem',
-        '4xl': '2.25rem',
-      },
-      fontWeight: {
-        normal: 400,
-        medium: 500,
-        semibold: 600,
-        bold: 700,
-      },
-      lineHeight: {
-        tight: 1.25,
-        normal: 1.5,
-        relaxed: 1.75,
-      },
-    },
-    // Engine-differentiated tokens
-    borderRadius: engineOverrides.borderRadius,
-    shadows: engineOverrides.shadows,
-    surface: engineOverrides.surface,
-    motion: engineOverrides.motion,
-    // Static tokens
-    glass: GLASS_TOKENS,
-    gradients: GRADIENT_TOKENS,
-    transitions: TRANSITION_TOKENS,
-    overlay: OVERLAY_TOKENS,
-  };
+    // 3. Personality: defaults + tenant overrides (deep merge)
+    const p = config.personality;
+    const personality: PersonalityTokens = {
+      animation: { ...DEFAULT_PERSONALITY.animation, ...p?.animation },
+      chart: { ...DEFAULT_PERSONALITY.chart, ...p?.chart },
+      typography: { ...DEFAULT_PERSONALITY.typography, ...p?.typography },
+      accent: { ...DEFAULT_PERSONALITY.accent, ...p?.accent },
+      card: { ...DEFAULT_PERSONALITY.card, ...p?.card },
+    };
 
-  return tokens;
+    return {
+      colors: {
+        // Single values (backwards compatible, from tenant branding)
+        primary: config.branding.primaryColor || 'var(--color-primary-500)',
+        secondary: config.branding.accentColor || 'var(--color-secondary-500)',
+        success: 'var(--color-success-500)',
+        warning: 'var(--color-warning-500)',
+        error: 'var(--color-error-500)',
+        info: 'var(--color-info-500)',
+
+        // Full color scales (CSS custom properties for white-labeling)
+        primaryScale: PRIMARY_SCALE,
+        secondaryScale: SECONDARY_SCALE,
+        neutral: NEUTRAL_SCALE,
+        successScale: SUCCESS_SCALE,
+        warningScale: WARNING_SCALE,
+        errorScale: ERROR_SCALE,
+        infoScale: INFO_SCALE,
+
+        // Common colors
+        common: {
+          white: 'var(--color-white)',
+          black: 'var(--color-black)',
+        },
+      },
+      spacing: [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96].map(
+        v => Math.round(v * densityScale)
+      ),
+      typography: {
+        fontSize: {
+          xs: '0.75rem',
+          sm: '0.875rem',
+          md: '1rem',
+          lg: '1.125rem',
+          xl: '1.25rem',
+          '2xl': '1.5rem',
+          '3xl': '1.875rem',
+          '4xl': '2.25rem',
+        },
+        fontWeight: {
+          normal: 400,
+          medium: 500,
+          semibold: 600,
+          bold: 700,
+        },
+        lineHeight: {
+          tight: 1.25,
+          normal: 1.5,
+          relaxed: 1.75,
+        },
+      },
+      // Engine-differentiated tokens (with tenant overrides)
+      borderRadius,
+      shadows,
+      surface,
+      motion,
+      // Static tokens
+      glass: GLASS_TOKENS,
+      gradients: GRADIENT_TOKENS,
+      transitions: TRANSITION_TOKENS,
+      overlay: OVERLAY_TOKENS,
+      // Personality tokens
+      personality,
+    };
+  }, [engine, config.slug, config.tokenOverrides, config.personality, config.branding.primaryColor, config.branding.accentColor]);
 }

@@ -12,7 +12,7 @@ import {
 
 export default createPreset<ProfileCardProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const { name, role, company, avatar, bio, stats, actions, online, className, style } = props;
 

@@ -87,7 +87,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
       style,
     } = props;
 
-    const isGlass = engine === 'modern' && tokens.surface.useGlass && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const [dateRange, setDateRange] = useState<DateRangeValue>('30d');
     const [costView, setCostView] = useState<'breakdown' | 'trend' | 'forecast'>('breakdown');

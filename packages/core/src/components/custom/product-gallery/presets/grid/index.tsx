@@ -19,7 +19,7 @@ import {
 export default createPreset<ProductGalleryProps>((context) => {
   const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { images, onImageClick, className, style } = props;
 
   const [selectedIndex, setSelectedIndex] = useState(0);

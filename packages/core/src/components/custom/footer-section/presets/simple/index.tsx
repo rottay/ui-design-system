@@ -20,7 +20,7 @@ export const SimpleFooterSection = createPreset<FooterSectionProps>({
   name: 'FooterSection.Simple',
   render: ({ primitives, props, tokens, engine }: PresetContext<FooterSectionProps>) => {
     const { Box, Text, Stack, Divider } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       columns = [],
       social = [],

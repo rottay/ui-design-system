@@ -104,7 +104,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
     const activeSelectedTeam = controlledSelectedTeam !== undefined ? controlledSelectedTeam : internalSelectedTeam;
     const activeTargetPeriod = controlledTargetPeriod !== undefined ? controlledTargetPeriod : internalTargetPeriod;
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);

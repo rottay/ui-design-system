@@ -131,7 +131,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
     const activeCostView = controlledCostView !== undefined ? controlledCostView : internalCostView;
     const activeDragState = controlledDragState !== undefined ? controlledDragState : internalDragState;
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);

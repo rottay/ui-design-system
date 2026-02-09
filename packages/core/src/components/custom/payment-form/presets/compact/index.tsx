@@ -12,7 +12,7 @@ export const CompactPreset = createPreset<PaymentFormProps>((context: PresetCont
   const { primitives, props, tokens, engine } = context;
   const { Box, Text, Input, Flex, Spinner } = primitives;
   const { onSubmit, onChange, brands = ['visa', 'mastercard', 'amex'], className, style } = props;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const [formData, setFormData] = useState<PaymentData>({ cardNumber: '', expiry: '', cvc: '', name: '' });
   const [processing, setProcessing] = useState(false);

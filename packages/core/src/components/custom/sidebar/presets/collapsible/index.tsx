@@ -214,7 +214,7 @@ export const CollapsibleSidebar = createPreset<SidebarProps>({
           display: 'flex',
           flexDirection: 'column',
           transition: `width 300ms ${tokens.motion.spring}`,
-          boxShadow: engine === 'modern' ? tokens.shadows.sm : 'none',
+          boxShadow: tokens.surface.useGlass ? tokens.shadows.sm : 'none',
           ...style,
         }}
       >

@@ -147,7 +147,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>(
   'BhPositionDetail.Standard',
   ({ primitives, props, tokens, engine }: PresetContext<BhPositionDetailProps>) => {
     const { Box } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       positionInfo,

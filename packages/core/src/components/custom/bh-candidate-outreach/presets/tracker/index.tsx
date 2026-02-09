@@ -99,11 +99,11 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
     const replyRate = Math.round((campaignMetrics.replied / totalSent) * 100);
     const bounceRate = Math.round((campaignMetrics.bounced / totalSent) * 100);
 
-    const glassStyle = engine === 'modern' && tokens.surface.useGlass && tokens.glass
+    const glassStyle = tokens.surface.useGlass && tokens.glass
       ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
       : {};
 
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: engine === 'modern' }), [tokens, engine]);
+    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: tokens.surface.useGlass }), [tokens, engine]);
 
     const channels: OutreachChannel[] = ['email', 'sms', 'whatsapp', 'linkedin'];
 
@@ -200,7 +200,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
                   const scale = (tokens.colors as any)[scaleKey];
                   return (
                     <Box key={card.key} style={{
-                      ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                      ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                       padding: tokens.spacing[3],
                     }}>
                       <Box style={{
@@ -319,7 +319,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
               {timelineView === 'funnel' ? (
                 /* Funnel chart SVG */
                 <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                   padding: tokens.spacing[4],
                   marginBottom: tokens.spacing[4],
                   display: 'flex',
@@ -426,7 +426,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
               ) : (
                 /* List view of recipients with status */
                 <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                   padding: 0,
                   marginBottom: tokens.spacing[4],
                   overflow: 'hidden',
@@ -665,7 +665,7 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
 
                       return (
                         <Box key={variant.id} style={{
-                          ...createCardStyle(tokens, { elevation: 'sm', glass: engine === 'modern' }),
+                          ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
                           padding: tokens.spacing[3],
                           border: isWinner && variant.metrics ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[400]}` : undefined,
                         }}>

@@ -24,7 +24,7 @@ export const CompactPreset = createPreset<AlertRuleBuilderProps>((context: Prese
   const { Box, Text, Switch, Button, Spinner } = primitives;
   const { rules, onDelete, onToggle, className, style } = props;
 
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const [hoveredRuleId, setHoveredRuleId] = useState<string | null>(null);
   const [isLoading] = useState(false);
 

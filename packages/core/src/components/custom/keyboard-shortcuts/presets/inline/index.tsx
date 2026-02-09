@@ -23,7 +23,7 @@ export const InlinePreset = createPreset<KeyboardShortcutsProps>((context) => {
   const { categories, className, style } = props;
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [filter, setFilter] = useState('');
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const containerStyle = useMemo(() => ({
     ...createCardStyle(tokens, {

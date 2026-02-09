@@ -40,7 +40,7 @@ export const Inline = createPreset<DataSummaryBarProps>((context: PresetContext<
   const { Box, Text, Spinner } = primitives;
   const { metrics, className, style } = props;
 
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isLoading] = useState(false);
 

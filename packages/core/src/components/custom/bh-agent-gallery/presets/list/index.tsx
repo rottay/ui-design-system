@@ -183,7 +183,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
     const handlePreviewToggle = (show: boolean) => { onPreviewToggle?.(show); if (controlledShowPreview === undefined) setLocalShowPreview(show); };
     const handleViewModeChange = (mode: AgentViewMode) => { onViewModeChange?.(mode); if (controlledViewMode === undefined) setLocalViewMode(mode); };
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 

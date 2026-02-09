@@ -66,7 +66,7 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
     }, {} as Record<string, typeof suggestions>);
 
     // Glass effect styles for modern engine
-    const glassStyles = engine === 'modern' && tokens.surface.useGlass && tokens.glass
+    const glassStyles = tokens.surface.useGlass && tokens.glass
       ? {
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,

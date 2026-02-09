@@ -16,7 +16,7 @@ export const GradientHeroSection = createPreset<HeroSectionProps>({
     const { Box, Stack, Button } = primitives;
     const { title, subtitle, description, actions = [], media, badge, className, style } = props;
 
-    const useGlass = engine === 'modern' && tokens.glass;
+    const useGlass = tokens.surface.useGlass && !!tokens.glass;
 
     return (
       <Box

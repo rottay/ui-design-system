@@ -17,7 +17,7 @@ export const GridFeatureGrid = createPreset<FeatureGridProps>({
   name: 'FeatureGrid.Grid',
   render: ({ primitives, props, tokens, engine }: PresetContext<FeatureGridProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { features, columns = 3, title, description, className, style } = props;
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 

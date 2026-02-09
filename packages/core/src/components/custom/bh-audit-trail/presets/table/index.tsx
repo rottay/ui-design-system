@@ -174,7 +174,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
       });
     }, []);
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const entityColors = getEntityTypeColors(tokens);
     const actionColors = getActionTypeColors(tokens);
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

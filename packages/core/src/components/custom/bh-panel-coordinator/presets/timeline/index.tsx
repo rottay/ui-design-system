@@ -25,7 +25,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
   name: 'BhPanelCoordinator.Timeline',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhPanelCoordinatorProps>) => {
     const { Box, Flex, Stack, Text, Grid } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const recColors = getRecommendationColors(tokens);
     const stageColors = getStageStatusColors(tokens);
 

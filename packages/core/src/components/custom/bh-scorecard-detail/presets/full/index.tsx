@@ -136,7 +136,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
   'BhScorecardDetail.Full',
   ({ primitives, props, tokens, engine }: PresetContext<BhScorecardDetailProps>) => {
     const { Box } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       header,

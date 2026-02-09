@@ -168,7 +168,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
   name: 'BhSkillGapMap.List',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhSkillGapMapProps>) => {
     const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const priorityColors = getPriorityColors(tokens);
 
     const { gaps, onGapSelect, loading, className, style } = props;

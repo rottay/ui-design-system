@@ -8,7 +8,7 @@ import type { ChartCardProps } from '../../core';
 
 export default createPreset<ChartCardProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const {
     title,

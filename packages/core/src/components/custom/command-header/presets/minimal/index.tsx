@@ -31,7 +31,7 @@ export const MinimalCommandHeader = createPreset<CommandHeaderProps>({
     } = props;
 
     const [hoveredStatus, setHoveredStatus] = useState<number | null>(null);
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const getStatusColor = (status?: string) => {
       switch (status) {

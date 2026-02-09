@@ -20,7 +20,7 @@ export const MinimalAuthLayout = createPreset<AuthLayoutProps>({
       onForgotPassword, socialProviders, showTerms, termsContent, footer, className, style,
     } = props;
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const [cardHovered, setCardHovered] = useState(false);
     const [forgotHovered, setForgotHovered] = useState(false);
     const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);

@@ -218,7 +218,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
     const categories = useMemo(() => Array.from(new Set(templates.map((t) => t.category))), [templates]);
 
     /* ── Engine-aware styling ───────────────────────────────────────── */
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     /* ── Styles ─────────────────────────────────────────────────────── */
     const containerStyle: React.CSSProperties = {

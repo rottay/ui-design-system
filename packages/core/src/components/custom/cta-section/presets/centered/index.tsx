@@ -24,7 +24,7 @@ export const CenteredCtaSection = createPreset<CtaSectionProps>({
     const { Box, Text, Button, Stack } = primitives;
     const { title, description, actions, media, className, style } = props;
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const [hovered, setHovered] = useState(false);
     const [hoveredAction, setHoveredAction] = useState<string | null>(null);

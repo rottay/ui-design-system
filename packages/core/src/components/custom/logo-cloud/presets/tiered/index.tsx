@@ -5,7 +5,7 @@ import type { LogoCloudProps } from '../../core';
 
 export const TieredPreset = createPreset<LogoCloudProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const { logos, title, description, className, style } = props;
 

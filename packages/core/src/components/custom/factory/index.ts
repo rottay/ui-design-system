@@ -26,7 +26,7 @@ export interface PresetContext<P = unknown> {
   tokens: DesignTokens;
   /** Current tenant configuration */
   tenant: TenantConfig;
-  /** Active engine name for conditional rendering */
+  /** Active engine name (set by the app, not by the design system) */
   engine: EngineName;
 }
 

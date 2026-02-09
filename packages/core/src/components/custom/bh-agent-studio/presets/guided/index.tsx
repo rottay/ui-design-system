@@ -125,7 +125,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     const isDirty = isDirtyProp || internalIsDirty;
     const estimatedCost = estimatedCostProp;
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);

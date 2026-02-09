@@ -21,7 +21,7 @@ export const BookingSchedulePicker = createPreset<SchedulePickerProps>({
   name: 'SchedulePicker.Booking',
   render: ({ primitives, props, tokens, engine }: PresetContext<SchedulePickerProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const slotColors = getSlotColors(tokens);
     const dayColors = getCalendarDayColors(tokens);
 

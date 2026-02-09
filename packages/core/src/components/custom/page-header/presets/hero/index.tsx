@@ -113,8 +113,8 @@ export const HeroPageHeader = createPreset<PageHeaderProps>({
           maxWidth: 720,
           margin: '0 auto',
           padding: `${tokens.spacing[6]}px 0`,
-          borderRadius: engine === 'modern' ? tokens.borderRadius.lg : undefined,
-          ...(engine === 'modern' && {
+          borderRadius: tokens.surface.useGlass ? tokens.borderRadius.lg : undefined,
+          ...(tokens.surface.useGradients && {
             background: `linear-gradient(135deg, ${tokens.colors.primaryScale[50]} 0%, transparent 50%)`,
             padding: `${tokens.spacing[8]}px ${tokens.spacing[6]}px`,
           }),

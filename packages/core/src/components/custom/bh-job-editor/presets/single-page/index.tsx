@@ -126,7 +126,7 @@ function generateJobCode(title: string): string {
 export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>(
   'SinglePageBhJobEditor',
   ({ props, tokens, engine }) => {
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       formData: formDataProp,
       validationErrors: validationErrorsProp,

@@ -473,3 +473,414 @@ export function formatDistanceToNow(
   const years = Math.floor(months / 12);
   return `${years}y${suffix}`;
 }
+
+/* ================================================================== */
+/*  PERSONALITY-DRIVEN HELPERS                                        */
+/*  All read exclusively from tokens.personality — NEVER engine name  */
+/* ================================================================== */
+
+/**
+ * Calculates stagger delay for a specific index.
+ * Respects staggerMax to cap total delay.
+ */
+export function createStaggerDelay(tokens: DesignTokens, index: number): number {
+  const { staggerDelay, staggerMax, intensity } = tokens.personality.animation;
+  if (intensity === 0) return 0;
+  return Math.min(index * staggerDelay, staggerMax);
+}
+
+/**
+ * Entrance animation config based on personality tokens.
+ * Returns CSS properties for initial and animate states.
+ */
+export function createEntranceAnimation(tokens: DesignTokens, options: {
+  index?: number;
+} = {}): {
+  initial: CSSProperties;
+  animate: CSSProperties;
+  transition: string;
+} {
+  const { index = 0 } = options;
+  const anim = tokens.personality.animation;
+
+  if (anim.intensity === 0 || anim.entrance === 'none') {
+    return {
+      initial: {},
+      animate: {},
+      transition: 'none',
+    };
+  }
+
+  const delay = createStaggerDelay(tokens, index);
+  const duration = anim.entranceDuration;
+  const delayStr = delay > 0 ? ` ${delay}ms` : '';
+
+  switch (anim.entrance) {
+    case 'fade':
+      return {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: `opacity ${duration}ms ease${delayStr}`,
+      };
+    case 'slideUp':
+      return {
+        initial: { opacity: 0, transform: 'translateY(8px)' },
+        animate: { opacity: 1, transform: 'translateY(0)' },
+        transition: `opacity ${duration}ms ease${delayStr}, transform ${duration}ms ease${delayStr}`,
+      };
+    case 'spring':
+      return {
+        initial: { opacity: 0, transform: 'translateY(12px) scale(0.98)' },
+        animate: { opacity: 1, transform: 'translateY(0) scale(1)' },
+        transition: `opacity ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1)${delayStr}, transform ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1)${delayStr}`,
+      };
+    case 'bounce':
+      return {
+        initial: { opacity: 0, transform: 'translateY(16px) scale(0.95)' },
+        animate: { opacity: 1, transform: 'translateY(0) scale(1)' },
+        transition: `opacity ${duration}ms cubic-bezier(0.34, 1.8, 0.64, 1)${delayStr}, transform ${duration}ms cubic-bezier(0.34, 1.8, 0.64, 1)${delayStr}`,
+      };
+    default:
+      return {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: `opacity ${duration}ms ease${delayStr}`,
+      };
+  }
+}
+
+/**
+ * Card hover styles driven by personality tokens.
+ * Returns base and hover state CSS.
+ */
+export function createCardHoverStyles(tokens: DesignTokens): {
+  base: CSSProperties;
+  hover: CSSProperties;
+} {
+  const { hoverLift, hoverScale, intensity } = tokens.personality.animation;
+  const { hoverElevation, defaultElevation, hoverTint } = tokens.personality.card;
+
+  if (intensity === 0) {
+    return { base: {}, hover: {} };
+  }
+
+  const transforms: string[] = [];
+  if (hoverLift > 0) transforms.push(`translateY(-${hoverLift}px)`);
+  if (hoverScale > 1) transforms.push(`scale(${hoverScale})`);
+
+  let hoverShadow: string | undefined;
+  if (hoverElevation === 'lift-one') {
+    hoverShadow = tokens.shadows[getNextElevation(defaultElevation)];
+  } else if (hoverElevation === 'lift-two') {
+    hoverShadow = tokens.shadows[getNextElevation(getNextElevation(defaultElevation))];
+  }
+
+  const hoverStyles: CSSProperties = {};
+  if (transforms.length > 0) hoverStyles.transform = transforms.join(' ');
+  if (hoverShadow) hoverStyles.boxShadow = hoverShadow;
+  if (hoverTint) hoverStyles.backgroundColor = tokens.colors.primaryScale[50];
+
+  return {
+    base: {
+      transition: `all ${tokens.motion.hover}`,
+      cursor: 'pointer',
+    },
+    hover: hoverStyles,
+  };
+}
+
+/**
+ * Accent bar styles driven by personality tokens.
+ */
+export function createPersonalityAccentBar(tokens: DesignTokens, options: {
+  color?: string;
+} = {}): CSSProperties | null {
+  const accent = tokens.personality.accent;
+  if (accent.barPosition === 'none') return null;
+
+  const color = options.color || tokens.colors.primary;
+  const isTop = accent.barPosition === 'top';
+  const isLeft = accent.barPosition === 'left';
+
+  let background: string;
+  switch (accent.barStyle) {
+    case 'gradient':
+      background = `linear-gradient(${isTop ? 'to right' : 'to bottom'}, ${color}, ${tokens.colors.secondary || color})`;
+      break;
+    case 'animated':
+      background = `linear-gradient(90deg, ${color}, ${tokens.colors.secondary || color}, ${color})`;
+      break;
+    case 'solid':
+    default:
+      background = color;
+      break;
+  }
+
+  const style: CSSProperties = {
+    background,
+    flexShrink: 0,
+  };
+
+  if (isTop) {
+    style.height = accent.barThickness;
+    style.width = '100%';
+    style.borderRadius = `${tokens.borderRadius.lg} ${tokens.borderRadius.lg} 0 0`;
+  } else if (isLeft) {
+    style.width = accent.barThickness;
+    style.height = '100%';
+    style.borderRadius = `${tokens.borderRadius.lg} 0 0 ${tokens.borderRadius.lg}`;
+  }
+
+  if (accent.barStyle === 'animated') {
+    style.backgroundSize = '200% 100%';
+    style.animation = 'accentBarShimmer 3s linear infinite';
+  }
+
+  return style;
+}
+
+/**
+ * Chart configuration from personality tokens.
+ */
+export function getChartConfig(tokens: DesignTokens): {
+  animationDuration: number;
+  animateOnMount: boolean;
+  lineType: 'linear' | 'monotoneX' | 'step';
+  showDots: boolean;
+  gradientFill: boolean;
+  tooltipStyle: 'minimal' | 'detailed' | 'glass';
+} {
+  const chart = tokens.personality.chart;
+  const lineType = chart.lineStyle === 'smooth' ? 'monotoneX' as const
+    : chart.lineStyle === 'step' ? 'step' as const
+    : 'linear' as const;
+
+  return {
+    animationDuration: chart.mountDuration,
+    animateOnMount: chart.animateOnMount,
+    lineType,
+    showDots: chart.showDots,
+    gradientFill: chart.useGradientFill,
+    tooltipStyle: chart.tooltipStyle,
+  };
+}
+
+/**
+ * Typography adjustments from personality tokens.
+ */
+export function getPersonalityTypography(tokens: DesignTokens): {
+  headingWeight: number;
+  labelTransform: 'uppercase' | 'capitalize' | 'none';
+  labelLetterSpacing: string;
+  headingLetterSpacing: string;
+} {
+  const typo = tokens.personality.typography;
+
+  let headingWeight: number;
+  switch (typo.headingWeightBias) {
+    case 'lighter':
+      headingWeight = tokens.typography.fontWeight.medium;
+      break;
+    case 'heavier':
+      headingWeight = tokens.typography.fontWeight.bold;
+      break;
+    default:
+      headingWeight = tokens.typography.fontWeight.semibold;
+  }
+
+  let labelTransform: 'uppercase' | 'capitalize' | 'none';
+  let labelLetterSpacing: string;
+  switch (typo.labelStyle) {
+    case 'uppercase':
+      labelTransform = 'uppercase';
+      labelLetterSpacing = '0.05em';
+      break;
+    case 'capitalize':
+      labelTransform = 'capitalize';
+      labelLetterSpacing = '0.01em';
+      break;
+    default:
+      labelTransform = 'none';
+      labelLetterSpacing = '0';
+  }
+
+  return {
+    headingWeight,
+    labelTransform,
+    labelLetterSpacing,
+    headingLetterSpacing: typo.headingLetterSpacing,
+  };
+}
+
+/**
+ * Skeleton loading style driven by personality tokens.
+ */
+export function createPersonalitySkeletonStyle(tokens: DesignTokens): CSSProperties {
+  const style = tokens.personality.animation.skeletonStyle;
+  const base: CSSProperties = {
+    backgroundColor: tokens.colors.neutral[100],
+    borderRadius: tokens.borderRadius.md,
+  };
+
+  switch (style) {
+    case 'shimmer':
+      return {
+        ...base,
+        background: `linear-gradient(90deg, ${tokens.colors.neutral[100]} 25%, ${tokens.colors.neutral[200]} 50%, ${tokens.colors.neutral[100]} 75%)`,
+        backgroundSize: '200% 100%',
+        animation: 'shimmer 1.5s ease-in-out infinite',
+      };
+    case 'wave':
+      return {
+        ...base,
+        background: `linear-gradient(90deg, ${tokens.colors.neutral[100]} 0%, ${tokens.colors.neutral[200]} 50%, ${tokens.colors.neutral[100]} 100%)`,
+        backgroundSize: '300% 100%',
+        animation: 'wave 2s ease-in-out infinite',
+      };
+    case 'pulse':
+    default:
+      return {
+        ...base,
+        animation: 'pulse 1.5s ease-in-out infinite',
+      };
+  }
+}
+
+/**
+ * Divider style from personality tokens.
+ */
+export function createDividerStyle(tokens: DesignTokens): CSSProperties {
+  const dividerStyle = tokens.personality.accent.dividerStyle;
+  if (dividerStyle === 'none') return { border: 'none' };
+
+  return {
+    borderTop: 'none',
+    borderLeft: 'none',
+    borderRight: 'none',
+    borderBottom: `1px ${dividerStyle} ${tokens.colors.neutral[200]}`,
+    margin: 0,
+  };
+}
+
+/**
+ * Section header style using personality typography.
+ */
+export function createPersonalitySectionHeaderStyle(tokens: DesignTokens): CSSProperties {
+  const typo = getPersonalityTypography(tokens);
+  return {
+    fontSize: tokens.typography.fontSize.xs,
+    fontWeight: tokens.typography.fontWeight.semibold,
+    color: tokens.colors.neutral[500],
+    textTransform: typo.labelTransform,
+    letterSpacing: typo.labelLetterSpacing,
+    marginBottom: tokens.spacing[2],
+  };
+}
+
+/**
+ * Error container style.
+ */
+export function createErrorContainerStyle(tokens: DesignTokens): CSSProperties {
+  return {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`,
+    textAlign: 'center' as const,
+    color: tokens.colors.errorScale[600],
+    backgroundColor: tokens.colors.errorScale[50],
+    borderRadius: tokens.borderRadius.lg,
+    border: `1px solid ${tokens.colors.errorScale[200]}`,
+  };
+}
+
+/**
+ * Padding value based on personality card density.
+ */
+export function getCardPadding(tokens: DesignTokens): string {
+  switch (tokens.personality.card.paddingDensity) {
+    case 'compact':
+      return `${tokens.spacing[4]}px ${tokens.spacing[5]}px`;
+    case 'spacious':
+      return `${tokens.spacing[6]}px ${tokens.spacing[7]}px`;
+    default:
+      return `${tokens.spacing[5]}px ${tokens.spacing[6]}px`;
+  }
+}
+
+/**
+ * Icon container styles based on personality shape.
+ */
+export function createIconContainerStyle(tokens: DesignTokens, options: {
+  size?: number;
+  color?: string;
+} = {}): CSSProperties {
+  const { size = 40, color } = options;
+  const shape = tokens.personality.accent.iconContainerShape;
+  const bgColor = color || tokens.colors.primaryScale[50];
+
+  let borderRadius: string;
+  switch (shape) {
+    case 'circle':
+      borderRadius = tokens.borderRadius.full;
+      break;
+    case 'square':
+      borderRadius = tokens.borderRadius.sm;
+      break;
+    case 'none':
+      return {
+        width: size,
+        height: size,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+      };
+    case 'rounded':
+    default:
+      borderRadius = tokens.borderRadius.md;
+  }
+
+  return {
+    width: size,
+    height: size,
+    borderRadius,
+    backgroundColor: bgColor,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  };
+}
+
+/**
+ * Badge border radius based on personality shape.
+ */
+export function getPersonalityBadgeRadius(tokens: DesignTokens): string {
+  switch (tokens.personality.accent.badgeShape) {
+    case 'pill':
+      return tokens.borderRadius.full;
+    case 'square':
+      return tokens.borderRadius.sm;
+    case 'rounded':
+    default:
+      return tokens.borderRadius.md;
+  }
+}
+
+/**
+ * Pulse speed CSS duration for live indicators.
+ */
+export function getPulseSpeed(tokens: DesignTokens): string {
+  switch (tokens.personality.animation.pulseSpeed) {
+    case 'none':
+      return 'paused';
+    case 'slow':
+      return '3s';
+    case 'fast':
+      return '1s';
+    default:
+      return '2s';
+  }
+}

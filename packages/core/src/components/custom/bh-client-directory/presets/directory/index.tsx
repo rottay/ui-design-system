@@ -156,7 +156,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
   'DirectoryBhClientDirectory',
   ({ primitives, props, tokens, engine }: PresetContext<BhClientDirectoryProps>) => {
     const { Box, Stack } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const {
       clients = [],

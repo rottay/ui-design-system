@@ -229,7 +229,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
       [localStages, localSelectedStage]
     );
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const stageColors = useMemo(() => getStageTypeColors(tokens), [tokens]);
     const statusColors = useMemo(() => getStatusColors(tokens), [tokens]);

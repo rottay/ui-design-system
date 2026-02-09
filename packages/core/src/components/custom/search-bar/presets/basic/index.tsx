@@ -39,7 +39,7 @@ export const BasicSearchBar = createPreset<SearchBarProps>({
     const [isFocused, setIsFocused] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const value = controlledValue ?? internalValue;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const sizeConfig = useMemo(() => ({
       sm: {

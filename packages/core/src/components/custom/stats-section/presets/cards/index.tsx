@@ -11,7 +11,7 @@ export const CardsStatsSection = createPreset<StatsSectionProps>({
   name: 'StatsSection.Cards',
   render: ({ primitives, props, tokens, engine }: PresetContext<StatsSectionProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { stats, title, description, className, style } = props;
 
     return (

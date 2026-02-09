@@ -25,7 +25,7 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
   name: 'BhEvidenceBrowser.SplitPane',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhEvidenceBrowserProps>) => {
     const { Box, Flex, Stack, Text } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const impactColors = getImpactColors(tokens);
     const speakerColors = getSpeakerColors(tokens);
 

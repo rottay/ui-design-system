@@ -68,7 +68,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
     const [showCelebration, setShowCelebration] = useState(false);
     const [exploredFeatures, setExploredFeatures] = useState<Set<string>>(new Set());
 
-    const isGlass = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const isLastStep = currentStep >= steps.length - 1;
     const currentStepData = steps[currentStep];
     const completedCount = steps.filter((s) => s.isComplete).length;

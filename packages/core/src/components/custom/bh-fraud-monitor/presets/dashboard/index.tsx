@@ -24,7 +24,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
   name: 'BhFraudMonitor.Dashboard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhFraudMonitorProps>) => {
     const { Box, Flex, Stack, Text, Grid } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const sevColors = getSeverityColors(tokens);
     const reviewColors = getReviewStatusColors(tokens);
 

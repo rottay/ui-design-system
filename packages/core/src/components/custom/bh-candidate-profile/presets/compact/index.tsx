@@ -108,7 +108,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
 
     const [expanded, setExpanded] = useState(false);
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const cardStyle = useMemo(() => createCardStyle(tokens, {

@@ -11,7 +11,7 @@ export const WallTestimonialSection = createPreset<TestimonialSectionProps>({
   name: 'TestimonialSection.Wall',
   render: ({ primitives, props, tokens, engine }: PresetContext<TestimonialSectionProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const { testimonials, title, description, className, style } = props;
 
     const renderStars = (rating?: number) => {

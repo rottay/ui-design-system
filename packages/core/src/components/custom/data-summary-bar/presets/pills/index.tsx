@@ -112,7 +112,7 @@ const MetricPill = ({ metric, index, tokens, engine, primitives }: {
 export const Pills = createPreset<DataSummaryBarProps>((context: PresetContext<DataSummaryBarProps>) => {
   const { primitives, props, tokens, engine } = context;
   const { Box, Text } = primitives;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const { metrics, className, style } = props;
 

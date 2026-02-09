@@ -21,7 +21,7 @@ export default createPreset<BottomNavProps>((context) => {
   const { items, activeKey, onItemClick, className, style } = props;
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [pressedKey, setPressedKey] = useState<string | null>(null);
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
   const navStyle = useMemo((): React.CSSProperties => ({
     ...createSurfaceStyle(tokens, {

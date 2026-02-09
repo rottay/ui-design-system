@@ -158,7 +158,7 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
   name: 'BhJobBoard.Grid',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhJobBoardProps>) => {
     const { Box, Stack } = primitives;
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const STATUS_CONFIG = useMemo(() => getStatusConfig(tokens), [tokens]);
     const URGENCY_CONFIG = useMemo(() => getUrgencyConfig(tokens), [tokens]);

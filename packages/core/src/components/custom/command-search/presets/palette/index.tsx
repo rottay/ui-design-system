@@ -195,7 +195,7 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
             overflow: 'hidden',
             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             ...style,
-            ...(engine === 'modern' && tokens.surface.useGlass && tokens.glass ? {
+            ...(tokens.surface.useGlass && tokens.glass ? {
               backdropFilter: tokens.glass.blur,
               WebkitBackdropFilter: tokens.glass.blur,
               backgroundColor: tokens.glass.bg,

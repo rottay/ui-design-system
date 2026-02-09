@@ -10,7 +10,7 @@ import type { BlogCardProps } from '../../core';
 
 export const HorizontalPreset = createPreset<BlogCardProps>((context) => {
   const { primitives, props, tokens, engine } = context;
-  const isGlass = engine === 'modern' && !!tokens.glass;
+  const isGlass = tokens.surface.useGlass && !!tokens.glass;
   const { Box, Text } = primitives;
   const { title, description, image, category, author, date, readTime, onClick, href, className, style } = props;
   const [isHovered, setIsHovered] = useState(false);

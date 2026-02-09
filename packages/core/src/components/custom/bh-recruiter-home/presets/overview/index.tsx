@@ -146,7 +146,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const [activityFilter, setActivityFilter] = useState<ActivityType | 'all'>('all');
     const [notificationDismissed, setNotificationDismissed] = useState<Set<string>>(new Set());
 
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);

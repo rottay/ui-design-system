@@ -24,7 +24,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
   name: 'BhSkillGapMap.Heatmap',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhSkillGapMapProps>) => {
     const { Box, Flex, Stack, Text, Grid } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const priorityColors = getPriorityColors(tokens);
 
     const {

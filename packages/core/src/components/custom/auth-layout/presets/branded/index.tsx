@@ -26,7 +26,7 @@ export const BrandedAuthLayout = createPreset<AuthLayoutProps>({
     const brandLogo = logo || tenant.branding.logo;
     const brandColor = tenant.branding.primaryColor || tokens.colors.primaryScale[600];
 
-    const isModern = engine === 'modern';
+    const isModern = tokens.surface.useGlass;
 
     const leftPanelBackground = backgroundImage
       ? `url(${backgroundImage}) center/cover`

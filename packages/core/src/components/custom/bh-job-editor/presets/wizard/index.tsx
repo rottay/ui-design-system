@@ -139,7 +139,7 @@ function generateJobCode(title: string): string {
 export const WizardBhJobEditor = createPreset<BhJobEditorProps>(
   'WizardBhJobEditor',
   ({ props, tokens, engine }) => {
-    const isGlass = engine === 'modern' && !!tokens.glass;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       formData: formDataProp,
       steps: stepsProp,

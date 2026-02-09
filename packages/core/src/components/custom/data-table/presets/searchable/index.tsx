@@ -52,7 +52,7 @@ export const SearchableDataTable = createPreset<DataTableProps & Record<string, 
     };
 
     const cellPadding = compact ? tokens.spacing[2] : tokens.spacing[3];
-    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine === 'modern' }), [tokens]);
+    const dropdownSurface = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: tokens.surface.useGlass }), [tokens]);
 
     // Filter data locally if no onSearch provided
     const filteredData = onSearch ? data : data.filter((record) => {

@@ -79,8 +79,8 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
   name: 'BhManagerConsole.Performance',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhManagerConsoleProps>) => {
     const { Box, Stack } = primitives;
-    const isGlass = engine === 'modern' && !!tokens.glass;
-    const isModern = engine === 'modern';
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const isModern = tokens.surface.useGlass;
 
     const {
       teams,
