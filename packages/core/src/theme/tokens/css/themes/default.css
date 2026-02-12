@@ -148,11 +148,13 @@
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Font Families */
-  --ds-font-family-base: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-                         Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --ds-font-family-heading: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --ds-font-family-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular,
-                         'SF Mono', Menlo, Monaco, Consolas, monospace;
+  --ds-font-sans: 'Geist Sans', 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                  Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ds-font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular,
+                  'SF Mono', Menlo, Monaco, Consolas, monospace;
+  --ds-font-family-base: var(--ds-font-sans);
+  --ds-font-family-heading: var(--ds-font-sans);
+  --ds-font-family-mono: var(--ds-font-mono);
 
   /* Font Sizes */
   --ds-font-size-xs: 0.75rem;

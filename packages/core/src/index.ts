@@ -31,6 +31,7 @@ export * from './animations';
 // COMPONENTS
 // ============================================
 export * from './components/primitives';
+export * from './components/patterns';
 export * from './components/custom';
 
 // ============================================

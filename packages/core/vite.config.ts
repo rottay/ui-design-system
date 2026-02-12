@@ -40,11 +40,13 @@ export default defineConfig({
         '@heroui/react',
         'framer-motion',
         'lucide-react',
+        'dayjs',
         // Externalize submodules for better tree-shaking
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,
         /^@heroui\/.*/,
         /^lucide-react\/.*/,
+        /^dayjs\/.*/,
       ],
       output: [
         {

@@ -26,7 +26,7 @@ export { CompactDashboardCard, TrendingDashboardCard, ChartDashboardCard, Detail
 export { DataTable } from './data-table';
 export type { DataTableProps, DataTablePreset, DataTableColumn } from './data-table';
 export { SimpleDataTable, SearchableDataTable, SelectableDataTable, FullDataTable, ExpandableDataTable, ProfessionalDataTable } from './data-table';
-export type { ExpandableDataTableProps, ProfessionalDataTableProps, FilterOption, RowAction, BulkAction } from './data-table';
+export type { ExpandableDataTableProps, ProfessionalDataTableProps, FilterOption, RowAction, BulkAction as DataTableBulkAction } from './data-table';
 
 // SearchBar
 export { SearchBar } from './search-bar';
@@ -236,7 +236,7 @@ export type {
   Evaluation,
   TimelineDataPoint,
   TimeRange,
-  DetailTab,
+  DetailTab as ActivityDetailTab,
 } from './activity-monitor';
 export { DashboardActivityMonitor, CompactActivityMonitor } from './activity-monitor';
 export { ACTIVITY_MONITOR_DEFAULTS } from './activity-monitor';
@@ -297,7 +297,7 @@ export { GANTT_TIMELINE_DEFAULTS } from './gantt-timeline';
 // ApprovalWorkflow
 export { ApprovalWorkflow } from './approval-workflow';
 export type {
-  ApprovalWorkflowProps,
+  ApprovalWorkflowProps as CustomApprovalWorkflowProps,
   ApprovalWorkflowPreset,
   Approver,
   Transition,
@@ -509,7 +509,7 @@ export { APP_SHELL_DEFAULTS } from './app-shell';
 
 // PageShell
 export { PageShell } from './page-shell';
-export type { PageShellProps, PageShellPreset, PageShellTab, PageShellBreadcrumb, PageShellAction } from './page-shell';
+export type { PageShellProps as CustomPageShellProps, PageShellPreset, PageShellTab, PageShellBreadcrumb, PageShellAction } from './page-shell';
 export { PAGE_SHELL_DEFAULTS } from './page-shell';
 
 // SettingsPage
@@ -524,7 +524,7 @@ export { ERROR_PAGE_DEFAULTS, ERROR_MESSAGES } from './error-page';
 
 // EmptyState
 export { EmptyState } from './empty-state';
-export type { EmptyStateProps, EmptyStatePreset, EmptyStateAction } from './empty-state';
+export type { EmptyStateProps as CustomEmptyStateProps, EmptyStatePreset, EmptyStateAction } from './empty-state';
 export { EMPTY_STATE_DEFAULTS } from './empty-state';
 
 // ConfirmationDialog
@@ -1100,7 +1100,7 @@ export type {
   ClientType,
   ClientStatus,
   ClientTier,
-  ApprovalStatus,
+  ApprovalStatus as BhApprovalStatus,
   ClientContact,
   ClientItem,
   ClientFilter,
@@ -1439,7 +1439,7 @@ export type {
   CompensationData,
   BenefitItem,
   BenefitCategory,
-  ApprovalStep,
+  ApprovalStep as BhApprovalStep,
   NegotiationChange,
   NegotiationVersion,
   DocumentInfo as BhOfferDocumentInfo,
@@ -3118,4 +3118,156 @@ export { DashboardPmPaymentAnalytics, CompactPmPaymentAnalytics } from './pm-pay
 export { PmProviderMetrics } from './pm-provider-metrics';
 export type { PmProviderMetricsProps, PmProviderMetricsPreset } from './pm-provider-metrics';
 export { DashboardPmProviderMetrics, ComparisonPmProviderMetrics } from './pm-provider-metrics';
+
+// StaffDirectory
+export { StaffDirectory } from './staff-directory';
+export type { StaffDirectoryProps, StaffDirectoryPreset, StaffDirectoryMember, StaffDirectoryFilter } from './staff-directory';
+export { CardsStaffDirectory, TableStaffDirectory } from './staff-directory';
+
+// StaffProfile
+export { StaffProfile } from './staff-profile';
+export type { StaffProfileProps, StaffProfilePreset, StaffProfileData, StaffSkill, StaffCertification as StaffProfileCertification, StaffWorkHistory, StaffEvaluation as StaffProfileEvaluation } from './staff-profile';
+export { FullStaffProfile, CompactStaffProfile } from './staff-profile';
+
+// StaffShiftScheduler
+export { StaffShiftScheduler } from './staff-shift-scheduler';
+export type { StaffShiftSchedulerProps, StaffShiftSchedulerPreset, StaffShift, ShiftAssignment } from './staff-shift-scheduler';
+export { CalendarStaffShiftScheduler, ListStaffShiftScheduler } from './staff-shift-scheduler';
+
+// StaffAvailabilityGrid
+export { StaffAvailabilityGrid } from './staff-availability-grid';
+export type { StaffAvailabilityGridProps, StaffAvailabilityGridPreset, StaffAvailabilityEntry, AvailabilitySlot } from './staff-availability-grid';
+export { GridStaffAvailabilityGrid, CompactStaffAvailabilityGrid } from './staff-availability-grid';
+
+// StaffCheckInMap
+export { StaffCheckInMap } from './staff-check-in-map';
+export type { StaffCheckInMapProps, StaffCheckInMapPreset, CheckInRecord } from './staff-check-in-map';
+export { MapStaffCheckInMap, ListStaffCheckInMap } from './staff-check-in-map';
+
+// StaffSwapBoard
+export { StaffSwapBoard } from './staff-swap-board';
+export type { StaffSwapBoardProps, StaffSwapBoardPreset, ShiftSwapRequest } from './staff-swap-board';
+export { BoardStaffSwapBoard, TableStaffSwapBoard } from './staff-swap-board';
+
+// StaffCredentialManager
+export { StaffCredentialManager } from './staff-credential-manager';
+export type { StaffCredentialManagerProps, StaffCredentialManagerPreset, StaffCredential } from './staff-credential-manager';
+export { GridStaffCredentialManager, TableStaffCredentialManager } from './staff-credential-manager';
+
+// StaffPayrollTable
+export { StaffPayrollTable } from './staff-payroll-table';
+export type { StaffPayrollTableProps, StaffPayrollTablePreset, PayrollLineItem } from './staff-payroll-table';
+export { DetailedStaffPayrollTable, SummaryStaffPayrollTable } from './staff-payroll-table';
+
+// StaffPayslipDetail
+export { StaffPayslipDetail } from './staff-payslip-detail';
+export type { StaffPayslipDetailProps, StaffPayslipDetailPreset, PayslipData, PayslipEarning, PayslipDeduction } from './staff-payslip-detail';
+export { FullStaffPayslipDetail, CompactStaffPayslipDetail } from './staff-payslip-detail';
+
+// StaffEvaluations
+export { StaffEvaluations } from './staff-evaluations';
+export type { StaffEvaluationsProps, StaffEvaluationsPreset, EvaluationRecord, EvaluationCategory } from './staff-evaluations';
+export { FormStaffEvaluations, SummaryStaffEvaluations } from './staff-evaluations';
+
+// BarPosTerminal
+export { BarPosTerminal } from './bar-pos-terminal';
+export type { BarPosTerminalProps, BarPosTerminalPreset } from './bar-pos-terminal';
+export { CompactBarPosTerminal, FullBarPosTerminal } from './bar-pos-terminal';
+
+// BarOrderQueue
+export { BarOrderQueue } from './bar-order-queue';
+export type { BarOrderQueueProps, BarOrderQueuePreset } from './bar-order-queue';
+export { KanbanBarOrderQueue, ListBarOrderQueue } from './bar-order-queue';
+
+// BarOrderHistory
+export { BarOrderHistory } from './bar-order-history';
+export type { BarOrderHistoryProps, BarOrderHistoryPreset } from './bar-order-history';
+export { TableBarOrderHistory, CompactBarOrderHistory } from './bar-order-history';
+
+// BarProductCatalog
+export { BarProductCatalog } from './bar-product-catalog';
+export type { BarProductCatalogProps, BarProductCatalogPreset } from './bar-product-catalog';
+export { GridBarProductCatalog, TableBarProductCatalog } from './bar-product-catalog';
+
+// BarRecipeEditor
+export { BarRecipeEditor } from './bar-recipe-editor';
+export type { BarRecipeEditorProps, BarRecipeEditorPreset } from './bar-recipe-editor';
+export { DetailedBarRecipeEditor, CompactBarRecipeEditor } from './bar-recipe-editor';
+
+// BarStockDashboard
+export { BarStockDashboard } from './bar-stock-dashboard';
+export type { BarStockDashboardProps, BarStockDashboardPreset } from './bar-stock-dashboard';
+export { DashboardBarStockDashboard, CompactBarStockDashboard } from './bar-stock-dashboard';
+
+// BarStockMovements
+export { BarStockMovements } from './bar-stock-movements';
+export type { BarStockMovementsProps, BarStockMovementsPreset } from './bar-stock-movements';
+export { TimelineBarStockMovements, TableBarStockMovements } from './bar-stock-movements';
+
+// BarPurchaseOrders
+export { BarPurchaseOrders } from './bar-purchase-orders';
+export type { BarPurchaseOrdersProps, BarPurchaseOrdersPreset } from './bar-purchase-orders';
+export { TableBarPurchaseOrders, KanbanBarPurchaseOrders } from './bar-purchase-orders';
+
+// BarGoodsReceipt
+export { BarGoodsReceipt } from './bar-goods-receipt';
+export type { BarGoodsReceiptProps, BarGoodsReceiptPreset } from './bar-goods-receipt';
+export { FormBarGoodsReceipt, CompactBarGoodsReceipt } from './bar-goods-receipt';
+
+// BarSupplierDirectory
+export { BarSupplierDirectory } from './bar-supplier-directory';
+export type { BarSupplierDirectoryProps, BarSupplierDirectoryPreset } from './bar-supplier-directory';
+export { TableBarSupplierDirectory, CardsBarSupplierDirectory } from './bar-supplier-directory';
+
+// BarPricingMatrix
+export { BarPricingMatrix } from './bar-pricing-matrix';
+export type { BarPricingMatrixProps, BarPricingMatrixPreset } from './bar-pricing-matrix';
+export { GridBarPricingMatrix, TableBarPricingMatrix } from './bar-pricing-matrix';
+
+// BarSalesDashboard
+export { BarSalesDashboard } from './bar-sales-dashboard';
+export type { BarSalesDashboardProps, BarSalesDashboardPreset } from './bar-sales-dashboard';
+export { DashboardBarSalesDashboard, CompactBarSalesDashboard } from './bar-sales-dashboard';
+
+// BhPipelineAnalytics
+export { BhPipelineAnalytics } from './bh-pipeline-analytics';
+export type { BhPipelineAnalyticsProps, BhPipelineAnalyticsPreset, PipelineStageStatus, PipelineStage as BhPipelineStage, PipelineBottleneck, PipelineSummary } from './bh-pipeline-analytics';
+export { OverviewBhPipelineAnalytics, DetailedBhPipelineAnalytics } from './bh-pipeline-analytics';
+export { BH_PIPELINE_ANALYTICS_DEFAULTS } from './bh-pipeline-analytics';
+
+// BhSourceRoi
+export { BhSourceRoi } from './bh-source-roi';
+export type { BhSourceRoiProps, BhSourceRoiPreset, SourceChannel, SourceTrend, SourceRoiSummary } from './bh-source-roi';
+export { SummaryBhSourceRoi, BreakdownBhSourceRoi } from './bh-source-roi';
+export { BH_SOURCE_ROI_DEFAULTS } from './bh-source-roi';
+
+// BhOfferNegotiation
+export { BhOfferNegotiation } from './bh-offer-negotiation';
+export type { BhOfferNegotiationProps, BhOfferNegotiationPreset, NegotiationStepType, CompensationPackage, NegotiationStep, OfferNegotiation } from './bh-offer-negotiation';
+export { TimelineBhOfferNegotiation, ComparisonBhOfferNegotiation } from './bh-offer-negotiation';
+export { BH_OFFER_NEGOTIATION_DEFAULTS } from './bh-offer-negotiation';
+
+// BhCapacityPlanner
+export { BhCapacityPlanner } from './bh-capacity-planner';
+export type { BhCapacityPlannerProps, BhCapacityPlannerPreset, RecruiterCapacity, RebalanceSuggestion, CapacitySummary } from './bh-capacity-planner';
+export { GridBhCapacityPlanner, ListBhCapacityPlanner } from './bh-capacity-planner';
+export { BH_CAPACITY_PLANNER_DEFAULTS } from './bh-capacity-planner';
+
+// BhClientPortal
+export { BhClientPortal } from './bh-client-portal';
+export type { BhClientPortalProps, BhClientPortalPreset, ClientPosition, ClientPipelineStage, ClientInterview, ClientMetrics, ClientInfo } from './bh-client-portal';
+export { ExecutiveBhClientPortal, OperationalBhClientPortal } from './bh-client-portal';
+export { BH_CLIENT_PORTAL_DEFAULTS } from './bh-client-portal';
+
+// BhTranscriptViewer
+export { BhTranscriptViewer } from './bh-transcript-viewer';
+export type { BhTranscriptViewerProps, BhTranscriptViewerPreset, TranscriptSegment as BhTranscriptSegment, TranscriptHighlight, ScoringDimension as BhScoringDimension, TranscriptMeta } from './bh-transcript-viewer';
+export { ReaderBhTranscriptViewer, AnalystBhTranscriptViewer } from './bh-transcript-viewer';
+export { BH_TRANSCRIPT_VIEWER_DEFAULTS } from './bh-transcript-viewer';
+
+// BhProcessDesigner
+export { BhProcessDesigner } from './bh-process-designer';
+export type { BhProcessDesignerProps, BhProcessDesignerPreset, StageType as BhStageType, KnockoutRule, ScoringRubric, ProcessStage, ProcessTemplate } from './bh-process-designer';
+export { VisualBhProcessDesigner, CompactBhProcessDesigner } from './bh-process-designer';
+export { BH_PROCESS_DESIGNER_DEFAULTS } from './bh-process-designer';
 
