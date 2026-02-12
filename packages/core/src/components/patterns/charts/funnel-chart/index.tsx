@@ -1,0 +1,206 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
+
+import type { ChartBaseProps, DataPoint } from '../types';
+import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../types';
+import { useChartDimensions } from '../hooks';
+
+export interface FunnelChartProps extends ChartBaseProps {
+  data: DataPoint[];
+  showPercentage?: boolean;
+  showConversion?: boolean;
+  orientation?: 'vertical' | 'horizontal';
+}
+
+export function FunnelChart({
+  data,
+  showPercentage = true,
+  showConversion = false,
+  orientation = 'vertical',
+  width,
+  height = 400,
+  className,
+  style,
+  loading = false,
+  title,
+  subtitle,
+  legend = false,
+  animate = true,
+  responsive = true,
+  colors = DEFAULT_COLORS,
+  tooltip = true,
+  margin = DEFAULT_MARGIN,
+}: FunnelChartProps) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const { containerRef, dimensions } = useChartDimensions(width, height);
+  const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
+  const chartHeight = height;
+
+  useEffect(() => {
+    if (!svgRef.current || !data || data.length === 0) return;
+
+    const svg = d3.select(svgRef.current);
+    svg.selectAll('*').remove();
+
+    const innerWidth = chartWidth - margin.left - margin.right;
+    const innerHeight = chartHeight - margin.top - margin.bottom;
+
+    const g = svg
+      .attr('width', chartWidth)
+      .attr('height', chartHeight)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const maxValue = d3.max(data, (d) => d.value) ?? 1;
+    const n = data.length;
+
+    if (orientation === 'vertical') {
+      const segmentHeight = innerHeight / n;
+      const gap = 2;
+
+      data.forEach((d, i) => {
+        const widthRatio = d.value / maxValue;
+        const nextRatio = i < n - 1 ? data[i + 1].value / maxValue : widthRatio * 0.8;
+        const topWidth = innerWidth * widthRatio;
+        const bottomWidth = innerWidth * nextRatio;
+        const topX = (innerWidth - topWidth) / 2;
+        const bottomX = (innerWidth - bottomWidth) / 2;
+        const yPos = i * segmentHeight;
+        const color = d.color ?? colors[i % colors.length];
+
+        const points = [
+          [topX, yPos + gap],
+          [topX + topWidth, yPos + gap],
+          [bottomX + bottomWidth, yPos + segmentHeight - gap],
+          [bottomX, yPos + segmentHeight - gap],
+        ];
+
+        const polygon = g
+          .append('polygon')
+          .attr('points', points.map((p) => p.join(',')).join(' '))
+          .attr('fill', color);
+
+        if (animate) {
+          polygon.attr('opacity', 0).transition().duration(500).delay(i * 100).attr('opacity', 1);
+        }
+
+        if (tooltip) {
+          polygon.append('title').text(`${d.label}: ${d.value}`);
+        }
+
+        // Label
+        const centerY = yPos + segmentHeight / 2;
+        g.append('text')
+          .attr('x', innerWidth / 2)
+          .attr('y', centerY - 6)
+          .attr('text-anchor', 'middle')
+          .style('fill', '#fff')
+          .style('font-size', '13px')
+          .style('font-weight', '600')
+          .style('pointer-events', 'none')
+          .text(d.label);
+
+        // Value / percentage
+        const pct = ((d.value / maxValue) * 100).toFixed(0);
+        const valueText = showPercentage ? `${d.value} (${pct}%)` : String(d.value);
+        g.append('text')
+          .attr('x', innerWidth / 2)
+          .attr('y', centerY + 10)
+          .attr('text-anchor', 'middle')
+          .style('fill', 'rgba(255,255,255,0.8)')
+          .style('font-size', '11px')
+          .style('pointer-events', 'none')
+          .text(valueText);
+
+        // Conversion rate
+        if (showConversion && i > 0) {
+          const rate = ((d.value / data[i - 1].value) * 100).toFixed(1);
+          g.append('text')
+            .attr('x', innerWidth + 8)
+            .attr('y', yPos + 4)
+            .attr('dominant-baseline', 'middle')
+            .style('fill', 'var(--ds-color-text-secondary)')
+            .style('font-size', '10px')
+            .text(`${rate}%`);
+        }
+      });
+    } else {
+      // Horizontal
+      const segmentWidth = innerWidth / n;
+      const gap = 2;
+
+      data.forEach((d, i) => {
+        const heightRatio = d.value / maxValue;
+        const nextRatio = i < n - 1 ? data[i + 1].value / maxValue : heightRatio * 0.8;
+        const leftHeight = innerHeight * heightRatio;
+        const rightHeight = innerHeight * nextRatio;
+        const leftY = (innerHeight - leftHeight) / 2;
+        const rightY = (innerHeight - rightHeight) / 2;
+        const xPos = i * segmentWidth;
+        const color = d.color ?? colors[i % colors.length];
+
+        const points = [
+          [xPos + gap, leftY],
+          [xPos + segmentWidth - gap, rightY],
+          [xPos + segmentWidth - gap, rightY + rightHeight],
+          [xPos + gap, leftY + leftHeight],
+        ];
+
+        const polygon = g
+          .append('polygon')
+          .attr('points', points.map((p) => p.join(',')).join(' '))
+          .attr('fill', color);
+
+        if (animate) {
+          polygon.attr('opacity', 0).transition().duration(500).delay(i * 100).attr('opacity', 1);
+        }
+
+        if (tooltip) {
+          polygon.append('title').text(`${d.label}: ${d.value}`);
+        }
+
+        g.append('text')
+          .attr('x', xPos + segmentWidth / 2)
+          .attr('y', innerHeight / 2)
+          .attr('text-anchor', 'middle')
+          .style('fill', '#fff')
+          .style('font-size', '12px')
+          .style('font-weight', '600')
+          .style('pointer-events', 'none')
+          .text(d.label);
+      });
+    }
+  }, [data, chartWidth, chartHeight, orientation, showPercentage, showConversion, animate, colors, margin, tooltip]);
+
+  if (loading) {
+    return (
+      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--ds-color-text-secondary)' }}>Loading...</div>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className={className} style={{ width: width ?? '100%', ...style }}>
+      {title && (
+        <div style={{ marginBottom: 4 }}>
+          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
+          {subtitle && <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>}
+        </div>
+      )}
+      <svg ref={svgRef} />
+      {legend && (
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+          {data.map((d, i) => (
+            <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+              <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+              <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

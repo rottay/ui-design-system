@@ -12,15 +12,20 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createFilterPillStyle,
   createHoverStyle,
   createListItemStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createProgressBarStyle,
   createSectionHeaderStyle,
   createStatusDotStyle,
+  getCardPadding,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhProviderConfigProps,
@@ -137,6 +142,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const handleProviderSelect = (providerId: string) => {
       setInternalSelectedProvider(providerId);
@@ -241,22 +251,13 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
         {/* =========================================================== */}
         {/*  Header                                                      */}
         {/* =========================================================== */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: tokens.spacing[6],
-          }}
-        >
-          <div>
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[6] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
             <Text
               style={{
                 fontSize: tokens.typography.fontSize['2xl'],
                 fontWeight: tokens.typography.fontWeight.bold,
                 color: tokens.colors.neutral[900],
-                display: 'block',
-                marginBottom: tokens.spacing[1],
               }}
             >
               AI Provider Management
@@ -269,8 +270,8 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             >
               {providers.length} providers configured &middot; {providers.filter((p) => p.status === 'healthy').length} healthy
             </Text>
-          </div>
-          <button
+          </Box>
+          <Box
             onClick={() => handleKeyModalToggle(true)}
             style={{
               display: 'inline-flex',
@@ -289,13 +290,13 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             }}
           >
             + Add API Key
-          </button>
-        </div>
+          </Box>
+        </Box>
 
         {/* =========================================================== */}
         {/*  1. Provider Grid                                            */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
@@ -309,7 +310,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             const testResult = getTestResult(provider.id);
 
             return (
-              <div
+              <Box
                 key={provider.id}
                 onClick={() => handleProviderSelect(provider.id)}
                 style={{
@@ -331,7 +332,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 }}
               >
                 {/* Provider header */}
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -339,9 +340,9 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     marginBottom: tokens.spacing[3],
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     {/* Status dot */}
-                    <div
+                    <Box
                       style={{
                         width: tokens.spacing[2],
                         height: tokens.spacing[2],
@@ -359,7 +360,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     >
                       {provider.name}
                     </Text>
-                  </div>
+                  </Box>
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.xs,
@@ -368,10 +369,10 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   >
                     {provider.modelCount} models
                   </Text>
-                </div>
+                </Box>
 
                 {/* Type badges */}
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     flexWrap: 'wrap' as const,
@@ -380,14 +381,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   }}
                 >
                   {provider.types.map((type) => (
-                    <span key={type} style={createBadgeStyle(tokens, typeColor(type))}>
+                    <Text as="span" key={type} style={createBadgeStyle(tokens, typeColor(type))}>
                       {type}
-                    </span>
+                    </Text>
                   ))}
-                </div>
+                </Box>
 
                 {/* Latency indicator */}
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -412,8 +413,8 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   >
                     {provider.latencyMs}ms
                   </Text>
-                </div>
-                <div
+                </Box>
+                <Box
                   style={{
                     height: 4,
                     backgroundColor: tokens.colors.neutral[100],
@@ -422,7 +423,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     marginBottom: tokens.spacing[3],
                   }}
                 >
-                  <div
+                  <Box
                     style={{
                       width: `${Math.min((provider.latencyMs / 1000) * 100, 100)}%`,
                       height: '100%',
@@ -436,11 +437,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }}
                   />
-                </div>
+                </Box>
 
                 {/* Test button */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <button
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box
+                    as="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleTestProvider(provider.id);
@@ -459,24 +461,25 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     }}
                   >
                     {testResult?.status === 'testing' ? 'Testing...' : 'Test'}
-                  </button>
+                  </Box>
                   {testResult && testResult.status !== 'testing' && (
-                    <span
+                    <Text
+                      as="span"
                       style={createBadgeStyle(tokens, testResult.status === 'success' ? 'success' : 'error')}
                     >
                       {testResult.status === 'success'
                         ? `${testResult.latencyMs}ms`
                         : 'Failed'}
-                    </span>
+                    </Text>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Box>
             );
           })}
-        </div>
+        </Box>
 
         {/* Two column layout: main + sidebar */}
-        <div
+        <Box
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 360px',
@@ -484,11 +487,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
           }}
         >
           {/* ===================== LEFT COLUMN ===================== */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[6] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[6] }}>
             {/* =========================================================== */}
             {/*  2. Health Dashboard                                         */}
             {/* =========================================================== */}
-            <div style={cardBase}>
+            <Box style={cardBase}>
               <Text
                 style={{
                   fontSize: tokens.typography.fontSize.lg,
@@ -500,13 +503,13 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
               >
                 Provider Health
               </Text>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: tokens.spacing[3] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: tokens.spacing[3] }}>
                 {providers.map((provider) => {
                   const sc = statusConfig(provider.status);
                   const cb = circuitConfig(provider.circuitBreaker);
 
                   return (
-                    <div
+                    <Box
                       key={provider.id}
                       style={{
                         padding: tokens.spacing[3],
@@ -515,7 +518,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         backgroundColor: tokens.colors.common.white,
                       }}
                     >
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -532,7 +535,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         >
                           {provider.name}
                         </Text>
-                        <div
+                        <Box
                           style={{
                             width: tokens.spacing[2],
                             height: tokens.spacing[2],
@@ -540,7 +543,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             backgroundColor: sc.color,
                           }}
                         />
-                      </div>
+                      </Box>
 
                       {/* Uptime */}
                       <Text
@@ -590,14 +593,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       )}
 
                       {/* Circuit breaker */}
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
                           gap: tokens.spacing[2],
                         }}
                       >
-                        <div
+                        <Box
                           style={{
                             width: tokens.spacing[4],
                             height: tokens.spacing[4],
@@ -608,7 +611,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             justifyContent: 'center',
                           }}
                         >
-                          <div
+                          <Box
                             style={{
                               width: tokens.spacing[2],
                               height: tokens.spacing[2],
@@ -616,7 +619,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               backgroundColor: cb.color,
                             }}
                           />
-                        </div>
+                        </Box>
                         <Text
                           style={{
                             fontSize: tokens.typography.fontSize.xs,
@@ -625,18 +628,18 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         >
                           CB: {cb.label}
                         </Text>
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
                   );
                 })}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* =========================================================== */}
             {/*  5. Fallback Visualization                                   */}
             {/* =========================================================== */}
             {activeFallbackChain && activeFallbackChain.providers.length > 0 && (
-              <div style={cardBase}>
+              <Box style={cardBase}>
                 <Text
                   style={{
                     fontSize: tokens.typography.fontSize.lg,
@@ -649,7 +652,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   Fallback Chain
                 </Text>
                 {/* Flow diagram */}
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -669,7 +672,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       const labels = ['Primary', 'Secondary', 'Tertiary', 'Quaternary'];
 
                       return (
-                        <div
+                        <Box
                           key={chainItem.providerId}
                           style={{
                             display: 'flex',
@@ -678,7 +681,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           }}
                         >
                           {/* Provider card */}
-                          <div
+                          <Box
                             style={{
                               padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                               borderRadius: tokens.borderRadius.lg,
@@ -712,7 +715,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             >
                               {provider.name}
                             </Text>
-                            <div
+                            <Box
                               style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -721,7 +724,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                                 marginTop: tokens.spacing[1],
                               }}
                             >
-                              <div
+                              <Box
                                 style={{
                                   width: 6,
                                   height: 6,
@@ -732,8 +735,8 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: sc.color }}>
                                 {sc.label}
                               </Text>
-                            </div>
-                          </div>
+                            </Box>
+                          </Box>
 
                           {/* Arrow */}
                           {!isLast && (
@@ -764,19 +767,19 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               />
                             </svg>
                           )}
-                        </div>
+                        </Box>
                       );
                     })}
-                </div>
-              </div>
+                </Box>
+              </Box>
             )}
 
             {/* =========================================================== */}
             {/*  6. Model Registry                                           */}
             {/* =========================================================== */}
             {models.length > 0 && (
-              <div style={cardBase}>
-                <div
+              <Box style={cardBase}>
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -793,9 +796,9 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   >
                     Model Registry
                   </Text>
-                  <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {(['all', 'chat', 'tts', 'stt', 'conversational'] as const).map((f) => (
-                      <button
+                      <Box
                         key={f}
                         onClick={() => handleModelFilterChange(f)}
                         style={{
@@ -821,13 +824,13 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                       >
                         {f}
-                      </button>
+                      </Box>
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
 
                 {/* Table header */}
-                <div
+                <Box
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '2fr 80px 100px 100px 1.5fr 60px',
@@ -843,12 +846,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       {col}
                     </Text>
                   ))}
-                </div>
+                </Box>
 
                 {/* Model rows */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' }}>
                   {filteredModels.map((model) => (
-                    <div
+                    <Box
                       key={model.id}
                       style={{
                         display: 'grid',
@@ -869,7 +872,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         e.currentTarget.style.transform = 'none';
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                         <Text
                           style={{
                             fontSize: tokens.typography.fontSize.sm,
@@ -880,7 +883,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           {model.name}
                         </Text>
                         {model.deprecated && (
-                          <span
+                          <Text
                             style={{
                               ...createBadgeStyle(tokens, 'error'),
                               fontSize: tokens.typography.fontSize.xs,
@@ -888,12 +891,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             }}
                           >
                             deprecated
-                          </span>
+                          </Text>
                         )}
-                      </div>
-                      <span style={createBadgeStyle(tokens, typeColor(model.type))}>
+                      </Box>
+                      <Text style={createBadgeStyle(tokens, typeColor(model.type))}>
                         {model.type}
-                      </span>
+                      </Text>
                       <Text
                         style={{
                           fontSize: tokens.typography.fontSize.sm,
@@ -913,9 +916,9 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           ? `${(model.contextWindow / 1000).toFixed(0)}K`
                           : model.contextWindow}
                       </Text>
-                      <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
+                      <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
                         {model.features.slice(0, 3).map((feat) => (
-                          <span
+                          <Text
                             key={feat}
                             style={{
                               padding: `0 ${tokens.spacing[1]}px`,
@@ -926,32 +929,32 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             }}
                           >
                             {feat}
-                          </span>
+                          </Text>
                         ))}
                         {model.features.length > 3 && (
-                          <span
+                          <Text
                             style={{
                               fontSize: tokens.typography.fontSize.xs,
                               color: tokens.colors.neutral[400],
                             }}
                           >
                             +{model.features.length - 3}
-                          </span>
+                          </Text>
                         )}
-                      </div>
-                      <div />
-                    </div>
+                      </Box>
+                      <Box />
+                    </Box>
                   ))}
-                </div>
-              </div>
+                </Box>
+              </Box>
             )}
 
             {/* =========================================================== */}
             {/*  7. Cost Comparison                                          */}
             {/* =========================================================== */}
             {models.length > 0 && (
-              <div style={cardBase}>
-                <div
+              <Box style={cardBase}>
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -968,7 +971,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   >
                     Cost Comparison
                   </Text>
-                  <div
+                  <Box
                     style={{
                       display: 'flex',
                       borderRadius: tokens.borderRadius.md,
@@ -977,7 +980,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     }}
                   >
                     {(['chart', 'table'] as const).map((v) => (
-                      <button
+                      <Box
                         key={v}
                         onClick={() => handleCostViewChange(v)}
                         style={{
@@ -999,14 +1002,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                       >
                         {v}
-                      </button>
+                      </Box>
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
 
                 {activeCostView === 'chart' ? (
                   /* Bar chart */
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {models
                       .filter((m) => !m.deprecated)
                       .sort((a, b) => a.costPer1kTokens - b.costPer1kTokens)
@@ -1023,7 +1026,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         const barColor = barColors[models.indexOf(model) % barColors.length];
 
                         return (
-                          <div
+                          <Box
                             key={model.id}
                             style={{
                               display: 'grid',
@@ -1045,7 +1048,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             >
                               {model.name}
                             </Text>
-                            <div
+                            <Box
                               style={{
                                 height: 20,
                                 backgroundColor: tokens.colors.neutral[100],
@@ -1053,7 +1056,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                                 overflow: 'hidden',
                               }}
                             >
-                              <div
+                              <Box
                                 style={{
                                   width: `${pct}%`,
                                   height: '100%',
@@ -1062,7 +1065,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                                   transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                                 }}
                               />
-                            </div>
+                            </Box>
                             <Text
                               style={{
                                 fontSize: tokens.typography.fontSize.xs,
@@ -1072,14 +1075,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             >
                               ${model.costPer1kTokens.toFixed(4)}
                             </Text>
-                          </div>
+                          </Box>
                         );
                       })}
-                  </div>
+                  </Box>
                 ) : (
                   /* Table view */
-                  <div>
-                    <div
+                  <Box>
+                    <Box
                       style={{
                         display: 'grid',
                         gridTemplateColumns: '2fr 1fr 1fr',
@@ -1093,12 +1096,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       <Text style={{ ...sectionHeader, marginBottom: 0 }}>Model</Text>
                       <Text style={{ ...sectionHeader, marginBottom: 0 }}>Cost/1K Tokens</Text>
                       <Text style={{ ...sectionHeader, marginBottom: 0 }}>Context</Text>
-                    </div>
+                    </Box>
                     {models
                       .filter((m) => !m.deprecated)
                       .sort((a, b) => a.costPer1kTokens - b.costPer1kTokens)
                       .map((model) => (
-                        <div
+                        <Box
                           key={model.id}
                           style={{
                             display: 'grid',
@@ -1117,21 +1120,21 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                             {model.contextWindow >= 1000 ? `${(model.contextWindow / 1000).toFixed(0)}K` : model.contextWindow}
                           </Text>
-                        </div>
+                        </Box>
                       ))}
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* ===================== RIGHT COLUMN (SIDEBAR) ===================== */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[6] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[6] }}>
             {/* =========================================================== */}
             {/*  3. API Key Management                                       */}
             {/* =========================================================== */}
-            <div style={cardBase}>
-              <div
+            <Box style={cardBase}>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1148,7 +1151,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 >
                   API Keys
                 </Text>
-                <button
+                <Box
                   onClick={() => handleKeyModalToggle(true)}
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -1163,12 +1166,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   }}
                 >
                   + Add
-                </button>
-              </div>
+                </Box>
+              </Box>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                 {apiKeys.map((key) => (
-                  <div
+                  <Box
                     key={key.id}
                     style={{
                       padding: tokens.spacing[3],
@@ -1199,8 +1202,8 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     >
                       Last used: {formatRelativeTime(key.lastUsed)} &middot; Created: {formatShortDate(key.createdAt)}
                     </Text>
-                    <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
-                      <button
+                    <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
+                      <Box
                         onClick={() => onRotateKey?.(key.id)}
                         style={{
                           flex: 1,
@@ -1221,8 +1224,8 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                       >
                         &#x21BB; Rotate
-                      </button>
-                      <button
+                      </Box>
+                      <Box
                         onClick={() => onRevokeKey?.(key.id)}
                         style={{
                           flex: 1,
@@ -1242,12 +1245,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                       >
                         Revoke
-                      </button>
-                    </div>
-                  </div>
+                      </Box>
+                    </Box>
+                  </Box>
                 ))}
                 {apiKeys.length === 0 && (
-                  <div
+                  <Box
                     style={{
                       padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px`,
                       textAlign: 'center' as const,
@@ -1257,15 +1260,15 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     <Text style={{ fontSize: tokens.typography.fontSize.sm }}>
                       No API keys configured.
                     </Text>
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* =========================================================== */}
             {/*  8. Connectivity Test Panel                                  */}
             {/* =========================================================== */}
-            <div style={cardBase}>
+            <Box style={cardBase}>
               <Text
                 style={{
                   fontSize: tokens.typography.fontSize.lg,
@@ -1277,7 +1280,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
               >
                 Connectivity
               </Text>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                 {providers.map((provider) => {
                   const testResult = getTestResult(provider.id);
                   const isTesting = testResult?.status === 'testing';
@@ -1285,7 +1288,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   const isFailure = testResult?.status === 'failure';
 
                   return (
-                    <div
+                    <Box
                       key={provider.id}
                       style={{
                         display: 'flex',
@@ -1303,9 +1306,9 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           : tokens.colors.common.white,
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                         {/* Status indicator */}
-                        <div
+                        <Box
                           style={{
                             width: tokens.spacing[3],
                             height: tokens.spacing[3],
@@ -1322,7 +1325,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               : {}),
                           }}
                         />
-                        <div>
+                        <Box>
                           <Text
                             style={{
                               fontSize: tokens.typography.fontSize.sm,
@@ -1355,14 +1358,13 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                               Testing connection...
                             </Text>
                           )}
-                        </div>
-                      </div>
-                      <button
-                        onClick={(e) => {
+                        </Box>
+                      </Box>
+                      <Box
+                        onClick={isTesting ? undefined : (e) => {
                           e.stopPropagation();
                           handleTestProvider(provider.id);
                         }}
-                        disabled={isTesting}
                         style={{
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                           borderRadius: tokens.borderRadius.md,
@@ -1375,18 +1377,18 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                       >
                         {isTesting ? '...' : 'Test'}
-                      </button>
-                    </div>
+                      </Box>
+                    </Box>
                   );
                 })}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* =========================================================== */}
             {/*  4. Configuration Panel (Selected Provider)                   */}
             {/* =========================================================== */}
             {selectedProviderData && (
-              <div style={cardBase}>
+              <Box style={cardBase}>
                 <Text
                   style={{
                     fontSize: tokens.typography.fontSize.lg,
@@ -1398,76 +1400,76 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 >
                   {selectedProviderData.name} Config
                 </Text>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
                   {/* Status */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                       Status
                     </Text>
-                    <span style={createBadgeStyle(tokens, selectedProviderData.status === 'healthy' ? 'success' : selectedProviderData.status === 'degraded' ? 'warning' : 'error')}>
+                    <Text style={createBadgeStyle(tokens, selectedProviderData.status === 'healthy' ? 'success' : selectedProviderData.status === 'degraded' ? 'warning' : 'error')}>
                       {statusConfig(selectedProviderData.status).label}
-                    </span>
-                  </div>
+                    </Text>
+                  </Box>
                   {/* Uptime */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                       Uptime
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                       {selectedProviderData.uptimePercent}%
                     </Text>
-                  </div>
+                  </Box>
                   {/* Latency */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                       Avg Latency
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                       {selectedProviderData.latencyMs}ms
                     </Text>
-                  </div>
+                  </Box>
                   {/* Models */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                       Models
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                       {selectedProviderData.modelCount}
                     </Text>
-                  </div>
+                  </Box>
                   {/* Circuit Breaker */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                       Circuit Breaker
                     </Text>
-                    <span style={createBadgeStyle(tokens, selectedProviderData.circuitBreaker === 'closed' ? 'success' : selectedProviderData.circuitBreaker === 'open' ? 'error' : 'warning')}>
+                    <Text style={createBadgeStyle(tokens, selectedProviderData.circuitBreaker === 'closed' ? 'success' : selectedProviderData.circuitBreaker === 'open' ? 'error' : 'warning')}>
                       {circuitConfig(selectedProviderData.circuitBreaker).label}
-                    </span>
-                  </div>
+                    </Text>
+                  </Box>
                   {/* Types */}
-                  <div>
+                  <Box>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], display: 'block', marginBottom: tokens.spacing[1] }}>
                       Capabilities
                     </Text>
-                    <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
+                    <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[1] }}>
                       {selectedProviderData.types.map((type) => (
-                        <span key={type} style={createBadgeStyle(tokens, typeColor(type))}>
+                        <Text as="span" key={type} style={createBadgeStyle(tokens, typeColor(type))}>
                           {type}
-                        </span>
+                        </Text>
                       ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* =========================================================== */}
         {/*  Add Key Modal                                               */}
         {/* =========================================================== */}
         {activeShowKeyModal && (
-          <div
+          <Box
             style={{
               position: 'fixed' as const,
               top: 0,
@@ -1482,7 +1484,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             }}
             onClick={() => handleKeyModalToggle(false)}
           >
-            <div
+            <Box
               onClick={(e) => e.stopPropagation()}
               style={{
                 ...cardBase,
@@ -1500,7 +1502,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   : {}),
               }}
             >
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1517,7 +1519,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 >
                   Add API Key
                 </Text>
-                <button
+                <Box
                   onClick={() => handleKeyModalToggle(false)}
                   style={{
                     border: 'none',
@@ -1530,16 +1532,16 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   }}
                 >
                   &#x2715;
-                </button>
-              </div>
+                </Box>
+              </Box>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
                 {/* Provider selection */}
-                <div>
+                <Box>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], display: 'block', marginBottom: tokens.spacing[1] }}>
                     Provider
                   </Text>
-                  <div
+                  <Box
                     style={{
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.md,
@@ -1553,16 +1555,16 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     }}
                   >
                     Select provider...
-                    <span>&#9662;</span>
-                  </div>
-                </div>
+                    <Text as="span">&#9662;</Text>
+                  </Box>
+                </Box>
 
                 {/* Key input */}
-                <div>
+                <Box>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], display: 'block', marginBottom: tokens.spacing[1] }}>
                     API Key
                   </Text>
-                  <div
+                  <Box
                     style={{
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.md,
@@ -1574,15 +1576,15 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     }}
                   >
                     sk-...
-                  </div>
-                </div>
+                  </Box>
+                </Box>
 
                 {/* Label */}
-                <div>
+                <Box>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], display: 'block', marginBottom: tokens.spacing[1] }}>
                     Label (optional)
                   </Text>
-                  <div
+                  <Box
                     style={{
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.md,
@@ -1593,11 +1595,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     }}
                   >
                     e.g. Production Key
-                  </div>
-                </div>
-              </div>
+                  </Box>
+                </Box>
+              </Box>
 
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'flex-end',
@@ -1607,7 +1609,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 }}
               >
-                <button
+                <Box
                   onClick={() => handleKeyModalToggle(false)}
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
@@ -1623,8 +1625,8 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   }}
                 >
                   Cancel
-                </button>
-                <button
+                </Box>
+                <Box
                   onClick={() => handleKeyModalToggle(false)}
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
@@ -1640,10 +1642,10 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   }}
                 >
                   Save Key
-                </button>
-              </div>
-            </div>
-          </div>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         )}
       </Box>
     );

@@ -2,25 +2,20 @@
 
 /**
  * BhScorecardDetail - Summary Preset
- * Compact overview card version showing key scorecard data at a glance
+ * Compact overview card version showing key scorecard data at a glance.
+ * Slite-inspired: generous whitespace, warm neutrals, soft shadows, minimal borders.
  */
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
   createHoverStyle,
+  createBadgeStyle,
+  createStatusDotStyle,
   createProgressBarStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
 } from '../../../helpers';
-import type {
-  BhScorecardDetailProps,
-  ScorecardDimension,
-  ScorecardSortBy,
-} from '../../core';
+import type { BhScorecardDetailProps, ScorecardDimension } from '../../core';
 import {
   getScoreLevelColors,
   getPassFailColors,
@@ -28,394 +23,254 @@ import {
   getConfidenceLabel,
   getConfidenceColor,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  User,
-  Briefcase,
-  Target,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  Shield,
-  BarChart3,
-  Star,
-  AlertOctagon,
-  MessageSquareQuote,
-  ThumbsUp,
-  Edit3,
-  RotateCcw,
-  Users,
-  ChevronDown,
-  ChevronRight,
-  TrendingUp,
-  Zap,
+  User, Briefcase, Target, CheckCircle2, XCircle, AlertTriangle,
+  Shield, Star, AlertOctagon, TrendingUp, ThumbsUp, Edit3,
+  RotateCcw, Users, ChevronDown, ChevronRight,
 } from 'lucide-react';
 
-/* ------------------------------------------------------------------ */
-/*  Summary Preset                                                      */
-/* ------------------------------------------------------------------ */
-export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>(
-  'BhScorecardDetail.Summary',
-  ({ primitives, props, tokens, engine }: PresetContext<BhScorecardDetailProps>) => {
-    const { Box } = primitives;
-    const isModern = tokens.surface.useGlass;
+export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
+  name: 'BhScorecardDetail.Summary',
+  render: ({ primitives, props, tokens }: PresetContext<BhScorecardDetailProps>) => {
+    const { Box, Flex, Stack, Text } = primitives;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      header,
-      dimensions,
-      overrideInfo,
-      cohortComparison,
-      onApprove,
-      onOverride,
-      onRequestRescore,
-      onDimensionSelect,
-      className,
-      style,
+      header, dimensions, overrideInfo, cohortComparison,
+      onApprove, onOverride, onRequestRescore, onDimensionSelect,
+      className, style,
     } = props;
 
-    /* ---- internal state ---- */
     const [expanded, setExpanded] = useState(false);
     const [hoveredDim, setHoveredDim] = useState<string | null>(null);
 
-    /* ---- glass support ---- */
-    const glassCard = isModern && tokens.glass
-      ? {
-          backdropFilter: tokens.glass.blur,
-          WebkitBackdropFilter: tokens.glass.blur,
-          backgroundColor: tokens.glass.bg,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
-        }
-      : {};
+    const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
 
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const hoverTransform = getHoverTransform(tokens);
+    const lvlColors = getScoreLevelColors(header.overallLevel, tokens);
+    const pfColors = getPassFailColors(header.passFail, tokens);
+    const knockouts = dimensions.filter(d => d.isKnockout && d.knockoutTriggered);
+    const sorted = useMemo(() => [...dimensions].sort((a, b) => b.score - a.score), [dimensions]);
+    const topDims = sorted.slice(0, 3);
+    const bottomDims = sorted.slice(-3).reverse();
+    const displayDims = expanded ? sorted : sorted.slice(0, 5);
 
-    const levelColors = getScoreLevelColors(header.overallLevel, tokens);
-    const passFailColors = getPassFailColors(header.passFail, tokens);
-
-    /* ---- knockout check ---- */
-    const knockoutDimensions = dimensions.filter(d => d.isKnockout && d.knockoutTriggered);
-    const hasKnockout = knockoutDimensions.length > 0;
-
-    /* ---- top / bottom dimensions ---- */
-    const sortedByScore = useMemo(() => [...dimensions].sort((a, b) => b.score - a.score), [dimensions]);
-    const topDimensions = sortedByScore.slice(0, 3);
-    const bottomDimensions = sortedByScore.slice(-3).reverse();
-
-    /* ---- Score ring (compact) ---- */
-    const renderCompactRing = () => {
-      const size = 64;
-      const strokeWidth = 6;
-      const radius = (size - strokeWidth) / 2;
-      const circumference = 2 * Math.PI * radius;
-      const progress = (header.overallScore / 100) * circumference;
-
+    /* ── Score Ring ─────────────────────────────────────── */
+    const ScoreRing = () => {
+      const sz = 68, sw = 6, r = (sz - sw) / 2;
+      const circ = 2 * Math.PI * r;
+      const prog = (header.overallScore / 100) * circ;
       return (
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={tokens.colors.neutral[100]}
-            strokeWidth={strokeWidth}
-          />
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={levelColors.ring}
-            strokeWidth={strokeWidth}
-            strokeDasharray={`${progress} ${circumference - progress}`}
-            strokeDashoffset={circumference / 4}
-            strokeLinecap="round"
-            style={{ transition: `stroke-dasharray ${tokens.motion.hover}` }}
-          />
-          <text
-            x={size / 2}
-            y={size / 2}
-            textAnchor="middle"
-            dominantBaseline="middle"
+        <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`}>
+          <circle cx={sz / 2} cy={sz / 2} r={r} fill="none"
+            stroke={tokens.colors.neutral[100]} strokeWidth={sw} />
+          <circle cx={sz / 2} cy={sz / 2} r={r} fill="none"
+            stroke={lvlColors.ring} strokeWidth={sw}
+            strokeDasharray={`${prog} ${circ - prog}`}
+            strokeDashoffset={circ / 4} strokeLinecap="round"
+            style={{ transition: `stroke-dasharray ${tokens.motion.hover}` }} />
+          <text x={sz / 2} y={sz / 2} textAnchor="middle" dominantBaseline="middle"
             fill={tokens.colors.neutral[900]}
             fontSize={tokens.typography.fontSize.lg}
-            fontWeight={tokens.typography.fontWeight.bold}
-          >
+            fontWeight={tokens.typography.fontWeight.bold}>
             {header.overallScore}
           </text>
         </svg>
       );
     };
 
-    /* ---- Mini score bar ---- */
-    const renderMiniBar = (dim: ScorecardDimension) => {
-      const scoreColor = getScoreGradientColor(dim.score, tokens);
-      const isHovered = hoveredDim === dim.id;
+    /* ── Badge pill ─────────────────────────────────────── */
+    const Pill = ({ bg, clr, border: brd, icon, label }: {
+      bg: string; clr: string; border?: string; icon: React.ReactNode; label: string;
+    }) => (
+      <Flex align="center" gap={4} style={{
+        padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+        borderRadius: tokens.borderRadius.full,
+        fontSize: tokens.typography.fontSize.xs,
+        fontWeight: tokens.typography.fontWeight.semibold,
+        backgroundColor: bg, color: clr,
+        ...(brd ? { border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${brd}` } : {}),
+      }}>
+        {icon}
+        <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{label}</Text>
+      </Flex>
+    );
 
+    /* ── Mini dimension bar ─────────────────────────────── */
+    const DimBar = (dim: ScorecardDimension) => {
+      const isHov = hoveredDim === dim.id;
       return (
-        <Box
-          key={dim.id}
+        <Box key={dim.id}
           onMouseEnter={() => setHoveredDim(dim.id)}
           onMouseLeave={() => setHoveredDim(null)}
           onClick={() => onDimensionSelect?.(dim.id)}
-          style={{
-            ...hoverStyle,
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            padding: `${tokens.spacing[1]}px 0`,
-          }}
-        >
-          <Box style={{
-            flex: 1,
-            fontSize: tokens.typography.fontSize.xs,
-            color: isHovered ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
-            fontWeight: isHovered ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap' as const,
-            minWidth: 0,
-            transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
+          style={{ display: 'flex', alignItems: 'center', gap: 8, ...hov, padding: `${tokens.spacing[1]}px 0` }}>
+          <Text style={{
+            flex: 1, fontSize: tokens.typography.fontSize.xs,
+            color: isHov ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
+            fontWeight: isHov ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const,
+            minWidth: 0, transition: `color ${tokens.transitions?.fast || tokens.motion.hover}`,
           }}>
             {dim.name}
-          </Box>
+          </Text>
           <Box style={{
-            width: 80,
-            height: 6,
-            backgroundColor: tokens.colors.neutral[100],
-            borderRadius: tokens.borderRadius.full,
-            overflow: 'hidden',
-            flexShrink: 0,
+            width: 80, height: 6, backgroundColor: tokens.colors.neutral[100],
+            borderRadius: tokens.borderRadius.full, overflow: 'hidden', flexShrink: 0,
           }}>
             <Box style={{
-              width: `${dim.score}%`,
-              height: '100%',
-              backgroundColor: scoreColor,
+              width: `${dim.score}%`, height: '100%',
+              backgroundColor: getScoreGradientColor(dim.score, tokens),
               borderRadius: tokens.borderRadius.full,
               transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
             }} />
           </Box>
-          <Box style={{
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.neutral[700],
-            minWidth: 24,
-            textAlign: 'right' as const,
+          <Text style={{
+            fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+            color: tokens.colors.neutral[700], minWidth: 24, textAlign: 'right' as const,
           }}>
             {dim.score}
-          </Box>
+          </Text>
         </Box>
       );
     };
 
-    /* ================================================================ */
-    /*  RENDER: Header Row                                                */
-    /* ================================================================ */
-    const renderHeaderRow = () => (
+    /* ── Top/Bottom panel ──────────────────────────────── */
+    const DimPanel = ({ title, icon, dims, scale }: {
+      title: string; icon: React.ReactNode; dims: ScorecardDimension[];
+      scale: { [k: number]: string };
+    }) => (
       <Box style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: tokens.spacing[4],
-        marginBottom: tokens.spacing[4],
+        padding: tokens.spacing[3], backgroundColor: (scale as any)[50],
+        borderRadius: tokens.borderRadius.lg,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${(scale as any)[100]}`,
       }}>
-        {/* Avatar */}
-        <Box style={{
-          width: 44,
-          height: 44,
-          borderRadius: tokens.borderRadius.full,
-          backgroundColor: tokens.colors.primaryScale[100],
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          flexShrink: 0,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
+        <Flex align="center" gap={4} style={{
+          fontSize: tokens.typography.fontSize.xs,
+          fontWeight: tokens.typography.fontWeight.semibold,
+          color: (scale as any)[700], marginBottom: tokens.spacing[2],
         }}>
-          {header.candidateAvatar ? (
-            <img
-              src={header.candidateAvatar}
-              alt={header.candidateName}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          ) : (
-            <User size={20} color={tokens.colors.primaryScale[600]} />
+          {icon}
+          <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{title}</Text>
+        </Flex>
+        <Stack gap={2}>
+          {dims.map(dim => (
+            <Flex key={dim.id} justify="between" align="center" style={{
+              fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
+            }}>
+              <Text style={{
+                fontSize: 'inherit', color: 'inherit', overflow: 'hidden',
+                textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const,
+                flex: 1, minWidth: 0,
+              }}>
+                {dim.name}
+              </Text>
+              <Text style={{
+                fontSize: 'inherit', fontWeight: tokens.typography.fontWeight.semibold,
+                color: (scale as any)[700], marginLeft: tokens.spacing[2],
+              }}>
+                {dim.score}
+              </Text>
+            </Flex>
+          ))}
+        </Stack>
+      </Box>
+    );
+
+    /* ── Action button ─────────────────────────────────── */
+    const ActionBtn = ({ onClick, icon, label, bg, clr, borderClr }: {
+      onClick?: () => void; icon: React.ReactNode; label: string;
+      bg: string; clr: string; borderClr?: string;
+    }) => (
+      <Box onClick={onClick} style={{
+        display: 'flex', alignItems: 'center', gap: 4,
+        ...hov, padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+        borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.xs,
+        fontWeight: tokens.typography.fontWeight.semibold, color: clr, backgroundColor: bg,
+        ...(borderClr ? { border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${borderClr}` } : {}),
+      }}>
+        {icon}
+        <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{label}</Text>
+      </Box>
+    );
+
+    return (
+      <Box className={className} style={{ ...card, padding: tokens.spacing[5], ...style }}>
+        {/* ── Header ───────────────────────────────────── */}
+        <Flex align="center" gap={16} style={{ marginBottom: tokens.spacing[4] }}>
+          <Box style={{
+            width: 48, height: 48, borderRadius: tokens.borderRadius.full,
+            backgroundColor: tokens.colors.primaryScale[100],
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            overflow: 'hidden', flexShrink: 0,
+            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
+          }}>
+            {header.candidateAvatar
+              ? <img src={header.candidateAvatar} alt={header.candidateName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : <User size={22} color={tokens.colors.primaryScale[600]} />}
+          </Box>
+          <Stack gap={2} style={{ flex: 1, minWidth: 0 }}>
+            <Text style={{
+              fontSize: tokens.typography.fontSize.md,
+              fontWeight: tokens.typography.fontWeight.bold,
+              color: tokens.colors.neutral[900],
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const,
+            }}>
+              {header.candidateName}
+            </Text>
+            <Flex align="center" gap={6} style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+              <Flex align="center" gap={3}>
+                <Briefcase size={12} />
+                <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{header.jobTitle}</Text>
+              </Flex>
+              <Box style={{ width: 3, height: 3, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[300] }} />
+              <Flex align="center" gap={3}>
+                <Target size={12} />
+                <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{header.stageName}</Text>
+              </Flex>
+            </Flex>
+          </Stack>
+          <ScoreRing />
+        </Flex>
+
+        {/* ── Badges ───────────────────────────────────── */}
+        <Flex align="center" gap={6} wrap="wrap" style={{ marginBottom: tokens.spacing[4] }}>
+          <Pill bg={lvlColors.bg} clr={lvlColors.color} border={lvlColors.border}
+            icon={<Star size={10} />} label={header.overallLevel.charAt(0).toUpperCase() + header.overallLevel.slice(1)} />
+          <Pill bg={pfColors.bg} clr={pfColors.color} border={pfColors.border}
+            icon={header.passFail === 'pass' ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
+            label={header.passFail.toUpperCase()} />
+          <Pill bg={tokens.colors.neutral[100]} clr={tokens.colors.neutral[600]}
+            icon={<Shield size={10} />}
+            label={`${getConfidenceLabel(header.confidence)} (${Math.round(header.confidence * 100)}%)`} />
+          {knockouts.length > 0 && (
+            <Pill bg={tokens.colors.errorScale[100]} clr={tokens.colors.errorScale[700]}
+              border={tokens.colors.errorScale[200]}
+              icon={<AlertOctagon size={10} />}
+              label={`${knockouts.length} Knockout${knockouts.length > 1 ? 's' : ''}`} />
           )}
-        </Box>
+          {overrideInfo && (
+            <Pill bg={tokens.colors.warningScale[100]} clr={tokens.colors.warningScale[700]}
+              icon={<Edit3 size={10} />} label="Overridden" />
+          )}
+          {cohortComparison && (
+            <Pill bg={tokens.colors.primaryScale[50]} clr={tokens.colors.primaryScale[700]}
+              icon={<Users size={10} />} label={`P${cohortComparison.percentile}`} />
+          )}
+        </Flex>
 
-        {/* Name + meta */}
-        <Box style={{ flex: 1, minWidth: 0 }}>
-          <Box style={{
-            fontSize: tokens.typography.fontSize.md,
-            fontWeight: tokens.typography.fontWeight.bold,
-            color: tokens.colors.neutral[900],
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap' as const,
-          }}>
-            {header.candidateName}
-          </Box>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.neutral[500],
-            marginTop: 2,
-          }}>
-            <Briefcase size={12} />
-            {header.jobTitle}
-            <Box style={{
-              width: 3,
-              height: 3,
-              borderRadius: tokens.borderRadius.full,
-              backgroundColor: tokens.colors.neutral[300],
-            }} />
-            <Target size={12} />
-            {header.stageName}
-          </Box>
-        </Box>
+        {/* ── Top / Bottom Strengths ───────────────────── */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[3], marginBottom: tokens.spacing[4] }}>
+          <DimPanel title="Top Strengths" icon={<TrendingUp size={12} />}
+            dims={topDims} scale={tokens.colors.successScale as unknown as { [k: number]: string }} />
+          <DimPanel title="Areas to Improve" icon={<AlertTriangle size={12} />}
+            dims={bottomDims} scale={tokens.colors.errorScale as unknown as { [k: number]: string }} />
+        </div>
 
-        {/* Score ring */}
-        {renderCompactRing()}
-      </Box>
-    );
-
-    /* ================================================================ */
-    /*  RENDER: Badge Row                                                 */
-    /* ================================================================ */
-    const renderBadgeRow = () => (
-      <Box style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: tokens.spacing[2],
-        flexWrap: 'wrap' as const,
-        marginBottom: tokens.spacing[3],
-      }}>
-        {/* Level badge */}
-        <Box style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: tokens.spacing[1],
-          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-          borderRadius: tokens.borderRadius.full,
-          fontSize: tokens.typography.fontSize.xs,
-          fontWeight: tokens.typography.fontWeight.semibold,
-          backgroundColor: levelColors.bg,
-          color: levelColors.color,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${levelColors.border}`,
-          textTransform: 'capitalize' as const,
-        }}>
-          <Star size={10} />
-          {header.overallLevel}
-        </Box>
-
-        {/* Pass/Fail */}
-        <Box style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: tokens.spacing[1],
-          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-          borderRadius: tokens.borderRadius.full,
-          fontSize: tokens.typography.fontSize.xs,
-          fontWeight: tokens.typography.fontWeight.semibold,
-          backgroundColor: passFailColors.bg,
-          color: passFailColors.color,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${passFailColors.border}`,
-          textTransform: 'uppercase' as const,
-        }}>
-          {header.passFail === 'pass' ? <CheckCircle2 size={10} /> : <XCircle size={10} />}
-          {header.passFail}
-        </Box>
-
-        {/* Confidence */}
-        <Box style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: tokens.spacing[1],
-          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-          borderRadius: tokens.borderRadius.full,
-          fontSize: tokens.typography.fontSize.xs,
-          fontWeight: tokens.typography.fontWeight.medium,
-          backgroundColor: tokens.colors.neutral[100],
-          color: tokens.colors.neutral[600],
-        }}>
-          <Shield size={10} />
-          {getConfidenceLabel(header.confidence)} ({Math.round(header.confidence * 100)}%)
-        </Box>
-
-        {/* Knockout warning */}
-        {hasKnockout && (
-          <Box style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-            borderRadius: tokens.borderRadius.full,
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            backgroundColor: tokens.colors.errorScale[100],
-            color: tokens.colors.errorScale[700],
-            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-          }}>
-            <AlertOctagon size={10} />
-            {knockoutDimensions.length} Knockout{knockoutDimensions.length > 1 ? 's' : ''}
-          </Box>
-        )}
-
-        {/* Override flag */}
-        {overrideInfo && (
-          <Box style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-            borderRadius: tokens.borderRadius.full,
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.medium,
-            backgroundColor: tokens.colors.warningScale[100],
-            color: tokens.colors.warningScale[700],
-          }}>
-            <Edit3 size={10} />
-            Overridden
-          </Box>
-        )}
-
-        {/* Cohort percentile */}
-        {cohortComparison && (
-          <Box style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-            borderRadius: tokens.borderRadius.full,
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.medium,
-            backgroundColor: tokens.colors.primaryScale[50],
-            color: tokens.colors.primaryScale[700],
-          }}>
-            <Users size={10} />
-            P{cohortComparison.percentile}
-          </Box>
-        )}
-      </Box>
-    );
-
-    /* ================================================================ */
-    /*  RENDER: Dimensions Summary                                        */
-    /* ================================================================ */
-    const renderDimensionsSummary = () => {
-      const displayDims = expanded ? sortedByScore : sortedByScore.slice(0, 5);
-
-      return (
-        <Box style={{ marginBottom: tokens.spacing[3] }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: tokens.spacing[2],
-          }}>
-            <Box style={{
+        {/* ── Dimension Bars ───────────────────────────── */}
+        <Box style={{ marginBottom: tokens.spacing[4] }}>
+          <Flex justify="between" align="center" style={{ marginBottom: tokens.spacing[2] }}>
+            <Text style={{
               fontSize: tokens.typography.fontSize.xs,
               fontWeight: tokens.typography.fontWeight.semibold,
               color: tokens.colors.neutral[500],
@@ -423,240 +278,52 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>(
               letterSpacing: '0.05em',
             }}>
               Dimensions ({dimensions.length})
-            </Box>
-          </Box>
-
-          {displayDims.map(dim => renderMiniBar(dim))}
-
+            </Text>
+          </Flex>
+          {displayDims.map(dim => DimBar(dim))}
           {dimensions.length > 5 && (
             <Box
               onClick={() => setExpanded(!expanded)}
               style={{
-                ...hoverStyle,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[1]}px 0`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                ...hov, padding: `${tokens.spacing[1]}px 0`,
                 fontSize: tokens.typography.fontSize.xs,
                 color: tokens.colors.primaryScale[600],
                 fontWeight: tokens.typography.fontWeight.medium,
                 marginTop: tokens.spacing[1],
-              }}
-            >
+              }}>
               {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-              {expanded ? 'Show less' : `Show ${dimensions.length - 5} more`}
+              <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>
+                {expanded ? 'Show less' : `Show ${dimensions.length - 5} more`}
+              </Text>
             </Box>
           )}
         </Box>
-      );
-    };
 
-    /* ================================================================ */
-    /*  RENDER: Quick Strengths / Weaknesses                              */
-    /* ================================================================ */
-    const renderTopBottom = () => (
-      <Box style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: tokens.spacing[3],
-        marginBottom: tokens.spacing[3],
-      }}>
-        {/* Strengths (top 3) */}
-        <Box style={{
-          padding: tokens.spacing[3],
-          backgroundColor: tokens.colors.successScale[50],
-          borderRadius: tokens.borderRadius.md,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[100]}`,
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.successScale[700],
-            marginBottom: tokens.spacing[2],
+        {/* ── Actions ──────────────────────────────────── */}
+        {(onApprove || onOverride || onRequestRescore) && (
+          <Flex align="center" gap={8} style={{
+            paddingTop: tokens.spacing[3],
+            borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
           }}>
-            <TrendingUp size={12} />
-            Top Strengths
-          </Box>
-          {topDimensions.map(dim => (
-            <Box key={dim.id} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: tokens.typography.fontSize.xs,
-              color: tokens.colors.neutral[600],
-              padding: `2px 0`,
-            }}>
-              <Box style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap' as const,
-                flex: 1,
-                minWidth: 0,
-              }}>
-                {dim.name}
-              </Box>
-              <Box style={{
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.successScale[700],
-                marginLeft: tokens.spacing[2],
-              }}>
-                {dim.score}
-              </Box>
-            </Box>
-          ))}
-        </Box>
-
-        {/* Weaknesses (bottom 3) */}
-        <Box style={{
-          padding: tokens.spacing[3],
-          backgroundColor: tokens.colors.errorScale[50],
-          borderRadius: tokens.borderRadius.md,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[100]}`,
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.errorScale[700],
-            marginBottom: tokens.spacing[2],
-          }}>
-            <AlertTriangle size={12} />
-            Areas to Improve
-          </Box>
-          {bottomDimensions.map(dim => (
-            <Box key={dim.id} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: tokens.typography.fontSize.xs,
-              color: tokens.colors.neutral[600],
-              padding: `2px 0`,
-            }}>
-              <Box style={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap' as const,
-                flex: 1,
-                minWidth: 0,
-              }}>
-                {dim.name}
-              </Box>
-              <Box style={{
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.errorScale[700],
-                marginLeft: tokens.spacing[2],
-              }}>
-                {dim.score}
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    );
-
-    /* ================================================================ */
-    /*  RENDER: Compact Actions                                           */
-    /* ================================================================ */
-    const renderCompactActions = () => (
-      <Box style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: tokens.spacing[2],
-        paddingTop: tokens.spacing[3],
-        borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-      }}>
-        {onApprove && (
-          <Box
-            onClick={onApprove}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: tokens.colors.common.white,
-              backgroundColor: tokens.colors.successScale[600],
-            }}
-          >
-            <ThumbsUp size={12} />
-            Approve
-          </Box>
+            {onApprove && (
+              <ActionBtn onClick={onApprove} icon={<ThumbsUp size={12} />}
+                label="Approve" bg={tokens.colors.successScale[600]} clr={tokens.colors.common.white} />
+            )}
+            {onOverride && (
+              <ActionBtn onClick={() => onOverride(header.overallScore, '')}
+                icon={<Edit3 size={12} />} label="Override"
+                bg={tokens.colors.warningScale[50]} clr={tokens.colors.warningScale[700]}
+                borderClr={tokens.colors.warningScale[200]} />
+            )}
+            {onRequestRescore && (
+              <ActionBtn onClick={onRequestRescore} icon={<RotateCcw size={12} />}
+                label="Re-score" bg={tokens.colors.infoScale[50]} clr={tokens.colors.infoScale[700]}
+                borderClr={tokens.colors.infoScale[200]} />
+            )}
+          </Flex>
         )}
-
-        {onOverride && (
-          <Box
-            onClick={() => onOverride(header.overallScore, '')}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.warningScale[700],
-              backgroundColor: tokens.colors.warningScale[50],
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
-            }}
-          >
-            <Edit3 size={12} />
-            Override
-          </Box>
-        )}
-
-        {onRequestRescore && (
-          <Box
-            onClick={onRequestRescore}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.infoScale[700],
-              backgroundColor: tokens.colors.infoScale[50],
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
-            }}
-          >
-            <RotateCcw size={12} />
-            Re-score
-          </Box>
-        )}
-      </Box>
-    );
-
-    /* ================================================================ */
-    /*  MAIN RENDER                                                       */
-    /* ================================================================ */
-    return (
-      <Box
-        className={className}
-        style={{
-          ...cardBase,
-          ...glassCard,
-          padding: tokens.spacing[4],
-          ...style,
-        }}
-      >
-        {renderHeaderRow()}
-        {renderBadgeRow()}
-        {renderTopBottom()}
-        {renderDimensionsSummary()}
-        {renderCompactActions()}
       </Box>
     );
   },
-);
+});

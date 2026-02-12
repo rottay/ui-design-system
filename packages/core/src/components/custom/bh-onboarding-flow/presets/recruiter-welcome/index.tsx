@@ -205,7 +205,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
             <div style={{
               width: 72,
               height: 72,
-              borderRadius: tokens.borderRadius.full,
+              borderRadius: '50%',
               backgroundColor: tokens.colors.primaryScale[100],
               display: 'flex',
               alignItems: 'center',
@@ -240,7 +240,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
       return (
         <div style={{
           padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
           backgroundColor: tokens.colors.common.white,
         }}>
           <Stack direction="horizontal" align="center" justify="space-between">
@@ -250,6 +250,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                 <h1 style={{
                   fontSize: tokens.typography.fontSize.lg,
                   fontWeight: tokens.typography.fontWeight.bold,
+                  letterSpacing: '-0.02em',
                   color: tokens.colors.neutral[900],
                   margin: 0,
                 }}>
@@ -287,7 +288,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                 style={{
                   flex: 1,
                   height: 4,
-                  borderRadius: tokens.borderRadius.full,
+                  borderRadius: '50%',
                   backgroundColor: idx <= currentStep
                     ? (step.isComplete ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500])
                     : tokens.colors.neutral[200],
@@ -322,7 +323,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
           <div style={{
             width: 80,
             height: 80,
-            borderRadius: tokens.borderRadius.full,
+            borderRadius: '50%',
             background: `linear-gradient(135deg, ${tokens.colors.primaryScale[100]}, ${tokens.colors.primaryScale[200]})`,
             display: 'flex',
             alignItems: 'center',
@@ -466,7 +467,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     transition: `all ${tokens.motion.hover}`,
                     textAlign: 'center' as const,
                     position: 'relative' as const,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isExplored ? tokens.colors.successScale[300] : tokens.colors.neutral[200]}`,
+                    border: `1px solid ${isExplored ? tokens.colors.successScale[300] : tokens.colors.neutral[100]}`,
                     backgroundColor: isExplored ? tokens.colors.successScale[50] : tokens.colors.common.white,
                   }}
                 >
@@ -477,7 +478,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                       right: tokens.spacing[2],
                       width: 20,
                       height: 20,
-                      borderRadius: tokens.borderRadius.full,
+                      borderRadius: '50%',
                       backgroundColor: tokens.colors.successScale[500],
                       display: 'flex',
                       alignItems: 'center',
@@ -544,7 +545,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
         width: '100%',
         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
         borderRadius: tokens.borderRadius.md,
-        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
+        border: `1px solid ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[200]}`,
         fontSize: tokens.typography.fontSize.sm,
         color: tokens.colors.neutral[900],
         backgroundColor: tokens.colors.common.white,
@@ -628,7 +629,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                 ...hoverTransition,
                 width: 44,
                 height: 24,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: '50%',
                 backgroundColor: inputValue ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                 padding: 2,
                 cursor: 'pointer',
@@ -640,7 +641,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
               <div style={{
                 width: 20,
                 height: 20,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: '50%',
                 backgroundColor: tokens.colors.common.white,
                 boxShadow: tokens.shadows.sm,
                 transform: inputValue ? 'translateX(20px)' : 'translateX(0)',
@@ -853,7 +854,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
       return (
         <div style={{
           padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
-          borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+          borderTop: `1px solid ${tokens.colors.neutral[100]}`,
           backgroundColor: tokens.colors.common.white,
         }}>
           <Stack direction="horizontal" align="center" justify="space-between">
@@ -865,7 +866,7 @@ export const RecruiterWelcomeBhOnboardingFlow = createPreset<BhOnboardingFlowPro
                     ...hoverTransition,
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
+                    border: `1px solid ${tokens.colors.neutral[200]}`,
                     backgroundColor: tokens.colors.common.white,
                     color: tokens.colors.neutral[700],
                     fontSize: tokens.typography.fontSize.sm,

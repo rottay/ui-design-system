@@ -157,7 +157,7 @@ function generateRadarPoints(
 export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
   name: 'BhRubricBuilder.Editor',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhRubricBuilderProps>) => {
-    const { Box, Text } = primitives;
+    const { Box, Flex, Stack, Text } = primitives;
 
     const {
       rubricName,
@@ -338,19 +338,18 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
         }}
       >
         {/* ── Rubric Header ────────────────────────────────────────── */}
-        <div
+        <Flex
+          align="center"
+          justify="between"
           style={{
             ...cardBase,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
             padding: tokens.spacing[4],
             borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flex: 1 }}>
+          <Flex align="center" gap={12} style={{ flex: 1 }}>
             <Target size={20} color={tokens.colors.primaryScale[600]} strokeWidth={1.5} />
             <input
               type="text"
@@ -420,9 +419,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               <CircleDot size={10} />
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
-          </div>
+          </Flex>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+          <Flex align="center" gap={8}>
             {localIsDirty && (
               <span
                 style={{
@@ -501,8 +500,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               <Send size={14} />
               Publish
             </button>
-          </div>
-        </div>
+          </Flex>
+        </Flex>
 
         {/* ── Main Content ─────────────────────────────────────────── */}
         <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>

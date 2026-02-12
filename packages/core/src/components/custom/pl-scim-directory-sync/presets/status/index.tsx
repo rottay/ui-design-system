@@ -185,7 +185,7 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
     const isModern = tokens.surface.useGlass;
 
     const {
-      config,
+      config: configProp,
       mappings = [],
       logs = [],
       onSync,
@@ -196,6 +196,17 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
       className,
       style,
     } = props;
+
+    // Provide default config if not provided
+    const config = configProp || {
+      provider: 'Unknown Provider',
+      tenantUrl: '',
+      status: 'pending' as const,
+      totalMapped: 0,
+      totalConflicts: 0,
+      autoProvision: false,
+      syncInterval: 60,
+    };
 
     // ─── State ──────────────────────────────────────────────────────────
 
@@ -217,10 +228,10 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
         let cmp = 0;
         switch (mappingSortField) {
           case 'displayName':
-            cmp = a.displayName.localeCompare(b.displayName);
+            cmp = (a.displayName || '').localeCompare(b.displayName || '');
             break;
           case 'status':
-            cmp = a.status.localeCompare(b.status);
+            cmp = (a.status || '').localeCompare(b.status || '');
             break;
           case 'lastSynced':
             cmp = (a.lastSynced?.getTime() || 0) - (b.lastSynced?.getTime() || 0);
@@ -732,7 +743,7 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
           {sortedMappings.map((mapping) => {
             const hasConflicts = mapping.conflicts && mapping.conflicts.length > 0;
             const isHovered = hoveredMappingId === mapping.id;
-            const statusBadgeColor = getMappingStatusBadge(mapping.status);
+            const statusBadgeColor = getMappingStatusBadge(mapping.status || 'pending');
 
             return (
               <div
@@ -753,9 +764,9 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
                   alignItems: 'center',
                   minHeight: 48,
                 }}
-                onMouseEnter={() => setHoveredMappingId(mapping.id)}
+                onMouseEnter={() => setHoveredMappingId(mapping.id || null)}
                 onMouseLeave={() => setHoveredMappingId(null)}
-                onClick={() => onMappingClick?.(mapping.id)}
+                onClick={() => mapping.id && onMappingClick?.(mapping.id)}
               >
                 {/* External ID */}
                 <div style={{
@@ -837,7 +848,7 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        onResolveConflict?.(mapping.id);
+                        if (mapping.id) onResolveConflict?.(mapping.id);
                       }}
                       style={{
                         display: 'inline-flex',

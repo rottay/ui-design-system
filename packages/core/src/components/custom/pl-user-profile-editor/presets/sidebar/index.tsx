@@ -763,7 +763,7 @@ export const SidebarPlUserProfileEditor = createPreset<PlUserProfileEditorProps>
     const renderSectionTitle = (title: string, subtitle: string) => (
       <div style={{ marginBottom: tokens.spacing[4] }}>
         <div style={{
-          fontSize: tokens.typography.fontSize.base,
+          fontSize: tokens.typography.fontSize.md,
           fontWeight: tokens.typography.fontWeight.semibold,
           color: tokens.colors.neutral[900],
           lineHeight: tokens.typography.lineHeight.tight,

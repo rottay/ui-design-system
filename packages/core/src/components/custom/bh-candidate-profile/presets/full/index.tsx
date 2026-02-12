@@ -4,19 +4,20 @@
  * BhCandidateProfile - Full Preset
  * Comprehensive candidate view with tabbed navigation covering profile,
  * applications, interviews, scores, notes, activity, and documents.
+ *
+ * Slite-inspired: generous spacing, warm tones, section cards,
+ * proficiency rings, timeline dots, and clean tab navigation.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createPanelHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
+  createBadgeStyle,
+  createProgressBarStyle,
+  createCardHoverStyles,
+  getPersonalityBadgeRadius,
+  getCardPadding,
 } from '../../../helpers';
 import type {
   BhCandidateProfileProps,
@@ -34,1991 +35,708 @@ import type {
 } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  MapPin,
-  Mail,
-  Phone,
-  ExternalLink,
-  AlertTriangle,
-  Calendar,
-  Clock,
-  Play,
-  FileText,
-  Edit3,
-  Trash2,
-  Plus,
-  Download,
-  Briefcase,
-  GraduationCap,
-  Globe,
-  Link as LinkIcon,
-  Star,
-  User,
-  Activity,
-  MessageSquare,
-  BarChart3,
-  ChevronRight,
+  Briefcase, MapPin, Mail, Phone, ExternalLink, Star, Edit2,
+  Calendar, FileText, MessageSquare, Activity, ChevronRight,
+  User, ClipboardList, Mic, BarChart3, StickyNote, Clock,
+  Upload, Download, Trash2, Plus, Play, Send, AlertTriangle,
+  Building, GraduationCap, Globe, Award, DollarSign,
 } from 'lucide-react';
+
+/* ------------------------------------------------------------------ */
+/*  Mock Data                                                          */
+/* ------------------------------------------------------------------ */
+
+const DEFAULT_CANDIDATE: CandidateInfo = {
+  id: 'c-1', name: 'Sarah Johnson', avatar: '',
+  currentRole: 'Senior Frontend Engineer at Google',
+  location: 'San Francisco, CA', email: 'sarah.j@google.com',
+  phone: '+1 (415) 555-0127', source: 'LinkedIn',
+  status: 'active', doNotContact: false,
+};
+
+const DEFAULT_SKILLS: CandidateSkill[] = [
+  { name: 'React', proficiency: 95 }, { name: 'TypeScript', proficiency: 92 },
+  { name: 'Next.js', proficiency: 88 }, { name: 'GraphQL', proficiency: 80 },
+  { name: 'Node.js', proficiency: 75 }, { name: 'System Design', proficiency: 70 },
+  { name: 'Testing', proficiency: 85 }, { name: 'CI/CD', proficiency: 65 },
+];
+
+const DEFAULT_EXPERIENCE: Experience[] = [
+  { company: 'Google', role: 'Senior Frontend Engineer', startDate: '2021-03', current: true, description: 'Leading frontend architecture for Google Cloud Console. Managing team of 5 engineers.' },
+  { company: 'Stripe', role: 'Frontend Engineer', startDate: '2018-06', endDate: '2021-02', current: false, description: 'Built payment dashboard components used by 100k+ merchants.' },
+  { company: 'Airbnb', role: 'Junior Developer', startDate: '2016-01', endDate: '2018-05', current: false, description: 'Worked on search and listing pages with React.' },
+];
+
+const DEFAULT_EDUCATION: Education[] = [
+  { institution: 'Stanford University', degree: 'M.S.', field: 'Computer Science', year: 2016 },
+  { institution: 'UC Berkeley', degree: 'B.S.', field: 'Computer Science', year: 2014 },
+];
+
+const DEFAULT_APPLICATIONS: CandidateApplication[] = [
+  { id: 'a-1', jobName: 'Staff Frontend Engineer', stage: 'Technical Interview', scorePercent: 92, pipelineProgress: 0.6, recruiterName: 'Alex Rivera', status: 'interviewing' },
+  { id: 'a-2', jobName: 'Frontend Lead', stage: 'Offer Pending', scorePercent: 88, pipelineProgress: 0.9, recruiterName: 'Jordan Park', status: 'offer_pending' },
+  { id: 'a-3', jobName: 'Senior React Developer', stage: 'Screening', scorePercent: 75, pipelineProgress: 0.2, recruiterName: 'Sam Lee', status: 'screening' },
+];
+
+const DEFAULT_INTERVIEWS: CandidateInterview[] = [
+  { id: 'i-1', date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), type: 'ai', status: 'scheduled', duration: '45 min', hasReplay: false },
+  { id: 'i-2', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), type: 'human', status: 'completed', scorePercent: 91, duration: '60 min', hasReplay: true },
+  { id: 'i-3', date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), type: 'ai', status: 'completed', scorePercent: 88, duration: '30 min', hasReplay: true },
+];
+
+const DEFAULT_NOTES: CandidateNote[] = [
+  { id: 'n-1', authorName: 'Alex Rivera', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), content: 'Strong technical skills, excellent communication. Recommend advancing to final round.', isEditable: true },
+  { id: 'n-2', authorName: 'Jordan Park', timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), content: 'Initial screening went well. Candidate is enthusiastic about the role and team culture.', isEditable: false },
+];
+
+const DEFAULT_EVENTS: CandidateEvent[] = [
+  { id: 'e-1', type: 'interview', message: 'Completed AI interview for Staff Frontend Engineer', timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), entityName: 'Staff Frontend Engineer' },
+  { id: 'e-2', type: 'application', message: 'Applied to Frontend Lead position', timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), entityName: 'Frontend Lead' },
+  { id: 'e-3', type: 'note', message: 'Alex Rivera added a note', timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000) },
+  { id: 'e-4', type: 'stage', message: 'Moved to Technical Interview stage', timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), entityName: 'Staff Frontend Engineer' },
+];
+
+const DEFAULT_STATS: CandidateStats = {
+  activeApplications: 3, totalInterviews: 7, avgScore: 91,
+  lastActivityDate: new Date(Date.now() - 2 * 60 * 60 * 1000),
+};
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
-function formatRelativeTime(date: Date): string {
-  const now = Date.now();
-  const diffMs = now - date.getTime();
-  const absDiff = Math.abs(diffMs);
-  const suffix = diffMs >= 0 ? ' ago' : ' from now';
 
-  const seconds = Math.floor(absDiff / 1000);
-  if (seconds < 60) return `${seconds}s${suffix}`;
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m${suffix}`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h${suffix}`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d${suffix}`;
-  const months = Math.floor(days / 30);
-  return `${months}mo${suffix}`;
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  return name.charAt(0).toUpperCase();
+}
+
+function getStatusConfig(status: string, t: DesignTokens) {
+  const map: Record<string, { dot: string; label: string; bg: string; text: string }> = {
+    active: { dot: t.colors.successScale[500], label: 'Active', bg: t.colors.successScale[50], text: t.colors.successScale[700] },
+    passive: { dot: t.colors.infoScale[500], label: 'Passive', bg: t.colors.infoScale[50], text: t.colors.infoScale[700] },
+    hired: { dot: t.colors.primaryScale[500], label: 'Hired', bg: t.colors.primaryScale[50], text: t.colors.primaryScale[700] },
+    inactive: { dot: t.colors.neutral[400], label: 'Inactive', bg: t.colors.neutral[100], text: t.colors.neutral[600] },
+    do_not_contact: { dot: t.colors.errorScale[500], label: 'DNC', bg: t.colors.errorScale[50], text: t.colors.errorScale[700] },
+  };
+  return map[status] ?? map['inactive'];
+}
+
+function getScoreColor(score: number, t: DesignTokens): string {
+  if (score >= 80) return t.colors.successScale[500];
+  if (score >= 60) return t.colors.warningScale[500];
+  return t.colors.errorScale[500];
 }
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
-function formatDateTime(date: Date): string {
-  return `${date.toLocaleDateString([], { month: 'short', day: 'numeric' })} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+function timeAgo(date: Date): string {
+  const diff = Date.now() - date.getTime();
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  if (hours < 0) return `in ${Math.abs(hours)}h`;
+  if (hours < 1) return 'Just now';
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return `${Math.floor(days / 7)}w ago`;
 }
 
-/** Builds an SVG polygon points string for a radar chart */
-function radarPoints(dimensions: { score: number }[], cx: number, cy: number, radius: number): string {
-  const count = dimensions.length;
-  if (count === 0) return '';
-  return dimensions
-    .map((d, i) => {
-      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
-      const r = (d.score / 100) * radius;
-      return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
-    })
-    .join(' ');
-}
-
-/** Builds outer frame polygon points for radar chart */
-function radarFramePoints(count: number, cx: number, cy: number, radius: number): string {
-  if (count === 0) return '';
-  return Array.from({ length: count })
-    .map((_, i) => {
-      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
-      return `${cx + radius * Math.cos(angle)},${cy + radius * Math.sin(angle)}`;
-    })
-    .join(' ');
+function getAppStageColor(status: string, t: DesignTokens) {
+  const map: Record<string, { bg: string; text: string }> = {
+    screening: { bg: t.colors.neutral[100], text: t.colors.neutral[600] },
+    reviewing: { bg: t.colors.infoScale[50], text: t.colors.infoScale[700] },
+    interviewing: { bg: t.colors.primaryScale[50], text: t.colors.primaryScale[700] },
+    offer_pending: { bg: t.colors.warningScale[50], text: t.colors.warningScale[700] },
+    hired: { bg: t.colors.successScale[50], text: t.colors.successScale[700] },
+    rejected: { bg: t.colors.errorScale[50], text: t.colors.errorScale[700] },
+  };
+  return map[status] ?? map['screening'];
 }
 
 /* ------------------------------------------------------------------ */
-/*  Tab config                                                         */
+/*  Score Ring                                                         */
 /* ------------------------------------------------------------------ */
-const TAB_CONFIG: { key: CandidateTab; label: string }[] = [
-  { key: 'profile', label: 'Profile' },
-  { key: 'applications', label: 'Applications' },
-  { key: 'interviews', label: 'Interviews' },
-  { key: 'scores', label: 'Scores' },
-  { key: 'notes', label: 'Notes' },
-  { key: 'activity', label: 'Activity' },
-  { key: 'documents', label: 'Documents' },
+
+function ScoreRing({ score, tokens: t, size = 64 }: { score: number; tokens: DesignTokens; size?: number }) {
+  const color = getScoreColor(score, t);
+  const r = (size / 2) - 5;
+  const circumference = 2 * Math.PI * r;
+  const strokeOffset = circumference - (score / 100) * circumference;
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="4" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
+          strokeDasharray={circumference} strokeDashoffset={strokeOffset} strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
+      </svg>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <span style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color, lineHeight: 1 }}>{score}</span>
+        <span style={{ fontSize: 9, color: t.colors.neutral[400], lineHeight: 1, marginTop: 2 }}>avg</span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tab definitions                                                    */
+/* ------------------------------------------------------------------ */
+
+const TAB_CONFIG: { key: CandidateTab; label: string; icon: React.ComponentType<{ size?: number }> }[] = [
+  { key: 'profile', label: 'Profile', icon: User },
+  { key: 'applications', label: 'Applications', icon: ClipboardList },
+  { key: 'interviews', label: 'Interviews', icon: Mic },
+  { key: 'scores', label: 'Scores', icon: BarChart3 },
+  { key: 'notes', label: 'Notes', icon: StickyNote },
+  { key: 'activity', label: 'Activity', icon: Activity },
+  { key: 'documents', label: 'Documents', icon: FileText },
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Full Preset                                                        */
+/*  Preset                                                             */
 /* ------------------------------------------------------------------ */
+
 export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
   name: 'BhCandidateProfile.Full',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateProfileProps>) => {
+  render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateProfileProps>) => {
     const { Box, Text } = primitives;
+    const candidate = props.candidate ?? DEFAULT_CANDIDATE;
+    const skills = props.skills ?? DEFAULT_SKILLS;
+    const experience = props.experience ?? DEFAULT_EXPERIENCE;
+    const education = props.education ?? DEFAULT_EDUCATION;
+    const applications = props.applications ?? DEFAULT_APPLICATIONS;
+    const interviews = props.interviews ?? DEFAULT_INTERVIEWS;
+    const notes = props.notes ?? DEFAULT_NOTES;
+    const events = props.events ?? DEFAULT_EVENTS;
+    const stats = props.stats ?? DEFAULT_STATS;
+    const compensationRange = props.compensationRange ?? { min: 180000, max: 220000, currency: 'USD' };
+    const languages = props.languages ?? [{ name: 'English', level: 'Native' }, { name: 'Spanish', level: 'Conversational' }];
+    const links = props.links ?? [{ label: 'LinkedIn', url: '#' }, { label: 'GitHub', url: '#' }, { label: 'Portfolio', url: '#' }];
+    const documents = props.documents ?? [
+      { id: 'd-1', name: 'Resume_Sarah_Johnson.pdf', type: 'pdf', uploadedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
+      { id: 'd-2', name: 'Cover_Letter.pdf', type: 'pdf', uploadedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000) },
+    ];
 
-    const {
-      candidate,
-      skills = [],
-      experience = [],
-      education = [],
-      applications = [],
-      interviews = [],
-      scoreCards = [],
-      notes = [],
-      events = [],
-      stats,
-      compensationRange,
-      languages = [],
-      links = [],
-      documents = [],
-      defaultTab = 'profile',
-      onTabChange,
-      onApplicationClick,
-      onInterviewClick,
-      onNoteSave,
-      onNoteDelete,
-      onNoteAdd,
-      onDocumentClick,
-      onEventLinkClick,
-      onReplayClick,
-      onEditProfile,
-      className,
-      style,
-    } = props;
+    const [activeTab, setActiveTab] = useState<CandidateTab>(props.defaultTab ?? 'profile');
+    const [newNoteContent, setNewNoteContent] = useState('');
 
-    const [activeTab, setActiveTab] = useState<CandidateTab>(defaultTab);
-    const [selectedApplication, setSelectedApplication] = useState<string | null>(null);
-    const [showNoteForm, setShowNoteForm] = useState(false);
-    const [noteText, setNoteText] = useState('');
-    const [expandedScorecard, setExpandedScorecard] = useState<string | null>(null);
-    const [activityFilter, setActivityFilter] = useState<string>('all');
+    const statusConfig = getStatusConfig(candidate.status ?? 'active', t);
+    const badgeRadius = getPersonalityBadgeRadius(t);
 
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const hoverTransform = getHoverTransform(tokens);
-
-    const cardStyle = useMemo(() => createCardStyle(tokens, {
-      elevation: 'sm',
-      glass: isGlass,
-    }), [tokens, isGlass]);
-
-    const handleTabChange = (tab: CandidateTab) => {
+    const handleTabChange = useCallback((tab: CandidateTab) => {
       setActiveTab(tab);
-      onTabChange?.(tab);
-    };
+      props.onTabChange?.(tab);
+    }, [props.onTabChange]);
 
-    const handleAddNote = () => {
-      if (noteText.trim()) {
-        onNoteAdd?.(noteText.trim());
-        setNoteText('');
-        setShowNoteForm(false);
-      }
-    };
-
-    const filteredEvents = useMemo(() => {
-      if (activityFilter === 'all') return events;
-      return events.filter((e) => e.type === activityFilter);
-    }, [events, activityFilter]);
-
-    const eventTypes = useMemo(() => {
-      const types = new Set(events.map((e) => e.type));
-      return ['all', ...Array.from(types)];
-    }, [events]);
-
-    const candidateName = candidate?.name ?? 'Unknown Candidate';
-    const initials = candidateName
-      .split(' ')
-      .map((n) => n.charAt(0))
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-
-    /* ------------------------------------------------------------------ */
-    /*  Status badge color helper                                          */
-    /* ------------------------------------------------------------------ */
-    const statusBadgeColor = (status: string): 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary' => {
-      const s = status.toLowerCase();
-      if (s === 'active' || s === 'hired' || s === 'accepted') return 'success';
-      if (s === 'rejected' || s === 'declined' || s === 'withdrawn') return 'error';
-      if (s === 'pending' || s === 'review' || s === 'in review') return 'warning';
-      if (s === 'offer' || s === 'offered') return 'info';
-      return 'primary';
-    };
-
-    /* ------------------------------------------------------------------ */
-    /*  Event type color                                                   */
-    /* ------------------------------------------------------------------ */
-    const eventDotColor = (type: string): string => {
-      switch (type) {
-        case 'applied': return tokens.colors.primaryScale[500];
-        case 'interview': return tokens.colors.infoScale[500];
-        case 'offer': return tokens.colors.successScale[500];
-        case 'hired': return tokens.colors.successScale[700];
-        case 'rejected': return tokens.colors.errorScale[500];
-        case 'note': return tokens.colors.warningScale[500];
-        case 'stage-change': return tokens.colors.secondaryScale[500];
-        default: return tokens.colors.neutral[400];
-      }
-    };
-
-    /* ================================================================== */
-    /*  SECTION: Header                                                    */
-    /* ================================================================== */
-    const renderHeader = () => (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: tokens.spacing[5],
-          padding: tokens.spacing[5],
-          ...createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }),
-          backgroundColor: isGlass ? tokens.glass?.bg : tokens.colors.common.white,
-          marginBottom: tokens.spacing[4],
-        }}
-      >
-        {/* Avatar */}
-        <div
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: tokens.borderRadius.full,
-            backgroundColor: tokens.colors.primaryScale[100],
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            overflow: 'hidden',
-            fontSize: tokens.typography.fontSize['2xl'],
-            fontWeight: tokens.typography.fontWeight.bold,
-            color: tokens.colors.primaryScale[700],
-          }}
-        >
-          {candidate?.avatar ? (
-            <img src={candidate.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-          ) : (
-            initials
-          )}
-        </div>
-
-        {/* Info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[2], flexWrap: 'wrap' as const }}>
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize['2xl'],
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
-              }}
-            >
-              {candidateName}
+    /* -- Section Card wrapper ---------------------------------------- */
+    const SectionCard = ({ children, title, extra }: { children: React.ReactNode; title?: string; extra?: React.ReactNode }) => (
+      <Box style={{
+        ...createCardStyle(t, { elevation: 'sm' }),
+        padding: `${t.spacing[6]}px`, border: `1px solid ${t.colors.neutral[100]}`,
+        backgroundColor: t.colors.common.white, marginBottom: t.spacing[4],
+      }}>
+        {title && (
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
+            <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+              {title}
             </Text>
-
-            {candidate?.status && (
-              <span style={createBadgeStyle(tokens, statusBadgeColor(candidate.status))}>
-                {candidate.status}
-              </span>
-            )}
-
-            {candidate?.doNotContact && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                  borderRadius: tokens.borderRadius.full,
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  backgroundColor: tokens.colors.errorScale[100],
-                  color: tokens.colors.errorScale[700],
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-                }}
-              >
-                <AlertTriangle size={12} />
-                Do Not Contact
-              </span>
-            )}
-          </div>
-
-          {candidate?.currentRole && (
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize.md,
-                color: tokens.colors.neutral[600],
-                display: 'block',
-                marginBottom: tokens.spacing[2],
-              }}
-            >
-              {candidate.currentRole}
-            </Text>
-          )}
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4], flexWrap: 'wrap' as const }}>
-            {candidate?.location && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[500],
-                }}
-              >
-                <MapPin size={14} />
-                {candidate.location}
-              </span>
-            )}
-            {candidate?.email && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[500],
-                }}
-              >
-                <Mail size={14} />
-                {candidate.email}
-              </span>
-            )}
-            {candidate?.phone && (
-              <span
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[500],
-                }}
-              >
-                <Phone size={14} />
-                {candidate.phone}
-              </span>
-            )}
-            {candidate?.source && (
-              <span style={createBadgeStyle(tokens, 'secondary')}>
-                Source: {candidate.source}
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Edit button */}
-        {onEditProfile && (
-          <button
-            onClick={onEditProfile}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              backgroundColor: tokens.colors.common.white,
-              color: tokens.colors.neutral[700],
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-              ...hoverStyle,
-            }}
-          >
-            <Edit3 size={14} />
-            Edit
-          </button>
+            {extra}
+          </Box>
         )}
-      </div>
+        {children}
+      </Box>
     );
 
-    /* ================================================================== */
-    /*  SECTION: Stats Bar                                                 */
-    /* ================================================================== */
-    const renderStatsBar = () => {
-      if (!stats) return null;
-
-      const avgScoreRadius = 18;
-      const avgScoreCircumference = 2 * Math.PI * avgScoreRadius;
-      const avgScorePct = Math.min(stats.avgScore / 100, 1);
-      const avgScoreDash = `${avgScorePct * avgScoreCircumference} ${avgScoreCircumference}`;
-
-      const statItems = [
-        { label: 'Active Applications', value: String(stats.activeApplications), icon: <Briefcase size={16} /> },
-        { label: 'Total Interviews', value: String(stats.totalInterviews), icon: <Calendar size={16} /> },
-        { label: 'Avg Score', value: null, icon: null, isChart: true },
-        { label: 'Last Activity', value: formatRelativeTime(stats.lastActivityDate), icon: <Activity size={16} /> },
-      ];
-
-      return (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: tokens.spacing[3],
-            marginBottom: tokens.spacing[4],
-          }}
-        >
-          {statItems.map((item, idx) => (
-            <div
-              key={idx}
-              style={{
-                ...cardStyle,
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[3],
-                padding: tokens.spacing[4],
-              }}
-            >
-              {item.isChart ? (
-                <>
-                  <svg width={44} height={44} viewBox="0 0 44 44" style={{ flexShrink: 0 }}>
-                    <circle
-                      cx={22}
-                      cy={22}
-                      r={avgScoreRadius}
-                      fill="none"
-                      stroke={tokens.colors.neutral[100]}
-                      strokeWidth={4}
-                    />
-                    <circle
-                      cx={22}
-                      cy={22}
-                      r={avgScoreRadius}
-                      fill="none"
-                      stroke={
-                        avgScorePct >= 0.7
-                          ? tokens.colors.successScale[500]
-                          : avgScorePct >= 0.4
-                          ? tokens.colors.warningScale[500]
-                          : tokens.colors.errorScale[500]
-                      }
-                      strokeWidth={4}
-                      strokeDasharray={avgScoreDash}
-                      strokeLinecap="round"
-                      transform="rotate(-90 22 22)"
-                    />
-                    <text
-                      x={22}
-                      y={22}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: tokens.typography.fontWeight.bold,
-                        fill: tokens.colors.neutral[900],
-                      }}
-                    >
-                      {stats.avgScore}%
-                    </text>
-                  </svg>
-                  <div>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                        display: 'block',
-                      }}
-                    >
-                      {item.label}
-                    </Text>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {item.icon && (
-                    <div
-                      style={{
-                        width: tokens.spacing[8],
-                        height: tokens.spacing[8],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: tokens.colors.primaryScale[50],
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: tokens.colors.primaryScale[600],
-                        flexShrink: 0,
-                      }}
-                    >
-                      {item.icon}
-                    </div>
-                  )}
-                  <div>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                        display: 'block',
-                      }}
-                    >
-                      {item.label}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xl,
-                        fontWeight: tokens.typography.fontWeight.bold,
-                        color: tokens.colors.neutral[900],
-                        display: 'block',
-                      }}
-                    >
-                      {item.value}
-                    </Text>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      );
-    };
-
-    /* ================================================================== */
-    /*  SECTION: Tab Navigation                                            */
-    /* ================================================================== */
-    const renderTabs = () => (
-      <div
-        style={{
-          display: 'flex',
-          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          marginBottom: tokens.spacing[5],
-          gap: tokens.spacing[1],
-          overflow: 'auto',
-        }}
-      >
-        {TAB_CONFIG.map((tab) => {
-          const isActive = activeTab === tab.key;
-          return (
-            <button
-              key={tab.key}
-              onClick={() => handleTabChange(tab.key)}
-              style={{
-                padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
-                color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-                borderBottom: isActive
-                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
-                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
-                marginBottom: -1,
-                whiteSpace: 'nowrap' as const,
-              }}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-    );
-
-    /* ================================================================== */
-    /*  TAB: Profile                                                       */
-    /* ================================================================== */
+    /* -- Profile Tab ------------------------------------------------- */
     const renderProfileTab = () => (
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[5] }}>
-        {/* Left column */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
-          {/* Skills */}
-          {skills.length > 0 && (
-            <div style={cardStyle}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                  marginBottom: tokens.spacing[4],
-                }}
-              >
-                Skills
-              </Text>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
-                {skills.map((skill, idx) => (
-                  <div key={idx}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: tokens.spacing[1],
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          color: tokens.colors.neutral[700],
-                        }}
-                      >
-                        {skill.name}
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[500],
-                        }}
-                      >
-                        {skill.proficiency}%
-                      </Text>
-                    </div>
-                    <svg width="100%" height={8} style={{ display: 'block' }}>
-                      <rect
-                        x={0}
-                        y={0}
-                        width="100%"
-                        height={8}
-                        rx={4}
-                        fill={tokens.colors.neutral[100]}
-                      />
-                      <rect
-                        x={0}
-                        y={0}
-                        width={`${skill.proficiency}%`}
-                        height={8}
-                        rx={4}
-                        fill={
-                          skill.proficiency >= 80
-                            ? tokens.colors.successScale[500]
-                            : skill.proficiency >= 50
-                            ? tokens.colors.warningScale[500]
-                            : tokens.colors.errorScale[500]
-                        }
-                      />
-                    </svg>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+        {/* Skills */}
+        <SectionCard title="Skills">
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+            {skills.map(skill => {
+              const pb = createProgressBarStyle(t, { percent: skill.proficiency, color: getScoreColor(skill.proficiency, t) });
+              return (
+                <Box key={skill.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], width: 120, flexShrink: 0, fontWeight: t.typography.fontWeight.medium }}>{skill.name}</Text>
+                  <Box style={{ flex: 1 }}><Box style={{ ...pb.track, height: 6 }}><Box style={{ ...pb.fill, height: 6 }} /></Box></Box>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], width: 32, textAlign: 'right' }}>{skill.proficiency}</Text>
+                </Box>
+              );
+            })}
+          </Box>
+        </SectionCard>
 
-          {/* Experience */}
-          {experience.length > 0 && (
-            <div style={cardStyle}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                  marginBottom: tokens.spacing[4],
-                }}
-              >
-                Experience
-              </Text>
-              <div style={{ position: 'relative' as const, paddingLeft: tokens.spacing[6] }}>
-                {/* Vertical timeline line */}
-                <div
-                  style={{
-                    position: 'absolute' as const,
-                    left: tokens.spacing[2],
-                    top: tokens.spacing[1],
-                    bottom: tokens.spacing[1],
-                    width: 2,
-                    backgroundColor: tokens.colors.neutral[200],
-                  }}
-                />
-                {experience.map((exp, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      position: 'relative' as const,
-                      marginBottom: idx < experience.length - 1 ? tokens.spacing[5] : 0,
-                    }}
-                  >
-                    {/* Timeline dot */}
-                    <div
-                      style={{
-                        position: 'absolute' as const,
-                        left: -(tokens.spacing[6] as number) + (tokens.spacing[2] as number) - 4,
-                        top: tokens.spacing[1],
-                        width: 10,
-                        height: 10,
-                        borderRadius: tokens.borderRadius.full,
-                        backgroundColor: exp.current
-                          ? tokens.colors.primaryScale[500]
-                          : tokens.colors.neutral[300],
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[900],
-                        display: 'block',
-                      }}
-                    >
-                      {exp.role}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        color: tokens.colors.primaryScale[600],
-                        fontWeight: tokens.typography.fontWeight.medium,
-                        display: 'block',
-                        marginBottom: tokens.spacing[1],
-                      }}
-                    >
-                      {exp.company}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[400],
-                        display: 'block',
-                        marginBottom: tokens.spacing[1],
-                      }}
-                    >
-                      {exp.startDate} &mdash; {exp.current ? 'Present' : exp.endDate}
-                    </Text>
-                    {exp.description && (
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[600],
-                          lineHeight: tokens.typography.lineHeight.relaxed,
-                          display: 'block',
-                        }}
-                      >
-                        {exp.description}
-                      </Text>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Right column */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
-          {/* Education */}
-          {education.length > 0 && (
-            <div style={cardStyle}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                  marginBottom: tokens.spacing[4],
-                }}
-              >
-                Education
-              </Text>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
-                {education.map((edu, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: tokens.spacing[3],
-                      padding: tokens.spacing[3],
-                      borderRadius: tokens.borderRadius.md,
-                      backgroundColor: tokens.colors.neutral[50],
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: tokens.spacing[8],
-                        height: tokens.spacing[8],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: tokens.colors.infoScale[50],
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: tokens.colors.infoScale[600],
-                        flexShrink: 0,
-                      }}
-                    >
-                      <GraduationCap size={16} />
-                    </div>
-                    <div>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[900],
-                          display: 'block',
-                        }}
-                      >
-                        {edu.degree} in {edu.field}
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[600],
-                          display: 'block',
-                        }}
-                      >
-                        {edu.institution}
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[400],
-                          display: 'block',
-                        }}
-                      >
-                        {edu.year}
-                      </Text>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Compensation */}
-          {compensationRange && (
-            <div style={cardStyle}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                  marginBottom: tokens.spacing[3],
-                }}
-              >
-                Compensation Expectation
-              </Text>
-              <div style={{ marginBottom: tokens.spacing[2] }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginBottom: tokens.spacing[1],
-                  }}
-                >
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                    {compensationRange.currency ?? '$'}{compensationRange.min.toLocaleString()}
+        {/* Experience */}
+        <SectionCard title="Experience">
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[5] }}>
+            {experience.map((exp, idx) => (
+              <Box key={idx} style={{ display: 'flex', gap: t.spacing[4] }}>
+                <Box style={{
+                  width: 40, height: 40, borderRadius: t.borderRadius.lg, flexShrink: 0,
+                  backgroundColor: t.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Building size={18} color={t.colors.primaryScale[500]} />
+                </Box>
+                <Box style={{ flex: 1 }}>
+                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], marginBottom: 2 }}>{exp.role}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], marginBottom: 4 }}>{exp.company}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginBottom: t.spacing[2] }}>
+                    {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
                   </Text>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                    {compensationRange.currency ?? '$'}{compensationRange.max.toLocaleString()}
+                  {exp.description && (
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], lineHeight: t.typography.lineHeight.relaxed }}>{exp.description}</Text>
+                  )}
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </SectionCard>
+
+        {/* Education */}
+        <SectionCard title="Education">
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+            {education.map((edu, idx) => (
+              <Box key={idx} style={{ display: 'flex', gap: t.spacing[4] }}>
+                <Box style={{
+                  width: 40, height: 40, borderRadius: t.borderRadius.lg, flexShrink: 0,
+                  backgroundColor: t.colors.warningScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <GraduationCap size={18} color={t.colors.warningScale[600]} />
+                </Box>
+                <Box>
+                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+                    {edu.degree} in {edu.field}
                   </Text>
-                </div>
-                <div
-                  style={{
-                    height: tokens.spacing[2],
-                    backgroundColor: tokens.colors.neutral[100],
-                    borderRadius: tokens.borderRadius.full,
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      background: `linear-gradient(90deg, ${tokens.colors.primaryScale[300]}, ${tokens.colors.primaryScale[500]})`,
-                      borderRadius: tokens.borderRadius.full,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{edu.institution}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Class of {edu.year}</Text>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </SectionCard>
 
-          {/* Languages */}
-          {languages.length > 0 && (
-            <div style={cardStyle}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                  marginBottom: tokens.spacing[3],
-                }}
-              >
-                Languages
+        {/* Additional info: compensation, languages, links */}
+        <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: t.spacing[4] }}>
+          <SectionCard title="Compensation">
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <DollarSign size={16} color={t.colors.successScale[500]} />
+              <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                ${(compensationRange.min / 1000).toFixed(0)}k - ${(compensationRange.max / 1000).toFixed(0)}k
               </Text>
-              <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[2] }}>
-                {languages.map((lang, idx) => (
-                  <div
-                    key={idx}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.full,
-                      backgroundColor: tokens.colors.neutral[100],
-                      fontSize: tokens.typography.fontSize.sm,
-                      color: tokens.colors.neutral[700],
-                    }}
-                  >
-                    <Globe size={12} />
-                    {lang.name}
-                    <span
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                      }}
-                    >
-                      ({lang.level})
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Links */}
-          {links.length > 0 && (
-            <div style={cardStyle}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                  marginBottom: tokens.spacing[3],
-                }}
-              >
-                Links &amp; Portfolio
-              </Text>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                {links.map((link, idx) => (
-                  <a
-                    key={idx}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[2],
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      textDecoration: 'none',
-                      color: tokens.colors.primaryScale[600],
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      ...hoverStyle,
-                    }}
-                  >
-                    <LinkIcon size={14} />
-                    {link.label}
-                    <ExternalLink size={12} style={{ marginLeft: 'auto', color: tokens.colors.neutral[400] }} />
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{compensationRange.currency}</Text>
+            </Box>
+          </SectionCard>
+          <SectionCard title="Languages">
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+              {languages.map(lang => (
+                <Box key={lang.name} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{lang.name}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{lang.level}</Text>
+                </Box>
+              ))}
+            </Box>
+          </SectionCard>
+          <SectionCard title="Links">
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+              {links.map(link => (
+                <Box key={link.label} onClick={() => {}} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], cursor: 'pointer', color: t.colors.primaryScale[600] }}>
+                  <Globe size={14} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>{link.label}</Text>
+                  <ExternalLink size={12} />
+                </Box>
+              ))}
+            </Box>
+          </SectionCard>
+        </Box>
+      </Box>
     );
 
-    /* ================================================================== */
-    /*  TAB: Applications                                                  */
-    /* ================================================================== */
+    /* -- Applications Tab -------------------------------------------- */
     const renderApplicationsTab = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
-        {applications.length === 0 && (
-          <div
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: tokens.spacing[8],
-              textAlign: 'center' as const,
-            }}
-          >
-            <Briefcase size={32} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              No applications found
-            </Text>
-          </div>
-        )}
-        {applications.map((app) => (
-          <div
-            key={app.id}
-            onClick={() => {
-              setSelectedApplication(app.id);
-              onApplicationClick?.(app.id);
-            }}
-            style={{
-              ...cardStyle,
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-              ...hoverStyle,
-              ...(selectedApplication === app.id
-                ? {
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                  }
-                : {}),
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.md,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[900],
-                  }}
-                >
-                  {app.jobName}
-                </Text>
-                <span style={createBadgeStyle(tokens, statusBadgeColor(app.status))}>
-                  {app.status}
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                <span style={createBadgeStyle(tokens, 'info')}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+        {applications.map(app => {
+          const stageColors = getAppStageColor(app.status, t);
+          const pb = createProgressBarStyle(t, { percent: app.pipelineProgress * 100 });
+          return (
+            <Box key={app.id} onClick={() => props.onApplicationClick?.(app.id)} style={{
+              ...createCardStyle(t, { elevation: 'sm', interactive: true }),
+              padding: `${t.spacing[5]}px`, border: `1px solid ${t.colors.neutral[100]}`,
+              backgroundColor: t.colors.common.white, cursor: 'pointer',
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
+                <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{app.jobName}</Text>
+                <Box style={{ padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: stageColors.bg, color: stageColors.text, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium }}>
                   {app.stage}
-                </span>
-                <ChevronRight size={16} style={{ color: tokens.colors.neutral[400] }} />
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4] }}>
-              {/* Score */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                  Score:
-                </Text>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: app.scorePercent >= 70
-                      ? tokens.colors.successScale[600]
-                      : app.scorePercent >= 40
-                      ? tokens.colors.warningScale[600]
-                      : tokens.colors.errorScale[600],
-                  }}
-                >
-                  {app.scorePercent}%
-                </Text>
-              </div>
-
-              {/* Pipeline progress */}
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                  Pipeline:
-                </Text>
-                <div
-                  style={{
-                    flex: 1,
-                    height: tokens.spacing[2],
-                    backgroundColor: tokens.colors.neutral[100],
-                    borderRadius: tokens.borderRadius.full,
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div
-                    style={{
-                      height: '100%',
-                      width: `${app.pipelineProgress * 100}%`,
-                      backgroundColor: tokens.colors.primaryScale[500],
-                      borderRadius: tokens.borderRadius.full,
-                      transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                    }}
-                  />
-                </div>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                  {Math.round(app.pipelineProgress * 100)}%
-                </Text>
-              </div>
-
-              {/* Recruiter */}
-              {app.recruiterName && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], flexShrink: 0 }}>
-                  <div
-                    style={{
-                      width: tokens.spacing[6],
-                      height: tokens.spacing[6],
-                      borderRadius: tokens.borderRadius.full,
-                      backgroundColor: tokens.colors.secondaryScale[100],
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      overflow: 'hidden',
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.secondaryScale[700],
-                    }}
-                  >
-                    {app.recruiterAvatar ? (
-                      <img src={app.recruiterAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-                    ) : (
-                      app.recruiterName.charAt(0).toUpperCase()
-                    )}
-                  </div>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
-                    {app.recruiterName}
-                  </Text>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-
-    /* ================================================================== */
-    /*  TAB: Interviews                                                    */
-    /* ================================================================== */
-    const renderInterviewsTab = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
-        {interviews.length === 0 && (
-          <div
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: tokens.spacing[8],
-              textAlign: 'center' as const,
-            }}
-          >
-            <Calendar size={32} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              No interviews found
-            </Text>
-          </div>
-        )}
-        {interviews.map((interview) => {
-          const statusColor =
-            interview.status === 'completed' ? 'success'
-            : interview.status === 'scheduled' ? 'info'
-            : 'error';
-          const typeColor = interview.type === 'ai' ? 'info' : 'secondary';
-
-          return (
-            <div
-              key={interview.id}
-              onClick={() => onInterviewClick?.(interview.id)}
-              style={{
-                ...cardStyle,
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[4],
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                ...hoverStyle,
-              }}
-            >
-              {/* Date block */}
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  padding: tokens.spacing[2],
-                  borderRadius: tokens.borderRadius.md,
-                  backgroundColor: tokens.colors.neutral[50],
-                  minWidth: 64,
-                  flexShrink: 0,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: tokens.colors.neutral[500],
-                    fontWeight: tokens.typography.fontWeight.medium,
-                  }}
-                >
-                  {interview.date.toLocaleDateString([], { month: 'short' })}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.xl,
-                    fontWeight: tokens.typography.fontWeight.bold,
-                    color: tokens.colors.neutral[900],
-                  }}
-                >
-                  {interview.date.getDate()}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: tokens.colors.neutral[500],
-                  }}
-                >
-                  {interview.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </Text>
-              </div>
-
-              {/* Details */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
-                  <span style={createBadgeStyle(tokens, typeColor as any)}>
-                    {interview.type === 'ai' ? 'AI Interview' : 'Human Interview'}
-                  </span>
-                  <span style={createBadgeStyle(tokens, statusColor as any)}>
-                    {interview.status}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                  {interview.duration && (
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: tokens.spacing[1],
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                      }}
-                    >
-                      <Clock size={12} />
-                      {interview.duration}
-                    </span>
-                  )}
-                  {interview.scorePercent !== undefined && (
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: interview.scorePercent >= 70
-                          ? tokens.colors.successScale[600]
-                          : interview.scorePercent >= 40
-                          ? tokens.colors.warningScale[600]
-                          : tokens.colors.errorScale[600],
-                      }}
-                    >
-                      Score: {interview.scorePercent}%
-                    </Text>
-                  )}
-                </div>
-              </div>
-
-              {/* Replay */}
-              {interview.hasReplay && interview.status === 'completed' && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onReplayClick?.(interview.id);
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[1],
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                    color: tokens.colors.primaryScale[600],
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    flexShrink: 0,
-                    ...hoverStyle,
-                  }}
-                >
-                  <Play size={12} />
-                  Replay
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-
-    /* ================================================================== */
-    /*  TAB: Scores                                                        */
-    /* ================================================================== */
-    const renderScoresTab = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
-        {scoreCards.length === 0 && (
-          <div
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: tokens.spacing[8],
-              textAlign: 'center' as const,
-            }}
-          >
-            <BarChart3 size={32} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              No score cards available
-            </Text>
-          </div>
-        )}
-        {scoreCards.map((sc) => {
-          const isExpanded = expandedScorecard === sc.applicationId;
-          const radarCx = 80;
-          const radarCy = 80;
-          const radarR = 60;
-
-          return (
-            <div
-              key={sc.applicationId}
-              style={cardStyle}
-            >
-              <div
-                onClick={() => setExpandedScorecard(isExpanded ? null : sc.applicationId)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                  marginBottom: isExpanded ? tokens.spacing[4] : 0,
-                }}
-              >
-                <div>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.md,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                      display: 'block',
-                    }}
-                  >
-                    {sc.jobName}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[500],
-                      display: 'block',
-                    }}
-                  >
-                    {sc.date}
-                  </Text>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.xl,
-                      fontWeight: tokens.typography.fontWeight.bold,
-                      color: sc.overallScore >= 70
-                        ? tokens.colors.successScale[600]
-                        : sc.overallScore >= 40
-                        ? tokens.colors.warningScale[600]
-                        : tokens.colors.errorScale[600],
-                    }}
-                  >
-                    {sc.overallScore}%
-                  </Text>
-                  <ChevronRight
-                    size={16}
-                    style={{
-                      color: tokens.colors.neutral[400],
-                      transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-                      transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
-                    }}
-                  />
-                </div>
-              </div>
-
-              {isExpanded && (
-                <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: tokens.spacing[4] }}>
-                  {/* Radar chart */}
-                  <svg width={160} height={160} viewBox="0 0 160 160">
-                    {/* Grid rings */}
-                    {[0.25, 0.5, 0.75, 1].map((scale) => (
-                      <polygon
-                        key={scale}
-                        points={radarFramePoints(sc.dimensions.length, radarCx, radarCy, radarR * scale)}
-                        fill="none"
-                        stroke={tokens.colors.neutral[200]}
-                        strokeWidth={1}
-                      />
-                    ))}
-                    {/* Axis lines */}
-                    {sc.dimensions.map((_, i) => {
-                      const angle = (Math.PI * 2 * i) / sc.dimensions.length - Math.PI / 2;
-                      return (
-                        <line
-                          key={i}
-                          x1={radarCx}
-                          y1={radarCy}
-                          x2={radarCx + radarR * Math.cos(angle)}
-                          y2={radarCy + radarR * Math.sin(angle)}
-                          stroke={tokens.colors.neutral[200]}
-                          strokeWidth={1}
-                        />
-                      );
-                    })}
-                    {/* Score polygon */}
-                    <polygon
-                      points={radarPoints(sc.dimensions, radarCx, radarCy, radarR)}
-                      fill={tokens.colors.primaryScale[100]}
-                      stroke={tokens.colors.primaryScale[500]}
-                      strokeWidth={2}
-                      fillOpacity={0.4}
-                    />
-                    {/* Score dots */}
-                    {sc.dimensions.map((d, i) => {
-                      const angle = (Math.PI * 2 * i) / sc.dimensions.length - Math.PI / 2;
-                      const r = (d.score / 100) * radarR;
-                      return (
-                        <circle
-                          key={i}
-                          cx={radarCx + r * Math.cos(angle)}
-                          cy={radarCy + r * Math.sin(angle)}
-                          r={3}
-                          fill={tokens.colors.primaryScale[500]}
-                        />
-                      );
-                    })}
-                  </svg>
-
-                  {/* Dimension list */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                    {sc.dimensions.map((dim, idx) => (
-                      <div key={idx}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: tokens.spacing[1],
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                              color: tokens.colors.neutral[700],
-                            }}
-                          >
-                            {dim.name}
-                          </Text>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                            <Text
-                              style={{
-                                fontSize: tokens.typography.fontSize.xs,
-                                color: tokens.colors.neutral[400],
-                              }}
-                            >
-                              Weight: {dim.weight}x
-                            </Text>
-                            <Text
-                              style={{
-                                fontSize: tokens.typography.fontSize.sm,
-                                fontWeight: tokens.typography.fontWeight.semibold,
-                                color: dim.score >= 70
-                                  ? tokens.colors.successScale[600]
-                                  : dim.score >= 40
-                                  ? tokens.colors.warningScale[600]
-                                  : tokens.colors.errorScale[600],
-                              }}
-                            >
-                              {dim.score}%
-                            </Text>
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            height: tokens.spacing[1],
-                            backgroundColor: tokens.colors.neutral[100],
-                            borderRadius: tokens.borderRadius.full,
-                            overflow: 'hidden',
-                          }}
-                        >
-                          <div
-                            style={{
-                              height: '100%',
-                              width: `${dim.score}%`,
-                              backgroundColor: dim.score >= 70
-                                ? tokens.colors.successScale[500]
-                                : dim.score >= 40
-                                ? tokens.colors.warningScale[500]
-                                : tokens.colors.errorScale[500],
-                              borderRadius: tokens.borderRadius.full,
-                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-
-    /* ================================================================== */
-    /*  TAB: Notes                                                         */
-    /* ================================================================== */
-    const renderNotesTab = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
-        {/* Add note button / form */}
-        <div style={cardStyle}>
-          {!showNoteForm ? (
-            <button
-              onClick={() => setShowNoteForm(true)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} dashed ${tokens.colors.neutral[300]}`,
-                backgroundColor: tokens.colors.neutral[50],
-                color: tokens.colors.neutral[600],
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.medium,
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                width: '100%',
-                ...hoverStyle,
-              }}
-            >
-              <Plus size={14} />
-              Add a note
-            </button>
-          ) : (
-            <div>
-              <textarea
-                value={noteText}
-                onChange={(e) => setNoteText(e.target.value)}
-                placeholder="Write your note..."
-                style={{
-                  width: '100%',
-                  minHeight: 80,
-                  padding: tokens.spacing[3],
-                  borderRadius: tokens.borderRadius.md,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[900],
-                  backgroundColor: tokens.colors.common.white,
-                  resize: 'vertical' as const,
-                  outline: 'none',
-                  fontFamily: 'inherit',
-                  boxSizing: 'border-box' as const,
-                  marginBottom: tokens.spacing[2],
-                }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                }}
-              />
-              <div style={{ display: 'flex', gap: tokens.spacing[2], justifyContent: 'flex-end' }}>
-                <button
-                  onClick={() => {
-                    setShowNoteForm(false);
-                    setNoteText('');
-                  }}
-                  style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                    backgroundColor: tokens.colors.common.white,
-                    color: tokens.colors.neutral[600],
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddNote}
-                  style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: 'none',
-                    backgroundColor: tokens.colors.primaryScale[600],
-                    color: tokens.colors.common.white,
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    ...hoverStyle,
-                  }}
-                >
-                  Save Note
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Notes list */}
-        {notes.length === 0 && !showNoteForm && (
-          <div
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: tokens.spacing[8],
-              textAlign: 'center' as const,
-            }}
-          >
-            <MessageSquare size={32} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              No notes yet
-            </Text>
-          </div>
-        )}
-        {notes.map((note) => (
-          <div key={note.id} style={cardStyle}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3] }}>
-              {/* Author avatar */}
-              <div
-                style={{
-                  width: tokens.spacing[8],
-                  height: tokens.spacing[8],
-                  borderRadius: tokens.borderRadius.full,
-                  backgroundColor: tokens.colors.secondaryScale[100],
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.secondaryScale[700],
-                  flexShrink: 0,
-                }}
-              >
-                {note.authorAvatar ? (
-                  <img src={note.authorAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-                ) : (
-                  note.authorName.charAt(0).toUpperCase()
+                </Box>
+              </Box>
+              <Box style={{ marginBottom: t.spacing[3] }}>
+                <Box style={{ ...pb.track, height: 6, marginBottom: t.spacing[1] }}><Box style={{ ...pb.fill, height: 6 }} /></Box>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{Math.round(app.pipelineProgress * 100)}% complete</Text>
+              </Box>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Score:</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: getScoreColor(app.scorePercent, t) }}>{app.scorePercent}%</Text>
+                </Box>
+                {app.recruiterName && (
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Recruiter: {app.recruiterName}</Text>
                 )}
-              </div>
-
-              {/* Content */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[900],
-                      }}
-                    >
-                      {note.authorName}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[400],
-                      }}
-                    >
-                      {formatRelativeTime(note.timestamp)}
-                    </Text>
-                  </div>
-
-                  {note.isEditable && (
-                    <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
-                      <button
-                        onClick={() => onNoteSave?.(note.id, note.content)}
-                        style={{
-                          border: 'none',
-                          background: 'none',
-                          cursor: 'pointer',
-                          transition: `all ${tokens.motion.hover}`,
-                          color: tokens.colors.neutral[400],
-                          padding: tokens.spacing[1],
-                          borderRadius: tokens.borderRadius.sm,
-                          display: 'flex',
-                          alignItems: 'center',
-                          ...hoverStyle,
-                        }}
-                      >
-                        <Edit3 size={14} />
-                      </button>
-                      <button
-                        onClick={() => onNoteDelete?.(note.id)}
-                        style={{
-                          border: 'none',
-                          background: 'none',
-                          cursor: 'pointer',
-                          transition: `all ${tokens.motion.hover}`,
-                          color: tokens.colors.errorScale[400],
-                          padding: tokens.spacing[1],
-                          borderRadius: tokens.borderRadius.sm,
-                          display: 'flex',
-                          alignItems: 'center',
-                          ...hoverStyle,
-                        }}
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: tokens.colors.neutral[700],
-                    lineHeight: tokens.typography.lineHeight.relaxed,
-                    display: 'block',
-                    whiteSpace: 'pre-wrap' as const,
-                  }}
-                >
-                  {note.content}
-                </Text>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
     );
 
-    /* ================================================================== */
-    /*  TAB: Activity                                                      */
-    /* ================================================================== */
-    const renderActivityTab = () => (
-      <div>
-        {/* Filter bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-          {eventTypes.map((type) => (
-            <button
-              key={type}
-              onClick={() => setActivityFilter(type)}
-              style={{
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.full,
-                border: activityFilter === type
-                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
-                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                backgroundColor: activityFilter === type
-                  ? tokens.colors.primaryScale[50]
-                  : tokens.colors.common.white,
-                color: activityFilter === type
-                  ? tokens.colors.primaryScale[600]
-                  : tokens.colors.neutral[600],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: activityFilter === type
-                  ? tokens.typography.fontWeight.semibold
-                  : tokens.typography.fontWeight.medium,
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                textTransform: 'capitalize' as const,
-                ...hoverStyle,
-              }}
-            >
-              {type}
+    /* -- Interviews Tab ---------------------------------------------- */
+    const renderInterviewsTab = () => (
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+        {interviews.map(interview => {
+          const isUpcoming = interview.status === 'scheduled';
+          const statusColor = interview.status === 'completed' ? t.colors.successScale : interview.status === 'scheduled' ? t.colors.primaryScale : t.colors.neutral;
+          return (
+            <Box key={interview.id} onClick={() => props.onInterviewClick?.(interview.id)} style={{
+              ...createCardStyle(t, { elevation: 'sm', interactive: true }),
+              padding: `${t.spacing[5]}px`, border: `1px solid ${isUpcoming ? t.colors.primaryScale[200] : t.colors.neutral[100]}`,
+              backgroundColor: isUpcoming ? t.colors.primaryScale[50] : t.colors.common.white, cursor: 'pointer',
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                  <Box style={{
+                    width: 40, height: 40, borderRadius: t.borderRadius.lg,
+                    backgroundColor: interview.type === 'ai' ? t.colors.primaryScale[100] : t.colors.infoScale[100],
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Mic size={18} color={interview.type === 'ai' ? t.colors.primaryScale[600] : t.colors.infoScale[600]} />
+                  </Box>
+                  <Box>
+                    <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+                      {interview.type === 'ai' ? 'AI Interview' : 'Panel Interview'}
+                    </Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{formatDate(interview.date)}</Text>
+                      {interview.duration && <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{interview.duration}</Text>}
+                    </Box>
+                  </Box>
+                </Box>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                  {interview.scorePercent !== undefined && (
+                    <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: getScoreColor(interview.scorePercent, t) }}>{interview.scorePercent}%</Text>
+                  )}
+                  <Box style={{ padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: (statusColor as any)[50], color: (statusColor as any)[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>
+                    {interview.status}
+                  </Box>
+                  {interview.hasReplay && (
+                    <button onClick={(e) => { e.stopPropagation(); props.onReplayClick?.(interview.id); }} style={{
+                      display: 'flex', alignItems: 'center', gap: 4, padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                      borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`,
+                      backgroundColor: t.colors.common.white, color: t.colors.neutral[600],
+                      fontSize: t.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
+                    }}>
+                      <Play size={12} /> Replay
+                    </button>
+                  )}
+                </Box>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
+    );
+
+    /* -- Notes Tab --------------------------------------------------- */
+    const renderNotesTab = () => (
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+        {/* Add note */}
+        <Box style={{
+          ...createCardStyle(t, { elevation: 'sm' }), padding: `${t.spacing[4]}px`,
+          border: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.common.white,
+        }}>
+          <textarea
+            value={newNoteContent}
+            onChange={(e) => setNewNoteContent(e.target.value)}
+            placeholder="Add a note about this candidate..."
+            style={{
+              width: '100%', minHeight: 80, padding: t.spacing[3], borderRadius: t.borderRadius.md,
+              border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.sm,
+              color: t.colors.neutral[700], fontFamily: 'inherit', outline: 'none', resize: 'vertical',
+            }}
+          />
+          <Box style={{ display: 'flex', justifyContent: 'flex-end', marginTop: t.spacing[2] }}>
+            <button onClick={() => { props.onNoteAdd?.(newNoteContent); setNewNoteContent(''); }} style={{
+              padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md,
+              border: 'none', backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+              fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
+              cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: t.spacing[1],
+            }}>
+              <Send size={14} /> Add Note
             </button>
-          ))}
-        </div>
+          </Box>
+        </Box>
 
-        {/* Timeline */}
-        {filteredEvents.length === 0 && (
-          <div
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: tokens.spacing[8],
-              textAlign: 'center' as const,
-            }}
-          >
-            <Activity size={32} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              No activity found
-            </Text>
-          </div>
-        )}
-        <div style={{ position: 'relative' as const, paddingLeft: tokens.spacing[6] }}>
-          {/* Vertical line */}
-          {filteredEvents.length > 0 && (
-            <div
-              style={{
-                position: 'absolute' as const,
-                left: tokens.spacing[2],
-                top: 0,
-                bottom: 0,
-                width: 2,
-                backgroundColor: tokens.colors.neutral[200],
-              }}
-            />
-          )}
-
-          {filteredEvents.map((event, idx) => (
-            <div
-              key={event.id}
-              style={{
-                position: 'relative' as const,
-                marginBottom: idx < filteredEvents.length - 1 ? tokens.spacing[4] : 0,
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: tokens.spacing[3],
-              }}
-            >
-              {/* Colored dot */}
-              <div
-                style={{
-                  position: 'absolute' as const,
-                  left: -(tokens.spacing[6] as number) + (tokens.spacing[2] as number) - 5,
-                  top: tokens.spacing[1],
-                  width: 12,
-                  height: 12,
-                  borderRadius: tokens.borderRadius.full,
-                  backgroundColor: eventDotColor(event.type),
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.common.white}`,
-                  flexShrink: 0,
-                }}
-              />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: tokens.colors.neutral[700],
-                    lineHeight: tokens.typography.lineHeight.relaxed,
-                    display: 'block',
-                  }}
-                >
-                  {event.message}
-                  {event.entityName && (
-                    <span
-                      onClick={() => onEventLinkClick?.(event.id)}
-                      style={{
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.primaryScale[600],
-                        cursor: event.entityLink ? 'pointer' : 'default',
-                        marginLeft: tokens.spacing[1],
-                      }}
-                    >
-                      {event.entityName}
-                    </span>
-                  )}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: tokens.colors.neutral[400],
-                    display: 'block',
-                    marginTop: tokens.spacing[1],
-                  }}
-                >
-                  {formatRelativeTime(event.timestamp)}
-                </Text>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-
-    /* ================================================================== */
-    /*  TAB: Documents                                                     */
-    /* ================================================================== */
-    const renderDocumentsTab = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
-        {documents.length === 0 && (
-          <div
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: tokens.spacing[8],
-              textAlign: 'center' as const,
-            }}
-          >
-            <FileText size={32} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              No documents found
-            </Text>
-          </div>
-        )}
-        {documents.map((doc) => (
-          <div
-            key={doc.id}
-            onClick={() => onDocumentClick?.(doc.id)}
-            style={{
-              ...cardStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[3],
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-              ...hoverStyle,
-            }}
-          >
-            <div
-              style={{
-                width: tokens.spacing[9],
-                height: tokens.spacing[9],
-                borderRadius: tokens.borderRadius.md,
-                backgroundColor: tokens.colors.infoScale[50],
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: tokens.colors.infoScale[600],
-                flexShrink: 0,
-              }}
-            >
-              <FileText size={20} />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  display: 'block',
-                }}
-              >
-                {doc.name}
-              </Text>
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                <span style={createBadgeStyle(tokens, 'secondary')}>
-                  {doc.type}
-                </span>
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: tokens.colors.neutral[400],
-                  }}
-                >
-                  Uploaded {formatDate(doc.uploadedAt)}
-                </Text>
-              </div>
-            </div>
-            <Download size={16} style={{ color: tokens.colors.neutral[400], flexShrink: 0 }} />
-          </div>
+        {notes.map(note => (
+          <Box key={note.id} style={{
+            ...createCardStyle(t, { elevation: 'sm' }), padding: `${t.spacing[5]}px`,
+            border: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.common.white,
+          }}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                <Box style={{
+                  width: 32, height: 32, borderRadius: t.borderRadius.full,
+                  backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700],
+                }}>
+                  {getInitials(note.authorName)}
+                </Box>
+                <Box>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{note.authorName}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{timeAgo(note.timestamp)}</Text>
+                </Box>
+              </Box>
+              {note.isEditable && (
+                <Box style={{ display: 'flex', gap: t.spacing[1] }}>
+                  <button style={{ border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: t.colors.neutral[400], display: 'flex', padding: 4 }}><Edit2 size={14} /></button>
+                  <button onClick={() => props.onNoteDelete?.(note.id)} style={{ border: 'none', backgroundColor: 'transparent', cursor: 'pointer', color: t.colors.neutral[400], display: 'flex', padding: 4 }}><Trash2 size={14} /></button>
+                </Box>
+              )}
+            </Box>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], lineHeight: t.typography.lineHeight.relaxed }}>{note.content}</Text>
+          </Box>
         ))}
-      </div>
+      </Box>
     );
 
-    /* ================================================================== */
-    /*  Tab content switch                                                 */
-    /* ================================================================== */
+    /* -- Activity Tab ------------------------------------------------ */
+    const renderActivityTab = () => (
+      <Box style={{ display: 'flex', flexDirection: 'column' }}>
+        {events.map((event, idx) => (
+          <Box key={event.id} style={{ display: 'flex', gap: t.spacing[4], position: 'relative' }}>
+            {/* Timeline line */}
+            {idx < events.length - 1 && (
+              <Box style={{
+                position: 'absolute', left: 15, top: 32, bottom: 0, width: 1,
+                backgroundColor: t.colors.neutral[200],
+              }} />
+            )}
+            {/* Dot */}
+            <Box style={{
+              width: 32, height: 32, borderRadius: t.borderRadius.full, flexShrink: 0,
+              backgroundColor: t.colors.primaryScale[50], border: `2px solid ${t.colors.primaryScale[200]}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1,
+            }}>
+              <Activity size={14} color={t.colors.primaryScale[500]} />
+            </Box>
+            <Box style={{ flex: 1, paddingBottom: t.spacing[5] }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], marginBottom: 2 }}>{event.message}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{timeAgo(event.timestamp)}</Text>
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    );
+
+    /* -- Documents Tab ----------------------------------------------- */
+    const renderDocumentsTab = () => (
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+        {documents.map(doc => (
+          <Box key={doc.id} onClick={() => props.onDocumentClick?.(doc.id)} style={{
+            ...createCardStyle(t, { elevation: 'sm', interactive: true }),
+            padding: `${t.spacing[4]}px ${t.spacing[5]}px`,
+            border: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.common.white,
+            display: 'flex', alignItems: 'center', gap: t.spacing[3], cursor: 'pointer',
+          }}>
+            <Box style={{
+              width: 40, height: 40, borderRadius: t.borderRadius.lg,
+              backgroundColor: t.colors.errorScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <FileText size={18} color={t.colors.errorScale[500]} />
+            </Box>
+            <Box style={{ flex: 1 }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{doc.name}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Uploaded {formatDate(doc.uploadedAt)}</Text>
+            </Box>
+            <Download size={16} color={t.colors.neutral[400]} />
+          </Box>
+        ))}
+      </Box>
+    );
+
+    /* -- Tab content router ------------------------------------------ */
     const renderTabContent = () => {
       switch (activeTab) {
-        case 'profile':
-          return renderProfileTab();
-        case 'applications':
-          return renderApplicationsTab();
-        case 'interviews':
-          return renderInterviewsTab();
-        case 'scores':
-          return renderScoresTab();
-        case 'notes':
-          return renderNotesTab();
-        case 'activity':
-          return renderActivityTab();
-        case 'documents':
-          return renderDocumentsTab();
-        default:
-          return null;
+        case 'profile': return renderProfileTab();
+        case 'applications': return renderApplicationsTab();
+        case 'interviews': return renderInterviewsTab();
+        case 'notes': return renderNotesTab();
+        case 'activity': return renderActivityTab();
+        case 'documents': return renderDocumentsTab();
+        case 'scores': return renderApplicationsTab(); // scores can share application view
+        default: return renderProfileTab();
       }
     };
 
-    /* ================================================================== */
-    /*  Main Render                                                        */
-    /* ================================================================== */
+    /* -- Main Render ------------------------------------------------- */
     return (
-      <Box
-        className={className}
-        style={{
-          height: '100%',
-          overflow: 'auto',
-          backgroundColor: tokens.colors.neutral[50],
-          padding: tokens.spacing[5],
-          ...style,
-        }}
-      >
-        {renderHeader()}
-        {renderStatsBar()}
-        {renderTabs()}
-        {renderTabContent()}
+      <Box className={props.className} style={{
+        display: 'flex', flexDirection: 'column', height: '100%',
+        backgroundColor: t.colors.neutral[50], ...props.style,
+      }}>
+        {/* Header */}
+        <Box style={{
+          padding: `${t.spacing[6]}px ${t.spacing[7]}px`,
+          backgroundColor: t.colors.common.white,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+        }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[5] }}>
+            {/* Avatar */}
+            <Box style={{
+              width: 72, height: 72, borderRadius: t.borderRadius.full, flexShrink: 0,
+              overflow: 'hidden', backgroundColor: t.colors.primaryScale[100],
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold,
+              color: t.colors.primaryScale[700],
+            }}>
+              {candidate.avatar
+                ? <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : getInitials(candidate.name)
+              }
+            </Box>
+
+            {/* Name + info */}
+            <Box style={{ flex: 1 }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[1] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                  {candidate.name}
+                </Text>
+                <Box style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius,
+                  backgroundColor: statusConfig.bg, fontSize: t.typography.fontSize.xs,
+                  fontWeight: t.typography.fontWeight.medium, color: statusConfig.text,
+                }}>
+                  <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusConfig.dot }} />
+                  {statusConfig.label}
+                </Box>
+                {candidate.doNotContact && (
+                  <Box style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius,
+                    backgroundColor: t.colors.errorScale[50], fontSize: t.typography.fontSize.xs,
+                    fontWeight: t.typography.fontWeight.medium, color: t.colors.errorScale[700],
+                  }}>
+                    <AlertTriangle size={12} /> Do Not Contact
+                  </Box>
+                )}
+              </Box>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4], marginBottom: t.spacing[2] }}>
+                {candidate.currentRole && (
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <Briefcase size={14} color={t.colors.neutral[400]} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{candidate.currentRole}</Text>
+                  </Box>
+                )}
+                {candidate.location && (
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <MapPin size={14} color={t.colors.neutral[400]} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{candidate.location}</Text>
+                  </Box>
+                )}
+              </Box>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
+                {candidate.email && (
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <Mail size={13} color={t.colors.neutral[400]} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{candidate.email}</Text>
+                  </Box>
+                )}
+                {candidate.phone && (
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <Phone size={13} color={t.colors.neutral[400]} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{candidate.phone}</Text>
+                  </Box>
+                )}
+                {candidate.source && (
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Source: {candidate.source}</Text>
+                )}
+              </Box>
+            </Box>
+
+            {/* Score + edit */}
+            <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: t.spacing[2] }}>
+              <ScoreRing score={stats.avgScore} tokens={t} />
+              {props.onEditProfile && (
+                <button onClick={props.onEditProfile} style={{
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
+                  border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
+                  color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, cursor: 'pointer',
+                  fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 4,
+                }}>
+                  <Edit2 size={12} /> Edit
+                </button>
+              )}
+            </Box>
+          </Box>
+
+          {/* Stats row */}
+          <Box style={{
+            display: 'flex', gap: t.spacing[6], marginTop: t.spacing[5],
+            padding: `${t.spacing[4]}px ${t.spacing[5]}px`,
+            backgroundColor: t.colors.neutral[50], borderRadius: t.borderRadius.lg,
+          }}>
+            {[
+              { label: 'Active Applications', value: stats.activeApplications, color: t.colors.primaryScale[500] },
+              { label: 'Total Interviews', value: stats.totalInterviews, color: t.colors.infoScale[500] },
+              { label: 'Avg Score', value: `${stats.avgScore}%`, color: t.colors.successScale[500] },
+              { label: 'Last Activity', value: timeAgo(stats.lastActivityDate), color: t.colors.warningScale[500] },
+            ].map(stat => (
+              <Box key={stat.label}>
+                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{stat.value}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{stat.label}</Text>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+
+        {/* Tabs */}
+        <Box style={{
+          display: 'flex', gap: 0,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+          backgroundColor: t.colors.common.white,
+          padding: `0 ${t.spacing[7]}px`,
+        }}>
+          {TAB_CONFIG.map(tab => {
+            const isActive = activeTab === tab.key;
+            const TabIcon = tab.icon;
+            return (
+              <Box
+                key={tab.key}
+                onClick={() => handleTabChange(tab.key)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                  padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                  borderBottom: `2px solid ${isActive ? t.colors.primaryScale[500] : 'transparent'}`,
+                  color: isActive ? t.colors.primaryScale[600] : t.colors.neutral[500],
+                  fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium,
+                  cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                  marginBottom: -1,
+                }}
+              >
+                <TabIcon size={16} />
+                {tab.label}
+              </Box>
+            );
+          })}
+        </Box>
+
+        {/* Tab Content */}
+        <Box style={{ flex: 1, overflow: 'auto', padding: `${t.spacing[5]}px ${t.spacing[7]}px` }}>
+          {renderTabContent()}
+        </Box>
       </Box>
     );
   },

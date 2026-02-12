@@ -2,28 +2,19 @@
 
 /**
  * BhIndividualHome - Standard Preset
- * Solo recruiter dashboard with pipeline, schedule, performance ring,
- * wizard onboarding, recent candidates, and token balance
+ * Slite-inspired recruiter dashboard with welcome hero, pipeline kanban,
+ * schedule timeline, wizard onboarding, performance ring, recent candidates,
+ * and token balance card.
  */
 
-import {useState, useMemo} from 'react';
+import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import {
-  createBadgeStyle,
-  createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createProgressBarStyle,
-  createSectionHeaderStyle,
-  createStatusDotStyle,
-  createSurfaceStyle,
-} from '../../../helpers';
+import { createCardStyle, createBadgeStyle } from '../../../helpers';
 import type { BhIndividualHomeProps, ScheduleItem, RecentCandidate } from '../../core';
 import {
   User, Calendar, Briefcase, Target, Zap, ChevronRight, Clock,
   Phone, Video, MapPin, Users, Gift, Play, CheckCircle, ArrowRight,
-  TrendingUp, Star, Eye, MessageSquare, MoreHorizontal, Coins
+  TrendingUp, Eye, MessageSquare, MoreHorizontal, Coins,
 } from 'lucide-react';
 
 const SCHEDULE_TYPE_CONFIG: Record<ScheduleItem['type'], { label: string; iconKey: string }> = {
@@ -45,26 +36,15 @@ const CANDIDATE_STATUS_MAP: Record<RecentCandidate['status'], { label: string; c
 
 export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
   name: 'BhIndividualHome.Standard',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhIndividualHomeProps>) => {
-    const { Box, Stack } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhIndividualHomeProps>) => {
+    const { Box, Text } = primitives;
 
     const {
-      welcome,
-      pipelines = [],
-      schedule = [],
-      wizardSteps,
-      performance,
-      recentCandidates = [],
-      tokenBalance,
-      onCandidateClick,
-      onScheduleAction,
-      onJobClick,
-      onWizardStepClick,
-      onViewAllCandidates,
-      onViewAllSchedule,
-      onBuyTokens,
-      className,
-      style,
+      welcome, pipelines = [], schedule = [], wizardSteps,
+      performance, recentCandidates = [], tokenBalance,
+      onCandidateClick, onScheduleAction, onJobClick,
+      onWizardStepClick, onViewAllCandidates, onViewAllSchedule,
+      onBuyTokens, className, style,
     } = props;
 
     const [showWizard, setShowWizard] = useState(() => {
@@ -72,15 +52,8 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
       return wizardSteps.some((s) => !s.completed);
     });
     const [selectedJob, setSelectedJob] = useState<string | null>(
-      pipelines.length > 0 ? pipelines[0].jobId : null
+      pipelines.length > 0 ? pipelines[0].jobId : null,
     );
-    const [timeRange, setTimeRange] = useState<'today' | 'week' | 'month'>('today');
-
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens]);
-    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     const scheduleIconMap: Record<string, React.ReactNode> = {
       phone: <Phone size={14} />,
@@ -103,913 +76,676 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
 
     const selectedPipeline = pipelines.find((p) => p.jobId === selectedJob) ?? pipelines[0];
 
-    const containerStyle: React.CSSProperties = {
-      ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-      padding: tokens.spacing[5],
-      backgroundColor: tokens.colors.neutral[50],
-      minHeight: '100%',
-      ...style,
+    const cardStyle: React.CSSProperties = {
+      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+      borderRadius: tokens.borderRadius.lg,
+      border: `1px solid ${tokens.colors.neutral[100]}`,
+      padding: `${tokens.spacing[5]}px`,
     };
 
-    const sectionTitleStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.lg,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      color: tokens.colors.neutral[900],
-      margin: 0,
+    const stageColors = [
+      tokens.colors.neutral[400], tokens.colors.infoScale[500],
+      tokens.colors.warningScale[500], tokens.colors.primaryScale[500],
+      tokens.colors.successScale[500],
+    ];
+
+    const statusDotColors: Record<string, string> = {
+      upcoming: tokens.colors.infoScale[500],
+      'in-progress': tokens.colors.warningScale[500],
+      completed: tokens.colors.successScale[500],
+      cancelled: tokens.colors.neutral[400],
     };
 
-    const sectionSubStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.sm,
-      color: tokens.colors.neutral[500],
-      margin: 0,
-    };
-
-    const linkStyle: React.CSSProperties = {
-      ...hoverTransition,
-      fontSize: tokens.typography.fontSize.sm,
-      fontWeight: tokens.typography.fontWeight.medium,
-      color: tokens.colors.primaryScale[600],
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-      background: 'none',
-      border: 'none',
-      padding: 0,
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: tokens.spacing[1],
-    };
-
-    /* ── Welcome Hero ─────────────────────────────────────────── */
-    const renderWelcomeHero = () => {
-      const heroStyle: React.CSSProperties = {
-        ...createCardStyle(tokens, { elevation: 'md', glass: isGlass }),
-        padding: `${tokens.spacing[6]}px ${tokens.spacing[6]}px`,
-        background: isGlass && tokens.glass
-          ? tokens.glass.bg
-          : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.primaryScale[100]})`,
-        position: 'relative' as const,
-        overflow: 'hidden',
-      };
-
-      return (
-        <div style={heroStyle}>
-          {isGlass && tokens.glass && (
-            <div style={{
-              position: 'absolute' as const,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backdropFilter: tokens.glass.blur,
-              WebkitBackdropFilter: tokens.glass.blur,
-              pointerEvents: 'none' as const,
-            }} />
-          )}
-          <Stack direction="horizontal" gap={tokens.spacing[4]} align="center" style={{ position: 'relative' as const, zIndex: 1 }}>
-            <div style={{
-              width: 56,
-              height: 56,
-              borderRadius: tokens.borderRadius.full,
-              backgroundColor: tokens.colors.primaryScale[200],
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden',
-              flexShrink: 0,
-            }}>
-              {welcome.avatar ? (
-                <img src={welcome.avatar} alt={welcome.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-              ) : (
-                <User size={24} color={tokens.colors.primaryScale[600]} />
-              )}
-            </div>
-            <div style={{ flex: 1 }}>
-              <h2 style={{
-                fontSize: tokens.typography.fontSize['2xl'],
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
-                margin: 0,
-                lineHeight: tokens.typography.lineHeight.tight,
-              }}>
-                {welcome.greeting ?? 'Good morning'}, {welcome.name}
-              </h2>
-              {welcome.focusSummary && (
-                <p style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[600],
-                  margin: `${tokens.spacing[1]}px 0 0`,
-                }}>
-                  {welcome.focusSummary}
-                </p>
-              )}
-            </div>
-            {welcome.todayCount !== undefined && (
-              <div style={{
-                ...createBadgeStyle(tokens, 'primary'),
-                fontSize: tokens.typography.fontSize.sm,
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              }}>
-                <Calendar size={14} style={{ marginRight: tokens.spacing[1] }} />
-                {welcome.todayCount} today
-              </div>
-            )}
-          </Stack>
-        </div>
-      );
-    };
-
-    /* ── Pipeline Preview (Compact Kanban) ────────────────────── */
-    const renderPipeline = () => {
-      if (pipelines.length === 0) return null;
-
-      const stageColors = [
-        tokens.colors.neutral[400],
-        tokens.colors.infoScale[500],
-        tokens.colors.warningScale[500],
-        tokens.colors.primaryScale[500],
-        tokens.colors.successScale[500],
-      ];
-
-      return (
-        <div style={cardBase}>
-          <Stack direction="horizontal" align="center" justify="space-between" style={{ marginBottom: tokens.spacing[4] }}>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <Briefcase size={18} color={tokens.colors.neutral[600]} />
-              <h3 style={sectionTitleStyle}>My Pipeline</h3>
-            </Stack>
-            <Stack direction="horizontal" gap={tokens.spacing[1]}>
-              {pipelines.map((p) => (
-                <button
-                  key={p.jobId}
-                  onClick={() => {
-                    setSelectedJob(p.jobId);
-                    onJobClick?.(p.jobId);
-                  }}
-                  style={{
-                    ...hoverTransition,
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
-                      selectedJob === p.jobId ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]
-                    }`,
-                    backgroundColor: selectedJob === p.jobId ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    color: selectedJob === p.jobId ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    whiteSpace: 'nowrap' as const,
-                  }}
-                >
-                  {p.jobTitle}
-                </button>
-              ))}
-            </Stack>
-          </Stack>
-
-          {selectedPipeline && (
-            <Stack direction="horizontal" gap={tokens.spacing[2]} style={{ overflowX: 'auto' as const }}>
-              {selectedPipeline.stages.map((stage, idx) => {
-                const totalCandidates = selectedPipeline.stages.reduce((sum, s) => sum + s.count, 0);
-                const widthPercent = totalCandidates > 0 ? Math.max(15, (stage.count / totalCandidates) * 100) : 100 / selectedPipeline.stages.length;
-                const stageColor = stage.color ?? stageColors[idx % stageColors.length];
-
-                return (
-                  <div
-                    key={stage.key}
-                    style={{
-                      flex: `0 0 ${widthPercent}%`,
-                      minWidth: 80,
-                      padding: tokens.spacing[3],
-                      borderRadius: tokens.borderRadius.md,
-                      backgroundColor: tokens.colors.neutral[50],
-                      borderTop: `3px solid ${stageColor}`,
-                    }}
-                  >
-                    <p style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[500],
-                      margin: 0,
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
-                    }}>
-                      {stage.label}
-                    </p>
-                    <p style={{
-                      fontSize: tokens.typography.fontSize['2xl'],
-                      fontWeight: tokens.typography.fontWeight.bold,
-                      color: tokens.colors.neutral[900],
-                      margin: `${tokens.spacing[1]}px 0 0`,
-                    }}>
-                      {stage.count}
-                    </p>
-                  </div>
-                );
-              })}
-            </Stack>
-          )}
-        </div>
-      );
-    };
-
-    /* ── Today's Schedule ──────────────────────────────────────── */
-    const renderSchedule = () => {
-      if (schedule.length === 0) return null;
-
-      const statusDotColors: Record<string, string> = {
-        upcoming: tokens.colors.infoScale[500],
-        'in-progress': tokens.colors.warningScale[500],
-        completed: tokens.colors.successScale[500],
-        cancelled: tokens.colors.neutral[400],
-      };
-
-      return (
-        <div style={cardBase}>
-          <Stack direction="horizontal" align="center" justify="space-between" style={{ marginBottom: tokens.spacing[4] }}>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <Calendar size={18} color={tokens.colors.neutral[600]} />
-              <h3 style={sectionTitleStyle}>Today&apos;s Schedule</h3>
-            </Stack>
-            {onViewAllSchedule && (
-              <button onClick={onViewAllSchedule} style={linkStyle}>
-                View all <ChevronRight size={14} />
-              </button>
-            )}
-          </Stack>
-
-          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-            {schedule.map((item) => {
-              const typeConfig = SCHEDULE_TYPE_CONFIG[item.type];
-              const dotColor = statusDotColors[item.status ?? 'upcoming'];
-              const icon = scheduleIconMap[typeConfig.iconKey];
-
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    ...cardInteractive,
-                    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[3],
-                  }}
-                  onClick={() => onScheduleAction?.(item.id, 'view')}
-                >
-                  <div style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: dotColor,
-                    flexShrink: 0,
-                  }} />
-                  <div style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: tokens.borderRadius.md,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    color: tokens.colors.primaryScale[600],
-                  }}>
-                    {icon}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[900],
-                      margin: 0,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap' as const,
-                    }}>
-                      {item.candidateName}
-                    </p>
-                    <p style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[500],
-                      margin: `${tokens.spacing[0]}px 0 0`,
-                    }}>
-                      {typeConfig.label} &middot; {item.jobTitle}
-                    </p>
-                  </div>
-                  <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                    <span style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[600],
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                    }}>
-                      <Clock size={12} />
-                      {item.time}
-                    </span>
-                    {item.duration && (
-                      <span style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[400],
-                      }}>
-                        {item.duration}
-                      </span>
-                    )}
-                    {item.type === 'video-interview' && (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); onScheduleAction?.(item.id, 'join'); }}
-                        style={{
-                          ...hoverTransition,
-                          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                          borderRadius: tokens.borderRadius.md,
-                          backgroundColor: tokens.colors.primaryScale[600],
-                          color: tokens.colors.common.white,
-                          border: 'none',
-                          fontSize: tokens.typography.fontSize.xs,
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          cursor: 'pointer',
-                          transition: `all ${tokens.motion.hover}`,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: tokens.spacing[1],
-                        }}
-                      >
-                        <Play size={10} /> Join
-                      </button>
-                    )}
-                  </Stack>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
-
-    /* ── Quick Start Wizard ────────────────────────────────────── */
-    const renderWizard = () => {
-      if (!showWizard || !wizardSteps || wizardSteps.length === 0) return null;
-
-      return (
-        <div style={{
-          ...cardBase,
-          borderLeft: `4px solid ${tokens.colors.primaryScale[500]}`,
-        }}>
-          <Stack direction="horizontal" align="center" justify="space-between" style={{ marginBottom: tokens.spacing[3] }}>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <Zap size={18} color={tokens.colors.primaryScale[600]} />
-              <h3 style={sectionTitleStyle}>Get Started</h3>
-            </Stack>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[3]}>
-              <span style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-              }}>
-                {completedWizardCount}/{totalWizardCount} complete
-              </span>
-              <button
-                onClick={() => setShowWizard(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[400],
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                  padding: 0,
-                }}
-              >
-                Dismiss
-              </button>
-            </Stack>
-          </Stack>
-
-          {/* Progress bar */}
-          <div style={{
-            width: '100%',
-            height: 4,
-            backgroundColor: tokens.colors.neutral[100],
-            borderRadius: tokens.borderRadius.full,
-            marginBottom: tokens.spacing[4],
-            overflow: 'hidden',
-          }}>
-            <div style={{
-              width: `${wizardProgress}%`,
-              height: '100%',
-              backgroundColor: tokens.colors.primaryScale[500],
-              borderRadius: tokens.borderRadius.full,
-              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-            }} />
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-            {wizardSteps.map((step) => (
-              <div
-                key={step.key}
-                onClick={() => !step.completed && onWizardStepClick?.(step.key)}
-                style={{
-                  ...hoverTransition,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[3],
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  backgroundColor: step.completed ? tokens.colors.successScale[50] : tokens.colors.common.white,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
-                    step.completed ? tokens.colors.successScale[200] : tokens.colors.neutral[200]
-                  }`,
-                  cursor: step.completed ? 'default' : 'pointer',
-                  opacity: step.completed ? 0.7 : 1,
-                }}
-              >
-                <div style={{
-                  width: 24,
-                  height: 24,
-                  borderRadius: tokens.borderRadius.full,
-                  backgroundColor: step.completed ? tokens.colors.successScale[500] : tokens.colors.neutral[200],
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  {step.completed ? (
-                    <CheckCircle size={14} color={tokens.colors.common.white} />
-                  ) : (
-                    <span style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[600],
-                    }}>
-                      {step.icon ?? ''}
-                    </span>
-                  )}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    color: step.completed ? tokens.colors.neutral[500] : tokens.colors.neutral[900],
-                    margin: 0,
-                    textDecoration: step.completed ? 'line-through' : 'none',
-                  }}>
-                    {step.label}
-                  </p>
-                  {step.description && !step.completed && (
-                    <p style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[400],
-                      margin: `${tokens.spacing[0]}px 0 0`,
-                    }}>
-                      {step.description}
-                    </p>
-                  )}
-                </div>
-                {!step.completed && (
-                  <ArrowRight size={14} color={tokens.colors.neutral[400]} />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    };
-
-    /* ── Performance Ring ──────────────────────────────────────── */
-    const renderPerformanceRing = () => {
-      if (!performance) return null;
-
-      return (
-        <div style={{
-          ...cardBase,
-          display: 'flex',
-          flexDirection: 'column' as const,
-          alignItems: 'center',
-          padding: tokens.spacing[5],
-        }}>
-          <Stack direction="horizontal" align="center" gap={tokens.spacing[2]} style={{ alignSelf: 'flex-start', marginBottom: tokens.spacing[4] }}>
-            <Target size={18} color={tokens.colors.neutral[600]} />
-            <h3 style={sectionTitleStyle}>Performance</h3>
-          </Stack>
-
-          <div style={{ position: 'relative' as const, width: 128, height: 128 }}>
-            <svg width="128" height="128" viewBox="0 0 128 128" style={{ transform: 'rotate(-90deg)' }}>
-              {/* Background circle */}
-              <circle
-                cx="64"
-                cy="64"
-                r={ringRadius}
-                fill="none"
-                stroke={tokens.colors.neutral[100]}
-                strokeWidth="10"
-              />
-              {/* Progress circle */}
-              <circle
-                cx="64"
-                cy="64"
-                r={ringRadius}
-                fill="none"
-                stroke={performancePercent >= 100 ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500]}
-                strokeWidth="10"
-                strokeLinecap="round"
-                strokeDasharray={ringCircumference}
-                strokeDashoffset={ringOffset}
-                style={{ transition: `stroke-dashoffset ${tokens.motion.hover}` }}
-              />
-            </svg>
-            <div style={{
-              position: 'absolute' as const,
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              textAlign: 'center' as const,
-            }}>
-              <p style={{
-                fontSize: tokens.typography.fontSize['2xl'],
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
-                margin: 0,
-                lineHeight: tokens.typography.lineHeight.tight,
-              }}>
-                {performance.hires}
-              </p>
-              <p style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[400],
-                margin: 0,
-              }}>
-                of {performance.target}
-              </p>
-            </div>
-          </div>
-
-          <div style={{ marginTop: tokens.spacing[3], textAlign: 'center' as const }}>
-            <p style={{
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.neutral[700],
-              margin: 0,
-            }}>
-              {performance.label ?? 'Hires This Quarter'}
-            </p>
-            <p style={{
-              fontSize: tokens.typography.fontSize.xs,
-              color: performancePercent >= 100 ? tokens.colors.successScale[600] : tokens.colors.primaryScale[600],
-              fontWeight: tokens.typography.fontWeight.medium,
-              margin: `${tokens.spacing[1]}px 0 0`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: tokens.spacing[1],
-            }}>
-              <TrendingUp size={12} />
-              {performancePercent}% of target
-            </p>
-          </div>
-        </div>
-      );
-    };
-
-    /* ── Recent Candidates ─────────────────────────────────────── */
-    const renderRecentCandidates = () => {
-      if (recentCandidates.length === 0) return null;
-
-      const displayed = recentCandidates.slice(0, 10);
-
-      return (
-        <div style={cardBase}>
-          <Stack direction="horizontal" align="center" justify="space-between" style={{ marginBottom: tokens.spacing[4] }}>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <Users size={18} color={tokens.colors.neutral[600]} />
-              <h3 style={sectionTitleStyle}>Recent Candidates</h3>
-              <span style={{
-                ...createBadgeStyle(tokens, 'primary'),
-                fontSize: tokens.typography.fontSize.xs,
-              }}>
-                {recentCandidates.length}
-              </span>
-            </Stack>
-            {onViewAllCandidates && (
-              <button onClick={onViewAllCandidates} style={linkStyle}>
-                View all <ChevronRight size={14} />
-              </button>
-            )}
-          </Stack>
-
-          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-            {displayed.map((candidate) => {
-              const statusCfg = CANDIDATE_STATUS_MAP[candidate.status];
-              const badgeStyle = useMemo(() => createBadgeStyle(tokens, statusCfg.colorKey), [tokens]);
-
-              return (
-                <div
-                  key={candidate.id}
-                  onClick={() => onCandidateClick?.(candidate.id)}
-                  style={{
-                    ...hoverTransition,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[3],
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    backgroundColor: tokens.colors.common.white,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                  }}
-                >
-                  <div style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.neutral[200],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden',
-                    flexShrink: 0,
-                  }}>
-                    {candidate.avatar ? (
-                      <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-                    ) : (
-                      <User size={14} color={tokens.colors.neutral[500]} />
-                    )}
-                  </div>
-
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[900],
-                      margin: 0,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap' as const,
-                    }}>
-                      {candidate.name}
-                    </p>
-                    {candidate.jobTitle && (
-                      <p style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[400],
-                        margin: 0,
-                      }}>
-                        {candidate.jobTitle}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Score bar */}
-                  <div style={{ width: 60, display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-end', gap: 2 }}>
-                    <span style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: candidate.score >= 80
-                        ? tokens.colors.successScale[700]
-                        : candidate.score >= 50
-                          ? tokens.colors.warningScale[700]
-                          : tokens.colors.neutral[600],
-                    }}>
-                      {candidate.score}%
-                    </span>
-                    <div style={{
-                      width: '100%',
-                      height: 4,
-                      backgroundColor: tokens.colors.neutral[100],
-                      borderRadius: tokens.borderRadius.full,
-                      overflow: 'hidden',
-                    }}>
-                      <div style={{
-                        width: `${candidate.score}%`,
-                        height: '100%',
-                        borderRadius: tokens.borderRadius.full,
-                        backgroundColor: candidate.score >= 80
-                          ? tokens.colors.successScale[500]
-                          : candidate.score >= 50
-                            ? tokens.colors.warningScale[500]
-                            : tokens.colors.neutral[400],
-                      }} />
-                    </div>
-                  </div>
-
-                  <span style={{
-                    ...badgeStyle,
-                    fontSize: tokens.typography.fontSize.xs,
-                    flexShrink: 0,
-                  }}>
-                    {statusCfg.label}
-                  </span>
-
-                  <Stack direction="horizontal" gap={tokens.spacing[1]}>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); onCandidateClick?.(candidate.id); }}
-                      style={{
-                        ...hoverTransition,
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: `all ${tokens.motion.hover}`,
-                        padding: tokens.spacing[1],
-                        borderRadius: tokens.borderRadius.sm,
-                        color: tokens.colors.neutral[400],
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Eye size={14} />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); }}
-                      style={{
-                        ...hoverTransition,
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: `all ${tokens.motion.hover}`,
-                        padding: tokens.spacing[1],
-                        borderRadius: tokens.borderRadius.sm,
-                        color: tokens.colors.neutral[400],
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <MessageSquare size={14} />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); }}
-                      style={{
-                        ...hoverTransition,
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: `all ${tokens.motion.hover}`,
-                        padding: tokens.spacing[1],
-                        borderRadius: tokens.borderRadius.sm,
-                        color: tokens.colors.neutral[400],
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <MoreHorizontal size={14} />
-                    </button>
-                  </Stack>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
-
-    /* ── Token Balance Mini-Card ────────────────────────────────── */
-    const renderTokenBalance = () => {
-      if (!tokenBalance) return null;
-
-      const usagePercent = tokenBalance.total
-        ? Math.round((tokenBalance.remaining / tokenBalance.total) * 100)
-        : null;
-      const isLow = tokenBalance.remaining <= 5;
-
-      return (
-        <div style={{
-          ...cardBase,
-          borderLeft: `4px solid ${isLow ? tokens.colors.warningScale[500] : tokens.colors.successScale[500]}`,
-        }}>
-          <Stack direction="horizontal" align="center" justify="space-between">
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <div style={{
-                width: 36,
-                height: 36,
-                borderRadius: tokens.borderRadius.md,
-                backgroundColor: isLow ? tokens.colors.warningScale[50] : tokens.colors.successScale[50],
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-                <Coins size={18} color={isLow ? tokens.colors.warningScale[600] : tokens.colors.successScale[600]} />
-              </div>
-              <div>
-                <p style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.medium,
-                  color: tokens.colors.neutral[500],
-                  margin: 0,
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: '0.05em',
-                }}>
-                  {tokenBalance.label ?? 'Interview Credits'}
-                </p>
-                <p style={{
-                  fontSize: tokens.typography.fontSize.xl,
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  color: tokens.colors.neutral[900],
-                  margin: 0,
-                  lineHeight: tokens.typography.lineHeight.tight,
-                }}>
-                  {tokenBalance.remaining} <span style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.normal,
-                    color: tokens.colors.neutral[400],
-                  }}>remaining</span>
-                </p>
-              </div>
-            </Stack>
-            <div style={{ textAlign: 'right' as const }}>
-              <p style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-                margin: 0,
-              }}>
-                ${tokenBalance.costPerInterview.toFixed(2)} / interview
-              </p>
-              {usagePercent !== null && (
-                <div style={{
-                  width: 80,
-                  height: 4,
-                  backgroundColor: tokens.colors.neutral[100],
-                  borderRadius: tokens.borderRadius.full,
-                  marginTop: tokens.spacing[1],
-                  overflow: 'hidden',
-                }}>
-                  <div style={{
-                    width: `${usagePercent}%`,
-                    height: '100%',
-                    backgroundColor: isLow ? tokens.colors.warningScale[500] : tokens.colors.successScale[500],
-                    borderRadius: tokens.borderRadius.full,
-                  }} />
-                </div>
-              )}
-              {onBuyTokens && (
-                <button
-                  onClick={onBuyTokens}
-                  style={{
-                    ...hoverTransition,
-                    marginTop: tokens.spacing[2],
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    backgroundColor: tokens.colors.primaryScale[600],
-                    color: tokens.colors.common.white,
-                    border: 'none',
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}
-                >
-                  Buy More
-                </button>
-              )}
-            </div>
-          </Stack>
-        </div>
-      );
-    };
-
-    /* ── Main Layout ───────────────────────────────────────────── */
     return (
-      <div className={className} style={containerStyle}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column' as const,
-          gap: tokens.spacing[5],
-          maxWidth: 1200,
-          margin: '0 auto',
+      <Box className={className} style={{
+        padding: `${tokens.spacing[6]}px`, backgroundColor: tokens.colors.neutral[50],
+        minHeight: '100%', ...style,
+      }}>
+        <Box style={{
+          display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5],
+          maxWidth: 1200, margin: '0 auto',
         }}>
           {/* Welcome Hero */}
-          {renderWelcomeHero()}
+          <Box style={{
+            ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+            borderRadius: tokens.borderRadius.lg, border: `1px solid ${tokens.colors.neutral[100]}`,
+            padding: `${tokens.spacing[6]}px`,
+            background: `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.primaryScale[100]})`,
+          }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4] }}>
+              <Box style={{
+                width: 56, height: 56, borderRadius: tokens.borderRadius.full,
+                backgroundColor: tokens.colors.primaryScale[200],
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                overflow: 'hidden', flexShrink: 0,
+              }}>
+                {welcome.avatar ? (
+                  <Box style={{ width: '100%', height: '100%' }}>
+                    <img src={welcome.avatar} alt={welcome.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
+                  </Box>
+                ) : (
+                  <User size={24} color={tokens.colors.primaryScale[600]} />
+                )}
+              </Box>
+              <Box style={{ flex: 1 }}>
+                <Text style={{
+                  fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold,
+                  color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight,
+                }}>
+                  {welcome.greeting ?? 'Good morning'}, {welcome.name}
+                </Text>
+                {welcome.focusSummary && (
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600],
+                    marginTop: tokens.spacing[1],
+                  }}>
+                    {welcome.focusSummary}
+                  </Text>
+                )}
+              </Box>
+              {welcome.todayCount !== undefined && (
+                <Box style={{
+                  ...createBadgeStyle(tokens, 'primary'),
+                  fontSize: tokens.typography.fontSize.sm,
+                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                  display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
+                }}>
+                  <Calendar size={14} />
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm }}>{welcome.todayCount} today</Text>
+                </Box>
+              )}
+            </Box>
+          </Box>
 
-          {/* Quick Start Wizard (conditional) */}
-          {renderWizard()}
+          {/* Quick Start Wizard */}
+          {showWizard && wizardSteps && wizardSteps.length > 0 && (
+            <Box style={{
+              ...cardStyle,
+              borderLeft: `4px solid ${tokens.colors.primaryScale[500]}`,
+            }}>
+              <Box style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                marginBottom: tokens.spacing[3],
+              }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                  <Zap size={18} color={tokens.colors.primaryScale[600]} />
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
+                    color: tokens.colors.neutral[900],
+                  }}>
+                    Get Started
+                  </Text>
+                </Box>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                    {completedWizardCount}/{totalWizardCount} complete
+                  </Text>
+                  <Box onClick={() => setShowWizard(false)} style={{ cursor: 'pointer' }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                      Dismiss
+                    </Text>
+                  </Box>
+                </Box>
+              </Box>
 
-          {/* Two-column layout for main content */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+              <Box style={{
+                width: '100%', height: 4, backgroundColor: tokens.colors.neutral[100],
+                borderRadius: tokens.borderRadius.full, marginBottom: tokens.spacing[4], overflow: 'hidden' as const,
+              }}>
+                <Box style={{
+                  width: `${wizardProgress}%`, height: '100%',
+                  backgroundColor: tokens.colors.primaryScale[500],
+                  borderRadius: tokens.borderRadius.full, transition: `width ${tokens.motion.hover}`,
+                }} />
+              </Box>
+
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                {wizardSteps.map((step) => (
+                  <Box
+                    key={step.key}
+                    onClick={() => !step.completed && onWizardStepClick?.(step.key)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
+                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                      borderRadius: tokens.borderRadius.lg,
+                      backgroundColor: step.completed ? tokens.colors.successScale[50] : tokens.colors.common.white,
+                      border: `1px solid ${step.completed ? tokens.colors.successScale[200] : tokens.colors.neutral[100]}`,
+                      cursor: step.completed ? 'default' : 'pointer',
+                      opacity: step.completed ? 0.7 : 1, transition: `all ${tokens.motion.hover}`,
+                    }}
+                  >
+                    <Box style={{
+                      width: 24, height: 24, borderRadius: tokens.borderRadius.full,
+                      backgroundColor: step.completed ? tokens.colors.successScale[500] : tokens.colors.neutral[200],
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}>
+                      {step.completed ? (
+                        <CheckCircle size={14} color={tokens.colors.common.white} />
+                      ) : (
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+                          color: tokens.colors.neutral[600],
+                        }}>
+                          {step.icon ?? ''}
+                        </Text>
+                      )}
+                    </Box>
+                    <Box style={{ flex: 1 }}>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                        color: step.completed ? tokens.colors.neutral[500] : tokens.colors.neutral[900],
+                        textDecoration: step.completed ? 'line-through' : 'none',
+                      }}>
+                        {step.label}
+                      </Text>
+                      {step.description && !step.completed && (
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: tokens.spacing[0] }}>
+                          {step.description}
+                        </Text>
+                      )}
+                    </Box>
+                    {!step.completed && <ArrowRight size={14} color={tokens.colors.neutral[400]} />}
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
+
+          {/* Two-column layout */}
+          <Box style={{
+            display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
             gap: tokens.spacing[5],
           }}>
             {/* Left column */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column' as const,
-              gap: tokens.spacing[5],
-            }}>
-              {renderPipeline()}
-              {renderSchedule()}
-              {renderRecentCandidates()}
-            </div>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5] }}>
+              {/* Pipeline */}
+              {pipelines.length > 0 && (
+                <Box style={cardStyle}>
+                  <Box style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginBottom: tokens.spacing[4],
+                  }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Briefcase size={18} color={tokens.colors.neutral[600]} />
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.neutral[900],
+                      }}>
+                        My Pipeline
+                      </Text>
+                    </Box>
+                    <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                      {pipelines.map((p) => (
+                        <Box
+                          key={p.jobId}
+                          onClick={() => { setSelectedJob(p.jobId); onJobClick?.(p.jobId); }}
+                          style={{
+                            padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                            borderRadius: tokens.borderRadius.lg,
+                            border: `1px solid ${selectedJob === p.jobId ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
+                            backgroundColor: selectedJob === p.jobId ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
+                            cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                          }}
+                        >
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                            color: selectedJob === p.jobId ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
+                            whiteSpace: 'nowrap' as const,
+                          }}>
+                            {p.jobTitle}
+                          </Text>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+
+                  {selectedPipeline && (
+                    <Box style={{ display: 'flex', gap: tokens.spacing[2], overflowX: 'auto' as const }}>
+                      {selectedPipeline.stages.map((stage, idx) => {
+                        const totalCandidates = selectedPipeline.stages.reduce((sum, s) => sum + s.count, 0);
+                        const widthPercent = totalCandidates > 0 ? Math.max(15, (stage.count / totalCandidates) * 100) : 100 / selectedPipeline.stages.length;
+                        const stageColor = stage.color ?? stageColors[idx % stageColors.length];
+
+                        return (
+                          <Box key={stage.key} style={{
+                            flex: `0 0 ${widthPercent}%`, minWidth: 80,
+                            padding: `${tokens.spacing[3]}px`,
+                            borderRadius: tokens.borderRadius.lg,
+                            backgroundColor: tokens.colors.neutral[50],
+                            borderTop: `3px solid ${stageColor}`,
+                          }}>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                              color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+                            }}>
+                              {stage.label}
+                            </Text>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold,
+                              color: tokens.colors.neutral[900], marginTop: tokens.spacing[1],
+                            }}>
+                              {stage.count}
+                            </Text>
+                          </Box>
+                        );
+                      })}
+                    </Box>
+                  )}
+                </Box>
+              )}
+
+              {/* Schedule */}
+              {schedule.length > 0 && (
+                <Box style={cardStyle}>
+                  <Box style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginBottom: tokens.spacing[4],
+                  }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Calendar size={18} color={tokens.colors.neutral[600]} />
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.neutral[900],
+                      }}>
+                        Today's Schedule
+                      </Text>
+                    </Box>
+                    {onViewAllSchedule && (
+                      <Box onClick={onViewAllSchedule} style={{
+                        display: 'flex', alignItems: 'center', gap: tokens.spacing[1], cursor: 'pointer',
+                      }}>
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                          color: tokens.colors.primaryScale[600],
+                        }}>
+                          View all
+                        </Text>
+                        <ChevronRight size={14} color={tokens.colors.primaryScale[600]} />
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                    {schedule.map((item) => {
+                      const typeConfig = SCHEDULE_TYPE_CONFIG[item.type];
+                      const dotColor = statusDotColors[item.status ?? 'upcoming'];
+                      const icon = scheduleIconMap[typeConfig.iconKey];
+
+                      return (
+                        <Box
+                          key={item.id}
+                          onClick={() => onScheduleAction?.(item.id, 'view')}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
+                            padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                            borderRadius: tokens.borderRadius.lg,
+                            border: `1px solid ${tokens.colors.neutral[100]}`,
+                            backgroundColor: tokens.colors.common.white,
+                            cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                          }}
+                        >
+                          <Box style={{
+                            width: 8, height: 8, borderRadius: tokens.borderRadius.full,
+                            backgroundColor: dotColor, flexShrink: 0,
+                          }} />
+                          <Box style={{
+                            width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
+                            backgroundColor: tokens.colors.primaryScale[50],
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            flexShrink: 0, color: tokens.colors.primaryScale[600],
+                          }}>
+                            {icon}
+                          </Box>
+                          <Box style={{ flex: 1, minWidth: 0 }}>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                              color: tokens.colors.neutral[900],
+                              overflow: 'hidden' as const, textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const,
+                            }}>
+                              {item.candidateName}
+                            </Text>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[0] }}>
+                              {typeConfig.label} - {item.jobTitle}
+                            </Text>
+                          </Box>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                              <Clock size={12} color={tokens.colors.neutral[600]} />
+                              <Text style={{
+                                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                                color: tokens.colors.neutral[600],
+                              }}>
+                                {item.time}
+                              </Text>
+                            </Box>
+                            {item.duration && (
+                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                                {item.duration}
+                              </Text>
+                            )}
+                            {item.type === 'video-interview' && (
+                              <Box
+                                onClick={(e: React.MouseEvent) => { e.stopPropagation(); onScheduleAction?.(item.id, 'join'); }}
+                                style={{
+                                  display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
+                                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                                  borderRadius: tokens.borderRadius.lg,
+                                  backgroundColor: tokens.colors.primaryScale[600],
+                                  cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                                }}
+                              >
+                                <Play size={10} color={tokens.colors.common.white} />
+                                <Text style={{
+                                  fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                                  color: tokens.colors.common.white,
+                                }}>
+                                  Join
+                                </Text>
+                              </Box>
+                            )}
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              )}
+
+              {/* Recent Candidates */}
+              {recentCandidates.length > 0 && (
+                <Box style={cardStyle}>
+                  <Box style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    marginBottom: tokens.spacing[4],
+                  }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Users size={18} color={tokens.colors.neutral[600]} />
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.neutral[900],
+                      }}>
+                        Recent Candidates
+                      </Text>
+                      <Box style={{ ...createBadgeStyle(tokens, 'primary') }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{recentCandidates.length}</Text>
+                      </Box>
+                    </Box>
+                    {onViewAllCandidates && (
+                      <Box onClick={onViewAllCandidates} style={{
+                        display: 'flex', alignItems: 'center', gap: tokens.spacing[1], cursor: 'pointer',
+                      }}>
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                          color: tokens.colors.primaryScale[600],
+                        }}>
+                          View all
+                        </Text>
+                        <ChevronRight size={14} color={tokens.colors.primaryScale[600]} />
+                      </Box>
+                    )}
+                  </Box>
+
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                    {recentCandidates.slice(0, 10).map((candidate) => {
+                      const statusCfg = CANDIDATE_STATUS_MAP[candidate.status];
+                      const badgeStyle = createBadgeStyle(tokens, statusCfg.colorKey);
+
+                      return (
+                        <Box
+                          key={candidate.id}
+                          onClick={() => onCandidateClick?.(candidate.id)}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
+                            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                            borderRadius: tokens.borderRadius.lg,
+                            backgroundColor: tokens.colors.common.white,
+                            border: `1px solid ${tokens.colors.neutral[100]}`,
+                            cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                          }}
+                        >
+                          <Box style={{
+                            width: 32, height: 32, borderRadius: tokens.borderRadius.full,
+                            backgroundColor: tokens.colors.neutral[200],
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            overflow: 'hidden', flexShrink: 0,
+                          }}>
+                            {candidate.avatar ? (
+                              <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
+                            ) : (
+                              <User size={14} color={tokens.colors.neutral[500]} />
+                            )}
+                          </Box>
+
+                          <Box style={{ flex: 1, minWidth: 0 }}>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                              color: tokens.colors.neutral[900],
+                              overflow: 'hidden' as const, textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const,
+                            }}>
+                              {candidate.name}
+                            </Text>
+                            {candidate.jobTitle && (
+                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                                {candidate.jobTitle}
+                              </Text>
+                            )}
+                          </Box>
+
+                          {/* Score bar */}
+                          <Box style={{ width: 60, display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-end', gap: 2 }}>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                              color: candidate.score >= 80
+                                ? tokens.colors.successScale[700]
+                                : candidate.score >= 50
+                                  ? tokens.colors.warningScale[700]
+                                  : tokens.colors.neutral[600],
+                            }}>
+                              {candidate.score}%
+                            </Text>
+                            <Box style={{
+                              width: '100%', height: 4, backgroundColor: tokens.colors.neutral[100],
+                              borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const,
+                            }}>
+                              <Box style={{
+                                width: `${candidate.score}%`, height: '100%',
+                                borderRadius: tokens.borderRadius.full,
+                                backgroundColor: candidate.score >= 80
+                                  ? tokens.colors.successScale[500]
+                                  : candidate.score >= 50
+                                    ? tokens.colors.warningScale[500]
+                                    : tokens.colors.neutral[400],
+                              }} />
+                            </Box>
+                          </Box>
+
+                          <Box style={{ ...badgeStyle, fontSize: tokens.typography.fontSize.xs, flexShrink: 0 }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{statusCfg.label}</Text>
+                          </Box>
+
+                          <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                            {[Eye, MessageSquare, MoreHorizontal].map((Icon, i) => (
+                              <Box
+                                key={i}
+                                onClick={(e: React.MouseEvent) => { e.stopPropagation(); if (i === 0) onCandidateClick?.(candidate.id); }}
+                                style={{
+                                  padding: `${tokens.spacing[1]}px`, borderRadius: tokens.borderRadius.md,
+                                  cursor: 'pointer', display: 'flex', alignItems: 'center',
+                                  transition: `all ${tokens.motion.hover}`,
+                                }}
+                              >
+                                <Icon size={14} color={tokens.colors.neutral[400]} />
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              )}
+            </Box>
 
             {/* Right column */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column' as const,
-              gap: tokens.spacing[5],
-            }}>
-              {renderPerformanceRing()}
-              {renderTokenBalance()}
-            </div>
-          </div>
-        </div>
-      </div>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5] }}>
+              {/* Performance Ring */}
+              {performance && (
+                <Box style={{
+                  ...cardStyle,
+                  display: 'flex', flexDirection: 'column' as const, alignItems: 'center',
+                }}>
+                  <Box style={{
+                    display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+                    alignSelf: 'flex-start', marginBottom: tokens.spacing[4],
+                  }}>
+                    <Target size={18} color={tokens.colors.neutral[600]} />
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
+                      color: tokens.colors.neutral[900],
+                    }}>
+                      Performance
+                    </Text>
+                  </Box>
+
+                  <Box style={{ position: 'relative' as const, width: 128, height: 128 }}>
+                    <svg width="128" height="128" viewBox="0 0 128 128" style={{ transform: 'rotate(-90deg)' }}>
+                      <circle cx="64" cy="64" r={ringRadius} fill="none" stroke={tokens.colors.neutral[100]} strokeWidth="10" />
+                      <circle
+                        cx="64" cy="64" r={ringRadius} fill="none"
+                        stroke={performancePercent >= 100 ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500]}
+                        strokeWidth="10" strokeLinecap="round"
+                        strokeDasharray={ringCircumference} strokeDashoffset={ringOffset}
+                        style={{ transition: `stroke-dashoffset ${tokens.motion.hover}` }}
+                      />
+                    </svg>
+                    <Box style={{
+                      position: 'absolute' as const, top: '50%', left: '50%',
+                      transform: 'translate(-50%, -50%)', textAlign: 'center' as const,
+                    }}>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold,
+                        color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight,
+                      }}>
+                        {performance.hires}
+                      </Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                        of {performance.target}
+                      </Text>
+                    </Box>
+                  </Box>
+
+                  <Box style={{ marginTop: tokens.spacing[3], textAlign: 'center' as const }}>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                      color: tokens.colors.neutral[700],
+                    }}>
+                      {performance.label ?? 'Hires This Quarter'}
+                    </Text>
+                    <Box style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      gap: tokens.spacing[1], marginTop: tokens.spacing[1],
+                    }}>
+                      <TrendingUp size={12} color={performancePercent >= 100 ? tokens.colors.successScale[600] : tokens.colors.primaryScale[600]} />
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                        color: performancePercent >= 100 ? tokens.colors.successScale[600] : tokens.colors.primaryScale[600],
+                      }}>
+                        {performancePercent}% of target
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
+              )}
+
+              {/* Token Balance */}
+              {tokenBalance && (() => {
+                const usagePercent = tokenBalance.total
+                  ? Math.round((tokenBalance.remaining / tokenBalance.total) * 100)
+                  : null;
+                const isLow = tokenBalance.remaining <= 5;
+
+                return (
+                  <Box style={{
+                    ...cardStyle,
+                    borderLeft: `4px solid ${isLow ? tokens.colors.warningScale[500] : tokens.colors.successScale[500]}`,
+                  }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                        <Box style={{
+                          width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
+                          backgroundColor: isLow ? tokens.colors.warningScale[50] : tokens.colors.successScale[50],
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        }}>
+                          <Coins size={18} color={isLow ? tokens.colors.warningScale[600] : tokens.colors.successScale[600]} />
+                        </Box>
+                        <Box>
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                            color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+                          }}>
+                            {tokenBalance.label ?? 'Interview Credits'}
+                          </Text>
+                          <Box style={{ display: 'flex', alignItems: 'baseline', gap: tokens.spacing[1] }}>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold,
+                              color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight,
+                            }}>
+                              {tokenBalance.remaining}
+                            </Text>
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400],
+                            }}>
+                              remaining
+                            </Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                      <Box style={{ textAlign: 'right' as const }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                          ${tokenBalance.costPerInterview.toFixed(2)} / interview
+                        </Text>
+                        {usagePercent !== null && (
+                          <Box style={{
+                            width: 80, height: 4, backgroundColor: tokens.colors.neutral[100],
+                            borderRadius: tokens.borderRadius.full, marginTop: tokens.spacing[1],
+                            overflow: 'hidden' as const,
+                          }}>
+                            <Box style={{
+                              width: `${usagePercent}%`, height: '100%',
+                              backgroundColor: isLow ? tokens.colors.warningScale[500] : tokens.colors.successScale[500],
+                              borderRadius: tokens.borderRadius.full,
+                            }} />
+                          </Box>
+                        )}
+                        {onBuyTokens && (
+                          <Box
+                            onClick={onBuyTokens}
+                            style={{
+                              marginTop: tokens.spacing[2],
+                              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                              borderRadius: tokens.borderRadius.lg,
+                              backgroundColor: tokens.colors.primaryScale[600],
+                              cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                              display: 'inline-block',
+                            }}
+                          >
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                              color: tokens.colors.common.white,
+                            }}>
+                              Buy More
+                            </Text>
+                          </Box>
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })()}
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     );
   },
 });

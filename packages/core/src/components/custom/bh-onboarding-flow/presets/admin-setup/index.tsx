@@ -205,7 +205,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
             <div style={{
               width: 80,
               height: 80,
-              borderRadius: tokens.borderRadius.full,
+              borderRadius: '50%',
               backgroundColor: tokens.colors.successScale[100],
               display: 'flex',
               alignItems: 'center',
@@ -273,7 +273,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                   <div style={{
                     width: 36,
                     height: 36,
-                    borderRadius: tokens.borderRadius.full,
+                    borderRadius: '50%',
                     backgroundColor: isPast
                       ? tokens.colors.successScale[500]
                       : isCurrentStep
@@ -370,7 +370,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
         width: '100%',
         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
         borderRadius: tokens.borderRadius.md,
-        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[300]}`,
+        border: `1px solid ${hasError ? tokens.colors.errorScale[300] : tokens.colors.neutral[200]}`,
         fontSize: tokens.typography.fontSize.sm,
         color: tokens.colors.neutral[900],
         backgroundColor: tokens.colors.common.white,
@@ -434,7 +434,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                 ...hoverTransition,
                 width: 44,
                 height: 24,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: '50%',
                 backgroundColor: inputValue ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
                 padding: 2,
                 cursor: 'pointer',
@@ -446,7 +446,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
               <div style={{
                 width: 20,
                 height: 20,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: '50%',
                 backgroundColor: tokens.colors.common.white,
                 boxShadow: tokens.shadows.sm,
                 transform: inputValue ? 'translateX(20px)' : 'translateX(0)',
@@ -643,7 +643,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
               style={{
                 marginTop: tokens.spacing[8],
                 paddingTop: tokens.spacing[5],
-                borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                borderTop: `1px solid ${tokens.colors.neutral[100]}`,
               }}
             >
               <div>
@@ -654,7 +654,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                       ...hoverTransition,
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
+                      border: `1px solid ${tokens.colors.neutral[200]}`,
                       backgroundColor: tokens.colors.common.white,
                       color: tokens.colors.neutral[700],
                       fontSize: tokens.typography.fontSize.sm,
@@ -734,7 +734,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
         <div style={{
           width: 300,
           flexShrink: 0,
-          borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+          borderLeft: `1px solid ${tokens.colors.neutral[100]}`,
           padding: tokens.spacing[5],
           backgroundColor: isGlass && tokens.glass ? tokens.glass.bgLight : tokens.colors.neutral[50],
           backdropFilter: isGlass && tokens.glass ? tokens.glass.blurSm : undefined,
@@ -784,7 +784,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                   </div>
                   {idx < previewItems.length - 1 && (
                     <div style={{
-                      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                      borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
                       marginTop: tokens.spacing[3],
                     }} />
                   )}
@@ -809,7 +809,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
           {/* Header */}
           <div style={{
             padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+            borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
             backgroundColor: tokens.colors.common.white,
           }}>
             <Stack direction="horizontal" align="center" gap={tokens.spacing[4]}>
@@ -818,6 +818,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                 <h1 style={{
                   fontSize: tokens.typography.fontSize.xl,
                   fontWeight: tokens.typography.fontWeight.bold,
+                  letterSpacing: '-0.02em',
                   color: tokens.colors.neutral[900],
                   margin: 0,
                 }}>
@@ -845,7 +846,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                     width: 120,
                     height: 6,
                     backgroundColor: tokens.colors.neutral[100],
-                    borderRadius: tokens.borderRadius.full,
+                    borderRadius: '50%',
                     overflow: 'hidden',
                   }}>
                     <div style={{
@@ -854,7 +855,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
                       backgroundColor: progressPercent === 100
                         ? tokens.colors.successScale[500]
                         : tokens.colors.primaryScale[500],
-                      borderRadius: tokens.borderRadius.full,
+                      borderRadius: '50%',
                       transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                     }} />
                   </div>
@@ -872,7 +873,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
             <div style={{
               width: 280,
               flexShrink: 0,
-              borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              borderRight: `1px solid ${tokens.colors.neutral[100]}`,
               backgroundColor: tokens.colors.common.white,
             }}>
               {renderStepper()}

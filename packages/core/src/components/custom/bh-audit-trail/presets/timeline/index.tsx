@@ -5,22 +5,43 @@
  * Vertical timeline view of audit events with filter bar, expandable
  * before/after diff cards, event detail modal, stats bar, export,
  * and real-time mode toggle.
+ *
+ * Design: Chronological vertical timeline with color-coded entity dots,
+ * card-based event entries, expandable inline diffs, and a detail modal.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import {
+  Activity,
+  User,
+  Briefcase,
+  Video,
+  FileText,
+  Users,
+  Settings,
+  Plus,
+  Pencil,
+  ArrowRightLeft,
+  Trash2,
+  ChevronDown,
+  ChevronRight,
+  X,
+  Download,
+  Radio,
+  Globe,
+  Clock,
+  Layers,
+  UserCheck,
+  Zap,
+} from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createProgressBarStyle,
-  createSectionHeaderStyle,
-  createStatusDotStyle,
-  createSurfaceStyle,
-  getHoverTransform,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityBadgeRadius,
+  createIconContainerStyle,
+  createDividerStyle,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -35,36 +56,32 @@ import {
   getActionTypeColors,
   formatAuditTimestamp,
 } from '../../core';
-import {
-  Activity,
-  User,
-  Briefcase,
-  Video,
-  FileText,
-  Users,
-  Settings,
-  Plus,
-  Pencil,
-  ArrowRightLeft,
-  Trash2,
-  Search,
-  Filter,
-  ChevronDown,
-  ChevronRight,
-  X,
-  Download,
-  Radio,
-  Eye,
-  Globe,
-  Clock,
-  BarChart3,
-  UserCheck,
-  Layers,
-  RefreshCw,
-  Zap,
-} from 'lucide-react';
 
-const ENTITY_TYPE_OPTIONS: { value: EntityType; label: string }[] = [
+/* ------------------------------------------------------------------ */
+/*  Mock Data                                                          */
+/* ------------------------------------------------------------------ */
+const MOCK_EVENTS: AuditEvent[] = [
+  { id: 'e1', timestamp: new Date(Date.now() - 180000).toISOString(), userName: 'Sofia Martinez', entityType: 'candidate', actionType: 'created', entityName: 'Emily Watson', ipAddress: '192.168.1.42' },
+  { id: 'e2', timestamp: new Date(Date.now() - 600000).toISOString(), userName: 'James Chen', entityType: 'job', actionType: 'updated', entityName: 'Sr. Frontend Engineer', ipAddress: '10.0.0.15', beforeState: { status: 'draft', salary: '120k' }, afterState: { status: 'published', salary: '140k' } },
+  { id: 'e3', timestamp: new Date(Date.now() - 1500000).toISOString(), userName: 'Priya Sharma', entityType: 'interview', actionType: 'state_change', entityName: 'Panel Review - Alex Kim', ipAddress: '172.16.0.8', beforeState: { stage: 'scheduled', panel: 3 }, afterState: { stage: 'completed', panel: 3 } },
+  { id: 'e4', timestamp: new Date(Date.now() - 3000000).toISOString(), userName: 'Marcus Williams', entityType: 'offer', actionType: 'created', entityName: 'Offer #1247 - Rachel Green', ipAddress: '192.168.1.55' },
+  { id: 'e5', timestamp: new Date(Date.now() - 5400000).toISOString(), userName: 'Sofia Martinez', entityType: 'team', actionType: 'updated', entityName: 'Engineering Hiring', ipAddress: '192.168.1.42', beforeState: { capacity: 80, members: 5 }, afterState: { capacity: 100, members: 6 } },
+  { id: 'e6', timestamp: new Date(Date.now() - 10800000).toISOString(), userName: 'James Chen', entityType: 'candidate', actionType: 'state_change', entityName: 'Tom Baker', ipAddress: '10.0.0.15', beforeState: { stage: 'phone_screen', rating: 3 }, afterState: { stage: 'onsite', rating: 4 }, relatedEvents: ['e3'] },
+  { id: 'e7', timestamp: new Date(Date.now() - 21600000).toISOString(), userName: 'Priya Sharma', entityType: 'settings', actionType: 'updated', entityName: 'SLA Configuration', ipAddress: '172.16.0.8', beforeState: { responseTime: 48, escalation: false }, afterState: { responseTime: 24, escalation: true } },
+  { id: 'e8', timestamp: new Date(Date.now() - 36000000).toISOString(), userName: 'Marcus Williams', entityType: 'job', actionType: 'deleted', entityName: 'Legacy QA Role', ipAddress: '192.168.1.55' },
+];
+
+const MOCK_STATS: AuditStats = {
+  totalEvents: 1247,
+  eventsToday: 34,
+  mostActiveUser: 'Sofia Martinez',
+  mostChangedEntity: 'Candidates',
+};
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
+const ENTITY_OPTIONS: { value: EntityType; label: string }[] = [
   { value: 'candidate', label: 'Candidate' },
   { value: 'job', label: 'Job' },
   { value: 'interview', label: 'Interview' },
@@ -73,7 +90,7 @@ const ENTITY_TYPE_OPTIONS: { value: EntityType; label: string }[] = [
   { value: 'settings', label: 'Settings' },
 ];
 
-const ACTION_TYPE_OPTIONS: { value: ActionType; label: string }[] = [
+const ACTION_OPTIONS: { value: ActionType; label: string }[] = [
   { value: 'created', label: 'Created' },
   { value: 'updated', label: 'Updated' },
   { value: 'state_change', label: 'State Change' },
@@ -82,1204 +99,529 @@ const ACTION_TYPE_OPTIONS: { value: ActionType; label: string }[] = [
 
 function getEntityIcon(entityType: EntityType, size: number) {
   switch (entityType) {
-    case 'candidate':
-      return <User size={size} />;
-    case 'job':
-      return <Briefcase size={size} />;
-    case 'interview':
-      return <Video size={size} />;
-    case 'offer':
-      return <FileText size={size} />;
-    case 'team':
-      return <Users size={size} />;
-    case 'settings':
-      return <Settings size={size} />;
+    case 'candidate': return <User size={size} />;
+    case 'job': return <Briefcase size={size} />;
+    case 'interview': return <Video size={size} />;
+    case 'offer': return <FileText size={size} />;
+    case 'team': return <Users size={size} />;
+    case 'settings': return <Settings size={size} />;
   }
 }
 
 function getActionIcon(actionType: ActionType, size: number) {
   switch (actionType) {
-    case 'created':
-      return <Plus size={size} />;
-    case 'updated':
-      return <Pencil size={size} />;
-    case 'state_change':
-      return <ArrowRightLeft size={size} />;
-    case 'deleted':
-      return <Trash2 size={size} />;
+    case 'created': return <Plus size={size} />;
+    case 'updated': return <Pencil size={size} />;
+    case 'state_change': return <ArrowRightLeft size={size} />;
+    case 'deleted': return <Trash2 size={size} />;
   }
 }
 
 function getActionLabel(actionType: ActionType): string {
   switch (actionType) {
-    case 'created':
-      return 'created';
-    case 'updated':
-      return 'updated';
-    case 'state_change':
-      return 'changed state of';
-    case 'deleted':
-      return 'deleted';
+    case 'created': return 'created';
+    case 'updated': return 'updated';
+    case 'state_change': return 'changed state of';
+    case 'deleted': return 'deleted';
   }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Timeline Preset                                                    */
+/* ------------------------------------------------------------------ */
 export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
   name: 'BhAuditTrail.Timeline',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhAuditTrailProps>) => {
-    const { Box, Stack } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhAuditTrailProps>) => {
+    const { Box, Text } = primitives;
+    const t = tokens;
 
+    /* -- Props with mock fallbacks ----------------------------------- */
     const {
-      events: externalEvents = [],
-      stats: externalStats,
+      events: eventsProp,
+      stats: statsProp,
       filters: externalFilters,
       onFilterChange,
-      selectedEvent: externalSelectedEvent,
+      selectedEvent: externalSelected,
       onEventSelect,
       showDetail: externalShowDetail = false,
       onDetailToggle,
-      viewMode: externalViewMode = 'timeline',
-      onViewModeChange,
-      liveMode: externalLiveMode = false,
+      liveMode: externalLive = false,
       onLiveModeToggle,
-      exportRange: externalExportRange,
       onExport,
       className,
       style,
     } = props;
 
-    const [viewMode, setViewMode] = useState(externalViewMode);
+    const events = eventsProp?.length ? eventsProp : MOCK_EVENTS;
+    const stats = statsProp ?? MOCK_STATS;
+
+    /* -- Internal state ---------------------------------------------- */
     const [filters, setFilters] = useState<AuditFilter>(externalFilters ?? {});
-    const [selectedEvent, setSelectedEvent] = useState<string | null>(
-      externalSelectedEvent ?? null
-    );
+    const [selectedEvent, setSelectedEvent] = useState<string | null>(externalSelected ?? null);
     const [showDetail, setShowDetail] = useState(externalShowDetail);
-    const [liveMode, setLiveMode] = useState(externalLiveMode);
+    const [liveMode, setLiveMode] = useState(externalLive);
     const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
 
-    useEffect(() => { setViewMode(externalViewMode); }, [externalViewMode]);
-    useEffect(() => {
-      if (externalFilters) setFilters(externalFilters);
-    }, [externalFilters]);
-    useEffect(() => {
-      if (externalSelectedEvent !== undefined) setSelectedEvent(externalSelectedEvent);
-    }, [externalSelectedEvent]);
+    useEffect(() => { if (externalFilters) setFilters(externalFilters); }, [externalFilters]);
+    useEffect(() => { if (externalSelected !== undefined) setSelectedEvent(externalSelected); }, [externalSelected]);
     useEffect(() => { setShowDetail(externalShowDetail); }, [externalShowDetail]);
-    useEffect(() => { setLiveMode(externalLiveMode); }, [externalLiveMode]);
+    useEffect(() => { setLiveMode(externalLive); }, [externalLive]);
 
-    const handleFilterChange = useCallback(
-      (next: AuditFilter) => {
-        setFilters(next);
-        onFilterChange?.(next);
-      },
-      [onFilterChange]
-    );
-
-    const handleEventSelect = useCallback(
-      (eventId: string | null) => {
-        setSelectedEvent(eventId);
-        onEventSelect?.(eventId);
-        if (eventId) {
-          setShowDetail(true);
-          onDetailToggle?.();
-        }
-      },
-      [onEventSelect, onDetailToggle]
-    );
-
+    const handleFilterChange = useCallback((next: AuditFilter) => { setFilters(next); onFilterChange?.(next); }, [onFilterChange]);
+    const handleSelect = useCallback((id: string | null) => {
+      setSelectedEvent(id);
+      onEventSelect?.(id);
+      if (id) { setShowDetail(true); onDetailToggle?.(); }
+    }, [onEventSelect, onDetailToggle]);
     const handleDetailClose = useCallback(() => {
-      setShowDetail(false);
-      setSelectedEvent(null);
-      onDetailToggle?.();
-      onEventSelect?.(null);
+      setShowDetail(false); setSelectedEvent(null); onDetailToggle?.(); onEventSelect?.(null);
     }, [onDetailToggle, onEventSelect]);
-
-    const handleLiveModeToggle = useCallback(() => {
-      const next = !liveMode;
-      setLiveMode(next);
-      onLiveModeToggle?.();
-    }, [liveMode, onLiveModeToggle]);
-
-    const toggleExpanded = useCallback((eventId: string) => {
-      setExpandedEvents((prev) => {
-        const next = new Set(prev);
-        if (next.has(eventId)) {
-          next.delete(eventId);
-        } else {
-          next.add(eventId);
-        }
-        return next;
-      });
+    const handleLiveToggle = useCallback(() => { const n = !liveMode; setLiveMode(n); onLiveModeToggle?.(); }, [liveMode, onLiveModeToggle]);
+    const toggleExpanded = useCallback((id: string) => {
+      setExpandedEvents((prev) => { const n = new Set(prev); if (n.has(id)) n.delete(id); else n.add(id); return n; });
     }, []);
 
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const entityColors = getEntityTypeColors(tokens);
-    const actionColors = getActionTypeColors(tokens);
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    /* -- Styles ------------------------------------------------------ */
+    const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
+    const actionColors = useMemo(() => getActionTypeColors(t), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
-    const containerStyle: React.CSSProperties = {
-      ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-      padding: tokens.spacing[5],
-      backgroundColor: tokens.colors.neutral[50],
-      minHeight: '100%',
-      ...style,
-    };
+    const selectedObj = useMemo(() => events.find((e) => e.id === selectedEvent), [events, selectedEvent]);
 
-    const sectionTitleStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.lg,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      color: tokens.colors.neutral[900],
-      margin: 0,
-    };
+    const filteredEvents = useMemo(() => events.filter((ev) => {
+      if (filters.entityType && ev.entityType !== filters.entityType) return false;
+      if (filters.actionType && ev.actionType !== filters.actionType) return false;
+      if (filters.userId && ev.userName !== filters.userId) return false;
+      return true;
+    }), [events, filters]);
 
-    const pulseKeyframes = `
-      @keyframes bhAuditPulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
-      }
-    `;
+    const pulseKeyframes = `@keyframes bhAuditPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }`;
 
-    const selectedEventObj = useMemo(
-      () => externalEvents.find((e) => e.id === selectedEvent),
-      [externalEvents, selectedEvent]
-    );
+    /* ================================================================ */
+    /*  Inner Components                                                 */
+    /* ================================================================ */
 
-    /* ---- Statistics Bar ---- */
-    const renderStatsBar = () => {
-      if (!externalStats) return null;
-
-      const statItems = [
-        {
-          label: 'Total Events',
-          value: externalStats.totalEvents.toLocaleString(),
-          icon: <Layers size={16} color={tokens.colors.primaryScale[600]} />,
-          color: tokens.colors.primaryScale,
-        },
-        {
-          label: 'Today',
-          value: externalStats.eventsToday.toLocaleString(),
-          icon: <Activity size={16} color={tokens.colors.infoScale[600]} />,
-          color: tokens.colors.infoScale,
-        },
-        {
-          label: 'Most Active',
-          value: externalStats.mostActiveUser,
-          icon: <UserCheck size={16} color={tokens.colors.successScale[600]} />,
-          color: tokens.colors.successScale,
-        },
-        {
-          label: 'Most Changed',
-          value: externalStats.mostChangedEntity,
-          icon: <Zap size={16} color={tokens.colors.warningScale[600]} />,
-          color: tokens.colors.warningScale,
-        },
-      ];
-
+    /* -- Stat Card -------------------------------------------------- */
+    const StatCard = ({ label, value, icon, scale }: { label: string; value: string | number; icon: React.ReactNode; scale: string }) => {
+      const s = (t.colors as any)[scale];
       return (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: tokens.spacing[3],
-          }}
-        >
-          {statItems.map((item) => (
-            <div key={item.label} style={cardBase}>
-              <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                <div
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: tokens.borderRadius.md,
-                    backgroundColor: (item.color as any)[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                  }}
-                >
-                  {item.icon}
-                </div>
-                <div>
-                  <span
-                    style={{
-                      ...sectionHeader,
-                      marginBottom: 0,
-                      display: 'block',
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: tokens.typography.fontSize.md,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                    }}
-                  >
-                    {item.value}
-                  </span>
-                </div>
-              </Stack>
-            </div>
-          ))}
-        </div>
+        <Box style={{ ...card, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+          <Box style={{
+            ...createIconContainerStyle(t, { size: 40, color: s[50] }),
+            color: s[600],
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {icon}
+          </Box>
+          <Box>
+            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', display: 'block', marginBottom: 2 }}>{label}</Text>
+            <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{typeof value === 'number' ? value.toLocaleString() : value}</Text>
+          </Box>
+        </Box>
       );
     };
 
-    /* ---- Filter Bar ---- */
-    const renderFilterBar = () => {
-      return (
-        <div style={cardBase}>
-          <Stack
-            direction="horizontal"
-            align="center"
-            justify="space-between"
-            style={{ flexWrap: 'wrap' as const, gap: tokens.spacing[3] }}
-          >
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]} style={{ flexWrap: 'wrap' as const }}>
-              {/* Entity type pills */}
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[500],
-                  fontWeight: tokens.typography.fontWeight.medium,
-                }}
-              >
-                Entity:
-              </span>
-              {ENTITY_TYPE_OPTIONS.map((opt) => {
+    /* -- Filter Pill ------------------------------------------------ */
+    const FilterPill = ({ active, color, borderColor, children, onClick }: { active: boolean; color?: string; borderColor?: string; children: React.ReactNode; onClick: () => void }) => (
+      <Box
+        onClick={onClick}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+          padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+          borderRadius: t.borderRadius.full,
+          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${active ? (borderColor || t.colors.primaryScale[300]) : t.colors.neutral[200]}`,
+          backgroundColor: active ? (color || t.colors.primaryScale[50]) : t.colors.common.white,
+          color: active ? (color ? 'inherit' : t.colors.primaryScale[700]) : t.colors.neutral[600],
+          fontSize: t.typography.fontSize.xs,
+          fontWeight: t.typography.fontWeight.medium,
+          cursor: 'pointer',
+          transition: `all ${t.motion.hover}`,
+        }}
+      >
+        {children}
+      </Box>
+    );
+
+    /* -- Diff Table ------------------------------------------------- */
+    const DiffTable = ({ before, after }: { before: Record<string, any>; after: Record<string, any> }) => (
+      <Box style={{ borderRadius: t.borderRadius.md, overflow: 'hidden', border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, marginTop: t.spacing[2] }}>
+        <Box style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', backgroundColor: t.colors.neutral[100], padding: `${t.spacing[2]}px` }}>
+          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Field</Text>
+          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Before</Text>
+          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>After</Text>
+        </Box>
+        {Object.keys({ ...before, ...after }).map((key) => {
+          const b = before[key];
+          const a = after[key];
+          const changed = JSON.stringify(b) !== JSON.stringify(a);
+          if (!changed) return null;
+          return (
+            <Box key={key} style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', borderBottom: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[100]}`, fontSize: t.typography.fontSize.xs }}>
+              <Box style={{ padding: t.spacing[2], backgroundColor: t.colors.neutral[50], fontFamily: 'monospace', fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], borderRight: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}` }}>
+                <Text style={{ fontSize: 'inherit', fontFamily: 'monospace' }}>{key}</Text>
+              </Box>
+              <Box style={{ padding: t.spacing[2], backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[700], fontFamily: 'monospace', borderRight: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, wordBreak: 'break-all' as const }}>
+                <Text style={{ fontSize: 'inherit', fontFamily: 'monospace' }}>{b !== undefined ? String(b) : '(none)'}</Text>
+              </Box>
+              <Box style={{ padding: t.spacing[2], backgroundColor: t.colors.successScale[50], color: t.colors.successScale[700], fontFamily: 'monospace', wordBreak: 'break-all' as const }}>
+                <Text style={{ fontSize: 'inherit', fontFamily: 'monospace' }}>{a !== undefined ? String(a) : '(none)'}</Text>
+              </Box>
+            </Box>
+          );
+        })}
+      </Box>
+    );
+
+    /* ================================================================ */
+    /*  Render                                                           */
+    /* ================================================================ */
+    return (
+      <Box
+        className={className}
+        style={{
+          minHeight: '100%',
+          backgroundColor: t.colors.neutral[50],
+          padding: t.spacing[7],
+          fontFamily: 'inherit',
+          ...style,
+        }}
+      >
+        <style>{pulseKeyframes}</style>
+
+        <Box style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
+
+          {/* ---- Stats Bar ------------------------------------------ */}
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4] }}>
+            <StatCard label="Total Events" value={stats.totalEvents} icon={<Layers size={18} />} scale="primaryScale" />
+            <StatCard label="Today" value={stats.eventsToday} icon={<Activity size={18} />} scale="infoScale" />
+            <StatCard label="Most Active" value={stats.mostActiveUser} icon={<UserCheck size={18} />} scale="successScale" />
+            <StatCard label="Most Changed" value={stats.mostChangedEntity} icon={<Zap size={18} />} scale="warningScale" />
+          </Box>
+
+          {/* ---- Filter Bar ----------------------------------------- */}
+          <Box style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: t.spacing[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexWrap: 'wrap' as const }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>Entity:</Text>
+              {ENTITY_OPTIONS.map((opt) => {
                 const isActive = filters.entityType === opt.value;
                 const eColor = entityColors[opt.value];
                 return (
-                  <button
-                    key={opt.value}
-                    onClick={() =>
-                      handleFilterChange({
-                        ...filters,
-                        entityType: isActive ? undefined : opt.value,
-                      })
-                    }
-                    style={{
-                      ...hoverTransition,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.full,
-                      border: isActive
-                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${eColor.border}`
-                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: isActive ? eColor.bg : tokens.colors.common.white,
-                      color: isActive ? eColor.color : tokens.colors.neutral[600],
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                    }}
-                  >
-                    {getEntityIcon(opt.value, 12)}
-                    {opt.label}
-                  </button>
+                  <FilterPill key={opt.value} active={isActive} color={isActive ? eColor.bg : undefined} borderColor={isActive ? eColor.border : undefined} onClick={() => handleFilterChange({ ...filters, entityType: isActive ? undefined : opt.value })}>
+                    <Box style={{ color: isActive ? eColor.color : 'inherit', display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      {getEntityIcon(opt.value, 12)}
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{opt.label}</Text>
+                    </Box>
+                  </FilterPill>
                 );
               })}
 
-              <div
-                style={{
-                  width: 1,
-                  height: 20,
-                  backgroundColor: tokens.colors.neutral[200],
-                  margin: `0 ${tokens.spacing[1]}px`,
-                }}
-              />
+              <Box style={{ width: 1, height: 20, backgroundColor: t.colors.neutral[200], margin: `0 ${t.spacing[1]}px` }} />
 
-              {/* Action type chips */}
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[500],
-                  fontWeight: tokens.typography.fontWeight.medium,
-                }}
-              >
-                Action:
-              </span>
-              {ACTION_TYPE_OPTIONS.map((opt) => {
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>Action:</Text>
+              {ACTION_OPTIONS.map((opt) => {
                 const isActive = filters.actionType === opt.value;
                 const aColor = actionColors[opt.value];
                 return (
-                  <button
-                    key={opt.value}
-                    onClick={() =>
-                      handleFilterChange({
-                        ...filters,
-                        actionType: isActive ? undefined : opt.value,
-                      })
-                    }
-                    style={{
-                      ...hoverTransition,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.full,
-                      border: isActive
-                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${aColor.bg}`
-                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: isActive ? aColor.bg : tokens.colors.common.white,
-                      color: isActive ? aColor.color : tokens.colors.neutral[600],
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                    }}
-                  >
-                    {getActionIcon(opt.value, 12)}
-                    {opt.label}
-                  </button>
+                  <FilterPill key={opt.value} active={isActive} color={isActive ? aColor.bg : undefined} borderColor={isActive ? aColor.bg : undefined} onClick={() => handleFilterChange({ ...filters, actionType: isActive ? undefined : opt.value })}>
+                    <Box style={{ color: isActive ? aColor.color : 'inherit', display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      {getActionIcon(opt.value, 12)}
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{opt.label}</Text>
+                    </Box>
+                  </FilterPill>
                 );
               })}
-            </Stack>
+            </Box>
 
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              {/* Live mode toggle */}
-              <button
-                onClick={handleLiveModeToggle}
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <Box
+                onClick={handleLiveToggle}
                 style={{
-                  ...hoverTransition,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
-                    liveMode
-                      ? tokens.colors.successScale[300]
-                      : tokens.colors.neutral[200]
-                  }`,
-                  backgroundColor: liveMode
-                    ? tokens.colors.successScale[50]
-                    : tokens.colors.common.white,
-                  color: liveMode
-                    ? tokens.colors.successScale[700]
-                    : tokens.colors.neutral[600],
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.medium,
+                  display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: t.borderRadius.md,
+                  border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${liveMode ? t.colors.successScale[300] : t.colors.neutral[200]}`,
+                  backgroundColor: liveMode ? t.colors.successScale[50] : t.colors.common.white,
+                  color: liveMode ? t.colors.successScale[700] : t.colors.neutral[600],
+                  fontSize: t.typography.fontSize.xs,
+                  fontWeight: t.typography.fontWeight.medium,
                   cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
+                  transition: `all ${t.motion.hover}`,
                 }}
               >
-                <Radio
-                  size={12}
-                  style={
-                    liveMode
-                      ? { animation: 'bhAuditPulse 2s ease-in-out infinite' }
-                      : undefined
-                  }
-                />
-                {liveMode ? 'Live' : 'Paused'}
-              </button>
-
-              {/* Export buttons */}
+                <Radio size={12} style={liveMode ? { animation: 'bhAuditPulse 2s ease-in-out infinite' } : undefined} />
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{liveMode ? 'Live' : 'Paused'}</Text>
+              </Box>
               {onExport && (
                 <>
-                  <button
-                    onClick={() => onExport('csv')}
-                    style={{
-                      ...hoverTransition,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      color: tokens.colors.neutral[600],
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                    }}
-                  >
+                  <Box onClick={() => onExport('csv')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}>
                     <Download size={12} />
-                    CSV
-                  </button>
-                  <button
-                    onClick={() => onExport('json')}
-                    style={{
-                      ...hoverTransition,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      color: tokens.colors.neutral[600],
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                    }}
-                  >
+                    <Text style={{ fontSize: t.typography.fontSize.xs }}>CSV</Text>
+                  </Box>
+                  <Box onClick={() => onExport('json')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}>
                     <Download size={12} />
-                    JSON
-                  </button>
+                    <Text style={{ fontSize: t.typography.fontSize.xs }}>JSON</Text>
+                  </Box>
                 </>
               )}
-            </Stack>
-          </Stack>
-        </div>
-      );
-    };
+            </Box>
+          </Box>
 
-    /* ---- Timeline ---- */
-    const renderTimeline = () => {
-      const filteredEvents = externalEvents.filter((ev) => {
-        if (filters.entityType && ev.entityType !== filters.entityType) return false;
-        if (filters.actionType && ev.actionType !== filters.actionType) return false;
-        if (filters.userId && ev.userName !== filters.userId) return false;
-        return true;
-      });
+          {/* ---- Timeline ------------------------------------------- */}
+          {filteredEvents.length === 0 ? (
+            <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${t.spacing[10]}px ${t.spacing[4]}px`, textAlign: 'center' as const }}>
+              <Box style={{ color: t.colors.neutral[300], marginBottom: t.spacing[3] }}><Activity size={32} /></Box>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>No audit events match your filters</Text>
+            </Box>
+          ) : (
+            <Box style={{ position: 'relative' as const }}>
+              {/* Vertical line */}
+              <Box style={{ position: 'absolute' as const, left: 19, top: 0, bottom: 0, width: 2, backgroundColor: t.colors.neutral[200] }} />
 
-      if (filteredEvents.length === 0) {
-        return (
-          <div
-            style={{
-              ...cardBase,
-              display: 'flex',
-              flexDirection: 'column' as const,
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`,
-              textAlign: 'center' as const,
-            }}
-          >
-            <Activity
-              size={32}
-              color={tokens.colors.neutral[300]}
-              style={{ marginBottom: tokens.spacing[3] }}
-            />
-            <p
-              style={{
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.neutral[500],
-                margin: 0,
-              }}
-            >
-              No audit events match your filters
-            </p>
-          </div>
-        );
-      }
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
+                {filteredEvents.map((event) => {
+                  const eColor = entityColors[event.entityType];
+                  const aColor = actionColors[event.actionType];
+                  const isExpanded = expandedEvents.has(event.id);
+                  const isSelected = selectedEvent === event.id;
+                  const hasDiff = event.beforeState && event.afterState && Object.keys(event.beforeState).length > 0;
 
-      return (
-        <div style={{ position: 'relative' as const }}>
-          {/* Timeline vertical line */}
-          <div
-            style={{
-              position: 'absolute' as const,
-              left: 19,
-              top: 0,
-              bottom: 0,
-              width: 2,
-              backgroundColor: tokens.colors.neutral[200],
-            }}
-          />
+                  return (
+                    <Box key={event.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const }}>
+                      {/* Timeline dot */}
+                      <Box style={{ width: 40, flexShrink: 0, display: 'flex', justifyContent: 'center', paddingTop: t.spacing[3], zIndex: 1 }}>
+                        <Box style={{ width: 14, height: 14, borderRadius: t.borderRadius.full, backgroundColor: eColor.dot, border: `3px solid ${t.colors.common.white}`, boxShadow: t.shadows.sm }} />
+                      </Box>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column' as const,
-              gap: tokens.spacing[3],
-            }}
-          >
-            {filteredEvents.map((event) => {
-              const eColor = entityColors[event.entityType];
-              const aColor = actionColors[event.actionType];
-              const isExpanded = expandedEvents.has(event.id);
-              const isSelected = selectedEvent === event.id;
-              const hasDiff =
-                event.beforeState &&
-                event.afterState &&
-                Object.keys(event.beforeState).length > 0;
+                      {/* Event card */}
+                      <Box
+                        onClick={() => handleSelect(event.id)}
+                        style={{
+                          ...card,
+                          flex: 1,
+                          borderLeft: `3px solid ${eColor.dot}`,
+                          cursor: 'pointer',
+                          transition: `all ${t.motion.hover}`,
+                          boxShadow: isSelected ? t.shadows.md : card.boxShadow,
+                        }}
+                        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.boxShadow = t.shadows.md; }}
+                        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.boxShadow = isSelected ? t.shadows.md : (card.boxShadow as string) || ''; }}
+                      >
+                        {/* Header */}
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                            <Box style={{
+                              ...createIconContainerStyle(t, { size: 28, color: t.colors.neutral[200] }),
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            }}>
+                              <User size={14} color={t.colors.neutral[500]} />
+                            </Box>
+                            <Box>
+                              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+                                {event.userName}
+                              </Text>
+                              {' '}
+                              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
+                                {getActionLabel(event.actionType)}
+                              </Text>
+                              {' '}
+                              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                                {event.entityName}
+                              </Text>
+                            </Box>
+                          </Box>
 
-              return (
-                <div
-                  key={event.id}
-                  style={{
-                    display: 'flex',
-                    gap: tokens.spacing[3],
-                    position: 'relative' as const,
-                  }}
-                >
-                  {/* Timeline dot */}
-                  <div
-                    style={{
-                      width: 40,
-                      flexShrink: 0,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      paddingTop: tokens.spacing[3],
-                      zIndex: 1,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 14,
-                        height: 14,
-                        borderRadius: tokens.borderRadius.full,
-                        backgroundColor: eColor.dot,
-                        border: `3px solid ${tokens.colors.common.white}`,
-                        boxShadow: tokens.shadows.sm,
-                      }}
-                    />
-                  </div>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                            <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              {getEntityIcon(event.entityType, 10)}
+                              <Text style={{ fontSize: 'inherit' }}>{event.entityType}</Text>
+                            </Box>
+                            <Box style={{ display: 'inline-flex', alignItems: 'center', padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: aColor.bg, color: aColor.color }}>
+                              <Text style={{ fontSize: 'inherit' }}>{event.actionType.replace('_', ' ')}</Text>
+                            </Box>
+                          </Box>
+                        </Box>
 
-                  {/* Event card */}
-                  <div
-                    style={{
-                      ...createCardStyle(tokens, {
-                        elevation: isSelected ? 'md' : 'sm',
-                        glass: isGlass,
-                        interactive: true,
-                      }),
-                      flex: 1,
-                      borderLeft: `3px solid ${eColor.dot}`,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                    }}
-                    onClick={() => handleEventSelect(event.id)}
-                  >
-                    {/* Header */}
-                    <Stack
-                      direction="horizontal"
-                      align="center"
-                      justify="space-between"
-                      style={{ marginBottom: tokens.spacing[2] }}
-                    >
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                        {event.userAvatar ? (
-                          <img
-                            src={event.userAvatar}
-                            alt={event.userName}
-                            style={{
-                              width: 28,
-                              height: 28,
-                              borderRadius: tokens.borderRadius.full,
-                              objectFit: 'cover' as const,
-                            }}
-                          />
-                        ) : (
-                          <div
-                            style={{
-                              width: 28,
-                              height: 28,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.neutral[200],
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <User size={14} color={tokens.colors.neutral[500]} />
-                          </div>
-                        )}
-                        <div>
-                          <span
-                            style={{
-                              fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              color: tokens.colors.neutral[900],
-                            }}
-                          >
-                            {event.userName}
-                          </span>{' '}
-                          <span
-                            style={{
-                              fontSize: tokens.typography.fontSize.sm,
-                              color: tokens.colors.neutral[500],
-                            }}
-                          >
-                            {getActionLabel(event.actionType)}
-                          </span>{' '}
-                          <span
-                            style={{
-                              fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                              color: tokens.colors.neutral[800],
-                            }}
-                          >
-                            {event.entityName}
-                          </span>
-                        </div>
-                      </Stack>
-
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                        <span
-                          style={{
-                            ...createBadgeStyle(tokens, 'primary'),
-                            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                          }}
-                        >
-                          {getEntityIcon(event.entityType, 10)}
-                          <span style={{ marginLeft: 4 }}>{event.entityType}</span>
-                        </span>
-                        <span
-                          style={{
-                            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                            borderRadius: tokens.borderRadius.full,
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.medium,
-                            backgroundColor: aColor.bg,
-                            color: aColor.color,
-                          }}
-                        >
-                          {event.actionType.replace('_', ' ')}
-                        </span>
-                      </Stack>
-                    </Stack>
-
-                    {/* Timestamp + IP */}
-                    <Stack
-                      direction="horizontal"
-                      align="center"
-                      gap={tokens.spacing[3]}
-                      style={{ marginBottom: hasDiff ? tokens.spacing[2] : 0 }}
-                    >
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                        <Clock size={12} color={tokens.colors.neutral[400]} />
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: tokens.colors.neutral[500],
-                          }}
-                        >
-                          {formatAuditTimestamp(event.timestamp)}
-                        </span>
-                      </Stack>
-                      {event.ipAddress && (
-                        <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                          <Globe size={12} color={tokens.colors.neutral[400]} />
-                          <span
-                            style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: tokens.colors.neutral[400],
-                              fontFamily: 'monospace',
-                            }}
-                          >
-                            {event.ipAddress}
-                          </span>
-                        </Stack>
-                      )}
-                      {event.relatedEvents && event.relatedEvents.length > 0 && (
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: tokens.colors.neutral[400],
-                          }}
-                        >
-                          {event.relatedEvents.length} related event{event.relatedEvents.length > 1 ? 's' : ''}
-                        </span>
-                      )}
-                    </Stack>
-
-                    {/* Expandable diff */}
-                    {hasDiff && (
-                      <>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleExpanded(event.id);
-                          }}
-                          style={{
-                            ...hoverTransition,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: tokens.spacing[1],
-                            padding: 0,
-                            border: 'none',
-                            backgroundColor: 'transparent',
-                            color: tokens.colors.primaryScale[600],
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.medium,
-                            cursor: 'pointer',
-                            transition: `all ${tokens.motion.hover}`,
-                          }}
-                        >
-                          {isExpanded ? (
-                            <ChevronDown size={14} />
-                          ) : (
-                            <ChevronRight size={14} />
+                        {/* Timestamp + IP */}
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: hasDiff ? t.spacing[2] : 0 }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                            <Clock size={12} color={t.colors.neutral[400]} />
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{formatAuditTimestamp(event.timestamp)}</Text>
+                          </Box>
+                          {event.ipAddress && (
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                              <Globe size={12} color={t.colors.neutral[400]} />
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontFamily: 'monospace' }}>{event.ipAddress}</Text>
+                            </Box>
                           )}
-                          {isExpanded ? 'Hide changes' : 'Show changes'}
-                        </button>
+                          {event.relatedEvents && event.relatedEvents.length > 0 && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                              {event.relatedEvents.length} related event{event.relatedEvents.length > 1 ? 's' : ''}
+                            </Text>
+                          )}
+                        </Box>
 
-                        {isExpanded && event.beforeState && event.afterState && (
-                          <div
-                            style={{
-                              marginTop: tokens.spacing[2],
-                              borderRadius: tokens.borderRadius.md,
-                              overflow: 'hidden',
-                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                            }}
-                          >
-                            {Object.keys({
-                              ...event.beforeState,
-                              ...event.afterState,
-                            }).map((key) => {
-                              const before = event.beforeState?.[key];
-                              const after = event.afterState?.[key];
-                              if (JSON.stringify(before) === JSON.stringify(after))
-                                return null;
+                        {/* Expandable diff */}
+                        {hasDiff && (
+                          <>
+                            <Box
+                              onClick={(e: React.MouseEvent) => { e.stopPropagation(); toggleExpanded(event.id); }}
+                              style={{
+                                display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                                color: t.colors.primaryScale[600],
+                                fontSize: t.typography.fontSize.xs,
+                                fontWeight: t.typography.fontWeight.medium,
+                                cursor: 'pointer',
+                                transition: `all ${t.motion.hover}`,
+                              }}
+                            >
+                              {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>{isExpanded ? 'Hide changes' : 'Show changes'}</Text>
+                            </Box>
 
-                              return (
-                                <div
-                                  key={key}
-                                  style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: '120px 1fr 1fr',
-                                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                                    fontSize: tokens.typography.fontSize.xs,
-                                  }}
-                                >
-                                  <div
-                                    style={{
-                                      padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-                                      backgroundColor: tokens.colors.neutral[50],
-                                      fontWeight: tokens.typography.fontWeight.medium,
-                                      color: tokens.colors.neutral[700],
-                                      fontFamily: 'monospace',
-                                      borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                    }}
-                                  >
-                                    {key}
-                                  </div>
-                                  <div
-                                    style={{
-                                      padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-                                      backgroundColor: tokens.colors.errorScale[50],
-                                      color: tokens.colors.errorScale[700],
-                                      fontFamily: 'monospace',
-                                      borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                      wordBreak: 'break-all' as const,
-                                    }}
-                                  >
-                                    {before !== undefined
-                                      ? String(before)
-                                      : '(none)'}
-                                  </div>
-                                  <div
-                                    style={{
-                                      padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-                                      backgroundColor: tokens.colors.successScale[50],
-                                      color: tokens.colors.successScale[700],
-                                      fontFamily: 'monospace',
-                                      wordBreak: 'break-all' as const,
-                                    }}
-                                  >
-                                    {after !== undefined
-                                      ? String(after)
-                                      : '(none)'}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
+                            {isExpanded && event.beforeState && event.afterState && (
+                              <DiffTable before={event.beforeState} after={event.afterState} />
+                            )}
+                          </>
                         )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          )}
 
-    /* ---- Event Detail Modal ---- */
-    const renderDetailModal = () => {
-      if (!showDetail || !selectedEventObj) return null;
+          {/* ---- Detail Modal --------------------------------------- */}
+          {showDetail && selectedObj && (() => {
+            const eColor = entityColors[selectedObj.entityType];
+            const aColor = actionColors[selectedObj.actionType];
+            const hasDiff = selectedObj.beforeState && selectedObj.afterState && Object.keys(selectedObj.beforeState).length > 0;
 
-      const eColor = entityColors[selectedEventObj.entityType];
-      const aColor = actionColors[selectedEventObj.actionType];
-      const hasDiff =
-        selectedEventObj.beforeState &&
-        selectedEventObj.afterState &&
-        Object.keys(selectedEventObj.beforeState).length > 0;
-
-      return (
-        <div
-          style={{
-            position: 'fixed' as const,
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: tokens.overlay?.light,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-          }}
-          onClick={handleDetailClose}
-        >
-          <div
-            style={{
-              ...createCardStyle(tokens, { elevation: 'xl', glass: isGlass }),
-              width: '100%',
-              maxWidth: 700,
-              maxHeight: '85vh',
-              overflowY: 'auto' as const,
-              padding: tokens.spacing[6],
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <Stack
-              direction="horizontal"
-              align="center"
-              justify="space-between"
-              style={{ marginBottom: tokens.spacing[5] }}
-            >
-              <Stack direction="horizontal" align="center" gap={tokens.spacing[3]}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: tokens.borderRadius.lg,
-                    backgroundColor: eColor.bg,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: eColor.color,
-                  }}
-                >
-                  {getEntityIcon(selectedEventObj.entityType, 22)}
-                </div>
-                <div>
-                  <span
-                    style={{
-                      fontSize: tokens.typography.fontSize.lg,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                      display: 'block',
-                    }}
-                  >
-                    {selectedEventObj.entityName}
-                  </span>
-                  <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                    <span style={createBadgeStyle(tokens, 'primary')}>
-                      {selectedEventObj.entityType}
-                    </span>
-                    <span
-                      style={{
-                        padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                        borderRadius: tokens.borderRadius.full,
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.medium,
-                        backgroundColor: aColor.bg,
-                        color: aColor.color,
-                      }}
-                    >
-                      {selectedEventObj.actionType.replace('_', ' ')}
-                    </span>
-                  </Stack>
-                </div>
-              </Stack>
-              <button
-                onClick={handleDetailClose}
+            return (
+              <Box
                 style={{
-                  ...hoverTransition,
-                  padding: tokens.spacing[2],
-                  border: 'none',
-                  backgroundColor: tokens.colors.neutral[100],
-                  borderRadius: tokens.borderRadius.md,
-                  color: tokens.colors.neutral[600],
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0,
+                  backgroundColor: 'rgba(0,0,0,0.4)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  zIndex: 1000,
                 }}
+                onClick={handleDetailClose}
               >
-                <X size={18} />
-              </button>
-            </Stack>
-
-            {/* User info */}
-            <div
-              style={{
-                ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-                padding: tokens.spacing[4],
-                backgroundColor: tokens.colors.common.white,
-                marginBottom: tokens.spacing[4],
-              }}
-            >
-              <Stack direction="horizontal" align="center" gap={tokens.spacing[3]}>
-                {selectedEventObj.userAvatar ? (
-                  <img
-                    src={selectedEventObj.userAvatar}
-                    alt={selectedEventObj.userName}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: tokens.borderRadius.full,
-                      objectFit: 'cover' as const,
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: tokens.borderRadius.full,
-                      backgroundColor: tokens.colors.neutral[200],
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <User size={20} color={tokens.colors.neutral[500]} />
-                  </div>
-                )}
-                <div>
-                  <span
-                    style={{
-                      fontSize: tokens.typography.fontSize.md,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                      display: 'block',
-                    }}
-                  >
-                    {selectedEventObj.userName}
-                  </span>
-                  <Stack direction="horizontal" align="center" gap={tokens.spacing[3]}>
-                    <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                      <Clock size={12} color={tokens.colors.neutral[400]} />
-                      <span
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[500],
-                        }}
-                      >
-                        {formatAuditTimestamp(selectedEventObj.timestamp)}
-                      </span>
-                    </Stack>
-                    {selectedEventObj.ipAddress && (
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                        <Globe size={12} color={tokens.colors.neutral[400]} />
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: tokens.colors.neutral[400],
-                            fontFamily: 'monospace',
-                          }}
-                        >
-                          {selectedEventObj.ipAddress}
-                        </span>
-                      </Stack>
-                    )}
-                  </Stack>
-                </div>
-              </Stack>
-            </div>
-
-            {/* Full diff view */}
-            {hasDiff && selectedEventObj.beforeState && selectedEventObj.afterState && (
-              <div style={{ marginBottom: tokens.spacing[4] }}>
-                <span style={{ ...sectionHeader, marginBottom: tokens.spacing[2], display: 'block' }}>
-                  Changes
-                </span>
-                <div
+                <Box
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   style={{
-                    borderRadius: tokens.borderRadius.md,
-                    overflow: 'hidden',
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                    ...createCardStyle(t, { padding: 32 }),
+                    width: '100%', maxWidth: 700, maxHeight: '85vh', overflowY: 'auto' as const,
+                    backgroundColor: t.colors.common.white,
                   }}
                 >
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '140px 1fr 1fr',
-                      backgroundColor: tokens.colors.neutral[100],
-                      padding: `${tokens.spacing[2]}px`,
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[600],
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
-                    }}
-                  >
-                    <span>Field</span>
-                    <span>Before</span>
-                    <span>After</span>
-                  </div>
-                  {Object.keys({
-                    ...selectedEventObj.beforeState,
-                    ...selectedEventObj.afterState,
-                  }).map((key) => {
-                    const before = selectedEventObj.beforeState?.[key];
-                    const after = selectedEventObj.afterState?.[key];
-                    const changed =
-                      JSON.stringify(before) !== JSON.stringify(after);
-                    return (
-                      <div
-                        key={key}
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: '140px 1fr 1fr',
-                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                          fontSize: tokens.typography.fontSize.xs,
-                        }}
-                      >
-                        <div
-                          style={{
-                            padding: `${tokens.spacing[2]}px`,
-                            fontFamily: 'monospace',
-                            fontWeight: tokens.typography.fontWeight.medium,
-                            color: tokens.colors.neutral[700],
-                            backgroundColor: tokens.colors.neutral[50],
-                            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                          }}
-                        >
-                          {key}
-                        </div>
-                        <div
-                          style={{
-                            padding: `${tokens.spacing[2]}px`,
-                            fontFamily: 'monospace',
-                            color: changed
-                              ? tokens.colors.errorScale[700]
-                              : tokens.colors.neutral[500],
-                            backgroundColor: changed
-                              ? tokens.colors.errorScale[50]
-                              : tokens.colors.common.white,
-                            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                            wordBreak: 'break-all' as const,
-                          }}
-                        >
-                          {before !== undefined ? String(before) : '(none)'}
-                        </div>
-                        <div
-                          style={{
-                            padding: `${tokens.spacing[2]}px`,
-                            fontFamily: 'monospace',
-                            color: changed
-                              ? tokens.colors.successScale[700]
-                              : tokens.colors.neutral[500],
-                            backgroundColor: changed
-                              ? tokens.colors.successScale[50]
-                              : tokens.colors.common.white,
-                            wordBreak: 'break-all' as const,
-                          }}
-                        >
-                          {after !== undefined ? String(after) : '(none)'}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+                  {/* Modal Header */}
+                  <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[5] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                      <Box style={{
+                        ...createIconContainerStyle(t, { size: 44, color: eColor.bg }),
+                        color: eColor.color,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        {getEntityIcon(selectedObj.entityType, 22)}
+                      </Box>
+                      <Box>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], display: 'block' }}>
+                          {selectedObj.entityName}
+                        </Text>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR }}>
+                            <Text style={{ fontSize: 'inherit' }}>{selectedObj.entityType}</Text>
+                          </Box>
+                          <Box style={{ display: 'inline-flex', alignItems: 'center', padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: aColor.bg, color: aColor.color }}>
+                            <Text style={{ fontSize: 'inherit' }}>{selectedObj.actionType.replace('_', ' ')}</Text>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box onClick={handleDetailClose} style={{ padding: t.spacing[2], backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.md, color: t.colors.neutral[600], cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <X size={18} />
+                    </Box>
+                  </Box>
 
-            {/* Related events */}
-            {selectedEventObj.relatedEvents &&
-              selectedEventObj.relatedEvents.length > 0 && (
-                <div>
-                  <span style={{ ...sectionHeader, marginBottom: tokens.spacing[2], display: 'block' }}>
-                    Related Events
-                  </span>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column' as const,
-                      gap: tokens.spacing[2],
-                    }}
-                  >
-                    {selectedEventObj.relatedEvents.map((relId) => {
-                      const relEvent = externalEvents.find((e) => e.id === relId);
-                      if (!relEvent) return null;
-                      const relEColor = entityColors[relEvent.entityType];
-                      return (
-                        <div
-                          key={relId}
-                          style={{
-                            ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-                            padding: tokens.spacing[3],
-                            backgroundColor: tokens.colors.common.white,
-                            cursor: 'pointer',
-                            transition: `all ${tokens.motion.hover}`,
-                          }}
-                          onClick={() => handleEventSelect(relId)}
-                        >
-                          <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                            <div
+                  {/* User info */}
+                  <Box style={{ ...card, marginBottom: t.spacing[4] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                      <Box style={{
+                        ...createIconContainerStyle(t, { size: 40, color: t.colors.neutral[200] }),
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <User size={20} color={t.colors.neutral[500]} />
+                      </Box>
+                      <Box>
+                        <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], display: 'block' }}>
+                          {selectedObj.userName}
+                        </Text>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                            <Clock size={12} color={t.colors.neutral[400]} />
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{formatAuditTimestamp(selectedObj.timestamp)}</Text>
+                          </Box>
+                          {selectedObj.ipAddress && (
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                              <Globe size={12} color={t.colors.neutral[400]} />
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontFamily: 'monospace' }}>{selectedObj.ipAddress}</Text>
+                            </Box>
+                          )}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  {/* Full diff */}
+                  {hasDiff && selectedObj.beforeState && selectedObj.afterState && (
+                    <Box style={{ marginBottom: t.spacing[4] }}>
+                      <Text style={{ ...sectionHdr, marginBottom: t.spacing[2], display: 'block' }}>Changes</Text>
+                      <DiffTable before={selectedObj.beforeState} after={selectedObj.afterState} />
+                    </Box>
+                  )}
+
+                  {/* Related events */}
+                  {selectedObj.relatedEvents && selectedObj.relatedEvents.length > 0 && (
+                    <Box>
+                      <Text style={{ ...sectionHdr, marginBottom: t.spacing[2], display: 'block' }}>Related Events</Text>
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
+                        {selectedObj.relatedEvents.map((relId) => {
+                          const relEvent = events.find((e) => e.id === relId);
+                          if (!relEvent) return null;
+                          const relEColor = entityColors[relEvent.entityType];
+                          return (
+                            <Box
+                              key={relId}
+                              onClick={() => handleSelect(relId)}
                               style={{
-                                width: 8,
-                                height: 8,
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: relEColor.dot,
-                                flexShrink: 0,
-                              }}
-                            />
-                            <span
-                              style={{
-                                fontSize: tokens.typography.fontSize.sm,
-                                color: tokens.colors.neutral[800],
+                                ...card, cursor: 'pointer',
+                                transition: `all ${t.motion.hover}`,
                               }}
                             >
-                              {relEvent.userName} {getActionLabel(relEvent.actionType)}{' '}
-                              {relEvent.entityName}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: tokens.typography.fontSize.xs,
-                                color: tokens.colors.neutral[400],
-                                marginLeft: 'auto',
-                              }}
-                            >
-                              {formatAuditTimestamp(relEvent.timestamp)}
-                            </span>
-                          </Stack>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-          </div>
-        </div>
-      );
-    };
-
-    /* ---- Main Layout ---- */
-    return (
-      <div className={className} style={containerStyle}>
-        <style>{pulseKeyframes}</style>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column' as const,
-            gap: tokens.spacing[5],
-            maxWidth: 1400,
-            margin: '0 auto',
-          }}
-        >
-          {/* Stats bar */}
-          {renderStatsBar()}
-
-          {/* Filter bar */}
-          {renderFilterBar()}
-
-          {/* Timeline */}
-          {renderTimeline()}
-
-          {/* Detail Modal */}
-          {renderDetailModal()}
-        </div>
-      </div>
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                                <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: relEColor.dot, flexShrink: 0 }} />
+                                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], flex: 1 }}>
+                                  {relEvent.userName} {getActionLabel(relEvent.actionType)} {relEvent.entityName}
+                                </Text>
+                                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                                  {formatAuditTimestamp(relEvent.timestamp)}
+                                </Text>
+                              </Box>
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            );
+          })()}
+        </Box>
+      </Box>
     );
   },
 });

@@ -16,7 +16,7 @@ import {
 } from '../../../helpers';
 import type {
   PlScimDirectorySyncProps,
-  SyncOperation,
+  SyncOperationRecord,
   SyncProvider,
   SyncMapping,
   SyncOperationType,
@@ -105,7 +105,7 @@ export const LogPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>({
     const OPERATION_STATUS_CONFIG = useMemo(() => getOperationStatusConfig(tokens), [tokens]);
 
     const {
-      providers,
+      providers = [],
       operations = [],
       mappings = [],
       onOperationClick,
@@ -616,7 +616,8 @@ export const LogPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>({
     const renderAttributeMappings = () => {
       if (!showMappings || mappings.length === 0) return null;
 
-      const getDirectionIcon = (direction: MappingDirection) => {
+      const getDirectionIcon = (direction: MappingDirection | undefined) => {
+        if (!direction) return <ArrowLeftRight size={14} color={tokens.colors.neutral[400]} />;
         if (direction === 'inbound') return <ArrowLeft size={14} color={tokens.colors.neutral[400]} />;
         if (direction === 'outbound') return <ArrowRight size={14} color={tokens.colors.neutral[400]} />;
         return <ArrowLeftRight size={14} color={tokens.colors.neutral[400]} />;
@@ -707,7 +708,7 @@ export const LogPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>({
 
     // ─── Render: Operation Row ─────────────────────────────────────────
 
-    const renderOperationRow = (operation: SyncOperation) => {
+    const renderOperationRow = (operation: SyncOperationRecord) => {
       const provider = providers.find(p => p.id === operation.providerId);
       const statusCfg = OPERATION_STATUS_CONFIG[operation.status];
       const isExpanded = expandedOperationId === operation.id;

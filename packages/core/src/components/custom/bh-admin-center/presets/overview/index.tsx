@@ -11,13 +11,18 @@ import { createPreset, PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createFilterPillStyle,
   createHoverStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createProgressBarStyle,
   createStatusDotStyle,
   createSurfaceStyle,
+  getCardPadding,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
 import {
@@ -60,7 +65,7 @@ import {
 export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
   name: 'BhAdminCenter.Overview',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhAdminCenterProps>) => {
-    const { Box } = primitives;
+    const { Box, Text } = primitives;
     const providerStatusColors = getProviderStatusColors(tokens);
     const circuitBreakerColors = getCircuitBreakerColors(tokens);
     const severityColors = getSeverityColors(tokens);
@@ -88,6 +93,11 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
     } = props;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const [dateRange, setDateRange] = useState<DateRangeValue>('30d');
     const [providerFilter, setProviderFilter] = useState<string>('all');
@@ -200,20 +210,20 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
               style={{ transition: `stroke-dashoffset ${tokens.motion.hover}` }}
             />
             <foreignObject x="22" y="26" width="44" height="36">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 {icon}
-                <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], marginTop: 2 }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], marginTop: 2 }}>
                   {formatPercentage(pct)}
-                </span>
-              </div>
+                </Text>
+              </Box>
             </foreignObject>
           </svg>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+          <Box style={{ textAlign: 'center' }}>
+            <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
               {typeof value === 'number' && typeof total === 'number' && total !== 100 ? `${value} / ${total}` : formatPercentage(pct)}
-            </p>
-            <p style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{label}</p>
-          </div>
+            </Text>
+            <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{label}</Text>
+          </Box>
         </Box>
       );
     };
@@ -334,28 +344,28 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
     ) => {
       const max = Math.max(...items.map(i => i.value), 1);
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
           {items.map((item) => {
             const widthPct = (item.value / max) * 100;
             return (
-              <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], width: 90, flexShrink: 0, textAlign: 'right' }}>{item.label}</span>
-                <div style={{ flex: 1, position: 'relative', height: barHeight, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.sm, overflow: 'hidden' }}>
-                  <div style={{
+              <Box key={item.label} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], width: 90, flexShrink: 0, textAlign: 'right' }}>{item.label}</Text>
+                <Box style={{ flex: 1, position: 'relative', height: barHeight, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.sm, overflow: 'hidden' }}>
+                  <Box style={{
                     height: '100%',
                     width: `${widthPct}%`,
                     backgroundColor: item.color,
                     borderRadius: tokens.borderRadius.sm,
                     transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                   }} />
-                </div>
-                <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], width: 60, flexShrink: 0 }}>
+                </Box>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], width: 60, flexShrink: 0 }}>
                   {formatCurrency(item.value)}
-                </span>
-              </div>
+                </Text>
+              </Box>
             );
           })}
-        </div>
+        </Box>
       );
     };
 
@@ -425,7 +435,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
       const bg = isUp ? tokens.colors.successScale[50] : tokens.colors.errorScale[50];
       const Icon = isUp ? TrendingUp : TrendingDown;
       return (
-        <span style={{
+        <Text style={{
           display: 'inline-flex', alignItems: 'center', gap: 2,
           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
           borderRadius: tokens.borderRadius.full,
@@ -435,7 +445,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
         }}>
           <Icon size={12} />
           {isUp ? '+' : ''}{trend.toFixed(1)}%
-        </span>
+        </Text>
       );
     };
 
@@ -473,30 +483,30 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
           justifyContent: 'space-between',
           ...(isGlass ? { backdropFilter: tokens.glass!.blur, WebkitBackdropFilter: tokens.glass!.blur, backgroundColor: tokens.glass!.bg } : {}),
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <div style={{
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            <Box style={{
               width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
               background: `linear-gradient(135deg, ${tokens.colors.primaryScale[500]}, ${tokens.colors.primaryScale[700]})`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
               <Settings size={18} color={tokens.colors.common.white} />
-            </div>
-            <div>
-              <h1 style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{title}</h1>
-              <p style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>BitHire ATS Platform Administration</p>
-            </div>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+            </Box>
+            <Box>
+              <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{title}</Text>
+              <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>BitHire ATS Platform Administration</Text>
+            </Box>
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
             {/* Date range pills */}
-            <div style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full }}>
+            <Box style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full }}>
               {DATE_RANGE_OPTIONS.map((opt) => (
-                <button key={opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} style={pillBtn(dateRange === opt.value)}>
+                <Box key={opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} style={pillBtn(dateRange === opt.value)}>
                   {opt.label}
-                </button>
+                </Box>
               ))}
-            </div>
+            </Box>
             {/* Live / Paused toggle */}
-            <button
+            <Box
               onClick={() => setSystemStatus(systemStatus === 'live' ? 'paused' : 'live')}
               style={{
                 display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
@@ -511,14 +521,14 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                 transition: `all ${tokens.motion.hover}`,
               }}
             >
-              <span style={{
+              <Box style={{
                 width: 6, height: 6, borderRadius: tokens.borderRadius.full,
                 backgroundColor: systemStatus === 'live' ? tokens.colors.successScale[500] : tokens.colors.neutral[400],
               }} />
               {systemStatus === 'live' ? 'Live' : 'Paused'}
-            </button>
+            </Box>
             {/* Refresh */}
-            <button onClick={onRefresh} style={{
+            <Box onClick={onRefresh} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               width: 32, height: 32, borderRadius: tokens.borderRadius.md,
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -526,9 +536,9 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
               color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`,
             }}>
               <RefreshCw size={14} />
-            </button>
+            </Box>
             {/* Export */}
-            <button onClick={onExportReport} style={{
+            <Box onClick={onExportReport} style={{
               display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
               padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
               borderRadius: tokens.borderRadius.md,
@@ -542,22 +552,22 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
             }}>
               <FileText size={12} />
               Export
-            </button>
-          </div>
+            </Box>
+          </Box>
         </Box>
 
         {/* ── Scrollable body ─────────────────────────────────────── */}
         <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[5] }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5], maxWidth: 1400, margin: '0 auto', width: '100%' }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5], maxWidth: 1400, margin: '0 auto', width: '100%' }}>
 
             {/* ── 1. System Health Hero ──────────────────────────── */}
             {systemHealth && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <Activity size={18} color={tokens.colors.primaryScale[600]} />
-                  <h2 style={sectionTitle}>System Health</h2>
-                </div>
-                <div style={gridFour}>
+                  <Text style={sectionTitle}>System Health</Text>
+                </Box>
+                <Box style={gridFour}>
                   {renderStatusCircleSvg(
                     systemHealth.providersUp,
                     systemHealth.providersTotal,
@@ -590,33 +600,33 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     systemHealth.slaCompliance >= 95 ? tokens.colors.successScale[100] : systemHealth.slaCompliance >= 80 ? tokens.colors.warningScale[100] : tokens.colors.errorScale[100],
                     <Shield size={16} color={systemHealth.slaCompliance >= 95 ? tokens.colors.successScale[600] : systemHealth.slaCompliance >= 80 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />,
                   )}
-                </div>
+                </Box>
               </section>
             )}
 
             {/* ── 2. Provider Health Grid ────────────────────────── */}
             {providers.length > 0 && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <Server size={18} color={tokens.colors.primaryScale[600]} />
-                    <h2 style={sectionTitle}>Provider Health</h2>
-                    <span style={{ ...createBadgeStyle(tokens, 'primary'), marginLeft: tokens.spacing[1] }}>{providers.length} providers</span>
-                  </div>
-                  <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                    <Text style={sectionTitle}>Provider Health</Text>
+                    <Text style={{ ...createBadgeStyle(tokens, 'primary'), marginLeft: tokens.spacing[1] }}>{providers.length} providers</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {providerStatuses.map((s) => (
-                      <button key={s} onClick={() => setProviderFilter(s)} style={pillBtn(providerFilter === s)}>
+                      <Box key={s} onClick={() => setProviderFilter(s)} style={pillBtn(providerFilter === s)}>
                         {s === 'all' ? 'All' : s.charAt(0).toUpperCase() + s.slice(1)}
-                      </button>
+                      </Box>
                     ))}
-                  </div>
-                </div>
-                <div style={gridThree}>
+                  </Box>
+                </Box>
+                <Box style={gridThree}>
                   {filteredProviders.map((provider) => {
                     const sc = providerStatusColors[provider.status];
                     const cb = circuitBreakerColors[provider.circuitBreaker];
                     return (
-                      <div
+                      <Box
                         key={provider.id}
                         onClick={() => onProviderClick?.(provider.id)}
                         style={{
@@ -626,36 +636,36 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                           borderLeft: `3px solid ${sc.dot}`,
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                            <span style={{
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                            <Box style={{
                               width: 8, height: 8, borderRadius: tokens.borderRadius.full,
                               backgroundColor: sc.dot,
                               display: 'inline-block',
                             }} />
-                            <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
                               {provider.name}
-                            </span>
-                          </div>
-                          <span style={{
+                            </Text>
+                          </Box>
+                          <Text style={{
                             ...createBadgeStyle(tokens, provider.status === 'healthy' ? 'success' : provider.status === 'degraded' ? 'warning' : 'error'),
                           }}>
                             {provider.status}
-                          </span>
-                        </div>
+                          </Text>
+                        </Box>
 
                         {/* Latency bar */}
-                        <div style={{ marginBottom: tokens.spacing[2] }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Latency</span>
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{provider.latencyMs}ms</span>
-                          </div>
+                        <Box style={{ marginBottom: tokens.spacing[2] }}>
+                          <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Latency</Text>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{provider.latencyMs}ms</Text>
+                          </Box>
                           {renderLatencyBar(provider.latencyMs)}
-                        </div>
+                        </Box>
 
                         {/* Circuit breaker + last checked */}
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: tokens.spacing[2] }}>
-                          <span style={{
+                        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: tokens.spacing[2] }}>
+                          <Text style={{
                             padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                             borderRadius: tokens.borderRadius.sm,
                             fontSize: tokens.typography.fontSize.xs,
@@ -663,63 +673,63 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                             backgroundColor: cb.bg, color: cb.color,
                           }}>
                             CB: {provider.circuitBreaker}
-                          </span>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center', gap: 2 }}>
+                          </Text>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center', gap: 2 }}>
                             <Clock size={10} />
                             {provider.lastChecked}
-                          </span>
-                        </div>
-                      </div>
+                          </Text>
+                        </Box>
+                      </Box>
                     );
                   })}
-                </div>
+                </Box>
               </section>
             )}
 
             {/* ── 3. Billing Summary ─────────────────────────────── */}
             {billing && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <CreditCard size={18} color={tokens.colors.primaryScale[600]} />
-                  <h2 style={sectionTitle}>Billing Summary</h2>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: tokens.spacing[4] }}>
+                  <Text style={sectionTitle}>Billing Summary</Text>
+                </Box>
+                <Box style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: tokens.spacing[4] }}>
                   {/* Stats cards */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
                     {/* Token balance */}
-                    <div style={{ ...cardBase }}>
-                      <p style={sectionSub}>Token Balance</p>
-                      <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                    <Box style={{ ...cardBase }}>
+                      <Text style={sectionSub}>Token Balance</Text>
+                      <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                         {formatTokenBalance(billing.tokenBalance)}
-                      </p>
-                    </div>
+                      </Text>
+                    </Box>
                     {/* Burn rate */}
-                    <div style={{ ...cardBase }}>
-                      <p style={sectionSub}>Burn Rate</p>
-                      <p style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.warningScale[700] }}>
-                        {formatTokenBalance(billing.burnRate)}<span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>/day</span>
-                      </p>
-                    </div>
+                    <Box style={{ ...cardBase }}>
+                      <Text style={sectionSub}>Burn Rate</Text>
+                      <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.warningScale[700] }}>
+                        {formatTokenBalance(billing.burnRate)}<Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>/day</Text>
+                      </Text>
+                    </Box>
                     {/* Projected runway */}
-                    <div style={{ ...cardBase }}>
-                      <p style={sectionSub}>Projected Runway</p>
-                      <p style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600] }}>
-                        {billing.projectedRunwayDays} <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>days</span>
-                      </p>
-                    </div>
+                    <Box style={{ ...cardBase }}>
+                      <Text style={sectionSub}>Projected Runway</Text>
+                      <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600] }}>
+                        {billing.projectedRunwayDays} <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>days</Text>
+                      </Text>
+                    </Box>
                     {/* Monthly cost */}
-                    <div style={{ ...cardBase }}>
-                      <p style={sectionSub}>Monthly Cost</p>
-                      <p style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                    <Box style={{ ...cardBase }}>
+                      <Text style={sectionSub}>Monthly Cost</Text>
+                      <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                         {formatCurrency(billing.monthlyCost)}
-                      </p>
-                    </div>
-                  </div>
+                      </Text>
+                    </Box>
+                  </Box>
 
                   {/* Area chart */}
-                  <div style={{ ...cardBase, display: 'flex', flexDirection: 'column' }}>
-                    <p style={{ ...sectionSub, marginBottom: tokens.spacing[3] }}>Monthly Token Trend</p>
-                    <div style={{ flex: 1, minHeight: 200 }}>
+                  <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' }}>
+                    <Text style={{ ...sectionSub, marginBottom: tokens.spacing[3] }}>Monthly Token Trend</Text>
+                    <Box style={{ flex: 1, minHeight: 200 }}>
                       {renderAreaChartSvg(
                         billing.monthlyTrend,
                         520,
@@ -728,50 +738,50 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                         tokens.colors.primaryScale[400],
                         tokens.colors.primaryScale[100],
                       )}
-                    </div>
-                  </div>
-                </div>
+                    </Box>
+                  </Box>
+                </Box>
               </section>
             )}
 
             {/* ── 4. Global Hiring Metrics ───────────────────────── */}
             {kpis.length > 0 && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <BarChart3 size={18} color={tokens.colors.primaryScale[600]} />
-                  <h2 style={sectionTitle}>Global Hiring Metrics</h2>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[4] }}>
+                  <Text style={sectionTitle}>Global Hiring Metrics</Text>
+                </Box>
+                <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[4] }}>
                   {kpis.slice(0, 6).map((kpi, i) => (
-                    <div key={i} style={{ ...cardBase }}>
-                      <p style={{ ...sectionSub, marginBottom: tokens.spacing[1] }}>{kpi.label}</p>
-                      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                        <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                    <Box key={i} style={{ ...cardBase }}>
+                      <Text style={{ ...sectionSub, marginBottom: tokens.spacing[1] }}>{kpi.label}</Text>
+                      <Box style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+                        <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                           {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
-                        </p>
+                        </Text>
                         {renderTrend(kpi.trend)}
-                      </div>
-                      <p style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                      </Box>
+                      <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                         vs prev: {typeof kpi.previousValue === 'number' ? kpi.previousValue.toLocaleString() : kpi.previousValue}
-                      </p>
-                    </div>
+                      </Text>
+                    </Box>
                   ))}
-                </div>
+                </Box>
               </section>
             )}
 
             {/* ── 5 & 6. Users + Events side by side ─────────────── */}
-            <div style={gridTwo}>
+            <Box style={gridTwo}>
               {/* 5. User Management Summary */}
               {users && (
                 <section style={{ ...cardBase }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <UserCog size={18} color={tokens.colors.primaryScale[600]} />
-                    <h3 style={sectionTitle}>User Management</h3>
-                  </div>
-                  <div style={{ display: 'flex', gap: tokens.spacing[4] }}>
+                    <Text style={sectionTitle}>User Management</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[4] }}>
                     {/* Donut */}
-                    <div>
+                    <Box>
                       {renderDonutChart(
                         Object.entries(users.byRole).map(([role, count], i) => ({
                           label: role,
@@ -780,68 +790,68 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                         })),
                         140,
                       )}
-                    </div>
+                    </Box>
                     {/* Legend + stats */}
-                    <div style={{ flex: 1 }}>
-                      <div style={{ marginBottom: tokens.spacing[3] }}>
-                        <p style={sectionSub}>Total Users</p>
-                        <p style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                    <Box style={{ flex: 1 }}>
+                      <Box style={{ marginBottom: tokens.spacing[3] }}>
+                        <Text style={sectionSub}>Total Users</Text>
+                        <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                           {users.totalUsers.toLocaleString()}
-                        </p>
-                      </div>
-                      <div style={{ marginBottom: tokens.spacing[3] }}>
-                        <p style={sectionSub}>Recent Invitations</p>
-                        <p style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.infoScale[600] }}>
+                        </Text>
+                      </Box>
+                      <Box style={{ marginBottom: tokens.spacing[3] }}>
+                        <Text style={sectionSub}>Recent Invitations</Text>
+                        <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.infoScale[600] }}>
                           {users.recentInvitations}
-                        </p>
-                      </div>
+                        </Text>
+                      </Box>
                       {/* Role legend */}
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
+                      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                         {Object.entries(users.byRole).map(([role, count], i) => (
-                          <div key={role} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                            <span style={{
+                          <Box key={role} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                            <Box style={{
                               width: 8, height: 8, borderRadius: tokens.borderRadius.full,
                               backgroundColor: roleColors[i % roleColors.length],
                               flexShrink: 0,
                             }} />
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], flex: 1 }}>{role}</span>
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{count}</span>
-                          </div>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], flex: 1 }}>{role}</Text>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{count}</Text>
+                          </Box>
                         ))}
-                      </div>
-                    </div>
-                  </div>
+                      </Box>
+                    </Box>
+                  </Box>
                 </section>
               )}
 
               {/* 6. Recent System Events */}
               <section style={{ ...cardBase, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <AlertTriangle size={18} color={tokens.colors.warningScale[600]} />
-                    <h3 style={sectionTitle}>System Events</h3>
+                    <Text style={sectionTitle}>System Events</Text>
                     {events.length > 0 && (
-                      <span style={{ ...createBadgeStyle(tokens, 'warning') }}>{events.length}</span>
+                      <Text style={{ ...createBadgeStyle(tokens, 'warning') }}>{events.length}</Text>
                     )}
-                  </div>
-                  <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                  </Box>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {eventTypes.map((t) => (
-                      <button key={t} onClick={() => setEventFilter(t)} style={pillBtn(eventFilter === t)}>
+                      <Box key={t} onClick={() => setEventFilter(t)} style={pillBtn(eventFilter === t)}>
                         {eventTypeLabels[t]}
-                      </button>
+                      </Box>
                     ))}
-                  </div>
-                </div>
-                <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                  </Box>
+                </Box>
+                <Box style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                   {filteredEvents.length === 0 ? (
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
+                    <Box style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
                       No events to display
-                    </div>
+                    </Box>
                   ) : (
                     filteredEvents.map((evt) => {
                       const sc = severityColors[evt.severity];
                       return (
-                        <div
+                        <Box
                           key={evt.id}
                           onClick={() => onEventClick?.(evt.id)}
                           style={{
@@ -854,16 +864,16 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                             transition: `all ${tokens.motion.hover}`,
                           }}
                         >
-                          <span style={{ color: sc.color, flexShrink: 0, marginTop: 2 }}>
+                          <Text style={{ color: sc.color, flexShrink: 0, marginTop: 2 }}>
                             {eventIcons[evt.type] ?? <AlertTriangle size={14} />}
-                          </span>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <p style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
+                          </Text>
+                          <Box style={{ flex: 1, minWidth: 0 }}>
+                            <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
                               {evt.message}
-                            </p>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[1] }}>
-                              <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{evt.time}</span>
-                              <span style={{
+                            </Text>
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[1] }}>
+                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{evt.time}</Text>
+                              <Text style={{
                                 padding: `0 ${tokens.spacing[2]}px`,
                                 borderRadius: tokens.borderRadius.full,
                                 fontSize: tokens.typography.fontSize.xs,
@@ -872,32 +882,32 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${sc.border}`,
                               }}>
                                 {evt.severity}
-                              </span>
-                            </div>
-                          </div>
+                              </Text>
+                            </Box>
+                          </Box>
                           <ChevronRight size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: 2 }} />
-                        </div>
+                        </Box>
                       );
                     })
                   )}
-                </div>
+                </Box>
               </section>
-            </div>
+            </Box>
 
             {/* ── 7. Cost Breakdown ──────────────────────────────── */}
             {costBreakdown.length > 0 && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <Layers size={18} color={tokens.colors.primaryScale[600]} />
-                    <h2 style={sectionTitle}>Cost Breakdown</h2>
-                  </div>
-                  <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
-                    <button onClick={() => setCostView('bar')} style={pillBtn(costView === 'bar')}>Bar</button>
-                    <button onClick={() => setCostView('treemap')} style={pillBtn(costView === 'treemap')}>Treemap</button>
-                  </div>
-                </div>
-                <div style={{ ...cardBase }}>
+                    <Text style={sectionTitle}>Cost Breakdown</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                    <Box onClick={() => setCostView('bar')} style={pillBtn(costView === 'bar')}>Bar</Box>
+                    <Box onClick={() => setCostView('treemap')} style={pillBtn(costView === 'treemap')}>Treemap</Box>
+                  </Box>
+                </Box>
+                <Box style={{ ...cardBase }}>
                   {costView === 'bar' ? (
                     renderBarChart(
                       costBreakdown.map((c, i) => ({
@@ -917,63 +927,63 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       120,
                     )
                   )}
-                </div>
+                </Box>
               </section>
             )}
 
             {/* ── 8. Compliance Dashboard ────────────────────────── */}
             {compliance && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <Lock size={18} color={tokens.colors.primaryScale[600]} />
-                  <h2 style={sectionTitle}>Compliance Dashboard</h2>
-                </div>
-                <div style={gridThree}>
+                  <Text style={sectionTitle}>Compliance Dashboard</Text>
+                </Box>
+                <Box style={gridThree}>
                   {/* Data Retention */}
-                  <div style={{ ...cardBase, borderTop: `3px solid ${complianceColors[compliance.dataRetention].color}` }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+                  <Box style={{ ...cardBase, borderTop: `3px solid ${complianceColors[compliance.dataRetention].color}` }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
                       <Database size={16} color={complianceColors[compliance.dataRetention].color} />
-                      <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>Data Retention</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                      <span style={{
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>Data Retention</Text>
+                    </Box>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Text style={{
                         ...createBadgeStyle(tokens, compliance.dataRetention === 'ok' ? 'success' : compliance.dataRetention === 'warning' ? 'warning' : 'error'),
                       }}>
                         {compliance.dataRetention === 'ok' ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
-                        <span style={{ marginLeft: 4 }}>{compliance.dataRetention.toUpperCase()}</span>
-                      </span>
-                    </div>
-                    <p style={{ margin: 0, marginTop: tokens.spacing[2], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                        <Text style={{ marginLeft: 4 }}>{compliance.dataRetention.toUpperCase()}</Text>
+                      </Text>
+                    </Box>
+                    <Text style={{ margin: 0, marginTop: tokens.spacing[2], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                       Retention policies are {compliance.dataRetention === 'ok' ? 'compliant' : 'requiring attention'}
-                    </p>
-                  </div>
+                    </Text>
+                  </Box>
 
                   {/* GDPR Requests */}
-                  <div style={{ ...cardBase, borderTop: `3px solid ${tokens.colors.infoScale[500]}` }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+                  <Box style={{ ...cardBase, borderTop: `3px solid ${tokens.colors.infoScale[500]}` }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
                       <Globe size={16} color={tokens.colors.infoScale[600]} />
-                      <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>GDPR Requests</span>
-                    </div>
-                    <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>GDPR Requests</Text>
+                    </Box>
+                    <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                       {compliance.gdprRequests}
-                    </p>
-                    <p style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                    </Text>
+                    <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                       Pending data subject requests
-                    </p>
-                  </div>
+                    </Text>
+                  </Box>
 
                   {/* Audit Completeness */}
-                  <div style={{ ...cardBase, borderTop: `3px solid ${compliance.auditCompleteness >= 90 ? tokens.colors.successScale[500] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}` }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+                  <Box style={{ ...cardBase, borderTop: `3px solid ${compliance.auditCompleteness >= 90 ? tokens.colors.successScale[500] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}` }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
                       <FileText size={16} color={compliance.auditCompleteness >= 90 ? tokens.colors.successScale[600] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />
-                      <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>Audit Completeness</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: tokens.spacing[2] }}>
-                      <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>Audit Completeness</Text>
+                    </Box>
+                    <Box style={{ display: 'flex', alignItems: 'flex-end', gap: tokens.spacing[2] }}>
+                      <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                         {formatPercentage(compliance.auditCompleteness)}
-                      </p>
-                    </div>
-                    <div style={{ marginTop: tokens.spacing[2] }}>
+                      </Text>
+                    </Box>
+                    <Box style={{ marginTop: tokens.spacing[2] }}>
                       <svg width="100%" height="8" style={{ display: 'block' }}>
                         <rect x="0" y="0" width="100%" height="8" rx="4" fill={tokens.colors.neutral[100]} />
                         <rect
@@ -984,22 +994,22 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                           style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                         />
                       </svg>
-                    </div>
-                  </div>
-                </div>
+                    </Box>
+                  </Box>
+                </Box>
               </section>
             )}
 
             {/* ── 9. Quick Config Actions ────────────────────────── */}
             {quickActions.length > 0 && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <Zap size={18} color={tokens.colors.primaryScale[600]} />
-                  <h2 style={sectionTitle}>Quick Actions</h2>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: tokens.spacing[3] }}>
+                  <Text style={sectionTitle}>Quick Actions</Text>
+                </Box>
+                <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: tokens.spacing[3] }}>
                   {quickActions.map((action) => (
-                    <button
+                    <Box
                       key={action.key}
                       onClick={() => onQuickAction?.(action.key)}
                       style={{
@@ -1024,7 +1034,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                         e.currentTarget.style.transform = 'none';
                       }}
                     >
-                      <span style={{
+                      <Text style={{
                         width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
                         backgroundColor: tokens.colors.primaryScale[50],
                         color: tokens.colors.primaryScale[600],
@@ -1032,23 +1042,23 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                         flexShrink: 0,
                       }}>
                         {action.icon}
-                      </span>
-                      <div>
-                        <p style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                      </Text>
+                      <Box>
+                        <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
                           {action.label}
-                        </p>
-                        <p style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], lineHeight: tokens.typography.lineHeight.relaxed }}>
+                        </Text>
+                        <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], lineHeight: tokens.typography.lineHeight.relaxed }}>
                           {action.description}
-                        </p>
-                      </div>
+                        </Text>
+                      </Box>
                       <ChevronRight size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: 2, marginLeft: 'auto' }} />
-                    </button>
+                    </Box>
                   ))}
-                </div>
+                </Box>
               </section>
             )}
 
-          </div>
+          </Box>
         </Box>
       </Box>
     );

@@ -11,13 +11,18 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createFilterPillStyle,
   createHoverStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createSectionHeaderStyle,
   createSurfaceStyle,
+  getCardPadding,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhAgentStudioProps,
@@ -129,6 +134,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const paddingVal = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const agentTypeConfig = useMemo(() => getAgentTypeConfig(tokens), [tokens]);
     const providerConfig = useMemo(() => getProviderConfig(tokens), [tokens]);
@@ -283,10 +293,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     /* ================================================================ */
 
     const renderIdentityStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
         {/* Name */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -296,11 +307,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Agent Name
-          </label>
+          </Text>
           <input
             type="text"
             value={agentData.name}
-            onChange={(e) => updateAgent({ name: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateAgent({ name: e.target.value })}
             placeholder="e.g. Technical Screen Agent"
             style={{
               width: '100%',
@@ -323,11 +334,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
-        </div>
+        </Box>
 
         {/* Description */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -337,10 +349,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Description
-          </label>
+          </Text>
           <textarea
             value={agentData.description}
-            onChange={(e) => updateAgent({ description: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateAgent({ description: e.target.value })}
             placeholder="Describe the agent's purpose and role..."
             rows={4}
             style={{
@@ -366,11 +378,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               e.currentTarget.style.borderColor = tokens.colors.neutral[300];
             }}
           />
-        </div>
+        </Box>
 
         {/* Type selector */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -380,13 +393,13 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Agent Type
-          </label>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
+          </Text>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
             {(Object.keys(agentTypeConfig) as AgentType[]).map((type) => {
               const config = agentTypeConfig[type];
               const isSelected = agentData.type === type;
               return (
-                <button
+                <Box
                   key={type}
                   onClick={() => updateAgent({ type })}
                   style={{
@@ -402,7 +415,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     transition: `all ${tokens.motion.hover}`,
                   }}
                 >
-                  <div
+                  <Box
                     style={{
                       width: tokens.spacing[12],
                       height: tokens.spacing[12],
@@ -416,8 +429,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {getAgentTypeIcon(type, 24)}
-                  </div>
-                  <span
+                  </Box>
+                  <Text
+                    as="span"
                     style={{
                       fontSize: tokens.typography.fontSize.md,
                       fontWeight: tokens.typography.fontWeight.semibold,
@@ -425,8 +439,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {config.label}
-                  </span>
-                  <span
+                  </Text>
+                  <Text
+                    as="span"
                     style={{
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.neutral[500],
@@ -435,21 +450,22 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {config.description}
-                  </span>
-                </button>
+                  </Text>
+                </Box>
               );
             })}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     );
 
     const renderLanguageVoiceStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
         {/* Language + Accent */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
-          <div>
-            <label
+        <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+          <Box>
+            <Text
+              as="label"
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -459,10 +475,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Language
-            </label>
+            </Text>
             <select
               value={agentData.language}
-              onChange={(e) => updateAgent({ language: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateAgent({ language: e.target.value })}
               style={{
                 width: '100%',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -480,9 +496,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 <option key={lang} value={lang}>{lang}</option>
               ))}
             </select>
-          </div>
-          <div>
-            <label
+          </Box>
+          <Box>
+            <Text
+              as="label"
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -492,11 +509,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Accent / Dialect
-            </label>
+            </Text>
             <input
               type="text"
               value={agentData.accent}
-              onChange={(e) => updateAgent({ accent: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateAgent({ accent: e.target.value })}
               placeholder="e.g. US, British, Australian"
               style={{
                 width: '100%',
@@ -519,12 +536,13 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Voice provider cards */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -534,13 +552,13 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Voice Provider
-          </label>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
+          </Text>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
             {providers.map((provider) => {
               const config = providerConfig[provider];
               const isSelected = agentData.voiceProvider === provider;
               return (
-                <button
+                <Box
                   key={provider}
                   onClick={() => updateAgent({ voiceProvider: provider })}
                   style={{
@@ -560,7 +578,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     size={20}
                     style={{ color: isSelected ? config.color : tokens.colors.neutral[400] }}
                   />
-                  <span
+                  <Text
+                    as="span"
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.semibold,
@@ -568,19 +587,20 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {config.label}
-                  </span>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  </Text>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     {config.description}
-                  </span>
-                </button>
+                  </Text>
+                </Box>
               );
             })}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Voice ID + Preview */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -590,12 +610,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Voice ID
-          </label>
-          <div style={{ display: 'flex', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+          </Text>
+          <Box style={{ display: 'flex', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
             <input
               type="text"
               value={agentData.voiceId}
-              onChange={(e) => updateAgent({ voiceId: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateAgent({ voiceId: e.target.value })}
               placeholder="Enter voice ID"
               style={{
                 flex: 1,
@@ -617,7 +637,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-            <button
+            <Box
               onClick={() => setVoicePreviewPlaying(!voicePreviewPlaying)}
               style={{
                 display: 'inline-flex',
@@ -636,11 +656,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             >
               {voicePreviewPlaying ? <Pause size={14} /> : <Play size={14} />}
               {voicePreviewPlaying ? 'Stop' : 'Preview'}
-            </button>
-          </div>
+            </Box>
+          </Box>
 
           {/* Waveform */}
-          <div
+          <Box
             style={{
               padding: tokens.spacing[3],
               borderRadius: tokens.borderRadius.md,
@@ -668,12 +688,13 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 );
               })}
             </svg>
-          </div>
+          </Box>
 
           {/* Available voices */}
           {voices.filter((v) => v.provider === agentData.voiceProvider).length > 0 && (
-            <div style={{ marginTop: tokens.spacing[3] }}>
-              <label
+            <Box style={{ marginTop: tokens.spacing[3] }}>
+              <Text
+                as="label"
                 style={{
                   display: 'block',
                   fontSize: tokens.typography.fontSize.xs,
@@ -685,12 +706,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Available Voices
-              </label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
+              </Text>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                 {voices
                   .filter((v) => v.provider === agentData.voiceProvider)
                   .map((voice) => (
-                    <button
+                    <Box
                       key={voice.id}
                       onClick={() => updateAgent({ voiceId: voice.id })}
                       style={{
@@ -706,32 +727,33 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                         ...hoverStyle,
                       }}
                     >
-                      <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>
                         {voice.name}
                         {voice.accent && (
-                          <span style={{ color: tokens.colors.neutral[500], marginLeft: tokens.spacing[1] }}>
+                          <Text style={{ color: tokens.colors.neutral[500], marginLeft: tokens.spacing[1] }}>
                             ({voice.accent})
-                          </span>
+                          </Text>
                         )}
-                      </span>
+                      </Text>
                       {agentData.voiceId === voice.id && (
                         <CheckCircle size={16} style={{ color: tokens.colors.primaryScale[600] }} />
                       )}
-                    </button>
+                    </Box>
                   ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
 
     const renderPersonalityStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
         {/* Tone scale */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-            <label
+        <Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
+            <Text
+              as="label"
               style={{
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.medium,
@@ -739,8 +761,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Tone Level
-            </label>
-            <span
+            </Text>
+            <Text
+              as="span"
               style={{
                 fontSize: tokens.typography.fontSize.sm,
                 fontWeight: tokens.typography.fontWeight.semibold,
@@ -748,8 +771,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               {getToneLevelLabel(agentData.toneLevel)}
-            </span>
-          </div>
+            </Text>
+          </Box>
           <svg width="100%" height="32" viewBox="0 0 400 32" preserveAspectRatio="none">
             <defs>
               <linearGradient id="guided-tone-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -770,7 +793,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             onChange={(e) => updateAgent({ toneLevel: parseInt(e.target.value, 10) })}
             style={{ width: '100%', accentColor: tokens.colors.primaryScale[600], marginTop: tokens.spacing[1] }}
           />
-          <div
+          <Box
             style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -779,14 +802,15 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               marginTop: tokens.spacing[1],
             }}
           >
-            <span>Formal</span>
-            <span>Casual</span>
-          </div>
-        </div>
+            <Text>Formal</Text>
+            <Text>Casual</Text>
+          </Box>
+        </Box>
 
         {/* Personality traits */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -796,15 +820,16 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Personality Traits
-          </label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+          </Text>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
             {agentData.personalityTraits.map((trait) => (
-              <div key={trait.name}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
-                  <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700] }}>
+              <Box key={trait.name}>
+                <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700] }}>
                     {trait.name}
-                  </span>
-                  <span
+                  </Text>
+                  <Text
+                    as="span"
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.semibold,
@@ -812,10 +837,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {trait.value}%
-                  </span>
-                </div>
-                <div style={{ position: 'relative' }}>
-                  <div
+                  </Text>
+                </Box>
+                <Box style={{ position: 'relative' }}>
+                  <Box
                     style={{
                       height: tokens.spacing[2],
                       borderRadius: tokens.borderRadius.full,
@@ -823,7 +848,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                       overflow: 'hidden',
                     }}
                   >
-                    <div
+                    <Box
                       style={{
                         height: '100%',
                         width: `${trait.value}%`,
@@ -832,7 +857,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                         transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                       }}
                     />
-                  </div>
+                  </Box>
                   <input
                     type="range"
                     min="0"
@@ -850,19 +875,20 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                       height: tokens.spacing[4],
                     }}
                   />
-                </div>
-              </div>
+                </Box>
+              </Box>
             ))}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     );
 
     const renderLLMStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
         {/* Model */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.sm,
@@ -872,10 +898,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Model
-          </label>
+          </Text>
           <select
             value={agentData.model}
-            onChange={(e) => updateAgent({ model: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateAgent({ model: e.target.value })}
             style={{
               width: '100%',
               padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -895,18 +921,18 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               </option>
             ))}
           </select>
-        </div>
+        </Box>
 
         {/* Temperature */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
-            <label style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
+        <Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
               Temperature
-            </label>
-            <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.semibold }}>
+            </Text>
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.semibold }}>
               {agentData.temperature.toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
-            </span>
-          </div>
+            </Text>
+          </Box>
           <input
             type="range"
             min="0"
@@ -916,19 +942,19 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             onChange={(e) => updateAgent({ temperature: parseFloat(e.target.value) })}
             style={{ width: '100%', accentColor: tokens.colors.primaryScale[600] }}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1] }}>
-            <span>Deterministic</span>
-            <span>Balanced</span>
-            <span>Creative</span>
-          </div>
-        </div>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1] }}>
+            <Text>Deterministic</Text>
+            <Text>Balanced</Text>
+            <Text>Creative</Text>
+          </Box>
+        </Box>
 
         {/* Max tokens + Top-P */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
-          <div>
-            <label style={{ display: 'block', fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], marginBottom: tokens.spacing[1] }}>
+        <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+          <Box>
+            <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], marginBottom: tokens.spacing[1] }}>
               Max Tokens
-            </label>
+            </Text>
             <input
               type="number"
               value={agentData.maxTokens}
@@ -956,16 +982,16 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-          </div>
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
-              <label style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
+          </Box>
+          <Box>
+            <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
                 Top-P
-              </label>
-              <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+              </Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                 {agentData.topP.toFixed(2)}
-              </span>
-            </div>
+              </Text>
+            </Box>
             <input
               type="range"
               min="0"
@@ -975,16 +1001,17 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               onChange={(e) => updateAgent({ topP: parseFloat(e.target.value) })}
               style={{ width: '100%', accentColor: tokens.colors.primaryScale[600], marginTop: tokens.spacing[1] }}
             />
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     );
 
     const renderPromptStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
         {/* Variables */}
-        <div>
-          <label
+        <Box>
+          <Text
+            as="label"
             style={{
               display: 'block',
               fontSize: tokens.typography.fontSize.xs,
@@ -996,10 +1023,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             Click to insert variable
-          </label>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
+          </Text>
+          <Box style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
             {SYSTEM_PROMPT_VARIABLES.map((variable) => (
-              <button
+              <Box
                 key={variable}
                 onClick={() => insertVariable(variable)}
                 style={{
@@ -1015,15 +1042,15 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 {variable}
-              </button>
+              </Box>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Code-editor textarea */}
         <textarea
           value={agentData.systemPrompt}
-          onChange={(e) => updateAgent({ systemPrompt: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateAgent({ systemPrompt: e.target.value })}
           placeholder="You are an AI interview agent for {company_name}..."
           rows={16}
           style={{
@@ -1051,13 +1078,13 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             e.currentTarget.style.borderColor = tokens.colors.neutral[300];
           }}
         />
-      </div>
+      </Box>
     );
 
     const renderScriptStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
         {sortedSections.map((section, idx) => (
-          <div
+          <Box
             key={section.id}
             style={{
               padding: tokens.spacing[3],
@@ -1066,11 +1093,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               backgroundColor: tokens.colors.common.white,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
-              <span style={{ color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center' }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
+              <Text style={{ color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center' }}>
                 <GripVertical size={16} />
-              </span>
-              <span
+              </Text>
+              <Text
+                as="span"
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: tokens.typography.fontWeight.semibold,
@@ -1079,11 +1107,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 #{idx + 1}
-              </span>
+              </Text>
               <input
                 type="text"
                 value={section.title}
-                onChange={(e) => updateScriptSection(section.id, { title: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateScriptSection(section.id, { title: e.target.value })}
                 style={{
                   flex: 1,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -1105,7 +1133,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
-              <button
+              <Box
                 onClick={() => removeScriptSection(section.id)}
                 style={{
                   display: 'inline-flex',
@@ -1120,11 +1148,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 <Trash2 size={14} />
-              </button>
-            </div>
+              </Box>
+            </Box>
             <textarea
               value={section.promptText}
-              onChange={(e) => updateScriptSection(section.id, { promptText: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateScriptSection(section.id, { promptText: e.target.value })}
               placeholder="Enter the prompt for this interview section..."
               rows={3}
               style={{
@@ -1153,7 +1181,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             <input
               type="text"
               value={section.conditions ?? ''}
-              onChange={(e) => updateScriptSection(section.id, { conditions: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateScriptSection(section.id, { conditions: e.target.value })}
               placeholder="Branching conditions (optional)"
               style={{
                 width: '100%',
@@ -1177,9 +1205,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-          </div>
+          </Box>
         ))}
-        <button
+        <Box
           onClick={addScriptSection}
           style={{
             display: 'flex',
@@ -1199,14 +1227,14 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
         >
           <Plus size={16} />
           Add Section
-        </button>
-      </div>
+        </Box>
+      </Box>
     );
 
     const renderToolsStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
         {agentData.tools.length === 0 ? (
-          <div
+          <Box
             style={{
               textAlign: 'center',
               padding: tokens.spacing[8],
@@ -1215,10 +1243,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             No function tools configured. Tools can be added via the API or admin panel.
-          </div>
+          </Box>
         ) : (
           agentData.tools.map((tool) => (
-            <div
+            <Box
               key={tool.id}
               style={{
                 display: 'flex',
@@ -1231,15 +1259,15 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 transition: `all ${tokens.motion.hover}`,
               }}
             >
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[1] }}>
+              <Box style={{ flex: 1 }}>
+                <Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[1] }}>
                   {tool.name}
-                </div>
-                <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                </Box>
+                <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                   {tool.description}
-                </div>
-              </div>
-              <button
+                </Box>
+              </Box>
+              <Box
                 onClick={() => toggleTool(tool.id)}
                 style={{
                   display: 'inline-flex',
@@ -1254,85 +1282,85 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 {tool.enabled ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
-              </button>
-            </div>
+              </Box>
+            </Box>
           ))
         )}
-      </div>
+      </Box>
     );
 
     const renderReviewStep = () => (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
         {/* Summary cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: tokens.spacing[3] }}>
+        <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: tokens.spacing[3] }}>
           {/* Agent summary */}
-          <div
+          <Box
             style={{
               ...cardBase,
               padding: tokens.spacing[4],
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
               <Bot size={16} style={{ color: tokens.colors.primaryScale[500] }} />
               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                 Agent Identity
               </Text>
-            </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Name:</strong> {agentData.name || 'Not set'}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Type:</strong> {agentTypeConfig[agentData.type].label}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Language:</strong> {agentData.language} ({agentData.accent})</div>
-            </div>
-          </div>
+            </Box>
+            <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Name:</strong> {agentData.name || 'Not set'}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Type:</strong> {agentTypeConfig[agentData.type].label}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Language:</strong> {agentData.language} ({agentData.accent})</Box>
+            </Box>
+          </Box>
 
           {/* LLM summary */}
-          <div style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
               <Settings size={16} style={{ color: tokens.colors.primaryScale[500] }} />
               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                 LLM Configuration
               </Text>
-            </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Model:</strong> {agentData.model}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Temperature:</strong> {agentData.temperature.toFixed(1)}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Max Tokens:</strong> {agentData.maxTokens}</div>
-            </div>
-          </div>
+            </Box>
+            <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Model:</strong> {agentData.model}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Temperature:</strong> {agentData.temperature.toFixed(1)}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Max Tokens:</strong> {agentData.maxTokens}</Box>
+            </Box>
+          </Box>
 
           {/* Voice summary */}
-          <div style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
               <Mic size={16} style={{ color: tokens.colors.primaryScale[500] }} />
               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                 Voice
               </Text>
-            </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Provider:</strong> {providerConfig[agentData.voiceProvider].label}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Voice ID:</strong> {agentData.voiceId || 'Not set'}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Tone:</strong> {getToneLevelLabel(agentData.toneLevel)}</div>
-            </div>
-          </div>
+            </Box>
+            <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Provider:</strong> {providerConfig[agentData.voiceProvider].label}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Voice ID:</strong> {agentData.voiceId || 'Not set'}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Tone:</strong> {getToneLevelLabel(agentData.toneLevel)}</Box>
+            </Box>
+          </Box>
 
           {/* Script summary */}
-          <div style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
+          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
               <FileText size={16} style={{ color: tokens.colors.primaryScale[500] }} />
               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                 Script & Tools
               </Text>
-            </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Script Sections:</strong> {agentData.scriptSections.length}</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>Tools:</strong> {agentData.tools.filter((t) => t.enabled).length}/{agentData.tools.length} enabled</div>
-              <div><strong style={{ color: tokens.colors.neutral[800] }}>System Prompt:</strong> {agentData.systemPrompt ? `${agentData.systemPrompt.length} chars` : 'Not set'}</div>
-            </div>
-          </div>
-        </div>
+            </Box>
+            <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Script Sections:</strong> {agentData.scriptSections.length}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Tools:</strong> {agentData.tools.filter((t) => t.enabled).length}/{agentData.tools.length} enabled</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>System Prompt:</strong> {agentData.systemPrompt ? `${agentData.systemPrompt.length} chars` : 'Not set'}</Box>
+            </Box>
+          </Box>
+        </Box>
 
         {/* Estimated cost */}
-        <div
+        <Box
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -1343,7 +1371,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
           }}
         >
-          <div
+          <Box
             style={{
               width: tokens.spacing[10],
               height: tokens.spacing[10],
@@ -1357,8 +1385,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             }}
           >
             <DollarSign size={20} />
-          </div>
-          <div>
+          </Box>
+          <Box>
             <Text
               style={{
                 fontSize: tokens.typography.fontSize.xs,
@@ -1380,12 +1408,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             >
               {formatEstimatedCost(estimatedCost)}
             </Text>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Validation */}
         {validationResults.length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
             <Text
               style={{
                 fontSize: tokens.typography.fontSize.sm,
@@ -1400,7 +1428,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               const colors = validationColors[result.status];
               const StatusIcon = result.status === 'pass' ? CheckCircle : result.status === 'fail' ? XCircle : AlertTriangle;
               return (
-                <div
+                <Box
                   key={idx}
                   style={{
                     display: 'flex',
@@ -1412,26 +1440,26 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.borderColor}`,
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: 2, flexShrink: 0, color: colors.dotColor }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', marginTop: 2, flexShrink: 0, color: colors.dotColor }}>
                     <StatusIcon size={14} />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: colors.color }}>
+                  </Box>
+                  <Box style={{ flex: 1 }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: colors.color }}>
                       {result.check}
-                    </span>
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: colors.color, opacity: 0.8, marginLeft: tokens.spacing[2] }}>
+                    </Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: colors.color, opacity: 0.8, marginLeft: tokens.spacing[2] }}>
                       {result.message}
-                    </span>
-                  </div>
-                </div>
+                    </Text>
+                  </Box>
+                </Box>
               );
             })}
-          </div>
+          </Box>
         )}
 
         {/* Action buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], justifyContent: 'center', paddingTop: tokens.spacing[2] }}>
-          <button
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], justifyContent: 'center', paddingTop: tokens.spacing[2] }}>
+          <Box
             onClick={() => onValidate?.(agentData)}
             style={{
               display: 'inline-flex',
@@ -1451,8 +1479,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
           >
             <ShieldCheck size={14} />
             Validate
-          </button>
-          <button
+          </Box>
+          <Box
             onClick={() => onSave?.(agentData)}
             style={{
               display: 'inline-flex',
@@ -1472,9 +1500,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
           >
             <Save size={14} />
             Save & Deploy Agent
-          </button>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     );
 
     /* ---------- Step content dispatcher ---------- */
@@ -1515,7 +1543,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
         }}
       >
         {/* Header */}
-        <div
+        <Box
           style={{
             padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -1529,8 +1557,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               : {}),
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <div
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            <Box
               style={{
                 width: tokens.spacing[10],
                 height: tokens.spacing[10],
@@ -1543,8 +1571,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               <Sparkles size={24} />
-            </div>
-            <div>
+            </Box>
+            <Box>
               <Text
                 style={{
                   fontSize: tokens.typography.fontSize.xl,
@@ -1558,15 +1586,15 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
                 Step-by-step agent configuration wizard
               </Text>
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
 
-        <div style={{ display: 'flex', height: 'calc(100% - 82px)' }}>
+        <Box style={{ display: 'flex', height: 'calc(100% - 82px)' }}>
           {/* =========================================================== */}
           {/*  Left: Step Navigation Sidebar                              */}
           {/* =========================================================== */}
-          <div
+          <Box
             style={{
               width: '280px',
               flexShrink: 0,
@@ -1583,16 +1611,15 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 : {}),
             }}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
               {steps.map((step, idx) => {
                 const isCurrent = idx === currentStep;
                 const isCompleted = completedSteps.has(idx);
                 const isAccessible = idx <= Math.max(currentStep, Math.max(...Array.from(completedSteps), -1) + 1);
                 return (
-                  <button
+                  <Box
                     key={step.key}
-                    onClick={() => goToStep(idx)}
-                    disabled={!isAccessible}
+                    onClick={isAccessible ? () => goToStep(idx) : undefined}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -1608,7 +1635,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                       textAlign: 'left',
                     }}
                   >
-                    <div
+                    <Box
                       style={{
                         width: tokens.spacing[8],
                         height: tokens.spacing[8],
@@ -1627,9 +1654,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {isCompleted ? <Check size={14} /> : step.icon}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div
+                    </Box>
+                    <Box style={{ flex: 1, minWidth: 0 }}>
+                      <Box
                         style={{
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: isCurrent ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
@@ -1640,8 +1667,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         {step.label}
-                      </div>
-                      <div
+                      </Box>
+                      <Box
                         style={{
                           fontSize: tokens.typography.fontSize.xs,
                           color: tokens.colors.neutral[500],
@@ -1651,15 +1678,15 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         {step.description}
-                      </div>
-                    </div>
-                  </button>
+                      </Box>
+                    </Box>
+                  </Box>
                 );
               })}
-            </div>
+            </Box>
 
             {/* Progress indicator */}
-            <div
+            <Box
               style={{
                 margin: `${tokens.spacing[4]}px ${tokens.spacing[4]}px 0`,
                 padding: tokens.spacing[3],
@@ -1668,17 +1695,18 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   marginBottom: tokens.spacing[2],
                 }}
               >
-                <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                   Progress
-                </span>
-                <span
+                </Text>
+                <Text
+                  as="span"
                   style={{
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.semibold,
@@ -1686,9 +1714,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   {Math.round(((completedSteps.size) / steps.length) * 100)}%
-                </span>
-              </div>
-              <div
+                </Text>
+              </Box>
+              <Box
                 style={{
                   height: tokens.spacing[1],
                   borderRadius: tokens.borderRadius.full,
@@ -1696,7 +1724,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   overflow: 'hidden',
                 }}
               >
-                <div
+                <Box
                   style={{
                     height: '100%',
                     width: `${(completedSteps.size / steps.length) * 100}%`,
@@ -1705,24 +1733,25 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                   }}
                 />
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* =========================================================== */}
           {/*  Right: Step Content                                         */}
           {/* =========================================================== */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <Box style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             {/* Step header */}
-            <div
+            <Box
               style={{
                 padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 backgroundColor: tokens.colors.common.white,
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                <span
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Text
+                  as="span"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -1735,8 +1764,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   {currentStepData.icon}
-                </span>
-                <div>
+                </Text>
+                <Box>
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.lg,
@@ -1755,12 +1784,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   >
                     Step {currentStep + 1} of {steps.length} &mdash; {currentStepData.description}
                   </Text>
-                </div>
-              </div>
-            </div>
+                </Box>
+              </Box>
+            </Box>
 
             {/* Scrollable step content */}
-            <div
+            <Box
               style={{
                 flex: 1,
                 overflow: 'auto',
@@ -1768,10 +1797,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               {renderCurrentStep()}
-            </div>
+            </Box>
 
             {/* Footer navigation */}
-            <div
+            <Box
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1781,9 +1810,8 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 backgroundColor: tokens.colors.common.white,
               }}
             >
-              <button
-                onClick={goBack}
-                disabled={isFirstStep}
+              <Box
+                onClick={isFirstStep ? undefined : goBack}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1801,10 +1829,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               >
                 <ChevronLeft size={16} />
                 Back
-              </button>
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+              </Box>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                 {isDirty && (
-                  <span
+                  <Text
+                    as="span"
                     style={{
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.warningScale[600],
@@ -1812,10 +1841,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     Unsaved changes
-                  </span>
+                  </Text>
                 )}
                 {isLastStep ? (
-                  <button
+                  <Box
                     onClick={() => onSave?.(agentData)}
                     style={{
                       display: 'inline-flex',
@@ -1835,9 +1864,9 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   >
                     <Save size={16} />
                     Save & Deploy
-                  </button>
+                  </Box>
                 ) : (
-                  <button
+                  <Box
                     onClick={goNext}
                     style={{
                       display: 'inline-flex',
@@ -1857,12 +1886,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   >
                     Continue
                     <ChevronRight size={16} />
-                  </button>
+                  </Box>
                 )}
-              </div>
-            </div>
-          </div>
-        </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       </Box>
     );
   },

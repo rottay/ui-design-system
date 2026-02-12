@@ -1131,7 +1131,7 @@ export const FormPlTenantSettings = createPreset<PlTenantSettingsProps>({
               }}
             >
               {webhookTesting ? (
-                <Spinner size="xs" />
+                <Spinner size="sm" />
               ) : (
                 <Send size={14} />
               )}
@@ -1396,7 +1396,7 @@ export const FormPlTenantSettings = createPreset<PlTenantSettingsProps>({
                 }}
               >
                 {saving ? (
-                  <Spinner size="xs" />
+                  <Spinner size="sm" />
                 ) : (
                   <Save size={14} />
                 )}

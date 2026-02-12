@@ -2,23 +2,45 @@
 
 /**
  * BhTeamBoard - Grid Preset
- * Full team management board with team cards, member table, capacity bars,
- * performance KPIs, sprint panel, add/edit modal, and targets config.
+ * Card-based grid layout with team overview cards, performance rings,
+ * capacity bars, member avatars, and interactive view toggle.
+ *
+ * Design: Generous whitespace, tinted KPI badges, SVG performance rings,
+ * hover lift, personality-aware accent bars, and modal form placeholder.
  */
 
 import { useState, useMemo } from 'react';
+import {
+  Users,
+  UserPlus,
+  LayoutGrid,
+  List,
+  Pencil,
+  Trash2,
+  Briefcase,
+  TrendingUp,
+  Target,
+  Zap,
+  Activity,
+  Award,
+  Star,
+  CheckCircle2,
+  Clock,
+  AlertTriangle,
+  X,
+} from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
+  createCardHoverStyles,
+  createBadgeStyle,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityBadgeRadius,
   createProgressBarStyle,
-  createSectionHeaderStyle,
-  getHoverTransform,
+  createPersonalityAccentBar,
+  createEntranceAnimation,
+  createDividerStyle,
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
@@ -28,49 +50,77 @@ import type {
   SprintData,
   TeamTarget,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
 
 /* ------------------------------------------------------------------ */
-/*  Helper: sparkline polyline points                                  */
+/*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-function sparklinePoints(data: number[], width: number, height: number, padding: number): string {
-  if (!data.length) return '';
+const MOCK_TEAMS: TeamItem[] = [
+  { id: 't1', name: 'Engineering Hiring', leadName: 'Sofia Martinez', memberCount: 6, activeJobs: 12, capacityUsed: 78, capacityTotal: 100, performanceScore: 88 },
+  { id: 't2', name: 'Product & Design', leadName: 'James Chen', memberCount: 4, activeJobs: 8, capacityUsed: 65, capacityTotal: 100, performanceScore: 82 },
+  { id: 't3', name: 'GTM Recruiting', leadName: 'Priya Sharma', memberCount: 5, activeJobs: 10, capacityUsed: 92, capacityTotal: 100, performanceScore: 74 },
+  { id: 't4', name: 'Executive Search', leadName: 'Marcus Williams', memberCount: 3, activeJobs: 4, capacityUsed: 56, capacityTotal: 100, performanceScore: 91 },
+  { id: 't5', name: 'Campus & Intern', leadName: 'Aisha Okafor', memberCount: 3, activeJobs: 6, capacityUsed: 42, capacityTotal: 80, performanceScore: 79 },
+  { id: 't6', name: 'Remote Talent', leadName: 'Liam O\'Brien', memberCount: 4, activeJobs: 7, capacityUsed: 88, capacityTotal: 100, performanceScore: 85 },
+];
+
+const MOCK_MEMBERS: TeamMember[] = [
+  { id: 'm1', name: 'Sofia Martinez', role: 'Team Lead', allocationPercent: 80, activeJobs: 4, hires: 6 },
+  { id: 'm2', name: 'Alex Kim', role: 'Sr. Recruiter', allocationPercent: 95, activeJobs: 5, hires: 4 },
+  { id: 'm3', name: 'Rachel Green', role: 'Recruiter', allocationPercent: 70, activeJobs: 3, hires: 3 },
+  { id: 'm4', name: 'Tom Baker', role: 'Jr. Recruiter', allocationPercent: 60, activeJobs: 2, hires: 2 },
+  { id: 'm5', name: 'Nina Patel', role: 'Sourcer', allocationPercent: 85, activeJobs: 3, hires: 2 },
+  { id: 'm6', name: 'Dave Johnson', role: 'Coordinator', allocationPercent: 40, activeJobs: 1, hires: 1 },
+];
+
+const MOCK_KPIS: TeamKpiData = {
+  hiresVsTarget: { actual: 18, target: 24 },
+  velocityTrend: [12, 14, 11, 16, 18, 15, 20, 22, 18, 24],
+  slaCompliance: 87,
+  satisfactionScore: 4.3,
+};
+
+const MOCK_SPRINT: SprintData = {
+  total: 32,
+  completed: 18,
+  inProgress: 9,
+  blocked: 5,
+  burndownData: [32, 30, 28, 25, 22, 20, 18, 17, 15, 14, 12, 9],
+};
+
+const MOCK_TARGETS: TeamTarget[] = [
+  { metric: 'Hires This Quarter', period: 'quarterly', value: 45, current: 32 },
+  { metric: 'Avg Time-to-Fill', period: 'quarterly', value: 28, current: 24 },
+  { metric: 'Monthly Offers', period: 'monthly', value: 12, current: 9 },
+  { metric: 'Source Quality', period: 'monthly', value: 90, current: 84 },
+];
+
+/* ------------------------------------------------------------------ */
+/*  SVG Helpers                                                        */
+/* ------------------------------------------------------------------ */
+function perfRing(score: number, radius: number) {
+  const circ = 2 * Math.PI * radius;
+  const pct = Math.min(score / 100, 1);
+  return { dashArray: `${pct * circ} ${circ}`, pct };
+}
+
+function sparkPts(data: number[], w: number, h: number, pad = 2): string {
+  if (data.length < 2) return '';
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
-  const stepX = (width - padding * 2) / (data.length - 1 || 1);
-  return data
-    .map((v, i) => {
-      const x = padding + i * stepX;
-      const y = height - padding - ((v - min) / range) * (height - padding * 2);
-      return `${x},${y}`;
-    })
-    .join(' ');
+  const step = (w - pad * 2) / (data.length - 1);
+  return data.map((v, i) => `${pad + i * step},${h - pad - ((v - min) / range) * (h - pad * 2)}`).join(' ');
 }
 
-function sparklinePolygonPoints(data: number[], width: number, height: number, padding: number): string {
-  if (!data.length) return '';
-  const line = sparklinePoints(data, width, height, padding);
-  const lastX = padding + (data.length - 1) * ((width - padding * 2) / (data.length - 1 || 1));
-  return `${padding},${height - padding} ${line} ${lastX},${height - padding}`;
+function sparkArea(data: number[], w: number, h: number, pad = 2): string {
+  if (data.length < 2) return '';
+  const pts = sparkPts(data, w, h, pad);
+  const lastX = pad + (data.length - 1) * ((w - pad * 2) / (data.length - 1));
+  return `${pad},${h - pad} ${pts} ${lastX},${h - pad}`;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Helper: progress ring SVG calculations                             */
-/* ------------------------------------------------------------------ */
-function progressRing(value: number, max: number, radius: number) {
-  const circumference = 2 * Math.PI * radius;
-  const pct = Math.min(value / (max || 1), 1);
-  const dashArray = `${pct * circumference} ${circumference}`;
-  return { circumference, dashArray, pct };
-}
-
-/* ------------------------------------------------------------------ */
-/*  Helper: clamp percentage                                           */
-/* ------------------------------------------------------------------ */
-function clampPct(val: number, total: number): number {
-  if (total <= 0) return 0;
-  return Math.min(Math.max((val / total) * 100, 0), 100);
+function clamp(val: number, total: number): number {
+  return total <= 0 ? 0 : Math.min(Math.max((val / total) * 100, 0), 100);
 }
 
 /* ------------------------------------------------------------------ */
@@ -78,1672 +128,698 @@ function clampPct(val: number, total: number): number {
 /* ------------------------------------------------------------------ */
 export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
   name: 'BhTeamBoard.Grid',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhTeamBoardProps>) => {
+  render: ({ primitives, props, tokens }: PresetContext<BhTeamBoardProps>) => {
     const { Box, Text } = primitives;
+    const t = tokens;
 
+    /* -- Props with mock fallbacks ----------------------------------- */
     const {
-      teams = [],
-      selectedTeam: controlledSelectedTeam,
+      teams: teamsProp,
+      selectedTeam: controlledSelected,
       onTeamSelect,
-      members = [],
-      teamKpis,
-      sprintData: controlledSprintData,
-      targets = [],
+      members: membersProp,
+      teamKpis: kpisProp,
+      sprintData: sprintProp,
+      targets: targetsProp,
       onAddTeam,
       onEditTeam,
       onAddMember,
       onRemoveMember,
-      onMemberRoleChange,
-      showAddModal: controlledShowAddModal,
+      showAddModal: controlledModal,
       onAddModalToggle,
-      viewMode: controlledViewMode,
+      viewMode: controlledView,
       onViewModeChange,
-      editingMember: controlledEditingMember,
-      onMemberEdit,
-      targetPeriod: controlledTargetPeriod,
+      targetPeriod: controlledPeriod,
       onTargetPeriodChange,
       className,
       style,
     } = props;
 
-    const [internalSelectedTeam, setInternalSelectedTeam] = useState<string | null>(
-      teams.length > 0 ? teams[0].id : null
+    const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
+    const members = membersProp?.length ? membersProp : MOCK_MEMBERS;
+    const kpis = kpisProp ?? MOCK_KPIS;
+    const sprint = sprintProp ?? MOCK_SPRINT;
+    const targets = targetsProp?.length ? targetsProp : MOCK_TARGETS;
+
+    /* -- Internal state ---------------------------------------------- */
+    const [intSelected, setIntSelected] = useState<string | null>(teams[0]?.id ?? null);
+    const [intModal, setIntModal] = useState(false);
+    const [intView, setIntView] = useState<'grid' | 'list'>('grid');
+    const [intPeriod, setIntPeriod] = useState<'monthly' | 'quarterly'>('quarterly');
+
+    const selectedId = controlledSelected !== undefined ? controlledSelected : intSelected;
+    const showModal = controlledModal !== undefined ? controlledModal : intModal;
+    const viewMode = controlledView !== undefined ? controlledView : intView;
+    const period = controlledPeriod !== undefined ? controlledPeriod : intPeriod;
+
+    const selectTeam = (id: string) => { setIntSelected(id); onTeamSelect?.(id); };
+    const toggleModal = (open: boolean) => { setIntModal(open); onAddModalToggle?.(open); };
+    const switchView = (m: 'grid' | 'list') => { setIntView(m); onViewModeChange?.(m); };
+    const switchPeriod = (p: 'monthly' | 'quarterly') => { setIntPeriod(p); onTargetPeriodChange?.(p); };
+
+    /* -- Derived data ------------------------------------------------ */
+    const activeTeam = useMemo(() => teams.find((team) => team.id === selectedId), [teams, selectedId]);
+    const totalMembers = useMemo(() => teams.reduce((s, team) => s + team.memberCount, 0), [teams]);
+    const filteredTargets = useMemo(
+      () => targets.filter((tgt) => tgt.period === period || !tgt.period),
+      [targets, period],
     );
-    const [internalMembers] = useState<TeamMember[]>(members);
-    const [internalShowAddModal, setInternalShowAddModal] = useState(false);
-    const [internalEditingMember, setInternalEditingMember] = useState<string | null>(null);
-    const [internalViewMode, setInternalViewMode] = useState<'grid' | 'list'>('grid');
-    const [internalSprintData] = useState<SprintData | undefined>(controlledSprintData);
-    const [internalTargetPeriod, setInternalTargetPeriod] = useState<'monthly' | 'quarterly'>('monthly');
 
-    const activeSelectedTeam = controlledSelectedTeam !== undefined ? controlledSelectedTeam : internalSelectedTeam;
-    const activeShowAddModal = controlledShowAddModal !== undefined ? controlledShowAddModal : internalShowAddModal;
-    const activeViewMode = controlledViewMode !== undefined ? controlledViewMode : internalViewMode;
-    const activeEditingMember = controlledEditingMember !== undefined ? controlledEditingMember : internalEditingMember;
-    const activeSprintData = controlledSprintData !== undefined ? controlledSprintData : internalSprintData;
-    const activeTargetPeriod = controlledTargetPeriod !== undefined ? controlledTargetPeriod : internalTargetPeriod;
-    const activeMembers = members.length > 0 ? members : internalMembers;
+    /* -- Styles ------------------------------------------------------ */
+    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
+    const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const divider = useMemo(() => createDividerStyle(t), [t]);
 
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const hoverTransform = getHoverTransform(tokens);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    const perfColor = (score: number) =>
+      score >= 85 ? t.colors.successScale[500]
+      : score >= 65 ? t.colors.warningScale[500]
+      : t.colors.errorScale[500];
 
-    const selectedTeamData = useMemo(
-      () => teams.find((t) => t.id === activeSelectedTeam),
-      [teams, activeSelectedTeam]
+    const capColor = (pct: number) =>
+      pct >= 90 ? t.colors.errorScale[500]
+      : pct >= 70 ? t.colors.warningScale[500]
+      : t.colors.successScale[500];
+
+    /* ================================================================ */
+    /*  Inner Components                                                 */
+    /* ================================================================ */
+
+    /* -- Section Header --------------------------------------------- */
+    const SectionHeader = ({ icon, label, right }: { icon: React.ReactNode; label: string; right?: React.ReactNode }) => (
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[5] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+          <Box style={{ color: t.colors.primaryScale[500] }}>{icon}</Box>
+          <Text style={{ ...sectionHdr, marginBottom: 0 }}>{label}</Text>
+        </Box>
+        {right}
+      </Box>
     );
 
-    const handleTeamSelect = (teamId: string) => {
-      setInternalSelectedTeam(teamId);
-      onTeamSelect?.(teamId);
+    /* -- Team Card -------------------------------------------------- */
+    const TeamCard = ({ team, idx }: { team: TeamItem; idx: number }) => {
+      const isSelected = selectedId === team.id;
+      const capPct = clamp(team.capacityUsed, team.capacityTotal);
+      const r = 22;
+      const sw = 4;
+      const sz = (r + sw) * 2;
+      const ring = perfRing(team.performanceScore, r);
+      const entrance = createEntranceAnimation(t, { index: idx });
+      const accent = createPersonalityAccentBar(t, {
+        color: isSelected ? t.colors.primaryScale[500] : t.colors.neutral[200],
+      });
+      const progressBar = createProgressBarStyle(t, { color: capColor(capPct), percent: capPct });
+
+      return (
+        <Box
+          onClick={() => selectTeam(team.id)}
+          style={{
+            ...card,
+            position: 'relative' as const,
+            overflow: 'hidden',
+            cursor: 'pointer',
+            border: isSelected
+              ? `2px solid ${t.colors.primaryScale[400]}`
+              : `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`,
+            backgroundColor: isSelected ? t.colors.primaryScale[50] : card.backgroundColor,
+            display: 'flex',
+            flexDirection: viewMode === 'list' ? 'row' as const : 'column' as const,
+            gap: t.spacing[4],
+            transition: `all ${t.motion.hover}`,
+            ...entrance.initial,
+          }}
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+            const el = e.currentTarget;
+            if (cardHover.hover.transform) el.style.transform = cardHover.hover.transform;
+            if (cardHover.hover.boxShadow) el.style.boxShadow = cardHover.hover.boxShadow;
+          }}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+            const el = e.currentTarget;
+            el.style.transform = 'none';
+            el.style.boxShadow = (card.boxShadow as string) || '';
+          }}
+        >
+          {accent && <Box style={{ ...accent, position: 'absolute' as const, top: 0, left: 0 }} />}
+
+          {/* Header row: avatar + name + perf ring */}
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: viewMode === 'list' ? 1 : undefined }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+              <Box style={{
+                ...createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] }),
+                color: t.colors.primaryScale[700],
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.bold }}>
+                  {team.leadName.charAt(0).toUpperCase()}
+                </Text>
+              </Box>
+              <Box>
+                <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], display: 'block' }}>
+                  {team.name}
+                </Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                  Lead: {team.leadName}
+                </Text>
+              </Box>
+            </Box>
+
+            {/* Performance ring */}
+            <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`} style={{ flexShrink: 0 }}>
+              <circle cx={sz / 2} cy={sz / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth={sw} />
+              <circle
+                cx={sz / 2} cy={sz / 2} r={r} fill="none"
+                stroke={perfColor(team.performanceScore)}
+                strokeWidth={sw}
+                strokeDasharray={ring.dashArray}
+                strokeLinecap="round"
+                transform={`rotate(-90 ${sz / 2} ${sz / 2})`}
+                style={{ transition: `stroke-dasharray ${t.motion.hover}` }}
+              />
+              <text x={sz / 2} y={sz / 2} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[900]} fontSize={t.typography.fontSize.xs} fontWeight={t.typography.fontWeight.bold}>
+                {team.performanceScore}
+              </text>
+            </svg>
+          </Box>
+
+          {/* Stat badges */}
+          <Box style={{ display: 'flex', gap: t.spacing[2], flexWrap: 'wrap' as const, flex: viewMode === 'list' ? 1 : undefined }}>
+            <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <Users size={12} />
+              <Text style={{ fontSize: 'inherit' }}>{team.memberCount} members</Text>
+            </Box>
+            <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+              <Briefcase size={12} />
+              <Text style={{ fontSize: 'inherit' }}>{team.activeJobs} jobs</Text>
+            </Box>
+          </Box>
+
+          {/* Capacity bar */}
+          <Box style={{ flex: viewMode === 'list' ? 1 : undefined }}>
+            <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Capacity</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>
+                {team.capacityUsed}/{team.capacityTotal}
+              </Text>
+            </Box>
+            <Box style={progressBar.track}>
+              <Box style={progressBar.fill} />
+            </Box>
+          </Box>
+
+          {/* Edit button in list mode */}
+          {viewMode === 'list' && (
+            <Box
+              onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEditTeam?.(team.id); }}
+              style={{
+                padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+                borderRadius: t.borderRadius.md,
+                border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`,
+                backgroundColor: t.colors.common.white,
+                color: t.colors.neutral[600],
+                fontSize: t.typography.fontSize.xs,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: t.spacing[1],
+                transition: `all ${t.motion.hover}`,
+              }}
+            >
+              <Pencil size={12} />
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>Edit</Text>
+            </Box>
+          )}
+        </Box>
+      );
     };
 
-    const handleViewModeChange = (mode: 'grid' | 'list') => {
-      setInternalViewMode(mode);
-      onViewModeChange?.(mode);
+    /* -- KPI Mini Card ---------------------------------------------- */
+    const KpiMini = ({ label, value, icon, scale }: { label: string; value: string; icon: React.ReactNode; scale: string }) => {
+      const s = (t.colors as any)[scale];
+      return (
+        <Box style={{
+          padding: t.spacing[4],
+          borderRadius: t.borderRadius.lg,
+          backgroundColor: s[50],
+          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${s[200]}`,
+        }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+            <Box style={{ color: s[600] }}>{icon}</Box>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: s[700], fontWeight: t.typography.fontWeight.medium }}>{label}</Text>
+          </Box>
+          <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: s[800] }}>{value}</Text>
+        </Box>
+      );
     };
 
-    const handleModalToggle = (open: boolean) => {
-      setInternalShowAddModal(open);
-      onAddModalToggle?.(open);
-    };
-
-    const handleMemberEdit = (memberId: string | null) => {
-      setInternalEditingMember(memberId);
-      onMemberEdit?.(memberId);
-    };
-
-    const handleTargetPeriodChange = (period: 'monthly' | 'quarterly') => {
-      setInternalTargetPeriod(period);
-      onTargetPeriodChange?.(period);
-    };
-
-    const roleColors: Record<string, 'primary' | 'success' | 'warning' | 'info' | 'secondary'> = {
-      'Lead': 'primary',
-      'Senior': 'success',
-      'Mid': 'info',
-      'Junior': 'warning',
-      'Intern': 'secondary',
-    };
-
-    const getRoleBadgeColor = (role: string): 'primary' | 'success' | 'warning' | 'info' | 'secondary' => {
-      return roleColors[role] || 'info';
-    };
-
-    /* ------------------------------------------------------------------ */
-    /*  Render                                                             */
-    /* ------------------------------------------------------------------ */
+    /* ================================================================ */
+    /*  Render                                                           */
+    /* ================================================================ */
     return (
       <Box
         className={className}
         style={{
           height: '100%',
           overflow: 'auto',
-          backgroundColor: tokens.colors.neutral[50],
-          padding: tokens.spacing[6],
+          backgroundColor: t.colors.neutral[50],
+          padding: t.spacing[7],
+          fontFamily: 'inherit',
           ...style,
         }}
       >
-        {/* =========================================================== */}
-        {/*  Header                                                      */}
-        {/* =========================================================== */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: tokens.spacing[6],
-          }}
-        >
-          <div>
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize['2xl'],
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
-                display: 'block',
-                marginBottom: tokens.spacing[1],
-              }}
-            >
+        {/* ---- Page Header ------------------------------------------ */}
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[7] }}>
+          <Box>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[1] }}>
               Team Management
             </Text>
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.neutral[500],
-              }}
-            >
-              {teams.length} teams &middot; {teams.reduce((s, t) => s + t.memberCount, 0)} total members
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
+              {teams.length} teams  &#183;  {totalMembers} total members
             </Text>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-            }}
-          >
-            {/* View mode toggle */}
-            <div
-              style={{
-                display: 'flex',
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                overflow: 'hidden',
-              }}
-            >
-              {(['grid', 'list'] as const).map((mode) => (
-                <button
-                  key={mode}
-                  onClick={() => handleViewModeChange(mode)}
+          </Box>
+
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            {/* View toggle */}
+            <Box style={{
+              display: 'inline-flex',
+              borderRadius: t.borderRadius.lg,
+              border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`,
+              overflow: 'hidden',
+            }}>
+              {([{ key: 'grid' as const, icon: <LayoutGrid size={14} /> }, { key: 'list' as const, icon: <List size={14} /> }]).map((m) => (
+                <Box
+                  key={m.key}
+                  onClick={() => switchView(m.key)}
                   style={{
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                    border: 'none',
-                    backgroundColor:
-                      activeViewMode === mode ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    color:
-                      activeViewMode === mode ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight:
-                      activeViewMode === mode
-                        ? tokens.typography.fontWeight.semibold
-                        : tokens.typography.fontWeight.medium,
+                    padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+                    backgroundColor: viewMode === m.key ? t.colors.primaryScale[50] : t.colors.common.white,
+                    color: viewMode === m.key ? t.colors.primaryScale[700] : t.colors.neutral[500],
+                    fontSize: t.typography.fontSize.sm,
+                    fontWeight: viewMode === m.key ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium,
                     cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    textTransform: 'capitalize' as const,
-                    ...hoverStyle,
+                    transition: `all ${t.motion.hover}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: t.spacing[1],
                   }}
                 >
-                  {mode === 'grid' ? '\u25A6' : '\u2630'} {mode}
-                </button>
+                  {m.icon}
+                  <Text style={{ fontSize: t.typography.fontSize.sm, textTransform: 'capitalize' as const }}>{m.key}</Text>
+                </Box>
               ))}
-            </div>
+            </Box>
+
             {/* Add team button */}
-            <button
-              onClick={() => {
-                handleModalToggle(true);
-                onAddTeam?.();
-              }}
+            <Box
+              onClick={() => { toggleModal(true); onAddTeam?.(); }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                border: 'none',
-                backgroundColor: tokens.colors.primaryScale[600],
-                color: tokens.colors.common.white,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
+                gap: t.spacing[2],
+                padding: `${t.spacing[2]}px ${t.spacing[5]}px`,
+                borderRadius: t.borderRadius.lg,
+                backgroundColor: t.colors.primaryScale[600],
+                color: t.colors.common.white,
+                fontSize: t.typography.fontSize.sm,
+                fontWeight: t.typography.fontWeight.semibold,
                 cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                ...hoverStyle,
+                transition: `all ${t.motion.hover}`,
               }}
             >
-              + Add Team
-            </button>
-          </div>
-        </div>
+              <UserPlus size={16} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: 'inherit' }}>Add Team</Text>
+            </Box>
+          </Box>
+        </Box>
 
-        {/* =========================================================== */}
-        {/*  1. Team Grid / List                                         */}
-        {/* =========================================================== */}
-        <div
-          style={{
-            display: activeViewMode === 'grid' ? 'grid' : 'flex',
-            gridTemplateColumns: activeViewMode === 'grid' ? 'repeat(auto-fill, minmax(280px, 1fr))' : undefined,
-            flexDirection: activeViewMode === 'list' ? 'column' : undefined,
-            gap: tokens.spacing[4],
-            marginBottom: tokens.spacing[6],
-          }}
-        >
-          {teams.map((team) => {
-            const isSelected = activeSelectedTeam === team.id;
-            const capacityPct = clampPct(team.capacityUsed, team.capacityTotal);
-            const perfRadius = 22;
-            const perfStroke = 4;
-            const perfSize = (perfRadius + perfStroke) * 2;
-            const perfRing = progressRing(team.performanceScore, 100, perfRadius);
+        {/* ---- Team Cards Grid -------------------------------------- */}
+        <Box style={{
+          display: viewMode === 'grid' ? 'grid' : 'flex',
+          gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(320px, 1fr))' : undefined,
+          flexDirection: viewMode === 'list' ? 'column' as const : undefined,
+          gap: t.spacing[5],
+          marginBottom: t.spacing[7],
+        }}>
+          {teams.map((team, idx) => (
+            <TeamCard key={team.id} team={team} idx={idx} />
+          ))}
+        </Box>
 
-            const capacityColor =
-              capacityPct >= 90
-                ? tokens.colors.errorScale[500]
-                : capacityPct >= 70
-                ? tokens.colors.warningScale[500]
-                : tokens.colors.successScale[500];
-
-            return (
-              <div
-                key={team.id}
-                onClick={() => handleTeamSelect(team.id)}
-                style={{
-                  ...cardInteractive,
-                  border: isSelected
-                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
-                    : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  backgroundColor: isSelected
-                    ? tokens.colors.primaryScale[50]
-                    : tokens.colors.common.white,
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                  display: 'flex',
-                  flexDirection: activeViewMode === 'list' ? 'row' : 'column',
-                  gap: tokens.spacing[3],
-                }}
-                onMouseEnter={(e) => {
-                  Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.md;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.transform = 'none';
-                  (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.sm;
-                }}
-              >
-                {/* Team header row */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    flex: activeViewMode === 'list' ? 1 : undefined,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                    {/* Lead avatar */}
-                    <div
-                      style={{
-                        width: tokens.spacing[9],
-                        height: tokens.spacing[9],
-                        borderRadius: tokens.borderRadius.full,
-                        overflow: 'hidden',
-                        backgroundColor: tokens.colors.primaryScale[100],
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: tokens.colors.primaryScale[700],
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        flexShrink: 0,
-                      }}
-                    >
-                      {team.leadAvatar ? (
-                        <img
-                          src={team.leadAvatar}
-                          alt=""
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' as const }}
-                        />
-                      ) : (
-                        team.leadName.charAt(0).toUpperCase()
-                      )}
-                    </div>
-                    <div>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.md,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[900],
-                          display: 'block',
-                        }}
-                      >
-                        {team.name}
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[500],
-                        }}
-                      >
-                        Lead: {team.leadName}
-                      </Text>
-                    </div>
-                  </div>
-                  {/* Performance ring */}
-                  <svg
-                    width={perfSize}
-                    height={perfSize}
-                    viewBox={`0 0 ${perfSize} ${perfSize}`}
-                    style={{ flexShrink: 0 }}
-                  >
-                    <circle
-                      cx={perfSize / 2}
-                      cy={perfSize / 2}
-                      r={perfRadius}
-                      fill="none"
-                      stroke={tokens.colors.neutral[100]}
-                      strokeWidth={perfStroke}
-                    />
-                    <circle
-                      cx={perfSize / 2}
-                      cy={perfSize / 2}
-                      r={perfRadius}
-                      fill="none"
-                      stroke={
-                        team.performanceScore >= 80
-                          ? tokens.colors.successScale[500]
-                          : team.performanceScore >= 50
-                          ? tokens.colors.warningScale[500]
-                          : tokens.colors.errorScale[500]
-                      }
-                      strokeWidth={perfStroke}
-                      strokeDasharray={perfRing.dashArray}
-                      strokeLinecap="round"
-                      transform={`rotate(-90 ${perfSize / 2} ${perfSize / 2})`}
-                      style={{ transition: `stroke-dasharray ${tokens.motion.hover}` }}
-                    />
-                    <text
-                      x={perfSize / 2}
-                      y={perfSize / 2}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      fill={tokens.colors.neutral[900]}
-                      fontSize={tokens.typography.fontSize.xs}
-                      fontWeight={tokens.typography.fontWeight.bold}
-                    >
-                      {team.performanceScore}
-                    </text>
-                  </svg>
-                </div>
-
-                {/* Stats row */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[3],
-                    flex: activeViewMode === 'list' ? 1 : undefined,
-                  }}
-                >
-                  {/* Member count badge */}
-                  <div
-                    style={{
-                      ...createBadgeStyle(tokens, 'info'),
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                    }}
-                  >
-                    <span style={{ fontSize: tokens.typography.fontSize.xs }}>{team.memberCount}</span>
-                    <span style={{ fontSize: tokens.typography.fontSize.xs }}>members</span>
-                  </div>
-                  {/* Active jobs */}
-                  <div
-                    style={{
-                      ...createBadgeStyle(tokens, 'success'),
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                    }}
-                  >
-                    <span style={{ fontSize: tokens.typography.fontSize.xs }}>{team.activeJobs}</span>
-                    <span style={{ fontSize: tokens.typography.fontSize.xs }}>jobs</span>
-                  </div>
-                </div>
-
-                {/* Capacity bar */}
-                <div
-                  style={{
-                    flex: activeViewMode === 'list' ? 1 : undefined,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginBottom: tokens.spacing[1],
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                      }}
-                    >
-                      Capacity
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[700],
-                      }}
-                    >
-                      {team.capacityUsed}/{team.capacityTotal}
-                    </Text>
-                  </div>
-                  <svg width="100%" height="8" style={{ display: 'block' }}>
-                    <rect
-                      x="0"
-                      y="0"
-                      width="100%"
-                      height="8"
-                      rx="4"
-                      fill={tokens.colors.neutral[100]}
-                    />
-                    <rect
-                      x="0"
-                      y="0"
-                      width={`${capacityPct}%`}
-                      height="8"
-                      rx="4"
-                      fill={capacityColor}
-                      style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
-                    />
-                  </svg>
-                </div>
-
-                {/* Edit button */}
-                {activeViewMode === 'list' && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditTeam?.(team.id);
-                    }}
-                    style={{
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      color: tokens.colors.neutral[600],
-                      fontSize: tokens.typography.fontSize.xs,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      ...hoverStyle,
-                    }}
-                  >
-                    Edit
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* =========================================================== */}
-        {/*  2. Team Detail Expanded Panel                               */}
-        {/* =========================================================== */}
-        {selectedTeamData && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 360px',
-              gap: tokens.spacing[6],
-              marginBottom: tokens.spacing[6],
-            }}
-          >
-            {/* Left: Members table */}
-            <div style={cardBase}>
-              <div
-                style={{
+        {/* ---- Selected Team Detail --------------------------------- */}
+        {activeTeam && (
+          <>
+            <Box style={divider} />
+            <Box style={{ marginTop: t.spacing[6] }}>
+              {/* Team detail header */}
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[6] }}>
+                <Box style={{
+                  ...createIconContainerStyle(t, { size: 48, color: t.colors.primaryScale[100] }),
+                  color: t.colors.primaryScale[700],
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: tokens.spacing[4],
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.lg,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[900],
-                  }}
-                >
-                  {selectedTeamData.name} Members
-                </Text>
-                <button
-                  onClick={() => onAddMember?.()}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[1],
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: 'none',
-                    backgroundColor: tokens.colors.primaryScale[600],
-                    color: tokens.colors.common.white,
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    ...hoverStyle,
-                  }}
-                >
-                  + Add Member
-                </button>
-              </div>
-
-              {/* Members table header */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '2fr 1fr 1fr 80px 80px 60px',
-                  gap: tokens.spacing[2],
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                  backgroundColor: tokens.colors.neutral[50],
-                  borderRadius: tokens.borderRadius.md,
-                  marginBottom: tokens.spacing[2],
-                }}
-              >
-                {['Member', 'Role', 'Allocation', 'Jobs', 'Hires', ''].map((col) => (
-                  <Text
-                    key={col}
-                    style={{
-                      ...sectionHeader,
-                      marginBottom: 0,
-                    }}
-                  >
-                    {col}
+                  justifyContent: 'center',
+                }}>
+                  <Users size={24} />
+                </Box>
+                <Box>
+                  <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
+                    {activeTeam.name}
                   </Text>
-                ))}
-              </div>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
+                    Led by {activeTeam.leadName}  &#183;  {activeTeam.memberCount} members  &#183;  {activeTeam.activeJobs} active jobs
+                  </Text>
+                </Box>
+              </Box>
 
-              {/* Members rows */}
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {activeMembers.map((member) => {
-                  const isEditing = activeEditingMember === member.id;
-                  const allocationColor =
-                    member.allocationPercent >= 90
-                      ? tokens.colors.errorScale[500]
-                      : member.allocationPercent >= 70
-                      ? tokens.colors.warningScale[500]
-                      : tokens.colors.primaryScale[500];
+              {/* KPI cards */}
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
+                <KpiMini label="Hires vs Target" value={`${kpis.hiresVsTarget.actual}/${kpis.hiresVsTarget.target}`} icon={<Target size={14} />} scale="successScale" />
+                <KpiMini label="SLA Compliance" value={`${kpis.slaCompliance}%`} icon={<CheckCircle2 size={14} />} scale="infoScale" />
+                <KpiMini label="Satisfaction" value={`${kpis.satisfactionScore}/5`} icon={<Star size={14} />} scale="warningScale" />
+                <KpiMini label="Performance" value={`${activeTeam.performanceScore}`} icon={<Award size={14} />} scale="primaryScale" />
+              </Box>
 
-                  return (
-                    <div
-                      key={member.id}
+              {/* Two-column: Members + Sprint */}
+              <Box style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: t.spacing[5], marginBottom: t.spacing[6] }}>
+                {/* Members Table */}
+                <Box style={{ ...card }}>
+                  <SectionHeader icon={<Users size={16} />} label={`${activeTeam.name} Members`} right={
+                    <Box
+                      onClick={() => onAddMember?.()}
                       style={{
-                        display: 'grid',
-                        gridTemplateColumns: '2fr 1fr 1fr 80px 80px 60px',
-                        gap: tokens.spacing[2],
-                        padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        alignItems: 'center',
-                        backgroundColor: isEditing ? tokens.colors.primaryScale[50] : 'transparent',
-                        borderRadius: isEditing ? tokens.borderRadius.md : undefined,
-                        ...hoverStyle,
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isEditing) {
-                          (e.currentTarget as HTMLDivElement).style.backgroundColor = tokens.colors.neutral[50];
-                        }
-                        e.currentTarget.style.transform = tokens.motion.transform;
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isEditing) {
-                          (e.currentTarget as HTMLDivElement).style.backgroundColor = 'transparent';
-                        }
-                        e.currentTarget.style.transform = 'none';
+                        display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                        padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                        borderRadius: t.borderRadius.md,
+                        backgroundColor: t.colors.primaryScale[600],
+                        color: t.colors.common.white,
+                        fontSize: t.typography.fontSize.xs,
+                        fontWeight: t.typography.fontWeight.semibold,
+                        cursor: 'pointer',
                       }}
                     >
-                      {/* Member name + avatar */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                        <div
-                          style={{
-                            width: tokens.spacing[8],
-                            height: tokens.spacing[8],
-                            borderRadius: tokens.borderRadius.full,
-                            overflow: 'hidden',
-                            backgroundColor: tokens.colors.secondaryScale[100],
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: tokens.colors.secondaryScale[700],
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            flexShrink: 0,
-                          }}
-                        >
-                          {member.avatar ? (
-                            <img
-                              src={member.avatar}
-                              alt=""
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' as const }}
-                            />
-                          ) : (
-                            member.name.charAt(0).toUpperCase()
-                          )}
-                        </div>
-                        <Text
-                          style={{
-                            fontSize: tokens.typography.fontSize.sm,
-                            fontWeight: tokens.typography.fontWeight.medium,
-                            color: tokens.colors.neutral[800],
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap' as const,
-                          }}
-                        >
-                          {member.name}
-                        </Text>
-                      </div>
+                      <UserPlus size={12} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: 'inherit' }}>Add</Text>
+                    </Box>
+                  } />
 
-                      {/* Role badge */}
-                      <div>
-                        <span style={createBadgeStyle(tokens, getRoleBadgeColor(member.role))}>
-                          {member.role}
-                        </span>
-                      </div>
+                  {/* Table header */}
+                  <Box style={{
+                    display: 'grid',
+                    gridTemplateColumns: '2fr 1fr 1fr 70px 70px 50px',
+                    gap: t.spacing[2],
+                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    backgroundColor: t.colors.neutral[50],
+                    borderRadius: t.borderRadius.md,
+                    marginBottom: t.spacing[2],
+                  }}>
+                    {['Member', 'Role', 'Allocation', 'Jobs', 'Hires', ''].map((col) => (
+                      <Text key={col} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{col}</Text>
+                    ))}
+                  </Box>
 
-                      {/* Allocation bar */}
-                      <div>
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: tokens.spacing[2],
-                          }}
-                        >
-                          <div
-                            style={{
-                              flex: 1,
-                              height: 6,
-                              backgroundColor: tokens.colors.neutral[100],
-                              borderRadius: tokens.borderRadius.full,
-                              overflow: 'hidden',
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: `${member.allocationPercent}%`,
-                                height: '100%',
-                                backgroundColor: allocationColor,
-                                borderRadius: tokens.borderRadius.full,
-                                transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                              }}
-                            />
-                          </div>
-                          <Text
-                            style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              color: tokens.colors.neutral[700],
-                              minWidth: 32,
-                              textAlign: 'right' as const,
-                            }}
-                          >
+                  {/* Rows */}
+                  {members.map((member) => {
+                    const allocColor = member.allocationPercent >= 90 ? t.colors.errorScale[500] : member.allocationPercent >= 70 ? t.colors.warningScale[500] : t.colors.primaryScale[500];
+                    const allocBar = createProgressBarStyle(t, { color: allocColor, percent: member.allocationPercent });
+
+                    return (
+                      <Box
+                        key={member.id}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '2fr 1fr 1fr 70px 70px 50px',
+                          gap: t.spacing[2],
+                          padding: `${t.spacing[3]}px`,
+                          borderBottom: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[100]}`,
+                          alignItems: 'center',
+                          transition: `background-color ${t.motion.hover}`,
+                          cursor: 'pointer',
+                        }}
+                        onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = t.colors.neutral[50]; }}
+                        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                      >
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Box style={{
+                            ...createIconContainerStyle(t, { size: 32, color: t.colors.secondaryScale[100] }),
+                            color: t.colors.secondaryScale[700],
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>
+                              {member.name.charAt(0)}
+                            </Text>
+                          </Box>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                            {member.name}
+                          </Text>
+                        </Box>
+                        <Box>
+                          <Box style={{ ...createBadgeStyle(t, member.role === 'Team Lead' ? 'primary' : member.role.includes('Sr') ? 'success' : 'info'), borderRadius: badgeR }}>
+                            <Text style={{ fontSize: 'inherit' }}>{member.role}</Text>
+                          </Box>
+                        </Box>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Box style={{ ...allocBar.track, flex: 1 }}>
+                            <Box style={allocBar.fill} />
+                          </Box>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], minWidth: 30, textAlign: 'right' as const }}>
                             {member.allocationPercent}%
                           </Text>
-                        </div>
-                      </div>
-
-                      {/* Active jobs */}
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          color: tokens.colors.neutral[700],
-                          textAlign: 'center' as const,
-                        }}
-                      >
-                        {member.activeJobs}
-                      </Text>
-
-                      {/* Hires */}
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.successScale[600],
-                          textAlign: 'center' as const,
-                        }}
-                      >
-                        {member.hires}
-                      </Text>
-
-                      {/* Actions */}
-                      <div style={{ display: 'flex', gap: tokens.spacing[1], justifyContent: 'flex-end' }}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleMemberEdit(isEditing ? null : member.id);
-                          }}
-                          style={{
-                            width: tokens.spacing[6],
-                            height: tokens.spacing[6],
-                            borderRadius: tokens.borderRadius.md,
-                            border: 'none',
-                            backgroundColor: 'transparent',
-                            color: tokens.colors.neutral[400],
-                            cursor: 'pointer',
-                            transition: `all ${tokens.motion.hover}`,
-                            fontSize: tokens.typography.fontSize.xs,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            ...hoverStyle,
-                          }}
-                          title="Edit"
-                        >
-                          &#x270E;
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onRemoveMember?.(member.id);
-                          }}
-                          style={{
-                            width: tokens.spacing[6],
-                            height: tokens.spacing[6],
-                            borderRadius: tokens.borderRadius.md,
-                            border: 'none',
-                            backgroundColor: 'transparent',
-                            color: tokens.colors.errorScale[400],
-                            cursor: 'pointer',
-                            transition: `all ${tokens.motion.hover}`,
-                            fontSize: tokens.typography.fontSize.xs,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            ...hoverStyle,
-                          }}
-                          title="Remove"
-                        >
-                          &#x2715;
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {activeMembers.length === 0 && (
-                  <div
-                    style={{
-                      padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`,
-                      textAlign: 'center' as const,
-                      color: tokens.colors.neutral[400],
-                    }}
-                  >
-                    <Text style={{ fontSize: tokens.typography.fontSize.sm }}>
-                      No members assigned to this team yet.
-                    </Text>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right sidebar: Capacity + KPIs */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
-              {/* =========================================================== */}
-              {/*  3. Capacity Visualization                                   */}
-              {/* =========================================================== */}
-              <div style={cardBase}>
-                <Text
-                  style={{
-                    ...sectionHeader,
-                    marginBottom: tokens.spacing[3],
-                  }}
-                >
-                  Recruiter Capacity
-                </Text>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
-                  {activeMembers.map((member) => {
-                    const allocated = member.allocationPercent;
-                    const available = 100 - allocated;
-                    return (
-                      <div key={member.id}>
-                        <Text
-                          style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.medium,
-                            color: tokens.colors.neutral[700],
-                            display: 'block',
-                            marginBottom: tokens.spacing[1],
-                          }}
-                        >
-                          {member.name}
-                        </Text>
-                        <svg width="100%" height="16" style={{ display: 'block' }}>
-                          <rect
-                            x="0"
-                            y="0"
-                            width="100%"
-                            height="16"
-                            rx="4"
-                            fill={tokens.colors.neutral[100]}
-                          />
-                          <rect
-                            x="0"
-                            y="0"
-                            width={`${allocated}%`}
-                            height="16"
-                            rx="4"
-                            fill={tokens.colors.primaryScale[500]}
-                            style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
-                          />
-                        </svg>
-                        <div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            marginTop: tokens.spacing[1],
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: tokens.colors.primaryScale[600],
-                            }}
+                        </Box>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], textAlign: 'center' as const }}>{member.activeJobs}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600], textAlign: 'center' as const }}>{member.hires}</Text>
+                        <Box style={{ display: 'flex', gap: t.spacing[1], justifyContent: 'flex-end' }}>
+                          <Box
+                            onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemoveMember?.(member.id); }}
+                            style={{ width: 24, height: 24, borderRadius: t.borderRadius.sm, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.errorScale[400], cursor: 'pointer' }}
                           >
-                            Allocated: {allocated}%
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: tokens.colors.neutral[400],
-                            }}
-                          >
-                            Available: {available}%
-                          </Text>
-                        </div>
-                      </div>
+                            <Trash2 size={12} />
+                          </Box>
+                        </Box>
+                      </Box>
                     );
                   })}
-                </div>
-              </div>
 
-              {/* =========================================================== */}
-              {/*  5. Performance KPIs                                         */}
-              {/* =========================================================== */}
-              {teamKpis && (
-                <div style={cardBase}>
-                  <Text
-                    style={{
-                      ...sectionHeader,
-                      marginBottom: tokens.spacing[3],
-                    }}
-                  >
-                    Performance KPIs
-                  </Text>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[3] }}>
-                    {/* Hires vs Target */}
-                    <div
-                      style={{
-                        padding: tokens.spacing[3],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: tokens.colors.successScale[50],
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[200]}`,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.successScale[700],
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          display: 'block',
-                          marginBottom: tokens.spacing[1],
-                        }}
-                      >
-                        Hires vs Target
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xl,
-                          fontWeight: tokens.typography.fontWeight.bold,
-                          color: tokens.colors.successScale[800],
-                          display: 'block',
-                        }}
-                      >
-                        {teamKpis.hiresVsTarget.actual}/{teamKpis.hiresVsTarget.target}
-                      </Text>
-                    </div>
+                  {members.length === 0 && (
+                    <Box style={{ padding: `${t.spacing[8]}px ${t.spacing[4]}px`, textAlign: 'center' as const }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>No members assigned yet.</Text>
+                    </Box>
+                  )}
+                </Box>
 
-                    {/* SLA Compliance */}
-                    <div
-                      style={{
-                        padding: tokens.spacing[3],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: tokens.colors.infoScale[50],
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.infoScale[700],
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          display: 'block',
-                          marginBottom: tokens.spacing[1],
-                        }}
-                      >
-                        SLA Compliance
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xl,
-                          fontWeight: tokens.typography.fontWeight.bold,
-                          color: tokens.colors.infoScale[800],
-                          display: 'block',
-                        }}
-                      >
-                        {teamKpis.slaCompliance}%
-                      </Text>
-                    </div>
+                {/* Sprint & Velocity sidebar */}
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
+                  {/* Sprint progress */}
+                  <Box style={{ ...card }}>
+                    <SectionHeader icon={<Activity size={16} />} label="Sprint Progress" />
+                    <Box style={{ display: 'flex', justifyContent: 'center', marginBottom: t.spacing[4] }}>
+                      {(() => {
+                        const r2 = 40;
+                        const sw2 = 7;
+                        const sz2 = (r2 + sw2) * 2;
+                        const ring2 = perfRing(sprint.completed / sprint.total * 100, r2);
+                        return (
+                          <svg width={sz2} height={sz2} viewBox={`0 0 ${sz2} ${sz2}`}>
+                            <circle cx={sz2 / 2} cy={sz2 / 2} r={r2} fill="none" stroke={t.colors.neutral[100]} strokeWidth={sw2} />
+                            <circle cx={sz2 / 2} cy={sz2 / 2} r={r2} fill="none" stroke={t.colors.successScale[500]} strokeWidth={sw2} strokeDasharray={ring2.dashArray} strokeLinecap="round" transform={`rotate(-90 ${sz2 / 2} ${sz2 / 2})`} />
+                            <text x={sz2 / 2} y={sz2 / 2 - 6} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[900]} fontSize={t.typography.fontSize.lg} fontWeight={t.typography.fontWeight.bold}>{Math.round(sprint.completed / sprint.total * 100)}%</text>
+                            <text x={sz2 / 2} y={sz2 / 2 + 10} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[500]} fontSize={t.typography.fontSize.xs}>done</text>
+                          </svg>
+                        );
+                      })()}
+                    </Box>
+                    {[
+                      { label: 'Completed', value: sprint.completed, color: t.colors.successScale[500] },
+                      { label: 'In Progress', value: sprint.inProgress, color: t.colors.primaryScale[500] },
+                      { label: 'Blocked', value: sprint.blocked, color: t.colors.errorScale[500] },
+                    ].map((item) => {
+                      const bar = createProgressBarStyle(t, { color: item.color, percent: clamp(item.value, sprint.total) });
+                      return (
+                        <Box key={item.label} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], width: 80, flexShrink: 0 }}>{item.label}</Text>
+                          <Box style={{ ...bar.track, flex: 1, height: 8 }}>
+                            <Box style={bar.fill} />
+                          </Box>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], width: 24, textAlign: 'right' as const }}>{item.value}</Text>
+                        </Box>
+                      );
+                    })}
+                  </Box>
 
-                    {/* Velocity Trend sparkline */}
-                    <div
-                      style={{
-                        padding: tokens.spacing[3],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: tokens.colors.primaryScale[50],
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.primaryScale[700],
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          display: 'block',
-                          marginBottom: tokens.spacing[1],
-                        }}
-                      >
-                        Velocity Trend
-                      </Text>
-                      {teamKpis.velocityTrend.length > 1 && (
-                        <svg width="100%" height="32" viewBox="0 0 120 32" preserveAspectRatio="none">
-                          <defs>
-                            <linearGradient id="vel-grad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor={tokens.colors.primaryScale[400]} stopOpacity="0.3" />
-                              <stop offset="100%" stopColor={tokens.colors.primaryScale[400]} stopOpacity="0" />
-                            </linearGradient>
-                          </defs>
-                          <polygon
-                            points={sparklinePolygonPoints(teamKpis.velocityTrend, 120, 32, 2)}
-                            fill="url(#vel-grad)"
-                          />
-                          <polyline
-                            points={sparklinePoints(teamKpis.velocityTrend, 120, 32, 2)}
-                            fill="none"
-                            stroke={tokens.colors.primaryScale[500]}
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      )}
-                    </div>
+                  {/* Velocity sparkline */}
+                  {kpis.velocityTrend.length > 1 && (
+                    <Box style={{ ...card }}>
+                      <SectionHeader icon={<TrendingUp size={16} />} label="Velocity Trend" />
+                      <svg width="100%" height="60" viewBox="0 0 160 60" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="tb-vel-g" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={t.colors.primaryScale[400]} stopOpacity="0.25" />
+                            <stop offset="100%" stopColor={t.colors.primaryScale[400]} stopOpacity="0" />
+                          </linearGradient>
+                        </defs>
+                        <polygon points={sparkArea(kpis.velocityTrend, 160, 60)} fill="url(#tb-vel-g)" />
+                        <polyline points={sparkPts(kpis.velocityTrend, 160, 60)} fill="none" stroke={t.colors.primaryScale[500]} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
 
-                    {/* Satisfaction */}
-                    <div
-                      style={{
-                        padding: tokens.spacing[3],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: tokens.colors.warningScale[50],
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.warningScale[700],
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          display: 'block',
-                          marginBottom: tokens.spacing[1],
-                        }}
-                      >
-                        Satisfaction
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xl,
-                          fontWeight: tokens.typography.fontWeight.bold,
-                          color: tokens.colors.warningScale[800],
-                          display: 'block',
-                        }}
-                      >
-                        {teamKpis.satisfactionScore}/5
-                      </Text>
-                    </div>
-                  </div>
-                </div>
+              {/* ---- Targets ---------------------------------------- */}
+              {filteredTargets.length > 0 && (
+                <Box style={{ ...card }}>
+                  <SectionHeader icon={<Target size={16} />} label="Team Targets" right={
+                    <Box style={{
+                      display: 'inline-flex',
+                      borderRadius: t.borderRadius.lg,
+                      border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`,
+                      overflow: 'hidden',
+                    }}>
+                      {(['quarterly', 'monthly'] as const).map((p) => (
+                        <Box
+                          key={p}
+                          onClick={() => switchPeriod(p)}
+                          style={{
+                            padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                            backgroundColor: period === p ? t.colors.primaryScale[50] : t.colors.common.white,
+                            color: period === p ? t.colors.primaryScale[700] : t.colors.neutral[500],
+                            fontSize: t.typography.fontSize.xs,
+                            fontWeight: period === p ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium,
+                            cursor: 'pointer',
+                            transition: `all ${t.motion.hover}`,
+                            textTransform: 'capitalize' as const,
+                          }}
+                        >
+                          <Text style={{ fontSize: t.typography.fontSize.xs }}>{p}</Text>
+                        </Box>
+                      ))}
+                    </Box>
+                  } />
+
+                  <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: t.spacing[4] }}>
+                    {filteredTargets.map((tgt, idx) => {
+                      const pct = clamp(tgt.current, tgt.value);
+                      const tColor = pct >= 100 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : pct >= 40 ? t.colors.warningScale[500] : t.colors.errorScale[500];
+                      const scaleName = pct >= 100 ? 'successScale' : pct >= 70 ? 'primaryScale' : pct >= 40 ? 'warningScale' : 'errorScale';
+                      const cs = (t.colors as any)[scaleName];
+                      const bar = createProgressBarStyle(t, { color: tColor, percent: pct });
+
+                      return (
+                        <Box key={idx} style={{
+                          padding: t.spacing[4],
+                          borderRadius: t.borderRadius.lg,
+                          backgroundColor: cs[50],
+                          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${cs[200]}`,
+                        }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], display: 'block', marginBottom: t.spacing[2] }}>
+                            {tgt.metric}
+                          </Text>
+                          <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[1], marginBottom: t.spacing[3] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{tgt.current}</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>/ {tgt.value}</Text>
+                          </Box>
+                          <Box style={bar.track}>
+                            <Box style={bar.fill} />
+                          </Box>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Box>
               )}
-            </div>
-          </div>
+            </Box>
+          </>
         )}
 
-        {/* =========================================================== */}
-        {/*  6. Sprint Panel                                             */}
-        {/* =========================================================== */}
-        {activeSprintData && selectedTeamData && (
-          <div
-            style={{
-              ...cardBase,
-              marginBottom: tokens.spacing[6],
-            }}
-          >
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[900],
-                display: 'block',
-                marginBottom: tokens.spacing[4],
-              }}
-            >
-              Sprint Progress
-            </Text>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '120px 1fr 1fr',
-                gap: tokens.spacing[6],
-                alignItems: 'center',
-              }}
-            >
-              {/* Progress ring */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                {(() => {
-                  const sprintRadius = 44;
-                  const sprintStroke = 8;
-                  const sprintSize = (sprintRadius + sprintStroke) * 2;
-                  const sprintRing = progressRing(
-                    activeSprintData.completed,
-                    activeSprintData.total,
-                    sprintRadius
-                  );
-                  return (
-                    <svg
-                      width={sprintSize}
-                      height={sprintSize}
-                      viewBox={`0 0 ${sprintSize} ${sprintSize}`}
-                    >
-                      <circle
-                        cx={sprintSize / 2}
-                        cy={sprintSize / 2}
-                        r={sprintRadius}
-                        fill="none"
-                        stroke={tokens.colors.neutral[100]}
-                        strokeWidth={sprintStroke}
-                      />
-                      <circle
-                        cx={sprintSize / 2}
-                        cy={sprintSize / 2}
-                        r={sprintRadius}
-                        fill="none"
-                        stroke={tokens.colors.successScale[500]}
-                        strokeWidth={sprintStroke}
-                        strokeDasharray={sprintRing.dashArray}
-                        strokeLinecap="round"
-                        transform={`rotate(-90 ${sprintSize / 2} ${sprintSize / 2})`}
-                        style={{ transition: `stroke-dasharray ${tokens.motion.hover}` }}
-                      />
-                      <text
-                        x={sprintSize / 2}
-                        y={sprintSize / 2 - 6}
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        fill={tokens.colors.neutral[900]}
-                        fontSize={tokens.typography.fontSize.lg}
-                        fontWeight={tokens.typography.fontWeight.bold}
-                      >
-                        {Math.round(sprintRing.pct * 100)}%
-                      </text>
-                      <text
-                        x={sprintSize / 2}
-                        y={sprintSize / 2 + 12}
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                        fill={tokens.colors.neutral[500]}
-                        fontSize={tokens.typography.fontSize.xs}
-                      >
-                        done
-                      </text>
-                    </svg>
-                  );
-                })()}
-              </div>
-
-              {/* Task distribution mini bar chart */}
-              <div>
-                <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[2] }}>
-                  Task Distribution
-                </Text>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                  {[
-                    { label: 'Completed', value: activeSprintData.completed, color: tokens.colors.successScale[500] },
-                    { label: 'In Progress', value: activeSprintData.inProgress, color: tokens.colors.primaryScale[500] },
-                    { label: 'Blocked', value: activeSprintData.blocked, color: tokens.colors.errorScale[500] },
-                  ].map((item) => (
-                    <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[600],
-                          width: 80,
-                          flexShrink: 0,
-                        }}
-                      >
-                        {item.label}
-                      </Text>
-                      <div
-                        style={{
-                          flex: 1,
-                          height: 12,
-                          backgroundColor: tokens.colors.neutral[100],
-                          borderRadius: tokens.borderRadius.sm,
-                          overflow: 'hidden',
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: `${clampPct(item.value, activeSprintData.total)}%`,
-                            height: '100%',
-                            backgroundColor: item.color,
-                            borderRadius: tokens.borderRadius.sm,
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }}
-                        />
-                      </div>
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[700],
-                          width: 24,
-                          textAlign: 'right' as const,
-                        }}
-                      >
-                        {item.value}
-                      </Text>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Burndown line chart */}
-              <div>
-                <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[2] }}>
-                  Burndown
-                </Text>
-                {activeSprintData.burndownData.length > 1 && (
-                  <svg width="100%" height="80" viewBox="0 0 200 80" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="burndown-grad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={tokens.colors.primaryScale[400]} stopOpacity="0.2" />
-                        <stop offset="100%" stopColor={tokens.colors.primaryScale[400]} stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    {/* Ideal line */}
-                    <line
-                      x1="4"
-                      y1="4"
-                      x2="196"
-                      y2="76"
-                      stroke={tokens.colors.neutral[300]}
-                      strokeWidth="1"
-                      strokeDasharray="4 4"
-                    />
-                    <polygon
-                      points={sparklinePolygonPoints(activeSprintData.burndownData, 200, 80, 4)}
-                      fill="url(#burndown-grad)"
-                    />
-                    <polyline
-                      points={sparklinePoints(activeSprintData.burndownData, 200, 80, 4)}
-                      fill="none"
-                      stroke={tokens.colors.primaryScale[500]}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* =========================================================== */}
-        {/*  8. Targets Config                                           */}
-        {/* =========================================================== */}
-        {targets.length > 0 && (
-          <div style={cardBase}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: tokens.spacing[4],
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.lg,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                }}
-              >
-                Team Targets
-              </Text>
-              <div
-                style={{
-                  display: 'flex',
-                  borderRadius: tokens.borderRadius.md,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  overflow: 'hidden',
-                }}
-              >
-                {(['monthly', 'quarterly'] as const).map((period) => (
-                  <button
-                    key={period}
-                    onClick={() => handleTargetPeriodChange(period)}
-                    style={{
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                      border: 'none',
-                      backgroundColor:
-                        activeTargetPeriod === period
-                          ? tokens.colors.primaryScale[50]
-                          : tokens.colors.common.white,
-                      color:
-                        activeTargetPeriod === period
-                          ? tokens.colors.primaryScale[600]
-                          : tokens.colors.neutral[500],
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight:
-                        activeTargetPeriod === period
-                          ? tokens.typography.fontWeight.semibold
-                          : tokens.typography.fontWeight.medium,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      textTransform: 'capitalize' as const,
-                      ...hoverStyle,
-                    }}
-                  >
-                    {period}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-                gap: tokens.spacing[3],
-              }}
-            >
-              {targets
-                .filter((t) => t.period === activeTargetPeriod || !t.period)
-                .map((target, idx) => {
-                  const pct = clampPct(target.current, target.value);
-                  const targetColor =
-                    pct >= 100
-                      ? tokens.colors.successScale[500]
-                      : pct >= 70
-                      ? tokens.colors.primaryScale[500]
-                      : pct >= 40
-                      ? tokens.colors.warningScale[500]
-                      : tokens.colors.errorScale[500];
-                  const targetBg =
-                    pct >= 100
-                      ? tokens.colors.successScale[50]
-                      : pct >= 70
-                      ? tokens.colors.primaryScale[50]
-                      : pct >= 40
-                      ? tokens.colors.warningScale[50]
-                      : tokens.colors.errorScale[50];
-
-                  return (
-                    <div
-                      key={idx}
-                      style={{
-                        padding: tokens.spacing[3],
-                        borderRadius: tokens.borderRadius.md,
-                        backgroundColor: targetBg,
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${
-                          pct >= 100
-                            ? tokens.colors.successScale[200]
-                            : pct >= 70
-                            ? tokens.colors.primaryScale[200]
-                            : pct >= 40
-                            ? tokens.colors.warningScale[200]
-                            : tokens.colors.errorScale[200]
-                        }`,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          fontWeight: tokens.typography.fontWeight.medium,
-                          color: tokens.colors.neutral[600],
-                          display: 'block',
-                          marginBottom: tokens.spacing[2],
-                        }}
-                      >
-                        {target.metric}
-                      </Text>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'baseline',
-                          gap: tokens.spacing[1],
-                          marginBottom: tokens.spacing[2],
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: tokens.typography.fontSize.xl,
-                            fontWeight: tokens.typography.fontWeight.bold,
-                            color: tokens.colors.neutral[900],
-                          }}
-                        >
-                          {target.current}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: tokens.typography.fontSize.sm,
-                            color: tokens.colors.neutral[500],
-                          }}
-                        >
-                          / {target.value}
-                        </Text>
-                      </div>
-                      <div
-                        style={{
-                          height: 6,
-                          backgroundColor: tokens.colors.neutral[200],
-                          borderRadius: tokens.borderRadius.full,
-                          overflow: 'hidden',
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: `${Math.min(pct, 100)}%`,
-                            height: '100%',
-                            backgroundColor: targetColor,
-                            borderRadius: tokens.borderRadius.full,
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-        )}
-
-        {/* =========================================================== */}
-        {/*  7. Add/Edit Team Modal                                      */}
-        {/* =========================================================== */}
-        {activeShowAddModal && (
-          <div
+        {/* ---- Add Team Modal --------------------------------------- */}
+        {showModal && (
+          <Box
             style={{
               position: 'fixed' as const,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: tokens.overlay?.medium,
+              top: 0, left: 0, right: 0, bottom: 0,
+              backgroundColor: 'rgba(0,0,0,0.4)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: 1000,
             }}
-            onClick={() => handleModalToggle(false)}
+            onClick={() => toggleModal(false)}
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
+            <Box
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               style={{
-                ...cardBase,
+                ...card,
                 width: 480,
-                maxHeight: '80%',
+                maxHeight: '80vh',
                 overflow: 'auto',
-                backgroundColor: tokens.colors.common.white,
-                ...(isGlass && tokens.glass
-                  ? {
-                      backdropFilter: tokens.glass.blur,
-                      WebkitBackdropFilter: tokens.glass.blur,
-                      backgroundColor: tokens.glass.bg,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
-                    }
-                  : {}),
+                backgroundColor: t.colors.common.white,
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: tokens.spacing[5],
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: tokens.typography.fontSize.lg,
-                    fontWeight: tokens.typography.fontWeight.bold,
-                    color: tokens.colors.neutral[900],
-                  }}
-                >
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[6] }}>
+                <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                   Add New Team
                 </Text>
-                <button
-                  onClick={() => handleModalToggle(false)}
+                <Box onClick={() => toggleModal(false)} style={{ cursor: 'pointer', color: t.colors.neutral[400], padding: t.spacing[1] }}>
+                  <X size={18} />
+                </Box>
+              </Box>
+
+              {[
+                { label: 'Team Name', placeholder: 'e.g. Engineering Recruiting' },
+                { label: 'Team Code', placeholder: 'e.g. ENG-REC' },
+                { label: 'Team Lead', placeholder: 'Select team lead...' },
+                { label: 'Max Capacity', placeholder: 'e.g. 50' },
+              ].map((field) => (
+                <Box key={field.label} style={{ marginBottom: t.spacing[4] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], display: 'block', marginBottom: t.spacing[1] }}>
+                    {field.label}
+                  </Text>
+                  <Box style={{
+                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    borderRadius: t.borderRadius.md,
+                    border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[300]}`,
+                    backgroundColor: t.colors.common.white,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>{field.placeholder}</Text>
+                  </Box>
+                </Box>
+              ))}
+
+              <Box style={{ ...divider, margin: `${t.spacing[4]}px 0` }} />
+
+              <Box style={{ display: 'flex', justifyContent: 'flex-end', gap: t.spacing[3] }}>
+                <Box
+                  onClick={() => toggleModal(false)}
                   style={{
-                    border: 'none',
-                    background: 'none',
-                    color: tokens.colors.neutral[400],
+                    padding: `${t.spacing[2]}px ${t.spacing[5]}px`,
+                    borderRadius: t.borderRadius.md,
+                    border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`,
+                    backgroundColor: t.colors.common.white,
+                    color: t.colors.neutral[600],
+                    fontSize: t.typography.fontSize.sm,
                     cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    fontSize: tokens.typography.fontSize.lg,
-                    padding: tokens.spacing[1],
                   }}
                 >
-                  &#x2715;
-                </button>
-              </div>
-
-              {/* Form fields */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
-                {/* Team name */}
-                <div>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[700],
-                      display: 'block',
-                      marginBottom: tokens.spacing[1],
-                    }}
-                  >
-                    Team Name
-                  </Text>
-                  <div
-                    style={{
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      fontSize: tokens.typography.fontSize.sm,
-                      color: tokens.colors.neutral[400],
-                    }}
-                  >
-                    e.g. Engineering Recruiting
-                  </div>
-                </div>
-
-                {/* Team code */}
-                <div>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[700],
-                      display: 'block',
-                      marginBottom: tokens.spacing[1],
-                    }}
-                  >
-                    Team Code
-                  </Text>
-                  <div
-                    style={{
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      fontSize: tokens.typography.fontSize.sm,
-                      color: tokens.colors.neutral[400],
-                    }}
-                  >
-                    e.g. ENG-REC
-                  </div>
-                </div>
-
-                {/* Lead selector */}
-                <div>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[700],
-                      display: 'block',
-                      marginBottom: tokens.spacing[1],
-                    }}
-                  >
-                    Team Lead
-                  </Text>
-                  <div
-                    style={{
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      fontSize: tokens.typography.fontSize.sm,
-                      color: tokens.colors.neutral[400],
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
-                  >
-                    Select team lead...
-                    <span>&#9662;</span>
-                  </div>
-                </div>
-
-                {/* Specializations tags */}
-                <div>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[700],
-                      display: 'block',
-                      marginBottom: tokens.spacing[1],
-                    }}
-                  >
-                    Specializations
-                  </Text>
-                  <div
-                    style={{
-                      padding: tokens.spacing[2],
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      display: 'flex',
-                      flexWrap: 'wrap' as const,
-                      gap: tokens.spacing[1],
-                      minHeight: 36,
-                    }}
-                  >
-                    {['Engineering', 'Product', 'Design'].map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          ...createBadgeStyle(tokens, 'primary'),
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: tokens.spacing[1],
-                        }}
-                      >
-                        {tag}
-                        <span style={{ cursor: 'pointer', fontSize: tokens.typography.fontSize.xs }}>
-                          &#x2715;
-                        </span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Capacity input */}
-                <div>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: tokens.colors.neutral[700],
-                      display: 'block',
-                      marginBottom: tokens.spacing[1],
-                    }}
-                  >
-                    Max Capacity
-                  </Text>
-                  <div
-                    style={{
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                      backgroundColor: tokens.colors.common.white,
-                      fontSize: tokens.typography.fontSize.sm,
-                      color: tokens.colors.neutral[400],
-                    }}
-                  >
-                    e.g. 50
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal footer */}
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  gap: tokens.spacing[2],
-                  marginTop: tokens.spacing[6],
-                  paddingTop: tokens.spacing[4],
-                  borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                }}
-              >
-                <button
-                  onClick={() => handleModalToggle(false)}
+                  <Text style={{ fontSize: t.typography.fontSize.sm }}>Cancel</Text>
+                </Box>
+                <Box
+                  onClick={() => { toggleModal(false); onAddTeam?.(); }}
                   style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                    backgroundColor: tokens.colors.common.white,
-                    color: tokens.colors.neutral[600],
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
+                    padding: `${t.spacing[2]}px ${t.spacing[5]}px`,
+                    borderRadius: t.borderRadius.md,
+                    backgroundColor: t.colors.primaryScale[600],
+                    color: t.colors.common.white,
+                    fontSize: t.typography.fontSize.sm,
+                    fontWeight: t.typography.fontWeight.semibold,
                     cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    ...hoverStyle,
                   }}
                 >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    handleModalToggle(false);
-                    onAddTeam?.();
-                  }}
-                  style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: 'none',
-                    backgroundColor: tokens.colors.primaryScale[600],
-                    color: tokens.colors.common.white,
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    ...hoverStyle,
-                  }}
-                >
-                  Create Team
-                </button>
-              </div>
-            </div>
-          </div>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: 'inherit' }}>Create Team</Text>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         )}
       </Box>
     );

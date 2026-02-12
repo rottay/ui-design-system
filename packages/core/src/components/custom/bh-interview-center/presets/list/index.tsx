@@ -2,1065 +2,375 @@
 
 /**
  * BhInterviewCenter - List Preset
- * Sortable table view with all interview columns, inline status badges,
- * type indicators, and row actions.
+ * Slite-inspired sortable table view with status badges, type indicators,
+ * stats bar, filter pills, search, and row actions.
  */
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import {
-  createBadgeStyle,
-  createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createSectionHeaderStyle,
-  createStatusDotStyle,
-  createSurfaceStyle,
-  getHoverTransform,
-} from '../../../helpers';
-import type {
-  BhInterviewCenterProps,
-  InterviewItem,
-  InterviewType,
-  InterviewStatus,
-  InterviewFilter,
-  CalendarView,
-  SortDirection,
-} from '../../core';
+import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import type { BhInterviewCenterProps, InterviewItem, InterviewType, InterviewStatus, InterviewFilter, SortDirection } from '../../core';
 import { BH_INTERVIEW_CENTER_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  Calendar,
-  List,
-  Clock,
-  Users,
-  Bot,
-  User,
-  Video,
-  MapPin,
-  Plus,
-  ChevronDown,
-  ChevronUp,
-  X,
-  Filter,
-  Search,
-  TrendingUp,
-  TrendingDown,
-  AlertCircle,
-  CheckCircle2,
-  XCircle,
-  Timer,
-  BarChart3,
-  CalendarDays,
-  Star,
-  Eye,
-  ExternalLink,
-  ArrowUpDown,
-  Activity,
+  Calendar, List, Clock, Bot, User, Plus, ChevronDown, ChevronUp, X, Filter, Search,
+  TrendingUp, TrendingDown, CheckCircle2, XCircle, Timer, BarChart3, CalendarDays,
+  Star, Eye, ExternalLink, ArrowUpDown, Activity,
 } from 'lucide-react';
 
-// ─── Status Config ────────────────────────────────────────────────────────────
+type ScaleKey = 'infoScale' | 'warningScale' | 'successScale' | 'neutral' | 'errorScale' | 'secondaryScale' | 'primaryScale';
 
-interface StatusConfig {
-  label: string;
-  color: string;
-  bgColor: string;
-  borderColor: string;
-  dotColor: string;
-}
+const STATUS_MAP: Record<InterviewStatus, { label: string; scale: ScaleKey }> = {
+  scheduled: { label: 'Scheduled', scale: 'infoScale' },
+  in_progress: { label: 'In Progress', scale: 'warningScale' },
+  completed: { label: 'Completed', scale: 'successScale' },
+  cancelled: { label: 'Cancelled', scale: 'neutral' },
+  no_show: { label: 'No Show', scale: 'errorScale' },
+};
 
-function getStatusConfig(tokens: DesignTokens): Record<InterviewStatus, StatusConfig> {
-  return {
-    scheduled: {
-      label: 'Scheduled',
-      color: tokens.colors.infoScale[700],
-      bgColor: tokens.colors.infoScale[50],
-      borderColor: tokens.colors.infoScale[200],
-      dotColor: tokens.colors.infoScale[500],
-    },
-    in_progress: {
-      label: 'In Progress',
-      color: tokens.colors.warningScale[700],
-      bgColor: tokens.colors.warningScale[50],
-      borderColor: tokens.colors.warningScale[200],
-      dotColor: tokens.colors.warningScale[500],
-    },
-    completed: {
-      label: 'Completed',
-      color: tokens.colors.successScale[700],
-      bgColor: tokens.colors.successScale[50],
-      borderColor: tokens.colors.successScale[200],
-      dotColor: tokens.colors.successScale[500],
-    },
-    cancelled: {
-      label: 'Cancelled',
-      color: tokens.colors.neutral[600],
-      bgColor: tokens.colors.neutral[100],
-      borderColor: tokens.colors.neutral[200],
-      dotColor: tokens.colors.neutral[400],
-    },
-    no_show: {
-      label: 'No Show',
-      color: tokens.colors.errorScale[700],
-      bgColor: tokens.colors.errorScale[50],
-      borderColor: tokens.colors.errorScale[200],
-      dotColor: tokens.colors.errorScale[500],
-    },
-  };
-}
+const TYPE_MAP: Record<InterviewType, { label: string; scale: ScaleKey }> = {
+  ai: { label: 'AI', scale: 'infoScale' },
+  human: { label: 'Human', scale: 'secondaryScale' },
+};
 
-// ─── Type Config ──────────────────────────────────────────────────────────────
+const statusCfg = (t: DesignTokens, s: InterviewStatus) => {
+  const { scale } = STATUS_MAP[s];
+  const sc = (t.colors as any)[scale];
+  return { label: STATUS_MAP[s].label, color: sc[700] ?? sc[600], bg: sc[50] ?? sc[100], border: sc[200], dot: sc[500] ?? sc[400] };
+};
 
-function getTypeConfig(tokens: DesignTokens): Record<InterviewType, { label: string; color: string; bgColor: string; borderColor: string }> {
-  return {
-    ai: {
-      label: 'AI',
-      color: tokens.colors.infoScale[700],
-      bgColor: tokens.colors.infoScale[100],
-      borderColor: tokens.colors.infoScale[200],
-    },
-    human: {
-      label: 'Human',
-      color: tokens.colors.secondaryScale[700],
-      bgColor: tokens.colors.secondaryScale[100],
-      borderColor: tokens.colors.secondaryScale[200],
-    },
-  };
-}
+const typeCfg = (t: DesignTokens, ty: InterviewType) => {
+  const { scale } = TYPE_MAP[ty];
+  const sc = (t.colors as any)[scale];
+  return { label: TYPE_MAP[ty].label, color: sc[700], bg: sc[100], border: sc[200] };
+};
 
-// ─── Date Helpers ─────────────────────────────────────────────────────────────
+function fmtTime(d: string) { const x = new Date(d), h = x.getHours(), m = x.getMinutes(); return `${h % 12 || 12}:${m.toString().padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`; }
+function fmtDate(d: string) { const x = new Date(d); return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][x.getMonth()]} ${x.getDate()}`; }
 
-function formatTime(dateStr: string): string {
-  const d = new Date(dateStr);
-  const h = d.getHours();
-  const m = d.getMinutes();
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  const h12 = h % 12 || 12;
-  return `${h12}:${m.toString().padStart(2, '0')} ${ampm}`;
-}
-
-function formatDateShort(dateStr: string): string {
-  const d = new Date(dateStr);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  return `${months[d.getMonth()]} ${d.getDate()}`;
-}
-
-function formatDateFull(dateStr: string): string {
-  const d = new Date(dateStr);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-}
-
-// ─── Table Columns ────────────────────────────────────────────────────────────
-
-interface Column {
-  key: string;
-  label: string;
-  width?: string;
-  sortable: boolean;
-}
-
-const TABLE_COLUMNS: Column[] = [
+const TABLE_COLUMNS = [
   { key: 'candidateName', label: 'Candidate', sortable: true },
   { key: 'jobTitle', label: 'Position', sortable: true },
   { key: 'stageName', label: 'Stage', sortable: true },
-  { key: 'type', label: 'Type', width: '90px', sortable: true },
-  { key: 'status', label: 'Status', width: '120px', sortable: true },
-  { key: 'dateTime', label: 'Date & Time', width: '160px', sortable: true },
-  { key: 'duration', label: 'Duration', width: '90px', sortable: true },
-  { key: 'score', label: 'Score', width: '80px', sortable: true },
+  { key: 'type', label: 'Type', sortable: true },
+  { key: 'status', label: 'Status', sortable: true },
+  { key: 'dateTime', label: 'Date & Time', sortable: true },
+  { key: 'duration', label: 'Duration', sortable: true },
+  { key: 'score', label: 'Score', sortable: true },
   { key: 'interviewer', label: 'Interviewer', sortable: false },
-  { key: 'actions', label: '', width: '80px', sortable: false },
+  { key: 'actions', label: '', sortable: false },
 ];
 
-// ─── List Preset ──────────────────────────────────────────────────────────────
+const GRID_COLS = '1fr 1fr 100px 90px 120px 160px 90px 80px 1fr 80px';
 
 export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
   name: 'BhInterviewCenter.List',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhInterviewCenterProps>) => {
-    const { Box, Stack } = primitives;
-    const isModern = tokens.surface.useGlass;
+  render: ({ primitives, props, tokens }: PresetContext<BhInterviewCenterProps>) => {
+    const { Box, Text } = primitives;
+    const t = tokens;
 
-    const STATUS_CONFIG = useMemo(() => getStatusConfig(tokens), [tokens]);
-    const TYPE_CONFIG = useMemo(() => getTypeConfig(tokens), [tokens]);
+    const { interviews, stats, filters: cFilters, onFilterChange, selectedInterview: cSel, onInterviewSelect, onScheduleNew, sortBy: cSort, sortDirection: cDir, onSortChange, className, style } = props;
 
-    const {
-      interviews,
-      stats,
-      filters: controlledFilters,
-      onFilterChange,
-      selectedInterview: controlledSelectedInterview,
-      onInterviewSelect,
-      onScheduleNew,
-      sortBy: controlledSortBy,
-      sortDirection: controlledSortDirection,
-      onSortChange,
-      className,
-      style,
-    } = props;
+    const [iFilters, setIFilters] = useState<InterviewFilter>({});
+    const [iSel, setISel] = useState<string | null>(null);
+    const [iSort, setISort] = useState(BH_INTERVIEW_CENTER_DEFAULTS.sortBy ?? 'dateTime');
+    const [iDir, setIDir] = useState<SortDirection>(BH_INTERVIEW_CENTER_DEFAULTS.sortDirection ?? 'asc');
+    const [search, setSearch] = useState('');
+    const [hovered, setHovered] = useState<string | null>(null);
 
-    // ─── Internal State ─────────────────────────────────────────────────
+    const filters = cFilters ?? iFilters;
+    const sel = cSel ?? iSel;
+    const sortBy = cSort ?? iSort;
+    const sortDir = cDir ?? iDir;
 
-    const [internalFilters, setInternalFilters] = useState<InterviewFilter>({});
-    const [internalSelectedInterview, setInternalSelectedInterview] = useState<string | null>(null);
-    const [internalSortBy, setInternalSortBy] = useState(BH_INTERVIEW_CENTER_DEFAULTS.sortBy ?? 'dateTime');
-    const [internalSortDirection, setInternalSortDirection] = useState<SortDirection>(
-      BH_INTERVIEW_CENTER_DEFAULTS.sortDirection ?? 'asc'
-    );
-    const [searchQuery, setSearchQuery] = useState('');
-    const [hoveredRowId, setHoveredRowId] = useState<string | null>(null);
+    const handleFilter = useCallback((f: InterviewFilter) => { if (!cFilters) setIFilters(f); onFilterChange?.(f); }, [cFilters, onFilterChange]);
+    const handleSelect = useCallback((id: string | null) => { if (cSel === undefined) setISel(id); onInterviewSelect?.(id); }, [cSel, onInterviewSelect]);
+    const handleSort = useCallback((field: string) => {
+      const dir = field === sortBy && sortDir === 'asc' ? 'desc' : 'asc';
+      if (!cSort) { setISort(field); setIDir(dir); }
+      onSortChange?.(field, dir);
+    }, [sortBy, sortDir, cSort, onSortChange]);
 
-    const filters = controlledFilters ?? internalFilters;
-    const selectedInterview = controlledSelectedInterview ?? internalSelectedInterview;
-    const sortBy = controlledSortBy ?? internalSortBy;
-    const sortDirection = controlledSortDirection ?? internalSortDirection;
-
-    // ─── Glass Style ────────────────────────────────────────────────────
-
-    const glassCardStyle = isModern && tokens.glass ? {
-      backdropFilter: tokens.glass.blur,
-      WebkitBackdropFilter: tokens.glass.blur,
-      backgroundColor: tokens.glass.bg,
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
-    } : {};
-
-    const glassSurfaceStyle = isModern && tokens.glass ? {
-      backdropFilter: tokens.glass.blurSm,
-      WebkitBackdropFilter: tokens.glass.blurSm,
-      backgroundColor: tokens.glass.bgLight,
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.borderLight}`,
-    } : {};
-
-    // ─── Handlers ───────────────────────────────────────────────────────
-
-    const handleFilterChange = useCallback((newFilters: InterviewFilter) => {
-      if (controlledFilters === undefined) setInternalFilters(newFilters);
-      onFilterChange?.(newFilters);
-    }, [controlledFilters, onFilterChange]);
-
-    const handleInterviewSelect = useCallback((id: string | null) => {
-      if (controlledSelectedInterview === undefined) setInternalSelectedInterview(id);
-      onInterviewSelect?.(id);
-    }, [controlledSelectedInterview, onInterviewSelect]);
-
-    const handleSortChange = useCallback((field: string) => {
-      const newDirection = field === sortBy && sortDirection === 'asc' ? 'desc' : 'asc';
-      if (controlledSortBy === undefined) {
-        setInternalSortBy(field);
-        setInternalSortDirection(newDirection);
-      }
-      onSortChange?.(field, newDirection);
-    }, [sortBy, sortDirection, controlledSortBy, onSortChange]);
-
-    const handleStatusFilter = useCallback((status: InterviewStatus | null) => {
-      handleFilterChange({ ...filters, status });
-    }, [filters, handleFilterChange]);
-
-    const handleTypeFilter = useCallback((type: InterviewType | null) => {
-      handleFilterChange({ ...filters, type });
-    }, [filters, handleFilterChange]);
-
-    // ─── Filtered + Sorted Interviews ───────────────────────────────────
-
-    const filteredInterviews = useMemo(() => {
-      let result = [...interviews];
-
-      if (filters.status) {
-        result = result.filter(i => i.status === filters.status);
-      }
-      if (filters.type) {
-        result = result.filter(i => i.type === filters.type);
-      }
-      if (filters.dateRange) {
-        const [start, end] = filters.dateRange;
-        result = result.filter(i => {
-          const d = new Date(i.dateTime);
-          return d >= new Date(start) && d <= new Date(end);
-        });
-      }
-      if (searchQuery) {
-        const lower = searchQuery.toLowerCase();
-        result = result.filter(i =>
-          i.candidateName.toLowerCase().includes(lower) ||
-          i.jobTitle.toLowerCase().includes(lower) ||
-          i.stageName.toLowerCase().includes(lower) ||
-          (i.recruiterName && i.recruiterName.toLowerCase().includes(lower)) ||
-          (i.agentName && i.agentName.toLowerCase().includes(lower))
-        );
-      }
-
-      result.sort((a, b) => {
-        let aVal: number | string = 0;
-        let bVal: number | string = 0;
+    const filtered = useMemo(() => {
+      let r = [...interviews];
+      if (filters.status) r = r.filter(i => i.status === filters.status);
+      if (filters.type) r = r.filter(i => i.type === filters.type);
+      if (filters.dateRange) { const [s, e] = filters.dateRange; r = r.filter(i => { const d = new Date(i.dateTime); return d >= new Date(s) && d <= new Date(e); }); }
+      if (search) { const q = search.toLowerCase(); r = r.filter(i => [i.candidateName, i.jobTitle, i.stageName, i.recruiterName, i.agentName].some(v => v?.toLowerCase().includes(q))); }
+      r.sort((a, b) => {
+        let av: number | string = 0, bv: number | string = 0;
         switch (sortBy) {
-          case 'dateTime':
-            aVal = new Date(a.dateTime).getTime(); bVal = new Date(b.dateTime).getTime(); break;
-          case 'candidateName':
-            aVal = a.candidateName.toLowerCase(); bVal = b.candidateName.toLowerCase(); break;
-          case 'jobTitle':
-            aVal = a.jobTitle.toLowerCase(); bVal = b.jobTitle.toLowerCase(); break;
-          case 'stageName':
-            aVal = a.stageName.toLowerCase(); bVal = b.stageName.toLowerCase(); break;
-          case 'duration':
-            aVal = a.duration; bVal = b.duration; break;
-          case 'score':
-            aVal = a.score ?? 0; bVal = b.score ?? 0; break;
-          case 'type':
-            aVal = a.type; bVal = b.type; break;
-          case 'status': {
-            const order: Record<InterviewStatus, number> = { scheduled: 0, in_progress: 1, completed: 2, cancelled: 3, no_show: 4 };
-            aVal = order[a.status]; bVal = order[b.status]; break;
-          }
-          default:
-            aVal = new Date(a.dateTime).getTime(); bVal = new Date(b.dateTime).getTime();
+          case 'dateTime': av = new Date(a.dateTime).getTime(); bv = new Date(b.dateTime).getTime(); break;
+          case 'candidateName': av = a.candidateName.toLowerCase(); bv = b.candidateName.toLowerCase(); break;
+          case 'jobTitle': av = a.jobTitle.toLowerCase(); bv = b.jobTitle.toLowerCase(); break;
+          case 'stageName': av = a.stageName.toLowerCase(); bv = b.stageName.toLowerCase(); break;
+          case 'duration': av = a.duration; bv = b.duration; break;
+          case 'score': av = a.score ?? 0; bv = b.score ?? 0; break;
+          case 'type': av = a.type; bv = b.type; break;
+          case 'status': { const o: Record<InterviewStatus, number> = { scheduled: 0, in_progress: 1, completed: 2, cancelled: 3, no_show: 4 }; av = o[a.status]; bv = o[b.status]; break; }
+          default: av = new Date(a.dateTime).getTime(); bv = new Date(b.dateTime).getTime();
         }
-        if (typeof aVal === 'string' && typeof bVal === 'string') {
-          return sortDirection === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-        }
-        return sortDirection === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
+        if (typeof av === 'string') return sortDir === 'asc' ? av.localeCompare(bv as string) : (bv as string).localeCompare(av);
+        return sortDir === 'asc' ? av - (bv as number) : (bv as number) - av;
       });
+      return r;
+    }, [interviews, filters, search, sortBy, sortDir]);
 
-      return result;
-    }, [interviews, filters, searchQuery, sortBy, sortDirection]);
+    const pillStyle = (active: boolean): React.CSSProperties => ({
+      display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+      padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full,
+      fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+      border: `1px solid ${active ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+      backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white,
+      color: active ? t.colors.primaryScale[600] : t.colors.neutral[600],
+      cursor: 'pointer', transition: `all ${t.motion.hover}`,
+    });
 
-    // ─── Render: Stats Bar ──────────────────────────────────────────────
-
-    const renderStatsBar = () => {
-      if (!stats) return null;
-
-      const statItems = [
-        { label: 'Scheduled', value: stats.scheduledToday, icon: <CalendarDays size={14} />, color: tokens.colors.infoScale[600], bg: tokens.colors.infoScale[50] },
-        { label: 'In Progress', value: stats.inProgress, icon: <Activity size={14} />, color: tokens.colors.warningScale[600], bg: tokens.colors.warningScale[50], pulse: true },
-        { label: 'Completed', value: stats.completedToday, icon: <CheckCircle2 size={14} />, color: tokens.colors.successScale[600], bg: tokens.colors.successScale[50] },
-        { label: 'No Shows', value: stats.noShows, icon: <XCircle size={14} />, color: tokens.colors.errorScale[600], bg: tokens.colors.errorScale[50] },
-        { label: 'Avg Duration', value: `${stats.avgDuration}m`, icon: <Timer size={14} />, color: tokens.colors.secondaryScale[600], bg: tokens.colors.secondaryScale[50] },
-        { label: 'Completion', value: `${stats.completionRate}%`, icon: <BarChart3 size={14} />, color: tokens.colors.primaryScale[600], bg: tokens.colors.primaryScale[50], trend: stats.completionTrend },
-      ];
-
-      return (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: tokens.spacing[3],
-          padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-          ...createSurfaceStyle(tokens, { elevation: 'sm' }),
-          backgroundColor: tokens.colors.common.white,
-          marginBottom: tokens.spacing[4],
-          flexWrap: 'wrap' as const,
-          ...glassSurfaceStyle,
-        }}>
-          {statItems.map((item, idx) => (
-            <div key={idx} style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.full,
-              backgroundColor: item.bg,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-            }}>
-              <span style={{ color: item.color, display: 'flex', alignItems: 'center' }}>
-                {item.icon}
-              </span>
-              <span style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[600],
-                fontWeight: tokens.typography.fontWeight.medium,
-              }}>
-                {item.label}
-              </span>
-              <span style={{
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
-              }}>
-                {item.value}
-              </span>
-              {item.pulse && (
-                <span style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: tokens.borderRadius.full,
-                  backgroundColor: tokens.colors.warningScale[500],
-                  boxShadow: `0 0 0 2px ${tokens.colors.warningScale[100]}`,
-                  animation: 'pulse 2s ease-in-out infinite',
-                }} />
-              )}
-              {item.trend !== undefined && (
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 1,
-                  fontSize: '10px',
-                  fontWeight: tokens.typography.fontWeight.medium,
-                  color: item.trend >= 0 ? tokens.colors.successScale[600] : tokens.colors.errorScale[600],
-                }}>
-                  {item.trend >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                  {Math.abs(item.trend)}%
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-      );
-    };
-
-    // ─── Render: Toolbar ────────────────────────────────────────────────
-
-    const renderToolbar = () => {
-      const statusOptions: (InterviewStatus | null)[] = [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'];
-      const typeOptions: (InterviewType | null)[] = [null, 'ai', 'human'];
-
-      return (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: tokens.spacing[3],
-          marginBottom: tokens.spacing[3],
-          flexWrap: 'wrap' as const,
-        }}>
-          {/* Status chips */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            <Filter size={14} color={tokens.colors.neutral[400]} />
-            {statusOptions.map((status) => {
-              const isActive = filters.status === status || (status === null && !filters.status);
-              return (
-                <button
-                  key={status ?? 'all'}
-                  onClick={() => handleStatusFilter(status)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[1],
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                    borderRadius: tokens.borderRadius.full,
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-                    backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    outline: 'none',
-                  }}
-                >
-                  {status !== null && (
-                    <span style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: tokens.borderRadius.full,
-                      backgroundColor: STATUS_CONFIG[status].dotColor,
-                      flexShrink: 0,
-                    }} />
-                  )}
-                  {status === null ? 'All' : STATUS_CONFIG[status].label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Type toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            {typeOptions.map((type) => {
-              const isActive = filters.type === type || (type === null && !filters.type);
-              return (
-                <button
-                  key={type ?? 'all-types'}
-                  onClick={() => handleTypeFilter(type)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[1],
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                    borderRadius: tokens.borderRadius.full,
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-                    backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    outline: 'none',
-                  }}
-                >
-                  {type === 'ai' && <Bot size={10} />}
-                  {type === 'human' && <User size={10} />}
-                  {type === null ? 'All' : TYPE_CONFIG[type].label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div style={{ flex: 1 }} />
-
-          {/* Search */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-            borderRadius: tokens.borderRadius.md,
-            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-            backgroundColor: tokens.colors.common.white,
-            minWidth: 200,
-            transition: `all ${tokens.motion.hover}`,
-          }}>
-            <Search size={14} color={tokens.colors.neutral[400]} />
-            <input
-              type="text"
-              placeholder="Search interviews..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                border: 'none',
-                outline: 'none',
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.neutral[800],
-                backgroundColor: 'transparent',
-                flex: 1,
-                padding: 0,
-              }}
-            
-              onFocus={(e) => {
-                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-              }}
-            />
-            {searchQuery && (
-              <X
-                size={12}
-                color={tokens.colors.neutral[400]}
-                style={{ cursor: 'pointer' }}
-                onClick={() => setSearchQuery('')}
-              />
-            )}
-          </div>
-
-          {/* Results count */}
-          <span style={{
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.neutral[500],
-            fontWeight: tokens.typography.fontWeight.medium,
-          }}>
-            {filteredInterviews.length} interview{filteredInterviews.length !== 1 ? 's' : ''}
-          </span>
-        </div>
-      );
-    };
-
-    // ─── Render: Table Header ───────────────────────────────────────────
-
-    const renderTableHeader = () => (
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 100px 90px 120px 160px 90px 80px 1fr 80px',
-        padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-        backgroundColor: tokens.colors.neutral[50],
-        borderRadius: `${tokens.borderRadius.lg} ${tokens.borderRadius.lg} 0 0`,
-      }}>
-        {TABLE_COLUMNS.map(col => {
-          const isCurrentSort = sortBy === col.key;
-          return (
-            <div
-              key={col.key}
-              onClick={() => col.sortable && handleSortChange(col.key)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: isCurrentSort ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
-                textTransform: 'uppercase' as const,
-                letterSpacing: '0.05em',
-                cursor: col.sortable ? 'pointer' : 'default',
-                userSelect: 'none' as const,
-                transition: `all ${tokens.motion.hover}`,
-                padding: `0 ${tokens.spacing[1]}px`,
-              }}
-            >
-              {col.label}
-              {col.sortable && isCurrentSort && (
-                sortDirection === 'asc' ? <ChevronUp size={12} /> : <ChevronDown size={12} />
-              )}
-              {col.sortable && !isCurrentSort && col.label && (
-                <ArrowUpDown size={10} style={{ opacity: 0.3 }} />
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-
-    // ─── Render: Table Row ──────────────────────────────────────────────
-
-    const renderTableRow = (interview: InterviewItem) => {
-      const statusCfg = STATUS_CONFIG[interview.status];
-      const typeCfg = TYPE_CONFIG[interview.type];
-      const isHovered = hoveredRowId === interview.id;
-      const isSelected = selectedInterview === interview.id;
-
-      return (
-        <div
-          key={interview.id}
-          onClick={() => handleInterviewSelect(interview.id)}
-          onMouseEnter={() => setHoveredRowId(interview.id)}
-          onMouseLeave={() => setHoveredRowId(null)}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 100px 90px 120px 160px 90px 80px 1fr 80px',
-            padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-            backgroundColor: isSelected
-              ? tokens.colors.primaryScale[50]
-              : isHovered
-                ? tokens.colors.neutral[50]
-                : tokens.colors.common.white,
-            cursor: 'pointer',
-            transition: `all ${tokens.motion.hover}`,
-            alignItems: 'center',
-          }}
-        >
-          {/* Candidate */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            padding: `0 ${tokens.spacing[1]}px`,
-            minWidth: 0,
-          }}>
-            <div style={{
-              width: 32,
-              height: 32,
-              borderRadius: tokens.borderRadius.full,
-              backgroundColor: tokens.colors.primaryScale[100],
-              backgroundImage: interview.candidateAvatar ? `url(${interview.candidateAvatar})` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}>
-              {!interview.candidateAvatar && (
-                <User size={14} color={tokens.colors.primaryScale[600]} />
-              )}
-            </div>
-            <span style={{
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.neutral[900],
-              whiteSpace: 'nowrap' as const,
-              overflow: 'hidden' as const,
-              textOverflow: 'ellipsis' as const,
-            }}>
-              {interview.candidateName}
-            </span>
-          </div>
-
-          {/* Position */}
-          <div style={{
-            fontSize: tokens.typography.fontSize.sm,
-            color: tokens.colors.neutral[700],
-            padding: `0 ${tokens.spacing[1]}px`,
-            whiteSpace: 'nowrap' as const,
-            overflow: 'hidden' as const,
-            textOverflow: 'ellipsis' as const,
-          }}>
-            {interview.jobTitle}
-          </div>
-
-          {/* Stage */}
-          <div style={{
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.neutral[600],
-            fontWeight: tokens.typography.fontWeight.medium,
-            padding: `0 ${tokens.spacing[1]}px`,
-          }}>
-            {interview.stageName}
-          </div>
-
-          {/* Type */}
-          <div style={{ padding: `0 ${tokens.spacing[1]}px` }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-              borderRadius: tokens.borderRadius.full,
-              fontSize: '10px',
-              fontWeight: tokens.typography.fontWeight.medium,
-              backgroundColor: typeCfg.bgColor,
-              color: typeCfg.color,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${typeCfg.borderColor}`,
-            }}>
-              {interview.type === 'ai' ? <Bot size={10} /> : <User size={10} />}
-              {typeCfg.label}
-            </span>
-          </div>
-
-          {/* Status */}
-          <div style={{ padding: `0 ${tokens.spacing[1]}px` }}>
-            <span style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-              borderRadius: tokens.borderRadius.full,
-              fontSize: '10px',
-              fontWeight: tokens.typography.fontWeight.medium,
-              backgroundColor: statusCfg.bgColor,
-              color: statusCfg.color,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}`,
-            }}>
-              <span style={{
-                width: 5,
-                height: 5,
-                borderRadius: tokens.borderRadius.full,
-                backgroundColor: statusCfg.dotColor,
-              }} />
-              {statusCfg.label}
-            </span>
-          </div>
-
-          {/* Date & Time */}
-          <div style={{
-            padding: `0 ${tokens.spacing[1]}px`,
-          }}>
-            <div style={{
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.neutral[800],
-            }}>
-              {formatDateShort(interview.dateTime)}
-            </div>
-            <div style={{
-              fontSize: tokens.typography.fontSize.xs,
-              color: tokens.colors.neutral[500],
-            }}>
-              {formatTime(interview.dateTime)}
-            </div>
-          </div>
-
-          {/* Duration */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.neutral[600],
-            fontWeight: tokens.typography.fontWeight.medium,
-            padding: `0 ${tokens.spacing[1]}px`,
-          }}>
-            <Clock size={12} color={tokens.colors.neutral[400]} />
-            {interview.duration}m
-          </div>
-
-          {/* Score */}
-          <div style={{ padding: `0 ${tokens.spacing[1]}px` }}>
-            {interview.score !== undefined ? (
-              <span style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: interview.score >= 80 ? tokens.colors.successScale[700] : interview.score >= 60 ? tokens.colors.warningScale[700] : tokens.colors.errorScale[700],
-              }}>
-                <Star size={12} />
-                {interview.score}
-              </span>
-            ) : (
-              <span style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[300],
-              }}>
-                --
-              </span>
-            )}
-          </div>
-
-          {/* Interviewer */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.neutral[600],
-            padding: `0 ${tokens.spacing[1]}px`,
-            whiteSpace: 'nowrap' as const,
-            overflow: 'hidden' as const,
-            textOverflow: 'ellipsis' as const,
-          }}>
-            {interview.type === 'ai' ? (
-              <>
-                <Bot size={12} color={tokens.colors.infoScale[500]} />
-                {interview.agentName ?? 'AI Agent'}
-              </>
-            ) : (
-              <>
-                <User size={12} color={tokens.colors.secondaryScale[500]} />
-                {interview.recruiterName ?? 'Unassigned'}
-              </>
-            )}
-          </div>
-
-          {/* Actions */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[1],
-            opacity: isHovered ? 1 : 0,
-            transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
-            padding: `0 ${tokens.spacing[1]}px`,
-          }}>
-            <button
-              onClick={(e) => { e.stopPropagation(); handleInterviewSelect(interview.id); }}
-              title="View details"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 26,
-                height: 26,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                backgroundColor: tokens.colors.common.white,
-                color: tokens.colors.neutral[600],
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                outline: 'none',
-              }}
-            >
-              <Eye size={12} />
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); }}
-              title="Open profile"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 26,
-                height: 26,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                backgroundColor: tokens.colors.common.white,
-                color: tokens.colors.neutral[600],
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                outline: 'none',
-              }}
-            >
-              <ExternalLink size={12} />
-            </button>
-          </div>
-        </div>
-      );
-    };
-
-    // ─── Render: Empty State ────────────────────────────────────────────
-
-    const renderEmptyState = () => (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column' as const,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px`,
-        textAlign: 'center' as const,
-      }}>
-        <div style={{
-          width: 64,
-          height: 64,
-          borderRadius: tokens.borderRadius.full,
-          backgroundColor: tokens.colors.primaryScale[50],
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: tokens.spacing[4],
-        }}>
-          <Calendar size={28} color={tokens.colors.primaryScale[400]} />
-        </div>
-        <div style={{
-          fontSize: tokens.typography.fontSize.lg,
-          fontWeight: tokens.typography.fontWeight.semibold,
-          color: tokens.colors.neutral[800],
-          marginBottom: tokens.spacing[2],
-        }}>
-          No interviews found
-        </div>
-        <div style={{
-          fontSize: tokens.typography.fontSize.sm,
-          color: tokens.colors.neutral[500],
-          marginBottom: tokens.spacing[6],
-          maxWidth: 360,
-          lineHeight: tokens.typography.lineHeight.relaxed,
-        }}>
-          {searchQuery || filters.status || filters.type
-            ? 'Try adjusting your filters or search query to find interviews.'
-            : 'Schedule your first interview to get started with the interview management hub.'}
-        </div>
-        {onScheduleNew && (
-          <button
-            onClick={onScheduleNew}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              backgroundColor: tokens.colors.primaryScale[600],
-              color: tokens.colors.common.white,
-              border: 'none',
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-              boxShadow: tokens.shadows.sm,
-              outline: 'none',
-            }}
-          >
-            <Plus size={16} />
-            Schedule Interview
-          </button>
-        )}
-      </div>
-    );
-
-    // ─── Render: Header ─────────────────────────────────────────────────
-
-    const renderHeader = () => (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: tokens.spacing[4],
-      }}>
-        <div>
-          <h1 style={{
-            fontSize: tokens.typography.fontSize['2xl'],
-            fontWeight: tokens.typography.fontWeight.bold,
-            color: tokens.colors.neutral[900],
-            margin: 0,
-            lineHeight: tokens.typography.lineHeight.tight,
-          }}>
-            Interview Center
-          </h1>
-          <p style={{
-            fontSize: tokens.typography.fontSize.sm,
-            color: tokens.colors.neutral[500],
-            margin: 0,
-            marginTop: tokens.spacing[1],
-          }}>
-            Manage and track all interviews across your pipeline
-          </p>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-          {/* Preset view toggle */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            borderRadius: tokens.borderRadius.md,
-            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-            overflow: 'hidden' as const,
-          }}>
-            {[
-              { key: 'calendar', icon: <Calendar size={14} /> },
-              { key: 'list', icon: <List size={14} /> },
-              { key: 'timeline', icon: <Clock size={14} /> },
-            ].map(({ key, icon }) => {
-              const isActive = key === 'list';
-              return (
-                <button
-                  key={key}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 32,
-                    height: 28,
-                    border: 'none',
-                    backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    outline: 'none',
-                  }}
-                >
-                  {icon}
-                </button>
-              );
-            })}
-          </div>
-          {onScheduleNew && (
-            <button
-              onClick={onScheduleNew}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                backgroundColor: tokens.colors.primaryScale[600],
-                color: tokens.colors.common.white,
-                border: 'none',
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                boxShadow: tokens.shadows.sm,
-                outline: 'none',
-              }}
-            >
-              <Plus size={16} />
-              Schedule Interview
-            </button>
-          )}
-        </div>
-      </div>
-    );
-
-    // ─── Main Render ────────────────────────────────────────────────────
+    const statuses: (InterviewStatus | null)[] = [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'];
+    const types: (InterviewType | null)[] = [null, 'ai', 'human'];
 
     return (
-      <div
-        className={className}
-        style={{
-          padding: tokens.spacing[6],
-          backgroundColor: tokens.colors.neutral[50],
-          minHeight: '100%',
-          fontFamily: 'inherit',
-          ...style,
-        }}
-      >
-        {renderHeader()}
-        {renderStatsBar()}
-        {renderToolbar()}
+      <Box className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
+        {/* Header */}
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
+          <Box>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: t.typography.lineHeight.tight }}>
+              Interview Center
+            </Text>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>
+              Manage and track all interviews across your pipeline
+            </Text>
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            {onScheduleNew && (
+              <Box onClick={onScheduleNew} style={{
+                display: 'inline-flex', alignItems: 'center', gap: t.spacing[2],
+                padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md,
+                fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold,
+                backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white,
+                cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: t.shadows.sm,
+              }}>
+                <Plus size={16} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white, fontWeight: t.typography.fontWeight.semibold }}>Schedule Interview</Text>
+              </Box>
+            )}
+          </Box>
+        </Box>
+
+        {/* Stats */}
+        {stats && (
+          <Box style={{
+            display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap' as const,
+            padding: `${t.spacing[3]}px ${t.spacing[4]}px`, marginBottom: t.spacing[4],
+            ...createCardStyle(t, { elevation: 'sm' }), borderRadius: t.borderRadius.lg,
+            border: `1px solid ${t.colors.neutral[100]}`,
+          }}>
+            {[
+              { label: 'Scheduled', value: stats.scheduledToday, icon: <CalendarDays size={14} />, scale: 'infoScale' },
+              { label: 'In Progress', value: stats.inProgress, icon: <Activity size={14} />, scale: 'warningScale' },
+              { label: 'Completed', value: stats.completedToday, icon: <CheckCircle2 size={14} />, scale: 'successScale' },
+              { label: 'No Shows', value: stats.noShows, icon: <XCircle size={14} />, scale: 'errorScale' },
+              { label: 'Avg Duration', value: `${stats.avgDuration}m`, icon: <Timer size={14} />, scale: 'secondaryScale' },
+              { label: 'Completion', value: `${stats.completionRate}%`, icon: <BarChart3 size={14} />, scale: 'primaryScale' },
+            ].map((it, i) => {
+              const sc = (t.colors as any)[it.scale];
+              return (
+                <Box key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.full,
+                  backgroundColor: sc[50], border: `1px solid ${t.colors.neutral[100]}`,
+                }}>
+                  <Box style={{ color: sc[600], display: 'flex', alignItems: 'center' }}>{it.icon}</Box>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{it.label}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{it.value}</Text>
+                </Box>
+              );
+            })}
+          </Box>
+        )}
+
+        {/* Toolbar */}
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], flexWrap: 'wrap' as const }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            <Filter size={14} color={t.colors.neutral[400]} />
+            {statuses.map(s => {
+              const a = filters.status === s || (s === null && !filters.status);
+              return (
+                <Box key={s ?? 'all'} onClick={() => handleFilter({ ...filters, status: s })} style={pillStyle(a)}>
+                  {s !== null && <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusCfg(t, s).dot, flexShrink: 0 }} />}
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{s === null ? 'All' : STATUS_MAP[s].label}</Text>
+                </Box>
+              );
+            })}
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            {types.map(ty => {
+              const a = filters.type === ty || (ty === null && !filters.type);
+              return (
+                <Box key={ty ?? 'all-types'} onClick={() => handleFilter({ ...filters, type: ty })} style={pillStyle(a)}>
+                  {ty === 'ai' && <Bot size={10} />}
+                  {ty === 'human' && <User size={10} />}
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{ty === null ? 'All' : TYPE_MAP[ty].label}</Text>
+                </Box>
+              );
+            })}
+          </Box>
+          <Box style={{ flex: 1 }} />
+          <Box style={{
+            display: 'flex', alignItems: 'center', gap: t.spacing[2],
+            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
+            border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, minWidth: 200,
+          }}>
+            <Search size={14} color={t.colors.neutral[400]} />
+            <input type="text" placeholder="Search interviews..." value={search} onChange={e => setSearch(e.target.value)} style={{
+              border: 'none', outline: 'none', fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800],
+              backgroundColor: 'transparent', flex: 1, padding: 0, fontFamily: 'inherit',
+            }} />
+            {search && <X size={12} color={t.colors.neutral[400]} style={{ cursor: 'pointer' }} onClick={() => setSearch('')} />}
+          </Box>
+          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>
+            {filtered.length} interview{filtered.length !== 1 ? 's' : ''}
+          </Text>
+        </Box>
 
         {/* Table */}
-        <div style={{
-          ...createCardStyle(tokens, { elevation: 'sm', glass: isModern }),
-          padding: 0,
-          overflow: 'hidden' as const,
-          ...(isModern ? glassCardStyle : {}),
+        <Box style={{
+          ...createCardStyle(t, { elevation: 'sm', padding: 0 }),
+          borderRadius: t.borderRadius.lg,
+          border: `1px solid ${t.colors.neutral[100]}`,
+          overflow: 'hidden',
         }}>
-          {renderTableHeader()}
-          {filteredInterviews.length === 0 ? renderEmptyState() : (
-            <div>
-              {filteredInterviews.map(interview => renderTableRow(interview))}
-            </div>
-          )}
-        </div>
-      </div>
+          {/* Table Header */}
+          <Box style={{
+            display: 'grid', gridTemplateColumns: GRID_COLS,
+            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            backgroundColor: t.colors.neutral[50],
+          }}>
+            {TABLE_COLUMNS.map(col => {
+              const cur = sortBy === col.key;
+              return (
+                <Box key={col.key} onClick={() => col.sortable && handleSort(col.key)} style={{
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold,
+                  color: cur ? t.colors.primaryScale[700] : t.colors.neutral[500],
+                  textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+                  cursor: col.sortable ? 'pointer' : 'default', userSelect: 'none' as const,
+                  padding: `0 ${t.spacing[1]}px`,
+                }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{col.label}</Text>
+                  {col.sortable && cur && (sortDir === 'asc' ? <ChevronUp size={12} /> : <ChevronDown size={12} />)}
+                  {col.sortable && !cur && col.label && <ArrowUpDown size={10} style={{ opacity: 0.3 }} />}
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/* Table Body */}
+          {filtered.length === 0 ? (
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${t.spacing[12]}px ${t.spacing[6]}px`, textAlign: 'center' as const }}>
+              <Box style={{ width: 64, height: 64, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: t.spacing[4] }}>
+                <Calendar size={28} color={t.colors.primaryScale[400]} />
+              </Box>
+              <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2] }}>No interviews found</Text>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginBottom: t.spacing[6], maxWidth: 360, lineHeight: t.typography.lineHeight.relaxed }}>
+                {search || filters.status || filters.type ? 'Try adjusting your filters or search query.' : 'Schedule your first interview to get started.'}
+              </Text>
+            </Box>
+          ) : filtered.map(iv => {
+            const sc = statusCfg(t, iv.status);
+            const tc = typeCfg(t, iv.type);
+            const isH = hovered === iv.id;
+            const isS = sel === iv.id;
+
+            return (
+              <Box key={iv.id} onClick={() => handleSelect(iv.id)} onMouseEnter={() => setHovered(iv.id)} onMouseLeave={() => setHovered(null)} style={{
+                display: 'grid', gridTemplateColumns: GRID_COLS,
+                padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                borderBottom: `1px solid ${t.colors.neutral[100]}`,
+                backgroundColor: isS ? t.colors.primaryScale[50] : isH ? t.colors.neutral[50] : t.colors.common.white,
+                cursor: 'pointer', transition: `all ${t.motion.hover}`, alignItems: 'center',
+              }}>
+                {/* Candidate */}
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `0 ${t.spacing[1]}px`, minWidth: 0 }}>
+                  <Box style={{
+                    width: 32, height: 32, borderRadius: t.borderRadius.full,
+                    backgroundColor: t.colors.primaryScale[100],
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    <User size={14} color={t.colors.primaryScale[600]} />
+                  </Box>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{iv.candidateName}</Text>
+                </Box>
+                {/* Position */}
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], padding: `0 ${t.spacing[1]}px`, whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{iv.jobTitle}</Text>
+                {/* Stage */}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, padding: `0 ${t.spacing[1]}px` }}>{iv.stageName}</Text>
+                {/* Type */}
+                <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
+                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, backgroundColor: tc.bg, border: `1px solid ${tc.border}` }}>
+                    <Text style={{ fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: tc.color }}>{tc.label}</Text>
+                  </Box>
+                </Box>
+                {/* Status */}
+                <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
+                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, backgroundColor: sc.bg, border: `1px solid ${sc.border}` }}>
+                    <Box style={{ width: 5, height: 5, borderRadius: t.borderRadius.full, backgroundColor: sc.dot }} />
+                    <Text style={{ fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: sc.color }}>{sc.label}</Text>
+                  </Box>
+                </Box>
+                {/* DateTime */}
+                <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{fmtDate(iv.dateTime)}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{fmtTime(iv.dateTime)}</Text>
+                </Box>
+                {/* Duration */}
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `0 ${t.spacing[1]}px` }}>
+                  <Clock size={12} color={t.colors.neutral[400]} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{iv.duration}m</Text>
+                </Box>
+                {/* Score */}
+                <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
+                  {iv.score !== undefined ? (
+                    <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                      <Star size={12} color={iv.score >= 80 ? t.colors.successScale[500] : iv.score >= 60 ? t.colors.warningScale[500] : t.colors.errorScale[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700] }}>{iv.score}</Text>
+                    </Box>
+                  ) : (
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>--</Text>
+                  )}
+                </Box>
+                {/* Interviewer */}
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `0 ${t.spacing[1]}px`, overflow: 'hidden' }}>
+                  {iv.type === 'ai' ? <Bot size={12} color={t.colors.infoScale[500]} /> : <User size={12} color={t.colors.secondaryScale[500]} />}
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {iv.type === 'ai' ? (iv.agentName ?? 'AI Agent') : (iv.recruiterName ?? 'Unassigned')}
+                  </Text>
+                </Box>
+                {/* Actions */}
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], opacity: isH ? 1 : 0, transition: `opacity ${t.motion.hover}`, padding: `0 ${t.spacing[1]}px` }}>
+                  <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(iv.id); }} style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    width: 26, height: 26, borderRadius: t.borderRadius.md,
+                    border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
+                    color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                  }}>
+                    <Eye size={12} />
+                  </Box>
+                  <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); }} style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    width: 26, height: 26, borderRadius: t.borderRadius.md,
+                    border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
+                    color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                  }}>
+                    <ExternalLink size={12} />
+                  </Box>
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
     );
   },
 });

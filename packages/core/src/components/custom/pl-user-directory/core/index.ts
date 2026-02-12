@@ -9,7 +9,8 @@ import type { EngineAwareProps } from '../../../../core/types';
 
 // ─── Preset ──────────────────────────────────────────────────────────────────
 
-export type UserDirectoryPreset = 'table' | 'grid';
+export type PlUserDirectoryPreset = 'table' | 'grid';
+export type UserDirectoryPreset = PlUserDirectoryPreset; // Alias for backwards compat
 
 // ─── Enums ───────────────────────────────────────────────────────────────────
 
@@ -61,7 +62,7 @@ export type SortDirection = 'asc' | 'desc';
 
 export interface PlUserDirectoryProps extends EngineAwareProps {
   /** Preset to use */
-  preset?: UserDirectoryPreset;
+  preset?: PlUserDirectoryPreset;
 
   /** User listings to display */
   users: UserDirectoryItem[];

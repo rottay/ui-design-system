@@ -11,13 +11,18 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createFilterPillStyle,
   createHoverStyle,
   createListItemStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createSurfaceStyle,
+  getCardPadding,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhAgentTesterProps,
@@ -208,6 +213,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
     const waveformBars = useMemo(() => generateWaveformBars(60), []);
 
     /* ---- Speed options ---- */
@@ -265,7 +275,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
         {/* =========================================================== */}
         {/*  1. Agent Info Bar                                           */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -283,7 +293,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
           }}
         >
           {/* Agent avatar */}
-          <div
+          <Box
             style={{
               width: tokens.spacing[10],
               height: tokens.spacing[10],
@@ -297,11 +307,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
             }}
           >
             <Bot size={20} strokeWidth={1.5} />
-          </div>
+          </Box>
 
           {/* Agent details */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+          <Box style={{ flex: 1, minWidth: 0 }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <Text
                 style={{
                   fontSize: tokens.typography.fontSize.md,
@@ -312,7 +322,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 {agentInfo?.name || 'Untitled Agent'}
               </Text>
               {isRunning && (
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -322,7 +332,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     padding: `0 ${tokens.spacing[2]}px`,
                   }}
                 >
-                  <div
+                  <Box
                     style={{
                       width: tokens.spacing[2],
                       height: tokens.spacing[2],
@@ -332,39 +342,39 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   />
                   Running
-                </div>
+                </Box>
               )}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginTop: tokens.spacing[1] }}>
+            </Box>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginTop: tokens.spacing[1] }}>
               {agentInfo?.type && (
-                <span style={{ ...createBadgeStyle(tokens, 'info'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[2]}px`, textTransform: 'capitalize' as const }}>
+                <Text style={{ ...createBadgeStyle(tokens, 'info'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[2]}px`, textTransform: 'capitalize' as const }}>
                   {agentInfo.type}
-                </span>
+                </Text>
               )}
               {agentInfo?.voice && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                   <Volume2 size={12} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{agentInfo.voice}</Text>
-                </div>
+                </Box>
               )}
               {agentInfo?.language && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                   <Globe size={12} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{agentInfo.language}</Text>
-                </div>
+                </Box>
               )}
               {agentInfo?.model && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                   <Zap size={12} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{agentInfo.model}</Text>
-                </div>
+                </Box>
               )}
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Estimated cost badge */}
           {costEstimate.totalCost > 0 && (
-            <div
+            <Box
               style={{
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
@@ -377,13 +387,13 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
               <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.infoScale[800] }}>
                 {formatCurrency(costEstimate.totalCost)}
               </Text>
-            </div>
+            </Box>
           )}
 
           {/* Controls */}
-          <div style={{ display: 'flex', gap: tokens.spacing[2], flexShrink: 0 }}>
+          <Box style={{ display: 'flex', gap: tokens.spacing[2], flexShrink: 0 }}>
             {!isRunning ? (
-              <button
+              <Box
                 onClick={onStartTest}
                 style={{
                   display: 'flex',
@@ -403,9 +413,9 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
               >
                 <Play size={16} strokeWidth={2} />
                 Start Test
-              </button>
+              </Box>
             ) : (
-              <button
+              <Box
                 onClick={onStopTest}
                 style={{
                   display: 'flex',
@@ -425,10 +435,10 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
               >
                 <Square size={16} strokeWidth={2} />
                 Stop
-              </button>
+              </Box>
             )}
             {onReset && (
-              <button
+              <Box
                 onClick={onReset}
                 style={{
                   display: 'flex',
@@ -447,17 +457,17 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 title="Reset"
               >
                 <RotateCcw size={16} strokeWidth={1.5} />
-              </button>
+              </Box>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* =========================================================== */}
         {/*  2. Main Content: Chat + Analysis Split                      */}
         {/* =========================================================== */}
-        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        <Box style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
           {/* ===================== LEFT: Chat ===================== */}
-          <div
+          <Box
             style={{
               flex: 1,
               display: 'flex',
@@ -467,7 +477,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
             }}
           >
             {/* Chat messages area */}
-            <div
+            <Box
               style={{
                 flex: 1,
                 overflow: 'auto',
@@ -478,7 +488,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
               }}
             >
               {messages.length === 0 && !isRunning && (
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -489,7 +499,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     padding: tokens.spacing[8],
                   }}
                 >
-                  <div
+                  <Box
                     style={{
                       width: tokens.spacing[14] ?? 56,
                       height: tokens.spacing[14] ?? 56,
@@ -503,7 +513,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   >
                     <MessageSquare size={28} strokeWidth={1.5} />
-                  </div>
+                  </Box>
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.lg,
@@ -525,13 +535,13 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   >
                     Configure a test persona and scenario, then start the test to simulate a conversation with this agent.
                   </Text>
-                </div>
+                </Box>
               )}
 
               {messages.map((msg) => {
                 const isAgent = msg.role === 'agent';
                 return (
-                  <div
+                  <Box
                     key={msg.id}
                     style={{
                       display: 'flex',
@@ -541,7 +551,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   >
                     {/* Avatar */}
-                    <div
+                    <Box
                       style={{
                         width: tokens.spacing[8],
                         height: tokens.spacing[8],
@@ -555,11 +565,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       }}
                     >
                       {isAgent ? <Bot size={14} strokeWidth={1.5} /> : <User size={14} strokeWidth={1.5} />}
-                    </div>
+                    </Box>
 
                     {/* Bubble */}
-                    <div style={{ maxWidth: '70%', minWidth: 0 }}>
-                      <div
+                    <Box style={{ maxWidth: '70%', minWidth: 0 }}>
+                      <Box
                         style={{
                           padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                           borderRadius: tokens.borderRadius.lg,
@@ -581,10 +591,10 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         }}
                       >
                         {msg.content}
-                      </div>
+                      </Box>
 
                       {/* Timestamp + Audio */}
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -597,7 +607,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           {formatTimestamp(msg.timestamp)}
                         </Text>
                         {msg.audioUrl && (
-                          <button
+                          <Box
                             onClick={onAudioToggle}
                             style={{
                               display: 'flex',
@@ -616,24 +626,24 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           >
                             <Volume2 size={10} strokeWidth={1.5} />
                             Audio
-                          </button>
+                          </Box>
                         )}
-                      </div>
-                    </div>
-                  </div>
+                      </Box>
+                    </Box>
+                  </Box>
                 );
               })}
 
               {/* Typing indicator */}
               {isTyping && (
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     gap: tokens.spacing[2],
                     alignItems: 'flex-start',
                   }}
                 >
-                  <div
+                  <Box
                     style={{
                       width: tokens.spacing[8],
                       height: tokens.spacing[8],
@@ -647,8 +657,8 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   >
                     <Bot size={14} strokeWidth={1.5} />
-                  </div>
-                  <div
+                  </Box>
+                  <Box
                     style={{
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                       borderRadius: tokens.borderRadius.lg,
@@ -661,7 +671,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   >
                     {[0, 1, 2].map((dot) => (
-                      <div
+                      <Box
                         key={dot}
                         style={{
                           width: tokens.spacing[2],
@@ -673,18 +683,18 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         }}
                       />
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               )}
 
               <div ref={chatEndRef} />
-            </div>
+            </Box>
 
             {/* =========================================================== */}
             {/*  3. Audio Controls Bar                                       */}
             {/* =========================================================== */}
             {audioState.duration > 0 && (
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -696,7 +706,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 }}
               >
                 {/* Play/pause */}
-                <button
+                <Box
                   onClick={onAudioToggle}
                   style={{
                     display: 'flex',
@@ -715,7 +725,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   }}
                 >
                   {audioState.playback === 'playing' ? <Pause size={14} strokeWidth={2} /> : <Play size={14} strokeWidth={2} />}
-                </button>
+                </Box>
 
                 {/* Time display */}
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], fontVariantNumeric: 'tabular-nums', flexShrink: 0, minWidth: 80, textAlign: 'center' as const }}>
@@ -723,7 +733,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 </Text>
 
                 {/* Waveform / seek bar */}
-                <div
+                <Box
                   style={{
                     flex: 1,
                     display: 'flex',
@@ -745,7 +755,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     const progress = audioState.duration > 0 ? audioState.currentTime / audioState.duration : 0;
                     const isPlayed = i / waveformBars.length <= progress;
                     return (
-                      <div
+                      <Box
                         key={i}
                         style={{
                           flex: 1,
@@ -757,12 +767,12 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       />
                     );
                   })}
-                </div>
+                </Box>
 
                 {/* Speed selector */}
                 <select
                   value={audioState.speed}
-                  onChange={(e) => onSpeedChange?.(parseFloat(e.target.value))}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onSpeedChange?.(parseFloat(e.target.value))}
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.md,
@@ -783,13 +793,13 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     <option key={s} value={s}>{s}x</option>
                   ))}
                 </select>
-              </div>
+              </Box>
             )}
 
             {/* =========================================================== */}
             {/*  Message Input                                               */}
             {/* =========================================================== */}
-            <div
+            <Box
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -799,7 +809,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
-              <div
+              <Box
                 style={{
                   flex: 1,
                   display: 'flex',
@@ -815,7 +825,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   type="text"
                   placeholder={isRunning ? 'Type a message as the test persona...' : 'Start a test to begin chatting...'}
                   value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessageInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
                   disabled={!isRunning}
                   style={{
@@ -828,7 +838,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     fontFamily: 'inherit',
                     opacity: isRunning ? 1 : 0.5,
                   }}
-                
+
                   onFocus={(e) => {
                     e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                     e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
@@ -838,10 +848,9 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                   }}
                 />
-              </div>
-              <button
-                onClick={handleSendMessage}
-                disabled={!isRunning || !messageInput.trim()}
+              </Box>
+              <Box
+                onClick={isRunning && messageInput.trim() ? handleSendMessage : undefined}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -858,12 +867,12 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 }}
               >
                 <Send size={16} strokeWidth={2} />
-              </button>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* ===================== RIGHT: Analysis Panel ===================== */}
-          <div
+          <Box
             style={{
               width: 380,
               flexShrink: 0,
@@ -881,7 +890,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
             }}
           >
             {/* Panel tabs */}
-            <div
+            <Box
               style={{
                 display: 'flex',
                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -890,7 +899,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
               {panels.map((panel) => {
                 const isActive = activePanel === panel.key;
                 return (
-                  <button
+                  <Box
                     key={panel.key}
                     onClick={() => setActivePanel(panel.key)}
                     style={{
@@ -911,12 +920,13 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       ...hoverStyle,
                     }}
                   >
-                    <span style={{ display: 'flex', alignItems: 'center', color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400] }}>
+                    <Text style={{ display: 'flex', alignItems: 'center', color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400] }}>
                       {panel.icon}
-                    </span>
+                    </Text>
                     {panel.label}
                     {panel.key === 'validation' && validationSummary.total > 0 && (
-                      <span
+                      <Text
+                        as="span"
                         style={{
                           marginLeft: tokens.spacing[1],
                           padding: `0 ${tokens.spacing[1]}px`,
@@ -928,18 +938,18 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         }}
                       >
                         {validationSummary.total}
-                      </span>
+                      </Text>
                     )}
-                  </button>
+                  </Box>
                 );
               })}
-            </div>
+            </Box>
 
             {/* Panel content */}
-            <div style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[4] }}>
+            <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[4] }}>
               {/* ---- CONFIG PANEL ---- */}
               {activePanel === 'config' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
@@ -952,21 +962,21 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     Test Persona
                   </Text>
 
-                  <div>
-                    <label style={labelStyle}>Persona Name</label>
+                  <Box>
+                    <Text style={labelStyle}>Persona Name</Text>
                     <input
                       type="text"
                       value={testConfig.personaName}
-                      onChange={(e) => handleConfigChange({ ...testConfig, personaName: e.target.value })}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleConfigChange({ ...testConfig, personaName: e.target.value })}
                       style={inputFieldStyle}
                     />
-                  </div>
+                  </Box>
 
-                  <div>
-                    <label style={labelStyle}>Persona Description</label>
+                  <Box>
+                    <Text style={labelStyle}>Persona Description</Text>
                     <textarea
                       value={testConfig.personaDescription}
-                      onChange={(e) => handleConfigChange({ ...testConfig, personaDescription: e.target.value })}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleConfigChange({ ...testConfig, personaDescription: e.target.value })}
                       rows={3}
                       style={{
                         ...inputFieldStyle,
@@ -974,13 +984,13 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         lineHeight: tokens.typography.lineHeight.relaxed,
                       }}
                     />
-                  </div>
+                  </Box>
 
-                  <div>
-                    <label style={labelStyle}>Scenario</label>
+                  <Box>
+                    <Text style={labelStyle}>Scenario</Text>
                     <select
                       value={testConfig.scenario}
-                      onChange={(e) => handleConfigChange({ ...testConfig, scenario: e.target.value })}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleConfigChange({ ...testConfig, scenario: e.target.value })}
                       style={{
                         ...inputFieldStyle,
                         cursor: 'pointer',
@@ -997,20 +1007,21 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       <option value="Scheduling coordination">Scheduling coordination</option>
                       <option value="Custom scenario">Custom scenario</option>
                     </select>
-                  </div>
+                  </Box>
 
-                  <div>
-                    <label style={labelStyle}>Max Conversation Turns</label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                  <Box>
+                    <Text style={labelStyle}>Max Conversation Turns</Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                       <input
                         type="range"
                         min={2}
                         max={30}
                         value={testConfig.maxTurns}
-                        onChange={(e) => handleConfigChange({ ...testConfig, maxTurns: parseInt(e.target.value) })}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleConfigChange({ ...testConfig, maxTurns: parseInt(e.target.value) })}
                         style={{ flex: 1, accentColor: tokens.colors.primaryScale[600] }}
                       />
-                      <span
+                      <Text
+                        as="span"
                         style={{
                           minWidth: tokens.spacing[8],
                           textAlign: 'center' as const,
@@ -1023,18 +1034,18 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         }}
                       >
                         {testConfig.maxTurns}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                      </Text>
+                    </Box>
+                  </Box>
+                </Box>
               )}
 
               {/* ---- VALIDATION PANEL ---- */}
               {activePanel === 'validation' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
                   {/* Summary bar */}
                   {validationSummary.total > 0 && (
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         gap: tokens.spacing[3],
@@ -1045,40 +1056,40 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         marginBottom: tokens.spacing[2],
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                         <Check size={14} strokeWidth={2} style={{ color: tokens.colors.successScale[600] }} />
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.successScale[700] }}>
                           {validationSummary.pass}
                         </Text>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                         <X size={14} strokeWidth={2} style={{ color: tokens.colors.errorScale[600] }} />
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.errorScale[700] }}>
                           {validationSummary.fail}
                         </Text>
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                         <AlertTriangle size={14} strokeWidth={2} style={{ color: tokens.colors.warningScale[600] }} />
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[700] }}>
                           {validationSummary.warn}
                         </Text>
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
                   )}
 
                   {validationResults.length === 0 && (
-                    <div style={{ textAlign: 'center' as const, padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px` }}>
+                    <Box style={{ textAlign: 'center' as const, padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px` }}>
                       <Check size={32} strokeWidth={1} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400], display: 'block' }}>
                         Run a test to see validation results
                       </Text>
-                    </div>
+                    </Box>
                   )}
 
                   {validationResults.map((check, i) => {
                     const visuals = getValidationVisuals(check.status, tokens);
                     return (
-                      <div
+                      <Box
                         key={`${check.name}-${i}`}
                         style={{
                           display: 'flex',
@@ -1090,7 +1101,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         }}
                       >
-                        <div
+                        <Box
                           style={{
                             width: tokens.spacing[6],
                             height: tokens.spacing[6],
@@ -1105,9 +1116,9 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           }}
                         >
                           {visuals.icon}
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
+                        </Box>
+                        <Box style={{ flex: 1, minWidth: 0 }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
                             <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                               {check.name}
                             </Text>
@@ -1116,35 +1127,35 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                                 {check.value}
                               </Text>
                             )}
-                          </div>
+                          </Box>
                           {check.message && (
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], lineHeight: tokens.typography.lineHeight.relaxed }}>
                               {check.message}
                             </Text>
                           )}
-                        </div>
-                      </div>
+                        </Box>
+                      </Box>
                     );
                   })}
-                </div>
+                </Box>
               )}
 
               {/* ---- TRANSCRIPT PANEL ---- */}
               {activePanel === 'transcript' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[0] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[0] }}>
                   {transcript.length === 0 && (
-                    <div style={{ textAlign: 'center' as const, padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px` }}>
+                    <Box style={{ textAlign: 'center' as const, padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px` }}>
                       <FileText size={32} strokeWidth={1} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400], display: 'block' }}>
                         Transcript will appear here during the test
                       </Text>
-                    </div>
+                    </Box>
                   )}
 
                   {transcript.map((line, i) => {
                     const isAgent = line.speaker.toLowerCase() === 'agent';
                     return (
-                      <div
+                      <Box
                         key={`transcript-${i}`}
                         style={{
                           display: 'flex',
@@ -1195,15 +1206,15 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         >
                           {line.text}
                         </Text>
-                      </div>
+                      </Box>
                     );
                   })}
-                </div>
+                </Box>
               )}
 
               {/* ---- COST PANEL ---- */}
               {activePanel === 'cost' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.sm,
@@ -1216,7 +1227,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   </Text>
 
                   {/* Cost table */}
-                  <div
+                  <Box
                     style={{
                       borderRadius: tokens.borderRadius.md,
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -1228,7 +1239,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       { label: 'Voice Minutes', value: costEstimate.voiceMinutes.toFixed(1), unit: 'min', cost: costEstimate.voiceMinutes * 0.02 },
                       { label: 'API Calls', value: costEstimate.apiCalls.toString(), unit: 'calls', cost: costEstimate.apiCalls * 0.001 },
                     ].map((row, i) => (
-                      <div
+                      <Box
                         key={row.label}
                         style={{
                           display: 'flex',
@@ -1239,23 +1250,23 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           borderBottom: i < 2 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
                         }}
                       >
-                        <div>
+                        <Box>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], display: 'block' }}>
                             {row.label}
                           </Text>
                           <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                             {row.value} {row.unit}
                           </Text>
-                        </div>
+                        </Box>
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                           {formatCurrency(row.cost)}
                         </Text>
-                      </div>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
 
                   {/* Total */}
-                  <div
+                  <Box
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -1274,10 +1285,10 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     <Text style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[700] }}>
                       {formatCurrency(costEstimate.totalCost)}
                     </Text>
-                  </div>
+                  </Box>
 
                   {/* Projected costs info */}
-                  <div
+                  <Box
                     style={{
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
@@ -1285,21 +1296,21 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>
+                    <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>
                       <AlertTriangle size={14} strokeWidth={1.5} style={{ color: tokens.colors.warningScale[600], flexShrink: 0, marginTop: 2 }} />
-                      <div>
+                      <Box>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[800], display: 'block', marginBottom: tokens.spacing[1] }}>
                           Projected Monthly Cost
                         </Text>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[700], lineHeight: tokens.typography.lineHeight.relaxed }}>
                           At 100 conversations/day: ~{formatCurrency(costEstimate.totalCost * 100 * 30)}/mo
                         </Text>
-                      </div>
-                    </div>
-                  </div>
+                      </Box>
+                    </Box>
+                  </Box>
 
                   {/* Cost per component bar chart */}
-                  <div>
+                  <Box>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600], display: 'block', marginBottom: tokens.spacing[2] }}>
                       Cost Distribution
                     </Text>
@@ -1315,7 +1326,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                       ];
                       return (
                         <>
-                          <div
+                          <Box
                             style={{
                               display: 'flex',
                               height: tokens.spacing[3],
@@ -1325,7 +1336,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                             }}
                           >
                             {segments.map((seg) => (
-                              <div
+                              <Box
                                 key={seg.label}
                                 style={{
                                   width: `${seg.pct}%`,
@@ -1334,26 +1345,26 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                                 }}
                               />
                             ))}
-                          </div>
-                          <div style={{ display: 'flex', gap: tokens.spacing[4] }}>
+                          </Box>
+                          <Box style={{ display: 'flex', gap: tokens.spacing[4] }}>
                             {segments.map((seg) => (
-                              <div key={seg.label} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                                <div style={{ width: tokens.spacing[2], height: tokens.spacing[2], borderRadius: tokens.borderRadius.full, backgroundColor: seg.color }} />
+                              <Box key={seg.label} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                                <Box style={{ width: tokens.spacing[2], height: tokens.spacing[2], borderRadius: tokens.borderRadius.full, backgroundColor: seg.color }} />
                                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                                   {seg.label} ({Math.round(seg.pct)}%)
                                 </Text>
-                              </div>
+                              </Box>
                             ))}
-                          </div>
+                          </Box>
                         </>
                       );
                     })()}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               )}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       </Box>
     );
   },

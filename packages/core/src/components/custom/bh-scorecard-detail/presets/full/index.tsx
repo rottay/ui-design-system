@@ -2,1600 +2,727 @@
 
 /**
  * BhScorecardDetail - Full Preset
- * Complete scorecard detail with header, radar chart, dimension table,
- * evidence panel, knockout warnings, confidence factors, override section,
- * cohort comparison, and action buttons
+ * Complete scorecard with radar chart, dimension details, evidence, confidence,
+ * override support, and cohort comparison.
+ * Slite-inspired: generous whitespace, warm neutrals, soft shadows, minimal borders.
  */
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
+  createSectionHeaderStyle,
   createHoverStyle,
-  createPanelHeaderStyle,
+  createBadgeStyle,
   createProgressBarStyle,
-  createStatusDotStyle,
   createSurfaceStyle,
-  getHoverTransform,
 } from '../../../helpers';
 import type {
-  BhScorecardDetailProps,
-  ScorecardDimension,
-  DimensionEvidence,
-  ScorecardSortBy,
-  ScorecardView,
+  BhScorecardDetailProps, ScorecardDimension, ScorecardSortBy, ScorecardView,
 } from '../../core';
 import {
-  getScoreLevelColors,
-  getPassFailColors,
-  getScoreGradientColor,
-  getConfidenceLabel,
-  getConfidenceColor,
+  getScoreLevelColors, getPassFailColors, getScoreGradientColor,
+  getConfidenceLabel, getConfidenceColor,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  User,
-  Briefcase,
-  Target,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  Shield,
-  BarChart3,
-  MessageSquareQuote,
-  ArrowUpDown,
-  ChevronDown,
-  ChevronRight,
-  Eye,
-  Table,
-  Hexagon,
-  FileText,
-  RotateCcw,
-  ThumbsUp,
-  Edit3,
-  AlertOctagon,
-  TrendingUp,
-  Percent,
-  Star,
-  Zap,
-  Activity,
-  Hash,
-  Quote,
-  Bot,
-  Users,
+  User, Briefcase, Target, CheckCircle2, XCircle, AlertTriangle,
+  Shield, Star, AlertOctagon, TrendingUp, ThumbsUp, Edit3,
+  RotateCcw, Users, ChevronDown, ChevronRight, MessageSquare,
+  Quote, BarChart3, Eye, Table, Hexagon, FileText, Activity,
+  Bot, ArrowUpDown,
 } from 'lucide-react';
 
-/* ------------------------------------------------------------------ */
-/*  Helper: Sort dimensions                                             */
-/* ------------------------------------------------------------------ */
+/* ── Helpers ───────────────────────────────────────────── */
 function sortDimensions(dims: ScorecardDimension[], sortBy: ScorecardSortBy): ScorecardDimension[] {
-  const sorted = [...dims];
-  switch (sortBy) {
-    case 'name':
-      return sorted.sort((a, b) => a.name.localeCompare(b.name));
-    case 'score':
-      return sorted.sort((a, b) => b.score - a.score);
-    case 'weight':
-      return sorted.sort((a, b) => b.weight - a.weight);
-    case 'confidence':
-      return sorted.sort((a, b) => b.confidence - a.confidence);
-    case 'evidence':
-      return sorted.sort((a, b) => b.evidenceCount - a.evidenceCount);
-    default:
-      return sorted;
-  }
+  const s = [...dims];
+  const fns: Record<string, () => ScorecardDimension[]> = {
+    name: () => s.sort((a, b) => a.name.localeCompare(b.name)),
+    score: () => s.sort((a, b) => b.score - a.score),
+    weight: () => s.sort((a, b) => b.weight - a.weight),
+    confidence: () => s.sort((a, b) => b.confidence - a.confidence),
+    evidence: () => s.sort((a, b) => b.evidenceCount - a.evidenceCount),
+  };
+  return (fns[sortBy] ?? (() => s))();
 }
 
-/* ------------------------------------------------------------------ */
-/*  Helper: Radar chart point computation                               */
-/* ------------------------------------------------------------------ */
-function computeRadarPoints(dimensions: ScorecardDimension[], radius: number, cx: number, cy: number): string {
-  const count = dimensions.length;
-  if (count === 0) return '';
-  return dimensions
-    .map((dim, i) => {
-      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
-      const r = (dim.score / 100) * radius;
-      const x = cx + r * Math.cos(angle);
-      const y = cy + r * Math.sin(angle);
-      return `${x},${y}`;
-    })
-    .join(' ');
-}
-
-function computeIdealPoints(dimensions: ScorecardDimension[], radius: number, cx: number, cy: number): string {
-  const count = dimensions.length;
-  if (count === 0) return '';
-  return dimensions
-    .map((_, i) => {
-      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
-      const x = cx + radius * Math.cos(angle);
-      const y = cy + radius * Math.sin(angle);
-      return `${x},${y}`;
-    })
-    .join(' ');
-}
-
-function computeGridPoints(level: number, count: number, radius: number, cx: number, cy: number): string {
-  return Array.from({ length: count })
-    .map((_, i) => {
-      const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
-      const r = level * radius;
-      const x = cx + r * Math.cos(angle);
-      const y = cy + r * Math.sin(angle);
-      return `${x},${y}`;
-    })
-    .join(' ');
-}
-
-/* ------------------------------------------------------------------ */
-/*  Full Preset                                                         */
-/* ------------------------------------------------------------------ */
-export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>(
-  'BhScorecardDetail.Full',
-  ({ primitives, props, tokens, engine }: PresetContext<BhScorecardDetailProps>) => {
-    const { Box } = primitives;
-    const isModern = tokens.surface.useGlass;
+export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>({
+  name: 'BhScorecardDetail.Full',
+  render: ({ primitives, props, tokens }: PresetContext<BhScorecardDetailProps>) => {
+    const { Box, Flex, Stack, Text } = primitives;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      header,
-      dimensions,
-      selectedDimension: selectedDimensionProp,
-      evidence = [],
-      overrideInfo,
-      cohortComparison,
-      onDimensionSelect,
-      onApprove,
-      onOverride,
-      onRequestRescore,
-      onSubmitAppeal,
-      showOverrideForm: showOverrideFormProp,
-      onOverrideFormToggle,
-      overrideReason: overrideReasonProp,
-      onOverrideReasonChange,
-      sortBy: sortByProp,
-      onSortChange,
-      activeView: activeViewProp,
-      className,
-      style,
+      header, dimensions, selectedDimension: selDimProp, evidence = [],
+      overrideInfo, cohortComparison,
+      onDimensionSelect, onApprove, onOverride, onRequestRescore,
+      onSubmitAppeal, showOverrideForm: showOverProp, onOverrideFormToggle,
+      overrideReason: overReasonProp, onOverrideReasonChange,
+      sortBy: sortByProp, onSortChange, activeView: viewProp,
+      className, style,
     } = props;
 
-    /* ---- internal state ---- */
-    const [internalExpandedDim, setInternalExpandedDim] = useState<string | null>(null);
-    const [internalShowOverride, setInternalShowOverride] = useState(false);
-    const [internalOverrideReason, setInternalOverrideReason] = useState('');
-    const [internalShowCompare, setInternalShowCompare] = useState(false);
-    const [internalSelectedEvidence, setInternalSelectedEvidence] = useState<number | null>(null);
-    const [internalSortBy, setInternalSortBy] = useState<ScorecardSortBy>('score');
-    const [internalActiveView, setInternalActiveView] = useState<ScorecardView>('table');
+    const [intExpandedDim, setIntExpandedDim] = useState<string | null>(null);
+    const [intShowOverride, setIntShowOverride] = useState(false);
+    const [intOverrideReason, setIntOverrideReason] = useState('');
+    const [intSortBy, setIntSortBy] = useState<ScorecardSortBy>('score');
+    const [intActiveView, setIntActiveView] = useState<ScorecardView>('table');
 
-    const selectedDimension = selectedDimensionProp ?? internalExpandedDim;
-    const showOverride = showOverrideFormProp ?? internalShowOverride;
-    const overrideReason = overrideReasonProp ?? internalOverrideReason;
-    const sortBy = sortByProp ?? internalSortBy;
-    const activeView = activeViewProp ?? internalActiveView;
+    const selectedDimension = selDimProp ?? intExpandedDim;
+    const showOverride = showOverProp ?? intShowOverride;
+    const overrideReason = overReasonProp ?? intOverrideReason;
+    const sortBy = sortByProp ?? intSortBy;
+    const activeView = viewProp ?? intActiveView;
 
-    const handleDimensionSelect = (id: string) => {
-      onDimensionSelect?.(id);
-      setInternalExpandedDim(prev => (prev === id ? null : id));
-    };
+    const handleDimSelect = (id: string) => { onDimensionSelect?.(id); setIntExpandedDim(prev => prev === id ? null : id); };
+    const handleSort = (f: ScorecardSortBy) => { onSortChange?.(f); setIntSortBy(f); };
+    const handleOverToggle = (s: boolean) => { onOverrideFormToggle?.(s); setIntShowOverride(s); };
+    const handleOverReason = (r: string) => { onOverrideReasonChange?.(r); setIntOverrideReason(r); };
 
-    const handleSortChange = (field: ScorecardSortBy) => {
-      onSortChange?.(field);
-      setInternalSortBy(field);
-    };
+    const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const surfStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
+    const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
 
-    const handleOverrideToggle = (show: boolean) => {
-      onOverrideFormToggle?.(show);
-      setInternalShowOverride(show);
-    };
+    const sorted = useMemo(() => sortDimensions(dimensions, sortBy), [dimensions, sortBy]);
+    const knockouts = dimensions.filter(d => d.isKnockout && d.knockoutTriggered);
+    const lvlColors = getScoreLevelColors(header.overallLevel, tokens);
+    const pfColors = getPassFailColors(header.passFail, tokens);
 
-    const handleOverrideReasonChange = (reason: string) => {
-      onOverrideReasonChange?.(reason);
-      setInternalOverrideReason(reason);
-    };
+    const bdr = `${tokens.surface.borderWidth} ${tokens.surface.borderStyle}`;
+    const trans = tokens.transitions?.normal || tokens.motion.hover;
 
-    const handleViewChange = (view: ScorecardView) => {
-      setInternalActiveView(view);
-    };
-
-    /* ---- glass support ---- */
-    const glassCard = isModern && tokens.glass
-      ? {
-          backdropFilter: tokens.glass.blur,
-          WebkitBackdropFilter: tokens.glass.blur,
-          backgroundColor: tokens.glass.bg,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
-        }
-      : {};
-
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isModern }), [tokens, isModern]);
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const hoverTransform = getHoverTransform(tokens);
-
-    /* ---- sorted dimensions ---- */
-    const sortedDimensions = useMemo(() => sortDimensions(dimensions, sortBy), [dimensions, sortBy]);
-
-    /* ---- knockout dimensions ---- */
-    const knockoutDimensions = dimensions.filter(d => d.isKnockout && d.knockoutTriggered);
-    const hasKnockout = knockoutDimensions.length > 0;
-
-    /* ---- level/pass-fail colors ---- */
-    const levelColors = getScoreLevelColors(header.overallLevel, tokens);
-    const passFailColors = getPassFailColors(header.passFail, tokens);
-
-    /* ---- radar chart config ---- */
-    const radarSize = 280;
-    const radarCenter = radarSize / 2;
-    const radarRadius = radarSize / 2 - 40;
-
-    /* ================================================================ */
-    /*  RENDER: Score Ring SVG                                            */
-    /* ================================================================ */
-    const renderScoreRing = () => {
-      const size = 96;
-      const strokeWidth = 8;
-      const radius = (size - strokeWidth) / 2;
-      const circumference = 2 * Math.PI * radius;
-      const progress = (header.overallScore / 100) * circumference;
-
+    /* ── Score Ring ─────────────────────────────────── */
+    const ScoreRing = ({ size = 96, sw = 8 }: { size?: number; sw?: number }) => {
+      const r = (size - sw) / 2, circ = 2 * Math.PI * r, prog = (header.overallScore / 100) * circ;
       return (
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={tokens.colors.neutral[100]}
-            strokeWidth={strokeWidth}
-          />
-          <circle
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            stroke={levelColors.ring}
-            strokeWidth={strokeWidth}
-            strokeDasharray={`${progress} ${circumference - progress}`}
-            strokeDashoffset={circumference / 4}
-            strokeLinecap="round"
-            style={{ transition: `stroke-dasharray ${tokens.motion.hover}` }}
-          />
-          <text
-            x={size / 2}
-            y={size / 2 - 6}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={tokens.colors.neutral[900]}
-            fontSize={tokens.typography.fontSize['2xl']}
-            fontWeight={tokens.typography.fontWeight.bold}
-          >
-            {header.overallScore}
-          </text>
-          <text
-            x={size / 2}
-            y={size / 2 + 14}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill={tokens.colors.neutral[500]}
-            fontSize={tokens.typography.fontSize.xs}
-          >
-            / 100
-          </text>
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={tokens.colors.neutral[100]} strokeWidth={sw} />
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={lvlColors.ring} strokeWidth={sw}
+            strokeDasharray={`${prog} ${circ - prog}`} strokeDashoffset={circ / 4} strokeLinecap="round"
+            style={{ transition: `stroke-dasharray ${tokens.motion.hover}` }} />
+          <text x={size / 2} y={size / 2 - 6} textAnchor="middle" dominantBaseline="middle"
+            fill={tokens.colors.neutral[900]} fontSize={tokens.typography.fontSize['2xl'] || '1.5rem'} fontWeight={tokens.typography.fontWeight.bold}>{header.overallScore}</text>
+          <text x={size / 2} y={size / 2 + 14} textAnchor="middle" dominantBaseline="middle"
+            fill={tokens.colors.neutral[500]} fontSize={tokens.typography.fontSize.xs}>/ 100</text>
         </svg>
       );
     };
 
-    /* ================================================================ */
-    /*  RENDER: Header                                                    */
-    /* ================================================================ */
-    const renderHeader = () => (
-      <Box style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-        gap: tokens.spacing[5],
-        flexWrap: 'wrap' as const,
+    /* ── Badge Pill ─────────────────────────────────── */
+    const Pill = ({ bg, clr, border: brd, icon, label }: {
+      bg: string; clr: string; border?: string; icon: React.ReactNode; label: string;
+    }) => (
+      <Flex align="center" gap={4} style={{
+        padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+        borderRadius: tokens.borderRadius.full,
+        fontSize: tokens.typography.fontSize.xs,
+        fontWeight: tokens.typography.fontWeight.semibold,
+        backgroundColor: bg, color: clr,
+        ...(brd ? { border: `${bdr} ${brd}` } : {}),
       }}>
-        {/* Left: Avatar + Info */}
-        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4], flex: 1, minWidth: 0 }}>
-          {/* Avatar */}
-          <Box style={{
-            width: 56,
-            height: 56,
-            borderRadius: tokens.borderRadius.full,
-            backgroundColor: tokens.colors.primaryScale[100],
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            flexShrink: 0,
-            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
-          }}>
-            {header.candidateAvatar ? (
-              <img
-                src={header.candidateAvatar}
-                alt={header.candidateName}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-              <User size={24} color={tokens.colors.primaryScale[600]} />
-            )}
-          </Box>
-
-          <Box style={{ minWidth: 0 }}>
-            <Box style={{
-              fontSize: tokens.typography.fontSize.xl,
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.neutral[900],
-              lineHeight: tokens.typography.lineHeight.tight,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap' as const,
-            }}>
-              {header.candidateName}
-            </Box>
-            <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[3],
-              marginTop: tokens.spacing[1],
-              flexWrap: 'wrap' as const,
-            }}>
-              <Box style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.neutral[600],
-              }}>
-                <Briefcase size={14} color={tokens.colors.neutral[400]} />
-                {header.jobTitle}
-              </Box>
-              <Box style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.neutral[600],
-              }}>
-                <Target size={14} color={tokens.colors.neutral[400]} />
-                {header.stageName}
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-
-        {/* Center: Score Ring */}
-        <Box style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: tokens.spacing[4],
-        }}>
-          {renderScoreRing()}
-
-          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-            {/* Level Badge */}
-            <Box style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-              borderRadius: tokens.borderRadius.full,
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              backgroundColor: levelColors.bg,
-              color: levelColors.color,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${levelColors.border}`,
-              textTransform: 'capitalize' as const,
-            }}>
-              <Star size={12} />
-              {header.overallLevel}
-            </Box>
-
-            {/* Pass/Fail Indicator */}
-            <Box style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-              borderRadius: tokens.borderRadius.full,
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              backgroundColor: passFailColors.bg,
-              color: passFailColors.color,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${passFailColors.border}`,
-              textTransform: 'uppercase' as const,
-            }}>
-              {header.passFail === 'pass' ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
-              {header.passFail}
-            </Box>
-
-            {/* Confidence Meter */}
-            <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-            }}>
-              <Box style={{
-                width: 80,
-                height: 6,
-                backgroundColor: tokens.colors.neutral[100],
-                borderRadius: tokens.borderRadius.full,
-                overflow: 'hidden',
-              }}>
-                <Box style={{
-                  width: `${header.confidence * 100}%`,
-                  height: '100%',
-                  backgroundColor: getConfidenceColor(header.confidence, tokens),
-                  borderRadius: tokens.borderRadius.full,
-                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                }} />
-              </Box>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-              }}>
-                {Math.round(header.confidence * 100)}%
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+        {icon}
+        <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{label}</Text>
+      </Flex>
     );
 
-    /* ================================================================ */
-    /*  RENDER: Radar Chart                                               */
-    /* ================================================================ */
-    const renderRadarChart = () => {
-      const dimCount = dimensions.length;
-      if (dimCount < 3) return null;
+    /* ── Radar Chart ───────────────────────────────── */
+    const RadarChart = () => {
+      const sz = 280, cx = sz / 2, cy = sz / 2, maxR = sz / 2 - 40;
+      const n = dimensions.length;
+      if (n < 3) return null;
+      const step = (2 * Math.PI) / n;
 
-      const gridLevels = [0.25, 0.5, 0.75, 1.0];
-      const actualPoints = computeRadarPoints(dimensions, radarRadius, radarCenter, radarCenter);
-      const idealPoints = computeIdealPoints(dimensions, radarRadius, radarCenter, radarCenter);
+      const polygon = (radius: number) =>
+        dimensions.map((_, i) => {
+          const a = i * step - Math.PI / 2;
+          return `${cx + radius * Math.cos(a)},${cy + radius * Math.sin(a)}`;
+        }).join(' ');
 
-      return (
-        <Box style={{
-          ...cardBase,
-          ...glassCard,
-          padding: tokens.spacing[4],
-          marginBottom: tokens.spacing[4],
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            marginBottom: tokens.spacing[3],
-            fontSize: tokens.typography.fontSize.sm,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.neutral[700],
-          }}>
-            <Hexagon size={16} color={tokens.colors.primaryScale[500]} />
-            Score Radar
-          </Box>
-
-          <Box style={{ display: 'flex', justifyContent: 'center' }}>
-            <svg width={radarSize} height={radarSize} viewBox={`0 0 ${radarSize} ${radarSize}`}>
-              {/* Grid polygons */}
-              {gridLevels.map((level) => (
-                <polygon
-                  key={level}
-                  points={computeGridPoints(level, dimCount, radarRadius, radarCenter, radarCenter)}
-                  fill="none"
-                  stroke={tokens.colors.neutral[200]}
-                  strokeWidth={1}
-                />
-              ))}
-
-              {/* Axis lines */}
-              {dimensions.map((_, i) => {
-                const angle = (Math.PI * 2 * i) / dimCount - Math.PI / 2;
-                const x = radarCenter + radarRadius * Math.cos(angle);
-                const y = radarCenter + radarRadius * Math.sin(angle);
-                return (
-                  <line
-                    key={i}
-                    x1={radarCenter}
-                    y1={radarCenter}
-                    x2={x}
-                    y2={y}
-                    stroke={tokens.colors.neutral[200]}
-                    strokeWidth={1}
-                  />
-                );
-              })}
-
-              {/* Ideal polygon (dashed) */}
-              <polygon
-                points={idealPoints}
-                fill="none"
-                stroke={tokens.colors.neutral[300]}
-                strokeWidth={1.5}
-                strokeDasharray="6,4"
-              />
-
-              {/* Actual polygon */}
-              <polygon
-                points={actualPoints}
-                fill={`${tokens.colors.primaryScale[500]}20`}
-                stroke={tokens.colors.primaryScale[500]}
-                strokeWidth={2}
-              />
-
-              {/* Dimension dots */}
-              {dimensions.map((dim, i) => {
-                const angle = (Math.PI * 2 * i) / dimCount - Math.PI / 2;
-                const r = (dim.score / 100) * radarRadius;
-                const x = radarCenter + r * Math.cos(angle);
-                const y = radarCenter + r * Math.sin(angle);
-                return (
-                  <circle
-                    key={dim.id}
-                    cx={x}
-                    cy={y}
-                    r={4}
-                    fill={tokens.colors.common.white}
-                    stroke={getScoreGradientColor(dim.score, tokens)}
-                    strokeWidth={2}
-                  />
-                );
-              })}
-
-              {/* Labels */}
-              {dimensions.map((dim, i) => {
-                const angle = (Math.PI * 2 * i) / dimCount - Math.PI / 2;
-                const labelRadius = radarRadius + 24;
-                const x = radarCenter + labelRadius * Math.cos(angle);
-                const y = radarCenter + labelRadius * Math.sin(angle);
-                return (
-                  <text
-                    key={dim.id}
-                    x={x}
-                    y={y}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill={tokens.colors.neutral[600]}
-                    fontSize={tokens.typography.fontSize.xs}
-                    fontWeight={tokens.typography.fontWeight.medium}
-                  >
-                    {dim.name.length > 12 ? dim.name.slice(0, 10) + '...' : dim.name}
-                  </text>
-                );
-              })}
-            </svg>
-          </Box>
-        </Box>
-      );
-    };
-
-    /* ================================================================ */
-    /*  RENDER: View Tabs                                                 */
-    /* ================================================================ */
-    const renderViewTabs = () => {
-      const views: { key: ScorecardView; label: string; icon: React.ReactNode }[] = [
-        { key: 'table', label: 'Table', icon: <Table size={14} /> },
-        { key: 'radar', label: 'Radar', icon: <Hexagon size={14} /> },
-        { key: 'detail', label: 'Detail', icon: <Eye size={14} /> },
-      ];
+      const dataPolygon = dimensions.map((d, i) => {
+        const a = i * step - Math.PI / 2;
+        const r = (d.score / 100) * maxR;
+        return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+      }).join(' ');
 
       return (
-        <Box style={{
-          display: 'flex',
-          gap: tokens.spacing[1],
-          padding: tokens.spacing[1],
-          backgroundColor: tokens.colors.neutral[100],
-          borderRadius: tokens.borderRadius.md,
-          marginBottom: tokens.spacing[4],
-        }}>
-          {views.map(v => (
-            <Box
-              key={v.key}
-              onClick={() => handleViewChange(v.key)}
-              style={{
-                ...hoverStyle,
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: activeView === v.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
-                color: activeView === v.key ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                backgroundColor: activeView === v.key ? tokens.colors.common.white : 'transparent',
-                boxShadow: activeView === v.key ? tokens.shadows.sm : 'none',
-              }}
-            >
-              {v.icon}
-              {v.label}
-            </Box>
+        <svg width={sz} height={sz} viewBox={`0 0 ${sz} ${sz}`}>
+          {[0.25, 0.5, 0.75, 1].map(p => (
+            <polygon key={p} points={polygon(maxR * p)}
+              fill="none" stroke={tokens.colors.neutral[200]} strokeWidth={1} />
           ))}
-        </Box>
+          {dimensions.map((_, i) => {
+            const a = i * step - Math.PI / 2;
+            return <line key={i} x1={cx} y1={cy} x2={cx + maxR * Math.cos(a)} y2={cy + maxR * Math.sin(a)}
+              stroke={tokens.colors.neutral[200]} strokeWidth={1} />;
+          })}
+          <polygon points={dataPolygon}
+            fill={tokens.colors.primaryScale[500] + '20'}
+            stroke={tokens.colors.primaryScale[500]} strokeWidth={2} />
+          {dimensions.map((d, i) => {
+            const a = i * step - Math.PI / 2;
+            const r = (d.score / 100) * maxR;
+            const lx = cx + (maxR + 20) * Math.cos(a);
+            const ly = cy + (maxR + 20) * Math.sin(a);
+            return (
+              <g key={d.id}>
+                <circle cx={cx + r * Math.cos(a)} cy={cy + r * Math.sin(a)}
+                  r={4} fill={tokens.colors.common.white} stroke={getScoreGradientColor(d.score, tokens)} strokeWidth={2} />
+                <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle"
+                  fill={tokens.colors.neutral[600]} fontSize={tokens.typography.fontSize.xs}>
+                  {d.name.length > 12 ? d.name.slice(0, 10) + '..' : d.name}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       );
     };
 
-    /* ================================================================ */
-    /*  RENDER: Sort Header                                               */
-    /* ================================================================ */
-    const renderSortHeader = () => {
-      const sortOptions: { key: ScorecardSortBy; label: string }[] = [
-        { key: 'name', label: 'Name' },
-        { key: 'score', label: 'Score' },
-        { key: 'weight', label: 'Weight' },
-        { key: 'confidence', label: 'Confidence' },
-        { key: 'evidence', label: 'Evidence' },
-      ];
+    /* ── View Tabs ─────────────────────────────────── */
+    const viewTabs: { key: ScorecardView; label: string; icon: React.ReactNode }[] = [
+      { key: 'table', label: 'Table', icon: <Table size={14} /> },
+      { key: 'radar', label: 'Radar', icon: <Hexagon size={14} /> },
+      { key: 'detail', label: 'Detail', icon: <Eye size={14} /> },
+    ];
 
-      return (
-        <Box style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: tokens.spacing[2],
-          marginBottom: tokens.spacing[3],
-        }}>
-          <ArrowUpDown size={14} color={tokens.colors.neutral[400]} />
-          <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-            Sort by:
-          </Box>
-          {sortOptions.map(opt => (
-            <Box
-              key={opt.key}
-              onClick={() => handleSortChange(opt.key)}
-              style={{
-                ...hoverStyle,
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: sortBy === opt.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                color: sortBy === opt.key ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
-                backgroundColor: sortBy === opt.key ? tokens.colors.primaryScale[50] : 'transparent',
-              }}
-            >
-              {opt.label}
-            </Box>
-          ))}
-        </Box>
-      );
-    };
+    const sortOpts: { key: ScorecardSortBy; label: string }[] = [
+      { key: 'name', label: 'Name' }, { key: 'score', label: 'Score' },
+      { key: 'weight', label: 'Weight' }, { key: 'confidence', label: 'Confidence' },
+      { key: 'evidence', label: 'Evidence' },
+    ];
 
-    /* ================================================================ */
-    /*  RENDER: Dimension Row                                             */
-    /* ================================================================ */
-    const renderDimensionRow = (dim: ScorecardDimension) => {
-      const isSelected = selectedDimension === dim.id;
-      const scoreColor = getScoreGradientColor(dim.score, tokens);
-      const confColor = getConfidenceColor(dim.confidence, tokens);
-
-      return (
-        <Box key={dim.id}>
-          <Box
-            onClick={() => handleDimensionSelect(dim.id)}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[3],
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-              borderRadius: tokens.borderRadius.md,
-              backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isSelected ? tokens.colors.primaryScale[200] : tokens.colors.neutral[100]}`,
-              marginBottom: tokens.spacing[2],
-            }}
-          >
-            {/* Expand chevron */}
-            <Box style={{ flexShrink: 0, color: tokens.colors.neutral[400] }}>
-              {isSelected ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </Box>
-
-            {/* Dimension name */}
-            <Box style={{
-              flex: 1,
-              minWidth: 0,
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.neutral[800],
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap' as const,
-            }}>
-              {dim.name}
-            </Box>
-
-            {/* Score bar */}
-            <Box style={{ width: 120, display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <Box style={{
-                flex: 1,
-                height: 8,
-                backgroundColor: tokens.colors.neutral[100],
-                borderRadius: tokens.borderRadius.full,
-                overflow: 'hidden',
-              }}>
-                <Box style={{
-                  width: `${dim.score}%`,
-                  height: '100%',
-                  backgroundColor: scoreColor,
-                  borderRadius: tokens.borderRadius.full,
-                  transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                }} />
-              </Box>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[700],
-                minWidth: 28,
-                textAlign: 'right' as const,
-              }}>
-                {dim.score}
-              </Box>
-            </Box>
-
-            {/* Weight badge */}
-            <Box style={{
-              ...createBadgeStyle(tokens, 'secondary'),
-              minWidth: 40,
-              justifyContent: 'center',
-            }}>
-              {dim.weight}%
-            </Box>
-
-            {/* Confidence dot */}
-            <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-            }}>
-              <Box style={{
-                width: 8,
-                height: 8,
-                borderRadius: tokens.borderRadius.full,
-                backgroundColor: confColor,
-              }} />
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-                minWidth: 32,
-              }}>
-                {Math.round(dim.confidence * 100)}%
-              </Box>
-            </Box>
-
-            {/* Knockout flag */}
-            {dim.isKnockout && (
-              <Box style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                backgroundColor: dim.knockoutTriggered ? tokens.colors.errorScale[100] : tokens.colors.neutral[100],
-                color: dim.knockoutTriggered ? tokens.colors.errorScale[700] : tokens.colors.neutral[500],
-              }}>
-                <AlertOctagon size={10} />
-                KO
-              </Box>
-            )}
-
-            {/* Evidence count badge */}
-            <Box style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.xs,
-              color: tokens.colors.neutral[500],
-              backgroundColor: tokens.colors.neutral[50],
-            }}>
-              <MessageSquareQuote size={10} />
-              {dim.evidenceCount}
-            </Box>
-          </Box>
-
-          {/* Expanded detail */}
-          {isSelected && renderDimensionDetail()}
-        </Box>
-      );
-    };
-
-    /* ================================================================ */
-    /*  RENDER: Dimension Detail (Expanded)                               */
-    /* ================================================================ */
-    const renderDimensionDetail = () => {
+    /* ── Evidence renderer ─────────────────────────── */
+    const renderEvidence = () => {
       if (evidence.length === 0) {
         return (
-          <Box style={{
-            padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
-            marginBottom: tokens.spacing[2],
-            fontSize: tokens.typography.fontSize.sm,
-            color: tokens.colors.neutral[400],
-            fontStyle: 'italic',
+          <Flex align="center" justify="center" style={{
+            padding: tokens.spacing[6], color: tokens.colors.neutral[400],
+            fontSize: tokens.typography.fontSize.sm, fontStyle: 'italic' as const,
           }}>
-            No evidence available for this dimension.
-          </Box>
+            <Text style={{ fontSize: 'inherit', color: 'inherit' }}>No evidence available for this dimension.</Text>
+          </Flex>
         );
       }
-
       return (
-        <Box style={{
+        <Stack gap={12} style={{
           padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
-          marginLeft: tokens.spacing[6],
-          marginBottom: tokens.spacing[3],
+          marginLeft: tokens.spacing[6], marginBottom: tokens.spacing[3],
           borderLeft: `3px solid ${tokens.colors.primaryScale[200]}`,
         }}>
           {evidence.map((ev, idx) => (
-            <Box key={idx} style={{ marginBottom: tokens.spacing[4] }}>
-              {/* Evidence quote */}
+            <Box key={idx}>
               <Box style={{
                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                 backgroundColor: tokens.colors.neutral[50],
                 borderLeft: `4px solid ${tokens.colors.primaryScale[300]}`,
-                borderRadius: `0 ${tokens.borderRadius.md} ${tokens.borderRadius.md} 0`,
+                borderRadius: `0 ${tokens.borderRadius.lg} ${tokens.borderRadius.lg} 0`,
                 marginBottom: tokens.spacing[2],
               }}>
-                <Box style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[700],
-                  fontStyle: 'italic',
-                  lineHeight: tokens.typography.lineHeight.relaxed,
-                }}>
-                  <Quote size={14} color={tokens.colors.neutral[300]} style={{ display: 'inline', marginRight: tokens.spacing[1] }} />
-                  {ev.quote}
-                </Box>
-                <Box style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[2],
-                  marginTop: tokens.spacing[2],
-                }}>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.primaryScale[600],
+                <Flex align="start" gap={6}>
+                  <Quote size={14} color={tokens.colors.neutral[300]} style={{ flexShrink: 0, marginTop: 3 }} />
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700],
+                    fontStyle: 'italic' as const, lineHeight: 1.6,
                   }}>
+                    {ev.quote}
+                  </Text>
+                </Flex>
+                <Flex align="center" gap={8} style={{ marginTop: tokens.spacing[2] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>
                     {ev.speaker}
-                  </Box>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: tokens.colors.neutral[400],
-                  }}>
+                  </Text>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                     Turn {ev.turnRef}
-                  </Box>
-                </Box>
+                  </Text>
+                </Flex>
               </Box>
-
-              {/* AI Reasoning */}
-              <Box style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+              <Flex align="start" gap={6} style={{
+                padding: tokens.spacing[3], borderRadius: tokens.borderRadius.lg,
                 backgroundColor: tokens.colors.primaryScale[50],
-                borderRadius: tokens.borderRadius.md,
+                border: `${bdr} ${tokens.colors.primaryScale[100]}`,
               }}>
                 <Bot size={14} color={tokens.colors.primaryScale[500]} style={{ flexShrink: 0, marginTop: 2 }} />
-                <Box style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[600],
-                  lineHeight: tokens.typography.lineHeight.relaxed,
-                }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], lineHeight: 1.6 }}>
                   {ev.aiReasoning}
-                </Box>
-              </Box>
+                </Text>
+              </Flex>
             </Box>
           ))}
+        </Stack>
+      );
+    };
+
+    /* ── Dimension Row ─────────────────────────────── */
+    const DimRow = (dim: ScorecardDimension) => {
+      const isSel = selectedDimension === dim.id;
+      const sc = getScoreGradientColor(dim.score, tokens);
+      const cc = getConfidenceColor(dim.confidence, tokens);
+      return (
+        <Box key={dim.id}>
+          <Box
+            onClick={() => handleDimSelect(dim.id)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              ...hov, padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+              borderRadius: tokens.borderRadius.lg,
+              backgroundColor: isSel ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
+              border: `${bdr} ${isSel ? tokens.colors.primaryScale[200] : tokens.colors.neutral[100]}`,
+              marginBottom: tokens.spacing[2],
+            }}>
+            <Box style={{ flexShrink: 0, color: tokens.colors.neutral[400] }}>
+              {isSel ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+            </Box>
+            <Text style={{
+              flex: 1, minWidth: 0, fontSize: tokens.typography.fontSize.sm,
+              fontWeight: tokens.typography.fontWeight.medium,
+              color: tokens.colors.neutral[800],
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const,
+            }}>
+              {dim.name}
+            </Text>
+            <Flex align="center" gap={6} style={{ width: 130 }}>
+              <Box style={{ flex: 1, height: 8, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
+                <Box style={{ width: `${dim.score}%`, height: '100%', backgroundColor: sc, borderRadius: tokens.borderRadius.full, transition: `width ${trans}` }} />
+              </Box>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700], minWidth: 28, textAlign: 'right' as const }}>
+                {dim.score}
+              </Text>
+            </Flex>
+            <Box style={{ ...createBadgeStyle(tokens, 'secondary'), minWidth: 40, justifyContent: 'center' }}>
+              {dim.weight}%
+            </Box>
+            <Flex align="center" gap={4}>
+              <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: cc }} />
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], minWidth: 32 }}>
+                {Math.round(dim.confidence * 100)}%
+              </Text>
+            </Flex>
+            {dim.isKnockout && (
+              <Flex align="center" gap={3} style={{
+                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                borderRadius: tokens.borderRadius.md,
+                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+                backgroundColor: dim.knockoutTriggered ? tokens.colors.errorScale[100] : tokens.colors.neutral[100],
+                color: dim.knockoutTriggered ? tokens.colors.errorScale[700] : tokens.colors.neutral[500],
+              }}>
+                <AlertOctagon size={10} />
+                <Text style={{ fontSize: 'inherit', color: 'inherit' }}>KO</Text>
+              </Flex>
+            )}
+            <Flex align="center" gap={3} style={{
+              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+              borderRadius: tokens.borderRadius.md,
+              fontSize: tokens.typography.fontSize.xs,
+              color: tokens.colors.neutral[500], backgroundColor: tokens.colors.neutral[50],
+            }}>
+              <MessageSquare size={10} />
+              <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{dim.evidenceCount}</Text>
+            </Flex>
+          </Box>
+          {isSel && renderEvidence()}
         </Box>
       );
     };
 
-    /* ================================================================ */
-    /*  RENDER: Dimension Table                                           */
-    /* ================================================================ */
-    const renderDimensionTable = () => (
-      <Box style={{
-        ...cardBase,
-        ...glassCard,
-        padding: tokens.spacing[4],
-        marginBottom: tokens.spacing[4],
+    /* ── Confidence Factors ─────────────────────────── */
+    const confFactors = [
+      { label: 'Evidence Quality', value: Math.round(header.confidence * 100), icon: <MessageSquare size={16} />, color: tokens.colors.primaryScale[500], desc: 'Based on the quality and specificity of interview evidence' },
+      { label: 'Response Completeness', value: Math.min(100, Math.round(header.confidence * 100 + 5)), icon: <FileText size={16} />, color: tokens.colors.infoScale[500], desc: 'Coverage of all scoring dimensions with sufficient data' },
+      { label: 'Consistency', value: Math.max(0, Math.round(header.confidence * 100 - 3)), icon: <Activity size={16} />, color: tokens.colors.successScale[500], desc: 'Cross-dimension and cross-evidence consistency score' },
+    ];
+
+    /* ── Action Button ─────────────────────────────── */
+    const ActBtn = ({ onClick, icon, label, bg, clr, borderClr }: {
+      onClick?: () => void; icon: React.ReactNode; label: string;
+      bg: string; clr: string; borderClr?: string;
+    }) => (
+      <Box onClick={onClick} style={{
+        display: 'flex', alignItems: 'center', gap: 6,
+        ...hov, padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
+        borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm,
+        fontWeight: tokens.typography.fontWeight.semibold, color: clr, backgroundColor: bg,
+        ...(borderClr ? { border: `${bdr} ${borderClr}` } : {}),
+        ...(!borderClr ? { boxShadow: tokens.shadows.sm } : {}),
       }}>
-        <Box style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: tokens.spacing[3],
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            fontSize: tokens.typography.fontSize.sm,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.neutral[700],
-          }}>
-            <BarChart3 size={16} color={tokens.colors.primaryScale[500]} />
-            Dimension Breakdown
-          </Box>
-          <Box style={{
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.neutral[400],
-          }}>
-            {dimensions.length} dimensions
-          </Box>
-        </Box>
-
-        {renderSortHeader()}
-
-        {sortedDimensions.map(dim => renderDimensionRow(dim))}
+        {icon}
+        <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{label}</Text>
       </Box>
     );
 
-    /* ================================================================ */
-    /*  RENDER: Knockout Section                                          */
-    /* ================================================================ */
-    const renderKnockoutSection = () => {
-      if (!hasKnockout) return null;
-
-      return (
-        <Box style={{
-          padding: tokens.spacing[4],
-          backgroundColor: tokens.colors.errorScale[50],
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-          borderRadius: tokens.borderRadius.lg,
-          marginBottom: tokens.spacing[4],
+    return (
+      <Box className={className} style={{
+        ...surfStyle, backgroundColor: tokens.colors.common.white, overflow: 'hidden', ...style,
+      }}>
+        {/* ── Header ───────────────────────────────────── */}
+        <Flex align="center" justify="between" wrap="wrap" gap={20} style={{
+          padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
+          borderBottom: `${bdr} ${tokens.colors.neutral[200]}`,
         }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            marginBottom: tokens.spacing[3],
-          }}>
-            <AlertTriangle size={18} color={tokens.colors.errorScale[600]} />
+          <Flex align="center" gap={16} style={{ flex: 1, minWidth: 0 }}>
             <Box style={{
-              fontSize: tokens.typography.fontSize.md,
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.errorScale[800],
+              width: 56, height: 56, borderRadius: tokens.borderRadius.full,
+              backgroundColor: tokens.colors.primaryScale[100],
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              overflow: 'hidden', flexShrink: 0,
+              border: `${bdr} ${tokens.colors.primaryScale[200]}`,
             }}>
-              Knockout Criteria Triggered
+              {header.candidateAvatar
+                ? <img src={header.candidateAvatar} alt={header.candidateName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : <User size={24} color={tokens.colors.primaryScale[600]} />}
             </Box>
-          </Box>
-
-          {knockoutDimensions.map(dim => (
-            <Box key={dim.id} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-              backgroundColor: tokens.colors.common.white,
-              borderRadius: tokens.borderRadius.md,
-              marginBottom: tokens.spacing[2],
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-            }}>
-              <Box style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
+            <Stack gap={4}>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xl || '1.25rem',
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.neutral[900],
               }}>
-                <AlertOctagon size={16} color={tokens.colors.errorScale[500]} />
-                <Box style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.errorScale[800],
-                }}>
-                  {dim.name}
+                {header.candidateName}
+              </Text>
+              <Flex gap={12} align="center" wrap="wrap">
+                <Flex align="center" gap={4} style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
+                  <Briefcase size={14} color={tokens.colors.neutral[400]} />
+                  <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{header.jobTitle}</Text>
+                </Flex>
+                <Flex align="center" gap={4} style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
+                  <Target size={14} color={tokens.colors.neutral[400]} />
+                  <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{header.stageName}</Text>
+                </Flex>
+              </Flex>
+            </Stack>
+          </Flex>
+          <Flex align="center" gap={16}>
+            <ScoreRing />
+            <Stack gap={6}>
+              <Pill bg={lvlColors.bg} clr={lvlColors.color} border={lvlColors.border}
+                icon={<Star size={12} />} label={header.overallLevel.charAt(0).toUpperCase() + header.overallLevel.slice(1)} />
+              <Pill bg={pfColors.bg} clr={pfColors.color} border={pfColors.border}
+                icon={header.passFail === 'pass' ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
+                label={header.passFail.toUpperCase()} />
+              <Flex align="center" gap={6}>
+                <Box style={{ width: 80, height: 6, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
+                  <Box style={{ width: `${header.confidence * 100}%`, height: '100%', backgroundColor: getConfidenceColor(header.confidence, tokens), borderRadius: tokens.borderRadius.full, transition: `width ${trans}` }} />
                 </Box>
-              </Box>
-              <Box style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[3],
-              }}>
-                <Box style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[500],
-                }}>
-                  Score: {dim.score} / Weight: {dim.weight}%
-                </Box>
-                <Box style={{
-                  ...createBadgeStyle(tokens, 'error'),
-                }}>
-                  Below Threshold
-                </Box>
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      );
-    };
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  {Math.round(header.confidence * 100)}%
+                </Text>
+              </Flex>
+            </Stack>
+          </Flex>
+        </Flex>
 
-    /* ================================================================ */
-    /*  RENDER: Confidence Factors                                        */
-    /* ================================================================ */
-    const renderConfidenceFactors = () => {
-      const factors = [
-        {
-          label: 'Evidence Quality',
-          value: Math.round(header.confidence * 100),
-          icon: <MessageSquareQuote size={16} />,
-          color: tokens.colors.primaryScale[500],
-          description: 'Based on the quality and specificity of interview evidence',
-        },
-        {
-          label: 'Response Completeness',
-          value: Math.min(100, Math.round(header.confidence * 100 + 5)),
-          icon: <FileText size={16} />,
-          color: tokens.colors.infoScale[500],
-          description: 'Coverage of all scoring dimensions with sufficient data',
-        },
-        {
-          label: 'Consistency',
-          value: Math.max(0, Math.round(header.confidence * 100 - 3)),
-          icon: <Activity size={16} />,
-          color: tokens.colors.successScale[500],
-          description: 'Cross-dimension and cross-evidence consistency score',
-        },
-      ];
-
-      return (
-        <Box style={{
-          ...cardBase,
-          ...glassCard,
-          padding: tokens.spacing[4],
-          marginBottom: tokens.spacing[4],
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            marginBottom: tokens.spacing[3],
-            fontSize: tokens.typography.fontSize.sm,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.neutral[700],
+        {/* ── Body ─────────────────────────────────────── */}
+        <Box style={{ padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px` }}>
+          {/* View Tabs */}
+          <Flex gap={4} style={{
+            padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100],
+            borderRadius: tokens.borderRadius.lg, marginBottom: tokens.spacing[4],
           }}>
-            <Shield size={16} color={tokens.colors.primaryScale[500]} />
-            Confidence Factors
-          </Box>
-
-          <Box style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: tokens.spacing[3],
-          }}>
-            {factors.map((factor) => (
-              <Box key={factor.label} style={{
-                padding: tokens.spacing[3],
-                backgroundColor: tokens.colors.neutral[50],
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-              }}>
-                <Box style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: tokens.spacing[2],
-                }}>
-                  <Box style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[2],
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[700],
-                  }}>
-                    <Box style={{ color: factor.color }}>{factor.icon}</Box>
-                    {factor.label}
-                  </Box>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.bold,
-                    color: tokens.colors.neutral[800],
-                  }}>
-                    {factor.value}%
-                  </Box>
-                </Box>
-
-                <Box style={{
-                  height: 4,
-                  backgroundColor: tokens.colors.neutral[200],
-                  borderRadius: tokens.borderRadius.full,
-                  overflow: 'hidden',
-                  marginBottom: tokens.spacing[2],
-                }}>
-                  <Box style={{
-                    width: `${factor.value}%`,
-                    height: '100%',
-                    backgroundColor: factor.color,
-                    borderRadius: tokens.borderRadius.full,
-                    transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                  }} />
-                </Box>
-
-                <Box style={{
+            {viewTabs.map(v => (
+              <Box key={v.key}
+                onClick={() => setIntActiveView(v.key)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  ...hov, padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.md,
                   fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[400],
-                  lineHeight: tokens.typography.lineHeight.relaxed,
+                  fontWeight: activeView === v.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
+                  color: activeView === v.key ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
+                  backgroundColor: activeView === v.key ? tokens.colors.common.white : 'transparent',
+                  boxShadow: activeView === v.key ? tokens.shadows.sm : 'none',
                 }}>
-                  {factor.description}
-                </Box>
+                {v.icon}
+                <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{v.label}</Text>
               </Box>
             ))}
-          </Box>
-        </Box>
-      );
-    };
+          </Flex>
 
-    /* ================================================================ */
-    /*  RENDER: Override Section                                           */
-    /* ================================================================ */
-    const renderOverrideSection = () => {
-      if (!overrideInfo) return null;
-
-      return (
-        <Box style={{
-          ...cardBase,
-          ...glassCard,
-          padding: tokens.spacing[4],
-          marginBottom: tokens.spacing[4],
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            marginBottom: tokens.spacing[3],
-          }}>
-            <Edit3 size={16} color={tokens.colors.warningScale[600]} />
+          {/* Knockouts */}
+          {knockouts.length > 0 && (
             <Box style={{
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: tokens.colors.warningScale[800],
+              padding: tokens.spacing[4], backgroundColor: tokens.colors.errorScale[50],
+              border: `${bdr} ${tokens.colors.errorScale[200]}`,
+              borderRadius: tokens.borderRadius.lg, marginBottom: tokens.spacing[4],
             }}>
-              Score Override Applied
+              <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+                <AlertTriangle size={18} color={tokens.colors.errorScale[600]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.md || '1rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.errorScale[800] }}>
+                  Knockout Criteria Triggered
+                </Text>
+              </Flex>
+              <Stack gap={6}>
+                {knockouts.map(dim => (
+                  <Flex key={dim.id} align="center" justify="between" style={{
+                    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                    backgroundColor: tokens.colors.common.white,
+                    borderRadius: tokens.borderRadius.lg,
+                    border: `${bdr} ${tokens.colors.errorScale[200]}`,
+                  }}>
+                    <Flex align="center" gap={6}>
+                      <AlertOctagon size={16} color={tokens.colors.errorScale[500]} />
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.errorScale[800] }}>
+                        {dim.name}
+                      </Text>
+                    </Flex>
+                    <Flex align="center" gap={8}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                        Score: {dim.score} / Weight: {dim.weight}%
+                      </Text>
+                      <Box style={{ ...createBadgeStyle(tokens, 'error') }}>Below Threshold</Box>
+                    </Flex>
+                  </Flex>
+                ))}
+              </Stack>
             </Box>
+          )}
+
+          {/* Radar */}
+          {(activeView === 'radar' || activeView === 'detail') && dimensions.length >= 3 && (
+            <Box style={{ ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
+              <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+                <Hexagon size={16} color={tokens.colors.primaryScale[500]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                  Score Radar
+                </Text>
+              </Flex>
+              <Flex justify="center">
+                <RadarChart />
+              </Flex>
+            </Box>
+          )}
+
+          {/* Dimension Table */}
+          {(activeView === 'table' || activeView === 'detail') && (
+            <Box style={{ ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
+              <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[3] }}>
+                <Flex align="center" gap={6}>
+                  <BarChart3 size={16} color={tokens.colors.primaryScale[500]} />
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                    Dimension Breakdown
+                  </Text>
+                </Flex>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                  {dimensions.length} dimensions
+                </Text>
+              </Flex>
+              {/* Sort controls */}
+              <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+                <ArrowUpDown size={14} color={tokens.colors.neutral[400]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Sort by:</Text>
+                {sortOpts.map(o => (
+                  <Box key={o.key} onClick={() => handleSort(o.key)} style={{
+                    ...hov, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                    borderRadius: tokens.borderRadius.md,
+                    fontSize: tokens.typography.fontSize.xs,
+                    fontWeight: sortBy === o.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
+                    color: sortBy === o.key ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
+                    backgroundColor: sortBy === o.key ? tokens.colors.primaryScale[50] : 'transparent',
+                  }}>
+                    {o.label}
+                  </Box>
+                ))}
+              </Flex>
+              {sorted.map(dim => DimRow(dim))}
+            </Box>
+          )}
+
+          {/* Confidence Factors */}
+          <Box style={{ ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
+            <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+              <Shield size={16} color={tokens.colors.primaryScale[500]} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                Confidence Factors
+              </Text>
+            </Flex>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
+              {confFactors.map(f => (
+                <Box key={f.label} style={{
+                  padding: tokens.spacing[3], backgroundColor: tokens.colors.neutral[50],
+                  borderRadius: tokens.borderRadius.lg,
+                  border: `${bdr} ${tokens.colors.neutral[100]}`,
+                }}>
+                  <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[2] }}>
+                    <Flex align="center" gap={6} style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                      <Box style={{ color: f.color }}>{f.icon}</Box>
+                      <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{f.label}</Text>
+                    </Flex>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>
+                      {f.value}%
+                    </Text>
+                  </Flex>
+                  <Box style={{ height: 4, backgroundColor: tokens.colors.neutral[200], borderRadius: tokens.borderRadius.full, overflow: 'hidden', marginBottom: tokens.spacing[2] }}>
+                    <Box style={{ width: `${f.value}%`, height: '100%', backgroundColor: f.color, borderRadius: tokens.borderRadius.full, transition: `width ${trans}` }} />
+                  </Box>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], lineHeight: 1.5 }}>
+                    {f.desc}
+                  </Text>
+                </Box>
+              ))}
+            </div>
           </Box>
 
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[4],
-            marginBottom: tokens.spacing[3],
-          }}>
-            {/* Original score */}
+          {/* Override Info */}
+          {overrideInfo && (
             <Box style={{
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-              backgroundColor: tokens.colors.errorScale[50],
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-              textDecoration: 'line-through',
+              ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4],
+              border: `${bdr} ${tokens.colors.warningScale[200]}`,
             }}>
+              <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+                <Edit3 size={16} color={tokens.colors.warningScale[600]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[800] }}>
+                  Score Override Applied
+                </Text>
+              </Flex>
+              <Flex gap={16} align="center" style={{ marginBottom: tokens.spacing[3] }}>
+                <Stack gap={2} style={{
+                  padding: tokens.spacing[3], backgroundColor: tokens.colors.errorScale[50],
+                  borderRadius: tokens.borderRadius.lg, border: `${bdr} ${tokens.colors.errorScale[200]}`,
+                }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Original</Text>
+                  <Text style={{ fontSize: tokens.typography.fontSize.lg || '1.125rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.errorScale[600], textDecoration: 'line-through' as const }}>
+                    {overrideInfo.originalScore}
+                  </Text>
+                </Stack>
+                <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.lg || '1.125rem' }}>{'\u2192'}</Text>
+                <Stack gap={2} style={{
+                  padding: tokens.spacing[3], backgroundColor: tokens.colors.successScale[50],
+                  borderRadius: tokens.borderRadius.lg, border: `${bdr} ${tokens.colors.successScale[200]}`,
+                }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Override</Text>
+                  <Text style={{ fontSize: tokens.typography.fontSize.lg || '1.125rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.successScale[700] }}>
+                    {overrideInfo.overrideScore}
+                  </Text>
+                </Stack>
+                <Stack gap={2} style={{ flex: 1 }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Overridden by</Text>
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+                    {overrideInfo.reviewerName}
+                  </Text>
+                </Stack>
+              </Flex>
               <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-                marginBottom: 2,
+                padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                backgroundColor: tokens.colors.neutral[50],
+                borderRadius: tokens.borderRadius.lg,
+                borderLeft: `3px solid ${tokens.colors.warningScale[300]}`,
               }}>
-                Original
-              </Box>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.errorScale[600],
-              }}>
-                {overrideInfo.originalScore}
-              </Box>
-            </Box>
-
-            {/* Arrow */}
-            <Box style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.lg }}>
-              {'\u2192'}
-            </Box>
-
-            {/* Override score */}
-            <Box style={{
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-              backgroundColor: tokens.colors.successScale[50],
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[200]}`,
-            }}>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-                marginBottom: 2,
-              }}>
-                Override
-              </Box>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.successScale[700],
-              }}>
-                {overrideInfo.overrideScore}
-              </Box>
-            </Box>
-
-            {/* Reviewer info */}
-            <Box style={{ flex: 1 }}>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-                marginBottom: tokens.spacing[1],
-              }}>
-                Overridden by
-              </Box>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[800],
-              }}>
-                {overrideInfo.reviewerName}
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: 1.6 }}>
+                  {overrideInfo.reasoning}
+                </Text>
               </Box>
             </Box>
-          </Box>
+          )}
 
-          {/* Reasoning */}
-          <Box style={{
-            padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-            backgroundColor: tokens.colors.neutral[50],
-            borderRadius: tokens.borderRadius.md,
-            fontSize: tokens.typography.fontSize.sm,
-            color: tokens.colors.neutral[600],
-            lineHeight: tokens.typography.lineHeight.relaxed,
-            borderLeft: `3px solid ${tokens.colors.warningScale[300]}`,
-          }}>
-            {overrideInfo.reasoning}
-          </Box>
-        </Box>
-      );
-    };
-
-    /* ================================================================ */
-    /*  RENDER: Cohort Comparison                                         */
-    /* ================================================================ */
-    const renderCohortComparison = () => {
-      if (!cohortComparison) return null;
-
-      return (
-        <Box style={{
-          ...cardBase,
-          ...glassCard,
-          padding: tokens.spacing[4],
-          marginBottom: tokens.spacing[4],
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            marginBottom: tokens.spacing[3],
-            fontSize: tokens.typography.fontSize.sm,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.neutral[700],
-          }}>
-            <Users size={16} color={tokens.colors.primaryScale[500]} />
-            Cohort Comparison
-          </Box>
-
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[4],
-            marginBottom: tokens.spacing[3],
-          }}>
+          {/* Override Form */}
+          {showOverride && (
             <Box style={{
-              fontSize: tokens.typography.fontSize['3xl'],
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.primaryScale[600],
-            }}>
-              P{cohortComparison.percentile}
-            </Box>
-            <Box style={{
-              fontSize: tokens.typography.fontSize.sm,
-              color: tokens.colors.neutral[500],
-            }}>
-              out of {cohortComparison.totalInCohort} candidates
-            </Box>
-          </Box>
-
-          {/* Percentile bar */}
-          <Box style={{
-            position: 'relative' as const,
-            height: 24,
-            backgroundColor: tokens.colors.neutral[100],
-            borderRadius: tokens.borderRadius.full,
-            overflow: 'hidden',
-          }}>
-            <Box style={{
-              position: 'absolute' as const,
-              left: 0,
-              top: 0,
-              height: '100%',
-              width: `${cohortComparison.percentile}%`,
-              background: `linear-gradient(90deg, ${tokens.colors.primaryScale[200]}, ${tokens.colors.primaryScale[500]})`,
-              borderRadius: tokens.borderRadius.full,
-              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-            }} />
-            {/* Position marker */}
-            <Box style={{
-              position: 'absolute' as const,
-              left: `${cohortComparison.percentile}%`,
-              top: -4,
-              transform: 'translateX(-50%)',
-              width: 16,
-              height: 32,
-              borderRadius: tokens.borderRadius.full,
-              backgroundColor: tokens.colors.primaryScale[600],
-              border: `3px solid ${tokens.colors.common.white}`,
-              boxShadow: tokens.shadows.md,
-            }} />
-          </Box>
-
-          <Box style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: tokens.spacing[1],
-          }}>
-            <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>0th</Box>
-            <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>50th</Box>
-            <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>100th</Box>
-          </Box>
-        </Box>
-      );
-    };
-
-    /* ================================================================ */
-    /*  RENDER: Override Form                                             */
-    /* ================================================================ */
-    const renderOverrideForm = () => {
-      if (!showOverride) return null;
-
-      return (
-        <Box style={{
-          ...cardBase,
-          padding: tokens.spacing[4],
-          marginBottom: tokens.spacing[4],
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
-          backgroundColor: tokens.colors.warningScale[50],
-        }}>
-          <Box style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing[2],
-            marginBottom: tokens.spacing[3],
-            fontSize: tokens.typography.fontSize.sm,
-            fontWeight: tokens.typography.fontWeight.semibold,
-            color: tokens.colors.warningScale[800],
-          }}>
-            <Edit3 size={16} />
-            Override Score
-          </Box>
-
-          <Box style={{ marginBottom: tokens.spacing[3] }}>
-            <Box style={{
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.neutral[600],
-              marginBottom: tokens.spacing[1],
-            }}>
-              Reason for override
-            </Box>
-            <textarea
-              value={overrideReason}
-              onChange={(e) => handleOverrideReasonChange(e.target.value)}
-              placeholder="Provide a detailed reason for overriding this score..."
-              style={{
-                width: '100%',
-                minHeight: 80,
-                padding: tokens.spacing[3],
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                fontSize: tokens.typography.fontSize.sm,
-                fontFamily: 'inherit',
-                color: tokens.colors.neutral[700],
-                backgroundColor: tokens.colors.common.white,
-                resize: 'vertical' as const,
-                outline: 'none',
-              }}
-            
-              onFocus={(e) => {
-                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-              }}
-            />
-          </Box>
-
-          <Box style={{ display: 'flex', gap: tokens.spacing[2], justifyContent: 'flex-end' }}>
-            <Box
-              onClick={() => handleOverrideToggle(false)}
-              style={{
-                ...hoverStyle,
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.medium,
-                color: tokens.colors.neutral[600],
-                backgroundColor: tokens.colors.neutral[100],
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              }}
-            >
-              Cancel
-            </Box>
-            <Box
-              onClick={() => {
-                onOverride?.(header.overallScore, overrideReason);
-                handleOverrideToggle(false);
-              }}
-              style={{
-                ...hoverStyle,
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.common.white,
-                backgroundColor: tokens.colors.warningScale[600],
-              }}
-            >
-              Submit Override
-            </Box>
-          </Box>
-        </Box>
-      );
-    };
-
-    /* ================================================================ */
-    /*  RENDER: Action Buttons                                            */
-    /* ================================================================ */
-    const renderActions = () => (
-      <Box style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: tokens.spacing[3],
-        padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
-        borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-        flexWrap: 'wrap' as const,
-      }}>
-        {/* Approve */}
-        {onApprove && (
-          <Box
-            onClick={onApprove}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: tokens.colors.common.white,
-              backgroundColor: tokens.colors.successScale[600],
-              boxShadow: tokens.shadows.sm,
-            }}
-          >
-            <ThumbsUp size={14} />
-            Approve
-          </Box>
-        )}
-
-        {/* Override */}
-        {onOverride && (
-          <Box
-            onClick={() => handleOverrideToggle(!showOverride)}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.warningScale[700],
+              ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4],
+              border: `${bdr} ${tokens.colors.warningScale[200]}`,
               backgroundColor: tokens.colors.warningScale[50],
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
-            }}
-          >
-            <Edit3 size={14} />
-            Override
-          </Box>
-        )}
+            }}>
+              <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+                <Edit3 size={16} color={tokens.colors.warningScale[600]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[800] }}>
+                  Override Score
+                </Text>
+              </Flex>
+              <Box style={{ marginBottom: tokens.spacing[3] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[600], marginBottom: tokens.spacing[1] }}>
+                  Reason for override
+                </Text>
+                <textarea
+                  value={overrideReason}
+                  onChange={(e) => handleOverReason(e.target.value)}
+                  placeholder="Provide a detailed reason for overriding this score..."
+                  style={{
+                    width: '100%', minHeight: 80, padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    border: `${bdr} ${tokens.colors.neutral[300]}`,
+                    fontSize: tokens.typography.fontSize.sm, fontFamily: 'inherit',
+                    color: tokens.colors.neutral[700], backgroundColor: tokens.colors.common.white,
+                    resize: 'vertical' as const, outline: 'none',
+                  }}
+                />
+              </Box>
+              <Flex gap={6} justify="end">
+                <Box onClick={() => handleOverToggle(false)} style={{
+                  ...hov, padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
+                  borderRadius: tokens.borderRadius.md,
+                  fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
+                  color: tokens.colors.neutral[600], backgroundColor: tokens.colors.neutral[100],
+                  border: `${bdr} ${tokens.colors.neutral[200]}`,
+                }}>
+                  Cancel
+                </Box>
+                <Box onClick={() => { onOverride?.(header.overallScore, overrideReason); handleOverToggle(false); }}
+                  style={{
+                    ...hov, padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
+                    borderRadius: tokens.borderRadius.md,
+                    fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
+                    color: tokens.colors.common.white, backgroundColor: tokens.colors.warningScale[600],
+                  }}>
+                  Submit Override
+                </Box>
+              </Flex>
+            </Box>
+          )}
 
-        {/* Re-score */}
-        {onRequestRescore && (
-          <Box
-            onClick={onRequestRescore}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.infoScale[700],
-              backgroundColor: tokens.colors.infoScale[50],
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
-            }}
-          >
-            <RotateCcw size={14} />
-            Re-score
-          </Box>
-        )}
-
-        {/* Appeal */}
-        {onSubmitAppeal && (
-          <Box
-            onClick={() => onSubmitAppeal(overrideReason)}
-            style={{
-              ...hoverStyle,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-              borderRadius: tokens.borderRadius.md,
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.warningScale[700],
-              backgroundColor: tokens.colors.warningScale[50],
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
-            }}
-          >
-            <AlertTriangle size={14} />
-            Appeal
-          </Box>
-        )}
-      </Box>
-    );
-
-    /* ================================================================ */
-    /*  MAIN RENDER                                                       */
-    /* ================================================================ */
-    return (
-      <Box
-        className={className}
-        style={{
-          ...surfaceStyle,
-          backgroundColor: tokens.colors.common.white,
-          overflow: 'hidden',
-          ...glassCard,
-          ...style,
-        }}
-      >
-        {renderHeader()}
-
-        <Box style={{ padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px` }}>
-          {renderViewTabs()}
-
-          {/* Knockout warning at top if triggered */}
-          {renderKnockoutSection()}
-
-          {/* Radar chart (shown in radar + detail view) */}
-          {(activeView === 'radar' || activeView === 'detail') && renderRadarChart()}
-
-          {/* Dimension table (shown in table + detail view) */}
-          {(activeView === 'table' || activeView === 'detail') && renderDimensionTable()}
-
-          {/* Confidence factors */}
-          {renderConfidenceFactors()}
-
-          {/* Override info (if exists) */}
-          {renderOverrideSection()}
-
-          {/* Override form (if toggled) */}
-          {renderOverrideForm()}
-
-          {/* Cohort comparison */}
-          {renderCohortComparison()}
+          {/* Cohort Comparison */}
+          {cohortComparison && (
+            <Box style={{ ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
+              <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
+                <Users size={16} color={tokens.colors.primaryScale[500]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                  Cohort Comparison
+                </Text>
+              </Flex>
+              <Flex align="center" gap={16} style={{ marginBottom: tokens.spacing[3] }}>
+                <Text style={{
+                  fontSize: tokens.typography.fontSize['3xl'] || '1.875rem',
+                  fontWeight: tokens.typography.fontWeight.bold,
+                  color: tokens.colors.primaryScale[600],
+                }}>
+                  P{cohortComparison.percentile}
+                </Text>
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                  out of {cohortComparison.totalInCohort} candidates
+                </Text>
+              </Flex>
+              <Box style={{ position: 'relative' as const, height: 24, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
+                <Box style={{
+                  position: 'absolute' as const, left: 0, top: 0, height: '100%',
+                  width: `${cohortComparison.percentile}%`,
+                  background: `linear-gradient(90deg, ${tokens.colors.primaryScale[200]}, ${tokens.colors.primaryScale[500]})`,
+                  borderRadius: tokens.borderRadius.full, transition: `width ${trans}`,
+                }} />
+                <Box style={{
+                  position: 'absolute' as const, left: `${cohortComparison.percentile}%`, top: -4,
+                  transform: 'translateX(-50%)', width: 16, height: 32,
+                  borderRadius: tokens.borderRadius.full,
+                  backgroundColor: tokens.colors.primaryScale[600],
+                  border: `3px solid ${tokens.colors.common.white}`,
+                  boxShadow: tokens.shadows.md,
+                }} />
+              </Box>
+              <Flex justify="between" style={{ marginTop: tokens.spacing[1] }}>
+                {['0th', '50th', '100th'].map(l => (
+                  <Text key={l} style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{l}</Text>
+                ))}
+              </Flex>
+            </Box>
+          )}
         </Box>
 
-        {renderActions()}
+        {/* ── Actions ──────────────────────────────────── */}
+        <Flex align="center" gap={8} wrap="wrap" style={{
+          padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
+          borderTop: `${bdr} ${tokens.colors.neutral[200]}`,
+        }}>
+          {onApprove && <ActBtn onClick={onApprove} icon={<ThumbsUp size={14} />} label="Approve" bg={tokens.colors.successScale[600]} clr={tokens.colors.common.white} />}
+          {onOverride && <ActBtn onClick={() => handleOverToggle(!showOverride)} icon={<Edit3 size={14} />} label="Override" bg={tokens.colors.warningScale[50]} clr={tokens.colors.warningScale[700]} borderClr={tokens.colors.warningScale[200]} />}
+          {onRequestRescore && <ActBtn onClick={onRequestRescore} icon={<RotateCcw size={14} />} label="Re-score" bg={tokens.colors.infoScale[50]} clr={tokens.colors.infoScale[700]} borderClr={tokens.colors.infoScale[200]} />}
+          {onSubmitAppeal && <ActBtn onClick={() => onSubmitAppeal(overrideReason)} icon={<AlertTriangle size={14} />} label="Appeal" bg={tokens.colors.warningScale[50]} clr={tokens.colors.warningScale[700]} borderClr={tokens.colors.warningScale[200]} />}
+        </Flex>
       </Box>
     );
   },
-);
+});

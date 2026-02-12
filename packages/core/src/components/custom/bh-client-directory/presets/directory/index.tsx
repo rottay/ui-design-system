@@ -2,1365 +2,324 @@
 
 /**
  * BhClientDirectory - Directory Preset
- * Split panel layout with filter bar, client list, and detail panel
+ * Split-panel layout with filterable client list (left) and
+ * rich detail panel (right) showing contacts, contract, metrics.
+ * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import {
-  createBadgeStyle,
-  createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
-} from '../../../helpers';
+import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
 import type {
-  BhClientDirectoryProps,
-  ClientItem,
-  ClientFilter,
-  ClientContact,
-  ClientType,
-  ClientStatus,
-  ClientTier,
-  ApprovalStatus,
-  ViewMode,
+  BhClientDirectoryProps, ClientItem, ClientFilter,
+  ClientType, ClientStatus, ClientTier, ApprovalStatus,
 } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  Search,
-  Plus,
-  Building2,
-  User,
-  ChevronDown,
-  X,
-  Mail,
-  Phone,
-  Briefcase,
-  DollarSign,
-  Calendar,
-  FileText,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  XCircle,
-  Edit3,
-  LayoutList,
-  LayoutGrid,
-  Filter,
-  Users,
-  TrendingUp,
-  Hash,
-  Star,
-  Shield,
-  Eye,
+  Search, Plus, Building2, User, X, Mail, Phone, Briefcase,
+  DollarSign, Calendar, FileText, CheckCircle2, Clock, XCircle,
+  Edit3, Users, Star, Shield, Eye, TrendingUp,
 } from 'lucide-react';
 
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+/* ---------------------------------------------------------------------------
+ * Helpers
+ * -------------------------------------------------------------------------*/
 
-const STATUS_MAP: Record<ClientStatus, { label: string; colorKey: 'success' | 'error' | 'warning' | 'info' }> = {
-  active: { label: 'Active', colorKey: 'success' },
-  inactive: { label: 'Inactive', colorKey: 'error' },
-  pending_approval: { label: 'Pending', colorKey: 'warning' },
-  suspended: { label: 'Suspended', colorKey: 'error' },
+const STATUS_CFG: Record<ClientStatus, { label: string; color: (t: DesignTokens) => string }> = {
+  active: { label: 'Active', color: t => t.colors.successScale[500] },
+  inactive: { label: 'Inactive', color: t => t.colors.neutral[400] },
+  pending_approval: { label: 'Pending', color: t => t.colors.warningScale[500] },
+  suspended: { label: 'Suspended', color: t => t.colors.errorScale[500] },
 };
 
-const TIER_MAP: Record<ClientTier, { label: string; colorKey: 'primary' | 'warning' | 'secondary' }> = {
-  standard: { label: 'Standard', colorKey: 'primary' },
-  premium: { label: 'Premium', colorKey: 'warning' },
-  enterprise: { label: 'Enterprise', colorKey: 'secondary' },
+const TIER_CFG: Record<ClientTier, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
+  standard: { label: 'Standard', color: t => t.colors.primaryScale[600], bg: t => t.colors.primaryScale[50] },
+  premium: { label: 'Premium', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
+  enterprise: { label: 'Enterprise', color: t => t.colors.secondaryScale[600], bg: t => t.colors.secondaryScale[50] },
 };
 
-const APPROVAL_MAP: Record<ApprovalStatus, { label: string; colorKey: 'warning' | 'info' | 'success' | 'error'; icon: typeof Clock }> = {
-  pending: { label: 'Pending', colorKey: 'warning', icon: Clock },
-  reviewed: { label: 'Reviewed', colorKey: 'info', icon: Eye },
-  approved: { label: 'Approved', colorKey: 'success', icon: CheckCircle2 },
-  rejected: { label: 'Rejected', colorKey: 'error', icon: XCircle },
-};
-
-const APPROVAL_STEPS: ApprovalStatus[] = ['pending', 'reviewed', 'approved'];
-
-function formatRevenue(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
-  return `$${value}`;
+function fmtRev(v: number): string { return v >= 1e6 ? `$${(v / 1e6).toFixed(1)}M` : v >= 1e3 ? `$${(v / 1e3).toFixed(0)}K` : `$${v}`; }
+function fmtFee(f: ClientItem['feeStructure']): string {
+  if (!f) return 'N/A';
+  if (f.type === 'percentage') return `${f.value}%`;
+  if (f.type === 'retainer') return `${f.currency ?? 'USD'} ${f.value.toLocaleString()}/mo`;
+  return `${f.currency ?? 'USD'} ${f.value.toLocaleString()}`;
 }
 
-function formatFee(feeStructure: ClientItem['feeStructure']): string {
-  if (!feeStructure) return 'N/A';
-  const currency = feeStructure.currency ?? 'USD';
-  switch (feeStructure.type) {
-    case 'percentage':
-      return `${feeStructure.value}%`;
-    case 'fixed':
-      return `${currency} ${feeStructure.value.toLocaleString()}`;
-    case 'retainer':
-      return `${currency} ${feeStructure.value.toLocaleString()}/mo`;
-    default:
-      return 'N/A';
-  }
-}
-
-function filterClients(clients: ClientItem[], filters: ClientFilter): ClientItem[] {
-  return clients.filter((client) => {
-    if (filters.type && filters.type !== 'all' && client.type !== filters.type) return false;
-    if (filters.status && filters.status !== 'all' && client.status !== filters.status) return false;
-    if (filters.tier && filters.tier !== 'all' && client.tier !== filters.tier) return false;
-    if (filters.industry && client.industry.toLowerCase().indexOf(filters.industry.toLowerCase()) === -1) return false;
-    if (filters.search) {
-      const q = filters.search.toLowerCase();
-      const nameMatch = client.name.toLowerCase().indexOf(q) !== -1;
-      const industryMatch = client.industry.toLowerCase().indexOf(q) !== -1;
-      const contactMatch = client.contacts.some(
-        (c) => c.name.toLowerCase().indexOf(q) !== -1 || c.email.toLowerCase().indexOf(q) !== -1,
-      );
-      if (!nameMatch && !industryMatch && !contactMatch) return false;
-    }
+function filterClients(clients: ClientItem[], f: ClientFilter): ClientItem[] {
+  return clients.filter(c => {
+    if (f.type && f.type !== 'all' && c.type !== f.type) return false;
+    if (f.status && f.status !== 'all' && c.status !== f.status) return false;
+    if (f.tier && f.tier !== 'all' && c.tier !== f.tier) return false;
+    if (f.search) { const q = f.search.toLowerCase(); if (!c.name.toLowerCase().includes(q) && !c.industry.toLowerCase().includes(q)) return false; }
     return true;
   });
 }
 
-function getStatusDotColor(tokens: DesignTokens, status: ClientStatus): string {
-  const mapping: Record<ClientStatus, string> = {
-    active: tokens.colors.successScale[500],
-    inactive: tokens.colors.neutral[400],
-    pending_approval: tokens.colors.warningScale[500],
-    suspended: tokens.colors.errorScale[500],
-  };
-  return mapping[status];
-}
+const DEFAULT_CLIENTS: ClientItem[] = [
+  { id: 'cl-1', name: 'Acme Corporation', type: 'company', status: 'active', tier: 'enterprise', industry: 'Technology', positionsCount: 12, revenue: 450000, approvalStatus: 'approved', contacts: [{ name: 'Lisa Park', email: 'lisa@acme.co', phone: '+1 (555) 100-2000', role: 'VP Engineering' }, { name: 'Tom Walsh', email: 'tom@acme.co', phone: '+1 (555) 100-2001', role: 'Hiring Manager' }], contractInfo: { terms: 'Annual', startDate: '2025-01-15', endDate: '2026-01-14' }, feeStructure: { type: 'percentage', value: 20 } },
+  { id: 'cl-2', name: 'Horizon Labs', type: 'company', status: 'active', tier: 'premium', industry: 'Healthcare', positionsCount: 5, revenue: 180000, approvalStatus: 'approved', contacts: [{ name: 'Mark Rivera', email: 'mark@horizon.io', phone: '+1 (555) 200-3000', role: 'HR Director' }], feeStructure: { type: 'retainer', value: 8000 } },
+  { id: 'cl-3', name: 'Nova Ventures', type: 'company', status: 'pending_approval', tier: 'standard', industry: 'Finance', positionsCount: 3, revenue: 75000, approvalStatus: 'pending', contacts: [{ name: 'Sam Ortiz', email: 'sam@nova.vc', phone: '+1 (555) 300-4000', role: 'Talent Lead' }], feeStructure: { type: 'fixed', value: 25000 } },
+  { id: 'cl-4', name: 'David Chen', type: 'individual', status: 'active', tier: 'standard', industry: 'Consulting', positionsCount: 1, revenue: 15000, approvalStatus: 'approved', contacts: [{ name: 'David Chen', email: 'david@chen.consulting', phone: '+1 (555) 400-5000', role: 'Owner' }] },
+  { id: 'cl-5', name: 'Meridian Group', type: 'company', status: 'inactive', tier: 'premium', industry: 'Real Estate', positionsCount: 0, revenue: 95000, approvalStatus: 'approved', contacts: [{ name: 'Kate Yu', email: 'kate@meridian.com', phone: '+1 (555) 500-6000', role: 'COO' }] },
+];
 
-function getScaleForColor(tokens: DesignTokens, colorKey: string) {
-  const map: Record<string, any> = {
-    primary: tokens.colors.primaryScale,
-    secondary: tokens.colors.secondaryScale,
-    success: tokens.colors.successScale,
-    warning: tokens.colors.warningScale,
-    error: tokens.colors.errorScale,
-    info: tokens.colors.infoScale,
-  };
-  return map[colorKey] ?? tokens.colors.neutral;
-}
+/* ---------------------------------------------------------------------------
+ * Preset
+ * -------------------------------------------------------------------------*/
 
-/* ------------------------------------------------------------------ */
-/*  Preset                                                             */
-/* ------------------------------------------------------------------ */
-
-export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>(
-  'DirectoryBhClientDirectory',
-  ({ primitives, props, tokens, engine }: PresetContext<BhClientDirectoryProps>) => {
-    const { Box, Stack } = primitives;
-    const isModern = tokens.surface.useGlass;
+export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
+  name: 'BhClientDirectory.Directory',
+  render: ({ primitives, props, tokens: t }: PresetContext<BhClientDirectoryProps>) => {
+    const { Box, Text } = primitives;
+    const br = getPersonalityBadgeRadius(t);
 
     const {
-      clients = [],
+      clients = DEFAULT_CLIENTS,
       filters: filtersProp,
       onFilterChange,
       onClientSelect,
-      selectedClient: selectedClientProp,
+      selectedClient: selectedProp,
       onAddClient,
       onEditClient,
-      viewMode: viewModeProp,
-      onViewModeChange,
-      className,
-      style,
+      className, style,
     } = props;
 
-    /* -- local state ------------------------------------------------ */
-    const [internalSelected, setInternalSelected] = useState<string | null>(selectedClientProp ?? null);
-    const [internalViewMode, setInternalViewMode] = useState<ViewMode>(viewModeProp ?? 'list');
-    const [internalFilters, setInternalFilters] = useState<ClientFilter>(
-      filtersProp ?? { type: 'all', status: 'all', tier: 'all', industry: '', search: '' },
-    );
-    const [showForm, setShowForm] = useState(false);
-    const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
-
-    const selectedId = selectedClientProp ?? internalSelected;
-    const viewMode = viewModeProp ?? internalViewMode;
+    const [internalSelected, setInternalSelected] = useState<string | null>(selectedProp ?? null);
+    const [internalFilters, setInternalFilters] = useState<ClientFilter>(filtersProp ?? { type: 'all', status: 'all', tier: 'all', search: '' });
+    const selectedId = selectedProp ?? internalSelected;
     const filters = filtersProp ?? internalFilters;
 
-    /* -- handlers --------------------------------------------------- */
-    const updateFilter = useCallback(
-      (patch: Partial<ClientFilter>) => {
-        const next = { ...filters, ...patch };
-        setInternalFilters(next);
-        onFilterChange?.(next);
-      },
-      [filters, onFilterChange],
-    );
-
-    const selectClient = useCallback(
-      (id: string) => {
-        setInternalSelected(id);
-        onClientSelect?.(id);
-      },
-      [onClientSelect],
-    );
-
-    const changeViewMode = useCallback(
-      (mode: ViewMode) => {
-        setInternalViewMode(mode);
-        onViewModeChange?.(mode);
-      },
-      [onViewModeChange],
-    );
-
-    const openAddForm = useCallback(() => {
-      setFormMode('add');
-      setShowForm(true);
-    }, []);
-
-    const openEditForm = useCallback(() => {
-      setFormMode('edit');
-      setShowForm(true);
-    }, []);
-
-    const closeForm = useCallback(() => {
-      setShowForm(false);
-    }, []);
-
-    /* -- derived ----------------------------------------------------- */
-    const filteredClients = filterClients(clients, filters);
-    const selectedClientData = clients.find((c) => c.id === selectedId) ?? null;
-
-    /* -- glassmorphism ----------------------------------------------- */
-    const glassStyle = isModern && tokens.glass
-      ? {
-          backdropFilter: tokens.glass.blur,
-          WebkitBackdropFilter: tokens.glass.blur,
-          backgroundColor: tokens.glass.bg,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}`,
-        }
-      : {};
-
-    /* ================================================================ */
-    /*  STYLES                                                          */
-    /* ================================================================ */
-
-    const rootStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      backgroundColor: tokens.colors.neutral[50],
-      fontFamily: 'inherit',
-      color: tokens.colors.neutral[900],
-      ...style,
-    };
-
-    const headerBarStyle: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-      backgroundColor: tokens.colors.common.white,
-      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-      ...glassStyle,
-    };
-
-    const filterBarStyle: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'center',
-      gap: tokens.spacing[3],
-      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-      backgroundColor: tokens.colors.common.white,
-      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-      flexWrap: 'wrap',
-      ...glassStyle,
-    };
-
-    const splitStyle: React.CSSProperties = {
-      display: 'flex',
-      flex: 1,
-      overflow: 'hidden',
-    };
-
-    const listPanelStyle: React.CSSProperties = {
-      width: selectedClientData ? '380px' : '100%',
-      minWidth: selectedClientData ? '380px' : undefined,
-      borderRight: selectedClientData
-        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`
-        : 'none',
-      overflowY: 'auto',
-      backgroundColor: tokens.colors.common.white,
-    };
-
-    const detailPanelStyle: React.CSSProperties = {
-      flex: 1,
-      overflowY: 'auto',
-      backgroundColor: tokens.colors.neutral[50],
-      padding: tokens.spacing[5],
-    };
-
-    const searchInputStyle: React.CSSProperties = {
-      flex: 1,
-      minWidth: '200px',
-      position: 'relative',
-    };
-
-    const inputStyle: React.CSSProperties = {
-      width: '100%',
-      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px ${tokens.spacing[2]}px ${tokens.spacing[8]}px`,
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-      borderRadius: tokens.borderRadius.md,
-      fontSize: tokens.typography.fontSize.sm,
-      color: tokens.colors.neutral[900],
-      backgroundColor: tokens.colors.common.white,
-      outline: 'none',
-      transition: `all ${tokens.motion.hover}`,
-    };
-
-    const pillStyle = (active: boolean): React.CSSProperties => ({
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: tokens.spacing[1],
-      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-      borderRadius: tokens.borderRadius.full,
-      fontSize: tokens.typography.fontSize.xs,
-      fontWeight: tokens.typography.fontWeight.medium,
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-      backgroundColor: active ? tokens.colors.primaryScale[50] : tokens.colors.neutral[100],
-      color: active ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${active ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
-    });
-
-    const selectStyle: React.CSSProperties = {
-      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-      borderRadius: tokens.borderRadius.md,
-      fontSize: tokens.typography.fontSize.xs,
-      fontWeight: tokens.typography.fontWeight.medium,
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-      backgroundColor: tokens.colors.common.white,
-      color: tokens.colors.neutral[700],
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-      outline: 'none',
-    };
-
-    const clientRowStyle = (isSelected: boolean): React.CSSProperties => ({
-      display: 'flex',
-      alignItems: 'center',
-      gap: tokens.spacing[3],
-      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-      backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-      borderLeft: isSelected ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
-    });
-
-    const avatarStyle = (type: ClientType): React.CSSProperties => ({
-      width: tokens.spacing[10],
-      height: tokens.spacing[10],
-      borderRadius: type === 'company' ? tokens.borderRadius.md : tokens.borderRadius.full,
-      backgroundColor: type === 'company' ? tokens.colors.primaryScale[100] : tokens.colors.secondaryScale[100],
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: type === 'company' ? tokens.colors.primaryScale[600] : tokens.colors.secondaryScale[600],
-      flexShrink: 0,
-    });
-
-    const statusDotStyle = (status: ClientStatus): React.CSSProperties => ({
-      width: tokens.spacing[2],
-      height: tokens.spacing[2],
-      borderRadius: tokens.borderRadius.full,
-      backgroundColor: getStatusDotColor(tokens, status),
-      flexShrink: 0,
-    });
-
-    const badgeSmallStyle = (colorKey: string): React.CSSProperties => {
-      const scale = getScaleForColor(tokens, colorKey);
-      return {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: tokens.spacing[1],
-        padding: `0px ${tokens.spacing[2]}px`,
-        borderRadius: tokens.borderRadius.full,
-        fontSize: tokens.typography.fontSize.xs,
-        fontWeight: tokens.typography.fontWeight.medium,
-        backgroundColor: scale[100],
-        color: scale[700],
-        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scale[200]}`,
-        lineHeight: '1.6',
-      };
-    };
-
-    const sectionCardStyle: React.CSSProperties = {
-      ...createCardStyle(tokens, { elevation: 'sm', glass: isModern }),
-      marginBottom: tokens.spacing[4],
-    };
-
-    const sectionTitleStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.sm,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      color: tokens.colors.neutral[800],
-      marginBottom: tokens.spacing[3],
-      display: 'flex',
-      alignItems: 'center',
-      gap: tokens.spacing[2],
-    };
-
-    const contactCardStyle: React.CSSProperties = {
-      padding: tokens.spacing[3],
-      borderRadius: tokens.borderRadius.md,
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-      backgroundColor: tokens.colors.neutral[50],
-      marginBottom: tokens.spacing[2],
-    };
-
-    const addButtonStyle: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: tokens.spacing[2],
-      padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-      borderRadius: tokens.borderRadius.md,
-      fontSize: tokens.typography.fontSize.sm,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      backgroundColor: tokens.colors.primaryScale[600],
-      color: tokens.colors.common.white,
-      border: 'none',
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-    };
-
-    const viewToggleStyle = (active: boolean): React.CSSProperties => ({
-      display: 'inline-flex',
-      alignItems: 'center',
-      padding: tokens.spacing[1],
-      borderRadius: tokens.borderRadius.sm,
-      cursor: 'pointer',
-      backgroundColor: active ? tokens.colors.primaryScale[100] : 'transparent',
-      color: active ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-      transition: `all ${tokens.motion.hover}`,
-      border: 'none',
-    });
-
-    /* -- slide-in form ---------------------------------------------- */
-    const overlayStyle: React.CSSProperties = {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: tokens.overlay?.light,
-      zIndex: 999,
-      display: showForm ? 'block' : 'none',
-    };
-
-    const slideFormStyle: React.CSSProperties = {
-      position: 'fixed',
-      top: 0,
-      right: 0,
-      bottom: 0,
-      width: '460px',
-      backgroundColor: tokens.colors.common.white,
-      boxShadow: tokens.shadows.xl,
-      zIndex: 1000,
-      overflowY: 'auto',
-      padding: tokens.spacing[5],
-      transform: showForm ? 'translateX(0)' : 'translateX(100%)',
-      transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}`,
-      ...glassStyle,
-    };
-
-    const formFieldStyle: React.CSSProperties = {
-      marginBottom: tokens.spacing[4],
-    };
-
-    const formLabelStyle: React.CSSProperties = {
-      display: 'block',
-      fontSize: tokens.typography.fontSize.xs,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      color: tokens.colors.neutral[600],
-      marginBottom: tokens.spacing[1],
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.04em',
-    };
-
-    const formInputStyle: React.CSSProperties = {
-      width: '100%',
-      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-      borderRadius: tokens.borderRadius.md,
-      fontSize: tokens.typography.fontSize.sm,
-      color: tokens.colors.neutral[900],
-      backgroundColor: tokens.colors.common.white,
-      outline: 'none',
-      boxSizing: 'border-box' as const,
-    };
-
-    const cancelBtnStyle: React.CSSProperties = {
-      padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-      borderRadius: tokens.borderRadius.md,
-      fontSize: tokens.typography.fontSize.sm,
-      fontWeight: tokens.typography.fontWeight.medium,
-      backgroundColor: tokens.colors.neutral[100],
-      color: tokens.colors.neutral[700],
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-    };
-
-    const submitBtnStyle: React.CSSProperties = {
-      padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-      borderRadius: tokens.borderRadius.md,
-      fontSize: tokens.typography.fontSize.sm,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      backgroundColor: tokens.colors.primaryScale[600],
-      color: tokens.colors.common.white,
-      border: 'none',
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-    };
-
-    /* -- approval tracker styles ------------------------------------ */
-    const approvalTrackerStyle: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'center',
-      gap: tokens.spacing[1],
-      marginTop: tokens.spacing[2],
-    };
-
-    const approvalStepCircle = (step: ApprovalStatus, currentStatus: ApprovalStatus): React.CSSProperties => {
-      const stepIndex = APPROVAL_STEPS.indexOf(step);
-      const currentIndex = APPROVAL_STEPS.indexOf(currentStatus === 'rejected' ? 'reviewed' : currentStatus);
-      const isCompleted = stepIndex <= currentIndex;
-      const isRejected = currentStatus === 'rejected' && step === 'approved';
-
-      let bgColor = tokens.colors.neutral[200];
-      let borderColor = tokens.colors.neutral[300];
-      let textColor = tokens.colors.neutral[500];
-
-      if (isRejected) {
-        bgColor = tokens.colors.errorScale[100];
-        borderColor = tokens.colors.errorScale[400];
-        textColor = tokens.colors.errorScale[600];
-      } else if (isCompleted) {
-        bgColor = tokens.colors.successScale[100];
-        borderColor = tokens.colors.successScale[400];
-        textColor = tokens.colors.successScale[600];
-      }
-
-      return {
-        width: tokens.spacing[8],
-        height: tokens.spacing[8],
-        borderRadius: tokens.borderRadius.full,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: bgColor,
-        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${borderColor}`,
-        color: textColor,
-        flexShrink: 0,
-      };
-    };
-
-    const approvalLineStyle = (step: ApprovalStatus, currentStatus: ApprovalStatus): React.CSSProperties => {
-      const stepIndex = APPROVAL_STEPS.indexOf(step);
-      const currentIndex = APPROVAL_STEPS.indexOf(currentStatus === 'rejected' ? 'reviewed' : currentStatus);
-      const isCompleted = stepIndex < currentIndex;
-
-      return {
-        flex: 1,
-        height: '2px',
-        backgroundColor: isCompleted ? tokens.colors.successScale[400] : tokens.colors.neutral[200],
-        transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
-      };
-    };
-
-    /* -- metrics style ---------------------------------------------- */
-    const metricBoxStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: tokens.spacing[3],
-      borderRadius: tokens.borderRadius.md,
-      backgroundColor: tokens.colors.neutral[50],
-      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-      flex: 1,
-    };
-
-    const metricValueStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.xl,
-      fontWeight: tokens.typography.fontWeight.bold,
-      color: tokens.colors.primaryScale[700],
-    };
-
-    const metricLabelStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.xs,
-      color: tokens.colors.neutral[500],
-      marginTop: tokens.spacing[1],
-    };
-
-    /* ================================================================ */
-    /*  RENDER                                                          */
-    /* ================================================================ */
-
-    const renderFilterBar = () => (
-      <div style={filterBarStyle}>
-        {/* Type pills */}
-        <div style={{ display: 'flex', gap: tokens.spacing[2], alignItems: 'center' }}>
-          <span
-            style={pillStyle(!filters.type || filters.type === 'all')}
-            onClick={() => updateFilter({ type: 'all' })}
-          >
-            <Users size={12} /> All
-          </span>
-          <span
-            style={pillStyle(filters.type === 'company')}
-            onClick={() => updateFilter({ type: 'company' })}
-          >
-            <Building2 size={12} /> Companies
-          </span>
-          <span
-            style={pillStyle(filters.type === 'individual')}
-            onClick={() => updateFilter({ type: 'individual' })}
-          >
-            <User size={12} /> Individuals
-          </span>
-        </div>
-
-        {/* Status dropdown */}
-        <select
-          style={selectStyle}
-          value={filters.status ?? 'all'}
-          onChange={(e) => updateFilter({ status: e.target.value as ClientStatus | 'all' })}
-        >
-          <option value="all">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="pending_approval">Pending Approval</option>
-          <option value="suspended">Suspended</option>
-        </select>
-
-        {/* Tier badges */}
-        <select
-          style={selectStyle}
-          value={filters.tier ?? 'all'}
-          onChange={(e) => updateFilter({ tier: e.target.value as ClientTier | 'all' })}
-        >
-          <option value="all">All Tiers</option>
-          <option value="standard">Standard</option>
-          <option value="premium">Premium</option>
-          <option value="enterprise">Enterprise</option>
-        </select>
-
-        {/* Industry selector */}
-        <input
-          style={{
-            ...formInputStyle,
-            width: '140px',
-            fontSize: tokens.typography.fontSize.xs,
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-          }}
-          placeholder="Industry..."
-          value={filters.industry ?? ''}
-          onChange={(e) => updateFilter({ industry: e.target.value })}
-        />
-
-        {/* Search input */}
-        <div style={searchInputStyle}>
-          <Search
-            size={14}
-            style={{
-              position: 'absolute',
-              left: tokens.spacing[3],
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: tokens.colors.neutral[400],
-            }}
-          />
-          <input
-            style={inputStyle}
-            placeholder="Search clients..."
-            value={filters.search ?? ''}
-            onChange={(e) => updateFilter({ search: e.target.value })}
-          />
-          {filters.search && (
-            <X
-              size={14}
-              style={{
-                position: 'absolute',
-                right: tokens.spacing[3],
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: tokens.colors.neutral[400],
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-              }}
-              onClick={() => updateFilter({ search: '' })}
-            />
-          )}
-        </div>
-      </div>
-    );
-
-    const renderClientRow = (client: ClientItem) => {
-      const isSelected = client.id === selectedId;
-      return (
-        <div
-          key={client.id}
-          style={clientRowStyle(isSelected)}
-          onClick={() => selectClient(client.id)}
-        >
-          <div style={avatarStyle(client.type)}>
-            {client.type === 'company' ? <Building2 size={18} /> : <User size={18} />}
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {client.name}
-              </span>
-              <span style={badgeSmallStyle(TIER_MAP[client.tier].colorKey)}>
-                {TIER_MAP[client.tier].label}
-              </span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                <div style={statusDotStyle(client.status)} />
-                {STATUS_MAP[client.status].label}
-              </span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                <Briefcase size={11} /> {client.positionsCount} positions
-              </span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                <DollarSign size={11} /> {formatRevenue(client.revenue)}
-              </span>
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const renderDetailPanel = () => {
-      if (!selectedClientData) return null;
-      const client = selectedClientData;
-      const statusInfo = STATUS_MAP[client.status];
-      const tierInfo = TIER_MAP[client.tier];
-      const approvalInfo = APPROVAL_MAP[client.approvalStatus];
-      const ApprovalIcon = approvalInfo.icon;
-
-      return (
-        <div style={detailPanelStyle}>
-          {/* Header */}
-          <div style={{ ...sectionCardStyle, padding: tokens.spacing[5] }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                <div style={{
-                  ...avatarStyle(client.type),
-                  width: tokens.spacing[12],
-                  height: tokens.spacing[12],
-                }}>
-                  {client.type === 'company' ? <Building2 size={24} /> : <User size={24} />}
-                </div>
-                <div>
-                  <div style={{
-                    fontSize: tokens.typography.fontSize.xl,
-                    fontWeight: tokens.typography.fontWeight.bold,
-                    color: tokens.colors.neutral[900],
-                    marginBottom: tokens.spacing[1],
-                  }}>
-                    {client.name}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], flexWrap: 'wrap' }}>
-                    <span style={badgeSmallStyle(tierInfo.colorKey)}>
-                      <Star size={10} /> {tierInfo.label}
-                    </span>
-                    <span style={badgeSmallStyle(statusInfo.colorKey)}>
-                      {statusInfo.label}
-                    </span>
-                    <span style={badgeSmallStyle(approvalInfo.colorKey)}>
-                      <ApprovalIcon size={10} /> {approvalInfo.label}
-                    </span>
-                    <span style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[500],
-                    }}>
-                      {client.industry}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <button
-                style={{
-                  ...addButtonStyle,
-                  backgroundColor: tokens.colors.neutral[100],
-                  color: tokens.colors.neutral[700],
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                }}
-                onClick={openEditForm}
-              >
-                <Edit3 size={14} /> Edit
-              </button>
-            </div>
-          </div>
-
-          {/* Contacts Section */}
-          <div style={sectionCardStyle}>
-            <div style={sectionTitleStyle}>
-              <Users size={16} color={tokens.colors.primaryScale[500]} />
-              Contacts ({client.contacts.length})
-            </div>
-            {client.contacts.map((contact, idx) => (
-              <div key={idx} style={contactCardStyle}>
-                <div style={{
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[900],
-                  marginBottom: tokens.spacing[1],
-                }}>
-                  {contact.name}
-                </div>
-                <div style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[600],
-                  marginBottom: tokens.spacing[1],
-                }}>
-                  {contact.role}
-                </div>
-                <div style={{ display: 'flex', gap: tokens.spacing[4], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                    <Mail size={11} /> {contact.email}
-                  </span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                    <Phone size={11} /> {contact.phone}
-                  </span>
-                </div>
-              </div>
-            ))}
-            {client.contacts.length === 0 && (
-              <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400], padding: tokens.spacing[3], textAlign: 'center' }}>
-                No contacts added yet
-              </div>
-            )}
-          </div>
-
-          {/* Contract Info */}
-          {client.contractInfo && (
-            <div style={sectionCardStyle}>
-              <div style={sectionTitleStyle}>
-                <FileText size={16} color={tokens.colors.primaryScale[500]} />
-                Contract Information
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[3] }}>
-                <div>
-                  <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>
-                    Terms
-                  </div>
-                  <div style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                    {client.contractInfo.terms}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>
-                    Fee Structure
-                  </div>
-                  <div style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                    {formatFee(client.feeStructure)}
-                    {client.feeStructure && (
-                      <span style={badgeSmallStyle('info')}>
-                        {client.feeStructure.type}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>
-                    Start Date
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>
-                    <Calendar size={12} /> {client.contractInfo.startDate}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>
-                    End Date
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>
-                    <Calendar size={12} /> {client.contractInfo.endDate}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Approval Status Tracker */}
-          <div style={sectionCardStyle}>
-            <div style={sectionTitleStyle}>
-              <Shield size={16} color={tokens.colors.primaryScale[500]} />
-              Approval Workflow
-            </div>
-            <div style={approvalTrackerStyle}>
-              {APPROVAL_STEPS.map((step, idx) => {
-                const isRejected = client.approvalStatus === 'rejected' && step === 'approved';
-                const StepIcon = isRejected ? XCircle : APPROVAL_MAP[step].icon;
-                const displayLabel = isRejected ? 'Rejected' : APPROVAL_MAP[step].label;
-
-                return (
-                  <div key={step} style={{ display: 'flex', alignItems: 'center', flex: idx < APPROVAL_STEPS.length - 1 ? 1 : undefined, gap: tokens.spacing[1] }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: tokens.spacing[1] }}>
-                      <div style={approvalStepCircle(step, client.approvalStatus)}>
-                        <StepIcon size={14} />
-                      </div>
-                      <span style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[600],
-                        fontWeight: tokens.typography.fontWeight.medium,
-                      }}>
-                        {displayLabel}
-                      </span>
-                    </div>
-                    {idx < APPROVAL_STEPS.length - 1 && (
-                      <div style={approvalLineStyle(step, client.approvalStatus)} />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Revenue Metrics */}
-          <div style={sectionCardStyle}>
-            <div style={sectionTitleStyle}>
-              <TrendingUp size={16} color={tokens.colors.primaryScale[500]} />
-              Revenue Metrics
-            </div>
-            <div style={{ display: 'flex', gap: tokens.spacing[3] }}>
-              <div style={metricBoxStyle}>
-                <div style={metricValueStyle}>{client.positionsCount}</div>
-                <div style={metricLabelStyle}>Positions</div>
-              </div>
-              <div style={metricBoxStyle}>
-                <div style={metricValueStyle}>{formatRevenue(client.revenue)}</div>
-                <div style={metricLabelStyle}>Total Revenue</div>
-              </div>
-              <div style={metricBoxStyle}>
-                <div style={{
-                  ...metricValueStyle,
-                  color: tokens.colors.successScale[600],
-                }}>
-                  {client.positionsCount > 0 ? Math.round(client.revenue / client.positionsCount / 100) * 100 : 0}
-                </div>
-                <div style={metricLabelStyle}>Avg Fee / Position</div>
-              </div>
-              <div style={metricBoxStyle}>
-                <div style={{
-                  ...metricValueStyle,
-                  color: tokens.colors.infoScale[600],
-                }}>
-                  {client.contacts.length}
-                </div>
-                <div style={metricLabelStyle}>Contacts</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Positions linked mini table */}
-          <div style={sectionCardStyle}>
-            <div style={sectionTitleStyle}>
-              <Briefcase size={16} color={tokens.colors.primaryScale[500]} />
-              Positions Linked ({client.positionsCount})
-            </div>
-            <div style={{
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              overflow: 'hidden',
-            }}>
-              {/* Table header */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '2fr 1fr 1fr 1fr',
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                backgroundColor: tokens.colors.neutral[50],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[600],
-                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                textTransform: 'uppercase' as const,
-                letterSpacing: '0.04em',
-              }}>
-                <span>Position</span>
-                <span>Status</span>
-                <span>Candidates</span>
-                <span>Fee</span>
-              </div>
-              {/* Placeholder rows showing positions belong to this client */}
-              {Array.from({ length: Math.min(client.positionsCount, 5) }).map((_, idx) => (
-                <div key={idx} style={{
-                  display: 'grid',
-                  gridTemplateColumns: '2fr 1fr 1fr 1fr',
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[700],
-                  borderBottom: idx < Math.min(client.positionsCount, 5) - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
-                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
-                }}>
-                  <span style={{ fontWeight: tokens.typography.fontWeight.medium }}>
-                    Position #{idx + 1}
-                  </span>
-                  <span>
-                    <span style={badgeSmallStyle(idx % 2 === 0 ? 'success' : 'warning')}>
-                      {idx % 2 === 0 ? 'Open' : 'In Progress'}
-                    </span>
-                  </span>
-                  <span>{Math.floor(Math.random() * 20) + 1}</span>
-                  <span>{formatFee(client.feeStructure)}</span>
-                </div>
-              ))}
-              {client.positionsCount > 5 && (
-                <div style={{
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.primaryScale[600],
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                  fontWeight: tokens.typography.fontWeight.medium,
-                }}>
-                  View all {client.positionsCount} positions
-                </div>
-              )}
-              {client.positionsCount === 0 && (
-                <div style={{
-                  padding: tokens.spacing[4],
-                  textAlign: 'center',
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[400],
-                }}>
-                  No positions linked to this client
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      );
-    };
-
-    const renderSlideForm = () => (
-      <>
-        <div style={overlayStyle} onClick={closeForm} />
-        <div style={slideFormStyle}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: tokens.spacing[5],
-          }}>
-            <span style={{
-              fontSize: tokens.typography.fontSize.lg,
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.neutral[900],
-            }}>
-              {formMode === 'add' ? 'Add New Client' : 'Edit Client'}
-            </span>
-            <X
-              size={20}
-              style={{ cursor: 'pointer', color: tokens.colors.neutral[500] }}
-              onClick={closeForm}
-            />
-          </div>
-
-          {/* Client Type */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Client Type</label>
-            <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
-              <span style={pillStyle(true)}>
-                <Building2 size={12} /> Company
-              </span>
-              <span style={pillStyle(false)}>
-                <User size={12} /> Individual
-              </span>
-            </div>
-          </div>
-
-          {/* Name */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Client Name</label>
-            <input
-              style={formInputStyle}
-              placeholder="Enter client name"
-              defaultValue={formMode === 'edit' && selectedClientData ? selectedClientData.name : ''}
-            />
-          </div>
-
-          {/* Industry */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Industry</label>
-            <input
-              style={formInputStyle}
-              placeholder="e.g. Technology, Healthcare"
-              defaultValue={formMode === 'edit' && selectedClientData ? selectedClientData.industry : ''}
-            />
-          </div>
-
-          {/* Tier */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Client Tier</label>
-            <select
-              style={{ ...formInputStyle, cursor: 'pointer' }}
-              defaultValue={formMode === 'edit' && selectedClientData ? selectedClientData.tier : 'standard'}
-            >
-              <option value="standard">Standard</option>
-              <option value="premium">Premium</option>
-              <option value="enterprise">Enterprise</option>
-            </select>
-          </div>
-
-          {/* Status */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Status</label>
-            <select
-              style={{ ...formInputStyle, cursor: 'pointer' }}
-              defaultValue={formMode === 'edit' && selectedClientData ? selectedClientData.status : 'pending_approval'}
-            >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="pending_approval">Pending Approval</option>
-              <option value="suspended">Suspended</option>
-            </select>
-          </div>
-
-          {/* Contract Terms */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Contract Terms</label>
-            <input
-              style={formInputStyle}
-              placeholder="e.g. Net 30, Annual"
-              defaultValue={formMode === 'edit' && selectedClientData?.contractInfo ? selectedClientData.contractInfo.terms : ''}
-            />
-          </div>
-
-          {/* Fee Structure */}
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Fee Type</label>
-            <select
-              style={{ ...formInputStyle, cursor: 'pointer' }}
-              defaultValue={formMode === 'edit' && selectedClientData?.feeStructure ? selectedClientData.feeStructure.type : 'percentage'}
-            >
-              <option value="percentage">Percentage</option>
-              <option value="fixed">Fixed</option>
-              <option value="retainer">Retainer</option>
-            </select>
-          </div>
-
-          <div style={formFieldStyle}>
-            <label style={formLabelStyle}>Fee Value</label>
-            <input
-              style={formInputStyle}
-              type="number"
-              placeholder="e.g. 20 (for 20%)"
-              defaultValue={formMode === 'edit' && selectedClientData?.feeStructure ? selectedClientData.feeStructure.value : ''}
-            />
-          </div>
-
-          {/* Contract Dates */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[3], ...formFieldStyle }}>
-            <div>
-              <label style={formLabelStyle}>Start Date</label>
-              <input
-                style={formInputStyle}
-                type="date"
-                defaultValue={formMode === 'edit' && selectedClientData?.contractInfo ? selectedClientData.contractInfo.startDate : ''}
-              />
-            </div>
-            <div>
-              <label style={formLabelStyle}>End Date</label>
-              <input
-                style={formInputStyle}
-                type="date"
-                defaultValue={formMode === 'edit' && selectedClientData?.contractInfo ? selectedClientData.contractInfo.endDate : ''}
-              />
-            </div>
-          </div>
-
-          {/* Contact (first contact) */}
-          <div style={{
-            padding: tokens.spacing[3],
-            borderRadius: tokens.borderRadius.md,
-            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-            backgroundColor: tokens.colors.neutral[50],
-            marginBottom: tokens.spacing[4],
-          }}>
-            <div style={{
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: tokens.colors.neutral[700],
-              marginBottom: tokens.spacing[3],
-            }}>
-              Primary Contact
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[2] }}>
-              <div>
-                <label style={formLabelStyle}>Name</label>
-                <input
-                  style={formInputStyle}
-                  placeholder="Contact name"
-                  defaultValue={formMode === 'edit' && selectedClientData?.contacts?.[0] ? selectedClientData.contacts[0].name : ''}
-                />
-              </div>
-              <div>
-                <label style={formLabelStyle}>Role</label>
-                <input
-                  style={formInputStyle}
-                  placeholder="e.g. HR Director"
-                  defaultValue={formMode === 'edit' && selectedClientData?.contacts?.[0] ? selectedClientData.contacts[0].role : ''}
-                />
-              </div>
-              <div>
-                <label style={formLabelStyle}>Email</label>
-                <input
-                  style={formInputStyle}
-                  type="email"
-                  placeholder="email@company.com"
-                  defaultValue={formMode === 'edit' && selectedClientData?.contacts?.[0] ? selectedClientData.contacts[0].email : ''}
-                />
-              </div>
-              <div>
-                <label style={formLabelStyle}>Phone</label>
-                <input
-                  style={formInputStyle}
-                  type="tel"
-                  placeholder="+1 (555) 000-0000"
-                  defaultValue={formMode === 'edit' && selectedClientData?.contacts?.[0] ? selectedClientData.contacts[0].phone : ''}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: tokens.spacing[3], paddingTop: tokens.spacing[3], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
-            <button style={cancelBtnStyle} onClick={closeForm}>
-              Cancel
-            </button>
-            <button
-              style={submitBtnStyle}
-              onClick={() => {
-                if (formMode === 'add') {
-                  onAddClient?.({});
-                } else if (selectedClientData) {
-                  onEditClient?.(selectedClientData.id, {});
-                }
-                closeForm();
-              }}
-            >
-              {formMode === 'add' ? 'Create Client' : 'Save Changes'}
-            </button>
-          </div>
-        </div>
-      </>
-    );
+    const updateFilter = useCallback((patch: Partial<ClientFilter>) => {
+      const next = { ...filters, ...patch };
+      setInternalFilters(next);
+      onFilterChange?.(next);
+    }, [filters, onFilterChange]);
+
+    const selectClient = useCallback((id: string) => {
+      setInternalSelected(id);
+      onClientSelect?.(id);
+    }, [onClientSelect]);
+
+    const filtered = useMemo(() => filterClients(clients, filters), [clients, filters]);
+    const selected = clients.find(c => c.id === selectedId) ?? null;
 
     return (
-      <div style={rootStyle} className={className}>
-        {/* Header bar */}
-        <div style={headerBarStyle}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Building2 size={20} color={tokens.colors.primaryScale[600]} />
-            <span style={{
-              fontSize: tokens.typography.fontSize.lg,
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.neutral[900],
-            }}>
-              Client Directory
-            </span>
-            <span style={{
-              fontSize: tokens.typography.fontSize.sm,
-              color: tokens.colors.neutral[500],
-              fontWeight: tokens.typography.fontWeight.medium,
-            }}>
-              {filteredClients.length} of {clients.length} clients
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], padding: tokens.spacing[1], borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
-              <button
-                style={viewToggleStyle(viewMode === 'list')}
-                onClick={() => changeViewMode('list')}
-              >
-                <LayoutList size={16} />
-              </button>
-              <button
-                style={viewToggleStyle(viewMode === 'grid')}
-                onClick={() => changeViewMode('grid')}
-              >
-                <LayoutGrid size={16} />
-              </button>
-            </div>
-            <button style={addButtonStyle} onClick={openAddForm}>
-              <Plus size={14} /> Add Client
-            </button>
-          </div>
-        </div>
+      <Box className={className} style={{
+        ...createCardStyle(t, { elevation: 'md' }),
+        display: 'flex', flexDirection: 'column', height: '100%',
+        backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
+      }}>
+        {/* Header */}
+        <Box style={{
+          padding: `${t.spacing[4]}px ${t.spacing[6]}px`,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            <Building2 size={18} style={{ color: t.colors.primaryScale[500] }} />
+            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>Client Directory</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{filtered.length} of {clients.length}</Text>
+          </Box>
+          {onAddClient && (
+            <button onClick={() => onAddClient({})} style={{
+              display: 'flex', alignItems: 'center', gap: t.spacing[2],
+              padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: br, border: 'none',
+              backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+              fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
+            }}><Plus size={14} /> Add Client</button>
+          )}
+        </Box>
 
         {/* Filter bar */}
-        {renderFilterBar()}
+        <Box style={{
+          display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap',
+          padding: `${t.spacing[3]}px ${t.spacing[6]}px`, borderBottom: `1px solid ${t.colors.neutral[100]}`,
+        }}>
+          {[{ l: 'All', v: 'all' }, { l: 'Companies', v: 'company' }, { l: 'Individuals', v: 'individual' }].map(o => {
+            const active = filters.type === o.v || (o.v === 'all' && (!filters.type || filters.type === 'all'));
+            return (
+              <button key={o.v} onClick={() => updateFilter({ type: o.v as any })} style={{
+                padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+                border: `1px solid ${active ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white,
+                color: active ? t.colors.primaryScale[700] : t.colors.neutral[600],
+                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+              }}>{o.l}</button>
+            );
+          })}
+          <select value={filters.status ?? 'all'} onChange={e => updateFilter({ status: e.target.value as any })} style={{
+            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+            border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700], backgroundColor: t.colors.common.white,
+          }}>
+            <option value="all">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="pending_approval">Pending</option>
+          </select>
+          <Box style={{ flex: 1, minWidth: 160, position: 'relative' }}>
+            <Search size={13} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
+            <input value={filters.search ?? ''} onChange={e => updateFilter({ search: e.target.value })} placeholder="Search..." style={{
+              width: '100%', padding: `${t.spacing[1]}px ${t.spacing[3]}px ${t.spacing[1]}px ${t.spacing[8]}px`,
+              border: `1px solid ${t.colors.neutral[200]}`, borderRadius: br,
+              fontSize: t.typography.fontSize.xs, color: t.colors.neutral[900], backgroundColor: t.colors.common.white, outline: 'none',
+            }} />
+          </Box>
+        </Box>
 
         {/* Split panel */}
-        <div style={splitStyle}>
-          {/* Client list */}
-          <div style={listPanelStyle}>
-            {filteredClients.length === 0 && (
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: tokens.spacing[8],
-                color: tokens.colors.neutral[400],
-              }}>
-                <Search size={32} style={{ marginBottom: tokens.spacing[3], opacity: 0.5 }} />
-                <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium }}>
-                  No clients found
-                </span>
-                <span style={{ fontSize: tokens.typography.fontSize.xs, marginTop: tokens.spacing[1] }}>
-                  Try adjusting your filters
-                </span>
-              </div>
+        <Box style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+          {/* List */}
+          <Box style={{
+            width: selected ? 360 : '100%', minWidth: selected ? 360 : undefined,
+            borderRight: selected ? `1px solid ${t.colors.neutral[100]}` : 'none',
+            overflowY: 'auto', backgroundColor: t.colors.common.white,
+          }}>
+            {filtered.length === 0 && (
+              <Box style={{ textAlign: 'center', padding: t.spacing[8], color: t.colors.neutral[400] }}>
+                <Search size={28} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />
+                <Text style={{ fontSize: t.typography.fontSize.sm }}>No clients found</Text>
+              </Box>
             )}
-            {filteredClients.map(renderClientRow)}
-          </div>
+            {filtered.map(client => {
+              const isActive = client.id === selectedId;
+              const sc = STATUS_CFG[client.status];
+              const tc = TIER_CFG[client.tier];
+              return (
+                <Box key={client.id} onClick={() => selectClient(client.id)} style={{
+                  display: 'flex', alignItems: 'center', gap: t.spacing[3],
+                  padding: `${t.spacing[3]}px ${t.spacing[5]}px`, cursor: 'pointer',
+                  borderBottom: `1px solid ${t.colors.neutral[50]}`,
+                  borderLeft: isActive ? `3px solid ${t.colors.primaryScale[500]}` : '3px solid transparent',
+                  backgroundColor: isActive ? t.colors.primaryScale[50] : t.colors.common.white,
+                  transition: 'background-color 0.1s ease',
+                }}>
+                  <Box style={{
+                    width: 36, height: 36, flexShrink: 0,
+                    borderRadius: client.type === 'company' ? t.borderRadius.md : t.borderRadius.full,
+                    backgroundColor: client.type === 'company' ? t.colors.primaryScale[50] : t.colors.secondaryScale[50],
+                    color: client.type === 'company' ? t.colors.primaryScale[600] : t.colors.secondaryScale[600],
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>{client.type === 'company' ? <Building2 size={16} /> : <User size={16} />}</Box>
+                  <Box style={{ flex: 1, minWidth: 0 }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: 2 }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{client.name}</Text>
+                      <Box style={{ padding: `0 ${t.spacing[1]}px`, borderRadius: br, backgroundColor: tc.bg(t) }}>
+                        <Text style={{ fontSize: 10, color: tc.color(t) }}>{tc.label}</Text>
+                      </Box>
+                    </Box>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <Box style={{ width: 5, height: 5, borderRadius: t.borderRadius.full, backgroundColor: sc.color(t) }} />
+                        {sc.label}
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Briefcase size={10} /> {client.positionsCount}</Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}><DollarSign size={10} /> {fmtRev(client.revenue)}</Box>
+                    </Box>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
 
           {/* Detail panel */}
-          {selectedClientData && renderDetailPanel()}
-          {!selectedClientData && filteredClients.length > 0 && (
-            <div style={{
-              ...detailPanelStyle,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: tokens.colors.neutral[400],
-            }}>
-              <Users size={40} style={{ marginBottom: tokens.spacing[3], opacity: 0.4 }} />
-              <span style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.medium }}>
-                Select a client to view details
-              </span>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, marginTop: tokens.spacing[1] }}>
-                Choose from the list on the left
-              </span>
-            </div>
-          )}
-        </div>
+          {selected ? (
+            <Box style={{ flex: 1, overflowY: 'auto', padding: `${t.spacing[6]}px` }}>
+              {/* Client header */}
+              <Box style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: t.spacing[5] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                  <Box style={{
+                    width: 48, height: 48, borderRadius: selected.type === 'company' ? t.borderRadius.lg : t.borderRadius.full,
+                    backgroundColor: selected.type === 'company' ? t.colors.primaryScale[50] : t.colors.secondaryScale[50],
+                    color: selected.type === 'company' ? t.colors.primaryScale[600] : t.colors.secondaryScale[600],
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>{selected.type === 'company' ? <Building2 size={22} /> : <User size={22} />}</Box>
+                  <Box>
+                    <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{selected.name}</Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: 2 }}>
+                      <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: TIER_CFG[selected.tier].bg(t) }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: TIER_CFG[selected.tier].color(t) }}><Star size={9} style={{ verticalAlign: 'middle', marginRight: 2 }} />{TIER_CFG[selected.tier].label}</Text>
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{selected.industry}</Text>
+                    </Box>
+                  </Box>
+                </Box>
+                <button onClick={() => onEditClient?.(selected.id, {})} style={{
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: br,
+                  border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
+                  color: t.colors.neutral[700], fontSize: t.typography.fontSize.xs, cursor: 'pointer',
+                }}><Edit3 size={12} /> Edit</button>
+              </Box>
 
-        {/* Slide-in form */}
-        {renderSlideForm()}
-      </div>
+              {/* Metrics */}
+              <Box style={{ display: 'flex', gap: t.spacing[3], marginBottom: t.spacing[5] }}>
+                {[
+                  { label: 'Positions', value: selected.positionsCount, color: t.colors.primaryScale[700] },
+                  { label: 'Revenue', value: fmtRev(selected.revenue), color: t.colors.successScale[600] },
+                  { label: 'Contacts', value: selected.contacts.length, color: t.colors.infoScale[600] },
+                  { label: 'Fee', value: fmtFee(selected.feeStructure), color: t.colors.primaryScale[600] },
+                ].map(m => (
+                  <Box key={m.label} style={{
+                    flex: 1, textAlign: 'center', padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.xl,
+                    backgroundColor: t.colors.neutral[50], border: `1px solid ${t.colors.neutral[100]}`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: m.color }}>{m.value}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{m.label}</Text>
+                  </Box>
+                ))}
+              </Box>
+
+              {/* Contacts */}
+              <Box style={{ marginBottom: t.spacing[5] }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[3], display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Users size={14} style={{ color: t.colors.primaryScale[500] }} /> Contacts ({selected.contacts.length})
+                </Text>
+                {selected.contacts.map((c, ci) => (
+                  <Box key={ci} style={{
+                    padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.lg, marginBottom: t.spacing[2],
+                    border: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50],
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], marginBottom: 2 }}>{c.name}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>{c.role}</Text>
+                    <Box style={{ display: 'flex', gap: t.spacing[4] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'flex', alignItems: 'center', gap: 3 }}><Mail size={11} /> {c.email}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'flex', alignItems: 'center', gap: 3 }}><Phone size={11} /> {c.phone}</Text>
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+
+              {/* Contract */}
+              {selected.contractInfo && (
+                <Box style={{ marginBottom: t.spacing[5] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[3], display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <FileText size={14} style={{ color: t.colors.primaryScale[500] }} /> Contract
+                  </Text>
+                  <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], padding: t.spacing[4], borderRadius: t.borderRadius.xl, border: `1px solid ${t.colors.neutral[100]}` }}>
+                    {[
+                      { label: 'Terms', value: selected.contractInfo.terms },
+                      { label: 'Fee', value: fmtFee(selected.feeStructure) },
+                      { label: 'Start', value: selected.contractInfo.startDate },
+                      { label: 'End', value: selected.contractInfo.endDate },
+                    ].map(f => (
+                      <Box key={f.label}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: 2 }}>{f.label}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{f.value}</Text>
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          ) : filtered.length > 0 ? (
+            <Box style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: t.colors.neutral[400] }}>
+              <Users size={36} style={{ marginBottom: t.spacing[3], opacity: 0.4 }} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>Select a client to view details</Text>
+            </Box>
+          ) : null}
+        </Box>
+      </Box>
     );
   },
-);
+});

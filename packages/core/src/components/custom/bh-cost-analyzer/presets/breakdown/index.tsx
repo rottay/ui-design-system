@@ -2,19 +2,32 @@
 
 /**
  * BhCostAnalyzer - Breakdown Preset
- * Premium per-model cost breakdown with relative cost bars, percentage badges,
- * inline trend sparklines, provider color dots, and summary totals.
+ * Slite-inspired per-model cost breakdown with generous whitespace,
+ * warm neutrals, relative cost bars, percentage badges, inline trend
+ * sparklines, provider color dots, and summary totals.
  */
 
 import { useState, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import type { BhCostAnalyzerProps, ModelCost } from '../../core';
+import type { BhCostAnalyzerProps, ModelCost, ProviderCost } from '../../core';
 import { formatCurrency, formatTokens } from '../../core';
 import {
-  createCardStyle, createPanelHeaderStyle, createListItemStyle, createBadgeStyle,
-  createAccentBarStyle, createProgressBarStyle, createHoverStyle, getHoverTransform,
-  getCardHoverShadow, createStatusDotStyle, createSectionHeaderStyle,
+  createCardStyle, createBadgeStyle, createHoverStyle,
+  createSectionHeaderStyle, createStatusDotStyle,
 } from '../../../helpers';
+import { DollarSign, TrendingUp, Layers, Activity } from 'lucide-react';
+
+const MOCK_PROVIDERS: ProviderCost[] = [
+  { providerId: 'openai', providerName: 'OpenAI', totalCost: 4280.50, tokenCount: 12400000, requestCount: 8420, share: 62.3, trend: 'up' as const, trendValue: 8.2 },
+  { providerId: 'anthropic', providerName: 'Anthropic', totalCost: 1850.25, tokenCount: 5200000, requestCount: 3150, share: 26.9, trend: 'down' as const, trendValue: 3.1 },
+];
+
+const MOCK_MODELS: ModelCost[] = [
+  { modelId: 'gpt4o', modelName: 'GPT-4o', provider: 'OpenAI', totalCost: 2840.30, tokenCount: 8200000, requestCount: 5600, avgCostPerRequest: 0.507 },
+  { modelId: 'gpt4o-mini', modelName: 'GPT-4o Mini', provider: 'OpenAI', totalCost: 1440.20, tokenCount: 4200000, requestCount: 2820, avgCostPerRequest: 0.511 },
+  { modelId: 'claude-sonnet', modelName: 'Claude 3.5 Sonnet', provider: 'Anthropic', totalCost: 1250.15, tokenCount: 3500000, requestCount: 2100, avgCostPerRequest: 0.595 },
+  { modelId: 'claude-haiku', modelName: 'Claude 3 Haiku', provider: 'Anthropic', totalCost: 600.10, tokenCount: 1700000, requestCount: 1050, avgCostPerRequest: 0.572 },
+];
 
 const PROVIDER_COLOR_KEYS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
 
@@ -41,61 +54,98 @@ function ModelRow({ model, maxCost, totalCost, providerColorMap, tokens, primiti
   model: ModelCost; maxCost: number; totalCost: number;
   providerColorMap: Record<string, string>; tokens: any; primitives: any;
 }) {
-  const { Box, Flex, Text } = primitives;
+  const { Box, Text } = primitives;
   const [hovered, setHovered] = useState(false);
   const costPct = maxCost > 0 ? Math.round((model.totalCost / maxCost) * 100) : 0;
   const sharePct = totalCost > 0 ? ((model.totalCost / totalCost) * 100).toFixed(1) : '0.0';
   const provColor = providerColorMap[model.provider] ?? tokens.colors.primaryScale[500];
 
-  const progressStyles = useMemo(
-    () => createProgressBarStyle(tokens, { color: provColor, percent: costPct }),
-    [tokens, provColor, costPct],
-  );
-  const rowStyle = useMemo(() => ({
-    ...createListItemStyle(tokens, { interactive: false }),
-    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-    ...(hovered ? { backgroundColor: tokens.colors.neutral[50], boxShadow: getCardHoverShadow(tokens), ...getHoverTransform(tokens) } : {}),
-  }), [tokens, hovered]);
-
   return (
-    <Box onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={rowStyle}>
-      <Flex justify="between" align="center" style={{ marginBottom: tokens.spacing[1] }}>
-        <Flex gap={6} align="center" style={{ flex: 2 }}>
-          <Box style={createStatusDotStyle(tokens, provColor)} />
-          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+    <Box
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
+        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+        backgroundColor: hovered ? tokens.colors.neutral[50] : 'transparent',
+        cursor: 'default',
+        transition: `all ${tokens.motion.hover}`,
+      }}
+    >
+      {/* Top row: model name, provider, sparkline, share badge */}
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flex: 2 }}>
+          <Box style={{
+            width: 10, height: 10, borderRadius: tokens.borderRadius.full,
+            backgroundColor: provColor, flexShrink: 0,
+          }} />
+          <Text style={{
+            fontSize: tokens.typography.fontSize.sm,
+            fontWeight: tokens.typography.fontWeight.semibold,
+            color: tokens.colors.neutral[900],
+          }}>
             {model.modelName}
           </Text>
-          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{model.provider}</Text>
-        </Flex>
-        <Flex gap={8} align="center">
+          <Text style={{
+            fontSize: tokens.typography.fontSize.xs,
+            color: tokens.colors.neutral[400],
+            fontWeight: tokens.typography.fontWeight.medium,
+          }}>
+            {model.provider}
+          </Text>
+        </Box>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
           <MiniSparkline color={provColor} />
-          <Box style={createBadgeStyle(tokens, 'primary')}>
+          <Box style={{
+            ...createBadgeStyle(tokens, 'primary'),
+            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+          }}>
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[700] }}>{sharePct}%</Text>
           </Box>
-        </Flex>
-      </Flex>
-      <Box style={{ marginBottom: tokens.spacing[1], ...progressStyles.track }}>
-        <div style={progressStyles.fill} />
+        </Box>
       </Box>
-      <Flex justify="between" align="center">
-        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+
+      {/* Progress bar */}
+      <Box style={{
+        height: 6,
+        borderRadius: tokens.borderRadius.full,
+        backgroundColor: tokens.colors.neutral[100],
+        overflow: 'hidden',
+        marginBottom: tokens.spacing[3],
+      }}>
+        <Box style={{
+          height: '100%',
+          width: `${costPct}%`,
+          borderRadius: tokens.borderRadius.full,
+          backgroundColor: provColor,
+          transition: `width 0.3s ease`,
+        }} />
+      </Box>
+
+      {/* Bottom row: cost, tokens, requests, avg cost */}
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={{
+          fontSize: tokens.typography.fontSize.md,
+          fontWeight: tokens.typography.fontWeight.bold,
+          color: tokens.colors.neutral[900],
+        }}>
           {formatCurrency(model.totalCost)}
         </Text>
-        <Flex gap={12} align="center">
-          <Flex gap={4} align="center">
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Tokens:</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>{formatTokens(model.tokenCount)}</Text>
-          </Flex>
-          <Flex gap={4} align="center">
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Reqs:</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>{model.requestCount.toLocaleString()}</Text>
-          </Flex>
-          <Flex gap={4} align="center">
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Avg:</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>{formatCurrency(model.avgCostPerRequest)}</Text>
-          </Flex>
-        </Flex>
-      </Flex>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Tokens</Text>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600] }}>{formatTokens(model.tokenCount)}</Text>
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Requests</Text>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600] }}>{model.requestCount.toLocaleString()}</Text>
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Avg</Text>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600] }}>{formatCurrency(model.avgCostPerRequest)}</Text>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }
@@ -103,10 +153,9 @@ function ModelRow({ model, maxCost, totalCost, providerColorMap, tokens, primiti
 /* Main preset */
 export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
   name: 'BhCostAnalyzer.Breakdown',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhCostAnalyzerProps>) => {
-    const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const { providers, models = [], loading, className, style } = props;
+  render: ({ primitives, props, tokens }: PresetContext<BhCostAnalyzerProps>) => {
+    const { Box, Text } = primitives;
+    const { providers = MOCK_PROVIDERS, models = MOCK_MODELS, loading, className, style } = props;
 
     const { maxCost, totalCost, providerColorMap } = useMemo(() => {
       const max = models.reduce((m, v) => Math.max(m, v.totalCost), 0);
@@ -117,56 +166,144 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     }, [models, tokens]);
 
     const cardStyle = useMemo(() => ({
-      ...createCardStyle(tokens, { glass: isGlass, padding: 0 }), overflow: 'hidden' as const, ...style,
-    }), [tokens, isGlass, style]);
-
-    const colHeaderStyle = useMemo(() => ({ ...createSectionHeaderStyle(tokens), marginBottom: 0 }), [tokens]);
+      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+      overflow: 'hidden' as const,
+      borderRadius: tokens.borderRadius.lg,
+      border: `1px solid ${tokens.colors.neutral[100]}`,
+      ...style,
+    }), [tokens, style]);
 
     if (loading) {
       return (
-        <Flex align="center" justify="center" direction="column" gap={8} style={{ padding: tokens.spacing[8], ...style }} className={className}>
-          <Spinner size="sm" />
-          <Text style={{ color: tokens.colors.neutral[500], fontSize: tokens.typography.fontSize.xs }}>Loading cost breakdown...</Text>
-        </Flex>
+        <Box className={className} style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexDirection: 'column' as const, gap: tokens.spacing[3],
+          padding: `${tokens.spacing[10]}px ${tokens.spacing[6]}px`, ...style,
+        }}>
+          <Activity size={24} color={tokens.colors.neutral[300]} />
+          <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>Loading cost breakdown...</Text>
+        </Box>
       );
     }
 
     return (
       <Box className={className} style={cardStyle}>
-        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
-        <Box style={createPanelHeaderStyle(tokens)}>
-          <Flex justify="between" align="center">
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
-              Cost Breakdown ({models.length} models)
+        {/* Header */}
+        <Box style={{
+          padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            <Box style={{
+              width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
+              backgroundColor: tokens.colors.primaryScale[50],
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Layers size={18} color={tokens.colors.primaryScale[500]} />
+            </Box>
+            <Box>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.md,
+                fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.neutral[900],
+              }}>
+                Cost Breakdown
+              </Text>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs,
+                color: tokens.colors.neutral[400],
+                marginTop: 2,
+              }}>
+                {models.length} models across {providers.length} providers
+              </Text>
+            </Box>
+          </Box>
+          <Box style={{
+            display: 'flex', alignItems: 'baseline', gap: tokens.spacing[1],
+          }}>
+            <Text style={{
+              fontSize: tokens.typography.fontSize.xs,
+              color: tokens.colors.neutral[400],
+              fontWeight: tokens.typography.fontWeight.medium,
+            }}>
+              Total
             </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>
-              Total: {formatCurrency(totalCost)}
+            <Text style={{
+              fontSize: tokens.typography.fontSize.xl,
+              fontWeight: tokens.typography.fontWeight.bold,
+              color: tokens.colors.primaryScale[600],
+            }}>
+              {formatCurrency(totalCost)}
             </Text>
-          </Flex>
+          </Box>
         </Box>
-        <Flex style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, background: tokens.colors.neutral[50] }}>
-          <Box style={{ flex: 2 }}><Text style={colHeaderStyle}>Model / Provider</Text></Box>
-          <Box style={{ flex: 1, textAlign: 'right' as const }}><Text style={colHeaderStyle}>Cost</Text></Box>
-          <Box style={{ flex: 1, textAlign: 'right' as const }}><Text style={colHeaderStyle}>Share</Text></Box>
-        </Flex>
-        <Stack gap={0} style={{ maxHeight: 400, overflowY: 'auto' as const }}>
+
+        {/* Column headers */}
+        <Box style={{
+          padding: `${tokens.spacing[2]}px ${tokens.spacing[6]}px`,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+          backgroundColor: tokens.colors.neutral[50],
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <Text style={{
+            ...createSectionHeaderStyle(tokens),
+            marginBottom: 0, flex: 2,
+          }}>Model / Provider</Text>
+          <Box style={{ display: 'flex', gap: tokens.spacing[6] }}>
+            <Text style={{ ...createSectionHeaderStyle(tokens), marginBottom: 0, textAlign: 'right' as const }}>Cost</Text>
+            <Text style={{ ...createSectionHeaderStyle(tokens), marginBottom: 0, textAlign: 'right' as const }}>Share</Text>
+          </Box>
+        </Box>
+
+        {/* Model rows */}
+        <Box style={{ maxHeight: 440, overflowY: 'auto' as const }}>
           {models.map(m => (
-            <ModelRow key={m.modelId} model={m} maxCost={maxCost} totalCost={totalCost} providerColorMap={providerColorMap} tokens={tokens} primitives={primitives} />
+            <ModelRow
+              key={m.modelId}
+              model={m}
+              maxCost={maxCost}
+              totalCost={totalCost}
+              providerColorMap={providerColorMap}
+              tokens={tokens}
+              primitives={primitives}
+            />
           ))}
-        </Stack>
-        <Box style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, background: tokens.colors.neutral[50] }}>
-          <Flex gap={16} wrap="wrap" align="center">
+        </Box>
+
+        {/* Provider summary footer */}
+        <Box style={{
+          padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
+          borderTop: `1px solid ${tokens.colors.neutral[100]}`,
+          backgroundColor: tokens.colors.neutral[50],
+        }}>
+          <Box style={{ display: 'flex', gap: tokens.spacing[5], flexWrap: 'wrap' as const, alignItems: 'center' }}>
             {providers.map(p => {
               const dotColor = providerColorMap[p.providerName] ?? tokens.colors.primaryScale[500];
               return (
-                <Flex key={p.providerId} gap={6} align="center">
-                  <Box style={createStatusDotStyle(tokens, dotColor)} />
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>{p.providerName}</Text>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{formatCurrency(p.totalCost)}</Text>
-                </Flex>
+                <Box key={p.providerId} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                  <Box style={{
+                    width: 8, height: 8, borderRadius: tokens.borderRadius.full,
+                    backgroundColor: dotColor, flexShrink: 0,
+                  }} />
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[600],
+                  }}>
+                    {p.providerName}
+                  </Text>
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    fontWeight: tokens.typography.fontWeight.bold,
+                    color: tokens.colors.neutral[800],
+                  }}>
+                    {formatCurrency(p.totalCost)}
+                  </Text>
+                </Box>
               );
             })}
-          </Flex>
+          </Box>
         </Box>
       </Box>
     );

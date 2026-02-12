@@ -48,6 +48,7 @@ import {
   RefreshCw,
   Info,
   Zap,
+  Edit,
   Globe,
   Cloud,
   CloudOff,
@@ -1103,7 +1104,7 @@ export const SetupPlPasskeyManager = createPreset<PlPasskeyManagerProps>({
               {/* Detail rows */}
               <div style={{ padding: 0 }}>
                 {[
-                  { label: 'Name', value: passkeyName || 'My Passkey', icon: <Edit3 size={14} /> },
+                  { label: 'Name', value: passkeyName || 'My Passkey', icon: <Edit size={14} /> },
                   {
                     label: 'Type',
                     value: isPlatform ? 'Platform Authenticator' : 'Security Key',

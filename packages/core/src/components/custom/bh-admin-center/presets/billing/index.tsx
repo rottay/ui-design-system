@@ -11,13 +11,18 @@ import { createPreset, PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createFilterPillStyle,
   createHoverStyle,
   createListItemStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createProgressBarStyle,
   createStatusDotStyle,
   createSurfaceStyle,
+  getCardPadding,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
 import {
@@ -62,7 +67,7 @@ import {
 export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
   name: 'BhAdminCenter.Billing',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhAdminCenterProps>) => {
-    const { Box } = primitives;
+    const { Box, Text } = primitives;
     const severityColors = getSeverityColors(tokens);
     const complianceColors = getComplianceColors(tokens);
 
@@ -88,6 +93,11 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
     } = props;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const [dateRange, setDateRange] = useState<DateRangeValue>('30d');
     const [costView, setCostView] = useState<'breakdown' | 'trend' | 'forecast'>('breakdown');
@@ -348,7 +358,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
       const bg = isUp ? tokens.colors.errorScale[50] : tokens.colors.successScale[50];
       const Icon = isUp ? ArrowUpRight : ArrowDownRight;
       return (
-        <span style={{
+        <Text style={{
           display: 'inline-flex', alignItems: 'center', gap: 2,
           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
           borderRadius: tokens.borderRadius.full,
@@ -358,7 +368,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
         }}>
           <Icon size={12} />
           {isUp ? '+' : ''}{trend.toFixed(1)}%
-        </span>
+        </Text>
       );
     };
 
@@ -385,29 +395,29 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           ...(isGlass ? { backdropFilter: tokens.glass!.blur, WebkitBackdropFilter: tokens.glass!.blur, backgroundColor: tokens.glass!.bg } : {}),
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-              <div style={{
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+              <Box style={{
                 width: 36, height: 36, borderRadius: tokens.borderRadius.lg,
                 background: `linear-gradient(135deg, ${tokens.colors.successScale[500]}, ${tokens.colors.primaryScale[600]})`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
                 <Wallet size={18} color={tokens.colors.common.white} />
-              </div>
-              <div>
-                <h1 style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{title}</h1>
-                <p style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Token usage, cost allocation & spend forecasting</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <div style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full }}>
+              </Box>
+              <Box>
+                <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{title}</Text>
+                <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Token usage, cost allocation & spend forecasting</Text>
+              </Box>
+            </Box>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full }}>
                 {DATE_RANGE_OPTIONS.map((opt) => (
-                  <button key={opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} style={pillBtn(dateRange === opt.value)}>
+                  <Box key={opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} style={pillBtn(dateRange === opt.value)}>
                     {opt.label}
-                  </button>
+                  </Box>
                 ))}
-              </div>
-              <button onClick={onRefresh} style={{
+              </Box>
+              <Box onClick={onRefresh} style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 width: 32, height: 32, borderRadius: tokens.borderRadius.md,
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -416,8 +426,8 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 color: tokens.colors.neutral[600],
               }}>
                 <RefreshCw size={14} />
-              </button>
-              <button onClick={onExportReport} style={{
+              </Box>
+              <Box onClick={onExportReport} style={{
                 display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
@@ -431,51 +441,51 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
               }}>
                 <Download size={12} />
                 Export Report
-              </button>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* Tabs */}
-          <div style={{ display: 'flex', gap: 0, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, marginLeft: -tokens.spacing[5], marginRight: -tokens.spacing[5], paddingLeft: tokens.spacing[5] }}>
+          <Box style={{ display: 'flex', gap: 0, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, marginLeft: -tokens.spacing[5], marginRight: -tokens.spacing[5], paddingLeft: tokens.spacing[5] }}>
             {(['overview', 'usage', 'invoices'] as const).map((tab) => (
-              <button key={tab} onClick={() => setBillingTab(tab)} style={tabBtn(billingTab === tab)}>
+              <Box key={tab} onClick={() => setBillingTab(tab)} style={tabBtn(billingTab === tab)}>
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
+              </Box>
             ))}
-          </div>
+          </Box>
         </Box>
 
         {/* ── Scrollable body ─────────────────────────────────────── */}
         <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[5] }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5], maxWidth: 1400, margin: '0 auto', width: '100%' }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5], maxWidth: 1400, margin: '0 auto', width: '100%' }}>
 
             {/* ── Cost Alerts Banner ──────────────────────────────── */}
             {costAlerts.length > 0 && (
-              <div style={{
+              <Box style={{
                 ...createSurfaceStyle(tokens, { elevation: 'sm', borderColor: tokens.colors.warningScale[200] }),
                 backgroundColor: tokens.colors.warningScale[50],
                 padding: tokens.spacing[4],
               }}>
-                <div
+                <Box
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
                   onClick={() => setAlertsExpanded(!alertsExpanded)}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <AlertTriangle size={16} color={tokens.colors.warningScale[600]} />
-                    <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[800] }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[800] }}>
                       {costAlerts.length} Cost Alert{costAlerts.length !== 1 ? 's' : ''}
-                    </span>
-                  </div>
+                    </Text>
+                  </Box>
                   <ChevronRight
                     size={14}
                     color={tokens.colors.warningScale[600]}
                     style={{ transform: alertsExpanded ? 'rotate(90deg)' : 'none', transition: `transform ${tokens.transitions?.normal || tokens.motion.hover}` }}
                   />
-                </div>
+                </Box>
                 {alertsExpanded && (
-                  <div style={{ marginTop: tokens.spacing[3], display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                  <Box style={{ marginTop: tokens.spacing[3], display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {costAlerts.map((alert) => (
-                      <div key={alert.id} onClick={() => onEventClick?.(alert.id)} style={{
+                      <Box key={alert.id} onClick={() => onEventClick?.(alert.id)} style={{
                         display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         backgroundColor: tokens.colors.common.white,
@@ -483,70 +493,70 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                         cursor: onEventClick ? 'pointer' : 'default',
                       }}>
                         <Flame size={12} color={tokens.colors.warningScale[600]} />
-                        <span style={{ flex: 1, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{alert.message}</span>
-                        <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{alert.time}</span>
-                      </div>
+                        <Text style={{ flex: 1, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{alert.message}</Text>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{alert.time}</Text>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             )}
 
             {/* ── Hero Billing Stats ──────────────────────────────── */}
             {billing && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
                 {/* Token Balance */}
-                <div style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.primaryScale[500]}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
+                <Box style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.primaryScale[500]}` }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <Zap size={14} color={tokens.colors.primaryScale[600]} />
-                    <span style={sectionSub}>Token Balance</span>
-                  </div>
-                  <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                    <Text style={sectionSub}>Token Balance</Text>
+                  </Box>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                     {formatTokenBalance(billing.tokenBalance)}
-                  </p>
-                  <div style={{ marginTop: tokens.spacing[2] }}>
+                  </Text>
+                  <Box style={{ marginTop: tokens.spacing[2] }}>
                     {renderGaugeChart(
                       billing.tokenBalance,
                       billing.tokenBalance + billing.burnRate * billing.projectedRunwayDays,
                       tokens.colors.primaryScale[500],
                       80,
                     )}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
 
                 {/* Daily Burn Rate */}
-                <div style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.warningScale[500]}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
+                <Box style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.warningScale[500]}` }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <Flame size={14} color={tokens.colors.warningScale[600]} />
-                    <span style={sectionSub}>Daily Burn Rate</span>
-                  </div>
-                  <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.warningScale[700] }}>
+                    <Text style={sectionSub}>Daily Burn Rate</Text>
+                  </Box>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.warningScale[700] }}>
                     {formatTokenBalance(billing.burnRate)}
-                  </p>
-                  <p style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  </Text>
+                  <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     tokens per day
-                  </p>
+                  </Text>
                   {billing.monthlyTrend.length >= 2 && (
-                    <div style={{ marginTop: tokens.spacing[2] }}>
+                    <Box style={{ marginTop: tokens.spacing[2] }}>
                       {renderStackedBarChart(billing.monthlyTrend.slice(-7), 120, 40)}
-                    </div>
+                    </Box>
                   )}
-                </div>
+                </Box>
 
                 {/* Projected Runway */}
-                <div style={{ ...cardBase, borderLeft: `3px solid ${billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[500] : billing.projectedRunwayDays < 30 ? tokens.colors.warningScale[500] : tokens.colors.successScale[500]}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
+                <Box style={{ ...cardBase, borderLeft: `3px solid ${billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[500] : billing.projectedRunwayDays < 30 ? tokens.colors.warningScale[500] : tokens.colors.successScale[500]}` }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <CalendarDays size={14} color={billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600]} />
-                    <span style={sectionSub}>Projected Runway</span>
-                  </div>
-                  <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.neutral[900] }}>
+                    <Text style={sectionSub}>Projected Runway</Text>
+                  </Box>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.neutral[900] }}>
                     {billing.projectedRunwayDays}
-                  </p>
-                  <p style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  </Text>
+                  <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     days remaining
-                  </p>
+                  </Text>
                   {billing.projectedRunwayDays < 14 && (
-                    <div style={{
+                    <Box style={{
                       marginTop: tokens.spacing[2],
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.sm,
@@ -556,43 +566,43 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       fontWeight: tokens.typography.fontWeight.medium,
                     }}>
                       Action required
-                    </div>
+                    </Box>
                   )}
-                </div>
+                </Box>
 
                 {/* Monthly Cost */}
-                <div style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.infoScale[500]}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
+                <Box style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.infoScale[500]}` }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <DollarSign size={14} color={tokens.colors.infoScale[600]} />
-                    <span style={sectionSub}>Monthly Cost</span>
-                  </div>
-                  <p style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                    <Text style={sectionSub}>Monthly Cost</Text>
+                  </Box>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                     {formatCurrency(billing.monthlyCost)}
-                  </p>
-                  <p style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  </Text>
+                  <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     current billing period
-                  </p>
-                </div>
-              </div>
+                  </Text>
+                </Box>
+              </Box>
             )}
 
             {/* ── Token Usage Trend (large area chart) ───────────── */}
             {billing && billing.monthlyTrend.length > 0 && (
               <section style={{ ...cardBase }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <TrendingUp size={18} color={tokens.colors.primaryScale[600]} />
-                    <h2 style={sectionTitle}>Token Usage Trend</h2>
-                  </div>
-                  <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                    <Text style={sectionTitle}>Token Usage Trend</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {(['breakdown', 'trend', 'forecast'] as const).map((v) => (
-                      <button key={v} onClick={() => setCostView(v)} style={pillBtn(costView === v)}>
+                      <Box key={v} onClick={() => setCostView(v)} style={pillBtn(costView === v)}>
                         {v.charAt(0).toUpperCase() + v.slice(1)}
-                      </button>
+                      </Box>
                     ))}
-                  </div>
-                </div>
-                <div style={{ width: '100%', overflow: 'hidden' }}>
+                  </Box>
+                </Box>
+                <Box style={{ width: '100%', overflow: 'hidden' }}>
                   {costView === 'trend' || costView === 'forecast' ? (
                     renderAreaChartSvg(
                       costView === 'forecast'
@@ -614,19 +624,19 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       tokens.colors.primaryScale[50],
                     )
                   )}
-                </div>
+                </Box>
                 {/* Legend for forecast */}
                 {costView === 'forecast' && (
-                  <div style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[3], paddingTop: tokens.spacing[2], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                      <span style={{ width: 12, height: 3, backgroundColor: tokens.colors.primaryScale[500], borderRadius: tokens.borderRadius.full, display: 'inline-block' }} />
-                      <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Actual</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                      <span style={{ width: 12, height: 3, backgroundColor: tokens.colors.warningScale[500], borderRadius: tokens.borderRadius.full, display: 'inline-block' }} />
-                      <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Projected</span>
-                    </div>
-                  </div>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[3], paddingTop: tokens.spacing[2], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                      <Box style={{ width: 12, height: 3, backgroundColor: tokens.colors.primaryScale[500], borderRadius: tokens.borderRadius.full, display: 'inline-block' }} />
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Actual</Text>
+                    </Box>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                      <Box style={{ width: 12, height: 3, backgroundColor: tokens.colors.warningScale[500], borderRadius: tokens.borderRadius.full, display: 'inline-block' }} />
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Projected</Text>
+                    </Box>
+                  </Box>
                 )}
               </section>
             )}
@@ -634,13 +644,13 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
             {/* ── Cost Allocation (donut + table) ────────────────── */}
             {costBreakdown.length > 0 && (
               <section>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <PieChart size={18} color={tokens.colors.primaryScale[600]} />
-                  <h2 style={sectionTitle}>Cost Allocation</h2>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: tokens.spacing[4] }}>
+                  <Text style={sectionTitle}>Cost Allocation</Text>
+                </Box>
+                <Box style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: tokens.spacing[4] }}>
                   {/* Donut */}
-                  <div style={{ ...cardBase, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     {renderDonutChart(
                       costBreakdown.map((c, i) => ({
                         label: c.category,
@@ -652,9 +662,9 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       formatCurrency(totalCost),
                     )}
                     {/* Legend */}
-                    <div style={{ marginTop: tokens.spacing[3], width: '100%' }}>
+                    <Box style={{ marginTop: tokens.spacing[3], width: '100%' }}>
                       {costBreakdown.map((c, i) => (
-                        <div
+                        <Box
                           key={c.category}
                           onClick={() => setSelectedCostCategory(selectedCostCategory === c.category ? null : c.category)}
                           style={{
@@ -665,16 +675,16 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                             transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`,
                           }}
                         >
-                          <span style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: costColors[i % costColors.length], flexShrink: 0 }} />
-                          <span style={{ flex: 1, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{c.category}</span>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{formatPercentage(c.percentage)}</span>
-                        </div>
+                          <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: costColors[i % costColors.length], flexShrink: 0 }} />
+                          <Text style={{ flex: 1, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{c.category}</Text>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{formatPercentage(c.percentage)}</Text>
+                        </Box>
                       ))}
-                    </div>
-                  </div>
+                    </Box>
+                  </Box>
 
                   {/* Detailed cost table */}
-                  <div style={{ ...cardBase, padding: 0, overflow: 'hidden' }}>
+                  <Box style={{ ...cardBase, padding: 0, overflow: 'hidden' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                       <thead>
                         <tr>
@@ -714,10 +724,10 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                                 fontWeight: tokens.typography.fontWeight.medium,
                                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                               }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                                  <span style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: costColors[i % costColors.length] }} />
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                                  <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: costColors[i % costColors.length] }} />
                                   {c.category}
-                                </div>
+                                </Box>
                               </td>
                               <td style={{
                                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
@@ -732,23 +742,23 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                               }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                                  <div style={{ flex: 1, height: 6, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
-                                    <div style={{ height: '100%', width: `${c.percentage}%`, backgroundColor: costColors[i % costColors.length], borderRadius: tokens.borderRadius.full }} />
-                                  </div>
-                                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], width: 40 }}>{formatPercentage(c.percentage)}</span>
-                                </div>
+                                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                                  <Box style={{ flex: 1, height: 6, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
+                                    <Box style={{ height: '100%', width: `${c.percentage}%`, backgroundColor: costColors[i % costColors.length], borderRadius: tokens.borderRadius.full }} />
+                                  </Box>
+                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], width: 40 }}>{formatPercentage(c.percentage)}</Text>
+                                </Box>
                               </td>
                               <td style={{
                                 padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                                 borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                               }}>
                                 {isHighest ? (
-                                  <span style={{ ...createBadgeStyle(tokens, 'warning') }}>Top spend</span>
+                                  <Text style={{ ...createBadgeStyle(tokens, 'warning') }}>Top spend</Text>
                                 ) : c.percentage > 20 ? (
-                                  <span style={{ ...createBadgeStyle(tokens, 'info') }}>Monitor</span>
+                                  <Text style={{ ...createBadgeStyle(tokens, 'info') }}>Monitor</Text>
                                 ) : (
-                                  <span style={{ ...createBadgeStyle(tokens, 'success') }}>Normal</span>
+                                  <Text style={{ ...createBadgeStyle(tokens, 'success') }}>Normal</Text>
                                 )}
                               </td>
                             </tr>
@@ -756,21 +766,21 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                         })}
                       </tbody>
                     </table>
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               </section>
             )}
 
             {/* ── Provider Cost & KPI Row ─────────────────────────── */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+            <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
               {/* Provider costs */}
               {providers.length > 0 && (
                 <section style={{ ...cardBase }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Layers size={16} color={tokens.colors.primaryScale[600]} />
-                    <h3 style={sectionTitle}>Provider Costs</h3>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+                    <Text style={sectionTitle}>Provider Costs</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
                     {providers.map((provider, i) => {
                       const latencyColor = provider.latencyMs < 150
                         ? tokens.colors.successScale[500]
@@ -778,7 +788,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                           ? tokens.colors.warningScale[500]
                           : tokens.colors.errorScale[500];
                       return (
-                        <div
+                        <Box
                           key={provider.id}
                           onClick={() => onProviderClick?.(provider.id)}
                           style={{
@@ -790,118 +800,118 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                             transition: `all ${tokens.motion.hover}`,
                           }}
                         >
-                          <span style={{
+                          <Box style={{
                             width: 8, height: 8, borderRadius: tokens.borderRadius.full,
                             backgroundColor: getProviderStatusColors(tokens)[provider.status].dot,
                             flexShrink: 0,
                           }} />
-                          <span style={{ flex: 1, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
+                          <Text style={{ flex: 1, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
                             {provider.name}
-                          </span>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                          </Text>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                             <Gauge size={12} color={latencyColor} />
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, color: latencyColor, fontWeight: tokens.typography.fontWeight.medium }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: latencyColor, fontWeight: tokens.typography.fontWeight.medium }}>
                               {provider.latencyMs}ms
-                            </span>
-                          </div>
-                          <span style={{
+                            </Text>
+                          </Box>
+                          <Text style={{
                             ...createBadgeStyle(tokens, provider.status === 'healthy' ? 'success' : provider.status === 'degraded' ? 'warning' : 'error'),
                           }}>
                             {provider.status}
-                          </span>
-                        </div>
+                          </Text>
+                        </Box>
                       );
                     })}
-                  </div>
+                  </Box>
                 </section>
               )}
 
               {/* Billing KPIs */}
               {kpis.length > 0 && (
                 <section style={{ ...cardBase }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <BarChart3 size={16} color={tokens.colors.primaryScale[600]} />
-                    <h3 style={sectionTitle}>Key Metrics</h3>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: tokens.spacing[3] }}>
+                    <Text style={sectionTitle}>Key Metrics</Text>
+                  </Box>
+                  <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: tokens.spacing[3] }}>
                     {kpis.slice(0, 4).map((kpi, i) => (
-                      <div key={i} style={{
+                      <Box key={i} style={{
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.neutral[50],
                       }}>
-                        <p style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>{kpi.label}</p>
-                        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                        <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>{kpi.label}</Text>
+                        <Box style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+                          <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                             {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
-                          </span>
+                          </Text>
                           {renderTrend(kpi.trend)}
-                        </div>
-                      </div>
+                        </Box>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
                 </section>
               )}
-            </div>
+            </Box>
 
             {/* ── Compliance & Quick Actions ──────────────────────── */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+            <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
               {/* Compliance */}
               {compliance && (
                 <section style={{ ...cardBase }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Shield size={16} color={tokens.colors.primaryScale[600]} />
-                    <h3 style={sectionTitle}>Compliance</h3>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+                    <Text style={sectionTitle}>Compliance</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
                     {/* Data Retention */}
-                    <div style={{
+                    <Box style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: complianceColors[compliance.dataRetention].bg,
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${complianceColors[compliance.dataRetention].border}`,
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                         <Lock size={14} color={complianceColors[compliance.dataRetention].color} />
-                        <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>Data Retention</span>
-                      </div>
-                      <span style={{
+                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>Data Retention</Text>
+                      </Box>
+                      <Text style={{
                         ...createBadgeStyle(tokens, compliance.dataRetention === 'ok' ? 'success' : compliance.dataRetention === 'warning' ? 'warning' : 'error'),
                       }}>
                         {compliance.dataRetention.toUpperCase()}
-                      </span>
-                    </div>
+                      </Text>
+                    </Box>
                     {/* GDPR */}
-                    <div style={{
+                    <Box style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: tokens.colors.neutral[50],
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                         <Globe size={14} color={tokens.colors.infoScale[600]} />
-                        <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>GDPR Requests</span>
-                      </div>
-                      <span style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>GDPR Requests</Text>
+                      </Box>
+                      <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                         {compliance.gdprRequests}
-                      </span>
-                    </div>
+                      </Text>
+                    </Box>
                     {/* Audit */}
-                    <div style={{
+                    <Box style={{
                       padding: tokens.spacing[3],
                       borderRadius: tokens.borderRadius.md,
                       backgroundColor: tokens.colors.neutral[50],
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                           <FileText size={14} color={compliance.auditCompleteness >= 90 ? tokens.colors.successScale[600] : tokens.colors.warningScale[600]} />
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>Audit Completeness</span>
-                        </div>
-                        <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>Audit Completeness</Text>
+                        </Box>
+                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                           {formatPercentage(compliance.auditCompleteness)}
-                        </span>
-                      </div>
+                        </Text>
+                      </Box>
                       <svg width="100%" height="8" style={{ display: 'block' }}>
                         <rect x="0" y="0" width="100%" height="8" rx="4" fill={tokens.colors.neutral[200]} />
                         <rect
@@ -912,21 +922,22 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                           style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                         />
                       </svg>
-                    </div>
-                  </div>
+                    </Box>
+                  </Box>
                 </section>
               )}
 
               {/* Quick Actions */}
               {quickActions.length > 0 && (
                 <section style={{ ...cardBase }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Zap size={16} color={tokens.colors.primaryScale[600]} />
-                    <h3 style={sectionTitle}>Quick Actions</h3>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                    <Text style={sectionTitle}>Quick Actions</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {quickActions.map((action) => (
-                      <button
+                      <Box
+                        as="button"
                         key={action.key}
                         onClick={() => onQuickAction?.(action.key)}
                         style={{
@@ -952,7 +963,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                           e.currentTarget.style.transform = 'none';
                         }}
                       >
-                        <span style={{
+                        <Text style={{
                           width: 32, height: 32, borderRadius: tokens.borderRadius.md,
                           backgroundColor: tokens.colors.primaryScale[50],
                           color: tokens.colors.primaryScale[600],
@@ -960,24 +971,24 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                           flexShrink: 0,
                         }}>
                           {action.icon}
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <p style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
+                        </Text>
+                        <Box style={{ flex: 1 }}>
+                          <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
                             {action.label}
-                          </p>
-                          <p style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                          </Text>
+                          <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                             {action.description}
-                          </p>
-                        </div>
+                          </Text>
+                        </Box>
                         <ChevronRight size={14} color={tokens.colors.neutral[400]} />
-                      </button>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
                 </section>
               )}
-            </div>
+            </Box>
 
-          </div>
+          </Box>
         </Box>
       </Box>
     );

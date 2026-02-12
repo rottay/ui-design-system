@@ -6,7 +6,7 @@
  * stage-specific action buttons, search/filter, stats ribbon, and bulk operations.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -63,7 +63,7 @@ interface StageConfig {
   color: string;
   bgColor: string;
   borderColor: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
 }
 
 function getStageConfig(tokens: DesignTokens): Record<LifecycleStage, StageConfig> {
@@ -132,7 +132,7 @@ function getStageConfig(tokens: DesignTokens): Record<LifecycleStage, StageConfi
 interface StageActionDef {
   action: LifecycleAction;
   label: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
   destructive: boolean;
 }
 

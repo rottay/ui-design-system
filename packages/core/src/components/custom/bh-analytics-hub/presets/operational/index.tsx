@@ -2,934 +2,365 @@
 
 /**
  * BhAnalyticsHub - Operational Preset
- * Detailed drill-down analytics with granular filtering,
- * expanded metric cards, stage-level breakdowns,
- * and per-recruiter/per-source detail views.
+ * Detailed operational analytics with granular filtering, funnel analysis,
+ * pipeline velocity, cost breakdown, and time-to-hire deep dives.
  */
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
+import {
+  Filter,
+  Clock,
+  DollarSign,
+  GitBranch,
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronDown,
+  Download,
+  Layers,
+  ArrowRight,
+  Timer,
+} from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createHoverStyle,
-  createPanelHeaderStyle,
-  createProgressBarStyle,
-  createSectionHeaderStyle,
-  createStatusDotStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createIconContainerStyle,
+  getPersonalityBadgeRadius,
+  createPersonalitySectionHeaderStyle,
 } from '../../../helpers';
 import type {
   BhAnalyticsHubProps,
-  DateRangePreset,
   FunnelStage,
   TimeToHireData,
-  SourceEffectiveness,
-  RecruiterPerformance,
-  CostAnalysis,
   PipelineVelocity,
-  TrendComparison,
+  CostAnalysis,
+  SourceEffectiveness,
+  DateRangePreset,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
 
 /* ------------------------------------------------------------------ */
-/*  Helper: format numbers                                            */
+/*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-function formatNumber(value: number): string {
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
-  return value.toLocaleString();
-}
+const MOCK_FUNNEL: FunnelStage[] = [
+  { name: 'Applied', count: 1240, conversionPercent: 100, prevPeriodCount: 1100 },
+  { name: 'Screened', count: 620, conversionPercent: 50, prevPeriodCount: 550 },
+  { name: 'Phone Screen', count: 410, conversionPercent: 66, prevPeriodCount: 380 },
+  { name: 'Technical', count: 248, conversionPercent: 60, prevPeriodCount: 220 },
+  { name: 'Onsite', count: 124, conversionPercent: 50, prevPeriodCount: 110 },
+  { name: 'Offered', count: 62, conversionPercent: 50, prevPeriodCount: 55 },
+  { name: 'Hired', count: 48, conversionPercent: 77, prevPeriodCount: 42 },
+];
 
-function formatCurrency(value: number): string {
-  return `$${value.toLocaleString()}`;
-}
+const MOCK_TTH: TimeToHireData[] = [
+  { job: 'Sr. Frontend Engineer', avgDays: 28, stages: [{ name: 'Screen', avgDays: 3 }, { name: 'Technical', avgDays: 7 }, { name: 'Onsite', avgDays: 10 }, { name: 'Offer', avgDays: 5 }, { name: 'Close', avgDays: 3 }] },
+  { job: 'Product Manager', avgDays: 34, stages: [{ name: 'Screen', avgDays: 4 }, { name: 'Interview', avgDays: 12 }, { name: 'Final', avgDays: 8 }, { name: 'Offer', avgDays: 6 }, { name: 'Close', avgDays: 4 }] },
+  { job: 'DevOps Lead', avgDays: 22, stages: [{ name: 'Screen', avgDays: 2 }, { name: 'Technical', avgDays: 6 }, { name: 'Onsite', avgDays: 8 }, { name: 'Offer', avgDays: 4 }, { name: 'Close', avgDays: 2 }] },
+  { job: 'Data Scientist', avgDays: 31, stages: [{ name: 'Screen', avgDays: 3 }, { name: 'Take-Home', avgDays: 9 }, { name: 'Onsite', avgDays: 10 }, { name: 'Offer', avgDays: 5 }, { name: 'Close', avgDays: 4 }] },
+];
 
-function formatPercent(value: number): string {
-  return `${value.toFixed(1)}%`;
-}
+const MOCK_VELOCITY: PipelineVelocity[] = [
+  { stage: 'Application Review', avgDays: 2.1, slaLimit: 3 },
+  { stage: 'Phone Screen', avgDays: 3.4, slaLimit: 5 },
+  { stage: 'Technical Interview', avgDays: 6.8, slaLimit: 7 },
+  { stage: 'Onsite Panel', avgDays: 8.2, slaLimit: 10 },
+  { stage: 'Offer Generation', avgDays: 4.1, slaLimit: 3 },
+  { stage: 'Offer Close', avgDays: 3.5, slaLimit: 5 },
+];
 
-/* ------------------------------------------------------------------ */
-/*  Helper: sparkline polyline points                                 */
-/* ------------------------------------------------------------------ */
-function sparklinePoints(data: number[], width: number, height: number, padding: number): string {
-  if (!data.length) return '';
-  const max = Math.max(...data);
-  const min = Math.min(...data);
-  const range = max - min || 1;
-  const stepX = (width - padding * 2) / (data.length - 1 || 1);
-  return data
-    .map((v, i) => {
-      const x = padding + i * stepX;
-      const y = height - padding - ((v - min) / range) * (height - padding * 2);
-      return `${x},${y}`;
-    })
-    .join(' ');
-}
+const MOCK_COST: CostAnalysis[] = [
+  { category: 'Job Boards', costPerHire: 1200, breakdown: [{ item: 'LinkedIn', cost: 680 }, { item: 'Indeed', cost: 320 }, { item: 'Glassdoor', cost: 200 }] },
+  { category: 'Agencies', costPerHire: 3400, breakdown: [{ item: 'TechRecruit Pro', cost: 2100 }, { item: 'Staffing Plus', cost: 1300 }] },
+  { category: 'Referral Bonuses', costPerHire: 800, breakdown: [{ item: 'Employee referrals', cost: 800 }] },
+  { category: 'Events', costPerHire: 600, breakdown: [{ item: 'Career fairs', cost: 350 }, { item: 'Meetups', cost: 250 }] },
+];
 
-/* ------------------------------------------------------------------ */
-/*  Helper: bar width calculation                                     */
-/* ------------------------------------------------------------------ */
-function valueToBarWidth(value: number, maxValue: number, maxWidth: number): number {
-  if (maxValue <= 0) return 0;
-  return (value / maxValue) * maxWidth;
-}
+const MOCK_SOURCES: SourceEffectiveness[] = [
+  { source: 'LinkedIn', candidateCount: 420, qualityScore: 82 },
+  { source: 'Referrals', candidateCount: 180, qualityScore: 91 },
+  { source: 'Indeed', candidateCount: 310, qualityScore: 65 },
+  { source: 'Career Site', candidateCount: 210, qualityScore: 74 },
+  { source: 'Agencies', candidateCount: 120, qualityScore: 78 },
+  { source: 'Events', candidateCount: 80, qualityScore: 70 },
+];
 
-/* ------------------------------------------------------------------ */
-/*  Chart color palette                                               */
-/* ------------------------------------------------------------------ */
-function getChartColors(tokens: DesignTokens): string[] {
-  return [
-    tokens.colors.primaryScale[500],
-    tokens.colors.successScale[500],
-    tokens.colors.warningScale[500],
-    tokens.colors.errorScale[500],
-    tokens.colors.infoScale[500],
-    tokens.colors.primaryScale[300],
-    tokens.colors.successScale[300],
-    tokens.colors.warningScale[300],
-  ];
-}
-
-/* ------------------------------------------------------------------ */
-/*  Operational Preset                                                */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/*  Operational Preset                                                 */
+/* ================================================================== */
 export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
   name: 'BhAnalyticsHub.Operational',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhAnalyticsHubProps>) => {
-    const { Box, Text } = primitives;
+  render: (ctx: PresetContext<BhAnalyticsHubProps>) => {
+    const { primitives: { Box, Flex, Stack, Text }, props, tokens: t } = ctx;
 
     const {
-      dateRange: controlledDateRange,
+      funnelData = MOCK_FUNNEL,
+      timeToHireData = MOCK_TTH,
+      velocityData = MOCK_VELOCITY,
+      costData = MOCK_COST,
+      sourceData = MOCK_SOURCES,
+      dateRange = '30d',
       onDateRangeChange,
-      comparisonPeriod: controlledComparison,
-      onComparisonToggle,
-      funnelData = [],
-      timeToHireData = [],
-      sourceData = [],
-      recruiterData = [],
-      costData = [],
-      velocityData = [],
-      diversityData,
-      trendData = [],
-      filters: controlledFilters,
+      filters = {},
       onFilterChange,
-      selectedMetric: controlledSelectedMetric,
-      onMetricSelect,
-      drilldownEntity: controlledDrilldown,
-      onDrilldown,
-      exportFormat: controlledExportFormat,
       onExport,
       className,
       style,
     } = props;
 
-    const [localDateRange, setLocalDateRange] = useState<DateRangePreset>('30d');
-    const [localComparison, setLocalComparison] = useState(false);
-    const [localFilters, setLocalFilters] = useState<Record<string, string>>({});
-    const [localSelectedMetric, setLocalSelectedMetric] = useState<string | null>(null);
-    const [localDrilldown, setLocalDrilldown] = useState<string | null>(null);
-    const [localExportFormat, setLocalExportFormat] = useState<'pdf' | 'csv' | 'email'>('pdf');
-    const [activeTab, setActiveTab] = useState<'funnel' | 'recruiters' | 'sources' | 'costs' | 'velocity'>('funnel');
+    const [activeTab, setActiveTab] = useState<'funnel' | 'velocity' | 'cost' | 'sources'>('funnel');
+    const [expandedJob, setExpandedJob] = useState<string | null>(null);
 
-    const dateRange = controlledDateRange ?? localDateRange;
-    const comparisonEnabled = controlledComparison ?? localComparison;
-    const filters = controlledFilters ?? localFilters;
-    const selectedMetric = controlledSelectedMetric !== undefined ? controlledSelectedMetric : localSelectedMetric;
-    const drilldownEntity = controlledDrilldown !== undefined ? controlledDrilldown : localDrilldown;
-    const exportFormat = controlledExportFormat ?? localExportFormat;
+    const card = createCardStyle(t, { padding: 28 });
+    const compactCard = createCardStyle(t, { padding: 20 });
+    const hoverStyles = createCardHoverStyles(t);
+    const badgeRadius = getPersonalityBadgeRadius(t);
+    const sectionLabel = createPersonalitySectionHeaderStyle(t);
 
-    const handleDateRange = (range: DateRangePreset) => {
-      setLocalDateRange(range);
-      onDateRangeChange?.(range);
-    };
-
-    const handleComparison = (enabled: boolean) => {
-      setLocalComparison(enabled);
-      onComparisonToggle?.(enabled);
-    };
-
-    const handleMetricSelect = (metric: string | null) => {
-      setLocalSelectedMetric(metric);
-      onMetricSelect?.(metric);
-    };
-
-    const handleDrilldown = (entity: string | null) => {
-      setLocalDrilldown(entity);
-      onDrilldown?.(entity);
-    };
-
-    const handleExport = (format: 'pdf' | 'csv' | 'email') => {
-      setLocalExportFormat(format);
-      onExport?.(format);
-    };
-
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
-    const chartColors = getChartColors(tokens);
-
-    /* ---------- Max values ---------- */
-    const tthMax = useMemo(() => {
-      return timeToHireData.length > 0 ? Math.max(...timeToHireData.map((d) => d.avgDays)) : 1;
-    }, [timeToHireData]);
-
-    const sourceMax = useMemo(() => {
-      return sourceData.length > 0 ? Math.max(...sourceData.map((s) => s.candidateCount)) : 1;
-    }, [sourceData]);
-
-    const costMax = useMemo(() => {
-      return costData.length > 0 ? Math.max(...costData.map((d) => d.costPerHire)) : 1;
-    }, [costData]);
-
-    const velocityMax = useMemo(() => {
-      const allVals = velocityData.flatMap((d) => [d.avgDays, d.slaLimit]);
-      return allVals.length > 0 ? Math.max(...allVals) : 1;
-    }, [velocityData]);
-
-    const barChartBarHeight = 24;
-
-    /* ---------- Tabs ---------- */
-    const tabs: { key: typeof activeTab; label: string }[] = [
-      { key: 'funnel', label: 'Funnel' },
-      { key: 'recruiters', label: 'Recruiters' },
-      { key: 'sources', label: 'Sources' },
-      { key: 'costs', label: 'Costs' },
-      { key: 'velocity', label: 'Velocity' },
+    const tabs = [
+      { key: 'funnel' as const, label: 'Funnel Analysis', icon: GitBranch },
+      { key: 'velocity' as const, label: 'Pipeline Velocity', icon: Timer },
+      { key: 'cost' as const, label: 'Cost Breakdown', icon: DollarSign },
+      { key: 'sources' as const, label: 'Source Effectiveness', icon: Layers },
     ];
 
+    const SectionTitle = ({ children }: { children: string }) => (
+      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[5] }}>{children}</Text>
+    );
+
     return (
-      <Box
-        className={className}
-        style={{
-          display: 'flex',
-          flexDirection: 'column' as const,
-          gap: tokens.spacing[5],
-          padding: tokens.spacing[6],
-          minHeight: '100%',
-          backgroundColor: tokens.colors.neutral[50],
-          fontFamily: 'inherit',
-          ...style,
-        }}
-      >
-        {/* ========== HEADER + DATE RANGE + EXPORT ========== */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap' as const,
-            gap: tokens.spacing[3],
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize.xl || '1.25rem',
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
-              }}
-            >
-              Operational Analytics
-            </Text>
+      <Box className={className} style={{ height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
 
-            <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
-              {(['7d', '30d', '90d', 'year', 'custom'] as const).map((range) => (
-                <div
-                  key={range}
-                  onClick={() => handleDateRange(range)}
-                  style={{
-                    ...hoverStyle,
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: dateRange === range ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                    backgroundColor: dateRange === range ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                    color: dateRange === range ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${dateRange === range ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
-                  }}
-                >
-                  {range === 'year' ? '1Y' : range === 'custom' ? 'Custom' : range.toUpperCase()}
-                </div>
-              ))}
-            </div>
-
-            {/* Comparison toggle */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <div
-                onClick={() => handleComparison(!comparisonEnabled)}
-                style={{
-                  ...hoverStyle,
-                  width: 36,
-                  height: 20,
-                  borderRadius: tokens.borderRadius.full,
-                  backgroundColor: comparisonEnabled ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
-                  position: 'relative' as const,
-                  flexShrink: 0,
-                  transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
-                }}
-              >
-                <div
-                  style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.common.white,
-                    position: 'absolute' as const,
-                    top: 2,
-                    left: comparisonEnabled ? 18 : 2,
-                    transition: `left ${tokens.transitions?.normal || tokens.motion.hover}`,
-                    boxShadow: tokens.shadows.sm,
-                  }}
-                />
-              </div>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                Compare
-              </Text>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
-            {(['pdf', 'csv', 'email'] as const).map((format) => (
-              <div
-                key={format}
-                onClick={() => handleExport(format)}
-                style={{
-                  ...hoverStyle,
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.medium,
-                  color: tokens.colors.neutral[600],
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  backgroundColor: tokens.colors.common.white,
-                  textTransform: 'uppercase' as const,
-                }}
-                onMouseEnter={(e) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.neutral[50] })}
-                onMouseLeave={(e) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.common.white })}
-              >
-                {format.toUpperCase()}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ========== SUMMARY KPI ROW ========== */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Total Pipeline</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xl || '1.25rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-              {funnelData.length > 0 ? formatNumber(funnelData[0].count) : '0'}
-            </Text>
+        {/* ── Header ── */}
+        <Flex align="center" justify="between" style={{ marginBottom: t.spacing[6] }}>
+          <Stack gap={1}>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>Operational Analytics</Text>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>Detailed recruiting metrics with drill-down capabilities</Text>
+          </Stack>
+          <Box style={{ display: 'flex', gap: t.spacing[2] }}>
+            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
+              <Filter size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={12} />
+            </Box>
+            <Box onClick={() => onExport?.('csv')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
+              <Download size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Export</Text>
+            </Box>
           </Box>
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Avg Time-to-Hire</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xl || '1.25rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-              {timeToHireData.length > 0 ? `${Math.round(timeToHireData.reduce((s, d) => s + d.avgDays, 0) / timeToHireData.length)}d` : '0d'}
-            </Text>
-          </Box>
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Active Sources</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xl || '1.25rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-              {sourceData.length}
-            </Text>
-          </Box>
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Active Recruiters</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xl || '1.25rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-              {recruiterData.length}
-            </Text>
-          </Box>
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>SLA Breaches</Text>
-            <Text
-              style={{
-                fontSize: tokens.typography.fontSize.xl || '1.25rem',
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: velocityData.filter((v) => v.avgDays > v.slaLimit).length > 0
-                  ? tokens.colors.errorScale[600]
-                  : tokens.colors.successScale[600],
-              }}
-            >
-              {velocityData.filter((v) => v.avgDays > v.slaLimit).length}
-            </Text>
-          </Box>
-        </div>
+        </Flex>
 
-        {/* ========== TAB NAVIGATION ========== */}
-        <div
-          style={{
-            display: 'flex',
-            gap: tokens.spacing[1],
-            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-            paddingBottom: 0,
-          }}
-        >
-          {tabs.map((tab) => (
-            <div
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              style={{
-                ...hoverStyle,
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: activeTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                color: activeTab === tab.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
-                borderBottom: activeTab === tab.key
-                  ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}`
-                  : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
-                marginBottom: -2,
-              }}
-            >
-              {tab.label}
-            </div>
-          ))}
-        </div>
+        {/* ── Tab Navigation ── */}
+        <Box style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: 3, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.key;
+            return (
+              <Box key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}>
+                <Icon size={16} />
+                <Text style={{ fontSize: t.typography.fontSize.sm }}>{tab.label}</Text>
+              </Box>
+            );
+          })}
+        </Box>
 
-        {/* ========== TAB CONTENT ========== */}
-
-        {/* ---- Funnel Tab ---- */}
+        {/* ── Funnel Analysis Tab ── */}
         {activeTab === 'funnel' && (
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Funnel Detail</Text>
-            {funnelData.length > 0 ? (
-              <div style={{ overflowX: 'auto' as const }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
-                  <thead>
-                    <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
-                      {['Stage', 'Count', 'Conversion', comparisonEnabled ? 'Previous' : null, comparisonEnabled ? 'Change' : null, 'Funnel %'].filter(Boolean).map((col) => (
-                        <th
-                          key={col!}
-                          style={{
-                            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                            textAlign: 'left' as const,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.neutral[500],
-                            fontSize: tokens.typography.fontSize.xs,
-                            textTransform: 'uppercase' as const,
-                            letterSpacing: '0.05em',
-                          }}
-                        >
-                          {col}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {funnelData.map((stage, i) => {
-                      const funnelPct = funnelData[0].count > 0 ? (stage.count / funnelData[0].count) * 100 : 0;
-                      const change =
-                        stage.prevPeriodCount !== undefined && stage.prevPeriodCount !== 0
-                          ? ((stage.count - stage.prevPeriodCount) / stage.prevPeriodCount) * 100
-                          : 0;
-                      return (
-                        <tr
-                          key={stage.name}
-                          style={{
-                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                              <div style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: chartColors[i % chartColors.length], flexShrink: 0 }} />
-                              <Text style={{ fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                                {stage.name}
-                              </Text>
-                            </div>
-                          </td>
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                            {formatNumber(stage.count)}
-                          </td>
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[600] }}>
-                            {formatPercent(stage.conversionPercent)}
-                          </td>
-                          {comparisonEnabled && (
-                            <>
-                              <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[500] }}>
-                                {stage.prevPeriodCount !== undefined ? formatNumber(stage.prevPeriodCount) : '\u2014'}
-                              </td>
-                              <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                                {stage.prevPeriodCount !== undefined ? (
-                                  <span style={{ color: change >= 0 ? tokens.colors.successScale[600] : tokens.colors.errorScale[600], fontWeight: tokens.typography.fontWeight.medium }}>
-                                    {change >= 0 ? '\u2191' : '\u2193'} {formatPercent(Math.abs(change))}
-                                  </span>
-                                ) : (
-                                  '\u2014'
-                                )}
-                              </td>
-                            </>
-                          )}
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                              <div style={{ width: 80, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' }}>
-                                <div
-                                  style={{
-                                    width: `${funnelPct}%`,
-                                    height: '100%',
-                                    borderRadius: tokens.borderRadius.full,
-                                    backgroundColor: chartColors[i % chartColors.length],
-                                  }}
-                                />
-                              </div>
-                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                                {funnelPct.toFixed(0)}%
-                              </Text>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                No funnel data
-              </div>
-            )}
-          </Box>
-        )}
-
-        {/* ---- Recruiters Tab ---- */}
-        {activeTab === 'recruiters' && (
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Recruiter Detail</Text>
-            {recruiterData.length > 0 ? (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: tokens.spacing[4] }}>
-                {recruiterData.map((recruiter, i) => (
-                  <div
-                    key={recruiter.name}
-                    onClick={() => handleMetricSelect(selectedMetric === recruiter.name ? null : recruiter.name)}
-                    style={{
-                      ...hoverStyle,
-                      padding: tokens.spacing[4],
-                      borderRadius: tokens.borderRadius.lg,
-                      backgroundColor: selectedMetric === recruiter.name ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${selectedMetric === recruiter.name ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
-                    }}
-                  >
-                    {/* Header with avatar */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
-                      <div
-                        style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: tokens.borderRadius.full,
-                          backgroundColor: tokens.colors.primaryScale[100],
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.bold,
-                          color: tokens.colors.primaryScale[700],
-                          overflow: 'hidden',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {recruiter.avatar ? (
-                          <img src={recruiter.avatar} alt={recruiter.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-                        ) : (
-                          recruiter.name.charAt(0).toUpperCase()
-                        )}
-                      </div>
-                      <div>
-                        <Text style={{ fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], fontSize: tokens.typography.fontSize.sm }}>
-                          {recruiter.name}
-                        </Text>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                          Rank #{i + 1}
-                        </Text>
-                      </div>
-                      {/* Sparkline */}
-                      {recruiter.sparkline.length > 0 && (
-                        <svg width={60} height={24} viewBox="0 0 60 24" style={{ marginLeft: 'auto' }}>
-                          <polyline
-                            points={sparklinePoints(recruiter.sparkline, 60, 24, 2)}
-                            fill="none"
-                            stroke={tokens.colors.primaryScale[400]}
-                            strokeWidth={1.5}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[6] }}>
+            <Box style={card}>
+              <SectionTitle>Conversion Funnel</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                {funnelData.map((stage, i) => {
+                  const maxW = Math.max(...funnelData.map((s) => s.count), 1);
+                  const pct = (stage.count / maxW) * 100;
+                  const colors = [t.colors.primaryScale[500], t.colors.primaryScale[400], t.colors.infoScale[400], t.colors.infoScale[500], t.colors.warningScale[400], t.colors.successScale[400], t.colors.successScale[500]];
+                  return (
+                    <Box key={stage.name} style={{ display: 'grid', gridTemplateColumns: '110px 1fr 50px 60px', alignItems: 'center', gap: t.spacing[2] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const }}>{stage.name}</Text>
+                      <Box style={{ height: 24, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden', position: 'relative' as const }}>
+                        <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${pct}%`, backgroundColor: colors[i % colors.length], borderRadius: t.borderRadius.sm, transition: 'width 400ms ease' }} />
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{stage.count.toLocaleString()}</Text>
+                      {i > 0 && (
+                        <Box style={{ ...createBadgeStyle(t, stage.conversionPercent >= 50 ? 'success' : stage.conversionPercent >= 30 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
+                          {stage.conversionPercent}%
+                        </Box>
                       )}
-                    </div>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
 
-                    {/* Metric grid */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[2] }}>
-                      <div>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Hires</Text>
-                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>
-                          {recruiter.hires}
-                        </Text>
-                      </div>
-                      <div>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Velocity</Text>
-                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>
-                          {recruiter.velocity}d
-                        </Text>
-                      </div>
-                      <div>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Pipeline</Text>
-                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>
-                          {formatCurrency(recruiter.pipelineValue)}
-                        </Text>
-                      </div>
-                      <div>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Satisfaction</Text>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                          <div
-                            style={{
-                              width: 40,
-                              height: 4,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.neutral[100],
-                              overflow: 'hidden',
-                            }}
-                          >
-                            <div
-                              style={{
-                                width: `${recruiter.satisfaction}%`,
-                                height: '100%',
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor:
-                                  recruiter.satisfaction >= 80
-                                    ? tokens.colors.successScale[500]
-                                    : recruiter.satisfaction >= 60
-                                    ? tokens.colors.warningScale[500]
-                                    : tokens.colors.errorScale[500],
-                              }}
-                            />
-                          </div>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                            {recruiter.satisfaction}%
-                          </Text>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                No recruiter data
-              </div>
-            )}
-          </Box>
-        )}
-
-        {/* ---- Sources Tab ---- */}
-        {activeTab === 'sources' && (
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Source Detail</Text>
-            {sourceData.length > 0 ? (
-              <div style={{ overflowX: 'auto' as const }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
-                  <thead>
-                    <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
-                      {['Source', 'Candidates', 'Quality Score', 'Volume', 'Quality'].map((col) => (
-                        <th
-                          key={col}
-                          style={{
-                            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                            textAlign: 'left' as const,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.neutral[500],
-                            fontSize: tokens.typography.fontSize.xs,
-                            textTransform: 'uppercase' as const,
-                            letterSpacing: '0.05em',
-                          }}
-                        >
-                          {col}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sourceData.map((source, i) => (
-                      <tr
-                        key={source.source}
-                        style={{
-                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                          transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                          {source.source}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                          {source.candidateCount}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                          <span
-                            style={{
-                              ...createBadgeStyle(tokens, source.qualityScore >= 70 ? 'success' : source.qualityScore >= 50 ? 'warning' : 'error'),
-                            }}
-                          >
-                            {source.qualityScore}
-                          </span>
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                          <div style={{ width: 100, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' }}>
-                            <div
-                              style={{
-                                width: `${(source.candidateCount / sourceMax) * 100}%`,
-                                height: '100%',
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: chartColors[i % chartColors.length],
-                              }}
-                            />
-                          </div>
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                          <div style={{ width: 60, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' }}>
-                            <div
-                              style={{
-                                width: `${source.qualityScore}%`,
-                                height: '100%',
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: source.qualityScore >= 70 ? tokens.colors.successScale[500] : source.qualityScore >= 50 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500],
-                              }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                No source data
-              </div>
-            )}
-          </Box>
-        )}
-
-        {/* ---- Costs Tab ---- */}
-        {activeTab === 'costs' && (
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Cost Breakdown</Text>
-            {costData.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-                {costData.map((cat, ci) => (
-                  <div
-                    key={cat.category}
-                    onClick={() => handleDrilldown(drilldownEntity === cat.category ? null : cat.category)}
-                    style={{
-                      ...hoverStyle,
-                      padding: tokens.spacing[4],
-                      borderRadius: tokens.borderRadius.md,
-                      backgroundColor: drilldownEntity === cat.category ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${drilldownEntity === cat.category ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-                      <Text style={{ fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], fontSize: tokens.typography.fontSize.sm }}>
-                        {cat.category}
+            {/* Drop-off Analysis */}
+            <Box style={card}>
+              <SectionTitle>Stage Drop-off</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                {funnelData.slice(0, -1).map((stage, i) => {
+                  const next = funnelData[i + 1];
+                  const dropped = stage.count - next.count;
+                  const dropRate = Math.round((dropped / stage.count) * 100);
+                  return (
+                    <Box key={stage.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: dropRate > 50 ? t.colors.errorScale[50] : t.colors.neutral[50] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flex: 1 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium }}>{stage.name}</Text>
+                        <ArrowRight size={14} color={t.colors.neutral[400]} />
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium }}>{next.name}</Text>
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: dropRate > 50 ? t.colors.errorScale[700] : t.colors.neutral[900] }}>
+                        -{dropped} ({dropRate}%)
                       </Text>
-                      <Text style={{ fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], fontSize: tokens.typography.fontSize.sm }}>
-                        {formatCurrency(cat.costPerHire)}/hire
-                      </Text>
-                    </div>
-
-                    {/* Full-width bar */}
-                    <div style={{ width: '100%', height: barChartBarHeight, borderRadius: tokens.borderRadius.sm, overflow: 'hidden', display: 'flex' }}>
-                      {cat.breakdown.map((b, bi) => {
-                        const segmentPct = cat.costPerHire > 0 ? (b.cost / cat.costPerHire) * 100 : 0;
-                        return (
-                          <div
-                            key={b.item}
-                            style={{
-                              width: `${segmentPct}%`,
-                              height: '100%',
-                              backgroundColor: chartColors[(ci + bi) % chartColors.length],
-                            }}
-                            title={`${b.item}: ${formatCurrency(b.cost)}`}
-                          />
-                        );
-                      })}
-                    </div>
-
-                    {/* Expanded breakdown */}
-                    {drilldownEntity === cat.category && (
-                      <div style={{ marginTop: tokens.spacing[3], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-                        {cat.breakdown.map((b, bi) => (
-                          <div key={b.item} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                              <div style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: chartColors[(ci + bi) % chartColors.length] }} />
-                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{b.item}</Text>
-                            </div>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                              {formatCurrency(b.cost)}
-                            </Text>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                No cost data
-              </div>
-            )}
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
           </Box>
         )}
 
-        {/* ---- Velocity Tab ---- */}
+        {/* ── Pipeline Velocity Tab ── */}
         {activeTab === 'velocity' && (
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Pipeline Velocity Detail</Text>
-            {velocityData.length > 0 ? (
-              <div style={{ overflowX: 'auto' as const }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
-                  <thead>
-                    <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
-                      {['Stage', 'Avg Days', 'SLA Limit', 'Status', 'Progress'].map((col) => (
-                        <th
-                          key={col}
-                          style={{
-                            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                            textAlign: 'left' as const,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.neutral[500],
-                            fontSize: tokens.typography.fontSize.xs,
-                            textTransform: 'uppercase' as const,
-                            letterSpacing: '0.05em',
-                          }}
-                        >
-                          {col}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {velocityData.map((stage, i) => {
-                      const isOverSla = stage.avgDays > stage.slaLimit;
-                      const pct = stage.slaLimit > 0 ? Math.min((stage.avgDays / stage.slaLimit) * 100, 150) : 0;
-                      return (
-                        <tr
-                          key={stage.stage}
-                          style={{
-                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = tokens.colors.neutral[50])}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                        >
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                            {stage.stage}
-                          </td>
-                          <td
-                            style={{
-                              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              color: isOverSla ? tokens.colors.errorScale[600] : tokens.colors.neutral[800],
-                            }}
-                          >
-                            {stage.avgDays}d
-                          </td>
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[500] }}>
-                            {stage.slaLimit}d
-                          </td>
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                            <span style={createBadgeStyle(tokens, isOverSla ? 'error' : 'success')}>
-                              {isOverSla ? 'Over SLA' : 'On Track'}
-                            </span>
-                          </td>
-                          <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                              <div
-                                style={{
-                                  width: 100,
-                                  height: 8,
-                                  borderRadius: tokens.borderRadius.full,
-                                  backgroundColor: tokens.colors.neutral[100],
-                                  overflow: 'hidden',
-                                  position: 'relative' as const,
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    width: `${Math.min(pct, 100)}%`,
-                                    height: '100%',
-                                    borderRadius: tokens.borderRadius.full,
-                                    backgroundColor: isOverSla ? tokens.colors.errorScale[400] : chartColors[i % chartColors.length],
-                                  }}
-                                />
-                              </div>
-                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], whiteSpace: 'nowrap' as const }}>
-                                {pct.toFixed(0)}%
-                              </Text>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                No velocity data
-              </div>
-            )}
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[6] }}>
+            <Box style={card}>
+              <SectionTitle>Stage Velocity vs SLA</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                {velocityData.map((v) => {
+                  const utilization = (v.avgDays / v.slaLimit) * 100;
+                  const isOver = v.avgDays > v.slaLimit;
+                  const barColor = isOver ? t.colors.errorScale[500] : utilization > 80 ? t.colors.warningScale[500] : t.colors.successScale[500];
+                  return (
+                    <Box key={v.stage}>
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{v.stage}</Text>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: isOver ? t.colors.errorScale[700] : t.colors.neutral[900] }}>{v.avgDays}d</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/ {v.slaLimit}d SLA</Text>
+                          {isOver && <AlertTriangle size={14} color={t.colors.errorScale[500]} />}
+                          {!isOver && <CheckCircle2 size={14} color={t.colors.successScale[500]} />}
+                        </Box>
+                      </Box>
+                      <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden', position: 'relative' as const }}>
+                        <Box style={{ position: 'absolute' as const, left: `${Math.min(utilization, 100)}%`, top: -2, width: 2, height: 12, backgroundColor: t.colors.neutral[400] }} />
+                        <Box style={{ height: '100%', width: `${Math.min(utilization, 100)}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: 'width 400ms ease' }} />
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+
+            <Box style={card}>
+              <SectionTitle>Time to Hire by Role</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                {timeToHireData.map((job) => (
+                  <Box key={job.job}>
+                    <Box onClick={() => setExpandedJob(expandedJob === job.job ? null : job.job)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[3]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], cursor: 'pointer', ...hoverStyles.base }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{job.job}</Text>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: job.avgDays > 30 ? t.colors.warningScale[700] : t.colors.neutral[900] }}>{job.avgDays}d</Text>
+                        <ChevronDown size={14} color={t.colors.neutral[400]} style={{ transform: expandedJob === job.job ? 'rotate(180deg)' : 'none', transition: `transform ${t.motion.hover}` } as any} />
+                      </Box>
+                    </Box>
+                    {expandedJob === job.job && (
+                      <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
+                        {job.stages.map((s) => (
+                          <Box key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{s.name}</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{s.avgDays}d</Text>
+                          </Box>
+                        ))}
+                      </Box>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </Box>
           </Box>
         )}
 
-        {/* ========== DIVERSITY METRICS (if present) ========== */}
-        {diversityData && diversityData.length > 0 && (
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Diversity Overview</Text>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: tokens.spacing[3] }}>
-              {diversityData.map((metric, i) => {
-                const pct = metric.total > 0 ? (metric.value / metric.total) * 100 : 0;
+        {/* ── Cost Breakdown Tab ── */}
+        {activeTab === 'cost' && (
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[6] }}>
+            <Box style={card}>
+              <SectionTitle>Cost per Hire by Category</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+                {costData.map((cat) => {
+                  const maxCost = Math.max(...costData.map((c) => c.costPerHire), 1);
+                  return (
+                    <Box key={cat.category}>
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{cat.category}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>${cat.costPerHire.toLocaleString()}</Text>
+                      </Box>
+                      <Box style={{ height: 12, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
+                        <Box style={{ height: '100%', width: `${(cat.costPerHire / maxCost) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm, transition: 'width 400ms ease' }} />
+                      </Box>
+                      <Box style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
+                        {cat.breakdown.map((b) => (
+                          <Box key={b.item} style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
+                            {b.item}: ${b.cost}
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+            <Box style={card}>
+              <SectionTitle>Cost Efficiency Summary</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+                {[
+                  { label: 'Total Recruiting Spend', value: '$205,440', trend: -5 },
+                  { label: 'Average Cost per Hire', value: '$4,280', trend: -12 },
+                  { label: 'Cost per Qualified Candidate', value: '$166', trend: 3 },
+                  { label: 'Agency vs Direct Ratio', value: '28:72', trend: -8 },
+                ].map((m) => {
+                  const trendColor = m.trend > 0 ? t.colors.errorScale[600] : t.colors.successScale[600];
+                  const TIcon = m.trend > 0 ? TrendingUp : TrendingDown;
+                  return (
+                    <Box key={m.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[4], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50] }}>
+                      <Box>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block', marginBottom: t.spacing[1] }}>{m.label}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{m.value}</Text>
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <TIcon size={14} color={trendColor} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(m.trend)}%</Text>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* ── Sources Tab ── */}
+        {activeTab === 'sources' && (
+          <Box style={card}>
+            <SectionTitle>Source Channel Comparison</SectionTitle>
+            <Box style={{ display: 'flex', flexDirection: 'column' }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 120px', gap: t.spacing[3], padding: `${t.spacing[2]}px 0`, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+                {['Source', 'Candidates', 'Quality', 'Effectiveness'].map((h) => (
+                  <Text key={h} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.04em' }}>{h}</Text>
+                ))}
+              </Box>
+              {sourceData.map((src) => {
+                const effectiveness = Math.round((src.qualityScore * src.candidateCount) / 100);
+                const maxEff = Math.max(...sourceData.map((s) => Math.round((s.qualityScore * s.candidateCount) / 100)), 1);
                 return (
-                  <div
-                    key={metric.category}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column' as const,
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: tokens.spacing[3],
-                      borderRadius: tokens.borderRadius.md,
-                      backgroundColor: tokens.colors.neutral[50],
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                    }}
-                  >
-                    <svg width={48} height={48} viewBox="0 0 48 48">
-                      <circle cx={24} cy={24} r={20} fill="none" stroke={tokens.colors.neutral[100]} strokeWidth={5} />
-                      <circle
-                        cx={24}
-                        cy={24}
-                        r={20}
-                        fill="none"
-                        stroke={chartColors[i % chartColors.length]}
-                        strokeWidth={5}
-                        strokeLinecap="round"
-                        strokeDasharray={`${(pct / 100) * (2 * Math.PI * 20)} ${2 * Math.PI * 20}`}
-                        transform="rotate(-90 24 24)"
-                      />
-                      <text x={24} y={26} textAnchor="middle" fontSize="10" fontWeight="700" fill={tokens.colors.neutral[800]}>
-                        {pct.toFixed(0)}%
-                      </text>
-                    </svg>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], textAlign: 'center' as const }}>
-                      {metric.category}
-                    </Text>
-                  </div>
+                  <Box key={src.source} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 120px', gap: t.spacing[3], padding: `${t.spacing[3]}px 0`, borderBottom: `1px solid ${t.colors.neutral[100]}`, alignItems: 'center' }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{src.source}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{src.candidateCount}</Text>
+                    <Box style={{ ...createBadgeStyle(t, src.qualityScore >= 80 ? 'success' : src.qualityScore >= 70 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{src.qualityScore}/100</Box>
+                    <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
+                      <Box style={{ height: '100%', width: `${(effectiveness / maxEff) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.full }} />
+                    </Box>
+                  </Box>
                 );
               })}
-            </div>
+            </Box>
           </Box>
         )}
       </Box>

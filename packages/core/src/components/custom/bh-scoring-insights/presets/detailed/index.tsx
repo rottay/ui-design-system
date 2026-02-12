@@ -7,18 +7,37 @@
  */
 
 import { useState, useMemo, useCallback } from 'react';
+import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  Activity,
+  Target,
+  ChevronDown,
+  ChevronUp,
+  ChevronRight,
+  Layers,
+  Zap,
+  Users,
+  AlertTriangle,
+  Award,
+  Search,
+  X,
+  PieChart,
+  Calendar,
+  Eye,
+} from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityBadgeRadius,
+  createDividerStyle,
+  createProgressBarStyle,
 } from '../../../helpers';
 import type {
   BhScoringInsightsProps,
@@ -31,74 +50,106 @@ import type {
   SkillGap,
   ScoringFilter,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
-import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  BarChart3,
-  Activity,
-  Target,
-  Filter,
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  ChevronRight,
-  Layers,
-  Zap,
-  Users,
-  AlertTriangle,
-  Award,
-  Search,
-  X,
-  Eye,
-  ExternalLink,
-  ArrowRight,
-  Info,
-  PieChart,
-} from 'lucide-react';
+
+/* ------------------------------------------------------------------ */
+/*  Mock data                                                          */
+/* ------------------------------------------------------------------ */
+const MOCK_KPIS: ScoringKpi[] = [
+  { label: 'Avg Composite Score', value: 74.8, trend: 2.6, previousValue: 72.2 },
+  { label: 'Pass Rate', value: 68, trend: 5.1, previousValue: 62.9 },
+  { label: 'Knockout Rate', value: 7.4, trend: -1.8, previousValue: 9.2 },
+  { label: 'Calibration Delta', value: 3.2, trend: -0.8, previousValue: 4.0 },
+  { label: 'Evaluations This Period', value: 342, trend: 14, previousValue: 328 },
+];
+
+const MOCK_DISTRIBUTION: LevelDistribution[] = [
+  { level: 'Exceptional (90+)', count: 32, color: '#10B981' },
+  { level: 'Strong (75-89)', count: 98, color: '#3B82F6' },
+  { level: 'Adequate (60-74)', count: 124, color: '#F59E0B' },
+  { level: 'Below (40-59)', count: 56, color: '#EF4444' },
+  { level: 'Poor (0-39)', count: 18, color: '#6B7280' },
+];
+
+const MOCK_HEATMAP: HeatmapCell[] = [
+  { dimension: 'Technical Skills', job: 'Sr. Engineer', avgScore: 82 },
+  { dimension: 'Technical Skills', job: 'Product Manager', avgScore: 65 },
+  { dimension: 'Technical Skills', job: 'Data Analyst', avgScore: 78 },
+  { dimension: 'Technical Skills', job: 'UX Designer', avgScore: 58 },
+  { dimension: 'Communication', job: 'Sr. Engineer', avgScore: 71 },
+  { dimension: 'Communication', job: 'Product Manager', avgScore: 88 },
+  { dimension: 'Communication', job: 'Data Analyst', avgScore: 74 },
+  { dimension: 'Communication', job: 'UX Designer', avgScore: 85 },
+  { dimension: 'Leadership', job: 'Sr. Engineer', avgScore: 64 },
+  { dimension: 'Leadership', job: 'Product Manager', avgScore: 79 },
+  { dimension: 'Leadership', job: 'Data Analyst', avgScore: 55 },
+  { dimension: 'Leadership', job: 'UX Designer', avgScore: 61 },
+  { dimension: 'Problem Solving', job: 'Sr. Engineer', avgScore: 86 },
+  { dimension: 'Problem Solving', job: 'Product Manager', avgScore: 76 },
+  { dimension: 'Problem Solving', job: 'Data Analyst', avgScore: 83 },
+  { dimension: 'Problem Solving', job: 'UX Designer', avgScore: 72 },
+  { dimension: 'Culture Fit', job: 'Sr. Engineer', avgScore: 77 },
+  { dimension: 'Culture Fit', job: 'Product Manager', avgScore: 82 },
+  { dimension: 'Culture Fit', job: 'Data Analyst', avgScore: 80 },
+  { dimension: 'Culture Fit', job: 'UX Designer', avgScore: 84 },
+];
+
+const MOCK_KNOCKOUTS: KnockoutStat[] = [
+  { dimension: 'Technical Skills', knockoutCount: 14, totalEvaluations: 342 },
+  { dimension: 'Communication', knockoutCount: 8, totalEvaluations: 342 },
+  { dimension: 'Culture Fit', knockoutCount: 6, totalEvaluations: 342 },
+  { dimension: 'Problem Solving', knockoutCount: 4, totalEvaluations: 342 },
+  { dimension: 'Leadership', knockoutCount: 2, totalEvaluations: 342 },
+];
+
+const MOCK_TRENDS: TrendPoint[] = [
+  { date: 'Jan', value: 68 }, { date: 'Feb', value: 70 }, { date: 'Mar', value: 69 },
+  { date: 'Apr', value: 72 }, { date: 'May', value: 71 }, { date: 'Jun', value: 74 },
+  { date: 'Jul', value: 73 }, { date: 'Aug', value: 76 }, { date: 'Sep', value: 75 },
+  { date: 'Oct', value: 74 }, { date: 'Nov', value: 77 }, { date: 'Dec', value: 79 },
+];
+
+const MOCK_COHORTS: CohortComparison[] = [
+  { groupName: 'Engineering', avgScore: 78.2, count: 142 },
+  { groupName: 'Product', avgScore: 75.8, count: 68 },
+  { groupName: 'Design', avgScore: 73.4, count: 52 },
+  { groupName: 'Data Science', avgScore: 80.1, count: 44 },
+  { groupName: 'Marketing', avgScore: 69.6, count: 36 },
+];
+
+const MOCK_GAPS: SkillGap[] = [
+  { dimension: 'System Design', avgScore: 62, gapFromTarget: -13 },
+  { dimension: 'Data Modeling', avgScore: 58, gapFromTarget: -17 },
+  { dimension: 'API Design', avgScore: 71, gapFromTarget: -4 },
+  { dimension: 'User Research', avgScore: 68, gapFromTarget: -7 },
+  { dimension: 'Team Collaboration', avgScore: 82, gapFromTarget: 7 },
+  { dimension: 'Strategic Thinking', avgScore: 65, gapFromTarget: -10 },
+];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
-function getScoreColor(score: number, tokens: DesignTokens): string {
-  if (score >= 80) return tokens.colors.successScale[600];
-  if (score >= 60) return tokens.colors.successScale[400];
-  if (score >= 40) return tokens.colors.warningScale[600];
-  if (score >= 20) return tokens.colors.warningScale[400];
-  return tokens.colors.errorScale[600];
+function getScoreColor(score: number, t: any): string {
+  if (score >= 80) return t.colors.successScale[600];
+  if (score >= 60) return t.colors.warningScale[600];
+  if (score >= 40) return t.colors.warningScale[400];
+  return t.colors.errorScale[600];
 }
 
-function getScoreBg(score: number, tokens: DesignTokens): string {
-  if (score >= 80) return tokens.colors.successScale[50];
-  if (score >= 60) return tokens.colors.successScale[100];
-  if (score >= 40) return tokens.colors.warningScale[50];
-  if (score >= 20) return tokens.colors.warningScale[100];
-  return tokens.colors.errorScale[100];
+function getScoreBg(score: number, t: any): string {
+  if (score >= 80) return t.colors.successScale[50];
+  if (score >= 60) return t.colors.warningScale[50];
+  return t.colors.errorScale[50];
 }
 
 function getScoreLabel(score: number): string {
-  if (score >= 80) return 'Excellent';
-  if (score >= 60) return 'Good';
-  if (score >= 40) return 'Average';
-  if (score >= 20) return 'Below';
+  if (score >= 80) return 'Strong';
+  if (score >= 60) return 'Adequate';
+  if (score >= 40) return 'Below';
   return 'Poor';
 }
 
-function getTrendColor(trend: number, tokens: DesignTokens): string {
-  if (trend > 0) return tokens.colors.successScale[600];
-  if (trend < 0) return tokens.colors.errorScale[600];
-  return tokens.colors.neutral[500];
-}
-
-function formatTrend(trend: number): string {
-  if (trend > 0) return `+${trend.toFixed(1)}%`;
-  if (trend < 0) return `${trend.toFixed(1)}%`;
-  return '0%';
-}
-
 /* ------------------------------------------------------------------ */
-/*  Section definition                                                 */
+/*  Section config                                                     */
 /* ------------------------------------------------------------------ */
 type SectionId = 'kpis' | 'distribution' | 'heatmap' | 'knockouts' | 'trends' | 'cohorts' | 'gaps';
 
@@ -106,38 +157,36 @@ interface SectionDef {
   id: SectionId;
   label: string;
   icon: typeof BarChart3;
+  description: string;
 }
 
 const SECTIONS: SectionDef[] = [
-  { id: 'kpis', label: 'Key Performance Indicators', icon: Award },
-  { id: 'distribution', label: 'Score Distribution', icon: BarChart3 },
-  { id: 'heatmap', label: 'Dimension Heatmap', icon: Layers },
-  { id: 'knockouts', label: 'Knockout Analysis', icon: AlertTriangle },
-  { id: 'trends', label: 'Scoring Trends', icon: Activity },
-  { id: 'cohorts', label: 'Cohort Comparison', icon: Users },
-  { id: 'gaps', label: 'Skill Gap Analysis', icon: Target },
+  { id: 'kpis', label: 'Key Performance Indicators', icon: Award, description: '5 core scoring metrics' },
+  { id: 'distribution', label: 'Score Distribution', icon: BarChart3, description: 'Candidate score bands' },
+  { id: 'heatmap', label: 'Dimension Heatmap', icon: Layers, description: 'Scores by dimension and job' },
+  { id: 'knockouts', label: 'Knockout Analysis', icon: AlertTriangle, description: 'Disqualification rates' },
+  { id: 'trends', label: 'Scoring Trends', icon: Activity, description: '12-month score trajectory' },
+  { id: 'cohorts', label: 'Cohort Comparison', icon: Users, description: 'Department-level benchmarks' },
+  { id: 'gaps', label: 'Skill Gap Analysis', icon: Target, description: 'Target vs actual performance' },
 ];
 
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 /*  Preset                                                             */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
 export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
   name: 'BhScoringInsights.Detailed',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhScoringInsightsProps>) => {
-    const { Box, Stack } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhScoringInsightsProps>) => {
+    const { Box, Text } = primitives;
+    const t = tokens;
 
     const {
-      kpis = [],
-      levelDistribution = [],
-      heatmapData = [],
-      knockoutStats = [],
-      trendData = [],
-      cohortComparisons = [],
-      skillGaps = [],
-      filters: filtersProp,
-      onFilterChange,
-      dateRange: dateRangeProp,
-      onDateRangeChange,
+      kpis: kpisProp,
+      levelDistribution: distProp,
+      heatmapData: heatProp,
+      knockoutStats: koProp,
+      trendData: trendProp,
+      cohortComparisons: cohortProp,
+      skillGaps: gapsProp,
       selectedDimension: selectedDimensionProp,
       onDimensionSelect,
       drilldownEntity: drilldownEntityProp,
@@ -146,533 +195,432 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
       style,
     } = props;
 
-    const [expandedSections, setExpandedSections] = useState<Set<SectionId>>(new Set(['kpis', 'distribution', 'heatmap']));
-    const [internalSelectedDimension, setInternalSelectedDimension] = useState<string | null>(selectedDimensionProp ?? null);
-    const [internalDrilldownEntity, setInternalDrilldownEntity] = useState<string | null>(drilldownEntityProp ?? null);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [internalFilters, setInternalFilters] = useState<ScoringFilter>(filtersProp ?? {});
-    const [internalDateRange, setInternalDateRange] = useState<[string, string]>(dateRangeProp ?? ['', '']);
+    const kpis = kpisProp?.length ? kpisProp : MOCK_KPIS;
+    const levelDistribution = distProp?.length ? distProp : MOCK_DISTRIBUTION;
+    const heatmapData = heatProp?.length ? heatProp : MOCK_HEATMAP;
+    const knockoutStats = koProp?.length ? koProp : MOCK_KNOCKOUTS;
+    const trendData = trendProp?.length ? trendProp : MOCK_TRENDS;
+    const cohortComparisons = cohortProp?.length ? cohortProp : MOCK_COHORTS;
+    const skillGaps = gapsProp?.length ? gapsProp : MOCK_GAPS;
 
-    const filters = filtersProp ?? internalFilters;
-    const dateRange = dateRangeProp ?? internalDateRange;
-    const selectedDimension = selectedDimensionProp ?? internalSelectedDimension;
-    const drilldownEntity = drilldownEntityProp ?? internalDrilldownEntity;
+    /* ---- State ---- */
+    const [expandedSections, setExpandedSections] = useState<Set<SectionId>>(
+      new Set(['kpis', 'distribution', 'heatmap']),
+    );
+    const [selectedDimension, setSelectedDimension] = useState<string | null>(
+      selectedDimensionProp ?? null,
+    );
+    const [drilldownEntity, setDrilldownEntity] = useState<string | null>(
+      drilldownEntityProp ?? null,
+    );
+    const [searchQuery, setSearchQuery] = useState('');
 
     const toggleSection = useCallback((id: SectionId) => {
       setExpandedSections(prev => {
         const next = new Set(prev);
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
+        next.has(id) ? next.delete(id) : next.add(id);
         return next;
       });
     }, []);
 
-    const handleDimensionSelect = useCallback((dim: string | null) => {
-      setInternalSelectedDimension(dim);
+    const handleDimSelect = useCallback((dim: string | null) => {
+      setSelectedDimension(dim);
       onDimensionSelect?.(dim);
     }, [onDimensionSelect]);
 
     const handleDrilldown = useCallback((entity: string | null) => {
-      setInternalDrilldownEntity(entity);
+      setDrilldownEntity(entity);
       onDrilldown?.(entity);
     }, [onDrilldown]);
 
-    const handleFilterChange = useCallback((f: ScoringFilter) => {
-      setInternalFilters(f);
-      onFilterChange?.(f);
-    }, [onFilterChange]);
-
-    const handleDateRangeChange = useCallback((range: [string, string]) => {
-      setInternalDateRange(range);
-      onDateRangeChange?.(range);
-    }, [onDateRangeChange]);
-
-    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
-
-    /* ---- Computed data ---- */
+    /* ---- Computed ---- */
     const heatmapDimensions = useMemo(() => [...new Set(heatmapData.map(c => c.dimension))], [heatmapData]);
     const heatmapJobs = useMemo(() => [...new Set(heatmapData.map(c => c.job))], [heatmapData]);
     const heatmapLookup = useMemo(() => {
-      const map = new Map<string, number>();
-      heatmapData.forEach(c => map.set(`${c.dimension}::${c.job}`, c.avgScore));
-      return map;
+      const m = new Map<string, number>();
+      heatmapData.forEach(c => m.set(`${c.dimension}::${c.job}`, c.avgScore));
+      return m;
     }, [heatmapData]);
-
-    const trendMax = useMemo(() => Math.max(...trendData.map(p => p.value), 1), [trendData]);
-    const trendMin = useMemo(() => Math.min(...trendData.map(p => p.value), 0), [trendData]);
-    const trendRange = trendMax - trendMin || 1;
 
     const distMax = useMemo(() => Math.max(...levelDistribution.map(l => l.count), 1), [levelDistribution]);
     const knockoutMax = useMemo(() => Math.max(...knockoutStats.map(k => k.knockoutCount), 1), [knockoutStats]);
     const cohortMax = useMemo(() => Math.max(...cohortComparisons.map(c => c.avgScore), 1), [cohortComparisons]);
     const gapMax = useMemo(() => Math.max(...skillGaps.map(s => Math.abs(s.gapFromTarget)), 1), [skillGaps]);
+    const trendMin = useMemo(() => Math.min(...trendData.map(p => p.value), 0), [trendData]);
+    const trendMax = useMemo(() => Math.max(...trendData.map(p => p.value), 1), [trendData]);
+    const trendRange = trendMax - trendMin || 1;
 
-    /* Filtered dimensions/knockouts by search */
     const filteredKnockouts = useMemo(() => {
       if (!searchQuery) return knockoutStats;
       return knockoutStats.filter(k => k.dimension.toLowerCase().includes(searchQuery.toLowerCase()));
     }, [knockoutStats, searchQuery]);
 
-    const filteredSkillGaps = useMemo(() => {
+    const filteredGaps = useMemo(() => {
       if (!searchQuery) return skillGaps;
       return skillGaps.filter(g => g.dimension.toLowerCase().includes(searchQuery.toLowerCase()));
     }, [skillGaps, searchQuery]);
 
-    /* ---- Section renderer ---- */
-    const renderSectionHeader = (section: SectionDef) => {
+    /* ---- Styles ---- */
+    const card = createCardStyle(t, { padding: 28 });
+    const hoverStyles = createCardHoverStyles(t);
+    const sectionLabel = createPersonalitySectionHeaderStyle(t);
+    const badgeRadius = getPersonalityBadgeRadius(t);
+
+    /* ---- Reusable components ---- */
+    const SectionHeader = ({ section }: { section: SectionDef }) => {
       const Icon = section.icon;
-      const isExpanded = expandedSections.has(section.id);
+      const isOpen = expandedSections.has(section.id);
       return (
-        <button
+        <Box
           onClick={() => toggleSection(section.id)}
           style={{
-            width: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-            border: 'none',
-            backgroundColor: isExpanded ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
+            padding: `${t.spacing[4]}px ${t.spacing[5]}px`,
             cursor: 'pointer',
-            fontFamily: 'inherit',
-            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-            transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            backgroundColor: isOpen ? t.colors.primaryScale[50] : 'transparent',
+            transition: `background-color ${t.motion.hover}`,
           }}
         >
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-            <Icon size={16} color={isExpanded ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500]} />
-            <span style={{
-              fontSize: tokens.typography.fontSize.sm,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: isExpanded ? tokens.colors.primaryScale[700] : tokens.colors.neutral[700],
-            }}>
-              {section.label}
-            </span>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            <Box style={createIconContainerStyle(t, { size: 32, color: isOpen ? t.colors.primaryScale[100] : t.colors.neutral[100] })}>
+              <Icon size={16} color={isOpen ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
+            </Box>
+            <Box>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: isOpen ? t.colors.primaryScale[700] : t.colors.neutral[800] }}>
+                {section.label}
+              </Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: 2 }}>
+                {section.description}
+              </Text>
+            </Box>
           </Box>
-          {isExpanded ? (
-            <ChevronUp size={16} color={tokens.colors.neutral[400]} />
-          ) : (
-            <ChevronDown size={16} color={tokens.colors.neutral[400]} />
-          )}
-        </button>
+          {isOpen ? <ChevronUp size={16} color={t.colors.neutral[400]} /> : <ChevronDown size={16} color={t.colors.neutral[400]} />}
+        </Box>
       );
     };
 
-    return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...style }}>
-
-        {/* ===== Header ===== */}
-        <Box style={{
-          padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          ...(tokens.surface.useGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg } : {}),
-        }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={{
-              width: tokens.spacing[10],
-              height: tokens.spacing[10],
-              borderRadius: tokens.borderRadius.lg,
-              backgroundColor: tokens.colors.primaryScale[100],
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <PieChart size={20} color={tokens.colors.primaryScale[600]} />
-            </Box>
-            <Box>
-              <h2 style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                Scoring Insights
-              </h2>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
-                Detailed Analysis
-              </span>
+    const KpiCard = ({ kpi }: { kpi: ScoringKpi }) => {
+      const isUp = kpi.trend > 0;
+      const TrendIcon = isUp ? TrendingUp : kpi.trend < 0 ? TrendingDown : Minus;
+      const trendColor = isUp ? t.colors.successScale[600] : kpi.trend < 0 ? t.colors.errorScale[600] : t.colors.neutral[500];
+      return (
+        <Box style={{ ...card, ...hoverStyles.base }}>
+          <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>{kpi.label}</Text>
+          <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[2] }}>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+              {typeof kpi.value === 'number' && kpi.value % 1 !== 0 ? kpi.value.toFixed(1) : kpi.value}
+            </Text>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <TrendIcon size={14} color={trendColor} />
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: trendColor, fontWeight: t.typography.fontWeight.medium }}>
+                {isUp ? '+' : ''}{typeof kpi.trend === 'number' && kpi.trend % 1 !== 0 ? kpi.trend.toFixed(1) : kpi.trend}%
+              </Text>
             </Box>
           </Box>
+          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: t.spacing[1] }}>
+            Previously: {typeof kpi.previousValue === 'number' && kpi.previousValue % 1 !== 0 ? kpi.previousValue.toFixed(1) : kpi.previousValue}
+          </Text>
+        </Box>
+      );
+    };
 
-          {/* Search + filters */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+    /* ================================================================ */
+    /*  RENDER                                                          */
+    /* ================================================================ */
+    return (
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, height: '100%', backgroundColor: t.colors.neutral[50], ...style }}>
+
+        {/* === Header === */}
+        <Box style={{ padding: `${t.spacing[6]}px ${t.spacing[7]}px`, backgroundColor: t.colors.common.white, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
+              <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
+                <PieChart size={22} color={t.colors.primaryScale[600]} />
+              </Box>
+              <Box>
+                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                  Scoring Insights
+                </Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>
+                  Detailed Analysis  --  {kpis.length} KPIs across {heatmapDimensions.length} dimensions
+                </Text>
+              </Box>
+            </Box>
+
             {/* Search */}
             <Box style={{
               display: 'flex',
               alignItems: 'center',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              backgroundColor: tokens.colors.common.white,
+              gap: t.spacing[2],
+              padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+              borderRadius: t.borderRadius.md,
+              border: `1px solid ${t.colors.neutral[200]}`,
+              backgroundColor: t.colors.common.white,
+              minWidth: 220,
             }}>
-              <Search size={14} color={tokens.colors.neutral[400]} />
+              <Search size={14} color={t.colors.neutral[400]} />
               <input
                 type="text"
                 placeholder="Search dimensions..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                 style={{
                   border: 'none',
                   outline: 'none',
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[700],
-                  fontFamily: 'inherit',
+                  fontSize: t.typography.fontSize.sm,
+                  color: t.colors.neutral[700],
                   backgroundColor: 'transparent',
-                  width: 160,
-                }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                  width: '100%',
+                  fontFamily: 'inherit',
                 }}
               />
               {searchQuery && (
-                <X size={12} color={tokens.colors.neutral[400]} onClick={() => setSearchQuery('')} style={{ cursor: 'pointer' }} />
+                <Box onClick={() => setSearchQuery('')} style={{ cursor: 'pointer', flexShrink: 0 }}>
+                  <X size={14} color={t.colors.neutral[400]} />
+                </Box>
               )}
-            </Box>
-
-            {/* Date range */}
-            <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              backgroundColor: tokens.colors.common.white,
-            }}>
-              <Calendar size={14} color={tokens.colors.neutral[400]} />
-              <input
-                type="date"
-                value={dateRange[0]}
-                onChange={(e) => handleDateRangeChange([e.target.value, dateRange[1]])}
-                style={{ border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], fontFamily: 'inherit', backgroundColor: 'transparent' }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                }}
-              />
-              <span style={{ color: tokens.colors.neutral[400] }}>-</span>
-              <input
-                type="date"
-                value={dateRange[1]}
-                onChange={(e) => handleDateRangeChange([dateRange[0], e.target.value])}
-                style={{ border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], fontFamily: 'inherit', backgroundColor: 'transparent' }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                }}
-              />
             </Box>
           </Box>
         </Box>
 
-        {/* ===== Sidebar + Content Layout ===== */}
+        {/* === Body: Sidebar + Content === */}
         <Box style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
 
-          {/* --- Left sidebar: dimension drill-down --- */}
+          {/* --- Left sidebar: dimensions --- */}
           <Box style={{
             width: 240,
             flexShrink: 0,
-            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+            borderRight: `1px solid ${t.colors.neutral[200]}`,
             overflow: 'auto',
-            backgroundColor: tokens.colors.neutral[50],
+            backgroundColor: t.colors.common.white,
           }}>
-            <Box style={{
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-            }}>
-              <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                Dimensions
-              </span>
+            <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[4]}px ${t.spacing[2]}px` }}>
+              <Text style={{ ...sectionLabel }}>Dimensions</Text>
             </Box>
 
-            {heatmapDimensions.length > 0 ? heatmapDimensions.map(dim => {
+            {heatmapDimensions.map(dim => {
               const isSelected = selectedDimension === dim;
               const dimScores = heatmapData.filter(c => c.dimension === dim);
-              const avgScore = dimScores.length > 0 ? dimScores.reduce((sum, c) => sum + c.avgScore, 0) / dimScores.length : 0;
+              const avgScore = dimScores.length > 0 ? dimScores.reduce((s, c) => s + c.avgScore, 0) / dimScores.length : 0;
               return (
-                <button
+                <Box
                   key={dim}
-                  onClick={() => handleDimensionSelect(isSelected ? null : dim)}
+                  onClick={() => handleDimSelect(isSelected ? null : dim)}
                   style={{
-                    width: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    border: 'none',
-                    backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
-                    borderLeft: isSelected ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
+                    padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
                     cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    transition: `all ${tokens.motion.hover}`,
+                    backgroundColor: isSelected ? t.colors.primaryScale[50] : 'transparent',
+                    borderLeft: isSelected ? `3px solid ${t.colors.primaryScale[500]}` : '3px solid transparent',
+                    transition: `all ${t.motion.hover}`,
                   }}
                 >
-                  <span style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[700],
-                    fontWeight: isSelected ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
+                  <Text style={{
+                    fontSize: t.typography.fontSize.sm,
+                    color: isSelected ? t.colors.primaryScale[700] : t.colors.neutral[700],
+                    fontWeight: isSelected ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal as number,
                   }}>
                     {dim}
-                  </span>
+                  </Text>
                   <Box style={{
-                    padding: `0 ${tokens.spacing[2]}px`,
-                    borderRadius: tokens.borderRadius.sm,
-                    backgroundColor: getScoreBg(avgScore, tokens),
-                    color: getScoreColor(avgScore, tokens),
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    flexShrink: 0,
+                    padding: `2px ${t.spacing[2]}px`,
+                    borderRadius: badgeRadius,
+                    backgroundColor: getScoreBg(avgScore, t),
+                    color: getScoreColor(avgScore, t),
+                    fontSize: t.typography.fontSize.xs,
+                    fontWeight: t.typography.fontWeight.semibold,
                   }}>
-                    {Math.round(avgScore)}
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: getScoreColor(avgScore, t), fontWeight: t.typography.fontWeight.semibold }}>
+                      {Math.round(avgScore)}
+                    </Text>
                   </Box>
-                </button>
+                </Box>
               );
-            }) : (
-              <Box style={{ padding: tokens.spacing[4], textAlign: 'center', color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                No dimensions available
-              </Box>
-            )}
+            })}
 
-            {/* Drilldown entities */}
+            {/* Jobs sub-section */}
             {heatmapJobs.length > 0 && (
               <>
-                <Box style={{
-                  padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                  borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                  marginTop: tokens.spacing[2],
-                }}>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Jobs
-                  </span>
+                <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[4]}px ${t.spacing[2]}px`, marginTop: t.spacing[2], borderTop: `1px solid ${t.colors.neutral[100]}` }}>
+                  <Text style={{ ...sectionLabel }}>Jobs</Text>
                 </Box>
                 {heatmapJobs.map(job => {
                   const isActive = drilldownEntity === job;
                   return (
-                    <button
+                    <Box
                       key={job}
                       onClick={() => handleDrilldown(isActive ? null : job)}
                       style={{
-                        width: '100%',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: tokens.spacing[2],
-                        padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                        border: 'none',
-                        backgroundColor: isActive ? tokens.colors.secondaryScale[50] : 'transparent',
-                        borderLeft: isActive ? `3px solid ${tokens.colors.secondaryScale[500]}` : '3px solid transparent',
+                        gap: t.spacing[2],
+                        padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
                         cursor: 'pointer',
-                        fontFamily: 'inherit',
-                        transition: `all ${tokens.motion.hover}`,
+                        backgroundColor: isActive ? t.colors.secondaryScale[50] : 'transparent',
+                        borderLeft: isActive ? `3px solid ${t.colors.secondaryScale[500]}` : '3px solid transparent',
+                        transition: `all ${t.motion.hover}`,
                       }}
                     >
-                      <span style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        color: isActive ? tokens.colors.secondaryScale[700] : tokens.colors.neutral[600],
-                        fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
+                      <Text style={{
+                        fontSize: t.typography.fontSize.sm,
+                        color: isActive ? t.colors.secondaryScale[700] : t.colors.neutral[600],
+                        fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal as number,
                       }}>
                         {job}
-                      </span>
-                    </button>
+                      </Text>
+                    </Box>
                   );
                 })}
               </>
             )}
           </Box>
 
-          {/* --- Main content: expandable sections --- */}
+          {/* --- Main content: accordion sections --- */}
           <Box style={{ flex: 1, overflow: 'auto' }}>
 
-            {/* === KPIs Section === */}
-            {renderSectionHeader(SECTIONS[0])}
+            {/* KPIs */}
+            <SectionHeader section={SECTIONS[0]} />
             {expandedSections.has('kpis') && (
-              <Box style={{ padding: tokens.spacing[4] }}>
-                <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(kpis.length, 3)}, 1fr)`, gap: tokens.spacing[3] }}>
-                  {kpis.map((kpi, idx) => {
-                    const trendColor = getTrendColor(kpi.trend, tokens);
-                    const TrendIcon = kpi.trend > 0 ? TrendingUp : kpi.trend < 0 ? TrendingDown : Minus;
-                    return (
-                      <Box key={idx} style={{ ...glassCard, padding: tokens.spacing[4] }}>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: tokens.spacing[2] }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            {kpi.label}
-                          </span>
-                          <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                            <TrendIcon size={12} color={trendColor} />
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, color: trendColor, fontWeight: tokens.typography.fontWeight.medium }}>
-                              {formatTrend(kpi.trend)}
-                            </span>
-                          </Box>
-                        </Box>
-                        <span style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], marginBottom: tokens.spacing[1] }}>
-                          {typeof kpi.value === 'number' && kpi.value % 1 !== 0 ? kpi.value.toFixed(1) : kpi.value}
-                        </span>
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                            Previous: {typeof kpi.previousValue === 'number' && kpi.previousValue % 1 !== 0 ? kpi.previousValue.toFixed(1) : kpi.previousValue}
-                          </span>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Box>
+              <Box style={{ padding: t.spacing[5], display: 'grid', gridTemplateColumns: `repeat(${Math.min(kpis.length, 5)}, 1fr)`, gap: t.spacing[4] }}>
+                {kpis.map((kpi, i) => <KpiCard key={i} kpi={kpi} />)}
               </Box>
             )}
 
-            {/* === Distribution Section === */}
-            {renderSectionHeader(SECTIONS[1])}
+            {/* Distribution */}
+            <SectionHeader section={SECTIONS[1]} />
             {expandedSections.has('distribution') && (
-              <Box style={{ padding: tokens.spacing[4] }}>
-                <Stack direction="vertical" spacing="sm">
-                  {levelDistribution.map((level, idx) => {
-                    const barWidth = (level.count / distMax) * 100;
-                    return (
-                      <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+                {levelDistribution.map((level, idx) => {
+                  const barPct = (level.count / distMax) * 100;
+                  return (
+                    <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+                      <Box style={{ width: 12, height: 12, borderRadius: t.borderRadius.sm, backgroundColor: level.color || t.colors.primaryScale[400], flexShrink: 0 }} />
+                      <Text style={{ width: 140, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium, flexShrink: 0 }}>
+                        {level.level}
+                      </Text>
+                      <Box style={{ flex: 1, position: 'relative' as const, height: 24 }}>
+                        <Box style={{ position: 'absolute' as const, inset: 0, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[100] }} />
                         <Box style={{
-                          width: 12,
-                          height: 12,
-                          borderRadius: tokens.borderRadius.sm,
-                          backgroundColor: level.color || tokens.colors.primaryScale[400],
-                          flexShrink: 0,
-                        }} />
-                        <span style={{ width: 80, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium, flexShrink: 0 }}>
-                          {level.level}
-                        </span>
-                        <Box style={{ flex: 1, position: 'relative', height: tokens.spacing[6] }}>
-                          <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }} />
-                          <Box style={{
-                            position: 'absolute', top: 0, left: 0, height: '100%',
-                            width: `${barWidth}%`,
-                            borderRadius: tokens.borderRadius.md,
-                            backgroundColor: level.color || tokens.colors.primaryScale[400],
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            paddingRight: barWidth > 15 ? tokens.spacing[2] : 0,
-                          }}>
-                            {barWidth > 15 && (
-                              <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>
-                                {level.count}
-                              </span>
-                            )}
-                          </Box>
+                          position: 'absolute' as const,
+                          top: 0,
+                          left: 0,
+                          height: '100%',
+                          width: `${barPct}%`,
+                          borderRadius: t.borderRadius.md,
+                          backgroundColor: level.color || t.colors.primaryScale[400],
+                          transition: `width ${t.motion.hover}`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'flex-end',
+                          paddingRight: barPct > 20 ? t.spacing[2] : 0,
+                        }}>
+                          {barPct > 20 && (
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>
+                              {level.count}
+                            </Text>
+                          )}
                         </Box>
-                        {barWidth <= 15 && (
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700], flexShrink: 0 }}>
-                            {level.count}
-                          </span>
-                        )}
                       </Box>
-                    );
-                  })}
-                </Stack>
+                      {barPct <= 20 && (
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], flexShrink: 0 }}>
+                          {level.count}
+                        </Text>
+                      )}
+                    </Box>
+                  );
+                })}
               </Box>
             )}
 
-            {/* === Heatmap Section === */}
-            {renderSectionHeader(SECTIONS[2])}
+            {/* Heatmap */}
+            <SectionHeader section={SECTIONS[2]} />
             {expandedSections.has('heatmap') && heatmapDimensions.length > 0 && (
-              <Box style={{ padding: tokens.spacing[4], overflowX: 'auto' }}>
-                {/* Column headers */}
-                <Box style={{ display: 'grid', gridTemplateColumns: `120px repeat(${heatmapJobs.length}, minmax(80px, 1fr))`, gap: tokens.spacing[1], marginBottom: tokens.spacing[1] }}>
+              <Box style={{ padding: t.spacing[5], overflowX: 'auto' as const }}>
+                <Box style={{ display: 'grid', gridTemplateColumns: `140px repeat(${heatmapJobs.length}, minmax(90px, 1fr))`, gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                   <Box />
                   {heatmapJobs.map(job => (
                     <Box
                       key={job}
                       onClick={() => handleDrilldown(drilldownEntity === job ? null : job)}
                       style={{
-                        textAlign: 'center',
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: drilldownEntity === job ? tokens.colors.secondaryScale[700] : tokens.colors.neutral[500],
-                        fontWeight: drilldownEntity === job ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
-                        padding: tokens.spacing[1],
+                        textAlign: 'center' as const,
+                        padding: t.spacing[1],
                         cursor: 'pointer',
-                        transition: `all ${tokens.motion.hover}`,
-                        borderRadius: tokens.borderRadius.sm,
-                        backgroundColor: drilldownEntity === job ? tokens.colors.secondaryScale[50] : 'transparent',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
+                        borderRadius: t.borderRadius.sm,
+                        backgroundColor: drilldownEntity === job ? t.colors.secondaryScale[50] : 'transparent',
+                        transition: `all ${t.motion.hover}`,
                       }}
                     >
-                      {job}
+                      <Text style={{
+                        fontSize: t.typography.fontSize.xs,
+                        color: drilldownEntity === job ? t.colors.secondaryScale[700] : t.colors.neutral[500],
+                        fontWeight: drilldownEntity === job ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium,
+                      }}>
+                        {job}
+                      </Text>
                     </Box>
                   ))}
                 </Box>
 
-                {/* Rows */}
                 {heatmapDimensions.map(dim => {
-                  const isSelectedDim = selectedDimension === dim;
+                  const isDimSel = selectedDimension === dim;
                   return (
-                    <Box key={dim} style={{ display: 'grid', gridTemplateColumns: `120px repeat(${heatmapJobs.length}, minmax(80px, 1fr))`, gap: tokens.spacing[1], marginBottom: tokens.spacing[1] }}>
+                    <Box key={dim} style={{ display: 'grid', gridTemplateColumns: `140px repeat(${heatmapJobs.length}, minmax(90px, 1fr))`, gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                       <Box
-                        onClick={() => handleDimensionSelect(isSelectedDim ? null : dim)}
+                        onClick={() => handleDimSelect(isDimSel ? null : dim)}
                         style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: isSelectedDim ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                          fontWeight: isSelectedDim ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                           display: 'flex',
                           alignItems: 'center',
-                          padding: `0 ${tokens.spacing[1]}px`,
+                          padding: `0 ${t.spacing[1]}px`,
                           cursor: 'pointer',
-                          transition: `all ${tokens.motion.hover}`,
-                          borderRadius: tokens.borderRadius.sm,
-                          backgroundColor: isSelectedDim ? tokens.colors.primaryScale[50] : 'transparent',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
+                          borderRadius: t.borderRadius.sm,
+                          backgroundColor: isDimSel ? t.colors.primaryScale[50] : 'transparent',
+                          transition: `all ${t.motion.hover}`,
                         }}
                       >
-                        {dim}
+                        <Text style={{
+                          fontSize: t.typography.fontSize.xs,
+                          color: isDimSel ? t.colors.primaryScale[700] : t.colors.neutral[600],
+                          fontWeight: isDimSel ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap' as const,
+                        }}>
+                          {dim}
+                        </Text>
                       </Box>
                       {heatmapJobs.map(job => {
                         const score = heatmapLookup.get(`${dim}::${job}`) ?? 0;
-                        const isHighlighted = (isSelectedDim || drilldownEntity === job);
+                        const isHighlighted = isDimSel || drilldownEntity === job;
                         return (
                           <Box
                             key={job}
                             style={{
-                              padding: tokens.spacing[2],
-                              borderRadius: tokens.borderRadius.sm,
-                              backgroundColor: getScoreBg(score, tokens),
-                              textAlign: 'center',
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              color: getScoreColor(score, tokens),
-                              border: isHighlighted ? `2px solid ${tokens.colors.primaryScale[400]}` : `${tokens.surface.borderWidth} solid transparent`,
-                              transition: `all ${tokens.motion.hover}`,
-                              minHeight: tokens.spacing[8],
+                              padding: t.spacing[2],
+                              borderRadius: t.borderRadius.sm,
+                              backgroundColor: getScoreBg(score, t),
+                              textAlign: 'center' as const,
+                              border: isHighlighted ? `2px solid ${t.colors.primaryScale[400]}` : '2px solid transparent',
+                              transition: `all ${t.motion.hover}`,
                               display: 'flex',
-                              flexDirection: 'column',
+                              flexDirection: 'column' as const,
                               alignItems: 'center',
                               justifyContent: 'center',
+                              minHeight: 44,
                               gap: 2,
                             }}
                           >
-                            <span>{Math.round(score)}</span>
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal as number, color: tokens.colors.neutral[400] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: getScoreColor(score, t) }}>
+                              {Math.round(score)}
+                            </Text>
+                            <Text style={{ fontSize: 10, color: t.colors.neutral[400] }}>
                               {getScoreLabel(score)}
-                            </span>
+                            </Text>
                           </Box>
                         );
                       })}
@@ -682,250 +630,229 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
               </Box>
             )}
 
-            {/* === Knockouts Section === */}
-            {renderSectionHeader(SECTIONS[3])}
+            {/* Knockouts */}
+            <SectionHeader section={SECTIONS[3]} />
             {expandedSections.has('knockouts') && (
-              <Box style={{ padding: tokens.spacing[4] }}>
-                <Stack direction="vertical" spacing="sm">
-                  {filteredKnockouts.map((stat, idx) => {
-                    const pct = stat.totalEvaluations > 0 ? (stat.knockoutCount / stat.totalEvaluations) * 100 : 0;
-                    const barWidth = (stat.knockoutCount / knockoutMax) * 100;
-                    const barColor = pct >= 30 ? tokens.colors.errorScale[500] : pct >= 15 ? tokens.colors.warningScale[500] : tokens.colors.neutral[400];
-                    return (
-                      <Box key={idx} style={{
-                        padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                        borderRadius: tokens.borderRadius.md,
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        backgroundColor: tokens.colors.common.white,
-                      }}>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], fontWeight: tokens.typography.fontWeight.medium }}>
-                            {stat.dimension}
-                          </span>
-                          <Box style={{ display: 'flex', gap: tokens.spacing[2], alignItems: 'center' }}>
-                            <Box style={{
-                              ...createBadgeStyle(tokens, pct >= 30 ? 'error' : pct >= 15 ? 'warning' : 'info'),
-                            }}>
-                              {pct.toFixed(1)}% rate
-                            </Box>
-                            <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                              {stat.knockoutCount}/{stat.totalEvaluations}
-                            </span>
+              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+                {filteredKnockouts.map((stat, idx) => {
+                  const pct = stat.totalEvaluations > 0 ? (stat.knockoutCount / stat.totalEvaluations) * 100 : 0;
+                  const barW = (stat.knockoutCount / knockoutMax) * 100;
+                  const barColor = pct >= 5 ? t.colors.errorScale[500] : pct >= 2 ? t.colors.warningScale[500] : t.colors.neutral[400];
+                  return (
+                    <Box key={idx} style={{ ...card, marginBottom: t.spacing[3] }}>
+                      <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium }}>
+                          {stat.dimension}
+                        </Text>
+                        <Box style={{ display: 'flex', gap: t.spacing[2], alignItems: 'center' }}>
+                          <Box style={createBadgeStyle(t, pct >= 5 ? 'error' : pct >= 2 ? 'warning' : 'info')}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs }}>{pct.toFixed(1)}% rate</Text>
                           </Box>
-                        </Box>
-                        <Box style={{ position: 'relative', height: tokens.spacing[3] }}>
-                          <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[100] }} />
-                          <Box style={{
-                            position: 'absolute', top: 0, left: 0, height: '100%',
-                            width: `${barWidth}%`,
-                            borderRadius: tokens.borderRadius.sm,
-                            backgroundColor: barColor,
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }} />
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                            {stat.knockoutCount}/{stat.totalEvaluations}
+                          </Text>
                         </Box>
                       </Box>
+                      <Box style={{ position: 'relative' as const, height: 8 }}>
+                        <Box style={{ position: 'absolute' as const, inset: 0, borderRadius: t.borderRadius.sm, backgroundColor: t.colors.neutral[100] }} />
+                        <Box style={{
+                          position: 'absolute' as const,
+                          top: 0,
+                          left: 0,
+                          height: '100%',
+                          width: `${barW}%`,
+                          borderRadius: t.borderRadius.sm,
+                          backgroundColor: barColor,
+                          transition: `width ${t.motion.hover}`,
+                        }} />
+                      </Box>
+                    </Box>
+                  );
+                })}
+                {filteredKnockouts.length === 0 && (
+                  <Text style={{ textAlign: 'center' as const, padding: t.spacing[4], color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}>
+                    No knockout data {searchQuery ? 'matching search' : 'available'}.
+                  </Text>
+                )}
+              </Box>
+            )}
+
+            {/* Trends */}
+            <SectionHeader section={SECTIONS[4]} />
+            {expandedSections.has('trends') && trendData.length > 1 && (
+              <Box style={{ padding: t.spacing[5], display: 'flex', justifyContent: 'center' }}>
+                <svg width={580} height={200} viewBox="0 0 580 200">
+                  {[0, 0.25, 0.5, 0.75, 1].map(frac => {
+                    const y = 16 + (1 - frac) * 150;
+                    const val = (trendMin + frac * trendRange).toFixed(0);
+                    return (
+                      <g key={frac}>
+                        <line x1={40} y1={y} x2={560} y2={y} stroke={t.colors.neutral[100]} strokeWidth={1} />
+                        <text x={36} y={y + 4} fontSize={10} fill={t.colors.neutral[400]} textAnchor="end">{val}</text>
+                      </g>
                     );
                   })}
-                  {filteredKnockouts.length === 0 && (
-                    <Box style={{ textAlign: 'center', padding: tokens.spacing[4], color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                      No knockout data {searchQuery ? 'matching search' : 'available'}.
-                    </Box>
-                  )}
-                </Stack>
+                  {(() => {
+                    const xStep = 520 / Math.max(trendData.length - 1, 1);
+                    const points = trendData.map((p, i) => ({
+                      x: 40 + i * xStep,
+                      y: 16 + (1 - (p.value - trendMin) / trendRange) * 150,
+                    }));
+                    const lineColor = t.colors.primaryScale[500];
+                    const areaPath = `M${points[0].x},${points[0].y} ${points.slice(1).map(p => `L${p.x},${p.y}`).join(' ')} L${points[points.length - 1].x},166 L${points[0].x},166 Z`;
+                    return (
+                      <g>
+                        <defs>
+                          <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={lineColor} stopOpacity={0.15} />
+                            <stop offset="100%" stopColor={lineColor} stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <path d={areaPath} fill="url(#trendGrad)" />
+                        <polyline points={points.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke={lineColor} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                        {points.map((p, i) => (
+                          <circle key={i} cx={p.x} cy={p.y} r={3.5} fill={lineColor} stroke={t.colors.common.white} strokeWidth={2} />
+                        ))}
+                      </g>
+                    );
+                  })()}
+                  {trendData.map((p, i) => {
+                    if (trendData.length > 10 && i % Math.ceil(trendData.length / 8) !== 0) return null;
+                    const x = 40 + i * (520 / Math.max(trendData.length - 1, 1));
+                    return (
+                      <text key={i} x={x} y={190} fontSize={10} fill={t.colors.neutral[400]} textAnchor="middle">{p.date}</text>
+                    );
+                  })}
+                </svg>
               </Box>
             )}
 
-            {/* === Trends Section === */}
-            {renderSectionHeader(SECTIONS[4])}
-            {expandedSections.has('trends') && trendData.length > 0 && (
-              <Box style={{ padding: tokens.spacing[4] }}>
-                <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                  <svg width={560} height={180} viewBox="0 0 560 180">
-                    {/* Grid lines */}
-                    {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
-                      const y = 10 + (1 - frac) * 140;
-                      const val = (trendMin + frac * trendRange).toFixed(0);
-                      return (
-                        <g key={frac}>
-                          <line x1={35} y1={y} x2={545} y2={y} stroke={tokens.colors.neutral[100]} strokeWidth={1} />
-                          <text x={30} y={y + 4} fontSize={9} fill={tokens.colors.neutral[400]} textAnchor="end">{val}</text>
-                        </g>
-                      );
-                    })}
-
-                    {/* Line */}
-                    {trendData.length > 1 && (() => {
-                      const xStep = 510 / Math.max(trendData.length - 1, 1);
-                      const points = trendData.map((p, i) => {
-                        const x = 35 + i * xStep;
-                        const y = 10 + (1 - (p.value - trendMin) / trendRange) * 140;
-                        return `${x},${y}`;
-                      });
-                      const lineColor = tokens.colors.primaryScale[500];
-                      const firstX = 35;
-                      const lastX = 35 + (trendData.length - 1) * xStep;
-                      const areaPath = `M${points[0]} ${points.slice(1).map(p => `L${p}`).join(' ')} L${lastX},150 L${firstX},150 Z`;
-                      return (
-                        <g>
-                          <path d={areaPath} fill={`${lineColor}15`} />
-                          <polyline points={points.join(' ')} fill="none" stroke={lineColor} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                          {trendData.map((p, i) => (
-                            <circle key={i} cx={35 + i * xStep} cy={10 + (1 - (p.value - trendMin) / trendRange) * 140} r={3} fill={lineColor} stroke={tokens.colors.common.white} strokeWidth={2} />
-                          ))}
-                        </g>
-                      );
-                    })()}
-
-                    {/* X-axis labels */}
-                    {trendData.map((p, i) => {
-                      if (trendData.length > 10 && i % Math.ceil(trendData.length / 8) !== 0) return null;
-                      const x = 35 + i * (510 / Math.max(trendData.length - 1, 1));
-                      return (
-                        <text key={i} x={x} y={172} fontSize={9} fill={tokens.colors.neutral[400]} textAnchor="middle">
-                          {p.date}
-                        </text>
-                      );
-                    })}
-                  </svg>
-                </Box>
-              </Box>
-            )}
-
-            {/* === Cohorts Section === */}
-            {renderSectionHeader(SECTIONS[5])}
+            {/* Cohorts */}
+            <SectionHeader section={SECTIONS[5]} />
             {expandedSections.has('cohorts') && (
-              <Box style={{ padding: tokens.spacing[4] }}>
-                <Stack direction="vertical" spacing="sm">
-                  {cohortComparisons.map((cohort, idx) => {
-                    const barWidth = (cohort.avgScore / cohortMax) * 100;
-                    const scoreColor = getScoreColor(cohort.avgScore, tokens);
-                    return (
-                      <Box
-                        key={idx}
-                        onClick={() => handleDrilldown(drilldownEntity === cohort.groupName ? null : cohort.groupName)}
-                        style={{
-                          padding: tokens.spacing[3],
-                          borderRadius: tokens.borderRadius.md,
-                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${drilldownEntity === cohort.groupName ? tokens.colors.primaryScale[300] : tokens.colors.neutral[100]}`,
-                          backgroundColor: drilldownEntity === cohort.groupName ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                          cursor: 'pointer',
-                          transition: `all ${tokens.motion.hover}`,
-                        }}
-                      >
-                        <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                            <Users size={14} color={tokens.colors.neutral[500]} />
-                            <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], fontWeight: tokens.typography.fontWeight.medium }}>
-                              {cohort.groupName}
-                            </span>
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                              ({cohort.count} candidates)
-                            </span>
-                          </Box>
-                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                            <span style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: scoreColor }}>
-                              {cohort.avgScore.toFixed(1)}
-                            </span>
-                            <span style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              padding: `0 ${tokens.spacing[1]}px`,
-                              borderRadius: tokens.borderRadius.sm,
-                              backgroundColor: getScoreBg(cohort.avgScore, tokens),
-                              color: scoreColor,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                            }}>
-                              {getScoreLabel(cohort.avgScore)}
-                            </span>
-                          </Box>
+              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+                {cohortComparisons.map((cohort, idx) => {
+                  const barW = (cohort.avgScore / cohortMax) * 100;
+                  const scoreColor = getScoreColor(cohort.avgScore, t);
+                  return (
+                    <Box
+                      key={idx}
+                      onClick={() => handleDrilldown(drilldownEntity === cohort.groupName ? null : cohort.groupName)}
+                      style={{
+                        ...card,
+                        marginBottom: t.spacing[3],
+                        cursor: 'pointer',
+                        border: drilldownEntity === cohort.groupName
+                          ? `2px solid ${t.colors.primaryScale[300]}`
+                          : `1px solid ${t.colors.neutral[200]}`,
+                        transition: `all ${t.motion.hover}`,
+                      }}
+                    >
+                      <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Users size={14} color={t.colors.neutral[500]} />
+                          <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium }}>
+                            {cohort.groupName}
+                          </Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                            ({cohort.count} candidates)
+                          </Text>
                         </Box>
-                        <Box style={{ position: 'relative', height: tokens.spacing[2] }}>
-                          <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100] }} />
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: scoreColor }}>
+                            {cohort.avgScore.toFixed(1)}
+                          </Text>
                           <Box style={{
-                            position: 'absolute', top: 0, left: 0, height: '100%',
-                            width: `${barWidth}%`,
-                            borderRadius: tokens.borderRadius.full,
-                            backgroundColor: scoreColor,
-                            opacity: 0.7,
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }} />
+                            padding: `2px ${t.spacing[2]}px`,
+                            borderRadius: badgeRadius,
+                            backgroundColor: getScoreBg(cohort.avgScore, t),
+                          }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: scoreColor, fontWeight: t.typography.fontWeight.medium }}>
+                              {getScoreLabel(cohort.avgScore)}
+                            </Text>
+                          </Box>
                         </Box>
                       </Box>
-                    );
-                  })}
-                  {cohortComparisons.length === 0 && (
-                    <Box style={{ textAlign: 'center', padding: tokens.spacing[4], color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                      No cohort data available.
+                      <Box style={{ position: 'relative' as const, height: 6 }}>
+                        <Box style={{ position: 'absolute' as const, inset: 0, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100] }} />
+                        <Box style={{
+                          position: 'absolute' as const,
+                          top: 0,
+                          left: 0,
+                          height: '100%',
+                          width: `${barW}%`,
+                          borderRadius: t.borderRadius.full,
+                          backgroundColor: scoreColor,
+                          opacity: 0.7,
+                          transition: `width ${t.motion.hover}`,
+                        }} />
+                      </Box>
                     </Box>
-                  )}
-                </Stack>
+                  );
+                })}
               </Box>
             )}
 
-            {/* === Skill Gaps Section === */}
-            {renderSectionHeader(SECTIONS[6])}
+            {/* Skill Gaps */}
+            <SectionHeader section={SECTIONS[6]} />
             {expandedSections.has('gaps') && (
-              <Box style={{ padding: tokens.spacing[4] }}>
-                <Stack direction="vertical" spacing="sm">
-                  {filteredSkillGaps.map((gap, idx) => {
-                    const isPositive = gap.gapFromTarget >= 0;
-                    const gapColor = isPositive ? tokens.colors.successScale[600] : tokens.colors.errorScale[600];
-                    const gapBg = isPositive ? tokens.colors.successScale[50] : tokens.colors.errorScale[50];
-                    return (
-                      <Box
-                        key={idx}
-                        style={{
-                          padding: tokens.spacing[3],
-                          borderRadius: tokens.borderRadius.md,
-                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                          borderLeft: `3px solid ${gapColor}`,
-                          backgroundColor: tokens.colors.common.white,
-                        }}
-                      >
-                        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[2] }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                            {gap.dimension}
-                          </span>
-                          <Box style={{ display: 'flex', gap: tokens.spacing[2], alignItems: 'center' }}>
-                            <Box style={{
-                              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.sm,
-                              backgroundColor: gapBg,
-                              color: gapColor,
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                            }}>
-                              {isPositive ? '+' : ''}{gap.gapFromTarget.toFixed(1)} gap
-                            </Box>
-                            <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
-                              Avg: {gap.avgScore.toFixed(1)}
-                            </span>
-                          </Box>
-                        </Box>
-                        {/* Visual bar from center */}
-                        <Box style={{ position: 'relative', height: tokens.spacing[3] }}>
-                          <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[50] }} />
-                          <Box style={{ position: 'absolute', top: -1, left: '50%', width: 1, height: `calc(100% + 2px)`, backgroundColor: tokens.colors.neutral[300] }} />
+              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+                {filteredGaps.map((gap, idx) => {
+                  const isPositive = gap.gapFromTarget >= 0;
+                  const gapColor = isPositive ? t.colors.successScale[600] : t.colors.errorScale[600];
+                  const gapBg = isPositive ? t.colors.successScale[50] : t.colors.errorScale[50];
+                  return (
+                    <Box
+                      key={idx}
+                      style={{
+                        ...card,
+                        marginBottom: t.spacing[3],
+                        borderLeft: `3px solid ${gapColor}`,
+                      }}
+                    >
+                      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                          {gap.dimension}
+                        </Text>
+                        <Box style={{ display: 'flex', gap: t.spacing[2], alignItems: 'center' }}>
                           <Box style={{
-                            position: 'absolute',
-                            top: 2,
-                            height: `calc(100% - 4px)`,
-                            left: isPositive ? '50%' : `calc(50% - ${(Math.abs(gap.gapFromTarget) / gapMax) * 50}%)`,
-                            width: `${(Math.abs(gap.gapFromTarget) / gapMax) * 50}%`,
-                            borderRadius: tokens.borderRadius.sm,
-                            backgroundColor: gapColor,
-                            opacity: 0.6,
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }} />
+                            padding: `2px ${t.spacing[2]}px`,
+                            borderRadius: badgeRadius,
+                            backgroundColor: gapBg,
+                          }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: gapColor }}>
+                              {isPositive ? '+' : ''}{gap.gapFromTarget.toFixed(1)} gap
+                            </Text>
+                          </Box>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
+                            Avg: {gap.avgScore.toFixed(1)}
+                          </Text>
                         </Box>
                       </Box>
-                    );
-                  })}
-                  {filteredSkillGaps.length === 0 && (
-                    <Box style={{ textAlign: 'center', padding: tokens.spacing[4], color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                      No skill gap data {searchQuery ? 'matching search' : 'available'}.
+                      {/* Center-origin bar */}
+                      <Box style={{ position: 'relative' as const, height: 10 }}>
+                        <Box style={{ position: 'absolute' as const, inset: 0, borderRadius: t.borderRadius.sm, backgroundColor: t.colors.neutral[50] }} />
+                        <Box style={{ position: 'absolute' as const, top: -1, left: '50%', width: 1, height: 'calc(100% + 2px)', backgroundColor: t.colors.neutral[300] }} />
+                        <Box style={{
+                          position: 'absolute' as const,
+                          top: 2,
+                          height: 'calc(100% - 4px)',
+                          left: isPositive ? '50%' : `calc(50% - ${(Math.abs(gap.gapFromTarget) / gapMax) * 50}%)`,
+                          width: `${(Math.abs(gap.gapFromTarget) / gapMax) * 50}%`,
+                          borderRadius: t.borderRadius.sm,
+                          backgroundColor: gapColor,
+                          opacity: 0.6,
+                          transition: `width ${t.motion.hover}`,
+                        }} />
+                      </Box>
                     </Box>
-                  )}
-                </Stack>
+                  );
+                })}
+                {filteredGaps.length === 0 && (
+                  <Text style={{ textAlign: 'center' as const, padding: t.spacing[4], color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}>
+                    No skill gap data {searchQuery ? 'matching search' : 'available'}.
+                  </Text>
+                )}
               </Box>
             )}
           </Box>

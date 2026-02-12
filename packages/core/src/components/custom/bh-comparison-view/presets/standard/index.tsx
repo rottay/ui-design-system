@@ -3,1105 +3,347 @@
 /**
  * BhComparisonView - Standard Preset
  * Side-by-side candidate comparison with radar chart, color-coded scoring grid,
- * strengths/weaknesses badges, and decision actions
+ * strengths/weaknesses, and decision actions. Slite-inspired warm design.
  */
 
 import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
+import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import type {
+  BhComparisonViewProps, ComparisonCandidate, ComparisonRow, CandidateDecision,
+} from '../../core';
 import {
-  createBadgeStyle,
-  createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createProgressBarStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
-} from '../../../helpers';
-import type { BhComparisonViewProps, ComparisonCandidate, CandidateDecision } from '../../core';
-import {
-  getRankColors,
-  getDecisionColors,
-  getCandidateInitials,
-  getScoreColor,
-  getScoreBgColor,
-  getCandidateColor,
+  getScoreColor, getScoreBgColor, getCandidateInitials,
+  getDecisionColors, getCandidateColor,
 } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  Plus,
-  X,
-  GripVertical,
-  ChevronDown,
-  ChevronRight,
-  Trophy,
-  Star,
-  TrendingUp,
-  TrendingDown,
-  Eye,
-  EyeOff,
-  Radar,
-  CheckCircle2,
-  XCircle,
-  PauseCircle,
-  Search,
-  Users,
-  BarChart3,
-  Award,
-  ThumbsUp,
-  ThumbsDown,
-  StickyNote,
+  Plus, X, ChevronUp, ChevronDown, ThumbsUp, ThumbsDown,
+  Pause, Eye, Trophy, AlertTriangle, Star, Radar,
 } from 'lucide-react';
+
+/* ---------------------------------------------------------------------------
+ * Default Data
+ * -------------------------------------------------------------------------*/
+
+const DEFAULT_CANDIDATES: ComparisonCandidate[] = [
+  { id: 'c-1', name: 'Sarah Johnson', overallScore: 92, rank: 1, dimensionScores: [{ dimension: 'Technical', score: 95 }, { dimension: 'Leadership', score: 88 }, { dimension: 'Communication', score: 90 }, { dimension: 'Culture Fit', score: 94 }, { dimension: 'Experience', score: 91 }], strengths: ['Deep React expertise', 'Strong system design', 'Google-level experience'], weaknesses: ['Limited backend experience'] },
+  { id: 'c-2', name: 'Michael Chen', overallScore: 88, rank: 2, dimensionScores: [{ dimension: 'Technical', score: 90 }, { dimension: 'Leadership', score: 85 }, { dimension: 'Communication', score: 82 }, { dimension: 'Culture Fit', score: 91 }, { dimension: 'Experience', score: 88 }], strengths: ['Full-stack capability', 'Startup experience at Stripe'], weaknesses: ['Needs mentorship on architecture', 'Shorter tenure history'] },
+  { id: 'c-3', name: 'Emily Rodriguez', overallScore: 85, rank: 3, dimensionScores: [{ dimension: 'Technical', score: 88 }, { dimension: 'Leadership', score: 92 }, { dimension: 'Communication', score: 86 }, { dimension: 'Culture Fit', score: 80 }, { dimension: 'Experience', score: 82 }], strengths: ['Staff engineer at Meta', 'Strong leadership skills'], weaknesses: ['Culture fit concerns', 'Salary expectations high'] },
+];
+
+const DEFAULT_ROWS: ComparisonRow[] = [
+  { dimension: 'Technical', scores: [{ candidateId: 'c-1', score: 95 }, { candidateId: 'c-2', score: 90 }, { candidateId: 'c-3', score: 88 }] },
+  { dimension: 'Leadership', scores: [{ candidateId: 'c-1', score: 88 }, { candidateId: 'c-2', score: 85 }, { candidateId: 'c-3', score: 92 }] },
+  { dimension: 'Communication', scores: [{ candidateId: 'c-1', score: 90 }, { candidateId: 'c-2', score: 82 }, { candidateId: 'c-3', score: 86 }] },
+  { dimension: 'Culture Fit', scores: [{ candidateId: 'c-1', score: 94 }, { candidateId: 'c-2', score: 91 }, { candidateId: 'c-3', score: 80 }] },
+  { dimension: 'Experience', scores: [{ candidateId: 'c-1', score: 91 }, { candidateId: 'c-2', score: 88 }, { candidateId: 'c-3', score: 82 }] },
+];
+
+/* ---------------------------------------------------------------------------
+ * ScoreRing
+ * -------------------------------------------------------------------------*/
+
+function ScoreRing({ score, tokens: t, size = 56 }: { score: number; tokens: DesignTokens; size?: number }) {
+  const color = getScoreColor(score, t);
+  const r = (size / 2) - 4; const c = 2 * Math.PI * r;
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
+          strokeDasharray={c} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
+      </svg>
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <span style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color, lineHeight: 1 }}>{score}</span>
+        <span style={{ fontSize: 8, color: t.colors.neutral[400], marginTop: 1 }}>score</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Radar Chart (SVG)
+ * -------------------------------------------------------------------------*/
+
+function RadarChart({ candidates, dimensions, tokens: t }: { candidates: ComparisonCandidate[]; dimensions: string[]; tokens: DesignTokens }) {
+  const size = 200; const cx = size / 2; const cy = size / 2; const maxR = 80;
+  const n = dimensions.length;
+  const angles = dimensions.map((_, i) => (Math.PI * 2 * i) / n - Math.PI / 2);
+
+  const getPoint = (angle: number, value: number) => ({
+    x: cx + Math.cos(angle) * (value / 100) * maxR,
+    y: cy + Math.sin(angle) * (value / 100) * maxR,
+  });
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {/* Grid rings */}
+      {[25, 50, 75, 100].map(level => (
+        <polygon key={level} points={angles.map(a => { const p = getPoint(a, level); return `${p.x},${p.y}`; }).join(' ')}
+          fill="none" stroke={t.colors.neutral[100]} strokeWidth="1" />
+      ))}
+      {/* Axis lines + labels */}
+      {angles.map((a, i) => {
+        const p = getPoint(a, 100);
+        const lp = getPoint(a, 115);
+        return (
+          <g key={i}>
+            <line x1={cx} y1={cy} x2={p.x} y2={p.y} stroke={t.colors.neutral[100]} strokeWidth="1" />
+            <text x={lp.x} y={lp.y} textAnchor="middle" dominantBaseline="middle"
+              style={{ fontSize: 9, fill: t.colors.neutral[500], fontWeight: 500 }}>{dimensions[i]}</text>
+          </g>
+        );
+      })}
+      {/* Candidate polygons */}
+      {candidates.map((cand, ci) => {
+        const cc = getCandidateColor(ci, t);
+        const points = cand.dimensionScores.map((ds, i) => {
+          const p = getPoint(angles[i], ds.score);
+          return `${p.x},${p.y}`;
+        }).join(' ');
+        return (
+          <polygon key={cand.id} points={points}
+            fill={`${cc.stroke}20`} stroke={cc.stroke} strokeWidth="2" />
+        );
+      })}
+    </svg>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Preset
+ * -------------------------------------------------------------------------*/
 
 export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
   name: 'BhComparisonView.Standard',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhComparisonViewProps>) => {
-    const { Box, Stack } = primitives;
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const rankColors = getRankColors(tokens);
-    const decisionColors = getDecisionColors(tokens);
+  render: ({ primitives, props, tokens: t }: PresetContext<BhComparisonViewProps>) => {
+    const { Box, Text } = primitives;
+    const br = getPersonalityBadgeRadius(t);
+    const dc = getDecisionColors(t);
 
     const {
-      candidates: controlledCandidates = [],
-      comparisonRows: controlledRows = [],
-      onAddCandidate,
-      onRemoveCandidate,
-      onReorderCandidates,
-      expandedRows: controlledExpandedRows,
-      onRowToggle,
-      highlightBest: controlledHighlightBest,
-      onHighlightToggle,
-      decisions: controlledDecisions,
-      onDecisionChange,
-      showRadar: controlledShowRadar,
-      onRadarToggle,
-      loading,
-      className,
-      style,
+      candidates = DEFAULT_CANDIDATES, comparisonRows = DEFAULT_ROWS,
+      onAddCandidate, onRemoveCandidate, highlightBest: hbp = true,
+      onHighlightToggle, decisions: dp, onDecisionChange,
+      showRadar: srp = true, onRadarToggle,
+      className, style,
     } = props;
 
-    const [internalCandidates, setInternalCandidates] = useState<ComparisonCandidate[]>(controlledCandidates);
-    const [internalExpandedRows, setInternalExpandedRows] = useState<string[]>(controlledExpandedRows ?? []);
-    const [internalHighlightBest, setInternalHighlightBest] = useState(controlledHighlightBest ?? true);
-    const [internalShowRadar, setInternalShowRadar] = useState(controlledShowRadar ?? true);
-    const [internalDecisions, setInternalDecisions] = useState<CandidateDecision[]>(controlledDecisions ?? []);
+    const [highlightBest, setHighlightBest] = useState(hbp);
+    const [showRadar, setShowRadar] = useState(srp);
+    const [expanded, setExpanded] = useState<Set<string>>(new Set());
+    const [iDecisions, setIDecisions] = useState<CandidateDecision[]>([]);
+    const decisions = dp ?? iDecisions;
 
-    const candidates = controlledCandidates.length > 0 ? controlledCandidates : internalCandidates;
-    const expandedRows = controlledExpandedRows ?? internalExpandedRows;
-    const highlightBest = controlledHighlightBest ?? internalHighlightBest;
-    const showRadar = controlledShowRadar ?? internalShowRadar;
-    const decisions = controlledDecisions ?? internalDecisions;
+    const dimensions = useMemo(() => comparisonRows.map(r => r.dimension), [comparisonRows]);
 
-    const handleRowToggle = (dimension: string) => {
-      if (onRowToggle) {
-        onRowToggle(dimension);
-      } else {
-        setInternalExpandedRows((prev) =>
-          prev.includes(dimension) ? prev.filter((d) => d !== dimension) : [...prev, dimension],
-        );
-      }
-    };
-
-    const handleHighlightToggle = () => {
-      const newVal = !highlightBest;
-      setInternalHighlightBest(newVal);
-      onHighlightToggle?.(newVal);
-    };
-
-    const handleRadarToggle = () => {
-      const newVal = !showRadar;
-      setInternalShowRadar(newVal);
-      onRadarToggle?.(newVal);
-    };
-
-    const handleDecisionChange = (decision: CandidateDecision) => {
-      if (onDecisionChange) {
-        onDecisionChange(decision);
-      } else {
-        setInternalDecisions((prev) => {
-          const existing = prev.findIndex((d) => d.candidateId === decision.candidateId);
-          if (existing >= 0) {
-            const updated = [...prev];
-            updated[existing] = decision;
-            return updated;
-          }
-          return [...prev, decision];
-        });
-      }
-    };
-
-    const getDecisionFor = (candidateId: string): CandidateDecision | undefined => {
-      return decisions.find((d) => d.candidateId === candidateId);
-    };
-
-    const comparisonRows = controlledRows.length > 0 ? controlledRows : [];
-
-    /* Collect unique dimensions for radar */
-    const dimensions = useMemo(() => {
-      if (comparisonRows.length > 0) return comparisonRows.map((r) => r.dimension);
-      const dimSet = new Set<string>();
-      candidates.forEach((c) => c.dimensionScores.forEach((ds) => dimSet.add(ds.dimension)));
-      return [...dimSet];
-    }, [comparisonRows, candidates]);
-
-    /* Find best score per row for highlighting */
-    const bestScorePerDimension = useMemo(() => {
-      const result: Record<string, string> = {};
-      dimensions.forEach((dim) => {
-        let bestId = '';
-        let bestScore = -1;
-        candidates.forEach((c) => {
-          const ds = c.dimensionScores.find((d) => d.dimension === dim);
-          if (ds && ds.score > bestScore) {
-            bestScore = ds.score;
-            bestId = c.id;
-          }
-        });
-        result[dim] = bestId;
-      });
-      return result;
-    }, [candidates, dimensions]);
-
-    /* Find worst score per row */
-    const worstScorePerDimension = useMemo(() => {
-      const result: Record<string, string> = {};
-      dimensions.forEach((dim) => {
-        let worstId = '';
-        let worstScore = 101;
-        candidates.forEach((c) => {
-          const ds = c.dimensionScores.find((d) => d.dimension === dim);
-          if (ds && ds.score < worstScore) {
-            worstScore = ds.score;
-            worstId = c.id;
-          }
-        });
-        result[dim] = worstId;
-      });
-      return result;
-    }, [candidates, dimensions]);
-
-    /* Radar chart math */
-    const radarSize = 300;
-    const radarCenter = radarSize / 2;
-    const radarRadius = radarSize / 2 - 40;
-    const angleStep = dimensions.length > 0 ? (2 * Math.PI) / dimensions.length : 0;
-
-    const getRadarPoint = (dimIndex: number, score: number): { x: number; y: number } => {
-      const angle = dimIndex * angleStep - Math.PI / 2;
-      const r = (score / 100) * radarRadius;
-      return {
-        x: radarCenter + r * Math.cos(angle),
-        y: radarCenter + r * Math.sin(angle),
-      };
-    };
-
-    const getRadarPolygon = (candidate: ComparisonCandidate): string => {
-      return dimensions
-        .map((dim, i) => {
-          const ds = candidate.dimensionScores.find((d) => d.dimension === dim);
-          const point = getRadarPoint(i, ds?.score ?? 0);
-          return `${point.x},${point.y}`;
-        })
-        .join(' ');
-    };
-
-    const glassStyle = tokens.surface.useGlass && tokens.glass
-      ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg }
-      : {};
-
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: tokens.surface.useGlass }), [tokens, engine]);
-
-    const colWidth = candidates.length > 0 ? `${Math.floor(100 / (candidates.length + 1))}%` : '25%';
+    const getDecision = (id: string) => decisions.find(d => d.candidateId === id);
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, ...surfaceStyle, ...style }}>
+      <Box className={className} style={{
+        ...createCardStyle(t, { elevation: 'md' }),
+        display: 'flex', flexDirection: 'column', height: '100%',
+        backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
+      }}>
         {/* Header */}
         <Box style={{
-          padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          ...glassStyle,
+          padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Users size={18} style={{ color: tokens.colors.primaryScale[600] }} />
-            <h2 style={{
-              margin: 0,
-              fontSize: tokens.typography.fontSize.lg,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: tokens.colors.neutral[900],
-            }}>
-              Candidate Comparison
-            </h2>
-            <Box style={{
-              ...createBadgeStyle(tokens, 'primary'),
-            }}>
-              {candidates.length}/4 candidates
-            </Box>
+          <Box>
+            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>Candidate Comparison</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>{candidates.length} candidates side by side</Text>
           </Box>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-            {/* Highlight best toggle */}
-            <button
-              onClick={handleHighlightToggle}
+          <Box style={{ display: 'flex', gap: t.spacing[2] }}>
+            <button onClick={() => { setShowRadar(!showRadar); onRadarToggle?.(!showRadar); }}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${highlightBest ? tokens.colors.successScale[300] : tokens.colors.neutral[200]}`,
-                backgroundColor: highlightBest ? tokens.colors.successScale[50] : tokens.colors.common.white,
-                color: highlightBest ? tokens.colors.successScale[700] : tokens.colors.neutral[600],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.medium,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                ...createHoverStyle(tokens),
-              }}
-            >
-              {highlightBest ? <Eye size={12} /> : <EyeOff size={12} />}
-              Highlight Best
-            </button>
-            {/* Radar toggle */}
-            <button
-              onClick={handleRadarToggle}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${showRadar ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-                backgroundColor: showRadar ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                color: showRadar ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.medium,
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                ...createHoverStyle(tokens),
-              }}
-            >
-              <Radar size={12} />
-              Radar Chart
-            </button>
-            {/* Add candidate */}
-            {candidates.length < 4 && (
-              <button
-                onClick={onAddCandidate}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  border: 'none',
-                  backgroundColor: tokens.colors.primaryScale[500],
-                  color: tokens.colors.common.white,
-                  fontSize: tokens.typography.fontSize.sm,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  cursor: 'pointer',
-                  fontFamily: 'inherit',
-                  ...createHoverStyle(tokens),
-                }}
-              >
-                <Plus size={14} />
-                Add Candidate
-              </button>
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
+                border: `1px solid ${showRadar ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+                backgroundColor: showRadar ? t.colors.primaryScale[50] : t.colors.common.white,
+                color: showRadar ? t.colors.primaryScale[700] : t.colors.neutral[600],
+                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+              }}><Radar size={13} /> Radar</button>
+            {onAddCandidate && (
+              <button onClick={onAddCandidate} style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
+                border: 'none', backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white,
+                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+              }}><Plus size={13} /> Add Candidate</button>
             )}
           </Box>
         </Box>
 
-        <Box style={{ flex: 1, overflow: 'auto' }}>
-          {loading ? (
-            <Box style={{ textAlign: 'center' as const, padding: tokens.spacing[8], color: tokens.colors.neutral[400] }}>Loading...</Box>
-          ) : (
-            <Box style={{ padding: tokens.spacing[4] }}>
-              {/* Candidate header row with avatars + scores */}
-              <Box style={{
-                display: 'grid',
-                gridTemplateColumns: `180px repeat(${candidates.length}, 1fr)`,
-                gap: tokens.spacing[3],
-                marginBottom: tokens.spacing[4],
-              }}>
-                {/* Empty corner cell */}
-                <Box />
-
-                {/* Candidate header cards */}
-                {candidates.map((candidate, idx) => {
-                  const rank = candidate.rank;
-                  const rc = rankColors[rank] ?? rankColors[4];
-                  const candColor = getCandidateColor(idx, tokens);
-
-                  return (
-                    <Box key={candidate.id} style={{
-                      ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
-                      padding: tokens.spacing[3],
-                      textAlign: 'center' as const,
-                      position: 'relative' as const,
-                      borderTop: `3px solid ${candColor.stroke}`,
-                    }}>
-                      {/* Remove button */}
-                      <button
-                        onClick={() => onRemoveCandidate?.(candidate.id)}
-                        style={{
-                          position: 'absolute' as const,
-                          top: tokens.spacing[1],
-                          right: tokens.spacing[1],
-                          background: 'none',
-                          border: 'none',
-                          cursor: 'pointer',
-                          transition: `all ${tokens.motion.hover}`,
-                          color: tokens.colors.neutral[400],
-                          padding: tokens.spacing[1],
-                          display: 'flex',
-                          alignItems: 'center',
-                          borderRadius: tokens.borderRadius.full,
-                        }}
-                      >
-                        <X size={12} />
-                      </button>
-
-                      {/* Drag handle */}
-                      <Box style={{
-                        position: 'absolute' as const,
-                        top: tokens.spacing[1],
-                        left: tokens.spacing[1],
-                        color: tokens.colors.neutral[300],
-                        cursor: 'grab',
-                        padding: tokens.spacing[1],
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}>
-                        <GripVertical size={12} />
+        <Box style={{ flex: 1, overflow: 'auto', padding: `${t.spacing[6]}px` }}>
+          {/* Radar chart */}
+          {showRadar && (
+            <Box style={{ display: 'flex', justifyContent: 'center', marginBottom: t.spacing[6] }}>
+              <Box style={{ textAlign: 'center' }}>
+                <RadarChart candidates={candidates} dimensions={dimensions} tokens={t} />
+                <Box style={{ display: 'flex', justifyContent: 'center', gap: t.spacing[4], marginTop: t.spacing[3] }}>
+                  {candidates.map((c, i) => {
+                    const cc = getCandidateColor(i, t);
+                    return (
+                      <Box key={c.id} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                        <Box style={{ width: 10, height: 10, borderRadius: t.borderRadius.full, backgroundColor: cc.stroke }} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{c.name}</Text>
                       </Box>
-
-                      {/* Avatar */}
-                      {candidate.avatar ? (
-                        <img src={candidate.avatar} alt="" style={{
-                          width: tokens.spacing[12] ?? 48,
-                          height: tokens.spacing[12] ?? 48,
-                          borderRadius: tokens.borderRadius.full,
-                          objectFit: 'cover' as const,
-                          margin: '0 auto',
-                          display: 'block',
-                          border: `3px solid ${candColor.light}`,
-                        }} />
-                      ) : (
-                        <Box style={{
-                          width: tokens.spacing[12] ?? 48,
-                          height: tokens.spacing[12] ?? 48,
-                          borderRadius: tokens.borderRadius.full,
-                          backgroundColor: candColor.fill,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: tokens.typography.fontSize.lg,
-                          color: candColor.stroke,
-                          fontWeight: tokens.typography.fontWeight.bold,
-                          margin: '0 auto',
-                          border: `3px solid ${candColor.light}`,
-                        }}>
-                          {getCandidateInitials(candidate.name)}
-                        </Box>
-                      )}
-
-                      {/* Name */}
-                      <Box style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[900],
-                        marginTop: tokens.spacing[2],
-                      }}>
-                        {candidate.name}
-                      </Box>
-
-                      {/* Overall score */}
-                      <Box style={{
-                        fontSize: tokens.typography.fontSize['2xl'],
-                        fontWeight: tokens.typography.fontWeight.bold,
-                        color: getScoreColor(candidate.overallScore, tokens),
-                        marginTop: tokens.spacing[1],
-                      }}>
-                        {candidate.overallScore}
-                      </Box>
-
-                      {/* Rank badge */}
-                      <Box style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: tokens.spacing[1],
-                        padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                        borderRadius: tokens.borderRadius.full,
-                        backgroundColor: rc.bgColor,
-                        color: rc.color,
-                        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rc.border}`,
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        marginTop: tokens.spacing[1],
-                      }}>
-                        {rank === 1 && <Trophy size={10} />}
-                        {rank === 2 && <Award size={10} />}
-                        {rank === 3 && <Star size={10} />}
-                        #{rank}
-                      </Box>
-                    </Box>
-                  );
-                })}
+                    );
+                  })}
+                </Box>
               </Box>
-
-              {/* Radar chart */}
-              {showRadar && candidates.length > 0 && dimensions.length >= 3 && (
-                <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
-                  padding: tokens.spacing[4],
-                  marginBottom: tokens.spacing[4],
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[900],
-                    marginBottom: tokens.spacing[3],
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[2],
-                  }}>
-                    <Radar size={14} />
-                    Skills Radar
-                  </Box>
-
-                  <svg
-                    width={radarSize}
-                    height={radarSize}
-                    viewBox={`0 0 ${radarSize} ${radarSize}`}
-                    style={{ overflow: 'visible' }}
-                  >
-                    {/* Grid rings */}
-                    {[20, 40, 60, 80, 100].map((level) => {
-                      const r = (level / 100) * radarRadius;
-                      const points = dimensions.map((_, i) => {
-                        const angle = i * angleStep - Math.PI / 2;
-                        return `${radarCenter + r * Math.cos(angle)},${radarCenter + r * Math.sin(angle)}`;
-                      }).join(' ');
-                      return (
-                        <polygon
-                          key={level}
-                          points={points}
-                          fill="none"
-                          stroke={tokens.colors.neutral[200]}
-                          strokeWidth={1}
-                        />
-                      );
-                    })}
-
-                    {/* Axis lines */}
-                    {dimensions.map((_, i) => {
-                      const angle = i * angleStep - Math.PI / 2;
-                      const endX = radarCenter + radarRadius * Math.cos(angle);
-                      const endY = radarCenter + radarRadius * Math.sin(angle);
-                      return (
-                        <line
-                          key={i}
-                          x1={radarCenter}
-                          y1={radarCenter}
-                          x2={endX}
-                          y2={endY}
-                          stroke={tokens.colors.neutral[200]}
-                          strokeWidth={1}
-                        />
-                      );
-                    })}
-
-                    {/* Candidate polygons */}
-                    {candidates.map((candidate, idx) => {
-                      const candColor = getCandidateColor(idx, tokens);
-                      const polygon = getRadarPolygon(candidate);
-                      return (
-                        <polygon
-                          key={candidate.id}
-                          points={polygon}
-                          fill={candColor.fill}
-                          fillOpacity={0.2}
-                          stroke={candColor.stroke}
-                          strokeWidth={2}
-                        />
-                      );
-                    })}
-
-                    {/* Candidate dots */}
-                    {candidates.map((candidate, idx) => {
-                      const candColor = getCandidateColor(idx, tokens);
-                      return dimensions.map((dim, i) => {
-                        const ds = candidate.dimensionScores.find((d) => d.dimension === dim);
-                        const point = getRadarPoint(i, ds?.score ?? 0);
-                        return (
-                          <circle
-                            key={`${candidate.id}-${dim}`}
-                            cx={point.x}
-                            cy={point.y}
-                            r={3}
-                            fill={candColor.stroke}
-                            stroke={tokens.colors.common.white}
-                            strokeWidth={1.5}
-                          />
-                        );
-                      });
-                    })}
-
-                    {/* Dimension labels */}
-                    {dimensions.map((dim, i) => {
-                      const angle = i * angleStep - Math.PI / 2;
-                      const labelR = radarRadius + 20;
-                      const x = radarCenter + labelR * Math.cos(angle);
-                      const y = radarCenter + labelR * Math.sin(angle);
-                      return (
-                        <text
-                          key={dim}
-                          x={x}
-                          y={y}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fill={tokens.colors.neutral[600]}
-                          fontSize={tokens.typography.fontSize.xs}
-                          fontWeight={tokens.typography.fontWeight.medium}
-                        >
-                          {dim}
-                        </text>
-                      );
-                    })}
-                  </svg>
-
-                  {/* Legend */}
-                  <Box style={{
-                    display: 'flex',
-                    gap: tokens.spacing[4],
-                    marginTop: tokens.spacing[3],
-                    flexWrap: 'wrap' as const,
-                    justifyContent: 'center',
-                  }}>
-                    {candidates.map((candidate, idx) => {
-                      const candColor = getCandidateColor(idx, tokens);
-                      return (
-                        <Box key={candidate.id} style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: tokens.spacing[1],
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[700],
-                        }}>
-                          <Box style={{
-                            width: 12,
-                            height: 12,
-                            borderRadius: tokens.borderRadius.sm,
-                            backgroundColor: candColor.stroke,
-                          }} />
-                          {candidate.name}
-                        </Box>
-                      );
-                    })}
-                  </Box>
-                </Box>
-              )}
-
-              {/* Comparison grid */}
-              {dimensions.length > 0 && candidates.length > 0 && (
-                <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
-                  padding: 0,
-                  marginBottom: tokens.spacing[4],
-                  overflow: 'hidden',
-                }}>
-                  {/* Grid header */}
-                  <Box style={{
-                    display: 'grid',
-                    gridTemplateColumns: `180px repeat(${candidates.length}, 1fr)`,
-                    gap: 0,
-                    backgroundColor: tokens.colors.neutral[50],
-                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  }}>
-                    <Box style={{
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[500],
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
-                    }}>
-                      Dimension
-                    </Box>
-                    {candidates.map((c) => (
-                      <Box key={c.id} style={{
-                        padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[500],
-                        textTransform: 'uppercase' as const,
-                        letterSpacing: '0.05em',
-                        textAlign: 'center' as const,
-                        borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      }}>
-                        {c.name}
-                      </Box>
-                    ))}
-                  </Box>
-
-                  {/* Grid rows */}
-                  {dimensions.map((dim, dimIdx) => {
-                    const isExpanded = expandedRows.includes(dim);
-                    const bestId = bestScorePerDimension[dim];
-                    const worstId = worstScorePerDimension[dim];
-
-                    return (
-                      <Box key={dim}>
-                        <Box style={{
-                          display: 'grid',
-                          gridTemplateColumns: `180px repeat(${candidates.length}, 1fr)`,
-                          gap: 0,
-                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        }}>
-                          {/* Dimension label */}
-                          <Box
-                            onClick={() => handleRowToggle(dim)}
-                            style={{
-                              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                              fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                              color: tokens.colors.neutral[800],
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: tokens.spacing[1],
-                              ...createHoverStyle(tokens),
-                            }}
-                          >
-                            {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                            {dim}
-                          </Box>
-
-                          {/* Score cells */}
-                          {candidates.map((candidate) => {
-                            const ds = candidate.dimensionScores.find((d) => d.dimension === dim);
-                            const score = ds?.score ?? 0;
-                            const isBest = highlightBest && candidate.id === bestId;
-                            const isWorst = highlightBest && candidate.id === worstId && candidates.length > 1;
-
-                            return (
-                              <Box key={candidate.id} style={{
-                                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                                textAlign: 'center' as const,
-                                borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                backgroundColor: isBest ? tokens.colors.successScale[50] : isWorst ? tokens.colors.errorScale[50] : 'transparent',
-                              }}>
-                                <Box style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: tokens.spacing[1],
-                                  padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                                  borderRadius: tokens.borderRadius.md,
-                                  backgroundColor: getScoreBgColor(score, tokens),
-                                  color: getScoreColor(score, tokens),
-                                  fontSize: tokens.typography.fontSize.sm,
-                                  fontWeight: tokens.typography.fontWeight.semibold,
-                                }}>
-                                  {score}
-                                  {isBest && <TrendingUp size={10} />}
-                                  {isWorst && <TrendingDown size={10} />}
-                                </Box>
-
-                                {/* Progress bar */}
-                                <Box style={{
-                                  marginTop: tokens.spacing[1],
-                                  height: 3,
-                                  backgroundColor: tokens.colors.neutral[100],
-                                  borderRadius: tokens.borderRadius.full,
-                                  overflow: 'hidden',
-                                }}>
-                                  <Box style={{
-                                    width: `${score}%`,
-                                    height: '100%',
-                                    backgroundColor: getScoreColor(score, tokens),
-                                    borderRadius: tokens.borderRadius.full,
-                                  }} />
-                                </Box>
-                              </Box>
-                            );
-                          })}
-                        </Box>
-
-                        {/* Expanded row details */}
-                        {isExpanded && (
-                          <Box style={{
-                            display: 'grid',
-                            gridTemplateColumns: `180px repeat(${candidates.length}, 1fr)`,
-                            gap: 0,
-                            backgroundColor: tokens.colors.neutral[50],
-                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                          }}>
-                            <Box style={{
-                              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: tokens.colors.neutral[500],
-                            }}>
-                              Details
-                            </Box>
-                            {candidates.map((candidate) => {
-                              const ds = candidate.dimensionScores.find((d) => d.dimension === dim);
-                              const score = ds?.score ?? 0;
-                              return (
-                                <Box key={candidate.id} style={{
-                                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                                  borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  color: tokens.colors.neutral[600],
-                                  textAlign: 'center' as const,
-                                }}>
-                                  <Box style={{ marginBottom: tokens.spacing[1] }}>
-                                    Score: {score}/100
-                                  </Box>
-                                  <Box style={{
-                                    color: score >= 70 ? tokens.colors.successScale[600] : score >= 40 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
-                                    fontWeight: tokens.typography.fontWeight.medium,
-                                  }}>
-                                    {score >= 70 ? 'Strong' : score >= 40 ? 'Average' : 'Needs Improvement'}
-                                  </Box>
-                                </Box>
-                              );
-                            })}
-                          </Box>
-                        )}
-                      </Box>
-                    );
-                  })}
-                </Box>
-              )}
-
-              {/* Strengths & Weaknesses */}
-              {candidates.length > 0 && (
-                <Box style={{
-                  display: 'grid',
-                  gridTemplateColumns: `repeat(${candidates.length}, 1fr)`,
-                  gap: tokens.spacing[3],
-                  marginBottom: tokens.spacing[4],
-                }}>
-                  {candidates.map((candidate, idx) => {
-                    const candColor = getCandidateColor(idx, tokens);
-                    return (
-                      <Box key={candidate.id} style={{
-                        ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
-                        padding: tokens.spacing[3],
-                        borderTop: `3px solid ${candColor.stroke}`,
-                      }}>
-                        <Box style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[800],
-                          marginBottom: tokens.spacing[3],
-                          textAlign: 'center' as const,
-                        }}>
-                          {candidate.name}
-                        </Box>
-
-                        {/* Strengths */}
-                        <Box style={{ marginBottom: tokens.spacing[3] }}>
-                          <Box style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: tokens.spacing[1],
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.successScale[700],
-                            marginBottom: tokens.spacing[2],
-                          }}>
-                            <ThumbsUp size={10} />
-                            Strengths
-                          </Box>
-                          <Box style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
-                            {candidate.strengths.map((s, i) => (
-                              <Box key={i} style={{
-                                padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: tokens.colors.successScale[100],
-                                color: tokens.colors.successScale[700],
-                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.successScale[200]}`,
-                                fontSize: tokens.typography.fontSize.xs,
-                                fontWeight: tokens.typography.fontWeight.medium,
-                              }}>
-                                {s}
-                              </Box>
-                            ))}
-                            {candidate.strengths.length === 0 && (
-                              <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                                None identified
-                              </Box>
-                            )}
-                          </Box>
-                        </Box>
-
-                        {/* Weaknesses */}
-                        <Box>
-                          <Box style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: tokens.spacing[1],
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.errorScale[700],
-                            marginBottom: tokens.spacing[2],
-                          }}>
-                            <ThumbsDown size={10} />
-                            Weaknesses
-                          </Box>
-                          <Box style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
-                            {candidate.weaknesses.map((w, i) => (
-                              <Box key={i} style={{
-                                padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: tokens.colors.errorScale[100],
-                                color: tokens.colors.errorScale[700],
-                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-                                fontSize: tokens.typography.fontSize.xs,
-                                fontWeight: tokens.typography.fontWeight.medium,
-                              }}>
-                                {w}
-                              </Box>
-                            ))}
-                            {candidate.weaknesses.length === 0 && (
-                              <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                                None identified
-                              </Box>
-                            )}
-                          </Box>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Box>
-              )}
-
-              {/* Decision actions */}
-              {candidates.length > 0 && (
-                <Box style={{
-                  ...createCardStyle(tokens, { elevation: 'sm', glass: tokens.surface.useGlass }),
-                  padding: 0,
-                  overflow: 'hidden',
-                }}>
-                  <Box style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    backgroundColor: tokens.colors.neutral[50],
-                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[900],
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[2],
-                  }}>
-                    <CheckCircle2 size={14} />
-                    Decisions
-                  </Box>
-
-                  {candidates.map((candidate, idx) => {
-                    const decision = getDecisionFor(candidate.id);
-                    const candColor = getCandidateColor(idx, tokens);
-
-                    return (
-                      <Box key={candidate.id} style={{
-                        padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: tokens.spacing[3],
-                      }}>
-                        {/* Candidate info */}
-                        <Box style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: tokens.spacing[2],
-                          minWidth: 150,
-                          flexShrink: 0,
-                        }}>
-                          <Box style={{
-                            width: tokens.spacing[7],
-                            height: tokens.spacing[7],
-                            borderRadius: tokens.borderRadius.full,
-                            backgroundColor: candColor.fill,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: candColor.stroke,
-                            fontWeight: tokens.typography.fontWeight.bold,
-                          }}>
-                            {getCandidateInitials(candidate.name)}
-                          </Box>
-                          <Box>
-                            <Box style={{
-                              fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                              color: tokens.colors.neutral[800],
-                            }}>
-                              {candidate.name}
-                            </Box>
-                            <Box style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: tokens.colors.neutral[500],
-                            }}>
-                              Score: {candidate.overallScore}
-                            </Box>
-                          </Box>
-                        </Box>
-
-                        {/* Decision buttons */}
-                        <Box style={{
-                          display: 'flex',
-                          gap: tokens.spacing[2],
-                          alignItems: 'center',
-                        }}>
-                          {(['advance', 'hold', 'reject'] as const).map((d) => {
-                            const isActive = decision?.decision === d;
-                            const dc = decisionColors[d];
-                            const icons = {
-                              advance: <CheckCircle2 size={12} />,
-                              hold: <PauseCircle size={12} />,
-                              reject: <XCircle size={12} />,
-                            };
-                            return (
-                              <button
-                                key={d}
-                                onClick={() => handleDecisionChange({ candidateId: candidate.id, decision: d, notes: decision?.notes })}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: tokens.spacing[1],
-                                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                                  borderRadius: tokens.borderRadius.md,
-                                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? dc.border : tokens.colors.neutral[200]}`,
-                                  backgroundColor: isActive ? dc.bgColor : tokens.colors.common.white,
-                                  color: isActive ? dc.color : tokens.colors.neutral[600],
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                                  cursor: 'pointer',
-                                  fontFamily: 'inherit',
-                                  textTransform: 'capitalize' as const,
-                                  ...createHoverStyle(tokens),
-                                }}
-                              >
-                                {icons[d]}
-                                {d}
-                              </button>
-                            );
-                          })}
-                        </Box>
-
-                        {/* Notes textarea */}
-                        <Box style={{ flex: 1 }}>
-                          <textarea
-                            value={decision?.notes ?? ''}
-                            onChange={(e) => handleDecisionChange({
-                              candidateId: candidate.id,
-                              decision: decision?.decision ?? 'hold',
-                              notes: e.target.value,
-                            })}
-                            placeholder="Add notes..."
-                            style={{
-                              width: '100%',
-                              minHeight: 36,
-                              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.md,
-                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontFamily: 'inherit',
-                              outline: 'none',
-                              boxSizing: 'border-box' as const,
-                              color: tokens.colors.neutral[800],
-                              backgroundColor: tokens.colors.common.white,
-                              resize: 'vertical' as const,
-                            }}
-                          
-                            onFocus={(e) => {
-                              e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                              e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                            }}
-                            onBlur={(e) => {
-                              e.currentTarget.style.boxShadow = 'none';
-                              e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                            }}
-                          />
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Box>
-              )}
-
-              {/* Empty state */}
-              {candidates.length === 0 && (
-                <Box style={{
-                  ...createCardStyle(tokens, { glass: isGlass, elevation: 'sm' }),
-                  padding: tokens.spacing[8],
-                  textAlign: 'center' as const,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: tokens.spacing[3],
-                }}>
-                  <Box style={{
-                    width: tokens.spacing[12] ?? 48,
-                    height: tokens.spacing[12] ?? 48,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: tokens.colors.primaryScale[400],
-                  }}>
-                    <Users size={24} />
-                  </Box>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.md,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[700],
-                  }}>
-                    No candidates to compare
-                  </Box>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: tokens.colors.neutral[500],
-                    maxWidth: 300,
-                  }}>
-                    Add up to 4 candidates to compare their skills, scores, and qualifications side by side.
-                  </Box>
-                  <button
-                    onClick={onAddCandidate}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: 'none',
-                      backgroundColor: tokens.colors.primaryScale[500],
-                      color: tokens.colors.common.white,
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      cursor: 'pointer',
-                      fontFamily: 'inherit',
-                      ...createHoverStyle(tokens),
-                    }}
-                  >
-                    <Plus size={14} />
-                    Add Candidate
-                  </button>
-                </Box>
-              )}
             </Box>
           )}
+
+          {/* Candidate headers */}
+          <Box style={{ display: 'grid', gridTemplateColumns: `160px repeat(${candidates.length}, 1fr)`, gap: t.spacing[3], marginBottom: t.spacing[4] }}>
+            <Box />
+            {candidates.map((c, i) => {
+              const cc = getCandidateColor(i, t);
+              const dec = getDecision(c.id);
+              return (
+                <Box key={c.id} style={{
+                  padding: `${t.spacing[4]}px`, borderRadius: t.borderRadius.xl,
+                  backgroundColor: t.colors.common.white, border: `1px solid ${t.colors.neutral[100]}`,
+                  textAlign: 'center', position: 'relative',
+                }}>
+                  {onRemoveCandidate && (
+                    <button onClick={() => onRemoveCandidate(c.id)} style={{
+                      position: 'absolute', top: t.spacing[2], right: t.spacing[2],
+                      width: 20, height: 20, borderRadius: t.borderRadius.full,
+                      border: 'none', backgroundColor: t.colors.neutral[100], color: t.colors.neutral[500],
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0,
+                    }}><X size={10} /></button>
+                  )}
+                  {c.rank === 1 && <Trophy size={14} style={{ color: t.colors.warningScale[500], marginBottom: t.spacing[1] }} />}
+                  <Box style={{
+                    width: 48, height: 48, borderRadius: t.borderRadius.full, margin: '0 auto',
+                    backgroundColor: cc.light, color: cc.stroke, border: `2px solid ${cc.stroke}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, marginBottom: t.spacing[2],
+                  }}>{getCandidateInitials(c.name)}</Box>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{c.name}</Text>
+                  <Box style={{ display: 'flex', justifyContent: 'center', marginTop: t.spacing[2] }}>
+                    <ScoreRing score={c.overallScore} tokens={t} size={48} />
+                  </Box>
+                  <Box style={{
+                    padding: `1px ${t.spacing[2]}px`, borderRadius: br, marginTop: t.spacing[2],
+                    backgroundColor: t.colors.neutral[50], fontSize: t.typography.fontSize.xs,
+                    fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[600], display: 'inline-block',
+                  }}>Rank #{c.rank}</Box>
+
+                  {/* Decision buttons */}
+                  <Box style={{ display: 'flex', gap: t.spacing[1], justifyContent: 'center', marginTop: t.spacing[3] }}>
+                    {(['advance', 'hold', 'reject'] as const).map(action => {
+                      const active = dec?.decision === action;
+                      const dcc = dc[action];
+                      const icons = { advance: <ThumbsUp size={12} />, hold: <Pause size={12} />, reject: <ThumbsDown size={12} /> };
+                      return (
+                        <button key={action} onClick={() => {
+                          const newDec = { candidateId: c.id, decision: action };
+                          onDecisionChange?.(newDec);
+                          if (!dp) setIDecisions(prev => [...prev.filter(d => d.candidateId !== c.id), newDec]);
+                        }} style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: 28, height: 28, borderRadius: t.borderRadius.md,
+                          border: `1px solid ${active ? dcc.border : t.colors.neutral[200]}`,
+                          backgroundColor: active ? dcc.bgColor : t.colors.common.white,
+                          color: active ? dcc.color : t.colors.neutral[400], cursor: 'pointer', padding: 0,
+                        }}>{icons[action]}</button>
+                      );
+                    })}
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/* Score grid */}
+          <Box style={{ borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[100]}`, overflow: 'hidden' }}>
+            {comparisonRows.map((row, ri) => {
+              const maxScore = Math.max(...row.scores.map(s => s.score));
+              return (
+                <Box key={row.dimension} style={{
+                  display: 'grid', gridTemplateColumns: `160px repeat(${candidates.length}, 1fr)`,
+                  borderBottom: ri < comparisonRows.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined,
+                }}>
+                  <Box style={{
+                    padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                    fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
+                    color: t.colors.neutral[700], display: 'flex', alignItems: 'center',
+                    backgroundColor: t.colors.neutral[50],
+                  }}>{row.dimension}</Box>
+                  {row.scores.map(s => {
+                    const isBest = highlightBest && s.score === maxScore;
+                    return (
+                      <Box key={s.candidateId} style={{
+                        padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2],
+                        backgroundColor: isBest ? getScoreBgColor(s.score, t) : t.colors.common.white,
+                      }}>
+                        <Box style={{
+                          flex: 1, height: 6, borderRadius: t.borderRadius.full,
+                          backgroundColor: t.colors.neutral[100], overflow: 'hidden',
+                        }}>
+                          <Box style={{ height: '100%', width: `${s.score}%`, backgroundColor: getScoreColor(s.score, t), borderRadius: t.borderRadius.full, transition: 'width 0.4s ease' }} />
+                        </Box>
+                        <Text style={{
+                          fontSize: t.typography.fontSize.sm, fontWeight: isBest ? t.typography.fontWeight.bold : t.typography.fontWeight.medium,
+                          color: getScoreColor(s.score, t), minWidth: 28, textAlign: 'right',
+                        }}>{s.score}</Text>
+                        {isBest && <Star size={12} style={{ color: t.colors.warningScale[500] }} />}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/* Strengths & Weaknesses */}
+          <Box style={{ display: 'grid', gridTemplateColumns: `160px repeat(${candidates.length}, 1fr)`, gap: t.spacing[3], marginTop: t.spacing[5] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4], paddingTop: t.spacing[2] }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600], textTransform: 'uppercase', letterSpacing: '0.05em' }}>Strengths</Text>
+            </Box>
+            {candidates.map(c => (
+              <Box key={c.id} style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
+                {c.strengths.map((s, i) => (
+                  <Box key={i} style={{
+                    display: 'flex', alignItems: 'flex-start', gap: t.spacing[1],
+                    padding: `${t.spacing[2]}px`, borderRadius: t.borderRadius.md,
+                    backgroundColor: t.colors.successScale[50],
+                  }}>
+                    <ThumbsUp size={11} style={{ color: t.colors.successScale[500], flexShrink: 0, marginTop: 2 }} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700] }}>{s}</Text>
+                  </Box>
+                ))}
+              </Box>
+            ))}
+          </Box>
+
+          <Box style={{ display: 'grid', gridTemplateColumns: `160px repeat(${candidates.length}, 1fr)`, gap: t.spacing[3], marginTop: t.spacing[3] }}>
+            <Box style={{ paddingTop: t.spacing[2] }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600], textTransform: 'uppercase', letterSpacing: '0.05em' }}>Weaknesses</Text>
+            </Box>
+            {candidates.map(c => (
+              <Box key={c.id} style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
+                {c.weaknesses.map((w, i) => (
+                  <Box key={i} style={{
+                    display: 'flex', alignItems: 'flex-start', gap: t.spacing[1],
+                    padding: `${t.spacing[2]}px`, borderRadius: t.borderRadius.md,
+                    backgroundColor: t.colors.errorScale[50],
+                  }}>
+                    <AlertTriangle size={11} style={{ color: t.colors.errorScale[500], flexShrink: 0, marginTop: 2 }} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[700] }}>{w}</Text>
+                  </Box>
+                ))}
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
     );

@@ -69,6 +69,9 @@ export interface PlSecurityEventLogProps extends EngineAwareProps {
   /** Preset to use */
   preset?: PlSecurityEventLogPreset;
 
+  /** Loading state */
+  loading?: boolean;
+
   /** Security events to display */
   events: SecurityEvent[];
 

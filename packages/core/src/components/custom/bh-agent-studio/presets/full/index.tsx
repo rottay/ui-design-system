@@ -12,12 +12,17 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createFilterPillStyle,
   createHoverStyle,
+  createPersonalityAccentBar,
   createSectionHeaderStyle,
   createSurfaceStyle,
+  getCardPadding,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhAgentStudioProps,
@@ -104,18 +109,20 @@ interface SectionProps {
   glass: boolean;
   children: React.ReactNode;
   badge?: React.ReactNode;
+  Box: any;
+  Text: any;
 }
 
-function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass, children, badge }: SectionProps) {
+function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass, children, badge, Box, Text }: SectionProps) {
   return (
-    <div
+    <Box
       style={{
         ...createCardStyle(tokens, { glass, elevation: 'sm' }),
         marginBottom: tokens.spacing[4],
         overflow: 'hidden',
       }}
     >
-      <button
+      <Box
         onClick={onToggle}
         style={{
           display: 'flex',
@@ -129,10 +136,11 @@ function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass,
           transition: `all ${tokens.motion.hover}`,
         }}
       >
-        <span style={{ color: tokens.colors.primaryScale[500], display: 'flex', alignItems: 'center' }}>
+        <Text style={{ color: tokens.colors.primaryScale[500], display: 'flex', alignItems: 'center' }}>
           {icon}
-        </span>
-        <span
+        </Text>
+        <Text
+          as="span"
           style={{
             flex: 1,
             textAlign: 'left',
@@ -142,18 +150,18 @@ function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass,
           }}
         >
           {title}
-        </span>
+        </Text>
         {badge}
-        <span style={{ color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center' }}>
+        <Text style={{ color: tokens.colors.neutral[400], display: 'flex', alignItems: 'center' }}>
           {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
-        </span>
-      </button>
+        </Text>
+      </Box>
       {!isCollapsed && (
-        <div style={{ padding: `0 ${tokens.spacing[4]}px ${tokens.spacing[4]}px` }}>
+        <Box style={{ padding: `0 ${tokens.spacing[4]}px ${tokens.spacing[4]}px` }}>
           {children}
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 
@@ -212,6 +220,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const agentTypeConfig = useMemo(() => getAgentTypeConfig(tokens), [tokens]);
     const providerConfig = useMemo(() => getProviderConfig(tokens), [tokens]);
@@ -386,7 +399,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
         {/* =========================================================== */}
         {/*  Top Bar: Title + Action Buttons                            */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -394,8 +407,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
             marginBottom: tokens.spacing[6],
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <div
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            <Box
               style={{
                 width: tokens.spacing[10],
                 height: tokens.spacing[10],
@@ -408,8 +421,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               <Sparkles size={24} />
-            </div>
-            <div>
+            </Box>
+            <Box>
               <Text
                 style={{
                   fontSize: tokens.typography.fontSize['2xl'],
@@ -428,12 +441,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               >
                 Configure and deploy intelligent interview agents
               </Text>
-            </div>
-          </div>
+            </Box>
+          </Box>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
             {isDirty && (
-              <span
+              <Text as="span"
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.warningScale[600],
@@ -442,9 +455,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Unsaved changes
-              </span>
+              </Text>
             )}
-            <button
+            <Box
               onClick={() => onValidate?.(agentData)}
               style={{
                 display: 'inline-flex',
@@ -464,8 +477,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
             >
               <ShieldCheck size={14} />
               Validate
-            </button>
-            <button
+            </Box>
+            <Box
               onClick={() => {
                 setIsTestMode(!isTestMode);
                 onTest?.(agentData);
@@ -488,10 +501,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
             >
               <TestTube size={14} />
               {isTestMode ? 'Testing...' : 'Test Agent'}
-            </button>
-            <button
-              onClick={() => onSave?.(agentData)}
-              disabled={!isDirty}
+            </Box>
+            <Box
+              onClick={isDirty ? () => onSave?.(agentData) : undefined}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -509,9 +521,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
             >
               <Save size={14} />
               Save Agent
-            </button>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
 
         {/* =========================================================== */}
         {/*  1. Agent Header: Name, Description, Type                   */}
@@ -523,22 +535,24 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['header']}
           onToggle={() => toggleSection('header')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
           badge={
             agentData.name ? (
-              <span
+              <Text as="span"
                 style={{
                   ...createBadgeStyle(tokens, 'primary'),
                   fontSize: tokens.typography.fontSize.xs,
                 }}
               >
                 {agentTypeConfig[agentData.type].label}
-              </span>
+              </Text>
             ) : undefined
           }
         >
           {/* Name input */}
-          <div style={{ marginBottom: tokens.spacing[4] }}>
-            <label
+          <Box style={{ marginBottom: tokens.spacing[4] }}>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -548,7 +562,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Agent Name
-            </label>
+            </Text>
             <input
               type="text"
               value={agentData.name}
@@ -576,11 +590,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-          </div>
+          </Box>
 
           {/* Description */}
-          <div style={{ marginBottom: tokens.spacing[4] }}>
-            <label
+          <Box style={{ marginBottom: tokens.spacing[4] }}>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -590,7 +604,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Description
-            </label>
+            </Text>
             <textarea
               value={agentData.description}
               onChange={(e) => updateAgent({ description: e.target.value })}
@@ -620,11 +634,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 e.currentTarget.style.borderColor = tokens.colors.neutral[300];
               }}
             />
-          </div>
+          </Box>
 
           {/* Type selector cards */}
-          <div>
-            <label
+          <Box>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -634,8 +648,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Agent Type
-            </label>
-            <div
+            </Text>
+            <Box
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
@@ -646,7 +660,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 const config = agentTypeConfig[type];
                 const isSelected = agentData.type === type;
                 return (
-                  <button
+                  <Box
                     key={type}
                     onClick={() => updateAgent({ type })}
                     style={{
@@ -662,7 +676,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       transition: `all ${tokens.motion.hover}`,
                     }}
                   >
-                    <div
+                    <Box
                       style={{
                         width: tokens.spacing[10],
                         height: tokens.spacing[10],
@@ -676,8 +690,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {getAgentTypeIcon(type, 20)}
-                    </div>
-                    <span
+                    </Box>
+                    <Text
+                      as="span"
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.semibold,
@@ -685,8 +700,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {config.label}
-                    </span>
-                    <span
+                    </Text>
+                    <Text
+                      as="span"
                       style={{
                         fontSize: tokens.typography.fontSize.xs,
                         color: tokens.colors.neutral[500],
@@ -695,12 +711,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {config.description}
-                    </span>
-                  </button>
+                    </Text>
+                  </Box>
                 );
               })}
-            </div>
-          </div>
+            </Box>
+          </Box>
         </CollapsibleSection>
 
         {/* =========================================================== */}
@@ -713,10 +729,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['language']}
           onToggle={() => toggleSection('language')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
         >
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
-            <div>
-              <label
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+            <Box>
+              <Text
                 style={{
                   display: 'block',
                   fontSize: tokens.typography.fontSize.sm,
@@ -726,10 +744,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Language
-              </label>
+              </Text>
               <select
                 value={agentData.language}
-                onChange={(e) => updateAgent({ language: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateAgent({ language: e.target.value })}
                 style={{
                   width: '100%',
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -749,9 +767,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   </option>
                 ))}
               </select>
-            </div>
-            <div>
-              <label
+            </Box>
+            <Box>
+              <Text
                 style={{
                   display: 'block',
                   fontSize: tokens.typography.fontSize.sm,
@@ -761,7 +779,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Accent / Dialect
-              </label>
+              </Text>
               <input
                 type="text"
                 value={agentData.accent}
@@ -788,8 +806,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
-            </div>
-          </div>
+            </Box>
+          </Box>
         </CollapsibleSection>
 
         {/* =========================================================== */}
@@ -802,10 +820,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['voice']}
           onToggle={() => toggleSection('voice')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
         >
           {/* Provider selector cards */}
-          <div style={{ marginBottom: tokens.spacing[4] }}>
-            <label
+          <Box style={{ marginBottom: tokens.spacing[4] }}>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -815,13 +835,13 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Voice Provider
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
+            </Text>
+            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3] }}>
               {providers.map((provider) => {
                 const config = providerConfig[provider];
                 const isSelected = agentData.voiceProvider === provider;
                 return (
-                  <button
+                  <Box
                     key={provider}
                     onClick={() => updateAgent({ voiceProvider: provider })}
                     style={{
@@ -843,7 +863,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         color: isSelected ? config.color : tokens.colors.neutral[400],
                       }}
                     />
-                    <span
+                    <Text
+                      as="span"
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.semibold,
@@ -851,24 +872,25 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {config.label}
-                    </span>
-                    <span
+                    </Text>
+                    <Text
+                      as="span"
                       style={{
                         fontSize: tokens.typography.fontSize.xs,
                         color: tokens.colors.neutral[500],
                       }}
                     >
                       {config.description}
-                    </span>
-                  </button>
+                    </Text>
+                  </Box>
                 );
               })}
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Voice ID input */}
-          <div style={{ marginBottom: tokens.spacing[4] }}>
-            <label
+          <Box style={{ marginBottom: tokens.spacing[4] }}>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -878,8 +900,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Voice ID
-            </label>
-            <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
+            </Text>
+            <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
               <input
                 type="text"
                 value={agentData.voiceId}
@@ -905,7 +927,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
-              <button
+              <Box
                 onClick={() => {
                   if (agentData.voiceId) {
                     navigator.clipboard?.writeText(agentData.voiceId);
@@ -925,12 +947,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 <Copy size={14} />
-              </button>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* Voice preview player with waveform SVG */}
-          <div
+          <Box
             style={{
               padding: tokens.spacing[4],
               borderRadius: tokens.borderRadius.lg,
@@ -938,7 +960,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             }}
           >
-            <div
+            <Box
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -955,7 +977,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               >
                 Voice Preview
               </Text>
-              <button
+              <Box
                 onClick={handleVoicePreview}
                 style={{
                   display: 'inline-flex',
@@ -977,8 +999,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               >
                 {voicePreviewPlaying ? <Pause size={12} /> : <Play size={12} />}
                 {voicePreviewPlaying ? 'Stop' : 'Play Sample'}
-              </button>
-            </div>
+              </Box>
+            </Box>
             {/* Waveform SVG */}
             <svg
               width="100%"
@@ -1012,12 +1034,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 );
               })}
             </svg>
-          </div>
+          </Box>
 
           {/* Available voices list */}
           {voices.length > 0 && (
-            <div style={{ marginTop: tokens.spacing[4] }}>
-              <label
+            <Box style={{ marginTop: tokens.spacing[4] }}>
+              <Text
                 style={{
                   display: 'block',
                   fontSize: tokens.typography.fontSize.sm,
@@ -1027,12 +1049,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Available Voices
-              </label>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+              </Text>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                 {voices
                   .filter((v) => v.provider === agentData.voiceProvider)
                   .map((voice) => (
-                    <button
+                    <Box
                       key={voice.id}
                       onClick={() => updateAgent({ voiceId: voice.id })}
                       style={{
@@ -1055,8 +1077,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         ...hoverStyle,
                       }}
                     >
-                      <div>
-                        <span
+                      <Box>
+                        <Text
+                          as="span"
                           style={{
                             fontSize: tokens.typography.fontSize.sm,
                             fontWeight: tokens.typography.fontWeight.medium,
@@ -1064,9 +1087,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           }}
                         >
                           {voice.name}
-                        </span>
+                        </Text>
                         {voice.accent && (
-                          <span
+                          <Text
+                            as="span"
                             style={{
                               fontSize: tokens.typography.fontSize.xs,
                               color: tokens.colors.neutral[500],
@@ -1074,19 +1098,19 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                             }}
                           >
                             ({voice.accent})
-                          </span>
+                          </Text>
                         )}
-                      </div>
+                      </Box>
                       {agentData.voiceId === voice.id && (
                         <CheckCircle
                           size={16}
                           style={{ color: tokens.colors.primaryScale[600] }}
                         />
                       )}
-                    </button>
+                    </Box>
                   ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
           )}
         </CollapsibleSection>
 
@@ -1100,17 +1124,19 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['personality']}
           onToggle={() => toggleSection('personality')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
         >
           {/* Tone selector with visual scale SVG */}
-          <div style={{ marginBottom: tokens.spacing[5] }}>
-            <div
+          <Box style={{ marginBottom: tokens.spacing[5] }}>
+            <Box
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 marginBottom: tokens.spacing[2],
               }}
             >
-              <label
+              <Text
                 style={{
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
@@ -1118,8 +1144,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Tone Level
-              </label>
-              <span
+              </Text>
+              <Text
+                as="span"
                 style={{
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.semibold,
@@ -1127,8 +1154,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 {getToneLevelLabel(agentData.toneLevel)}
-              </span>
-            </div>
+              </Text>
+            </Box>
             {/* Gradient bar SVG */}
             <svg width="100%" height="32" viewBox="0 0 400 32" preserveAspectRatio="none">
               <defs>
@@ -1168,7 +1195,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 accentColor: tokens.colors.primaryScale[600],
               }}
             />
-            <div
+            <Box
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -1177,14 +1204,14 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 marginTop: tokens.spacing[1],
               }}
             >
-              <span>Formal</span>
-              <span>Casual</span>
-            </div>
-          </div>
+              <Text>Formal</Text>
+              <Text>Casual</Text>
+            </Box>
+          </Box>
 
           {/* Personality trait sliders */}
-          <div>
-            <label
+          <Box>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -1194,26 +1221,28 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Personality Traits
-            </label>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+            </Text>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
               {agentData.personalityTraits.map((trait) => (
-                <div key={trait.name}>
-                  <div
+                <Box key={trait.name}>
+                  <Box
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       marginBottom: tokens.spacing[1],
                     }}
                   >
-                    <span
+                    <Text
+                      as="span"
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
                         color: tokens.colors.neutral[700],
                       }}
                     >
                       {trait.name}
-                    </span>
-                    <span
+                    </Text>
+                    <Text
+                      as="span"
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.semibold,
@@ -1223,10 +1252,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {trait.value}%
-                    </span>
-                  </div>
-                  <div style={{ position: 'relative' }}>
-                    <div
+                    </Text>
+                  </Box>
+                  <Box style={{ position: 'relative' }}>
+                    <Box
                       style={{
                         height: tokens.spacing[2],
                         borderRadius: tokens.borderRadius.full,
@@ -1234,7 +1263,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         overflow: 'hidden',
                       }}
                     >
-                      <div
+                      <Box
                         style={{
                           height: '100%',
                           width: `${trait.value}%`,
@@ -1243,7 +1272,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                         }}
                       />
-                    </div>
+                    </Box>
                     <input
                       type="range"
                       min="0"
@@ -1261,11 +1290,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         height: tokens.spacing[4],
                       }}
                     />
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               ))}
-            </div>
-          </div>
+            </Box>
+          </Box>
         </CollapsibleSection>
 
         {/* =========================================================== */}
@@ -1278,10 +1307,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['llm']}
           onToggle={() => toggleSection('llm')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
         >
           {/* Model selector */}
-          <div style={{ marginBottom: tokens.spacing[4] }}>
-            <label
+          <Box style={{ marginBottom: tokens.spacing[4] }}>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.sm,
@@ -1291,10 +1322,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Model
-            </label>
+            </Text>
             <select
               value={agentData.model}
-              onChange={(e) => updateAgent({ model: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateAgent({ model: e.target.value })}
               style={{
                 width: '100%',
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -1314,18 +1345,18 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 </option>
               ))}
             </select>
-          </div>
+          </Box>
 
           {/* Temperature slider */}
-          <div style={{ marginBottom: tokens.spacing[4] }}>
-            <div
+          <Box style={{ marginBottom: tokens.spacing[4] }}>
+            <Box
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 marginBottom: tokens.spacing[1],
               }}
             >
-              <label
+              <Text
                 style={{
                   fontSize: tokens.typography.fontSize.sm,
                   fontWeight: tokens.typography.fontWeight.medium,
@@ -1333,8 +1364,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Temperature
-              </label>
-              <span
+              </Text>
+              <Text
+                as="span"
                 style={{
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.primaryScale[600],
@@ -1342,8 +1374,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 {agentData.temperature.toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
-              </span>
-            </div>
+              </Text>
+            </Box>
             <input
               type="range"
               min="0"
@@ -1356,7 +1388,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 accentColor: tokens.colors.primaryScale[600],
               }}
             />
-            <div
+            <Box
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -1365,16 +1397,16 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 marginTop: tokens.spacing[1],
               }}
             >
-              <span>Deterministic</span>
-              <span>Balanced</span>
-              <span>Creative</span>
-            </div>
-          </div>
+              <Text>Deterministic</Text>
+              <Text>Balanced</Text>
+              <Text>Creative</Text>
+            </Box>
+          </Box>
 
           {/* Max tokens & Top-P in a grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
-            <div>
-              <label
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
+            <Box>
+              <Text
                 style={{
                   display: 'block',
                   fontSize: tokens.typography.fontSize.sm,
@@ -1384,7 +1416,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 Max Tokens
-              </label>
+              </Text>
               <input
                 type="number"
                 value={agentData.maxTokens}
@@ -1412,16 +1444,16 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                 }}
               />
-            </div>
-            <div>
-              <div
+            </Box>
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   marginBottom: tokens.spacing[1],
                 }}
               >
-                <label
+                <Text
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
@@ -1429,16 +1461,16 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   Top-P
-                </label>
-                <span
+                </Text>
+                <Text as="span"
                   style={{
                     fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.neutral[500],
                   }}
                 >
                   {agentData.topP.toFixed(2)}
-                </span>
-              </div>
+                </Text>
+              </Box>
               <input
                 type="range"
                 min="0"
@@ -1452,8 +1484,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   marginTop: tokens.spacing[1],
                 }}
               />
-            </div>
-          </div>
+            </Box>
+          </Box>
         </CollapsibleSection>
 
         {/* =========================================================== */}
@@ -1466,9 +1498,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['prompt']}
           onToggle={() => toggleSection('prompt')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
           badge={
             agentData.systemPrompt ? (
-              <span
+              <Text as="span"
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.successScale[600],
@@ -1476,13 +1510,13 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 {agentData.systemPrompt.length} chars
-              </span>
+              </Text>
             ) : undefined
           }
         >
           {/* Variable helpers */}
-          <div style={{ marginBottom: tokens.spacing[3] }}>
-            <label
+          <Box style={{ marginBottom: tokens.spacing[3] }}>
+            <Text
               style={{
                 display: 'block',
                 fontSize: tokens.typography.fontSize.xs,
@@ -1494,10 +1528,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Available Variables
-            </label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
+            </Text>
+            <Box style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
               {SYSTEM_PROMPT_VARIABLES.map((variable) => (
-                <button
+                <Box
                   key={variable}
                   onClick={() => insertVariable(variable)}
                   style={{
@@ -1513,10 +1547,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   {variable}
-                </button>
+                </Box>
               ))}
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Code-editor style textarea */}
           <textarea
@@ -1561,24 +1595,26 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['script']}
           onToggle={() => toggleSection('script')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
           badge={
-            <span
+            <Text as="span"
               style={{
                 ...createBadgeStyle(tokens, 'secondary'),
                 fontSize: tokens.typography.fontSize.xs,
               }}
             >
               {sortedSections.length} section{sortedSections.length !== 1 ? 's' : ''}
-            </span>
+            </Text>
           }
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
             {sortedSections.map((section, idx) => {
               const isDragging = dragState.dragId === section.id;
               const isDragOver = dragState.overId === section.id;
               return (
-                <div key={section.id}>
-                  <div
+                <Box key={section.id}>
+                  <Box
                     draggable
                     onDragStart={(e) => handleScriptDragStart(e, section.id)}
                     onDragOver={(e) => handleScriptDragOver(e, section.id)}
@@ -1600,7 +1636,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {/* Section header */}
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1608,7 +1644,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         marginBottom: tokens.spacing[2],
                       }}
                     >
-                      <span
+                      <Text as="span"
                         style={{
                           cursor: 'grab',
                           color: tokens.colors.neutral[400],
@@ -1617,8 +1653,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         <GripVertical size={16} />
-                      </span>
-                      <span
+                      </Text>
+                      <Text as="span"
                         style={{
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.semibold,
@@ -1627,7 +1663,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         #{idx + 1}
-                      </span>
+                      </Text>
                       <input
                         type="text"
                         value={section.title}
@@ -1655,7 +1691,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                         }}
                       />
-                      <button
+                      <Box
                         onClick={() => removeScriptSection(section.id)}
                         style={{
                           display: 'inline-flex',
@@ -1670,8 +1706,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         <Trash2 size={14} />
-                      </button>
-                    </div>
+                      </Box>
+                    </Box>
 
                     {/* Prompt textarea */}
                     <textarea
@@ -1707,7 +1743,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     />
 
                     {/* Branching conditions */}
-                    <div style={{ marginTop: tokens.spacing[2] }}>
+                    <Box style={{ marginTop: tokens.spacing[2] }}>
                       <input
                         type="text"
                         value={section.conditions ?? ''}
@@ -1736,12 +1772,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                         }}
                       />
-                    </div>
-                  </div>
+                    </Box>
+                  </Box>
 
                   {/* Add section button between items */}
                   {idx < sortedSections.length - 1 && (
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1749,14 +1785,14 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         padding: `${tokens.spacing[1]}px 0`,
                       }}
                     >
-                      <div
+                      <Box
                         style={{
                           flex: 1,
                           height: 1,
                           backgroundColor: tokens.colors.neutral[200],
                         }}
                       />
-                      <button
+                      <Box
                         onClick={addScriptSection}
                         style={{
                           display: 'inline-flex',
@@ -1774,22 +1810,22 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         <Plus size={14} />
-                      </button>
-                      <div
+                      </Box>
+                      <Box
                         style={{
                           flex: 1,
                           height: 1,
                           backgroundColor: tokens.colors.neutral[200],
                         }}
                       />
-                    </div>
+                    </Box>
                   )}
-                </div>
+                </Box>
               );
             })}
 
             {/* Add first/last section button */}
-            <button
+            <Box
               onClick={addScriptSection}
               style={{
                 display: 'flex',
@@ -1809,8 +1845,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
             >
               <Plus size={16} />
               Add Section
-            </button>
-          </div>
+            </Box>
+          </Box>
         </CollapsibleSection>
 
         {/* =========================================================== */}
@@ -1823,9 +1859,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['tools']}
           onToggle={() => toggleSection('tools')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
           badge={
             agentData.tools.length > 0 ? (
-              <span
+              <Text as="span"
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.successScale[600],
@@ -1833,12 +1871,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               >
                 {agentData.tools.filter((t) => t.enabled).length}/{agentData.tools.length} enabled
-              </span>
+              </Text>
             ) : undefined
           }
         >
           {agentData.tools.length === 0 ? (
-            <div
+            <Box
               style={{
                 textAlign: 'center',
                 padding: tokens.spacing[6],
@@ -1847,11 +1885,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               No function tools configured. Add tools to extend agent capabilities.
-            </div>
+            </Box>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
               {agentData.tools.map((tool) => (
-                <div
+                <Box
                   key={tool.id}
                   style={{
                     display: 'flex',
@@ -1870,8 +1908,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     transition: `all ${tokens.motion.hover}`,
                   }}
                 >
-                  <div style={{ flex: 1 }}>
-                    <div
+                  <Box style={{ flex: 1 }}>
+                    <Box
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.semibold,
@@ -1880,8 +1918,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {tool.name}
-                    </div>
-                    <div
+                    </Box>
+                    <Box
                       style={{
                         fontSize: tokens.typography.fontSize.xs,
                         color: tokens.colors.neutral[500],
@@ -1889,9 +1927,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       {tool.description}
-                    </div>
-                  </div>
-                  <button
+                    </Box>
+                  </Box>
+                  <Box
                     onClick={() => toggleTool(tool.id)}
                     style={{
                       display: 'inline-flex',
@@ -1908,10 +1946,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     {tool.enabled ? <ToggleRight size={28} /> : <ToggleLeft size={28} />}
-                  </button>
-                </div>
+                  </Box>
+                </Box>
               ))}
-            </div>
+            </Box>
           )}
         </CollapsibleSection>
 
@@ -1925,10 +1963,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['call']}
           onToggle={() => toggleSection('call')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[4] }}>
             {/* Recording toggle */}
-            <div
+            <Box
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1939,8 +1979,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
-              <div>
-                <div
+              <Box>
+                <Box
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
@@ -1948,17 +1988,17 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   Call Recording
-                </div>
-                <div
+                </Box>
+                <Box
                   style={{
                     fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.neutral[500],
                   }}
                 >
                   Record all agent calls for quality assurance
-                </div>
-              </div>
-              <button
+                </Box>
+              </Box>
+              <Box
                 onClick={() =>
                   updateCallSettings({ recordingEnabled: !agentData.callSettings.recordingEnabled })
                 }
@@ -1979,19 +2019,19 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 ) : (
                   <ToggleLeft size={28} />
                 )}
-              </button>
-            </div>
+              </Box>
+            </Box>
 
             {/* Max duration slider */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   marginBottom: tokens.spacing[1],
                 }}
               >
-                <label
+                <Text
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
@@ -1999,8 +2039,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   Max Duration
-                </label>
-                <span
+                </Text>
+                <Text
+                  as="span"
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
@@ -2008,8 +2049,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   {agentData.callSettings.maxDurationMinutes} min
-                </span>
-              </div>
+                </Text>
+              </Box>
               <input
                 type="range"
                 min="5"
@@ -2024,7 +2065,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   accentColor: tokens.colors.primaryScale[600],
                 }}
               />
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -2033,13 +2074,13 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   marginTop: tokens.spacing[1],
                 }}
               >
-                <span>5 min</span>
-                <span>120 min</span>
-              </div>
-            </div>
+                <Text>5 min</Text>
+                <Text>120 min</Text>
+              </Box>
+            </Box>
 
             {/* Voicemail detection toggle */}
-            <div
+            <Box
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -2050,8 +2091,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
               }}
             >
-              <div>
-                <div
+              <Box>
+                <Box
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
@@ -2059,17 +2100,17 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   Voicemail Detection
-                </div>
-                <div
+                </Box>
+                <Box
                   style={{
                     fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.neutral[500],
                   }}
                 >
                   Detect voicemail and leave a scripted message
-                </div>
-              </div>
-              <button
+                </Box>
+              </Box>
+              <Box
                 onClick={() =>
                   updateCallSettings({
                     voicemailDetection: !agentData.callSettings.voicemailDetection,
@@ -2092,19 +2133,19 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 ) : (
                   <ToggleLeft size={28} />
                 )}
-              </button>
-            </div>
+              </Box>
+            </Box>
 
             {/* Retry config */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   marginBottom: tokens.spacing[1],
                 }}
               >
-                <label
+                <Text
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.medium,
@@ -2112,8 +2153,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   Retry Attempts
-                </label>
-                <span
+                </Text>
+                <Text
+                  as="span"
                   style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
@@ -2121,8 +2163,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   }}
                 >
                   {agentData.callSettings.retryCount}
-                </span>
-              </div>
+                </Text>
+              </Box>
               <input
                 type="range"
                 min="0"
@@ -2137,7 +2179,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   accentColor: tokens.colors.primaryScale[600],
                 }}
               />
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -2146,11 +2188,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   marginTop: tokens.spacing[1],
                 }}
               >
-                <span>No retry</span>
-                <span>5 retries</span>
-              </div>
-            </div>
-          </div>
+                <Text>No retry</Text>
+                <Text>5 retries</Text>
+              </Box>
+            </Box>
+          </Box>
         </CollapsibleSection>
 
         {/* =========================================================== */}
@@ -2163,11 +2205,13 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
           isCollapsed={!!collapsedSections['validation']}
           onToggle={() => toggleSection('validation')}
           glass={isGlass}
+          Box={Box}
+          Text={Text}
           badge={
             validationResults.length > 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                 {passCount > 0 && (
-                  <span
+                  <Text as="span"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -2178,10 +2222,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     <CheckCircle size={12} /> {passCount}
-                  </span>
+                  </Text>
                 )}
                 {failCount > 0 && (
-                  <span
+                  <Text as="span"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -2192,10 +2236,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     <XCircle size={12} /> {failCount}
-                  </span>
+                  </Text>
                 )}
                 {warnCount > 0 && (
-                  <span
+                  <Text as="span"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -2206,14 +2250,14 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     }}
                   >
                     <AlertTriangle size={12} /> {warnCount}
-                  </span>
+                  </Text>
                 )}
-              </div>
+              </Box>
             ) : undefined
           }
         >
           {/* Estimated cost */}
-          <div
+          <Box
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -2225,7 +2269,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               marginBottom: tokens.spacing[4],
             }}
           >
-            <div
+            <Box
               style={{
                 width: tokens.spacing[10],
                 height: tokens.spacing[10],
@@ -2239,8 +2283,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               <DollarSign size={20} />
-            </div>
-            <div>
+            </Box>
+            <Box>
               <Text
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
@@ -2262,12 +2306,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               >
                 {formatEstimatedCost(estimatedCost)}
               </Text>
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Validation checks */}
           {validationResults.length === 0 ? (
-            <div
+            <Box
               style={{
                 textAlign: 'center',
                 padding: tokens.spacing[6],
@@ -2276,9 +2320,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               Click "Validate" to run configuration checks.
-            </div>
+            </Box>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
               {validationResults.map((result, idx) => {
                 const colors = validationColors[result.status];
                 const StatusIcon =
@@ -2288,7 +2332,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     ? XCircle
                     : AlertTriangle;
                 return (
-                  <div
+                  <Box
                     key={idx}
                     style={{
                       display: 'flex',
@@ -2300,7 +2344,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.borderColor}`,
                     }}
                   >
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -2311,9 +2355,9 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       }}
                     >
                       <StatusIcon size={16} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div
+                    </Box>
+                    <Box style={{ flex: 1 }}>
+                      <Box
                         style={{
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: tokens.typography.fontWeight.semibold,
@@ -2322,8 +2366,8 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         {result.check}
-                      </div>
-                      <div
+                      </Box>
+                      <Box
                         style={{
                           fontSize: tokens.typography.fontSize.xs,
                           color: colors.color,
@@ -2332,12 +2376,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         }}
                       >
                         {result.message}
-                      </div>
-                    </div>
-                  </div>
+                      </Box>
+                    </Box>
+                  </Box>
                 );
               })}
-            </div>
+            </Box>
           )}
         </CollapsibleSection>
       </Box>

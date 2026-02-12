@@ -2,244 +2,174 @@
 
 /**
  * BhSkillGapMap - List Preset
- * Premium gap list with heatmap-style skill bars, severity indicators,
- * category badges, summary counters, and recommendation callouts.
+ * Prioritized gap list with severity indicators, progress bars,
+ * dimension codes, candidate counts, and recommendation callouts.
+ * Slite-inspired warm design with generous whitespace.
  */
 
 import { useState, useMemo } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
-import type { BhSkillGapMapProps, SkillGapItem } from '../../core';
+import { createPreset, type PresetContext } from '../../../factory';
+import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import type { BhSkillGapMapProps, SkillGapItem, GapPriority } from '../../core';
 import { getPriorityColors } from '../../core';
+import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  createCardStyle,
-  createPanelHeaderStyle,
-  createListItemStyle,
-  createProgressBarStyle,
-  createBadgeStyle,
-  createAccentBarStyle,
-  createHoverStyle,
-  getHoverTransform,
-  getCardHoverShadow,
-  createStatusDotStyle,
-  createSectionHeaderStyle,
-} from '../../../helpers';
+  List, AlertTriangle, Info, Target, TrendingDown, Users, ChevronRight,
+} from 'lucide-react';
 
-/* ------------------------------------------------------------------ */
-/*  Child component to avoid useMemo inside .map() callback           */
-/* ------------------------------------------------------------------ */
-function GapRow({
-  gap,
-  tokens,
-  engine,
-  priorityColors,
-  onGapSelect,
-  primitives,
-}: {
-  gap: SkillGapItem;
-  tokens: any;
-  engine: string;
-  priorityColors: ReturnType<typeof getPriorityColors>;
-  onGapSelect?: (id: string) => void;
-  primitives: any;
-}) {
-  const { Box, Flex, Text } = primitives;
-  const [hovered, setHovered] = useState(false);
+/* ---------------------------------------------------------------------------
+ * Default Data
+ * -------------------------------------------------------------------------*/
 
-  const pc = priorityColors[gap.priority];
-  const pct = gap.requiredLevel > 0 ? Math.round((gap.currentLevel / gap.requiredLevel) * 100) : 0;
-  const barColor = pct >= 70
-    ? tokens.colors.successScale[500]
-    : pct >= 40
-      ? tokens.colors.warningScale[500]
-      : tokens.colors.errorScale[500];
+const DEFAULT_GAPS: SkillGapItem[] = [
+  { id: 'g-1', dimension: 'System Design', dimensionCode: 'SD', currentLevel: 3, requiredLevel: 5, gapSize: 2, priority: 'critical', candidateCount: 4, recommendation: 'Focus hiring on candidates with distributed systems experience at scale.' },
+  { id: 'g-2', dimension: 'React Advanced', dimensionCode: 'RA', currentLevel: 4, requiredLevel: 5, gapSize: 1, priority: 'high', candidateCount: 3, recommendation: 'Look for RSC and server component expertise.' },
+  { id: 'g-3', dimension: 'Leadership', dimensionCode: 'LD', currentLevel: 3, requiredLevel: 4, gapSize: 1, priority: 'high', candidateCount: 5, recommendation: 'Prioritize tech lead or engineering manager backgrounds.' },
+  { id: 'g-4', dimension: 'TypeScript', dimensionCode: 'TS', currentLevel: 4, requiredLevel: 5, gapSize: 1, priority: 'medium', candidateCount: 2 },
+  { id: 'g-5', dimension: 'Testing', dimensionCode: 'QA', currentLevel: 3, requiredLevel: 4, gapSize: 1, priority: 'medium', candidateCount: 3 },
+  { id: 'g-6', dimension: 'Communication', dimensionCode: 'CM', currentLevel: 4, requiredLevel: 4, gapSize: 0, priority: 'low', candidateCount: 1 },
+];
 
-  const progressStyles = useMemo(
-    () => createProgressBarStyle(tokens, { color: barColor, percent: pct }),
-    [tokens, barColor, pct],
-  );
+/* ---------------------------------------------------------------------------
+ * Preset
+ * -------------------------------------------------------------------------*/
 
-  const rowStyle = useMemo(() => ({
-    ...createListItemStyle(tokens, { interactive: !!onGapSelect }),
-    borderLeft: `3px solid ${pc.color}`,
-    ...(hovered
-      ? {
-          backgroundColor: tokens.colors.neutral[50],
-          boxShadow: getCardHoverShadow(tokens),
-          ...getHoverTransform(tokens),
-        }
-      : {}),
-  }), [tokens, onGapSelect, pc.color, hovered]);
-
-  const codeBadgeStyle = useMemo(
-    () => createBadgeStyle(tokens, 'secondary'),
-    [tokens],
-  );
-
-  return (
-    <Box
-      onClick={() => onGapSelect?.(gap.id)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={rowStyle}
-    >
-      {/* Top row: dimension + priority badge */}
-      <Flex justify="between" align="center" style={{ marginBottom: tokens.spacing[1] }}>
-        <Flex gap={6} align="center">
-          <Box style={codeBadgeStyle}>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.secondaryScale[700] }}>
-              {gap.dimensionCode}
-            </Text>
-          </Box>
-          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-            {gap.dimension}
-          </Text>
-        </Flex>
-        <Box style={{
-          padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`,
-          borderRadius: tokens.borderRadius.full,
-          background: pc.bgColor,
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${pc.border}`,
-        }}>
-          <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: pc.color, textTransform: 'capitalize' as const }}>
-            {gap.priority}
-          </Text>
-        </Box>
-      </Flex>
-
-      {/* Skill level bar */}
-      <Flex gap={8} align="center" style={{ marginBottom: tokens.spacing[1] }}>
-        <Box style={{ flex: 1, ...progressStyles.track }}>
-          <div style={progressStyles.fill} />
-        </Box>
-        <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[600], minWidth: 36, textAlign: 'right' as const }}>
-          {gap.currentLevel}/{gap.requiredLevel}
-        </Text>
-      </Flex>
-
-      {/* Bottom row: candidate count + gap size */}
-      <Flex justify="between" align="center">
-        <Flex gap={8} align="center">
-          <Flex gap={4} align="center">
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-              Gap:
-            </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: pc.color }}>
-              {gap.gapSize}
-            </Text>
-          </Flex>
-          <Box style={{
-            ...createBadgeStyle(tokens, 'info'),
-            padding: `0 ${tokens.spacing[1]}px`,
-          }}>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.infoScale[700] }}>
-              {gap.candidateCount} candidates
-            </Text>
-          </Box>
-        </Flex>
-      </Flex>
-
-      {/* Recommendation callout */}
-      {gap.recommendation && (
-        <Box style={{
-          marginTop: tokens.spacing[2],
-          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-          borderRadius: tokens.borderRadius.md,
-          background: tokens.colors.infoScale[50],
-          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.infoScale[200]}`,
-        }}>
-          <Flex gap={6} align="start">
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.infoScale[600], flexShrink: 0, lineHeight: 1.5 }}>
-              i
-            </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.infoScale[700], lineHeight: 1.5 }}>
-              {gap.recommendation}
-            </Text>
-          </Flex>
-        </Box>
-      )}
-    </Box>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Main preset                                                       */
-/* ------------------------------------------------------------------ */
 export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
   name: 'BhSkillGapMap.List',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhSkillGapMapProps>) => {
-    const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const priorityColors = getPriorityColors(tokens);
+  render: ({ primitives, props, tokens: t }: PresetContext<BhSkillGapMapProps>) => {
+    const { Box, Text } = primitives;
+    const br = getPersonalityBadgeRadius(t);
+    const pc = getPriorityColors(t);
 
-    const { gaps, onGapSelect, loading, className, style } = props;
+    const {
+      gaps = DEFAULT_GAPS,
+      onGapSelect,
+      loading,
+      className, style,
+    } = props;
 
-    /* Priority summary counts */
-    const summaryCounts = useMemo(() => {
-      const counts = { critical: 0, high: 0, medium: 0, low: 0 };
-      gaps.forEach(g => { counts[g.priority]++; });
-      return counts;
+    const counts = useMemo(() => {
+      const c = { critical: 0, high: 0, medium: 0, low: 0 };
+      gaps.forEach(g => { c[g.priority]++; });
+      return c;
     }, [gaps]);
-
-    const cardStyle = useMemo(() => ({
-      ...createCardStyle(tokens, { glass: isGlass, padding: 0 }),
-      overflow: 'hidden' as const,
-      ...style,
-    }), [tokens, isGlass, style]);
 
     if (loading) {
       return (
-        <Flex align="center" justify="center" direction="column" gap={8} style={{ padding: tokens.spacing[8], ...style }} className={className}>
-          <Spinner size="sm" />
-          <Text style={{ color: tokens.colors.neutral[500], fontSize: tokens.typography.fontSize.xs }}>
-            Loading skill gaps...
-          </Text>
-        </Flex>
+        <Box className={className} style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[500], ...style }}>
+          <Text>Loading skill gaps...</Text>
+        </Box>
       );
     }
 
     return (
-      <Box className={className} style={cardStyle}>
-        {/* Accent bar */}
-        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
-
+      <Box className={className} style={{
+        ...createCardStyle(t, { elevation: 'md' }),
+        display: 'flex', flexDirection: 'column', height: '100%',
+        backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
+      }}>
         {/* Header */}
-        <Box style={createPanelHeaderStyle(tokens)}>
-          <Flex justify="between" align="center">
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
-              Skill Gaps ({gaps.length})
-            </Text>
-          </Flex>
+        <Box style={{
+          padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+        }}>
+          <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
+            <List size={16} style={{ marginRight: t.spacing[2], verticalAlign: 'middle' }} />
+            Skill Gaps ({gaps.length})
+          </Text>
+          {/* Priority counters */}
+          <Box style={{ display: 'flex', gap: t.spacing[3], marginTop: t.spacing[3] }}>
+            {(['critical', 'high', 'medium', 'low'] as GapPriority[]).map(p => {
+              const colors = pc[p];
+              return (
+                <Box key={p} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: colors.color }} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], textTransform: 'capitalize' }}>{p}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: colors.color }}>{counts[p]}</Text>
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
 
-        {/* Summary counters */}
-        <Flex gap={12} align="center" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-          {((['critical', 'high', 'medium', 'low'] as const).map(p => (
-            <Flex key={p} gap={4} align="center">
-              <Box style={createStatusDotStyle(tokens, priorityColors[p].color)} />
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], textTransform: 'capitalize' as const }}>
-                {p}
-              </Text>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: priorityColors[p].color }}>
-                {summaryCounts[p]}
-              </Text>
-            </Flex>
-          )))}
-        </Flex>
-
         {/* Gap rows */}
-        <Stack gap={0} style={{ maxHeight: 400, overflowY: 'auto' as const }}>
-          {gaps.map(gap => (
-            <GapRow
-              key={gap.id}
-              gap={gap}
-              tokens={tokens}
-              engine={engine}
-              priorityColors={priorityColors}
-              onGapSelect={onGapSelect}
-              primitives={primitives}
-            />
-          ))}
-        </Stack>
+        <Box style={{ flex: 1, overflowY: 'auto' }}>
+          {gaps.map((gap, gi) => {
+            const colors = pc[gap.priority];
+            const pct = gap.requiredLevel > 0 ? Math.round((gap.currentLevel / gap.requiredLevel) * 100) : 0;
+            const barColor = pct >= 80 ? t.colors.successScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
+
+            return (
+              <Box key={gap.id} onClick={() => onGapSelect?.(gap.id)} style={{
+                padding: `${t.spacing[4]}px ${t.spacing[6]}px`,
+                borderBottom: gi < gaps.length - 1 ? `1px solid ${t.colors.neutral[50]}` : undefined,
+                borderLeft: `3px solid ${colors.color}`,
+                cursor: onGapSelect ? 'pointer' : 'default',
+                transition: 'background-color 0.15s ease',
+              }}>
+                {/* Top: dimension + code badge + priority */}
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                    <Box style={{
+                      padding: `1px ${t.spacing[2]}px`, borderRadius: br,
+                      backgroundColor: t.colors.secondaryScale[50], border: `1px solid ${t.colors.secondaryScale[200]}`,
+                    }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.secondaryScale[700] }}>{gap.dimensionCode}</Text>
+                    </Box>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{gap.dimension}</Text>
+                  </Box>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                    <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: colors.bgColor, border: `1px solid ${colors.border}` }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: colors.color, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>{gap.priority}</Text>
+                    </Box>
+                    {onGapSelect && <ChevronRight size={14} style={{ color: t.colors.neutral[400] }} />}
+                  </Box>
+                </Box>
+
+                {/* Progress bar */}
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                  <Box style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+                    <Box style={{ height: '100%', width: `${pct}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: 'width 0.4s ease' }} />
+                  </Box>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], minWidth: 36, textAlign: 'right' }}>
+                    {gap.currentLevel}/{gap.requiredLevel}
+                  </Text>
+                </Box>
+
+                {/* Bottom: gap size + candidate count */}
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Gap:</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: colors.color }}>{gap.gapSize}</Text>
+                    </Box>
+                    <Box style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 3,
+                      padding: `0 ${t.spacing[2]}px`, borderRadius: br,
+                      backgroundColor: t.colors.infoScale[50], border: `1px solid ${t.colors.infoScale[200]}`,
+                    }}>
+                      <Users size={10} style={{ color: t.colors.infoScale[600] }} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[700] }}>{gap.candidateCount} candidates</Text>
+                    </Box>
+                  </Box>
+                </Box>
+
+                {/* Recommendation */}
+                {gap.recommendation && (
+                  <Box style={{
+                    marginTop: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    borderRadius: t.borderRadius.lg, backgroundColor: t.colors.infoScale[50],
+                    border: `1px solid ${t.colors.infoScale[200]}`,
+                    display: 'flex', alignItems: 'flex-start', gap: t.spacing[2],
+                  }}>
+                    <Info size={11} style={{ color: t.colors.infoScale[500], flexShrink: 0, marginTop: 2 }} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[700], lineHeight: 1.5 }}>{gap.recommendation}</Text>
+                  </Box>
+                )}
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
     );
   },

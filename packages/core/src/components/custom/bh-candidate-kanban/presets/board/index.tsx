@@ -2,24 +2,25 @@
 
 /**
  * BhCandidateKanban - Board Preset
- * Classic kanban board with draggable candidate cards, stage columns,
- * SLA indicators, AI recommendation dots, score rings, and quick actions
+ * Classic kanban board composed from PatternKanbanBoard with domain-specific
+ * candidate cards, SLA indicators, AI recommendation dots, and score rings.
+ * Slite-inspired warm design with generous whitespace and soft surfaces.
  */
 
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createPanelHeaderStyle,
-  createProgressBarStyle,
-  createStatusDotStyle,
   createSurfaceStyle,
+  createHoverStyle,
   getHoverTransform,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
+import {
+  PatternKanbanBoard,
+  useKanban,
+} from '../../../../patterns';
+import type { KanbanColumnDef } from '../../../../patterns';
 import type {
   BhCandidateKanbanProps,
   KanbanCandidate,
@@ -31,33 +32,32 @@ import type {
 } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  Search, Filter, LayoutGrid, Rows3, GripVertical,
+  Search, Filter, LayoutGrid, Rows3,
   Calendar, MessageSquare, ThumbsDown, Pause, CheckSquare, Square,
-  ChevronDown, X, User, Sparkles, Clock, Tag, Mail,
-  ArrowRight, Trash2, MoreHorizontal, Users, Briefcase,
+  X, Sparkles, Clock, Tag, Users, Briefcase,
 } from 'lucide-react';
 
 /* ---------------------------------------------------------------------------
- * Helper utilities
+ * Helpers
  * -------------------------------------------------------------------------*/
 
-function getScoreColor(score: number, tokens: DesignTokens): string {
-  if (score >= 75) return tokens.colors.successScale[500];
-  if (score >= 50) return tokens.colors.warningScale[500];
-  return tokens.colors.errorScale[500];
+function getScoreColor(score: number, t: DesignTokens): string {
+  if (score >= 75) return t.colors.successScale[500];
+  if (score >= 50) return t.colors.warningScale[500];
+  return t.colors.errorScale[500];
 }
 
-function getScoreTrackColor(score: number, tokens: DesignTokens): string {
-  if (score >= 75) return tokens.colors.successScale[100];
-  if (score >= 50) return tokens.colors.warningScale[100];
-  return tokens.colors.errorScale[100];
+function getScoreTrackColor(score: number, t: DesignTokens): string {
+  if (score >= 75) return t.colors.successScale[100];
+  if (score >= 50) return t.colors.warningScale[100];
+  return t.colors.errorScale[100];
 }
 
-function getAiColor(rec: AiRecommendation, tokens: DesignTokens): string {
+function getAiColor(rec: AiRecommendation, t: DesignTokens): string {
   switch (rec) {
-    case 'advance': return tokens.colors.successScale[500];
-    case 'hold': return tokens.colors.warningScale[500];
-    case 'reject': return tokens.colors.errorScale[500];
+    case 'advance': return t.colors.successScale[500];
+    case 'hold': return t.colors.warningScale[500];
+    case 'reject': return t.colors.errorScale[500];
   }
 }
 
@@ -69,32 +69,19 @@ function getAiLabel(rec: AiRecommendation): string {
   }
 }
 
-function getAiBgColor(rec: AiRecommendation, tokens: DesignTokens): string {
-  switch (rec) {
-    case 'advance': return tokens.colors.successScale[50];
-    case 'hold': return tokens.colors.warningScale[50];
-    case 'reject': return tokens.colors.errorScale[50];
-  }
+function getSourceConfig(source: CandidateSource, t: DesignTokens) {
+  const m: Record<CandidateSource, { label: string; bg: string; text: string }> = {
+    applied: { label: 'Applied', bg: t.colors.primaryScale[50], text: t.colors.primaryScale[700] },
+    referral: { label: 'Referral', bg: t.colors.successScale[50], text: t.colors.successScale[700] },
+    sourced: { label: 'Sourced', bg: t.colors.infoScale[50], text: t.colors.infoScale[700] },
+    agency: { label: 'Agency', bg: t.colors.warningScale[50], text: t.colors.warningScale[700] },
+    internal: { label: 'Internal', bg: t.colors.secondaryScale[50], text: t.colors.secondaryScale[700] },
+  };
+  return m[source];
 }
 
-function getSourceConfig(source: CandidateSource, tokens: DesignTokens): { label: string; bg: string; text: string } {
-  switch (source) {
-    case 'applied':
-      return { label: 'Applied', bg: tokens.colors.primaryScale[100], text: tokens.colors.primaryScale[700] };
-    case 'referral':
-      return { label: 'Referral', bg: tokens.colors.successScale[100], text: tokens.colors.successScale[700] };
-    case 'sourced':
-      return { label: 'Sourced', bg: tokens.colors.infoScale[100], text: tokens.colors.infoScale[700] };
-    case 'agency':
-      return { label: 'Agency', bg: tokens.colors.warningScale[100], text: tokens.colors.warningScale[700] };
-    case 'internal':
-      return { label: 'Internal', bg: tokens.colors.secondaryScale[100], text: tokens.colors.secondaryScale[700] };
-  }
-}
-
-function getSlaStatus(candidate: KanbanCandidate, stage: KanbanStage): SlaStatus {
-  const hoursInStage = candidate.daysInStage * 24;
-  const ratio = hoursInStage / stage.slaHours;
+function getSlaStatus(c: KanbanCandidate, stage: KanbanStage): SlaStatus {
+  const ratio = (c.daysInStage * 24) / stage.slaHours;
   if (ratio < 0.5) return 'green';
   if (ratio < 0.85) return 'yellow';
   return 'red';
@@ -102,17 +89,17 @@ function getSlaStatus(candidate: KanbanCandidate, stage: KanbanStage): SlaStatus
 
 function getStageSlaStatus(candidates: KanbanCandidate[], stage: KanbanStage): SlaStatus {
   if (candidates.length === 0) return 'green';
-  const statuses = candidates.map((c) => getSlaStatus(c, stage));
-  if (statuses.some((s) => s === 'red')) return 'red';
-  if (statuses.some((s) => s === 'yellow')) return 'yellow';
+  const statuses = candidates.map(c => getSlaStatus(c, stage));
+  if (statuses.some(s => s === 'red')) return 'red';
+  if (statuses.some(s => s === 'yellow')) return 'yellow';
   return 'green';
 }
 
-function getSlaBarColor(status: SlaStatus, tokens: DesignTokens): string {
+function getSlaBarColor(status: SlaStatus, t: DesignTokens): string {
   switch (status) {
-    case 'green': return tokens.colors.successScale[500];
-    case 'yellow': return tokens.colors.warningScale[500];
-    case 'red': return tokens.colors.errorScale[500];
+    case 'green': return t.colors.successScale[500];
+    case 'yellow': return t.colors.warningScale[500];
+    case 'red': return t.colors.errorScale[500];
   }
 }
 
@@ -122,34 +109,72 @@ function getInitials(name: string): string {
   return (parts[0]?.[0] ?? '').toUpperCase();
 }
 
-function matchesFilters(candidate: KanbanCandidate, filters: KanbanFilter | undefined, searchQuery: string): boolean {
-  if (searchQuery) {
-    const q = searchQuery.toLowerCase();
-    const nameMatch = candidate.name.toLowerCase().includes(q);
-    const emailMatch = candidate.email?.toLowerCase().includes(q);
-    const tagMatch = candidate.tags.some((t) => t.toLowerCase().includes(q));
-    if (!nameMatch && !emailMatch && !tagMatch) return false;
+function matchesFilters(c: KanbanCandidate, f: KanbanFilter | undefined, q: string): boolean {
+  if (q) {
+    const ql = q.toLowerCase();
+    if (!c.name.toLowerCase().includes(ql) && !c.email?.toLowerCase().includes(ql) && !c.tags.some(t => t.toLowerCase().includes(ql))) return false;
   }
-
-  if (!filters) return true;
-
-  if (filters.source && filters.source.length > 0 && !filters.source.includes(candidate.source)) return false;
-  if (filters.aiRecommendation && filters.aiRecommendation.length > 0 && !filters.aiRecommendation.includes(candidate.aiRecommendation)) return false;
-  if (filters.tags && filters.tags.length > 0 && !filters.tags.some((t) => candidate.tags.includes(t))) return false;
-  if (filters.scoreMin !== undefined && candidate.scorePercent < filters.scoreMin) return false;
-  if (filters.scoreMax !== undefined && candidate.scorePercent > filters.scoreMax) return false;
-
+  if (!f) return true;
+  if (f.source?.length && !f.source.includes(c.source)) return false;
+  if (f.aiRecommendation?.length && !f.aiRecommendation.includes(c.aiRecommendation)) return false;
+  if (f.tags?.length && !f.tags.some(t => c.tags.includes(t))) return false;
+  if (f.scoreMin !== undefined && c.scorePercent < f.scoreMin) return false;
+  if (f.scoreMax !== undefined && c.scorePercent > f.scoreMax) return false;
   return true;
 }
 
 /* ---------------------------------------------------------------------------
- * Drag state interface
+ * ScoreRing
  * -------------------------------------------------------------------------*/
 
-interface DragState {
-  candidateId: string;
-  fromStageId: string;
+function ScoreRing({ score, tokens: t, size = 40 }: { score: number; tokens: DesignTokens; size?: number }) {
+  const r = (size / 2) - 4;
+  const c = 2 * Math.PI * r;
+  const offset = c - (score / 100) * c;
+  const color = getScoreColor(score, t);
+
+  return (
+    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={getScoreTrackColor(score, t)} strokeWidth="3" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
+          strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
+      </svg>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: size <= 30 ? 8 : t.typography.fontSize.xs,
+        fontWeight: t.typography.fontWeight.bold, color,
+      }}>
+        {score}
+      </div>
+    </div>
+  );
 }
+
+/* ---------------------------------------------------------------------------
+ * Default Data
+ * -------------------------------------------------------------------------*/
+
+const DEFAULT_STAGES: KanbanStage[] = [
+  { id: 's-1', name: 'Applied', order: 1, slaHours: 48, candidateCount: 6 },
+  { id: 's-2', name: 'Screening', order: 2, slaHours: 72, candidateCount: 4 },
+  { id: 's-3', name: 'Interview', order: 3, slaHours: 96, candidateCount: 3 },
+  { id: 's-4', name: 'Assessment', order: 4, slaHours: 72, candidateCount: 2 },
+  { id: 's-5', name: 'Offer', order: 5, slaHours: 48, candidateCount: 1 },
+];
+
+const DEFAULT_CANDIDATES: KanbanCandidate[] = [
+  { id: 'c-1', name: 'Sarah Johnson', scorePercent: 95, daysInStage: 1, source: 'applied', tags: ['React', 'Senior'], aiRecommendation: 'advance', stageId: 's-3', email: 'sarah@google.com' },
+  { id: 'c-2', name: 'Michael Chen', scorePercent: 88, daysInStage: 2, source: 'referral', tags: ['Full Stack', 'Go'], aiRecommendation: 'advance', stageId: 's-3', email: 'mchen@stripe.com' },
+  { id: 'c-3', name: 'Emily Rodriguez', scorePercent: 92, daysInStage: 0, source: 'sourced', tags: ['Staff', 'System Design'], aiRecommendation: 'advance', stageId: 's-4', email: 'emily@meta.com' },
+  { id: 'c-4', name: 'James Kim', scorePercent: 72, daysInStage: 3, source: 'applied', tags: ['ML', 'Python'], aiRecommendation: 'hold', stageId: 's-2', email: 'jkim@anthropic.com' },
+  { id: 'c-5', name: 'Anna Kowalski', scorePercent: 78, daysInStage: 5, source: 'agency', tags: ['DevOps'], aiRecommendation: 'hold', stageId: 's-1', email: 'anna@vercel.com' },
+  { id: 'c-6', name: 'David Thompson', scorePercent: 91, daysInStage: 1, source: 'referral', tags: ['VP Eng'], aiRecommendation: 'advance', stageId: 's-5', email: 'david@linear.app' },
+  { id: 'c-7', name: 'Lisa Park', scorePercent: 65, daysInStage: 4, source: 'applied', tags: ['Junior', 'React'], aiRecommendation: 'reject', stageId: 's-1', email: 'lisa@figma.com' },
+  { id: 'c-8', name: 'Robert Wilson', scorePercent: 83, daysInStage: 1, source: 'sourced', tags: ['Backend', 'Rust'], aiRecommendation: 'advance', stageId: 's-2', email: 'rwilson@cloudflare.com' },
+];
 
 /* ---------------------------------------------------------------------------
  * Board Preset
@@ -157,1307 +182,435 @@ interface DragState {
 
 export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
   name: 'BhCandidateKanban.Board',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhCandidateKanbanProps>) => {
-    const { Box, Stack } = primitives;
-    const isModern = tokens.surface.useGlass;
+  render: ({ primitives, props, tokens: t, engine }: PresetContext<BhCandidateKanbanProps>) => {
+    const { Box, Text } = primitives;
+    const isGlass = t.surface.useGlass;
+    const br = getPersonalityBadgeRadius(t);
 
     const {
-      jobName,
-      totalCandidates,
-      stages = [],
-      candidates: candidatesProp = [],
-      onCandidateMove,
-      onCandidateClick,
-      onScheduleInterview,
-      onAddNote,
-      onReject,
-      onHold,
-      filters: filtersProp,
-      onFilterChange,
-      searchQuery: searchQueryProp,
-      onSearchChange,
-      selectedCandidate: selectedCandidateProp,
-      bulkSelection: bulkSelectionProp,
-      onBulkSelectionChange,
-      onBulkAction,
-      className,
-      style,
+      jobName = 'Senior Frontend Engineer', totalCandidates = 16,
+      stages = DEFAULT_STAGES, candidates: cp = DEFAULT_CANDIDATES,
+      onCandidateMove, onCandidateClick, onScheduleInterview, onAddNote, onReject, onHold,
+      filters: fp, onFilterChange, searchQuery: sqp, onSearchChange,
+      selectedCandidate: selp, bulkSelection: bsp, onBulkSelectionChange, onBulkAction,
+      className, style,
     } = props;
 
-    /* -- Internal state -------------------------------------------------- */
-    const [internalCandidates, setInternalCandidates] = useState<KanbanCandidate[]>(candidatesProp);
-    const [dragState, setDragState] = useState<DragState | null>(null);
-    const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
-    const [internalFilters, setInternalFilters] = useState<KanbanFilter>({});
-    const [internalSearchQuery, setInternalSearchQuery] = useState('');
-    const [internalSelectedCandidate, setInternalSelectedCandidate] = useState<string | null>(null);
-    const [showConfirmReject, setShowConfirmReject] = useState<string | null>(null);
-    const [internalBulkSelection, setInternalBulkSelection] = useState<string[]>([]);
-    const [showFilterPanel, setShowFilterPanel] = useState(false);
-    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-    const [aiTooltipId, setAiTooltipId] = useState<string | null>(null);
-    const [dropZoneActive, setDropZoneActive] = useState<'reject' | 'hold' | null>(null);
+    const [iFilters, setIFilters] = useState<KanbanFilter>({});
+    const [iSearch, setISearch] = useState('');
+    const [iSelected, setISelected] = useState<string | null>(null);
+    const [iBulk, setIBulk] = useState<string[]>([]);
+    const [showFilter, setShowFilter] = useState(false);
+    const [hovered, setHovered] = useState<string | null>(null);
+    const [aiTip, setAiTip] = useState<string | null>(null);
+    const [confirmRejectId, setConfirmRejectId] = useState<string | null>(null);
 
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const filters = fp ?? iFilters;
+    const sq = sqp ?? iSearch;
+    const selected = selp ?? iSelected;
+    const bulk = bsp ?? iBulk;
 
-    /* -- Resolve controlled vs uncontrolled ------------------------------ */
-    const candidates = candidatesProp.length > 0 ? candidatesProp : internalCandidates;
-    const filters = filtersProp ?? internalFilters;
-    const searchQuery = searchQueryProp ?? internalSearchQuery;
-    const selectedCandidate = selectedCandidateProp ?? internalSelectedCandidate;
-    const bulkSelection = bulkSelectionProp ?? internalBulkSelection;
+    const setFilters = useCallback((f: KanbanFilter) => { onFilterChange ? onFilterChange(f) : setIFilters(f); }, [onFilterChange]);
+    const setSearch = useCallback((q: string) => { onSearchChange ? onSearchChange(q) : setISearch(q); }, [onSearchChange]);
+    const setSelected = useCallback((id: string) => { onCandidateClick ? onCandidateClick(id) : setISelected(prev => prev === id ? null : id); }, [onCandidateClick]);
+    const setBulk = useCallback((ids: string[]) => { onBulkSelectionChange ? onBulkSelectionChange(ids) : setIBulk(ids); }, [onBulkSelectionChange]);
+    const toggleBulk = useCallback((id: string) => { setBulk(bulk.includes(id) ? bulk.filter(x => x !== id) : [...bulk, id]); }, [bulk, setBulk]);
 
-    const handleFilterChange = useCallback((newFilters: KanbanFilter) => {
-      if (onFilterChange) onFilterChange(newFilters);
-      else setInternalFilters(newFilters);
-    }, [onFilterChange]);
+    const sorted = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
 
-    const handleSearchChange = useCallback((query: string) => {
-      if (onSearchChange) onSearchChange(query);
-      else setInternalSearchQuery(query);
-    }, [onSearchChange]);
+    const columns = useMemo((): KanbanColumnDef<KanbanCandidate>[] =>
+      sorted.map(stage => ({
+        id: stage.id,
+        title: stage.name,
+        items: cp.filter(c => c.stageId === stage.id && matchesFilters(c, filters, sq)).sort((a, b) => b.scorePercent - a.scorePercent),
+      })),
+    [cp, sorted, filters, sq]);
 
-    const handleSelectCandidate = useCallback((id: string) => {
-      if (onCandidateClick) onCandidateClick(id);
-      else setInternalSelectedCandidate((prev) => (prev === id ? null : id));
-    }, [onCandidateClick]);
+    const totalFiltered = columns.reduce((s, c) => s + c.items.length, 0);
+    const hasFilters = !!((filters.source?.length) || (filters.aiRecommendation?.length) || (filters.tags?.length) || filters.scoreMin !== undefined || filters.scoreMax !== undefined);
 
-    const handleBulkSelectionChange = useCallback((ids: string[]) => {
-      if (onBulkSelectionChange) onBulkSelectionChange(ids);
-      else setInternalBulkSelection(ids);
-    }, [onBulkSelectionChange]);
+    const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
+    const surfaceBase = useMemo(() => createSurfaceStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
+    const hoverTransform = getHoverTransform(t);
 
-    /* -- Sorted stages --------------------------------------------------- */
-    const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
+    const handleMove = useCallback((itemId: string, from: string, to: string, _pos: number) => {
+      if (from !== to) onCandidateMove?.(itemId, from, to);
+    }, [onCandidateMove]);
 
-    /* -- Filtered candidates per stage ----------------------------------- */
-    const candidatesByStage = useMemo(() => {
-      const map: Record<string, KanbanCandidate[]> = {};
-      for (const stage of sortedStages) {
-        map[stage.id] = candidates
-          .filter((c) => c.stageId === stage.id && matchesFilters(c, filters, searchQuery))
-          .sort((a, b) => b.scorePercent - a.scorePercent);
-      }
-      return map;
-    }, [candidates, sortedStages, filters, searchQuery]);
+    /* Column header */
+    const renderColumnHeader = useCallback((col: KanbanColumnDef<KanbanCandidate>, count: number) => {
+      const stage = sorted.find(s => s.id === col.id);
+      if (!stage) return null;
+      const sla = getStageSlaStatus(col.items, stage);
 
-    /* -- Drag handlers --------------------------------------------------- */
-    const handleDragStart = useCallback((candidateId: string, stageId: string) => {
-      setDragState({ candidateId, fromStageId: stageId });
-    }, []);
+      return (
+        <div style={{ marginBottom: t.spacing[1] }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <span style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{stage.name}</span>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: 22, height: 22,
+                borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], color: t.colors.neutral[600],
+                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, padding: `0 ${t.spacing[2]}px`,
+              }}>{count}</span>
+            </div>
+          </div>
+          <div style={{ height: 3, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: count > 0 ? '100%' : '0%', backgroundColor: getSlaBarColor(sla, t), borderRadius: t.borderRadius.full, transition: 'width 0.4s ease' }} />
+          </div>
+        </div>
+      );
+    }, [sorted, t]);
 
-    const handleDragOver = useCallback((e: React.DragEvent, stageId: string) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      setDragOverColumn(stageId);
-    }, []);
+    /* Card renderer */
+    const renderCard = useCallback((c: KanbanCandidate, _colId: string) => {
+      const isSel = selected === c.id;
+      const isBulk = bulk.includes(c.id);
+      const isH = hovered === c.id;
+      const src = getSourceConfig(c.source, t);
+      const aiC = getAiColor(c.aiRecommendation, t);
+      const showTip = aiTip === c.id;
 
-    const handleDragLeave = useCallback(() => {
-      setDragOverColumn(null);
-    }, []);
-
-    const handleDrop = useCallback((e: React.DragEvent, toStageId: string) => {
-      e.preventDefault();
-      if (!dragState) return;
-      const { candidateId, fromStageId } = dragState;
-      if (fromStageId !== toStageId) {
-        if (onCandidateMove) {
-          onCandidateMove(candidateId, fromStageId, toStageId);
-        } else {
-          setInternalCandidates((prev) =>
-            prev.map((c) => (c.id === candidateId ? { ...c, stageId: toStageId, daysInStage: 0 } : c))
-          );
-        }
-      }
-      setDragState(null);
-      setDragOverColumn(null);
-      setDropZoneActive(null);
-    }, [dragState, onCandidateMove]);
-
-    const handleDropZoneDragOver = useCallback((e: React.DragEvent, zone: 'reject' | 'hold') => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      setDropZoneActive(zone);
-    }, []);
-
-    const handleDropZoneDragLeave = useCallback(() => {
-      setDropZoneActive(null);
-    }, []);
-
-    const handleDropZoneDrop = useCallback((e: React.DragEvent, zone: 'reject' | 'hold') => {
-      e.preventDefault();
-      if (!dragState) return;
-      const { candidateId } = dragState;
-      if (zone === 'reject') {
-        setShowConfirmReject(candidateId);
-      } else if (zone === 'hold') {
-        onHold?.(candidateId);
-      }
-      setDragState(null);
-      setDragOverColumn(null);
-      setDropZoneActive(null);
-    }, [dragState, onHold]);
-
-    const handleDragEnd = useCallback(() => {
-      setDragState(null);
-      setDragOverColumn(null);
-      setDropZoneActive(null);
-    }, []);
-
-    /* -- Bulk helpers ----------------------------------------------------- */
-    const toggleBulkCandidate = useCallback((id: string) => {
-      const next = bulkSelection.includes(id)
-        ? bulkSelection.filter((x) => x !== id)
-        : [...bulkSelection, id];
-      handleBulkSelectionChange(next);
-    }, [bulkSelection, handleBulkSelectionChange]);
-
-    const toggleBulkStage = useCallback((stageId: string) => {
-      const stageCandidateIds = (candidatesByStage[stageId] ?? []).map((c) => c.id);
-      const allSelected = stageCandidateIds.every((id) => bulkSelection.includes(id));
-      if (allSelected) {
-        handleBulkSelectionChange(bulkSelection.filter((id) => !stageCandidateIds.includes(id)));
-      } else {
-        const combined = new Set([...bulkSelection, ...stageCandidateIds]);
-        handleBulkSelectionChange(Array.from(combined));
-      }
-    }, [candidatesByStage, bulkSelection, handleBulkSelectionChange]);
-
-    /* -- Confirm reject -------------------------------------------------- */
-    const confirmReject = useCallback(() => {
-      if (showConfirmReject) {
-        onReject?.(showConfirmReject);
-        setShowConfirmReject(null);
-      }
-    }, [showConfirmReject, onReject]);
-
-    /* -- Styles ---------------------------------------------------------- */
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
-    const surfaceBase = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const hoverTransform = getHoverTransform(tokens);
-
-    const hasActiveFilters = !!(
-      (filters.source && filters.source.length > 0) ||
-      (filters.aiRecommendation && filters.aiRecommendation.length > 0) ||
-      (filters.tags && filters.tags.length > 0) ||
-      filters.scoreMin !== undefined ||
-      filters.scoreMax !== undefined
-    );
-
-    const totalFiltered = Object.values(candidatesByStage).reduce((sum, arr) => sum + arr.length, 0);
-
-    /* -- Render ---------------------------------------------------------- */
-    return (
-      <Box
-        className={className}
-        style={{
-          display: 'flex',
-          flexDirection: 'column' as const,
-          height: '100%',
-          backgroundColor: tokens.colors.neutral[50],
-          fontFamily: 'inherit',
-          ...style,
-        }}
-      >
-        {/* ================================================================
-            HEADER
-            ================================================================ */}
-        <Box
-          style={{
-            ...surfaceBase,
-            borderRadius: tokens.borderRadius.none,
-            padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-            backgroundColor: tokens.colors.common.white,
-            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: tokens.spacing[4],
-            flexShrink: 0,
-            ...(isModern && tokens.glass ? {
-              backdropFilter: tokens.glass.blur,
-              WebkitBackdropFilter: tokens.glass.blur,
-              backgroundColor: tokens.glass.bg,
-            } : {}),
-          }}
-        >
-          {/* Left: job name + count */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], minWidth: 0 }}>
-            <Briefcase size={20} style={{ color: tokens.colors.primaryScale[600], flexShrink: 0 }} />
-            <Box style={{ minWidth: 0 }}>
-              <Box
-                style={{
-                  fontSize: tokens.typography.fontSize.lg,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[900],
-                  whiteSpace: 'nowrap' as const,
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                {jobName}
-              </Box>
-              <Box
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[500],
-                  marginTop: 2,
-                }}
-              >
-                {totalFiltered} of {totalCandidates} candidates
-                {hasActiveFilters && (
-                  <span style={{ color: tokens.colors.primaryScale[600], marginLeft: tokens.spacing[1] }}>
-                    (filtered)
-                  </span>
-                )}
-              </Box>
-            </Box>
-          </Box>
-
-          {/* Center: Search + filter */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], flex: 1, maxWidth: 480 }}>
-            {/* Search input */}
-            <Box
-              style={{
-                position: 'relative' as const,
-                flex: 1,
-              }}
-            >
-              <Search
-                size={16}
-                style={{
-                  position: 'absolute' as const,
-                  left: tokens.spacing[3],
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: tokens.colors.neutral[400],
-                  pointerEvents: 'none' as const,
-                }}
-              />
-              <input
-                type="text"
-                placeholder="Search candidates..."
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px ${tokens.spacing[2]}px ${tokens.spacing[8]}px`,
-                  border: `${tokens.surface.borderWidth || '1px'} ${tokens.surface.borderStyle || 'solid'} ${tokens.colors.neutral[300]}`,
-                  borderRadius: tokens.borderRadius.md,
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[900],
-                  backgroundColor: tokens.colors.common.white,
-                  outline: 'none',
-                  transition: `all ${tokens.motion.hover}`,
-                  boxSizing: 'border-box' as const,
-                }}
-                onFocus={(e) => {
-                  (e.target as HTMLInputElement).style.borderColor = tokens.colors.primaryScale[400];
-                  (e.target as HTMLInputElement).style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                }}
-                onBlur={(e) => {
-                  (e.target as HTMLInputElement).style.borderColor = tokens.colors.neutral[300];
-                  (e.target as HTMLInputElement).style.boxShadow = 'none';
-                }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => handleSearchChange('')}
-                  style={{
-                    position: 'absolute' as const,
-                    right: tokens.spacing[2],
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    padding: 2,
-                    color: tokens.colors.neutral[400],
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </Box>
-
-            {/* Filter button */}
-            <button
-              onClick={() => setShowFilterPanel((v) => !v)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                border: `${tokens.surface.borderWidth || '1px'} ${tokens.surface.borderStyle || 'solid'} ${hasActiveFilters ? tokens.colors.primaryScale[400] : tokens.colors.neutral[300]}`,
-                borderRadius: tokens.borderRadius.md,
-                backgroundColor: hasActiveFilters ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                color: hasActiveFilters ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.medium,
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                whiteSpace: 'nowrap' as const,
-              }}
-            >
-              <Filter size={14} />
-              Filters
-              {hasActiveFilters && (
-                <Box
-                  style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.primaryScale[500],
-                  }}
-                />
-              )}
-            </button>
-          </Box>
-
-          {/* Right: bulk count + view toggle */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-            {bulkSelection.length > 0 && (
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[2],
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  backgroundColor: tokens.colors.primaryScale[50],
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.medium,
-                  color: tokens.colors.primaryScale[700],
-                }}
-              >
-                {bulkSelection.length} selected
-                <button
-                  onClick={() => handleBulkSelectionChange([])}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    padding: 0,
-                    color: tokens.colors.primaryScale[500],
-                    display: 'flex',
-                  }}
-                >
-                  <X size={12} />
-                </button>
-              </Box>
-            )}
-            <button
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 32,
-                height: 32,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth || '1px'} ${tokens.surface.borderStyle || 'solid'} ${tokens.colors.primaryScale[300]}`,
-                backgroundColor: tokens.colors.primaryScale[50],
-                color: tokens.colors.primaryScale[600],
-                cursor: 'default',
-              }}
-              title="Board view"
-            >
-              <LayoutGrid size={16} />
-            </button>
-            <button
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 32,
-                height: 32,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth || '1px'} ${tokens.surface.borderStyle || 'solid'} ${tokens.colors.neutral[200]}`,
-                backgroundColor: tokens.colors.common.white,
-                color: tokens.colors.neutral[400],
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-              }}
-              title="Swimlane view"
-            >
-              <Rows3 size={16} />
-            </button>
-          </Box>
-        </Box>
-
-        {/* ================================================================
-            FILTER PANEL (collapsible)
-            ================================================================ */}
-        {showFilterPanel && (
-          <Box
-            style={{
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
-              backgroundColor: tokens.colors.common.white,
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[4],
-              flexWrap: 'wrap' as const,
-              flexShrink: 0,
-            }}
-          >
-            {/* Source filter */}
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[500] }}>
-                Source:
-              </Box>
-              {(['applied', 'referral', 'sourced', 'agency', 'internal'] as CandidateSource[]).map((src) => {
-                const active = filters.source?.includes(src);
-                const srcConfig = getSourceConfig(src, tokens);
-                return (
-                  <button
-                    key={src}
-                    onClick={() => {
-                      const current = filters.source ?? [];
-                      const next = active ? current.filter((s) => s !== src) : [...current, src];
-                      handleFilterChange({ ...filters, source: next.length > 0 ? next : undefined });
-                    }}
-                    style={{
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.full,
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      border: active ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${srcConfig.text}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: active ? srcConfig.bg : tokens.colors.common.white,
-                      color: active ? srcConfig.text : tokens.colors.neutral[500],
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                    }}
-                  >
-                    {srcConfig.label}
-                  </button>
-                );
-              })}
-            </Box>
-
-            {/* AI Recommendation filter */}
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[500] }}>
-                AI:
-              </Box>
-              {(['advance', 'hold', 'reject'] as AiRecommendation[]).map((rec) => {
-                const active = filters.aiRecommendation?.includes(rec);
-                const aiColor = getAiColor(rec, tokens);
-                const aiBg = getAiBgColor(rec, tokens);
-                return (
-                  <button
-                    key={rec}
-                    onClick={() => {
-                      const current = filters.aiRecommendation ?? [];
-                      const next = active ? current.filter((r) => r !== rec) : [...current, rec];
-                      handleFilterChange({ ...filters, aiRecommendation: next.length > 0 ? next : undefined });
-                    }}
-                    style={{
-                      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.full,
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      border: active ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${aiColor}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                      backgroundColor: active ? aiBg : tokens.colors.common.white,
-                      color: active ? aiColor : tokens.colors.neutral[500],
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      textTransform: 'capitalize' as const,
-                    }}
-                  >
-                    {rec}
-                  </button>
-                );
-              })}
-            </Box>
-
-            {/* Clear filters */}
-            {hasActiveFilters && (
-              <button
-                onClick={() => handleFilterChange({})}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[1],
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.medium,
-                  border: 'none',
-                  backgroundColor: tokens.colors.errorScale[50],
-                  color: tokens.colors.errorScale[600],
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                }}
-              >
-                <X size={12} />
-                Clear all
-              </button>
-            )}
-          </Box>
-        )}
-
-        {/* ================================================================
-            KANBAN COLUMNS CONTAINER
-            ================================================================ */}
+      return (
         <div
-          ref={scrollContainerRef}
+          onClick={() => setSelected(c.id)}
+          onMouseEnter={() => setHovered(c.id)}
+          onMouseLeave={() => { setHovered(null); setAiTip(null); }}
           style={{
-            flex: 1,
-            display: 'flex',
-            gap: tokens.spacing[3],
-            padding: tokens.spacing[4],
-            overflowX: 'auto' as const,
-            overflowY: 'hidden' as const,
-            minHeight: 0,
+            ...cardBase,
+            padding: `${t.spacing[4]}px`,
+            cursor: 'grab',
+            borderColor: isSel ? t.colors.primaryScale[400] : isBulk ? t.colors.primaryScale[200] : t.colors.neutral[100],
+            backgroundColor: isSel ? t.colors.primaryScale[50] : isBulk ? t.colors.primaryScale[50] ?? t.colors.common.white : t.colors.common.white,
+            position: 'relative',
+            transition: `all 0.2s ease`,
+            ...(isH ? { ...hoverTransform, boxShadow: t.shadows.md } : {}),
           }}
         >
-          {sortedStages.map((stage) => {
-            const stageCandidates = candidatesByStage[stage.id] ?? [];
-            const slaStatus = getStageSlaStatus(stageCandidates, stage);
-            const isDragOver = dragOverColumn === stage.id && dragState && dragState.fromStageId !== stage.id;
-            const allStageSelected = stageCandidates.length > 0 && stageCandidates.every((c) => bulkSelection.includes(c.id));
-            const someStageSelected = stageCandidates.some((c) => bulkSelection.includes(c.id));
+          {/* Bulk checkbox */}
+          {(bulk.length > 0 || isH) && (
+            <button onClick={e => { e.stopPropagation(); toggleBulk(c.id); }}
+              style={{ position: 'absolute', top: t.spacing[2], left: t.spacing[2], width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: isBulk ? t.colors.primaryScale[600] : t.colors.neutral[300], zIndex: 2 }}>
+              {isBulk ? <CheckSquare size={14} /> : <Square size={14} />}
+            </button>
+          )}
 
-            return (
-              <Box
-                key={stage.id}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column' as const,
-                  minWidth: 280,
-                  maxWidth: 320,
-                  flex: '0 0 300px',
-                  height: '100%',
-                  borderRadius: tokens.borderRadius.lg,
-                  backgroundColor: isDragOver ? tokens.colors.primaryScale[50] : tokens.colors.neutral[100],
-                  border: isDragOver
-                    ? `2px dashed ${tokens.colors.primaryScale[400]}`
-                    : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  transition: `all ${tokens.motion.hover}`,
-                  overflow: 'hidden',
-                }}
-                onDragOver={(e: React.DragEvent) => handleDragOver(e, stage.id)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e: React.DragEvent) => handleDrop(e, stage.id)}
-              >
-                {/* Column Header */}
-                <Box
+          {/* Avatar + Name + Score */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+            <div style={{
+              width: 38, height: 38, borderRadius: t.borderRadius.full,
+              backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700],
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
+              overflow: 'hidden', flexShrink: 0, border: `2px solid ${t.colors.common.white}`, boxShadow: `0 0 0 1px ${t.colors.neutral[100]}`,
+            }}>
+              {c.avatar
+                ? <img src={c.avatar} alt={c.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: t.borderRadius.full }} />
+                : getInitials(c.name)
+              }
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</div>
+              {c.email && <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.email}</div>}
+            </div>
+            <ScoreRing score={c.scorePercent} tokens={t} />
+          </div>
+
+          {/* Metadata row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3], flexWrap: 'wrap' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: t.typography.fontSize.xs, color: c.daysInStage >= 3 ? t.colors.warningScale[600] : t.colors.neutral[500] }}>
+              <Clock size={11} />{c.daysInStage}d
+            </span>
+            <span style={{ display: 'inline-flex', padding: `1px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: src.bg, color: src.text }}>
+              {src.label}
+            </span>
+            <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}
+              onMouseEnter={() => setAiTip(c.id)} onMouseLeave={() => setAiTip(null)}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <Sparkles size={11} style={{ color: aiC }} />
+                <span style={{ width: 7, height: 7, borderRadius: t.borderRadius.full, backgroundColor: aiC }} />
+              </span>
+              {showTip && (
+                <span style={{
+                  position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)',
+                  marginBottom: 4, padding: `3px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md,
+                  backgroundColor: t.colors.neutral[900], color: t.colors.common.white,
+                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                  whiteSpace: 'nowrap', zIndex: 10, boxShadow: t.shadows.lg,
+                }}>
+                  {getAiLabel(c.aiRecommendation)}
+                </span>
+              )}
+            </span>
+          </div>
+
+          {/* Tags */}
+          {c.tags.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' }}>
+              {c.tags.slice(0, 2).map((tag, i) => (
+                <span key={i} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 3,
+                  padding: `1px ${t.spacing[2]}px`, borderRadius: br,
+                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                  backgroundColor: t.colors.neutral[50], color: t.colors.neutral[600],
+                  border: `1px solid ${t.colors.neutral[100]}`,
+                }}>
+                  <Tag size={9} />{tag}
+                </span>
+              ))}
+              {c.tags.length > 2 && (
+                <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>+{c.tags.length - 2}</span>
+              )}
+            </div>
+          )}
+
+          {/* Hover actions */}
+          {isH && (
+            <div style={{
+              position: 'absolute', bottom: 0, left: 0, right: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1],
+              padding: `${t.spacing[3]}px 0 ${t.spacing[2]}px`,
+              background: `linear-gradient(transparent, ${t.colors.common.white} 40%)`,
+              borderRadius: `0 0 ${t.borderRadius.lg} ${t.borderRadius.lg}`,
+            }}>
+              {[
+                { icon: <Calendar size={13} />, color: t.colors.primaryScale[600], fn: () => onScheduleInterview?.(c.id) },
+                { icon: <MessageSquare size={13} />, color: t.colors.infoScale[600], fn: () => onAddNote?.(c.id) },
+                { icon: <ThumbsDown size={13} />, color: t.colors.errorScale[600], fn: () => setConfirmRejectId(c.id) },
+                { icon: <Pause size={13} />, color: t.colors.warningScale[600], fn: () => onHold?.(c.id) },
+              ].map((a, i) => (
+                <button key={i} onClick={e => { e.stopPropagation(); a.fn(); }}
                   style={{
-                    padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px ${tokens.spacing[2]}px`,
-                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                    backgroundColor: tokens.colors.common.white,
-                    ...(isModern && tokens.glass ? {
-                      backdropFilter: tokens.glass.blurSm,
-                      WebkitBackdropFilter: tokens.glass.blurSm,
-                      backgroundColor: tokens.glass.bgLight,
-                    } : {}),
-                  }}
-                >
-                  <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                      <Box
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[800],
-                        }}
-                      >
-                        {stage.name}
-                      </Box>
-                      <Box
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          minWidth: 22,
-                          height: 22,
-                          borderRadius: tokens.borderRadius.full,
-                          backgroundColor: tokens.colors.neutral[200],
-                          color: tokens.colors.neutral[700],
-                          fontSize: tokens.typography.fontSize.xs,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          padding: `0 ${tokens.spacing[1]}px`,
-                        }}
-                      >
-                        {stageCandidates.length}
-                      </Box>
-                    </Box>
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28,
+                    borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200] ?? t.colors.neutral[200]}`,
+                    backgroundColor: t.colors.common.white, color: a.color, cursor: 'pointer', padding: 0,
+                    boxShadow: t.shadows.sm, transition: `transform ${t.motion.hover}`,
+                  }}>
+                  {a.icon}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }, [selected, bulk, hovered, aiTip, t, cardBase, hoverTransform, br, setSelected, toggleBulk, onScheduleInterview, onAddNote, onHold]);
 
-                    {/* Bulk select button */}
-                    <button
-                      onClick={() => toggleBulkStage(stage.id)}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 24,
-                        height: 24,
-                        borderRadius: tokens.borderRadius.sm,
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        color: allStageSelected
-                          ? tokens.colors.primaryScale[600]
-                          : someStageSelected
-                            ? tokens.colors.primaryScale[400]
-                            : tokens.colors.neutral[400],
-                        cursor: 'pointer',
-                        transition: `all ${tokens.motion.hover}`,
-                      }}
-                      title={allStageSelected ? 'Deselect all in stage' : 'Select all in stage'}
-                    >
-                      {allStageSelected ? <CheckSquare size={16} /> : <Square size={16} />}
-                    </button>
-                  </Box>
-
-                  {/* SLA indicator bar */}
-                  <svg width="100%" height="4" style={{ display: 'block', borderRadius: tokens.borderRadius.full }}>
-                    <rect
-                      x="0"
-                      y="0"
-                      width="100%"
-                      height="4"
-                      rx="2"
-                      ry="2"
-                      fill={tokens.colors.neutral[200]}
-                    />
-                    <rect
-                      x="0"
-                      y="0"
-                      width={stageCandidates.length > 0 ? '100%' : '0%'}
-                      height="4"
-                      rx="2"
-                      ry="2"
-                      fill={getSlaBarColor(slaStatus, tokens)}
-                      style={{ transition: `all ${tokens.motion.hover}` }}
-                    />
-                  </svg>
-                </Box>
-
-                {/* Scrollable card container */}
-                <Box
-                  style={{
-                    flex: 1,
-                    overflowY: 'auto' as const,
-                    padding: tokens.spacing[2],
-                    display: 'flex',
-                    flexDirection: 'column' as const,
-                    gap: tokens.spacing[2],
-                  }}
-                >
-                  {stageCandidates.length === 0 && (
-                    <Box
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column' as const,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: `${tokens.spacing[6]}px ${tokens.spacing[3]}px`,
-                        color: tokens.colors.neutral[400],
-                        fontSize: tokens.typography.fontSize.xs,
-                        textAlign: 'center' as const,
-                      }}
-                    >
-                      <Users size={24} style={{ marginBottom: tokens.spacing[2], opacity: 0.5 }} />
-                      No candidates
-                    </Box>
-                  )}
-
-                  {stageCandidates.map((candidate) => {
-                    const isSelected = selectedCandidate === candidate.id;
-                    const isBulkSelected = bulkSelection.includes(candidate.id);
-                    const isDragging = dragState?.candidateId === candidate.id;
-                    const isHovered = hoveredCard === candidate.id;
-                    const sourceConfig = getSourceConfig(candidate.source, tokens);
-                    const aiColor = getAiColor(candidate.aiRecommendation, tokens);
-                    const scoreColor = getScoreColor(candidate.scorePercent, tokens);
-                    const scoreTrack = getScoreTrackColor(candidate.scorePercent, tokens);
-                    const showAiTooltip = aiTooltipId === candidate.id;
-
-                    const circumference = 2 * Math.PI * 16;
-                    const strokeOffset = circumference - (candidate.scorePercent / 100) * circumference;
-
-                    return (
-                      <Box
-                        key={candidate.id}
-                        draggable
-                        onDragStart={() => handleDragStart(candidate.id, stage.id)}
-                        onDragEnd={handleDragEnd}
-                        onClick={() => handleSelectCandidate(candidate.id)}
-                        onMouseEnter={() => setHoveredCard(candidate.id)}
-                        onMouseLeave={() => { setHoveredCard(null); setAiTooltipId(null); }}
-                        style={{
-                          ...cardBase,
-                          padding: tokens.spacing[3],
-                          cursor: isDragging ? 'grabbing' : 'grab',
-                          opacity: isDragging ? 0.5 : 1,
-                          borderColor: isSelected
-                            ? tokens.colors.primaryScale[500]
-                            : isBulkSelected
-                              ? tokens.colors.primaryScale[300]
-                              : (cardBase.border ? undefined : tokens.colors.neutral[200]),
-                          backgroundColor: isSelected
-                            ? tokens.colors.primaryScale[50]
-                            : isBulkSelected
-                              ? tokens.colors.primaryScale[50]
-                              : tokens.colors.common.white,
-                          position: 'relative' as const,
-                          transition: `all ${tokens.motion.hover}`,
-                          ...(isModern && tokens.glass ? {
-                            backdropFilter: tokens.glass.blurSm,
-                            WebkitBackdropFilter: tokens.glass.blurSm,
-                          } : {}),
-                          ...(isHovered && !isDragging ? hoverTransform : {}),
-                        }}
-                      >
-                        {/* Bulk checkbox */}
-                        {(bulkSelection.length > 0 || isHovered) && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); toggleBulkCandidate(candidate.id); }}
-                            style={{
-                              position: 'absolute' as const,
-                              top: tokens.spacing[2],
-                              left: tokens.spacing[2],
-                              width: 18,
-                              height: 18,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              background: 'none',
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              color: isBulkSelected ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
-                              zIndex: 2,
-                            }}
-                          >
-                            {isBulkSelected ? <CheckSquare size={14} /> : <Square size={14} />}
-                          </button>
-                        )}
-
-                        {/* Card top row: avatar + name + score ring */}
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
-                          {/* Avatar */}
-                          <Box
-                            style={{
-                              width: 36,
-                              height: 36,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.primaryScale[100],
-                              color: tokens.colors.primaryScale[700],
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              overflow: 'hidden',
-                              flexShrink: 0,
-                            }}
-                          >
-                            {candidate.avatar ? (
-                              <img
-                                src={candidate.avatar}
-                                alt={candidate.name}
-                                style={{ width: '100%', height: '100%', objectFit: 'cover' as const, borderRadius: tokens.borderRadius.full }}
-                              />
-                            ) : (
-                              getInitials(candidate.name)
-                            )}
-                          </Box>
-
-                          {/* Name + email */}
-                          <Box style={{ flex: 1, minWidth: 0 }}>
-                            <Box
-                              style={{
-                                fontSize: tokens.typography.fontSize.sm,
-                                fontWeight: tokens.typography.fontWeight.semibold,
-                                color: tokens.colors.neutral[900],
-                                whiteSpace: 'nowrap' as const,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                              }}
-                            >
-                              {candidate.name}
-                            </Box>
-                            {candidate.email && (
-                              <Box
-                                style={{
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  color: tokens.colors.neutral[400],
-                                  whiteSpace: 'nowrap' as const,
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                }}
-                              >
-                                {candidate.email}
-                              </Box>
-                            )}
-                          </Box>
-
-                          {/* Score ring */}
-                          <Box
-                            style={{
-                              position: 'relative' as const,
-                              width: 40,
-                              height: 40,
-                              flexShrink: 0,
-                            }}
-                          >
-                            <svg width="40" height="40" viewBox="0 0 40 40" style={{ transform: 'rotate(-90deg)' }}>
-                              <circle
-                                cx="20"
-                                cy="20"
-                                r="16"
-                                fill="none"
-                                stroke={scoreTrack}
-                                strokeWidth="3"
-                              />
-                              <circle
-                                cx="20"
-                                cy="20"
-                                r="16"
-                                fill="none"
-                                stroke={scoreColor}
-                                strokeWidth="3"
-                                strokeDasharray={circumference}
-                                strokeDashoffset={strokeOffset}
-                                strokeLinecap="round"
-                                style={{ transition: `stroke-dashoffset ${tokens.motion.hover}` }}
-                              />
-                            </svg>
-                            <Box
-                              style={{
-                                position: 'absolute' as const,
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: tokens.typography.fontSize.xs,
-                                fontWeight: tokens.typography.fontWeight.bold,
-                                color: scoreColor,
-                              }}
-                            >
-                              {candidate.scorePercent}
-                            </Box>
-                          </Box>
-                        </Box>
-
-                        {/* Middle row: days in stage + source + AI dot */}
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2], flexWrap: 'wrap' as const }}>
-                          {/* Days in stage */}
-                          <Box
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: tokens.spacing[1],
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: tokens.colors.neutral[500],
-                            }}
-                          >
-                            <Clock size={12} />
-                            {candidate.daysInStage}d
-                          </Box>
-
-                          {/* Source badge */}
-                          <Box
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              padding: `1px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.full,
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                              backgroundColor: sourceConfig.bg,
-                              color: sourceConfig.text,
-                            }}
-                          >
-                            {sourceConfig.label}
-                          </Box>
-
-                          {/* AI recommendation dot */}
-                          <Box
-                            style={{ position: 'relative' as const, display: 'inline-flex', alignItems: 'center' }}
-                            onMouseEnter={() => setAiTooltipId(candidate.id)}
-                            onMouseLeave={() => setAiTooltipId(null)}
-                          >
-                            <Box
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: tokens.spacing[1],
-                                padding: `1px ${tokens.spacing[1]}px`,
-                                borderRadius: tokens.borderRadius.full,
-                                cursor: 'default',
-                              }}
-                            >
-                              <Sparkles size={12} style={{ color: aiColor }} />
-                              <Box
-                                style={{
-                                  width: 8,
-                                  height: 8,
-                                  borderRadius: tokens.borderRadius.full,
-                                  backgroundColor: aiColor,
-                                }}
-                              />
-                            </Box>
-                            {/* Tooltip */}
-                            {showAiTooltip && (
-                              <Box
-                                style={{
-                                  position: 'absolute' as const,
-                                  bottom: '100%',
-                                  left: '50%',
-                                  transform: 'translateX(-50%)',
-                                  marginBottom: tokens.spacing[1],
-                                  padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                                  borderRadius: tokens.borderRadius.md,
-                                  backgroundColor: tokens.colors.neutral[900],
-                                  color: tokens.colors.common.white,
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  fontWeight: tokens.typography.fontWeight.medium,
-                                  whiteSpace: 'nowrap' as const,
-                                  zIndex: 10,
-                                  boxShadow: tokens.shadows.md,
-                                }}
-                              >
-                                {getAiLabel(candidate.aiRecommendation)}
-                              </Box>
-                            )}
-                          </Box>
-                        </Box>
-
-                        {/* Tags row */}
-                        {candidate.tags.length > 0 && (
-                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
-                            {candidate.tags.slice(0, 2).map((tag, i) => (
-                              <Box
-                                key={i}
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  gap: tokens.spacing[1],
-                                  padding: `1px ${tokens.spacing[2]}px`,
-                                  borderRadius: tokens.borderRadius.full,
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  fontWeight: tokens.typography.fontWeight.medium,
-                                  backgroundColor: tokens.colors.neutral[100],
-                                  color: tokens.colors.neutral[600],
-                                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                }}
-                              >
-                                <Tag size={10} />
-                                {tag}
-                              </Box>
-                            ))}
-                            {candidate.tags.length > 2 && (
-                              <Box
-                                style={{
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  color: tokens.colors.neutral[400],
-                                  fontWeight: tokens.typography.fontWeight.medium,
-                                }}
-                              >
-                                +{candidate.tags.length - 2} more
-                              </Box>
-                            )}
-                          </Box>
-                        )}
-
-                        {/* Quick actions overlay on hover */}
-                        {isHovered && !isDragging && (
-                          <Box
-                            style={{
-                              position: 'absolute' as const,
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: tokens.spacing[1],
-                              padding: `${tokens.spacing[2]}px 0`,
-                              background: `linear-gradient(transparent, ${tokens.colors.common.white} 30%)`,
-                              borderRadius: `0 0 ${tokens.borderRadius.lg} ${tokens.borderRadius.lg}`,
-                            }}
-                          >
-                            {/* Schedule */}
-                            <button
-                              onClick={(e) => { e.stopPropagation(); onScheduleInterview?.(candidate.id); }}
-                              title="Schedule interview"
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 28,
-                                height: 28,
-                                borderRadius: tokens.borderRadius.md,
-                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                backgroundColor: tokens.colors.common.white,
-                                color: tokens.colors.primaryScale[600],
-                                cursor: 'pointer',
-                                transition: `all ${tokens.motion.hover}`,
-                                boxShadow: tokens.shadows.sm,
-                              }}
-                            >
-                              <Calendar size={14} />
-                            </button>
-
-                            {/* Add Note */}
-                            <button
-                              onClick={(e) => { e.stopPropagation(); onAddNote?.(candidate.id); }}
-                              title="Add note"
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 28,
-                                height: 28,
-                                borderRadius: tokens.borderRadius.md,
-                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                backgroundColor: tokens.colors.common.white,
-                                color: tokens.colors.infoScale[600],
-                                cursor: 'pointer',
-                                transition: `all ${tokens.motion.hover}`,
-                                boxShadow: tokens.shadows.sm,
-                              }}
-                            >
-                              <MessageSquare size={14} />
-                            </button>
-
-                            {/* Reject */}
-                            <button
-                              onClick={(e) => { e.stopPropagation(); setShowConfirmReject(candidate.id); }}
-                              title="Reject"
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 28,
-                                height: 28,
-                                borderRadius: tokens.borderRadius.md,
-                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                backgroundColor: tokens.colors.common.white,
-                                color: tokens.colors.errorScale[600],
-                                cursor: 'pointer',
-                                transition: `all ${tokens.motion.hover}`,
-                                boxShadow: tokens.shadows.sm,
-                              }}
-                            >
-                              <ThumbsDown size={14} />
-                            </button>
-
-                            {/* Hold */}
-                            <button
-                              onClick={(e) => { e.stopPropagation(); onHold?.(candidate.id); }}
-                              title="Put on hold"
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 28,
-                                height: 28,
-                                borderRadius: tokens.borderRadius.md,
-                                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                                backgroundColor: tokens.colors.common.white,
-                                color: tokens.colors.warningScale[600],
-                                cursor: 'pointer',
-                                transition: `all ${tokens.motion.hover}`,
-                                boxShadow: tokens.shadows.sm,
-                              }}
-                            >
-                              <Pause size={14} />
-                            </button>
-                          </Box>
-                        )}
-                      </Box>
-                    );
-                  })}
-                </Box>
-              </Box>
-            );
-          })}
+    /* Toolbar */
+    const toolbar = (
+      <div style={{
+        padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+        backgroundColor: t.colors.common.white,
+        borderBottom: `1px solid ${t.colors.neutral[100]}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: t.spacing[4],
+        ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg } : {}),
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], minWidth: 0 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.primaryScale[50],
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          }}>
+            <Briefcase size={18} style={{ color: t.colors.primaryScale[600] }} />
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {jobName}
+            </div>
+            <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+              {totalFiltered} of {totalCandidates} candidates
+              {hasFilters && <span style={{ color: t.colors.primaryScale[600], marginLeft: t.spacing[1] }}>(filtered)</span>}
+            </div>
+          </div>
         </div>
 
-        {/* ================================================================
-            BOTTOM DROP ZONES (Reject / Hold)
-            ================================================================ */}
-        {dragState && (
-          <Box
+        <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flex: 1, maxWidth: 440 }}>
+          <div style={{ position: 'relative', flex: 1 }}>
+            <Search size={15} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400], pointerEvents: 'none' }} />
+            <input type="text" placeholder="Search candidates..." value={sq}
+              onChange={e => setSearch(e.target.value)}
+              style={{
+                width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px ${t.spacing[2]}px 36px`,
+                border: `1px solid ${t.colors.neutral[200]}`, borderRadius: t.borderRadius.lg,
+                fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800],
+                backgroundColor: t.colors.neutral[50], outline: 'none', fontFamily: 'inherit',
+                transition: `border-color ${t.motion.hover}`, boxSizing: 'border-box',
+              }} />
+            {sq && (
+              <button onClick={() => setSearch('')}
+                style={{ position: 'absolute', right: t.spacing[2], top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: t.colors.neutral[400], display: 'flex' }}>
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          <button onClick={() => setShowFilter(v => !v)}
             style={{
-              display: 'flex',
-              gap: tokens.spacing[3],
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px ${tokens.spacing[4]}px`,
-              flexShrink: 0,
-            }}
-          >
-            {/* Reject drop zone */}
-            <div
-              onDragOver={(e) => handleDropZoneDragOver(e, 'reject')}
-              onDragLeave={handleDropZoneDragLeave}
-              onDrop={(e) => handleDropZoneDrop(e, 'reject')}
-              style={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.lg,
-                border: `2px dashed ${dropZoneActive === 'reject' ? tokens.colors.errorScale[500] : tokens.colors.errorScale[300]}`,
-                backgroundColor: dropZoneActive === 'reject' ? tokens.colors.errorScale[100] : tokens.colors.errorScale[50],
-                color: dropZoneActive === 'reject' ? tokens.colors.errorScale[700] : tokens.colors.errorScale[500],
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.medium,
-                transition: `all ${tokens.motion.hover}`,
-              }}
-            >
-              <ThumbsDown size={18} />
-              Drop to reject
-            </div>
+              display: 'flex', alignItems: 'center', gap: t.spacing[1],
+              padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+              border: `1px solid ${hasFilters ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+              borderRadius: t.borderRadius.lg,
+              backgroundColor: hasFilters ? t.colors.primaryScale[50] : t.colors.common.white,
+              color: hasFilters ? t.colors.primaryScale[700] : t.colors.neutral[600],
+              fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
+              cursor: 'pointer', whiteSpace: 'nowrap',
+            }}>
+            <Filter size={14} /> Filters
+            {hasFilters && <span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[500] }} />}
+          </button>
+        </div>
 
-            {/* Hold drop zone */}
-            <div
-              onDragOver={(e) => handleDropZoneDragOver(e, 'hold')}
-              onDragLeave={handleDropZoneDragLeave}
-              onDrop={(e) => handleDropZoneDrop(e, 'hold')}
-              style={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.lg,
-                border: `2px dashed ${dropZoneActive === 'hold' ? tokens.colors.warningScale[500] : tokens.colors.warningScale[300]}`,
-                backgroundColor: dropZoneActive === 'hold' ? tokens.colors.warningScale[100] : tokens.colors.warningScale[50],
-                color: dropZoneActive === 'hold' ? tokens.colors.warningScale[700] : tokens.colors.warningScale[500],
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.medium,
-                transition: `all ${tokens.motion.hover}`,
-              }}
-            >
-              <Pause size={18} />
-              Drop to hold
+        <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+          {bulk.length > 0 && (
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: t.spacing[2],
+              padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
+              backgroundColor: t.colors.primaryScale[50], fontSize: t.typography.fontSize.xs,
+              fontWeight: t.typography.fontWeight.medium, color: t.colors.primaryScale[700],
+            }}>
+              {bulk.length} selected
+              <button onClick={() => setBulk([])}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: t.colors.primaryScale[500], display: 'flex' }}>
+                <X size={12} />
+              </button>
             </div>
-          </Box>
+          )}
+          <button style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32,
+            borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.primaryScale[200]}`,
+            backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[600], cursor: 'default',
+          }} title="Board view"><LayoutGrid size={15} /></button>
+          <button style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32,
+            borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[200]}`,
+            backgroundColor: t.colors.common.white, color: t.colors.neutral[400], cursor: 'pointer',
+          }} title="Swimlane view"><Rows3 size={15} /></button>
+        </div>
+      </div>
+    );
+
+    return (
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...style }}>
+        {toolbar}
+
+        {/* Filter panel */}
+        {showFilter && (
+          <div style={{
+            padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
+            backgroundColor: t.colors.common.white, borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            display: 'flex', alignItems: 'center', gap: t.spacing[4], flexWrap: 'wrap',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <span style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>Source</span>
+              {(['applied', 'referral', 'sourced', 'agency', 'internal'] as CandidateSource[]).map(src => {
+                const active = filters.source?.includes(src);
+                const sc = getSourceConfig(src, t);
+                return (
+                  <button key={src} onClick={() => {
+                    const cur = filters.source ?? [];
+                    const next = active ? cur.filter(s => s !== src) : [...cur, src];
+                    setFilters({ ...filters, source: next.length > 0 ? next : undefined });
+                  }} style={{
+                    padding: `2px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs,
+                    fontWeight: t.typography.fontWeight.medium,
+                    border: `1px solid ${active ? sc.text : t.colors.neutral[200]}`,
+                    backgroundColor: active ? sc.bg : t.colors.common.white,
+                    color: active ? sc.text : t.colors.neutral[500], cursor: 'pointer',
+                  }}>{sc.label}</button>
+                );
+              })}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <span style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI</span>
+              {(['advance', 'hold', 'reject'] as AiRecommendation[]).map(rec => {
+                const active = filters.aiRecommendation?.includes(rec);
+                const ac = getAiColor(rec, t);
+                return (
+                  <button key={rec} onClick={() => {
+                    const cur = filters.aiRecommendation ?? [];
+                    const next = active ? cur.filter(r => r !== rec) : [...cur, rec];
+                    setFilters({ ...filters, aiRecommendation: next.length > 0 ? next : undefined });
+                  }} style={{
+                    padding: `2px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs,
+                    fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize',
+                    border: `1px solid ${active ? ac : t.colors.neutral[200]}`,
+                    backgroundColor: active ? `${ac}12` : t.colors.common.white,
+                    color: active ? ac : t.colors.neutral[500], cursor: 'pointer',
+                  }}>{rec}</button>
+                );
+              })}
+            </div>
+            {hasFilters && (
+              <button onClick={() => setFilters({})} style={{
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: `2px ${t.spacing[2]}px`, borderRadius: br, fontSize: t.typography.fontSize.xs,
+                fontWeight: t.typography.fontWeight.medium, border: 'none',
+                backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[600], cursor: 'pointer',
+              }}><X size={11} /> Clear all</button>
+            )}
+          </div>
         )}
 
-        {/* ================================================================
-            CONFIRM REJECT MODAL
-            ================================================================ */}
-        {showConfirmReject && (
-          <Box
-            style={{
-              position: 'fixed' as const,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: tokens.overlay?.light,
-              zIndex: 1000,
-            }}
-            onClick={() => setShowConfirmReject(null)}
-          >
-            <Box
-              onClick={(e: React.MouseEvent) => e.stopPropagation()}
-              style={{
-                ...cardBase,
-                padding: tokens.spacing[5],
-                maxWidth: 360,
-                width: '90%',
-                backgroundColor: tokens.colors.common.white,
-                boxShadow: tokens.shadows.xl,
-              }}
-            >
-              <Box
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[2],
-                  marginBottom: tokens.spacing[3],
-                }}
-              >
-                <Box
-                  style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.errorScale[100],
-                    color: tokens.colors.errorScale[600],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+        {/* Kanban */}
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <PatternKanbanBoard
+            columns={columns}
+            renderCard={renderCard}
+            renderColumnHeader={renderColumnHeader}
+            onItemMove={handleMove}
+            onItemClick={item => setSelected(item.id)}
+            itemKey={c => c.id}
+            columnMinWidth={280}
+            columnGap={t.spacing[3]}
+            emptyColumn={
+              <div style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                padding: `${t.spacing[8]}px ${t.spacing[4]}px`, color: t.colors.neutral[300],
+                fontSize: t.typography.fontSize.sm, textAlign: 'center',
+              }}>
+                <Users size={28} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />
+                No candidates in this stage
+              </div>
+            }
+            engine={engine}
+          />
+        </div>
+
+        {/* Confirm reject modal */}
+        {confirmRejectId && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backgroundColor: t.overlay?.light, zIndex: 1000,
+          }} onClick={() => setConfirmRejectId(null)}>
+            <div onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{
+              ...cardBase, padding: `${t.spacing[6]}px`, maxWidth: 380, width: '90%',
+              backgroundColor: t.colors.common.white, boxShadow: t.shadows.xl,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: t.borderRadius.full,
+                  backgroundColor: t.colors.errorScale[50], color: t.colors.errorScale[600],
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
                   <ThumbsDown size={18} />
-                </Box>
-                <Box
-                  style={{
-                    fontSize: tokens.typography.fontSize.lg,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[900],
-                  }}
-                >
-                  Confirm Rejection
-                </Box>
-              </Box>
-              <Box
-                style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[600],
-                  marginBottom: tokens.spacing[4],
-                  lineHeight: tokens.typography.lineHeight.relaxed,
-                }}
-              >
-                Are you sure you want to reject this candidate? This action will move them to the rejected pool.
-              </Box>
-              <Box style={{ display: 'flex', gap: tokens.spacing[2], justifyContent: 'flex-end' }}>
-                <button
-                  onClick={() => setShowConfirmReject(null)}
-                  style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                    backgroundColor: tokens.colors.common.white,
-                    color: tokens.colors.neutral[700],
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmReject}
-                  style={{
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: 'none',
-                    backgroundColor: tokens.colors.errorScale[600],
-                    color: tokens.colors.common.white,
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}
-                >
-                  Reject
-                </button>
-              </Box>
-            </Box>
-          </Box>
+                </div>
+                <span style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>Confirm Rejection</span>
+              </div>
+              <div style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], marginBottom: t.spacing[5], lineHeight: t.typography.lineHeight.relaxed }}>
+                Are you sure you want to reject this candidate? They will be moved to the rejected pool and notified.
+              </div>
+              <div style={{ display: 'flex', gap: t.spacing[3], justifyContent: 'flex-end' }}>
+                <button onClick={() => setConfirmRejectId(null)} style={{
+                  padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
+                  border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
+                  color: t.colors.neutral[700], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+                }}>Cancel</button>
+                <button onClick={() => { onReject?.(confirmRejectId); setConfirmRejectId(null); }} style={{
+                  padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
+                  border: 'none', backgroundColor: t.colors.errorScale[600], color: t.colors.common.white,
+                  fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+                }}>Reject Candidate</button>
+              </div>
+            </div>
+          </div>
         )}
       </Box>
     );

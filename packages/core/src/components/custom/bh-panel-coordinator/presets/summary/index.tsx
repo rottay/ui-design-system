@@ -7,7 +7,7 @@
 
 import { useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
-import type { BhPanelCoordinatorProps } from '../../core';
+import type { BhPanelCoordinatorProps, InterviewStage, PanelMember } from '../../core';
 import { getRecommendationColors, getStageStatusColors, getRecommendationLabel, getAggregationLabel } from '../../core';
 import {
   createCardStyle,
@@ -17,6 +17,19 @@ import {
   createFilterPillStyle,
 } from '../../../helpers';
 
+const MOCK_STAGES: InterviewStage[] = [
+  { id: 's-1', name: 'Technical Screen', order: 1, status: 'completed', aggregationStrategy: 'average', aggregatedScore: 82, maxScore: 100, completedDate: '2025-01-15', panelMemberIds: ['m-1', 'm-2'] },
+  { id: 's-2', name: 'System Design', order: 2, status: 'completed', aggregationStrategy: 'weighted_average', aggregatedScore: 75, maxScore: 100, completedDate: '2025-01-18', panelMemberIds: ['m-3'] },
+  { id: 's-3', name: 'Behavioral', order: 3, status: 'in_progress', aggregationStrategy: 'consensus', maxScore: 100, panelMemberIds: ['m-4'] },
+];
+
+const MOCK_MEMBERS: PanelMember[] = [
+  { id: 'm-1', name: 'Alex Rivera', role: 'Senior Engineer', stageId: 's-1', overallScore: 85, recommendation: 'hire' },
+  { id: 'm-2', name: 'Jordan Park', role: 'Staff Engineer', stageId: 's-1', overallScore: 79, recommendation: 'hire' },
+  { id: 'm-3', name: 'Morgan Lee', role: 'Principal Architect', stageId: 's-2', overallScore: 75, recommendation: 'hire' },
+  { id: 'm-4', name: 'Casey Kim', role: 'Engineering Manager', stageId: 's-3' },
+];
+
 export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
   name: 'BhPanelCoordinator.Summary',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhPanelCoordinatorProps>) => {
@@ -25,7 +38,7 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
     const recColors = getRecommendationColors(tokens);
     const stageColors = getStageStatusColors(tokens);
 
-    const { stages, members, consensus, candidateName, positionTitle, loading, className, style } = props;
+    const { stages = MOCK_STAGES, members = MOCK_MEMBERS, consensus, candidateName, positionTitle, loading, className, style } = props;
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
 
@@ -50,7 +63,7 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
           {consensus && (() => {
             const rc = recColors[consensus.recommendation];
             return (
-              <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, background: rc.bgColor, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rc.border}` }}>
+              <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: '50%', background: rc.bgColor, border: `1px solid ${rc.border}` }}>
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: rc.color }}>
                   {getRecommendationLabel(consensus.recommendation)}
                 </Text>
@@ -68,11 +81,11 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
               <Box key={stage.id} style={createListItemStyle(tokens, { interactive: false })}>
                 <Flex justify="between" align="center" style={{ marginBottom: tokens.spacing[1] }}>
                   <Flex gap={6} align="center">
-                    <Box style={{ width: 18, height: 18, borderRadius: tokens.borderRadius.full, background: sc.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box style={{ width: 18, height: 18, borderRadius: '50%', background: sc.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: sc.color }}>{stage.order}</Text>
                     </Box>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{stage.name}</Text>
-                    <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`, borderRadius: tokens.borderRadius.full, background: sc.bgColor }}>
+                    <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[1]}px`, borderRadius: '50%', background: sc.bgColor }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: sc.color, textTransform: 'capitalize' as const }}>{stage.status.replace('_', ' ')}</Text>
                     </Box>
                   </Flex>
@@ -88,7 +101,7 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
                   {stageMembers.map(m => {
                     const mrc = m.recommendation ? recColors[m.recommendation] : null;
                     return (
-                      <Flex key={m.id} gap={4} align="center" style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, background: tokens.colors.neutral[50], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+                      <Flex key={m.id} gap={4} align="center" style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: '50%', background: tokens.colors.neutral[50], border: `1px solid ${tokens.colors.neutral[100]}` }}>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{m.name}</Text>
                         {m.overallScore !== undefined && <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600] }}>{m.overallScore}</Text>}
                         {m.recommendation && mrc && (

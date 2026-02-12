@@ -2,178 +2,301 @@
 
 /**
  * BhPanelCoordinator - Timeline Preset
- * Full stage progression with member scores and consensus
+ * Full stage progression with member scores, dimension breakdowns, and consensus.
+ * Slite-inspired: generous whitespace, warm neutrals, soft shadows, minimal borders.
  */
 
 import { useState, useMemo } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
-import type { BhPanelCoordinatorProps } from '../../core';
-import { getRecommendationColors, getStageStatusColors, getRecommendationLabel, getAggregationLabel } from '../../core';
+import { createPreset, type PresetContext } from '../../../factory';
+import type { BhPanelCoordinatorProps, InterviewStage, PanelMember } from '../../core';
+import {
+  getRecommendationColors, getStageStatusColors,
+  getRecommendationLabel, getAggregationLabel,
+} from '../../core';
 import {
   createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
   createHoverStyle,
   createListItemStyle,
   createPanelHeaderStyle,
   createProgressBarStyle,
   createSectionHeaderStyle,
   createStatusDotStyle,
+  createFilterPillStyle,
 } from '../../../helpers';
+import {
+  Users, UserCheck, CheckCircle2, Clock, AlertCircle,
+  ChevronRight, MessageSquare, BarChart3, Award,
+} from 'lucide-react';
+
+const MOCK_STAGES: InterviewStage[] = [
+  { id: 's-1', name: 'Technical Screen', order: 1, status: 'completed', aggregationStrategy: 'average', aggregatedScore: 82, maxScore: 100, completedDate: '2025-01-15', panelMemberIds: ['m-1', 'm-2'] },
+  { id: 's-2', name: 'System Design', order: 2, status: 'completed', aggregationStrategy: 'weighted_average', aggregatedScore: 75, maxScore: 100, completedDate: '2025-01-18', panelMemberIds: ['m-3'] },
+  { id: 's-3', name: 'Behavioral', order: 3, status: 'in_progress', aggregationStrategy: 'consensus', maxScore: 100, scheduledDate: '2025-01-22', panelMemberIds: ['m-4'] },
+  { id: 's-4', name: 'Hiring Manager', order: 4, status: 'pending', aggregationStrategy: 'average', maxScore: 100, panelMemberIds: [] },
+];
+
+const MOCK_MEMBERS: PanelMember[] = [
+  { id: 'm-1', name: 'Alex Rivera', role: 'Senior Engineer', stageId: 's-1', overallScore: 85, recommendation: 'hire', submittedAt: '2025-01-15T14:00:00Z', dimensionScores: [{ dimension: 'Problem Solving', score: 9, maxScore: 10 }, { dimension: 'Code Quality', score: 8, maxScore: 10 }], notes: 'Strong problem-solving skills. Clean code approach.' },
+  { id: 'm-2', name: 'Jordan Park', role: 'Staff Engineer', stageId: 's-1', overallScore: 79, recommendation: 'hire', submittedAt: '2025-01-15T16:00:00Z', dimensionScores: [{ dimension: 'Problem Solving', score: 8, maxScore: 10 }, { dimension: 'Code Quality', score: 7, maxScore: 10 }] },
+  { id: 'm-3', name: 'Morgan Lee', role: 'Principal Architect', stageId: 's-2', overallScore: 75, recommendation: 'hire', submittedAt: '2025-01-18T11:00:00Z', dimensionScores: [{ dimension: 'System Design', score: 8, maxScore: 10 }, { dimension: 'Scalability', score: 7, maxScore: 10 }] },
+  { id: 'm-4', name: 'Casey Kim', role: 'Engineering Manager', stageId: 's-3' },
+];
 
 export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
   name: 'BhPanelCoordinator.Timeline',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhPanelCoordinatorProps>) => {
-    const { Box, Flex, Stack, Text, Grid } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhPanelCoordinatorProps>) => {
+    const { Box, Flex, Stack, Text } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const recColors = getRecommendationColors(tokens);
     const stageColors = getStageStatusColors(tokens);
 
     const {
-      stages,
-      members,
-      consensus,
-      candidateName,
-      positionTitle,
-      selectedStageId: selectedStageIdProp,
-      onStageSelect,
-      selectedMemberId: selectedMemberIdProp,
-      onMemberSelect,
-      onFinalDecision,
-      loading,
-      className,
-      style,
+      stages = MOCK_STAGES, members = MOCK_MEMBERS, consensus, candidateName, positionTitle,
+      selectedStageId: selectedStageIdProp, onStageSelect,
+      selectedMemberId: selectedMemberIdProp, onMemberSelect,
+      onFinalDecision, loading, className, style,
     } = props;
 
-    const [internalSelectedStage, setInternalSelectedStage] = useState(selectedStageIdProp ?? '');
-    const [internalSelectedMember, setInternalSelectedMember] = useState(selectedMemberIdProp ?? '');
+    const [internalStage, setInternalStage] = useState(selectedStageIdProp ?? '');
+    const [internalMember, setInternalMember] = useState(selectedMemberIdProp ?? '');
 
-    const selectedStageId = selectedStageIdProp ?? internalSelectedStage;
-    const selectedMemberId = selectedMemberIdProp ?? internalSelectedMember;
+    const selectedStageId = selectedStageIdProp ?? internalStage;
+    const selectedMemberId = selectedMemberIdProp ?? internalMember;
 
-    const handleStageSelect = (id: string) => {
-      setInternalSelectedStage(id);
-      onStageSelect?.(id);
-    };
-
-    const handleMemberSelect = (id: string) => {
-      setInternalSelectedMember(id);
-      onMemberSelect?.(id);
-    };
+    const handleStageSelect = (id: string) => { setInternalStage(id); onStageSelect?.(id); };
+    const handleMemberSelect = (id: string) => { setInternalMember(id); onMemberSelect?.(id); };
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
-    const completedStages = sortedStages.filter(s => s.status === 'completed').length;
+    const completedCount = sortedStages.filter(s => s.status === 'completed').length;
     const selectedMember = members.find(m => m.id === selectedMemberId);
+
+    const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
 
     if (loading) {
       return (
-        <Flex align="center" justify="center" style={{ padding: tokens.spacing[8], ...style }} className={className}>
-          <Text style={{ color: tokens.colors.neutral[500] }}>Loading panel data...</Text>
+        <Flex align="center" justify="center" style={{ padding: tokens.spacing[10], ...style }} className={className}>
+          <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>Loading panel data...</Text>
         </Flex>
       );
     }
 
+    /* ── Stage status icon ─────────────────────────────── */
+    const StageIcon = ({ status }: { status: string }) => {
+      const size = 14;
+      switch (status) {
+        case 'completed': return <CheckCircle2 size={size} color={tokens.colors.successScale[500]} />;
+        case 'in_progress': return <Clock size={size} color={tokens.colors.infoScale[500]} />;
+        case 'cancelled': return <AlertCircle size={size} color={tokens.colors.errorScale[500]} />;
+        default: return <Clock size={size} color={tokens.colors.neutral[400]} />;
+      }
+    };
+
+    /* ── Sparkline for score distribution ───────────────── */
+    const ScoreSparkline = ({ scores }: { scores: number[] }) => {
+      if (scores.length === 0) return null;
+      const max = Math.max(...scores, 1);
+      const w = 80, h = 24, barW = Math.min(12, (w - (scores.length - 1) * 2) / scores.length);
+      return (
+        <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`}>
+          {scores.map((s, i) => {
+            const barH = Math.max(2, (s / max) * (h - 2));
+            const x = i * (barW + 2);
+            const color = s / max >= 0.7 ? tokens.colors.successScale[400]
+              : s / max >= 0.4 ? tokens.colors.warningScale[400]
+              : tokens.colors.errorScale[400];
+            return <rect key={i} x={x} y={h - barH} width={barW} height={barH} rx={2} fill={color} opacity={0.8} />;
+          })}
+        </svg>
+      );
+    };
+
     return (
-      <Box className={className} style={{ ...style }}>
-        {/* Header */}
-        <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[4] }}>
+      <Box className={className} style={{
+        display: 'flex', flexDirection: 'column' as const,
+        gap: tokens.spacing[5], ...style,
+      }}>
+        {/* ── Header ───────────────────────────────────── */}
+        <Flex align="center" justify="between">
           <Stack gap={2}>
-            <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+            <Text style={{
+              fontSize: tokens.typography.fontSize.lg,
+              fontWeight: tokens.typography.fontWeight.bold,
+              color: tokens.colors.neutral[900],
+            }}>
               {candidateName ?? 'Panel Coordination'}
             </Text>
-            {positionTitle && <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>{positionTitle}</Text>}
+            {positionTitle && (
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                {positionTitle}
+              </Text>
+            )}
           </Stack>
           <Flex gap={8}>
-            <Box style={createFilterPillStyle(tokens, { active: false })}>
+            <Flex align="center" gap={4} style={{
+              ...createFilterPillStyle(tokens, { active: false }),
+            }}>
+              <BarChart3 size={12} />
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
-                {completedStages}/{sortedStages.length} stages
+                {completedCount}/{sortedStages.length} stages
               </Text>
-            </Box>
-            <Box style={createFilterPillStyle(tokens, { active: false })}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{members.length} panelists</Text>
-            </Box>
+            </Flex>
+            <Flex align="center" gap={4} style={{
+              ...createFilterPillStyle(tokens, { active: false }),
+            }}>
+              <Users size={12} />
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
+                {members.length} panelists
+              </Text>
+            </Flex>
           </Flex>
         </Flex>
 
-        {/* Stage Timeline */}
-        <Box style={{ ...createCardStyle(tokens, { glass: isGlass, padding: 0 }), overflow: 'hidden', marginBottom: tokens.spacing[4] }}>
+        {/* ── Stage Timeline Bar ───────────────────────── */}
+        <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
           <Box style={createPanelHeaderStyle(tokens)}>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>Stage Progression</Text>
+            <Flex align="center" gap={6}>
+              <Award size={14} color={tokens.colors.neutral[500]} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                Stage Progression
+              </Text>
+            </Flex>
           </Box>
           <Flex gap={0}>
             {sortedStages.map((stage, i) => {
               const sc = stageColors[stage.status];
               const isSelected = selectedStageId === stage.id;
               const stageMembers = members.filter(m => m.stageId === stage.id);
+              const memberScores = stageMembers.map(m => m.overallScore ?? 0);
               return (
-                <Box
-                  key={stage.id}
-                  onClick={() => handleStageSelect(stage.id)}
-                  style={{
-                    flex: 1,
-                    padding: tokens.spacing[3],
-                    borderRight: i < sortedStages.length - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : 'none',
-                    background: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}
-                >
-                  <Flex gap={6} align="center" style={{ marginBottom: tokens.spacing[1] }}>
-                    <Box style={{ width: 20, height: 20, borderRadius: tokens.borderRadius.full, background: sc.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: sc.color }}>{stage.order}</Text>
+                <Box key={stage.id} onClick={() => handleStageSelect(stage.id)} style={{
+                  flex: 1, padding: `${tokens.spacing[4]}px ${tokens.spacing[3]}px`,
+                  borderRight: i < sortedStages.length - 1
+                    ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`
+                    : 'none',
+                  backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
+                  cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                }}>
+                  <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[2] }}>
+                    <Box style={{
+                      width: 24, height: 24, borderRadius: tokens.borderRadius.full,
+                      backgroundColor: sc.bgColor, display: 'flex',
+                      alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <StageIcon status={stage.status} />
                     </Box>
-                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{stage.name}</Text>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: tokens.typography.fontWeight.semibold,
+                      color: tokens.colors.neutral[800],
+                    }}>
+                      {stage.name}
+                    </Text>
                   </Flex>
-                  <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, background: sc.bgColor, display: 'inline-block', marginBottom: tokens.spacing[1] }}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: sc.color, textTransform: 'capitalize' as const }}>{stage.status.replace('_', ' ')}</Text>
-                  </Box>
+                  <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[2] }}>
+                    <Box style={{
+                      padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
+                      borderRadius: tokens.borderRadius.full,
+                      backgroundColor: sc.bgColor, display: 'inline-flex',
+                    }}>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.xs, color: sc.color,
+                        textTransform: 'capitalize' as const,
+                      }}>
+                        {stage.status.replace('_', ' ')}
+                      </Text>
+                    </Box>
+                  </Flex>
                   {stage.aggregatedScore !== undefined && (
-                    <Flex justify="between" align="center">
-                      <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{stage.aggregatedScore}</Text>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{getAggregationLabel(stage.aggregationStrategy)}</Text>
+                    <Flex justify="between" align="center" style={{ marginBottom: tokens.spacing[1] }}>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.xl || '1.25rem',
+                        fontWeight: tokens.typography.fontWeight.bold,
+                        color: tokens.colors.neutral[800],
+                      }}>
+                        {stage.aggregatedScore}
+                      </Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                        {getAggregationLabel(stage.aggregationStrategy)}
+                      </Text>
                     </Flex>
                   )}
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: tokens.spacing[1] }}>{stageMembers.length} panelist{stageMembers.length !== 1 ? 's' : ''}</Text>
+                  <Flex align="center" gap={6}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                      {stageMembers.length} panelist{stageMembers.length !== 1 ? 's' : ''}
+                    </Text>
+                    <ScoreSparkline scores={memberScores} />
+                  </Flex>
                 </Box>
               );
             })}
           </Flex>
         </Box>
 
-        <Flex gap={16}>
-          {/* Panelists */}
-          <Box style={{ flex: 1, ...createCardStyle(tokens, { glass: isGlass, padding: 0 }), overflow: 'hidden' }}>
+        {/* ── Panelists + Detail ───────────────────────── */}
+        <div style={{ display: 'grid', gridTemplateColumns: selectedMember || consensus ? '1fr 340px' : '1fr', gap: tokens.spacing[5] }}>
+          {/* Panelist List */}
+          <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <Box style={createPanelHeaderStyle(tokens)}>
-              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>Panelists</Text>
+              <Flex align="center" gap={6}>
+                <UserCheck size={14} color={tokens.colors.neutral[500]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                  Panelists
+                </Text>
+              </Flex>
             </Box>
-            <Stack gap={0} style={{ maxHeight: 320, overflowY: 'auto' }}>
+            <Stack gap={0} style={{ maxHeight: 380, overflowY: 'auto' as const }}>
               {members.map(m => {
                 const isSelected = selectedMemberId === m.id;
                 const rc = m.recommendation ? recColors[m.recommendation] : null;
                 const memberStage = stages.find(s => s.id === m.stageId);
                 return (
-                  <Box
-                    key={m.id}
-                    onClick={() => handleMemberSelect(m.id)}
-                    style={createListItemStyle(tokens, { active: isSelected, interactive: true })}
-                  >
+                  <Box key={m.id} onClick={() => handleMemberSelect(m.id)}
+                    style={createListItemStyle(tokens, { active: isSelected, interactive: true })}>
                     <Flex justify="between" align="center">
                       <Stack gap={2}>
-                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{m.name}</Text>
-                        <Flex gap={6}>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{m.role}</Text>
-                          {memberStage && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Stage: {memberStage.name}</Text>}
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.sm,
+                          fontWeight: tokens.typography.fontWeight.semibold,
+                          color: tokens.colors.neutral[800],
+                        }}>
+                          {m.name}
+                        </Text>
+                        <Flex gap={8}>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                            {m.role}
+                          </Text>
+                          {memberStage && (
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                              {memberStage.name}
+                            </Text>
+                          )}
                         </Flex>
                       </Stack>
-                      <Flex gap={6} align="center">
+                      <Flex align="center" gap={8}>
                         {m.overallScore !== undefined && (
-                          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{m.overallScore}</Text>
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.sm,
+                            fontWeight: tokens.typography.fontWeight.bold,
+                            color: tokens.colors.neutral[700],
+                          }}>
+                            {m.overallScore}
+                          </Text>
                         )}
                         {m.recommendation && rc && (
-                          <Box style={{ padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, background: rc.bgColor, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rc.border}` }}>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: rc.color }}>{getRecommendationLabel(m.recommendation)}</Text>
-                          </Box>
+                          <Flex align="center" gap={4} style={{
+                            padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
+                            borderRadius: tokens.borderRadius.full,
+                            backgroundColor: rc.bgColor,
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rc.border}`,
+                          }}>
+                            <Box style={createStatusDotStyle(tokens, rc.color)} />
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: rc.color }}>
+                              {getRecommendationLabel(m.recommendation)}
+                            </Text>
+                          </Flex>
                         )}
+                        <ChevronRight size={14} color={tokens.colors.neutral[300]} />
                       </Flex>
                     </Flex>
                   </Box>
@@ -182,24 +305,50 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
             </Stack>
           </Box>
 
-          {/* Member Detail / Consensus */}
-          <Box style={{ width: 300 }}>
+          {/* Detail Panel */}
+          <Box>
             {selectedMember ? (
-              <Box style={createCardStyle(tokens)}>
-                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[3] }}>
-                  {selectedMember.name}
-                </Text>
+              <Box style={{ ...card, padding: tokens.spacing[5] }}>
+                <Flex align="center" gap={8} style={{ marginBottom: tokens.spacing[4] }}>
+                  <Box style={{
+                    width: 36, height: 36, borderRadius: tokens.borderRadius.full,
+                    backgroundColor: tokens.colors.primaryScale[100],
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <UserCheck size={16} color={tokens.colors.primaryScale[600]} />
+                  </Box>
+                  <Stack gap={1}>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: tokens.typography.fontWeight.bold,
+                      color: tokens.colors.neutral[800],
+                    }}>
+                      {selectedMember.name}
+                    </Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                      {selectedMember.role}
+                    </Text>
+                  </Stack>
+                </Flex>
+
+                {/* Dimension Scores */}
                 {selectedMember.dimensionScores && selectedMember.dimensionScores.length > 0 && (
-                  <Stack gap={8}>
+                  <Stack gap={10}>
                     {selectedMember.dimensionScores.map(ds => {
                       const pct = ds.maxScore > 0 ? (ds.score / ds.maxScore) * 100 : 0;
-                      const barColor = pct >= 70 ? tokens.colors.successScale[500] : pct >= 40 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500];
+                      const barColor = pct >= 70 ? tokens.colors.successScale[500]
+                        : pct >= 40 ? tokens.colors.warningScale[500]
+                        : tokens.colors.errorScale[500];
                       const progressStyles = createProgressBarStyle(tokens, { color: barColor, percent: pct });
                       return (
                         <Box key={ds.dimension}>
-                          <Flex justify="between" style={{ marginBottom: 3 }}>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{ds.dimension}</Text>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{ds.score}/{ds.maxScore}</Text>
+                          <Flex justify="between" style={{ marginBottom: 4 }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>
+                              {ds.dimension}
+                            </Text>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                              {ds.score}/{ds.maxScore}
+                            </Text>
                           </Flex>
                           <Box style={{ ...progressStyles.track, height: 5 }}>
                             <div style={progressStyles.fill} />
@@ -209,62 +358,110 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                     })}
                   </Stack>
                 )}
+
+                {/* Notes */}
                 {selectedMember.notes && (
-                  <Box style={{ marginTop: tokens.spacing[2], padding: tokens.spacing[2], borderRadius: tokens.borderRadius.md, background: tokens.colors.neutral[50] }}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{selectedMember.notes}</Text>
-                  </Box>
+                  <Flex align="start" gap={6} style={{
+                    marginTop: tokens.spacing[4], padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: tokens.colors.neutral[50],
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                  }}>
+                    <MessageSquare size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], lineHeight: 1.5 }}>
+                      {selectedMember.notes}
+                    </Text>
+                  </Flex>
                 )}
               </Box>
             ) : consensus ? (
-              <Box style={createCardStyle(tokens)}>
-                <Text style={createSectionHeaderStyle(tokens)}>
-                  Consensus
+              <Box style={{ ...card, padding: tokens.spacing[5] }}>
+                <Text style={{
+                  ...createSectionHeaderStyle(tokens),
+                  marginBottom: tokens.spacing[4],
+                }}>
+                  Panel Consensus
                 </Text>
+
+                {/* Main recommendation */}
                 {(() => {
                   const rc = recColors[consensus.recommendation];
                   return (
-                    <Box style={{ textAlign: 'center' as const, marginBottom: tokens.spacing[3] }}>
-                      <Box style={{ padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.lg, background: rc.bgColor, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rc.border}`, display: 'inline-block' }}>
-                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: rc.color }}>
-                          {getRecommendationLabel(consensus.recommendation)}
-                        </Text>
-                      </Box>
-                      <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], marginTop: tokens.spacing[1] }}>
-                        {consensus.isUnanimous ? 'Unanimous' : `${consensus.agreementPercentage}% agreement`}
+                    <Box style={{
+                      textAlign: 'center' as const, padding: tokens.spacing[4],
+                      marginBottom: tokens.spacing[4], borderRadius: tokens.borderRadius.lg,
+                      backgroundColor: rc.bgColor,
+                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${rc.border}`,
+                    }}>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.lg || '1.125rem',
+                        fontWeight: tokens.typography.fontWeight.bold, color: rc.color,
+                      }}>
+                        {getRecommendationLabel(consensus.recommendation)}
+                      </Text>
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600],
+                        marginTop: tokens.spacing[1],
+                      }}>
+                        {consensus.isUnanimous ? 'Unanimous decision' : `${consensus.agreementPercentage}% agreement`}
                       </Text>
                     </Box>
                   );
                 })()}
+
                 {/* Distribution */}
-                <Stack gap={4}>
-                  {(Object.entries(consensus.distribution) as [string, number][]).filter(([, count]) => count > 0).map(([rec, count]) => {
-                    const rc = recColors[rec as keyof typeof recColors];
-                    return (
-                      <Flex key={rec} justify="between" align="center">
-                        <Flex gap={4} align="center">
-                          <Box style={createStatusDotStyle(tokens, rc.color)} />
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>{getRecommendationLabel(rec as any)}</Text>
+                <Stack gap={6}>
+                  {(Object.entries(consensus.distribution) as [string, number][])
+                    .filter(([, count]) => count > 0)
+                    .map(([rec, count]) => {
+                      const rc = recColors[rec as keyof typeof recColors];
+                      return (
+                        <Flex key={rec} justify="between" align="center">
+                          <Flex gap={6} align="center">
+                            <Box style={createStatusDotStyle(tokens, rc.color)} />
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>
+                              {getRecommendationLabel(rec as any)}
+                            </Text>
+                          </Flex>
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.xs,
+                            fontWeight: tokens.typography.fontWeight.bold,
+                            color: tokens.colors.neutral[700],
+                          }}>
+                            {count}
+                          </Text>
                         </Flex>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{count}</Text>
-                      </Flex>
-                    );
-                  })}
+                      );
+                    })}
                 </Stack>
+
+                {/* Dissenting */}
                 {consensus.dissentingMembers.length > 0 && (
-                  <Box style={{ marginTop: tokens.spacing[2], padding: tokens.spacing[2], borderRadius: tokens.borderRadius.md, background: tokens.colors.warningScale[50], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}` }}>
+                  <Flex align="start" gap={6} style={{
+                    marginTop: tokens.spacing[4], padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.lg,
+                    backgroundColor: tokens.colors.warningScale[50],
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
+                  }}>
+                    <AlertCircle size={14} color={tokens.colors.warningScale[600]} style={{ flexShrink: 0, marginTop: 2 }} />
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[700] }}>
                       Dissenting: {consensus.dissentingMembers.join(', ')}
                     </Text>
-                  </Box>
+                  </Flex>
                 )}
               </Box>
             ) : (
-              <Box style={{ padding: tokens.spacing[5], textAlign: 'center' as const }}>
-                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>Select a panelist for details</Text>
+              <Box style={{
+                ...card, padding: tokens.spacing[8],
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
+                  Select a panelist for details
+                </Text>
               </Box>
             )}
           </Box>
-        </Flex>
+        </div>
       </Box>
     );
   },

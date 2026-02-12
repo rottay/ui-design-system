@@ -2,7 +2,7 @@
 
 /**
  * BhInterviewReplay - Compact Preset
- * Premium condensed transcript with timeline scrubber, speaker avatars,
+ * Slite-inspired condensed transcript with timeline scrubber, speaker avatars,
  * evidence markers, confidence badges, and playback summary stats.
  */
 
@@ -10,17 +10,23 @@ import { useState, useMemo } from 'react';
 import { createPreset, PresetContext } from '../../../factory';
 import type { BhInterviewReplayProps, TranscriptEntry } from '../../core';
 import { getSpeakerColors } from '../../core';
-import {
-  createCardStyle, createPanelHeaderStyle, createListItemStyle, createBadgeStyle,
-  createAccentBarStyle, createHoverStyle, getHoverTransform, getCardHoverShadow,
-  createStatusDotStyle, createSectionHeaderStyle,
-} from '../../../helpers';
+import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import { MessageSquare, Bookmark, Users, Clock } from 'lucide-react';
+
+const MOCK_TRANSCRIPT: TranscriptEntry[] = [
+  { id: 't-1', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'Welcome! Could you walk me through a challenging technical project you led recently?', timestamp: '00:00', durationMs: 8000, confidence: 0.98 },
+  { id: 't-2', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Sure. I led the migration of our monolithic API to a microservices architecture serving 2M DAU.', timestamp: '00:12', durationMs: 18000, confidence: 0.95, hasEvidence: true },
+  { id: 't-3', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'What was the biggest technical challenge during the migration?', timestamp: '00:45', durationMs: 6000, confidence: 0.97 },
+  { id: 't-4', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Data consistency across services. We implemented event-sourcing with eventual consistency and a reconciliation system.', timestamp: '01:02', durationMs: 22000, confidence: 0.92, hasEvidence: true },
+  { id: 't-5', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'How did you handle team coordination?', timestamp: '01:38', durationMs: 5000, confidence: 0.96 },
+  { id: 't-6', speaker: 'candidate', speakerName: 'Sarah Chen', text: 'Weekly architecture reviews and shared OpenAPI contracts. Each team owned their service following common patterns.', timestamp: '01:55', durationMs: 16000, confidence: 0.94, hasEvidence: true },
+];
 
 /* Timeline scrubber bar */
 function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
   transcript: TranscriptEntry[]; speakerColors: ReturnType<typeof getSpeakerColors>; tokens: any; primitives: any;
 }) {
-  const { Flex } = primitives;
+  const { Box } = primitives;
   const segments = useMemo(() => {
     if (transcript.length === 0) return [];
     const w = 100 / transcript.length;
@@ -28,11 +34,11 @@ function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
   }, [transcript, speakerColors, tokens]);
 
   return (
-    <Flex style={{ height: 6, borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const, background: tokens.colors.neutral[100] }}>
+    <Box style={{ display: 'flex', height: 6, borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const, background: tokens.colors.neutral[100] }}>
       {segments.map(seg => (
-        <div key={seg.id} style={{ width: seg.width, height: '100%', backgroundColor: seg.color, transition: `opacity ${tokens.motion.hover}` }} />
+        <Box key={seg.id} style={{ width: seg.width, height: '100%', backgroundColor: seg.color, transition: `opacity ${tokens.motion.hover}` }} />
       ))}
-    </Flex>
+    </Box>
   );
 }
 
@@ -40,22 +46,10 @@ function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
 function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
   entry: TranscriptEntry; speakerColors: ReturnType<typeof getSpeakerColors>; tokens: any; onEntrySelect?: (id: string) => void; primitives: any;
 }) {
-  const { Box, Flex, Text } = primitives;
+  const { Box, Text } = primitives;
   const [hovered, setHovered] = useState(false);
   const sc = speakerColors[entry.speaker];
   const initial = entry.speakerName.charAt(0).toUpperCase();
-
-  const rowStyle = useMemo(() => ({
-    ...createListItemStyle(tokens, { interactive: !!onEntrySelect }),
-    borderLeft: `3px solid ${sc.color}`,
-    ...(hovered ? { backgroundColor: tokens.colors.neutral[50], boxShadow: getCardHoverShadow(tokens), ...getHoverTransform(tokens) } : {}),
-  }), [tokens, onEntrySelect, sc.color, hovered]);
-
-  const avatarStyle = useMemo(() => ({
-    width: 24, height: 24, borderRadius: tokens.borderRadius.full,
-    backgroundColor: sc.bgColor, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${sc.border}`,
-    display: 'flex' as const, alignItems: 'center' as const, justifyContent: 'center' as const, flexShrink: 0,
-  }), [tokens, sc]);
 
   const durationStr = useMemo(() => {
     if (!entry.durationMs) return null;
@@ -72,19 +66,35 @@ function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
     : undefined;
 
   return (
-    <Box onClick={() => onEntrySelect?.(entry.id)} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={rowStyle}>
-      <Flex gap={8} align="start">
-        <Box style={avatarStyle}>
+    <Box
+      onClick={() => onEntrySelect?.(entry.id)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
+        borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+        borderLeft: `3px solid ${sc.color}`,
+        backgroundColor: hovered ? tokens.colors.neutral[50] : 'transparent',
+        cursor: onEntrySelect ? 'pointer' : 'default',
+        transition: `all ${tokens.motion.hover}`,
+      }}
+    >
+      <Box style={{ display: 'flex', gap: tokens.spacing[2], alignItems: 'flex-start' }}>
+        <Box style={{
+          width: 24, height: 24, borderRadius: tokens.borderRadius.full,
+          backgroundColor: sc.bgColor, border: `1px solid ${sc.border}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}>
           <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: sc.color, lineHeight: 1 }}>{initial}</Text>
         </Box>
         <Box style={{ flex: 1, minWidth: 0 }}>
-          <Flex justify="between" align="center" style={{ marginBottom: tokens.spacing[1] }}>
-            <Flex gap={6} align="center">
+          <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[1] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: sc.color }}>{entry.speakerName}</Text>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{entry.timestamp}</Text>
               {durationStr && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>({durationStr})</Text>}
-            </Flex>
-            <Flex gap={4} align="center">
+            </Box>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
               {entry.hasEvidence && (
                 <Box style={{ ...createBadgeStyle(tokens, 'warning'), padding: `0 ${tokens.spacing[1]}px` }}>
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[700] }}>Evidence</Text>
@@ -95,11 +105,11 @@ function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: confidenceTextColor }}>{Math.round(entry.confidence! * 100)}%</Text>
                 </Box>
               )}
-            </Flex>
-          </Flex>
-          <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: 1.5 }}>{entry.text}</Text>
+            </Box>
+          </Box>
+          <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.relaxed }}>{entry.text}</Text>
         </Box>
-      </Flex>
+      </Box>
     </Box>
   );
 }
@@ -107,11 +117,10 @@ function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
 /* Main preset */
 export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
   name: 'BhInterviewReplay.Compact',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhInterviewReplayProps>) => {
-    const { Box, Flex, Stack, Text, Spinner } = primitives;
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+  render: ({ primitives, props, tokens }: PresetContext<BhInterviewReplayProps>) => {
+    const { Box, Text } = primitives;
     const speakerColors = getSpeakerColors(tokens);
-    const { transcript, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
+    const { transcript = MOCK_TRANSCRIPT, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
 
     const stats = useMemo(() => {
       const totalMs = transcript.reduce((s, e) => s + (e.durationMs ?? 0), 0);
@@ -122,76 +131,110 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
       return { durationStr, speakerCount: speakers.length, evidenceCount, entryCount: transcript.length };
     }, [transcript]);
 
-    const cardStyle = useMemo(() => ({
-      ...createCardStyle(tokens, { glass: isGlass, padding: 0 }), overflow: 'hidden' as const, ...style,
-    }), [tokens, isGlass, style]);
-
     if (loading) {
       return (
-        <Flex align="center" justify="center" direction="column" gap={8} style={{ padding: tokens.spacing[8], ...style }} className={className}>
-          <Spinner size="sm" />
-          <Text style={{ color: tokens.colors.neutral[500], fontSize: tokens.typography.fontSize.xs }}>Loading transcript...</Text>
-        </Flex>
+        <Box className={className} style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: `${tokens.spacing[10]}px`, ...style,
+        }}>
+          <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>Loading transcript...</Text>
+        </Box>
       );
     }
 
     return (
-      <Box className={className} style={cardStyle}>
-        <div style={createAccentBarStyle(tokens, { position: 'top' })} />
-        <Flex align="center" justify="between" style={createPanelHeaderStyle(tokens)}>
-          <Box>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+      <Box className={className} style={{
+        ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+        borderRadius: tokens.borderRadius.lg,
+        border: `1px solid ${tokens.colors.neutral[100]}`,
+        overflow: 'hidden', ...style,
+      }}>
+        {/* Header */}
+        <Box style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+        }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+            <Box style={{
+              width: 32, height: 32, borderRadius: tokens.borderRadius.lg,
+              backgroundColor: tokens.colors.primaryScale[50],
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <MessageSquare size={16} color={tokens.colors.primaryScale[500]} />
+            </Box>
+            <Text style={{
+              fontSize: tokens.typography.fontSize.md,
+              fontWeight: tokens.typography.fontWeight.bold,
+              color: tokens.colors.neutral[900],
+            }}>
               {candidateName ?? 'Transcript'}{jobTitle ? ` - ${jobTitle}` : ''}
             </Text>
           </Box>
-          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{stats.entryCount} entries</Text>
-        </Flex>
+          <Box style={{ ...createBadgeStyle(tokens, 'primary'), padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[700] }}>{stats.entryCount} entries</Text>
+          </Box>
+        </Box>
 
         {/* Summary stats bar */}
-        <Flex gap={12} align="center" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+        <Box style={{
+          display: 'flex', gap: tokens.spacing[4], alignItems: 'center',
+          padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+        }}>
           {stats.durationStr && (
-            <Flex gap={4} align="center">
-              <Box style={createStatusDotStyle(tokens, tokens.colors.primaryScale[500])} />
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+              <Clock size={12} color={tokens.colors.primaryScale[500]} />
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{stats.durationStr}</Text>
-            </Flex>
+            </Box>
           )}
-          <Flex gap={4} align="center">
-            <Box style={createStatusDotStyle(tokens, tokens.colors.secondaryScale[500])} />
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+            <Users size={12} color={tokens.colors.secondaryScale[500]} />
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{stats.speakerCount} speakers</Text>
-          </Flex>
+          </Box>
           {stats.evidenceCount > 0 && (
-            <Flex gap={4} align="center">
-              <Box style={createStatusDotStyle(tokens, tokens.colors.warningScale[500])} />
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+              <Bookmark size={12} color={tokens.colors.warningScale[500]} />
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{stats.evidenceCount} evidence</Text>
-            </Flex>
+            </Box>
           )}
-        </Flex>
+        </Box>
 
         {/* Timeline scrubber */}
-        <Box style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-          <Text style={{ ...createSectionHeaderStyle(tokens), marginBottom: tokens.spacing[1] }}>Timeline</Text>
+        <Box style={{
+          padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+        }}>
+          <Text style={{
+            fontSize: tokens.typography.fontSize.xs,
+            fontWeight: tokens.typography.fontWeight.bold,
+            color: tokens.colors.neutral[500],
+            textTransform: 'uppercase' as const,
+            letterSpacing: '0.05em',
+            marginBottom: tokens.spacing[2],
+          }}>Timeline</Text>
           <TimelineScrubber transcript={transcript} speakerColors={speakerColors} tokens={tokens} primitives={primitives} />
-          <Flex gap={12} style={{ marginTop: tokens.spacing[1] }}>
+          <Box style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[2] }}>
             {(['candidate', 'interviewer', 'system'] as const).map(role => {
               const sc = speakerColors[role];
               const count = transcript.filter(e => e.speaker === role).length;
               if (count === 0) return null;
               return (
-                <Flex key={role} gap={4} align="center">
-                  <Box style={createStatusDotStyle(tokens, sc.color)} />
+                <Box key={role} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                  <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: sc.color }} />
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], textTransform: 'capitalize' as const }}>{role} ({count})</Text>
-                </Flex>
+                </Box>
               );
             })}
-          </Flex>
+          </Box>
         </Box>
 
         {/* Transcript entries */}
-        <Stack gap={0} style={{ maxHeight: 400, overflowY: 'auto' as const }}>
+        <Box style={{ maxHeight: 400, overflowY: 'auto' as const }}>
           {transcript.map(entry => (
             <EntryRow key={entry.id} entry={entry} speakerColors={speakerColors} tokens={tokens} onEntrySelect={onEntrySelect} primitives={primitives} />
           ))}
-        </Stack>
+        </Box>
       </Box>
     );
   },

@@ -1,0 +1,22 @@
+'use client';
+
+/**
+ * ApprovalWorkflow - Pattern Component
+ *
+ * Multi-step approval chain with status tracking, comments, and action buttons.
+ * Used by: Offer approvals (bh), PurchaseOrders (bar), ShiftSwaps (staff), Refunds (pm)
+ */
+
+import { createEngineComponent } from '../../../core/engines/factory';
+import type { ApprovalWorkflowProps } from './types';
+
+export type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from './types';
+
+export const PatternApprovalWorkflow = createEngineComponent<ApprovalWorkflowProps>(
+  'PatternApprovalWorkflow',
+  {
+    classic: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
+    rustic: () => import('./engines/rustic'),
+  }
+);

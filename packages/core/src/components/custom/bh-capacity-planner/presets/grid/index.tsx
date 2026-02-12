@@ -1,0 +1,319 @@
+'use client';
+
+/**
+ * BhCapacityPlanner - Grid Preset
+ * Card-based grid showing each recruiter's capacity utilization
+ * with SVG ring charts, workload stats, and rebalancing suggestions.
+ * Slite-inspired warm design with generous whitespace.
+ */
+
+import { useState, useMemo } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
+import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import type { BhCapacityPlannerProps, RecruiterCapacity, RebalanceSuggestion, CapacitySummary } from '../../core';
+import type { DesignTokens } from '../../../../../core/types/tokens';
+import {
+  LayoutGrid, Users, TrendingUp, AlertTriangle, AlertOctagon,
+  Briefcase, ArrowRight, CheckCircle2, UserCircle, Zap,
+} from 'lucide-react';
+
+/* ---------------------------------------------------------------------------
+ * Default Data
+ * -------------------------------------------------------------------------*/
+
+const DEFAULT_RECRUITERS: RecruiterCapacity[] = [
+  { id: 'r-1', name: 'Sarah Johnson', department: 'Engineering', currentAssignments: 14, maxCapacity: 12, utilizationPercent: 117, activePositions: 4, activeCandidates: 14, avgTimePerCandidate: 3.2, status: 'overloaded' },
+  { id: 'r-2', name: 'Michael Chen', department: 'Engineering', currentAssignments: 9, maxCapacity: 12, utilizationPercent: 75, activePositions: 3, activeCandidates: 9, avgTimePerCandidate: 4.1, status: 'optimal' },
+  { id: 'r-3', name: 'Emily Rodriguez', department: 'Product', currentAssignments: 11, maxCapacity: 12, utilizationPercent: 92, activePositions: 3, activeCandidates: 11, avgTimePerCandidate: 3.8, status: 'optimal' },
+  { id: 'r-4', name: 'James Kim', department: 'Design', currentAssignments: 4, maxCapacity: 10, utilizationPercent: 40, activePositions: 2, activeCandidates: 4, avgTimePerCandidate: 5.0, status: 'underutilized' },
+  { id: 'r-5', name: 'Anna Kowalski', department: 'Sales', currentAssignments: 13, maxCapacity: 10, utilizationPercent: 130, activePositions: 5, activeCandidates: 13, avgTimePerCandidate: 2.8, status: 'overloaded' },
+  { id: 'r-6', name: 'David Thompson', department: 'Engineering', currentAssignments: 8, maxCapacity: 12, utilizationPercent: 67, activePositions: 2, activeCandidates: 8, avgTimePerCandidate: 4.5, status: 'optimal' },
+];
+
+const DEFAULT_SUGGESTIONS: RebalanceSuggestion[] = [
+  { fromRecruiterId: 'r-1', fromRecruiterName: 'Sarah Johnson', toRecruiterId: 'r-4', toRecruiterName: 'James Kim', candidateCount: 3, reason: 'Sarah is overloaded at 117% while James has capacity at 40%. Cross-trained in design-adjacent roles.' },
+  { fromRecruiterId: 'r-5', fromRecruiterName: 'Anna Kowalski', toRecruiterId: 'r-6', toRecruiterName: 'David Thompson', candidateCount: 2, reason: 'Anna is at 130% utilization. David has bandwidth and overlapping department experience.' },
+];
+
+const DEFAULT_SUMMARY: CapacitySummary = {
+  totalRecruiters: 6,
+  avgUtilization: 87,
+  overloadedCount: 2,
+  underutilizedCount: 1,
+  totalOpenReqs: 19,
+};
+
+/* ---------------------------------------------------------------------------
+ * Helpers
+ * -------------------------------------------------------------------------*/
+
+function getStatusConfig(status: string, t: DesignTokens) {
+  switch (status) {
+    case 'overloaded': return { label: 'Overloaded', color: t.colors.errorScale[600], bg: t.colors.errorScale[50], border: t.colors.errorScale[200] };
+    case 'optimal': return { label: 'Optimal', color: t.colors.successScale[600], bg: t.colors.successScale[50], border: t.colors.successScale[200] };
+    case 'underutilized': return { label: 'Underutilized', color: t.colors.warningScale[600], bg: t.colors.warningScale[50], border: t.colors.warningScale[200] };
+    default: return { label: status, color: t.colors.neutral[500], bg: t.colors.neutral[50], border: t.colors.neutral[200] };
+  }
+}
+
+function getRingColor(status: string, t: DesignTokens) {
+  switch (status) {
+    case 'overloaded': return t.colors.errorScale[500];
+    case 'optimal': return t.colors.successScale[500];
+    case 'underutilized': return t.colors.warningScale[500];
+    default: return t.colors.neutral[400];
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * ScoreRing Sub-component
+ * -------------------------------------------------------------------------*/
+
+function UtilizationRing({ percent, status, t }: { percent: number; status: string; t: DesignTokens }) {
+  const size = 76;
+  const stroke = 5;
+  const r = (size - stroke) / 2;
+  const circ = 2 * Math.PI * r;
+  const clamped = Math.min(percent, 150);
+  const progress = (Math.min(clamped, 100) / 100) * circ;
+  const color = getRingColor(status, t);
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth={stroke} />
+      <circle
+        cx={size / 2} cy={size / 2} r={r} fill="none"
+        stroke={color} strokeWidth={stroke} strokeLinecap="round"
+        strokeDasharray={`${progress} ${circ}`}
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        style={{ transition: 'stroke-dasharray 0.5s ease' }}
+      />
+      {percent > 100 && (
+        <circle
+          cx={size / 2} cy={size / 2} r={r} fill="none"
+          stroke={t.colors.errorScale[300]} strokeWidth={stroke} strokeLinecap="round"
+          strokeDasharray={`${((clamped - 100) / 100) * circ} ${circ}`}
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          opacity={0.4}
+          style={{ transition: 'stroke-dasharray 0.5s ease' }}
+        />
+      )}
+      <text x={size / 2} y={size / 2} textAnchor="middle" dominantBaseline="central"
+        fill={color} fontSize={14} fontWeight={700}>
+        {percent}%
+      </text>
+    </svg>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+ * Preset
+ * -------------------------------------------------------------------------*/
+
+export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
+  name: 'BhCapacityPlanner.Grid',
+  render: ({ primitives, props, tokens: t }: PresetContext<BhCapacityPlannerProps>) => {
+    const { Box, Text } = primitives;
+    const br = getPersonalityBadgeRadius(t);
+
+    const {
+      recruiters = DEFAULT_RECRUITERS,
+      suggestions = DEFAULT_SUGGESTIONS,
+      summary = DEFAULT_SUMMARY,
+      selectedRecruiter: controlledSelected,
+      onRecruiterSelect,
+      onAcceptSuggestion,
+      className, style,
+    } = props;
+
+    const [internalSelected, setInternalSelected] = useState<string | null>(null);
+    const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;
+    const handleSelect = (id: string | null) => {
+      if (controlledSelected === undefined) setInternalSelected(id);
+      onRecruiterSelect?.(id);
+    };
+
+    return (
+      <Box className={className} style={{
+        ...createCardStyle(t, { elevation: 'md' }),
+        display: 'flex', flexDirection: 'column', height: '100%',
+        backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...style,
+      }}>
+        {/* Header */}
+        <Box style={{
+          padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+          backgroundColor: t.colors.common.white,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+        }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
+            <LayoutGrid size={16} style={{ color: t.colors.primaryScale[500] }} />
+            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+              Recruiter Capacity
+            </Text>
+          </Box>
+
+          {/* Summary Metrics */}
+          {summary && (
+            <Box style={{ display: 'flex', gap: t.spacing[5] }}>
+              {[
+                { label: 'Recruiters', value: summary.totalRecruiters, icon: Users, color: t.colors.primaryScale[600] },
+                { label: 'Avg Utilization', value: `${summary.avgUtilization}%`, icon: TrendingUp, color: t.colors.infoScale[600] },
+                { label: 'Overloaded', value: summary.overloadedCount, icon: AlertOctagon, color: t.colors.errorScale[600] },
+                { label: 'Underutilized', value: summary.underutilizedCount, icon: AlertTriangle, color: t.colors.warningScale[600] },
+                { label: 'Open Reqs', value: summary.totalOpenReqs, icon: Briefcase, color: t.colors.neutral[700] },
+              ].map(m => {
+                const Icon = m.icon;
+                return (
+                  <Box key={m.label} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                    <Icon size={14} style={{ color: m.color }} />
+                    <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: m.color }}>{m.value}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{m.label}</Text>
+                  </Box>
+                );
+              })}
+            </Box>
+          )}
+        </Box>
+
+        <Box style={{ flex: 1, overflowY: 'auto', padding: t.spacing[6] }}>
+          {/* Recruiter Grid */}
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
+            {recruiters.map(rec => {
+              const isSelected = selected === rec.id;
+              const sc = getStatusConfig(rec.status, t);
+              return (
+                <Box key={rec.id} onClick={() => handleSelect(isSelected ? null : rec.id)} style={{
+                  ...createCardStyle(t, { elevation: 'sm' }),
+                  padding: t.spacing[5], backgroundColor: t.colors.common.white,
+                  border: `2px solid ${isSelected ? sc.color : t.colors.neutral[100]}`,
+                  cursor: 'pointer', transition: 'all 0.2s ease',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                }}>
+                  {/* Avatar + Ring */}
+                  <Box style={{ position: 'relative', marginBottom: t.spacing[3] }}>
+                    <UtilizationRing percent={rec.utilizationPercent} status={rec.status} t={t} />
+                    <Box style={{
+                      position: 'absolute', top: 14, left: 14, width: 48, height: 48,
+                      borderRadius: t.borderRadius.full, overflow: 'hidden',
+                      backgroundColor: t.colors.primaryScale[100],
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {rec.avatar ? (
+                        <img src={rec.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
+                          {rec.name.split(' ').map(n => n[0]).join('')}
+                        </Text>
+                      )}
+                    </Box>
+                  </Box>
+
+                  {/* Name + Department */}
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800], textAlign: 'center' }}>
+                    {rec.name}
+                  </Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: t.spacing[3] }}>
+                    {rec.department}
+                  </Text>
+
+                  {/* Stats Row */}
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: t.spacing[3] }}>
+                    {[
+                      { label: 'Assigned', value: `${rec.currentAssignments}/${rec.maxCapacity}` },
+                      { label: 'Positions', value: rec.activePositions },
+                      { label: 'Candidates', value: rec.activeCandidates },
+                    ].map(s => (
+                      <Box key={s.label} style={{ textAlign: 'center', flex: 1 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{s.value}</Text>
+                        <Text style={{ fontSize: 9, color: t.colors.neutral[400] }}>{s.label}</Text>
+                      </Box>
+                    ))}
+                  </Box>
+
+                  {/* Avg Time */}
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[3] }}>
+                    <Zap size={10} style={{ color: t.colors.neutral[400] }} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
+                      {rec.avgTimePerCandidate}h avg/candidate
+                    </Text>
+                  </Box>
+
+                  {/* Status Badge */}
+                  <Box style={{
+                    padding: `2px ${t.spacing[3]}px`, borderRadius: br,
+                    backgroundColor: sc.bg, border: `1px solid ${sc.border}`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: sc.color }}>
+                      {sc.label}
+                    </Text>
+                  </Box>
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/* Rebalancing Suggestions */}
+          {suggestions.length > 0 && (
+            <Box style={{
+              ...createCardStyle(t, { elevation: 'sm' }),
+              padding: t.spacing[5], backgroundColor: t.colors.common.white,
+            }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                <Zap size={15} style={{ color: t.colors.warningScale[500] }} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                  Rebalancing Suggestions ({suggestions.length})
+                </Text>
+              </Box>
+
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                {suggestions.map((sug, i) => (
+                  <Box key={i} style={{
+                    padding: `${t.spacing[4]}px ${t.spacing[4]}px`,
+                    borderRadius: t.borderRadius.lg,
+                    border: `1px solid ${t.colors.warningScale[200]}`,
+                    backgroundColor: t.colors.warningScale[50],
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  }}>
+                    <Box style={{ flex: 1 }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[1] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>
+                          Move
+                        </Text>
+                        <Box style={{
+                          padding: `0 ${t.spacing[2]}px`, borderRadius: br,
+                          backgroundColor: t.colors.infoScale[50], border: `1px solid ${t.colors.infoScale[200]}`,
+                        }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.infoScale[700] }}>
+                            {sug.candidateCount} candidates
+                          </Text>
+                        </Box>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>from</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{sug.fromRecruiterName}</Text>
+                        <ArrowRight size={14} style={{ color: t.colors.neutral[400] }} />
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{sug.toRecruiterName}</Text>
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], lineHeight: 1.5 }}>
+                        {sug.reason}
+                      </Text>
+                    </Box>
+                    {onAcceptSuggestion && (
+                      <Box onClick={(e: any) => { e.stopPropagation(); onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }} style={{
+                        display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                        padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
+                        backgroundColor: t.colors.primaryScale[500], cursor: 'pointer',
+                        transition: 'background-color 0.15s ease', flexShrink: 0, marginLeft: t.spacing[4],
+                      }}>
+                        <CheckCircle2 size={12} style={{ color: t.colors.common.white }} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>Accept</Text>
+                      </Box>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
+        </Box>
+      </Box>
+    );
+  },
+});

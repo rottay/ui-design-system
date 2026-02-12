@@ -4,6 +4,9 @@
  * BhAgentGallery - Gallery Preset
  * Grid-based agent browse and select with preview modal,
  * tab navigation, filter bar, agent cards, and marketplace section.
+ *
+ * Design: Rich card grid with sparkline usage charts, hover action
+ * overlays, featured marketplace section, and personality-driven styling.
  */
 
 import { useState, useMemo } from 'react';
@@ -11,18 +14,17 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
+  createDividerStyle,
   createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createSurfaceStyle,
+  createPersonalityAccentBar,
+  createSectionHeaderStyle,
+  getCardPadding,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhAgentGalleryProps,
-  AgentSummary,
-  AgentPreview,
   AgentFilter,
   AgentTab,
   AgentViewMode,
@@ -47,8 +49,6 @@ import {
   Download,
   X,
   Play,
-  Pause,
-  ChevronDown,
   Phone,
   MessageSquare,
   Calendar,
@@ -100,25 +100,15 @@ function getAgentTypeIcon(type: AgentType, size: number) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Helper: language flag emoji                                       */
+/*  Helper: language label (no emoji flags)                           */
 /* ------------------------------------------------------------------ */
-function getLanguageFlag(language: string): string {
-  const flags: Record<string, string> = {
-    en: '\u{1F1FA}\u{1F1F8}',
-    es: '\u{1F1EA}\u{1F1F8}',
-    fr: '\u{1F1EB}\u{1F1F7}',
-    de: '\u{1F1E9}\u{1F1EA}',
-    pt: '\u{1F1E7}\u{1F1F7}',
-    ja: '\u{1F1EF}\u{1F1F5}',
-    ko: '\u{1F1F0}\u{1F1F7}',
-    zh: '\u{1F1E8}\u{1F1F3}',
-    it: '\u{1F1EE}\u{1F1F9}',
-    nl: '\u{1F1F3}\u{1F1F1}',
-    ar: '\u{1F1F8}\u{1F1E6}',
-    hi: '\u{1F1EE}\u{1F1F3}',
-    ru: '\u{1F1F7}\u{1F1FA}',
+function getLanguageLabel(language: string): string {
+  const labels: Record<string, string> = {
+    en: 'EN', es: 'ES', fr: 'FR', de: 'DE', pt: 'PT',
+    ja: 'JA', ko: 'KO', zh: 'ZH', it: 'IT', nl: 'NL',
+    ar: 'AR', hi: 'HI', ru: 'RU',
   };
-  return flags[language.toLowerCase()] || '\u{1F310}';
+  return labels[language.toLowerCase()] || language.toUpperCase();
 }
 
 /* ------------------------------------------------------------------ */
@@ -183,31 +173,22 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
     const showPreview = controlledShowPreview ?? localShowPreview;
     const viewMode = controlledViewMode ?? localViewMode;
 
-    const handleTabChange = (tab: AgentTab) => {
-      onTabChange?.(tab);
-      if (controlledTab === undefined) setLocalTab(tab);
-    };
-    const handleFilterChange = (f: AgentFilter) => {
-      onFilterChange?.(f);
-      if (controlledFilters === undefined) setLocalFilters(f);
-    };
-    const handleSelect = (id: string) => {
-      onAgentSelect?.(id);
-      if (controlledSelected === undefined) setLocalSelected(id);
-    };
-    const handlePreviewToggle = (show: boolean) => {
-      onPreviewToggle?.(show);
-      if (controlledShowPreview === undefined) setLocalShowPreview(show);
-    };
-    const handleViewModeChange = (mode: AgentViewMode) => {
-      onViewModeChange?.(mode);
-      if (controlledViewMode === undefined) setLocalViewMode(mode);
-    };
+    const handleTabChange = (tab: AgentTab) => { onTabChange?.(tab); if (controlledTab === undefined) setLocalTab(tab); };
+    const handleFilterChange = (f: AgentFilter) => { onFilterChange?.(f); if (controlledFilters === undefined) setLocalFilters(f); };
+    const handleSelect = (id: string) => { onAgentSelect?.(id); if (controlledSelected === undefined) setLocalSelected(id); };
+    const handlePreviewToggle = (show: boolean) => { onPreviewToggle?.(show); if (controlledShowPreview === undefined) setLocalShowPreview(show); };
+    const handleViewModeChange = (mode: AgentViewMode) => { onViewModeChange?.(mode); if (controlledViewMode === undefined) setLocalViewMode(mode); };
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverTransform = getHoverTransform(tokens);
+    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     /* ---- Filtering ---- */
     const filteredAgents = useMemo(() => {
@@ -225,8 +206,6 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
     }, [agents, filters]);
 
     const selectedAgentData = useMemo(() => agents.find((a) => a.id === selectedAgent), [agents, selectedAgent]);
-
-    /* ---- Derived counts ---- */
     const counts = tabCounts ?? { my: agents.length, team: 0, marketplace: 0 };
 
     /* ---- Tab config ---- */
@@ -265,6 +244,22 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       return ['all', ...Array.from(provs)];
     }, [agents]);
 
+    /* ---- Reusable icon button style ---- */
+    const iconBtnStyle = (bg: string, color: string): React.CSSProperties => ({
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: tokens.spacing[7],
+      height: tokens.spacing[7],
+      borderRadius: tokens.borderRadius.md,
+      border: 'none',
+      backgroundColor: bg,
+      boxShadow: tokens.shadows.sm,
+      color,
+      cursor: 'pointer',
+      transition: `all ${tokens.motion.hover}`,
+    });
+
     /* ---- Select style helper ---- */
     const selectStyle: React.CSSProperties = {
       padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
@@ -288,7 +283,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
         className={className}
         style={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'column' as const,
           height: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
@@ -298,7 +293,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
         {/* =========================================================== */}
         {/*  1. Tab Bar                                                  */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -306,19 +301,13 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
             padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
             backgroundColor: tokens.colors.common.white,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-            ...(isGlass
-              ? {
-                  backdropFilter: tokens.glass?.blur,
-                  WebkitBackdropFilter: tokens.glass?.blur,
-                  backgroundColor: tokens.glass?.bg,
-                }
-              : {}),
+            ...(isGlass ? { backdropFilter: tokens.glass?.blur, WebkitBackdropFilter: tokens.glass?.blur, backgroundColor: tokens.glass?.bg } : {}),
           }}
         >
           {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
             return (
-              <button
+              <Box
                 key={tab.key}
                 onClick={() => handleTabChange(tab.key)}
                 style={{
@@ -326,7 +315,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   alignItems: 'center',
                   gap: tokens.spacing[2],
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                  borderRadius: tokens.borderRadius.md,
+                  borderRadius: badgeRadius,
                   border: isActive
                     ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
                     : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
@@ -336,14 +325,13 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
-                  ...hoverStyle,
                 }}
               >
-                <span style={{ display: 'flex', alignItems: 'center', color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400] }}>
                   {tab.icon}
-                </span>
-                <span>{tab.label}</span>
-                <span
+                </Box>
+                <Text>{tab.label}</Text>
+                <Box
                   style={{
                     padding: `0 ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.full,
@@ -355,16 +343,16 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     textAlign: 'center' as const,
                   }}
                 >
-                  {tab.count}
-                </span>
-              </button>
+                  <Text>{tab.count}</Text>
+                </Box>
+              </Box>
             );
           })}
 
           {/* View mode toggle */}
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: tokens.spacing[1] }}>
+          <Box style={{ marginLeft: 'auto', display: 'flex', gap: tokens.spacing[1] }}>
             {(['grid', 'list'] as const).map((mode) => (
-              <button
+              <Box
                 key={mode}
                 onClick={() => handleViewModeChange(mode)}
                 style={{
@@ -381,19 +369,18 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   color: viewMode === mode ? tokens.colors.primaryScale[600] : tokens.colors.neutral[400],
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
-                  ...hoverStyle,
                 }}
               >
                 {mode === 'grid' ? <Grid3X3 size={16} strokeWidth={1.5} /> : <List size={16} strokeWidth={1.5} />}
-              </button>
+              </Box>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* =========================================================== */}
         {/*  2. Filter Bar                                               */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -404,7 +391,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
           }}
         >
           {/* Search */}
-          <div
+          <Box
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -432,273 +419,160 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 color: tokens.colors.neutral[800],
                 fontFamily: 'inherit',
               }}
-            
-              onFocus={(e) => {
-                e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-              }}
             />
-          </div>
+          </Box>
 
-          {/* Filter icon */}
-          <div style={{ display: 'flex', alignItems: 'center', color: tokens.colors.neutral[400] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', color: tokens.colors.neutral[400] }}>
             <Filter size={16} strokeWidth={1.5} />
-          </div>
+          </Box>
 
-          {/* Type filter */}
-          <select
-            value={filters.type || 'all'}
-            onChange={(e) => handleFilterChange({ ...filters, type: e.target.value as AgentType | 'all' })}
-            style={selectStyle}
-          >
-            {typeOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
+          <select value={filters.type || 'all'} onChange={(e) => handleFilterChange({ ...filters, type: e.target.value as AgentType | 'all' })} style={selectStyle}>
+            {typeOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
           </select>
 
-          {/* Language filter */}
-          <select
-            value={filters.language || 'all'}
-            onChange={(e) => handleFilterChange({ ...filters, language: e.target.value })}
-            style={selectStyle}
-          >
-            {uniqueLanguages.map((lang) => (
-              <option key={lang} value={lang}>
-                {lang === 'all' ? 'All Languages' : `${getLanguageFlag(lang)} ${lang.toUpperCase()}`}
-              </option>
-            ))}
+          <select value={filters.language || 'all'} onChange={(e) => handleFilterChange({ ...filters, language: e.target.value })} style={selectStyle}>
+            {uniqueLanguages.map((lang) => (<option key={lang} value={lang}>{lang === 'all' ? 'All Languages' : getLanguageLabel(lang)}</option>))}
           </select>
 
-          {/* Provider filter */}
-          <select
-            value={filters.provider || 'all'}
-            onChange={(e) => handleFilterChange({ ...filters, provider: e.target.value })}
-            style={selectStyle}
-          >
-            {uniqueProviders.map((prov) => (
-              <option key={prov} value={prov}>{prov === 'all' ? 'All Providers' : prov}</option>
-            ))}
+          <select value={filters.provider || 'all'} onChange={(e) => handleFilterChange({ ...filters, provider: e.target.value })} style={selectStyle}>
+            {uniqueProviders.map((prov) => (<option key={prov} value={prov}>{prov === 'all' ? 'All Providers' : prov}</option>))}
           </select>
 
-          {/* Status filter */}
-          <select
-            value={filters.status || 'all'}
-            onChange={(e) => handleFilterChange({ ...filters, status: e.target.value as AgentStatus | 'all' })}
-            style={selectStyle}
-          >
-            {statusOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
+          <select value={filters.status || 'all'} onChange={(e) => handleFilterChange({ ...filters, status: e.target.value as AgentStatus | 'all' })} style={selectStyle}>
+            {statusOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
           </select>
-        </div>
+        </Box>
 
         {/* =========================================================== */}
         {/*  3. Agent Cards Grid                                         */}
         {/* =========================================================== */}
-        <div
-          style={{
-            flex: 1,
-            overflow: 'auto',
-            padding: tokens.spacing[5],
-          }}
-        >
+        <Box style={{ flex: 1, overflow: 'auto' as const, padding: tokens.spacing[5] }}>
           {filteredAgents.length === 0 ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: `${tokens.spacing[10]}px ${tokens.spacing[4]}px`,
-                textAlign: 'center' as const,
-              }}
-            >
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[10]}px ${tokens.spacing[4]}px`, textAlign: 'center' as const }}>
               <Bot size={48} strokeWidth={1} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[4] }} />
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.lg,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  color: tokens.colors.neutral[500],
-                  display: 'block',
-                  marginBottom: tokens.spacing[2],
-                }}
-              >
+              <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], display: 'block', marginBottom: tokens.spacing[2] }}>
                 No agents found
               </Text>
-              <Text
-                style={{
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[400],
-                }}
-              >
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
                 Try adjusting your filters or create a new agent
               </Text>
-            </div>
+            </Box>
           ) : (
             <>
               {/* Marketplace featured section */}
               {activeTab === 'marketplace' && filteredAgents.some((a) => a.rating && a.rating >= 4.5) && (
-                <div style={{ marginBottom: tokens.spacing[6] }}>
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.lg,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                      display: 'block',
-                      marginBottom: tokens.spacing[4],
-                    }}
-                  >
-                    Featured Agents
-                  </Text>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                      gap: tokens.spacing[4],
-                      marginBottom: tokens.spacing[4],
-                    }}
-                  >
+                <Box style={{ marginBottom: tokens.spacing[6] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
+                    <Star size={16} strokeWidth={1.5} style={{ color: tokens.colors.warningScale[500] }} />
+                    <Text style={{ ...sectionHeader, marginBottom: 0 }}>Featured Agents</Text>
+                  </Box>
+                  <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: tokens.spacing[4], marginBottom: tokens.spacing[4] }}>
                     {filteredAgents
                       .filter((a) => a.rating && a.rating >= 4.5)
                       .slice(0, 3)
-                      .map((agent) => {
-                        const statusInfo = getStatusInfo(agent.status, tokens);
-                        return (
-                          <div
-                            key={`featured-${agent.id}`}
-                            onClick={() => handleSelect(agent.id)}
+                      .map((agent) => (
+                        <Box
+                          key={`featured-${agent.id}`}
+                          onClick={() => handleSelect(agent.id)}
+                          style={{
+                            ...cardBase,
+                            padding: padding,
+                            cursor: 'pointer',
+                            transition: `all ${tokens.motion.hover}`,
+                            border: selectedAgent === agent.id
+                              ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
+                              : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
+                            background: isGlass ? tokens.glass?.bg : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
+                            position: 'relative' as const,
+                            overflow: 'hidden',
+                          }}
+                          onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                            Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
+                            (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.md;
+                          }}
+                          onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                            (e.currentTarget as HTMLDivElement).style.transform = 'none';
+                            (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.sm;
+                          }}
+                        >
+                          <Box style={accentBar || undefined} />
+                          {/* Featured badge */}
+                          <Box
                             style={{
-                              ...cardBase,
-                              padding: tokens.spacing[4],
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              border: selectedAgent === agent.id
-                                ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[400]}`
-                                : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
-                              background: isGlass
-                                ? tokens.glass?.bg
-                                : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
-                              position: 'relative' as const,
-                              ...hoverStyle,
-                            }}
-                            onMouseEnter={(e) => {
-                              Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
-                              (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.md;
-                            }}
-                            onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLDivElement).style.transform = 'none';
-                              (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.sm;
+                              position: 'absolute' as const,
+                              top: tokens.spacing[2],
+                              right: tokens.spacing[2],
+                              ...createBadgeStyle(tokens, 'warning'),
+                              fontSize: tokens.typography.fontSize.xs,
+                              display: 'flex',
+                              alignItems: 'center',
                             }}
                           >
-                            {/* Featured badge */}
-                            <div
+                            <Star size={12} strokeWidth={2} style={{ marginRight: tokens.spacing[1] }} />
+                            <Text>Featured</Text>
+                          </Box>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
+                            <Box
                               style={{
-                                position: 'absolute' as const,
-                                top: tokens.spacing[2],
-                                right: tokens.spacing[2],
-                                ...createBadgeStyle(tokens, 'warning'),
-                                fontSize: tokens.typography.fontSize.xs,
+                                width: tokens.spacing[10],
+                                height: tokens.spacing[10],
+                                borderRadius: tokens.borderRadius.lg,
+                                backgroundColor: tokens.colors.primaryScale[100],
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: tokens.colors.primaryScale[600],
                               }}
                             >
-                              <Star size={12} strokeWidth={2} style={{ marginRight: tokens.spacing[1] }} />
-                              Featured
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
-                              <div
-                                style={{
-                                  width: tokens.spacing[10],
-                                  height: tokens.spacing[10],
-                                  borderRadius: tokens.borderRadius.lg,
-                                  backgroundColor: tokens.colors.primaryScale[100],
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  color: tokens.colors.primaryScale[600],
-                                }}
-                              >
-                                {getAgentTypeIcon(agent.type, 20)}
-                              </div>
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <Text
-                                  style={{
-                                    fontSize: tokens.typography.fontSize.md,
-                                    fontWeight: tokens.typography.fontWeight.semibold,
-                                    color: tokens.colors.neutral[900],
-                                    display: 'block',
-                                  }}
-                                >
-                                  {agent.name}
+                              {getAgentTypeIcon(agent.type, 20)}
+                            </Box>
+                            <Box style={{ flex: 1, minWidth: 0 }}>
+                              <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], display: 'block' }}>
+                                {agent.name}
+                              </Text>
+                              {agent.author && (
+                                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>by {agent.author}</Text>
+                              )}
+                            </Box>
+                          </Box>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                            {agent.rating !== undefined && (
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                                <Star size={14} strokeWidth={2} style={{ color: tokens.colors.warningScale[500], fill: tokens.colors.warningScale[500] }} />
+                                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+                                  {agent.rating.toFixed(1)}
                                 </Text>
-                                {agent.author && (
-                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                                    by {agent.author}
-                                  </Text>
-                                )}
-                              </div>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                              {agent.rating !== undefined && (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                                  <Star size={14} strokeWidth={2} style={{ color: tokens.colors.warningScale[500], fill: tokens.colors.warningScale[500] }} />
-                                  <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                                    {agent.rating.toFixed(1)}
-                                  </Text>
-                                </div>
-                              )}
-                              {agent.downloads !== undefined && (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                                  <Download size={14} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
-                                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
-                                    {agent.downloads.toLocaleString()}
-                                  </Text>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
+                              </Box>
+                            )}
+                            {agent.downloads !== undefined && (
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                                <Download size={14} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
+                                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
+                                  {agent.downloads.toLocaleString()}
+                                </Text>
+                              </Box>
+                            )}
+                          </Box>
+                        </Box>
+                      ))}
+                  </Box>
 
-                  {/* Divider */}
-                  <div
-                    style={{
-                      height: 1,
-                      backgroundColor: tokens.colors.neutral[200],
-                      marginBottom: tokens.spacing[4],
-                    }}
-                  />
-                  <Text
-                    style={{
-                      fontSize: tokens.typography.fontSize.lg,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                      display: 'block',
-                      marginBottom: tokens.spacing[4],
-                    }}
-                  >
-                    All Agents
-                  </Text>
-                </div>
+                  <Box style={divider} />
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[4], marginBottom: tokens.spacing[4] }}>
+                    <Bot size={16} strokeWidth={1.5} style={{ color: tokens.colors.primaryScale[500] }} />
+                    <Text style={{ ...sectionHeader, marginBottom: 0 }}>All Agents</Text>
+                  </Box>
+                </Box>
               )}
 
               {/* Main grid */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                  gap: tokens.spacing[4],
-                }}
-              >
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: tokens.spacing[4] }}>
                 {filteredAgents.map((agent) => {
                   const statusInfo = getStatusInfo(agent.status, tokens);
                   const isSelected = selectedAgent === agent.id;
 
                   return (
-                    <div
+                    <Box
                       key={agent.id}
                       onClick={() => handleSelect(agent.id)}
                       style={{
@@ -711,15 +585,14 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         overflow: 'hidden',
                         position: 'relative' as const,
-                        ...hoverStyle,
                       }}
-                      onMouseEnter={(e) => {
+                      onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                         Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
                         (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.md;
                         const actions = e.currentTarget.querySelector('[data-agent-actions]') as HTMLDivElement | null;
                         if (actions) actions.style.opacity = '1';
                       }}
-                      onMouseLeave={(e) => {
+                      onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                         (e.currentTarget as HTMLDivElement).style.transform = 'none';
                         (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.sm;
                         const actions = e.currentTarget.querySelector('[data-agent-actions]') as HTMLDivElement | null;
@@ -727,10 +600,10 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       }}
                     >
                       {/* Card content */}
-                      <div style={{ padding: tokens.spacing[4] }}>
+                      <Box style={{ padding: padding }}>
                         {/* Header: Icon + Name + Status */}
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
-                          <div
+                        <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
+                          <Box
                             style={{
                               width: tokens.spacing[10],
                               height: tokens.spacing[10],
@@ -744,13 +617,14 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             }}
                           >
                             {getAgentTypeIcon(agent.type, 20)}
-                          </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
+                          </Box>
+                          <Box style={{ flex: 1, minWidth: 0 }}>
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
                               <Text
                                 style={{
                                   fontSize: tokens.typography.fontSize.md,
-                                  fontWeight: tokens.typography.fontWeight.semibold,
+                                  fontWeight: typo.headingWeight,
+                                  letterSpacing: typo.headingLetterSpacing,
                                   color: tokens.colors.neutral[900],
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -760,130 +634,66 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                 {agent.name}
                               </Text>
                               {agent.isDefault && (
-                                <span
-                                  style={{
-                                    ...createBadgeStyle(tokens, 'primary'),
-                                    fontSize: tokens.typography.fontSize.xs,
-                                    padding: `0 ${tokens.spacing[2]}px`,
-                                    lineHeight: tokens.typography.lineHeight.relaxed,
-                                  }}
-                                >
-                                  Default
-                                </span>
+                                <Box style={{ ...createBadgeStyle(tokens, 'primary'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[2]}px`, lineHeight: tokens.typography.lineHeight.relaxed }}>
+                                  <Text>Default</Text>
+                                </Box>
                               )}
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                              <span
-                                style={{
-                                  ...createBadgeStyle(tokens, 'info'),
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  padding: `0 ${tokens.spacing[2]}px`,
-                                  textTransform: 'capitalize' as const,
-                                }}
-                              >
-                                {agent.type}
-                              </span>
-                              {/* Status dot */}
-                              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                                <div
-                                  style={{
-                                    width: tokens.spacing[2],
-                                    height: tokens.spacing[2],
-                                    borderRadius: tokens.borderRadius.full,
-                                    backgroundColor: statusInfo.color,
-                                  }}
-                                />
-                                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusInfo.color }}>
-                                  {statusInfo.label}
-                                </Text>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                            </Box>
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                              <Box style={{ ...createBadgeStyle(tokens, 'info'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[2]}px`, textTransform: 'capitalize' as const }}>
+                                <Text>{agent.type}</Text>
+                              </Box>
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                                <Box style={{ width: tokens.spacing[2], height: tokens.spacing[2], borderRadius: tokens.borderRadius.full, backgroundColor: statusInfo.color }} />
+                                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusInfo.color }}>{statusInfo.label}</Text>
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
 
-                        {/* Meta row: Language, Provider */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                            <span style={{ fontSize: tokens.typography.fontSize.sm }}>{getLanguageFlag(agent.language)}</span>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
-                              {agent.language.toUpperCase()}
+                        {/* Meta row */}
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium }}>
+                              {getLanguageLabel(agent.language)}
                             </Text>
-                          </div>
-                          <div
-                            style={{
-                              ...createBadgeStyle(tokens, 'secondary'),
-                              fontSize: tokens.typography.fontSize.xs,
-                              padding: `0 ${tokens.spacing[2]}px`,
-                            }}
-                          >
-                            {agent.voiceProvider}
-                          </div>
-                          {/* Marketplace rating */}
+                          </Box>
+                          <Box style={{ ...createBadgeStyle(tokens, 'secondary'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[2]}px` }}>
+                            <Text>{agent.voiceProvider}</Text>
+                          </Box>
                           {activeTab === 'marketplace' && agent.rating !== undefined && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginLeft: 'auto' }}>
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginLeft: 'auto' }}>
                               <Star size={12} strokeWidth={2} style={{ color: tokens.colors.warningScale[500], fill: tokens.colors.warningScale[500] }} />
                               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
                                 {agent.rating.toFixed(1)}
                               </Text>
                               {agent.downloads !== undefined && (
                                 <>
-                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], margin: `0 ${tokens.spacing[1]}px` }}>
-                                    |
-                                  </Text>
+                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], margin: `0 ${tokens.spacing[1]}px` }}>|</Text>
                                   <Download size={12} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
-                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                                    {agent.downloads.toLocaleString()}
-                                  </Text>
+                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{agent.downloads.toLocaleString()}</Text>
                                 </>
                               )}
-                            </div>
+                            </Box>
                           )}
-                        </div>
+                        </Box>
 
                         {/* Usage sparkline */}
                         {agent.usageSparkline.length > 0 && (
-                          <div style={{ marginBottom: tokens.spacing[2] }}>
-                            <Text
-                              style={{
-                                fontSize: tokens.typography.fontSize.xs,
-                                color: tokens.colors.neutral[400],
-                                display: 'block',
-                                marginBottom: tokens.spacing[1],
-                              }}
-                            >
+                          <Box style={{ marginBottom: tokens.spacing[2] }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], display: 'block', marginBottom: tokens.spacing[1] }}>
                               Usage (last 14 days)
                             </Text>
-                            <svg
-                              width="100%"
-                              height={40}
-                              viewBox="0 0 200 40"
-                              preserveAspectRatio="none"
-                              style={{ display: 'block' }}
-                            >
-                              <polygon
-                                points={sparklinePolygonPoints(agent.usageSparkline, 200, 40, 2)}
-                                fill={tokens.colors.primaryScale[100]}
-                                stroke="none"
-                              />
-                              <polyline
-                                points={sparklinePoints(agent.usageSparkline, 200, 40, 2)}
-                                fill="none"
-                                stroke={tokens.colors.primaryScale[500]}
-                                strokeWidth={1.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
+                            <svg width="100%" height={40} viewBox="0 0 200 40" preserveAspectRatio="none" style={{ display: 'block' }}>
+                              <polygon points={sparklinePolygonPoints(agent.usageSparkline, 200, 40, 2)} fill={tokens.colors.primaryScale[100]} stroke="none" />
+                              <polyline points={sparklinePoints(agent.usageSparkline, 200, 40, 2)} fill="none" stroke={tokens.colors.primaryScale[500]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                          </div>
+                          </Box>
                         )}
 
                         {/* Preview button */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSelect(agent.id);
-                            handlePreviewToggle(true);
-                          }}
+                        <Box
+                          onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(agent.id); handlePreviewToggle(true); }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -899,16 +709,15 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             fontWeight: tokens.typography.fontWeight.medium,
                             cursor: 'pointer',
                             transition: `all ${tokens.motion.hover}`,
-                            ...hoverStyle,
                           }}
                         >
                           <Eye size={14} strokeWidth={1.5} />
-                          Preview
-                        </button>
-                      </div>
+                          <Text>Preview</Text>
+                        </Box>
+                      </Box>
 
                       {/* ---- Hover Actions Overlay ---- */}
-                      <div
+                      <Box
                         data-agent-actions=""
                         style={{
                           position: 'absolute' as const,
@@ -921,140 +730,47 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         }}
                       >
                         {onDuplicate && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); onDuplicate(agent.id); }}
-                            title="Duplicate"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: tokens.spacing[7],
-                              height: tokens.spacing[7],
-                              borderRadius: tokens.borderRadius.md,
-                              border: 'none',
-                              backgroundColor: tokens.colors.common.white,
-                              boxShadow: tokens.shadows.sm,
-                              color: tokens.colors.neutral[600],
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              ...hoverStyle,
-                            }}
-                          >
+                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDuplicate(agent.id); }} title="Duplicate" style={iconBtnStyle(tokens.colors.common.white, tokens.colors.neutral[600])}>
                             <Copy size={14} strokeWidth={1.5} />
-                          </button>
+                          </Box>
                         )}
                         {onEdit && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); onEdit(agent.id); }}
-                            title="Edit"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: tokens.spacing[7],
-                              height: tokens.spacing[7],
-                              borderRadius: tokens.borderRadius.md,
-                              border: 'none',
-                              backgroundColor: tokens.colors.common.white,
-                              boxShadow: tokens.shadows.sm,
-                              color: tokens.colors.neutral[600],
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              ...hoverStyle,
-                            }}
-                          >
+                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEdit(agent.id); }} title="Edit" style={iconBtnStyle(tokens.colors.common.white, tokens.colors.neutral[600])}>
                             <Pencil size={14} strokeWidth={1.5} />
-                          </button>
+                          </Box>
                         )}
                         {agent.status === 'active' && onDeactivate && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); onDeactivate(agent.id); }}
-                            title="Deactivate"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: tokens.spacing[7],
-                              height: tokens.spacing[7],
-                              borderRadius: tokens.borderRadius.md,
-                              border: 'none',
-                              backgroundColor: tokens.colors.warningScale[50],
-                              boxShadow: tokens.shadows.sm,
-                              color: tokens.colors.warningScale[600],
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              ...hoverStyle,
-                            }}
-                          >
+                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDeactivate(agent.id); }} title="Deactivate" style={iconBtnStyle(tokens.colors.warningScale[50], tokens.colors.warningScale[600])}>
                             <PowerOff size={14} strokeWidth={1.5} />
-                          </button>
+                          </Box>
                         )}
                         {agent.status !== 'active' && onActivate && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); onActivate(agent.id); }}
-                            title="Activate"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: tokens.spacing[7],
-                              height: tokens.spacing[7],
-                              borderRadius: tokens.borderRadius.md,
-                              border: 'none',
-                              backgroundColor: tokens.colors.successScale[50],
-                              boxShadow: tokens.shadows.sm,
-                              color: tokens.colors.successScale[600],
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              ...hoverStyle,
-                            }}
-                          >
+                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onActivate(agent.id); }} title="Activate" style={iconBtnStyle(tokens.colors.successScale[50], tokens.colors.successScale[600])}>
                             <Power size={14} strokeWidth={1.5} />
-                          </button>
+                          </Box>
                         )}
                         {onDelete && (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); onDelete(agent.id); }}
-                            title="Delete"
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: tokens.spacing[7],
-                              height: tokens.spacing[7],
-                              borderRadius: tokens.borderRadius.md,
-                              border: 'none',
-                              backgroundColor: tokens.colors.errorScale[50],
-                              boxShadow: tokens.shadows.sm,
-                              color: tokens.colors.errorScale[600],
-                              cursor: 'pointer',
-                              transition: `all ${tokens.motion.hover}`,
-                              ...hoverStyle,
-                            }}
-                          >
+                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDelete(agent.id); }} title="Delete" style={iconBtnStyle(tokens.colors.errorScale[50], tokens.colors.errorScale[600])}>
                             <Trash2 size={14} strokeWidth={1.5} />
-                          </button>
+                          </Box>
                         )}
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
                   );
                 })}
-              </div>
+              </Box>
             </>
           )}
-        </div>
+        </Box>
 
         {/* =========================================================== */}
         {/*  4. Preview Modal                                            */}
         {/* =========================================================== */}
         {showPreview && selectedAgentData && (
-          <div
+          <Box
             style={{
               position: 'fixed' as const,
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              top: 0, left: 0, right: 0, bottom: 0,
               backgroundColor: tokens.overlay?.medium,
               display: 'flex',
               alignItems: 'center',
@@ -1064,8 +780,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
             }}
             onClick={() => handlePreviewToggle(false)}
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
+            <Box
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
               style={{
                 ...cardBase,
                 padding: 0,
@@ -1074,19 +790,14 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 maxHeight: '80vh',
                 overflow: 'hidden',
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'column' as const,
                 ...(isGlass
-                  ? {
-                      backdropFilter: tokens.glass?.blurLg,
-                      WebkitBackdropFilter: tokens.glass?.blurLg,
-                      backgroundColor: tokens.glass?.bgHeavy,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass?.border}`,
-                    }
+                  ? { backdropFilter: tokens.glass?.blurLg, WebkitBackdropFilter: tokens.glass?.blurLg, backgroundColor: tokens.glass?.bgHeavy, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass?.border}` }
                   : { backgroundColor: tokens.colors.common.white }),
               }}
             >
               {/* Modal header */}
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1095,8 +806,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                  <div
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                  <Box
                     style={{
                       width: tokens.spacing[10],
                       height: tokens.spacing[10],
@@ -1109,36 +820,22 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     }}
                   >
                     {getAgentTypeIcon(selectedAgentData.type, 20)}
-                  </div>
-                  <div>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.lg,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[900],
-                        display: 'block',
-                      }}
-                    >
+                  </Box>
+                  <Box>
+                    <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], display: 'block' }}>
                       {selectedAgentData.name}
                     </Text>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                      <span
-                        style={{
-                          ...createBadgeStyle(tokens, 'info'),
-                          fontSize: tokens.typography.fontSize.xs,
-                          padding: `0 ${tokens.spacing[2]}px`,
-                          textTransform: 'capitalize' as const,
-                        }}
-                      >
-                        {selectedAgentData.type}
-                      </span>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box style={{ ...createBadgeStyle(tokens, 'info'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[2]}px`, textTransform: 'capitalize' as const }}>
+                        <Text>{selectedAgentData.type}</Text>
+                      </Box>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                        {getLanguageFlag(selectedAgentData.language)} {selectedAgentData.language.toUpperCase()} | {selectedAgentData.voiceProvider}
+                        {getLanguageLabel(selectedAgentData.language)} | {selectedAgentData.voiceProvider}
                       </Text>
-                    </div>
-                  </div>
-                </div>
-                <button
+                    </Box>
+                  </Box>
+                </Box>
+                <Box
                   onClick={() => handlePreviewToggle(false)}
                   style={{
                     display: 'flex',
@@ -1152,36 +849,20 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                     color: tokens.colors.neutral[500],
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
-                    ...hoverStyle,
                   }}
                 >
                   <X size={18} strokeWidth={1.5} />
-                </button>
-              </div>
+                </Box>
+              </Box>
 
               {/* Modal body */}
-              <div
-                style={{
-                  flex: 1,
-                  overflow: 'auto',
-                  padding: `${tokens.spacing[5]}px`,
-                }}
-              >
-                {/* Config summary */}
+              <Box style={{ flex: 1, overflow: 'auto' as const, padding: tokens.spacing[5] }}>
                 {previewData && (
                   <>
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[800],
-                        display: 'block',
-                        marginBottom: tokens.spacing[3],
-                      }}
-                    >
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], display: 'block', marginBottom: tokens.spacing[3] }}>
                       Configuration Summary
                     </Text>
-                    <div
+                    <Box
                       style={{
                         padding: tokens.spacing[3],
                         borderRadius: tokens.borderRadius.md,
@@ -1191,56 +872,27 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       }}
                     >
                       {Object.entries(previewData.configSummary).map(([key, value]) => (
-                        <div
-                          key={key}
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            padding: `${tokens.spacing[2]}px 0`,
-                            borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                          }}
-                        >
+                        <Box key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: `${tokens.spacing[2]}px 0`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], textTransform: 'capitalize' as const }}>
                             {key.replace(/([A-Z])/g, ' $1').trim()}
                           </Text>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
                             {value}
                           </Text>
-                        </div>
+                        </Box>
                       ))}
-                    </div>
+                    </Box>
 
                     {/* Sample conversation */}
-                    <Text
-                      style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[800],
-                        display: 'block',
-                        marginBottom: tokens.spacing[3],
-                      }}
-                    >
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], display: 'block', marginBottom: tokens.spacing[3] }}>
                       Sample Conversation
                     </Text>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: tokens.spacing[2],
-                        marginBottom: tokens.spacing[5],
-                      }}
-                    >
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2], marginBottom: tokens.spacing[5] }}>
                       {previewData.sampleConversation.map((line, i) => {
                         const isAgent = i % 2 === 1;
                         return (
-                          <div
-                            key={i}
-                            style={{
-                              display: 'flex',
-                              justifyContent: isAgent ? 'flex-start' : 'flex-end',
-                            }}
-                          >
-                            <div
+                          <Box key={i} style={{ display: 'flex', justifyContent: isAgent ? 'flex-start' : 'flex-end' }}>
+                            <Box
                               style={{
                                 maxWidth: '75%',
                                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -1251,28 +903,20 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                 lineHeight: tokens.typography.lineHeight.relaxed,
                               }}
                             >
-                              {line}
-                            </div>
-                          </div>
+                              <Text>{line}</Text>
+                            </Box>
+                          </Box>
                         );
                       })}
-                    </div>
+                    </Box>
 
                     {/* Voice preview */}
                     {previewData.voicePreviewUrl && (
-                      <div style={{ marginBottom: tokens.spacing[5] }}>
-                        <Text
-                          style={{
-                            fontSize: tokens.typography.fontSize.sm,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.neutral[800],
-                            display: 'block',
-                            marginBottom: tokens.spacing[3],
-                          }}
-                        >
+                      <Box style={{ marginBottom: tokens.spacing[5] }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], display: 'block', marginBottom: tokens.spacing[3] }}>
                           Voice Preview
                         </Text>
-                        <div
+                        <Box
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -1283,7 +927,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                           }}
                         >
-                          <button
+                          <Box
                             style={{
                               display: 'flex',
                               alignItems: 'center',
@@ -1291,20 +935,17 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               width: tokens.spacing[9],
                               height: tokens.spacing[9],
                               borderRadius: tokens.borderRadius.full,
-                              border: 'none',
                               backgroundColor: tokens.colors.primaryScale[600],
                               color: tokens.colors.common.white,
                               cursor: 'pointer',
                               transition: `all ${tokens.motion.hover}`,
-                              ...hoverStyle,
                             }}
                           >
                             <Play size={16} strokeWidth={2} />
-                          </button>
-                          {/* Waveform placeholder */}
-                          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                          </Box>
+                          <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
                             {Array.from({ length: 40 }).map((_, i) => (
-                              <div
+                              <Box
                                 key={i}
                                 style={{
                                   flex: 1,
@@ -1314,13 +955,13 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                                 }}
                               />
                             ))}
-                          </div>
-                        </div>
-                      </div>
+                          </Box>
+                        </Box>
+                      </Box>
                     )}
 
                     {/* Estimated cost */}
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1337,31 +978,20 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.infoScale[800] }}>
                         ${previewData.estimatedCost.toFixed(2)}
                       </Text>
-                    </div>
+                    </Box>
                   </>
                 )}
 
                 {!previewData && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`,
-                      textAlign: 'center' as const,
-                    }}
-                  >
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`, textAlign: 'center' as const }}>
                     <Eye size={32} strokeWidth={1} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
-                    <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-                      Preview data not available
-                    </Text>
-                  </div>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>Preview data not available</Text>
+                  </Box>
                 )}
-              </div>
+              </Box>
 
               {/* Modal footer */}
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   gap: tokens.spacing[3],
@@ -1370,7 +1000,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 }}
               >
                 {onDuplicate && (
-                  <button
+                  <Box
                     onClick={() => { onDuplicate(selectedAgentData.id); handlePreviewToggle(false); }}
                     style={{
                       display: 'flex',
@@ -1385,15 +1015,14 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       fontWeight: tokens.typography.fontWeight.medium,
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
-                      ...hoverStyle,
                     }}
                   >
                     <Copy size={14} strokeWidth={1.5} />
-                    Duplicate
-                  </button>
+                    <Text>Duplicate</Text>
+                  </Box>
                 )}
                 {onEdit && (
-                  <button
+                  <Box
                     onClick={() => { onEdit(selectedAgentData.id); handlePreviewToggle(false); }}
                     style={{
                       display: 'flex',
@@ -1409,16 +1038,15 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       cursor: 'pointer',
                       transition: `all ${tokens.motion.hover}`,
                       marginLeft: 'auto',
-                      ...hoverStyle,
                     }}
                   >
                     <Pencil size={14} strokeWidth={1.5} />
-                    Edit Agent
-                  </button>
+                    <Text>Edit Agent</Text>
+                  </Box>
                 )}
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
         )}
       </Box>
     );

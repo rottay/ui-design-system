@@ -2,161 +2,115 @@
 
 /**
  * W3NftCollectionManager - Gallery Preset
- * Manage NFT collections with metadata, supply tracking, and batch operations
+ * Keep custom grid, add PatternPageShell wrapper
  */
 
-import { useState, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
+import type { W3NftCollectionManagerProps, NftCollectionManagerItem } from '../../core';
 import {
-  createCardStyle,
-  createBadgeStyle,
-  createSurfaceStyle,
-  createEmptyStateStyle,
-  createSectionHeaderStyle,
-} from '../../../helpers';
-import type { W3NftCollectionManagerProps } from '../../core';
+  PatternPageShell,
+  PatternEmptyState,
+} from '../../../../patterns';
+
+const RARITY_COLORS: Record<string, string> = {
+  common: '#9ca3af',
+  rare: '#3b82f6',
+  epic: '#a855f7',
+  legendary: '#f59e0b',
+};
 
 export const GalleryW3NftCollectionManager = createPreset<W3NftCollectionManagerProps>({
   name: 'W3NftCollectionManager.Gallery',
   render: ({ primitives, props, tokens, engine }: PresetContext<W3NftCollectionManagerProps>) => {
-    const { Box, Stack, Spinner } = primitives;
-    const isModern = tokens.surface.useGlass;
-    const { loading, className, style, ...rest } = props;
-
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-    const containerStyle = useMemo(() => ({
-      padding: tokens.spacing[6],
-      backgroundColor: tokens.colors.neutral[50],
-      minHeight: '100%',
-      fontFamily: 'inherit',
-    }), [tokens]);
-
-    const headerStyle = useMemo(() => ({
-      fontSize: tokens.typography.fontSize['2xl'],
-      fontWeight: tokens.typography.fontWeight.bold,
-      color: tokens.colors.neutral[900],
-      margin: 0,
-      lineHeight: tokens.typography.lineHeight.tight,
-    }), [tokens]);
-
-    const cardStyle = useMemo(() => createCardStyle(tokens, {
-      elevation: 'sm',
-      glass: isModern,
-    }), [tokens, isModern]);
-
-    const items = (rest as any).items ?? (rest as any).methods ?? (rest as any).sessions ?? (rest as any).metrics ?? [];
+    const { Spinner } = primitives;
+    const { loading, className, style, items, onItemClick, onMint } = props;
 
     if (loading) {
       return (
-        <div className={className} style={{ ...containerStyle, display: 'flex', justifyContent: 'center', alignItems: 'center', ...style }}>
+        <div className={className} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%', ...style }}>
           <Spinner size="lg" />
         </div>
       );
     }
 
     return (
-      <div className={className} style={{ ...containerStyle, ...style }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[6] }}>
-          <div>
-            <h2 style={headerStyle}>NFT Collection Manager</h2>
-            <p style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], margin: 0, marginTop: tokens.spacing[1] }}>
-              Manage NFT collections with metadata, supply tracking, and batch operations
-            </p>
-          </div>
-          {(rest as any).onCreate || (rest as any).onAdd || (rest as any).onConnect || (rest as any).onDeploy || (rest as any).onInitiate ? (
-            <button
-              onClick={(rest as any).onCreate ?? (rest as any).onAdd ?? (rest as any).onConnect ?? (rest as any).onDeploy ?? (rest as any).onInitiate}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                backgroundColor: tokens.colors.primaryScale[600],
-                color: tokens.colors.common.white,
-                border: 'none',
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                boxShadow: tokens.shadows.sm,
-              }}
-            >
-              + New
-            </button>
-          ) : null}
-        </div>
-
-        {/* Content */}
+      <PatternPageShell
+        title="NFT Collection"
+        subtitle="Manage NFT collections with metadata, supply tracking, and batch operations"
+        actions={onMint ? <button onClick={onMint}>+ Mint NFT</button> : undefined}
+        className={className}
+        style={style}
+        engine={engine}
+      >
         {items.length === 0 ? (
-          <div style={{ ...createEmptyStateStyle(tokens), ...cardStyle, padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px` }}>
-            <div style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[400], marginBottom: tokens.spacing[2] }}>
-              No items found
-            </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              Get started by creating your first item.
-            </div>
-          </div>
+          <PatternEmptyState
+            title="No NFTs found"
+            description="Mint your first NFT to get started."
+            engine={engine}
+          />
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: tokens.spacing[4] }}>
-            {items.map((item: any, idx: number) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16 }}>
+            {items.map((nft) => (
               <div
-                key={item.id || idx}
-                onMouseEnter={() => setHoveredId(item.id)}
-                onMouseLeave={() => setHoveredId(null)}
-                onClick={() => (rest as any).onItemClick?.(item.id) ?? (rest as any).onStake?.(item.id)}
+                key={nft.id}
+                onClick={() => onItemClick?.(nft.id)}
                 style={{
-                  ...cardStyle,
+                  borderRadius: 12,
+                  border: '1px solid #e5e7eb',
+                  overflow: 'hidden',
                   cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                  transform: hoveredId === item.id ? tokens.motion.transform : 'none',
-                  boxShadow: hoveredId === item.id ? tokens.shadows.md : tokens.shadows.sm,
+                  transition: 'box-shadow 0.15s, transform 0.15s',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: tokens.spacing[3] }}>
-                  <div style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: tokens.borderRadius.lg,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: tokens.colors.primaryScale[600],
-                    fontSize: tokens.typography.fontSize.lg,
-                    fontWeight: tokens.typography.fontWeight.bold,
-                  }}>
-                    {(item.name || item.title || item.planName || 'I').charAt(0)}
-                  </div>
-                  {item.status && (
-                    <span style={{
-                      ...createBadgeStyle(tokens, item.status === 'active' || item.status === 'connected' || item.status === 'completed' || item.status === 'delivered' || item.status === 'paid' || item.status === 'confirmed' || item.status === 'minted' ? 'success' : item.status === 'pending' || item.status === 'processing' || item.status === 'trialing' || item.status === 'in_transit' || item.status === 'retrying' ? 'warning' : item.status === 'inactive' || item.status === 'failed' || item.status === 'expired' || item.status === 'rejected' || item.status === 'down' || item.status === 'cancelled' || item.status === 'revoked' || item.status === 'burned' || item.status === 'dropped' ? 'error' : 'info'),
-                    }}>
-                      {item.status}
-                    </span>
+                <div style={{
+                  height: 200,
+                  backgroundColor: '#f3f4f6',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                }}>
+                  {nft.image ? (
+                    <img src={nft.image} alt={nft.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontSize: '2rem', color: '#d1d5db' }}>NFT</span>
                   )}
                 </div>
-                <div style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900], marginBottom: tokens.spacing[1] }}>
-                  {item.name || item.title || item.planName || item.event || 'Unnamed'}
-                </div>
-                <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[3] }}>
-                  {item.description || item.type || item.address || item.symbol || item.token || item.method || item.url || item.customer || item.recipientName || ''}
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: tokens.spacing[3], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                    {item.amount || item.balance || item.supply || item.totalStaked || item.value || (item.apy ? `APY: ${item.apy}%` : '') || item.volume || ''}
-                  </span>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                    {item.createdAt || item.lastUsed || item.timestamp || item.lastActive || item.lastChecked || item.network || ''}
-                  </span>
+                <div style={{ padding: 12 }}>
+                  <div style={{ fontWeight: 600, marginBottom: 4 }}>{nft.name}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: 8 }}>
+                    #{nft.tokenId} {nft.collection ? `- ${nft.collection}` : ''}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    {nft.rarity && (
+                      <span style={{
+                        padding: '2px 8px',
+                        borderRadius: 12,
+                        fontSize: '0.7rem',
+                        fontWeight: 600,
+                        color: RARITY_COLORS[nft.rarity] ?? '#666',
+                        border: `1px solid ${RARITY_COLORS[nft.rarity] ?? '#ddd'}`,
+                      }}>
+                        {nft.rarity}
+                      </span>
+                    )}
+                    <span style={{
+                      padding: '2px 8px',
+                      borderRadius: 12,
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      backgroundColor: nft.status === 'minted' ? '#dcfce7' : nft.status === 'pending' ? '#fef3c7' : '#fecaca',
+                      color: nft.status === 'minted' ? '#166534' : nft.status === 'pending' ? '#92400e' : '#991b1b',
+                    }}>
+                      {nft.status}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </PatternPageShell>
     );
   },
 });

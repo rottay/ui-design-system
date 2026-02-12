@@ -2,22 +2,31 @@
 
 /**
  * BhScoringInsights - Dashboard Preset
- * Full analytics dashboard with KPI cards, distribution histograms,
- * dimension heatmap, knockout analysis, trend charts, cohort comparison,
- * skill gap analysis, and a filter bar.
+ * Scoring analytics overview with KPI cards, score distribution,
+ * heatmap, knockout stats, trend chart, and cohort comparisons.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState } from 'react';
+import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  Target,
+  Award,
+  AlertTriangle,
+  Filter,
+  ChevronDown,
+  Users,
+  Layers,
+  Zap,
+} from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createEmptyStateStyle,
-  createHoverStyle,
-  createPanelHeaderStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createIconContainerStyle,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type {
   BhScoringInsightsProps,
@@ -28,826 +37,324 @@ import type {
   TrendPoint,
   CohortComparison,
   SkillGap,
-  ScoringFilter,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
-import {
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  BarChart3,
-  Activity,
-  Target,
-  Filter,
-  Calendar,
-  ChevronDown,
-  Layers,
-  Zap,
-  Users,
-  AlertTriangle,
-  Award,
-  PieChart,
-  ArrowRight,
-  X,
-  BarChart,
-  LineChart,
-  AreaChart,
-} from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
-/*  Helpers                                                            */
+/*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-function getScoreHeatColor(score: number, tokens: DesignTokens): string {
-  if (score >= 80) return tokens.colors.successScale[500];
-  if (score >= 60) return tokens.colors.successScale[200];
-  if (score >= 40) return tokens.colors.warningScale[300];
-  if (score >= 20) return tokens.colors.warningScale[500];
-  return tokens.colors.errorScale[500];
-}
+const MOCK_KPIS: ScoringKpi[] = [
+  { label: 'Avg Score', value: 72.4, trend: 3.2, previousValue: 69.2 },
+  { label: 'Top Performers', value: 48, trend: 12, previousValue: 36 },
+  { label: 'Knockout Rate', value: 8.2, trend: -2.1, previousValue: 10.3 },
+  { label: 'Score Variance', value: 14.6, trend: -1.8, previousValue: 16.4 },
+];
 
-function getScoreHeatBg(score: number, tokens: DesignTokens): string {
-  if (score >= 80) return tokens.colors.successScale[100];
-  if (score >= 60) return tokens.colors.successScale[50];
-  if (score >= 40) return tokens.colors.warningScale[50];
-  if (score >= 20) return tokens.colors.warningScale[100];
-  return tokens.colors.errorScale[100];
-}
+const MOCK_DISTRIBUTION: LevelDistribution[] = [
+  { level: 'Exceptional (90-100)', count: 24, color: '#10B981' },
+  { level: 'Strong (75-89)', count: 86, color: '#3B82F6' },
+  { level: 'Adequate (60-74)', count: 142, color: '#F59E0B' },
+  { level: 'Below (40-59)', count: 68, color: '#EF4444' },
+  { level: 'Poor (0-39)', count: 22, color: '#6B7280' },
+];
 
-function getScoreHeatText(score: number, tokens: DesignTokens): string {
-  if (score >= 80) return tokens.colors.successScale[800];
-  if (score >= 60) return tokens.colors.successScale[700];
-  if (score >= 40) return tokens.colors.warningScale[800];
-  if (score >= 20) return tokens.colors.warningScale[700];
-  return tokens.colors.errorScale[800];
-}
+const MOCK_HEATMAP: HeatmapCell[] = [
+  { dimension: 'Technical Skills', job: 'Frontend Eng', avgScore: 82 },
+  { dimension: 'Technical Skills', job: 'Product Mgr', avgScore: 45 },
+  { dimension: 'Technical Skills', job: 'DevOps Lead', avgScore: 78 },
+  { dimension: 'Communication', job: 'Frontend Eng', avgScore: 71 },
+  { dimension: 'Communication', job: 'Product Mgr', avgScore: 88 },
+  { dimension: 'Communication', job: 'DevOps Lead', avgScore: 65 },
+  { dimension: 'Leadership', job: 'Frontend Eng', avgScore: 58 },
+  { dimension: 'Leadership', job: 'Product Mgr', avgScore: 76 },
+  { dimension: 'Leadership', job: 'DevOps Lead', avgScore: 72 },
+  { dimension: 'Problem Solving', job: 'Frontend Eng', avgScore: 85 },
+  { dimension: 'Problem Solving', job: 'Product Mgr', avgScore: 74 },
+  { dimension: 'Problem Solving', job: 'DevOps Lead', avgScore: 80 },
+];
 
-function getTrendIcon(trend: number) {
-  if (trend > 0) return TrendingUp;
-  if (trend < 0) return TrendingDown;
-  return Minus;
-}
+const MOCK_KNOCKOUTS: KnockoutStat[] = [
+  { dimension: 'Technical Skills', knockoutCount: 18, totalEvaluations: 342 },
+  { dimension: 'Communication', knockoutCount: 8, totalEvaluations: 342 },
+  { dimension: 'Culture Fit', knockoutCount: 12, totalEvaluations: 342 },
+  { dimension: 'Experience Level', knockoutCount: 6, totalEvaluations: 342 },
+];
 
-function getTrendColor(trend: number, tokens: DesignTokens): string {
-  if (trend > 0) return tokens.colors.successScale[600];
-  if (trend < 0) return tokens.colors.errorScale[600];
-  return tokens.colors.neutral[500];
-}
+const MOCK_TREND: TrendPoint[] = [
+  { date: 'Week 1', value: 68 }, { date: 'Week 2', value: 70 },
+  { date: 'Week 3', value: 69 }, { date: 'Week 4', value: 72 },
+  { date: 'Week 5', value: 71 }, { date: 'Week 6', value: 74 },
+  { date: 'Week 7', value: 73 }, { date: 'Week 8', value: 72 },
+];
 
-function formatTrend(trend: number): string {
-  if (trend > 0) return `+${trend.toFixed(1)}%`;
-  if (trend < 0) return `${trend.toFixed(1)}%`;
-  return '0%';
-}
+const MOCK_COHORTS: CohortComparison[] = [
+  { groupName: 'Referrals', avgScore: 78.4, count: 64 },
+  { groupName: 'LinkedIn', avgScore: 71.2, count: 128 },
+  { groupName: 'Career Site', avgScore: 69.8, count: 96 },
+  { groupName: 'Agencies', avgScore: 74.1, count: 42 },
+  { groupName: 'Job Boards', avgScore: 65.3, count: 112 },
+];
 
-/* ------------------------------------------------------------------ */
-/*  Preset                                                             */
-/* ------------------------------------------------------------------ */
+const MOCK_GAPS: SkillGap[] = [
+  { dimension: 'System Design', avgScore: 58, gapFromTarget: -22 },
+  { dimension: 'Leadership', avgScore: 62, gapFromTarget: -18 },
+  { dimension: 'Data Analysis', avgScore: 65, gapFromTarget: -15 },
+  { dimension: 'Communication', avgScore: 72, gapFromTarget: -8 },
+  { dimension: 'Technical Skills', avgScore: 78, gapFromTarget: -2 },
+];
+
+/* ================================================================== */
+/*  Dashboard Preset                                                   */
+/* ================================================================== */
 export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
   name: 'BhScoringInsights.Dashboard',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhScoringInsightsProps>) => {
-    const { Box, Stack } = primitives;
+  render: (ctx: PresetContext<BhScoringInsightsProps>) => {
+    const { primitives: { Box, Flex, Stack, Text }, props, tokens: t } = ctx;
 
     const {
-      kpis = [],
-      levelDistribution = [],
-      heatmapData = [],
-      knockoutStats = [],
-      trendData = [],
-      cohortComparisons = [],
-      skillGaps = [],
-      filters: filtersProp,
+      kpis = MOCK_KPIS,
+      levelDistribution = MOCK_DISTRIBUTION,
+      heatmapData = MOCK_HEATMAP,
+      knockoutStats = MOCK_KNOCKOUTS,
+      trendData = MOCK_TREND,
+      cohortComparisons = MOCK_COHORTS,
+      skillGaps = MOCK_GAPS,
+      filters,
       onFilterChange,
-      dateRange: dateRangeProp,
-      onDateRangeChange,
-      selectedDimension: selectedDimensionProp,
-      onDimensionSelect,
-      drilldownEntity: drilldownEntityProp,
-      onDrilldown,
-      chartType: chartTypeProp,
-      onChartTypeChange,
       className,
       style,
     } = props;
 
-    /* ----- internal state ----- */
-    const [internalDateRange, setInternalDateRange] = useState<[string, string]>(dateRangeProp ?? ['', '']);
-    const [internalFilters, setInternalFilters] = useState<ScoringFilter>(filtersProp ?? {});
-    const [internalSelectedDimension, setInternalSelectedDimension] = useState<string | null>(selectedDimensionProp ?? null);
-    const [internalDrilldownEntity, setInternalDrilldownEntity] = useState<string | null>(drilldownEntityProp ?? null);
-    const [internalChartType, setInternalChartType] = useState<'bar' | 'line' | 'area'>(chartTypeProp ?? 'line');
+    const [activeSection, setActiveSection] = useState<'overview' | 'heatmap' | 'gaps'>('overview');
 
-    const dateRange = dateRangeProp ?? internalDateRange;
-    const filters = filtersProp ?? internalFilters;
-    const selectedDimension = selectedDimensionProp ?? internalSelectedDimension;
-    const drilldownEntity = drilldownEntityProp ?? internalDrilldownEntity;
-    const chartType = chartTypeProp ?? internalChartType;
+    const card = createCardStyle(t, { padding: 28 });
+    const hoverStyles = createCardHoverStyles(t);
+    const badgeRadius = getPersonalityBadgeRadius(t);
 
-    const handleDateRangeChange = useCallback((range: [string, string]) => {
-      setInternalDateRange(range);
-      onDateRangeChange?.(range);
-    }, [onDateRangeChange]);
+    const SectionTitle = ({ children, action }: { children: string; action?: React.ReactNode }) => (
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[5] }}>
+        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{children}</Text>
+        {action}
+      </Box>
+    );
 
-    const handleFilterChange = useCallback((f: ScoringFilter) => {
-      setInternalFilters(f);
-      onFilterChange?.(f);
-    }, [onFilterChange]);
-
-    const handleDimensionSelect = useCallback((dim: string | null) => {
-      setInternalSelectedDimension(dim);
-      onDimensionSelect?.(dim);
-    }, [onDimensionSelect]);
-
-    const handleDrilldown = useCallback((entity: string | null) => {
-      setInternalDrilldownEntity(entity);
-      onDrilldown?.(entity);
-    }, [onDrilldown]);
-
-    const handleChartType = useCallback((type: 'bar' | 'line' | 'area') => {
-      setInternalChartType(type);
-      onChartTypeChange?.(type);
-    }, [onChartTypeChange]);
-
-    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
-
-    /* ---- Heatmap unique dimensions / jobs ---- */
-    const heatmapDimensions = useMemo(() => [...new Set(heatmapData.map(c => c.dimension))], [heatmapData]);
-    const heatmapJobs = useMemo(() => [...new Set(heatmapData.map(c => c.job))], [heatmapData]);
-    const heatmapLookup = useMemo(() => {
-      const map = new Map<string, number>();
-      heatmapData.forEach(c => map.set(`${c.dimension}::${c.job}`, c.avgScore));
-      return map;
-    }, [heatmapData]);
-
-    /* ---- Trend chart bounds ---- */
-    const trendMax = useMemo(() => Math.max(...trendData.map(p => p.value), 1), [trendData]);
-    const trendMin = useMemo(() => Math.min(...trendData.map(p => p.value), 0), [trendData]);
-    const trendRange = trendMax - trendMin || 1;
-
-    /* ---- Distribution max ---- */
-    const distMax = useMemo(() => Math.max(...levelDistribution.map(l => l.count), 1), [levelDistribution]);
-
-    /* ---- Knockout max ---- */
-    const knockoutMax = useMemo(() => Math.max(...knockoutStats.map(k => k.knockoutCount), 1), [knockoutStats]);
-
-    /* ---- Cohort max ---- */
-    const cohortMax = useMemo(() => Math.max(...cohortComparisons.map(c => c.avgScore), 1), [cohortComparisons]);
-
-    /* ---- Skill gap max ---- */
-    const gapMax = useMemo(() => Math.max(...skillGaps.map(s => Math.abs(s.gapFromTarget)), 1), [skillGaps]);
-
-    /* ---- Sparkline helper ---- */
-    const renderSparkline = (kpi: ScoringKpi) => {
-      const points = [kpi.previousValue, kpi.value];
-      const max = Math.max(...points, 1);
-      const min = Math.min(...points, 0);
-      const range = max - min || 1;
-      const w = 48;
-      const h = 20;
-      const x1 = 0;
-      const y1 = h - ((points[0] - min) / range) * h;
-      const x2 = w;
-      const y2 = h - ((points[1] - min) / range) * h;
-      const lineColor = kpi.trend >= 0 ? tokens.colors.successScale[500] : tokens.colors.errorScale[500];
-      return (
-        <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ display: 'block' }}>
-          <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={lineColor} strokeWidth={2} strokeLinecap="round" />
-          <circle cx={x2} cy={y2} r={2.5} fill={lineColor} />
-        </svg>
-      );
+    /* Heatmap helpers */
+    const dimensions = [...new Set(heatmapData.map((h) => h.dimension))];
+    const jobs = [...new Set(heatmapData.map((h) => h.job))];
+    const getHeatmapColor = (score: number) => {
+      if (score >= 80) return { bg: t.colors.successScale[100], text: t.colors.successScale[800] };
+      if (score >= 65) return { bg: t.colors.warningScale[100], text: t.colors.warningScale[800] };
+      if (score >= 50) return { bg: t.colors.warningScale[50], text: t.colors.warningScale[700] };
+      return { bg: t.colors.errorScale[100], text: t.colors.errorScale[800] };
     };
 
-    /* ---- Chart type icons ---- */
-    const chartTypeOptions: Array<{ type: 'bar' | 'line' | 'area'; icon: typeof BarChart }> = [
-      { type: 'bar', icon: BarChart },
-      { type: 'line', icon: LineChart },
-      { type: 'area', icon: AreaChart },
-    ];
-
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...style }}>
+      <Box className={className} style={{ height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
 
-        {/* ===== 8. Filter Bar ===== */}
-        <Box style={{
-          padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
-          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: tokens.colors.neutral[50],
-          ...(tokens.surface.useGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg } : {}),
-        }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <Filter size={16} color={tokens.colors.neutral[500]} />
-              <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>Filters</span>
-            </Box>
-
-            {/* Date range */}
-            <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              backgroundColor: tokens.colors.common.white,
-              fontSize: tokens.typography.fontSize.sm,
-              color: tokens.colors.neutral[600],
-            }}>
-              <Calendar size={14} color={tokens.colors.neutral[400]} />
-              <input
-                type="date"
-                value={dateRange[0]}
-                onChange={(e) => handleDateRangeChange([e.target.value, dateRange[1]])}
-                style={{
-                  border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[600], fontFamily: 'inherit', backgroundColor: 'transparent',
-                }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                }}
-              />
-              <span style={{ color: tokens.colors.neutral[400] }}>-</span>
-              <input
-                type="date"
-                value={dateRange[1]}
-                onChange={(e) => handleDateRangeChange([dateRange[0], e.target.value])}
-                style={{
-                  border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[600], fontFamily: 'inherit', backgroundColor: 'transparent',
-                }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                }}
-              />
-            </Box>
-
-            {/* Job filter */}
-            <Box style={{
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.job ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-              backgroundColor: filters.job ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-            }}>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.job ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
-                {filters.job ?? 'All Jobs'}
-              </span>
-              {filters.job ? (
-                <X size={12} color={tokens.colors.primaryScale[500]} onClick={() => handleFilterChange({ ...filters, job: null })} style={{ cursor: 'pointer' }} />
-              ) : (
-                <ChevronDown size={12} color={tokens.colors.neutral[400]} />
-              )}
-            </Box>
-
-            {/* Stage filter */}
-            <Box style={{
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.stage ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-              backgroundColor: filters.stage ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-            }}>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.stage ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
-                {filters.stage ?? 'All Stages'}
-              </span>
-              {filters.stage ? (
-                <X size={12} color={tokens.colors.primaryScale[500]} onClick={() => handleFilterChange({ ...filters, stage: null })} style={{ cursor: 'pointer' }} />
-              ) : (
-                <ChevronDown size={12} color={tokens.colors.neutral[400]} />
-              )}
-            </Box>
-
-            {/* Team filter */}
-            <Box style={{
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.team ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-              backgroundColor: filters.team ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-            }}>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.team ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
-                {filters.team ?? 'All Teams'}
-              </span>
-              {filters.team ? (
-                <X size={12} color={tokens.colors.primaryScale[500]} onClick={() => handleFilterChange({ ...filters, team: null })} style={{ cursor: 'pointer' }} />
-              ) : (
-                <ChevronDown size={12} color={tokens.colors.neutral[400]} />
-              )}
-            </Box>
-
-            {/* Rubric filter */}
-            <Box style={{
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.md,
-              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.rubric ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-              backgroundColor: filters.rubric ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-              cursor: 'pointer',
-              transition: `all ${tokens.motion.hover}`,
-            }}>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: filters.rubric ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500] }}>
-                {filters.rubric ?? 'All Rubrics'}
-              </span>
-              {filters.rubric ? (
-                <X size={12} color={tokens.colors.primaryScale[500]} onClick={() => handleFilterChange({ ...filters, rubric: null })} style={{ cursor: 'pointer' }} />
-              ) : (
-                <ChevronDown size={12} color={tokens.colors.neutral[400]} />
-              )}
-            </Box>
+        {/* ── Header ── */}
+        <Flex align="center" justify="between" style={{ marginBottom: t.spacing[7] }}>
+          <Stack gap={1}>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>Scoring Insights</Text>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>Candidate evaluation analytics and quality metrics</Text>
+          </Stack>
+          <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
+            <Filter size={14} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={12} />
           </Box>
+        </Flex>
 
-          {/* Chart type selector */}
-          <Box style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.md }}>
-            {chartTypeOptions.map((opt) => {
-              const Icon = opt.icon;
-              const isActive = chartType === opt.type;
-              return (
-                <button
-                  key={opt.type}
-                  onClick={() => handleChartType(opt.type)}
-                  style={{
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                    borderRadius: tokens.borderRadius.sm,
-                    border: 'none',
-                    backgroundColor: isActive ? tokens.colors.common.white : 'transparent',
-                    color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[500],
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                    fontFamily: 'inherit',
-                    display: 'flex',
-                    alignItems: 'center',
-                    boxShadow: isActive ? tokens.shadows.sm : 'none',
-                  }}
-                >
-                  <Icon size={14} />
-                </button>
-              );
-            })}
-          </Box>
+        {/* ── KPI Cards ── */}
+        <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: t.spacing[4], marginBottom: t.spacing[7] }}>
+          {kpis.map((kpi) => {
+            const isPositive = kpi.trend > 0;
+            const invertedMetric = kpi.label.includes('Knockout') || kpi.label.includes('Variance');
+            const trendColor = invertedMetric ? (isPositive ? t.colors.errorScale[600] : t.colors.successScale[600]) : (isPositive ? t.colors.successScale[600] : t.colors.errorScale[600]);
+            const TrendIcon = isPositive ? TrendingUp : TrendingDown;
+            const icons = [Target, Award, AlertTriangle, BarChart3];
+            const Icon = icons[kpis.indexOf(kpi) % icons.length];
+            const colorScales = [t.colors.primaryScale, t.colors.successScale, t.colors.warningScale, t.colors.infoScale];
+            const cs = colorScales[kpis.indexOf(kpi) % colorScales.length];
+
+            return (
+              <Box key={kpi.label} style={{ ...card, ...hoverStyles.base }} onMouseEnter={(e: any) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
+                  <Box style={createIconContainerStyle(t, { size: 40, color: cs[50] })}>
+                    <Icon size={20} color={cs[600]} />
+                  </Box>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <TrendIcon size={14} color={trendColor} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(kpi.trend).toFixed(1)}%</Text>
+                  </Box>
+                </Box>
+                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{typeof kpi.value === 'number' ? kpi.value.toFixed(1) : kpi.value}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{kpi.label}</Text>
+              </Box>
+            );
+          })}
         </Box>
 
-        {/* ===== Main Scrollable Content ===== */}
-        <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[5] }}>
-
-          {/* ===== 1. KPI Row ===== */}
-          <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(kpis.length, 6)}, 1fr)`, gap: tokens.spacing[3], marginBottom: tokens.spacing[5] }}>
-            {kpis.map((kpi, idx) => {
-              const TrendIcon = getTrendIcon(kpi.trend);
-              const trendColor = getTrendColor(kpi.trend, tokens);
-              return (
-                <Box
-                  key={idx}
-                  style={{
-                    ...glassCard,
-                    padding: tokens.spacing[4],
-                  }}
-                >
-                  <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: tokens.spacing[2] }}>
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      {kpi.label}
-                    </span>
-                    {renderSparkline(kpi)}
-                  </Box>
-                  <Box style={{ display: 'flex', alignItems: 'flex-end', gap: tokens.spacing[2] }}>
-                    <span style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], lineHeight: 1 }}>
-                      {typeof kpi.value === 'number' && kpi.value % 1 !== 0 ? kpi.value.toFixed(1) : kpi.value}
-                    </span>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: 2, marginBottom: 2 }}>
-                      <TrendIcon size={12} color={trendColor} />
-                      <span style={{ fontSize: tokens.typography.fontSize.xs, color: trendColor, fontWeight: tokens.typography.fontWeight.medium }}>
-                        {formatTrend(kpi.trend)}
-                      </span>
-                    </Box>
-                  </Box>
-                </Box>
-              );
-            })}
-          </Box>
-
-          {/* ===== 2. Score Distribution Histogram ===== */}
-          {levelDistribution.length > 0 && (
-            <Box style={{ ...glassCard, padding: tokens.spacing[5], marginBottom: tokens.spacing[5] }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                <BarChart3 size={18} color={tokens.colors.primaryScale[600]} />
-                <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                  Score Distribution
-                </h3>
+        {/* ── Tab Nav ── */}
+        <Box style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: 3, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
+          {[
+            { key: 'overview' as const, label: 'Distribution', icon: BarChart3 },
+            { key: 'heatmap' as const, label: 'Heatmap', icon: Layers },
+            { key: 'gaps' as const, label: 'Skill Gaps', icon: Zap },
+          ].map((tab) => {
+            const TabIcon = tab.icon;
+            const isActive = activeSection === tab.key;
+            return (
+              <Box key={tab.key} onClick={() => setActiveSection(tab.key)} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}>
+                <TabIcon size={16} /> <Text style={{ fontSize: t.typography.fontSize.sm }}>{tab.label}</Text>
               </Box>
-
-              <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                <svg width={Math.max(levelDistribution.length * 80, 320)} height={200} viewBox={`0 0 ${Math.max(levelDistribution.length * 80, 320)} 200`}>
-                  {/* Y-axis grid */}
-                  {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
-                    const y = 10 + (1 - frac) * 160;
-                    const val = Math.round(distMax * frac);
-                    return (
-                      <g key={frac}>
-                        <line x1={40} y1={y} x2={Math.max(levelDistribution.length * 80, 320) - 10} y2={y} stroke={tokens.colors.neutral[100]} strokeWidth={1} />
-                        <text x={35} y={y + 4} fontSize={10} fill={tokens.colors.neutral[400]} textAnchor="end">{val}</text>
-                      </g>
-                    );
-                  })}
-
-                  {/* Bars */}
-                  {levelDistribution.map((level, idx) => {
-                    const barWidth = 48;
-                    const x = 50 + idx * 80;
-                    const barHeight = (level.count / distMax) * 160;
-                    const y = 10 + 160 - barHeight;
-                    return (
-                      <g key={idx}>
-                        <rect
-                          x={x}
-                          y={y}
-                          width={barWidth}
-                          height={barHeight}
-                          rx={4}
-                          fill={level.color || tokens.colors.primaryScale[400]}
-                        />
-                        <text
-                          x={x + barWidth / 2}
-                          y={y - 6}
-                          fontSize={11}
-                          fill={tokens.colors.neutral[700]}
-                          textAnchor="middle"
-                          fontWeight={tokens.typography.fontWeight.semibold as number}
-                        >
-                          {level.count}
-                        </text>
-                        <text
-                          x={x + barWidth / 2}
-                          y={186}
-                          fontSize={10}
-                          fill={tokens.colors.neutral[500]}
-                          textAnchor="middle"
-                        >
-                          {level.level}
-                        </text>
-                      </g>
-                    );
-                  })}
-                </svg>
-              </Box>
-            </Box>
-          )}
-
-          {/* ===== Grid: Heatmap + Knockout ===== */}
-          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[5], marginBottom: tokens.spacing[5] }}>
-
-            {/* ===== 3. Dimension Heatmap ===== */}
-            {heatmapDimensions.length > 0 && heatmapJobs.length > 0 && (
-              <Box style={{ ...glassCard, padding: tokens.spacing[5] }}>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                  <Layers size={18} color={tokens.colors.secondaryScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                    Dimension Heatmap
-                  </h3>
-                </Box>
-
-                <Box style={{ overflowX: 'auto' }}>
-                  {/* Column headers (jobs) */}
-                  <Box style={{ display: 'grid', gridTemplateColumns: `100px repeat(${heatmapJobs.length}, 1fr)`, gap: tokens.spacing[1], marginBottom: tokens.spacing[1] }}>
-                    <Box />
-                    {heatmapJobs.map(job => (
-                      <Box key={job} style={{
-                        textAlign: 'center',
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                        fontWeight: tokens.typography.fontWeight.medium,
-                        padding: tokens.spacing[1],
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}>
-                        {job}
-                      </Box>
-                    ))}
-                  </Box>
-
-                  {/* Rows (dimensions) */}
-                  {heatmapDimensions.map(dim => (
-                    <Box key={dim} style={{ display: 'grid', gridTemplateColumns: `100px repeat(${heatmapJobs.length}, 1fr)`, gap: tokens.spacing[1], marginBottom: tokens.spacing[1] }}>
-                      <Box style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[600],
-                        fontWeight: tokens.typography.fontWeight.medium,
-                        display: 'flex',
-                        alignItems: 'center',
-                        padding: `0 ${tokens.spacing[1]}px`,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}>
-                        {dim}
-                      </Box>
-                      {heatmapJobs.map(job => {
-                        const score = heatmapLookup.get(`${dim}::${job}`) ?? 0;
-                        return (
-                          <Box
-                            key={job}
-                            onClick={() => handleDimensionSelect(selectedDimension === dim ? null : dim)}
-                            style={{
-                              padding: tokens.spacing[2],
-                              borderRadius: tokens.borderRadius.sm,
-                              backgroundColor: getScoreHeatBg(score, tokens),
-                              textAlign: 'center',
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              color: getScoreHeatText(score, tokens),
-                              cursor: 'pointer',
-                              border: selectedDimension === dim ? `2px solid ${tokens.colors.primaryScale[400]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getScoreHeatColor(score, tokens)}20`,
-                              transition: `all ${tokens.motion.hover}`,
-                              minHeight: tokens.spacing[8],
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            {Math.round(score)}
-                          </Box>
-                        );
-                      })}
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
-            )}
-
-            {/* ===== 4. Knockout Analysis ===== */}
-            {knockoutStats.length > 0 && (
-              <Box style={{ ...glassCard, padding: tokens.spacing[5] }}>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                  <AlertTriangle size={18} color={tokens.colors.errorScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                    Knockout Analysis
-                  </h3>
-                </Box>
-
-                <Stack direction="vertical" spacing="sm">
-                  {knockoutStats.map((stat, idx) => {
-                    const pct = stat.totalEvaluations > 0 ? (stat.knockoutCount / stat.totalEvaluations) * 100 : 0;
-                    const barWidth = (stat.knockoutCount / knockoutMax) * 100;
-                    return (
-                      <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                        <span style={{ width: 120, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium, flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {stat.dimension}
-                        </span>
-                        <Box style={{ flex: 1, position: 'relative', height: tokens.spacing[5] }}>
-                          <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[100] }} />
-                          <Box style={{
-                            position: 'absolute', top: 0, left: 0, height: '100%',
-                            width: `${barWidth}%`,
-                            borderRadius: tokens.borderRadius.sm,
-                            backgroundColor: pct >= 30 ? tokens.colors.errorScale[400] : pct >= 15 ? tokens.colors.warningScale[400] : tokens.colors.neutral[300],
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }} />
-                        </Box>
-                        <Box style={{ width: 80, textAlign: 'right', flexShrink: 0 }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{stat.knockoutCount}</span>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginLeft: tokens.spacing[1] }}>({pct.toFixed(0)}%)</span>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Stack>
-              </Box>
-            )}
-          </Box>
-
-          {/* ===== 5. Trend Charts ===== */}
-          {trendData.length > 0 && (
-            <Box style={{ ...glassCard, padding: tokens.spacing[5], marginBottom: tokens.spacing[5] }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                <Activity size={18} color={tokens.colors.primaryScale[600]} />
-                <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                  Score Trends
-                </h3>
-              </Box>
-
-              <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                <svg width={600} height={200} viewBox="0 0 600 200">
-                  {/* Grid */}
-                  {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
-                    const y = 15 + (1 - frac) * 160;
-                    const val = (trendMin + frac * trendRange).toFixed(0);
-                    return (
-                      <g key={frac}>
-                        <line x1={40} y1={y} x2={580} y2={y} stroke={tokens.colors.neutral[100]} strokeWidth={1} />
-                        <text x={35} y={y + 4} fontSize={10} fill={tokens.colors.neutral[400]} textAnchor="end">{val}</text>
-                      </g>
-                    );
-                  })}
-
-                  {/* Line path */}
-                  {trendData.length > 1 && (() => {
-                    const xStep = 540 / Math.max(trendData.length - 1, 1);
-                    const points = trendData.map((p, i) => {
-                      const x = 40 + i * xStep;
-                      const y = 15 + (1 - (p.value - trendMin) / trendRange) * 160;
-                      return `${x},${y}`;
-                    });
-
-                    const lineColor = tokens.colors.primaryScale[500];
-
-                    if (chartType === 'area') {
-                      const firstX = 40;
-                      const lastX = 40 + (trendData.length - 1) * xStep;
-                      const areaPath = `M${points[0]} ${points.slice(1).map(p => `L${p}`).join(' ')} L${lastX},175 L${firstX},175 Z`;
-                      return (
-                        <g>
-                          <path d={areaPath} fill={`${lineColor}20`} />
-                          <polyline points={points.join(' ')} fill="none" stroke={lineColor} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                          {trendData.map((p, i) => (
-                            <circle key={i} cx={40 + i * xStep} cy={15 + (1 - (p.value - trendMin) / trendRange) * 160} r={3} fill={lineColor} stroke={tokens.colors.common.white} strokeWidth={2} />
-                          ))}
-                        </g>
-                      );
-                    }
-
-                    if (chartType === 'bar') {
-                      const barW = Math.max(xStep * 0.6, 8);
-                      return (
-                        <g>
-                          {trendData.map((p, i) => {
-                            const cx = 40 + i * xStep;
-                            const y = 15 + (1 - (p.value - trendMin) / trendRange) * 160;
-                            const barH = 175 - y;
-                            return (
-                              <rect key={i} x={cx - barW / 2} y={y} width={barW} height={barH} rx={3} fill={lineColor} opacity={0.7} />
-                            );
-                          })}
-                        </g>
-                      );
-                    }
-
-                    /* line (default) */
-                    return (
-                      <g>
-                        <polyline points={points.join(' ')} fill="none" stroke={lineColor} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                        {trendData.map((p, i) => (
-                          <circle key={i} cx={40 + i * xStep} cy={15 + (1 - (p.value - trendMin) / trendRange) * 160} r={3} fill={lineColor} stroke={tokens.colors.common.white} strokeWidth={2} />
-                        ))}
-                      </g>
-                    );
-                  })()}
-
-                  {/* X-axis labels (sampled) */}
-                  {trendData.map((p, i) => {
-                    if (trendData.length > 10 && i % Math.ceil(trendData.length / 8) !== 0) return null;
-                    const x = 40 + i * (540 / Math.max(trendData.length - 1, 1));
-                    return (
-                      <text key={i} x={x} y={195} fontSize={9} fill={tokens.colors.neutral[400]} textAnchor="middle">
-                        {p.date}
-                      </text>
-                    );
-                  })}
-                </svg>
-              </Box>
-            </Box>
-          )}
-
-          {/* ===== Grid: Cohort + Skill Gap ===== */}
-          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[5] }}>
-
-            {/* ===== 6. Cohort Comparison ===== */}
-            {cohortComparisons.length > 0 && (
-              <Box style={{ ...glassCard, padding: tokens.spacing[5] }}>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                  <Users size={18} color={tokens.colors.infoScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                    Cohort Comparison
-                  </h3>
-                </Box>
-
-                <Stack direction="vertical" spacing="sm">
-                  {cohortComparisons.map((cohort, idx) => {
-                    const barWidth = (cohort.avgScore / cohortMax) * 100;
-                    const barColor = getScoreHeatColor(cohort.avgScore, tokens);
-                    return (
-                      <Box key={idx}>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[1] }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium }}>
-                            {cohort.groupName}
-                          </span>
-                          <Box style={{ display: 'flex', gap: tokens.spacing[2], alignItems: 'center' }}>
-                            <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                              {cohort.avgScore.toFixed(1)}
-                            </span>
-                            <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                              n={cohort.count}
-                            </span>
-                          </Box>
-                        </Box>
-                        <Box style={{ position: 'relative', height: tokens.spacing[3] }}>
-                          <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[100] }} />
-                          <Box style={{
-                            position: 'absolute', top: 0, left: 0, height: '100%',
-                            width: `${barWidth}%`,
-                            borderRadius: tokens.borderRadius.sm,
-                            backgroundColor: barColor,
-                            transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                          }} />
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Stack>
-              </Box>
-            )}
-
-            {/* ===== 7. Skill Gap Analysis ===== */}
-            {skillGaps.length > 0 && (
-              <Box style={{ ...glassCard, padding: tokens.spacing[5] }}>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                  <Target size={18} color={tokens.colors.warningScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                    Skill Gap Analysis
-                  </h3>
-                </Box>
-
-                <Stack direction="vertical" spacing="sm">
-                  {skillGaps.map((gap, idx) => {
-                    const isPositive = gap.gapFromTarget >= 0;
-                    const barWidth = (Math.abs(gap.gapFromTarget) / gapMax) * 50;
-                    const gapColor = isPositive ? tokens.colors.successScale[500] : tokens.colors.errorScale[500];
-                    const gapBg = isPositive ? tokens.colors.successScale[50] : tokens.colors.errorScale[50];
-                    return (
-                      <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                        <span style={{ width: 100, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium, flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {gap.dimension}
-                        </span>
-                        <Box style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                          {/* Center line = target */}
-                          <Box style={{ flex: 1, position: 'relative', height: tokens.spacing[5] }}>
-                            <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[50] }} />
-                            {/* Center marker */}
-                            <Box style={{ position: 'absolute', top: -2, left: '50%', width: 2, height: `calc(100% + 4px)`, backgroundColor: tokens.colors.neutral[300] }} />
-                            {/* Gap bar */}
-                            <Box style={{
-                              position: 'absolute',
-                              top: 2,
-                              height: `calc(100% - 4px)`,
-                              left: isPositive ? '50%' : `calc(50% - ${barWidth}%)`,
-                              width: `${barWidth}%`,
-                              borderRadius: tokens.borderRadius.sm,
-                              backgroundColor: gapColor,
-                              transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
-                              opacity: 0.7,
-                            }} />
-                          </Box>
-                        </Box>
-                        <Box style={{ width: 80, textAlign: 'right', flexShrink: 0 }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: gapColor }}>
-                            {isPositive ? '+' : ''}{gap.gapFromTarget.toFixed(1)}
-                          </span>
-                          <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                            avg: {gap.avgScore.toFixed(1)}
-                          </span>
-                        </Box>
-                      </Box>
-                    );
-                  })}
-                </Stack>
-
-                {/* Legend */}
-                <Box style={{ display: 'flex', justifyContent: 'center', gap: tokens.spacing[4], marginTop: tokens.spacing[3] }}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                    <Box style={{ width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.errorScale[500] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Below Target</span>
-                  </Box>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                    <Box style={{ width: 2, height: tokens.spacing[3], backgroundColor: tokens.colors.neutral[300] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Target</span>
-                  </Box>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                    <Box style={{ width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.successScale[500] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Above Target</span>
-                  </Box>
-                </Box>
-              </Box>
-            )}
-          </Box>
+            );
+          })}
         </Box>
+
+        {/* ── Overview Tab ── */}
+        {activeSection === 'overview' && (
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[6] }}>
+            {/* Distribution */}
+            <Box style={card}>
+              <SectionTitle>Score Distribution</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                {levelDistribution.map((level) => {
+                  const maxCount = Math.max(...levelDistribution.map((l) => l.count), 1);
+                  return (
+                    <Box key={level.level}>
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{level.level}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{level.count}</Text>
+                      </Box>
+                      <Box style={{ height: 16, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
+                        <Box style={{ height: '100%', width: `${(level.count / maxCount) * 100}%`, backgroundColor: level.color, borderRadius: t.borderRadius.sm, transition: 'width 400ms ease' }} />
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+
+            {/* Cohort Comparison */}
+            <Box style={card}>
+              <SectionTitle action={<Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Users size={12} /> By Source</Box>}>Cohort Comparison</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                {cohortComparisons.sort((a, b) => b.avgScore - a.avgScore).map((cohort, i) => {
+                  const cs = cohort.avgScore >= 75 ? t.colors.successScale : cohort.avgScore >= 65 ? t.colors.warningScale : t.colors.errorScale;
+                  return (
+                    <Box key={cohort.groupName} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: i === 0 ? cs[50] : t.colors.neutral[50] }}>
+                      <Box style={{ width: 28, height: 28, borderRadius: t.borderRadius.full, backgroundColor: cs[100], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{i + 1}</Text>
+                      </Box>
+                      <Box style={{ flex: 1 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{cohort.groupName}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{cohort.count} candidates</Text>
+                      </Box>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{cohort.avgScore.toFixed(1)}</Text>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+
+            {/* Trend Chart */}
+            <Box style={card}>
+              <SectionTitle>Score Trend</SectionTitle>
+              {trendData.length > 0 && (() => {
+                const cW = 480; const cH = 180; const pad = 32;
+                const vals = trendData.map((d) => d.value);
+                const maxV = Math.max(...vals); const minV = Math.min(...vals); const range = maxV - minV || 1;
+                const stepX = (cW - pad * 2) / (trendData.length - 1 || 1);
+                const pts = trendData.map((d, i) => ({ x: pad + i * stepX, y: cH - pad - ((d.value - minV) / range) * (cH - pad * 2) }));
+                return (
+                  <svg width="100%" viewBox={`0 0 ${cW} ${cH}`} style={{ display: 'block' }}>
+                    {[0, 0.5, 1].map((p) => { const y = cH - pad - p * (cH - pad * 2); return <line key={p} x1={pad} y1={y} x2={cW - pad} y2={y} stroke={t.colors.neutral[100]} />; })}
+                    {trendData.map((d, i) => <text key={i} x={pad + i * stepX} y={cH - 8} textAnchor="middle" fill={t.colors.neutral[400]} fontSize="10">{d.date}</text>)}
+                    <defs><linearGradient id="score-trend-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.colors.primaryScale[500]} stopOpacity="0.12" /><stop offset="100%" stopColor={t.colors.primaryScale[500]} stopOpacity="0" /></linearGradient></defs>
+                    <polygon points={`${pts[0].x},${cH - pad} ${pts.map((p) => `${p.x},${p.y}`).join(' ')} ${pts[pts.length - 1].x},${cH - pad}`} fill="url(#score-trend-g)" />
+                    <polyline points={pts.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke={t.colors.primaryScale[500]} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="4" fill={t.colors.common.white} stroke={t.colors.primaryScale[500]} strokeWidth="2" />)}
+                  </svg>
+                );
+              })()}
+            </Box>
+
+            {/* Knockout Stats */}
+            <Box style={card}>
+              <SectionTitle>Knockout Analysis</SectionTitle>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                {knockoutStats.map((k) => {
+                  const rate = ((k.knockoutCount / k.totalEvaluations) * 100).toFixed(1);
+                  const isHigh = k.knockoutCount > 10;
+                  return (
+                    <Box key={k.dimension} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: isHigh ? t.colors.errorScale[50] : t.colors.neutral[50] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        {isHigh && <AlertTriangle size={16} color={t.colors.errorScale[500]} />}
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{k.dimension}</Text>
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{k.knockoutCount} / {k.totalEvaluations}</Text>
+                        <Box style={{ ...createBadgeStyle(t, isHigh ? 'error' : 'success'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{rate}%</Box>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* ── Heatmap Tab ── */}
+        {activeSection === 'heatmap' && (
+          <Box style={card}>
+            <SectionTitle>Dimension x Job Heatmap</SectionTitle>
+            <Box style={{ display: 'grid', gridTemplateColumns: `150px repeat(${jobs.length}, 1fr)`, gap: t.spacing[1] }}>
+              <Box />
+              {jobs.map((j) => <Text key={j} style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textAlign: 'center' as const, padding: t.spacing[2] }}>{j}</Text>)}
+              {dimensions.map((dim) => (
+                <>
+                  <Text key={dim} style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], padding: t.spacing[2], display: 'flex', alignItems: 'center' }}>{dim}</Text>
+                  {jobs.map((job) => {
+                    const cell = heatmapData.find((h) => h.dimension === dim && h.job === job);
+                    const score = cell?.avgScore ?? 0;
+                    const hc = getHeatmapColor(score);
+                    return (
+                      <Box key={`${dim}-${job}`} style={{ backgroundColor: hc.bg, borderRadius: t.borderRadius.sm, padding: t.spacing[3], textAlign: 'center' as const, transition: 'all 200ms ease' }}>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: hc.text }}>{score}</Text>
+                      </Box>
+                    );
+                  })}
+                </>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {/* ── Skill Gaps Tab ── */}
+        {activeSection === 'gaps' && (
+          <Box style={card}>
+            <SectionTitle>Skill Gap Analysis</SectionTitle>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
+              {skillGaps.sort((a, b) => a.gapFromTarget - b.gapFromTarget).map((gap) => {
+                const severity = Math.abs(gap.gapFromTarget) > 15 ? 'error' : Math.abs(gap.gapFromTarget) > 8 ? 'warning' : 'success';
+                const barColor = severity === 'error' ? t.colors.errorScale[500] : severity === 'warning' ? t.colors.warningScale[500] : t.colors.successScale[500];
+                return (
+                  <Box key={gap.dimension}>
+                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{gap.dimension}</Text>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{gap.avgScore}</Text>
+                        <Box style={{ ...createBadgeStyle(t, severity), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{gap.gapFromTarget > 0 ? '+' : ''}{gap.gapFromTarget}</Box>
+                      </Box>
+                    </Box>
+                    <Box style={{ height: 12, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden', position: 'relative' as const }}>
+                      <Box style={{ position: 'absolute' as const, left: '80%', top: 0, width: 2, height: '100%', backgroundColor: t.colors.neutral[400] }} />
+                      <Box style={{ height: '100%', width: `${gap.avgScore}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: 'width 400ms ease' }} />
+                    </Box>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: t.spacing[1] }}>Target: 80</Text>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        )}
       </Box>
     );
   },

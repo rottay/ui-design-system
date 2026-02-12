@@ -2,35 +2,21 @@
 
 /**
  * BhFeedbackEditor - Standard Preset
- * Complete feedback composer with decision context, template selector,
- * AI draft generator, rich text editor with variable chips,
- * channel selector, tone selector, and live preview panel.
+ * Slite-inspired feedback composer with decision context sidebar,
+ * template selector, channel tabs, tone cards, variable chips,
+ * AI generation, rich textarea, and live preview panel.
  */
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import {
-  createBadgeStyle,
-  createCardStyle,
-  createEmptyStateStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createProgressBarStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
-} from '../../../helpers';
+import { createCardStyle, createBadgeStyle } from '../../../helpers';
 import type {
   BhFeedbackEditorProps,
   FeedbackChannel,
   FeedbackTone,
   FeedbackTemplate,
-  DecisionContext,
 } from '../../core';
 import {
-  BH_FEEDBACK_EDITOR_DEFAULTS,
   getChannelConfig,
   getToneConfig,
   getTemplateCategoryConfig,
@@ -38,74 +24,33 @@ import {
   substituteVariables,
   FEEDBACK_VARIABLES,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
-  Mail,
-  MessageSquare,
-  Smartphone,
-  Linkedin,
-  Send,
-  Sparkles,
-  Eye,
-  EyeOff,
-  FileText,
-  ChevronRight,
-  ChevronDown,
-  Check,
-  X,
-  Star,
-  BarChart3,
-  Award,
-  Quote,
-  Loader2,
-  Plus,
-  Hash,
-  Type,
-  Target,
-  Clipboard,
-  Heart,
-  Briefcase,
-  Shield,
-  Lightbulb,
-  BookOpen,
+  Mail, MessageSquare, Smartphone, Linkedin,
+  Send, Sparkles, Eye, EyeOff, FileText,
+  ChevronRight, ChevronDown, Check,
+  Star, Quote, Loader2, Target, BookOpen,
 } from 'lucide-react';
-
-// ─── Standard Preset ────────────────────────────────────────────────────────────
 
 export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
   name: 'BhFeedbackEditor.Standard',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhFeedbackEditorProps>) => {
-    const { Box } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhFeedbackEditorProps>) => {
+    const { Box, Text } = primitives;
     const channelConfig = getChannelConfig(tokens);
     const toneConfig = getToneConfig(tokens);
     const categoryConfig = getTemplateCategoryConfig(tokens);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const cardStyle = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: engine !== 'classic' }), [tokens, engine]);
 
     const {
-      context,
-      templates = [],
-      selectedTemplate: selectedTemplateProp,
-      onTemplateSelect,
-      messageContent: messageContentProp,
-      onMessageChange,
-      subject: subjectProp,
-      onSubjectChange,
-      channel: channelProp,
-      onChannelChange,
-      tone: toneProp,
-      onToneChange,
-      isGenerating: isGeneratingProp,
-      onGenerate,
-      showPreview: showPreviewProp,
-      onPreviewToggle,
-      onSend,
-      recipientPreview,
-      className,
-      style,
+      context, templates = [],
+      selectedTemplate: selectedTemplateProp, onTemplateSelect,
+      messageContent: messageContentProp, onMessageChange,
+      subject: subjectProp, onSubjectChange,
+      channel: channelProp, onChannelChange,
+      tone: toneProp, onToneChange,
+      isGenerating: isGeneratingProp, onGenerate,
+      showPreview: showPreviewProp, onPreviewToggle,
+      onSend, recipientPreview, className, style,
     } = props;
 
-    // ─── Internal state ──────────────────────────────────────────────────
     const [internalSelectedTemplate, setInternalSelectedTemplate] = useState<string | null>(null);
     const [internalMessage, setInternalMessage] = useState('');
     const [internalSubject, setInternalSubject] = useState('');
@@ -194,339 +139,259 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
       linkedin: <Linkedin size={16} />,
     };
 
-    const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'lg', glass: engine !== 'classic' }), [tokens, engine]);
-
     return (
       <Box className={className} style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        backgroundColor: tokens.colors.neutral[50],
-        fontFamily: 'inherit',
-        ...style,
+        display: 'flex', flexDirection: 'column' as const, height: '100%',
+        backgroundColor: tokens.colors.neutral[50], ...style,
       }}>
-        {/* ─── Candidate Header ────────────────────────────────────────── */}
+        {/* Header */}
         <Box style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
           backgroundColor: tokens.colors.common.white,
-          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-          ...createSurfaceStyle(tokens, { elevation: 'sm' }),
-          borderRadius: tokens.borderRadius.none,
+          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
             <Box style={{
-              width: tokens.spacing[10],
-              height: tokens.spacing[10],
-              borderRadius: tokens.borderRadius.full,
+              width: 40, height: 40, borderRadius: tokens.borderRadius.full,
               backgroundColor: tokens.colors.primaryScale[100],
-              color: tokens.colors.primaryScale[700],
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: tokens.typography.fontSize.md,
-              fontWeight: tokens.typography.fontWeight.bold,
-              flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              {context.candidateName.charAt(0).toUpperCase()}
-            </Box>
-            <Box style={{ display: 'flex', flexDirection: 'column' }}>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[900],
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
+              <Text style={{
+                fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.primaryScale[700],
               }}>
-                {context.candidateName}
+                {context.candidateName.charAt(0).toUpperCase()}
+              </Text>
+            </Box>
+            <Box>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Text style={{
+                  fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
+                  color: tokens.colors.neutral[900],
+                }}>
+                  {context.candidateName}
+                </Text>
                 <Box style={{
                   padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.full,
                   backgroundColor: decisionBadge.bgColor,
-                  color: decisionBadge.color,
-                  fontSize: tokens.typography.fontSize.xs,
-                  fontWeight: tokens.typography.fontWeight.semibold,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${decisionBadge.borderColor}`,
+                  border: `1px solid ${decisionBadge.borderColor}`,
                 }}>
-                  {context.decision}
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+                    color: decisionBadge.color,
+                  }}>
+                    {context.decision}
+                  </Text>
                 </Box>
               </Box>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.neutral[500],
-              }}>
-                {context.jobTitle}
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[1] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                  {context.jobTitle}
+                </Text>
                 {recipientPreview && (
-                  <span style={{ marginLeft: tokens.spacing[2], color: tokens.colors.neutral[400] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
                     ({recipientPreview})
-                  </span>
+                  </Text>
                 )}
               </Box>
             </Box>
           </Box>
 
-          {/* Preview Toggle + Send */}
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-            <button
+            <Box
               onClick={() => setShowPreview(!showPreview)}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
+                display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.md,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${showPreview ? tokens.colors.primaryScale[300] : tokens.colors.neutral[300]}`,
+                borderRadius: tokens.borderRadius.lg,
+                border: `1px solid ${showPreview ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
                 backgroundColor: showPreview ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                 color: showPreview ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.medium,
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                fontFamily: 'inherit',
-                ...hoverStyle,
+                cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
               }}
             >
               {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
-              {showPreview ? 'Hide Preview' : 'Preview'}
-            </button>
-            <button
-              onClick={onSend}
-              disabled={!messageContent.trim()}
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium }}>
+                {showPreview ? 'Hide Preview' : 'Preview'}
+              </Text>
+            </Box>
+            <Box
+              onClick={messageContent.trim() ? onSend : undefined}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
+                display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`,
-                borderRadius: tokens.borderRadius.md,
-                border: 'none',
+                borderRadius: tokens.borderRadius.lg, border: 'none',
                 backgroundColor: messageContent.trim() ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300],
-                color: tokens.colors.common.white,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
                 cursor: messageContent.trim() ? 'pointer' : 'not-allowed',
-                fontFamily: 'inherit',
-                ...hoverStyle,
+                transition: `all ${tokens.motion.hover}`,
               }}
             >
-              <Send size={14} />
-              Send
-            </button>
+              <Send size={14} color={tokens.colors.common.white} />
+              <Text style={{
+                fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
+                color: tokens.colors.common.white,
+              }}>
+                Send
+              </Text>
+            </Box>
           </Box>
         </Box>
 
-        {/* ─── Main Content ────────────────────────────────────────────── */}
-        <Box style={{
-          display: 'flex',
-          flex: 1,
-          overflow: 'hidden',
-        }}>
-          {/* ─── Left: Template Sidebar ─────────────────────────────────── */}
+        {/* Main Content */}
+        <Box style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+          {/* Left: Template Sidebar */}
           <Box style={{
-            width: 280,
-            flexShrink: 0,
-            borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+            width: 280, flexShrink: 0,
+            borderRight: `1px solid ${tokens.colors.neutral[100]}`,
             backgroundColor: tokens.colors.common.white,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
+            display: 'flex', flexDirection: 'column' as const, overflow: 'hidden',
           }}>
             {/* Decision Context Card */}
             <Box style={{
-              padding: tokens.spacing[4],
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
+              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
             }}>
               <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[500],
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: tokens.spacing[2],
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
+                display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
+                marginBottom: tokens.spacing[3],
               }}>
-                <Target size={12} />
-                Decision Context
+                <Target size={12} color={tokens.colors.neutral[400]} />
+                <Text style={{
+                  fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold,
+                  color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+                }}>
+                  Decision Context
+                </Text>
               </Box>
-              {/* Score highlights */}
+
               {context.scoreHighlights.length > 0 && (
-                <Box style={{ marginBottom: tokens.spacing[2] }}>
+                <Box style={{ marginBottom: tokens.spacing[3] }}>
                   {context.scoreHighlights.map((h, i) => (
                     <Box key={i} style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[600],
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                      marginBottom: 2,
+                      display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginBottom: 3,
                     }}>
                       <Star size={10} color={tokens.colors.warningScale[500]} />
-                      {h}
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{h}</Text>
                     </Box>
                   ))}
                 </Box>
               )}
-              {/* Key evidence */}
+
               {context.keyEvidence.length > 0 && (
-                <Box style={{ marginBottom: tokens.spacing[2] }}>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    color: tokens.colors.neutral[500],
-                    marginBottom: tokens.spacing[1],
+                <Box style={{ marginBottom: tokens.spacing[3] }}>
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                    color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1],
                   }}>
                     Evidence
-                  </Box>
+                  </Text>
                   {context.keyEvidence.map((ev, i) => (
                     <Box key={i} style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[600],
+                      display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[1],
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.sm,
-                      backgroundColor: tokens.colors.neutral[50],
-                      marginBottom: 2,
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: tokens.spacing[1],
+                      borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[50],
+                      marginBottom: 3,
                     }}>
                       <Quote size={10} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: 2 }} />
-                      {ev}
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{ev}</Text>
                     </Box>
                   ))}
                 </Box>
               )}
-              {/* Reasoning */}
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                color: tokens.colors.neutral[500],
-                fontStyle: 'italic',
+
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500],
+                fontStyle: 'italic' as const,
               }}>
                 {context.reasoning}
-              </Box>
+              </Text>
             </Box>
 
-            {/* Templates list */}
+            {/* Templates Header */}
             <Box style={{
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.semibold,
-              color: tokens.colors.neutral[500],
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing[1],
+              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
+              padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
+              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
             }}>
-              <FileText size={12} />
-              Templates ({templates.length})
+              <FileText size={12} color={tokens.colors.neutral[400]} />
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold,
+                color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em',
+              }}>
+                Templates ({templates.length})
+              </Text>
             </Box>
-            <Box style={{ flex: 1, overflowY: 'auto' }}>
+
+            {/* Templates List */}
+            <Box style={{ flex: 1, overflowY: 'auto' as const }}>
               {Object.entries(groupedTemplates).map(([category, categoryTemplates]) => {
                 const catConfig = categoryConfig[category as keyof typeof categoryConfig];
                 const isExpanded = expandedCategory === category;
 
                 return (
                   <Box key={category}>
-                    <button
+                    <Box
                       onClick={() => setExpandedCategory(isExpanded ? null : category)}
                       style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        cursor: 'pointer',
-                        transition: `all ${tokens.motion.hover}`,
-                        fontFamily: 'inherit',
-                        ...hoverStyle,
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`,
+                        cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
                       }}
                     >
-                      <Box style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: tokens.spacing[2],
-                      }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                         <Box style={{
-                          padding: `0 ${tokens.spacing[2]}px`,
-                          borderRadius: tokens.borderRadius.sm,
+                          padding: `0 ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md,
                           backgroundColor: catConfig?.bgColor ?? tokens.colors.neutral[50],
-                          color: catConfig?.color ?? tokens.colors.neutral[700],
-                          fontSize: tokens.typography.fontSize.xs,
-                          fontWeight: tokens.typography.fontWeight.medium,
                         }}>
-                          {catConfig?.label ?? category}
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                            color: catConfig?.color ?? tokens.colors.neutral[700],
+                          }}>
+                            {catConfig?.label ?? category}
+                          </Text>
                         </Box>
-                        <Box style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[400],
-                        }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                           ({categoryTemplates.length})
-                        </Box>
+                        </Text>
                       </Box>
                       {isExpanded ? <ChevronDown size={12} color={tokens.colors.neutral[400]} /> : <ChevronRight size={12} color={tokens.colors.neutral[400]} />}
-                    </button>
+                    </Box>
 
                     {isExpanded && categoryTemplates.map((template) => {
                       const isSelected = template.id === selectedTemplateId;
                       const isHovered = template.id === hoveredTemplateId;
                       return (
-                        <div
+                        <Box
                           key={template.id}
                           onClick={() => handleTemplateApply(template.id)}
                           onMouseEnter={() => setHoveredTemplateId(template.id)}
                           onMouseLeave={() => setHoveredTemplateId(null)}
                           style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px ${tokens.spacing[2]}px ${tokens.spacing[6]}px`,
-                            backgroundColor: isSelected
-                              ? tokens.colors.primaryScale[50]
-                              : isHovered
-                                ? tokens.colors.neutral[50]
-                                : 'transparent',
-                            cursor: 'pointer',
-                            transition: `all ${tokens.motion.hover}`,
-                            borderLeft: isSelected ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[500]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
-                            ...hoverStyle,
+                            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                            padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px ${tokens.spacing[2]}px ${tokens.spacing[7]}px`,
+                            backgroundColor: isSelected ? tokens.colors.primaryScale[50] : isHovered ? tokens.colors.neutral[50] : 'transparent',
+                            cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                            borderLeft: isSelected ? `3px solid ${tokens.colors.primaryScale[500]}` : '3px solid transparent',
                           }}
                         >
                           <Box style={{ flex: 1, minWidth: 0 }}>
-                            <Box style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.medium,
+                            <Text style={{
+                              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
                               color: isSelected ? tokens.colors.primaryScale[700] : tokens.colors.neutral[800],
-                              whiteSpace: 'nowrap',
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis',
                             }}>
                               {template.name}
-                            </Box>
-                            {/* Effectiveness bar */}
+                            </Text>
                             {template.effectiveness !== undefined && (
-                              <Box style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: tokens.spacing[1],
-                                marginTop: 2,
-                              }}>
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginTop: 2 }}>
                                 <Box style={{
-                                  width: 60,
-                                  height: 4,
-                                  borderRadius: tokens.borderRadius.full,
-                                  backgroundColor: tokens.colors.neutral[200],
-                                  overflow: 'hidden',
+                                  width: 60, height: 4, borderRadius: tokens.borderRadius.full,
+                                  backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' as const,
                                 }}>
                                   <Box style={{
-                                    width: `${template.effectiveness}%`,
-                                    height: '100%',
+                                    width: `${template.effectiveness}%`, height: '100%',
                                     borderRadius: tokens.borderRadius.full,
                                     backgroundColor: template.effectiveness >= 70
                                       ? tokens.colors.successScale[500]
@@ -535,17 +400,14 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                                         : tokens.colors.errorScale[500],
                                   }} />
                                 </Box>
-                                <Box style={{
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  color: tokens.colors.neutral[400],
-                                }}>
+                                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                                   {template.effectiveness}%
-                                </Box>
+                                </Text>
                               </Box>
                             )}
                           </Box>
                           {isSelected && <Check size={12} color={tokens.colors.primaryScale[500]} />}
-                        </div>
+                        </Box>
                       );
                     })}
                   </Box>
@@ -553,67 +415,56 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
               })}
 
               {templates.length === 0 && (
-                <Box style={{
-                  padding: tokens.spacing[6],
-                  textAlign: 'center',
-                  color: tokens.colors.neutral[400],
-                  fontSize: tokens.typography.fontSize.xs,
-                }}>
-                  No templates available
+                <Box style={{ padding: `${tokens.spacing[6]}px`, textAlign: 'center' as const }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                    No templates available
+                  </Text>
                 </Box>
               )}
             </Box>
           </Box>
 
-          {/* ─── Center: Editor ─────────────────────────────────────────── */}
-          <Box style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-          }}>
-            {/* Channel tabs */}
+          {/* Center: Editor */}
+          <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, overflow: 'hidden' }}>
+            {/* Channel Tabs */}
             <Box style={{
               display: 'flex',
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
               backgroundColor: tokens.colors.common.white,
             }}>
               {(['email', 'sms', 'whatsapp', 'linkedin'] as FeedbackChannel[]).map((ch) => {
                 const config = channelConfig[ch];
                 const isActive = channel === ch;
                 return (
-                  <button
+                  <Box
                     key={ch}
                     onClick={() => setChannel(ch)}
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[2],
+                      display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                      border: 'none',
-                      borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${config.color}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
-                      backgroundColor: 'transparent',
+                      borderBottom: isActive ? `2px solid ${config.color}` : '2px solid transparent',
                       color: isActive ? config.color : tokens.colors.neutral[500],
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      fontFamily: 'inherit',
-                      ...hoverStyle,
+                      cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     {channelIcons[ch]}
-                    {config.label}
-                  </button>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
+                      color: 'inherit',
+                    }}>
+                      {config.label}
+                    </Text>
+                  </Box>
                 );
               })}
             </Box>
 
-            {/* Subject line (email only) */}
+            {/* Subject Line (email only) */}
             {currentChannelConfig.hasSubject && (
               <Box style={{
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`,
+                borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
                 backgroundColor: tokens.colors.common.white,
               }}>
                 <input
@@ -622,218 +473,163 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                   onChange={(e) => setSubject(e.target.value)}
                   placeholder="Subject line..."
                   style={{
-                    width: '100%',
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[300]}`,
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: tokens.colors.neutral[900],
-                    backgroundColor: tokens.colors.common.white,
-                    fontFamily: 'inherit',
-                    outline: 'none',
+                    width: '100%', padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                    borderRadius: tokens.borderRadius.lg,
+                    border: `1px solid ${tokens.colors.neutral[200]}`,
+                    fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[900],
+                    backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', outline: 'none',
                   }}
-                
                   onFocus={(e) => {
                     e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                     e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.boxShadow = 'none';
-                    e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                    e.currentTarget.style.borderColor = tokens.colors.neutral[200];
                   }}
                 />
               </Box>
             )}
 
-            {/* Tone selector */}
+            {/* Tone Selector */}
             <Box style={{
-              display: 'flex',
-              gap: tokens.spacing[2],
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-              backgroundColor: tokens.colors.common.white,
+              display: 'flex', gap: tokens.spacing[2],
+              padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
+              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+              backgroundColor: tokens.colors.common.white, alignItems: 'center',
             }}>
-              <Box style={{
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.medium,
-                color: tokens.colors.neutral[500],
-                display: 'flex',
-                alignItems: 'center',
-                marginRight: tokens.spacing[1],
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                color: tokens.colors.neutral[500], marginRight: tokens.spacing[1],
               }}>
                 Tone:
-              </Box>
+              </Text>
               {(['encouraging', 'neutral', 'professional'] as FeedbackTone[]).map((t) => {
                 const config = toneConfig[t];
                 const isActive = tone === t;
                 return (
-                  <button
+                  <Box
                     key={t}
                     onClick={() => setTone(t)}
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'flex-start',
+                      display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-start',
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? config.borderColor : tokens.colors.neutral[200]}`,
+                      borderRadius: tokens.borderRadius.lg,
+                      border: `1px solid ${isActive ? config.borderColor : tokens.colors.neutral[200]}`,
                       backgroundColor: isActive ? config.bgColor : tokens.colors.common.white,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      fontFamily: 'inherit',
-                      flex: 1,
-                      ...hoverStyle,
+                      cursor: 'pointer', transition: `all ${tokens.motion.hover}`, flex: 1,
                     }}
                   >
-                    <Box style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: isActive ? config.color : tokens.colors.neutral[700],
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
-                    }}>
-                      {isActive && <Check size={10} />}
-                      {config.label}
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                      {isActive && <Check size={10} color={config.color} />}
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+                        color: isActive ? config.color : tokens.colors.neutral[700],
+                      }}>
+                        {config.label}
+                      </Text>
                     </Box>
-                    <Box style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[400],
-                      marginTop: 2,
-                      textAlign: 'left',
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400],
+                      marginTop: 2, textAlign: 'left' as const,
                     }}>
                       {config.description}
-                    </Box>
-                  </button>
+                    </Text>
+                  </Box>
                 );
               })}
             </Box>
 
-            {/* Variable insertion toolbar + AI generate button */}
+            {/* Variable Chips + AI Generate */}
             <Box style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-              borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`,
+              borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
               backgroundColor: tokens.colors.common.white,
             }}>
-              <Box style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[1],
-                flexWrap: 'wrap',
-              }}>
-                <Box style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[400],
-                  marginRight: tokens.spacing[1],
-                }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginRight: tokens.spacing[1] }}>
                   Insert:
-                </Box>
+                </Text>
                 {FEEDBACK_VARIABLES.map((v) => (
-                  <button
+                  <Box
                     key={v.key}
                     onClick={() => handleInsertVariable(v.key)}
                     style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
+                      display: 'inline-flex', alignItems: 'center',
                       padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.md,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
+                      border: `1px solid ${tokens.colors.primaryScale[200]}`,
                       backgroundColor: tokens.colors.primaryScale[50],
-                      color: tokens.colors.primaryScale[600],
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      fontFamily: 'monospace',
-                      ...hoverStyle,
+                      cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
                     }}
                   >
-                    {v.label}
-                  </button>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                      color: tokens.colors.primaryScale[600], fontFamily: 'monospace',
+                    }}>
+                      {v.label}
+                    </Text>
+                  </Box>
                 ))}
               </Box>
 
-              <button
-                onClick={handleGenerate}
-                disabled={isGenerating}
+              <Box
+                onClick={isGenerating ? undefined : handleGenerate}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: tokens.spacing[2],
+                  display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.secondaryScale?.[300] ?? tokens.colors.primaryScale[300]}`,
+                  borderRadius: tokens.borderRadius.lg,
+                  border: `1px solid ${tokens.colors.secondaryScale?.[300] ?? tokens.colors.primaryScale[300]}`,
                   backgroundColor: tokens.colors.secondaryScale?.[50] ?? tokens.colors.primaryScale[50],
-                  color: tokens.colors.secondaryScale?.[700] ?? tokens.colors.primaryScale[700],
-                  fontSize: tokens.typography.fontSize.sm,
-                  fontWeight: tokens.typography.fontWeight.semibold,
                   cursor: isGenerating ? 'not-allowed' : 'pointer',
-                  fontFamily: 'inherit',
-                  opacity: isGenerating ? 0.7 : 1,
-                  ...hoverStyle,
+                  opacity: isGenerating ? 0.7 : 1, transition: `all ${tokens.motion.hover}`,
                 }}
               >
                 {isGenerating ? (
-                  <Loader2 size={14} style={{ animation: 'spin 1s linear infinite' }} />
+                  <Loader2 size={14} color={tokens.colors.secondaryScale?.[700] ?? tokens.colors.primaryScale[700]} style={{ animation: 'spin 1s linear infinite' }} />
                 ) : (
-                  <Sparkles size={14} />
+                  <Sparkles size={14} color={tokens.colors.secondaryScale?.[700] ?? tokens.colors.primaryScale[700]} />
                 )}
-                {isGenerating ? 'Generating...' : 'Generate Feedback'}
-              </button>
+                <Text style={{
+                  fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
+                  color: tokens.colors.secondaryScale?.[700] ?? tokens.colors.primaryScale[700],
+                }}>
+                  {isGenerating ? 'Generating...' : 'Generate Feedback'}
+                </Text>
+              </Box>
             </Box>
 
             {/* Textarea */}
-            <Box style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, overflow: 'hidden' }}>
               <textarea
                 value={messageContent}
                 onChange={(e) => setMessageContent(e.target.value)}
                 placeholder="Compose your feedback message here..."
                 style={{
-                  flex: 1,
-                  padding: tokens.spacing[4],
-                  border: 'none',
-                  fontSize: tokens.typography.fontSize.sm,
-                  color: tokens.colors.neutral[900],
-                  backgroundColor: tokens.colors.common.white,
-                  fontFamily: 'inherit',
-                  resize: 'none',
-                  outline: 'none',
+                  flex: 1, padding: `${tokens.spacing[5]}px`,
+                  border: 'none', fontSize: tokens.typography.fontSize.sm,
+                  color: tokens.colors.neutral[900], backgroundColor: tokens.colors.common.white,
+                  fontFamily: 'inherit', resize: 'none' as const, outline: 'none',
                   lineHeight: tokens.typography.lineHeight.relaxed,
                 }}
-              
-                onFocus={(e) => {
-                  e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                  e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.borderColor = tokens.colors.neutral[300];
-                }}
               />
-              {/* Character count bar (for SMS) */}
+
               {currentChannelConfig.maxChars > 0 && (
                 <Box style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                  borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`,
+                  borderTop: `1px solid ${tokens.colors.neutral[100]}`,
                   backgroundColor: tokens.colors.common.white,
                 }}>
                   <Box style={{
-                    flex: 1,
-                    height: 4,
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.neutral[200],
-                    marginRight: tokens.spacing[3],
+                    flex: 1, height: 4, borderRadius: tokens.borderRadius.full,
+                    backgroundColor: tokens.colors.neutral[100], marginRight: tokens.spacing[3],
+                    overflow: 'hidden' as const,
                   }}>
                     <Box style={{
                       width: `${Math.min(100, (charCount / currentChannelConfig.maxChars) * 100)}%`,
-                      height: '100%',
-                      borderRadius: tokens.borderRadius.full,
+                      height: '100%', borderRadius: tokens.borderRadius.full,
                       backgroundColor: isOverLimit
                         ? tokens.colors.errorScale[500]
                         : charCount > currentChannelConfig.maxChars * 0.8
@@ -842,146 +638,131 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                       transition: `all ${tokens.motion.hover}`,
                     }} />
                   </Box>
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.xs,
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs, whiteSpace: 'nowrap' as const,
                     color: isOverLimit ? tokens.colors.errorScale[600] : tokens.colors.neutral[500],
                     fontWeight: isOverLimit ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
-                    whiteSpace: 'nowrap',
                   }}>
                     {charCount}/{currentChannelConfig.maxChars}
-                  </Box>
+                  </Text>
                 </Box>
               )}
             </Box>
           </Box>
 
-          {/* ─── Right: Preview Panel ───────────────────────────────────── */}
+          {/* Right: Preview Panel */}
           {showPreview && (
             <Box style={{
-              width: 360,
-              flexShrink: 0,
-              borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              width: 360, flexShrink: 0,
+              borderLeft: `1px solid ${tokens.colors.neutral[100]}`,
               backgroundColor: tokens.colors.neutral[50],
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
+              display: 'flex', flexDirection: 'column' as const, overflow: 'hidden',
             }}>
               <Box style={{
-                padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+                display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+                padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
+                borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
                 backgroundColor: tokens.colors.common.white,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[700],
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
               }}>
-                <Eye size={14} />
-                Preview ({channelConfig[channel].label})
+                <Eye size={14} color={tokens.colors.neutral[500]} />
+                <Text style={{
+                  fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
+                  color: tokens.colors.neutral[700],
+                }}>
+                  Preview ({channelConfig[channel].label})
+                </Text>
               </Box>
-              <Box style={{ flex: 1, overflowY: 'auto', padding: tokens.spacing[4] }}>
-                {/* Simulated message container */}
+
+              <Box style={{ flex: 1, overflowY: 'auto' as const, padding: `${tokens.spacing[5]}px` }}>
                 <Box style={{
-                  ...cardStyle,
-                  padding: tokens.spacing[4],
+                  ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+                  borderRadius: tokens.borderRadius.lg,
+                  border: `1px solid ${tokens.colors.neutral[100]}`,
+                  padding: `${tokens.spacing[5]}px`,
                 }}>
                   {/* Channel header */}
                   <Box style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: tokens.spacing[2],
-                    marginBottom: tokens.spacing[3],
-                    paddingBottom: tokens.spacing[3],
-                    borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                    display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+                    marginBottom: tokens.spacing[4], paddingBottom: tokens.spacing[4],
+                    borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
                   }}>
                     <Box style={{
-                      width: tokens.spacing[8],
-                      height: tokens.spacing[8],
-                      borderRadius: tokens.borderRadius.full,
+                      width: 32, height: 32, borderRadius: tokens.borderRadius.full,
                       backgroundColor: currentChannelConfig.bgColor,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
                       color: currentChannelConfig.color,
                     }}>
                       {channelIcons[channel]}
                     </Box>
                     <Box style={{ flex: 1 }}>
-                      <Box style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
                         color: tokens.colors.neutral[900],
                       }}>
                         {channel === 'email' ? 'Email Message' : channelConfig[channel].label + ' Message'}
-                      </Box>
-                      <Box style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[500],
-                      }}>
+                      </Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                         To: {recipientPreview ?? context.candidateName}
-                      </Box>
+                      </Text>
                     </Box>
                   </Box>
 
                   {/* Subject (email) */}
                   {channel === 'email' && subject && (
-                    <Box style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
-                      marginBottom: tokens.spacing[3],
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
+                      color: tokens.colors.neutral[900], marginBottom: tokens.spacing[3],
                     }}>
                       {substituteVariables(subject, context)}
-                    </Box>
+                    </Text>
                   )}
 
-                  {/* Rendered message */}
-                  <Box style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: tokens.colors.neutral[700],
-                    lineHeight: tokens.typography.lineHeight.relaxed,
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word',
-                  }}>
-                    {previewContent || (
-                      <span style={{ color: tokens.colors.neutral[400], fontStyle: 'italic' }}>
-                        Message preview will appear here...
-                      </span>
-                    )}
-                  </Box>
+                  {/* Message body */}
+                  {previewContent ? (
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700],
+                      lineHeight: tokens.typography.lineHeight.relaxed,
+                      whiteSpace: 'pre-wrap' as const, wordBreak: 'break-word' as const,
+                    }}>
+                      {previewContent}
+                    </Text>
+                  ) : (
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400],
+                      fontStyle: 'italic' as const,
+                    }}>
+                      Message preview will appear here...
+                    </Text>
+                  )}
                 </Box>
 
                 {/* Template hover preview */}
                 {hoveredTemplate && hoveredTemplate.id !== selectedTemplateId && (
                   <Box style={{
-                    ...cardStyle,
-                    marginTop: tokens.spacing[3],
-                    padding: tokens.spacing[3],
+                    ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+                    marginTop: tokens.spacing[3], padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                    borderRadius: tokens.borderRadius.lg,
                     borderLeft: `3px solid ${tokens.colors.infoScale[400]}`,
+                    border: `1px solid ${tokens.colors.neutral[100]}`,
                   }}>
                     <Box style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.infoScale[700],
-                      marginBottom: tokens.spacing[2],
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: tokens.spacing[1],
+                      display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginBottom: tokens.spacing[2],
                     }}>
-                      <BookOpen size={12} />
-                      Template Preview: {hoveredTemplate.name}
+                      <BookOpen size={12} color={tokens.colors.infoScale[700]} />
+                      <Text style={{
+                        fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+                        color: tokens.colors.infoScale[700],
+                      }}>
+                        Template Preview: {hoveredTemplate.name}
+                      </Text>
                     </Box>
-                    <Box style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      color: tokens.colors.neutral[600],
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600],
                       lineHeight: tokens.typography.lineHeight.relaxed,
-                      whiteSpace: 'pre-wrap',
-                      maxHeight: 120,
-                      overflow: 'hidden',
+                      whiteSpace: 'pre-wrap' as const, maxHeight: 120, overflow: 'hidden' as const,
                     }}>
                       {substituteVariables(hoveredTemplate.content, context)}
-                    </Box>
+                    </Text>
                   </Box>
                 )}
               </Box>

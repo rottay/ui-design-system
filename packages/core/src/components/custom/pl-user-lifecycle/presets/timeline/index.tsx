@@ -5,7 +5,7 @@
  * User lifecycle timeline with vertical event display, stage visualization, and progress tracking
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
@@ -44,7 +44,7 @@ interface StageConfig {
   label: string;
   color: string;
   bgColor: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
 }
 
 function getStageConfig(tokens: DesignTokens): Record<LifecycleStage, StageConfig> {

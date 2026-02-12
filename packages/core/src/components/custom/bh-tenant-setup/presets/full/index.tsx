@@ -11,12 +11,17 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createFilterPillStyle,
   createHoverStyle,
+  createPersonalityAccentBar,
   createProgressBarStyle,
   createSurfaceStyle,
+  getCardPadding,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhTenantSetupProps,
@@ -46,7 +51,7 @@ const STEP_ICONS: Record<string, React.ReactNode> = {
 export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
   name: 'BhTenantSetup.Full',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhTenantSetupProps>) => {
-    const { Box, Stack } = primitives;
+    const { Box, Text } = primitives;
 
     const {
       steps,
@@ -76,6 +81,11 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
     const surfaceMd = useMemo(() => createSurfaceStyle(tokens, { elevation: 'md', glass: isGlass }), [tokens, isGlass]);
     const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
     const hoverLift = getHoverTransform(tokens);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const paddingVal = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const isLastStep = localCurrentStep >= steps.length - 1;
     const currentStepData = steps[localCurrentStep];
@@ -190,59 +200,59 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
 
     /* ── Progress Stepper ────────────────────────────────────── */
     const renderStepper = () => (
-      <div style={{
+      <Box style={{
         display: 'flex',
         flexDirection: 'column' as const,
         gap: tokens.spacing[1],
         padding: `${tokens.spacing[6]}px ${tokens.spacing[5]}px`,
       }}>
         {/* Progress bar */}
-        <div style={{
+        <Box style={{
           marginBottom: tokens.spacing[4],
         }}>
-          <div style={{
+          <Box style={{
             display: 'flex',
             justifyContent: 'space-between',
             marginBottom: tokens.spacing[2],
           }}>
-            <span style={{
+            <Text style={{
               fontSize: tokens.typography.fontSize.xs,
               fontWeight: tokens.typography.fontWeight.semibold,
               color: tokens.colors.primaryScale[700],
             }}>
               {progressPercent}% Complete
-            </span>
-            <span style={{
+            </Text>
+            <Text style={{
               fontSize: tokens.typography.fontSize.xs,
               color: tokens.colors.neutral[400],
             }}>
               Step {localCurrentStep + 1} of {steps.length}
-            </span>
-          </div>
-          <div style={{
+            </Text>
+          </Box>
+          <Box style={{
             height: 6,
             borderRadius: tokens.borderRadius.full,
             backgroundColor: tokens.colors.neutral[200],
             overflow: 'hidden',
           }}>
-            <div style={{
+            <Box style={{
               height: '100%',
               width: `${progressPercent}%`,
               borderRadius: tokens.borderRadius.full,
               backgroundColor: tokens.colors.primaryScale[500],
               transition: `width 0.4s ${tokens.motion.spring}`,
             }} />
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {steps.map((step, idx) => {
           const isCurrentStep = idx === localCurrentStep;
           const isPast = step.isComplete;
-          const stepIcon = STEP_ICONS[step.key] ?? <span style={{ fontSize: tokens.typography.fontSize.sm }}>{idx + 1}</span>;
+          const stepIcon = STEP_ICONS[step.key] ?? <Text style={{ fontSize: tokens.typography.fontSize.sm }}>{idx + 1}</Text>;
 
           return (
-            <div key={step.key}>
-              <div
+            <Box key={step.key}>
+              <Box
                 onClick={() => {
                   if (isPast || isCurrentStep) {
                     setLocalCurrentStep(idx);
@@ -262,7 +272,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 }}
               >
                 {/* Step circle with SVG check */}
-                <div style={{
+                <Box style={{
                   width: 36,
                   height: 36,
                   borderRadius: tokens.borderRadius.full,
@@ -291,36 +301,36 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                       />
                     </svg>
                   ) : (
-                    <span style={{ fontSize: tokens.typography.fontSize.xs }}>{stepIcon}</span>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{stepIcon}</Text>
                   )}
-                </div>
+                </Box>
 
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{
+                <Box style={{ flex: 1, minWidth: 0 }}>
+                  <Text style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: isCurrentStep ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                     color: isCurrentStep ? tokens.colors.primaryScale[700] : tokens.colors.neutral[700],
                     margin: 0,
                   }}>
                     {step.label}
-                  </p>
+                  </Text>
                   {step.description && isCurrentStep && (
-                    <p style={{
+                    <Text style={{
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.neutral[400],
                       margin: `${tokens.spacing[1]}px 0 0 0`,
                     }}>
                       {step.description}
-                    </p>
+                    </Text>
                   )}
-                </div>
+                </Box>
 
                 {isPast && <Check size={14} color={tokens.colors.successScale[500]} />}
-              </div>
+              </Box>
 
               {/* Connector line */}
               {idx < steps.length - 1 && (
-                <div style={{
+                <Box style={{
                   marginLeft: 18 + tokens.spacing[3],
                   width: 2,
                   height: 12,
@@ -328,36 +338,36 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
                 }} />
               )}
-            </div>
+            </Box>
           );
         })}
-      </div>
+      </Box>
     );
 
     /* ── Step 1: Organization ────────────────────────────────── */
     const renderOrganization = () => (
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-        <h3 style={{
+      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+        <Text style={{
           fontSize: tokens.typography.fontSize.xl,
           fontWeight: tokens.typography.fontWeight.bold,
           color: tokens.colors.neutral[900],
           margin: 0,
         }}>
           Tell us about your company
-        </h3>
-        <p style={{
+        </Text>
+        <Text style={{
           fontSize: tokens.typography.fontSize.sm,
           color: tokens.colors.neutral[500],
           margin: 0,
         }}>
           This information helps us customize your BitHire experience.
-        </p>
+        </Text>
 
         {/* Company Name */}
-        <div>
-          <label style={labelStyle}>
-            Company Name <span style={{ color: tokens.colors.errorScale[500] }}>*</span>
-          </label>
+        <Box>
+          <Text style={labelStyle}>
+            Company Name <Text style={{ color: tokens.colors.errorScale[500] }}>*</Text>
+          </Text>
           <input
             type="text"
             value={localFormData.orgName}
@@ -365,12 +375,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             placeholder="Enter your company name"
             style={inputStyle}
           />
-        </div>
+        </Box>
 
         {/* Logo Upload */}
-        <div>
-          <label style={labelStyle}>Company Logo</label>
-          <div style={{
+        <Box>
+          <Text style={labelStyle}>Company Logo</Text>
+          <Box style={{
             ...hoverTransition,
             display: 'flex',
             flexDirection: 'column' as const,
@@ -384,7 +394,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             backgroundColor: tokens.colors.common.white,
           }}>
             {localFormData.logo ? (
-              <div style={{ textAlign: 'center' as const }}>
+              <Box style={{ textAlign: 'center' as const }}>
                 <img
                   src={localFormData.logo}
                   alt="Company logo"
@@ -395,39 +405,39 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     marginBottom: tokens.spacing[2],
                   }}
                 />
-                <p style={{
+                <Text style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.primaryScale[600],
                   margin: 0,
                 }}>
                   Click to change
-                </p>
-              </div>
+                </Text>
+              </Box>
             ) : (
               <>
                 <Upload size={28} color={tokens.colors.neutral[400]} />
-                <p style={{
+                <Text style={{
                   fontSize: tokens.typography.fontSize.sm,
                   color: tokens.colors.neutral[500],
                   margin: `${tokens.spacing[2]}px 0 0 0`,
                 }}>
                   Drop your logo here or click to upload
-                </p>
-                <p style={{
+                </Text>
+                <Text style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[400],
                   margin: `${tokens.spacing[1]}px 0 0 0`,
                 }}>
                   SVG, PNG or JPG (max 2MB)
-                </p>
+                </Text>
               </>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Industry */}
-        <div>
-          <label style={labelStyle}>Industry</label>
+        <Box>
+          <Text style={labelStyle}>Industry</Text>
           <select
             value={localFormData.industry}
             onChange={(e) => updateFormData({ industry: e.target.value })}
@@ -438,18 +448,18 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-        </div>
+        </Box>
 
         {/* Company Size */}
-        <div>
-          <label style={labelStyle}>Company Size</label>
-          <div style={{
+        <Box>
+          <Text style={labelStyle}>Company Size</Text>
+          <Box style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: tokens.spacing[2],
           }}>
             {getSizeOptions().map((opt) => (
-              <button
+              <Box
                 key={opt.value}
                 onClick={() => updateFormData({ size: opt.value })}
                 style={{
@@ -475,14 +485,14 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 }}
               >
                 {opt.label}
-              </button>
+              </Box>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Timezone */}
-        <div>
-          <label style={labelStyle}>Timezone</label>
+        <Box>
+          <Text style={labelStyle}>Timezone</Text>
           <select
             value={localFormData.timezone}
             onChange={(e) => updateFormData({ timezone: e.target.value })}
@@ -493,8 +503,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
 
     /* ── Step 2: Billing ─────────────────────────────────────── */
@@ -537,24 +547,24 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       ];
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-          <h3 style={{
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Text style={{
             fontSize: tokens.typography.fontSize.xl,
             fontWeight: tokens.typography.fontWeight.bold,
             color: tokens.colors.neutral[900],
             margin: 0,
           }}>
             Choose your billing model
-          </h3>
-          <p style={{
+          </Text>
+          <Text style={{
             fontSize: tokens.typography.fontSize.sm,
             color: tokens.colors.neutral[500],
             margin: 0,
           }}>
             Select how you want to pay for AI-powered interviews.
-          </p>
+          </Text>
 
-          <div style={{
+          <Box style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
             gap: tokens.spacing[4],
@@ -563,7 +573,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               const isSelected = localFormData.billingMode === option.mode;
 
               return (
-                <div
+                <Box
                   key={option.mode}
                   onClick={() => updateFormData({ billingMode: option.mode })}
                   style={{
@@ -581,7 +591,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   }}
                 >
                   {option.recommended && (
-                    <div style={{
+                    <Box style={{
                       position: 'absolute' as const,
                       top: -1,
                       right: tokens.spacing[3],
@@ -589,10 +599,10 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                       borderRadius: `0 0 ${tokens.borderRadius.md} ${tokens.borderRadius.md}`,
                     }}>
                       Recommended
-                    </div>
+                    </Box>
                   )}
 
-                  <div style={{
+                  <Box style={{
                     width: 48,
                     height: 48,
                     borderRadius: tokens.borderRadius.lg,
@@ -608,24 +618,24 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     marginBottom: tokens.spacing[3],
                   }}>
                     {option.icon}
-                  </div>
+                  </Box>
 
-                  <h4 style={{
+                  <Text style={{
                     fontSize: tokens.typography.fontSize.lg,
                     fontWeight: tokens.typography.fontWeight.bold,
                     color: tokens.colors.neutral[900],
                     margin: `0 0 ${tokens.spacing[1]}px 0`,
                   }}>
                     {option.title}
-                  </h4>
+                  </Text>
 
-                  <p style={{
+                  <Text style={{
                     fontSize: tokens.typography.fontSize.sm,
                     color: tokens.colors.neutral[500],
                     margin: `0 0 ${tokens.spacing[3]}px 0`,
                   }}>
                     {option.description}
-                  </p>
+                  </Text>
 
                   <ul style={{
                     listStyle: 'none',
@@ -652,7 +662,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   </ul>
 
                   {/* Selection indicator */}
-                  <div style={{
+                  <Box style={{
                     marginTop: tokens.spacing[4],
                     display: 'flex',
                     alignItems: 'center',
@@ -669,12 +679,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     fontWeight: tokens.typography.fontWeight.semibold,
                   }}>
                     {isSelected ? 'Selected' : 'Select'}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               );
             })}
-          </div>
-        </div>
+          </Box>
+        </Box>
       );
     };
 
@@ -689,27 +699,27 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       const testStatus = localProviderTestResult?.status;
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-          <h3 style={{
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Text style={{
             fontSize: tokens.typography.fontSize.xl,
             fontWeight: tokens.typography.fontWeight.bold,
             color: tokens.colors.neutral[900],
             margin: 0,
           }}>
             Connect your AI Provider
-          </h3>
-          <p style={{
+          </Text>
+          <Text style={{
             fontSize: tokens.typography.fontSize.sm,
             color: tokens.colors.neutral[500],
             margin: 0,
           }}>
             Configure the AI service that will power your interviews.
-          </p>
+          </Text>
 
           {/* Provider Selection */}
-          <div>
-            <label style={labelStyle}>AI Provider</label>
-            <div style={{
+          <Box>
+            <Text style={labelStyle}>AI Provider</Text>
+            <Box style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
               gap: tokens.spacing[3],
@@ -718,7 +728,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 const isSelected = localFormData.providerConfig.provider === prov.value;
 
                 return (
-                  <button
+                  <Box
                     key={prov.value}
                     onClick={() => updateFormData({
                       providerConfig: { ...localFormData.providerConfig, provider: prov.value },
@@ -740,33 +750,33 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     <Cpu size={20} color={isSelected
                       ? tokens.colors.primaryScale[600]
                       : tokens.colors.neutral[400]} />
-                    <p style={{
+                    <Text style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.semibold,
                       color: tokens.colors.neutral[900],
                       margin: `${tokens.spacing[2]}px 0 0 0`,
                     }}>
                       {prov.label}
-                    </p>
-                    <p style={{
+                    </Text>
+                    <Text style={{
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.neutral[500],
                       margin: `${tokens.spacing[1]}px 0 0 0`,
                     }}>
                       {prov.description}
-                    </p>
-                  </button>
+                    </Text>
+                  </Box>
                 );
               })}
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* API Key Input */}
-          <div>
-            <label style={labelStyle}>
-              API Key <span style={{ color: tokens.colors.errorScale[500] }}>*</span>
-            </label>
-            <div style={{ position: 'relative' as const }}>
+          <Box>
+            <Text style={labelStyle}>
+              API Key <Text style={{ color: tokens.colors.errorScale[500] }}>*</Text>
+            </Text>
+            <Box style={{ position: 'relative' as const }}>
               <input
                 type="password"
                 value={localFormData.providerConfig.apiKey}
@@ -786,21 +796,20 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 top: '50%',
                 transform: 'translateY(-50%)',
               }} />
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Test Connection */}
-          <div style={{
+          <Box style={{
             display: 'flex',
             alignItems: 'center',
             gap: tokens.spacing[3],
           }}>
-            <button
-              onClick={() => {
+            <Box
+              onClick={localFormData.providerConfig.apiKey ? () => {
                 setLocalProviderTestResult({ provider: localFormData.providerConfig.provider, status: 'testing' });
                 onTestProvider?.();
-              }}
-              disabled={!localFormData.providerConfig.apiKey}
+              } : undefined}
               style={{
                 ...buttonPrimaryStyle,
                 opacity: !localFormData.providerConfig.apiKey ? 0.5 : 1,
@@ -809,11 +818,11 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             >
               <Zap size={14} />
               Test Connection
-            </button>
+            </Box>
 
             {/* Live test status */}
             {testStatus && (
-              <div style={{
+              <Box style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: tokens.spacing[2],
@@ -835,41 +844,41 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     <Loader2 size={16} color={tokens.colors.infoScale[600]} style={{
                       animation: 'bhTenantSpin 1s linear infinite',
                     }} />
-                    <span style={{
+                    <Text style={{
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.infoScale[700],
                     }}>
                       Testing connection...
-                    </span>
+                    </Text>
                   </>
                 )}
                 {testStatus === 'success' && (
                   <>
                     <CheckCircle2 size={16} color={tokens.colors.successScale[600]} />
-                    <span style={{
+                    <Text style={{
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.successScale[700],
                     }}>
                       Connected successfully
                       {localProviderTestResult?.latencyMs ? ` (${localProviderTestResult.latencyMs}ms)` : ''}
-                    </span>
+                    </Text>
                   </>
                 )}
                 {testStatus === 'failure' && (
                   <>
                     <XCircle size={16} color={tokens.colors.errorScale[600]} />
-                    <span style={{
+                    <Text style={{
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.errorScale[700],
                     }}>
                       {localProviderTestResult?.error ?? 'Connection failed'}
-                    </span>
+                    </Text>
                   </>
                 )}
-              </div>
+              </Box>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       );
     };
 
@@ -917,29 +926,29 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       };
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-          <h3 style={{
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Text style={{
             fontSize: tokens.typography.fontSize.xl,
             fontWeight: tokens.typography.fontWeight.bold,
             color: tokens.colors.neutral[900],
             margin: 0,
           }}>
             Create your hiring teams
-          </h3>
-          <p style={{
+          </Text>
+          <Text style={{
             fontSize: tokens.typography.fontSize.sm,
             color: tokens.colors.neutral[500],
             margin: 0,
           }}>
             Organize your recruiters and hiring managers into teams.
-          </p>
+          </Text>
 
           {localTeams.map((team, teamIdx) => (
-            <div key={teamIdx} style={{
+            <Box key={teamIdx} style={{
               ...cardBase,
               position: 'relative' as const,
             }}>
-              <button
+              <Box
                 onClick={() => removeTeam(teamIdx)}
                 style={{
                   position: 'absolute' as const,
@@ -955,11 +964,11 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 }}
               >
                 <Trash2 size={16} color={tokens.colors.neutral[400]} />
-              </button>
+              </Box>
 
               {/* Team Name */}
-              <div style={{ marginBottom: tokens.spacing[3] }}>
-                <label style={labelStyle}>Team Name</label>
+              <Box style={{ marginBottom: tokens.spacing[3] }}>
+                <Text style={labelStyle}>Team Name</Text>
                 <input
                   type="text"
                   value={team.name}
@@ -967,12 +976,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   placeholder="e.g., Engineering Hiring"
                   style={inputStyle}
                 />
-              </div>
+              </Box>
 
               {/* Specializations Multi-Tag Input */}
-              <div style={{ marginBottom: tokens.spacing[3] }}>
-                <label style={labelStyle}>Specializations</label>
-                <div style={{
+              <Box style={{ marginBottom: tokens.spacing[3] }}>
+                <Text style={labelStyle}>Specializations</Text>
+                <Box style={{
                   display: 'flex',
                   flexWrap: 'wrap' as const,
                   gap: tokens.spacing[1],
@@ -984,7 +993,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   alignItems: 'center',
                 }}>
                   {team.specializations.map((spec, sIdx) => (
-                    <span key={sIdx} style={{
+                    <Text key={sIdx} style={{
                       ...createBadgeStyle(tokens, 'primary'),
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -992,7 +1001,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     }}>
                       <Tag size={10} />
                       {spec}
-                      <button
+                      <Box
                         onClick={() => removeSpecialization(teamIdx, sIdx)}
                         style={{
                           background: 'none',
@@ -1005,8 +1014,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                         }}
                       >
                         <X size={10} color={tokens.colors.primaryScale[600]} />
-                      </button>
-                    </span>
+                      </Box>
+                    </Text>
                   ))}
                   <input
                     type="text"
@@ -1028,7 +1037,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                         (e.target as HTMLInputElement).value = '';
                       }
                     }}
-                  
+
                     onFocus={(e) => {
                       e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                       e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
@@ -1038,14 +1047,14 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                       e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                     }}
                   />
-                </div>
-              </div>
+                </Box>
+              </Box>
 
               {/* Capacity Slider */}
-              <div>
-                <label style={labelStyle}>
+              <Box>
+                <Text style={labelStyle}>
                   Team Capacity: <strong>{team.capacity}</strong> members
-                </label>
+                </Text>
                 <input
                   type="range"
                   min="1"
@@ -1060,20 +1069,20 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     transition: `all ${tokens.motion.hover}`,
                   }}
                 />
-                <div style={{
+                <Box style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[400],
                 }}>
-                  <span>1</span>
-                  <span>50</span>
-                </div>
-              </div>
-            </div>
+                  <Text>1</Text>
+                  <Text>50</Text>
+                </Box>
+              </Box>
+            </Box>
           ))}
 
-          <button
+          <Box
             onClick={addTeam}
             style={{
               ...buttonSecondaryStyle,
@@ -1085,8 +1094,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
           >
             <Plus size={16} />
             Add Team
-          </button>
-        </div>
+          </Box>
+        </Box>
       );
     };
 
@@ -1108,29 +1117,29 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       };
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-          <h3 style={{
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Text style={{
             fontSize: tokens.typography.fontSize.xl,
             fontWeight: tokens.typography.fontWeight.bold,
             color: tokens.colors.neutral[900],
             margin: 0,
           }}>
             Invite your team
-          </h3>
-          <p style={{
+          </Text>
+          <Text style={{
             fontSize: tokens.typography.fontSize.sm,
             color: tokens.colors.neutral[500],
             margin: 0,
           }}>
             Send invitations to get your team onboard.
-          </p>
+          </Text>
 
           {localInvitations.map((invite, idx) => (
-            <div key={idx} style={{
+            <Box key={idx} style={{
               ...cardBase,
               position: 'relative' as const,
             }}>
-              <button
+              <Box
                 onClick={() => removeInvitation(idx)}
                 style={{
                   position: 'absolute' as const,
@@ -1145,12 +1154,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                 }}
               >
                 <X size={16} color={tokens.colors.neutral[400]} />
-              </button>
+              </Box>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
                 {/* Email */}
-                <div>
-                  <label style={labelStyle}>Email</label>
+                <Box>
+                  <Text style={labelStyle}>Email</Text>
                   <input
                     type="email"
                     value={invite.email}
@@ -1158,10 +1167,10 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     placeholder="colleague@company.com"
                     style={inputStyle}
                   />
-                </div>
+                </Box>
                 {/* Role */}
-                <div>
-                  <label style={labelStyle}>Role</label>
+                <Box>
+                  <Text style={labelStyle}>Role</Text>
                   <select
                     value={invite.role}
                     onChange={(e) => updateInvitation(idx, { role: e.target.value })}
@@ -1171,12 +1180,12 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
                   </select>
-                </div>
-              </div>
+                </Box>
+              </Box>
 
               {/* Personal Message */}
-              <div>
-                <label style={labelStyle}>Welcome Message (optional)</label>
+              <Box>
+                <Text style={labelStyle}>Welcome Message (optional)</Text>
                 <textarea
                   value={invite.message ?? ''}
                   onChange={(e) => updateInvitation(idx, { message: e.target.value })}
@@ -1187,11 +1196,11 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     resize: 'vertical' as const,
                   }}
                 />
-              </div>
-            </div>
+              </Box>
+            </Box>
           ))}
 
-          <button
+          <Box
             onClick={addInvitation}
             style={{
               ...buttonSecondaryStyle,
@@ -1203,37 +1212,37 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
           >
             <UserPlus size={16} />
             Add Another Invitation
-          </button>
-        </div>
+          </Box>
+        </Box>
       );
     };
 
     /* ── Step 6: First Job ───────────────────────────────────── */
     const renderFirstJob = () => (
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-        <h3 style={{
+      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+        <Text style={{
           fontSize: tokens.typography.fontSize.xl,
           fontWeight: tokens.typography.fontWeight.bold,
           color: tokens.colors.neutral[900],
           margin: 0,
         }}>
           Create your first job
-        </h3>
-        <p style={{
+        </Text>
+        <Text style={{
           fontSize: tokens.typography.fontSize.sm,
           color: tokens.colors.neutral[500],
           margin: 0,
         }}>
           Optionally create your first job posting or skip to finish setup.
-        </p>
+        </Text>
 
-        <div style={{
+        <Box style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: tokens.spacing[4],
         }}>
           {/* Create Job Card */}
-          <div
+          <Box
             onClick={handleNext}
             style={{
               ...cardBase,
@@ -1245,7 +1254,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
             }}
           >
-            <div style={{
+            <Box style={{
               width: 56,
               height: 56,
               borderRadius: tokens.borderRadius.full,
@@ -1257,26 +1266,26 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               marginBottom: tokens.spacing[3],
             }}>
               <Briefcase size={24} color={tokens.colors.primaryScale[600]} />
-            </div>
-            <h4 style={{
+            </Box>
+            <Text style={{
               fontSize: tokens.typography.fontSize.md,
               fontWeight: tokens.typography.fontWeight.bold,
               color: tokens.colors.neutral[900],
               margin: `0 0 ${tokens.spacing[1]}px 0`,
             }}>
               Create a Job
-            </h4>
-            <p style={{
+            </Text>
+            <Text style={{
               fontSize: tokens.typography.fontSize.sm,
               color: tokens.colors.neutral[500],
               margin: 0,
             }}>
               Use the guided wizard to post your first position
-            </p>
-          </div>
+            </Text>
+          </Box>
 
           {/* Skip Card */}
-          <div
+          <Box
             onClick={() => {
               setLocalIsComplete(true);
               setTimeout(() => onComplete?.(), 3000);
@@ -1291,7 +1300,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             }}
           >
-            <div style={{
+            <Box style={{
               width: 56,
               height: 56,
               borderRadius: tokens.borderRadius.full,
@@ -1303,25 +1312,25 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               marginBottom: tokens.spacing[3],
             }}>
               <SkipForward size={24} color={tokens.colors.neutral[500]} />
-            </div>
-            <h4 style={{
+            </Box>
+            <Text style={{
               fontSize: tokens.typography.fontSize.md,
               fontWeight: tokens.typography.fontWeight.bold,
               color: tokens.colors.neutral[900],
               margin: `0 0 ${tokens.spacing[1]}px 0`,
             }}>
               Skip for Now
-            </h4>
-            <p style={{
+            </Text>
+            <Text style={{
               fontSize: tokens.typography.fontSize.sm,
               color: tokens.colors.neutral[500],
               margin: 0,
             }}>
               You can create jobs later from the dashboard
-            </p>
-          </div>
-        </div>
-      </div>
+            </Text>
+          </Box>
+        </Box>
+      </Box>
     );
 
     /* ── Celebration ─────────────────────────────────────────── */
@@ -1345,7 +1354,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         const size = 6 + Math.random() * 6;
 
         return (
-          <div
+          <Box
             key={i}
             style={{
               position: 'absolute' as const,
@@ -1370,7 +1379,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
       ];
 
       return (
-        <div style={{
+        <Box style={{
           position: 'absolute' as const,
           top: 0,
           left: 0,
@@ -1387,14 +1396,14 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         }}>
           {confettiPieces}
 
-          <div style={{
+          <Box style={{
             textAlign: 'center' as const,
             zIndex: 51,
             maxWidth: 500,
             padding: tokens.spacing[5],
           }}>
             {/* Animated green check circle */}
-            <div style={{
+            <Box style={{
               width: 80,
               height: 80,
               borderRadius: tokens.borderRadius.full,
@@ -1422,32 +1431,32 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   }}
                 />
               </svg>
-            </div>
+            </Box>
 
-            <h2 style={{
+            <Text style={{
               fontSize: tokens.typography.fontSize['3xl'],
               fontWeight: tokens.typography.fontWeight.bold,
               color: tokens.colors.neutral[900],
               margin: 0,
             }}>
               Your BitHire is ready!
-            </h2>
-            <p style={{
+            </Text>
+            <Text style={{
               fontSize: tokens.typography.fontSize.md,
               color: tokens.colors.neutral[600],
               margin: `${tokens.spacing[2]}px 0 ${tokens.spacing[5]}px 0`,
             }}>
               Everything is set up. Here are some next steps to get started.
-            </p>
+            </Text>
 
             {/* Next steps guide cards */}
-            <div style={{
+            <Box style={{
               display: 'flex',
               gap: tokens.spacing[3],
               justifyContent: 'center',
             }}>
               {nextSteps.map((step, idx) => (
-                <div key={idx} style={{
+                <Box key={idx} style={{
                   ...cardBase,
                   ...hoverTransition,
                   cursor: 'pointer',
@@ -1455,7 +1464,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   flex: 1,
                   textAlign: 'center' as const,
                 }}>
-                  <div style={{
+                  <Box style={{
                     width: 36,
                     height: 36,
                     borderRadius: tokens.borderRadius.full,
@@ -1468,27 +1477,27 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     color: tokens.colors.primaryScale[600],
                   }}>
                     {step.icon}
-                  </div>
-                  <p style={{
+                  </Box>
+                  <Text style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: tokens.typography.fontWeight.semibold,
                     color: tokens.colors.neutral[900],
                     margin: 0,
                   }}>
                     {step.title}
-                  </p>
-                  <p style={{
+                  </Text>
+                  <Text style={{
                     fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.neutral[500],
                     margin: `${tokens.spacing[1]}px 0 0 0`,
                   }}>
                     {step.description}
-                  </p>
-                </div>
+                  </Text>
+                </Box>
               ))}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       );
     };
 
@@ -1516,7 +1525,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
 
     /* ── Navigation Footer ───────────────────────────────────── */
     const renderNavigation = () => (
-      <div style={{
+      <Box style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -1524,9 +1533,8 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
         backgroundColor: tokens.colors.common.white,
       }}>
-        <button
-          onClick={handleBack}
-          disabled={localCurrentStep === 0}
+        <Box
+          onClick={localCurrentStep === 0 ? undefined : handleBack}
           style={{
             ...buttonSecondaryStyle,
             opacity: localCurrentStep === 0 ? 0.4 : 1,
@@ -1535,11 +1543,11 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         >
           <ChevronLeft size={16} />
           Back
-        </button>
+        </Box>
 
-        <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
+        <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
           {currentStepData?.key !== 'first-job' && (
-            <button
+            <Box
               onClick={handleSkip}
               style={{
                 ...buttonSecondaryStyle,
@@ -1548,17 +1556,17 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
             >
               <SkipForward size={14} />
               Skip
-            </button>
+            </Box>
           )}
 
           {currentStepData?.key !== 'first-job' && (
-            <button onClick={handleNext} style={buttonPrimaryStyle}>
+            <Box onClick={handleNext} style={buttonPrimaryStyle}>
               {isLastStep ? 'Complete Setup' : 'Continue'}
               {isLastStep ? <Rocket size={14} /> : <ChevronRight size={14} />}
-            </button>
+            </Box>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
 
     /* ── Main Render ─────────────────────────────────────────── */
@@ -1586,39 +1594,39 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
 
         {localIsComplete && renderCelebration()}
 
-        <div style={{
+        <Box style={{
           display: 'flex',
           minHeight: '100%',
         }}>
           {/* Sidebar Stepper */}
-          <div style={{
+          <Box style={{
             width: 280,
             borderRight: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
             flexShrink: 0,
           }}>
             {renderStepper()}
-          </div>
+          </Box>
 
           {/* Main Content Area */}
-          <div style={{
+          <Box style={{
             flex: 1,
             display: 'flex',
             flexDirection: 'column' as const,
           }}>
             {/* Step Content */}
-            <div style={{
+            <Box style={{
               flex: 1,
               padding: `${tokens.spacing[6]}px ${tokens.spacing[6]}px`,
               overflowY: 'auto' as const,
             }}>
               {renderStepContent()}
-            </div>
+            </Box>
 
             {/* Navigation Footer */}
             {!localIsComplete && renderNavigation()}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Box>
     );
   },

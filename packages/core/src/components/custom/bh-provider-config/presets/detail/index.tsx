@@ -10,11 +10,13 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
-  createFilterPillStyle,
+  createDividerStyle,
   createHoverStyle,
-  createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createSectionHeaderStyle,
-  getHoverTransform,
+  getCardPadding,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhProviderConfigProps,
@@ -124,6 +126,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     const selectedProviderData = useMemo(
       () => providers.find((p) => p.id === activeSelectedProvider),
@@ -197,7 +204,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
         {/* =========================================================== */}
         {/*  Left Panel: Provider List                                    */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             width: 260,
             flexShrink: 0,
@@ -216,7 +223,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
               : {}),
           }}
         >
-          <div
+          <Box
             style={{
               padding: tokens.spacing[4],
               borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -232,14 +239,14 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
             >
               Providers
             </Text>
-          </div>
-          <div style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[2] }}>
+          </Box>
+          <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[2] }}>
             {providers.map((provider) => {
               const isSelected = activeSelectedProvider === provider.id;
               const sc = statusConfig(provider.status);
 
               return (
-                <div
+                <Box
                   key={provider.id}
                   onClick={() => handleProviderSelect(provider.id)}
                   style={{
@@ -265,8 +272,8 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     e.currentTarget.style.transform = 'none';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
-                    <div
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
+                    <Box
                       style={{
                         width: tokens.spacing[2],
                         height: tokens.spacing[2],
@@ -287,10 +294,10 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     >
                       {provider.name}
                     </Text>
-                  </div>
-                  <div style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
+                  </Box>
+                  <Box style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
                     {provider.types.map((type) => (
-                      <span
+                      <Box
                         key={type}
                         style={{
                           padding: `0 ${tokens.spacing[1]}px`,
@@ -301,19 +308,19 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                         }}
                       >
                         {type}
-                      </span>
+                      </Box>
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               );
             })}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* =========================================================== */}
         {/*  Right Panel: Provider Detail                                  */}
         {/* =========================================================== */}
-        <div
+        <Box
           style={{
             flex: 1,
             overflow: 'auto',
@@ -321,11 +328,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
           }}
         >
           {selectedProviderData ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
               {/* Header */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                  <div
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+                  <Box
                     style={{
                       width: tokens.spacing[3],
                       height: tokens.spacing[3],
@@ -333,11 +340,12 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                       backgroundColor: statusConfig(selectedProviderData.status).color,
                     }}
                   />
-                  <div>
+                  <Box>
                     <Text
                       style={{
                         fontSize: tokens.typography.fontSize['2xl'],
-                        fontWeight: tokens.typography.fontWeight.bold,
+                        fontWeight: typo.headingWeight,
+                        letterSpacing: typo.headingLetterSpacing,
                         color: tokens.colors.neutral[900],
                         display: 'block',
                       }}
@@ -345,11 +353,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                       {selectedProviderData.name}
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
-                      {statusConfig(selectedProviderData.status).label} &middot; {selectedProviderData.modelCount} models &middot; {selectedProviderData.uptimePercent}% uptime
+                      {statusConfig(selectedProviderData.status).label} &#183; {selectedProviderData.modelCount} models &#183; {selectedProviderData.uptimePercent}% uptime
                     </Text>
-                  </div>
-                </div>
-                <button
+                  </Box>
+                </Box>
+                <Box
                   onClick={() => handleTestProvider(selectedProviderData.id)}
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
@@ -361,22 +369,21 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     fontWeight: tokens.typography.fontWeight.semibold,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
-                    ...hoverStyle,
                   }}
                 >
-                  Test Connection
-                </button>
-              </div>
+                  <Text>Test Connection</Text>
+                </Box>
+              </Box>
 
               {/* Stats row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
                 {[
                   { label: 'Uptime', value: `${selectedProviderData.uptimePercent}%`, scale: tokens.colors.successScale },
                   { label: 'Latency', value: `${selectedProviderData.latencyMs}ms`, scale: selectedProviderData.latencyMs < 200 ? tokens.colors.successScale : selectedProviderData.latencyMs < 500 ? tokens.colors.warningScale : tokens.colors.errorScale },
                   { label: 'Models', value: `${selectedProviderData.modelCount}`, scale: tokens.colors.infoScale },
                   { label: 'Circuit', value: circuitConfig(selectedProviderData.circuitBreaker).label, scale: selectedProviderData.circuitBreaker === 'closed' ? tokens.colors.successScale : selectedProviderData.circuitBreaker === 'open' ? tokens.colors.errorScale : tokens.colors.warningScale },
                 ].map((stat) => (
-                  <div
+                  <Box
                     key={stat.label}
                     style={{
                       ...cardBase,
@@ -390,13 +397,13 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     <Text style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: stat.scale[800] }}>
                       {stat.value}
                     </Text>
-                  </div>
+                  </Box>
                 ))}
-              </div>
+              </Box>
 
               {/* Latency trend chart */}
               {selectedProviderData.latencyTrend.length > 1 && (
-                <div style={cardBase}>
+                <Box style={cardBase}>
                   <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[3] }}>
                     Latency Trend (24h)
                   </Text>
@@ -420,26 +427,26 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                       strokeLinejoin="round"
                     />
                   </svg>
-                </div>
+                </Box>
               )}
 
               {/* Type badges */}
-              <div style={cardBase}>
+              <Box style={cardBase}>
                 <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[3] }}>
                   Capabilities
                 </Text>
-                <div style={{ display: 'flex', gap: tokens.spacing[2], flexWrap: 'wrap' as const }}>
+                <Box style={{ display: 'flex', gap: tokens.spacing[2], flexWrap: 'wrap' as const }}>
                   {selectedProviderData.types.map((type) => (
-                    <span key={type} style={{ ...createBadgeStyle(tokens, typeColor(type)), padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px` }}>
+                    <Box key={type} style={{ ...createBadgeStyle(tokens, typeColor(type)), padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px` }}>
                       {type}
-                    </span>
+                    </Box>
                   ))}
-                </div>
-              </div>
+                </Box>
+              </Box>
 
               {/* API Keys for this provider */}
               {apiKeys.length > 0 && (
-                <div style={cardBase}>
+                <Box style={cardBase}>
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.lg,
@@ -451,9 +458,9 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                   >
                     API Keys
                   </Text>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {apiKeys.map((key) => (
-                      <div
+                      <Box
                         key={key.id}
                         style={{
                           display: 'flex',
@@ -464,7 +471,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                         }}
                       >
-                        <div>
+                        <Box>
                           <Text
                             style={{
                               fontSize: tokens.typography.fontSize.sm,
@@ -479,9 +486,9 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                             Last used: {formatRelativeTime(key.lastUsed)} &middot; Created: {formatShortDate(key.createdAt)}
                           </Text>
-                        </div>
-                        <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
-                          <button
+                        </Box>
+                        <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                          <Box
                             onClick={() => onRotateKey?.(key.id)}
                             style={{
                               padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -495,9 +502,9 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                               ...hoverStyle,
                             }}
                           >
-                            &#x21BB;
-                          </button>
-                          <button
+                            <Text>Rotate</Text>
+                          </Box>
+                          <Box
                             onClick={() => onRevokeKey?.(key.id)}
                             style={{
                               padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -512,24 +519,24 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                             }}
                           >
                             Revoke
-                          </button>
-                        </div>
-                      </div>
+                          </Box>
+                        </Box>
+                      </Box>
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               )}
 
               {/* Models for this provider */}
               {models.length > 0 && (
-                <div style={cardBase}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
+                <Box style={cardBase}>
+                  <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
                       Models
                     </Text>
-                    <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                    <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                       {(['all', 'chat', 'tts', 'stt', 'conversational'] as const).map((f) => (
-                        <button
+                        <Box
                           key={f}
                           onClick={() => handleModelFilterChange(f)}
                           style={{
@@ -547,13 +554,13 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           }}
                         >
                           {f}
-                        </button>
+                        </Box>
                       ))}
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
+                    </Box>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {filteredModels.map((model) => (
-                      <div
+                      <Box
                         key={model.id}
                         style={{
                           display: 'flex',
@@ -574,32 +581,32 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           e.currentTarget.style.transform = 'none';
                         }}
                       >
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
+                        <Box style={{ flex: 1, minWidth: 0 }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
                             <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
                               {model.name}
                             </Text>
-                            <span style={createBadgeStyle(tokens, typeColor(model.type))}>
+                            <Box style={createBadgeStyle(tokens, typeColor(model.type))}>
                               {model.type}
-                            </span>
+                            </Box>
                             {model.deprecated && (
-                              <span style={{ ...createBadgeStyle(tokens, 'error'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[1]}px` }}>
+                              <Box style={{ ...createBadgeStyle(tokens, 'error'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[1]}px` }}>
                                 deprecated
-                              </span>
+                              </Box>
                             )}
-                          </div>
-                          <div style={{ display: 'flex', gap: tokens.spacing[3] }}>
+                          </Box>
+                          <Box style={{ display: 'flex', gap: tokens.spacing[3] }}>
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                               ${model.costPer1kTokens.toFixed(4)}/1K
                             </Text>
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                               {model.contextWindow >= 1000 ? `${(model.contextWindow / 1000).toFixed(0)}K` : model.contextWindow} ctx
                             </Text>
-                          </div>
+                          </Box>
                           {model.features.length > 0 && (
-                            <div style={{ display: 'flex', gap: tokens.spacing[1], marginTop: tokens.spacing[1], flexWrap: 'wrap' as const }}>
+                            <Box style={{ display: 'flex', gap: tokens.spacing[1], marginTop: tokens.spacing[1], flexWrap: 'wrap' as const }}>
                               {model.features.map((feat) => (
-                                <span
+                                <Box
                                   key={feat}
                                   style={{
                                     padding: `0 ${tokens.spacing[1]}px`,
@@ -610,19 +617,19 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                                   }}
                                 >
                                   {feat}
-                                </span>
+                                </Box>
                               ))}
-                            </div>
+                            </Box>
                           )}
-                        </div>
-                      </div>
+                        </Box>
+                      </Box>
                     ))}
-                  </div>
-                </div>
+                  </Box>
+                </Box>
               )}
-            </div>
+            </Box>
           ) : (
-            <div
+            <Box
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -634,9 +641,9 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
               <Text style={{ fontSize: tokens.typography.fontSize.md }}>
                 Select a provider from the list to view details.
               </Text>
-            </div>
+            </Box>
           )}
-        </div>
+        </Box>
       </Box>
     );
   },

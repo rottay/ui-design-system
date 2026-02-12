@@ -3,6 +3,7 @@
  * Manage privacy settings, data consent preferences, and GDPR compliance options
  */
 
+import React from 'react';
 import type { PlPrivacyManagerProps } from './core';
 import { PL_PRIVACY_MANAGER_DEFAULTS } from './core';
 import { PL_PRIVACY_MANAGER_PRESETS } from './presets';

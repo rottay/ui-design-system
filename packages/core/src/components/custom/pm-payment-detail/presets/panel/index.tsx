@@ -2,163 +2,128 @@
 
 /**
  * PmPaymentDetail - Panel Preset
- * View payment details with transaction timeline, refund history, and metadata
+ * Compose PatternDetailPanel<PaymentDetailItem> with metadata sidebar
  */
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
+import type { PmPaymentDetailProps, PaymentDetailItem } from '../../core';
 import {
-  createCardStyle,
-  createBadgeStyle,
-  createSurfaceStyle,
-  createEmptyStateStyle,
-  createSectionHeaderStyle,
-} from '../../../helpers';
-import type { PmPaymentDetailProps } from '../../core';
+  PatternDetailPanel,
+  PatternTimeline,
+  PatternEmptyState,
+} from '../../../../patterns';
+import type { DetailTab, TimelineItem } from '../../../../patterns';
 
 export const PanelPmPaymentDetail = createPreset<PmPaymentDetailProps>({
   name: 'PmPaymentDetail.Panel',
   render: ({ primitives, props, tokens, engine }: PresetContext<PmPaymentDetailProps>) => {
-    const { Box, Stack, Spinner } = primitives;
-    const isModern = tokens.surface.useGlass;
-    const { loading, className, style, ...rest } = props;
-
-    const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-    const containerStyle = useMemo(() => ({
-      padding: tokens.spacing[6],
-      backgroundColor: tokens.colors.neutral[50],
-      minHeight: '100%',
-      fontFamily: 'inherit',
-    }), [tokens]);
-
-    const headerStyle = useMemo(() => ({
-      fontSize: tokens.typography.fontSize['2xl'],
-      fontWeight: tokens.typography.fontWeight.bold,
-      color: tokens.colors.neutral[900],
-      margin: 0,
-      lineHeight: tokens.typography.lineHeight.tight,
-    }), [tokens]);
-
-    const cardStyle = useMemo(() => createCardStyle(tokens, {
-      elevation: 'sm',
-      glass: isModern,
-    }), [tokens, isModern]);
-
-    const items = (rest as any).items ?? (rest as any).methods ?? (rest as any).sessions ?? (rest as any).metrics ?? [];
+    const { Spinner } = primitives;
+    const { loading, className, style, items, onItemClick, onCreate } = props;
 
     if (loading) {
       return (
-        <div className={className} style={{ ...containerStyle, display: 'flex', justifyContent: 'center', alignItems: 'center', ...style }}>
+        <div className={className} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100%', ...style }}>
           <Spinner size="lg" />
         </div>
       );
     }
 
-    return (
-      <div className={className} style={{ ...containerStyle, ...style }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[6] }}>
-          <div>
-            <h2 style={headerStyle}>Payment Detail</h2>
-            <p style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], margin: 0, marginTop: tokens.spacing[1] }}>
-              View payment details with transaction timeline, refund history, and metadata
-            </p>
-          </div>
-          {(rest as any).onCreate || (rest as any).onAdd || (rest as any).onConnect || (rest as any).onDeploy || (rest as any).onInitiate ? (
-            <button
-              onClick={(rest as any).onCreate ?? (rest as any).onAdd ?? (rest as any).onConnect ?? (rest as any).onDeploy ?? (rest as any).onInitiate}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: tokens.spacing[2],
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                borderRadius: tokens.borderRadius.md,
-                fontSize: tokens.typography.fontSize.sm,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                backgroundColor: tokens.colors.primaryScale[600],
-                color: tokens.colors.common.white,
-                border: 'none',
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                boxShadow: tokens.shadows.sm,
-              }}
-            >
-              + New
-            </button>
-          ) : null}
-        </div>
+    if (items.length === 0) {
+      return (
+        <PatternEmptyState
+          title="No payment details"
+          description="Get started by creating your first payment."
+          className={className}
+          style={style}
+          engine={engine}
+        />
+      );
+    }
 
-        {/* Content */}
-        {items.length === 0 ? (
-          <div style={{ ...createEmptyStateStyle(tokens), ...cardStyle, padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px` }}>
-            <div style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[400], marginBottom: tokens.spacing[2] }}>
-              No items found
+    const item = items[0];
+
+    const statusColor = item.status === 'completed' || item.status === 'refunded'
+      ? 'green'
+      : item.status === 'failed' || item.status === 'cancelled'
+        ? 'red'
+        : 'orange';
+
+    const timelineItems: TimelineItem[] = items.map((entry) => ({
+      key: entry.id,
+      timestamp: entry.createdAt,
+      title: `${entry.currency} ${entry.amount}`,
+      description: entry.description ?? `${entry.method} payment - ${entry.status}`,
+      type: entry.status === 'completed' ? 'success'
+        : entry.status === 'failed' ? 'error'
+        : entry.status === 'pending' || entry.status === 'processing' ? 'warning'
+        : 'default',
+    }));
+
+    const tabs: DetailTab[] = [
+      {
+        key: 'overview',
+        label: 'Overview',
+        content: (
+          <div>
+            <div style={{ marginBottom: 16 }}>
+              <strong>Amount:</strong> {item.currency} {item.amount}
             </div>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
-              Get started by creating your first item.
+            <div style={{ marginBottom: 16 }}>
+              <strong>Method:</strong> {item.method}
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <strong>Reference:</strong> {item.reference ?? 'N/A'}
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <strong>Customer:</strong> {item.customer ?? 'N/A'}
             </div>
           </div>
-        ) : (
-          <div style={{ ...cardStyle, padding: 0, overflow: 'hidden' as const }}>
-            {items.map((item: any, idx: number) => (
-              <div
-                key={item.id || idx}
-                onMouseEnter={() => setHoveredId(item.id)}
-                onMouseLeave={() => setHoveredId(null)}
-                onClick={() => (rest as any).onItemClick?.(item.id) ?? (rest as any).onToggle?.(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`,
-                  borderBottom: idx < items.length - 1 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
-                  backgroundColor: hoveredId === item.id ? tokens.colors.neutral[50] : tokens.colors.common.white,
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                  <div style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: tokens.borderRadius.md,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: tokens.colors.primaryScale[600],
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.bold,
-                  }}>
-                    {(item.name || item.title || 'I').charAt(0)}
-                  </div>
-                  <div>
-                    <div style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
-                      {item.name || item.title || item.event || 'Unnamed'}
-                    </div>
-                    <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                      {item.description || item.type || item.email || item.address || item.planName || ''}
-                    </div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                  {item.status && (
-                    <span style={{
-                      ...createBadgeStyle(tokens, item.status === 'active' || item.status === 'connected' || item.status === 'completed' || item.status === 'delivered' || item.status === 'paid' || item.status === 'minted' || item.status === 'confirmed' ? 'success' : item.status === 'pending' || item.status === 'processing' || item.status === 'trialing' || item.status === 'in_transit' || item.status === 'retrying' ? 'warning' : item.status === 'inactive' || item.status === 'failed' || item.status === 'expired' || item.status === 'rejected' || item.status === 'down' || item.status === 'burned' || item.status === 'dropped' || item.status === 'cancelled' || item.status === 'revoked' ? 'error' : 'info'),
-                    }}>
-                      {item.status}
-                    </span>
-                  )}
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                    {item.createdAt || item.lastUsed || item.timestamp || item.lastActive || ''}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        ),
+      },
+      {
+        key: 'timeline',
+        label: 'Timeline',
+        content: (
+          <PatternTimeline
+            items={timelineItems}
+            showTimestamp
+            engine={engine}
+          />
+        ),
+      },
+    ];
+
+    const sidebar = (
+      <div>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: '0.75rem', color: '#888' }}>Status</div>
+          <div style={{ fontWeight: 600 }}>{item.status}</div>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: '0.75rem', color: '#888' }}>Created</div>
+          <div>{item.createdAt}</div>
+        </div>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: '0.75rem', color: '#888' }}>Method</div>
+          <div>{item.method}</div>
+        </div>
       </div>
+    );
+
+    return (
+      <PatternDetailPanel
+        data={item}
+        title={`Payment ${item.reference ?? item.id}`}
+        subtitle={item.description ?? `${item.currency} ${item.amount}`}
+        status={{ label: item.status, color: statusColor }}
+        tabs={tabs}
+        sidebar={sidebar}
+        sidebarPosition="right"
+        className={className}
+        style={style}
+        engine={engine}
+      />
     );
   },
 });

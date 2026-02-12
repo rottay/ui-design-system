@@ -16,27 +16,85 @@ export type SyncStatus = 'synced' | 'syncing' | 'error' | 'paused' | 'pending';
 
 export type SyncOperation = 'create' | 'update' | 'delete' | 'provision' | 'deprovision';
 
+// ─── Sync Operation Types ───────────────────────────────────────────────────
+
+export type SyncOperationType = 'full' | 'incremental' | 'manual';
+
+export type SyncOperationStatus = 'running' | 'completed' | 'failed' | 'partial';
+
+// ─── Sync Stats ─────────────────────────────────────────────────────────────
+
+export interface SyncStats {
+  /** Number of users created in this operation */
+  usersCreated: number;
+  /** Number of users updated in this operation */
+  usersUpdated: number;
+  /** Number of users deactivated in this operation */
+  usersDeactivated: number;
+  /** Number of groups created in this operation */
+  groupsCreated: number;
+  /** Number of groups updated in this operation */
+  groupsUpdated: number;
+  /** Number of errors encountered in this operation */
+  errors: number;
+}
+
+// ─── Sync Operation Record ──────────────────────────────────────────────────
+
+export interface SyncOperationRecord {
+  /** Unique identifier for this operation */
+  id: string;
+  /** Provider ID this operation is associated with */
+  providerId: string;
+  /** Type of sync operation */
+  type: SyncOperationType;
+  /** Current status of the operation */
+  status: SyncOperationStatus;
+  /** When the operation started */
+  startedAt: Date | string;
+  /** Duration of the operation in seconds */
+  duration?: number;
+  /** Statistics for this operation */
+  stats: SyncStats;
+  /** Error details if the operation failed */
+  errorDetails?: Array<{ resource: string; message: string }>;
+}
+
+// ─── Mapping Direction ──────────────────────────────────────────────────────
+
+export type MappingDirection = 'inbound' | 'outbound' | 'bidirectional';
+
 // ─── Sync Mapping ───────────────────────────────────────────────────────────
 
 export interface SyncMapping {
   /** Unique identifier for this mapping entry */
-  id: string;
+  id?: string;
   /** External identifier from the identity provider */
-  externalId: string;
+  externalId?: string;
   /** Internal identifier in the local system */
-  internalId: string;
+  internalId?: string;
   /** Display name of the mapped user/entity */
-  displayName: string;
+  displayName?: string;
   /** Email address of the mapped user */
-  email: string;
+  email?: string;
   /** Current sync status of this mapping */
-  status: SyncStatus;
+  status?: SyncStatus;
   /** Timestamp of the last successful sync for this mapping */
   lastSynced?: Date;
   /** Source identity provider name */
-  source: string;
+  source?: string;
   /** List of conflict descriptions, if any exist */
   conflicts?: string[];
+  /** SCIM attribute name (for attribute mappings) */
+  scimAttribute?: string;
+  /** Direction of the mapping */
+  direction?: MappingDirection;
+  /** Local attribute name (for attribute mappings) */
+  localAttribute?: string;
+  /** Whether this mapping is required */
+  isRequired?: boolean;
+  /** Transform function name or expression */
+  transform?: string;
 }
 
 // ─── Sync Log ───────────────────────────────────────────────────────────────
@@ -62,6 +120,29 @@ export interface SyncLog {
   duration?: number;
 }
 
+// ─── Provider Types ─────────────────────────────────────────────────────────
+
+export type ProviderType = 'azure-ad' | 'okta' | 'google-workspace' | 'onelogin' | 'custom';
+
+export type ProviderStatus = 'active' | 'inactive' | 'error' | 'pending';
+
+// ─── Sync Provider ──────────────────────────────────────────────────────────
+
+export interface SyncProvider {
+  /** Unique identifier for this provider */
+  id: string;
+  /** Display name of the provider */
+  name: string;
+  /** Type of identity provider */
+  type: ProviderType;
+  /** Current status of the provider connection */
+  status: ProviderStatus;
+  /** The tenant URL for the identity provider */
+  tenantUrl?: string;
+  /** Last time the provider was synced */
+  lastSync?: Date | string;
+}
+
 // ─── Sync Config ────────────────────────────────────────────────────────────
 
 export interface SyncConfig {
@@ -85,6 +166,16 @@ export interface SyncConfig {
   syncInterval: number;
 }
 
+// ─── Filter Change Event ────────────────────────────────────────────────────
+
+export interface FilterChangeEvent {
+  providerId?: string;
+  operationType?: SyncOperationType;
+  operationStatus?: SyncOperationStatus;
+  dateStart?: Date | string;
+  dateEnd?: Date | string;
+}
+
 // ─── Component Props ────────────────────────────────────────────────────────
 
 export interface PlScimDirectorySyncProps extends EngineAwareProps {
@@ -92,7 +183,7 @@ export interface PlScimDirectorySyncProps extends EngineAwareProps {
   preset?: PlScimDirectorySyncPreset;
 
   /** Sync configuration and provider details */
-  config: SyncConfig;
+  config?: SyncConfig;
   /** User/entity mappings between external and internal systems */
   mappings?: SyncMapping[];
   /** Sync operation logs */
@@ -106,6 +197,32 @@ export interface PlScimDirectorySyncProps extends EngineAwareProps {
   onToggleAutoProvision?: (enabled: boolean) => void;
   /** Handle click on a specific mapping row */
   onMappingClick?: (mappingId: string) => void;
+
+  // ─── Log Preset Props ─────────────────────────────────────────────────────
+
+  /** List of sync providers (for log preset) */
+  providers?: SyncProvider[];
+  /** List of sync operations (for log preset) */
+  operations?: SyncOperationRecord[];
+  /** Handle click on a specific operation row */
+  onOperationClick?: (operationId: string) => void;
+  /** Export logs to a file */
+  onExportLogs?: () => void;
+
+  // ─── Filter Props ─────────────────────────────────────────────────────────
+
+  /** Filter by provider ID */
+  filterProviderId?: string;
+  /** Filter by operation type */
+  filterOperationType?: SyncOperationType;
+  /** Filter by operation status */
+  filterOperationStatus?: SyncOperationStatus;
+  /** Filter by start date */
+  filterDateStart?: Date | string;
+  /** Filter by end date */
+  filterDateEnd?: Date | string;
+  /** Handle filter changes */
+  onFilterChange?: (filters: FilterChangeEvent) => void;
 
   /** Loading state */
   loading?: boolean;

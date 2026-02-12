@@ -3,21 +3,37 @@
 /**
  * BhSlaMonitor - Standard Preset
  * SLA tracking dashboard with compliance hero, breach alerts, per-stage bars,
- * at-risk countdown cards, historical trend chart, and configuration panel.
+ * at-risk items queue, and compliance history trend chart.
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import {
+  Shield,
+  AlertTriangle,
+  Clock,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  ChevronDown,
+  ChevronRight,
+  Users,
+  CheckCircle2,
+  XCircle,
+  Timer,
+  Settings,
+  BarChart3,
+  Zap,
+  Bell,
+  ArrowRight,
+} from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
   createCardStyle,
-  createFilterPillStyle,
-  createHoverStyle,
-  createListItemStyle,
-  createPanelHeaderStyle,
-  createSectionHeaderStyle,
-  createSurfaceStyle,
-  getHoverTransform,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type {
   BhSlaMonitorProps,
@@ -28,1194 +44,400 @@ import type {
   SlaHistoryPoint,
   SlaConfig,
 } from '../../core';
-import {
-  getSlaStatusColors,
-  getComplianceColor,
-  TIME_RANGE_OPTIONS,
-} from '../../core';
-import {
-  Shield,
-  AlertTriangle,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Clock,
-  User,
-  Settings,
-  ChevronRight,
-  BarChart3,
-  AlertCircle,
-  Timer,
-  ArrowUpRight,
-  ArrowDownRight,
-  Activity,
-  Calendar,
-  Mail,
-  Zap,
-  X,
-} from 'lucide-react';
+import { getSlaStatusColors, getComplianceColor, TIME_RANGE_OPTIONS } from '../../core';
 
+/* ------------------------------------------------------------------ */
+/*  Mock data                                                          */
+/* ------------------------------------------------------------------ */
+const MOCK_COMPLIANCE: SlaCompliance = { percentage: 87.4, trend: 'up' };
+
+const MOCK_BREACHES: SlaBreach[] = [
+  { id: 'b1', jobName: 'Sr. Backend Engineer', stageName: 'Technical Interview', slaHours: 48, actualHours: 72, assignedRecruiter: 'Sofia Martinez' },
+  { id: 'b2', jobName: 'Product Designer', stageName: 'Portfolio Review', slaHours: 24, actualHours: 38, assignedRecruiter: 'James Chen' },
+  { id: 'b3', jobName: 'Data Analyst', stageName: 'Offer Approval', slaHours: 24, actualHours: 52, assignedRecruiter: 'Priya Sharma' },
+  { id: 'b4', jobName: 'DevOps Engineer', stageName: 'Screening Call', slaHours: 24, actualHours: 31, assignedRecruiter: 'Marcus Williams' },
+];
+
+const MOCK_STAGE_SLA: StageSla[] = [
+  { stageName: 'Application Review', avgHours: 16, limitHours: 24, status: 'green' },
+  { stageName: 'Screening Call', avgHours: 22, limitHours: 24, status: 'yellow' },
+  { stageName: 'Technical Interview', avgHours: 38, limitHours: 48, status: 'yellow' },
+  { stageName: 'Panel Interview', avgHours: 44, limitHours: 72, status: 'green' },
+  { stageName: 'Offer Approval', avgHours: 20, limitHours: 24, status: 'yellow' },
+  { stageName: 'Background Check', avgHours: 96, limitHours: 120, status: 'green' },
+];
+
+const MOCK_AT_RISK: AtRiskItem[] = [
+  { id: 'r1', type: 'candidate', name: 'Elena Vasquez', stage: 'Technical Interview', hoursRemaining: 4, assignee: 'Sofia Martinez' },
+  { id: 'r2', type: 'interview', name: 'Panel: Alex Kim', stage: 'Panel Interview', hoursRemaining: 8, assignee: 'James Chen' },
+  { id: 'r3', type: 'candidate', name: 'David Park', stage: 'Offer Approval', hoursRemaining: 2, assignee: 'Priya Sharma' },
+  { id: 'r4', type: 'candidate', name: 'Lisa Thompson', stage: 'Screening Call', hoursRemaining: 6, assignee: 'Marcus Williams' },
+];
+
+const MOCK_HISTORY: SlaHistoryPoint[] = [
+  { date: 'Jan', compliance: 82 }, { date: 'Feb', compliance: 84 }, { date: 'Mar', compliance: 81 },
+  { date: 'Apr', compliance: 85 }, { date: 'May', compliance: 83 }, { date: 'Jun', compliance: 86 },
+  { date: 'Jul', compliance: 88 }, { date: 'Aug', compliance: 85 }, { date: 'Sep', compliance: 87 },
+  { date: 'Oct', compliance: 86 }, { date: 'Nov', compliance: 88 }, { date: 'Dec', compliance: 87 },
+];
+
+/* ================================================================== */
+/*  Preset                                                             */
+/* ================================================================== */
 export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
   name: 'BhSlaMonitor.Standard',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhSlaMonitorProps>) => {
-    const { Box, Stack } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhSlaMonitorProps>) => {
+    const { Box, Text } = primitives;
+    const t = tokens;
 
     const {
-      compliance: externalCompliance,
-      breaches: externalBreaches = [],
-      stageSlaData: externalStageSlaData = [],
-      atRiskItems: externalAtRiskItems = [],
-      history: externalHistory = [],
-      config: externalConfig = [],
-      timeRange: externalTimeRange = '7d',
+      compliance: compProp,
+      breaches: brProp,
+      stageSlaData: stageProp,
+      atRiskItems: riskProp,
+      history: histProp,
+      timeRange: trProp,
       onTimeRangeChange,
-      showConfig: externalShowConfig = false,
-      onConfigToggle,
-      selectedStage: externalSelectedStage,
+      selectedStage: selStageProp,
       onStageSelect,
-      breachFilter: externalBreachFilter = 'all',
-      onBreachFilterChange,
       className,
       style,
     } = props;
 
-    const [timeRange, setTimeRange] = useState(externalTimeRange);
-    const [showConfig, setShowConfig] = useState(externalShowConfig);
-    const [selectedStage, setSelectedStage] = useState<string | null>(
-      externalSelectedStage ?? null
-    );
-    const [breachFilter, setBreachFilter] = useState(externalBreachFilter);
+    const compliance = compProp ?? MOCK_COMPLIANCE;
+    const breaches = brProp?.length ? brProp : MOCK_BREACHES;
+    const stageSlaData = stageProp?.length ? stageProp : MOCK_STAGE_SLA;
+    const atRiskItems = riskProp?.length ? riskProp : MOCK_AT_RISK;
+    const history = histProp?.length ? histProp : MOCK_HISTORY;
 
-    useEffect(() => { setTimeRange(externalTimeRange); }, [externalTimeRange]);
-    useEffect(() => { setShowConfig(externalShowConfig); }, [externalShowConfig]);
-    useEffect(() => {
-      if (externalSelectedStage !== undefined) setSelectedStage(externalSelectedStage);
-    }, [externalSelectedStage]);
-    useEffect(() => { setBreachFilter(externalBreachFilter); }, [externalBreachFilter]);
+    const [timeRange, setTimeRange] = useState(trProp ?? '7d');
+    const [selectedStage, setSelectedStage] = useState<string | null>(selStageProp ?? null);
+    const [activeTab, setActiveTab] = useState<'breaches' | 'at-risk'>('breaches');
 
-    const handleTimeRangeChange = useCallback(
-      (range: string) => {
-        setTimeRange(range);
-        onTimeRangeChange?.(range);
-      },
-      [onTimeRangeChange]
-    );
-
-    const handleConfigToggle = useCallback(() => {
-      const next = !showConfig;
-      setShowConfig(next);
-      onConfigToggle?.();
-    }, [showConfig, onConfigToggle]);
-
-    const handleStageSelect = useCallback(
-      (stage: string | null) => {
-        setSelectedStage(stage);
-        onStageSelect?.(stage);
-      },
-      [onStageSelect]
-    );
-
-    const handleBreachFilterChange = useCallback(
-      (filter: 'all' | 'active' | 'resolved') => {
-        setBreachFilter(filter);
-        onBreachFilterChange?.(filter);
-      },
-      [onBreachFilterChange]
-    );
-
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
-    const slaColors = getSlaStatusColors(tokens);
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const cardInteractive = useMemo(() => createCardStyle(tokens, {
-      elevation: 'sm',
-      glass: isGlass,
-      interactive: true,
-    }), [tokens, isGlass]);
-    const hoverTransition = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
-
-    const containerStyle: React.CSSProperties = {
-      ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-      padding: tokens.spacing[5],
-      backgroundColor: tokens.colors.neutral[50],
-      minHeight: '100%',
-      ...style,
+    const handleTimeRange = (val: string) => {
+      setTimeRange(val);
+      onTimeRangeChange?.(val);
     };
 
-    const sectionTitleStyle: React.CSSProperties = {
-      fontSize: tokens.typography.fontSize.lg,
-      fontWeight: tokens.typography.fontWeight.semibold,
-      color: tokens.colors.neutral[900],
-      margin: 0,
+    const handleStageSelect = (stage: string) => {
+      const next = selectedStage === stage ? null : stage;
+      setSelectedStage(next);
+      onStageSelect?.(next);
     };
 
-    const pulseKeyframes = `
-      @keyframes bhSlaPulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-      }
-    `;
+    /* ---- Computed ---- */
+    const statusColors = getSlaStatusColors(t);
+    const compColor = getComplianceColor(t, compliance.percentage);
+    const histMin = useMemo(() => Math.min(...history.map(h => h.compliance), 0), [history]);
+    const histMax = useMemo(() => Math.max(...history.map(h => h.compliance), 100), [history]);
+    const histRange = histMax - histMin || 1;
 
-    /* ---- Compliance Hero ---- */
-    const renderComplianceHero = () => {
-      const comp = externalCompliance ?? { percentage: 0, trend: 'stable' as const };
-      const compColor = getComplianceColor(tokens, comp.percentage);
-      const trendIcon =
-        comp.trend === 'up' ? (
-          <TrendingUp size={20} color={tokens.colors.successScale[600]} />
-        ) : comp.trend === 'down' ? (
-          <TrendingDown size={20} color={tokens.colors.errorScale[600]} />
-        ) : (
-          <Minus size={16} color={tokens.colors.neutral[400]} />
-        );
-      const trendLabel =
-        comp.trend === 'up' ? 'Improving' : comp.trend === 'down' ? 'Declining' : 'Stable';
-      const trendColor =
-        comp.trend === 'up'
-          ? tokens.colors.successScale[600]
-          : comp.trend === 'down'
-          ? tokens.colors.errorScale[600]
-          : tokens.colors.neutral[500];
+    /* ---- Styles ---- */
+    const card = createCardStyle(t, { padding: 28 });
+    const hoverStyles = createCardHoverStyles(t);
+    const sectionLabel = createPersonalitySectionHeaderStyle(t);
+    const badgeRadius = getPersonalityBadgeRadius(t);
 
-      const heroStyle: React.CSSProperties = {
-        ...createCardStyle(tokens, { elevation: 'md', glass: isGlass }),
-        padding: `${tokens.spacing[6]}px ${tokens.spacing[6]}px`,
-        background:
-          isGlass && tokens.glass
-            ? tokens.glass.bg
-            : `linear-gradient(135deg, ${compColor.bg}, ${tokens.colors.common.white})`,
-        position: 'relative' as const,
-        overflow: 'hidden',
-      };
+    /* ================================================================ */
+    return (
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
 
-      return (
-        <div style={heroStyle}>
-          <style>{pulseKeyframes}</style>
-          {isGlass && tokens.glass && (
-            <div
-              style={{
-                position: 'absolute' as const,
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backdropFilter: tokens.glass.blur,
-                WebkitBackdropFilter: tokens.glass.blur,
-                pointerEvents: 'none' as const,
-              }}
-            />
-          )}
-          <Stack
-            direction="horizontal"
-            align="center"
-            justify="space-between"
-            style={{ position: 'relative' as const, zIndex: 1 }}
-          >
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[5]}>
-              <div
+        {/* === Header === */}
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
+            <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
+              <Shield size={22} color={t.colors.primaryScale[600]} />
+            </Box>
+            <Box>
+              <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                SLA Monitor
+              </Text>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>
+                {breaches.length} active breach{breaches.length !== 1 ? 'es' : ''} -- {atRiskItems.length} at risk
+              </Text>
+            </Box>
+          </Box>
+
+          {/* Time range toggle */}
+          <Box style={{ display: 'flex', gap: t.spacing[1] }}>
+            {TIME_RANGE_OPTIONS.map(opt => (
+              <Box
+                key={opt.value}
+                onClick={() => handleTimeRange(opt.value)}
                 style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: tokens.borderRadius.full,
-                  backgroundColor: compColor.bg,
-                  border: `3px solid ${compColor.color}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
+                  cursor: 'pointer',
+                  backgroundColor: timeRange === opt.value ? t.colors.primaryScale[600] : t.colors.neutral[100],
+                  transition: `all ${t.motion.hover}`,
                 }}
               >
-                <span
-                  style={{
-                    fontSize: tokens.typography.fontSize['2xl'],
-                    fontWeight: tokens.typography.fontWeight.bold,
-                    color: compColor.color,
-                    lineHeight: tokens.typography.lineHeight.tight,
-                  }}
-                >
-                  {Math.round(comp.percentage)}
-                </span>
-              </div>
-              <div>
-                <div
+                <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: timeRange === opt.value ? t.colors.common.white : t.colors.neutral[600] }}>
+                  {opt.label}
+                </Text>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+
+        {/* === Compliance Hero + Stage Bars === */}
+        <Box style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: t.spacing[5] }}>
+
+          {/* Compliance gauge */}
+          <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Overall Compliance</Text>
+            <svg width={160} height={100} viewBox="0 0 160 100">
+              {/* Background arc */}
+              <path
+                d={`M 20 90 A 60 60 0 0 1 140 90`}
+                fill="none"
+                stroke={t.colors.neutral[100]}
+                strokeWidth={12}
+                strokeLinecap="round"
+              />
+              {/* Value arc */}
+              {(() => {
+                const pct = Math.min(compliance.percentage / 100, 1);
+                const angle = Math.PI * pct;
+                const x = 80 - 60 * Math.cos(angle);
+                const y = 90 - 60 * Math.sin(angle);
+                const largeArc = pct > 0.5 ? 1 : 0;
+                return (
+                  <path
+                    d={`M 20 90 A 60 60 0 ${largeArc} 1 ${x} ${y}`}
+                    fill="none"
+                    stroke={compColor.color}
+                    strokeWidth={12}
+                    strokeLinecap="round"
+                  />
+                );
+              })()}
+              <text x={80} y={78} textAnchor="middle" fontSize={28} fontWeight={700} fill={compColor.color}>
+                {compliance.percentage.toFixed(1)}%
+              </text>
+            </svg>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[3] }}>
+              {compliance.trend === 'up' && <TrendingUp size={14} color={t.colors.successScale[600]} />}
+              {compliance.trend === 'down' && <TrendingDown size={14} color={t.colors.errorScale[600]} />}
+              {compliance.trend === 'stable' && <Minus size={14} color={t.colors.neutral[500]} />}
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: compliance.trend === 'up' ? t.colors.successScale[600] : compliance.trend === 'down' ? t.colors.errorScale[600] : t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>
+                {compliance.trend === 'up' ? 'Improving' : compliance.trend === 'down' ? 'Declining' : 'Stable'}
+              </Text>
+            </Box>
+          </Box>
+
+          {/* Stage SLA bars */}
+          <Box style={{ ...card }}>
+            <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Stage Performance</Text>
+            {stageSlaData.map(stage => {
+              const pct = (stage.avgHours / stage.limitHours) * 100;
+              const sColors = statusColors[stage.status];
+              const isSelected = selectedStage === stage.stageName;
+              return (
+                <Box
+                  key={stage.stageName}
+                  onClick={() => handleStageSelect(stage.stageName)}
                   style={{
                     display: 'flex',
-                    alignItems: 'baseline',
-                    gap: tokens.spacing[2],
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: tokens.typography.fontSize['4xl'],
-                      fontWeight: tokens.typography.fontWeight.bold,
-                      color: compColor.color,
-                      lineHeight: tokens.typography.lineHeight.tight,
-                    }}
-                  >
-                    {comp.percentage.toFixed(1)}%
-                  </span>
-                </div>
-                <p
-                  style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    color: tokens.colors.neutral[600],
-                    margin: `${tokens.spacing[1]}px 0 0 0`,
-                  }}
-                >
-                  SLA Compliance Rate
-                </p>
-                <Stack
-                  direction="horizontal"
-                  align="center"
-                  gap={tokens.spacing[1]}
-                  style={{ marginTop: tokens.spacing[2] }}
-                >
-                  {trendIcon}
-                  <span
-                    style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                      color: trendColor,
-                    }}
-                  >
-                    {trendLabel}
-                  </span>
-                </Stack>
-              </div>
-            </Stack>
-
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              {TIME_RANGE_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => handleTimeRangeChange(opt.value)}
-                  style={{
-                    ...hoverTransition,
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border:
-                      timeRange === opt.value
-                        ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[300]}`
-                        : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                    backgroundColor:
-                      timeRange === opt.value
-                        ? tokens.colors.primaryScale[50]
-                        : tokens.colors.common.white,
-                    color:
-                      timeRange === opt.value
-                        ? tokens.colors.primaryScale[700]
-                        : tokens.colors.neutral[600],
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
+                    alignItems: 'center',
+                    gap: t.spacing[3],
+                    marginBottom: t.spacing[3],
+                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    borderRadius: t.borderRadius.md,
                     cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
+                    backgroundColor: isSelected ? sColors.bg : 'transparent',
+                    transition: `background-color ${t.motion.hover}`,
                   }}
                 >
-                  {opt.label}
-                </button>
+                  <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: sColors.dot, flexShrink: 0 }} />
+                  <Text style={{ width: 140, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium, flexShrink: 0 }}>
+                    {stage.stageName}
+                  </Text>
+                  <Box style={{ flex: 1, position: 'relative' as const, height: 20 }}>
+                    <Box style={{ position: 'absolute' as const, inset: 0, borderRadius: t.borderRadius.sm, backgroundColor: t.colors.neutral[100] }} />
+                    <Box style={{
+                      position: 'absolute' as const, top: 0, left: 0, height: '100%',
+                      width: `${Math.min(pct, 100)}%`,
+                      borderRadius: t.borderRadius.sm,
+                      backgroundColor: sColors.dot,
+                      opacity: 0.7,
+                      transition: `width ${t.motion.hover}`,
+                    }} />
+                    {/* SLA limit marker */}
+                    <Box style={{ position: 'absolute' as const, top: -2, left: '100%', width: 2, height: 'calc(100% + 4px)', backgroundColor: t.colors.neutral[400], borderRadius: 1 }} />
+                  </Box>
+                  <Text style={{ width: 80, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textAlign: 'right' as const, flexShrink: 0 }}>
+                    {stage.avgHours}h / {stage.limitHours}h
+                  </Text>
+                </Box>
+              );
+            })}
+          </Box>
+        </Box>
+
+        {/* === Breaches & At-Risk (tabbed) + History Chart === */}
+        <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[5] }}>
+
+          {/* Left: Breaches / At-risk */}
+          <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
+            {/* Tab header */}
+            <Box style={{ display: 'flex', borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+              {(['breaches', 'at-risk'] as const).map(tab => (
+                <Box
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  style={{
+                    flex: 1,
+                    padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                    cursor: 'pointer',
+                    textAlign: 'center' as const,
+                    borderBottom: activeTab === tab ? `2px solid ${t.colors.primaryScale[600]}` : '2px solid transparent',
+                    backgroundColor: activeTab === tab ? t.colors.primaryScale[50] : 'transparent',
+                    transition: `all ${t.motion.hover}`,
+                  }}
+                >
+                  <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1] }}>
+                    {tab === 'breaches' ? <XCircle size={14} color={activeTab === tab ? t.colors.errorScale[600] : t.colors.neutral[400]} /> : <Timer size={14} color={activeTab === tab ? t.colors.warningScale[600] : t.colors.neutral[400]} />}
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: activeTab === tab ? t.colors.neutral[800] : t.colors.neutral[500] }}>
+                      {tab === 'breaches' ? `Breaches (${breaches.length})` : `At Risk (${atRiskItems.length})`}
+                    </Text>
+                  </Box>
+                </Box>
               ))}
-              <button
-                onClick={handleConfigToggle}
-                style={{
-                  ...hoverTransition,
-                  padding: `${tokens.spacing[2]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                  backgroundColor: showConfig
-                    ? tokens.colors.primaryScale[50]
-                    : tokens.colors.common.white,
-                  color: showConfig
-                    ? tokens.colors.primaryScale[700]
-                    : tokens.colors.neutral[600],
-                  cursor: 'pointer',
-                  transition: `all ${tokens.motion.hover}`,
+            </Box>
+
+            {/* Tab content */}
+            <Box style={{ padding: t.spacing[4], maxHeight: 320, overflow: 'auto' }}>
+              {activeTab === 'breaches' && breaches.map(breach => (
+                <Box key={breach.id} style={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Settings size={16} />
-              </button>
-            </Stack>
-          </Stack>
-        </div>
-      );
-    };
-
-    /* ---- Breach Alerts ---- */
-    const renderBreachAlerts = () => {
-      if (externalBreaches.length === 0) return null;
-
-      const filterOptions: Array<{ value: 'all' | 'active' | 'resolved'; label: string }> = [
-        { value: 'all', label: 'All' },
-        { value: 'active', label: 'Active' },
-        { value: 'resolved', label: 'Resolved' },
-      ];
-
-      return (
-        <div style={cardBase}>
-          <Stack
-            direction="horizontal"
-            align="center"
-            justify="space-between"
-            style={{ marginBottom: tokens.spacing[4] }}
-          >
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <AlertTriangle size={18} color={tokens.colors.errorScale[600]} />
-              <span style={sectionTitleStyle}>SLA Breaches</span>
-              <span
-                style={{
-                  ...createBadgeStyle(tokens, 'error'),
-                  marginLeft: tokens.spacing[1],
-                }}
-              >
-                {externalBreaches.length}
-              </span>
-            </Stack>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-              {filterOptions.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => handleBreachFilterChange(opt.value)}
-                  style={{
-                    ...hoverTransition,
-                    padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                    borderRadius: tokens.borderRadius.md,
-                    border: 'none',
-                    backgroundColor:
-                      breachFilter === opt.value
-                        ? tokens.colors.errorScale[100]
-                        : 'transparent',
-                    color:
-                      breachFilter === opt.value
-                        ? tokens.colors.errorScale[700]
-                        : tokens.colors.neutral[500],
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}
-                >
-                  {opt.label}
-                </button>
+                  gap: t.spacing[3],
+                  padding: `${t.spacing[3]}px ${t.spacing[3]}px`,
+                  marginBottom: t.spacing[2],
+                  borderRadius: t.borderRadius.md,
+                  border: `1px solid ${t.colors.errorScale[200]}`,
+                  backgroundColor: t.colors.errorScale[50],
+                }}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.errorScale[100] })}>
+                    <AlertTriangle size={16} color={t.colors.errorScale[600]} />
+                  </Box>
+                  <Box style={{ flex: 1 }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                      {breach.jobName}
+                    </Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+                      {breach.stageName} -- {breach.assignedRecruiter}
+                    </Text>
+                  </Box>
+                  <Box style={{ textAlign: 'right' as const }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.errorScale[600] }}>
+                      {breach.actualHours}h
+                    </Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                      SLA: {breach.slaHours}h
+                    </Text>
+                  </Box>
+                </Box>
               ))}
-            </Stack>
-          </Stack>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column' as const,
-              gap: tokens.spacing[3],
-            }}
-          >
-            {externalBreaches.map((breach) => {
-              const exceededBy = breach.actualHours - breach.slaHours;
-              const exceededPercent =
-                breach.slaHours > 0
-                  ? Math.round((exceededBy / breach.slaHours) * 100)
-                  : 0;
-
-              return (
-                <div
-                  key={breach.id}
-                  style={{
-                    ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-                    padding: tokens.spacing[4],
-                    backgroundColor: tokens.colors.errorScale[50],
-                    borderLeft: `4px solid ${tokens.colors.errorScale[500]}`,
-                  }}
-                >
-                  <Stack
-                    direction="horizontal"
-                    align="center"
-                    justify="space-between"
-                  >
-                    <div style={{ flex: 1 }}>
-                      <Stack
-                        direction="horizontal"
-                        align="center"
-                        gap={tokens.spacing[2]}
-                        style={{ marginBottom: tokens.spacing[2] }}
-                      >
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.md,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.neutral[900],
-                          }}
-                        >
-                          {breach.jobName}
-                        </span>
-                        <ChevronRight
-                          size={14}
-                          color={tokens.colors.neutral[400]}
-                        />
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.sm,
-                            color: tokens.colors.neutral[600],
-                          }}
-                        >
-                          {breach.stageName}
-                        </span>
-                      </Stack>
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[4]}>
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: tokens.colors.neutral[500],
-                          }}
-                        >
-                          SLA: {breach.slaHours}h
-                        </span>
-                        <span
-                          style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            fontWeight: tokens.typography.fontWeight.semibold,
-                            color: tokens.colors.errorScale[700],
-                          }}
-                        >
-                          Actual: {breach.actualHours}h (+{exceededBy}h / +{exceededPercent}%)
-                        </span>
-                      </Stack>
-                    </div>
-                    <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-                      {breach.recruiterAvatar ? (
-                        <img
-                          src={breach.recruiterAvatar}
-                          alt={breach.assignedRecruiter}
-                          style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: tokens.borderRadius.full,
-                            objectFit: 'cover' as const,
-                          }}
-                        />
-                      ) : (
-                        <div
-                          style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: tokens.borderRadius.full,
-                            backgroundColor: tokens.colors.neutral[200],
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <User size={16} color={tokens.colors.neutral[500]} />
-                        </div>
-                      )}
-                      <span
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          color: tokens.colors.neutral[700],
-                          fontWeight: tokens.typography.fontWeight.medium,
-                        }}
-                      >
-                        {breach.assignedRecruiter}
-                      </span>
-                    </Stack>
-                  </Stack>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
-
-    /* ---- Per-Stage SLA Bars ---- */
-    const renderStageSla = () => {
-      if (externalStageSlaData.length === 0) return null;
-
-      const maxHours = Math.max(
-        ...externalStageSlaData.map((s) => Math.max(s.avgHours, s.limitHours))
-      );
-      const chartWidth = 600;
-      const barHeight = 28;
-      const rowGap = tokens.spacing[3];
-      const labelWidth = 120;
-      const chartAreaWidth = chartWidth - labelWidth - 60;
-
-      return (
-        <div style={cardBase}>
-          <Stack
-            direction="horizontal"
-            align="center"
-            gap={tokens.spacing[2]}
-            style={{ marginBottom: tokens.spacing[4] }}
-          >
-            <BarChart3 size={18} color={tokens.colors.primaryScale[600]} />
-            <span style={sectionTitleStyle}>Stage SLA Performance</span>
-          </Stack>
-
-          <svg
-            width="100%"
-            viewBox={`0 0 ${chartWidth} ${externalStageSlaData.length * (barHeight + rowGap) + 20}`}
-            style={{ overflow: 'visible' }}
-          >
-            {externalStageSlaData.map((stage, i) => {
-              const y = i * (barHeight + rowGap) + 10;
-              const barW =
-                maxHours > 0
-                  ? (stage.avgHours / maxHours) * chartAreaWidth
-                  : 0;
-              const limitX =
-                maxHours > 0
-                  ? labelWidth + (stage.limitHours / maxHours) * chartAreaWidth
-                  : labelWidth;
-              const statusColors = slaColors[stage.status];
-              const isSelected = selectedStage === stage.stageName;
-
-              return (
-                <g
-                  key={stage.stageName}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() =>
-                    handleStageSelect(
-                      isSelected ? null : stage.stageName
-                    )
-                  }
-                >
-                  {/* Label */}
-                  <text
-                    x={labelWidth - 8}
-                    y={y + barHeight / 2 + 4}
-                    textAnchor="end"
-                    style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fill: isSelected
-                        ? tokens.colors.primaryScale[700]
-                        : tokens.colors.neutral[700],
-                      fontWeight: isSelected
-                        ? tokens.typography.fontWeight.semibold
-                        : tokens.typography.fontWeight.normal,
-                    }}
-                  >
-                    {stage.stageName}
-                  </text>
-
-                  {/* Background */}
-                  <rect
-                    x={labelWidth}
-                    y={y}
-                    width={chartAreaWidth}
-                    height={barHeight}
-                    rx={Number(tokens.borderRadius.sm.replace('px', '')) || 4}
-                    fill={tokens.colors.neutral[100]}
-                  />
-
-                  {/* Avg bar */}
-                  <rect
-                    x={labelWidth}
-                    y={y}
-                    width={Math.max(barW, 2)}
-                    height={barHeight}
-                    rx={Number(tokens.borderRadius.sm.replace('px', '')) || 4}
-                    fill={statusColors.dot}
-                    opacity={0.8}
-                  />
-
-                  {/* SLA limit line */}
-                  <line
-                    x1={limitX}
-                    y1={y - 2}
-                    x2={limitX}
-                    y2={y + barHeight + 2}
-                    stroke={tokens.colors.neutral[800]}
-                    strokeWidth={2}
-                    strokeDasharray="4,2"
-                  />
-
-                  {/* Values */}
-                  <text
-                    x={labelWidth + chartAreaWidth + 8}
-                    y={y + barHeight / 2 + 4}
-                    style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fill: statusColors.color,
-                      fontWeight: tokens.typography.fontWeight.medium,
-                    }}
-                  >
-                    {stage.avgHours}h
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-
-          <Stack
-            direction="horizontal"
-            align="center"
-            gap={tokens.spacing[4]}
-            style={{ marginTop: tokens.spacing[3] }}
-          >
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-              <div
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: tokens.borderRadius.sm,
-                  backgroundColor: tokens.colors.successScale[500],
-                }}
-              />
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[600],
-                }}
-              >
-                Within SLA
-              </span>
-            </Stack>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-              <div
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: tokens.borderRadius.sm,
-                  backgroundColor: tokens.colors.warningScale[500],
-                }}
-              />
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[600],
-                }}
-              >
-                Near limit
-              </span>
-            </Stack>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-              <div
-                style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: tokens.borderRadius.sm,
-                  backgroundColor: tokens.colors.errorScale[500],
-                }}
-              />
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[600],
-                }}
-              >
-                Breached
-              </span>
-            </Stack>
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-              <div
-                style={{
-                  width: 16,
-                  height: 2,
-                  backgroundColor: tokens.colors.neutral[800],
-                  borderTop: `2px dashed ${tokens.colors.neutral[800]}`,
-                }}
-              />
-              <span
-                style={{
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.neutral[600],
-                }}
-              >
-                SLA Limit
-              </span>
-            </Stack>
-          </Stack>
-        </div>
-      );
-    };
-
-    /* ---- At-Risk Items ---- */
-    const renderAtRiskItems = () => {
-      if (externalAtRiskItems.length === 0) return null;
-
-      return (
-        <div style={cardBase}>
-          <Stack
-            direction="horizontal"
-            align="center"
-            gap={tokens.spacing[2]}
-            style={{ marginBottom: tokens.spacing[4] }}
-          >
-            <Timer size={18} color={tokens.colors.warningScale[600]} />
-            <span style={sectionTitleStyle}>At-Risk Items</span>
-            <span style={createBadgeStyle(tokens, 'warning')}>
-              {externalAtRiskItems.length}
-            </span>
-          </Stack>
-
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-              gap: tokens.spacing[3],
-            }}
-          >
-            {externalAtRiskItems.map((item) => {
-              const urgencyColor =
-                item.hoursRemaining <= 2
-                  ? {
-                      bg: tokens.colors.errorScale[50],
-                      border: tokens.colors.errorScale[300],
-                      text: tokens.colors.errorScale[700],
-                      badge: tokens.colors.errorScale[500],
-                    }
-                  : item.hoursRemaining <= 6
-                  ? {
-                      bg: tokens.colors.warningScale[50],
-                      border: tokens.colors.warningScale[300],
-                      text: tokens.colors.warningScale[700],
-                      badge: tokens.colors.warningScale[500],
-                    }
-                  : {
-                      bg: tokens.colors.infoScale[50],
-                      border: tokens.colors.infoScale[300],
-                      text: tokens.colors.infoScale[700],
-                      badge: tokens.colors.infoScale[500],
-                    };
-
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    ...createSurfaceStyle(tokens, { elevation: 'sm', glass: isGlass }),
-                    padding: tokens.spacing[4],
-                    backgroundColor: urgencyColor.bg,
-                    borderLeft: `3px solid ${urgencyColor.border}`,
-                  }}
-                >
-                  <Stack
-                    direction="horizontal"
-                    align="start"
-                    justify="space-between"
-                    style={{ marginBottom: tokens.spacing[2] }}
-                  >
-                    <div>
-                      <span
-                        style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[900],
-                          display: 'block',
-                        }}
-                      >
-                        {item.name}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[500],
-                        }}
-                      >
-                        {item.stage}
-                      </span>
-                    </div>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                        borderRadius: tokens.borderRadius.md,
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        backgroundColor: urgencyColor.badge,
-                        color: tokens.colors.common.white,
-                      }}
-                    >
-                      {item.type === 'candidate' ? 'Candidate' : 'Interview'}
-                    </span>
-                  </Stack>
-
-                  <Stack
-                    direction="horizontal"
-                    align="center"
-                    justify="space-between"
-                  >
-                    <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                      <Clock size={14} color={urgencyColor.text} />
-                      <span
-                        style={{
-                          fontSize: tokens.typography.fontSize.lg,
-                          fontWeight: tokens.typography.fontWeight.bold,
-                          color: urgencyColor.text,
-                        }}
-                      >
-                        {item.hoursRemaining}h
-                      </span>
-                      <span
-                        style={{
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[500],
-                        }}
-                      >
-                        remaining
-                      </span>
-                    </Stack>
-                    <span
-                      style={{
-                        fontSize: tokens.typography.fontSize.xs,
-                        color: tokens.colors.neutral[600],
-                      }}
-                    >
-                      {item.assignee}
-                    </span>
-                  </Stack>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-    };
-
-    /* ---- Historical Trend Chart ---- */
-    const renderHistoryChart = () => {
-      if (externalHistory.length < 2) return null;
-
-      const chartW = 600;
-      const chartH = 200;
-      const padL = 40;
-      const padR = 16;
-      const padT = 16;
-      const padB = 32;
-      const plotW = chartW - padL - padR;
-      const plotH = chartH - padT - padB;
-
-      const minVal = Math.min(...externalHistory.map((p) => p.compliance));
-      const maxVal = Math.max(...externalHistory.map((p) => p.compliance));
-      const range = Math.max(maxVal - minVal, 10);
-      const yMin = Math.max(0, minVal - range * 0.1);
-      const yMax = Math.min(100, maxVal + range * 0.1);
-      const yRange = yMax - yMin;
-
-      const points = externalHistory.map((p, i) => {
-        const x = padL + (i / (externalHistory.length - 1)) * plotW;
-        const y = padT + plotH - ((p.compliance - yMin) / yRange) * plotH;
-        return { x, y, ...p };
-      });
-
-      const polyline = points.map((p) => `${p.x},${p.y}`).join(' ');
-      const areaPath = `M${points[0].x},${padT + plotH} ${points
-        .map((p) => `L${p.x},${p.y}`)
-        .join(' ')} L${points[points.length - 1].x},${padT + plotH} Z`;
-
-      const thresholdY90 =
-        padT + plotH - ((90 - yMin) / yRange) * plotH;
-      const thresholdY75 =
-        padT + plotH - ((75 - yMin) / yRange) * plotH;
-
-      return (
-        <div style={cardBase}>
-          <Stack
-            direction="horizontal"
-            align="center"
-            gap={tokens.spacing[2]}
-            style={{ marginBottom: tokens.spacing[4] }}
-          >
-            <Activity size={18} color={tokens.colors.infoScale[600]} />
-            <span style={sectionTitleStyle}>Compliance Trend</span>
-          </Stack>
-
-          <svg
-            width="100%"
-            viewBox={`0 0 ${chartW} ${chartH}`}
-            style={{ overflow: 'visible' }}
-          >
-            {/* Grid lines */}
-            {[yMin, yMin + yRange * 0.25, yMin + yRange * 0.5, yMin + yRange * 0.75, yMax].map(
-              (v, i) => {
-                const y = padT + plotH - ((v - yMin) / yRange) * plotH;
+              {activeTab === 'at-risk' && atRiskItems.map(item => {
+                const urgentColor = item.hoursRemaining <= 4 ? t.colors.errorScale[600] : t.colors.warningScale[600];
+                const urgentBg = item.hoursRemaining <= 4 ? t.colors.errorScale[50] : t.colors.warningScale[50];
                 return (
-                  <g key={i}>
-                    <line
-                      x1={padL}
-                      y1={y}
-                      x2={padL + plotW}
-                      y2={y}
-                      stroke={tokens.colors.neutral[100]}
-                      strokeWidth={1}
-                    />
-                    <text
-                      x={padL - 6}
-                      y={y + 4}
-                      textAnchor="end"
-                      style={{
-                        fontSize: '10px',
-                        fill: tokens.colors.neutral[400],
-                      }}
-                    >
-                      {Math.round(v)}%
-                    </text>
-                  </g>
+                  <Box key={item.id} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: t.spacing[3],
+                    padding: `${t.spacing[3]}px ${t.spacing[3]}px`,
+                    marginBottom: t.spacing[2],
+                    borderRadius: t.borderRadius.md,
+                    border: `1px solid ${t.colors.warningScale[200]}`,
+                    backgroundColor: urgentBg,
+                  }}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: `${urgentColor}20` })}>
+                    <Timer size={16} color={urgentColor} />
+                  </Box>
+                  <Box style={{ flex: 1 }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
+                      {item.name}
+                    </Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+                      {item.stage} -- {item.assignee}
+                    </Text>
+                  </Box>
+                  <Box style={{
+                    padding: `2px ${t.spacing[2]}px`,
+                    borderRadius: badgeRadius,
+                    backgroundColor: `${urgentColor}15`,
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: urgentColor }}>
+                      {item.hoursRemaining}h left
+                    </Text>
+                  </Box>
+                  </Box>
                 );
-              }
-            )}
+              })}
+            </Box>
+          </Box>
 
-            {/* 90% threshold line */}
-            {90 >= yMin && 90 <= yMax && (
-              <line
-                x1={padL}
-                y1={thresholdY90}
-                x2={padL + plotW}
-                y2={thresholdY90}
-                stroke={tokens.colors.successScale[400]}
-                strokeWidth={1}
-                strokeDasharray="6,3"
-              />
-            )}
-
-            {/* 75% threshold line */}
-            {75 >= yMin && 75 <= yMax && (
-              <line
-                x1={padL}
-                y1={thresholdY75}
-                x2={padL + plotW}
-                y2={thresholdY75}
-                stroke={tokens.colors.warningScale[400]}
-                strokeWidth={1}
-                strokeDasharray="6,3"
-              />
-            )}
-
-            {/* Area fill */}
-            <path
-              d={areaPath}
-              fill={tokens.colors.primaryScale[100]}
-              opacity={0.4}
-            />
-
-            {/* Line */}
-            <polyline
-              points={polyline}
-              fill="none"
-              stroke={tokens.colors.primaryScale[500]}
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-
-            {/* Dots */}
-            {points.map((p, i) => (
-              <circle
-                key={i}
-                cx={p.x}
-                cy={p.y}
-                r={3.5}
-                fill={tokens.colors.common.white}
-                stroke={tokens.colors.primaryScale[500]}
-                strokeWidth={2}
-              />
-            ))}
-
-            {/* X-axis labels */}
-            {points
-              .filter(
-                (_, i) =>
-                  i === 0 ||
-                  i === points.length - 1 ||
-                  i % Math.ceil(points.length / 6) === 0
-              )
-              .map((p, i) => (
-                <text
-                  key={i}
-                  x={p.x}
-                  y={padT + plotH + 18}
-                  textAnchor="middle"
-                  style={{
-                    fontSize: '10px',
-                    fill: tokens.colors.neutral[400],
-                  }}
-                >
-                  {p.date}
-                </text>
-              ))}
-          </svg>
-        </div>
-      );
-    };
-
-    /* ---- Configuration Panel ---- */
-    const renderConfig = () => {
-      if (!showConfig || externalConfig.length === 0) return null;
-
-      return (
-        <div style={cardBase}>
-          <Stack
-            direction="horizontal"
-            align="center"
-            justify="space-between"
-            style={{ marginBottom: tokens.spacing[4] }}
-          >
-            <Stack direction="horizontal" align="center" gap={tokens.spacing[2]}>
-              <Settings size={18} color={tokens.colors.neutral[600]} />
-              <span style={sectionTitleStyle}>SLA Configuration</span>
-            </Stack>
-            <button
-              onClick={handleConfigToggle}
-              style={{
-                ...hoverTransition,
-                padding: tokens.spacing[1],
-                border: 'none',
-                backgroundColor: 'transparent',
-                color: tokens.colors.neutral[400],
-                cursor: 'pointer',
-                transition: `all ${tokens.motion.hover}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <X size={18} />
-            </button>
-          </Stack>
-
-          <div style={{ overflowX: 'auto' as const }}>
-            <table
-              style={{
-                width: '100%',
-                borderCollapse: 'collapse' as const,
-                fontSize: tokens.typography.fontSize.sm,
-              }}
-            >
-              <thead>
-                <tr>
-                  {['Stage', 'SLA Limit (h)', 'Alert Recipients', 'Escalation Rules'].map(
-                    (header) => (
-                      <th
-                        key={header}
-                        style={{
-                          padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                          textAlign: 'left' as const,
-                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                          color: tokens.colors.neutral[600],
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          fontSize: tokens.typography.fontSize.xs,
-                          textTransform: 'uppercase' as const,
-                          letterSpacing: '0.05em',
-                          whiteSpace: 'nowrap' as const,
-                        }}
-                      >
-                        {header}
-                      </th>
-                    )
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {externalConfig.map((cfg) => (
-                  <tr key={cfg.stageId}>
-                    <td
-                      style={{
-                        padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        fontWeight: tokens.typography.fontWeight.medium,
-                        color: tokens.colors.neutral[900],
-                      }}
-                    >
-                      {cfg.stageName}
-                    </td>
-                    <td
-                      style={{
-                        padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        color: tokens.colors.neutral[700],
-                      }}
-                    >
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                        <Clock size={14} color={tokens.colors.neutral[400]} />
-                        <span>{cfg.limitHours}h</span>
-                      </Stack>
-                    </td>
-                    <td
-                      style={{
-                        padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                      }}
-                    >
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[1]} style={{ flexWrap: 'wrap' as const }}>
-                        {cfg.alertRecipients.map((recipient, idx) => (
-                          <span
-                            key={idx}
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: tokens.spacing[1],
-                              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.primaryScale[50],
-                              color: tokens.colors.primaryScale[700],
-                              fontSize: tokens.typography.fontSize.xs,
-                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}`,
-                            }}
-                          >
-                            <Mail size={10} />
-                            {recipient}
-                          </span>
-                        ))}
-                      </Stack>
-                    </td>
-                    <td
-                      style={{
-                        padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                        borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                        color: tokens.colors.neutral[600],
-                      }}
-                    >
-                      <Stack direction="horizontal" align="center" gap={tokens.spacing[1]}>
-                        <Zap size={14} color={tokens.colors.warningScale[500]} />
-                        <span>{cfg.escalationRules}</span>
-                      </Stack>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-    };
-
-    /* ---- Main Layout ---- */
-    return (
-      <div className={className} style={containerStyle}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column' as const,
-            gap: tokens.spacing[5],
-            maxWidth: 1400,
-            margin: '0 auto',
-          }}
-        >
-          {/* Compliance Hero */}
-          {renderComplianceHero()}
-
-          {/* Breach Alerts */}
-          {renderBreachAlerts()}
-
-          {/* Two-column layout: Stage SLA + At-Risk */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 2fr)',
-              gap: tokens.spacing[5],
-            }}
-          >
-            {renderStageSla()}
-            {renderAtRiskItems()}
-          </div>
-
-          {/* Historical Trend */}
-          {renderHistoryChart()}
-
-          {/* Configuration */}
-          {renderConfig()}
-        </div>
-      </div>
+          {/* Right: History chart */}
+          <Box style={{ ...card }}>
+            <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Compliance Trend</Text>
+            <Box style={{ display: 'flex', justifyContent: 'center' }}>
+              <svg width={420} height={200} viewBox="0 0 420 200">
+                {/* Grid */}
+                {[0, 0.25, 0.5, 0.75, 1].map(frac => {
+                  const y = 16 + (1 - frac) * 150;
+                  const val = (histMin + frac * histRange).toFixed(0);
+                  return (
+                    <g key={frac}>
+                      <line x1={36} y1={y} x2={400} y2={y} stroke={t.colors.neutral[100]} strokeWidth={1} />
+                      <text x={32} y={y + 4} fontSize={9} fill={t.colors.neutral[400]} textAnchor="end">{val}%</text>
+                    </g>
+                  );
+                })}
+                {/* 90% threshold line */}
+                {(() => {
+                  const y = 16 + (1 - (90 - histMin) / histRange) * 150;
+                  return <line x1={36} y1={y} x2={400} y2={y} stroke={t.colors.successScale[300]} strokeWidth={1} strokeDasharray="4 4" />;
+                })()}
+                {/* Line + area */}
+                {history.length > 1 && (() => {
+                  const xStep = 364 / Math.max(history.length - 1, 1);
+                  const points = history.map((h, i) => ({
+                    x: 36 + i * xStep,
+                    y: 16 + (1 - (h.compliance - histMin) / histRange) * 150,
+                  }));
+                  const lineColor = t.colors.primaryScale[500];
+                  const areaPath = `M${points[0].x},${points[0].y} ${points.slice(1).map(p => `L${p.x},${p.y}`).join(' ')} L${points[points.length - 1].x},166 L${points[0].x},166 Z`;
+                  return (
+                    <g>
+                      <defs>
+                        <linearGradient id="slaGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={lineColor} stopOpacity={0.15} />
+                          <stop offset="100%" stopColor={lineColor} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <path d={areaPath} fill="url(#slaGrad)" />
+                      <polyline points={points.map(p => `${p.x},${p.y}`).join(' ')} fill="none" stroke={lineColor} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                      {points.map((p, i) => (
+                        <circle key={i} cx={p.x} cy={p.y} r={3} fill={lineColor} stroke={t.colors.common.white} strokeWidth={2} />
+                      ))}
+                    </g>
+                  );
+                })()}
+                {/* X labels */}
+                {history.map((h, i) => {
+                  if (history.length > 8 && i % 2 !== 0) return null;
+                  const x = 36 + i * (364 / Math.max(history.length - 1, 1));
+                  return <text key={i} x={x} y={190} fontSize={9} fill={t.colors.neutral[400]} textAnchor="middle">{h.date}</text>;
+                })}
+              </svg>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     );
   },
 });

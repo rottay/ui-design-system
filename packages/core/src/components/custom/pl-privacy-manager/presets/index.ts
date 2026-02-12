@@ -5,9 +5,13 @@
 export { PanelPlPrivacyManager } from './panel';
 export { WizardPlPrivacyManager } from './wizard';
 
-export const PRESETS = {
-  panel: () => import('./panel').then((m) => m.PanelPlPrivacyManager),
-  wizard: () => import('./wizard').then((m) => m.WizardPlPrivacyManager),
-} as const;
+import type { PlPrivacyManagerPreset } from '../core';
+import type { ComponentType } from 'react';
+import type { PlPrivacyManagerProps } from '../core';
+import { PanelPlPrivacyManager } from './panel';
+import { WizardPlPrivacyManager } from './wizard';
 
-export type PresetName = keyof typeof PRESETS;
+export const PL_PRIVACY_MANAGER_PRESETS: Record<PlPrivacyManagerPreset, ComponentType<PlPrivacyManagerProps>> = {
+  panel: PanelPlPrivacyManager,
+  wizard: WizardPlPrivacyManager,
+};

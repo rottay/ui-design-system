@@ -11,12 +11,17 @@ import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createDividerStyle,
   createEmptyStateStyle,
   createHoverStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
   createProgressBarStyle,
   createSectionHeaderStyle,
   createStatusDotStyle,
+  getCardPadding,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhTokenManagerProps,
@@ -127,6 +132,11 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const padding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
     /* ---------- Filtered & sorted transactions ---------- */
     const processedTransactions = useMemo(() => {
@@ -235,7 +245,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
         }}
       >
         {/* ========== HEADER BAR ========== */}
-        <div
+        <Box
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -254,9 +264,9 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             Token Usage Details
           </Text>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
             {(['7d', '30d', '90d', 'year'] as const).map((range) => (
-              <div
+              <Box
                 key={range}
                 onClick={() => handleTimeRange(range)}
                 style={{
@@ -271,13 +281,13 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                 }}
               >
                 {range === 'year' ? '1Y' : range.toUpperCase()}
-              </div>
+              </Box>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* ========== SUMMARY STAT CARDS ========== */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
+        <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
           {/* Balance */}
           <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
             <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Balance</Text>
@@ -291,8 +301,8 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
               {balance ? formatTokenCount(balance.balance) : '0'}
             </Text>
             {balance && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginTop: tokens.spacing[1] }}>
-                <span
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginTop: tokens.spacing[1] }}>
+                <Text
                   style={{
                     fontSize: tokens.typography.fontSize.xs,
                     fontWeight: tokens.typography.fontWeight.semibold,
@@ -300,8 +310,8 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   }}
                 >
                   {trendArrow(balance.trend)} {formatTokenCount(balance.burnRatePerDay)}/day
-                </span>
-                <span
+                </Text>
+                <Text
                   style={{
                     fontSize: tokens.typography.fontSize.xs,
                     color: runwayColor(balance.projectedRunwayDays),
@@ -309,8 +319,8 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   }}
                 >
                   {balance.projectedRunwayDays}d runway
-                </span>
-              </div>
+                </Text>
+              </Box>
             )}
           </Box>
 
@@ -364,17 +374,17 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
               tokens credited
             </Text>
           </Box>
-        </div>
+        </Box>
 
         {/* ========== TEAM + ALERTS SIDEBAR + MAIN TABLE ========== */}
-        <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: tokens.spacing[5] }}>
+        <Box style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: tokens.spacing[5] }}>
           {/* ---- Left sidebar: Teams + Alerts ---- */}
-          <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
             {/* Team filter */}
             <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
               <Text style={{ ...sectionHeader }}>Filter by Team</Text>
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-                <div
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                <Box
                   onClick={() => handleTeamSelect(null)}
                   style={{
                     ...hoverStyle,
@@ -387,11 +397,11 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   }}
                 >
                   All Teams
-                </div>
+                </Box>
                 {teamQuotas.map((team) => {
                   const pct = team.limit > 0 ? Math.min((team.used / team.limit) * 100, 100) : 0;
                   return (
-                    <div
+                    <Box
                       key={team.teamId}
                       onClick={() => handleTeamSelect(team.teamId)}
                       style={{
@@ -404,13 +414,13 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                         color: selectedTeam === team.teamId ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                       }}
                     >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span>{team.teamName}</span>
-                        <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text>{team.teamName}</Text>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                           {pct.toFixed(0)}%
-                        </span>
-                      </div>
-                      <div
+                        </Text>
+                      </Box>
+                      <Box
                         style={{
                           width: '100%',
                           height: 3,
@@ -420,7 +430,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                           marginTop: tokens.spacing[1],
                         }}
                       >
-                        <div
+                        <Box
                           style={{
                             width: `${pct}%`,
                             height: '100%',
@@ -428,23 +438,23 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                             backgroundColor: quotaColor(team.used, team.limit),
                           }}
                         />
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
                   );
                 })}
-              </div>
+              </Box>
             </Box>
 
             {/* Active alerts */}
             <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
               <Text style={{ ...sectionHeader }}>Active Alerts</Text>
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                 {activeAlerts.length > 0 ? (
                   activeAlerts.map((alert) => {
                     const badgeColor = alert.type === 'low_balance' ? 'error' : alert.type === 'high_usage' ? 'warning' : 'info';
                     const label = alert.type === 'low_balance' ? 'Low Balance' : alert.type === 'high_usage' ? 'High Usage' : 'Quota Exceeded';
                     return (
-                      <div
+                      <Box
                         key={alert.id}
                         style={{
                           display: 'flex',
@@ -456,11 +466,11 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                           border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                         }}
                       >
-                        <span style={createBadgeStyle(tokens, badgeColor)}>{label}</span>
+                        <Text style={createBadgeStyle(tokens, badgeColor)}>{label}</Text>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                           {alert.type === 'low_balance' ? formatTokenCount(alert.threshold) : `${alert.threshold}%`}
                         </Text>
-                      </div>
+                      </Box>
                     );
                   })
                 ) : (
@@ -468,17 +478,17 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                     No active alerts
                   </Text>
                 )}
-              </div>
+              </Box>
             </Box>
 
             {/* Cost breakdown summary */}
             <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
               <Text style={{ ...sectionHeader }}>Cost Summary</Text>
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                 {costBreakdown.map((item) => (
-                  <div key={item.category} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                      <div
+                  <Box key={item.category} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                      <Box
                         style={{
                           width: 8,
                           height: 8,
@@ -490,28 +500,28 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
                         {item.category}
                       </Text>
-                    </div>
+                    </Box>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                       {formatCurrency(item.amount)}
                     </Text>
-                  </div>
+                  </Box>
                 ))}
                 {costBreakdown.length === 0 && (
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], textAlign: 'center' as const }}>
                     No cost data
                   </Text>
                 )}
-              </div>
+              </Box>
             </Box>
-          </div>
+          </Box>
 
           {/* ---- Main transaction table ---- */}
           <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
               <Text style={{ ...sectionHeader, marginBottom: 0 }}>Transactions</Text>
-              <div style={{ display: 'flex', gap: tokens.spacing[1] }}>
+              <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                 {(['all', 'usage', 'purchase', 'credit'] as const).map((f) => (
-                  <div
+                  <Box
                     key={f}
                     onClick={() => handleTransactionFilter(f)}
                     style={{
@@ -525,19 +535,19 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                     }}
                   >
                     {f.charAt(0).toUpperCase() + f.slice(1)}
-                  </div>
+                  </Box>
                 ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* Result count */}
-            <div style={{ marginBottom: tokens.spacing[2] }}>
+            <Box style={{ marginBottom: tokens.spacing[2] }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                 {processedTransactions.length} transaction{processedTransactions.length !== 1 ? 's' : ''} found
               </Text>
-            </div>
+            </Box>
 
-            <div style={{ overflowX: 'auto' as const }}>
+            <Box style={{ overflowX: 'auto' as const }}>
               <table
                 style={{
                   width: '100%',
@@ -592,9 +602,9 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                         {tx.date}
                       </td>
                       <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                        <span style={txTypeBadge(tx.type)}>
+                        <Text style={txTypeBadge(tx.type)}>
                           {tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}
-                        </span>
+                        </Text>
                       </td>
                       <td
                         style={{
@@ -644,11 +654,11 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   )}
                 </tbody>
               </table>
-            </div>
+            </Box>
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -661,8 +671,8 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                   Page {page + 1} of {totalPages}
                 </Text>
-                <div style={{ display: 'flex', gap: tokens.spacing[2] }}>
-                  <div
+                <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
+                  <Box
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     style={{
                       ...hoverStyle,
@@ -676,8 +686,8 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                     }}
                   >
                     Previous
-                  </div>
-                  <div
+                  </Box>
+                  <Box
                     onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                     style={{
                       ...hoverStyle,
@@ -691,15 +701,15 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                     }}
                   >
                     Next
-                  </div>
-                </div>
-              </div>
+                  </Box>
+                </Box>
+              </Box>
             )}
           </Box>
-        </div>
+        </Box>
 
         {/* ========== TOP-UP BANNER ========== */}
-        <div
+        <Box
           onClick={onTopUp}
           style={{
             ...hoverStyle,
@@ -718,7 +728,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
           onMouseLeave={(e) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.primaryScale[600] })}
         >
           + Top Up Tokens
-        </div>
+        </Box>
       </Box>
     );
   },

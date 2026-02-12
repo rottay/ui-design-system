@@ -128,7 +128,7 @@ function generatePieSlices(
 export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
   name: 'BhRubricBuilder.Preview',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhRubricBuilderProps>) => {
-    const { Box, Text } = primitives;
+    const { Box, Flex, Stack, Text } = primitives;
 
     const {
       rubricName,
@@ -215,19 +215,18 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
         }}
       >
         {/* ── Header ───────────────────────────────────────────────── */}
-        <div
+        <Flex
+          align="center"
+          justify="between"
           style={{
             ...cardBase,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
             padding: tokens.spacing[4],
             borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+          <Flex align="center" gap={12}>
             <Target size={20} color={tokens.colors.primaryScale[600]} strokeWidth={1.5} />
             <Text
               style={{
@@ -271,9 +270,9 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               <CircleDot size={10} />
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </span>
-          </div>
+          </Flex>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+          <Flex align="center" gap={8}>
             <span
               style={{
                 display: 'inline-flex',
@@ -290,8 +289,8 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               <User size={12} />
               Sample Candidate Preview
             </span>
-          </div>
-        </div>
+          </Flex>
+        </Flex>
 
         {/* ── Content ──────────────────────────────────────────────── */}
         <div
