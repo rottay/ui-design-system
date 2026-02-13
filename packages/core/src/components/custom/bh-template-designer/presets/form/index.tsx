@@ -206,6 +206,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
         style={{
           display: 'flex',
           flexDirection: 'column' as const,
+          width: '100%',
           height: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',

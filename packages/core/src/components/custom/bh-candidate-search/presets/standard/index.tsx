@@ -5,20 +5,24 @@
  * Advanced candidate search with full-text search, filters,
  * saved searches, result cards, faceted counts, and bulk actions.
  *
- * Slite-inspired: generous whitespace, warm neutrals, soft shadows,
- * card-based results with avatar + match score ring + skill pills.
+ * Personality-driven, glass-aware, zero raw HTML.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
-  createHoverStyle,
-  createSurfaceStyle,
   createCardHoverStyles,
-  getCardPadding,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
   getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  getCardPadding,
+  formatDistanceToNow,
 } from '../../../helpers';
 import type {
   BhCandidateSearchProps,
@@ -54,7 +58,6 @@ import {
   Plus,
   Minus,
   Sparkles,
-  ExternalLink,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -100,35 +103,35 @@ const STATUS_OPTIONS = ['active', 'passive', 'not-looking', 'hired', 'rejected']
 const SOURCE_OPTIONS = ['LinkedIn', 'Referral', 'Job Board', 'Direct', 'Agency', 'Event'];
 
 /* ------------------------------------------------------------------ */
-/*  Score Ring                                                         */
+/*  Score Ring (Box + Text, zero raw HTML)                             */
 /* ------------------------------------------------------------------ */
 
-function ScoreRing({ score, tokens, size = 48 }: { score: number; tokens: DesignTokens; size?: number }) {
-  const colors = getMatchScoreColor(score, tokens);
+function ScoreRingInner({ score, tokens: t, size = 48, Box, Text }: { score: number; tokens: DesignTokens; size?: number; Box: any; Text: any }) {
+  const colors = getMatchScoreColor(score, t);
   const r = (size / 2) - 4;
   const circumference = 2 * Math.PI * r;
   const strokeOffset = circumference - (score / 100) * circumference;
 
   return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+    <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Match score: ${score}`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={colors.border} strokeWidth="3" />
         <circle
           cx={size / 2} cy={size / 2} r={r} fill="none" stroke={colors.text} strokeWidth="3"
           strokeDasharray={circumference} strokeDashoffset={strokeOffset} strokeLinecap="round"
-          style={{ transition: 'stroke-dashoffset 0.6s ease' }}
+          style={{ transition: `stroke-dashoffset ${t.motion.hover}` }}
         />
       </svg>
-      <div style={{
+      <Box style={{ 
         position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
-        <span style={{ fontSize: size <= 36 ? 9 : tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: colors.text, lineHeight: 1 }}>
+        <Text style={{ fontSize: size <= 36 ? 9 : t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: colors.text, lineHeight: 1 }}>
           {score}
-        </span>
-        <span style={{ fontSize: 7, color: colors.text, lineHeight: 1, marginTop: 1 }}>match</span>
-      </div>
-    </div>
+        </Text>
+        <Text style={{ fontSize: 7, color: colors.text, lineHeight: 1}}>match</Text>
+      </Box>
+    </Box>
   );
 }
 
@@ -147,31 +150,36 @@ interface FilterSectionProps {
   children: React.ReactNode;
 }
 
-function FilterSection({ sectionKey, label, Icon, isExpanded, onToggle, tokens, primitives, children }: FilterSectionProps) {
+function FilterSection({ sectionKey, label, Icon, isExpanded, onToggle, tokens: t, primitives, children }: FilterSectionProps) {
   const { Box, Text } = primitives;
   return (
-    <Box style={{ borderBottom: `1px solid ${tokens.colors.neutral[100]}` }}>
+    <Box style={{ borderBottom: `1px solid ${t.colors.neutral[100]}` }}>
       <Box
+        role="button"
+        tabIndex={0}
+        aria-expanded={isExpanded}
+        aria-label={`Toggle ${label} filter`}
         onClick={() => onToggle(sectionKey)}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(sectionKey); } }}
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-          cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+          padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+          cursor: 'pointer', transition: `all ${t.motion.hover}`,
         }}
       >
-        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-          <Icon size={14} color={tokens.colors.neutral[400]} />
-          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+          <Icon size={14} color={t.colors.neutral[400]} />
+          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>
             {label}
           </Text>
         </Box>
         {isExpanded
-          ? <ChevronUp size={14} color={tokens.colors.neutral[400]} />
-          : <ChevronDown size={14} color={tokens.colors.neutral[400]} />
+          ? <ChevronUp size={14} color={t.colors.neutral[400]} />
+          : <ChevronDown size={14} color={t.colors.neutral[400]} />
         }
       </Box>
       {isExpanded && (
-        <Box style={{ padding: `0 ${tokens.spacing[4]}px ${tokens.spacing[4]}px` }}>
+        <Box style={{ padding: `0 ${t.spacing[4]}px ${t.spacing[4]}px` }}>
           {children}
         </Box>
       )}
@@ -183,7 +191,7 @@ function FilterSection({ sectionKey, label, Icon, isExpanded, onToggle, tokens, 
 /*  Checkbox Facet List                                                */
 /* ------------------------------------------------------------------ */
 
-function CheckboxFacetList({ facets, activeValues, onToggle, tokens, primitives }: {
+function CheckboxFacetList({ facets, activeValues, onToggle, tokens: t, primitives }: {
   facets: FacetCount[];
   activeValues: string[];
   onToggle: (value: string) => void;
@@ -198,29 +206,34 @@ function CheckboxFacetList({ facets, activeValues, onToggle, tokens, primitives 
         return (
           <Box
             key={facet.value}
+            role="checkbox"
+            tabIndex={0}
+            aria-checked={isActive}
+            aria-label={`${facet.value} (${facet.count})`}
             onClick={() => onToggle(facet.value)}
+            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(facet.value); } }}
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-              borderRadius: tokens.borderRadius.md,
+              padding: `${t.spacing[2]}px ${t.spacing[2]}px`,
+              borderRadius: t.borderRadius.md,
               cursor: 'pointer',
-              backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent',
-              transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
+              backgroundColor: isActive ? t.colors.primaryScale[50] : 'transparent',
+              transition: `background-color ${t.motion.hover}`,
             }}
           >
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Box style={{
-                width: 16, height: 16, borderRadius: tokens.borderRadius.sm,
-                border: `1.5px solid ${isActive ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
-                backgroundColor: isActive ? tokens.colors.primaryScale[500] : 'transparent',
+                width: 16, height: 16, borderRadius: t.borderRadius.sm,
+                border: `1.5px solid ${isActive ? t.colors.primaryScale[500] : t.colors.neutral[300]}`,
+                backgroundColor: isActive ? t.colors.primaryScale[500] : 'transparent',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: `all ${tokens.motion.hover}`,
+                transition: `all ${t.motion.hover}`,
               }}>
-                {isActive && <Check size={10} color={tokens.colors.common.white} />}
+                {isActive && <Check size={10} color={t.colors.common.white} />}
               </Box>
-              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700] }}>{facet.value}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{facet.value}</Text>
             </Box>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], fontWeight: tokens.typography.fontWeight.medium }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontWeight: t.typography.fontWeight.medium }}>
               {facet.count}
             </Text>
           </Box>
@@ -234,7 +247,7 @@ function CheckboxFacetList({ facets, activeValues, onToggle, tokens, primitives 
 /*  Candidate Result Card                                              */
 /* ------------------------------------------------------------------ */
 
-function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendOutreach, onAddToJob, tokens, primitives }: {
+function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendOutreach, onAddToJob, tokens: t, primitives }: {
   candidate: SearchResult;
   isSelected: boolean;
   onToggleSelection: (id: string) => void;
@@ -245,103 +258,114 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
 }) {
   const { Box, Text } = primitives;
   const [isHovered, setIsHovered] = useState(false);
-  const scoreColors = getMatchScoreColor(candidate.matchScore, tokens);
-  const statusColors = getStatusColors(candidate.status, tokens);
-  const cardHover = createCardHoverStyles(tokens);
-  const badgeRadius = getPersonalityBadgeRadius(tokens);
+  const scoreColors = useMemo(() => getMatchScoreColor(candidate.matchScore, t), [candidate.matchScore, t]);
+  const statusColors = useMemo(() => getStatusColors(candidate.status, t), [candidate.status, t]);
+  const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
+  const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+  const handleCheckboxClick = useCallback((e: React.MouseEvent) => { e.stopPropagation(); onToggleSelection(candidate.id); }, [onToggleSelection, candidate.id]);
+  const handleCheckboxKey = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggleSelection(candidate.id); }
+  }, [onToggleSelection, candidate.id]);
+  const handleEmailClick = useCallback((e: React.MouseEvent) => { e.stopPropagation(); onSendOutreach?.([candidate.id]); }, [onSendOutreach, candidate.id]);
+  const handleAddClick = useCallback((e: React.MouseEvent) => { e.stopPropagation(); onAddToJob?.([candidate.id]); }, [onAddToJob, candidate.id]);
 
   return (
     <Box
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      role="listitem"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
-        ...createCardStyle(tokens, { elevation: 'sm' }),
-        padding: `${tokens.spacing[5]}px ${tokens.spacing[5]}px`,
-        display: 'flex', alignItems: 'center', gap: tokens.spacing[4],
-        border: `1px solid ${isSelected ? tokens.colors.primaryScale[300] : tokens.colors.neutral[100]}`,
-        backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
+        ...createCardStyle(t, { elevation: 'sm' }),
+        padding: `${t.spacing[5]}px ${t.spacing[5]}px`,
+        display: 'flex', alignItems: 'center', gap: t.spacing[4],
+        border: `1px solid ${isSelected ? t.colors.primaryScale[300] : t.colors.neutral[100]}`,
+        backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
         ...cardHover.base,
         ...(isHovered && !isSelected ? cardHover.hover : {}),
       }}
     >
       {/* Checkbox */}
       <Box
-        onClick={(e: React.MouseEvent) => { e.stopPropagation(); onToggleSelection(candidate.id); }}
+        role="checkbox"
+        tabIndex={0}
+        aria-checked={isSelected}
+        aria-label={`Select ${candidate.name}`}
+        onClick={handleCheckboxClick}
+        onKeyDown={handleCheckboxKey}
         style={{
-          width: 18, height: 18, borderRadius: tokens.borderRadius.sm, flexShrink: 0,
-          border: `1.5px solid ${isSelected ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
-          backgroundColor: isSelected ? tokens.colors.primaryScale[500] : 'transparent',
+          width: 18, height: 18, borderRadius: t.borderRadius.sm, flexShrink: 0,
+          border: `1.5px solid ${isSelected ? t.colors.primaryScale[500] : t.colors.neutral[300]}`,
+          backgroundColor: isSelected ? t.colors.primaryScale[500] : 'transparent',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+          cursor: 'pointer', transition: `all ${t.motion.hover}`,
         }}
       >
-        {isSelected && <Check size={12} color={tokens.colors.common.white} />}
+        {isSelected && <Check size={12} color={t.colors.common.white} />}
       </Box>
 
       {/* Avatar circle */}
       <Box style={{
-        width: 48, height: 48, borderRadius: tokens.borderRadius.full, flexShrink: 0,
+        width: 48, height: 48, borderRadius: t.borderRadius.full, flexShrink: 0,
         overflow: 'hidden',
-        backgroundColor: tokens.colors.primaryScale[100],
+        backgroundColor: t.colors.primaryScale[100],
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold,
-        color: tokens.colors.primaryScale[700],
+        fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold,
+        color: t.colors.primaryScale[700],
       }}>
         {candidate.avatar
-          ? <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          : getCandidateInitials(candidate.name)
+          ? <Box as="img" src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          : <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>{getCandidateInitials(candidate.name)}</Text>
         }
       </Box>
 
       {/* Info */}
       <Box style={{ flex: 1, minWidth: 0 }}>
-        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: 4 }}>
-          <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: 4 }}>
+          <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
             {candidate.name}
           </Text>
           <Box style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
-            padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius,
+            padding: `2px ${t.spacing[2]}px`, borderRadius: badgeRadius,
             backgroundColor: statusColors.bg,
-            fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+            fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
             color: statusColors.text, textTransform: 'capitalize' as const,
           }}>
-            <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: statusColors.text }} />
-            {candidate.status.replace('-', ' ')}
+            <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusColors.text }} />
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: statusColors.text }}>{candidate.status.replace('-', ' ')}</Text>
           </Box>
         </Box>
-        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4], marginBottom: tokens.spacing[2] }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            <Briefcase size={13} color={tokens.colors.neutral[400]} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
-              {candidate.currentRole}
-            </Text>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4], marginBottom: t.spacing[2] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            <Briefcase size={13} color={t.colors.neutral[400]} />
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{candidate.currentRole}</Text>
           </Box>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            <MapPin size={13} color={tokens.colors.neutral[400]} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
-              {candidate.location}
-            </Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+            <MapPin size={13} color={t.colors.neutral[400]} />
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{candidate.location}</Text>
           </Box>
         </Box>
-        <Box style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' }}>
+        <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap' }}>
           {candidate.skills.slice(0, 5).map(skill => {
             const isHighlighted = candidate.highlights.includes(skill);
             return (
               <Box key={skill} style={{
-                padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius,
-                backgroundColor: isHighlighted ? tokens.colors.primaryScale[50] : tokens.colors.neutral[50],
-                border: `1px solid ${isHighlighted ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: isHighlighted ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
-                color: isHighlighted ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
+                padding: `2px ${t.spacing[2]}px`, borderRadius: badgeRadius,
+                backgroundColor: isHighlighted ? t.colors.primaryScale[50] : t.colors.neutral[50],
+                border: `1px solid ${isHighlighted ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                fontSize: t.typography.fontSize.xs,
+                fontWeight: isHighlighted ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium,
+                color: isHighlighted ? t.colors.primaryScale[700] : t.colors.neutral[600],
               }}>
-                {skill}
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{skill}</Text>
               </Box>
             );
           })}
           {candidate.skills.length > 5 && (
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], alignSelf: 'center' }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], alignSelf: 'center' }}>
               +{candidate.skills.length - 5} more
             </Text>
           )}
@@ -349,41 +373,51 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
       </Box>
 
       {/* Match score ring */}
-      <ScoreRing score={candidate.matchScore} tokens={tokens} />
+      <ScoreRingInner score={candidate.matchScore} tokens={t} Box={Box} Text={Text} />
 
       {/* Quick actions */}
       <Box style={{
-        display: 'flex', flexDirection: 'column', gap: tokens.spacing[2], flexShrink: 0,
-        opacity: isHovered ? 1 : 0, transition: `opacity 0.2s ease`,
+        display: 'flex', flexDirection: 'column', gap: t.spacing[2], flexShrink: 0,
+        opacity: isHovered ? 1 : 0, transition: `opacity ${t.motion.hover}`,
         pointerEvents: isHovered ? 'auto' as const : 'none' as const,
       }}>
-        <button
-          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSendOutreach?.([candidate.id]); }}
+        <Box
+          role="button"
+          tabIndex={0}
+          aria-label={`Email ${candidate.name}`}
+          onClick={handleEmailClick}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSendOutreach?.([candidate.id]); } }}
           style={{
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md,
-            border: `1px solid ${tokens.colors.neutral[200]}`,
-            backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600],
-            fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
-            display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-            transition: `all ${tokens.motion.hover}`,
+            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
+            border: `1px solid ${t.colors.neutral[200]}`,
+            backgroundColor: t.colors.common.white, color: t.colors.neutral[600],
+            fontSize: t.typography.fontSize.xs, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: t.spacing[1],
+            transition: `all ${t.motion.hover}`,
           }}
         >
-          <Mail size={12} /> Email
-        </button>
-        <button
-          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onAddToJob?.([candidate.id]); }}
+          <Mail size={12} />
+          <Text style={{ fontSize: t.typography.fontSize.xs }}>Email</Text>
+        </Box>
+        <Box
+          role="button"
+          tabIndex={0}
+          aria-label={`Add ${candidate.name} to job`}
+          onClick={handleAddClick}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAddToJob?.([candidate.id]); } }}
           style={{
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md,
+            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
             border: 'none',
-            backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
-            fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit',
-            display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-            fontWeight: tokens.typography.fontWeight.medium,
-            transition: `all ${tokens.motion.hover}`,
+            backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+            fontSize: t.typography.fontSize.xs, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: t.spacing[1],
+            fontWeight: t.typography.fontWeight.medium,
+            transition: `all ${t.motion.hover}`,
           }}
         >
-          <Plus size={12} /> Add to Job
-        </button>
+          <Plus size={12} />
+          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white }}>Add to Job</Text>
+        </Box>
       </Box>
     </Box>
   );
@@ -397,6 +431,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
   name: 'BhCandidateSearch.Standard',
   render: ({ primitives, props, tokens }: PresetContext<BhCandidateSearchProps>) => {
     const { Box, Text } = primitives;
+    const t = tokens;
 
     const {
       searchQuery: searchQueryProp, onSearchChange,
@@ -408,6 +443,10 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       showAdvanced: showAdvancedProp, onToggleAdvanced,
       totalResults: totalResultsProp, loading, className, style,
     } = props;
+
+    const isGlass = useMemo(() => t.surface.useGlass, [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
 
     /* -- State --------------------------------------------------------- */
     const [internalQuery, setInternalQuery] = useState(searchQueryProp ?? '');
@@ -506,6 +545,16 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       handleFilterChange(key, isActive ? current.filter(s => s !== value) : [...current, value]);
     }, [activeFilters, handleFilterChange]);
 
+    const handleClearSelection = useCallback(() => {
+      setInternalSelected([]);
+      onSelectionChange?.([]);
+    }, [onSelectionChange]);
+
+    const handleClearFilters = useCallback(() => {
+      setInternalFilters({});
+      onFilterChange?.({});
+    }, [onFilterChange]);
+
     /* -- Derived ------------------------------------------------------- */
     const activeFilterCount = useMemo(() => {
       let count = 0;
@@ -531,157 +580,169 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
     }, [facetCounts]);
 
     /* -- Reusable styles ----------------------------------------------- */
-    const inputStyle: React.CSSProperties = {
-      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-      borderRadius: tokens.borderRadius.md,
-      border: `1px solid ${tokens.colors.neutral[200]}`,
-      fontSize: tokens.typography.fontSize.sm,
-      color: tokens.colors.neutral[700],
+    const inputStyle = useMemo((): React.CSSProperties => ({
+      padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+      borderRadius: t.borderRadius.md,
+      border: `1px solid ${t.colors.neutral[200]}`,
+      fontSize: t.typography.fontSize.sm,
+      color: t.colors.neutral[700],
       fontFamily: 'inherit',
       outline: 'none',
       width: '100%',
-      transition: `all ${tokens.motion.hover}`,
-    };
+      transition: `all ${t.motion.hover}`,
+    }), [t]);
 
-    const focusHandlers = {
-      onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-        e.currentTarget.style.boxShadow = `0 0 0 3px ${tokens.colors.primaryScale[100]}`;
-        e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
-      },
-      onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-        e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.borderColor = tokens.colors.neutral[200];
-      },
-    };
-
-    const pillStyle = (isActive: boolean): React.CSSProperties => ({
-      padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-      borderRadius: tokens.borderRadius.full,
-      border: `1px solid ${isActive ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-      backgroundColor: isActive ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-      color: isActive ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-      fontSize: tokens.typography.fontSize.xs,
-      fontWeight: tokens.typography.fontWeight.medium,
+    const pillStyle = useCallback((isActive: boolean): React.CSSProperties => ({
+      padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+      borderRadius: t.borderRadius.full,
+      border: `1px solid ${isActive ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+      backgroundColor: isActive ? t.colors.primaryScale[50] : t.colors.common.white,
+      color: isActive ? t.colors.primaryScale[700] : t.colors.neutral[600],
+      fontSize: t.typography.fontSize.xs,
+      fontWeight: t.typography.fontWeight.medium,
       cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-    });
+      transition: `all ${t.motion.hover}`,
+    }), [t]);
 
-    const bulkActions = [
+    const bulkActions = useMemo(() => [
       { label: 'Add to Job', icon: <Users size={14} />, onClick: () => onAddToJob?.(selectedCandidates), primary: true },
       { label: 'Send Outreach', icon: <Mail size={14} />, onClick: () => onSendOutreach?.(selectedCandidates) },
       { label: 'Export', icon: <Download size={14} />, onClick: () => onExport?.(selectedCandidates) },
       ...(selectedCandidates.length >= 2 ? [{ label: 'Compare', icon: <GitCompare size={14} />, onClick: () => onCompare?.(selectedCandidates) }] : []),
-    ];
+    ], [selectedCandidates, onAddToJob, onSendOutreach, onExport, onCompare]);
 
-    const renderRangeBar = (min: number, max: number, rangeMax: number, color: string) => (
-      <svg width="100%" height="6" viewBox="0 0 240 6" preserveAspectRatio="none" style={{ borderRadius: tokens.borderRadius.full, marginTop: 4 }}>
-        <rect x="0" y="0" width="240" height="6" rx="3" fill={tokens.colors.neutral[100]} />
+    const renderRangeBar = useCallback((min: number, max: number, rangeMax: number, color: string) => (
+      <svg width="100%" height="6" viewBox="0 0 240 6" preserveAspectRatio="none" style={{ borderRadius: t.borderRadius.full, marginTop: 4 }}>
+        <rect x="0" y="0" width="240" height="6" rx="3" fill={t.colors.neutral[100]} />
         <rect
           x={(min / rangeMax) * 240}
           y="0"
           width={Math.max(((max - min) / rangeMax) * 240, 6)}
           height="6" rx="3" fill={color}
-          style={{ transition: 'all 0.3s' }}
+          style={{ transition: `all ${t.motion.hover}` }}
         />
       </svg>
-    );
+    ), [t]);
 
     /* -- Render -------------------------------------------------------- */
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: tokens.colors.neutral[50],
+        backgroundColor: t.colors.neutral[50],
         ...style,
       }}>
         {/* Search Bar */}
         <Box style={{
           position: 'relative',
-          padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
-          backgroundColor: tokens.colors.common.white,
+          padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+          backgroundColor: isGlass && t.glass ? t.glass.bg : t.colors.common.white,
+          ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
         }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
             <Box style={{ flex: 1, position: 'relative', display: 'flex', alignItems: 'center' }}>
-              <Search size={18} color={tokens.colors.neutral[400]} style={{ position: 'absolute', left: tokens.spacing[4], zIndex: 1, pointerEvents: 'none' }} />
+              <Search size={18} color={t.colors.neutral[400]} style={{ position: 'absolute', left: t.spacing[4], zIndex: 1, pointerEvents: 'none' }} />
               <input
-                type="text" value={searchQuery}
-                onChange={(e) => handleQueryChange(e.target.value)}
-                onFocus={(e) => { setShowAutocomplete(true); focusHandlers.onFocus(e); }}
-                onBlur={(e) => { setTimeout(() => setShowAutocomplete(false), 200); focusHandlers.onBlur(e); }}
+                type="text"
+                value={searchQuery}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleQueryChange(e.target.value)}
+                onFocus={() => setShowAutocomplete(true)}
+                onBlur={() => { setTimeout(() => setShowAutocomplete(false), 200); }}
                 placeholder="Search candidates by name, skills, role, location..."
+                aria-label="Search candidates"
                 style={{
                   width: '100%',
-                  padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px ${tokens.spacing[3]}px 44px`,
-                  borderRadius: tokens.borderRadius.lg,
-                  border: `1px solid ${tokens.colors.neutral[200]}`,
-                  backgroundColor: tokens.colors.neutral[50],
-                  fontSize: tokens.typography.fontSize.md, color: tokens.colors.neutral[800],
+                  padding: `${t.spacing[3]}px ${t.spacing[4]}px ${t.spacing[3]}px 44px`,
+                  borderRadius: t.borderRadius.lg,
+                  border: `1px solid ${t.colors.neutral[200]}`,
+                  backgroundColor: t.colors.neutral[50],
+                  fontSize: t.typography.fontSize.md, color: t.colors.neutral[800],
                   fontFamily: 'inherit', outline: 'none',
-                  transition: `all ${tokens.motion.hover}`,
+                  transition: `all ${t.motion.hover}`,
                 }}
               />
               {searchQuery && (
-                <button onClick={() => handleQueryChange('')} style={{
-                  position: 'absolute', right: tokens.spacing[3], border: 'none', backgroundColor: 'transparent',
-                  cursor: 'pointer', display: 'flex', padding: tokens.spacing[1],
-                }}>
-                  <X size={16} color={tokens.colors.neutral[400]} />
-                </button>
+                <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Clear search"
+                  onClick={() => handleQueryChange('')}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleQueryChange(''); } }}
+                  style={{
+                    position: 'absolute', right: t.spacing[3], backgroundColor: 'transparent',
+                    cursor: 'pointer', display: 'flex', padding: t.spacing[1],
+                  }}
+                >
+                  <X size={16} color={t.colors.neutral[400]} />
+                </Box>
               )}
             </Box>
-            <button onClick={handleToggleAdvanced} style={{
-              padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.lg,
-              border: `1px solid ${showAdvanced ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`,
-              backgroundColor: showAdvanced ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-              color: showAdvanced ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
-              fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
-              cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center',
-              gap: tokens.spacing[2], whiteSpace: 'nowrap',
-              transition: `all ${tokens.motion.hover}`,
-            }}>
+            <Box
+              role="button"
+              tabIndex={0}
+              aria-label="Toggle advanced filters"
+              aria-expanded={showAdvanced}
+              onClick={handleToggleAdvanced}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggleAdvanced(); } }}
+              style={{
+                padding: `${t.spacing[3]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
+                border: `1px solid ${showAdvanced ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+                backgroundColor: showAdvanced ? t.colors.primaryScale[50] : t.colors.common.white,
+                color: showAdvanced ? t.colors.primaryScale[600] : t.colors.neutral[600],
+                fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
+                cursor: 'pointer', display: 'flex', alignItems: 'center',
+                gap: t.spacing[2], whiteSpace: 'nowrap',
+                transition: `all ${t.motion.hover}`,
+              }}
+            >
               <SlidersHorizontal size={16} />
-              Filters
+              <Text style={{ fontSize: t.typography.fontSize.sm }}>Filters</Text>
               {activeFilterCount > 0 && (
-                <span style={{
+                <Box style={{
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  width: 20, height: 20, borderRadius: tokens.borderRadius.full,
-                  backgroundColor: tokens.colors.primaryScale[500], color: tokens.colors.common.white,
-                  fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold,
+                  width: 20, height: 20, borderRadius: t.borderRadius.full,
+                  backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
                 }}>
-                  {activeFilterCount}
-                </span>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white, fontWeight: t.typography.fontWeight.bold }}>{activeFilterCount}</Text>
+                </Box>
               )}
-            </button>
+            </Box>
           </Box>
 
           {/* Autocomplete */}
           {showAutocomplete && !searchQuery && (
             <Box style={{
-              position: 'absolute', top: '100%', left: tokens.spacing[6], right: tokens.spacing[6],
-              backgroundColor: tokens.colors.common.white,
-              border: `1px solid ${tokens.colors.neutral[100]}`,
-              borderRadius: tokens.borderRadius.lg,
-              boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
-              zIndex: 50, padding: tokens.spacing[2],
+              position: 'absolute', top: '100%', left: t.spacing[6], right: t.spacing[6],
+              backgroundColor: t.colors.common.white,
+              border: `1px solid ${t.colors.neutral[100]}`,
+              borderRadius: t.borderRadius.lg,
+              boxShadow: t.shadows.lg,
+              zIndex: 50, padding: t.spacing[2],
             }}>
               <Text style={{
-                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
-                color: tokens.colors.neutral[400], textTransform: 'uppercase', letterSpacing: '0.05em',
-                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                ...createPersonalitySectionHeaderStyle(t),
+                padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
               }}>
                 Recent searches
               </Text>
               {recentSearches.map((term, idx) => (
-                <Box key={idx} onClick={() => { handleQueryChange(term); setShowAutocomplete(false); }}
+                <Box
+                  key={idx}
+                  role="option"
+                  tabIndex={0}
+                  aria-label={`Search for ${term}`}
+                  onClick={() => { handleQueryChange(term); setShowAutocomplete(false); }}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleQueryChange(term); setShowAutocomplete(false); } }}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
-                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                    borderRadius: tokens.borderRadius.md, cursor: 'pointer',
-                    transition: `background-color ${tokens.motion.hover}`,
+                    display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                    borderRadius: t.borderRadius.md, cursor: 'pointer',
+                    transition: `background-color ${t.motion.hover}`,
                   }}
                 >
-                  <Clock size={14} color={tokens.colors.neutral[400]} />
-                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>{term}</Text>
+                  <Clock size={14} color={t.colors.neutral[400]} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{term}</Text>
                 </Box>
               ))}
             </Box>
@@ -689,36 +750,64 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
 
           {/* Active filter chips */}
           {(searchQuery || activeFilterCount > 0) && (
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[3], flexWrap: 'wrap' }}>
-              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[3], flexWrap: 'wrap' }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>
                 {totalResults} results
               </Text>
               {activeFilters.skills?.map(skill => (
                 <Box key={skill} style={{
-                  ...createBadgeStyle(tokens, 'primary'),
+                  ...createBadgeStyle(t, 'primary'),
                   display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer',
                 }}>
-                  {skill}
-                  <X size={10} onClick={() => handleFilterChange('skills', (activeFilters.skills ?? []).filter(s => s !== skill))} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{skill}</Text>
+                  <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Remove ${skill} filter`}
+                    onClick={() => handleFilterChange('skills', (activeFilters.skills ?? []).filter(s => s !== skill))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange('skills', (activeFilters.skills ?? []).filter(s => s !== skill)); } }}
+                    style={{ cursor: 'pointer', display: 'flex' }}
+                  >
+                    <X size={10} />
+                  </Box>
                 </Box>
               ))}
               {activeFilters.location && (
                 <Box style={{
-                  ...createBadgeStyle(tokens, 'info'),
+                  ...createBadgeStyle(t, 'info'),
                   display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer',
                 }}>
-                  <MapPin size={10} />{activeFilters.location}
-                  <X size={10} onClick={() => handleFilterChange('location', '')} />
+                  <MapPin size={10} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{activeFilters.location}</Text>
+                  <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Remove location filter"
+                    onClick={() => handleFilterChange('location', '')}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange('location', ''); } }}
+                    style={{ cursor: 'pointer', display: 'flex' }}
+                  >
+                    <X size={10} />
+                  </Box>
                 </Box>
               )}
               {activeFilters.status?.map(s => (
                 <Box key={s} style={{
-                  ...createBadgeStyle(tokens, 'secondary'),
+                  ...createBadgeStyle(t, 'secondary'),
                   display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer',
                   textTransform: 'capitalize' as const,
                 }}>
-                  {s}
-                  <X size={10} onClick={() => handleFilterChange('status', (activeFilters.status ?? []).filter(st => st !== s))} />
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{s}</Text>
+                  <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Remove ${s} filter`}
+                    onClick={() => handleFilterChange('status', (activeFilters.status ?? []).filter(st => st !== s))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange('status', (activeFilters.status ?? []).filter(st => st !== s)); } }}
+                    style={{ cursor: 'pointer', display: 'flex' }}
+                  >
+                    <X size={10} />
+                  </Box>
                 </Box>
               ))}
             </Box>
@@ -727,58 +816,100 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
 
         {/* Saved Searches */}
         <Box style={{
-          display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
-          padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
-          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
-          overflowX: 'auto', backgroundColor: tokens.colors.common.white,
+          display: 'flex', alignItems: 'center', gap: t.spacing[2],
+          padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
+          overflowX: 'auto', backgroundColor: t.colors.common.white,
         }}>
-          <Bookmark size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0 }} />
+          <Bookmark size={14} color={t.colors.neutral[400]} style={{ flexShrink: 0 }} />
           {savedSearches.map(search => (
             <Box key={search.id} style={{
-              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.full,
-              border: `1px solid ${tokens.colors.neutral[200]}`,
-              backgroundColor: tokens.colors.common.white,
-              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
-              color: tokens.colors.neutral[700],
+              display: 'flex', alignItems: 'center', gap: t.spacing[1],
+              padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+              borderRadius: t.borderRadius.full,
+              border: `1px solid ${t.colors.neutral[200]}`,
+              backgroundColor: t.colors.common.white,
+              fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+              color: t.colors.neutral[700],
               cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
-              transition: `all ${tokens.motion.hover}`,
+              transition: `all ${t.motion.hover}`,
             }}>
-              <span onClick={() => handleLoadSearch(search)}>{search.name}</span>
-              <span style={{ color: tokens.colors.neutral[400] }}>({search.resultCount})</span>
-              <button onClick={(e) => { e.stopPropagation(); handleDeleteSearch(search.id); }}
-                style={{ border: 'none', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', padding: 0, marginLeft: 2 }}>
-                <X size={10} color={tokens.colors.neutral[400]} />
-              </button>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label={`Load search: ${search.name}`}
+                onClick={() => handleLoadSearch(search)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLoadSearch(search); } }}
+                style={{ cursor: 'pointer' }}
+              >
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{search.name}</Text>
+              </Box>
+              <Text style={{ color: t.colors.neutral[400], fontSize: t.typography.fontSize.xs }}>({search.resultCount})</Text>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label={`Delete search: ${search.name}`}
+                onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleDeleteSearch(search.id); }}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDeleteSearch(search.id); } }}
+                style={{ cursor: 'pointer', display: 'flex', padding: 0, marginLeft: 2 }}
+              >
+                <X size={10} color={t.colors.neutral[400]} />
+              </Box>
             </Box>
           ))}
           {searchQuery && !showSaveDialog && (
-            <button onClick={() => setShowSaveDialog(true)} style={{
-              display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-              padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-              borderRadius: tokens.borderRadius.full,
-              border: `1px dashed ${tokens.colors.primaryScale[300]}`,
-              backgroundColor: tokens.colors.primaryScale[50], color: tokens.colors.primaryScale[600],
-              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
-              cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0,
-            }}>
-              <Save size={12} /> Save current
-            </button>
+            <Box
+              role="button"
+              tabIndex={0}
+              aria-label="Save current search"
+              onClick={() => setShowSaveDialog(true)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowSaveDialog(true); } }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                borderRadius: t.borderRadius.full,
+                border: `1px dashed ${t.colors.primaryScale[300]}`,
+                backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[600],
+                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
+              }}
+            >
+              <Save size={12} />
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>Save current</Text>
+            </Box>
           )}
           {showSaveDialog && (
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], flexShrink: 0 }}>
-              <input type="text" value={saveSearchName} onChange={(e) => setSaveSearchName(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSaveSearch()} placeholder="Search name..." autoFocus
-                style={{ ...inputStyle, width: 140, fontSize: tokens.typography.fontSize.xs, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }}
-                {...focusHandlers}
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
+              <input
+                type="text"
+                value={saveSearchName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSaveSearchName(e.target.value)}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => { if (e.key === 'Enter') handleSaveSearch(); }}
+                placeholder="Search name..."
+                aria-label="Save search name"
+                autoFocus
+                style={{ ...inputStyle, width: 140, fontSize: t.typography.fontSize.xs, padding: `${t.spacing[1]}px ${t.spacing[2]}px` }}
               />
-              <button onClick={handleSaveSearch} style={{ border: 'none', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', padding: 2 }}>
-                <Check size={14} color={tokens.colors.successScale[500]} />
-              </button>
-              <button onClick={() => setShowSaveDialog(false)} style={{ border: 'none', backgroundColor: 'transparent', cursor: 'pointer', display: 'flex', padding: 2 }}>
-                <X size={14} color={tokens.colors.neutral[400]} />
-              </button>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Confirm save search"
+                onClick={handleSaveSearch}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSaveSearch(); } }}
+                style={{ cursor: 'pointer', display: 'flex', padding: 2 }}
+              >
+                <Check size={14} color={t.colors.successScale[500]} />
+              </Box>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Cancel save search"
+                onClick={() => setShowSaveDialog(false)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowSaveDialog(false); } }}
+                style={{ cursor: 'pointer', display: 'flex', padding: 2 }}
+              >
+                <X size={14} color={t.colors.neutral[400]} />
+              </Box>
             </Box>
           )}
         </Box>
@@ -787,150 +918,183 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
         <Box style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           {/* Filters Panel */}
           {showAdvanced && (
-            <Box style={{
+            <Box role="region" aria-label="Advanced filters" style={{
               width: 300, flexShrink: 0,
-              borderRight: `1px solid ${tokens.colors.neutral[100]}`,
-              backgroundColor: tokens.colors.common.white, overflowY: 'auto',
+              borderRight: `1px solid ${t.colors.neutral[100]}`,
+              backgroundColor: t.colors.common.white, overflowY: 'auto',
             }}>
               <Box style={{
-                padding: `${tokens.spacing[4]}px ${tokens.spacing[4]}px`,
-                borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+                padding: `${t.spacing[4]}px ${t.spacing[4]}px`,
+                borderBottom: `1px solid ${t.colors.neutral[100]}`,
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               }}>
-                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800] }}>
                   Advanced Filters
                 </Text>
                 {activeFilterCount > 0 && (
-                  <button onClick={() => { setInternalFilters({}); onFilterChange?.({}); }}
-                    style={{ border: 'none', backgroundColor: 'transparent', color: tokens.colors.primaryScale[500], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer', fontFamily: 'inherit' }}>
-                    Clear all
-                  </button>
+                  <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Clear all filters"
+                    onClick={handleClearFilters}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClearFilters(); } }}
+                    style={{ color: t.colors.primaryScale[500], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}
+                  >
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.primaryScale[500] }}>Clear all</Text>
+                  </Box>
                 )}
               </Box>
 
-              <FilterSection sectionKey="skills" label="Skills" Icon={Star} isExpanded={expandedSections.has('skills')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
-                <CheckboxFacetList facets={facetsByDimension['skills'] ?? []} activeValues={activeFilters.skills ?? []} onToggle={(v) => toggleArrayFilter('skills', v)} tokens={tokens} primitives={primitives} />
+              <FilterSection sectionKey="skills" label="Skills" Icon={Star} isExpanded={expandedSections.has('skills')} onToggle={toggleSection} tokens={t} primitives={primitives}>
+                <CheckboxFacetList facets={facetsByDimension['skills'] ?? []} activeValues={activeFilters.skills ?? []} onToggle={(v) => toggleArrayFilter('skills', v)} tokens={t} primitives={primitives} />
               </FilterSection>
 
-              <FilterSection sectionKey="experience" label="Experience" Icon={Briefcase} isExpanded={expandedSections.has('experience')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
-                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                    <select value={(activeFilters.experienceRange ?? [0, 20])[0]} onChange={(e) => handleFilterChange('experienceRange', [Number(e.target.value), (activeFilters.experienceRange ?? [0, 20])[1]])} style={{ ...inputStyle, flex: 1, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }}>
+              <FilterSection sectionKey="experience" label="Experience" Icon={Briefcase} isExpanded={expandedSections.has('experience')} onToggle={toggleSection} tokens={t} primitives={primitives}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                    <select value={(activeFilters.experienceRange ?? [0, 20])[0]} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange('experienceRange', [Number(e.target.value), (activeFilters.experienceRange ?? [0, 20])[1]])} aria-label="Minimum experience" style={{ ...inputStyle, flex: 1, padding: `${t.spacing[1]}px ${t.spacing[2]}px` }}>
                       {EXPERIENCE_OPTIONS.map(y => <option key={y} value={y}>{y} yrs</option>)}
                     </select>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>to</Text>
-                    <select value={(activeFilters.experienceRange ?? [0, 20])[1]} onChange={(e) => handleFilterChange('experienceRange', [(activeFilters.experienceRange ?? [0, 20])[0], Number(e.target.value)])} style={{ ...inputStyle, flex: 1, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>to</Text>
+                    <select value={(activeFilters.experienceRange ?? [0, 20])[1]} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange('experienceRange', [(activeFilters.experienceRange ?? [0, 20])[0], Number(e.target.value)])} aria-label="Maximum experience" style={{ ...inputStyle, flex: 1, padding: `${t.spacing[1]}px ${t.spacing[2]}px` }}>
                       {EXPERIENCE_OPTIONS.map(y => <option key={y} value={y}>{y}+ yrs</option>)}
                     </select>
                   </Box>
-                  {renderRangeBar((activeFilters.experienceRange ?? [0, 20])[0], (activeFilters.experienceRange ?? [0, 20])[1], 20, tokens.colors.primaryScale[400])}
+                  {renderRangeBar((activeFilters.experienceRange ?? [0, 20])[0], (activeFilters.experienceRange ?? [0, 20])[1], 20, t.colors.primaryScale[400])}
                 </Box>
               </FilterSection>
 
-              <FilterSection sectionKey="location" label="Location" Icon={MapPin} isExpanded={expandedSections.has('location')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
-                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                  <input type="text" value={activeFilters.location ?? ''} onChange={(e) => handleFilterChange('location', e.target.value)}
-                    placeholder="City, State, or Country" style={inputStyle} {...focusHandlers} />
+              <FilterSection sectionKey="location" label="Location" Icon={MapPin} isExpanded={expandedSections.has('location')} onToggle={toggleSection} tokens={t} primitives={primitives}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                  <input type="text" value={activeFilters.location ?? ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('location', e.target.value)} placeholder="City, State, or Country" aria-label="Location filter" style={inputStyle} />
                   {(facetsByDimension['location'] ?? []).map(facet => (
-                    <Box key={facet.value} onClick={() => handleFilterChange('location', facet.value)}
+                    <Box key={facet.value}
+                      role="option"
+                      tabIndex={0}
+                      aria-label={`${facet.value} (${facet.count})`}
+                      onClick={() => handleFilterChange('location', facet.value)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange('location', facet.value); } }}
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-                        borderRadius: tokens.borderRadius.md, cursor: 'pointer',
-                        backgroundColor: activeFilters.location === facet.value ? tokens.colors.primaryScale[50] : 'transparent',
-                        transition: `background-color ${tokens.motion.hover}`,
+                        padding: `${t.spacing[2]}px ${t.spacing[2]}px`,
+                        borderRadius: t.borderRadius.md, cursor: 'pointer',
+                        backgroundColor: activeFilters.location === facet.value ? t.colors.primaryScale[50] : 'transparent',
+                        transition: `background-color ${t.motion.hover}`,
                       }}>
-                      <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>{facet.value}</Text>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{facet.count}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{facet.value}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{facet.count}</Text>
                     </Box>
                   ))}
                 </Box>
               </FilterSection>
 
-              <FilterSection sectionKey="education" label="Education" Icon={GraduationCap} isExpanded={expandedSections.has('education')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
+              <FilterSection sectionKey="education" label="Education" Icon={GraduationCap} isExpanded={expandedSections.has('education')} onToggle={toggleSection} tokens={t} primitives={primitives}>
                 <Box style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {EDUCATION_OPTIONS.map(opt => (
-                    <Box key={opt} onClick={() => handleFilterChange('education', opt === 'Any' ? '' : opt)}
+                    <Box key={opt}
+                      role="option"
+                      tabIndex={0}
+                      aria-selected={activeFilters.education === opt}
+                      onClick={() => handleFilterChange('education', opt === 'Any' ? '' : opt)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange('education', opt === 'Any' ? '' : opt); } }}
                       style={{
-                        padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-                        borderRadius: tokens.borderRadius.md, cursor: 'pointer',
-                        backgroundColor: activeFilters.education === opt ? tokens.colors.primaryScale[50] : 'transparent',
-                        color: activeFilters.education === opt ? tokens.colors.primaryScale[700] : tokens.colors.neutral[600],
-                        fontSize: tokens.typography.fontSize.sm,
-                        transition: `all ${tokens.motion.hover}`,
+                        padding: `${t.spacing[2]}px ${t.spacing[2]}px`,
+                        borderRadius: t.borderRadius.md, cursor: 'pointer',
+                        backgroundColor: activeFilters.education === opt ? t.colors.primaryScale[50] : 'transparent',
+                        color: activeFilters.education === opt ? t.colors.primaryScale[700] : t.colors.neutral[600],
+                        fontSize: t.typography.fontSize.sm,
+                        transition: `all ${t.motion.hover}`,
                       }}>
-                      {opt}
+                      <Text style={{ fontSize: t.typography.fontSize.sm }}>{opt}</Text>
                     </Box>
                   ))}
                 </Box>
               </FilterSection>
 
-              <FilterSection sectionKey="availability" label="Availability" Icon={Clock} isExpanded={expandedSections.has('availability')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
-                <Box style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
+              <FilterSection sectionKey="availability" label="Availability" Icon={Clock} isExpanded={expandedSections.has('availability')} onToggle={toggleSection} tokens={t} primitives={primitives}>
+                <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1] }}>
                   {AVAILABILITY_OPTIONS.map(opt => (
-                    <Box key={opt} onClick={() => handleFilterChange('availability', opt === 'Any' ? '' : opt)} style={pillStyle(activeFilters.availability === opt)}>
-                      {opt}
+                    <Box key={opt}
+                      role="option"
+                      tabIndex={0}
+                      aria-selected={activeFilters.availability === opt}
+                      onClick={() => handleFilterChange('availability', opt === 'Any' ? '' : opt)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange('availability', opt === 'Any' ? '' : opt); } }}
+                      style={pillStyle(activeFilters.availability === opt)}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{opt}</Text>
                     </Box>
                   ))}
                 </Box>
               </FilterSection>
 
-              <FilterSection sectionKey="salary" label="Salary Range" Icon={DollarSign} isExpanded={expandedSections.has('salary')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
-                <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+              <FilterSection sectionKey="salary" label="Salary Range" Icon={DollarSign} isExpanded={expandedSections.has('salary')} onToggle={toggleSection} tokens={t} primitives={primitives}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                     <input type="number" value={(activeFilters.salaryRange ?? [0, 300000])[0]}
-                      onChange={(e) => handleFilterChange('salaryRange', [Number(e.target.value), (activeFilters.salaryRange ?? [0, 300000])[1]])}
-                      placeholder="Min" style={{ ...inputStyle, flex: 1, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }} {...focusHandlers} />
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>to</Text>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('salaryRange', [Number(e.target.value), (activeFilters.salaryRange ?? [0, 300000])[1]])}
+                      placeholder="Min" aria-label="Minimum salary" style={{ ...inputStyle, flex: 1, padding: `${t.spacing[1]}px ${t.spacing[2]}px` }} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>to</Text>
                     <input type="number" value={(activeFilters.salaryRange ?? [0, 300000])[1]}
-                      onChange={(e) => handleFilterChange('salaryRange', [(activeFilters.salaryRange ?? [0, 300000])[0], Number(e.target.value)])}
-                      placeholder="Max" style={{ ...inputStyle, flex: 1, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }} {...focusHandlers} />
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('salaryRange', [(activeFilters.salaryRange ?? [0, 300000])[0], Number(e.target.value)])}
+                      placeholder="Max" aria-label="Maximum salary" style={{ ...inputStyle, flex: 1, padding: `${t.spacing[1]}px ${t.spacing[2]}px` }} />
                   </Box>
-                  {renderRangeBar((activeFilters.salaryRange ?? [0, 300000])[0], (activeFilters.salaryRange ?? [0, 300000])[1], 300000, tokens.colors.successScale[400])}
+                  {renderRangeBar((activeFilters.salaryRange ?? [0, 300000])[0], (activeFilters.salaryRange ?? [0, 300000])[1], 300000, t.colors.successScale[400])}
                 </Box>
               </FilterSection>
 
-              <FilterSection sectionKey="source" label="Source" Icon={Globe} isExpanded={expandedSections.has('source')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
+              <FilterSection sectionKey="source" label="Source" Icon={Globe} isExpanded={expandedSections.has('source')} onToggle={toggleSection} tokens={t} primitives={primitives}>
                 <CheckboxFacetList
                   facets={SOURCE_OPTIONS.map(src => ({ dimension: 'source', value: src, count: (facetsByDimension['source'] ?? []).find(f => f.value === src)?.count ?? 0 }))}
                   activeValues={activeFilters.source ?? []}
                   onToggle={(v) => toggleArrayFilter('source', v)}
-                  tokens={tokens} primitives={primitives}
+                  tokens={t} primitives={primitives}
                 />
               </FilterSection>
 
-              <FilterSection sectionKey="tags" label="Tags" Icon={Tag} isExpanded={expandedSections.has('tags')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
-                <Box style={{ display: 'flex', flexWrap: 'wrap', gap: tokens.spacing[1] }}>
+              <FilterSection sectionKey="tags" label="Tags" Icon={Tag} isExpanded={expandedSections.has('tags')} onToggle={toggleSection} tokens={t} primitives={primitives}>
+                <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1] }}>
                   {['JavaScript', 'Remote', 'Full-time', 'Contract', 'Senior', 'Lead', 'Startup', 'Enterprise'].map(tag => (
-                    <Box key={tag} onClick={() => toggleArrayFilter('tags', tag)} style={pillStyle((activeFilters.tags ?? []).includes(tag))}>
-                      {tag}
+                    <Box key={tag}
+                      role="option"
+                      tabIndex={0}
+                      aria-selected={(activeFilters.tags ?? []).includes(tag)}
+                      onClick={() => toggleArrayFilter('tags', tag)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleArrayFilter('tags', tag); } }}
+                      style={pillStyle((activeFilters.tags ?? []).includes(tag))}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{tag}</Text>
                     </Box>
                   ))}
                 </Box>
               </FilterSection>
 
-              <FilterSection sectionKey="status" label="Status" Icon={Filter} isExpanded={expandedSections.has('status')} onToggle={toggleSection} tokens={tokens} primitives={primitives}>
+              <FilterSection sectionKey="status" label="Status" Icon={Filter} isExpanded={expandedSections.has('status')} onToggle={toggleSection} tokens={t} primitives={primitives}>
                 <Box style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {STATUS_OPTIONS.map(status => {
                     const isActive = (activeFilters.status ?? []).includes(status);
-                    const statusColorSet = getStatusColors(status, tokens);
+                    const statusColorSet = getStatusColors(status, t);
                     const facet = (facetsByDimension['status'] ?? []).find(f => f.value === status);
                     return (
-                      <Box key={status} onClick={() => toggleArrayFilter('status', status)}
+                      <Box key={status}
+                        role="checkbox"
+                        tabIndex={0}
+                        aria-checked={isActive}
+                        aria-label={`${status} status filter`}
+                        onClick={() => toggleArrayFilter('status', status)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleArrayFilter('status', status); } }}
                         style={{
                           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                          padding: `${tokens.spacing[2]}px ${tokens.spacing[2]}px`,
-                          borderRadius: tokens.borderRadius.md, cursor: 'pointer',
+                          padding: `${t.spacing[2]}px ${t.spacing[2]}px`,
+                          borderRadius: t.borderRadius.md, cursor: 'pointer',
                           backgroundColor: isActive ? statusColorSet.bg : 'transparent',
-                          transition: `all ${tokens.motion.hover}`,
+                          transition: `all ${t.motion.hover}`,
                         }}>
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                          <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: statusColorSet.text }} />
-                          <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], textTransform: 'capitalize' as const }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: statusColorSet.text }} />
+                          <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], textTransform: 'capitalize' as const }}>
                             {status.replace('-', ' ')}
                           </Text>
                         </Box>
-                        {facet && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{facet.count}</Text>}
+                        {facet && <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{facet.count}</Text>}
                       </Box>
                     );
                   })}
@@ -940,29 +1104,37 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
           )}
 
           {/* Results */}
-          <Box style={{ flex: 1, overflow: 'auto', padding: `${tokens.spacing[5]}px ${tokens.spacing[5]}px` }}>
-            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                <Box onClick={handleSelectAll} style={{
-                  width: 18, height: 18, borderRadius: tokens.borderRadius.sm, cursor: 'pointer',
-                  border: `1.5px solid ${selectedCandidates.length === results.length && results.length > 0 ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`,
-                  backgroundColor: selectedCandidates.length === results.length && results.length > 0 ? tokens.colors.primaryScale[500] : 'transparent',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${tokens.motion.hover}`,
-                }}>
-                  {selectedCandidates.length === results.length && results.length > 0 && <Check size={12} color={tokens.colors.common.white} />}
-                  {selectedCandidates.length > 0 && selectedCandidates.length < results.length && <Minus size={12} color={tokens.colors.primaryScale[500]} />}
+          <Box style={{ flex: 1, overflow: 'auto', padding: `${t.spacing[5]}px ${t.spacing[5]}px` }}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                <Box
+                  role="checkbox"
+                  tabIndex={0}
+                  aria-checked={selectedCandidates.length === results.length && results.length > 0}
+                  aria-label="Select all candidates"
+                  onClick={handleSelectAll}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectAll(); } }}
+                  style={{
+                    width: 18, height: 18, borderRadius: t.borderRadius.sm, cursor: 'pointer',
+                    border: `1.5px solid ${selectedCandidates.length === results.length && results.length > 0 ? t.colors.primaryScale[500] : t.colors.neutral[300]}`,
+                    backgroundColor: selectedCandidates.length === results.length && results.length > 0 ? t.colors.primaryScale[500] : 'transparent',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${t.motion.hover}`,
+                  }}
+                >
+                  {selectedCandidates.length === results.length && results.length > 0 && <Check size={12} color={t.colors.common.white} />}
+                  {selectedCandidates.length > 0 && selectedCandidates.length < results.length && <Minus size={12} color={t.colors.primaryScale[500]} />}
                 </Box>
-                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700] }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>
                   {totalResults} candidates found
                 </Text>
               </Box>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                <Sparkles size={14} color={tokens.colors.neutral[400]} />
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Sorted by match score</Text>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                <Sparkles size={14} color={t.colors.neutral[400]} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Sorted by match score</Text>
               </Box>
             </Box>
 
-            <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[3] }}>
+            <Box role="list" aria-label="Search results" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
               {results.map(candidate => (
                 <CandidateResultCard
                   key={candidate.id}
@@ -971,7 +1143,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                   onToggleSelection={handleSelectionToggle}
                   onSendOutreach={onSendOutreach}
                   onAddToJob={onAddToJob}
-                  tokens={tokens}
+                  tokens={t}
                   primitives={primitives}
                 />
               ))}
@@ -981,35 +1153,50 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
 
         {/* Bulk Actions Bar */}
         {selectedCandidates.length > 0 && (
-          <Box style={{
-            padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
-            borderTop: `1px solid ${tokens.colors.neutral[100]}`,
-            backgroundColor: tokens.colors.primaryScale[50],
+          <Box role="toolbar" aria-label="Bulk actions" style={{
+            padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
+            borderTop: `1px solid ${t.colors.neutral[100]}`,
+            backgroundColor: t.colors.primaryScale[50],
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-              <Box style={{ ...createBadgeStyle(tokens, 'primary') }}>
-                {selectedCandidates.length} selected
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+              <Box style={{ ...createBadgeStyle(t, 'primary') }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{selectedCandidates.length} selected</Text>
               </Box>
-              <button onClick={() => { setInternalSelected([]); onSelectionChange?.([]); }}
-                style={{ border: 'none', backgroundColor: 'transparent', color: tokens.colors.neutral[500], fontSize: tokens.typography.fontSize.xs, cursor: 'pointer', fontFamily: 'inherit' }}>
-                Clear
-              </button>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Clear selection"
+                onClick={handleClearSelection}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClearSelection(); } }}
+                style={{ color: t.colors.neutral[500], fontSize: t.typography.fontSize.xs, cursor: 'pointer' }}
+              >
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Clear</Text>
+              </Box>
             </Box>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               {bulkActions.map(action => (
-                <button key={action.label} onClick={action.onClick} style={{
-                  padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
-                  borderRadius: tokens.borderRadius.md,
-                  border: action.primary ? 'none' : `1px solid ${tokens.colors.neutral[200]}`,
-                  backgroundColor: action.primary ? tokens.colors.primaryScale[500] : tokens.colors.common.white,
-                  color: action.primary ? tokens.colors.common.white : tokens.colors.neutral[700],
-                  fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
-                  cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-                  transition: `all ${tokens.motion.hover}`,
-                }}>
-                  {action.icon}{action.label}
-                </button>
+                <Box
+                  key={action.label}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={action.label}
+                  onClick={action.onClick}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action.onClick?.(); } }}
+                  style={{
+                    padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
+                    borderRadius: t.borderRadius.md,
+                    border: action.primary ? 'none' : `1px solid ${t.colors.neutral[200]}`,
+                    backgroundColor: action.primary ? t.colors.primaryScale[500] : t.colors.common.white,
+                    color: action.primary ? t.colors.common.white : t.colors.neutral[700],
+                    fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium,
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                    transition: `all ${t.motion.hover}`,
+                  }}
+                >
+                  {action.icon}
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: action.primary ? t.colors.common.white : t.colors.neutral[700] }}>{action.label}</Text>
+                </Box>
               ))}
             </Box>
           </Box>

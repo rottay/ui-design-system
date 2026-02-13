@@ -6,7 +6,7 @@
  * trend chart, recruiter leaderboard, and source effectiveness.
  */
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -30,7 +30,14 @@ import {
   createCardHoverStyles,
   createIconContainerStyle,
   getPersonalityBadgeRadius,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
 } from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import type {
   BhAnalyticsHubProps,
   FunnelStage,
@@ -121,14 +128,18 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const [activeDateRange, setActiveDateRange] = useState<DateRangePreset>(dateRange);
     const [selectedKpi, setSelectedKpi] = useState<string | null>(null);
 
-    const card = createCardStyle(t, { padding: 28 });
-    const hoverStyles = createCardHoverStyles(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const isGlass = t.surface.useGlass;
+    const card = useMemo(() => createCardStyle(t, { padding: 28, glass: isGlass }), [t, isGlass]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-    const handleDateRange = (range: DateRangePreset) => {
+    const handleDateRange = useCallback((range: DateRangePreset) => {
       setActiveDateRange(range);
       onDateRangeChange?.(range);
-    };
+    }, [onDateRangeChange]);
 
     const totalHires = funnelData.find((f) => f.name === 'Hired')?.count ?? 48;
     const prevHires = funnelData.find((f) => f.name === 'Hired')?.prevPeriodCount ?? 42;
@@ -150,7 +161,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     );
 
     return (
-      <Box className={className} style={{ height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
 
         {/* ── Header ── */}
         <Flex align="center" justify="between" style={{ marginBottom: t.spacing[7] }}>
@@ -188,7 +199,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             const TrendIcon = isPositive ? ArrowUpRight : isNeutral ? Minus : ArrowDownRight;
 
             return (
-              <Box key={kpi.label} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} style={{ ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: any) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
+              <Box key={kpi.label} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: any) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
                   <Box style={createIconContainerStyle(t, { size: 40, color: kpi.color[50] })}>
                     <Icon size={20} color={kpi.color[600]} />
@@ -199,7 +210,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                   </Box>
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{kpi.value}</Text>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{kpi.label}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{kpi.label}</Text>
               </Box>
             );
           })}
@@ -228,7 +239,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     </Box>
                     <Box style={{ position: 'relative' as const, height: 20, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
                       {comparisonPeriod && stage.prevPeriodCount && <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${prevPct}%`, backgroundColor: t.colors.neutral[200], borderRadius: t.borderRadius.sm, opacity: 0.5 }} />}
-                      <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${pct}%`, backgroundColor: colors[i % colors.length], borderRadius: t.borderRadius.sm, transition: 'width 500ms ease' }} />
+                      <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${pct}%`, backgroundColor: colors[i % colors.length], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
                     </Box>
                   </Box>
                 );
@@ -320,7 +331,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                       </Box>
                     </Box>
                     <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
-                      <Box style={{ height: '100%', width: `${(src.candidateCount / maxC) * 100}%`, backgroundColor: qColor[400], borderRadius: t.borderRadius.full, transition: 'width 500ms ease' }} />
+                      <Box style={{ height: '100%', width: `${(src.candidateCount / maxC) * 100}%`, backgroundColor: qColor[400], borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
                     </Box>
                   </Box>
                 );

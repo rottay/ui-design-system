@@ -6,11 +6,17 @@
  * event timeline, detail panel, and similarity checks.
  */
 
-import { useState } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
 import type { BhFraudMonitorProps, EventSeverity, ReviewStatus, ProctoringEvent } from '../../core';
 import { getSeverityColors, getReviewStatusColors, getEventTypeLabel } from '../../core';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createCardStyle, createBadgeStyle, createCardHoverStyles, createEntranceAnimation,
+  createStaggerDelay, createIconContainerStyle, createPersonalitySectionHeaderStyle,
+  getPersonalityTypography, getPersonalityBadgeRadius, createPersonalityAccentBar,
+  createEmptyStateStyle,
+} from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import { ShieldAlert, AlertTriangle, Filter, BarChart3, Users, Activity } from 'lucide-react';
 
 const MOCK_EVENTS: ProctoringEvent[] = [
@@ -25,8 +31,14 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
   name: 'BhFraudMonitor.Dashboard',
   render: ({ primitives, props, tokens }: PresetContext<BhFraudMonitorProps>) => {
     const { Box, Text } = primitives;
-    const sevColors = getSeverityColors(tokens);
-    const reviewColors = getReviewStatusColors(tokens);
+    const isGlass = tokens.surface.useGlass;
+    const sevColors = useMemo(() => getSeverityColors(tokens), [tokens]);
+    const reviewColors = useMemo(() => getReviewStatusColors(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const {
       events = MOCK_EVENTS, similarityChecks = [], stats,
@@ -41,33 +53,33 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const selectedEventId = selectedEventIdProp ?? internalSelectedId;
     const activeSeverityFilter = severityFilterProp ?? internalSeverityFilter;
 
-    const handleEventSelect = (id: string) => {
+    const handleEventSelect = useCallback((id: string) => {
       setInternalSelectedId(id);
       onEventSelect?.(id);
-    };
+    }, [onEventSelect]);
 
-    const toggleSeverity = (sev: EventSeverity) => {
+    const toggleSeverity = useCallback((sev: EventSeverity) => {
       const next = activeSeverityFilter.includes(sev)
         ? activeSeverityFilter.filter(s => s !== sev)
         : [...activeSeverityFilter, sev];
       setInternalSeverityFilter(next);
       onSeverityFilterChange?.(next);
-    };
+    }, [activeSeverityFilter, onSeverityFilterChange]);
 
-    const filteredEvents = activeSeverityFilter.length > 0
+    const filteredEvents = useMemo(() => activeSeverityFilter.length > 0
       ? events.filter(e => activeSeverityFilter.includes(e.severity))
-      : events;
+      : events, [events, activeSeverityFilter]);
 
-    const selectedEvent = events.find(e => e.id === selectedEventId);
+    const selectedEvent = useMemo(() => events.find(e => e.id === selectedEventId), [events, selectedEventId]);
 
-    const computedStats = stats ?? {
+    const computedStats = useMemo(() => stats ?? {
       totalEvents: events.length,
       criticalCount: events.filter(e => e.severity === 'critical').length,
       pendingReview: events.filter(e => e.reviewStatus === 'pending').length,
       flaggedScorables: new Set(events.filter(e => e.reviewStatus === 'flagged').map(e => e.scorableId)).size,
-    };
+    }, [stats, events]);
 
-    const severityOptions: EventSeverity[] = ['critical', 'high', 'medium', 'low'];
+    const severityOptions: EventSeverity[] = useMemo(() => ['critical', 'high', 'medium', 'low'], []);
 
     if (loading) {
       return (
@@ -81,7 +93,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     }
 
     const statCardStyle = (accentColor: string) => ({
-      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+      ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
       borderRadius: tokens.borderRadius.lg,
       border: `1px solid ${tokens.colors.neutral[100]}`,
       overflow: 'hidden' as const,
@@ -110,7 +122,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                     color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em',
                   }}>{stat.label}</Text>
                 </Box>
-                <Text style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: stat.color }}>
+                <Text style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                   {stat.value}
                 </Text>
               </Box>
@@ -135,9 +147,14 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
               <Box
                 key={sev}
                 onClick={() => toggleSeverity(sev)}
+                role="button"
+                tabIndex={0}
+                aria-label={`Filter by ${sev} severity`}
+                aria-pressed={isActive}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSeverity(sev); } }}
                 style={{
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                  borderRadius: tokens.borderRadius.full,
+                  borderRadius: badgeRadius,
                   fontSize: tokens.typography.fontSize.xs,
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
                   backgroundColor: isActive ? sc.bgColor : tokens.colors.common.white,
@@ -160,7 +177,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
           {/* Event List */}
           <Box style={{
             flex: 1,
-            ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+            ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
             borderRadius: tokens.borderRadius.lg,
             border: `1px solid ${tokens.colors.neutral[100]}`,
             overflow: 'hidden',
@@ -221,7 +238,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
           {selectedEvent && (
             <Box style={{
               width: 300,
-              ...createCardStyle(tokens, { elevation: 'sm' }),
+              ...createCardStyle(tokens, { elevation: 'sm', glass: isGlass }),
               borderRadius: tokens.borderRadius.lg,
               border: `1px solid ${tokens.colors.neutral[100]}`,
               padding: `${tokens.spacing[5]}px ${tokens.spacing[5]}px`,
@@ -230,21 +247,21 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                 Event Detail
               </Text>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-                <Box>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: 2 }}>Type</Text>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>Type</Text>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>{getEventTypeLabel(selectedEvent.type)}</Text>
                 </Box>
-                <Box>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: 2 }}>Description</Text>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>Description</Text>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>{selectedEvent.description}</Text>
                 </Box>
-                <Box>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: 2 }}>Timestamp</Text>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>Timestamp</Text>
                   <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>{selectedEvent.timestamp}</Text>
                 </Box>
                 {selectedEvent.metadata && Object.entries(selectedEvent.metadata).map(([key, val]) => (
                   <Box key={key}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: 2 }}>{key}</Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>{key}</Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>{String(val)}</Text>
                   </Box>
                 ))}
@@ -252,6 +269,8 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                   <Box style={{ display: 'flex', gap: tokens.spacing[2], marginTop: tokens.spacing[2] }}>
                     <Box
                       onClick={() => onReviewAction(selectedEvent.id, 'dismissed')}
+                      role="button" tabIndex={0} aria-label="Dismiss event"
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onReviewAction(selectedEvent.id, 'dismissed'); } }}
                       style={{
                         flex: 1, padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md, background: tokens.colors.neutral[100],
@@ -262,6 +281,8 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                     </Box>
                     <Box
                       onClick={() => onReviewAction(selectedEvent.id, 'flagged')}
+                      role="button" tabIndex={0} aria-label="Flag event"
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onReviewAction(selectedEvent.id, 'flagged'); } }}
                       style={{
                         flex: 1, padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md, background: tokens.colors.errorScale[50],
@@ -273,6 +294,8 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                     </Box>
                     <Box
                       onClick={() => onReviewAction(selectedEvent.id, 'escalated')}
+                      role="button" tabIndex={0} aria-label="Escalate event"
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onReviewAction(selectedEvent.id, 'escalated'); } }}
                       style={{
                         flex: 1, padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md, background: tokens.colors.errorScale[100],
@@ -293,7 +316,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
         {similarityChecks.length > 0 && (
           <Box style={{
             marginTop: tokens.spacing[5],
-            ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+            ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
             borderRadius: tokens.borderRadius.lg,
             border: `1px solid ${tokens.colors.neutral[100]}`,
             overflow: 'hidden',

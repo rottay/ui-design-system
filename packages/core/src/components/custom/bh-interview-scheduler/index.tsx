@@ -34,4 +34,4 @@ export function BhInterviewScheduler(props: BhInterviewSchedulerProps): React.Re
 
 BhInterviewScheduler.displayName = 'BhInterviewScheduler';
 
-export { StandardBhInterviewScheduler } from './presets';
+export { StandardBhInterviewScheduler, CompactBhInterviewScheduler } from './presets';

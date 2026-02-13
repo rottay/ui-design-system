@@ -6,11 +6,18 @@
  * review status badges, and clean filter pills.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BhFraudMonitorProps, ProctoringEvent, EventType, EventSeverity } from '../../core';
 import { getSeverityColors, getEventTypeLabel } from '../../core';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createCardStyle, createBadgeStyle, createCardHoverStyles,
+  createEntranceAnimation, createStaggerDelay,
+  createPersonalitySectionHeaderStyle, getPersonalityTypography,
+  getPersonalityBadgeRadius, createIconContainerStyle,
+  createEmptyStateStyle,
+} from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import { ShieldAlert, AlertTriangle, Clock } from 'lucide-react';
 
 const MOCK_EVENTS: ProctoringEvent[] = [
@@ -29,16 +36,25 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
   name: 'BhFraudMonitor.Compact',
   render: ({ primitives, props, tokens }: PresetContext<BhFraudMonitorProps>) => {
     const { Box, Text } = primitives;
-    const sevColors = getSeverityColors(tokens);
+    const isGlass = tokens.surface.useGlass;
+    const sevColors = useMemo(() => getSeverityColors(tokens), [tokens]);
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
     const { events = MOCK_EVENTS, stats, selectedEventId, onEventSelect, loading, className, style } = props;
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-    const formatTime = (ts: string) => {
+    const handleEventSelect = useCallback((id: string) => {
+      onEventSelect?.(id);
+    }, [onEventSelect]);
+
+    const formatTime = useCallback((ts: string) => {
       try {
         const d = new Date(ts);
         return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
       } catch { return ts; }
-    };
+    }, []);
 
     if (loading) {
       return (
@@ -69,7 +85,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
 
     return (
       <Box className={className} style={{
-        ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+        ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
         borderRadius: tokens.borderRadius.lg,
         border: `1px solid ${tokens.colors.neutral[100]}`,
         overflow: 'hidden', ...style,
@@ -142,8 +158,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
 
         {/* Stats row */}
         {stats && (
-          <Box style={{
-            display: 'flex', gap: tokens.spacing[4], alignItems: 'center',
+          <Box style={{ display: 'flex', gap: tokens.spacing[4], alignItems: 'center',
             padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
             backgroundColor: tokens.colors.neutral[50],
             borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
@@ -169,9 +184,14 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
             return (
               <Box
                 key={ev.id}
-                onClick={() => onEventSelect?.(ev.id)}
+                onClick={() => handleEventSelect(ev.id)}
                 onMouseEnter={() => setHoveredId(ev.id)}
                 onMouseLeave={() => setHoveredId(null)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${ev.severity} event: ${ev.description}`}
+                aria-selected={selectedEventId === ev.id}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEventSelect(ev.id); } }}
                 style={{
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
                   borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
@@ -190,7 +210,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                     }}>
                       <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: typeInd.color }} />
                     </Box>
-                    <Box style={{ flex: 1, minWidth: 0 }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[1] }}>
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
                           {getEventTypeLabel(ev.type)}
@@ -210,7 +230,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                         {ev.description}
                       </Text>
                       {ev.candidateName && (
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: tokens.spacing[1] }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400]}}>
                           {ev.candidateName}
                         </Text>
                       )}

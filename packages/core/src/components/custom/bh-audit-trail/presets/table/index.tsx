@@ -37,8 +37,11 @@ import {
   createCardStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
+  getPersonalityTypography,
   createIconContainerStyle,
   createDividerStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -135,6 +138,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     const [sortDir, setSortDir] = useState<SortDir>('desc');
     const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
 
+
     useEffect(() => { if (externalFilters) setFilters(externalFilters); }, [externalFilters]);
     useEffect(() => { if (externalSelected !== undefined) setSelectedEvent(externalSelected); }, [externalSelected]);
     useEffect(() => { setLiveMode(externalLive); }, [externalLive]);
@@ -150,11 +154,23 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     }, []);
 
     /* -- Styles ------------------------------------------------------ */
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
     const actionColors = useMemo(() => getActionTypeColors(t), [t]);
     const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return {
+          backdropFilter: t.glass.blur,
+          WebkitBackdropFilter: t.glass.blur,
+        };
+      }
+      return {};
+    }, [t]);
 
     const pulseKeyframes = `@keyframes bhAuditTablePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }`;
 
@@ -196,8 +212,8 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
           }}>
             {icon}
           </Box>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', display: 'block', marginBottom: 2 }}>{label}</Text>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing, display: 'block', marginBottom: t.spacing[1] }}>{label}</Text>
             <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{typeof value === 'number' ? value.toLocaleString() : value}</Text>
           </Box>
         </Box>
@@ -210,6 +226,9 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
       return (
         <Box
           onClick={() => handleSort(field)}
+          role="columnheader"
+          tabIndex={0}
+          aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
           style={{
             width,
             display: 'flex',
@@ -220,8 +239,8 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
             color: active ? t.colors.primaryScale[700] : t.colors.neutral[600],
             fontWeight: t.typography.fontWeight.semibold,
             fontSize: t.typography.fontSize.xs,
-            textTransform: 'uppercase' as const,
-            letterSpacing: '0.05em',
+            textTransform: typo.labelTransform,
+            letterSpacing: typo.labelLetterSpacing,
             whiteSpace: 'nowrap' as const,
             transition: `color ${t.motion.hover}`,
           }}
@@ -241,11 +260,16 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     return (
       <Box
         className={className}
+        role="region"
+        aria-label="Audit Trail Table"
         style={{
           minHeight: '100%',
           backgroundColor: t.colors.neutral[50],
           padding: t.spacing[7],
           fontFamily: 'inherit',
+          ...glassStyle,
+          ...entrance.animate,
+          transition: entrance.transition,
           ...style,
         }}
       >
@@ -267,17 +291,17 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                 {filteredSorted.length} event{filteredSorted.length !== 1 ? 's' : ''}
               </Text>
               {filters.entityType && (
-                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Text style={{ fontSize: 'inherit' }}>{filters.entityType}</Text>
-                  <Box onClick={() => handleFilterChange({ ...filters, entityType: undefined })} style={{ cursor: 'pointer', display: 'inline-flex' }}>
+                  <Box onClick={() => handleFilterChange({ ...filters, entityType: undefined })} role="button" tabIndex={0} aria-label="Clear entity filter" style={{ cursor: 'pointer', display: 'inline-flex' }}>
                     <X size={10} />
                   </Box>
                 </Box>
               )}
               {filters.actionType && (
-                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Text style={{ fontSize: 'inherit' }}>{filters.actionType.replace('_', ' ')}</Text>
-                  <Box onClick={() => handleFilterChange({ ...filters, actionType: undefined })} style={{ cursor: 'pointer', display: 'inline-flex' }}>
+                  <Box onClick={() => handleFilterChange({ ...filters, actionType: undefined })} role="button" tabIndex={0} aria-label="Clear action filter" style={{ cursor: 'pointer', display: 'inline-flex' }}>
                     <X size={10} />
                   </Box>
                 </Box>
@@ -287,6 +311,10 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Box
                 onClick={handleLiveToggle}
+                role="button"
+                tabIndex={0}
+                aria-pressed={liveMode}
+                aria-label={liveMode ? 'Disable live mode' : 'Enable live mode'}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
@@ -305,11 +333,11 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
               </Box>
               {onExport && (
                 <>
-                  <Box onClick={() => onExport('csv')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}>
+                  <Box onClick={() => onExport('csv')} role="button" tabIndex={0} aria-label="Export as CSV" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>CSV</Text>
                   </Box>
-                  <Box onClick={() => onExport('json')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}>
+                  <Box onClick={() => onExport('json')} role="button" tabIndex={0} aria-label="Export as JSON" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>JSON</Text>
                   </Box>
@@ -356,6 +384,10 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                   <React.Fragment key={event.id}>
                     <Box
                       onClick={() => handleSelect(event.id)}
+                      role="row"
+                      tabIndex={0}
+                      aria-selected={isSelected}
+                      aria-label={`${event.userName} ${getActionLabel(event.actionType).toLowerCase()} ${event.entityName}`}
                       style={{
                         display: 'grid',
                         gridTemplateColumns: '32px 140px 160px 110px 110px 1fr 120px',
@@ -373,7 +405,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
                       {/* Expand toggle */}
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {hasDiff && (
-                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); toggleRow(event.id); }} style={{ cursor: 'pointer', color: t.colors.neutral[400], display: 'flex' }}>
+                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); toggleRow(event.id); }} role="button" tabIndex={0} aria-expanded={isExpanded} aria-label={isExpanded ? 'Collapse changes' : 'Expand changes'} style={{ cursor: 'pointer', color: t.colors.neutral[400], display: 'flex' }}>
                             {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                           </Box>
                         )}

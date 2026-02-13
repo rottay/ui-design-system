@@ -702,7 +702,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   color: tokens.colors.neutral[500],
                   marginBottom: tokens.spacing[2],
                   textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
+                  letterSpacing: typo.labelLetterSpacing,
                 }}
               >
                 Available Voices
@@ -750,7 +750,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     const renderPersonalityStep = () => (
       <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[5] }}>
         {/* Tone scale */}
-        <Box>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
           <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: tokens.spacing[2] }}>
             <Text
               as="label"
@@ -1018,7 +1018,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               fontWeight: tokens.typography.fontWeight.medium,
               color: tokens.colors.neutral[500],
               textTransform: 'uppercase',
-              letterSpacing: '0.04em',
+              letterSpacing: typo.labelLetterSpacing,
               marginBottom: tokens.spacing[2],
             }}
           >
@@ -1036,7 +1036,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   backgroundColor: tokens.colors.primaryScale[50],
                   color: tokens.colors.primaryScale[700],
                   fontSize: tokens.typography.fontSize.xs,
-                  fontFamily: 'monospace',
+                  fontFamily: 'inherit',
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                 }}
@@ -1059,7 +1059,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             borderRadius: tokens.borderRadius.md,
             border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[700]}`,
             fontSize: tokens.typography.fontSize.sm,
-            fontFamily: 'monospace',
+            fontFamily: 'inherit',
             lineHeight: tokens.typography.lineHeight.relaxed,
             color: tokens.colors.neutral[100],
             backgroundColor: tokens.colors.neutral[900],
@@ -1393,7 +1393,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 color: tokens.colors.primaryScale[500],
                 fontWeight: tokens.typography.fontWeight.medium,
                 textTransform: 'uppercase',
-                letterSpacing: '0.04em',
+                letterSpacing: typo.labelLetterSpacing,
                 display: 'block',
               }}
             >
@@ -1440,10 +1440,10 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${colors.borderColor}`,
                   }}
                 >
-                  <Box style={{ display: 'flex', alignItems: 'center', marginTop: 2, flexShrink: 0, color: colors.dotColor }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', marginTop: tokens.spacing[1], flexShrink: 0, color: colors.dotColor }}>
                     <StatusIcon size={14} />
                   </Box>
-                  <Box style={{ flex: 1 }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: colors.color }}>
                       {result.check}
                     </Text>

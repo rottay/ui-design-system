@@ -9,17 +9,17 @@
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle,
-  createCardStyle,
-  createSurfaceStyle,
+  createBadgeStyle, createCardStyle, createSurfaceStyle, createHoverStyle,
+  createEntranceAnimation, createCardHoverStyles, createIconContainerStyle,
+  getPersonalityTypography, getPersonalityBadgeRadius, getCardPadding,
 } from '../../../helpers';
 import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Briefcase, Plus, Search, LayoutGrid, List, Columns3, MapPin, Clock,
-  Users, Eye, X, ChevronDown, ChevronUp, Globe, Filter, ChevronsUpDown,
-  MoreHorizontal, Building2,
+  Users, Eye, X, ChevronDown, ChevronUp, Globe, ChevronsUpDown,
+  MoreHorizontal, Building2, Check,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -48,85 +48,6 @@ function getUrgencyConfig(tokens: DesignTokens): Record<JobUrgency, UrgencyConfi
 }
 
 /* ------------------------------------------------------------------ */
-/*  Sub-components                                                      */
-/* ------------------------------------------------------------------ */
-
-function Checkbox({ checked, tokens, size = 16, onClick }: { checked: boolean; tokens: DesignTokens; size?: number; onClick?: (e: React.MouseEvent) => void }) {
-  return (
-    <div onClick={onClick} style={{ width: size, height: size, borderRadius: 4, border: `1.5px solid ${checked ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`, backgroundColor: checked ? tokens.colors.primaryScale[500] : tokens.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, flexShrink: 0 }}>
-      {checked && (
-        <svg width={size - 6} height={size - 6} viewBox="0 0 10 10">
-          <path d="M2 5L4.5 7.5L8 3" stroke={tokens.colors.common.white} strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      )}
-    </div>
-  );
-}
-
-function StatusBadge({ status, config, tokens }: { status: JobStatus; config: StatusConfig; tokens: DesignTokens }) {
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: config.bgColor, color: config.color, border: `1px solid ${config.borderColor}` }}>
-      <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: config.dotColor }} />
-      {config.label}
-    </span>
-  );
-}
-
-function AvatarStack({ avatars, tokens, size = 22, maxShow = 3 }: { avatars: string[]; tokens: DesignTokens; size?: number; maxShow?: number }) {
-  const shown = avatars.slice(0, maxShow);
-  const remaining = avatars.length - maxShow;
-  const overlap = Math.round(size * 0.27);
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      {shown.map((avatar, idx) => (
-        <div key={idx} style={{ width: size, height: size, borderRadius: '50%', border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: idx > 0 ? -overlap : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600], position: 'relative' as const, zIndex: maxShow - idx }}>
-          {!avatar && <Users size={Math.round(size * 0.41)} />}
-        </div>
-      ))}
-      {remaining > 0 && (
-        <div style={{ width: size, height: size, borderRadius: '50%', border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.neutral[100], marginLeft: -overlap, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600], position: 'relative' as const, zIndex: 0 }}>
-          +{remaining}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ViewToggle({ active, onSelect, tokens }: { active: ViewMode; onSelect: (m: ViewMode) => void; tokens: DesignTokens }) {
-  const modes: { mode: ViewMode; icon: React.ReactNode }[] = [
-    { mode: 'grid', icon: <LayoutGrid size={14} /> },
-    { mode: 'table', icon: <List size={14} /> },
-    { mode: 'kanban', icon: <Columns3 size={14} /> },
-  ];
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
-      {modes.map(({ mode, icon }) => (
-        <button key={mode} onClick={() => onSelect(mode)} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 26, border: 'none', borderRadius: tokens.borderRadius.sm, backgroundColor: mode === active ? tokens.colors.common.white : 'transparent', color: mode === active ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer', transition: `all ${tokens.motion.hover}`, outline: 'none', fontFamily: 'inherit', boxShadow: mode === active ? tokens.shadows.sm : 'none' }}>
-          {icon}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function PrimaryButton({ onClick, children, tokens }: { onClick?: () => void; children: React.ReactNode; tokens: DesignTokens }) {
-  return (
-    <button onClick={onClick} style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, border: 'none', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit' }}>
-      {children}
-    </button>
-  );
-}
-
-function IconButton({ onClick, title, icon, tokens, size = 26 }: { onClick?: (e: React.MouseEvent) => void; title?: string; icon: React.ReactNode; tokens: DesignTokens; size?: number }) {
-  return (
-    <button onClick={onClick} title={title} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: size, height: size, borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], cursor: 'pointer', transition: `all ${tokens.motion.hover}`, outline: 'none', fontFamily: 'inherit' }}>
-      {icon}
-    </button>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  Column config                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -151,7 +72,6 @@ const TABLE_COLUMNS: TableColumn[] = [
 
 function filterAndSortJobs(jobs: JobItem[], filters: JobBoardFilter, searchQuery: string, sortBy: string, sortDirection: SortDirection, clients: { id: string; name: string }[]): JobItem[] {
   let result = [...jobs];
-
   if (filters.status) result = result.filter(j => j.status === filters.status);
   if (filters.department) result = result.filter(j => j.department === filters.department);
   if (filters.urgency) result = result.filter(j => j.urgency === filters.urgency);
@@ -160,7 +80,6 @@ function filterAndSortJobs(jobs: JobItem[], filters: JobBoardFilter, searchQuery
     const lower = searchQuery.toLowerCase();
     result = result.filter(j => j.title.toLowerCase().includes(lower) || j.code.toLowerCase().includes(lower) || j.department.toLowerCase().includes(lower) || j.location.toLowerCase().includes(lower) || (j.clientName && j.clientName.toLowerCase().includes(lower)));
   }
-
   result.sort((a, b) => {
     let aVal: number | string = 0, bVal: number | string = 0;
     switch (sortBy) {
@@ -176,7 +95,6 @@ function filterAndSortJobs(jobs: JobItem[], filters: JobBoardFilter, searchQuery
     if (typeof aVal === 'string' && typeof bVal === 'string') return sortDirection === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
     return sortDirection === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
   });
-
   return result;
 }
 
@@ -187,7 +105,8 @@ function filterAndSortJobs(jobs: JobItem[], filters: JobBoardFilter, searchQuery
 export const TableBhJobBoard = createPreset<BhJobBoardProps>({
   name: 'BhJobBoard.Table',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhJobBoardProps>) => {
-    const isModern = tokens.surface.useGlass;
+    const { Box, Text } = primitives;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const STATUS_CONFIG = useMemo(() => getStatusConfig(tokens), [tokens]);
     const URGENCY_CONFIG = useMemo(() => getUrgencyConfig(tokens), [tokens]);
@@ -213,6 +132,12 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
     const sortBy = controlledSortBy ?? internalSortBy;
     const sortDirection = controlledSortDirection ?? internalSortDirection;
 
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+    const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
+
     const handleFilterChange = useCallback((f: JobBoardFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleSearchChange = useCallback((q: string) => { if (controlledSearchQuery === undefined) setInternalSearchQuery(q); onSearchChange?.(q); }, [controlledSearchQuery, onSearchChange]);
     const handleSortChange = useCallback((field: string) => {
@@ -220,7 +145,6 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       if (controlledSortBy === undefined) { setInternalSortBy(field); setInternalSortDirection(dir); }
       onSortChange?.(field, dir);
     }, [sortBy, sortDirection, controlledSortBy, onSortChange]);
-
     const handleSelectionToggle = useCallback((jobId: string) => {
       const next = selectedJobs.includes(jobId) ? selectedJobs.filter(id => id !== jobId) : [...selectedJobs, jobId];
       if (controlledSelectedJobs === undefined) setInternalSelectedJobs(next);
@@ -236,9 +160,7 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       onSelectionChange?.(next);
     }, [filteredJobs, selectedJobs, controlledSelectedJobs, onSelectionChange]);
 
-    const glassSurfaceStyle = isModern && tokens.glass ? { backdropFilter: tokens.glass.blurSm, WebkitBackdropFilter: tokens.glass.blurSm, backgroundColor: tokens.glass.bgLight, border: `1px solid ${tokens.glass.borderLight}` } : {};
-
-    /* Sparkline */
+    /* Sparkline (SVG allowed) */
     const renderSparkline = (job: JobItem) => {
       const stages = job.candidatesByStage;
       if (!stages.length) return null;
@@ -248,7 +170,6 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       const pts = stages.map((s, i) => `${stages.length > 1 ? i * step : w / 2},${h - (s.count / max) * (h - 4) - 2}`).join(' ');
       const lastX = stages.length > 1 ? (stages.length - 1) * step : w / 2;
       const lastY = h - (stages[stages.length - 1].count / max) * (h - 4) - 2;
-
       return (
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ display: 'block' }}>
           <polyline points={pts} fill="none" stroke={tokens.colors.primaryScale[400]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
@@ -257,68 +178,6 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       );
     };
 
-    /* Header */
-    const renderHeader = () => (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[5] }}>
-        <div>
-          <h1 style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], margin: 0, lineHeight: tokens.typography.lineHeight.tight, letterSpacing: '-0.02em' }}>Jobs</h1>
-          <p style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], margin: 0, marginTop: tokens.spacing[1] }}>Manage and track all your open positions</p>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-          <ViewToggle active="table" onSelect={(m) => onViewModeChange?.(m)} tokens={tokens} />
-          {onCreateJob && <PrimaryButton onClick={onCreateJob} tokens={tokens}><Plus size={16} />New Job</PrimaryButton>}
-        </div>
-      </div>
-    );
-
-    /* Toolbar */
-    const renderToolbar = () => {
-      const statusOptions: (JobStatus | null)[] = [null, 'published', 'draft', 'paused', 'closed'];
-      return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.common.white, marginBottom: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, flexWrap: 'wrap' as const, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, ...glassSurfaceStyle }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
-            {statusOptions.map((status) => {
-              const isActive = filters.status === status || (status === null && !filters.status);
-              return (
-                <button key={status ?? 'all'} onClick={() => handleFilterChange({ ...filters, status })} style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.sm, fontSize: tokens.typography.fontSize.xs, fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium, border: 'none', backgroundColor: isActive ? tokens.colors.common.white : 'transparent', color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[500], cursor: 'pointer', transition: `all ${tokens.motion.hover}`, outline: 'none', fontFamily: 'inherit', boxShadow: isActive ? tokens.shadows.sm : 'none' }}>
-                  {status !== null && <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: STATUS_CONFIG[status].dotColor, flexShrink: 0 }} />}
-                  {status === null ? 'All' : STATUS_CONFIG[status].label}
-                </button>
-              );
-            })}
-          </div>
-
-          {departments.length > 0 && (
-            <div style={{ position: 'relative' as const }}>
-              <button onClick={() => setShowDepartmentDropdown(!showDepartmentDropdown)} style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, border: `1px solid ${filters.department ? tokens.colors.primaryScale[200] : tokens.colors.neutral[100]}`, backgroundColor: filters.department ? tokens.colors.primaryScale[50] : tokens.colors.common.white, color: filters.department ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600], cursor: 'pointer', transition: `all ${tokens.motion.hover}`, outline: 'none', fontFamily: 'inherit' }}>
-                {filters.department ?? 'Department'}<ChevronDown size={12} />
-              </button>
-              {showDepartmentDropdown && (
-                <div style={{ position: 'absolute' as const, top: '100%', left: 0, marginTop: tokens.spacing[1], minWidth: 180, backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.lg, border: `1px solid ${tokens.colors.neutral[100]}`, zIndex: 50, padding: `${tokens.spacing[1]}px 0` }}>
-                  {[null, ...departments].map(dept => (
-                    <div key={dept ?? 'all'} onClick={() => { handleFilterChange({ ...filters, department: dept }); setShowDepartmentDropdown(false); }} style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontSize: tokens.typography.fontSize.sm, color: (dept === null ? !filters.department : filters.department === dept) ? tokens.colors.primaryScale[600] : tokens.colors.neutral[700], backgroundColor: (dept === null ? !filters.department : filters.department === dept) ? tokens.colors.primaryScale[50] : 'transparent', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, fontFamily: 'inherit' }}>
-                      {dept ?? 'All Departments'}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          <div style={{ flex: 1 }} />
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, minWidth: 200 }}>
-            <Search size={14} color={tokens.colors.neutral[400]} />
-            <input type="text" placeholder="Search jobs..." value={searchQuery} onChange={(e) => handleSearchChange(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], backgroundColor: 'transparent', flex: 1, padding: 0, fontFamily: 'inherit' }} />
-            {searchQuery && <X size={12} color={tokens.colors.neutral[400]} style={{ cursor: 'pointer' }} onClick={() => handleSearchChange('')} />}
-          </div>
-
-          {selectedJobs.length > 0 && <span style={{ padding: `2px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold }}>{selectedJobs.length} selected</span>}
-        </div>
-      );
-    };
-
-    /* Sort icon */
     const renderSortIcon = (key: string) => {
       if (sortBy !== key) return <ChevronsUpDown size={12} color={tokens.colors.neutral[300]} />;
       return sortDirection === 'asc' ? <ChevronUp size={12} color={tokens.colors.primaryScale[500]} /> : <ChevronDown size={12} color={tokens.colors.primaryScale[500]} />;
@@ -326,15 +185,131 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
 
     const allSelected = filteredJobs.length > 0 && filteredJobs.every(j => selectedJobs.includes(j.id));
 
+    /* Checkbox */
+    const CheckboxBox = useCallback(({ checked, onClick, label }: { checked: boolean; onClick?: (e: React.MouseEvent) => void; label: string }) => (
+      <Box role="checkbox" tabIndex={0} aria-checked={checked} aria-label={label}
+        onClick={onClick}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(e as any); } }}
+        style={{ width: 16, height: 16, borderRadius: 4, border: `1.5px solid ${checked ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`, backgroundColor: checked ? tokens.colors.primaryScale[500] : tokens.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${tokens.motion.hover}`, flexShrink: 0, outline: 'none' }}>
+        {checked && <Check size={10} color={tokens.colors.common.white} />}
+      </Box>
+    ), [tokens, Box]);
+
+    /* Header */
+    const renderHeader = () => (
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[5] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+          <Text style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight }}>Jobs</Text>
+          <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500]}}>Manage and track all your open positions</Text>
+        </Box>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+          {/* View toggle */}
+          <Box style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
+            {([{ mode: 'grid' as ViewMode, icon: <LayoutGrid size={14} /> }, { mode: 'table' as ViewMode, icon: <List size={14} /> }, { mode: 'kanban' as ViewMode, icon: <Columns3 size={14} /> }]).map(({ mode, icon }) => (
+              <Box key={mode} role="button" tabIndex={0} aria-label={`${mode} view`} aria-pressed={mode === 'table'}
+                onClick={() => onViewModeChange?.(mode)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onViewModeChange?.(mode); } }}
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 30, height: 26, borderRadius: tokens.borderRadius.sm, backgroundColor: mode === 'table' ? tokens.colors.common.white : 'transparent', color: mode === 'table' ? tokens.colors.neutral[900] : tokens.colors.neutral[500], transition: `all ${tokens.motion.hover}`, outline: 'none', boxShadow: mode === 'table' ? tokens.shadows.sm : 'none', fontFamily: 'inherit' }}>
+                {icon}
+              </Box>
+            ))}
+          </Box>
+          {onCreateJob && (
+            <Box role="button" tabIndex={0} aria-label="Create new job" onClick={onCreateJob}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              <Plus size={16} color={tokens.colors.common.white} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>New Job</Text>
+            </Box>
+          )}
+        </Box>
+      </Box>
+    );
+
+    /* Toolbar */
+    const renderToolbar = () => {
+      const statusOptions: (JobStatus | null)[] = [null, 'published', 'draft', 'paused', 'closed'];
+      return (
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.common.white, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, flexWrap: 'wrap' as const }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: 2, padding: 3, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[100] }}>
+            {statusOptions.map((status) => {
+              const isActive = filters.status === status || (status === null && !filters.status);
+              return (
+                <Box key={status ?? 'all'} role="button" tabIndex={0} aria-label={`Filter ${status ?? 'all'}`} aria-pressed={isActive}
+                  onClick={() => handleFilterChange({ ...filters, status })}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, status }); } }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.sm, fontSize: tokens.typography.fontSize.xs, fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium, backgroundColor: isActive ? tokens.colors.common.white : 'transparent', color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[500], transition: `all ${tokens.motion.hover}`, outline: 'none', fontFamily: 'inherit', boxShadow: isActive ? tokens.shadows.sm : 'none' }}>
+                  {status !== null && <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: STATUS_CONFIG[status].dotColor, flexShrink: 0 }} />}
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: isActive ? tokens.colors.neutral[900] : tokens.colors.neutral[500] }}>{status === null ? 'All' : STATUS_CONFIG[status].label}</Text>
+                </Box>
+              );
+            })}
+          </Box>
+
+          {departments.length > 0 && (
+            <Box style={{ position: 'relative' as const }}>
+              <Box role="button" tabIndex={0} aria-label="Filter by department" aria-expanded={showDepartmentDropdown}
+                onClick={() => setShowDepartmentDropdown(!showDepartmentDropdown)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowDepartmentDropdown(!showDepartmentDropdown); } }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${filters.department ? tokens.colors.primaryScale[200] : tokens.colors.neutral[100]}`, backgroundColor: filters.department ? tokens.colors.primaryScale[50] : tokens.colors.common.white, color: filters.department ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600], outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: filters.department ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600] }}>{filters.department ?? 'Department'}</Text>
+                <ChevronDown size={12} />
+              </Box>
+              {showDepartmentDropdown && (
+                <Box style={{ position: 'absolute' as const, top: '100%', left: 0, marginTop: tokens.spacing[1], minWidth: 180, backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, zIndex: 50, padding: `${tokens.spacing[1]}px 0` }}>
+                  {[null, ...departments].map(dept => {
+                    const isActive = dept === null ? !filters.department : filters.department === dept;
+                    return (
+                      <Box key={dept ?? 'all'} role="option" aria-selected={isActive}
+                        onClick={() => { handleFilterChange({ ...filters, department: dept }); setShowDepartmentDropdown(false); }}
+                        style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontSize: tokens.typography.fontSize.sm, color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[700], backgroundColor: isActive ? tokens.colors.primaryScale[50] : 'transparent', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, fontFamily: 'inherit' }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.sm, color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[700] }}>{dept ?? 'All Departments'}</Text>
+                      </Box>
+                    );
+                  })}
+                </Box>
+              )}
+            </Box>
+          )}
+
+          <Box style={{ flex: 1 }} />
+
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, minWidth: 200 }}>
+            <Search size={14} color={tokens.colors.neutral[400]} />
+            <input type="text" placeholder="Search jobs..." value={searchQuery} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSearchChange(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], backgroundColor: 'transparent', flex: 1, padding: 0, fontFamily: 'inherit' }} />
+            {searchQuery && <Box role="button" tabIndex={0} aria-label="Clear search" onClick={() => handleSearchChange('')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSearchChange(''); } }} style={{ display: 'flex', cursor: 'pointer', outline: 'none' }}><X size={12} color={tokens.colors.neutral[400]} /></Box>}
+          </Box>
+
+          {selectedJobs.length > 0 && (
+            <Box style={{ padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: tokens.colors.primaryScale[600], display: 'inline-flex', alignItems: 'center' }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>{selectedJobs.length} selected</Text>
+            </Box>
+          )}
+        </Box>
+      );
+    };
+
     /* Table header */
     const renderTableHeader = () => (
-      <div style={{ display: 'flex', alignItems: 'center', padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.neutral[50], borderBottom: `1px solid ${tokens.colors.neutral[100]}` }}>
+      <Box style={{ display: 'flex', alignItems: 'center', padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.neutral[50], borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
         {TABLE_COLUMNS.map(col => (
-          <div key={col.key} style={{ flex: col.width ? `0 0 ${typeof col.width === 'number' ? col.width + 'px' : col.width}` : '1', display: 'flex', alignItems: 'center', justifyContent: col.align === 'center' ? 'center' : col.align === 'right' ? 'flex-end' : 'flex-start', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', cursor: col.sortable ? 'pointer' : 'default', userSelect: 'none' as const, padding: `0 ${tokens.spacing[2]}px` }} onClick={() => col.sortable && handleSortChange(col.key)}>
-            {col.key === 'select' ? <Checkbox checked={allSelected} tokens={tokens} onClick={(e) => { e.stopPropagation(); handleSelectAll(); }} /> : <>{col.label}{col.sortable && renderSortIcon(col.key)}</>}
-          </div>
+          <Box key={col.key}
+            role={col.sortable ? 'button' : undefined}
+            tabIndex={col.sortable ? 0 : undefined}
+            aria-label={col.sortable ? `Sort by ${col.label}` : undefined}
+            onClick={() => col.sortable && handleSortChange(col.key)}
+            onKeyDown={col.sortable ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSortChange(col.key); } } : undefined}
+            style={{ flex: col.width ? `0 0 ${typeof col.width === 'number' ? col.width + 'px' : col.width}` : '1', display: 'flex', alignItems: 'center', justifyContent: col.align === 'center' ? 'center' : col.align === 'right' ? 'flex-end' : 'flex-start', gap: tokens.spacing[1], padding: `0 ${tokens.spacing[2]}px`, userSelect: 'none' as const, outline: 'none' }}>
+            {col.key === 'select'
+              ? <CheckboxBox checked={allSelected} onClick={(e) => { e.stopPropagation(); handleSelectAll(); }} label="Select all" />
+              : <>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing }}>{col.label}</Text>
+                  {col.sortable && renderSortIcon(col.key)}
+                </>
+            }
+          </Box>
         ))}
-      </div>
+      </Box>
     );
 
     /* Table row */
@@ -343,91 +318,142 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       const urgencyCfg = URGENCY_CONFIG[job.urgency];
       const isHovered = hoveredRowId === job.id;
       const isSelected = selectedJobs.includes(job.id);
-
       const cellPad = `0 ${tokens.spacing[2]}px`;
 
       return (
-        <div key={job.id} style={{ display: 'flex', alignItems: 'center', padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: isSelected ? tokens.colors.primaryScale[50] : isHovered ? tokens.colors.neutral[50] : tokens.colors.common.white, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, cursor: 'pointer', transition: `all ${tokens.motion.hover}` }} onMouseEnter={() => setHoveredRowId(job.id)} onMouseLeave={() => setHoveredRowId(null)} onClick={() => onJobClick?.(job.id)}>
-          <div style={{ flex: '0 0 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
-            <Checkbox checked={isSelected} tokens={tokens} onClick={(e) => { e.stopPropagation(); handleSelectionToggle(job.id); }} />
-          </div>
-          <div style={{ flex: 1, padding: cellPad, overflow: 'hidden' as const }}>
-            <div style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.title}</div>
-            <div style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>{job.code}{job.clientName && <><span style={{ color: tokens.colors.neutral[300] }}>&middot;</span><Building2 size={10} />{job.clientName}</>}</div>
-          </div>
-          <div style={{ flex: '0 0 120px', padding: cellPad }}><StatusBadge status={job.status} config={statusCfg} tokens={tokens} /></div>
-          <div style={{ flex: '0 0 140px', padding: cellPad, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.department}</div>
-          <div style={{ flex: '0 0 100px', padding: cellPad }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `1px solid ${urgencyCfg.borderColor}` }}>{urgencyCfg.label}</span>
-          </div>
-          <div style={{ flex: '0 0 130px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[2], padding: cellPad }}>
-            <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{job.candidateCount}</span>
+        <Box key={job.id} role="row" tabIndex={0} aria-label={`${job.title} - ${statusCfg.label}`} aria-selected={isSelected}
+          onClick={() => onJobClick?.(job.id)}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onJobClick?.(job.id); } }}
+          onMouseEnter={() => setHoveredRowId(job.id)} onMouseLeave={() => setHoveredRowId(null)}
+          style={{ display: 'flex', alignItems: 'center', padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: isSelected ? tokens.colors.primaryScale[50] : isHovered ? tokens.colors.neutral[50] : tokens.colors.common.white, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+          <Box style={{ flex: '0 0 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
+            <CheckboxBox checked={isSelected} onClick={(e) => { e.stopPropagation(); handleSelectionToggle(job.id); }} label={`Select ${job.title}`} />
+          </Box>
+          <Box style={{ flex: 1, padding: cellPad, overflow: 'hidden' as const }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.title}</Text>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.code}</Text>
+              {job.clientName && <>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[300] }}>-</Text>
+                <Building2 size={10} color={tokens.colors.neutral[400]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.clientName}</Text>
+              </>}
+            </Box>
+          </Box>
+          <Box style={{ flex: '0 0 120px', padding: cellPad }}>
+            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: statusCfg.bgColor, color: statusCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}` }}>
+              <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: statusCfg.dotColor }} />
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusCfg.color }}>{statusCfg.label}</Text>
+            </Box>
+          </Box>
+          <Box style={{ flex: '0 0 140px', padding: cellPad, overflow: 'hidden' as const }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.department}</Text>
+          </Box>
+          <Box style={{ flex: '0 0 100px', padding: cellPad }}>
+            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: urgencyCfg.color }}>{urgencyCfg.label}</Text>
+            </Box>
+          </Box>
+          <Box style={{ flex: '0 0 130px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[2], padding: cellPad }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{job.candidateCount}</Text>
             {renderSparkline(job)}
-          </div>
-          <div style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600] }}><Clock size={12} />{job.daysOpen}d</span>
-          </div>
-          <div style={{ flex: '0 0 150px', padding: cellPad, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], display: 'flex', alignItems: 'center', gap: tokens.spacing[1], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>
-            {job.isRemote ? <><Globe size={12} />Remote</> : <><MapPin size={12} />{job.location}</>}
-          </div>
-          <div style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
-            <AvatarStack avatars={job.recruiterAvatars} tokens={tokens} />
-          </div>
-          <div style={{ flex: '0 0 80px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[1], opacity: isHovered ? 1 : 0, transition: `opacity ${tokens.transitions?.fast || tokens.motion.hover}`, padding: cellPad }}>
-            <IconButton onClick={(e) => { e.stopPropagation(); onJobClick?.(job.id); }} title="View" icon={<Eye size={12} />} tokens={tokens} />
-            <IconButton onClick={(e) => { e.stopPropagation(); }} title="More" icon={<MoreHorizontal size={12} />} tokens={tokens} />
-          </div>
-        </div>
+          </Box>
+          <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
+            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+              <Clock size={12} color={job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600]} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600] }}>{job.daysOpen}d</Text>
+            </Box>
+          </Box>
+          <Box style={{ flex: '0 0 150px', padding: cellPad, display: 'flex', alignItems: 'center', gap: tokens.spacing[1], overflow: 'hidden' as const }}>
+            {job.isRemote ? <><Globe size={12} color={tokens.colors.neutral[600]} /><Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>Remote</Text></> : <><MapPin size={12} color={tokens.colors.neutral[600]} /><Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.location}</Text></>}
+          </Box>
+          <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
+            <Box style={{ display: 'flex', alignItems: 'center' }}>
+              {job.recruiterAvatars.slice(0, 3).map((avatar, idx) => (
+                <Box key={idx} style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: idx > 0 ? -6 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 3 - idx }}>
+                  {!avatar && <Users size={9} color={tokens.colors.primaryScale[600]} />}
+                </Box>
+              ))}
+              {job.recruiterAvatars.length > 3 && (
+                <Box style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.neutral[100], marginLeft: -6, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 0 }}>
+                  <Text style={{ fontSize: '9px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{job.recruiterAvatars.length - 3}</Text>
+                </Box>
+              )}
+            </Box>
+          </Box>
+          <Box style={{ flex: '0 0 80px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[1], opacity: isHovered ? 1 : 0, transition: `opacity ${tokens.motion.hover}`, padding: cellPad }}>
+            <Box role="button" tabIndex={0} aria-label="View job" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onJobClick?.(job.id); }}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onJobClick?.(job.id); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+              <Eye size={12} />
+            </Box>
+            <Box role="button" tabIndex={0} aria-label="More actions" onClick={(e: React.MouseEvent) => { e.stopPropagation(); }}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+              <MoreHorizontal size={12} />
+            </Box>
+          </Box>
+        </Box>
       );
     };
 
     /* Empty state */
     const renderEmptyState = () => (
-      <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px`, textAlign: 'center' as const, backgroundColor: tokens.colors.common.white }}>
-        <div style={{ width: 56, height: 56, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: tokens.spacing[4] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px`, textAlign: 'center' as const, backgroundColor: tokens.colors.common.white }}>
+        <Box style={createIconContainerStyle(tokens, { size: 56, color: tokens.colors.primaryScale[50] })}>
           <Briefcase size={24} color={tokens.colors.primaryScale[400]} />
-        </div>
-        <div style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[2], letterSpacing: '-0.01em' }}>{emptyText}</div>
-        <div style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[5], maxWidth: 320 }}>Try adjusting your filters or search query.</div>
-        {onCreateJob && <PrimaryButton onClick={onCreateJob} tokens={tokens}><Plus size={16} />Create Job</PrimaryButton>}
-      </div>
+        </Box>
+        <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[2], marginTop: tokens.spacing[4] }}>{emptyText}</Text>
+        <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[5], maxWidth: 320 }}>Try adjusting your filters or search query.</Text>
+        {onCreateJob && (
+          <Box role="button" tabIndex={0} aria-label="Create job" onClick={onCreateJob}
+            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+            <Plus size={16} color={tokens.colors.common.white} />
+            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.common.white }}>Create Job</Text>
+          </Box>
+        )}
+      </Box>
     );
 
     /* Stats summary */
     const renderStatsSummary = () => {
       if (!stats.length) return null;
       return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4], marginBottom: tokens.spacing[5] }}>
-          {stats.map(stat => (
-            <div key={stat.key} style={{ flex: 1, ...createCardStyle(tokens, { elevation: 'sm', glass: isModern }), padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', ...glassSurfaceStyle }}>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium }}>{stat.label}</span>
-              <span style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: stat.key === 'total' ? tokens.colors.primaryScale[600] : tokens.colors.neutral[900], letterSpacing: '-0.02em' }}>{stat.count}</span>
-            </div>
-          ))}
-        </div>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4], marginBottom: tokens.spacing[5] }}>
+          {stats.map((stat, i) => {
+            const statEntrance = createEntranceAnimation(tokens, { index: i });
+            return (
+              <Box key={stat.key} style={{ flex: 1, ...cardBase, padding: `${tokens.spacing[4]}px ${tokens.spacing[5]}px`, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], alignItems: 'center', justifyContent: 'space-between', ...statEntrance.animate, transition: statEntrance.transition }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium }}>{stat.label}</Text>
+                <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: stat.key === 'total' ? tokens.colors.primaryScale[600] : tokens.colors.neutral[900] }}>{stat.count}</Text>
+              </Box>
+            );
+          })}
+        </Box>
       );
     };
 
     return (
-      <div className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', fontFamily: 'inherit', ...style }}>
+      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
         {renderHeader()}
         {renderStatsSummary()}
-        <div style={{ ...createSurfaceStyle(tokens, { elevation: 'sm' }), backgroundColor: tokens.colors.common.white, overflow: 'hidden' as const, borderRadius: tokens.borderRadius.lg, border: `1px solid ${tokens.colors.neutral[100]}`, ...glassSurfaceStyle }}>
+        <Box style={{ ...createSurfaceStyle(tokens, { elevation: 'sm' }), backgroundColor: tokens.colors.common.white, overflow: 'hidden' as const, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
           {renderToolbar()}
           {filteredJobs.length === 0 ? renderEmptyState() : (
             <>
               {renderTableHeader()}
-              <div>{filteredJobs.map(job => renderTableRow(job))}</div>
+              <Box role="table">{filteredJobs.map(job => renderTableRow(job))}</Box>
             </>
           )}
           {filteredJobs.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, borderTop: `1px solid ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.neutral[50] }}>
-              <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Showing {filteredJobs.length} of {jobs.length} jobs</span>
-              {selectedJobs.length > 0 && <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.medium }}>{selectedJobs.length} selected</span>}
-            </div>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.neutral[50] }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Showing {filteredJobs.length} of {jobs.length} jobs</Text>
+              {selectedJobs.length > 0 && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.medium }}>{selectedJobs.length} selected</Text>}
+            </Box>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   },
 });

@@ -4,12 +4,27 @@
  * BhInterviewScheduler - Standard Preset
  * Interview scheduling flow with candidate selector, type picker,
  * scheduling controls, AI agent configuration, and confirmation summary.
+ * Personality-driven, glass-aware, accessible.
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createBadgeStyle, createCardStyle, createHoverStyle, createSurfaceStyle } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+  getAccentAwareLayout,
+} from '../../../helpers';
 import type { BhInterviewSchedulerProps, ScheduleCandidate, InterviewTypeConfig, ScheduleData, AgentOverride } from '../../core';
+import type { DesignTokens } from '../../../../../types';
 import {
   Bot, User, Calendar, Clock, Globe, Timer, Settings, Send, X,
   Sparkles, DollarSign, Mail, CheckCircle, AlertCircle, Tag,
@@ -26,7 +41,7 @@ const DURATION_OPTIONS = [15, 30, 45, 60, 90, 120];
 export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerProps>({
   name: 'BhInterviewScheduler.Standard',
   render: ({ primitives, props, tokens }: PresetContext<BhInterviewSchedulerProps>) => {
-    const { Stack } = primitives;
+    const { Box, Text } = primitives;
     const { candidate: externalCandidate, interviewType: externalType, onTypeChange, templateStage, scheduleData: externalSchedule, onScheduleChange, agentConfig: externalAgentConfig, onAgentConfigChange, agents = [], interviewers = [], onConfirm, onCancel, estimatedCost, showConfirmation: externalShowConfirmation = false, className, style } = props;
 
     const [selectedCandidate, setSelectedCandidate] = useState<ScheduleCandidate | null>(externalCandidate ?? null);
@@ -35,200 +50,424 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
     const [agentConfig, setAgentConfig] = useState<AgentOverride>(externalAgentConfig ?? {});
     const [showConfirmation, setShowConfirmation] = useState(externalShowConfirmation);
 
+    const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
+
     const handleTypeChange = useCallback((c: InterviewTypeConfig) => { setInterviewType(c); onTypeChange?.(c); }, [onTypeChange]);
     const handleScheduleChange = useCallback((d: Partial<ScheduleData>) => { const u = { ...scheduleData, ...d }; setScheduleData(u); onScheduleChange?.(u); }, [scheduleData, onScheduleChange]);
     const handleAgentConfigChange = useCallback((c: Partial<AgentOverride>) => { const u = { ...agentConfig, ...c }; setAgentConfig(u); onAgentConfigChange?.(u); }, [agentConfig, onAgentConfigChange]);
+
+    const handleConfirm = useCallback(() => {
+      setShowConfirmation(true);
+      onConfirm?.();
+    }, [onConfirm]);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const t = tokens;
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
-    const cardInteractive = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass, interactive: true }), [t, isGlass]);
 
-    const inputStyle: React.CSSProperties = { width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[300]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[900], outline: 'none', boxSizing: 'border-box' };
-    const selectStyle: React.CSSProperties = { ...inputStyle, appearance: 'none' as const, cursor: 'pointer', transition: `all ${t.motion.hover}` };
-    const labelStyle: React.CSSProperties = { fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' };
-    const titleStyle: React.CSSProperties = { fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], margin: 0 };
-    const primaryBtn: React.CSSProperties = { padding: `${t.spacing[2]}px ${t.spacing[5]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, display: 'inline-flex', alignItems: 'center', gap: t.spacing[2] };
-    const secondaryBtn: React.CSSProperties = { ...primaryBtn, backgroundColor: t.colors.common.white, color: t.colors.neutral[700], border: `${bdr} ${t.colors.neutral[300]}` };
+    const inputStyle: React.CSSProperties = useMemo(() => ({
+      width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[300]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[900], outline: 'none', boxSizing: 'border-box' as const,
+    }), [t, bdr]);
 
-    const SectionTitle = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
-      <Stack direction="horizontal" align="center" gap={t.spacing[2]} style={{ marginBottom: t.spacing[4] }}>
-        {icon}<h3 style={titleStyle}>{label}</h3>
-      </Stack>
-    );
+    const selectStyle: React.CSSProperties = useMemo(() => ({
+      ...inputStyle, appearance: 'none' as const, cursor: 'pointer', transition: `all ${t.motion.hover}`,
+    }), [inputStyle, t]);
 
-    const TypeCard = ({ type, icon: Icon, label, desc }: { type: 'ai' | 'human'; icon: typeof Bot; label: string; desc: string }) => {
-      const sel = interviewType.type === type;
-      return (
-        <div onClick={() => handleTypeChange({ ...interviewType, type })} style={{ ...cardInteractive, padding: t.spacing[4], textAlign: 'center' as const, backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${sel ? t.colors.primaryScale[400] : t.colors.neutral[200]}` }}>
-          <div style={{ width: 48, height: 48, borderRadius: t.borderRadius.lg, backgroundColor: sel ? t.colors.primaryScale[100] : t.colors.neutral[100], display: 'flex', alignItems: 'center', justifyContent: 'center', margin: `0 auto ${t.spacing[3]}px` }}>
-            <Icon size={24} color={sel ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
-          </div>
-          <p style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: sel ? t.colors.primaryScale[700] : t.colors.neutral[900], margin: 0 }}>{label}</p>
-          <p style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], margin: `${t.spacing[1]}px 0 0` }}>{desc}</p>
-        </div>
-      );
-    };
+    const primaryBtnStyle: React.CSSProperties = useMemo(() => ({
+      padding: `${t.spacing[2]}px ${t.spacing[5]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, display: 'inline-flex' as const, alignItems: 'center' as const, gap: t.spacing[2],
+    }), [t]);
 
-    const PersonRow = ({ id, name, subtitle, avatar, icon: Icon, selectedId, onSelect }: { id: string; name: string; subtitle: string; avatar?: string; icon: typeof Bot; selectedId?: string; onSelect: (id: string) => void }) => {
-      const sel = selectedId === id;
-      return (
-        <div onClick={() => onSelect(id)} style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white, border: `${bdr} ${sel ? t.colors.primaryScale[300] : t.colors.neutral[200]}`, cursor: 'pointer', transition: `all ${t.motion.hover}`, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
-          {avatar ? (
-            <div style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[200], overflow: 'hidden', flexShrink: 0 }}>
-              <img src={avatar} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-          ) : (
-            <Icon size={16} color={sel ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
-          )}
-          <div style={{ flex: 1 }}>
-            <p style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900], margin: 0 }}>{name}</p>
-            <p style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], margin: 0 }}>{subtitle}</p>
-          </div>
-          {sel && <CheckCircle size={16} color={t.colors.primaryScale[600]} />}
-        </div>
-      );
-    };
+    const secondaryBtnStyle: React.CSSProperties = useMemo(() => ({
+      ...primaryBtnStyle, backgroundColor: t.colors.common.white, color: t.colors.neutral[700], border: `${bdr} ${t.colors.neutral[300]}`,
+    }), [primaryBtnStyle, t, bdr]);
 
-    const summaryRows: [string, React.ReactNode][] = [
+    const labelStyle: React.CSSProperties = useMemo(() => ({
+      fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' as const,
+    }), [t]);
+
+    const summaryRows = useMemo((): [string, string][] => [
       ['Candidate', selectedCandidate?.name ?? 'Not selected'],
-      ['Type', <Stack key="t" direction="horizontal" align="center" gap={t.spacing[2]}>{interviewType.type === 'ai' ? <Bot size={14} color={t.colors.primaryScale[600]} /> : <User size={14} color={t.colors.primaryScale[600]} />}<span style={{ color: t.colors.neutral[900] }}>{interviewType.type === 'ai' ? `AI - ${interviewType.agentName ?? 'No agent'}` : `Human - ${interviewType.interviewerName ?? 'No interviewer'}`}</span></Stack>],
+      ['Type', interviewType.type === 'ai' ? `AI - ${interviewType.agentName ?? 'No agent'}` : `Human - ${interviewType.interviewerName ?? 'No interviewer'}`],
       ['Date & Time', scheduleData.date && scheduleData.time ? `${scheduleData.date} at ${scheduleData.time} (${scheduleData.timezone.replace(/_/g, ' ')})` : 'Not scheduled'],
       ['Duration', `${scheduleData.estimatedDuration} minutes`],
-      ...(templateStage ? [['Stage', templateStage] as [string, React.ReactNode]] : []),
-    ];
+      ...(templateStage ? [['Stage', templateStage] as [string, string]] : []),
+    ], [selectedCandidate, interviewType, scheduleData, templateStage]);
 
     return (
-      <div className={className} style={{ ...createSurfaceStyle(t, { elevation: 'sm', glass: isGlass }), padding: t.spacing[5], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[5], maxWidth: 800, margin: '0 auto' }}>
+      <Box className={className} style={{ padding: t.spacing[5], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...style }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], maxWidth: 800, margin: '0 auto' }}>
           {/* Candidate */}
-          <div style={cardBase}>
-            <SectionTitle icon={<User size={18} color={t.colors.neutral[600]} />} label="Candidate" />
+          <Box style={{ ...cardBase, ...createEntranceAnimation(t, { index: 0 }).animate }}>
+            {accentBar && <Box style={accentBar} />}
+
+        <Box style={accentLayout.inner}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
+                <User size={18} color={t.colors.neutral[600]} />
+              </Box>
+              <Text style={{
+                fontSize: t.typography.fontSize.lg,
+                fontWeight: personalityTypo.headingWeight,
+                color: t.colors.neutral[900],
+                letterSpacing: personalityTypo.headingLetterSpacing,
+              }}>Candidate</Text>
+            </Box>
             {selectedCandidate ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.primaryScale[50], border: `${bdr} ${t.colors.primaryScale[200]}` }}>
-                <div style={{ width: 44, height: 44, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[200], display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
-                  {selectedCandidate.avatar ? <img src={selectedCandidate.avatar} alt={selectedCandidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={20} color={t.colors.primaryScale[600]} />}
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], margin: 0 }}>{selectedCandidate.name}</p>
-                  <Stack direction="horizontal" align="center" gap={t.spacing[2]} style={{ marginTop: t.spacing[1] }}>
-                    <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{selectedCandidate.jobTitle}</span>
-                    <span style={{ ...createBadgeStyle(t, 'info'), fontSize: t.typography.fontSize.xs }}>{selectedCandidate.currentStage}</span>
-                  </Stack>
-                </div>
-              </div>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: t.colors.primaryScale[50], border: `${bdr} ${t.colors.primaryScale[200]}` }}>
+                <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[200] })}>
+                  <User size={20} color={t.colors.primaryScale[600]} />
+                </Box>
+                <Box style={{ flex: 1 }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{selectedCandidate.name}</Text>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{selectedCandidate.jobTitle}</Text>
+                    <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{selectedCandidate.currentStage}</Box>
+                  </Box>
+                </Box>
+              </Box>
             ) : (
-              <div style={{ ...inputStyle, display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.neutral[400], cursor: 'pointer' }}><Search size={14} /><span>Search for a candidate...</span></div>
+              <Box style={{ ...inputStyle, display: 'flex', alignItems: 'center', gap: t.spacing[2], color: t.colors.neutral[400], cursor: 'pointer' }}>
+                <Search size={14} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>Search for a candidate...</Text>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* Interview Type */}
-          <div style={cardBase}>
-            <SectionTitle icon={<Sparkles size={18} color={t.colors.neutral[600]} />} label="Interview Type" />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
-              <TypeCard type="ai" icon={Bot} label="AI Interview" desc="Automated AI agent conducts the interview" />
-              <TypeCard type="human" icon={User} label="Human Interview" desc="Live interviewer conducts the session" />
-            </div>
+          <Box style={{ ...cardBase, ...createEntranceAnimation(t, { index: 1 }).animate }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
+                <Sparkles size={18} color={t.colors.neutral[600]} />
+              </Box>
+              <Text style={{
+                fontSize: t.typography.fontSize.lg,
+                fontWeight: personalityTypo.headingWeight,
+                color: t.colors.neutral[900],
+                letterSpacing: personalityTypo.headingLetterSpacing,
+              }}>Interview Type</Text>
+            </Box>
+            <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
+              {(['ai', 'human'] as const).map((typeKey) => {
+                const sel = interviewType.type === typeKey;
+                const Icon = typeKey === 'ai' ? Bot : User;
+                const label = typeKey === 'ai' ? 'AI Interview' : 'Human Interview';
+                const desc = typeKey === 'ai' ? 'Automated AI agent conducts the interview' : 'Live interviewer conducts the session';
+                return (
+                  <Box
+                    key={typeKey}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Select ${label}`}
+                    aria-pressed={sel}
+                    onClick={() => handleTypeChange({ ...interviewType, type: typeKey })}
+                    onKeyDown={(e: React.KeyboardEvent) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleTypeChange({ ...interviewType, type: typeKey });
+                      }
+                    }}
+                    style={{
+                      ...cardHover.base,
+                      padding: t.spacing[4],
+                      textAlign: 'center' as const,
+                      backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white,
+                      border: `${bdr} ${sel ? t.colors.primaryScale[400] : t.colors.neutral[200]}`,
+                      borderRadius: t.borderRadius.lg,
+                    }}
+                  >
+                    <Box style={{ ...createIconContainerStyle(t, { size: 48, color: sel ? t.colors.primaryScale[100] : t.colors.neutral[100] }), margin: `0 auto ${t.spacing[3]}px` }}>
+                      <Icon size={24} color={sel ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
+                    </Box>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: sel ? t.colors.primaryScale[700] : t.colors.neutral[900] }}>{label}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{desc}</Text>
+                  </Box>
+                );
+              })}
+            </Box>
             {interviewType.type === 'ai' && agents.length > 0 && (
-              <div><label style={labelStyle}>Select AI Agent</label><div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-                {agents.map((a) => <PersonRow key={a.id} id={a.id} name={a.name} subtitle={`${a.type} \u00B7 ${a.language}`} icon={Bot} selectedId={interviewType.agentId} onSelect={(id) => handleTypeChange({ ...interviewType, agentId: id, agentName: a.name })} />)}
-              </div></div>
+              <Box>
+                <Text style={labelStyle}>Select AI Agent</Text>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
+                  {agents.map((a) => {
+                    const sel = interviewType.agentId === a.id;
+                    return (
+                      <Box
+                        key={a.id}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Select agent ${a.name}`}
+                        aria-pressed={sel}
+                        onClick={() => handleTypeChange({ ...interviewType, agentId: a.id, agentName: a.name })}
+                        onKeyDown={(e: React.KeyboardEvent) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleTypeChange({ ...interviewType, agentId: a.id, agentName: a.name });
+                          }
+                        }}
+                        style={{
+                          padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
+                          backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white,
+                          border: `${bdr} ${sel ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+                          cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                          display: 'flex', alignItems: 'center', gap: t.spacing[3],
+                        }}
+                      >
+                        <Bot size={16} color={sel ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{a.name}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{a.type} {'\u00B7'} {a.language}</Text>
+                        </Box>
+                        {sel && <CheckCircle size={16} color={t.colors.primaryScale[600]} />}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
             )}
             {interviewType.type === 'human' && interviewers.length > 0 && (
-              <div><label style={labelStyle}>Select Interviewer</label><div style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-                {interviewers.map((i) => <PersonRow key={i.id} id={i.id} name={i.name} subtitle={i.role} avatar={i.avatar} icon={User} selectedId={interviewType.interviewerId} onSelect={(id) => handleTypeChange({ ...interviewType, interviewerId: id, interviewerName: i.name })} />)}
-              </div></div>
+              <Box>
+                <Text style={labelStyle}>Select Interviewer</Text>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
+                  {interviewers.map((i) => {
+                    const sel = interviewType.interviewerId === i.id;
+                    return (
+                      <Box
+                        key={i.id}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Select interviewer ${i.name}`}
+                        aria-pressed={sel}
+                        onClick={() => handleTypeChange({ ...interviewType, interviewerId: i.id, interviewerName: i.name })}
+                        onKeyDown={(e: React.KeyboardEvent) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleTypeChange({ ...interviewType, interviewerId: i.id, interviewerName: i.name });
+                          }
+                        }}
+                        style={{
+                          padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
+                          backgroundColor: sel ? t.colors.primaryScale[50] : t.colors.common.white,
+                          border: `${bdr} ${sel ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+                          cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                          display: 'flex', alignItems: 'center', gap: t.spacing[3],
+                        }}
+                      >
+                        <User size={16} color={sel ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{i.name}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{i.role}</Text>
+                        </Box>
+                        {sel && <CheckCircle size={16} color={t.colors.primaryScale[600]} />}
+                      </Box>
+                    );
+                  })}
+                </Box>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* Template Stage */}
-          <div style={cardBase}>
-            <SectionTitle icon={<Tag size={18} color={t.colors.neutral[600]} />} label="Template Stage" />
-            <span style={{ ...(templateStage ? createBadgeStyle(t, 'success') : createBadgeStyle(t, 'warning')), fontSize: t.typography.fontSize.sm, padding: `${t.spacing[2]}px ${t.spacing[3]}px` }}>
-              {templateStage ? <><CheckCircle size={14} style={{ marginRight: t.spacing[1] }} />Auto-detected: {templateStage}</> : <><AlertCircle size={14} style={{ marginRight: t.spacing[1] }} />No stage detected</>}
-            </span>
-          </div>
+          <Box style={{ ...cardBase, ...createEntranceAnimation(t, { index: 2 }).animate }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
+                <Tag size={18} color={t.colors.neutral[600]} />
+              </Box>
+              <Text style={{
+                fontSize: t.typography.fontSize.lg,
+                fontWeight: personalityTypo.headingWeight,
+                color: t.colors.neutral[900],
+                letterSpacing: personalityTypo.headingLetterSpacing,
+              }}>Template Stage</Text>
+            </Box>
+            <Box style={{ ...(templateStage ? createBadgeStyle(t, 'success') : createBadgeStyle(t, 'warning')), borderRadius: badgeRadius, fontSize: t.typography.fontSize.sm, padding: `${t.spacing[2]}px ${t.spacing[3]}px` }}>
+              {templateStage ? <CheckCircle size={14} style={{ marginRight: t.spacing[1] }} /> : <AlertCircle size={14} style={{ marginRight: t.spacing[1] }} />}
+              <Text style={{ fontSize: t.typography.fontSize.sm }}>{templateStage ? `Auto-detected: ${templateStage}` : 'No stage detected'}</Text>
+            </Box>
+          </Box>
 
           {/* Schedule */}
-          <div style={cardBase}>
-            <SectionTitle icon={<Calendar size={18} color={t.colors.neutral[600]} />} label="Schedule" />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
-              <div><label style={labelStyle}>Date</label><input type="date" value={scheduleData.date} onChange={(e) => handleScheduleChange({ date: e.target.value })} style={inputStyle} /></div>
-              <div><label style={labelStyle}>Time</label><input type="time" value={scheduleData.time} onChange={(e) => handleScheduleChange({ time: e.target.value })} style={inputStyle} /></div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
-              <div><label style={labelStyle}><Globe size={12} style={{ marginRight: t.spacing[1], verticalAlign: 'middle' }} />Timezone</label><select value={scheduleData.timezone} onChange={(e) => handleScheduleChange({ timezone: e.target.value })} style={selectStyle}>{TIMEZONE_OPTIONS.map((tz) => <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>)}</select></div>
-              <div><label style={labelStyle}><Timer size={12} style={{ marginRight: t.spacing[1], verticalAlign: 'middle' }} />Duration</label><select value={scheduleData.estimatedDuration} onChange={(e) => handleScheduleChange({ estimatedDuration: parseInt(e.target.value, 10) })} style={selectStyle}>{DURATION_OPTIONS.map((d) => <option key={d} value={d}>{d} minutes</option>)}</select></div>
-            </div>
+          <Box style={{ ...cardBase, ...createEntranceAnimation(t, { index: 3 }).animate }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
+                <Calendar size={18} color={t.colors.neutral[600]} />
+              </Box>
+              <Text style={{
+                fontSize: t.typography.fontSize.lg,
+                fontWeight: personalityTypo.headingWeight,
+                color: t.colors.neutral[900],
+                letterSpacing: personalityTypo.headingLetterSpacing,
+              }}>Schedule</Text>
+            </Box>
+            <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+              <Box>
+                <Text style={labelStyle}>Date</Text>
+                <input type="date" value={scheduleData.date} onChange={(e: any) => handleScheduleChange({ date: e.target.value })} style={inputStyle} aria-label="Interview date" />
+              </Box>
+              <Box>
+                <Text style={labelStyle}>Time</Text>
+                <input type="time" value={scheduleData.time} onChange={(e: any) => handleScheduleChange({ time: e.target.value })} style={inputStyle} aria-label="Interview time" />
+              </Box>
+            </Box>
+            <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+              <Box>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], ...labelStyle }}>
+                  <Globe size={12} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Timezone</Text>
+                </Box>
+                <select value={scheduleData.timezone} onChange={(e: any) => handleScheduleChange({ timezone: e.target.value })} style={selectStyle} aria-label="Timezone">
+                  {TIMEZONE_OPTIONS.map((tz) => (
+                    <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
+                  ))}
+                </select>
+              </Box>
+              <Box>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], ...labelStyle }}>
+                  <Timer size={12} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Duration</Text>
+                </Box>
+                <select value={scheduleData.estimatedDuration} onChange={(e: any) => handleScheduleChange({ estimatedDuration: parseInt(e.target.value, 10) })} style={selectStyle} aria-label="Duration">
+                  {DURATION_OPTIONS.map((d) => (
+                    <option key={d} value={d}>{d} minutes</option>
+                  ))}
+                </select>
+              </Box>
+            </Box>
             {scheduleData.date && scheduleData.time && (
-              <div style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.successScale[50], border: `${bdr} ${t.colors.successScale[200]}`, display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.successScale[50], border: `${bdr} ${t.colors.successScale[200]}`, display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                 <CheckCircle size={14} color={t.colors.successScale[600]} />
-                <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700], fontWeight: t.typography.fontWeight.medium }}>Time slot available</span>
-              </div>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700], fontWeight: t.typography.fontWeight.medium }}>Time slot available</Text>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* Configuration */}
-          <div style={cardBase}>
+          <Box style={{ ...cardBase, ...createEntranceAnimation(t, { index: 4 }).animate }}>
             {interviewType.type === 'ai' ? (
               <>
-                <SectionTitle icon={<Settings size={18} color={t.colors.neutral[600]} />} label="Agent Configuration" />
-                <div style={{ marginBottom: t.spacing[3] }}>
-                  <label style={labelStyle}><Thermometer size={12} style={{ marginRight: t.spacing[1], verticalAlign: 'middle' }} />Temperature: {agentConfig.temperature ?? 0.7}</label>
-                  <input type="range" min="0" max="1" step="0.1" value={agentConfig.temperature ?? 0.7} onChange={(e) => handleAgentConfigChange({ temperature: parseFloat(e.target.value) })} style={{ width: '100%', accentColor: t.colors.primaryScale[500] }} />
-                  <Stack direction="horizontal" justify="space-between" style={{ marginTop: t.spacing[1] }}>
-                    <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Focused</span>
-                    <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Creative</span>
-                  </Stack>
-                </div>
-                <div style={{ marginBottom: t.spacing[3] }}>
-                  <label style={labelStyle}><Timer size={12} style={{ marginRight: t.spacing[1], verticalAlign: 'middle' }} />Max Duration (minutes)</label>
-                  <input type="number" min="10" max="120" step="5" value={agentConfig.maxDuration ?? scheduleData.estimatedDuration} onChange={(e) => handleAgentConfigChange({ maxDuration: parseInt(e.target.value, 10) })} style={inputStyle} />
-                </div>
-                <div>
-                  <label style={labelStyle}><MessageSquare size={12} style={{ marginRight: t.spacing[1], verticalAlign: 'middle' }} />Custom Prompt (optional)</label>
-                  <textarea value={agentConfig.customPrompt ?? ''} onChange={(e) => handleAgentConfigChange({ customPrompt: e.target.value })} placeholder="Add specific instructions for the AI agent..." rows={4} style={{ ...inputStyle, resize: 'vertical' as const, fontFamily: 'inherit' }} />
-                </div>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
+                    <Settings size={18} color={t.colors.neutral[600]} />
+                  </Box>
+                  <Text style={{
+                    fontSize: t.typography.fontSize.lg,
+                    fontWeight: personalityTypo.headingWeight,
+                    color: t.colors.neutral[900],
+                    letterSpacing: personalityTypo.headingLetterSpacing,
+                  }}>Agent Configuration</Text>
+                </Box>
+                <Box style={{ marginBottom: t.spacing[3] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], ...labelStyle }}>
+                    <Thermometer size={12} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Temperature: {agentConfig.temperature ?? 0.7}</Text>
+                  </Box>
+                  <input type="range" min="0" max="1" step="0.1" value={agentConfig.temperature ?? 0.7} onChange={(e: any) => handleAgentConfigChange({ temperature: parseFloat(e.target.value) })} style={{ width: '100%', accentColor: t.colors.primaryScale[500] }} aria-label="Temperature slider" />
+                  <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: t.spacing[1] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Focused</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Creative</Text>
+                  </Box>
+                </Box>
+                <Box style={{ marginBottom: t.spacing[3] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], ...labelStyle }}>
+                    <Timer size={12} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Max Duration (minutes)</Text>
+                  </Box>
+                  <input type="number" min="10" max="120" step="5" value={agentConfig.maxDuration ?? scheduleData.estimatedDuration} onChange={(e: any) => handleAgentConfigChange({ maxDuration: parseInt(e.target.value, 10) })} style={inputStyle} aria-label="Max duration" />
+                </Box>
+                <Box>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], ...labelStyle }}>
+                    <MessageSquare size={12} />
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>Custom Prompt (optional)</Text>
+                  </Box>
+                  <textarea value={agentConfig.customPrompt ?? ''} onChange={(e: any) => handleAgentConfigChange({ customPrompt: e.target.value })} placeholder="Add specific instructions for the AI agent..." rows={4} style={{ ...inputStyle, resize: 'vertical' as const, fontFamily: 'inherit' }} aria-label="Custom prompt" />
+                </Box>
               </>
             ) : (
               <>
-                <SectionTitle icon={<FileText size={18} color={t.colors.neutral[600]} />} label="Interviewer Notes" />
-                <textarea placeholder="Add notes for the interviewer..." rows={6} style={{ ...inputStyle, resize: 'vertical' as const, fontFamily: 'inherit' }} />
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
+                    <FileText size={18} color={t.colors.neutral[600]} />
+                  </Box>
+                  <Text style={{
+                    fontSize: t.typography.fontSize.lg,
+                    fontWeight: personalityTypo.headingWeight,
+                    color: t.colors.neutral[900],
+                    letterSpacing: personalityTypo.headingLetterSpacing,
+                  }}>Interviewer Notes</Text>
+                </Box>
+                <textarea placeholder="Add notes for the interviewer..." rows={6} style={{ ...inputStyle, resize: 'vertical' as const, fontFamily: 'inherit' }} aria-label="Interviewer notes" />
               </>
             )}
-          </div>
+          </Box>
 
           {/* Preview & Confirm */}
-          <div style={{ ...cardBase, borderLeft: `4px solid ${t.colors.primaryScale[500]}` }}>
-            <SectionTitle icon={<Send size={18} color={t.colors.primaryScale[600]} />} label="Preview & Confirm" />
-            <div style={{ padding: t.spacing[4], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], border: `${bdr} ${t.colors.neutral[200]}`, marginBottom: t.spacing[4] }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: `${t.spacing[2]}px ${t.spacing[4]}px`, fontSize: t.typography.fontSize.sm }}>
+          <Box style={{ ...cardBase, borderLeft: `4px solid ${t.colors.primaryScale[500]}`, ...createEntranceAnimation(t, { index: 5 }).animate }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.primaryScale[50] })}>
+                <Send size={18} color={t.colors.primaryScale[600]} />
+              </Box>
+              <Text style={{
+                fontSize: t.typography.fontSize.lg,
+                fontWeight: personalityTypo.headingWeight,
+                color: t.colors.neutral[900],
+                letterSpacing: personalityTypo.headingLetterSpacing,
+              }}>Preview & Confirm</Text>
+            </Box>
+            <Box style={{ padding: t.spacing[4], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], border: `${bdr} ${t.colors.neutral[200]}`, marginBottom: t.spacing[4] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: `${t.spacing[2]}px ${t.spacing[4]}px`, fontSize: t.typography.fontSize.sm }}>
                 {summaryRows.map(([label, value]) => (
                   <React.Fragment key={label}>
-                    <span style={{ color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>{label}</span>
-                    <span style={{ color: t.colors.neutral[900] }}>{value}</span>
+                    <Text style={{ color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium, fontSize: t.typography.fontSize.sm }}>{label}</Text>
+                    <Text style={{ color: t.colors.neutral[900], fontSize: t.typography.fontSize.sm }}>{value}</Text>
                   </React.Fragment>
                 ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
             {interviewType.type === 'ai' && estimatedCost !== undefined && (
-              <div style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.infoScale[50], border: `${bdr} ${t.colors.infoScale[200]}`, display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.infoScale[50], border: `${bdr} ${t.colors.infoScale[200]}`, display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
                 <DollarSign size={14} color={t.colors.infoScale[600]} />
-                <span style={{ fontSize: t.typography.fontSize.sm, color: t.colors.infoScale[700], fontWeight: t.typography.fontWeight.medium }}>Estimated cost: ${estimatedCost.toFixed(2)}</span>
-              </div>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.infoScale[700], fontWeight: t.typography.fontWeight.medium }}>Estimated cost: ${estimatedCost.toFixed(2)}</Text>
+              </Box>
             )}
-            <Stack direction="horizontal" align="center" gap={t.spacing[2]} style={{ marginBottom: t.spacing[4] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
               <Mail size={14} color={t.colors.neutral[600]} />
-              <span style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>Send invitation email to candidate</span>
-            </Stack>
-            <Stack direction="horizontal" gap={t.spacing[3]} justify="end">
-              {onCancel && <button onClick={onCancel} style={secondaryBtn}><X size={14} /> Cancel</button>}
-              <button onClick={() => { setShowConfirmation(true); onConfirm?.(); }} style={primaryBtn}><Send size={14} /> Schedule Interview</button>
-            </Stack>
-          </div>
-        </div>
-      </div>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>Send invitation email to candidate</Text>
+            </Box>
+            <Box style={{ display: 'flex', gap: t.spacing[3], justifyContent: 'flex-end' }}>
+              {onCancel && (
+                <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Cancel scheduling"
+                  onClick={onCancel}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCancel(); } }}
+                  style={secondaryBtnStyle}
+                >
+                  <X size={14} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>Cancel</Text>
+                </Box>
+              )}
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Schedule interview"
+                onClick={handleConfirm}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleConfirm(); } }}
+                style={primaryBtnStyle}
+              >
+                <Send size={14} />
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white }}>Schedule Interview</Text>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        </Box>
+      </Box>
     );
   },
 });

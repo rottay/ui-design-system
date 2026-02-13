@@ -5,16 +5,25 @@
  * Visual timeline of negotiation steps with compensation cards.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
-  createSectionHeaderStyle,
   createHoverStyle,
   createBadgeStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createIconContainerStyle,
+  createDividerStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  getCardPadding,
 } from '../../../helpers';
 import type { BhOfferNegotiationProps, NegotiationStep, CompensationPackage, OfferNegotiation } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
+import { Clock, Check, X, RotateCcw, User, Building2, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
 const MOCK_NEGOTIATION: OfferNegotiation = {
   id: 'neg-1',
@@ -83,8 +92,24 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+
+    const [hoveredStep, setHoveredStep] = useState<string | null>(null);
+
+    const handleStepClick = useCallback((idx: number) => {
+      onStepSelect?.(selectedStep === idx ? null : idx);
+    }, [onStepSelect, selectedStep]);
+
+    const handleAction = useCallback((action: 'approve' | 'counter' | 'withdraw') => {
+      if (negotiation) onAction?.(action, negotiation.id);
+    }, [onAction, negotiation]);
 
     if (!negotiation) {
       return (
@@ -109,65 +134,86 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
           minHeight: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
+          ...entrance.animate,
+          transition: entrance.transition,
           ...style,
         }}
       >
         {/* Header */}
-        <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-              <div
+        <Box style={{ ...cardBase, padding: cardPadding }}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+              <Box
                 style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  backgroundColor: tokens.colors.primaryScale[100],
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: tokens.typography.fontSize.lg || '1.125rem',
-                  fontWeight: tokens.typography.fontWeight.bold,
-                  color: tokens.colors.primaryScale[700],
+                  ...createIconContainerStyle(tokens, { size: 40, color: tokens.colors.primaryScale[100] }),
                   overflow: 'hidden',
                 }}
               >
                 {negotiation.candidateAvatar ? (
-                  <img src={negotiation.candidateAvatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
+                  <Box
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      backgroundImage: `url(${negotiation.candidateAvatar})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
                 ) : (
-                  negotiation.candidateName.charAt(0)
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.lg || '1.125rem',
+                    fontWeight: tokens.typography.fontWeight.bold,
+                    color: tokens.colors.primaryScale[700],
+                  }}>
+                    {negotiation.candidateName.charAt(0)}
+                  </Text>
                 )}
-              </div>
-              <div>
-                <Text style={{ fontSize: tokens.typography.fontSize.lg || '1.125rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+              </Box>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                <Text style={{
+                  fontSize: tokens.typography.fontSize.lg || '1.125rem',
+                  fontWeight: typo.headingWeight,
+                  letterSpacing: typo.headingLetterSpacing,
+                  color: tokens.colors.neutral[900],
+                }}>
                   {negotiation.candidateName}
                 </Text>
                 <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
                   {negotiation.positionTitle} - {negotiation.department}
                 </Text>
-              </div>
-            </div>
-            <div
+              </Box>
+            </Box>
+            <Box
               style={{
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: badgeRadius,
                 backgroundColor: getStatusColor(negotiation.status, tokens),
                 color: tokens.colors.common.white,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.semibold,
-                textTransform: 'uppercase' as const,
+                display: 'inline-flex',
+                alignItems: 'center',
               }}
             >
-              {negotiation.status.replace('_', ' ')}
-            </div>
-          </div>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: tokens.typography.fontWeight.semibold,
+                color: tokens.colors.common.white,
+                textTransform: typo.labelTransform,
+                letterSpacing: typo.labelLetterSpacing,
+              }}>
+                {negotiation.status.replace('_', ' ')}
+              </Text>
+            </Box>
+          </Box>
         </Box>
 
         {/* Timeline */}
-        <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-          <Text style={{ ...sectionHeader, letterSpacing: '-0.02em' }}>Negotiation Timeline</Text>
-          <div style={{ position: 'relative' as const, paddingLeft: 40 }}>
+        <Box style={{ ...cardBase, padding: cardPadding }}>
+          <Text style={{ ...sectionHeader }}>Negotiation Timeline</Text>
+          <Box style={{ position: 'relative' as const, paddingLeft: 40, marginTop: tokens.spacing[3] }}>
             {/* Vertical line */}
-            <div
+            <Box
               style={{
                 position: 'absolute' as const,
                 left: 15,
@@ -184,23 +230,36 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
               const comp = step.compensation;
               const prevComp = i > 0 ? steps[i - 1].compensation : null;
               const salaryDiff = prevComp ? comp.baseSalary - prevComp.baseSalary : 0;
+              const stepEntrance = createEntranceAnimation(tokens, { index: i });
+              const isHovered = hoveredStep === step.id;
 
               return (
-                <div
+                <Box
                   key={step.id}
-                  onClick={() => onStepSelect?.(isSelected ? null : i)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${getStepLabel(step.type)} step - ${formatCurrency(totalCompValue(comp))}`}
+                  aria-pressed={isSelected}
+                  onClick={() => handleStepClick(i)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStepClick(i); } }}
+                  onMouseEnter={() => setHoveredStep(step.id)}
+                  onMouseLeave={() => setHoveredStep(null)}
                   style={{
-                    ...hoverStyle,
+                    ...cardHover.base,
+                    ...(isHovered ? cardHover.hover : {}),
                     position: 'relative' as const,
                     marginBottom: tokens.spacing[5],
                     padding: tokens.spacing[4],
                     borderRadius: tokens.borderRadius.md,
                     border: `1px solid ${isSelected ? stepColor : tokens.colors.neutral[100]}`,
                     backgroundColor: isSelected ? stepColor + '08' : tokens.colors.common.white,
+                    ...stepEntrance.animate,
+                    transition: stepEntrance.transition,
+                    outline: 'none',
                   }}
                 >
                   {/* Timeline dot */}
-                  <div
+                  <Box
                     style={{
                       position: 'absolute' as const,
                       left: -33,
@@ -215,70 +274,102 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
                   />
 
                   {/* Step header */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
-                    <div>
+                  <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: stepColor }}>
                         {getStepLabel(step.type)}
                       </Text>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                        {step.date} - by {step.initiatedBy === 'company' ? 'Company' : 'Candidate'}
-                      </Text>
-                    </div>
-                    <Text style={{ fontSize: tokens.typography.fontSize.lg || '1.125rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                          {step.date}
+                        </Text>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[300] }}> - </Text>
+                        {step.initiatedBy === 'company' ? (
+                          <Building2 size={10} color={tokens.colors.neutral[400]} />
+                        ) : (
+                          <User size={10} color={tokens.colors.neutral[400]} />
+                        )}
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                          {step.initiatedBy === 'company' ? 'Company' : 'Candidate'}
+                        </Text>
+                      </Box>
+                    </Box>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.lg || '1.125rem',
+                      fontWeight: typo.headingWeight,
+                      letterSpacing: typo.headingLetterSpacing,
+                      color: tokens.colors.neutral[900],
+                    }}>
                       {formatCurrency(totalCompValue(comp))}
                     </Text>
-                  </div>
+                  </Box>
 
                   {/* Compensation breakdown */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[3] }}>
+                  <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[3] }}>
                     {[
                       { label: 'Base', value: comp.baseSalary, diff: salaryDiff },
                       { label: 'Equity', value: comp.equity || 0, diff: prevComp ? (comp.equity || 0) - (prevComp.equity || 0) : 0 },
                       { label: 'Signing Bonus', value: comp.signingBonus || 0, diff: prevComp ? (comp.signingBonus || 0) - (prevComp.signingBonus || 0) : 0 },
                       { label: 'Annual Bonus', value: comp.annualBonus || 0, diff: prevComp ? (comp.annualBonus || 0) - (prevComp.annualBonus || 0) : 0 },
                     ].map((item) => (
-                      <div key={item.label} style={{ textAlign: 'center' as const }}>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                      <Box key={item.label} style={{ textAlign: 'center' as const, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                        <Text style={{
+                          fontSize: tokens.typography.fontSize.xs,
+                          color: tokens.colors.neutral[500],
+                          textTransform: typo.labelTransform,
+                          letterSpacing: typo.labelLetterSpacing,
+                        }}>
                           {item.label}
                         </Text>
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                           {formatCurrency(item.value)}
                         </Text>
                         {i > 0 && item.diff !== 0 && (
-                          <Text
-                            style={{
-                              fontSize: tokens.typography.fontSize.xs,
-                              color: item.diff > 0 ? tokens.colors.successScale[500] : tokens.colors.errorScale[500],
-                            }}
-                          >
-                            {item.diff > 0 ? '+' : ''}{formatCurrency(item.diff)}
-                          </Text>
+                          <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], justifyContent: 'center' }}>
+                            {item.diff > 0 ? (
+                              <TrendingUp size={10} color={tokens.colors.successScale[500]} />
+                            ) : (
+                              <TrendingDown size={10} color={tokens.colors.errorScale[500]} />
+                            )}
+                            <Text
+                              style={{
+                                fontSize: tokens.typography.fontSize.xs,
+                                color: item.diff > 0 ? tokens.colors.successScale[500] : tokens.colors.errorScale[500],
+                              }}
+                            >
+                              {item.diff > 0 ? '+' : ''}{formatCurrency(item.diff)}
+                            </Text>
+                          </Box>
                         )}
-                      </div>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
 
                   {/* Notes */}
                   {step.notes && isSelected && (
-                    <div style={{ marginTop: tokens.spacing[3], padding: tokens.spacing[3], borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[50] }}>
+                    <Box style={{ marginTop: tokens.spacing[3], padding: tokens.spacing[3], borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[50] }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], fontStyle: 'italic' }}>
                         {step.notes}
                       </Text>
-                    </div>
+                    </Box>
                   )}
-                </div>
+                </Box>
               );
             })}
-          </div>
+          </Box>
         </Box>
 
         {/* Actions */}
         {negotiation.status === 'in_progress' && onAction && (
-          <div style={{ display: 'flex', gap: tokens.spacing[3], justifyContent: 'flex-end' }}>
-            {['approve', 'counter', 'withdraw'].map((action) => (
-              <div
+          <Box style={{ display: 'flex', gap: tokens.spacing[3], justifyContent: 'flex-end' }}>
+            {(['approve', 'counter', 'withdraw'] as const).map((action) => (
+              <Box
                 key={action}
-                onClick={() => onAction(action as 'approve' | 'counter' | 'withdraw', negotiation.id)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${action} negotiation`}
+                onClick={() => handleAction(action)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAction(action); } }}
                 style={{
                   ...hoverStyle,
                   padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
@@ -289,12 +380,21 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
                   color: tokens.colors.common.white,
                   fontFamily: 'inherit',
                   textTransform: 'capitalize' as const,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: tokens.spacing[1],
+                  outline: 'none',
                 }}
               >
-                {action}
-              </div>
+                {action === 'approve' && <Check size={14} color={tokens.colors.common.white} />}
+                {action === 'counter' && <RotateCcw size={14} color={tokens.colors.common.white} />}
+                {action === 'withdraw' && <X size={14} color={tokens.colors.common.white} />}
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>
+                  {action}
+                </Text>
+              </Box>
             ))}
-          </div>
+          </Box>
         )}
       </Box>
     );

@@ -6,11 +6,18 @@
  * and compact metrics. Slite-inspired warm design with clean data density.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  createIconContainerStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+} from '../../../helpers';
 import type { BhClientPortalProps, ClientPosition, ClientInterview } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
+import type { DesignTokens } from '../../../../../types';
 import {
   Table, Briefcase, Users, Clock, TrendingUp, Calendar, Award,
   ArrowUpDown, ChevronDown, ChevronUp,
@@ -77,6 +84,13 @@ function getInterviewStatusColor(status: string, t: DesignTokens) {
 }
 
 /* ---------------------------------------------------------------------------
+ * Grid Column Defs
+ * -------------------------------------------------------------------------*/
+
+const POS_GRID = '2fr 1fr 80px 60px 60px 80px 70px 100px';
+const IV_GRID = '1.5fr 1.5fr 100px 80px 80px 80px';
+
+/* ---------------------------------------------------------------------------
  * Preset
  * -------------------------------------------------------------------------*/
 
@@ -84,7 +98,15 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
   name: 'BhClientPortal.Operational',
   render: ({ primitives, props, tokens: t }: PresetContext<BhClientPortalProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur };
+      }
+      return {};
+    }, [t]);
 
     const {
       client = DEFAULT_CLIENT,
@@ -97,35 +119,41 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
     } = props;
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
+
+
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+
     const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;
-    const handleSelect = (id: string | null) => {
+    const handleSelect = useCallback((id: string | null) => {
       if (controlledSelected === undefined) setInternalSelected(id);
       onPositionSelect?.(id);
-    };
+    }, [controlledSelected, onPositionSelect]);
 
-    const thStyle = {
+    const thStyle = useMemo(() => ({
       padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
       textAlign: 'left' as const,
       fontWeight: t.typography.fontWeight.semibold,
       color: t.colors.neutral[500],
       fontSize: t.typography.fontSize.xs,
-      textTransform: 'uppercase' as const,
-      letterSpacing: '0.05em',
-      borderBottom: `1px solid ${t.colors.neutral[200]}`,
-    };
+      textTransform: typo.labelTransform,
+      letterSpacing: typo.labelLetterSpacing,
+    }), [t, typo]);
 
-    const tdStyle = {
+    const tdStyle = useMemo(() => ({
       padding: `${t.spacing[3]}px ${t.spacing[3]}px`,
       fontSize: t.typography.fontSize.sm,
       color: t.colors.neutral[700],
-      borderBottom: `1px solid ${t.colors.neutral[50]}`,
-    };
+      display: 'flex',
+      alignItems: 'center',
+    }), [t]);
 
     return (
-      <Box className={className} style={{
+      <Box className={className} role="region" aria-label="Client Portal Operations" style={{
         ...createCardStyle(t, { elevation: 'md' }),
         display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...style,
+        backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...glassStyle,
+        ...entrance.animate, transition: entrance.transition,
+        ...style,
       }}>
         {/* Header */}
         <Box style={{
@@ -137,20 +165,16 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
             {client && (
               <>
-                <Box style={{
-                  width: 36, height: 36, borderRadius: t.borderRadius.lg, flexShrink: 0,
-                  backgroundColor: t.colors.primaryScale[100], display: 'flex',
-                  alignItems: 'center', justifyContent: 'center',
-                }}>
+                <Box style={createIconContainerStyle(t, { size: 36, color: t.colors.primaryScale[100] })}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
                     {client.name.charAt(0)}
                   </Text>
                 </Box>
-                <Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Table size={14} style={{ color: t.colors.neutral[400] }} />
-                    <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
-                      {client.name} · Operations
+                    <Table size={14} color={t.colors.neutral[400]} />
+                    <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: typo.headingWeight, color: t.colors.neutral[900], letterSpacing: typo.headingLetterSpacing }}>
+                      {client.name} -- Operations
                     </Text>
                   </Box>
                 </Box>
@@ -171,10 +195,10 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
               ].map(m => {
                 const Icon = m.icon;
                 return (
-                  <Box key={m.label} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-                    <Icon size={12} style={{ color: t.colors.neutral[400] }} />
-                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{m.value}</Text>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{m.label}</Text>
+                  <Box key={m.label} style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1] }}>
+                    <Icon size={12} color={t.colors.neutral[400]} />
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800], display: 'block' }}>{m.value}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>{m.label}</Text>
                   </Box>
                 );
               })}
@@ -186,59 +210,87 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
           {/* Positions Table */}
           <Box style={{
             ...createCardStyle(t, { elevation: 'sm' }),
-            padding: t.spacing[5], backgroundColor: t.colors.common.white, marginBottom: t.spacing[5],
+            padding: t.spacing[5], backgroundColor: t.colors.common.white, marginBottom: t.spacing[5], width: '100%',
           }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
-              <Briefcase size={15} style={{ color: t.colors.primaryScale[500] }} />
+              <Briefcase size={15} color={t.colors.primaryScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                 Positions Detail ({positions.length})
               </Text>
             </Box>
             {positions.length > 0 ? (
-              <Box style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr>
-                      {['Position', 'Department', 'Status', 'Total', 'Active', 'Interviews', 'Days Open', 'Target Date'].map(col => (
-                        <th key={col} style={thStyle}>{col}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {positions.map(pos => {
-                      const isSelected = selected === pos.id;
-                      const sc = getStatusConfig(pos.status, t);
-                      return (
-                        <tr key={pos.id} onClick={() => handleSelect(isSelected ? null : pos.id)} style={{
-                          cursor: 'pointer', transition: 'background-color 0.15s ease',
-                          backgroundColor: isSelected ? t.colors.primaryScale[50] : 'transparent',
+              <Box style={{ overflowX: 'auto' }} role="table" aria-label="Positions table">
+                {/* Header row */}
+                <Box role="row" style={{
+                  display: 'grid',
+                  gridTemplateColumns: POS_GRID,
+                  borderBottom: `1px solid ${t.colors.neutral[200]}`,
+                }}>
+                  {['Position', 'Department', 'Status', 'Total', 'Active', 'Interviews', 'Days', 'Target Date'].map(col => (
+                    <Box key={col} role="columnheader" style={thStyle}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500] }}>{col}</Text>
+                    </Box>
+                  ))}
+                </Box>
+                {/* Data rows */}
+                {positions.map(pos => {
+                  const isSelected = selected === pos.id;
+                  const sc = getStatusConfig(pos.status, t);
+                  return (
+                    <Box
+                      key={pos.id}
+                      onClick={() => handleSelect(isSelected ? null : pos.id)}
+                      role="row"
+                      tabIndex={0}
+                      aria-selected={isSelected}
+                      aria-label={`${pos.title} - ${sc.label}`}
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: POS_GRID,
+                        cursor: 'pointer',
+                        transition: `background-color ${t.motion.hover}`,
+                        backgroundColor: isSelected ? t.colors.primaryScale[50] : 'transparent',
+                        borderBottom: `1px solid ${t.colors.neutral[50]}`,
+                      }}
+                    >
+                      <Box style={{ ...tdStyle, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], minWidth: 0 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{pos.title}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{pos.department}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Box style={{
+                          display: 'inline-block', padding: `1px ${t.spacing[2]}px`, borderRadius: br,
+                          backgroundColor: sc.bg, border: `1px solid ${sc.border}`,
                         }}>
-                          <td style={{ ...tdStyle, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{pos.title}</td>
-                          <td style={tdStyle}>{pos.department}</td>
-                          <td style={tdStyle}>
-                            <Box style={{
-                              display: 'inline-block', padding: `1px ${t.spacing[2]}px`, borderRadius: br,
-                              backgroundColor: sc.bg, border: `1px solid ${sc.border}`,
-                            }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: sc.color }}>{sc.label}</Text>
-                            </Box>
-                          </td>
-                          <td style={tdStyle}>{pos.totalCandidates}</td>
-                          <td style={{ ...tdStyle, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{pos.activeCandidates}</td>
-                          <td style={tdStyle}>{pos.interviewsScheduled}</td>
-                          <td style={{ ...tdStyle, color: pos.daysOpen > 60 ? t.colors.errorScale[500] : pos.daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[700] }}>
-                            {pos.daysOpen}d
-                          </td>
-                          <td style={{ ...tdStyle, color: t.colors.neutral[500] }}>{pos.targetHireDate || '--'}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: sc.color }}>{sc.label}</Text>
+                        </Box>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{pos.totalCandidates}</Text>
+                      </Box>
+                      <Box style={{ ...tdStyle, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{pos.activeCandidates}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{pos.interviewsScheduled}</Text>
+                      </Box>
+                      <Box style={{ ...tdStyle, color: pos.daysOpen > 60 ? t.colors.errorScale[500] : pos.daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[700] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: pos.daysOpen > 60 ? t.colors.errorScale[500] : pos.daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[700] }}>
+                          {pos.daysOpen}d
+                        </Text>
+                      </Box>
+                      <Box style={{ ...tdStyle, color: t.colors.neutral[500] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{pos.targetHireDate || '--'}</Text>
+                      </Box>
+                    </Box>
+                  );
+                })}
               </Box>
             ) : (
               <Box style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[400] }}>
-                <Text style={{ fontSize: t.typography.fontSize.sm }}>No positions</Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>No positions</Text>
               </Box>
             )}
           </Box>
@@ -247,50 +299,64 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
           {interviews.length > 0 && (
             <Box style={{
               ...createCardStyle(t, { elevation: 'sm' }),
-              padding: t.spacing[5], backgroundColor: t.colors.common.white,
+              padding: t.spacing[5], backgroundColor: t.colors.common.white, width: '100%',
             }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
-                <Calendar size={15} style={{ color: t.colors.primaryScale[500] }} />
+                <Calendar size={15} color={t.colors.primaryScale[500]} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                   Interview Schedule ({interviews.length})
                 </Text>
               </Box>
-              <Box style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                  <thead>
-                    <tr>
-                      {['Candidate', 'Position', 'Date', 'Time', 'Type', 'Status'].map(col => (
-                        <th key={col} style={thStyle}>{col}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {interviews.map(iv => {
-                      const statusColor = getInterviewStatusColor(iv.status, t);
-                      return (
-                        <tr key={iv.id}>
-                          <td style={{ ...tdStyle, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{iv.candidateName}</td>
-                          <td style={tdStyle}>{iv.positionTitle}</td>
-                          <td style={tdStyle}>{iv.date}</td>
-                          <td style={tdStyle}>{iv.time}</td>
-                          <td style={tdStyle}>
-                            <Box style={{
-                              display: 'inline-block', padding: `1px ${t.spacing[2]}px`, borderRadius: br,
-                              backgroundColor: t.colors.secondaryScale[50], border: `1px solid ${t.colors.secondaryScale[200]}`,
-                            }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.secondaryScale[700], textTransform: 'capitalize' }}>{iv.type}</Text>
-                            </Box>
-                          </td>
-                          <td style={tdStyle}>
-                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: statusColor, textTransform: 'capitalize' }}>
-                              {iv.status}
-                            </Text>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <Box style={{ overflowX: 'auto' }} role="table" aria-label="Interview schedule table">
+                {/* Header row */}
+                <Box role="row" style={{
+                  display: 'grid',
+                  gridTemplateColumns: IV_GRID,
+                  borderBottom: `1px solid ${t.colors.neutral[200]}`,
+                }}>
+                  {['Candidate', 'Position', 'Date', 'Time', 'Type', 'Status'].map(col => (
+                    <Box key={col} role="columnheader" style={thStyle}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500] }}>{col}</Text>
+                    </Box>
+                  ))}
+                </Box>
+                {/* Data rows */}
+                {interviews.map(iv => {
+                  const statusColor = getInterviewStatusColor(iv.status, t);
+                  return (
+                    <Box key={iv.id} role="row" aria-label={`${iv.candidateName} - ${iv.positionTitle} - ${iv.date}`} style={{
+                      display: 'grid',
+                      gridTemplateColumns: IV_GRID,
+                      borderBottom: `1px solid ${t.colors.neutral[50]}`,
+                    }}>
+                      <Box style={{ ...tdStyle, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], minWidth: 0 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{iv.candidateName}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{iv.positionTitle}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{iv.date}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{iv.time}</Text>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Box style={{
+                          display: 'inline-block', padding: `1px ${t.spacing[2]}px`, borderRadius: br,
+                          backgroundColor: t.colors.secondaryScale[50], border: `1px solid ${t.colors.secondaryScale[200]}`,
+                        }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.secondaryScale[700], textTransform: 'capitalize' }}>{iv.type}</Text>
+                        </Box>
+                      </Box>
+                      <Box style={tdStyle}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: statusColor, textTransform: 'capitalize' }}>
+                          {iv.status}
+                        </Text>
+                      </Box>
+                    </Box>
+                  );
+                })}
               </Box>
             </Box>
           )}

@@ -236,6 +236,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
         style={{
           display: 'flex',
           flexDirection: 'column' as const,
+          width: '100%',
           gap: tokens.spacing[5],
           padding: tokens.spacing[6],
           minHeight: '100%',
@@ -289,7 +290,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
         {/* ========== SUMMARY STAT CARDS ========== */}
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
           {/* Balance */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4] }}>
             <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Balance</Text>
             <Text
               style={{
@@ -325,7 +326,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
           </Box>
 
           {/* Total Usage */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4] }}>
             <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Total Usage</Text>
             <Text
               style={{
@@ -336,13 +337,13 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             >
               {formatTokenCount(summaryStats.totalUsage)}
             </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500]}}>
               {formatCurrency(summaryStats.totalSpend)} spent
             </Text>
           </Box>
 
           {/* Total Purchased */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4] }}>
             <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Purchased</Text>
             <Text
               style={{
@@ -353,13 +354,13 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             >
               {formatTokenCount(summaryStats.totalPurchases)}
             </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500]}}>
               tokens added
             </Text>
           </Box>
 
           {/* Credits */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4] }}>
             <Text style={{ ...sectionHeader, marginBottom: tokens.spacing[1] }}>Credits</Text>
             <Text
               style={{
@@ -370,7 +371,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             >
               {formatTokenCount(summaryStats.totalCredits)}
             </Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[1] }}>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500]}}>
               tokens credited
             </Text>
           </Box>

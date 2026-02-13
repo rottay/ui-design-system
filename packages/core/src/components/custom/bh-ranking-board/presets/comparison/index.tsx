@@ -6,9 +6,14 @@
  * side-by-side stage score breakdowns, and quick decision actions.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  createEntranceAnimation,
+} from '../../../helpers';
 import type {
   BhRankingBoardProps, RankedCandidate, DecisionAction,
 } from '../../core';
@@ -31,29 +36,6 @@ const DEFAULT_CANDIDATES: RankedCandidate[] = [
 ];
 
 /* ---------------------------------------------------------------------------
- * ScoreRing
- * -------------------------------------------------------------------------*/
-
-function ScoreRing({ score, tokens: t, size = 72 }: { score: number; tokens: DesignTokens; size?: number }) {
-  const color = getScoreBarColor(score, t);
-  const r = (size / 2) - 5; const c = 2 * Math.PI * r;
-  return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="4" />
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
-          strokeDasharray={c} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round"
-          style={{ transition: 'stroke-dashoffset 0.6s ease' }} />
-      </svg>
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color, lineHeight: 1 }}>{score}</span>
-        <span style={{ fontSize: 9, color: t.colors.neutral[400], marginTop: 2 }}>overall</span>
-      </div>
-    </div>
-  );
-}
-
-/* ---------------------------------------------------------------------------
  * Radar Chart
  * -------------------------------------------------------------------------*/
 
@@ -68,7 +50,7 @@ function MiniRadar({ candidates, tokens: t }: { candidates: RankedCandidate[]; t
   const colors = [t.colors.primaryScale[500], t.colors.successScale[500], t.colors.warningScale[500]];
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Radar chart comparing candidate scores">
       {[25, 50, 75, 100].map(lv => (
         <polygon key={lv} points={angles.map(a => { const p = getP(a, lv); return `${p.x},${p.y}`; }).join(' ')} fill="none" stroke={t.colors.neutral[100]} strokeWidth="1" />
       ))}
@@ -93,7 +75,9 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
   name: 'BhRankingBoard.Comparison',
   render: ({ primitives, props, tokens: t }: PresetContext<BhRankingBoardProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
       jobName = 'Senior Frontend Engineer',
@@ -110,11 +94,39 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
 
     const stages = compared.length > 0 ? compared[0].stageScores.map(s => s.stage) : [];
 
+    const handleDecision = useCallback((candidateId: string, action: DecisionAction) => {
+      onDecisionChange?.(candidateId, action);
+    }, [onDecisionChange]);
+
+    const cardStyle = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
+
+    /* ScoreRing using primitives */
+    const ScoreRing = useCallback(({ score, size = 72 }: { score: number; size?: number }) => {
+      const color = getScoreBarColor(score, t);
+      const r = (size / 2) - 5; const c = 2 * Math.PI * r;
+      return (
+        <Box style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }} role="img" aria-label={`Score: ${score}`}>
+            <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="4" />
+            <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="4"
+              strokeDasharray={`${c}`} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round"
+              style={{ transition: `stroke-dashoffset ${t.personality.animation.entranceDuration}ms ease` }} />
+          </svg>
+          <Box style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color, lineHeight: 1 }}>{score}</Text>
+            <Text style={{ fontSize: 9, color: t.colors.neutral[400], marginTop: t.spacing[1] }}>overall</Text>
+          </Box>
+        </Box>
+      );
+    }, [t, Box, Text]);
+
     return (
       <Box className={className} style={{
-        ...createCardStyle(t, { elevation: 'md' }),
-        display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
+        ...cardStyle,
+        display: 'flex', flexDirection: 'column', width: '100%', height: '100%',
+        backgroundColor: t.colors.common.white, overflow: 'hidden',
+        ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
+        ...style,
       }}>
         {/* Header */}
         <Box style={{
@@ -122,19 +134,21 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
-              <ArrowLeftRight size={16} style={{ marginRight: t.spacing[2], verticalAlign: 'middle' }} />
-              Head-to-Head Comparison
-            </Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>{jobName} - {compared.length} candidates</Text>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <ArrowLeftRight size={16} style={{ color: t.colors.neutral[700] }} />
+              <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: personalityTypo.headingWeight, color: t.colors.neutral[900], letterSpacing: personalityTypo.headingLetterSpacing }}>
+                Head-to-Head Comparison
+              </Text>
+            </Box>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{jobName} - {compared.length} candidates</Text>
           </Box>
         </Box>
 
         <Box style={{ flex: 1, overflow: 'auto', padding: `${t.spacing[6]}px` }}>
           {/* Radar chart centered */}
           <Box style={{ display: 'flex', justifyContent: 'center', marginBottom: t.spacing[5] }}>
-            <Box style={{ textAlign: 'center' }}>
+            <Box style={{ textAlign: 'center' as const }}>
               <MiniRadar candidates={compared} tokens={t} />
               <Box style={{ display: 'flex', justifyContent: 'center', gap: t.spacing[4], marginTop: t.spacing[2] }}>
                 {compared.map((c, i) => {
@@ -152,30 +166,34 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
 
           {/* Candidate cards side by side */}
           <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${compared.length}, 1fr)`, gap: t.spacing[4], marginBottom: t.spacing[5] }}>
-            {compared.map(c => {
+            {compared.map((c, idx) => {
               const rb = getRankBadgeColors(c.rank, t);
               return (
                 <Box key={c.id} style={{
                   padding: `${t.spacing[5]}px`, borderRadius: t.borderRadius.xl,
-                  border: `1px solid ${t.colors.neutral[100]}`, textAlign: 'center',
+                  border: `1px solid ${t.colors.neutral[100]}`, textAlign: 'center' as const,
+                  ...createEntranceAnimation(t, { index: idx }).animate,
                 }}>
                   {c.rank <= 3 && <Trophy size={16} style={{ color: t.colors.warningScale[500], marginBottom: t.spacing[2] }} />}
                   <Box style={{
                     width: 52, height: 52, borderRadius: t.borderRadius.full, margin: '0 auto',
-                    backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700],
+                    backgroundColor: t.colors.primaryScale[50],
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, marginBottom: t.spacing[2],
-                  }}>{getCandidateInitials(c.name)}</Box>
+                    marginBottom: t.spacing[2],
+                  }}>
+                    <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>{getCandidateInitials(c.name)}</Text>
+                  </Box>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{c.name}</Text>
-                  <Box style={{ padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: rb.bg, color: rb.color, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, display: 'inline-block', marginTop: t.spacing[1] }}>
-                    Rank #{c.rank}
+                  <Box style={{ padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: rb.bg, display: 'inline-block', marginTop: t.spacing[1] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: rb.color }}>Rank #{c.rank}</Text>
                   </Box>
                   <Box style={{ display: 'flex', justifyContent: 'center', marginTop: t.spacing[3] }}>
-                    <ScoreRing score={c.overallScore} tokens={t} />
+                    <ScoreRing score={c.overallScore} />
                   </Box>
                   {c.hasKnockout && (
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: t.spacing[2], color: t.colors.errorScale[600], fontSize: t.typography.fontSize.xs }}>
-                      <AlertTriangle size={12} /> Knockout flag
+                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: t.spacing[2] }}>
+                      <AlertTriangle size={12} style={{ color: t.colors.errorScale[600] }} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[600] }}>Knockout flag</Text>
                     </Box>
                   )}
                 </Box>
@@ -184,7 +202,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
           </Box>
 
           {/* Stage-by-stage comparison */}
-          <Box style={{ borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[100]}`, overflow: 'hidden', marginBottom: t.spacing[5] }}>
+          <Box style={{ borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[100]}`, overflow: 'hidden', marginBottom: t.spacing[5] }} role="table" aria-label="Stage-by-stage score comparison">
             {stages.map((stage, si) => {
               const scores = compared.map(c => {
                 const ss = c.stageScores.find(s => s.stage === stage);
@@ -192,21 +210,21 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
               });
               const maxScore = Math.max(...scores);
               return (
-                <Box key={stage} style={{
+                <Box key={stage} role="row" style={{
                   display: 'grid', gridTemplateColumns: `120px repeat(${compared.length}, 1fr)`,
                   borderBottom: si < stages.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined,
                 }}>
-                  <Box style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px`, backgroundColor: t.colors.neutral[50], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], display: 'flex', alignItems: 'center' }}>
-                    {stage}
+                  <Box role="rowheader" style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px`, backgroundColor: t.colors.neutral[50], display: 'flex', alignItems: 'center' }}>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{stage}</Text>
                   </Box>
                   {scores.map((score, ci) => {
                     const isBest = score === maxScore;
                     return (
-                      <Box key={ci} style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[2], backgroundColor: isBest ? `${getScoreBarColor(score, t)}08` : t.colors.common.white }}>
-                        <Box style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+                      <Box key={ci} role="cell" style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[2], backgroundColor: isBest ? t.colors.successScale[50] : t.colors.common.white }}>
+                        <Box style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }} role="progressbar" aria-valuenow={score} aria-valuemin={0} aria-valuemax={100}>
                           <Box style={{ height: '100%', width: `${score}%`, backgroundColor: getScoreBarColor(score, t), borderRadius: t.borderRadius.full }} />
                         </Box>
-                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: isBest ? t.typography.fontWeight.bold : t.typography.fontWeight.medium, color: getScoreBarColor(score, t), minWidth: 28, textAlign: 'right' }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: isBest ? t.typography.fontWeight.bold : t.typography.fontWeight.medium, color: getScoreBarColor(score, t), minWidth: 28, textAlign: 'right' as const }}>
                           {score}
                         </Text>
                         {isBest && <Star size={11} style={{ color: t.colors.warningScale[500] }} />}
@@ -240,18 +258,29 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
                   ))}
                 </Box>
                 {/* Decision buttons */}
-                <Box style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[3] }}>
+                <Box style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[3] }} role="group" aria-label={`Decision actions for ${c.name}`}>
                   {(['advance', 'hold', 'reject'] as DecisionAction[]).map(action => {
                     const ac = getDecisionActionColors(action, t);
                     const icons = { advance: <ThumbsUp size={12} />, hold: <Pause size={12} />, reject: <ThumbsDown size={12} /> };
                     return (
-                      <button key={action} onClick={() => onDecisionChange?.(c.id, action)} style={{
-                        display: 'flex', alignItems: 'center', gap: 3, flex: 1, justifyContent: 'center',
-                        padding: `${t.spacing[2]}px`, borderRadius: br,
-                        border: `1px solid ${ac.border}`, backgroundColor: ac.bg, color: ac.color,
-                        fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
-                        textTransform: 'capitalize',
-                      }}>{icons[action]} {action}</button>
+                      <Box
+                        key={action}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`${action} ${c.name}`}
+                        onClick={() => handleDecision(c.id, action)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleDecision(c.id, action); }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 3, flex: 1, justifyContent: 'center',
+                          padding: `${t.spacing[2]}px`, borderRadius: br,
+                          border: `1px solid ${ac.border}`, backgroundColor: ac.bg,
+                          fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+                          textTransform: 'capitalize' as const,
+                          transition: `all ${t.motion.hover}`,
+                        }}>
+                        {icons[action]}
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: ac.color }}>{action}</Text>
+                      </Box>
                     );
                   })}
                 </Box>

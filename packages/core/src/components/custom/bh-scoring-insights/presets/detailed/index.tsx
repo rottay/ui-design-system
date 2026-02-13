@@ -35,10 +35,13 @@ import {
   createCardHoverStyles,
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
+  createEntranceAnimation,
   getPersonalityBadgeRadius,
+  getPersonalityTypography,
   createDividerStyle,
   createProgressBarStyle,
 } from '../../../helpers';
+import type { DesignTokens } from '../../../../../core/types/tokens';
 import type {
   BhScoringInsightsProps,
   ScoringKpi,
@@ -63,11 +66,11 @@ const MOCK_KPIS: ScoringKpi[] = [
 ];
 
 const MOCK_DISTRIBUTION: LevelDistribution[] = [
-  { level: 'Exceptional (90+)', count: 32, color: '#10B981' },
-  { level: 'Strong (75-89)', count: 98, color: '#3B82F6' },
-  { level: 'Adequate (60-74)', count: 124, color: '#F59E0B' },
-  { level: 'Below (40-59)', count: 56, color: '#EF4444' },
-  { level: 'Poor (0-39)', count: 18, color: '#6B7280' },
+  { level: 'Exceptional (90+)', count: 32, colorKey: 'success' },
+  { level: 'Strong (75-89)', count: 98, colorKey: 'primary' },
+  { level: 'Adequate (60-74)', count: 124, colorKey: 'warning' },
+  { level: 'Below (40-59)', count: 56, colorKey: 'error' },
+  { level: 'Poor (0-39)', count: 18, colorKey: 'secondary' },
 ];
 
 const MOCK_HEATMAP: HeatmapCell[] = [
@@ -128,6 +131,15 @@ const MOCK_GAPS: SkillGap[] = [
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
+function resolveLevelColor(level: LevelDistribution, t: DesignTokens): string {
+  if (level.colorKey) {
+    const scaleKey = `${level.colorKey}Scale` as const;
+    const scale = (t.colors as any)[scaleKey];
+    return scale?.[500] ?? t.colors.primaryScale[500];
+  }
+  return level.color || t.colors.primaryScale[500];
+}
+
 function getScoreColor(score: number, t: any): string {
   if (score >= 80) return t.colors.successScale[600];
   if (score >= 60) return t.colors.warningScale[600];
@@ -178,6 +190,8 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
   render: ({ primitives, props, tokens }: PresetContext<BhScoringInsightsProps>) => {
     const { Box, Text } = primitives;
     const t = tokens;
+    const isGlass = t.surface.useGlass;
+    const ptypo = getPersonalityTypography(t);
 
     const {
       kpis: kpisProp,
@@ -261,7 +275,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
     }, [skillGaps, searchQuery]);
 
     /* ---- Styles ---- */
-    const card = createCardStyle(t, { padding: 28 });
+    const card = createCardStyle(t, { padding: 28, glass: isGlass });
     const hoverStyles = createCardHoverStyles(t);
     const sectionLabel = createPersonalitySectionHeaderStyle(t);
     const badgeRadius = getPersonalityBadgeRadius(t);
@@ -272,6 +286,9 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
       const isOpen = expandedSections.has(section.id);
       return (
         <Box
+          role="button"
+          aria-expanded={isOpen}
+          aria-controls={`section-content-${section.id}`}
           onClick={() => toggleSection(section.id)}
           style={{
             display: 'flex',
@@ -288,11 +305,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             <Box style={createIconContainerStyle(t, { size: 32, color: isOpen ? t.colors.primaryScale[100] : t.colors.neutral[100] })}>
               <Icon size={16} color={isOpen ? t.colors.primaryScale[600] : t.colors.neutral[500]} />
             </Box>
-            <Box>
-              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: isOpen ? t.colors.primaryScale[700] : t.colors.neutral[800] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: isOpen ? t.colors.primaryScale[700] : t.colors.neutral[800], letterSpacing: ptypo.headingLetterSpacing }}>
                 {section.label}
               </Text>
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: 2 }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400]}}>
                 {section.description}
               </Text>
             </Box>
@@ -310,7 +327,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
         <Box style={{ ...card, ...hoverStyles.base }}>
           <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>{kpi.label}</Text>
           <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[2] }}>
-            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
               {typeof kpi.value === 'number' && kpi.value % 1 !== 0 ? kpi.value.toFixed(1) : kpi.value}
             </Text>
             <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -331,20 +348,29 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
     /*  RENDER                                                          */
     /* ================================================================ */
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, height: '100%', backgroundColor: t.colors.neutral[50], ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, width: '100%', height: '100%', backgroundColor: t.colors.neutral[50], ...style }}>
 
         {/* === Header === */}
-        <Box style={{ padding: `${t.spacing[6]}px ${t.spacing[7]}px`, backgroundColor: t.colors.common.white, borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+        <Box style={{
+          padding: `${t.spacing[6]}px ${t.spacing[7]}px`,
+          backgroundColor: t.colors.common.white,
+          borderBottom: `1px solid ${t.colors.neutral[200]}`,
+          ...(isGlass && t.glass ? {
+            backdropFilter: t.glass.blur,
+            WebkitBackdropFilter: t.glass.blur,
+            backgroundColor: t.glass.bg,
+          } : {}),
+        }}>
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
               <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
                 <PieChart size={22} color={t.colors.primaryScale[600]} />
               </Box>
-              <Box>
-                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing }}>
                   Scoring Insights
                 </Text>
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
                   Detailed Analysis  --  {kpis.length} KPIs across {heatmapDimensions.length} dimensions
                 </Text>
               </Box>
@@ -367,6 +393,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 placeholder="Search dimensions..."
                 value={searchQuery}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+                aria-label="Search dimensions"
                 style={{
                   border: 'none',
                   outline: 'none',
@@ -378,7 +405,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 }}
               />
               {searchQuery && (
-                <Box onClick={() => setSearchQuery('')} style={{ cursor: 'pointer', flexShrink: 0 }}>
+                <Box onClick={() => setSearchQuery('')} style={{ cursor: 'pointer', flexShrink: 0 }} role="button" aria-label="Clear search">
                   <X size={14} color={t.colors.neutral[400]} />
                 </Box>
               )}
@@ -390,12 +417,17 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
         <Box style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
 
           {/* --- Left sidebar: dimensions --- */}
-          <Box style={{
+          <Box role="navigation" aria-label="Dimension and job navigation" style={{
             width: 240,
             flexShrink: 0,
             borderRight: `1px solid ${t.colors.neutral[200]}`,
             overflow: 'auto',
             backgroundColor: t.colors.common.white,
+            ...(isGlass && t.glass ? {
+              backdropFilter: t.glass.blur,
+              WebkitBackdropFilter: t.glass.blur,
+              backgroundColor: t.glass.bg,
+            } : {}),
           }}>
             <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[4]}px ${t.spacing[2]}px` }}>
               <Text style={{ ...sectionLabel }}>Dimensions</Text>
@@ -486,20 +518,29 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {/* KPIs */}
             <SectionHeader section={SECTIONS[0]} />
             {expandedSections.has('kpis') && (
-              <Box style={{ padding: t.spacing[5], display: 'grid', gridTemplateColumns: `repeat(${Math.min(kpis.length, 5)}, 1fr)`, gap: t.spacing[4] }}>
-                {kpis.map((kpi, i) => <KpiCard key={i} kpi={kpi} />)}
+              <Box role="region" id="section-content-kpis" aria-label="Key Performance Indicators" style={{ padding: t.spacing[5], display: 'grid', gridTemplateColumns: `repeat(${Math.min(kpis.length, 5)}, 1fr)`, gap: t.spacing[4] }}>
+                {kpis.map((kpi, i) => {
+                  const entrance = createEntranceAnimation(t, { index: i });
+                  return (
+                    <Box key={i} style={{ ...entrance.animate, transition: entrance.transition }}>
+                      <KpiCard kpi={kpi} />
+                    </Box>
+                  );
+                })}
               </Box>
             )}
 
             {/* Distribution */}
             <SectionHeader section={SECTIONS[1]} />
             {expandedSections.has('distribution') && (
-              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+              <Box role="region" id="section-content-distribution" aria-label="Score Distribution" style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
                 {levelDistribution.map((level, idx) => {
                   const barPct = (level.count / distMax) * 100;
+                  const barColor = resolveLevelColor(level, t);
+                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
-                    <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
-                      <Box style={{ width: 12, height: 12, borderRadius: t.borderRadius.sm, backgroundColor: level.color || t.colors.primaryScale[400], flexShrink: 0 }} />
+                    <Box key={idx} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
+                      <Box style={{ width: 12, height: 12, borderRadius: t.borderRadius.sm, backgroundColor: barColor, flexShrink: 0 }} />
                       <Text style={{ width: 140, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.medium, flexShrink: 0 }}>
                         {level.level}
                       </Text>
@@ -512,7 +553,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                           height: '100%',
                           width: `${barPct}%`,
                           borderRadius: t.borderRadius.md,
-                          backgroundColor: level.color || t.colors.primaryScale[400],
+                          backgroundColor: barColor,
                           transition: `width ${t.motion.hover}`,
                           display: 'flex',
                           alignItems: 'center',
@@ -540,7 +581,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {/* Heatmap */}
             <SectionHeader section={SECTIONS[2]} />
             {expandedSections.has('heatmap') && heatmapDimensions.length > 0 && (
-              <Box style={{ padding: t.spacing[5], overflowX: 'auto' as const }}>
+              <Box role="region" id="section-content-heatmap" aria-label="Dimension Heatmap" style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: t.spacing[5], overflowX: 'auto' as const }}>
                 <Box style={{ display: 'grid', gridTemplateColumns: `140px repeat(${heatmapJobs.length}, minmax(90px, 1fr))`, gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                   <Box />
                   {heatmapJobs.map(job => (
@@ -618,7 +659,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                             <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: getScoreColor(score, t) }}>
                               {Math.round(score)}
                             </Text>
-                            <Text style={{ fontSize: 10, color: t.colors.neutral[400] }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                               {getScoreLabel(score)}
                             </Text>
                           </Box>
@@ -633,13 +674,14 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {/* Knockouts */}
             <SectionHeader section={SECTIONS[3]} />
             {expandedSections.has('knockouts') && (
-              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+              <Box role="region" id="section-content-knockouts" aria-label="Knockout Analysis" style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
                 {filteredKnockouts.map((stat, idx) => {
                   const pct = stat.totalEvaluations > 0 ? (stat.knockoutCount / stat.totalEvaluations) * 100 : 0;
                   const barW = (stat.knockoutCount / knockoutMax) * 100;
                   const barColor = pct >= 5 ? t.colors.errorScale[500] : pct >= 2 ? t.colors.warningScale[500] : t.colors.neutral[400];
+                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
-                    <Box key={idx} style={{ ...card, marginBottom: t.spacing[3] }}>
+                    <Box key={idx} style={{ ...card, marginBottom: t.spacing[3], ...entrance.animate, transition: entrance.transition }}>
                       <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium }}>
                           {stat.dimension}
@@ -680,8 +722,8 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {/* Trends */}
             <SectionHeader section={SECTIONS[4]} />
             {expandedSections.has('trends') && trendData.length > 1 && (
-              <Box style={{ padding: t.spacing[5], display: 'flex', justifyContent: 'center' }}>
-                <svg width={580} height={200} viewBox="0 0 580 200">
+              <Box role="region" id="section-content-trends" aria-label="Scoring Trends" style={{ padding: t.spacing[5], display: 'flex', justifyContent: 'center' }}>
+                <svg width="100%" viewBox="0 0 580 200" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Score trend chart showing monthly score progression">
                   {[0, 0.25, 0.5, 0.75, 1].map(frac => {
                     const y = 16 + (1 - frac) * 150;
                     const val = (trendMin + frac * trendRange).toFixed(0);
@@ -730,10 +772,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {/* Cohorts */}
             <SectionHeader section={SECTIONS[5]} />
             {expandedSections.has('cohorts') && (
-              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+              <Box role="region" id="section-content-cohorts" aria-label="Cohort Comparison" style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
                 {cohortComparisons.map((cohort, idx) => {
                   const barW = (cohort.avgScore / cohortMax) * 100;
                   const scoreColor = getScoreColor(cohort.avgScore, t);
+                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box
                       key={idx}
@@ -742,6 +785,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                         ...card,
                         marginBottom: t.spacing[3],
                         cursor: 'pointer',
+                        ...entrance.animate,
                         border: drilldownEntity === cohort.groupName
                           ? `2px solid ${t.colors.primaryScale[300]}`
                           : `1px solid ${t.colors.neutral[200]}`,
@@ -796,11 +840,12 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
             {/* Skill Gaps */}
             <SectionHeader section={SECTIONS[6]} />
             {expandedSections.has('gaps') && (
-              <Box style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
+              <Box role="region" id="section-content-gaps" aria-label="Skill Gap Analysis" style={{ padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
                 {filteredGaps.map((gap, idx) => {
                   const isPositive = gap.gapFromTarget >= 0;
                   const gapColor = isPositive ? t.colors.successScale[600] : t.colors.errorScale[600];
                   const gapBg = isPositive ? t.colors.successScale[50] : t.colors.errorScale[50];
+                  const entrance = createEntranceAnimation(t, { index: idx });
                   return (
                     <Box
                       key={idx}
@@ -808,6 +853,8 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                         ...card,
                         marginBottom: t.spacing[3],
                         borderLeft: `3px solid ${gapColor}`,
+                        ...entrance.animate,
+                        transition: entrance.transition,
                       }}
                     >
                       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: t.spacing[2] }}>

@@ -329,6 +329,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
         style={{
           display: 'flex',
           flexDirection: 'column' as const,
+          width: '100%',
           gap: tokens.spacing[6],
           padding: tokens.spacing[6],
           minHeight: '100%',
@@ -902,7 +903,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
         {/* ========== TWO-COLUMN: ALERTS CONFIG + FORECAST ========== */}
         <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[6] }}>
           {/* ---- Alerts Configuration ---- */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[5] }}>
             <Text style={{ ...sectionHeader }}>Alert Configuration</Text>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
               {alerts.map((alert) => (

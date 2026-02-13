@@ -40,8 +40,12 @@ import {
   createCardStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
+  getPersonalityTypography,
   createIconContainerStyle,
   createDividerStyle,
+  createOverlayStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhAuditTrailProps,
@@ -182,11 +186,24 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     }, []);
 
     /* -- Styles ------------------------------------------------------ */
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const entityColors = useMemo(() => getEntityTypeColors(t), [t]);
     const actionColors = useMemo(() => getActionTypeColors(t), [t]);
     const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+    const overlayStyle = useMemo(() => createOverlayStyle(t, 'medium'), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return {
+          backdropFilter: t.glass.blur,
+          WebkitBackdropFilter: t.glass.blur,
+        };
+      }
+      return {};
+    }, [t]);
 
     const selectedObj = useMemo(() => events.find((e) => e.id === selectedEvent), [events, selectedEvent]);
 
@@ -215,8 +232,8 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
           }}>
             {icon}
           </Box>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', display: 'block', marginBottom: 2 }}>{label}</Text>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing, display: 'block', marginBottom: t.spacing[1] }}>{label}</Text>
             <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{typeof value === 'number' ? value.toLocaleString() : value}</Text>
           </Box>
         </Box>
@@ -224,9 +241,13 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     };
 
     /* -- Filter Pill ------------------------------------------------ */
-    const FilterPill = ({ active, color, borderColor, children, onClick }: { active: boolean; color?: string; borderColor?: string; children: React.ReactNode; onClick: () => void }) => (
+    const FilterPill = ({ active, color, borderColor, children, onClick, label }: { active: boolean; color?: string; borderColor?: string; children: React.ReactNode; onClick: () => void; label?: string }) => (
       <Box
         onClick={onClick}
+        role="button"
+        tabIndex={0}
+        aria-pressed={active}
+        aria-label={label}
         style={{
           display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
           padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
@@ -280,11 +301,16 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     return (
       <Box
         className={className}
+        role="region"
+        aria-label="Audit Trail Timeline"
         style={{
           minHeight: '100%',
           backgroundColor: t.colors.neutral[50],
           padding: t.spacing[7],
           fontFamily: 'inherit',
+          ...glassStyle,
+          ...entrance.animate,
+          transition: entrance.transition,
           ...style,
         }}
       >
@@ -308,7 +334,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                 const isActive = filters.entityType === opt.value;
                 const eColor = entityColors[opt.value];
                 return (
-                  <FilterPill key={opt.value} active={isActive} color={isActive ? eColor.bg : undefined} borderColor={isActive ? eColor.border : undefined} onClick={() => handleFilterChange({ ...filters, entityType: isActive ? undefined : opt.value })}>
+                  <FilterPill key={opt.value} active={isActive} color={isActive ? eColor.bg : undefined} borderColor={isActive ? eColor.border : undefined} onClick={() => handleFilterChange({ ...filters, entityType: isActive ? undefined : opt.value })} label={`Filter by ${opt.label}`}>
                     <Box style={{ color: isActive ? eColor.color : 'inherit', display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       {getEntityIcon(opt.value, 12)}
                       <Text style={{ fontSize: t.typography.fontSize.xs }}>{opt.label}</Text>
@@ -324,7 +350,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                 const isActive = filters.actionType === opt.value;
                 const aColor = actionColors[opt.value];
                 return (
-                  <FilterPill key={opt.value} active={isActive} color={isActive ? aColor.bg : undefined} borderColor={isActive ? aColor.bg : undefined} onClick={() => handleFilterChange({ ...filters, actionType: isActive ? undefined : opt.value })}>
+                  <FilterPill key={opt.value} active={isActive} color={isActive ? aColor.bg : undefined} borderColor={isActive ? aColor.bg : undefined} onClick={() => handleFilterChange({ ...filters, actionType: isActive ? undefined : opt.value })} label={`Filter by ${opt.label}`}>
                     <Box style={{ color: isActive ? aColor.color : 'inherit', display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       {getActionIcon(opt.value, 12)}
                       <Text style={{ fontSize: t.typography.fontSize.xs }}>{opt.label}</Text>
@@ -337,6 +363,10 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Box
                 onClick={handleLiveToggle}
+                role="button"
+                tabIndex={0}
+                aria-pressed={liveMode}
+                aria-label={liveMode ? 'Disable live mode' : 'Enable live mode'}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
@@ -355,11 +385,11 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
               </Box>
               {onExport && (
                 <>
-                  <Box onClick={() => onExport('csv')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}>
+                  <Box onClick={() => onExport('csv')} role="button" tabIndex={0} aria-label="Export as CSV" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>CSV</Text>
                   </Box>
-                  <Box onClick={() => onExport('json')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer' }}>
+                  <Box onClick={() => onExport('json')} role="button" tabIndex={0} aria-label="Export as JSON" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>JSON</Text>
                   </Box>
@@ -380,15 +410,16 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
               <Box style={{ position: 'absolute' as const, left: 19, top: 0, bottom: 0, width: 2, backgroundColor: t.colors.neutral[200] }} />
 
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
-                {filteredEvents.map((event) => {
+                {filteredEvents.map((event, idx) => {
                   const eColor = entityColors[event.entityType];
                   const aColor = actionColors[event.actionType];
                   const isExpanded = expandedEvents.has(event.id);
                   const isSelected = selectedEvent === event.id;
                   const hasDiff = event.beforeState && event.afterState && Object.keys(event.beforeState).length > 0;
+                  const itemEntrance = createEntranceAnimation(t, { index: idx });
 
                   return (
-                    <Box key={event.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const }}>
+                    <Box key={event.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const, ...itemEntrance.animate, transition: itemEntrance.transition }}>
                       {/* Timeline dot */}
                       <Box style={{ width: 40, flexShrink: 0, display: 'flex', justifyContent: 'center', paddingTop: t.spacing[3], zIndex: 1 }}>
                         <Box style={{ width: 14, height: 14, borderRadius: t.borderRadius.full, backgroundColor: eColor.dot, border: `3px solid ${t.colors.common.white}`, boxShadow: t.shadows.sm }} />
@@ -397,6 +428,9 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                       {/* Event card */}
                       <Box
                         onClick={() => handleSelect(event.id)}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`${event.userName} ${getActionLabel(event.actionType)} ${event.entityName}`}
                         style={{
                           ...card,
                           flex: 1,
@@ -417,7 +451,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                             }}>
                               <User size={14} color={t.colors.neutral[500]} />
                             </Box>
-                            <Box>
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
                                 {event.userName}
                               </Text>
@@ -433,7 +467,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                           </Box>
 
                           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                            <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                               {getEntityIcon(event.entityType, 10)}
                               <Text style={{ fontSize: 'inherit' }}>{event.entityType}</Text>
                             </Box>
@@ -467,6 +501,10 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                           <>
                             <Box
                               onClick={(e: React.MouseEvent) => { e.stopPropagation(); toggleExpanded(event.id); }}
+                              role="button"
+                              tabIndex={0}
+                              aria-expanded={isExpanded}
+                              aria-label={isExpanded ? 'Hide changes' : 'Show changes'}
                               style={{
                                 display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                                 color: t.colors.primaryScale[600],
@@ -503,11 +541,14 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
               <Box
                 style={{
                   position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0,
-                  backgroundColor: 'rgba(0,0,0,0.4)',
+                  ...overlayStyle,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   zIndex: 1000,
                 }}
                 onClick={handleDetailClose}
+                role="dialog"
+                aria-modal={true}
+                aria-label="Audit event detail"
               >
                 <Box
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -541,7 +582,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                         </Box>
                       </Box>
                     </Box>
-                    <Box onClick={handleDetailClose} style={{ padding: t.spacing[2], backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.md, color: t.colors.neutral[600], cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Box onClick={handleDetailClose} role="button" tabIndex={0} aria-label="Close detail panel" style={{ padding: t.spacing[2], backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.md, color: t.colors.neutral[600], cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${t.motion.hover}` }}>
                       <X size={18} />
                     </Box>
                   </Box>

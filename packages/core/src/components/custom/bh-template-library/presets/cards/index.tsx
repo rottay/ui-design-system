@@ -232,6 +232,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
     const containerStyle: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column' as const,
+      width: '100%',
       height: '100%',
       backgroundColor: tokens.colors.neutral[50],
       fontFamily: 'inherit',

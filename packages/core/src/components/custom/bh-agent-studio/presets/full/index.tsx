@@ -1523,7 +1523,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 fontWeight: tokens.typography.fontWeight.medium,
                 color: tokens.colors.neutral[500],
                 textTransform: 'uppercase',
-                letterSpacing: '0.04em',
+                letterSpacing: typo.labelLetterSpacing,
                 marginBottom: tokens.spacing[2],
               }}
             >
@@ -1541,7 +1541,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     backgroundColor: tokens.colors.primaryScale[50],
                     color: tokens.colors.primaryScale[700],
                     fontSize: tokens.typography.fontSize.xs,
-                    fontFamily: 'monospace',
+                    fontFamily: 'inherit',
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
                   }}
@@ -1564,7 +1564,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               borderRadius: tokens.borderRadius.md,
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[700]}`,
               fontSize: tokens.typography.fontSize.sm,
-              fontFamily: 'monospace',
+              fontFamily: 'inherit',
               lineHeight: tokens.typography.lineHeight.relaxed,
               color: tokens.colors.neutral[100],
               backgroundColor: tokens.colors.neutral[900],
@@ -2215,7 +2215,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: 2,
+                      gap: tokens.spacing[1],
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.successScale[600],
                       fontWeight: tokens.typography.fontWeight.medium,
@@ -2229,7 +2229,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: 2,
+                      gap: tokens.spacing[1],
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.errorScale[600],
                       fontWeight: tokens.typography.fontWeight.medium,
@@ -2243,7 +2243,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: 2,
+                      gap: tokens.spacing[1],
                       fontSize: tokens.typography.fontSize.xs,
                       color: tokens.colors.warningScale[600],
                       fontWeight: tokens.typography.fontWeight.medium,
@@ -2291,7 +2291,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   color: tokens.colors.primaryScale[500],
                   fontWeight: tokens.typography.fontWeight.medium,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
+                  letterSpacing: typo.labelLetterSpacing,
                   display: 'block',
                 }}
               >
@@ -2349,7 +2349,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        marginTop: 2,
+                        marginTop: tokens.spacing[1],
                         flexShrink: 0,
                         color: colors.dotColor,
                       }}
@@ -2362,7 +2362,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                           fontSize: tokens.typography.fontSize.sm,
                           fontWeight: tokens.typography.fontWeight.semibold,
                           color: colors.color,
-                          marginBottom: 2,
+                          marginBottom: tokens.spacing[1],
                         }}
                       >
                         {result.check}

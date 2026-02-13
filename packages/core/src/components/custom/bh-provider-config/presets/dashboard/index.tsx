@@ -7,7 +7,7 @@
  * cost comparison, and connectivity testing.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -148,36 +148,37 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
 
-    const handleProviderSelect = (providerId: string) => {
+    const handleProviderSelect = useCallback((providerId: string) => {
       setInternalSelectedProvider(providerId);
       onProviderSelect?.(providerId);
-    };
+    }, [onProviderSelect]);
 
-    const handleKeyModalToggle = (open: boolean) => {
+    const handleKeyModalToggle = useCallback((open: boolean) => {
       setInternalShowKeyModal(open);
       onKeyModalToggle?.(open);
-    };
+    }, [onKeyModalToggle]);
 
-    const handleModelFilterChange = (filter: ProviderType | 'all') => {
+    const handleModelFilterChange = useCallback((filter: ProviderType | 'all') => {
       setInternalModelFilter(filter);
       onModelFilterChange?.(filter);
-    };
+    }, [onModelFilterChange]);
 
-    const handleCostViewChange = (view: 'chart' | 'table') => {
+    const handleCostViewChange = useCallback((view: 'chart' | 'table') => {
       setInternalCostView(view);
       onCostViewChange?.(view);
-    };
+    }, [onCostViewChange]);
 
-    const handleTestProvider = (providerId: string) => {
-      const existing = activeTestResults.find((r) => r.providerId === providerId);
-      if (!existing || existing.status !== 'testing') {
-        setInternalTestResults((prev) => [
+    const handleTestProvider = useCallback((providerId: string) => {
+      setInternalTestResults((prev) => {
+        const existing = prev.find((r) => r.providerId === providerId);
+        if (existing && existing.status === 'testing') return prev;
+        return [
           ...prev.filter((r) => r.providerId !== providerId),
           { providerId, status: 'testing' as TestStatus },
-        ]);
-      }
+        ];
+      });
       onTestProvider?.(providerId);
-    };
+    }, [onTestProvider]);
 
     const selectedProviderData = useMemo(
       () => providers.find((p) => p.id === activeSelectedProvider),
@@ -272,7 +273,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             </Text>
           </Box>
           <Box
+            role="button"
+            tabIndex={0}
+            aria-label="Add API Key"
             onClick={() => handleKeyModalToggle(true)}
+            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleKeyModalToggle(true); } }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -289,7 +294,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
               ...hoverStyle,
             }}
           >
-            + Add API Key
+            <Text>+ Add API Key</Text>
           </Box>
         </Box>
 
@@ -312,7 +317,12 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
             return (
               <Box
                 key={provider.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`Select provider ${provider.name}`}
+                aria-pressed={isSelected}
                 onClick={() => handleProviderSelect(provider.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProviderSelect(provider.id); } }}
                 style={{
                   ...cardInteractive,
                   border: isSelected
@@ -322,11 +332,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                 }}
-                onMouseEnter={(e) => {
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
                   (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.md;
                 }}
-                onMouseLeave={(e) => {
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
                   (e.currentTarget as HTMLDivElement).style.transform = 'none';
                   (e.currentTarget as HTMLDivElement).style.boxShadow = tokens.shadows.sm;
                 }}
@@ -442,11 +452,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 {/* Test button */}
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Box
-                    as="button"
-                    onClick={(e) => {
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Test ${provider.name}`}
+                    onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
                       handleTestProvider(provider.id);
                     }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleTestProvider(provider.id); } }}
                     style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.md,
@@ -460,7 +473,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       ...hoverStyle,
                     }}
                   >
-                    {testResult?.status === 'testing' ? 'Testing...' : 'Test'}
+                    <Text>{testResult?.status === 'testing' ? 'Testing...' : 'Test'}</Text>
                   </Box>
                   {testResult && testResult.status !== 'testing' && (
                     <Text
@@ -700,7 +713,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                                 display: 'block',
                                 marginBottom: tokens.spacing[1],
                                 textTransform: 'uppercase' as const,
-                                letterSpacing: '0.05em',
+                                letterSpacing: typo.labelLetterSpacing,
                               }}
                             >
                               {labels[idx] || `Priority ${idx + 1}`}
@@ -796,11 +809,16 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   >
                     Model Registry
                   </Text>
-                  <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                  <Box role="radiogroup" aria-label="Filter by model type" style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {(['all', 'chat', 'tts', 'stt', 'conversational'] as const).map((f) => (
                       <Box
                         key={f}
+                        role="radio"
+                        tabIndex={0}
+                        aria-checked={activeModelFilter === f}
+                        aria-label={`Filter ${f}`}
                         onClick={() => handleModelFilterChange(f)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleModelFilterChange(f); } }}
                         style={{
                           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                           borderRadius: tokens.borderRadius.md,
@@ -823,7 +841,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           ...hoverStyle,
                         }}
                       >
-                        {f}
+                        <Text>{f}</Text>
                       </Box>
                     ))}
                   </Box>
@@ -1081,7 +1099,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   </Box>
                 ) : (
                   /* Table view */
-                  <Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                     <Box
                       style={{
                         display: 'grid',
@@ -1152,7 +1170,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   API Keys
                 </Text>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Add API key"
                   onClick={() => handleKeyModalToggle(true)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleKeyModalToggle(true); } }}
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.md,
@@ -1165,7 +1187,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     ...hoverStyle,
                   }}
                 >
-                  + Add
+                  <Text>+ Add</Text>
                 </Box>
               </Box>
 
@@ -1185,7 +1207,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.medium,
                         color: tokens.colors.neutral[800],
-                        fontFamily: 'monospace',
+                        fontFamily: 'inherit',
                         display: 'block',
                         marginBottom: tokens.spacing[1],
                       }}
@@ -1204,7 +1226,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     </Text>
                     <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
                       <Box
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Rotate API key"
                         onClick={() => onRotateKey?.(key.id)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRotateKey?.(key.id); } }}
                         style={{
                           flex: 1,
                           display: 'inline-flex',
@@ -1223,10 +1249,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           ...hoverStyle,
                         }}
                       >
-                        &#x21BB; Rotate
+                        <Text>Rotate</Text>
                       </Box>
                       <Box
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Revoke API key"
                         onClick={() => onRevokeKey?.(key.id)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRevokeKey?.(key.id); } }}
                         style={{
                           flex: 1,
                           display: 'inline-flex',
@@ -1244,7 +1274,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           ...hoverStyle,
                         }}
                       >
-                        Revoke
+                        <Text>Revoke</Text>
                       </Box>
                     </Box>
                   </Box>
@@ -1470,6 +1500,9 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
         {/* =========================================================== */}
         {activeShowKeyModal && (
           <Box
+            role="dialog"
+            aria-modal="true"
+            aria-label="Add API Key"
             style={{
               position: 'fixed' as const,
               top: 0,
@@ -1520,7 +1553,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                   Add API Key
                 </Text>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Close modal"
                   onClick={() => handleKeyModalToggle(false)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleKeyModalToggle(false); } }}
                   style={{
                     border: 'none',
                     background: 'none',
@@ -1531,7 +1568,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     padding: tokens.spacing[1],
                   }}
                 >
-                  &#x2715;
+                  <Text>&#x2715;</Text>
                 </Box>
               </Box>
 
@@ -1572,7 +1609,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                       backgroundColor: tokens.colors.common.white,
                       fontSize: tokens.typography.fontSize.sm,
                       color: tokens.colors.neutral[400],
-                      fontFamily: 'monospace',
+                      fontFamily: 'inherit',
                     }}
                   >
                     sk-...
@@ -1610,7 +1647,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                 }}
               >
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Cancel"
                   onClick={() => handleKeyModalToggle(false)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleKeyModalToggle(false); } }}
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
@@ -1624,10 +1665,14 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     ...hoverStyle,
                   }}
                 >
-                  Cancel
+                  <Text>Cancel</Text>
                 </Box>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Save key"
                   onClick={() => handleKeyModalToggle(false)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleKeyModalToggle(false); } }}
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
@@ -1641,7 +1686,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                     ...hoverStyle,
                   }}
                 >
-                  Save Key
+                  <Text>Save Key</Text>
                 </Box>
               </Box>
             </Box>

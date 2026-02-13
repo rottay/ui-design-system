@@ -6,7 +6,7 @@
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 
-export type BhInterviewSchedulerPreset = 'standard';
+export type BhInterviewSchedulerPreset = 'standard' | 'compact';
 
 export interface ScheduleCandidate {
   id: string;

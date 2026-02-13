@@ -210,8 +210,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         <Box style={{
           marginBottom: tokens.spacing[4],
         }}>
-          <Box style={{
-            display: 'flex',
+          <Box style={{ display: 'flex',
             justifyContent: 'space-between',
             marginBottom: tokens.spacing[2],
           }}>
@@ -305,7 +304,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                   )}
                 </Box>
 
-                <Box style={{ flex: 1, minWidth: 0 }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
                   <Text style={{
                     fontSize: tokens.typography.fontSize.sm,
                     fontWeight: isCurrentStep ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
@@ -380,7 +379,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         {/* Logo Upload */}
         <Box>
           <Text style={labelStyle}>Company Logo</Text>
-          <Box style={{
+          <Box style={{ 
             ...hoverTransition,
             display: 'flex',
             flexDirection: 'column' as const,
@@ -1069,8 +1068,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
                     transition: `all ${tokens.motion.hover}`,
                   }}
                 />
-                <Box style={{
-                  display: 'flex',
+                <Box style={{ display: 'flex',
                   justifyContent: 'space-between',
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.neutral[400],
@@ -1396,7 +1394,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
         }}>
           {confettiPieces}
 
-          <Box style={{
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4],
             textAlign: 'center' as const,
             zIndex: 51,
             maxWidth: 500,
@@ -1456,7 +1454,7 @@ export const FullBhTenantSetup = createPreset<BhTenantSetupProps>({
               justifyContent: 'center',
             }}>
               {nextSteps.map((step, idx) => (
-                <Box key={idx} style={{
+                <Box key={idx} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2],
                   ...cardBase,
                   ...hoverTransition,
                   cursor: 'pointer',

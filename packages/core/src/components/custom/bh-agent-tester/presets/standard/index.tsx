@@ -6,7 +6,7 @@
  * test config, validation results, transcript, and cost estimator.
  */
 
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -194,16 +194,16 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
 
     const chatEndRef = useRef<HTMLDivElement>(null);
 
-    const handleConfigChange = (config: TestConfig) => {
+    const handleConfigChange = useCallback((config: TestConfig) => {
       onConfigChange?.(config);
       if (controlledConfig === undefined) setLocalConfig(config);
-    };
+    }, [onConfigChange, controlledConfig]);
 
-    const handleSendMessage = () => {
+    const handleSendMessage = useCallback(() => {
       if (!messageInput.trim()) return;
       onSendMessage?.(messageInput.trim());
       setMessageInput('');
-    };
+    }, [messageInput, onSendMessage]);
 
     /* ---- Auto-scroll chat ---- */
     useEffect(() => {
@@ -394,7 +394,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
           <Box style={{ display: 'flex', gap: tokens.spacing[2], flexShrink: 0 }}>
             {!isRunning ? (
               <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Start test"
                 onClick={onStartTest}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStartTest?.(); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -412,11 +416,15 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 }}
               >
                 <Play size={16} strokeWidth={2} />
-                Start Test
+                <Text>Start Test</Text>
               </Box>
             ) : (
               <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Stop test"
                 onClick={onStopTest}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStopTest?.(); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -434,12 +442,16 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 }}
               >
                 <Square size={16} strokeWidth={2} />
-                Stop
+                <Text>Stop</Text>
               </Box>
             )}
             {onReset && (
               <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Reset test"
                 onClick={onReset}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onReset?.(); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -738,7 +750,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     flex: 1,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 1,
+                    gap: tokens.spacing[1],
                     height: 32,
                     cursor: 'pointer',
                     transition: `all ${tokens.motion.hover}`,
@@ -850,7 +862,12 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 />
               </Box>
               <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Send message"
+                aria-disabled={!isRunning || !messageInput.trim()}
                 onClick={isRunning && messageInput.trim() ? handleSendMessage : undefined}
+                onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && isRunning && messageInput.trim()) { e.preventDefault(); handleSendMessage(); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1250,7 +1267,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                           borderBottom: i < 2 ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` : 'none',
                         }}
                       >
-                        <Box>
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], display: 'block' }}>
                             {row.label}
                           </Text>
@@ -1297,8 +1314,8 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   >
                     <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>
-                      <AlertTriangle size={14} strokeWidth={1.5} style={{ color: tokens.colors.warningScale[600], flexShrink: 0, marginTop: 2 }} />
-                      <Box>
+                      <AlertTriangle size={14} strokeWidth={1.5} style={{ color: tokens.colors.warningScale[600], flexShrink: 0, marginTop: tokens.spacing[1] }} />
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[800], display: 'block', marginBottom: tokens.spacing[1] }}>
                           Projected Monthly Cost
                         </Text>

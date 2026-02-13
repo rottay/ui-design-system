@@ -6,18 +6,29 @@
  * for reviewing completed calibration sessions.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createCardHoverStyles,
   createEmptyStateStyle,
+  createEntranceAnimation,
   createFilterPillStyle,
   createHoverStyle,
+  createIconContainerStyle,
   createPanelHeaderStyle,
+  createPersonalitySectionHeaderStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
   createSurfaceStyle,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  createDividerStyle,
+  getChartConfig,
   getHoverTransform,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type {
   BhCalibrationViewProps,
@@ -95,7 +106,7 @@ function getMisalignmentColor(val: number, tokens: DesignTokens): string {
 export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
   name: 'BhCalibrationView.Results',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCalibrationViewProps>) => {
-    const { Box, Stack } = primitives;
+    const { Box, Text, Stack } = primitives;
 
     const {
       rubricName,
@@ -108,18 +119,36 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
       style,
     } = props;
 
+    /* ----- personality + glass ----- */
+    const isGlass = tokens.surface.useGlass;
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const headerIconStyle = useMemo(() => createIconContainerStyle(tokens, { size: tokens.spacing[10], color: tokens.colors.primaryScale[100] }), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens, { index: 0 }), [tokens]);
+
     const [expandedSample, setExpandedSample] = useState<string | null>(null);
     const [expandedAdjustment, setExpandedAdjustment] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'overview' | 'samples' | 'adjustments'>('overview');
 
-    const completedSamples = progress?.completed ?? samples.filter(s => s.humanScores && s.aiScores).length;
-    const totalSamples = progress?.total ?? samples.length;
+    const handleTabChange = useCallback((tab: typeof activeTab) => {
+      setActiveTab(tab);
+    }, []);
+    const handleSampleToggle = useCallback((id: string) => {
+      setExpandedSample(prev => prev === id ? null : id);
+    }, []);
+    const handleAdjustmentToggle = useCallback((dimension: string) => {
+      setExpandedAdjustment(prev => prev === dimension ? null : dimension);
+    }, []);
+
+    const completedSamples = useMemo(() => progress?.completed ?? samples.filter(s => s.humanScores && s.aiScores).length, [progress, samples]);
+    const totalSamples = useMemo(() => progress?.total ?? samples.length, [progress, samples]);
     const agreementRate = alignmentMetrics?.agreementRate ?? 0;
     const mae = alignmentMetrics?.meanAbsoluteError ?? 0;
     const confidenceCorr = alignmentMetrics?.confidenceCorrelation ?? 0;
-    const perDimAlignment = alignmentMetrics?.perDimensionAlignment ?? [];
+    const perDimAlignment = useMemo(() => alignmentMetrics?.perDimensionAlignment ?? [], [alignmentMetrics]);
 
-    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
+    const glassCard = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), [tokens, isGlass]);
     const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
 
     /* Aggregate stats across all samples */
@@ -155,14 +184,14 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
       });
     }, [dimensions, samples]);
 
-    const tabs: Array<{ key: typeof activeTab; label: string; icon: typeof BarChart3 }> = [
+    const tabs = useMemo<Array<{ key: typeof activeTab; label: string; icon: typeof BarChart3 }>>(() => [
       { key: 'overview', label: 'Overview', icon: PieChart },
       { key: 'samples', label: 'Sample Details', icon: FileText },
       { key: 'adjustments', label: 'Adjustments', icon: Lightbulb },
-    ];
+    ], []);
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
 
         {/* ===== Header ===== */}
         <Box style={{
@@ -171,36 +200,30 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          ...(tokens.surface.useGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg } : {}),
+          flexWrap: 'wrap' as const,
+          gap: tokens.spacing[3],
+          ...(isGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg } : {}),
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={{
-              width: tokens.spacing[10],
-              height: tokens.spacing[10],
-              borderRadius: tokens.borderRadius.lg,
-              backgroundColor: tokens.colors.primaryScale[100],
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+            <Box style={headerIconStyle}>
               <Target size={20} color={tokens.colors.primaryScale[600]} />
             </Box>
-            <Box>
-              <h2 style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+              <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], display: 'block' }}>
                 {rubricName} - Results
-              </h2>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+              </Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
                 Calibration Analysis
-              </span>
+              </Text>
             </Box>
           </Box>
 
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={createBadgeStyle(tokens, 'info')}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
+            <Box style={{ ...createBadgeStyle(tokens, 'info'), borderRadius: badgeRadius }}>
               <FileText size={12} style={{ marginRight: tokens.spacing[1] }} />
               {completedSamples}/{totalSamples} samples
             </Box>
-            <Box style={createBadgeStyle(tokens, agreementRate >= 0.7 ? 'success' : agreementRate >= 0.5 ? 'warning' : 'error')}>
+            <Box style={{ ...createBadgeStyle(tokens, agreementRate >= 0.7 ? 'success' : agreementRate >= 0.5 ? 'warning' : 'error'), borderRadius: badgeRadius }}>
               <Award size={12} style={{ marginRight: tokens.spacing[1] }} />
               {getGradeLabel(agreementRate)}
             </Box>
@@ -208,7 +231,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
         </Box>
 
         {/* ===== Tab Navigation ===== */}
-        <Box style={{
+        <Box role="tablist" aria-label="Calibration results tabs" style={{
           display: 'flex',
           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
           padding: `0 ${tokens.spacing[5]}px`,
@@ -220,14 +243,17 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
             return (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`panel-${tab.key}`}
+                onClick={() => handleTabChange(tab.key)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: tokens.spacing[2],
                   padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
                   border: 'none',
-                  borderBottom: isActive ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[600]}` : `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} transparent`,
+                  borderBottom: isActive ? `2px solid ${tokens.colors.primaryScale[600]}` : `2px solid transparent`,
                   backgroundColor: 'transparent',
                   color: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                   fontWeight: isActive ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
@@ -251,116 +277,100 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
           {activeTab === 'overview' && (
             <Stack direction="vertical" spacing="lg">
               {/* Summary Metric Cards */}
-              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: tokens.spacing[4] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: tokens.spacing[4] }}>
                 {/* Agreement Rate */}
-                <Box style={{ ...glassCard, padding: tokens.spacing[4], textAlign: 'center' }}>
+                {(() => { const e0 = createEntranceAnimation(tokens, { index: 0 }); return (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...glassCard, padding: tokens.spacing[4], textAlign: 'center', ...e0.animate, transition: e0.transition }}>
                   <Box style={{
-                    width: tokens.spacing[10],
-                    height: tokens.spacing[10],
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: getAgreementBg(agreementRate, tokens),
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    ...createIconContainerStyle(tokens, { size: tokens.spacing[10], color: getAgreementBg(agreementRate, tokens) }),
                     margin: '0 auto',
                     marginBottom: tokens.spacing[2],
                   }}>
                     <CheckCircle size={18} color={getAgreementColor(agreementRate, tokens)} />
                   </Box>
-                  <span style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: getAgreementColor(agreementRate, tokens) }}>
+                  <Text style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: getAgreementColor(agreementRate, tokens) }}>
                     {Math.round(agreementRate * 100)}%
-                  </span>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  </Text>
+                  <Text style={{ ...sectionHeaderStyle, marginBottom: 0 }}>
                     Agreement Rate
-                  </span>
+                  </Text>
                 </Box>
+                ); })()}
 
                 {/* MAE */}
-                <Box style={{ ...glassCard, padding: tokens.spacing[4], textAlign: 'center' }}>
+                {(() => { const e1 = createEntranceAnimation(tokens, { index: 1 }); return (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...glassCard, padding: tokens.spacing[4], textAlign: 'center', ...e1.animate, transition: e1.transition }}>
                   <Box style={{
-                    width: tokens.spacing[10],
-                    height: tokens.spacing[10],
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: mae <= 10 ? tokens.colors.successScale[50] : mae <= 20 ? tokens.colors.warningScale[50] : tokens.colors.errorScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    ...createIconContainerStyle(tokens, { size: tokens.spacing[10], color: mae <= 10 ? tokens.colors.successScale[50] : mae <= 20 ? tokens.colors.warningScale[50] : tokens.colors.errorScale[50] }),
                     margin: '0 auto',
                     marginBottom: tokens.spacing[2],
                   }}>
                     <BarChart3 size={18} color={mae <= 10 ? tokens.colors.successScale[600] : mae <= 20 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />
                   </Box>
-                  <span style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: mae <= 10 ? tokens.colors.successScale[600] : mae <= 20 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600] }}>
+                  <Text style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: mae <= 10 ? tokens.colors.successScale[600] : mae <= 20 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600] }}>
                     {mae.toFixed(1)}
-                  </span>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  </Text>
+                  <Text style={{ ...sectionHeaderStyle, marginBottom: 0 }}>
                     Mean Abs. Error
-                  </span>
+                  </Text>
                 </Box>
+                ); })()}
 
                 {/* Confidence Correlation */}
-                <Box style={{ ...glassCard, padding: tokens.spacing[4], textAlign: 'center' }}>
+                {(() => { const e2 = createEntranceAnimation(tokens, { index: 2 }); return (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...glassCard, padding: tokens.spacing[4], textAlign: 'center', ...e2.animate, transition: e2.transition }}>
                   <Box style={{
-                    width: tokens.spacing[10],
-                    height: tokens.spacing[10],
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: confidenceCorr >= 0.7 ? tokens.colors.successScale[50] : confidenceCorr >= 0.4 ? tokens.colors.warningScale[50] : tokens.colors.errorScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    ...createIconContainerStyle(tokens, { size: tokens.spacing[10], color: confidenceCorr >= 0.7 ? tokens.colors.successScale[50] : confidenceCorr >= 0.4 ? tokens.colors.warningScale[50] : tokens.colors.errorScale[50] }),
                     margin: '0 auto',
                     marginBottom: tokens.spacing[2],
                   }}>
                     <GitCompare size={18} color={confidenceCorr >= 0.7 ? tokens.colors.successScale[600] : confidenceCorr >= 0.4 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />
                   </Box>
-                  <span style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: confidenceCorr >= 0.7 ? tokens.colors.successScale[600] : confidenceCorr >= 0.4 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600] }}>
+                  <Text style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: confidenceCorr >= 0.7 ? tokens.colors.successScale[600] : confidenceCorr >= 0.4 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600] }}>
                     {confidenceCorr.toFixed(2)}
-                  </span>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  </Text>
+                  <Text style={{ ...sectionHeaderStyle, marginBottom: 0 }}>
                     Confidence Corr.
-                  </span>
+                  </Text>
                 </Box>
+                ); })()}
 
                 {/* Samples Completed */}
-                <Box style={{ ...glassCard, padding: tokens.spacing[4], textAlign: 'center' }}>
+                {(() => { const e3 = createEntranceAnimation(tokens, { index: 3 }); return (
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...glassCard, padding: tokens.spacing[4], textAlign: 'center', ...e3.animate, transition: e3.transition }}>
                   <Box style={{
-                    width: tokens.spacing[10],
-                    height: tokens.spacing[10],
-                    borderRadius: tokens.borderRadius.full,
-                    backgroundColor: tokens.colors.primaryScale[50],
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    ...createIconContainerStyle(tokens, { size: tokens.spacing[10], color: tokens.colors.primaryScale[50] }),
                     margin: '0 auto',
                     marginBottom: tokens.spacing[2],
                   }}>
                     <Layers size={18} color={tokens.colors.primaryScale[600]} />
                   </Box>
-                  <span style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[600] }}>
+                  <Text style={{ display: 'block', fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[600] }}>
                     {completedSamples}
-                  </span>
-                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  </Text>
+                  <Text style={{ ...sectionHeaderStyle, marginBottom: 0 }}>
                     Samples Reviewed
-                  </span>
+                  </Text>
                 </Box>
+                ); })()}
               </Box>
 
               {/* Per-Dimension Bar Chart (horizontal) */}
               <Box style={{ ...glassCard, padding: tokens.spacing[5] }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <BarChart3 size={18} color={tokens.colors.primaryScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900] }}>
                     Average Scores by Dimension
-                  </h3>
+                  </Text>
                 </Box>
 
                 <Stack direction="vertical" spacing="sm">
                   {dimAvgScores.map((item) => (
-                    <Box key={item.dimension} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-                      <span style={{ width: 120, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium, flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <Box key={item.dimension} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
+                      <Text style={{ width: 120, minWidth: 80, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontWeight: tokens.typography.fontWeight.medium, flexShrink: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {item.dimension}
-                      </span>
-                      <Box style={{ flex: 1, display: 'flex', gap: tokens.spacing[1], alignItems: 'center' }}>
+                      </Text>
+                      <Box style={{ flex: 1, minWidth: 120, display: 'flex', gap: tokens.spacing[1], alignItems: 'center' }}>
                         {/* Human bar */}
                         <Box style={{ flex: 1, position: 'relative', height: tokens.spacing[4] }}>
                           <Box style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '100%', borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.neutral[100] }} />
@@ -384,24 +394,24 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           }} />
                         </Box>
                       </Box>
-                      <Box style={{ width: 80, display: 'flex', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], flexShrink: 0 }}>
-                        <span style={{ color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.semibold }}>{Math.round(item.avgHuman)}</span>
-                        <span>/</span>
-                        <span style={{ color: tokens.colors.secondaryScale[600], fontWeight: tokens.typography.fontWeight.semibold }}>{Math.round(item.avgAI)}</span>
+                      <Box style={{ width: 80, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], flexShrink: 0 }}>
+                        <Text style={{ color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.semibold, fontSize: 'inherit' }}>{Math.round(item.avgHuman)}</Text>
+                        <Text style={{ fontSize: 'inherit', color: 'inherit' }}>/</Text>
+                        <Text style={{ color: tokens.colors.secondaryScale[600], fontWeight: tokens.typography.fontWeight.semibold, fontSize: 'inherit' }}>{Math.round(item.avgAI)}</Text>
                       </Box>
                     </Box>
                   ))}
                 </Stack>
 
                 {/* Legend */}
-                <Box style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[3], justifyContent: 'center' }}>
+                <Box style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[3], justifyContent: 'center', flexWrap: 'wrap' as const }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                     <Box style={{ width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.primaryScale[400] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Human</span>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Human</Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                     <Box style={{ width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.sm, backgroundColor: tokens.colors.secondaryScale[400] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>AI</span>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>AI</Text>
                   </Box>
                 </Box>
               </Box>
@@ -411,32 +421,36 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 <Box style={{ ...glassCard, padding: tokens.spacing[5] }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Zap size={18} color={tokens.colors.warningScale[600]} />
-                    <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                    <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900] }}>
                       Alignment Heatmap
-                    </h3>
+                    </Text>
                   </Box>
 
-                  <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(perDimAlignment.length, 8)}, 1fr)`, gap: tokens.spacing[2] }}>
-                    {perDimAlignment.map((item, idx) => (
-                      <Box
-                        key={idx}
-                        style={{
-                          padding: tokens.spacing[3],
-                          borderRadius: tokens.borderRadius.md,
-                          backgroundColor: getAgreementBg(item.agreement, tokens),
-                          textAlign: 'center',
-                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(item.agreement, tokens)}30`,
-                          transition: `all ${tokens.motion.hover}`,
-                        }}
-                      >
-                        <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], marginBottom: tokens.spacing[1], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {item.dimension}
-                        </span>
-                        <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: getAgreementColor(item.agreement, tokens) }}>
-                          {Math.round(item.agreement * 100)}%
-                        </span>
-                      </Box>
-                    ))}
+                  <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: tokens.spacing[2] }}>
+                    {perDimAlignment.map((item, idx) => {
+                      const heatEntrance = createEntranceAnimation(tokens, { index: idx });
+                      return (
+                        <Box
+                          key={idx}
+                          style={{
+                            padding: tokens.spacing[3],
+                            borderRadius: tokens.borderRadius.md,
+                            backgroundColor: getAgreementBg(item.agreement, tokens),
+                            textAlign: 'center',
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(item.agreement, tokens)}30`,
+                            transition: heatEntrance.transition || `all ${tokens.motion.hover}`,
+                            ...heatEntrance.animate,
+                          }}
+                        >
+                          <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], marginBottom: tokens.spacing[1], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {item.dimension}
+                          </Text>
+                          <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: getAgreementColor(item.agreement, tokens) }}>
+                            {Math.round(item.agreement * 100)}%
+                          </Text>
+                        </Box>
+                      );
+                    })}
                   </Box>
                 </Box>
               )}
@@ -449,6 +463,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
               {samples.map((sample, sIdx) => {
                 const stats = sampleStats[sIdx];
                 const isExpanded = expandedSample === sample.id;
+                const sEntrance = createEntranceAnimation(tokens, { index: sIdx });
                 return (
                   <Box
                     key={sample.id}
@@ -457,11 +472,16 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       borderRadius: tokens.borderRadius.lg,
                       backgroundColor: tokens.colors.common.white,
                       overflow: 'hidden',
+                      ...sEntrance.animate,
+                      transition: sEntrance.transition,
                     }}
                   >
                     {/* Sample header (collapsible) */}
                     <button
-                      onClick={() => setExpandedSample(isExpanded ? null : sample.id)}
+                      aria-expanded={isExpanded}
+                      aria-controls={`sample-detail-${sample.id}`}
+                      aria-label={`Sample ${sample.id}, ${stats ? Math.round(stats.agreementRate * 100) + '% agreement' : 'no data'}`}
+                      onClick={() => handleSampleToggle(sample.id)}
                       style={{
                         width: '100%',
                         display: 'flex',
@@ -477,26 +497,21 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                     >
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                         <Box style={{
-                          width: tokens.spacing[8],
-                          height: tokens.spacing[8],
-                          borderRadius: tokens.borderRadius.md,
-                          backgroundColor: tokens.colors.primaryScale[100],
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          ...createIconContainerStyle(tokens, { size: tokens.spacing[8], color: tokens.colors.primaryScale[100] }),
                         }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>
+                          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>
                             {sIdx + 1}
-                          </span>
+                          </Text>
                         </Box>
-                        <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
                           Sample {sample.id}
-                        </span>
+                        </Text>
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                         {stats && (
                           <Box style={{
                             ...createBadgeStyle(tokens, stats.agreementRate >= 0.7 ? 'success' : stats.agreementRate >= 0.5 ? 'warning' : 'error'),
+                            borderRadius: badgeRadius,
                           }}>
                             {Math.round(stats.agreementRate * 100)}% agree
                           </Box>
@@ -507,13 +522,14 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
                     {/* Expanded content */}
                     {isExpanded && sample.humanScores && sample.aiScores && (
-                      <Box style={{ padding: tokens.spacing[4], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-                        <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(dimensions.length, 4)}, 1fr)`, gap: tokens.spacing[3] }}>
-                          {dimensions.map(dim => {
+                      <Box id={`sample-detail-${sample.id}`} role="region" aria-label={`Details for sample ${sample.id}`} style={{ padding: tokens.spacing[4], borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+                        <Box style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(140px, 1fr))`, gap: tokens.spacing[3] }}>
+                          {dimensions.map((dim, dimIdx) => {
                             const hVal = sample.humanScores?.[dim] ?? 0;
                             const aVal = sample.aiScores?.[dim] ?? 0;
                             const diff = Math.abs(hVal - aVal);
                             const isClose = diff <= 10;
+                            const dimEntrance = createEntranceAnimation(tokens, { index: dimIdx });
                             return (
                               <Box key={dim} style={{
                                 padding: tokens.spacing[3],
@@ -521,26 +537,28 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                                 backgroundColor: isClose ? tokens.colors.successScale[50] : tokens.colors.errorScale[50],
                                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isClose ? tokens.colors.successScale[200] : tokens.colors.errorScale[200]}`,
                                 textAlign: 'center',
+                                ...dimEntrance.animate,
+                                transition: dimEntrance.transition,
                               }}>
-                                <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600], marginBottom: tokens.spacing[2], textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                <Text style={{ ...sectionHeaderStyle, display: 'block', marginBottom: tokens.spacing[2], color: tokens.colors.neutral[600] }}>
                                   {dim}
-                                </span>
+                                </Text>
                                 <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: tokens.spacing[2] }}>
-                                  <Box>
-                                    <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Human</span>
-                                    <span style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[600] }}>{hVal}</span>
+                                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                                    <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Human</Text>
+                                    <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[600] }}>{hVal}</Text>
                                   </Box>
                                   <ArrowRight size={14} color={tokens.colors.neutral[300]} />
-                                  <Box>
-                                    <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>AI</span>
-                                    <span style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.secondaryScale[600] }}>{aVal}</span>
+                                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                                    <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>AI</Text>
+                                    <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.secondaryScale[600] }}>{aVal}</Text>
                                   </Box>
                                 </Box>
                                 <Box style={{ marginTop: tokens.spacing[1], display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[1] }}>
                                   {isClose ? <CheckCircle size={10} color={tokens.colors.successScale[600]} /> : <XCircle size={10} color={tokens.colors.errorScale[600]} />}
-                                  <span style={{ fontSize: tokens.typography.fontSize.xs, color: isClose ? tokens.colors.successScale[700] : tokens.colors.errorScale[700], fontWeight: tokens.typography.fontWeight.medium }}>
+                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: isClose ? tokens.colors.successScale[700] : tokens.colors.errorScale[700], fontWeight: tokens.typography.fontWeight.medium }}>
                                     {isClose ? 'Aligned' : `Diff: ${diff}`}
-                                  </span>
+                                  </Text>
                                 </Box>
                               </Box>
                             );
@@ -553,8 +571,10 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
               })}
 
               {samples.length === 0 && (
-                <Box style={{ textAlign: 'center', padding: tokens.spacing[8], color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-                  No calibration samples available.
+                <Box style={createEmptyStateStyle(tokens)}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
+                    No calibration samples available.
+                  </Text>
                 </Box>
               )}
             </Stack>
@@ -567,6 +587,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 adjustments.map((adj, idx) => {
                   const isExpanded = expandedAdjustment === adj.dimension;
                   const misColor = getMisalignmentColor(adj.misalignment, tokens);
+                  const adjEntrance = createEntranceAnimation(tokens, { index: idx });
                   return (
                     <Box
                       key={idx}
@@ -576,10 +597,15 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         backgroundColor: tokens.colors.common.white,
                         overflow: 'hidden',
                         borderLeft: `3px solid ${misColor}`,
+                        ...adjEntrance.animate,
+                        transition: adjEntrance.transition,
                       }}
                     >
                       <button
-                        onClick={() => setExpandedAdjustment(isExpanded ? null : adj.dimension)}
+                        aria-expanded={isExpanded}
+                        aria-controls={`adj-detail-${adj.dimension}`}
+                        aria-label={`${adj.dimension} adjustment, ${(adj.misalignment * 100).toFixed(0)}% misalignment`}
+                        onClick={() => handleAdjustmentToggle(adj.dimension)}
                         style={{
                           width: '100%',
                           display: 'flex',
@@ -595,14 +621,14 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       >
                         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                           <AlertTriangle size={16} color={misColor} />
-                          <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+                          <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                             {adj.dimension}
-                          </span>
+                          </Text>
                         </Box>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                           <Box style={{
                             padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                            borderRadius: tokens.borderRadius.sm,
+                            borderRadius: badgeRadius,
                             backgroundColor: `${misColor}15`,
                             color: misColor,
                             fontSize: tokens.typography.fontSize.xs,
@@ -615,16 +641,16 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       </button>
 
                       {isExpanded && (
-                        <Box style={{ padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+                        <Box id={`adj-detail-${adj.dimension}`} role="region" aria-label={`Adjustment details for ${adj.dimension}`} style={{ padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                           <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2], padding: tokens.spacing[3], backgroundColor: tokens.colors.warningScale[50], borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}` }}>
-                            <Lightbulb size={16} color={tokens.colors.warningScale[600]} style={{ flexShrink: 0, marginTop: 2 }} />
-                            <Box>
-                              <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.warningScale[700], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: tokens.spacing[1] }}>
+                            <Lightbulb size={16} color={tokens.colors.warningScale[600]} style={{ flexShrink: 0, marginTop: tokens.spacing[1] }} />
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                              <Text style={{ ...sectionHeaderStyle, display: 'block', color: tokens.colors.warningScale[700], marginBottom: tokens.spacing[1] }}>
                                 Suggested Tweak
-                              </span>
-                              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.relaxed }}>
+                              </Text>
+                              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.relaxed }}>
                                 {adj.suggestedTweak}
-                              </span>
+                              </Text>
                             </Box>
                           </Box>
                         </Box>
@@ -633,11 +659,11 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                   );
                 })
               ) : (
-                <Box style={{ textAlign: 'center', padding: tokens.spacing[8] }}>
+                <Box style={createEmptyStateStyle(tokens)}>
                   <CheckCircle size={32} color={tokens.colors.successScale[400]} style={{ marginBottom: tokens.spacing[2] }} />
-                  <p style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
                     No adjustments needed. Human and AI scoring are well aligned.
-                  </p>
+                  </Text>
                 </Box>
               )}
             </Stack>

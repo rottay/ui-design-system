@@ -41,4 +41,4 @@ export function BhFeedbackEditor(props: BhFeedbackEditorProps): React.ReactEleme
 
 BhFeedbackEditor.displayName = 'BhFeedbackEditor';
 
-export { StandardBhFeedbackEditor } from './presets';
+export { StandardBhFeedbackEditor, CompactBhFeedbackEditor } from './presets';

@@ -6,7 +6,7 @@
  * Shows members, KPIs, sprint burndown, and target progress.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Users,
   UserPlus,
@@ -31,6 +31,9 @@ import {
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
   createBadgeStyle,
+  getPersonalityTypography,
+  createEntranceAnimation,
+  createProgressBarStyle,
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
@@ -105,22 +108,24 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
 
     const [selectedTeam, setSelectedTeam] = useState(selProp ?? teams[0]?.id);
 
-    const handleTeamSelect = (id: string) => {
+    const handleTeamSelect = useCallback((id: string) => {
       setSelectedTeam(id);
       onTeamSelect?.(id);
-    };
+    }, [onTeamSelect]);
 
     const activeTeam = teams.find(tm => tm.id === selectedTeam) ?? teams[0];
 
     /* ---- Styles ---- */
-    const card = createCardStyle(t, { padding: 24 });
-    const hoverStyles = createCardHoverStyles(t);
-    const sectionLabel = createPersonalitySectionHeaderStyle(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const isGlass = t.surface.useGlass && !!t.glass;
 
     /* ================================================================ */
     return (
-      <Box className={className} style={{ display: 'flex', height: '100%', backgroundColor: t.colors.neutral[50], ...style }}>
+      <Box className={className} style={{ display: 'flex', width: '100%', height: '100%', backgroundColor: t.colors.neutral[50], ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}), ...style }}>
 
         {/* === Left sidebar: team list === */}
         <Box style={{
@@ -147,7 +152,12 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
             return (
               <Box
                 key={tm.id}
+                role="button"
+                tabIndex={0}
+                aria-label={`Select team: ${tm.name}`}
+                aria-pressed={isSelected}
                 onClick={() => handleTeamSelect(tm.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleTeamSelect(tm.id); }}
                 style={{
                   padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                   cursor: 'pointer',
@@ -163,14 +173,14 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                   </Text>
                   <ChevronRight size={14} color={t.colors.neutral[400]} />
                 </Box>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1], display: 'block' }}>
                   {tm.memberCount} members -- {tm.activeJobs} jobs
                 </Text>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[2] }}>
                   <Box style={{ flex: 1, height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
                     <Box style={{ height: '100%', width: `${capPct}%`, borderRadius: t.borderRadius.full, backgroundColor: capColor, opacity: 0.7 }} />
                   </Box>
-                  <Text style={{ fontSize: 10, color: t.colors.neutral[400], flexShrink: 0 }}>{capPct.toFixed(0)}%</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], flexShrink: 0 }}>{capPct.toFixed(0)}%</Text>
                 </Box>
               </Box>
             );
@@ -184,11 +194,11 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
 
               {/* Team header */}
               <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Box>
-                  <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: personalityTypo.headingWeight, color: t.colors.neutral[900], letterSpacing: personalityTypo.headingLetterSpacing }}>
                     {activeTeam.name}
                   </Text>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
                     Led by {activeTeam.leadName} -- Performance: {activeTeam.performanceScore}/100
                   </Text>
                 </Box>
@@ -209,23 +219,23 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
 
               {/* KPI row */}
               <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4] }}>
-                <Box style={{ ...card }}>
-                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>Hires vs Target</Text>
-                  <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card }}>
+                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>Hires vs Target</Text>
+                  <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
                     {teamKpis.hiresVsTarget.actual}/{teamKpis.hiresVsTarget.target}
                   </Text>
-                  <Box style={{ marginTop: t.spacing[2], height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+                  <Box style={{ marginTop: t.spacing[2], height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden', width: '100%' }}>
                     <Box style={{ height: '100%', width: `${(teamKpis.hiresVsTarget.actual / teamKpis.hiresVsTarget.target) * 100}%`, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[500] }} />
                   </Box>
                 </Box>
-                <Box style={{ ...card }}>
-                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>SLA Compliance</Text>
-                  <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: teamKpis.slaCompliance >= 85 ? t.colors.successScale[600] : t.colors.warningScale[600] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card }}>
+                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>SLA Compliance</Text>
+                  <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
                     {teamKpis.slaCompliance}%
                   </Text>
                 </Box>
-                <Box style={{ ...card }}>
-                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>Satisfaction</Text>
+                <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const }}>
+                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>Satisfaction</Text>
                   <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                       {teamKpis.satisfactionScore.toFixed(1)}
@@ -233,8 +243,8 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/5.0</Text>
                   </Box>
                 </Box>
-                <Box style={{ ...card }}>
-                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>Velocity</Text>
+                <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const }}>
+                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>Velocity</Text>
                   {teamKpis.velocityTrend.length > 1 && (
                     <svg width={100} height={32} viewBox="0 0 100 32">
                       {(() => {
@@ -269,27 +279,27 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                         borderBottom: `1px solid ${t.colors.neutral[100]}`,
                       }}>
                         <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <Text style={{ fontSize: 12, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
                             {mem.name.split(' ').map(n => n[0]).join('')}
                           </Text>
                         </Box>
-                        <Box style={{ flex: 1 }}>
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{mem.name}</Text>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{mem.role}</Text>
                         </Box>
-                        <Box style={{ textAlign: 'center' as const, width: 50 }}>
+                        <Box style={{ textAlign: 'center' as const, width: 50, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{mem.activeJobs}</Text>
-                          <Text style={{ fontSize: 10, color: t.colors.neutral[400] }}>jobs</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>jobs</Text>
                         </Box>
-                        <Box style={{ textAlign: 'center' as const, width: 50 }}>
+                        <Box style={{ textAlign: 'center' as const, width: 50, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{mem.hires}</Text>
-                          <Text style={{ fontSize: 10, color: t.colors.neutral[400] }}>hires</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>hires</Text>
                         </Box>
                         <Box style={{ width: 80, display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Box style={{ flex: 1, height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
                             <Box style={{ height: '100%', width: `${mem.allocationPercent}%`, borderRadius: t.borderRadius.full, backgroundColor: allocColor }} />
                           </Box>
-                          <Text style={{ fontSize: 10, color: t.colors.neutral[400], flexShrink: 0 }}>{mem.allocationPercent}%</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], flexShrink: 0 }}>{mem.allocationPercent}%</Text>
                         </Box>
                       </Box>
                     );
@@ -297,8 +307,8 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                 </Box>
 
                 {/* Targets */}
-                <Box style={{ ...card }}>
-                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Quarterly Targets</Text>
+                <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const }}>
+                  <Text style={{ ...sectionLabel, marginBottom: t.spacing[4], display: 'block' }}>Quarterly Targets</Text>
                   {targets.map((tgt, idx) => {
                     const pct = (tgt.current / Math.max(tgt.value, 1)) * 100;
                     const isOnTrack = pct >= 75;
@@ -328,7 +338,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
 
                   {/* Sprint ring */}
                   <Box style={{ borderTop: `1px solid ${t.colors.neutral[100]}`, paddingTop: t.spacing[4], marginTop: t.spacing[2] }}>
-                    <Text style={{ ...sectionLabel, marginBottom: t.spacing[3] }}>Sprint</Text>
+                    <Text style={{ ...sectionLabel, marginBottom: t.spacing[3], display: 'block' }}>Sprint</Text>
                     <Box style={{ display: 'flex', justifyContent: 'center' }}>
                       <svg width={100} height={100} viewBox="0 0 100 100">
                         {(() => {

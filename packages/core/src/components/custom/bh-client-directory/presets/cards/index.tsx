@@ -7,14 +7,23 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+} from '../../../helpers';
 import type {
   BhClientDirectoryProps, ClientItem, ClientFilter,
   ClientType, ClientStatus, ClientTier, ApprovalStatus,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
+import type { DesignTokens } from '../../../../../types';
 import {
   Search, Plus, Building2, User, ChevronDown, ChevronUp, X,
   Mail, Phone, Briefcase, DollarSign, Calendar, FileText,
@@ -79,7 +88,15 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
   name: 'BhClientDirectory.Cards',
   render: ({ primitives, props, tokens: t }: PresetContext<BhClientDirectoryProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur };
+      }
+      return {};
+    }, [t]);
 
     const {
       clients = DEFAULT_CLIENTS,
@@ -92,6 +109,10 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
     } = props;
 
     const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
+
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+
     const [internalFilters, setInternalFilters] = useState<ClientFilter>(
       filtersProp ?? { type: 'all', status: 'all', tier: 'all', search: '' },
     );
@@ -104,17 +125,19 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
 
     const filtered = useMemo(() => filterClients(clients, filters), [clients, filters]);
 
-    const toggleExpand = (id: string) => {
+    const toggleExpand = useCallback((id: string) => {
       const next = expandedCard === id ? null : id;
       setExpandedCard(next);
       onClientSelect?.(id);
-    };
+    }, [expandedCard, onClientSelect]);
 
     return (
-      <Box className={className} style={{
+      <Box className={className} role="region" aria-label="Client Directory Cards" style={{
         ...createCardStyle(t, { elevation: 'md' }),
         display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
+        backgroundColor: t.colors.common.white, overflow: 'hidden', ...glassStyle,
+        ...entrance.animate, transition: entrance.transition,
+        ...style,
       }}>
         {/* Header */}
         <Box style={{
@@ -122,20 +145,32 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
-              <Building2 size={16} style={{ marginRight: t.spacing[2], verticalAlign: 'middle' }} />
-              Client Directory
-            </Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>{filtered.length} clients</Text>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <Building2 size={16} color={t.colors.primaryScale[500]} />
+              <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: typo.headingWeight, color: t.colors.neutral[900], letterSpacing: typo.headingLetterSpacing }}>
+                Client Directory
+              </Text>
+            </Box>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>{filtered.length} clients</Text>
           </Box>
           {onAddClient && (
-            <button onClick={() => onAddClient({})} style={{
-              display: 'flex', alignItems: 'center', gap: t.spacing[2],
-              padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: br, border: 'none',
-              backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
-              fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
-            }}><Plus size={14} /> Add Client</button>
+            <Box
+              onClick={() => onAddClient({})}
+              role="button"
+              tabIndex={0}
+              aria-label="Add new client"
+              style={{
+                display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: br,
+                backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+                fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
+                transition: `all ${t.motion.hover}`,
+              }}
+            >
+              <Plus size={14} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>Add Client</Text>
+            </Box>
           )}
         </Box>
 
@@ -144,7 +179,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
           display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap',
           padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
-        }}>
+        }} role="toolbar" aria-label="Filter controls">
           {[
             { label: 'All', value: 'all' as const, icon: <Users size={12} /> },
             { label: 'Companies', value: 'company' as const, icon: <Building2 size={12} /> },
@@ -152,88 +187,143 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
           ].map(opt => {
             const active = !filters.type || filters.type === opt.value || (opt.value === 'all' && !filters.type);
             return (
-              <button key={opt.value} onClick={() => updateFilter({ type: opt.value })} style={{
-                display: 'flex', alignItems: 'center', gap: 4,
-                padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-                border: `1px solid ${active ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
-                backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white,
-                color: active ? t.colors.primaryScale[700] : t.colors.neutral[600],
-                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
-              }}>{opt.icon} {opt.label}</button>
+              <Box
+                key={opt.value}
+                onClick={() => updateFilter({ type: opt.value })}
+                role="button"
+                tabIndex={0}
+                aria-pressed={active}
+                aria-label={`Filter by ${opt.label}`}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+                  border: `1px solid ${active ? t.colors.primaryScale[200] : t.colors.neutral[200]}`,
+                  backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white,
+                  color: active ? t.colors.primaryScale[700] : t.colors.neutral[600],
+                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
+                  transition: `all ${t.motion.hover}`,
+                }}
+              >
+                {opt.icon}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: 'inherit' }}>{opt.label}</Text>
+              </Box>
             );
           })}
-          <select value={filters.status ?? 'all'} onChange={e => updateFilter({ status: e.target.value as ClientStatus | 'all' })} style={{
-            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-            border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs,
-            color: t.colors.neutral[700], backgroundColor: t.colors.common.white, cursor: 'pointer',
-          }}>
-            <option value="all">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="pending_approval">Pending</option>
-            <option value="suspended">Suspended</option>
-          </select>
-          <select value={filters.tier ?? 'all'} onChange={e => updateFilter({ tier: e.target.value as ClientTier | 'all' })} style={{
-            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-            border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs,
-            color: t.colors.neutral[700], backgroundColor: t.colors.common.white, cursor: 'pointer',
-          }}>
-            <option value="all">All Tiers</option>
-            <option value="standard">Standard</option>
-            <option value="premium">Premium</option>
-            <option value="enterprise">Enterprise</option>
-          </select>
+          {/* Status filter */}
+          <Box
+            style={{
+              position: 'relative',
+              padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+              border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs,
+              color: t.colors.neutral[700], backgroundColor: t.colors.common.white, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: t.spacing[1],
+            }}
+          >
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
+              {filters.status === 'all' || !filters.status ? 'All Statuses' : STATUS_MAP[filters.status as ClientStatus]?.label ?? filters.status}
+            </Text>
+            <ChevronDown size={12} color={t.colors.neutral[400]} />
+            <select
+              aria-label="Filter by status"
+              value={filters.status ?? 'all'}
+              onChange={(e: any) => updateFilter({ status: e.target.value as ClientStatus | 'all' })}
+              style={{
+                position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%',
+              }}
+            />
+          </Box>
+          {/* Tier filter */}
+          <Box
+            style={{
+              position: 'relative',
+              padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+              border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs,
+              color: t.colors.neutral[700], backgroundColor: t.colors.common.white, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: t.spacing[1],
+            }}
+          >
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
+              {filters.tier === 'all' || !filters.tier ? 'All Tiers' : TIER_MAP[filters.tier as ClientTier]?.label ?? filters.tier}
+            </Text>
+            <ChevronDown size={12} color={t.colors.neutral[400]} />
+            <select
+              aria-label="Filter by tier"
+              value={filters.tier ?? 'all'}
+              onChange={(e: any) => updateFilter({ tier: e.target.value as ClientTier | 'all' })}
+              style={{
+                position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer', width: '100%', height: '100%',
+              }}
+            />
+          </Box>
+          {/* Search */}
           <Box style={{ flex: 1, minWidth: 180, position: 'relative' }}>
-            <Search size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
-            <input value={filters.search ?? ''} onChange={e => updateFilter({ search: e.target.value })} placeholder="Search clients..." style={{
-              width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px ${t.spacing[2]}px ${t.spacing[8]}px`,
-              border: `1px solid ${t.colors.neutral[200]}`, borderRadius: br,
-              fontSize: t.typography.fontSize.sm, color: t.colors.neutral[900], backgroundColor: t.colors.common.white, outline: 'none',
-            }} />
+            <Search size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400], pointerEvents: 'none' }} />
+            <input
+              aria-label="Search clients"
+              value={filters.search ?? ''}
+              onChange={(e: any) => updateFilter({ search: e.target.value })}
+              placeholder="Search clients..."
+              style={{
+                width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px ${t.spacing[2]}px ${t.spacing[8]}px`,
+                border: `1px solid ${t.colors.neutral[200]}`, borderRadius: br,
+                fontSize: t.typography.fontSize.sm, color: t.colors.neutral[900], backgroundColor: t.colors.common.white,
+                outline: 'none',
+              }}
+            />
           </Box>
         </Box>
 
         {/* Card grid */}
         <Box style={{ flex: 1, overflow: 'auto', padding: `${t.spacing[5]}px ${t.spacing[6]}px` }}>
           {filtered.length === 0 && (
-            <Box style={{ textAlign: 'center', padding: t.spacing[10], color: t.colors.neutral[400] }}>
-              <Search size={32} style={{ marginBottom: t.spacing[3], opacity: 0.5 }} />
-              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>No clients found</Text>
-              <Text style={{ fontSize: t.typography.fontSize.xs, marginTop: t.spacing[1] }}>Try adjusting your filters</Text>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...createEmptyStateStyle(t) }}>
+              <Search size={32} style={{ marginBottom: t.spacing[3], opacity: 0.5, color: t.colors.neutral[300] }} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[400] }}>No clients found</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Try adjusting your filters</Text>
             </Box>
           )}
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: t.spacing[4] }}>
-            {filtered.map(client => {
+            {filtered.map((client, idx) => {
               const isExpanded = expandedCard === client.id;
               const st = STATUS_MAP[client.status];
               const ti = TIER_MAP[client.tier];
+              const itemEntrance = createEntranceAnimation(t, { index: idx });
 
               return (
                 <Box key={client.id} style={{
                   borderRadius: t.borderRadius.xl, border: `1px solid ${isExpanded ? t.colors.primaryScale[300] : t.colors.neutral[100]}`,
-                  backgroundColor: t.colors.common.white, overflow: 'hidden', transition: 'border-color 0.15s ease',
+                  backgroundColor: t.colors.common.white, overflow: 'hidden', transition: `border-color ${t.motion.hover}`,
+                  ...itemEntrance.animate,
                 }}>
                   {/* Card header */}
-                  <Box onClick={() => toggleExpand(client.id)} style={{
-                    display: 'flex', alignItems: 'center', gap: t.spacing[3],
-                    padding: `${t.spacing[4]}px`, cursor: 'pointer',
-                  }}>
-                    <Box style={{
-                      width: 44, height: 44, flexShrink: 0,
-                      borderRadius: client.type === 'company' ? t.borderRadius.lg : t.borderRadius.full,
-                      backgroundColor: client.type === 'company' ? t.colors.primaryScale[50] : t.colors.secondaryScale[50],
-                      color: client.type === 'company' ? t.colors.primaryScale[600] : t.colors.secondaryScale[600],
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      {client.type === 'company' ? <Building2 size={20} /> : <User size={20} />}
+                  <Box
+                    onClick={() => toggleExpand(client.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isExpanded}
+                    aria-label={`${client.name} - ${st.label} - ${ti.label}`}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: t.spacing[3],
+                      padding: `${t.spacing[4]}px`, cursor: 'pointer',
+                    }}
+                  >
+                    <Box style={createIconContainerStyle(t, {
+                      size: 44,
+                      color: client.type === 'company' ? t.colors.primaryScale[50] : t.colors.secondaryScale[50],
+                    })}>
+                      {client.type === 'company'
+                        ? <Building2 size={20} color={t.colors.primaryScale[600]} />
+                        : <User size={20} color={t.colors.secondaryScale[600]} />}
                     </Box>
-                    <Box style={{ flex: 1, minWidth: 0 }}>
-                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{client.name}</Text>
-                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: 2 }}>
+                    <Box style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{client.name}</Text>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
                         <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: ti.bg(t) }}>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: ti.color(t), fontWeight: t.typography.fontWeight.medium }}><Star size={9} style={{ verticalAlign: 'middle', marginRight: 2 }} />{ti.label}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: ti.color(t), fontWeight: t.typography.fontWeight.medium }}>
+                            <Star size={9} style={{ verticalAlign: 'middle', marginRight: t.spacing[1] }} />{ti.label}
+                          </Text>
                         </Box>
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: st.color(t) }} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{st.label}</Text>
                         </Box>
@@ -247,13 +337,13 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                   {/* Stats row */}
                   <Box style={{ display: 'flex', borderTop: `1px solid ${t.colors.neutral[50]}`, borderBottom: `1px solid ${t.colors.neutral[50]}` }}>
                     {[
-                      { label: 'Positions', value: client.positionsCount, color: t.colors.primaryScale[700] },
-                      { label: 'Revenue', value: formatRevenue(client.revenue), color: t.colors.successScale[600] },
-                      { label: 'Contacts', value: client.contacts.length, color: t.colors.infoScale[600] },
+                      { label: 'Positions', value: client.positionsCount },
+                      { label: 'Revenue', value: formatRevenue(client.revenue) },
+                      { label: 'Contacts', value: client.contacts.length },
                     ].map(s => (
-                      <Box key={s.label} style={{ flex: 1, textAlign: 'center', padding: `${t.spacing[3]}px 0` }}>
-                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: s.color }}>{s.value}</Text>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{s.label}</Text>
+                      <Box key={s.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, textAlign: 'center', padding: `${t.spacing[3]}px 0` }}>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{s.value}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>{s.label}</Text>
                       </Box>
                     ))}
                   </Box>
@@ -270,55 +360,61 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
                   {isExpanded && (
                     <Box style={{ padding: `${t.spacing[4]}px`, borderTop: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50] }}>
                       {/* Contacts */}
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2], display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <Users size={13} style={{ color: t.colors.primaryScale[500] }} /> Contacts
-                      </Text>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[2] }}>
+                        <Users size={13} style={{ color: t.colors.primaryScale[500] }} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>Contacts</Text>
+                      </Box>
                       {client.contacts.map((contact, ci) => (
                         <Box key={ci} style={{
                           display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[2],
                           padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                           backgroundColor: t.colors.common.white, border: `1px solid ${t.colors.neutral[100]}`,
                         }}>
-                          <Box style={{
-                            width: 28, height: 28, borderRadius: t.borderRadius.full, flexShrink: 0,
-                            backgroundColor: t.colors.secondaryScale[50], color: t.colors.secondaryScale[600],
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          }}><User size={13} /></Box>
-                          <Box style={{ flex: 1, minWidth: 0 }}>
-                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{contact.name}</Text>
-                            <Text style={{ fontSize: 10, color: t.colors.neutral[500] }}>{contact.role}</Text>
+                          <Box style={createIconContainerStyle(t, { size: 28, color: t.colors.secondaryScale[50] })}>
+                            <User size={13} color={t.colors.secondaryScale[600]} />
                           </Box>
-                          <Mail size={12} style={{ color: t.colors.primaryScale[400], cursor: 'pointer' }} />
-                          <Phone size={12} style={{ color: t.colors.primaryScale[400], cursor: 'pointer' }} />
+                          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{contact.name}</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{contact.role}</Text>
+                          </Box>
+                          <Mail size={12} style={{ color: t.colors.primaryScale[400] }} />
+                          <Phone size={12} style={{ color: t.colors.primaryScale[400] }} />
                         </Box>
                       ))}
 
                       {/* Contract */}
                       {client.contractInfo && (
                         <Box style={{ marginTop: t.spacing[3] }}>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2], display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <FileText size={13} style={{ color: t.colors.primaryScale[500] }} /> Contract
-                          </Text>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[2] }}>
+                            <FileText size={13} style={{ color: t.colors.primaryScale[500] }} />
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>Contract</Text>
+                          </Box>
                           <Box style={{
                             display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[2],
                             padding: t.spacing[3], borderRadius: t.borderRadius.lg,
                             backgroundColor: t.colors.common.white, border: `1px solid ${t.colors.neutral[100]}`,
                           }}>
-                            <Box>
-                              <Text style={{ fontSize: 10, color: t.colors.neutral[500] }}>Terms</Text>
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Terms</Text>
                               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{client.contractInfo.terms}</Text>
                             </Box>
-                            <Box>
-                              <Text style={{ fontSize: 10, color: t.colors.neutral[500] }}>Fee</Text>
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Fee</Text>
                               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{formatFee(client.feeStructure)}</Text>
                             </Box>
-                            <Box>
-                              <Text style={{ fontSize: 10, color: t.colors.neutral[500] }}>Start</Text>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[800], display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={10} /> {client.contractInfo.startDate}</Text>
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Start</Text>
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                                <Calendar size={10} color={t.colors.neutral[500]} />
+                                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[800] }}>{client.contractInfo.startDate}</Text>
+                              </Box>
                             </Box>
-                            <Box>
-                              <Text style={{ fontSize: 10, color: t.colors.neutral[500] }}>End</Text>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[800], display: 'flex', alignItems: 'center', gap: 3 }}><Calendar size={10} /> {client.contractInfo.endDate}</Text>
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>End</Text>
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                                <Calendar size={10} color={t.colors.neutral[500]} />
+                                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[800] }}>{client.contractInfo.endDate}</Text>
+                              </Box>
                             </Box>
                           </Box>
                         </Box>
@@ -326,18 +422,38 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
 
                       {/* Actions */}
                       <Box style={{ display: 'flex', gap: t.spacing[2], justifyContent: 'flex-end', marginTop: t.spacing[3], paddingTop: t.spacing[3], borderTop: `1px solid ${t.colors.neutral[100]}` }}>
-                        <button onClick={() => onEditClient?.(client.id, {})} style={{
-                          display: 'flex', alignItems: 'center', gap: 4,
-                          padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-                          border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
-                          color: t.colors.neutral[700], fontSize: t.typography.fontSize.xs, cursor: 'pointer',
-                        }}><Edit3 size={11} /> Edit</button>
-                        <button onClick={() => onClientSelect?.(client.id)} style={{
-                          display: 'flex', alignItems: 'center', gap: 4,
-                          padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-                          border: 'none', backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
-                          fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
-                        }}><Briefcase size={11} /> View Details</button>
+                        <Box
+                          onClick={() => onEditClient?.(client.id, {})}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Edit ${client.name}`}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+                            border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
+                            color: t.colors.neutral[700], fontSize: t.typography.fontSize.xs, cursor: 'pointer',
+                            transition: `all ${t.motion.hover}`,
+                          }}
+                        >
+                          <Edit3 size={11} />
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>Edit</Text>
+                        </Box>
+                        <Box
+                          onClick={() => onClientSelect?.(client.id)}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`View ${client.name} details`}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
+                            backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+                            fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
+                            transition: `all ${t.motion.hover}`,
+                          }}
+                        >
+                          <Briefcase size={11} />
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>View Details</Text>
+                        </Box>
                       </Box>
                     </Box>
                   )}

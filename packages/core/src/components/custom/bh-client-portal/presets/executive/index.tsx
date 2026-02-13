@@ -7,11 +7,18 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  createIconContainerStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+} from '../../../helpers';
 import type { BhClientPortalProps, ClientPosition, ClientInterview, ClientPipelineStage } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
+import type { DesignTokens } from '../../../../../types';
 import {
   LayoutDashboard, Briefcase, Users, Clock, TrendingUp, Award,
   Calendar, Video, Phone, MapPin, UsersRound, ChevronRight, BarChart3,
@@ -92,7 +99,15 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
   name: 'BhClientPortal.Executive',
   render: ({ primitives, props, tokens: t }: PresetContext<BhClientPortalProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur };
+      }
+      return {};
+    }, [t]);
 
     const {
       client = DEFAULT_CLIENT,
@@ -106,30 +121,36 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
     } = props;
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
+
+
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+
     const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;
-    const handleSelect = (id: string | null) => {
+    const handleSelect = useCallback((id: string | null) => {
       if (controlledSelected === undefined) setInternalSelected(id);
       onPositionSelect?.(id);
-    };
+    }, [controlledSelected, onPositionSelect]);
 
     const pipelineMax = useMemo(() => pipeline.length > 0 ? Math.max(...pipeline.map(p => p.count)) : 1, [pipeline]);
 
-    const metricItems = metrics ? [
+    const metricItems = useMemo(() => metrics ? [
       { label: 'Open Positions', value: metrics.totalOpenPositions, icon: Briefcase, color: t.colors.primaryScale[600] },
       { label: 'Active Candidates', value: metrics.totalActiveCandidates, icon: Users, color: t.colors.infoScale[600] },
       { label: 'Avg Time to Fill', value: `${metrics.avgTimeToFill}d`, icon: Clock, color: t.colors.warningScale[600] },
       { label: 'Fill Rate', value: `${metrics.fillRate}%`, icon: TrendingUp, color: t.colors.successScale[600] },
       { label: 'Interviews', value: metrics.upcomingInterviews, icon: Calendar, color: t.colors.secondaryScale[600] },
       { label: 'Offers Extended', value: metrics.offersExtended, icon: Award, color: t.colors.primaryScale[500] },
-    ] : [];
+    ] : [], [metrics, t]);
 
-    const scheduledInterviews = interviews.filter(i => i.status === 'scheduled');
+    const scheduledInterviews = useMemo(() => interviews.filter(i => i.status === 'scheduled'), [interviews]);
 
     return (
-      <Box className={className} style={{
+      <Box className={className} role="region" aria-label="Client Portal Dashboard" style={{
         ...createCardStyle(t, { elevation: 'md' }),
         display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...style,
+        backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...glassStyle,
+        ...entrance.animate, transition: entrance.transition,
+        ...style,
       }}>
         {/* Client Header */}
         {client && (
@@ -141,27 +162,28 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
               {client.logo ? (
                 <Box style={{ width: 44, height: 44, borderRadius: t.borderRadius.lg, overflow: 'hidden', flexShrink: 0 }}>
-                  <img src={client.logo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img
+                    src={client.logo}
+                    alt={`${client.name} logo`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 </Box>
               ) : (
-                <Box style={{
-                  width: 44, height: 44, borderRadius: t.borderRadius.lg, flexShrink: 0,
-                  backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
+                <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
                   <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
                     {client.name.charAt(0)}
                   </Text>
                 </Box>
               )}
-              <Box>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                  <LayoutDashboard size={16} style={{ color: t.colors.primaryScale[500] }} />
-                  <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+                  <LayoutDashboard size={16} color={t.colors.primaryScale[500]} />
+                  <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: typo.headingWeight, color: t.colors.neutral[900], letterSpacing: typo.headingLetterSpacing }}>
                     {client.name}
                   </Text>
                 </Box>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
-                  {client.contactName} · {client.contactEmail}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>
+                  {client.contactName} -- {client.contactEmail}
                 </Text>
               </Box>
             </Box>
@@ -171,20 +193,23 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
         <Box style={{ flex: 1, overflowY: 'auto', padding: t.spacing[6] }}>
           {/* Metric Cards */}
           {metrics && (
-            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
-              {metricItems.map(m => {
+            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: t.spacing[4], marginBottom: t.spacing[6], width: '100%' }}>
+              {metricItems.map((m, idx) => {
                 const Icon = m.icon;
+                const itemEntrance = createEntranceAnimation(t, { index: idx });
                 return (
-                  <Box key={m.label} style={{
+                  <Box key={m.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
                     ...createCardStyle(t, { elevation: 'sm' }),
                     padding: `${t.spacing[4]}px ${t.spacing[4]}px`,
                     backgroundColor: t.colors.common.white, textAlign: 'center',
+                    ...itemEntrance.animate,
+                    transition: itemEntrance.transition,
                   }}>
-                    <Icon size={16} style={{ color: m.color, marginBottom: t.spacing[2] }} />
-                    <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: m.color, display: 'block' }}>
+                    <Icon size={16} style={{ color: m.color, marginBottom: t.spacing[1] }} />
+                    <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
                       {m.value}
                     </Text>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>
                       {m.label}
                     </Text>
                   </Box>
@@ -194,14 +219,14 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
           )}
 
           {/* Pipeline + Positions */}
-          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: t.spacing[5], marginBottom: t.spacing[6] }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: t.spacing[5], marginBottom: t.spacing[6], width: '100%' }}>
             {/* Pipeline */}
             <Box style={{
               ...createCardStyle(t, { elevation: 'sm' }),
               padding: t.spacing[5], backgroundColor: t.colors.common.white,
-            }}>
+            }} role="list" aria-label="Candidate Pipeline">
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
-                <BarChart3 size={15} style={{ color: t.colors.primaryScale[500] }} />
+                <BarChart3 size={15} color={t.colors.primaryScale[500]} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                   Candidate Pipeline
                 </Text>
@@ -209,15 +234,15 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
               {pipeline.map((stage, i) => {
                 const barPct = pipelineMax > 0 ? (stage.count / pipelineMax) * 100 : 0;
                 return (
-                  <Box key={stage.name} style={{ marginBottom: i < pipeline.length - 1 ? t.spacing[3] : 0 }}>
-                    <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                  <Box key={stage.name} role="listitem" aria-label={`${stage.name}: ${stage.count} candidates`} style={{ marginBottom: i < pipeline.length - 1 ? t.spacing[3] : 0 }}>
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{stage.name}</Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{stage.count}</Text>
                     </Box>
                     <Box style={{ height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
                       <Box style={{
                         height: '100%', width: `${barPct}%`, borderRadius: t.borderRadius.full,
-                        backgroundColor: t.colors.primaryScale[400], transition: 'width 0.4s ease',
+                        backgroundColor: t.colors.primaryScale[400], transition: `width ${t.motion.hover}`,
                       }} />
                     </Box>
                   </Box>
@@ -231,40 +256,48 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
               padding: t.spacing[5], backgroundColor: t.colors.common.white,
             }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
-                <Briefcase size={15} style={{ color: t.colors.primaryScale[500] }} />
+                <Briefcase size={15} color={t.colors.primaryScale[500]} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                   Your Positions ({positions.length})
                 </Text>
               </Box>
-              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }} role="list" aria-label="Open positions">
                 {positions.map(pos => {
                   const isSelected = selected === pos.id;
                   const sc = getStatusConfig(pos.status, t);
                   return (
-                    <Box key={pos.id} onClick={() => handleSelect(isSelected ? null : pos.id)} style={{
-                      padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
-                      borderRadius: t.borderRadius.lg,
-                      border: `1px solid ${isSelected ? t.colors.primaryScale[300] : t.colors.neutral[100]}`,
-                      backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
-                      cursor: 'pointer', transition: 'all 0.15s ease',
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    }}>
-                      <Box>
-                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
+                    <Box
+                      key={pos.id}
+                      onClick={() => handleSelect(isSelected ? null : pos.id)}
+                      role="listitem"
+                      tabIndex={0}
+                      aria-selected={isSelected}
+                      aria-label={`${pos.title} - ${sc.label} - ${pos.activeCandidates} active candidates`}
+                      style={{
+                        padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                        borderRadius: t.borderRadius.lg,
+                        border: `1px solid ${isSelected ? t.colors.primaryScale[300] : t.colors.neutral[100]}`,
+                        backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
+                        cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      }}
+                    >
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], minWidth: 0 }}>
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
                           {pos.title}
                         </Text>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 1 }}>
-                          {pos.department} · {pos.daysOpen} days open
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>
+                          {pos.department} -- {pos.daysOpen} days open
                         </Text>
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
-                        <Box style={{ textAlign: 'center' }}>
+                        <Box style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{pos.activeCandidates}</Text>
-                          <Text style={{ fontSize: 9, color: t.colors.neutral[400] }}>Active</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Active</Text>
                         </Box>
-                        <Box style={{ textAlign: 'center' }}>
+                        <Box style={{ textAlign: 'center', display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{pos.interviewsScheduled}</Text>
-                          <Text style={{ fontSize: 9, color: t.colors.neutral[400] }}>Interviews</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Interviews</Text>
                         </Box>
                         <Box style={{
                           padding: `1px ${t.spacing[2]}px`, borderRadius: br,
@@ -272,7 +305,7 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                         }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: sc.color }}>{sc.label}</Text>
                         </Box>
-                        <ChevronRight size={14} style={{ color: t.colors.neutral[400] }} />
+                        <ChevronRight size={14} color={t.colors.neutral[400]} />
                       </Box>
                     </Box>
                   );
@@ -288,16 +321,16 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
               padding: t.spacing[5], backgroundColor: t.colors.common.white,
             }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
-                <Calendar size={15} style={{ color: t.colors.primaryScale[500] }} />
+                <Calendar size={15} color={t.colors.primaryScale[500]} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                   Upcoming Interviews ({scheduledInterviews.length})
                 </Text>
               </Box>
-              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: t.spacing[3] }}>
+              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: t.spacing[3] }} role="list" aria-label="Upcoming interviews">
                 {scheduledInterviews.map(iv => {
                   const Icon = getInterviewIcon(iv.type);
                   return (
-                    <Box key={iv.id} style={{
+                    <Box key={iv.id} role="listitem" aria-label={`${iv.candidateName} - ${iv.date} at ${iv.time}`} style={{
                       padding: t.spacing[4], borderRadius: t.borderRadius.lg,
                       border: `1px solid ${t.colors.neutral[100]}`,
                       backgroundColor: t.colors.common.white,
@@ -307,17 +340,17 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
                           {iv.candidateName}
                         </Text>
                         <Box style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 4,
+                          display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                           padding: `1px ${t.spacing[2]}px`, borderRadius: br,
                           backgroundColor: t.colors.secondaryScale[50], border: `1px solid ${t.colors.secondaryScale[200]}`,
                         }}>
-                          <Icon size={10} style={{ color: t.colors.secondaryScale[600] }} />
+                          <Icon size={10} color={t.colors.secondaryScale[600]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.secondaryScale[700], textTransform: 'capitalize' }}>{iv.type}</Text>
                         </Box>
                       </Box>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{iv.positionTitle}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block' }}>{iv.positionTitle}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[2] }}>
-                        <Calendar size={10} style={{ color: t.colors.neutral[400] }} />
+                        <Calendar size={10} color={t.colors.neutral[400]} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
                           {iv.date} at {iv.time}
                         </Text>

@@ -7,7 +7,7 @@ import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
 
-export type BhFeedbackEditorPreset = 'standard';
+export type BhFeedbackEditorPreset = 'standard' | 'compact';
 
 export type FeedbackChannel = 'email' | 'sms' | 'whatsapp' | 'linkedin';
 

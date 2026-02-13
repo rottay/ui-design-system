@@ -7,10 +7,23 @@
  * and token balance card.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+} from '../../../helpers';
 import type { BhIndividualHomeProps, ScheduleItem, RecentCandidate } from '../../core';
+import type { DesignTokens } from '../../../../../types';
 import {
   User, Calendar, Briefcase, Target, Zap, ChevronRight, Clock,
   Phone, Video, MapPin, Users, Gift, Play, CheckCircle, ArrowRight,
@@ -38,6 +51,13 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
   name: 'BhIndividualHome.Standard',
   render: ({ primitives, props, tokens }: PresetContext<BhIndividualHomeProps>) => {
     const { Box, Text } = primitives;
+    const isGlass = tokens.surface.useGlass;
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const {
       welcome, pipelines = [], schedule = [], wizardSteps,
@@ -55,46 +75,69 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
       pipelines.length > 0 ? pipelines[0].jobId : null,
     );
 
-    const scheduleIconMap: Record<string, React.ReactNode> = {
+    const scheduleIconMap: Record<string, React.ReactNode> = useMemo(() => ({
       phone: <Phone size={14} />,
       video: <Video size={14} />,
       mappin: <MapPin size={14} />,
       users: <Users size={14} />,
       gift: <Gift size={14} />,
-    };
+    }), []);
 
-    const completedWizardCount = wizardSteps?.filter((s) => s.completed).length ?? 0;
-    const totalWizardCount = wizardSteps?.length ?? 0;
-    const wizardProgress = totalWizardCount > 0 ? (completedWizardCount / totalWizardCount) * 100 : 0;
+    const completedWizardCount = useMemo(() => wizardSteps?.filter((s) => s.completed).length ?? 0, [wizardSteps]);
+    const totalWizardCount = useMemo(() => wizardSteps?.length ?? 0, [wizardSteps]);
+    const wizardProgress = useMemo(() => totalWizardCount > 0 ? (completedWizardCount / totalWizardCount) * 100 : 0, [completedWizardCount, totalWizardCount]);
 
-    const performancePercent = performance
+    const performancePercent = useMemo(() => performance
       ? Math.min(100, Math.round((performance.hires / Math.max(performance.target, 1)) * 100))
-      : 0;
+      : 0, [performance]);
     const ringRadius = 54;
-    const ringCircumference = 2 * Math.PI * ringRadius;
-    const ringOffset = ringCircumference - (performancePercent / 100) * ringCircumference;
+    const ringCircumference = useMemo(() => 2 * Math.PI * ringRadius, []);
+    const ringOffset = useMemo(() => ringCircumference - (performancePercent / 100) * ringCircumference, [ringCircumference, performancePercent]);
 
-    const selectedPipeline = pipelines.find((p) => p.jobId === selectedJob) ?? pipelines[0];
+    const selectedPipeline = useMemo(() => pipelines.find((p) => p.jobId === selectedJob) ?? pipelines[0], [pipelines, selectedJob]);
 
-    const cardStyle: React.CSSProperties = {
-      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+    const cardStyle = useMemo((): React.CSSProperties => ({
+      ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
       borderRadius: tokens.borderRadius.lg,
       border: `1px solid ${tokens.colors.neutral[100]}`,
       padding: `${tokens.spacing[5]}px`,
-    };
+    }), [tokens, isGlass]);
 
-    const stageColors = [
+    const stageColors = useMemo(() => [
       tokens.colors.neutral[400], tokens.colors.infoScale[500],
       tokens.colors.warningScale[500], tokens.colors.primaryScale[500],
       tokens.colors.successScale[500],
-    ];
+    ], [tokens]);
 
-    const statusDotColors: Record<string, string> = {
+    const statusDotColors = useMemo((): Record<string, string> => ({
       upcoming: tokens.colors.infoScale[500],
       'in-progress': tokens.colors.warningScale[500],
       completed: tokens.colors.successScale[500],
       cancelled: tokens.colors.neutral[400],
-    };
+    }), [tokens]);
+
+    const handleCandidateClick = useCallback((id: string) => {
+      onCandidateClick?.(id);
+    }, [onCandidateClick]);
+
+    const handleScheduleAction = useCallback((id: string, action: string) => {
+      onScheduleAction?.(id, action);
+    }, [onScheduleAction]);
+
+    const handleJobClick = useCallback((jobId: string) => {
+      setSelectedJob(jobId);
+      onJobClick?.(jobId);
+    }, [onJobClick]);
+
+    const handleDismissWizard = useCallback(() => {
+      setShowWizard(false);
+    }, []);
+
+    const animStyle = useCallback((index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(tokens, index)}ms`,
+    }), [entrance, tokens]);
 
     return (
       <Box className={className} style={{
@@ -120,17 +163,20 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                 overflow: 'hidden', flexShrink: 0,
               }}>
                 {welcome.avatar ? (
-                  <Box style={{ width: '100%', height: '100%' }}>
-                    <img src={welcome.avatar} alt={welcome.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-                  </Box>
+                  <Box
+                    style={{ width: '100%', height: '100%', backgroundImage: `url(${welcome.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                    role="img"
+                    aria-label={welcome.name}
+                  />
                 ) : (
                   <User size={24} color={tokens.colors.primaryScale[600]} />
                 )}
               </Box>
-              <Box style={{ flex: 1 }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>
                 <Text style={{
-                  fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold,
+                  fontSize: tokens.typography.fontSize['2xl'], fontWeight: ptypo.headingWeight,
                   color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight,
+                  letterSpacing: ptypo.headingLetterSpacing,
                 }}>
                   {welcome.greeting ?? 'Good morning'}, {welcome.name}
                 </Text>
@@ -170,8 +216,8 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                   <Zap size={18} color={tokens.colors.primaryScale[600]} />
                   <Text style={{
-                    fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[900],
+                    fontSize: tokens.typography.fontSize.lg, fontWeight: ptypo.headingWeight,
+                    color: tokens.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                   }}>
                     Get Started
                   </Text>
@@ -180,7 +226,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     {completedWizardCount}/{totalWizardCount} complete
                   </Text>
-                  <Box onClick={() => setShowWizard(false)} style={{ cursor: 'pointer' }}>
+                  <Box onClick={handleDismissWizard} role="button" tabIndex={0} aria-label="Dismiss wizard" onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDismissWizard(); } }} style={{ cursor: 'pointer' }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                       Dismiss
                     </Text>
@@ -230,7 +276,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         </Text>
                       )}
                     </Box>
-                    <Box style={{ flex: 1 }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>
                       <Text style={{
                         fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
                         color: step.completed ? tokens.colors.neutral[500] : tokens.colors.neutral[900],
@@ -239,7 +285,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         {step.label}
                       </Text>
                       {step.description && !step.completed && (
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: tokens.spacing[0] }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400]}}>
                           {step.description}
                         </Text>
                       )}
@@ -307,7 +353,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         const stageColor = stage.color ?? stageColors[idx % stageColors.length];
 
                         return (
-                          <Box key={stage.key} style={{
+                          <Box key={stage.key} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                             flex: `0 0 ${widthPercent}%`, minWidth: 80,
                             padding: `${tokens.spacing[3]}px`,
                             borderRadius: tokens.borderRadius.lg,
@@ -396,7 +442,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                           }}>
                             {icon}
                           </Box>
-                          <Box style={{ flex: 1, minWidth: 0 }}>
+                          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
                             <Text style={{
                               fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
                               color: tokens.colors.neutral[900],
@@ -404,7 +450,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                             }}>
                               {item.candidateName}
                             </Text>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginTop: tokens.spacing[0] }}>
+                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500]}}>
                               {typeConfig.label} - {item.jobTitle}
                             </Text>
                           </Box>
@@ -510,13 +556,17 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                             overflow: 'hidden', flexShrink: 0,
                           }}>
                             {candidate.avatar ? (
-                              <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
+                              <Box
+                                style={{ width: '100%', height: '100%', backgroundImage: `url(${candidate.avatar})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                                role="img"
+                                aria-label={candidate.name}
+                              />
                             ) : (
                               <User size={14} color={tokens.colors.neutral[500]} />
                             )}
                           </Box>
 
-                          <Box style={{ flex: 1, minWidth: 0 }}>
+                          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
                             <Text style={{
                               fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium,
                               color: tokens.colors.neutral[900],
@@ -532,7 +582,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                           </Box>
 
                           {/* Score bar */}
-                          <Box style={{ width: 60, display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-end', gap: 2 }}>
+                          <Box style={{ width: 60, display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-end', gap: tokens.spacing[1] }}>
                             <Text style={{
                               fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
                               color: candidate.score >= 80
@@ -618,7 +668,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         style={{ transition: `stroke-dashoffset ${tokens.motion.hover}` }}
                       />
                     </svg>
-                    <Box style={{
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                       position: 'absolute' as const, top: '50%', left: '50%',
                       transform: 'translate(-50%, -50%)', textAlign: 'center' as const,
                     }}>
@@ -720,10 +770,14 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                         {onBuyTokens && (
                           <Box
                             onClick={onBuyTokens}
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Buy more interview credits"
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onBuyTokens?.(); } }}
                             style={{
                               marginTop: tokens.spacing[2],
                               padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                              borderRadius: tokens.borderRadius.lg,
+                              borderRadius: badgeRadius,
                               backgroundColor: tokens.colors.primaryScale[600],
                               cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
                               display: 'inline-block',

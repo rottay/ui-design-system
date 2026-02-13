@@ -7,9 +7,20 @@
  * and pre-interview checklist.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+} from '../../../helpers';
 import type {
   BhInterviewPrepProps,
   ChecklistItem,
@@ -37,6 +48,31 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
   name: 'BhInterviewPrep.Standard',
   render: ({ primitives, props, tokens }: PresetContext<BhInterviewPrepProps>) => {
     const { Box, Text } = primitives;
+    const t = tokens;
+    const isGlass = t.surface.useGlass;
+    const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
+
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+
+
+    const glassCard = useMemo(() =>
+      isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {},
+      [isGlass, t, bdr]
+    );
+
+    const handleKeyNav = useCallback((e: React.KeyboardEvent, action: () => void) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); }
+    }, []);
+
+    const animStyle = useCallback((index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    }), [entrance, t]);
 
     const {
       interviewBrief, candidateBrief, evaluationFocus, scriptOverview,
@@ -70,68 +106,74 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
       onRubricToggle?.(next);
     }, [showFullRubric, onRubricToggle]);
 
-    const cardBase: React.CSSProperties = {
-      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
-      borderRadius: tokens.borderRadius.lg,
-      border: `1px solid ${tokens.colors.neutral[100]}`,
-      padding: `${tokens.spacing[5]}px`,
-    };
+    const cardBase = useMemo<React.CSSProperties>(() => ({
+      ...createCardStyle(t, { elevation: 'sm', padding: 0 }),
+      borderRadius: t.borderRadius.lg,
+      border: `${bdr} ${t.colors.neutral[100]}`,
+      padding: `${t.spacing[5]}px`,
+      ...glassCard,
+      ...accentBar,
+    }), [t, bdr, glassCard, accentBar]);
 
     return (
       <Box className={className} style={{
-        padding: `${tokens.spacing[6]}px`, backgroundColor: tokens.colors.neutral[50],
-        minHeight: '100%', ...style,
+        padding: `${t.spacing[6]}px`, backgroundColor: t.colors.neutral[50],
+        minHeight: '100%', width: '100%', ...style,
       }}>
         <Box style={{
-          display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5],
+          display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5],
           maxWidth: 900, margin: '0 auto',
         }}>
           {/* Interview Info Hero */}
           {interviewBrief && (
             <Box style={{
-              ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
-              borderRadius: tokens.borderRadius.lg, border: `1px solid ${tokens.colors.neutral[100]}`,
-              padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-              background: `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.primaryScale[100]})`,
-            }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
-                <Briefcase size={20} color={tokens.colors.primaryScale[600]} />
+              ...createCardStyle(t, { elevation: 'sm', padding: 0 }),
+              borderRadius: t.borderRadius.lg, border: `${bdr} ${t.colors.neutral[100]}`,
+              padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+              background: `linear-gradient(135deg, ${t.colors.primaryScale[50]}, ${t.colors.primaryScale[100]})`,
+              ...glassCard,
+              ...animStyle(0),
+            }} role="region" aria-label="Interview brief">
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
+                <Briefcase size={20} color={t.colors.primaryScale[600]} />
                 <Text style={{
-                  fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold,
-                  color: tokens.colors.neutral[900],
+                  fontSize: t.typography.fontSize['2xl'], fontWeight: ptypo.headingWeight,
+                  color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                 }}>
                   {interviewBrief.jobTitle}
                 </Text>
               </Box>
 
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap' as const }}>
                 <Box style={{
-                  ...createBadgeStyle(tokens, 'primary'),
-                  fontSize: tokens.typography.fontSize.sm,
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
+                  ...createBadgeStyle(t, 'primary'),
+                  fontSize: t.typography.fontSize.sm,
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  borderRadius: badgeRadius,
                 }}>
-                  <Text style={{ fontSize: tokens.typography.fontSize.sm }}>{interviewBrief.stageName}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm }}>{interviewBrief.stageName}</Text>
                 </Box>
                 <Box style={{
-                  ...createBadgeStyle(tokens, interviewBrief.type === 'ai' ? 'info' : 'secondary'),
-                  fontSize: tokens.typography.fontSize.sm,
-                  padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
-                  display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+                  ...createBadgeStyle(t, interviewBrief.type === 'ai' ? 'info' : 'secondary'),
+                  fontSize: t.typography.fontSize.sm,
+                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                  display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                  borderRadius: badgeRadius,
                 }}>
                   {interviewBrief.type === 'ai' ? <Bot size={14} /> : <User size={14} />}
-                  <Text style={{ fontSize: tokens.typography.fontSize.sm }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm }}>
                     {interviewBrief.type === 'ai' ? 'AI Interview' : 'Human Interview'}
                   </Text>
                 </Box>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                  <Calendar size={14} color={tokens.colors.neutral[600]} />
-                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Calendar size={14} color={t.colors.neutral[600]} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>
                     {formatDateTime(interviewBrief.dateTime)}
                   </Text>
                 </Box>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-                  <Clock size={14} color={tokens.colors.neutral[600]} />
-                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                  <Clock size={14} color={t.colors.neutral[600]} />
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>
                     {interviewBrief.estimatedDuration} min
                   </Text>
                 </Box>
@@ -140,76 +182,71 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
           )}
 
           {/* Two-column layout */}
-          <Box style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 2fr)', gap: tokens.spacing[5] }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 3fr) minmax(0, 2fr)', gap: t.spacing[5] }}>
             {/* Left column */}
-            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
               {/* Candidate Briefing */}
               {candidateBrief && (
-                <Box style={cardBase}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                    <User size={18} color={tokens.colors.neutral[600]} />
+                <Box style={{ ...cardBase, ...animStyle(1) }} role="region" aria-label="Candidate briefing">
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                    <User size={18} color={t.colors.neutral[600]} />
                     <Text style={{
-                      fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
+                      fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight,
+                      color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                     }}>
                       Candidate Briefing
                     </Text>
                   </Box>
 
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[4] }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[4] }}>
                     <Box style={{
-                      width: 48, height: 48, borderRadius: tokens.borderRadius.full,
-                      backgroundColor: tokens.colors.primaryScale[200],
+                      width: 48, height: 48, borderRadius: t.borderRadius.full,
+                      backgroundColor: t.colors.primaryScale[200],
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       overflow: 'hidden', flexShrink: 0,
+                      backgroundImage: candidateBrief.avatar ? `url(${candidateBrief.avatar})` : 'none',
+                      backgroundSize: 'cover', backgroundPosition: 'center',
                     }}>
-                      {candidateBrief.avatar ? (
-                        <img src={candidateBrief.avatar} alt={candidateBrief.name} style={{ width: '100%', height: '100%', objectFit: 'cover' as const }} />
-                      ) : (
-                        <User size={22} color={tokens.colors.primaryScale[600]} />
-                      )}
+                      {!candidateBrief.avatar && <User size={22} color={t.colors.primaryScale[600]} />}
                     </Box>
                     <Text style={{
-                      fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
+                      fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight,
+                      color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                     }}>
                       {candidateBrief.name}
                     </Text>
                   </Box>
 
                   <Box style={{
-                    padding: `${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.lg,
-                    backgroundColor: tokens.colors.neutral[50],
-                    border: `1px solid ${tokens.colors.neutral[100]}`, marginBottom: tokens.spacing[4],
+                    padding: `${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
+                    backgroundColor: t.colors.neutral[50],
+                    border: `${bdr} ${t.colors.neutral[100]}`, marginBottom: t.spacing[4],
                   }}>
                     <Text style={{
-                      fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700],
-                      lineHeight: tokens.typography.lineHeight.relaxed,
+                      fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700],
+                      lineHeight: t.typography.lineHeight.relaxed,
+                      wordBreak: 'break-word' as const,
                     }}>
                       {candidateBrief.summary}
                     </Text>
                   </Box>
 
                   {candidateBrief.resumeHighlights.length > 0 && (
-                    <Box style={{ marginBottom: tokens.spacing[4] }}>
-                      <Text style={{
-                        fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold,
-                        color: tokens.colors.neutral[500], textTransform: 'uppercase' as const,
-                        letterSpacing: '0.05em', marginBottom: tokens.spacing[2],
-                      }}>
+                    <Box style={{ marginBottom: t.spacing[4] }}>
+                      <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>
                         Resume Highlights
                       </Text>
-                      <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>
                         {candidateBrief.resumeHighlights.map((highlight, idx) => (
                           <Box key={idx} style={{
-                            display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
-                            padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                            borderRadius: tokens.borderRadius.lg,
-                            backgroundColor: tokens.colors.common.white,
-                            border: `1px solid ${tokens.colors.neutral[100]}`,
+                            display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                            padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                            borderRadius: badgeRadius,
+                            backgroundColor: t.colors.common.white,
+                            border: `${bdr} ${t.colors.neutral[100]}`,
                           }}>
-                            <Star size={12} color={tokens.colors.warningScale[500]} />
-                            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>{highlight}</Text>
+                            <Star size={12} color={t.colors.warningScale[500]} />
+                            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800] }}>{highlight}</Text>
                           </Box>
                         ))}
                       </Box>
@@ -226,29 +263,25 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
 
                     return (
                       <Box>
-                        <Text style={{
-                          fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold,
-                          color: tokens.colors.neutral[500], textTransform: 'uppercase' as const,
-                          letterSpacing: '0.05em', marginBottom: tokens.spacing[2],
-                        }}>
+                        <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>
                           Previous Scores
                         </Text>
-                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 24}`} width="100%" height={chartHeight + 24} style={{ display: 'block' }}>
+                        <svg viewBox={`0 0 ${chartWidth} ${chartHeight + 24}`} width="100%" height={chartHeight + 24} style={{ display: 'block' }} role="img" aria-label="Previous scores chart">
                           {candidateBrief.previousScores.map((score, idx) => {
                             const x = 10 + idx * ((chartWidth - 20) / candidateBrief.previousScores.length) + ((chartWidth - 20) / candidateBrief.previousScores.length - barWidth) / 2;
                             const barHeight = (score.score / maxScore) * (chartHeight - 10);
                             const y = chartHeight - barHeight;
-                            const fillColor = score.score >= 80 ? tokens.colors.successScale[500]
-                              : score.score >= 50 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500];
+                            const fillColor = score.score >= 80 ? t.colors.successScale[500]
+                              : score.score >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
 
                             return (
                               <g key={idx}>
                                 <rect x={x} y={y} width={barWidth} height={barHeight} rx={4} fill={fillColor} opacity={0.8} />
-                                <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" fontSize={tokens.typography.fontSize.xs}
-                                  fill={tokens.colors.neutral[700]} fontWeight={tokens.typography.fontWeight.medium as any}>
+                                <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" fontSize={t.typography.fontSize.xs}
+                                  fill={t.colors.neutral[700]} fontWeight={t.typography.fontWeight.medium as any}>
                                   {score.score}%
                                 </text>
-                                <text x={x + barWidth / 2} y={chartHeight + 16} textAnchor="middle" fontSize="10" fill={tokens.colors.neutral[500]}>
+                                <text x={x + barWidth / 2} y={chartHeight + 16} textAnchor="middle" fontSize="10" fill={t.colors.neutral[500]}>
                                   {score.stage.length > 8 ? score.stage.slice(0, 7) + '...' : score.stage}
                                 </text>
                               </g>
@@ -263,79 +296,83 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
 
               {/* Script Overview */}
               {scriptOverview && scriptOverview.sections.length > 0 && (
-                <Box style={cardBase}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
-                    <BookOpen size={18} color={tokens.colors.neutral[600]} />
+                <Box style={{ ...cardBase, ...animStyle(2) }} role="region" aria-label="Script overview">
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+                    <BookOpen size={18} color={t.colors.neutral[600]} />
                     <Text style={{
-                      fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[900],
+                      fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight,
+                      color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                     }}>
                       Script Overview
                     </Text>
                   </Box>
 
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
                     {scriptOverview.sections.map((section, idx) => {
                       const isExpanded = expandedSections.includes(section.title);
 
                       return (
                         <Box key={idx} style={{
-                          borderRadius: tokens.borderRadius.lg,
-                          backgroundColor: tokens.colors.common.white,
-                          border: `1px solid ${tokens.colors.neutral[100]}`,
+                          borderRadius: t.borderRadius.lg,
+                          backgroundColor: t.colors.common.white,
+                          border: `${bdr} ${t.colors.neutral[100]}`,
                           overflow: 'hidden' as const,
                         }}>
                           <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} section: ${section.title}`}
+                            aria-expanded={isExpanded}
                             onClick={() => handleSectionToggle(section.title)}
+                            onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => handleSectionToggle(section.title))}
                             style={{
-                              padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+                              padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                              cursor: 'pointer', transition: `all ${t.motion.hover}`, outline: 'none',
                             }}
                           >
-                            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                               <Box style={{
-                                width: 24, height: 24, borderRadius: tokens.borderRadius.full,
-                                backgroundColor: tokens.colors.primaryScale[100],
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                ...createIconContainerStyle(t, { size: 24 }),
                               }}>
                                 <Text style={{
-                                  fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
-                                  color: tokens.colors.primaryScale[700],
+                                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold,
+                                  color: t.colors.primaryScale[700],
                                 }}>
                                   {idx + 1}
                                 </Text>
                               </Box>
                               <Text style={{
-                                fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
-                                color: tokens.colors.neutral[900],
+                                fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight,
+                                color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                               }}>
                                 {section.title}
                               </Text>
-                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                                 {section.keyQuestions.length} questions
                               </Text>
                             </Box>
-                            {isExpanded ? <ChevronDown size={16} color={tokens.colors.neutral[500]} /> : <ChevronRight size={16} color={tokens.colors.neutral[500]} />}
+                            {isExpanded ? <ChevronDown size={16} color={t.colors.neutral[500]} /> : <ChevronRight size={16} color={t.colors.neutral[500]} />}
                           </Box>
 
                           {isExpanded && (
                             <Box style={{
-                              padding: `0 ${tokens.spacing[4]}px ${tokens.spacing[3]}px`,
-                              borderTop: `1px solid ${tokens.colors.neutral[100]}`,
-                              paddingTop: tokens.spacing[3],
+                              padding: `0 ${t.spacing[4]}px ${t.spacing[3]}px`,
+                              borderTop: `${bdr} ${t.colors.neutral[100]}`,
+                              paddingTop: t.spacing[3],
                             }}>
-                              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
                                 {section.keyQuestions.map((question, qIdx) => (
                                   <Box key={qIdx} style={{
-                                    display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2],
-                                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                                    borderRadius: tokens.borderRadius.lg, backgroundColor: tokens.colors.neutral[50],
+                                    display: 'flex', alignItems: 'flex-start', gap: t.spacing[2],
+                                    padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                                    borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[50],
                                   }}>
-                                    <HelpCircle size={14} color={tokens.colors.primaryScale[500]} style={{ flexShrink: 0, marginTop: 2 }} />
+                                    <HelpCircle size={14} color={t.colors.primaryScale[500]} style={{ flexShrink: 0, marginTop: t.spacing[1] }} />
                                     <Text style={{
-                                      fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800],
-                                      lineHeight: tokens.typography.lineHeight.normal,
+                                      fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800],
+                                      lineHeight: t.typography.lineHeight.normal,
+                                      wordBreak: 'break-word' as const,
                                     }}>
                                       {question}
                                     </Text>
@@ -353,97 +390,103 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
             </Box>
 
             {/* Right column */}
-            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
               {/* Evaluation Focus */}
               {evaluationFocus && evaluationFocus.dimensions.length > 0 && (() => {
                 const maxWeight = Math.max(...evaluationFocus.dimensions.map((d) => d.weight));
 
                 return (
-                  <Box style={cardBase}>
+                  <Box style={{ ...cardBase, ...animStyle(3) }} role="region" aria-label="Evaluation focus">
                     <Box style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      marginBottom: tokens.spacing[4],
+                      marginBottom: t.spacing[4],
                     }}>
-                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                        <Target size={18} color={tokens.colors.neutral[600]} />
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Target size={18} color={t.colors.neutral[600]} />
                         <Text style={{
-                          fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[900],
+                          fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight,
+                          color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                         }}>
                           Evaluation Focus
                         </Text>
                       </Box>
                       <Box
+                        role="button"
+                        tabIndex={0}
+                        aria-label={showFullRubric ? 'Collapse rubric' : 'Show full rubric'}
+                        aria-pressed={showFullRubric}
                         onClick={handleRubricToggle}
+                        onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, handleRubricToggle)}
                         style={{
-                          display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
-                          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                          borderRadius: tokens.borderRadius.lg,
-                          backgroundColor: tokens.colors.common.white,
-                          border: `1px solid ${tokens.colors.neutral[200]}`,
-                          cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                          display: 'flex', alignItems: 'center', gap: t.spacing[1],
+                          padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                          borderRadius: badgeRadius,
+                          backgroundColor: t.colors.common.white,
+                          border: `${bdr} ${t.colors.neutral[200]}`,
+                          cursor: 'pointer', transition: `all ${t.motion.hover}`, outline: 'none',
                         }}
                       >
-                        <Eye size={12} color={tokens.colors.primaryScale[600]} />
+                        <Eye size={12} color={t.colors.primaryScale[600]} />
                         <Text style={{
-                          fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
-                          color: tokens.colors.primaryScale[600],
+                          fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                          color: t.colors.primaryScale[600],
                         }}>
                           {showFullRubric ? 'Collapse' : 'Full Rubric'}
                         </Text>
                       </Box>
                     </Box>
 
-                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
                       {evaluationFocus.dimensions.map((dim, idx) => {
                         const weightPercent = (dim.weight / maxWeight) * 100;
 
                         return (
                           <Box key={idx} style={{
-                            padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                            borderRadius: tokens.borderRadius.lg,
-                            backgroundColor: dim.isKnockout ? tokens.colors.errorScale[50] : tokens.colors.common.white,
-                            border: `1px solid ${dim.isKnockout ? tokens.colors.errorScale[200] : tokens.colors.neutral[100]}`,
-                          }}>
+                            padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                            borderRadius: t.borderRadius.lg,
+                            backgroundColor: dim.isKnockout ? t.colors.errorScale[50] : t.colors.common.white,
+                            border: `${bdr} ${dim.isKnockout ? t.colors.errorScale[200] : t.colors.neutral[100]}`,
+                          }} role="article" aria-label={`Dimension: ${dim.name}, weight ${dim.weight}`}>
                             <Box style={{
                               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                              marginBottom: tokens.spacing[2],
+                              marginBottom: t.spacing[2],
                             }}>
-                              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                                 <Text style={{
-                                  fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
-                                  color: tokens.colors.neutral[900],
+                                  fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight,
+                                  color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                                 }}>
                                   {dim.name}
                                 </Text>
                                 {dim.isKnockout && (
                                   <Box style={{
-                                    ...createBadgeStyle(tokens, 'error'),
-                                    fontSize: tokens.typography.fontSize.xs,
-                                    display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+                                    ...createBadgeStyle(t, 'error'),
+                                    fontSize: t.typography.fontSize.xs,
+                                    display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                                    borderRadius: badgeRadius,
                                   }}>
                                     <Shield size={10} />
-                                    <Text style={{ fontSize: tokens.typography.fontSize.xs }}>Knockout</Text>
+                                    <Text style={{ fontSize: t.typography.fontSize.xs }}>Knockout</Text>
                                   </Box>
                                 )}
                               </Box>
                               <Text style={{
-                                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
-                                color: tokens.colors.neutral[600], fontVariantNumeric: 'tabular-nums',
+                                fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold,
+                                color: t.colors.neutral[600], fontVariantNumeric: 'tabular-nums',
                               }}>
                                 Weight: {dim.weight}
                               </Text>
                             </Box>
 
                             <Box style={{
-                              width: '100%', height: 6, backgroundColor: tokens.colors.neutral[100],
-                              borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const,
+                              width: '100%', height: 6, backgroundColor: t.colors.neutral[100],
+                              borderRadius: t.borderRadius.full, overflow: 'hidden' as const,
                             }}>
                               <Box style={{
                                 width: `${weightPercent}%`, height: '100%',
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: dim.isKnockout ? tokens.colors.errorScale[500] : tokens.colors.primaryScale[500],
-                                transition: `width ${tokens.motion.hover}`,
+                                borderRadius: t.borderRadius.full,
+                                backgroundColor: dim.isKnockout ? t.colors.errorScale[500] : t.colors.primaryScale[500],
+                                transition: `width ${t.motion.hover}`,
                               }} />
                             </Box>
                           </Box>
@@ -460,45 +503,45 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                 const totalCount = externalChecklist.length;
 
                 return (
-                  <Box style={cardBase}>
+                  <Box style={{ ...cardBase, ...animStyle(4) }} role="region" aria-label="Pre-interview checklist">
                     <Box style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      marginBottom: tokens.spacing[4],
+                      marginBottom: t.spacing[4],
                     }}>
-                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                        <ListChecks size={18} color={tokens.colors.neutral[600]} />
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <ListChecks size={18} color={t.colors.neutral[600]} />
                         <Text style={{
-                          fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[900],
+                          fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight,
+                          color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing,
                         }}>
                           Pre-Interview Checklist
                         </Text>
                       </Box>
                       <Text style={{
-                        fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
-                        color: passCount === totalCount ? tokens.colors.successScale[600] : tokens.colors.neutral[500],
+                        fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+                        color: passCount === totalCount ? t.colors.successScale[600] : t.colors.neutral[500],
                       }}>
                         {passCount}/{totalCount} passed
                       </Text>
                     </Box>
 
                     <Box style={{
-                      width: '100%', height: 4, backgroundColor: tokens.colors.neutral[100],
-                      borderRadius: tokens.borderRadius.full, marginBottom: tokens.spacing[4], overflow: 'hidden' as const,
+                      width: '100%', height: 4, backgroundColor: t.colors.neutral[100],
+                      borderRadius: t.borderRadius.full, marginBottom: t.spacing[4], overflow: 'hidden' as const,
                     }}>
                       <Box style={{
                         width: `${totalCount > 0 ? (passCount / totalCount) * 100 : 0}%`,
                         height: '100%',
-                        backgroundColor: passCount === totalCount ? tokens.colors.successScale[500] : tokens.colors.primaryScale[500],
-                        borderRadius: tokens.borderRadius.full, transition: `width ${tokens.motion.hover}`,
+                        backgroundColor: passCount === totalCount ? t.colors.successScale[500] : t.colors.primaryScale[500],
+                        borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}`,
                       }} />
                     </Box>
 
-                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
                       {externalChecklist.map((item) => {
                         const currentStatus = checklistStatus[item.key] ?? item.status;
                         const statusCfg = CHECKLIST_STATUS_CONFIG[currentStatus];
-                        const scale = tokens.colors[`${statusCfg.colorKey}Scale` as const] as any;
+                        const scale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
 
                         const StatusIcon = currentStatus === 'pass' ? CheckCircle : currentStatus === 'fail' ? XCircle : AlertTriangle;
                         const nextStatus: ChecklistItem['status'] = currentStatus === 'pending' ? 'pass' : currentStatus === 'pass' ? 'fail' : 'pending';
@@ -506,29 +549,33 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                         return (
                           <Box
                             key={item.key}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`${item.label}: ${statusCfg.label}. Click to change status.`}
                             onClick={() => handleChecklistUpdate(item.key, nextStatus)}
+                            onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => handleChecklistUpdate(item.key, nextStatus))}
                             style={{
-                              display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
-                              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                              borderRadius: tokens.borderRadius.lg,
-                              backgroundColor: currentStatus === 'pass' ? tokens.colors.successScale[50]
-                                : currentStatus === 'fail' ? tokens.colors.errorScale[50] : tokens.colors.common.white,
-                              border: `1px solid ${currentStatus === 'pass' ? tokens.colors.successScale[200]
-                                : currentStatus === 'fail' ? tokens.colors.errorScale[200] : tokens.colors.neutral[100]}`,
-                              cursor: 'pointer', transition: `all ${tokens.motion.hover}`,
+                              display: 'flex', alignItems: 'center', gap: t.spacing[3],
+                              padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
+                              borderRadius: t.borderRadius.lg,
+                              backgroundColor: currentStatus === 'pass' ? t.colors.successScale[50]
+                                : currentStatus === 'fail' ? t.colors.errorScale[50] : t.colors.common.white,
+                              border: `${bdr} ${currentStatus === 'pass' ? t.colors.successScale[200]
+                                : currentStatus === 'fail' ? t.colors.errorScale[200] : t.colors.neutral[100]}`,
+                              cursor: 'pointer', transition: `all ${t.motion.hover}`, outline: 'none',
                             }}
                           >
                             <StatusIcon size={18} color={scale[500]} />
                             <Text style={{
-                              flex: 1, fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                              color: currentStatus === 'pass' ? tokens.colors.neutral[500] : tokens.colors.neutral[900],
+                              flex: 1, fontSize: t.typography.fontSize.sm,
+                              fontWeight: t.typography.fontWeight.medium,
+                              color: currentStatus === 'pass' ? t.colors.neutral[500] : t.colors.neutral[900],
                               textDecoration: currentStatus === 'pass' ? 'line-through' : 'none',
                             }}>
                               {item.label}
                             </Text>
                             <Text style={{
-                              fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
+                              fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
                               color: scale[700],
                             }}>
                               {statusCfg.label}

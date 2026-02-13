@@ -15,10 +15,13 @@ export interface ScoringKpi {
   previousValue: number;
 }
 
+export type ScoreColorKey = 'success' | 'primary' | 'warning' | 'error' | 'info' | 'secondary';
+
 export interface LevelDistribution {
   level: string;
   count: number;
-  color: string;
+  color?: string;
+  colorKey?: ScoreColorKey;
 }
 
 export interface HeatmapCell {

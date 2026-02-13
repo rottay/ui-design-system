@@ -7,9 +7,20 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+} from '../../../helpers';
 import type {
   BhDecisionHubProps, DecisionCandidate, DecisionAction,
   RejectCategory, BulkDecisionEntry,
@@ -18,7 +29,7 @@ import {
   getDecisionActionConfig, getRejectCategoryLabel,
   getCandidateInitials, formatScoreDisplay, getScoreColor,
 } from '../../core';
-import type { DesignTokens } from '../../../../../core/types/tokens';
+import type { DesignTokens } from '../../../../../types';
 import {
   Zap, ThumbsUp, ThumbsDown, Pause, Send, Check, X,
   ChevronDown, ChevronUp, Sparkles, AlertTriangle, RotateCcw,
@@ -41,20 +52,26 @@ const DEFAULT_CANDIDATES: DecisionCandidate[] = [
  * ScoreRing (mini)
  * -------------------------------------------------------------------------*/
 
+/* Module-level refs for sub-components */
+let _BBox: any;
+let _BText: any;
+
 function ScoreRing({ score, t }: { score: number; t: DesignTokens }) {
   const color = getScoreColor(t, score);
   const size = 36; const r = 13; const c = 2 * Math.PI * r;
+  const Box = _BBox;
+  const Text = _BText;
   return (
-    <div style={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
+    <Box style={{ position: 'relative' as const, width: size, height: size, flexShrink: 0 }} role="img" aria-label={`Score: ${score}%`}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: 'rotate(-90deg)' }}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth="3" />
         <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth="3"
           strokeDasharray={c} strokeDashoffset={c - (score / 100) * c} strokeLinecap="round" />
       </svg>
-      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ fontSize: 10, fontWeight: 700, color }}>{score}</span>
-      </div>
-    </div>
+      <Box style={{ position: 'absolute' as const, inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color }}>{score}</Text>
+      </Box>
+    </Box>
   );
 }
 
@@ -66,8 +83,13 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
   name: 'BhDecisionHub.Bulk',
   render: ({ primitives, props, tokens: t }: PresetContext<BhDecisionHubProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
-    const actionConfig = getDecisionActionConfig(t);
+    _BBox = Box;
+    _BText = Text;
+    const isGlass = t.surface.useGlass;
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const actionConfig = useMemo(() => getDecisionActionConfig(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     const {
       jobName = 'Senior Frontend Engineer',
@@ -153,8 +175,8 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
 
     return (
       <Box className={className} style={{
-        ...createCardStyle(t, { elevation: 'md' }),
-        display: 'flex', flexDirection: 'column', height: '100%',
+        ...createCardStyle(t, { elevation: 'md', glass: isGlass }),
+        display: 'flex', flexDirection: 'column' as const, height: '100%',
         backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
       }}>
         {/* Header */}
@@ -170,12 +192,12 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
             }}>
               <Zap size={18} style={{ color: t.colors.warningScale[600] }} />
             </Box>
-            <Box>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
                 {jobName}
-                <span style={{ marginLeft: t.spacing[2], padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.warningScale[50], color: t.colors.warningScale[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>Bulk Mode</span>
+                <Text style={{ marginLeft: t.spacing[2], padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: t.colors.warningScale[50], color: t.colors.warningScale[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>Bulk Mode</Text>
               </Text>
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
                 {pendingCount} candidates | {bulkDecisions.length} decided | {stats.undecided} remaining
               </Text>
             </Box>
@@ -186,12 +208,13 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                 {decisionIcons[key as DecisionAction]} {val}
               </Box>
             ))}
-            <button onClick={resetAll} style={{
+            <Box onClick={resetAll} role="button" tabIndex={0} aria-label="Reset all decisions" onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); resetAll(); } }} style={{
               display: 'flex', alignItems: 'center', gap: 4,
               padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
               border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
               color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, cursor: 'pointer',
-            }}><RotateCcw size={11} /> Reset</button>
+              transition: `all ${t.motion.hover}`,
+            }}><RotateCcw size={11} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Reset</Text></Box>
           </Box>
         </Box>
 
@@ -211,36 +234,44 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                 const cfg = actionConfig[action];
                 const active = batchAction === action;
                 return (
-                  <button key={action} onClick={() => setBatchAction(active ? null : action)} style={{
+                  <Box key={action} onClick={() => setBatchAction(active ? null : action)} role="button" tabIndex={0} aria-label={`Batch ${cfg.label}`} aria-pressed={active} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBatchAction(active ? null : action); } }} style={{
                     display: 'flex', alignItems: 'center', gap: 3,
                     padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
                     border: `1px solid ${active ? cfg.borderColor : t.colors.neutral[200]}`,
                     backgroundColor: active ? cfg.bgColor : t.colors.common.white,
                     color: active ? cfg.color : t.colors.neutral[600],
                     fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer',
-                  }}>{cfg.label}</button>
+                    transition: `all ${t.motion.hover}`,
+                  }}><Text style={{ fontSize: t.typography.fontSize.xs }}>{cfg.label}</Text></Box>
                 );
               })}
             </Box>
             {batchAction === 'reject' && (
-              <select value={batchRejectCat ?? ''} onChange={e => setBatchRejectCat(e.target.value as RejectCategory)} style={{
-                padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-                border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs,
-                color: t.colors.neutral[700], backgroundColor: t.colors.common.white,
-              }}>
-                <option value="">Category...</option>
-                {(['not_qualified', 'culture_fit', 'compensation', 'timing', 'other'] as RejectCategory[]).map(cat => (
-                  <option key={cat} value={cat}>{getRejectCategoryLabel(cat)}</option>
-                ))}
-              </select>
+              <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap' as const }}>
+                {(['not_qualified', 'culture_fit', 'compensation', 'timing', 'other'] as RejectCategory[]).map(cat => {
+                  const isActive = batchRejectCat === cat;
+                  return (
+                    <Box key={cat} onClick={() => setBatchRejectCat(isActive ? null : cat)} role="button" tabIndex={0} aria-label={`Category: ${getRejectCategoryLabel(cat)}`} aria-pressed={isActive} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBatchRejectCat(isActive ? null : cat); } }} style={{
+                      padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,
+                      border: `1px solid ${isActive ? t.colors.errorScale[300] : t.colors.neutral[200]}`,
+                      backgroundColor: isActive ? t.colors.errorScale[50] : t.colors.common.white,
+                      color: isActive ? t.colors.errorScale[700] : t.colors.neutral[600],
+                      fontSize: t.typography.fontSize.xs, cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                    }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{getRejectCategoryLabel(cat)}</Text>
+                    </Box>
+                  );
+                })}
+              </Box>
             )}
             {batchAction && (
-              <button onClick={applyBatch} style={{
+              <Box onClick={applyBatch} role="button" tabIndex={0} aria-label={`Apply batch action to ${selectedIds.size} candidates`} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); applyBatch(); } }} style={{
                 display: 'flex', alignItems: 'center', gap: 3,
                 padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
-                border: 'none', backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
+                backgroundColor: t.colors.primaryScale[500], color: t.colors.common.white,
                 fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer',
-              }}><Check size={11} /> Apply to {selectedIds.size}</button>
+                transition: `all ${t.motion.hover}`,
+              }}><Check size={11} /> <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.common.white }}>Apply to {selectedIds.size}</Text></Box>
             )}
           </Box>
         )}
@@ -251,25 +282,27 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
           padding: `${t.spacing[2]}px ${t.spacing[6]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }}>
-          <button onClick={toggleAll} style={{
-            width: 18, height: 18, borderRadius: 4,
+          <Box onClick={toggleAll} role="checkbox" tabIndex={0} aria-checked={allSelected} aria-label="Select all candidates" onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAll(); } }} style={{
+            width: 18, height: 18, borderRadius: t.borderRadius.sm,
             border: `1px solid ${allSelected ? t.colors.primaryScale[500] : t.colors.neutral[300]}`,
             backgroundColor: allSelected ? t.colors.primaryScale[500] : t.colors.common.white,
             color: allSelected ? t.colors.common.white : 'transparent',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', padding: 0,
-          }}>{allSelected && <Check size={11} />}</button>
+            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+            transition: `all ${t.motion.hover}`,
+          }}>{allSelected && <Check size={11} />}</Box>
           <Box style={{ flex: 1, display: 'flex', gap: t.spacing[2] }}>
             {(['rank', 'score', 'name'] as const).map(field => (
-              <button key={field} onClick={() => { sortBy === field ? setSortDir(d => d === 'asc' ? 'desc' : 'asc') : (setSortBy(field), setSortDir('asc')); }} style={{
-                padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br, border: 'none',
+              <Box key={field} onClick={() => { sortBy === field ? setSortDir(d => d === 'asc' ? 'desc' : 'asc') : (setSortBy(field), setSortDir('asc')); }} role="button" tabIndex={0} aria-label={`Sort by ${field}`} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sortBy === field ? setSortDir(d => d === 'asc' ? 'desc' : 'asc') : (setSortBy(field), setSortDir('asc')); } }} style={{
+                padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,
                 backgroundColor: sortBy === field ? t.colors.neutral[100] : 'transparent',
                 color: sortBy === field ? t.colors.neutral[800] : t.colors.neutral[500],
-                fontSize: t.typography.fontSize.xs, fontWeight: sortBy === field ? 600 : 400, cursor: 'pointer',
+                fontSize: t.typography.fontSize.xs, fontWeight: sortBy === field ? t.typography.fontWeight.semibold : t.typography.fontWeight.normal, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: 2,
+                transition: `all ${t.motion.hover}`,
               }}>
-                {field.charAt(0).toUpperCase() + field.slice(1)}
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{field.charAt(0).toUpperCase() + field.slice(1)}</Text>
                 {sortBy === field && (sortDir === 'asc' ? <ChevronUp size={10} /> : <ChevronDown size={10} />)}
-              </button>
+              </Box>
             ))}
           </Box>
           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{candidates.length} candidates</Text>
@@ -287,13 +320,14 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
               <Box key={candidate.id} style={{ borderBottom: `1px solid ${t.colors.neutral[50]}` }}>
                 {/* Row */}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: `${t.spacing[3]}px ${t.spacing[6]}px` }}>
-                  <button onClick={() => toggleSelect(candidate.id)} style={{
-                    width: 18, height: 18, borderRadius: 4, padding: 0,
+                  <Box onClick={() => toggleSelect(candidate.id)} role="checkbox" tabIndex={0} aria-checked={isSelected} aria-label={`Select ${candidate.name}`} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSelect(candidate.id); } }} style={{
+                    width: 18, height: 18, borderRadius: t.borderRadius.sm,
                     border: `1px solid ${isSelected ? t.colors.primaryScale[500] : t.colors.neutral[300]}`,
                     backgroundColor: isSelected ? t.colors.primaryScale[500] : t.colors.common.white,
                     color: isSelected ? t.colors.common.white : 'transparent',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0,
-                  }}>{isSelected && <Check size={11} />}</button>
+                    transition: `all ${t.motion.hover}`,
+                  }}>{isSelected && <Check size={11} />}</Box>
 
                   <Text style={{ width: 28, textAlign: 'center', fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[400], flexShrink: 0 }}>
                     #{candidate.rank}
@@ -303,10 +337,10 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                     width: 32, height: 32, borderRadius: t.borderRadius.full, flexShrink: 0,
                     backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700],
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 11, fontWeight: t.typography.fontWeight.bold,
+                    fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
                   }}>{getCandidateInitials(candidate.name)}</Box>
 
-                  <Box style={{ flex: 1, minWidth: 0 }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{candidate.name}</Text>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {candidate.highlights.slice(0, 3).join(' | ')}
@@ -320,13 +354,14 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                       const cfg = actionConfig[action];
                       const isActive = existing?.decision === action;
                       return (
-                        <button key={action} onClick={() => isActive ? removeDecision(candidate.id) : setDecision(candidate.id, action)} title={cfg.label} style={{
-                          width: 28, height: 28, borderRadius: br, padding: 0,
+                        <Box key={action} onClick={() => isActive ? removeDecision(candidate.id) : setDecision(candidate.id, action)} role="button" tabIndex={0} aria-label={cfg.label} aria-pressed={isActive} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isActive ? removeDecision(candidate.id) : setDecision(candidate.id, action); } }} style={{
+                          width: 28, height: 28, borderRadius: br,
                           border: `1px solid ${isActive ? cfg.borderColor : t.colors.neutral[200]}`,
                           backgroundColor: isActive ? cfg.bgColor : t.colors.common.white,
                           color: isActive ? cfg.color : t.colors.neutral[400],
                           display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                        }}>{decisionIcons[action]}</button>
+                          transition: `all ${t.motion.hover}`,
+                        }}>{decisionIcons[action]}</Box>
                       );
                     })}
                   </Box>
@@ -340,11 +375,12 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                     }}>{actionConfig[existing.decision].label}</Box>
                   )}
 
-                  <button onClick={() => setExpandedId(isExpanded ? null : candidate.id)} style={{
-                    width: 24, height: 24, borderRadius: br, border: 'none',
+                  <Box onClick={() => setExpandedId(isExpanded ? null : candidate.id)} role="button" tabIndex={0} aria-label={isExpanded ? 'Collapse details' : 'Expand details'} aria-expanded={isExpanded} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedId(isExpanded ? null : candidate.id); } }} style={{
+                    width: 24, height: 24, borderRadius: br,
                     backgroundColor: 'transparent', color: t.colors.neutral[400], cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0,
-                  }}>{isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</button>
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    transition: `all ${t.motion.hover}`,
+                  }}>{isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</Box>
                 </Box>
 
                 {/* Expanded detail */}
@@ -356,7 +392,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                       backgroundColor: t.colors.primaryScale[50], border: `1px solid ${t.colors.primaryScale[200]}`,
                       display: 'flex', alignItems: 'flex-start', gap: t.spacing[2],
                     }}>
-                      <Sparkles size={13} style={{ color: t.colors.primaryScale[500], flexShrink: 0, marginTop: 2 }} />
+                      <Sparkles size={13} style={{ color: t.colors.primaryScale[500], flexShrink: 0, marginTop: t.spacing[1] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.primaryScale[700], lineHeight: 1.5 }}>{candidate.aiRecommendation}</Text>
                     </Box>
 
@@ -401,18 +437,22 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
 
                     {/* Reject category selector */}
                     {existing?.decision === 'reject' && (
-                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[3] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[3], flexWrap: 'wrap' as const }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Reject category:</Text>
-                        <select value={existing.rejectCategory ?? ''} onChange={e => setDecision(candidate.id, 'reject', e.target.value as RejectCategory)} style={{
-                          padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,
-                          border: `1px solid ${t.colors.neutral[200]}`, fontSize: t.typography.fontSize.xs,
-                          color: t.colors.neutral[700], backgroundColor: t.colors.common.white,
-                        }}>
-                          <option value="">Select...</option>
-                          {(['not_qualified', 'culture_fit', 'compensation', 'timing', 'other'] as RejectCategory[]).map(cat => (
-                            <option key={cat} value={cat}>{getRejectCategoryLabel(cat)}</option>
-                          ))}
-                        </select>
+                        {(['not_qualified', 'culture_fit', 'compensation', 'timing', 'other'] as RejectCategory[]).map(cat => {
+                          const isActive = existing.rejectCategory === cat;
+                          return (
+                            <Box key={cat} onClick={() => setDecision(candidate.id, 'reject', cat)} role="button" tabIndex={0} aria-label={getRejectCategoryLabel(cat)} aria-pressed={isActive} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDecision(candidate.id, 'reject', cat); } }} style={{
+                              padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,
+                              border: `1px solid ${isActive ? t.colors.errorScale[300] : t.colors.neutral[200]}`,
+                              backgroundColor: isActive ? t.colors.errorScale[50] : t.colors.common.white,
+                              color: isActive ? t.colors.errorScale[700] : t.colors.neutral[600],
+                              fontSize: t.typography.fontSize.xs, cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                            }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>{getRejectCategoryLabel(cat)}</Text>
+                            </Box>
+                          );
+                        })}
                       </Box>
                     )}
                   </Box>
@@ -445,14 +485,15 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
               </Text>
             )}
           </Box>
-          <button onClick={onBulkSubmit} disabled={bulkDecisions.length === 0} style={{
+          <Box onClick={bulkDecisions.length > 0 ? onBulkSubmit : undefined} role="button" tabIndex={bulkDecisions.length > 0 ? 0 : -1} aria-label={`Submit all ${bulkDecisions.length} decisions`} aria-disabled={bulkDecisions.length === 0} onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && bulkDecisions.length > 0) { e.preventDefault(); onBulkSubmit?.(); } }} style={{
             display: 'flex', alignItems: 'center', gap: t.spacing[2],
-            padding: `${t.spacing[2]}px ${t.spacing[6]}px`, borderRadius: br, border: 'none',
+            padding: `${t.spacing[2]}px ${t.spacing[6]}px`, borderRadius: br,
             backgroundColor: bulkDecisions.length > 0 ? t.colors.primaryScale[500] : t.colors.neutral[300],
             color: t.colors.common.white, fontSize: t.typography.fontSize.sm,
             fontWeight: t.typography.fontWeight.semibold,
             cursor: bulkDecisions.length > 0 ? 'pointer' : 'not-allowed',
-          }}><Send size={14} /> Submit All Decisions ({bulkDecisions.length})</button>
+            transition: `all ${t.motion.hover}`,
+          }}><Send size={14} /> <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white }}>Submit All Decisions ({bulkDecisions.length})</Text></Box>
         </Box>
       </Box>
     );

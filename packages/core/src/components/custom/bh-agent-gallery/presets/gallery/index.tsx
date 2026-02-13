@@ -9,19 +9,22 @@
  * overlays, featured marketplace section, and personality-driven styling.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
   createDividerStyle,
+  createEmptyStateStyle,
   createHoverStyle,
+  createIconContainerStyle,
   createPersonalityAccentBar,
   createSectionHeaderStyle,
   getCardPadding,
   getHoverTransform,
   getPersonalityBadgeRadius,
   getPersonalityTypography,
+  getAccentAwareLayout,
 } from '../../../helpers';
 import type {
   BhAgentGalleryProps,
@@ -134,7 +137,7 @@ function getStatusInfo(status: AgentStatus, tokens: DesignTokens): { color: stri
 /* ------------------------------------------------------------------ */
 export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
   name: 'BhAgentGallery.Gallery',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhAgentGalleryProps>) => {
+  render: ({ primitives, props, tokens }: PresetContext<BhAgentGalleryProps>) => {
     const { Box, Text } = primitives;
 
     const {
@@ -173,22 +176,26 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
     const showPreview = controlledShowPreview ?? localShowPreview;
     const viewMode = controlledViewMode ?? localViewMode;
 
-    const handleTabChange = (tab: AgentTab) => { onTabChange?.(tab); if (controlledTab === undefined) setLocalTab(tab); };
-    const handleFilterChange = (f: AgentFilter) => { onFilterChange?.(f); if (controlledFilters === undefined) setLocalFilters(f); };
-    const handleSelect = (id: string) => { onAgentSelect?.(id); if (controlledSelected === undefined) setLocalSelected(id); };
-    const handlePreviewToggle = (show: boolean) => { onPreviewToggle?.(show); if (controlledShowPreview === undefined) setLocalShowPreview(show); };
-    const handleViewModeChange = (mode: AgentViewMode) => { onViewModeChange?.(mode); if (controlledViewMode === undefined) setLocalViewMode(mode); };
+    const handleTabChange = useCallback((tab: AgentTab) => { onTabChange?.(tab); if (controlledTab === undefined) setLocalTab(tab); }, [onTabChange, controlledTab]);
+    const handleFilterChange = useCallback((f: AgentFilter) => { onFilterChange?.(f); if (controlledFilters === undefined) setLocalFilters(f); }, [onFilterChange, controlledFilters]);
+    const handleSelect = useCallback((id: string) => { onAgentSelect?.(id); if (controlledSelected === undefined) setLocalSelected(id); }, [onAgentSelect, controlledSelected]);
+    const handlePreviewToggle = useCallback((show: boolean) => { onPreviewToggle?.(show); if (controlledShowPreview === undefined) setLocalShowPreview(show); }, [onPreviewToggle, controlledShowPreview]);
+    const handleViewModeChange = useCallback((mode: AgentViewMode) => { onViewModeChange?.(mode); if (controlledViewMode === undefined) setLocalViewMode(mode); }, [onViewModeChange, controlledViewMode]);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const hoverTransform = getHoverTransform(tokens);
+    const hoverTransform = useMemo(() => getHoverTransform(tokens), [tokens]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const padding = useMemo(() => getCardPadding(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
+    const emptyState = useMemo(() => createEmptyStateStyle(tokens), [tokens]);
+    const iconContainer = useMemo(() => createIconContainerStyle(tokens, { size: 40, color: tokens.colors.primaryScale[50] }), [tokens]);
+    const iconContainerSm = useMemo(() => createIconContainerStyle(tokens, { size: 32, color: tokens.colors.primaryScale[50] }), [tokens]);
 
     /* ---- Filtering ---- */
     const filteredAgents = useMemo(() => {
@@ -245,7 +252,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
     }, [agents]);
 
     /* ---- Reusable icon button style ---- */
-    const iconBtnStyle = (bg: string, color: string): React.CSSProperties => ({
+    const iconBtnStyle = useCallback((bg: string, color: string): React.CSSProperties => ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -258,10 +265,10 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       color,
       cursor: 'pointer',
       transition: `all ${tokens.motion.hover}`,
-    });
+    }), [tokens]);
 
     /* ---- Select style helper ---- */
-    const selectStyle: React.CSSProperties = {
+    const selectStyle: React.CSSProperties = useMemo(() => ({
       padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
       borderRadius: tokens.borderRadius.md,
       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -276,7 +283,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       WebkitAppearance: 'none' as const,
       backgroundImage: 'none',
       minWidth: 120,
-    };
+    }), [tokens]);
 
     return (
       <Box
@@ -294,6 +301,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
         {/*  1. Tab Bar                                                  */}
         {/* =========================================================== */}
         <Box
+          role="tablist"
+          aria-label="Agent tabs"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -309,7 +318,12 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
             return (
               <Box
                 key={tab.key}
+                role="tab"
+                tabIndex={0}
+                aria-selected={isActive}
+                aria-label={`${tab.label} (${tab.count})`}
                 onClick={() => handleTabChange(tab.key)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTabChange(tab.key); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -350,11 +364,16 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
           })}
 
           {/* View mode toggle */}
-          <Box style={{ marginLeft: 'auto', display: 'flex', gap: tokens.spacing[1] }}>
+          <Box style={{ marginLeft: 'auto', display: 'flex', gap: tokens.spacing[1] }} role="radiogroup" aria-label="View mode">
             {(['grid', 'list'] as const).map((mode) => (
               <Box
                 key={mode}
+                role="radio"
+                tabIndex={0}
+                aria-checked={viewMode === mode}
+                aria-label={`${mode} view`}
                 onClick={() => handleViewModeChange(mode)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewModeChange(mode); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -381,6 +400,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
         {/*  2. Filter Bar                                               */}
         {/* =========================================================== */}
         <Box
+          role="search"
+          aria-label="Filter agents"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -408,6 +429,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
             <input
               type="text"
               placeholder="Search agents..."
+              aria-label="Search agents"
               value={filters.search || ''}
               onChange={(e) => handleFilterChange({ ...filters, search: e.target.value })}
               style={{
@@ -426,19 +448,19 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
             <Filter size={16} strokeWidth={1.5} />
           </Box>
 
-          <select value={filters.type || 'all'} onChange={(e) => handleFilterChange({ ...filters, type: e.target.value as AgentType | 'all' })} style={selectStyle}>
+          <select aria-label="Filter by type" value={filters.type || 'all'} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange({ ...filters, type: e.target.value as AgentType | 'all' })} style={selectStyle}>
             {typeOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
           </select>
 
-          <select value={filters.language || 'all'} onChange={(e) => handleFilterChange({ ...filters, language: e.target.value })} style={selectStyle}>
+          <select aria-label="Filter by language" value={filters.language || 'all'} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange({ ...filters, language: e.target.value })} style={selectStyle}>
             {uniqueLanguages.map((lang) => (<option key={lang} value={lang}>{lang === 'all' ? 'All Languages' : getLanguageLabel(lang)}</option>))}
           </select>
 
-          <select value={filters.provider || 'all'} onChange={(e) => handleFilterChange({ ...filters, provider: e.target.value })} style={selectStyle}>
+          <select aria-label="Filter by provider" value={filters.provider || 'all'} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange({ ...filters, provider: e.target.value })} style={selectStyle}>
             {uniqueProviders.map((prov) => (<option key={prov} value={prov}>{prov === 'all' ? 'All Providers' : prov}</option>))}
           </select>
 
-          <select value={filters.status || 'all'} onChange={(e) => handleFilterChange({ ...filters, status: e.target.value as AgentStatus | 'all' })} style={selectStyle}>
+          <select aria-label="Filter by status" value={filters.status || 'all'} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange({ ...filters, status: e.target.value as AgentStatus | 'all' })} style={selectStyle}>
             {statusOptions.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
           </select>
         </Box>
@@ -448,7 +470,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
         {/* =========================================================== */}
         <Box style={{ flex: 1, overflow: 'auto' as const, padding: tokens.spacing[5] }}>
           {filteredAgents.length === 0 ? (
-            <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[10]}px ${tokens.spacing[4]}px`, textAlign: 'center' as const }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...emptyState, padding: `${tokens.spacing[10]}px ${tokens.spacing[4]}px` }}>
               <Bot size={48} strokeWidth={1} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[4] }} />
               <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], display: 'block', marginBottom: tokens.spacing[2] }}>
                 No agents found
@@ -473,7 +495,11 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       .map((agent) => (
                         <Box
                           key={`featured-${agent.id}`}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Select featured agent ${agent.name}`}
                           onClick={() => handleSelect(agent.id)}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(agent.id); } }}
                           style={{
                             ...cardBase,
                             padding: padding,
@@ -485,6 +511,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             background: isGlass ? tokens.glass?.bg : `linear-gradient(135deg, ${tokens.colors.primaryScale[50]}, ${tokens.colors.secondaryScale[50]})`,
                             position: 'relative' as const,
                             overflow: 'hidden',
+                            ...accentLayout.outer,
                           }}
                           onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                             Object.assign((e.currentTarget as HTMLDivElement).style, hoverTransform);
@@ -496,6 +523,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           }}
                         >
                           <Box style={accentBar || undefined} />
+                          <Box style={accentLayout.inner}>
                           {/* Featured badge */}
                           <Box
                             style={{
@@ -512,21 +540,10 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             <Text>Featured</Text>
                           </Box>
                           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
-                            <Box
-                              style={{
-                                width: tokens.spacing[10],
-                                height: tokens.spacing[10],
-                                borderRadius: tokens.borderRadius.lg,
-                                backgroundColor: tokens.colors.primaryScale[100],
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: tokens.colors.primaryScale[600],
-                              }}
-                            >
+                            <Box style={{ ...iconContainer, color: tokens.colors.primaryScale[600] }}>
                               {getAgentTypeIcon(agent.type, 20)}
                             </Box>
-                            <Box style={{ flex: 1, minWidth: 0 }}>
+                            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
                               <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], display: 'block' }}>
                                 {agent.name}
                               </Text>
@@ -553,6 +570,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               </Box>
                             )}
                           </Box>
+                          </Box>
                         </Box>
                       ))}
                   </Box>
@@ -566,7 +584,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
               )}
 
               {/* Main grid */}
-              <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: tokens.spacing[4] }}>
+              <Box role="list" aria-label="Agent cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: tokens.spacing[4] }}>
                 {filteredAgents.map((agent) => {
                   const statusInfo = getStatusInfo(agent.status, tokens);
                   const isSelected = selectedAgent === agent.id;
@@ -574,6 +592,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   return (
                     <Box
                       key={agent.id}
+                      role="listitem"
                       onClick={() => handleSelect(agent.id)}
                       style={{
                         ...cardBase,
@@ -605,15 +624,9 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3], marginBottom: tokens.spacing[3] }}>
                           <Box
                             style={{
-                              width: tokens.spacing[10],
-                              height: tokens.spacing[10],
-                              borderRadius: tokens.borderRadius.lg,
+                              ...iconContainer,
                               backgroundColor: tokens.colors.primaryScale[50],
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
                               color: tokens.colors.primaryScale[600],
-                              flexShrink: 0,
                             }}
                           >
                             {getAgentTypeIcon(agent.type, 20)}
@@ -684,7 +697,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], display: 'block', marginBottom: tokens.spacing[1] }}>
                               Usage (last 14 days)
                             </Text>
-                            <svg width="100%" height={40} viewBox="0 0 200 40" preserveAspectRatio="none" style={{ display: 'block' }}>
+                            <svg width="100%" height={40} viewBox="0 0 200 40" preserveAspectRatio="none" style={{ display: 'block' }} aria-hidden="true">
                               <polygon points={sparklinePolygonPoints(agent.usageSparkline, 200, 40, 2)} fill={tokens.colors.primaryScale[100]} stroke="none" />
                               <polyline points={sparklinePoints(agent.usageSparkline, 200, 40, 2)} fill="none" stroke={tokens.colors.primaryScale[500]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -693,7 +706,11 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
 
                         {/* Preview button */}
                         <Box
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Preview ${agent.name}`}
                           onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(agent.id); handlePreviewToggle(true); }}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleSelect(agent.id); handlePreviewToggle(true); } }}
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -730,27 +747,27 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         }}
                       >
                         {onDuplicate && (
-                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDuplicate(agent.id); }} title="Duplicate" style={iconBtnStyle(tokens.colors.common.white, tokens.colors.neutral[600])}>
+                          <Box role="button" tabIndex={0} aria-label={`Duplicate ${agent.name}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDuplicate(agent.id); }} style={iconBtnStyle(tokens.colors.common.white, tokens.colors.neutral[600])}>
                             <Copy size={14} strokeWidth={1.5} />
                           </Box>
                         )}
                         {onEdit && (
-                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEdit(agent.id); }} title="Edit" style={iconBtnStyle(tokens.colors.common.white, tokens.colors.neutral[600])}>
+                          <Box role="button" tabIndex={0} aria-label={`Edit ${agent.name}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEdit(agent.id); }} style={iconBtnStyle(tokens.colors.common.white, tokens.colors.neutral[600])}>
                             <Pencil size={14} strokeWidth={1.5} />
                           </Box>
                         )}
                         {agent.status === 'active' && onDeactivate && (
-                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDeactivate(agent.id); }} title="Deactivate" style={iconBtnStyle(tokens.colors.warningScale[50], tokens.colors.warningScale[600])}>
+                          <Box role="button" tabIndex={0} aria-label={`Deactivate ${agent.name}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDeactivate(agent.id); }} style={iconBtnStyle(tokens.colors.warningScale[50], tokens.colors.warningScale[600])}>
                             <PowerOff size={14} strokeWidth={1.5} />
                           </Box>
                         )}
                         {agent.status !== 'active' && onActivate && (
-                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onActivate(agent.id); }} title="Activate" style={iconBtnStyle(tokens.colors.successScale[50], tokens.colors.successScale[600])}>
+                          <Box role="button" tabIndex={0} aria-label={`Activate ${agent.name}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); onActivate(agent.id); }} style={iconBtnStyle(tokens.colors.successScale[50], tokens.colors.successScale[600])}>
                             <Power size={14} strokeWidth={1.5} />
                           </Box>
                         )}
                         {onDelete && (
-                          <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDelete(agent.id); }} title="Delete" style={iconBtnStyle(tokens.colors.errorScale[50], tokens.colors.errorScale[600])}>
+                          <Box role="button" tabIndex={0} aria-label={`Delete ${agent.name}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDelete(agent.id); }} style={iconBtnStyle(tokens.colors.errorScale[50], tokens.colors.errorScale[600])}>
                             <Trash2 size={14} strokeWidth={1.5} />
                           </Box>
                         )}
@@ -768,6 +785,9 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
         {/* =========================================================== */}
         {showPreview && selectedAgentData && (
           <Box
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Preview ${selectedAgentData.name}`}
             style={{
               position: 'fixed' as const,
               top: 0, left: 0, right: 0, bottom: 0,
@@ -809,13 +829,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
                   <Box
                     style={{
-                      width: tokens.spacing[10],
-                      height: tokens.spacing[10],
-                      borderRadius: tokens.borderRadius.lg,
+                      ...iconContainer,
                       backgroundColor: tokens.colors.primaryScale[50],
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
                       color: tokens.colors.primaryScale[600],
                     }}
                   >
@@ -836,7 +851,11 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   </Box>
                 </Box>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Close preview"
                   onClick={() => handlePreviewToggle(false)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePreviewToggle(false); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -872,7 +891,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                       }}
                     >
                       {Object.entries(previewData.configSummary).map(([key, value]) => (
-                        <Box key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: `${tokens.spacing[2]}px 0`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
+                        <Box key={key} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], justifyContent: 'space-between', padding: `${tokens.spacing[2]}px 0`, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], textTransform: 'capitalize' as const }}>
                             {key.replace(/([A-Z])/g, ' $1').trim()}
                           </Text>
@@ -928,6 +947,9 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           }}
                         >
                           <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Play voice preview"
                             style={{
                               display: 'flex',
                               alignItems: 'center',
@@ -943,7 +965,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                           >
                             <Play size={16} strokeWidth={2} />
                           </Box>
-                          <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: tokens.spacing[0] || 1 }}>
                             {Array.from({ length: 40 }).map((_, i) => (
                               <Box
                                 key={i}
@@ -983,7 +1005,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 )}
 
                 {!previewData && (
-                  <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px`, textAlign: 'center' as const }}>
+                  <Box style={{ ...emptyState, padding: `${tokens.spacing[8]}px ${tokens.spacing[4]}px` }}>
                     <Eye size={32} strokeWidth={1} style={{ color: tokens.colors.neutral[300], marginBottom: tokens.spacing[3] }} />
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>Preview data not available</Text>
                   </Box>
@@ -1001,7 +1023,11 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
               >
                 {onDuplicate && (
                   <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Duplicate agent"
                     onClick={() => { onDuplicate(selectedAgentData.id); handlePreviewToggle(false); }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDuplicate(selectedAgentData.id); handlePreviewToggle(false); } }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -1023,7 +1049,11 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                 )}
                 {onEdit && (
                   <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Edit agent"
                     onClick={() => { onEdit(selectedAgentData.id); handlePreviewToggle(false); }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEdit(selectedAgentData.id); handlePreviewToggle(false); } }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',

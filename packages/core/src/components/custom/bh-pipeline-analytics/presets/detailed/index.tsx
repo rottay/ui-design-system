@@ -91,11 +91,11 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column' as const,
-        gap: tokens.spacing[5], ...style,
+        gap: tokens.spacing[5], width: '100%', ...style,
       }}>
         {/* ── Summary Row ──────────────────────────────── */}
         {summary && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
             {[
               { label: 'Active', value: formatNumber(summary.totalActive), color: tokens.colors.primaryScale[600], icon: <Users size={14} /> },
               { label: 'Hired', value: formatNumber(summary.totalHired), color: tokens.colors.successScale[600], icon: <TrendingUp size={14} /> },
@@ -103,7 +103,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
               { label: 'Conversion', value: formatPercent(summary.overallConversionRate), color: tokens.colors.infoScale[600], icon: <Target size={14} /> },
               { label: 'Bottlenecks', value: String(summary.bottleneckCount), color: summary.bottleneckCount > 0 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600], icon: <AlertTriangle size={14} /> },
             ].map(stat => (
-              <Box key={stat.label} style={{ ...card, padding: tokens.spacing[4], textAlign: 'center' as const }}>
+              <Box key={stat.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...card, padding: tokens.spacing[4], textAlign: 'center' as const }}>
                 <Flex align="center" justify="center" gap={6} style={{ marginBottom: tokens.spacing[2] }}>
                   <Box style={{
                     width: 28, height: 28, borderRadius: tokens.borderRadius.md,
@@ -126,7 +126,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                 </Text>
               </Box>
             ))}
-          </div>
+          </Box>
         )}
 
         {/* ── Stages Detail Table ──────────────────────── */}
@@ -277,7 +277,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
               <AlertTriangle size={14} color={tokens.colors.errorScale[500]} />
               <Text style={{ ...sectionHeader, marginBottom: 0 }}>Bottleneck Analysis</Text>
             </Flex>
-            <div style={{
+            <Box style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
               gap: tokens.spacing[4],
@@ -343,7 +343,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                   </Flex>
                 </Box>
               ))}
-            </div>
+            </Box>
           </Box>
         )}
       </Box>

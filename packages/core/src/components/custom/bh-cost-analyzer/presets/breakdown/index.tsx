@@ -7,14 +7,18 @@
  * sparklines, provider color dots, and summary totals.
  */
 
-import { useState, useMemo } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
+import { useState, useMemo, useCallback } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
 import type { BhCostAnalyzerProps, ModelCost, ProviderCost } from '../../core';
 import { formatCurrency, formatTokens } from '../../core';
 import {
   createCardStyle, createBadgeStyle, createHoverStyle,
   createSectionHeaderStyle, createStatusDotStyle,
+  createCardHoverStyles, createEntranceAnimation,
+  createPersonalitySectionHeaderStyle, getPersonalityTypography,
+  getPersonalityBadgeRadius, createIconContainerStyle,
 } from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, Layers, Activity } from 'lucide-react';
 
 const MOCK_PROVIDERS: ProviderCost[] = [
@@ -75,7 +79,7 @@ function ModelRow({ model, maxCost, totalCost, providerColorMap, tokens, primiti
       {/* Top row: model name, provider, sparkline, share badge */}
       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flex: 2 }}>
-          <Box style={{
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
             width: 10, height: 10, borderRadius: tokens.borderRadius.full,
             backgroundColor: provColor, flexShrink: 0,
           }} />
@@ -118,7 +122,7 @@ function ModelRow({ model, maxCost, totalCost, providerColorMap, tokens, primiti
           width: `${costPct}%`,
           borderRadius: tokens.borderRadius.full,
           backgroundColor: provColor,
-          transition: `width 0.3s ease`,
+          transition: `width ${tokens.motion.hover}`,
         }} />
       </Box>
 
@@ -155,6 +159,10 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
   name: 'BhCostAnalyzer.Breakdown',
   render: ({ primitives, props, tokens }: PresetContext<BhCostAnalyzerProps>) => {
     const { Box, Text } = primitives;
+    const isGlass = tokens.surface.useGlass;
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
     const { providers = MOCK_PROVIDERS, models = MOCK_MODELS, loading, className, style } = props;
 
     const { maxCost, totalCost, providerColorMap } = useMemo(() => {
@@ -166,7 +174,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     }, [models, tokens]);
 
     const cardStyle = useMemo(() => ({
-      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+      ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
       overflow: 'hidden' as const,
       borderRadius: tokens.borderRadius.lg,
       border: `1px solid ${tokens.colors.neutral[100]}`,
@@ -202,7 +210,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
             }}>
               <Layers size={18} color={tokens.colors.primaryScale[500]} />
             </Box>
-            <Box>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
               <Text style={{
                 fontSize: tokens.typography.fontSize.md,
                 fontWeight: tokens.typography.fontWeight.bold,
@@ -213,14 +221,13 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
               <Text style={{
                 fontSize: tokens.typography.fontSize.xs,
                 color: tokens.colors.neutral[400],
-                marginTop: 2,
+                marginTop: tokens.spacing[1],
               }}>
                 {models.length} models across {providers.length} providers
               </Text>
             </Box>
           </Box>
-          <Box style={{
-            display: 'flex', alignItems: 'baseline', gap: tokens.spacing[1],
+          <Box style={{ display: 'flex', alignItems: 'baseline', gap: tokens.spacing[1],
           }}>
             <Text style={{
               fontSize: tokens.typography.fontSize.xs,
@@ -250,7 +257,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
             ...createSectionHeaderStyle(tokens),
             marginBottom: 0, flex: 2,
           }}>Model / Provider</Text>
-          <Box style={{ display: 'flex', gap: tokens.spacing[6] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[6] }}>
             <Text style={{ ...createSectionHeaderStyle(tokens), marginBottom: 0, textAlign: 'right' as const }}>Cost</Text>
             <Text style={{ ...createSectionHeaderStyle(tokens), marginBottom: 0, textAlign: 'right' as const }}>Share</Text>
           </Box>
@@ -282,7 +289,7 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
               const dotColor = providerColorMap[p.providerName] ?? tokens.colors.primaryScale[500];
               return (
                 <Box key={p.providerId} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                  <Box style={{
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                     width: 8, height: 8, borderRadius: tokens.borderRadius.full,
                     backgroundColor: dotColor, flexShrink: 0,
                   }} />

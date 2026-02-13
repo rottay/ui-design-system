@@ -2,13 +2,27 @@
 
 /**
  * BhInterviewCenter - List Preset
- * Slite-inspired sortable table view with status badges, type indicators,
+ * Sortable table view with status badges, type indicators,
  * stats bar, filter pills, search, and row actions.
+ * Personality-driven, glass-aware, fully accessible.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+  getAccentAwareLayout,
+} from '../../../helpers';
 import type { BhInterviewCenterProps, InterviewItem, InterviewType, InterviewStatus, InterviewFilter, SortDirection } from '../../core';
 import { BH_INTERVIEW_CENTER_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -68,6 +82,17 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
   render: ({ primitives, props, tokens }: PresetContext<BhInterviewCenterProps>) => {
     const { Box, Text } = primitives;
     const t = tokens;
+    const isGlass = t.surface.useGlass;
+    const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
+
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
+    const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
     const { interviews, stats, filters: cFilters, onFilterChange, selectedInterview: cSel, onInterviewSelect, onScheduleNew, sortBy: cSort, sortDirection: cDir, onSortChange, className, style } = props;
 
@@ -78,10 +103,16 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const [search, setSearch] = useState('');
     const [hovered, setHovered] = useState<string | null>(null);
 
+
     const filters = cFilters ?? iFilters;
     const sel = cSel ?? iSel;
     const sortBy = cSort ?? iSort;
     const sortDir = cDir ?? iDir;
+
+    const glassCard = useMemo(() =>
+      isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {},
+      [isGlass, t, bdr]
+    );
 
     const handleFilter = useCallback((f: InterviewFilter) => { if (!cFilters) setIFilters(f); onFilterChange?.(f); }, [cFilters, onFilterChange]);
     const handleSelect = useCallback((id: string | null) => { if (cSel === undefined) setISel(id); onInterviewSelect?.(id); }, [cSel, onInterviewSelect]);
@@ -116,40 +147,50 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       return r;
     }, [interviews, filters, search, sortBy, sortDir]);
 
-    const pillStyle = (active: boolean): React.CSSProperties => ({
+    const pillStyle = useCallback((active: boolean): React.CSSProperties => ({
       display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
-      padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full,
+      padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: badgeRadius,
       fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
-      border: `1px solid ${active ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+      border: `${bdr} ${active ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
       backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white,
       color: active ? t.colors.primaryScale[600] : t.colors.neutral[600],
       cursor: 'pointer', transition: `all ${t.motion.hover}`,
-    });
+    }), [t, bdr, badgeRadius]);
 
-    const statuses: (InterviewStatus | null)[] = [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'];
-    const types: (InterviewType | null)[] = [null, 'ai', 'human'];
+    const animStyle = useCallback((index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    }), [entrance, t]);
+
+    const statuses: (InterviewStatus | null)[] = useMemo(() => [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'], []);
+    const types: (InterviewType | null)[] = useMemo(() => [null, 'ai', 'human'], []);
+
+    const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
+    const clearSearch = useCallback(() => setSearch(''), []);
 
     return (
-      <Box className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
+      <Box className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...style }}>
         {/* Header */}
-        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: t.typography.lineHeight.tight }}>
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4], ...animStyle(0) }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], lineHeight: t.typography.lineHeight.tight, letterSpacing: ptypo.headingLetterSpacing }}>
               Interview Center
             </Text>
-            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
               Manage and track all interviews across your pipeline
             </Text>
           </Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
             {onScheduleNew && (
-              <Box onClick={onScheduleNew} style={{
-                display: 'inline-flex', alignItems: 'center', gap: t.spacing[2],
-                padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md,
-                fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold,
-                backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white,
-                cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: t.shadows.sm,
-              }}>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Schedule new interview"
+                onClick={onScheduleNew}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onScheduleNew(); } }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: t.shadows.sm }}
+              >
                 <Plus size={16} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white, fontWeight: t.typography.fontWeight.semibold }}>Schedule Interview</Text>
               </Box>
@@ -159,12 +200,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
         {/* Stats */}
         {stats && (
-          <Box style={{
-            display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap' as const,
-            padding: `${t.spacing[3]}px ${t.spacing[4]}px`, marginBottom: t.spacing[4],
-            ...createCardStyle(t, { elevation: 'sm' }), borderRadius: t.borderRadius.lg,
-            border: `1px solid ${t.colors.neutral[100]}`,
-          }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap' as const, padding: `${t.spacing[3]}px ${t.spacing[4]}px`, marginBottom: t.spacing[4], ...createCardStyle(t, { elevation: 'sm', glass: isGlass }), borderRadius: t.borderRadius.lg, ...glassCard }} role="region" aria-label="Interview statistics">
             {[
               { label: 'Scheduled', value: stats.scheduledToday, icon: <CalendarDays size={14} />, scale: 'infoScale' },
               { label: 'In Progress', value: stats.inProgress, icon: <Activity size={14} />, scale: 'warningScale' },
@@ -175,14 +211,10 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             ].map((it, i) => {
               const sc = (t.colors as any)[it.scale];
               return (
-                <Box key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: t.spacing[2],
-                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.full,
-                  backgroundColor: sc[50], border: `1px solid ${t.colors.neutral[100]}`,
-                }}>
+                <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: sc[50], border: `${bdr} ${t.colors.neutral[100]}` }}>
                   <Box style={{ color: sc[600], display: 'flex', alignItems: 'center' }}>{it.icon}</Box>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{it.label}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{it.value}</Text>
+                  <Text style={{ ...sectionLabel, marginBottom: 0 }}>{it.label}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900] }}>{it.value}</Text>
                 </Box>
               );
             })}
@@ -190,13 +222,13 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
         )}
 
         {/* Toolbar */}
-        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], flexWrap: 'wrap' as const }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], flexWrap: 'wrap' as const }} role="toolbar" aria-label="Interview filters">
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
             <Filter size={14} color={t.colors.neutral[400]} />
             {statuses.map(s => {
               const a = filters.status === s || (s === null && !filters.status);
               return (
-                <Box key={s ?? 'all'} onClick={() => handleFilter({ ...filters, status: s })} style={pillStyle(a)}>
+                <Box key={s ?? 'all'} role="button" tabIndex={0} aria-label={s === null ? 'All statuses' : STATUS_MAP[s].label} aria-pressed={a} onClick={() => handleFilter({ ...filters, status: s })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilter({ ...filters, status: s }); } }} style={pillStyle(a)}>
                   {s !== null && <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusCfg(t, s).dot, flexShrink: 0 }} />}
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>{s === null ? 'All' : STATUS_MAP[s].label}</Text>
                 </Box>
@@ -207,7 +239,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             {types.map(ty => {
               const a = filters.type === ty || (ty === null && !filters.type);
               return (
-                <Box key={ty ?? 'all-types'} onClick={() => handleFilter({ ...filters, type: ty })} style={pillStyle(a)}>
+                <Box key={ty ?? 'all-types'} role="button" tabIndex={0} aria-label={ty === null ? 'All types' : TYPE_MAP[ty].label} aria-pressed={a} onClick={() => handleFilter({ ...filters, type: ty })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilter({ ...filters, type: ty }); } }} style={pillStyle(a)}>
                   {ty === 'ai' && <Bot size={10} />}
                   {ty === 'human' && <User size={10} />}
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>{ty === null ? 'All' : TYPE_MAP[ty].label}</Text>
@@ -216,17 +248,17 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             })}
           </Box>
           <Box style={{ flex: 1 }} />
-          <Box style={{
-            display: 'flex', alignItems: 'center', gap: t.spacing[2],
-            padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md,
-            border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, minWidth: 200,
-          }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, minWidth: 200 }}>
             <Search size={14} color={t.colors.neutral[400]} />
-            <input type="text" placeholder="Search interviews..." value={search} onChange={e => setSearch(e.target.value)} style={{
-              border: 'none', outline: 'none', fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800],
-              backgroundColor: 'transparent', flex: 1, padding: 0, fontFamily: 'inherit',
-            }} />
-            {search && <X size={12} color={t.colors.neutral[400]} style={{ cursor: 'pointer' }} onClick={() => setSearch('')} />}
+            <input
+              type="text"
+              placeholder="Search interviews..."
+              value={search}
+              onChange={handleSearchChange}
+              aria-label="Search interviews"
+              style={{ border: 'none', outline: 'none', fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], backgroundColor: 'transparent', flex: 1, padding: 0, fontFamily: 'inherit' }}
+            />
+            {search && <Box role="button" tabIndex={0} aria-label="Clear search" onClick={clearSearch} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clearSearch(); } }} style={{ cursor: 'pointer', display: 'flex' }}><X size={12} color={t.colors.neutral[400]} /></Box>}
           </Box>
           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>
             {filtered.length} interview{filtered.length !== 1 ? 's' : ''}
@@ -234,30 +266,16 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
         </Box>
 
         {/* Table */}
-        <Box style={{
-          ...createCardStyle(t, { elevation: 'sm', padding: 0 }),
-          borderRadius: t.borderRadius.lg,
-          border: `1px solid ${t.colors.neutral[100]}`,
-          overflow: 'hidden',
-        }}>
+        <Box style={{ ...createCardStyle(t, { elevation: 'sm', padding: 0, glass: isGlass }), borderRadius: t.borderRadius.lg, overflow: 'hidden', ...glassCard }}>
+          {accentBar && <Box style={accentBar} />}
+
+        <Box style={accentLayout.inner}>
           {/* Table Header */}
-          <Box style={{
-            display: 'grid', gridTemplateColumns: GRID_COLS,
-            padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
-            borderBottom: `1px solid ${t.colors.neutral[100]}`,
-            backgroundColor: t.colors.neutral[50],
-          }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: GRID_COLS, padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50] }} role="row">
             {TABLE_COLUMNS.map(col => {
               const cur = sortBy === col.key;
               return (
-                <Box key={col.key} onClick={() => col.sortable && handleSort(col.key)} style={{
-                  display: 'flex', alignItems: 'center', gap: t.spacing[1],
-                  fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold,
-                  color: cur ? t.colors.primaryScale[700] : t.colors.neutral[500],
-                  textTransform: 'uppercase' as const, letterSpacing: '0.05em',
-                  cursor: col.sortable ? 'pointer' : 'default', userSelect: 'none' as const,
-                  padding: `0 ${t.spacing[1]}px`,
-                }}>
+                <Box key={col.key} role={col.sortable ? 'button' : undefined} tabIndex={col.sortable ? 0 : undefined} aria-label={col.sortable ? `Sort by ${col.label}` : undefined} onClick={() => col.sortable && handleSort(col.key)} onKeyDown={col.sortable ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(col.key); } } : undefined} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], ...sectionLabel, marginBottom: 0, color: cur ? t.colors.primaryScale[700] : t.colors.neutral[500], cursor: col.sortable ? 'pointer' : 'default', userSelect: 'none' as const, padding: `0 ${t.spacing[1]}px` }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>{col.label}</Text>
                   {col.sortable && cur && (sortDir === 'asc' ? <ChevronUp size={12} /> : <ChevronDown size={12} />)}
                   {col.sortable && !cur && col.label && <ArrowUpDown size={10} style={{ opacity: 0.3 }} />}
@@ -268,36 +286,26 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
           {/* Table Body */}
           {filtered.length === 0 ? (
-            <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${t.spacing[12]}px ${t.spacing[6]}px`, textAlign: 'center' as const }}>
-              <Box style={{ width: 64, height: 64, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: t.spacing[4] }}>
+            <Box style={emptyState}>
+              <Box style={createIconContainerStyle(t, { size: 64, color: t.colors.primaryScale[50] })}>
                 <Calendar size={28} color={t.colors.primaryScale[400]} />
               </Box>
-              <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2] }}>No interviews found</Text>
+              <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], marginBottom: t.spacing[2], marginTop: t.spacing[4] }}>No interviews found</Text>
               <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginBottom: t.spacing[6], maxWidth: 360, lineHeight: t.typography.lineHeight.relaxed }}>
                 {search || filters.status || filters.type ? 'Try adjusting your filters or search query.' : 'Schedule your first interview to get started.'}
               </Text>
             </Box>
-          ) : filtered.map(iv => {
+          ) : filtered.map((iv, idx) => {
             const sc = statusCfg(t, iv.status);
             const tc = typeCfg(t, iv.type);
             const isH = hovered === iv.id;
             const isS = sel === iv.id;
 
             return (
-              <Box key={iv.id} onClick={() => handleSelect(iv.id)} onMouseEnter={() => setHovered(iv.id)} onMouseLeave={() => setHovered(null)} style={{
-                display: 'grid', gridTemplateColumns: GRID_COLS,
-                padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
-                borderBottom: `1px solid ${t.colors.neutral[100]}`,
-                backgroundColor: isS ? t.colors.primaryScale[50] : isH ? t.colors.neutral[50] : t.colors.common.white,
-                cursor: 'pointer', transition: `all ${t.motion.hover}`, alignItems: 'center',
-              }}>
+              <Box key={iv.id} role="row" aria-selected={isS} onClick={() => handleSelect(iv.id)} onMouseEnter={() => setHovered(iv.id)} onMouseLeave={() => setHovered(null)} style={{ display: 'grid', gridTemplateColumns: GRID_COLS, padding: `${t.spacing[3]}px ${t.spacing[4]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}`, backgroundColor: isS ? t.colors.primaryScale[50] : isH ? t.colors.neutral[50] : t.colors.common.white, cursor: 'pointer', transition: `all ${t.motion.hover}`, alignItems: 'center' }}>
                 {/* Candidate */}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `0 ${t.spacing[1]}px`, minWidth: 0 }}>
-                  <Box style={{
-                    width: 32, height: 32, borderRadius: t.borderRadius.full,
-                    backgroundColor: t.colors.primaryScale[100],
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}>
+                  <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <User size={14} color={t.colors.primaryScale[600]} />
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{iv.candidateName}</Text>
@@ -308,19 +316,19 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, padding: `0 ${t.spacing[1]}px` }}>{iv.stageName}</Text>
                 {/* Type */}
                 <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
-                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, backgroundColor: tc.bg, border: `1px solid ${tc.border}` }}>
+                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: tc.bg, border: `${bdr} ${tc.border}` }}>
                     <Text style={{ fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: tc.color }}>{tc.label}</Text>
                   </Box>
                 </Box>
                 {/* Status */}
                 <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
-                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, backgroundColor: sc.bg, border: `1px solid ${sc.border}` }}>
+                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: sc.bg, border: `${bdr} ${sc.border}` }}>
                     <Box style={{ width: 5, height: 5, borderRadius: t.borderRadius.full, backgroundColor: sc.dot }} />
                     <Text style={{ fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: sc.color }}>{sc.label}</Text>
                   </Box>
                 </Box>
                 {/* DateTime */}
-                <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: `0 ${t.spacing[1]}px` }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{fmtDate(iv.dateTime)}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{fmtTime(iv.dateTime)}</Text>
                 </Box>
@@ -349,26 +357,17 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 </Box>
                 {/* Actions */}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], opacity: isH ? 1 : 0, transition: `opacity ${t.motion.hover}`, padding: `0 ${t.spacing[1]}px` }}>
-                  <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(iv.id); }} style={{
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    width: 26, height: 26, borderRadius: t.borderRadius.md,
-                    border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
-                    color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}`,
-                  }}>
+                  <Box role="button" tabIndex={0} aria-label={`View details for ${iv.candidateName}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(iv.id); }} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleSelect(iv.id); } }} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Eye size={12} />
                   </Box>
-                  <Box onClick={(e: React.MouseEvent) => { e.stopPropagation(); }} style={{
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    width: 26, height: 26, borderRadius: t.borderRadius.md,
-                    border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white,
-                    color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}`,
-                  }}>
+                  <Box role="button" tabIndex={0} aria-label={`Open profile for ${iv.candidateName}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); }} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <ExternalLink size={12} />
                   </Box>
                 </Box>
               </Box>
             );
           })}
+        </Box>
         </Box>
       </Box>
     );

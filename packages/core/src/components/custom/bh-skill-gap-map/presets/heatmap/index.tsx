@@ -7,9 +7,19 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createIconContainerStyle,
+  createPersonalityAccentBar,
+  getAccentAwareLayout,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+} from '../../../helpers';
 import type { BhSkillGapMapProps, GapPriority, SkillGapItem, DimensionHeatmapCell } from '../../core';
 import { getPriorityColors, getScoreColor, getScoreBgColor } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -69,6 +79,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const { Box, Text } = primitives;
     const br = getPersonalityBadgeRadius(t);
     const pc = getPriorityColors(t);
+    const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
       gaps = DEFAULT_GAPS,
@@ -84,50 +95,82 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
       className, style,
     } = props;
 
+    /* ── State ─────────────────────────────────────────────────── */
     const [internalSelected, setInternalSelected] = useState<string>(selectedGapProp ?? '');
     const [internalPriority, setInternalPriority] = useState<GapPriority[]>([]);
 
     const selectedGapId = selectedGapProp ?? internalSelected;
     const activePriority = priorityFilterProp ?? internalPriority;
 
-    const handleGapSelect = (id: string) => { setInternalSelected(id); onGapSelect?.(id); };
-    const togglePriority = (p: GapPriority) => {
+    /* ── Personality + Animation ───────────────────────────────── */
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+
+    /* ── Glass header style ────────────────────────────────────── */
+    const headerGlassStyle = useMemo(() => {
+      const s: React.CSSProperties = {};
+      if (isGlass && t.glass) {
+        s.backdropFilter = t.glass.blur;
+        s.WebkitBackdropFilter = t.glass.blur;
+        s.backgroundColor = t.glass.bg;
+      }
+      return s;
+    }, [isGlass, t]);
+
+    /* ── Callbacks ─────────────────────────────────────────────── */
+    const handleGapSelect = useCallback((id: string) => { setInternalSelected(id); onGapSelect?.(id); }, [onGapSelect]);
+    const togglePriority = useCallback((p: GapPriority) => {
       const next = activePriority.includes(p) ? activePriority.filter(x => x !== p) : [...activePriority, p];
       setInternalPriority(next);
       onPriorityFilterChange?.(next);
-    };
+    }, [activePriority, onPriorityFilterChange]);
 
-    const filteredGaps = activePriority.length > 0 ? gaps.filter(g => activePriority.includes(g.priority)) : gaps;
-    const dims = dimsProp?.length ? dimsProp : [...new Set(heatmapData.map(c => c.dimension))];
-    const cands = candsProp?.length ? candsProp : [...new Set(heatmapData.map(c => c.candidate))];
-    const selectedGap = gaps.find(g => g.id === selectedGapId);
+    /* ── Derived ───────────────────────────────────────────────── */
+    const filteredGaps = useMemo(() => activePriority.length > 0 ? gaps.filter(g => activePriority.includes(g.priority)) : gaps, [gaps, activePriority]);
+    const dims = useMemo(() => dimsProp?.length ? dimsProp : [...new Set(heatmapData.map(c => c.dimension))], [dimsProp, heatmapData]);
+    const cands = useMemo(() => candsProp?.length ? candsProp : [...new Set(heatmapData.map(c => c.candidate))], [candsProp, heatmapData]);
+    const selectedGap = useMemo(() => gaps.find(g => g.id === selectedGapId), [gaps, selectedGapId]);
 
     if (loading) {
       return (
-        <Box className={className} style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[500], ...style }}>
+        <Box className={className} role="status" aria-label="Loading skill gap data" style={{ padding: t.spacing[8], textAlign: 'center', color: t.colors.neutral[500], ...style }}>
           <Text>Loading skill gap data...</Text>
         </Box>
       );
     }
 
     return (
-      <Box className={className} style={{
-        ...createCardStyle(t, { elevation: 'md' }),
+      <Box className={className} role="region" aria-label="Skill gap heatmap" style={{
+        ...createCardStyle(t, { elevation: 'md', glass: isGlass }),
         display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
+        backgroundColor: t.colors.common.white, overflow: 'hidden',
+        ...accentLayout.outer,
+        ...entrance.animate,
+        transition: entrance.transition,
+        width: '100%',
+        ...style,
       }}>
+        {/* Accent bar */}
+        {accentBar && <Box style={accentBar} />}
+
+        <Box style={{ ...accentLayout.inner, display: 'flex', flexDirection: 'column' as const, flex: 1 }}>
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          ...headerGlassStyle,
         }}>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
-              <Grid3x3 size={16} style={{ marginRight: t.spacing[2], verticalAlign: 'middle' }} />
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, letterSpacing: ptypo.headingLetterSpacing, color: t.colors.neutral[900] }}>
+              <Grid3x3 size={16} style={{ marginRight: t.spacing[2], verticalAlign: 'middle' }} aria-hidden="true" />
               Skill Gap Heatmap
             </Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
               {dims.length} dimensions | {cands.length} candidates | {gaps.length} gaps identified
             </Text>
           </Box>
@@ -148,7 +191,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                   backgroundColor: s.bg, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: t.spacing[2],
                 }}>
                   <Box style={{ color: s.color }}>{s.icon}</Box>
-                  <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: s.color }}>{s.value}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{s.value}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: s.color, fontWeight: t.typography.fontWeight.medium }}>{s.label}</Text>
                 </Box>
               ))}
@@ -156,19 +199,20 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
           )}
 
           {/* Priority filters */}
-          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[5] }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], marginRight: t.spacing[1] }}>Priority:</Text>
+          <Box role="group" aria-label="Filter by priority" style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[5] }}>
+            <Text style={{ ...sectionHeaderStyle, marginBottom: 0, marginRight: t.spacing[1] }}>Priority:</Text>
             {(['critical', 'high', 'medium', 'low'] as GapPriority[]).map(p => {
               const colors = pc[p];
               const active = activePriority.includes(p);
               return (
-                <button key={p} onClick={() => togglePriority(p)} style={{
+                <button key={p} onClick={() => togglePriority(p)} aria-pressed={active} aria-label={`Filter by ${p} priority`} style={{
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: br,
                   border: `1px solid ${active ? colors.border : t.colors.neutral[200]}`,
                   backgroundColor: active ? colors.bgColor : t.colors.common.white,
                   color: active ? colors.color : t.colors.neutral[500],
                   fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
-                  cursor: 'pointer', textTransform: 'capitalize',
+                  cursor: 'pointer', textTransform: 'capitalize' as const,
+                  transition: `all ${t.motion.hover}`,
                 }}>{p}</button>
               );
             })}
@@ -177,29 +221,29 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
           {/* Heatmap grid */}
           {heatmapData.length > 0 && dims.length > 0 && cands.length > 0 && (
             <Box style={{ marginBottom: t.spacing[6], overflowX: 'auto' }}>
-              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[3] }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], marginBottom: t.spacing[3] }}>
                 Dimension Heatmap
               </Text>
-              <Box style={{ borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[100]}`, overflow: 'hidden' }}>
+              <Box role="table" aria-label="Candidate score heatmap" style={{ borderRadius: t.borderRadius.lg, border: `1px solid ${t.colors.neutral[100]}`, overflow: 'hidden' }}>
                 {/* Header row */}
-                <Box style={{ display: 'flex' }}>
-                  <Box style={{ width: 120, minWidth: 120, padding: `${t.spacing[2]}px ${t.spacing[3]}px`, backgroundColor: t.colors.neutral[50], borderBottom: `1px solid ${t.colors.neutral[100]}` }} />
+                <Box role="row" style={{ display: 'flex' }}>
+                  <Box role="columnheader" style={{ width: 120, minWidth: 120, padding: `${t.spacing[2]}px ${t.spacing[3]}px`, backgroundColor: t.colors.neutral[50], borderBottom: `1px solid ${t.colors.neutral[100]}` }} />
                   {dims.map(dim => (
-                    <Box key={dim} style={{
+                    <Box key={dim} role="columnheader" style={{
                       width: 80, minWidth: 80, textAlign: 'center',
                       padding: `${t.spacing[2]}px ${t.spacing[1]}px`,
                       backgroundColor: t.colors.neutral[50],
                       borderBottom: `1px solid ${t.colors.neutral[100]}`,
                       borderLeft: `1px solid ${t.colors.neutral[100]}`,
                     }}>
-                      <Text style={{ fontSize: 10, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600] }}>{dim}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600] }}>{dim}</Text>
                     </Box>
                   ))}
                 </Box>
                 {/* Candidate rows */}
                 {cands.map((cand, ci) => (
-                  <Box key={cand} style={{ display: 'flex', borderBottom: ci < cands.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined }}>
-                    <Box style={{
+                  <Box key={cand} role="row" style={{ display: 'flex', borderBottom: ci < cands.length - 1 ? `1px solid ${t.colors.neutral[100]}` : undefined }}>
+                    <Box role="rowheader" style={{
                       width: 120, minWidth: 120, padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                       display: 'flex', alignItems: 'center',
                     }}>
@@ -210,7 +254,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                       const score = cell?.score ?? 0;
                       const maxScore = cell?.maxScore ?? 100;
                       return (
-                        <Box key={`${cand}-${dim}`} style={{
+                        <Box key={`${cand}-${dim}`} role="cell" aria-label={`${cand} ${dim}: ${score}/${maxScore}`} style={{
                           width: 80, minWidth: 80, height: 36,
                           borderLeft: `1px solid ${t.colors.neutral[100]}`,
                           backgroundColor: getScoreBgColor(score, maxScore, t),
@@ -231,22 +275,29 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
           )}
 
           {/* Gap list */}
-          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[3] }}>
+          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], marginBottom: t.spacing[3] }}>
             Skill Gaps ({filteredGaps.length})
           </Text>
-          <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-            {filteredGaps.map(gap => {
+          <Box role="list" aria-label="Identified skill gaps" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
+            {filteredGaps.map((gap, gi) => {
               const colors = pc[gap.priority];
               const isSelected = selectedGapId === gap.id;
               const pct = gap.requiredLevel > 0 ? Math.round((gap.currentLevel / gap.requiredLevel) * 100) : 0;
               const barColor = pct >= 80 ? t.colors.successScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
 
+              const gapEntrance = createEntranceAnimation(t, { index: gi });
               return (
-                <Box key={gap.id} onClick={() => handleGapSelect(gap.id)} style={{
+                <Box key={gap.id} role="listitem" aria-selected={isSelected} tabIndex={0}
+                  onClick={() => handleGapSelect(gap.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleGapSelect(gap.id); } }}
+                  aria-label={`${gap.dimension}: ${gap.priority} priority, gap size ${gap.gapSize}`}
+                  style={{
+                  ...cardHover.base,
+                  ...gapEntrance.animate,
                   padding: `${t.spacing[3]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.lg,
                   border: `1px solid ${isSelected ? t.colors.primaryScale[300] : t.colors.neutral[100]}`,
                   backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
-                  cursor: 'pointer', transition: 'all 0.15s ease',
+                  cursor: 'pointer', transition: `all ${t.motion.hover}`,
                   borderLeft: `3px solid ${colors.color}`,
                 }}>
                   <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
@@ -259,8 +310,8 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{gap.candidateCount} candidates</Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Box style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
-                      <Box style={{ height: '100%', width: `${pct}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: 'width 0.4s ease' }} />
+                    <Box role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`${gap.dimension} completion`} style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+                      <Box style={{ height: '100%', width: `${pct}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], minWidth: 36, textAlign: 'right' }}>
                       {gap.currentLevel}/{gap.requiredLevel}
@@ -273,7 +324,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                       border: `1px solid ${t.colors.infoScale[200]}`,
                       display: 'flex', alignItems: 'flex-start', gap: t.spacing[2],
                     }}>
-                      <Info size={12} style={{ color: t.colors.infoScale[500], flexShrink: 0, marginTop: 2 }} />
+                      <Info size={12} style={{ color: t.colors.infoScale[500], flexShrink: 0, marginTop: t.spacing[1] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[700], lineHeight: 1.5 }}>{gap.recommendation}</Text>
                     </Box>
                   )}
@@ -281,6 +332,7 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
               );
             })}
           </Box>
+        </Box>
         </Box>
       </Box>
     );

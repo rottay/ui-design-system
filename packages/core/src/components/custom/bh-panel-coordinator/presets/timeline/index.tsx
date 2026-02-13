@@ -6,7 +6,7 @@
  * Slite-inspired: generous whitespace, warm neutrals, soft shadows, minimal borders.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BhPanelCoordinatorProps, InterviewStage, PanelMember } from '../../core';
 import {
@@ -22,6 +22,9 @@ import {
   createSectionHeaderStyle,
   createStatusDotStyle,
   createFilterPillStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createEntranceAnimation,
 } from '../../../helpers';
 import {
   Users, UserCheck, CheckCircle2, Clock, AlertCircle,
@@ -63,8 +66,8 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
     const selectedStageId = selectedStageIdProp ?? internalStage;
     const selectedMemberId = selectedMemberIdProp ?? internalMember;
 
-    const handleStageSelect = (id: string) => { setInternalStage(id); onStageSelect?.(id); };
-    const handleMemberSelect = (id: string) => { setInternalMember(id); onMemberSelect?.(id); };
+    const handleStageSelect = useCallback((id: string) => { setInternalStage(id); onStageSelect?.(id); }, [onStageSelect]);
+    const handleMemberSelect = useCallback((id: string) => { setInternalMember(id); onMemberSelect?.(id); }, [onMemberSelect]);
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
     const completedCount = sortedStages.filter(s => s.status === 'completed').length;
@@ -169,7 +172,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
               const stageMembers = members.filter(m => m.stageId === stage.id);
               const memberScores = stageMembers.map(m => m.overallScore ?? 0);
               return (
-                <Box key={stage.id} onClick={() => handleStageSelect(stage.id)} style={{
+                <Box key={stage.id} role="button" tabIndex={0} aria-label={`Stage: ${stage.name}`} aria-pressed={isSelected} onClick={() => handleStageSelect(stage.id)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleStageSelect(stage.id); }} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                   flex: 1, padding: `${tokens.spacing[4]}px ${tokens.spacing[3]}px`,
                   borderRight: i < sortedStages.length - 1
                     ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`
@@ -234,7 +237,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
         </Box>
 
         {/* ── Panelists + Detail ───────────────────────── */}
-        <div style={{ display: 'grid', gridTemplateColumns: selectedMember || consensus ? '1fr 340px' : '1fr', gap: tokens.spacing[5] }}>
+        <Box style={{ display: 'grid', gridTemplateColumns: selectedMember || consensus ? '1fr 340px' : '1fr', gap: tokens.spacing[5] }}>
           {/* Panelist List */}
           <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
             <Box style={createPanelHeaderStyle(tokens)}>
@@ -251,7 +254,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                 const rc = m.recommendation ? recColors[m.recommendation] : null;
                 const memberStage = stages.find(s => s.id === m.stageId);
                 return (
-                  <Box key={m.id} onClick={() => handleMemberSelect(m.id)}
+                  <Box key={m.id} role="button" tabIndex={0} aria-label={`Panelist: ${m.name}`} aria-pressed={isSelected} onClick={() => handleMemberSelect(m.id)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleMemberSelect(m.id); }}
                     style={createListItemStyle(tokens, { active: isSelected, interactive: true })}>
                     <Flex justify="between" align="center">
                       <Stack gap={2}>
@@ -308,7 +311,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
           {/* Detail Panel */}
           <Box>
             {selectedMember ? (
-              <Box style={{ ...card, padding: tokens.spacing[5] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...card, padding: tokens.spacing[5] }}>
                 <Flex align="center" gap={8} style={{ marginBottom: tokens.spacing[4] }}>
                   <Box style={{
                     width: 36, height: 36, borderRadius: tokens.borderRadius.full,
@@ -351,7 +354,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                             </Text>
                           </Flex>
                           <Box style={{ ...progressStyles.track, height: 5 }}>
-                            <div style={progressStyles.fill} />
+                            <Box style={progressStyles.fill} />
                           </Box>
                         </Box>
                       );
@@ -367,7 +370,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                     backgroundColor: tokens.colors.neutral[50],
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
                   }}>
-                    <MessageSquare size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <MessageSquare size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: tokens.spacing[1] }} />
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], lineHeight: 1.5 }}>
                       {selectedMember.notes}
                     </Text>
@@ -387,7 +390,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                 {(() => {
                   const rc = recColors[consensus.recommendation];
                   return (
-                    <Box style={{
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                       textAlign: 'center' as const, padding: tokens.spacing[4],
                       marginBottom: tokens.spacing[4], borderRadius: tokens.borderRadius.lg,
                       backgroundColor: rc.bgColor,
@@ -443,7 +446,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
                     backgroundColor: tokens.colors.warningScale[50],
                     border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                   }}>
-                    <AlertCircle size={14} color={tokens.colors.warningScale[600]} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <AlertCircle size={14} color={tokens.colors.warningScale[600]} style={{ flexShrink: 0, marginTop: tokens.spacing[1] }} />
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[700] }}>
                       Dissenting: {consensus.dissentingMembers.join(', ')}
                     </Text>
@@ -461,7 +464,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
               </Box>
             )}
           </Box>
-        </div>
+        </Box>
       </Box>
     );
   },

@@ -237,7 +237,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
     /* ── Step 1: Basics ──────────────────────────────────────── */
     const renderBasics = () => (
       <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-        <Box style={{ textAlign: 'center' as const, marginBottom: tokens.spacing[2] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], textAlign: 'center' as const, marginBottom: tokens.spacing[2] }}>
           <Text style={{
             fontSize: tokens.typography.fontSize.xl,
             fontWeight: tokens.typography.fontWeight.bold,
@@ -261,8 +261,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
           </Text>
           <input
             type="text"
+            aria-label="Company name"
             value={localFormData.orgName}
-            onChange={(e) => updateFormData({ orgName: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormData({ orgName: e.target.value })}
             placeholder="Your company name"
             style={inputStyle}
           />
@@ -271,8 +272,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
         <Box>
           <Text style={labelStyle}>Industry</Text>
           <select
+            aria-label="Industry"
             value={localFormData.industry}
-            onChange={(e) => updateFormData({ industry: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateFormData({ industry: e.target.value })}
             style={selectStyle}
           >
             <option value="">Select industry</option>
@@ -290,7 +292,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
 
       return (
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-          <Box style={{ textAlign: 'center' as const, marginBottom: tokens.spacing[2] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], textAlign: 'center' as const, marginBottom: tokens.spacing[2] }}>
             <Text style={{
               fontSize: tokens.typography.fontSize.xl,
               fontWeight: tokens.typography.fontWeight.bold,
@@ -356,8 +358,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
             <Box style={{ position: 'relative' as const }}>
               <input
                 type="password"
+                aria-label="API Key"
                 value={localFormData.providerConfig.apiKey}
-                onChange={(e) => updateFormData({
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateFormData({
                   providerConfig: { ...localFormData.providerConfig, apiKey: e.target.value },
                 })}
                 placeholder="sk-..."
@@ -447,7 +450,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
 
       return (
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
-          <Box style={{ textAlign: 'center' as const, marginBottom: tokens.spacing[2] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], textAlign: 'center' as const, marginBottom: tokens.spacing[2] }}>
             <Text style={{
               fontSize: tokens.typography.fontSize.xl,
               fontWeight: tokens.typography.fontWeight.bold,
@@ -475,8 +478,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
                 {idx === 0 && <Text style={labelStyle}>Email</Text>}
                 <input
                   type="email"
+                  aria-label={`Email for invitation ${idx + 1}`}
                   value={invite.email}
-                  onChange={(e) => updateInvite(idx, { email: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateInvite(idx, { email: e.target.value })}
                   placeholder="colleague@company.com"
                   style={inputStyle}
                 />
@@ -484,8 +488,9 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
               <Box style={{ flex: 1 }}>
                 {idx === 0 && <Text style={labelStyle}>Role</Text>}
                 <select
+                  aria-label={`Role for invitation ${idx + 1}`}
                   value={invite.role}
-                  onChange={(e) => updateInvite(idx, { role: e.target.value })}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateInvite(idx, { role: e.target.value })}
                   style={selectStyle}
                 >
                   {getRoleOptions().map((opt) => (
@@ -542,7 +547,7 @@ export const QuickBhTenantSetup = createPreset<BhTenantSetupProps>({
         backdropFilter: isGlass && tokens.glass ? tokens.glass.blur : undefined,
         WebkitBackdropFilter: isGlass && tokens.glass ? tokens.glass.blur : undefined,
       }}>
-        <Box style={{
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4],
           textAlign: 'center' as const,
           zIndex: 51,
         }}>

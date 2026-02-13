@@ -16,6 +16,15 @@ import {
   createSectionHeaderStyle,
   createStatusDotStyle,
   getHoverTransform,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createCardHoverStyles,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createPersonalitySectionHeaderStyle,
+  createIconContainerStyle,
+  createEmptyStateStyle,
 } from '../../../helpers';
 import type {
   BhPositionDetailProps,
@@ -139,6 +148,9 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
   render: ({ primitives, props, tokens }: PresetContext<BhPositionDetailProps>) => {
     const { Box, Flex, Stack, Text } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
 
     const {
       positionInfo,
@@ -343,7 +355,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
       const dashOffset = circumference - (fillPercent / 100) * circumference;
 
       return (
-        <Box style={{ ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
           <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[3] }}>
             <Target size={14} color={tokens.colors.neutral[500]} />
             <Text style={{ ...sectionHeader, marginBottom: 0 }}>Requirements</Text>
@@ -459,7 +471,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
           </Flex>
 
           {/* Table header */}
-          <div style={{
+          <Box style={{
             display: 'grid', gridTemplateColumns: '1fr 120px 100px 40px',
             gap: tokens.spacing[3],
             padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
@@ -474,14 +486,16 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
             <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Candidates</Text>
             <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Status</Text>
             <Box />
-          </div>
+          </Box>
 
           {/* Rows */}
           {linkedJobs.map(job => {
             const jobStatusCol = getJobStatusColors(job.status, tokens);
             return (
-              <div key={job.id}
+              <Box key={job.id}
+                role="button" tabIndex={0} aria-label={`View job ${job.title}`}
                 onClick={() => onJobClick?.(job.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onJobClick?.(job.id); } }}
                 style={{
                   display: 'grid', gridTemplateColumns: '1fr 120px 100px 40px',
                   gap: tokens.spacing[3],
@@ -491,8 +505,8 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                   cursor: 'pointer',
                   transition: `all ${tokens.motion.hover}`,
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50]; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
+                onMouseEnter={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = tokens.colors.neutral[50]; }}
+                onMouseLeave={(e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 <Text style={{
                   fontSize: tokens.typography.fontSize.sm,
@@ -523,7 +537,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                 <Box style={{ color: tokens.colors.neutral[400] }}>
                   <ExternalLink size={14} />
                 </Box>
-              </div>
+              </Box>
             );
           })}
         </Box>
@@ -690,7 +704,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
           </Flex>
 
           {/* Fee info */}
-          <div style={{
+          <Box style={{
             display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
             gap: tokens.spacing[3], marginBottom: tokens.spacing[4],
           }}>
@@ -733,7 +747,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
                 </Text>
               </Stack>
             ))}
-          </div>
+          </Box>
 
           {/* Projected vs Actual comparison bar */}
           <Stack gap={8}>
@@ -794,7 +808,7 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
         : tokens.colors.errorScale[500];
 
       return (
-        <Box style={{ ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...card, padding: tokens.spacing[5], marginBottom: tokens.spacing[4] }}>
           <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[4] }}>
             <Flex align="center" gap={6}>
               <Shield size={14} color={tokens.colors.neutral[500]} />
@@ -1012,6 +1026,8 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
         boxShadow: tokens.shadows.lg,
         width: '100%', overflow: 'hidden',
+        ...entrance.animate,
+        transition: entrance.transition,
         ...(isGlass && tokens.glass ? {
           backdropFilter: tokens.glass.blur,
           WebkitBackdropFilter: tokens.glass.blur,

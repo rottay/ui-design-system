@@ -6,10 +6,14 @@
  * negotiation history, document management, and status pipeline tracker
  */
 
-import {useState, useCallback, useMemo} from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
-  createBadgeStyle, createCardStyle, createHoverStyle, createSurfaceStyle, getHoverTransform,
+  createBadgeStyle, createCardStyle, createHoverStyle, createSurfaceStyle,
+  createEntranceAnimation, createStaggerDelay, createCardHoverStyles,
+  createPersonalitySectionHeaderStyle, createIconContainerStyle,
+  createDividerStyle, getPersonalityTypography, getPersonalityBadgeRadius,
+  getCardPadding,
 } from '../../../helpers';
 import type {
   BhOfferWorkspaceProps, CompensationData, ApprovalStep, OfferStatus,
@@ -25,16 +29,14 @@ import {
 
 export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
   name: 'BhOfferWorkspace.Editor',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhOfferWorkspaceProps>) => {
-    const { Box } = primitives;
+  render: ({ primitives, props, tokens }: PresetContext<BhOfferWorkspaceProps>) => {
+    const { Box, Text } = primitives;
     const t = tokens;
-    const bdr = '1px solid';
     const sp = t.spacing;
     const ty = t.typography;
     const c = t.colors;
     const n = c.neutral;
     const p = c.primaryScale;
-    const trans = t.transitions?.fast || t.motion.hover;
 
     const {
       candidateName, jobTitle, status, compensation, benefits,
@@ -59,88 +61,112 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const surfMd = useMemo(() => createSurfaceStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const hov = useMemo(() => createHoverStyle(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const cardPadding = useMemo(() => getCardPadding(t), [t]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
     const statusCfg = getOfferStatusConfig(status);
 
-    const secTitle: React.CSSProperties = {
-      fontSize: ty.fontSize.lg, fontWeight: ty.fontWeight.semibold, letterSpacing: '-0.02em',
-      color: n[900], margin: 0, display: 'flex', alignItems: 'center', gap: sp[2],
-    };
-    const lbl: React.CSSProperties = {
+    const secTitle: React.CSSProperties = useMemo(() => ({
+      fontSize: ty.fontSize.lg,
+      fontWeight: typo.headingWeight,
+      letterSpacing: typo.headingLetterSpacing,
+      color: n[900],
+      display: 'flex', alignItems: 'center', gap: sp[2],
+    }), [ty, typo, n, sp]);
+
+    const lbl: React.CSSProperties = useMemo(() => ({
       fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.medium,
       color: n[600], marginBottom: sp[1],
-    };
-    const inp: React.CSSProperties = {
+      textTransform: typo.labelTransform,
+      letterSpacing: typo.labelLetterSpacing,
+    }), [ty, n, sp, typo]);
+
+    const inp: React.CSSProperties = useMemo(() => ({
       width: '100%', padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
-      border: `${bdr} ${n[200]}`, fontSize: ty.fontSize.sm, color: n[900],
-      backgroundColor: c.common.white, outline: 'none', transition: `border-color ${trans}`,
+      border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${n[200]}`,
+      fontSize: ty.fontSize.sm, color: n[900],
+      backgroundColor: c.common.white, outline: 'none',
+      transition: `border-color ${t.motion.hover}`,
       boxSizing: 'border-box' as const,
-    };
-    const btnPri: React.CSSProperties = {
+    }), [sp, t, n, ty, c]);
+
+    const btnPri: React.CSSProperties = useMemo(() => ({
       ...hov, padding: `${sp[2]}px ${sp[4]}px`, borderRadius: t.borderRadius.md,
-      backgroundColor: p[600], color: c.common.white, border: 'none',
+      backgroundColor: p[600], color: c.common.white,
       fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, fontFamily: 'inherit',
-      cursor: 'pointer', transition: `all ${t.motion.hover}`,
-      display: 'inline-flex', alignItems: 'center', gap: sp[2],
-    };
-    const btnSec: React.CSSProperties = {
+      display: 'inline-flex', alignItems: 'center', gap: sp[2], outline: 'none',
+    }), [hov, sp, t, p, c, ty]);
+
+    const btnSec: React.CSSProperties = useMemo(() => ({
       ...hov, padding: `${sp[2]}px ${sp[4]}px`, borderRadius: t.borderRadius.md,
-      backgroundColor: c.common.white, color: n[700], border: `${bdr} ${n[200]}`,
+      backgroundColor: c.common.white, color: n[700],
+      border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${n[200]}`,
       fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.medium, fontFamily: 'inherit',
-      cursor: 'pointer', transition: `all ${t.motion.hover}`,
-      display: 'inline-flex', alignItems: 'center', gap: sp[2],
-    };
-    const navItem = (active: boolean): React.CSSProperties => ({
+      display: 'inline-flex', alignItems: 'center', gap: sp[2], outline: 'none',
+    }), [hov, sp, t, c, n, ty]);
+
+    const navItem = useCallback((active: boolean): React.CSSProperties => ({
       ...hov, padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
       backgroundColor: active ? p[50] : 'transparent',
       color: active ? p[700] : n[600],
       fontWeight: active ? ty.fontWeight.semibold : ty.fontWeight.medium,
-      fontSize: ty.fontSize.sm, cursor: 'pointer', transition: `all ${t.motion.hover}`,
-      border: 'none', display: 'flex', alignItems: 'center', gap: sp[2],
-      textAlign: 'left' as const, width: '100%',
-    });
-    const bigVal: React.CSSProperties = {
-      fontSize: ty.fontSize.xl, fontWeight: ty.fontWeight.bold, color: n[900], margin: 0,
-    };
+      fontSize: ty.fontSize.sm,
+      display: 'flex', alignItems: 'center', gap: sp[2],
+      textAlign: 'left' as const, width: '100%', outline: 'none',
+    }), [hov, sp, t, p, n, ty]);
 
     const handleCompChange = useCallback((field: keyof CompensationData, value: number | string) => {
       setOfferData((prev) => ({ ...prev, [field]: value }));
     }, []);
-    const toggleEditing = () => { setLocalIsEditing(!localIsEditing); onEditToggle?.(); };
-    const toggleHistory = () => { setLocalShowHistory(!localShowHistory); onHistoryToggle?.(); };
-    const toggleComparison = () => { setLocalShowComparison(!localShowComparison); onComparisonToggle?.(); };
+    const toggleEditing = useCallback(() => { setLocalIsEditing(!localIsEditing); onEditToggle?.(); }, [localIsEditing, onEditToggle]);
+    const toggleHistory = useCallback(() => { setLocalShowHistory(!localShowHistory); onHistoryToggle?.(); }, [localShowHistory, onHistoryToggle]);
+    const toggleComparison = useCallback(() => { setLocalShowComparison(!localShowComparison); onComparisonToggle?.(); }, [localShowComparison, onComparisonToggle]);
 
     /* Field helper: editable number or display */
-    const Field = ({ label, field, value, suffix, fmt }: {
+    const Field = useCallback(({ label, field, value, suffix, fmt }: {
       label: string; field?: keyof CompensationData; value: number | string;
       suffix?: string; fmt?: (v: number) => string;
     }) => (
-      <div style={card}>
-        <label style={lbl}>{label}</label>
+      <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
+        <Text style={lbl}>{label}</Text>
         {localIsEditing && field ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
-            <input type={typeof value === 'number' ? 'number' : 'text'} value={value}
-              onChange={(e) => handleCompChange(field, typeof value === 'number' ? Number(e.target.value) : e.target.value)}
-              style={{ ...inp, flex: 1 }} />
-            {suffix && <span style={{ fontSize: ty.fontSize.sm, color: n[500] }}>{suffix}</span>}
-          </div>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <input
+              type={typeof value === 'number' ? 'number' : 'text'}
+              value={value}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange(field, typeof value === 'number' ? Number(e.target.value) : e.target.value)}
+              style={{ ...inp, flex: 1 }}
+            />
+            {suffix && <Text style={{ fontSize: ty.fontSize.sm, color: n[500] }}>{suffix}</Text>}
+          </Box>
         ) : (
-          <p style={bigVal}>{fmt ? fmt(value as number) : value}{suffix && !fmt ? suffix : ''}</p>
+          <Text style={{
+            fontSize: ty.fontSize.xl,
+            fontWeight: typo.headingWeight,
+            letterSpacing: typo.headingLetterSpacing,
+            color: n[900],
+          }}>
+            {fmt ? fmt(value as number) : value}{suffix && !fmt ? suffix : ''}
+          </Text>
         )}
-      </div>
-    );
+      </Box>
+    ), [card, lbl, localIsEditing, sp, inp, ty, n, typo, handleCompChange, Box, Text]);
 
-    const fmtC = (v: number) => formatCurrency(v, offerData.currency);
+    const fmtC = useCallback((v: number) => formatCurrency(v, offerData.currency), [offerData.currency]);
 
-    /* ── Sections ─── */
-    const sections = [
-      { key: 'compensation', label: 'Compensation', icon: <DollarSign size={16} /> },
-      { key: 'benefits', label: 'Benefits', icon: <Gift size={16} /> },
-      { key: 'relocation', label: 'Relocation', icon: <Truck size={16} /> },
-      { key: 'terms', label: 'Terms', icon: <Briefcase size={16} /> },
-      { key: 'approval', label: 'Approval Chain', icon: <Shield size={16} /> },
-      { key: 'documents', label: 'Documents', icon: <FileText size={16} /> },
-      { key: 'pipeline', label: 'Status Pipeline', icon: <BarChart3 size={16} /> },
-    ];
+    /* Sections */
+    const sections = useMemo(() => [
+      { key: 'compensation', label: 'Compensation', Icon: DollarSign },
+      { key: 'benefits', label: 'Benefits', Icon: Gift },
+      { key: 'relocation', label: 'Relocation', Icon: Truck },
+      { key: 'terms', label: 'Terms', Icon: Briefcase },
+      { key: 'approval', label: 'Approval Chain', Icon: Shield },
+      { key: 'documents', label: 'Documents', Icon: FileText },
+      { key: 'pipeline', label: 'Status Pipeline', Icon: BarChart3 },
+    ], []);
 
     const renderCompensation = () => {
       const pct = offerData.marketRangeMax > offerData.marketRangeMin
@@ -148,27 +174,39 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
         : 50;
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[5] }}>
-          <h3 style={secTitle}><DollarSign size={20} color={p[600]} />Compensation Package</h3>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[5] }}>
+          <Box style={{ ...secTitle }}>
+            <DollarSign size={20} color={p[600]} />
+            <Text style={secTitle}>Compensation Package</Text>
+          </Box>
 
           {/* Base Salary */}
-          <div style={card}>
-            <div style={{ marginBottom: sp[3] }}>
-              <label style={lbl}>Base Salary ({offerData.currency})</label>
+          <Box style={card}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[1], marginBottom: sp[3] }}>
+              <Text style={lbl}>Base Salary ({offerData.currency})</Text>
               {localIsEditing ? (
-                <input type="number" value={offerData.baseSalary}
-                  onChange={(e) => handleCompChange('baseSalary', Number(e.target.value))} style={inp} />
+                <input
+                  type="number"
+                  value={offerData.baseSalary}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('baseSalary', Number(e.target.value))}
+                  style={inp}
+                />
               ) : (
-                <p style={{ fontSize: ty.fontSize['2xl'], fontWeight: ty.fontWeight.bold, color: n[900], margin: 0 }}>
+                <Text style={{
+                  fontSize: ty.fontSize['2xl'],
+                  fontWeight: typo.headingWeight,
+                  letterSpacing: typo.headingLetterSpacing,
+                  color: n[900],
+                }}>
                   {fmtC(offerData.baseSalary)}
-                </p>
+                </Text>
               )}
-            </div>
-            <div style={{ marginTop: sp[3] }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: ty.fontSize.xs, color: n[500], marginBottom: sp[1] }}>
-                <span>Min: {fmtC(offerData.marketRangeMin)}</span>
-                <span>Max: {fmtC(offerData.marketRangeMax)}</span>
-              </div>
+            </Box>
+            <Box style={{ marginTop: sp[3] }}>
+              <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: sp[1] }}>
+                <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Min: {fmtC(offerData.marketRangeMin)}</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Max: {fmtC(offerData.marketRangeMax)}</Text>
+              </Box>
               <svg width="100%" height="32" viewBox="0 0 400 32" preserveAspectRatio="none" style={{ display: 'block' }}>
                 <rect x="0" y="10" width="400" height="12" rx="6" fill={n[200]} />
                 <rect x="0" y="10" width={pct * 4} height="12" rx="6" fill={p[400]} />
@@ -177,14 +215,14 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   {fmtC(offerData.baseSalary)}
                 </text>
               </svg>
-            </div>
-          </div>
+            </Box>
+          </Box>
 
           {/* Bonus row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
             <Field label="Signing Bonus" field="signingBonus" value={offerData.signingBonus} fmt={fmtC} />
             <Field label="Annual Bonus Target" field="annualBonusPercent" value={offerData.annualBonusPercent} suffix="%" />
-          </div>
+          </Box>
 
           {/* Commission */}
           {offerData.commissionStructure !== undefined && (
@@ -194,40 +232,63 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
 
           {/* Equity */}
           {(offerData.equityShares !== undefined || localIsEditing) && (
-            <div style={card}>
-              <h4 style={{ ...secTitle, fontSize: ty.fontSize.md, marginBottom: sp[3] }}>
-                <Award size={18} color={p[600]} />Equity Package
-              </h4>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
-                <div>
-                  <label style={lbl}>Shares</label>
+            <Box style={card}>
+              <Box style={{ ...secTitle, fontSize: ty.fontSize.md, marginBottom: sp[3] }}>
+                <Award size={18} color={p[600]} />
+                <Text style={{ ...secTitle, fontSize: ty.fontSize.md }}>Equity Package</Text>
+              </Box>
+              <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
+                  <Text style={lbl}>Shares</Text>
                   {localIsEditing ? (
-                    <input type="number" value={offerData.equityShares ?? 0}
-                      onChange={(e) => handleCompChange('equityShares', Number(e.target.value))} style={inp} />
+                    <input
+                      type="number"
+                      value={offerData.equityShares ?? 0}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('equityShares', Number(e.target.value))}
+                      style={inp}
+                    />
                   ) : (
-                    <p style={{ fontSize: ty.fontSize.lg, fontWeight: ty.fontWeight.bold, color: n[900], margin: 0 }}>
+                    <Text style={{
+                      fontSize: ty.fontSize.lg,
+                      fontWeight: typo.headingWeight,
+                      color: n[900],
+                    }}>
                       {(offerData.equityShares ?? 0).toLocaleString()} shares
-                    </p>
+                    </Text>
                   )}
-                </div>
-                <div>
-                  <label style={lbl}>Vesting (years)</label>
+                </Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
+                  <Text style={lbl}>Vesting (years)</Text>
                   {localIsEditing ? (
-                    <input type="number" value={offerData.vestingYears ?? 4}
-                      onChange={(e) => handleCompChange('vestingYears', Number(e.target.value))} style={inp} />
+                    <input
+                      type="number"
+                      value={offerData.vestingYears ?? 4}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('vestingYears', Number(e.target.value))}
+                      style={inp}
+                    />
                   ) : (
-                    <p style={{ fontSize: ty.fontSize.lg, fontWeight: ty.fontWeight.bold, color: n[900], margin: 0 }}>
+                    <Text style={{
+                      fontSize: ty.fontSize.lg,
+                      fontWeight: typo.headingWeight,
+                      color: n[900],
+                    }}>
                       {offerData.vestingYears ?? 4} years
-                    </p>
+                    </Text>
                   )}
-                </div>
-              </div>
+                </Box>
+              </Box>
               {!localIsEditing && (offerData.equityShares ?? 0) > 0 && (() => {
                 const yrs = offerData.vestingYears ?? 4;
                 const sharesPer = Math.floor((offerData.equityShares ?? 0) / yrs);
                 return (
-                  <div style={{ marginTop: sp[4] }}>
-                    <p style={{ fontSize: ty.fontSize.xs, color: n[500], margin: `0 0 ${sp[2]}px 0` }}>Vesting Schedule (1-year cliff)</p>
+                  <Box style={{ marginTop: sp[4] }}>
+                    <Text style={{
+                      fontSize: ty.fontSize.xs, color: n[500], marginBottom: sp[2],
+                      textTransform: typo.labelTransform,
+                      letterSpacing: typo.labelLetterSpacing,
+                    }}>
+                      Vesting Schedule (1-year cliff)
+                    </Text>
                     <svg width="100%" height="60" viewBox="0 0 400 60" preserveAspectRatio="none" style={{ display: 'block' }}>
                       <line x1="20" y1="30" x2="380" y2="30" stroke={n[200]} strokeWidth="3" strokeLinecap="round" />
                       {Array.from({ length: yrs }, (_, i) => {
@@ -244,255 +305,397 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                       })}
                       <circle cx="20" cy="30" r="4" fill={n[400]} />
                     </svg>
-                  </div>
+                  </Box>
                 );
               })()}
-            </div>
+            </Box>
           )}
-        </div>
+        </Box>
       );
     };
 
     const renderBenefits = () => (
-      <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-        <h3 style={secTitle}><Gift size={20} color={p[600]} />Benefits Package</h3>
+      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+          <Gift size={20} color={p[600]} />
+          <Text style={secTitle}>Benefits Package</Text>
+        </Box>
         {benefits.map((cat, ci) => (
-          <div key={ci} style={card}>
-            <h4 style={{ fontSize: ty.fontSize.md, fontWeight: ty.fontWeight.semibold, color: n[800], margin: `0 0 ${sp[3]}px 0`, textTransform: 'capitalize' as const }}>{cat.category}</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: sp[2] }}>
-              {cat.items.map((item, ii) => {
-                const sc = item.included ? c.successScale : n;
-                return (
-                  <div key={ii} style={{ ...hov, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    padding: `${sp[3]}px`, borderRadius: t.borderRadius.md,
-                    backgroundColor: item.included ? c.successScale[50] : n[50],
-                    border: `${bdr} ${item.included ? c.successScale[200] : n[200]}` }}>
-                    <span style={{ fontSize: ty.fontSize.sm, color: item.included ? c.successScale[800] : n[500], fontWeight: ty.fontWeight.medium }}>{item.name}</span>
-                    {localIsEditing ? (
-                      <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center' }}>
-                        {item.included ? <ToggleRight size={22} color={c.successScale[500]} /> : <ToggleLeft size={22} color={n[400]} />}
-                      </button>
-                    ) : item.included ? <Check size={16} color={c.successScale[600]} /> : <X size={16} color={n[400]} />}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <Box key={ci} style={card}>
+            <Text style={{
+              fontSize: ty.fontSize.md,
+              fontWeight: typo.headingWeight,
+              color: n[800],
+              marginBottom: sp[3],
+              textTransform: 'capitalize' as const,
+            }}>
+              {cat.category}
+            </Text>
+            <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: sp[2] }}>
+              {cat.items.map((item, ii) => (
+                <Box key={ii} style={{
+                  ...hov,
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: `${sp[3]}px`, borderRadius: t.borderRadius.md,
+                  backgroundColor: item.included ? c.successScale[50] : n[50],
+                  border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${item.included ? c.successScale[200] : n[200]}`,
+                }}>
+                  <Text style={{
+                    fontSize: ty.fontSize.sm,
+                    color: item.included ? c.successScale[800] : n[500],
+                    fontWeight: ty.fontWeight.medium,
+                  }}>
+                    {item.name}
+                  </Text>
+                  {localIsEditing ? (
+                    <Box
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Toggle ${item.name}`}
+                      style={{ display: 'flex', alignItems: 'center', outline: 'none', cursor: 'pointer' }}
+                    >
+                      {item.included ? <ToggleRight size={22} color={c.successScale[500]} /> : <ToggleLeft size={22} color={n[400]} />}
+                    </Box>
+                  ) : item.included ? <Check size={16} color={c.successScale[600]} /> : <X size={16} color={n[400]} />}
+                </Box>
+              ))}
+            </Box>
+          </Box>
         ))}
-      </div>
+      </Box>
     );
 
     const renderRelocation = () => {
       if (!relocationPackage && !localIsEditing) {
         return (
-          <div style={card}>
-            <h3 style={secTitle}><Truck size={20} color={p[600]} />Relocation Package</h3>
-            <p style={{ fontSize: ty.fontSize.sm, color: n[500], margin: `${sp[3]}px 0 0 0` }}>No relocation package included in this offer.</p>
-          </div>
+          <Box style={card}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+              <Truck size={20} color={p[600]} />
+              <Text style={secTitle}>Relocation Package</Text>
+            </Box>
+            <Text style={{ fontSize: ty.fontSize.sm, color: n[500], marginTop: sp[3] }}>No relocation package included in this offer.</Text>
+          </Box>
         );
       }
       const relo = relocationPackage ?? { budget: 0, movingAllowance: 0, tempHousing: false };
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-          <h3 style={secTitle}><Truck size={20} color={p[600]} />Relocation Package</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <Truck size={20} color={p[600]} />
+            <Text style={secTitle}>Relocation Package</Text>
+          </Box>
+          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
             <Field label="Relocation Budget" value={relo.budget} fmt={(v) => formatCurrency(v, compensation.currency)} />
             <Field label="Moving Allowance" value={relo.movingAllowance} fmt={(v) => formatCurrency(v, compensation.currency)} />
-          </div>
-          <div style={card}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div>
-                <p style={{ fontSize: ty.fontSize.md, fontWeight: ty.fontWeight.medium, color: n[800], margin: 0 }}>Temporary Housing</p>
-                <p style={{ fontSize: ty.fontSize.xs, color: n[500], margin: `${sp[1]}px 0 0 0` }}>Cover housing for the first 90 days</p>
-              </div>
+          </Box>
+          <Box style={card}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                <Text style={{ fontSize: ty.fontSize.md, fontWeight: ty.fontWeight.medium, color: n[800] }}>Temporary Housing</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: n[500]}}>Cover housing for the first 90 days</Text>
+              </Box>
               {localIsEditing ? (
-                <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex' }}>
+                <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Toggle temporary housing"
+                  style={{ display: 'flex', cursor: 'pointer', outline: 'none' }}
+                >
                   {relo.tempHousing ? <ToggleRight size={26} color={c.successScale[500]} /> : <ToggleLeft size={26} color={n[400]} />}
-                </button>
+                </Box>
               ) : (
-                <span style={createBadgeStyle(t, relo.tempHousing ? 'success' : 'secondary')}>{relo.tempHousing ? 'Included' : 'Not Included'}</span>
+                <Box style={createBadgeStyle(t, relo.tempHousing ? 'success' : 'secondary')}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{relo.tempHousing ? 'Included' : 'Not Included'}</Text>
+                </Box>
               )}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       );
     };
 
     const renderTerms = () => {
       const arrColors: Record<string, 'primary' | 'success' | 'warning'> = { onsite: 'primary', remote: 'success', hybrid: 'warning' };
       const termFields = [
-        { label: 'Start Date', icon: <Calendar size={16} color={c.infoScale[500]} />, value: employmentTerms.startDate, type: 'date' },
-        { label: 'Probation Period', icon: <Clock size={16} color={c.warningScale[500]} />, value: employmentTerms.probationPeriod, type: 'text' },
-        { label: 'Notice Period', icon: <AlertCircle size={16} color={c.errorScale[500]} />, value: employmentTerms.noticePeriod, type: 'text' },
+        { label: 'Start Date', Icon: Calendar, iconColor: c.infoScale[500], value: employmentTerms.startDate, type: 'date' },
+        { label: 'Probation Period', Icon: Clock, iconColor: c.warningScale[500], value: employmentTerms.probationPeriod, type: 'text' },
+        { label: 'Notice Period', Icon: AlertCircle, iconColor: c.errorScale[500], value: employmentTerms.noticePeriod, type: 'text' },
       ];
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-          <h3 style={secTitle}><Briefcase size={20} color={p[600]} />Employment Terms</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: sp[4] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <Briefcase size={20} color={p[600]} />
+            <Text style={secTitle}>Employment Terms</Text>
+          </Box>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: sp[4] }}>
             {termFields.map((tf) => (
-              <div key={tf.label} style={card}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[2] }}>
-                  {tf.icon}<label style={{ ...lbl, marginBottom: 0 }}>{tf.label}</label>
-                </div>
+              <Box key={tf.label} style={card}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[2] }}>
+                  <tf.Icon size={16} color={tf.iconColor} />
+                  <Text style={{ ...lbl, marginBottom: 0 }}>{tf.label}</Text>
+                </Box>
                 {localIsEditing ? (
-                  <input type={tf.type} value={tf.value} style={inp} readOnly={!localIsEditing} />
+                  <input
+                    type={tf.type}
+                    value={tf.value}
+                    readOnly={!localIsEditing}
+                    style={inp}
+                  />
                 ) : (
-                  <p style={{ fontSize: ty.fontSize.md, fontWeight: ty.fontWeight.semibold, color: n[900], margin: 0 }}>{tf.value}</p>
+                  <Text style={{
+                    fontSize: ty.fontSize.md,
+                    fontWeight: typo.headingWeight,
+                    color: n[900],
+                  }}>
+                    {tf.value}
+                  </Text>
                 )}
-              </div>
+              </Box>
             ))}
-            <div style={card}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[2] }}>
-                <MapPin size={16} color={p[500]} /><label style={{ ...lbl, marginBottom: 0 }}>Work Arrangement</label>
-              </div>
+            <Box style={card}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[2] }}>
+                <MapPin size={16} color={p[500]} />
+                <Text style={{ ...lbl, marginBottom: 0 }}>Work Arrangement</Text>
+              </Box>
               {localIsEditing ? (
-                <div style={{ display: 'flex', gap: sp[2] }}>
+                <Box style={{ display: 'flex', gap: sp[2] }}>
                   {(['onsite', 'remote', 'hybrid'] as const).map((arr) => (
-                    <button key={arr} style={{
-                      ...hov, flex: 1, padding: `${sp[2]}px`, borderRadius: t.borderRadius.md,
-                      border: `${bdr} ${employmentTerms.workArrangement === arr ? p[300] : n[200]}`,
-                      backgroundColor: employmentTerms.workArrangement === arr ? p[50] : c.common.white,
-                      color: employmentTerms.workArrangement === arr ? p[700] : n[600],
-                      fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.medium,
-                      cursor: 'pointer', transition: `all ${t.motion.hover}`, textTransform: 'capitalize' as const,
-                    }}>{arr}</button>
+                    <Box
+                      key={arr}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Select ${arr} arrangement`}
+                      aria-pressed={employmentTerms.workArrangement === arr}
+                      style={{
+                        ...hov, flex: 1, padding: `${sp[2]}px`, borderRadius: t.borderRadius.md,
+                        border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${employmentTerms.workArrangement === arr ? p[300] : n[200]}`,
+                        backgroundColor: employmentTerms.workArrangement === arr ? p[50] : c.common.white,
+                        color: employmentTerms.workArrangement === arr ? p[700] : n[600],
+                        fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.medium,
+                        textTransform: 'capitalize' as const, textAlign: 'center' as const,
+                        outline: 'none',
+                      }}
+                    >
+                      <Text style={{
+                        fontSize: ty.fontSize.xs,
+                        fontWeight: ty.fontWeight.medium,
+                        color: employmentTerms.workArrangement === arr ? p[700] : n[600],
+                        textTransform: 'capitalize' as const,
+                      }}>
+                        {arr}
+                      </Text>
+                    </Box>
                   ))}
-                </div>
+                </Box>
               ) : (
-                <span style={createBadgeStyle(t, arrColors[employmentTerms.workArrangement] ?? 'primary')}>{employmentTerms.workArrangement}</span>
+                <Box style={createBadgeStyle(t, arrColors[employmentTerms.workArrangement] ?? 'primary')}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{employmentTerms.workArrangement}</Text>
+                </Box>
               )}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       );
     };
 
     const renderApproval = () => {
-      const stepCfg = (s: ApprovalStep) => s.status === 'approved' ? { scale: c.successScale, icon: <Check size={14} color={c.common.white} />, badge: 'success' as const }
-        : s.status === 'rejected' ? { scale: c.errorScale, icon: <X size={14} color={c.common.white} />, badge: 'error' as const }
-        : { scale: c.warningScale, icon: <Clock size={14} color={c.common.white} />, badge: 'warning' as const };
+      const stepCfg = (s: ApprovalStep) => s.status === 'approved' ? { scale: c.successScale, Icon: Check, badge: 'success' as const }
+        : s.status === 'rejected' ? { scale: c.errorScale, Icon: X, badge: 'error' as const }
+        : { scale: c.warningScale, Icon: Clock, badge: 'warning' as const };
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-          <h3 style={secTitle}><Shield size={20} color={p[600]} />Approval Workflow</h3>
-          <div style={card}>
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <Shield size={20} color={p[600]} />
+            <Text style={secTitle}>Approval Workflow</Text>
+          </Box>
+          <Box style={card}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
               {approvalStatus.map((step, idx) => {
                 const cfg = stepCfg(step);
                 return (
-                  <div key={idx}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
-                      <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: cfg.scale[500], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{cfg.icon}</div>
+                  <Box key={idx}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[3]}px 0` }}>
+                      <Box style={{
+                        ...createIconContainerStyle(t, { size: 36, color: cfg.scale[500] }),
+                        backgroundColor: cfg.scale[500],
+                      }}>
+                        <cfg.Icon size={14} color={c.common.white} />
+                      </Box>
                       {step.approverAvatar ? (
-                        <img src={step.approverAvatar} alt={step.approverName} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' as const, border: `${bdr} ${cfg.scale[200]}` }} />
+                        <Box style={{
+                          width: 32, height: 32, borderRadius: t.borderRadius.full,
+                          backgroundImage: `url(${step.approverAvatar})`,
+                          backgroundSize: 'cover', backgroundPosition: 'center',
+                          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${cfg.scale[200]}`,
+                          flexShrink: 0,
+                        }} />
                       ) : (
-                        <div style={{ width: 32, height: 32, borderRadius: '50%', backgroundColor: cfg.scale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: cfg.scale[700] }}>{step.approverName.charAt(0).toUpperCase()}</div>
+                        <Box style={createIconContainerStyle(t, { size: 32, color: cfg.scale[100] })}>
+                          <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: cfg.scale[700] }}>{step.approverName.charAt(0).toUpperCase()}</Text>
+                        </Box>
                       )}
-                      <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, color: n[900], margin: 0 }}>{step.approverName}</p>
-                        <p style={{ fontSize: ty.fontSize.xs, color: n[500], margin: 0 }}>{step.role}</p>
-                      </div>
-                      <span style={createBadgeStyle(t, cfg.badge)}>
-                        {step.status === 'approved' ? 'Approved' : step.status === 'rejected' ? 'Rejected' : 'Pending'}
-                        {step.date ? ` - ${step.date}` : ''}
-                      </span>
-                    </div>
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                        <Text style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, color: n[900] }}>{step.approverName}</Text>
+                        <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>{step.role}</Text>
+                      </Box>
+                      <Box style={createBadgeStyle(t, cfg.badge)}>
+                        <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>
+                          {step.status === 'approved' ? 'Approved' : step.status === 'rejected' ? 'Rejected' : 'Pending'}
+                          {step.date ? ` - ${step.date}` : ''}
+                        </Text>
+                      </Box>
+                    </Box>
                     {idx < approvalStatus.length - 1 && (
-                      <div style={{ marginLeft: 18, width: 2, height: 20, backgroundColor: approvalStatus[idx + 1].status !== 'pending' ? c.successScale[300] : n[200], transition: `background-color ${trans}` }} />
+                      <Box style={{
+                        marginLeft: 18, width: 2, height: 20,
+                        backgroundColor: approvalStatus[idx + 1].status !== 'pending' ? c.successScale[300] : n[200],
+                        transition: `background-color ${t.motion.hover}`,
+                      }} />
                     )}
-                  </div>
+                  </Box>
                 );
               })}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       );
     };
 
     const renderNegotiationHistory = () => {
       if (!localShowHistory || negotiationHistory.length === 0) return null;
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-          <h3 style={secTitle}><History size={20} color={p[600]} />Negotiation History</h3>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <History size={20} color={p[600]} />
+            <Text style={secTitle}>Negotiation History</Text>
+          </Box>
           {negotiationHistory.map((ver, vi) => (
-            <div key={vi} style={{ ...card, borderLeft: `3px solid ${p[400]}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[3] }}>
-                <span style={createBadgeStyle(t, 'primary')}>v{ver.version}</span>
-                <span style={{ fontSize: ty.fontSize.sm, color: n[500] }}>{ver.date}</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[2] }}>
+            <Box key={vi} style={{ ...card, borderLeft: `3px solid ${p[400]}` }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[3] }}>
+                <Box style={createBadgeStyle(t, 'primary')}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>v{ver.version}</Text>
+                </Box>
+                <Text style={{ fontSize: ty.fontSize.sm, color: n[500] }}>{ver.date}</Text>
+              </Box>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[2] }}>
                 {ver.changes.map((ch, ci) => (
-                  <div key={ci} style={{ display: 'flex', alignItems: 'center', gap: sp[3], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: n[50] }}>
-                    <span style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.medium, color: n[700], minWidth: 120 }}>{ch.field}</span>
-                    <span style={{ fontSize: ty.fontSize.sm, color: c.errorScale[600], backgroundColor: c.errorScale[50], padding: `${sp[1]}px ${sp[2]}px`, borderRadius: t.borderRadius.sm, textDecoration: 'line-through' }}>{ch.oldValue}</span>
+                  <Box key={ci} style={{ display: 'flex', flexDirection: 'row' as const, alignItems: 'center', gap: sp[3], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: n[50] }}>
+                    <Text style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.medium, color: n[700], minWidth: 120 }}>{ch.field}</Text>
+                    <Text style={{ fontSize: ty.fontSize.sm, color: c.errorScale[600], backgroundColor: c.errorScale[50], padding: `${sp[1]}px ${sp[2]}px`, borderRadius: t.borderRadius.sm, textDecoration: 'line-through' }}>{ch.oldValue}</Text>
                     <ChevronRight size={14} color={n[400]} />
-                    <span style={{ fontSize: ty.fontSize.sm, color: c.successScale[700], backgroundColor: c.successScale[50], padding: `${sp[1]}px ${sp[2]}px`, borderRadius: t.borderRadius.sm }}>{ch.newValue}</span>
-                  </div>
+                    <Text style={{ fontSize: ty.fontSize.sm, color: c.successScale[700], backgroundColor: c.successScale[50], padding: `${sp[1]}px ${sp[2]}px`, borderRadius: t.borderRadius.sm }}>{ch.newValue}</Text>
+                  </Box>
                 ))}
-              </div>
+              </Box>
               {ver.counterOffer && (
-                <div style={{ marginTop: sp[3], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: c.warningScale[50], border: `${bdr} ${c.warningScale[200]}` }}>
-                  <p style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: c.warningScale[700], margin: `0 0 ${sp[1]}px 0` }}>Counter-Offer</p>
-                  <p style={{ fontSize: ty.fontSize.sm, color: c.warningScale[800], margin: 0 }}>{ver.counterOffer}</p>
-                </div>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
+                  marginTop: sp[3], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
+                  backgroundColor: c.warningScale[50],
+                  border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${c.warningScale[200]}`,
+                }}>
+                  <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: c.warningScale[700] }}>Counter-Offer</Text>
+                  <Text style={{ fontSize: ty.fontSize.sm, color: c.warningScale[800] }}>{ver.counterOffer}</Text>
+                </Box>
               )}
-            </div>
+            </Box>
           ))}
-        </div>
+        </Box>
       );
     };
 
     const renderDocuments = () => {
       const docColor: Record<string, 'success' | 'warning' | 'secondary'> = { signed: 'success', pending: 'warning', draft: 'secondary' };
       const sigCard = (signed: boolean, label: string) => (
-        <div style={{ padding: `${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: signed ? c.successScale[50] : n[50], border: `${bdr} ${signed ? c.successScale[200] : n[200]}` }}>
-          <p style={{ fontSize: ty.fontSize.xs, color: n[500], margin: `0 0 ${sp[1]}px 0` }}>{label}</p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+        <Box style={{
+          display: 'flex', flexDirection: 'column' as const, gap: sp[1],
+          padding: `${sp[3]}px`, borderRadius: t.borderRadius.md,
+          backgroundColor: signed ? c.successScale[50] : n[50],
+          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${signed ? c.successScale[200] : n[200]}`,
+        }}>
+          <Text style={{
+            fontSize: ty.fontSize.xs, color: n[500],
+            textTransform: typo.labelTransform,
+            letterSpacing: typo.labelLetterSpacing,
+          }}>
+            {label}
+          </Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
             {signed ? <Check size={16} color={c.successScale[600]} /> : <Clock size={16} color={n[400]} />}
-            <span style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, color: signed ? c.successScale[700] : n[600] }}>{signed ? 'Signed' : 'Pending'}</span>
-          </div>
-        </div>
+            <Text style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, color: signed ? c.successScale[700] : n[600] }}>{signed ? 'Signed' : 'Pending'}</Text>
+          </Box>
+        </Box>
       );
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-          <h3 style={secTitle}><FileText size={20} color={p[600]} />Documents</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: sp[3] }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <FileText size={20} color={p[600]} />
+            <Text style={secTitle}>Documents</Text>
+          </Box>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: sp[3] }}>
             {localDocuments.map((doc, i) => (
-              <div key={i} style={{ ...card, ...hov, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: sp[2] }}>
-                  <div style={{ width: 36, height: 36, borderRadius: t.borderRadius.md, backgroundColor: p[50], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box key={i} style={{ ...card, ...cardHover.base, cursor: 'pointer', display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
+                <Box style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: sp[1] }}>
+                  <Box style={createIconContainerStyle(t, { size: 36, color: p[50] })}>
                     <FileText size={18} color={p[600]} />
-                  </div>
-                  <span style={createBadgeStyle(t, docColor[doc.status] ?? 'secondary')}>{doc.status}</span>
-                </div>
-                <p style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, color: n[900], margin: 0 }}>{doc.name}</p>
-                {doc.uploadDate && <p style={{ fontSize: ty.fontSize.xs, color: n[500], margin: `${sp[1]}px 0 0 0` }}>Uploaded: {doc.uploadDate}</p>}
-              </div>
+                  </Box>
+                  <Box style={createBadgeStyle(t, docColor[doc.status] ?? 'secondary')}>
+                    <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{doc.status}</Text>
+                  </Box>
+                </Box>
+                <Text style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.semibold, color: n[900] }}>{doc.name}</Text>
+                {doc.uploadDate && <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Uploaded: {doc.uploadDate}</Text>}
+              </Box>
             ))}
             {localIsEditing && (
-              <div style={{ ...hov, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: sp[4], borderRadius: t.borderRadius.lg, border: `2px dashed ${n[200]}`, cursor: 'pointer', transition: `all ${t.motion.hover}`, minHeight: 100 }}>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Upload document"
+                style={{
+                  ...hov, display: 'flex', flexDirection: 'column' as const,
+                  alignItems: 'center', justifyContent: 'center',
+                  padding: sp[4], borderRadius: t.borderRadius.lg,
+                  border: `2px dashed ${n[200]}`, minHeight: 100, outline: 'none',
+                }}
+              >
                 <Upload size={24} color={n[400]} />
-                <p style={{ fontSize: ty.fontSize.sm, color: n[500], margin: `${sp[2]}px 0 0 0` }}>Upload Document</p>
-              </div>
+                <Text style={{ fontSize: ty.fontSize.sm, color: n[500], marginTop: sp[2] }}>Upload Document</Text>
+              </Box>
             )}
-          </div>
-          <div style={card}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[3] }}>
+          </Box>
+          <Box style={card}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], marginBottom: sp[3] }}>
               <PenTool size={18} color={p[600]} />
-              <h4 style={{ fontSize: ty.fontSize.md, fontWeight: ty.fontWeight.semibold, color: n[900], margin: 0 }}>E-Signature Status</h4>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[3] }}>
+              <Text style={{
+                fontSize: ty.fontSize.md,
+                fontWeight: typo.headingWeight,
+                color: n[900],
+              }}>
+                E-Signature Status
+              </Text>
+            </Box>
+            <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[3] }}>
               {sigCard(localSignatureStatus.companySigned, 'Company Signature')}
               {sigCard(localSignatureStatus.candidateSigned, 'Candidate Signature')}
-            </div>
-            {localSignatureStatus.signedDate && <p style={{ fontSize: ty.fontSize.xs, color: n[500], margin: `${sp[2]}px 0 0 0` }}>Signed on: {localSignatureStatus.signedDate}</p>}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: sp[2], padding: `${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: c.infoScale[50], border: `${bdr} ${c.infoScale[200]}` }}>
-            <input type="checkbox" style={{ width: 18, height: 18, accentColor: p[600] }} />
-            <span style={{ fontSize: ty.fontSize.sm, color: c.infoScale[800], fontWeight: ty.fontWeight.medium }}>Legal review completed</span>
-          </div>
-        </div>
+            </Box>
+            {localSignatureStatus.signedDate && <Text style={{ fontSize: ty.fontSize.xs, color: n[500], marginTop: sp[2] }}>Signed on: {localSignatureStatus.signedDate}</Text>}
+          </Box>
+          <Box style={{
+            display: 'flex', alignItems: 'center', gap: sp[2],
+            padding: `${sp[3]}px`, borderRadius: t.borderRadius.md,
+            backgroundColor: c.infoScale[50],
+            border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${c.infoScale[200]}`,
+          }}>
+            <input
+              type="checkbox"
+              aria-label="Legal review completed"
+              style={{ width: 18, height: 18, accentColor: p[600] }}
+            />
+            <Text style={{ fontSize: ty.fontSize.sm, color: c.infoScale[800], fontWeight: ty.fontWeight.medium }}>Legal review completed</Text>
+          </Box>
+        </Box>
       );
     };
 
@@ -503,10 +706,13 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       const negotiating = status === 'negotiating';
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
-          <h3 style={secTitle}><BarChart3 size={20} color={p[600]} />Offer Status Pipeline</h3>
-          <div style={{ ...card, padding: `${sp[5]}px ${sp[4]}px`, overflowX: 'auto' as const }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minWidth: 500 }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
+            <BarChart3 size={20} color={p[600]} />
+            <Text style={secTitle}>Offer Status Pipeline</Text>
+          </Box>
+          <Box style={{ ...card, padding: `${sp[5]}px ${sp[4]}px`, overflowX: 'auto' as const }}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minWidth: 500 }}>
               {steps.map((step, idx) => {
                 const past = idx < curIdx, cur = idx === curIdx;
                 let cc = n[300], lc = n[400];
@@ -514,32 +720,51 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 else if (cur && !declined) { cc = p[500]; lc = p[700]; }
                 else if (declined && step.key === 'accepted') { cc = c.errorScale[500]; lc = c.errorScale[700]; }
                 return (
-                  <div key={step.key} style={{ display: 'flex', alignItems: 'center', flex: idx < steps.length - 1 ? 1 : 'none' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: sp[2] }}>
-                      <div style={{ width: 32, height: 32, borderRadius: '50%', backgroundColor: cc, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${t.motion.hover}`, boxShadow: cur ? `0 0 0 4px ${p[100]}` : 'none' }}>
+                  <Box key={step.key} style={{ display: 'flex', alignItems: 'center', flex: idx < steps.length - 1 ? 1 : 'none' }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: sp[2] }}>
+                      <Box style={{
+                        width: 32, height: 32, borderRadius: t.borderRadius.full,
+                        backgroundColor: cc, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: `all ${t.motion.hover}`,
+                        boxShadow: cur ? `0 0 0 4px ${p[100]}` : 'none',
+                      }}>
                         {past ? <Check size={14} color={c.common.white} /> : declined && step.key === 'accepted' ? <X size={14} color={c.common.white} /> : (
-                          <span style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.bold, color: cur ? c.common.white : n[500] }}>{idx + 1}</span>
+                          <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.bold, color: cur ? c.common.white : n[500] }}>{idx + 1}</Text>
                         )}
-                      </div>
-                      <span style={{ fontSize: ty.fontSize.xs, fontWeight: cur ? ty.fontWeight.semibold : ty.fontWeight.medium, color: lc, whiteSpace: 'nowrap' as const }}>
+                      </Box>
+                      <Text style={{
+                        fontSize: ty.fontSize.xs,
+                        fontWeight: cur ? ty.fontWeight.semibold : ty.fontWeight.medium,
+                        color: lc, whiteSpace: 'nowrap' as const,
+                      }}>
                         {declined && step.key === 'accepted' ? 'Declined' : step.label}
-                      </span>
-                    </div>
+                      </Text>
+                    </Box>
                     {idx < steps.length - 1 && (
-                      <div style={{ flex: 1, height: 2, marginTop: -20, backgroundColor: past ? c.successScale[300] : n[200], transition: `background-color ${trans}`, marginLeft: sp[2], marginRight: sp[2] }} />
+                      <Box style={{
+                        flex: 1, height: 2, marginTop: -20,
+                        backgroundColor: past ? c.successScale[300] : n[200],
+                        transition: `background-color ${t.motion.hover}`,
+                        marginLeft: sp[2], marginRight: sp[2],
+                      }} />
                     )}
-                  </div>
+                  </Box>
                 );
               })}
-            </div>
+            </Box>
             {negotiating && (
-              <div style={{ marginTop: sp[4], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: c.warningScale[50], border: `${bdr} ${c.warningScale[200]}`, display: 'flex', alignItems: 'center', gap: sp[2] }}>
+              <Box style={{
+                marginTop: sp[4], padding: `${sp[2]}px ${sp[3]}px`, borderRadius: t.borderRadius.md,
+                backgroundColor: c.warningScale[50],
+                border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${c.warningScale[200]}`,
+                display: 'flex', alignItems: 'center', gap: sp[2],
+              }}>
                 <TrendingUp size={16} color={c.warningScale[600]} />
-                <span style={{ fontSize: ty.fontSize.sm, color: c.warningScale[700], fontWeight: ty.fontWeight.medium }}>Offer is currently in negotiation</span>
-              </div>
+                <Text style={{ fontSize: ty.fontSize.sm, color: c.warningScale[700], fontWeight: ty.fontWeight.medium }}>Offer is currently in negotiation</Text>
+              </Box>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       );
     };
 
@@ -550,50 +775,117 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     };
 
     return (
-      <Box className={className} style={{ ...surfMd, minHeight: '100%', backgroundColor: n[50], position: 'relative' as const, overflow: 'hidden', ...style }}>
-        <style>{`@keyframes bhOfferPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }`}</style>
-        <div style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4], padding: sp[5] }}>
+      <Box className={className} style={{
+        ...surfMd, minHeight: '100%', backgroundColor: n[50],
+        position: 'relative' as const, overflow: 'hidden',
+        ...entrance.animate, transition: entrance.transition,
+        ...style,
+      }}>
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4], padding: sp[5] }}>
           {/* Header */}
-          <div style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: sp[3] }}>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: sp[3], marginBottom: sp[2] }}>
-                <div style={{ width: 44, height: 44, borderRadius: '50%', backgroundColor: p[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Box style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' as const, gap: sp[3] }}>
+            <Box style={{ flex: 1, minWidth: 200 }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: sp[3], marginBottom: sp[2] }}>
+                <Box style={createIconContainerStyle(t, { size: 44, color: p[100] })}>
                   <User size={20} color={p[600]} />
-                </div>
-                <div>
-                  <h2 style={{ fontSize: ty.fontSize.xl, fontWeight: ty.fontWeight.bold, color: n[900], margin: 0 }}>{candidateName}</h2>
-                  <p style={{ fontSize: ty.fontSize.sm, color: n[500], margin: 0 }}>{jobTitle} &middot; Version {localCurrentVersion}</p>
-                </div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: sp[2], flexWrap: 'wrap' as const }}>
-              <span style={createBadgeStyle(t, statusCfg.color)}>{statusCfg.label}</span>
-              <button onClick={toggleEditing} style={btnSec}>{localIsEditing ? <Eye size={14} /> : <Edit3 size={14} />}{localIsEditing ? 'Preview' : 'Edit'}</button>
-              <button onClick={toggleHistory} style={btnSec}><History size={14} />History</button>
-              <button onClick={toggleComparison} style={btnSec}><ArrowLeftRight size={14} />Compare</button>
-              {status === 'draft' && <button onClick={onSubmitApproval} style={btnPri}><Shield size={14} />Submit for Approval</button>}
-              {status === 'approved' && <button onClick={onSendOffer} style={btnPri}><Send size={14} />Send Offer</button>}
-              {localIsEditing && <button onClick={onSave} style={btnPri}><Save size={14} />Save</button>}
-            </div>
-          </div>
+                </Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                  <Text style={{
+                    fontSize: ty.fontSize.xl,
+                    fontWeight: typo.headingWeight,
+                    letterSpacing: typo.headingLetterSpacing,
+                    color: n[900],
+                  }}>
+                    {candidateName}
+                  </Text>
+                  <Text style={{ fontSize: ty.fontSize.sm, color: n[500] }}>
+                    {jobTitle} - Version {localCurrentVersion}
+                  </Text>
+                </Box>
+              </Box>
+            </Box>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2], flexWrap: 'wrap' as const }}>
+              <Box style={createBadgeStyle(t, statusCfg.color)}>
+                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{statusCfg.label}</Text>
+              </Box>
+              <Box role="button" tabIndex={0} aria-label={localIsEditing ? 'Preview mode' : 'Edit mode'} onClick={toggleEditing}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleEditing(); } }}
+                style={btnSec}>
+                {localIsEditing ? <Eye size={14} /> : <Edit3 size={14} />}
+                <Text style={{ fontSize: ty.fontSize.sm, color: 'inherit' }}>{localIsEditing ? 'Preview' : 'Edit'}</Text>
+              </Box>
+              <Box role="button" tabIndex={0} aria-label="Toggle history" onClick={toggleHistory}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleHistory(); } }}
+                style={btnSec}>
+                <History size={14} />
+                <Text style={{ fontSize: ty.fontSize.sm, color: 'inherit' }}>History</Text>
+              </Box>
+              <Box role="button" tabIndex={0} aria-label="Toggle comparison" onClick={toggleComparison}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleComparison(); } }}
+                style={btnSec}>
+                <ArrowLeftRight size={14} />
+                <Text style={{ fontSize: ty.fontSize.sm, color: 'inherit' }}>Compare</Text>
+              </Box>
+              {status === 'draft' && onSubmitApproval && (
+                <Box role="button" tabIndex={0} aria-label="Submit for approval" onClick={onSubmitApproval}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSubmitApproval(); } }}
+                  style={btnPri}>
+                  <Shield size={14} color={c.common.white} />
+                  <Text style={{ fontSize: ty.fontSize.sm, color: c.common.white }}>Submit for Approval</Text>
+                </Box>
+              )}
+              {status === 'approved' && onSendOffer && (
+                <Box role="button" tabIndex={0} aria-label="Send offer" onClick={onSendOffer}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSendOffer(); } }}
+                  style={btnPri}>
+                  <Send size={14} color={c.common.white} />
+                  <Text style={{ fontSize: ty.fontSize.sm, color: c.common.white }}>Send Offer</Text>
+                </Box>
+              )}
+              {localIsEditing && onSave && (
+                <Box role="button" tabIndex={0} aria-label="Save changes" onClick={onSave}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSave(); } }}
+                  style={btnPri}>
+                  <Save size={14} color={c.common.white} />
+                  <Text style={{ fontSize: ty.fontSize.sm, color: c.common.white }}>Save</Text>
+                </Box>
+              )}
+            </Box>
+          </Box>
 
           {/* Main layout */}
-          <div style={{ display: 'flex', gap: sp[4], alignItems: 'flex-start' }}>
-            <div style={{ ...card, padding: sp[3], display: 'flex', flexDirection: 'column' as const, gap: sp[1], minWidth: 200 }}>
+          <Box style={{ display: 'flex', gap: sp[4], alignItems: 'flex-start' }}>
+            <Box style={{ ...card, padding: sp[3], display: 'flex', flexDirection: 'column' as const, gap: sp[1], minWidth: 200 }}>
               {sections.map((s) => (
-                <button key={s.key} onClick={() => setActiveSection(s.key)} style={navItem(activeSection === s.key)}>
-                  {s.icon}{s.label}
-                </button>
+                <Box
+                  key={s.key}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Go to ${s.label} section`}
+                  aria-pressed={activeSection === s.key}
+                  onClick={() => setActiveSection(s.key)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSection(s.key); } }}
+                  style={navItem(activeSection === s.key)}
+                >
+                  <s.Icon size={16} />
+                  <Text style={{
+                    fontSize: ty.fontSize.sm,
+                    fontWeight: activeSection === s.key ? ty.fontWeight.semibold : ty.fontWeight.medium,
+                    color: activeSection === s.key ? p[700] : n[600],
+                  }}>
+                    {s.label}
+                  </Text>
+                </Box>
               ))}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
+            </Box>
+            <Box style={{ flex: 1, minWidth: 0 }}>
               {(sectionMap[activeSection] ?? renderCompensation)()}
               {localShowHistory && negotiationHistory.length > 0 && activeSection !== 'pipeline' && (
-                <div style={{ marginTop: sp[5] }}>{renderNegotiationHistory()}</div>
+                <Box style={{ marginTop: sp[5] }}>{renderNegotiationHistory()}</Box>
               )}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
       </Box>
     );
   },

@@ -4,7 +4,11 @@ import type { DesignTokens } from '../../../../core/types/tokens';
 
 export type BhEvidenceBrowserPreset = 'split-pane' | 'compact';
 
-export type EvidenceImpact = 'strong_positive' | 'positive' | 'neutral' | 'negative' | 'strong_negative';
+/**
+ * Evidence impact aligned with dm-scoring's 3-level EvidenceImpact type.
+ * @see dm-scoring/domain/types/common - EVIDENCE_IMPACT_VALUES
+ */
+export type EvidenceImpact = 'positive' | 'negative' | 'neutral';
 export type SpeakerRole = 'candidate' | 'interviewer' | 'system';
 
 export interface TranscriptSegment {
@@ -16,22 +20,31 @@ export interface TranscriptSegment {
   hasEvidence?: boolean;
 }
 
+/**
+ * Evidence item aligned with dm-scoring Evidence entity.
+ * @see dm-scoring/domain/entity/evidence
+ */
 export interface EvidenceItem {
   id: string;
   quote: string;
   dimension: string;
   dimensionCode: string;
   impact: EvidenceImpact;
+  impactExplanation?: string;
   score: number;
+  speakerRole?: SpeakerRole;
+  speakerName?: string;
+  turnIndex?: number;
   transcriptSegmentId?: string;
-  validated?: boolean;
+  isValidated: boolean;
+  similarityScore?: number;
   timestamp?: string;
 }
 
 export interface EvidenceFilter {
   dimension?: string;
   impact?: EvidenceImpact;
-  validated?: boolean;
+  isValidated?: boolean;
 }
 
 export interface BhEvidenceBrowserProps extends EngineAwareProps {
@@ -41,7 +54,7 @@ export interface BhEvidenceBrowserProps extends EngineAwareProps {
   dimensions?: string[];
   selectedEvidenceId?: string;
   onEvidenceSelect?: (evidenceId: string) => void;
-  onValidate?: (evidenceId: string, validated: boolean) => void;
+  onValidate?: (evidenceId: string, isValidated: boolean) => void;
   filter?: EvidenceFilter;
   onFilterChange?: (filter: EvidenceFilter) => void;
   candidateName?: string;
@@ -57,23 +70,28 @@ export const BH_EVIDENCE_BROWSER_DEFAULTS: Partial<BhEvidenceBrowserProps> = {
 
 export function getImpactColors(tokens: DesignTokens) {
   return {
-    strong_positive: { color: tokens.colors.successScale[800], bgColor: tokens.colors.successScale[50], border: tokens.colors.successScale[200] },
     positive: { color: tokens.colors.successScale[600], bgColor: tokens.colors.successScale[50], border: tokens.colors.successScale[200] },
     neutral: { color: tokens.colors.neutral[600], bgColor: tokens.colors.neutral[100], border: tokens.colors.neutral[200] },
     negative: { color: tokens.colors.errorScale[600], bgColor: tokens.colors.errorScale[50], border: tokens.colors.errorScale[200] },
-    strong_negative: { color: tokens.colors.errorScale[800], bgColor: tokens.colors.errorScale[50], border: tokens.colors.errorScale[200] },
   };
 }
 
 export function getImpactLabel(impact: EvidenceImpact): string {
   const labels: Record<EvidenceImpact, string> = {
-    strong_positive: 'Strong +',
     positive: 'Positive',
     neutral: 'Neutral',
     negative: 'Negative',
-    strong_negative: 'Strong -',
   };
   return labels[impact];
+}
+
+export function getImpactIcon(impact: EvidenceImpact): string {
+  const icons: Record<EvidenceImpact, string> = {
+    positive: '+',
+    neutral: '~',
+    negative: '-',
+  };
+  return icons[impact];
 }
 
 export function getSpeakerColors(tokens: DesignTokens) {
@@ -83,3 +101,6 @@ export function getSpeakerColors(tokens: DesignTokens) {
     system: { color: tokens.colors.neutral[600], bgColor: tokens.colors.neutral[100] },
   };
 }
+
+/** All valid impact values for filter iteration */
+export const IMPACT_OPTIONS: EvidenceImpact[] = ['positive', 'neutral', 'negative'];

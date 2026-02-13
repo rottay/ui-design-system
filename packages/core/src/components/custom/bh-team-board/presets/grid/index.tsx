@@ -9,7 +9,7 @@
  * hover lift, personality-aware accent bars, and modal form placeholder.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Users,
   UserPlus,
@@ -41,6 +41,7 @@ import {
   createPersonalityAccentBar,
   createEntranceAnimation,
   createDividerStyle,
+  getPersonalityTypography,
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
@@ -172,10 +173,10 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
     const viewMode = controlledView !== undefined ? controlledView : intView;
     const period = controlledPeriod !== undefined ? controlledPeriod : intPeriod;
 
-    const selectTeam = (id: string) => { setIntSelected(id); onTeamSelect?.(id); };
-    const toggleModal = (open: boolean) => { setIntModal(open); onAddModalToggle?.(open); };
-    const switchView = (m: 'grid' | 'list') => { setIntView(m); onViewModeChange?.(m); };
-    const switchPeriod = (p: 'monthly' | 'quarterly') => { setIntPeriod(p); onTargetPeriodChange?.(p); };
+    const selectTeam = useCallback((id: string) => { setIntSelected(id); onTeamSelect?.(id); }, [onTeamSelect]);
+    const toggleModal = useCallback((open: boolean) => { setIntModal(open); onAddModalToggle?.(open); }, [onAddModalToggle]);
+    const switchView = useCallback((m: 'grid' | 'list') => { setIntView(m); onViewModeChange?.(m); }, [onViewModeChange]);
+    const switchPeriod = useCallback((p: 'monthly' | 'quarterly') => { setIntPeriod(p); onTargetPeriodChange?.(p); }, [onTargetPeriodChange]);
 
     /* -- Derived data ------------------------------------------------ */
     const activeTeam = useMemo(() => teams.find((team) => team.id === selectedId), [teams, selectedId]);
@@ -191,6 +192,8 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
     const sectionHdr = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const badgeR = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const divider = useMemo(() => createDividerStyle(t), [t]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const isGlass = t.surface.useGlass && !!t.glass;
 
     const perfColor = (score: number) =>
       score >= 85 ? t.colors.successScale[500]
@@ -233,7 +236,12 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
       return (
         <Box
+          role="button"
+          tabIndex={0}
+          aria-label={`Select team: ${team.name}`}
+          aria-pressed={isSelected}
           onClick={() => selectTeam(team.id)}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') selectTeam(team.id); }}
           style={{
             ...card,
             position: 'relative' as const,
@@ -247,7 +255,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
             flexDirection: viewMode === 'list' ? 'row' as const : 'column' as const,
             gap: t.spacing[4],
             transition: `all ${t.motion.hover}`,
-            ...entrance.initial,
+            ...entrance.animate,
           }}
           onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
             const el = e.currentTarget;
@@ -276,7 +284,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                   {team.leadName.charAt(0).toUpperCase()}
                 </Text>
               </Box>
-              <Box>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                 <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], display: 'block' }}>
                   {team.name}
                 </Text>
@@ -364,12 +372,14 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
           borderRadius: t.borderRadius.lg,
           backgroundColor: s[50],
           border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${s[200]}`,
+          display: 'flex',
+          flexDirection: 'column' as const,
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
             <Box style={{ color: s[600] }}>{icon}</Box>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: s[700], fontWeight: t.typography.fontWeight.medium }}>{label}</Text>
           </Box>
-          <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: s[800] }}>{value}</Text>
+          <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{value}</Text>
         </Box>
       );
     };
@@ -381,22 +391,24 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
       <Box
         className={className}
         style={{
+          width: '100%',
           height: '100%',
           overflow: 'auto',
           backgroundColor: t.colors.neutral[50],
           padding: t.spacing[7],
           fontFamily: 'inherit',
+          ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
           ...style,
         }}
       >
         {/* ---- Page Header ------------------------------------------ */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[7] }}>
-          <Box>
-            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[1] }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: personalityTypo.headingWeight, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[1], letterSpacing: personalityTypo.headingLetterSpacing }}>
               Team Management
             </Text>
             <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
-              {teams.length} teams  &#183;  {totalMembers} total members
+              {teams.length} teams {' \u00B7 '} {totalMembers} total members
             </Text>
           </Box>
 
@@ -411,7 +423,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
               {([{ key: 'grid' as const, icon: <LayoutGrid size={14} /> }, { key: 'list' as const, icon: <List size={14} /> }]).map((m) => (
                 <Box
                   key={m.key}
+                  role="tab"
+                  aria-selected={viewMode === m.key}
+                  tabIndex={0}
                   onClick={() => switchView(m.key)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') switchView(m.key); }}
                   style={{
                     padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
                     backgroundColor: viewMode === m.key ? t.colors.primaryScale[50] : t.colors.common.white,
@@ -433,7 +449,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
             {/* Add team button */}
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label="Add new team"
               onClick={() => { toggleModal(true); onAddTeam?.(); }}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { toggleModal(true); onAddTeam?.(); } }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -483,12 +503,12 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 }}>
                   <Users size={24} />
                 </Box>
-                <Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                   <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
                     {activeTeam.name}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
-                    Led by {activeTeam.leadName}  &#183;  {activeTeam.memberCount} members  &#183;  {activeTeam.activeJobs} active jobs
+                    Led by {activeTeam.leadName} {' \u00B7 '} {activeTeam.memberCount} members {' \u00B7 '} {activeTeam.activeJobs} active jobs
                   </Text>
                 </Box>
               </Box>
@@ -760,7 +780,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                   Add New Team
                 </Text>
-                <Box onClick={() => toggleModal(false)} style={{ cursor: 'pointer', color: t.colors.neutral[400], padding: t.spacing[1] }}>
+                <Box role="button" tabIndex={0} aria-label="Close modal" onClick={() => toggleModal(false)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') toggleModal(false); }} style={{ cursor: 'pointer', color: t.colors.neutral[400], padding: t.spacing[1] }}>
                   <X size={18} />
                 </Box>
               </Box>

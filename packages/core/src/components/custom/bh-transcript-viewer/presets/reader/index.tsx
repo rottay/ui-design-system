@@ -8,13 +8,14 @@
  * score cards in sidebar, and personality-driven typography.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
   createSectionHeaderStyle,
   createHoverStyle,
   createDividerStyle,
+  createEmptyStateStyle,
   createPersonalityAccentBar,
   getCardPadding,
   getPersonalityTypography,
@@ -33,65 +34,23 @@ const MOCK_META: TranscriptMeta = {
   interviewDate: '2025-01-20', interviewType: 'Technical', duration: '45 min', overallScore: 82,
 };
 
-const MOCK_SEGMENTS: TranscriptSegment[] = [
-  { id: 'seg-1', speaker: 'interviewer', speakerName: 'AI Interviewer', timestamp: '00:00', text: 'Welcome Sarah. Let us start with a system design question. How would you design a real-time notification system for a large-scale application?' },
-  { id: 'seg-2', speaker: 'candidate', speakerName: 'Sarah Chen', timestamp: '00:15', text: 'I would start by identifying the key requirements: low latency delivery, support for multiple channels like push, email, and in-app, and the ability to handle millions of concurrent users.', highlights: [{ startOffset: 0, endOffset: 50, dimensionId: 'dim-1', dimensionName: 'System Design', color: '#3B82F6', score: 8, confidence: 0.9 }] },
-  { id: 'seg-3', speaker: 'interviewer', speakerName: 'AI Interviewer', timestamp: '00:45', text: 'How would you handle the real-time aspect specifically?' },
-  { id: 'seg-4', speaker: 'candidate', speakerName: 'Sarah Chen', timestamp: '01:00', text: 'I would use WebSocket connections for real-time delivery, with a message queue like Kafka for reliable processing. A fan-out service would distribute notifications to the appropriate channels based on user preferences.', highlights: [{ startOffset: 0, endOffset: 80, dimensionId: 'dim-2', dimensionName: 'Architecture', color: '#10B981', score: 9, confidence: 0.92 }] },
-];
+function createMockSegments(tokens: { colors: any }): TranscriptSegment[] {
+  const primary = tokens.colors.primaryScale[500];
+  const success = tokens.colors.successScale[500];
+  return [
+    { id: 'seg-1', speaker: 'interviewer', speakerName: 'AI Interviewer', timestamp: '00:00', text: 'Welcome Sarah. Let us start with a system design question. How would you design a real-time notification system for a large-scale application?' },
+    { id: 'seg-2', speaker: 'candidate', speakerName: 'Sarah Chen', timestamp: '00:15', text: 'I would start by identifying the key requirements: low latency delivery, support for multiple channels like push, email, and in-app, and the ability to handle millions of concurrent users.', highlights: [{ startOffset: 0, endOffset: 50, dimensionId: 'dim-1', dimensionName: 'System Design', color: primary, score: 8, confidence: 0.9 }] },
+    { id: 'seg-3', speaker: 'interviewer', speakerName: 'AI Interviewer', timestamp: '00:45', text: 'How would you handle the real-time aspect specifically?' },
+    { id: 'seg-4', speaker: 'candidate', speakerName: 'Sarah Chen', timestamp: '01:00', text: 'I would use WebSocket connections for real-time delivery, with a message queue like Kafka for reliable processing. A fan-out service would distribute notifications to the appropriate channels based on user preferences.', highlights: [{ startOffset: 0, endOffset: 80, dimensionId: 'dim-2', dimensionName: 'Architecture', color: success, score: 9, confidence: 0.92 }] },
+  ];
+}
 
-const MOCK_DIMENSIONS: ScoringDimension[] = [
-  { id: 'dim-1', name: 'System Design', color: '#3B82F6', score: 8, maxScore: 10, confidence: 0.9, evidenceCount: 3 },
-  { id: 'dim-2', name: 'Architecture', color: '#10B981', score: 9, maxScore: 10, confidence: 0.92, evidenceCount: 2 },
-  { id: 'dim-3', name: 'Communication', color: '#F59E0B', score: 7, maxScore: 10, confidence: 0.85, evidenceCount: 4 },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Highlight Helper                                                   */
-/* ------------------------------------------------------------------ */
-function renderHighlightedText(
-  text: string,
-  highlights: TranscriptHighlight[],
-  selectedDimension: string | null
-): React.ReactNode[] {
-  if (!highlights || highlights.length === 0) return [text];
-
-  const filtered = selectedDimension
-    ? highlights.filter((h) => h.dimensionId === selectedDimension)
-    : highlights;
-
-  if (filtered.length === 0) return [text];
-
-  const sorted = [...filtered].sort((a, b) => a.startOffset - b.startOffset);
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-
-  sorted.forEach((hl, i) => {
-    if (hl.startOffset > lastIndex) {
-      parts.push(text.slice(lastIndex, hl.startOffset));
-    }
-    parts.push(
-      <span
-        key={i}
-        style={{
-          backgroundColor: hl.color + '30',
-          borderBottom: `2px solid ${hl.color}`,
-          padding: '1px 2px',
-          borderRadius: 2,
-        }}
-        title={`${hl.dimensionName}: ${hl.score} (${(hl.confidence * 100).toFixed(0)}% confidence)`}
-      >
-        {text.slice(hl.startOffset, hl.endOffset)}
-      </span>
-    );
-    lastIndex = hl.endOffset;
-  });
-
-  if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex));
-  }
-
-  return parts;
+function createMockDimensions(tokens: { colors: any }): ScoringDimension[] {
+  return [
+    { id: 'dim-1', name: 'System Design', color: tokens.colors.primaryScale[500], score: 8, maxScore: 10, confidence: 0.9, evidenceCount: 3 },
+    { id: 'dim-2', name: 'Architecture', color: tokens.colors.successScale[500], score: 9, maxScore: 10, confidence: 0.92, evidenceCount: 2 },
+    { id: 'dim-3', name: 'Communication', color: tokens.colors.warningScale[500], score: 7, maxScore: 10, confidence: 0.85, evidenceCount: 4 },
+  ];
 }
 
 /* ------------------------------------------------------------------ */
@@ -102,10 +61,13 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
   render: ({ primitives, props, tokens }: PresetContext<BhTranscriptViewerProps>) => {
     const { Box, Text } = primitives;
 
+    const defaultSegments = useMemo(() => createMockSegments(tokens), [tokens]);
+    const defaultDimensions = useMemo(() => createMockDimensions(tokens), [tokens]);
+
     const {
       meta = MOCK_META,
-      segments = MOCK_SEGMENTS,
-      dimensions = MOCK_DIMENSIONS,
+      segments = defaultSegments,
+      dimensions = defaultDimensions,
       selectedDimension,
       onDimensionSelect,
       selectedSegment,
@@ -124,6 +86,63 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
     const accentBar = useMemo(() => createPersonalityAccentBar(tokens, { color: tokens.colors.primaryScale[500] }), [tokens]);
+    const emptyState = useMemo(() => createEmptyStateStyle(tokens), [tokens]);
+
+    /* ---- Highlight helper (uses Box primitive) ---- */
+    const renderHighlightedText = useCallback((
+      text: string,
+      highlights: TranscriptHighlight[],
+      selDimension: string | null
+    ): React.ReactNode[] => {
+      if (!highlights || highlights.length === 0) return [text];
+
+      const filtered = selDimension
+        ? highlights.filter((h) => h.dimensionId === selDimension)
+        : highlights;
+
+      if (filtered.length === 0) return [text];
+
+      const sorted = [...filtered].sort((a, b) => a.startOffset - b.startOffset);
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+
+      sorted.forEach((hl, i) => {
+        if (hl.startOffset > lastIndex) {
+          parts.push(text.slice(lastIndex, hl.startOffset));
+        }
+        parts.push(
+          <Box
+            key={i}
+            style={{
+              display: 'inline' as const,
+              backgroundColor: hl.color + '30',
+              borderBottom: `2px solid ${hl.color}`,
+              padding: `${tokens.spacing[0] || 1}px ${tokens.spacing[1]}px`,
+              borderRadius: tokens.borderRadius.sm,
+              transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
+            }}
+            title={`${hl.dimensionName}: ${hl.score} (${(hl.confidence * 100).toFixed(0)}% confidence)`}
+          >
+            <Text style={{ display: 'inline' }}>{text.slice(hl.startOffset, hl.endOffset)}</Text>
+          </Box>
+        );
+        lastIndex = hl.endOffset;
+      });
+
+      if (lastIndex < text.length) {
+        parts.push(text.slice(lastIndex));
+      }
+
+      return parts;
+    }, [Box, Text, tokens]);
+
+    const handleSegmentClick = useCallback((segId: string) => {
+      onSegmentSelect?.(selectedSegment === segId ? null : segId);
+    }, [onSegmentSelect, selectedSegment]);
+
+    const handleDimensionClick = useCallback((dimId: string | null) => {
+      onDimensionSelect?.(dimId);
+    }, [onDimensionSelect]);
 
     return (
       <Box
@@ -134,6 +153,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
           gap: tokens.spacing[6],
           padding: tokens.spacing[6],
           minHeight: '100%',
+          width: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
           ...style,
@@ -144,7 +164,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
           <Box style={{ ...cardBase, padding: padding, position: 'relative' as const, overflow: 'hidden' }}>
             <Box style={accentBar || undefined} />
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                 <Text style={{
                   fontSize: tokens.typography.fontSize.xl || '1.25rem',
                   fontWeight: typo.headingWeight,
@@ -160,7 +180,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
               </Box>
               <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4] }}>
                 <Box style={{ textAlign: 'center' as const }}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[400], marginBottom: 2 }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>
                     <Clock size={12} strokeWidth={1.5} />
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Duration</Text>
                   </Box>
@@ -168,7 +188,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                 </Box>
                 {meta.overallScore !== undefined && (
                   <Box style={{ textAlign: 'center' as const }}>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[400], marginBottom: 2 }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>
                       <Award size={12} strokeWidth={1.5} />
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Score</Text>
                     </Box>
@@ -182,7 +202,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
 
         <Box style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: tokens.spacing[6] }}>
           {/* Transcript */}
-          <Box style={{ ...cardBase, padding: padding }}>
+          <Box style={{ ...cardBase, padding: padding, minWidth: 0 }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <BookOpen size={15} strokeWidth={1.5} style={{ color: tokens.colors.primaryScale[500] }} />
               <Text style={{ ...sectionHeader, marginBottom: 0 }}>Transcript</Text>
@@ -196,7 +216,12 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                 return (
                   <Box
                     key={seg.id}
-                    onClick={() => onSegmentSelect?.(isSelected ? null : seg.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${seg.speakerName} at ${seg.timestamp}`}
+                    aria-pressed={isSelected}
+                    onClick={() => handleSegmentClick(seg.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick(seg.id); } }}
                     style={{
                       ...hoverStyle,
                       display: 'flex',
@@ -208,7 +233,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                       cursor: 'pointer',
                     }}
                   >
-                    <Box style={{ flexShrink: 0, width: 80 }}>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flexShrink: 0, width: 80 }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: isInterviewer ? tokens.colors.neutral[600] : tokens.colors.primaryScale[600], display: 'block' }}>
                         {seg.speakerName}
                       </Text>
@@ -218,15 +243,15 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                         </Text>
                       )}
                     </Box>
-                    <Box style={{ flex: 1 }}>
-                      <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], lineHeight: 1.6 }}>
+                    <Box style={{ flex: 1, minWidth: 0 }}>
+                      <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], lineHeight: 1.6, wordBreak: 'break-word' as const }}>
                         {renderHighlightedText(seg.text, seg.highlights || [], selectedDimension ?? null)}
                       </Text>
                     </Box>
                   </Box>
                 );
               }) : (
-                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
+                <Box style={{ ...emptyState, height: 120 }}>
                   <Text>No transcript data</Text>
                 </Box>
               )}
@@ -244,7 +269,12 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                 {/* All filter */}
                 <Box
-                  onClick={() => onDimensionSelect?.(null)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Show all dimensions"
+                  aria-pressed={!selectedDimension}
+                  onClick={() => handleDimensionClick(null)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionClick(null); } }}
                   style={{
                     ...hoverStyle,
                     padding: tokens.spacing[2],
@@ -264,7 +294,12 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                   return (
                     <Box
                       key={dim.id}
-                      onClick={() => onDimensionSelect?.(isActive ? null : dim.id)}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Filter by ${dim.name} (${dim.score}/${dim.maxScore})`}
+                      aria-pressed={isActive}
+                      onClick={() => handleDimensionClick(isActive ? null : dim.id)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionClick(isActive ? null : dim.id); } }}
                       style={{
                         ...hoverStyle,
                         padding: tokens.spacing[2],

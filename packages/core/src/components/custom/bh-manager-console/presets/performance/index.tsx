@@ -6,7 +6,7 @@
  * hiring velocity, goal tracking, and comparative benchmarks.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Activity,
   Users,
@@ -31,6 +31,8 @@ import {
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
   createBadgeStyle,
+  getPersonalityTypography,
+  createEntranceAnimation,
 } from '../../../helpers';
 import type {
   BhManagerConsoleProps,
@@ -66,13 +68,7 @@ const MOCK_RECRUITERS: RecruiterWorkload[] = [
   { recruiterId: 'r4', name: 'Marcus Williams', avatar: undefined, metrics: { Hires: 3, Screens: 18, 'Pass Rate': 82, 'Avg Days': 22, 'Quality': 90, 'Satisfaction': 4.8 } },
 ];
 
-const MOCK_PIPELINE: PipelineStage[] = [
-  { name: 'Applied', count: 342, percentage: 100, color: '#6366F1' },
-  { name: 'Screened', count: 186, percentage: 54, color: '#3B82F6' },
-  { name: 'Interviewed', count: 92, percentage: 27, color: '#10B981' },
-  { name: 'Offered', count: 28, percentage: 8, color: '#F59E0B' },
-  { name: 'Hired', count: 18, percentage: 5, color: '#EF4444' },
-];
+/* MOCK_PIPELINE is created inside render to use token colors */
 
 const MOCK_ALERTS: PerformanceAlert[] = [
   { id: 'a1', recruiterName: 'Priya Sharma', metric: 'Time to Fill', threshold: 28, actual: 32, severity: 'warning' },
@@ -108,7 +104,13 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
     const teams = teamsProp?.length ? teamsProp : MOCK_TEAMS;
     const kpis = kpisProp?.length ? kpisProp : MOCK_KPIS;
     const recruiters = recProp?.length ? recProp : MOCK_RECRUITERS;
-    const pipeline = pipeProp?.length ? pipeProp : MOCK_PIPELINE;
+    const pipeline = pipeProp?.length ? pipeProp : useMemo(() => ([
+      { name: 'Applied', count: 342, percentage: 100, color: t.colors.primaryScale[500] },
+      { name: 'Screened', count: 186, percentage: 54, color: t.colors.infoScale[500] },
+      { name: 'Interviewed', count: 92, percentage: 27, color: t.colors.successScale[500] },
+      { name: 'Offered', count: 28, percentage: 8, color: t.colors.warningScale[500] },
+      { name: 'Hired', count: 18, percentage: 5, color: t.colors.errorScale[500] },
+    ]), [t]);
     const alerts = alertsProp?.length ? alertsProp : MOCK_ALERTS;
 
     const [selectedTeam, setSelectedTeam] = useState(selTeamProp ?? teams[0]?.id);
@@ -124,20 +126,37 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
       });
     }, [recruiters, sortCol, sortAsc]);
 
-    const handleSort = (col: string) => {
+    const handleSort = useCallback((col: string) => {
       if (sortCol === col) setSortAsc(!sortAsc);
       else { setSortCol(col); setSortAsc(false); }
-    };
+    }, [sortCol, sortAsc]);
+
+    const handleDateRangeChange = useCallback((opt: DateRangeOption) => {
+      setDateRange(opt);
+      onDateRangeChange?.(opt);
+    }, [onDateRangeChange]);
+
+    const handleRecruiterClick = useCallback((recruiterId: string) => {
+      onRecruiterClick?.(recruiterId);
+    }, [onRecruiterClick]);
 
     /* ---- Styles ---- */
-    const card = createCardStyle(t, { padding: 28 });
-    const hoverStyles = createCardHoverStyles(t);
-    const sectionLabel = createPersonalitySectionHeaderStyle(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const isGlass = t.surface.useGlass && !!t.glass;
+
+    const rankColors = useMemo(() => [
+      t.colors.warningScale[500],
+      t.colors.neutral[400],
+      t.colors.warningScale[300],
+    ], [t]);
 
     /* ================================================================ */
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}), ...style }}>
 
         {/* === Header === */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -145,20 +164,24 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
             <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
               <Activity size={22} color={t.colors.primaryScale[600]} />
             </Box>
-            <Box>
-              <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+              <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: personalityTypo.headingWeight, color: t.colors.neutral[900], letterSpacing: personalityTypo.headingLetterSpacing }}>
                 Performance Analytics
               </Text>
-              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
                 {recruiters.length} recruiters -- {teams.find(tm => tm.id === selectedTeam)?.name ?? 'All'}
               </Text>
             </Box>
           </Box>
-          <Box style={{ display: 'flex', gap: t.spacing[1] }}>
+          <Box style={{ display: 'flex', gap: t.spacing[1] }} role="tablist" aria-label="Date range">
             {(['7d', '14d', '30d', '90d'] as DateRangeOption[]).map(opt => (
               <Box
                 key={opt}
-                onClick={() => { setDateRange(opt); onDateRangeChange?.(opt); }}
+                role="tab"
+                aria-selected={dateRange === opt}
+                tabIndex={0}
+                onClick={() => handleDateRangeChange(opt)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleDateRangeChange(opt); }}
                 style={{
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                   borderRadius: badgeRadius,
@@ -178,13 +201,13 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
         {/* === KPI Cards === */}
         <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: t.spacing[4] }}>
           {kpis.map((kpi, i) => (
-            <Box key={i} style={{ ...card, ...hoverStyles.base }}>
+            <Box key={i} style={{ ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate }}>
               <Text style={{ ...sectionLabel, marginBottom: t.spacing[2] }}>{kpi.label}</Text>
               <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[2] }}>
                 <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                   {kpi.value}
                 </Text>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                   {kpi.trend === 'up' ? <TrendingUp size={14} color={t.colors.successScale[600]} /> : kpi.trend === 'down' ? <TrendingDown size={14} color={t.colors.errorScale[600]} /> : <Minus size={14} color={t.colors.neutral[500]} />}
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: kpi.trend === 'up' ? t.colors.successScale[600] : kpi.trend === 'down' ? t.colors.errorScale[600] : t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>
                     {kpi.trendValue}
@@ -209,7 +232,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
         </Box>
 
         {/* === Recruiter Leaderboard === */}
-        <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <Box style={{ ...card, padding: 0, overflow: 'hidden' }} role="table" aria-label="Recruiter leaderboard">
           <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, borderBottom: `1px solid ${t.colors.neutral[200]}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Award size={16} color={t.colors.primaryScale[600]} />
@@ -223,16 +246,20 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
           </Box>
 
           {/* Header */}
-          <Box style={{ display: 'grid', gridTemplateColumns: `48px 180px repeat(${PERF_COLUMNS.length}, 1fr)`, gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderBottom: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50], alignItems: 'center' }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textAlign: 'center' as const }}>#</Text>
-            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Recruiter</Text>
+          <Box role="row" style={{ display: 'grid', gridTemplateColumns: `48px 180px repeat(${PERF_COLUMNS.length}, 1fr)`, gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderBottom: `1px solid ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50], alignItems: 'center' }}>
+            <Box role="columnheader" style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textAlign: 'center' as const }}>#</Box>
+            <Box role="columnheader" style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: personalityTypo.labelTransform, letterSpacing: personalityTypo.labelLetterSpacing }}>Recruiter</Box>
             {PERF_COLUMNS.map(col => (
               <Box
                 key={col}
+                role="columnheader"
+                tabIndex={0}
+                aria-sort={sortCol === col ? (sortAsc ? 'ascending' : 'descending') : undefined}
                 onClick={() => handleSort(col)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleSort(col); }}
                 style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, userSelect: 'none' as const }}
               >
-                <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: sortCol === col ? t.colors.primaryScale[600] : t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+                <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: sortCol === col ? t.colors.primaryScale[600] : t.colors.neutral[500], textTransform: personalityTypo.labelTransform, letterSpacing: personalityTypo.labelLetterSpacing }}>
                   {col}
                 </Text>
                 {sortCol === col && <ArrowUpDown size={10} color={t.colors.primaryScale[600]} />}
@@ -243,11 +270,14 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
           {/* Rows */}
           {sorted.map((rec, idx) => {
             const rank = idx + 1;
-            const rankColors = ['#FFD700', '#C0C0C0', '#CD7F32'];
             return (
               <Box
                 key={rec.recruiterId}
-                onClick={() => onRecruiterClick?.(rec.recruiterId)}
+                role="row"
+                tabIndex={onRecruiterClick ? 0 : undefined}
+                aria-label={`Rank ${rank}: ${rec.name}`}
+                onClick={() => handleRecruiterClick(rec.recruiterId)}
+                onKeyDown={onRecruiterClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick(rec.recruiterId); } : undefined}
                 style={{
                   display: 'grid',
                   gridTemplateColumns: `48px 180px repeat(${PERF_COLUMNS.length}, 1fr)`,
@@ -257,13 +287,13 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   cursor: onRecruiterClick ? 'pointer' : 'default',
                   transition: `background-color ${t.motion.hover}`,
                   alignItems: 'center',
-                  backgroundColor: rank <= 3 ? `${rankColors[rank - 1]}08` : 'transparent',
+                  backgroundColor: rank <= 3 ? t.colors.warningScale[50] : 'transparent',
                 }}
               >
                 <Box style={{ display: 'flex', justifyContent: 'center' }}>
                   {rank <= 3 ? (
-                    <Box style={{ width: 24, height: 24, borderRadius: t.borderRadius.full, backgroundColor: `${rankColors[rank - 1]}25`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ fontSize: 11, fontWeight: t.typography.fontWeight.bold, color: rankColors[rank - 1] }}>{rank}</Text>
+                    <Box style={{ width: 24, height: 24, borderRadius: t.borderRadius.full, backgroundColor: t.colors.warningScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: rankColors[rank - 1] }}>{rank}</Text>
                     </Box>
                   ) : (
                     <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>{rank}</Text>
@@ -271,7 +301,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 </Box>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                   <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Text style={{ fontSize: 12, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
                       {rec.name.split(' ').map(n => n[0]).join('')}
                     </Text>
                   </Box>
@@ -301,7 +331,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
         {/* === Pipeline + Alerts === */}
         <Box style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: t.spacing[5] }}>
           {/* Velocity chart */}
-          <Box style={{ ...card }}>
+          <Box style={{ ...card }} aria-label="Hiring velocity chart">
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Hiring Velocity</Text>
             <Box style={{ display: 'flex', justifyContent: 'center' }}>
               <svg width={480} height={180} viewBox="0 0 480 180">
@@ -333,7 +363,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
           </Box>
 
           {/* Performance alerts */}
-          <Box style={{ ...card }}>
+          <Box style={{ ...card }} role="alert" aria-label="Threshold alerts">
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
               <Target size={16} color={t.colors.warningScale[600]} />
               <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
@@ -363,7 +393,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       {alert.recruiterName}
                     </Text>
                     <Box style={createBadgeStyle(t, isCritical ? 'error' : 'warning')}>
-                      <Text style={{ fontSize: 10 }}>{alert.severity}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{alert.severity}</Text>
                     </Box>
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>

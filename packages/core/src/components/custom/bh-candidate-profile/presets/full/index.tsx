@@ -177,7 +177,7 @@ function ScoreRing({ score, tokens: t, size = 64 }: { score: number; tokens: Des
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       }}>
         <span style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color, lineHeight: 1 }}>{score}</span>
-        <span style={{ fontSize: 9, color: t.colors.neutral[400], lineHeight: 1, marginTop: 2 }}>avg</span>
+        <span style={{ fontSize: 9, color: t.colors.neutral[400], lineHeight: 1, marginTop: t.spacing[1] }}>avg</span>
       </div>
     </div>
   );
@@ -282,8 +282,8 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 }}>
                   <Building size={18} color={t.colors.primaryScale[500]} />
                 </Box>
-                <Box style={{ flex: 1 }}>
-                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], marginBottom: 2 }}>{exp.role}</Text>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], marginBottom: t.spacing[1] }}>{exp.role}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], marginBottom: 4 }}>{exp.company}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginBottom: t.spacing[2] }}>
                     {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
@@ -308,7 +308,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 }}>
                   <GraduationCap size={18} color={t.colors.warningScale[600]} />
                 </Box>
-                <Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                   <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
                     {edu.degree} in {edu.field}
                   </Text>
@@ -334,7 +334,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
           <SectionCard title="Languages">
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
               {languages.map(lang => (
-                <Box key={lang.name} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box key={lang.name} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{lang.name}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{lang.level}</Text>
                 </Box>
@@ -493,7 +493,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 }}>
                   {getInitials(note.authorName)}
                 </Box>
-                <Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{note.authorName}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{timeAgo(note.timestamp)}</Text>
                 </Box>
@@ -531,8 +531,8 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             }}>
               <Activity size={14} color={t.colors.primaryScale[500]} />
             </Box>
-            <Box style={{ flex: 1, paddingBottom: t.spacing[5] }}>
-              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], marginBottom: 2 }}>{event.message}</Text>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, paddingBottom: t.spacing[5] }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], marginBottom: t.spacing[1] }}>{event.message}</Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{timeAgo(event.timestamp)}</Text>
             </Box>
           </Box>
@@ -556,7 +556,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             }}>
               <FileText size={18} color={t.colors.errorScale[500]} />
             </Box>
-            <Box style={{ flex: 1 }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{doc.name}</Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Uploaded {formatDate(doc.uploadedAt)}</Text>
             </Box>

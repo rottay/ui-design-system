@@ -6,9 +6,14 @@
  * and condensed layout for key job information.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createHoverStyle } from '../../../helpers';
+import {
+  createCardStyle, createHoverStyle, createEntranceAnimation,
+  createCardHoverStyles, createPersonalitySectionHeaderStyle,
+  createIconContainerStyle, getPersonalityTypography, getPersonalityBadgeRadius,
+  getCardPadding,
+} from '../../../helpers';
 import type { BhJobDetailProps } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -70,24 +75,6 @@ function TrendIcon({ trend }: { trend?: string }) {
   return <Minus size={10} />;
 }
 
-/* Sub-components */
-function Badge({ bg, color, border, children, tokens }: { bg: string; color: string; border: string; children: React.ReactNode; tokens: DesignTokens }) {
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: bg, color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${border}`, textTransform: 'capitalize' as const }}>
-      {children}
-    </span>
-  );
-}
-
-function Avatar({ avatar, name, tokens, size = 24 }: { avatar?: string; name: string; tokens: DesignTokens; size?: number }) {
-  if (avatar) return <img src={avatar} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' as const }} />;
-  return (
-    <span style={{ width: size, height: size, borderRadius: '50%', backgroundColor: tokens.colors.primaryScale[100], color: tokens.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: tokens.typography.fontWeight.semibold, flexShrink: 0 }}>
-      {name.charAt(0).toUpperCase()}
-    </span>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 /*  Compact Preset                                                      */
 /* ------------------------------------------------------------------ */
@@ -97,18 +84,22 @@ type CompactTab = 'summary' | 'pipeline' | 'candidates' | 'activity';
 export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
   'BhJobDetail.Compact',
   ({ primitives, props, tokens }: PresetContext<BhJobDetailProps>) => {
-    const { Box } = primitives;
-    const isModern = tokens.surface.useGlass;
+    const { Box, Text } = primitives;
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const { jobInfo, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], activeTab: activeTabProp, onTabChange, onCandidateClick, className, style } = props;
 
     const [internalTab, setInternalTab] = useState<CompactTab>('summary');
     const activeTab = (activeTabProp as string) === 'overview' ? 'summary' : ((activeTabProp as string) ?? internalTab) as CompactTab;
-    const handleTabChange = (tab: CompactTab) => { onTabChange?.(tab as any); setInternalTab(tab); };
+    const handleTabChange = useCallback((tab: CompactTab) => { onTabChange?.(tab as any); setInternalTab(tab); }, [onTabChange]);
 
-    const glassCard = isModern && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}` } : {};
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
+    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const iconContainer = useMemo(() => createIconContainerStyle(tokens, { size: 32 }), [tokens]);
 
     const sc = statusColors(jobInfo.status, tokens);
     const uc = urgencyColors(jobInfo.urgency, tokens);
@@ -118,18 +109,58 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
       { key: 'candidates', label: 'Candidates' }, { key: 'activity', label: 'Activity' },
     ];
 
+    const BadgeBox = useCallback(({ bg, color, border, children }: { bg: string; color: string; border: string; children: React.ReactNode }) => (
+      <Box style={{
+        display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
+        padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+        borderRadius: badgeRadius,
+        fontSize: tokens.typography.fontSize.xs,
+        fontWeight: tokens.typography.fontWeight.medium,
+        backgroundColor: bg, color,
+        border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${border}`,
+        textTransform: 'capitalize' as const,
+      }}>
+        {children}
+      </Box>
+    ), [tokens, badgeRadius, Box]);
+
+    const AvatarBox = useCallback(({ avatar, name, size = 24 }: { avatar?: string; name: string; size?: number }) => {
+      if (avatar) {
+        return <Box style={{ width: size, height: size, borderRadius: tokens.borderRadius.full, backgroundImage: `url(${avatar})`, backgroundSize: 'cover', backgroundPosition: 'center', flexShrink: 0 }} />;
+      }
+      return (
+        <Box style={{
+          ...createIconContainerStyle(tokens, { size, color: tokens.colors.primaryScale[100] }),
+        }}>
+          <Text style={{ fontSize: '10px', fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>
+            {name.charAt(0).toUpperCase()}
+          </Text>
+        </Box>
+      );
+    }, [tokens, Box, Text]);
+
     const tabRenderers: Record<CompactTab, () => React.ReactNode> = {
       summary: () => (
         <Box style={{ padding: tokens.spacing[4], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
           {metrics.length > 0 && (
             <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(metrics.length, 4)}, 1fr)`, gap: tokens.spacing[2] }}>
               {metrics.slice(0, 4).map((m, i) => (
-                <Box key={i} style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, backgroundColor: tokens.colors.neutral[50], borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}`, textAlign: 'center' as const }}>
-                  <Box style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{m.value}</Box>
-                  <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{m.label}</Box>
+                <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                  backgroundColor: tokens.colors.neutral[50],
+                  borderRadius: tokens.borderRadius.md,
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                  textAlign: 'center' as const,
+                }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900] }}>{m.value}</Text>
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500],
+                    textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing,
+                  }}>{m.label}</Text>
                   {m.trendValue !== undefined && (
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2, fontSize: tokens.typography.fontSize.xs, color: trendColor(m.trend, tokens), marginTop: tokens.spacing[1] }}>
-                      <TrendIcon trend={m.trend} /><span>{m.trendValue}%</span>
+                      <TrendIcon trend={m.trend} />
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: trendColor(m.trend, tokens) }}>{m.trendValue}%</Text>
                     </Box>
                   )}
                 </Box>
@@ -138,44 +169,59 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
           )}
           {funnelStages.length > 0 && (
             <Box style={{ ...cardBase, padding: tokens.spacing[3] }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: tokens.spacing[2] }}>Pipeline</Box>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold,
+                color: tokens.colors.neutral[500],
+                textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing,
+                marginBottom: tokens.spacing[2],
+              }}>Pipeline</Text>
               <Box style={{ display: 'flex', height: 24, borderRadius: tokens.borderRadius.md, overflow: 'hidden' }}>
                 {funnelStages.map(s => (
-                  <Box key={s.name} title={`${s.name}: ${s.count} (${s.percentage}%)`} style={{ width: `${s.percentage}%`, minWidth: s.percentage > 0 ? 2 : 0, backgroundColor: s.color || tokens.colors.primaryScale[400], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', color: tokens.colors.common.white, fontWeight: tokens.typography.fontWeight.semibold, overflow: 'hidden' }}>
-                    {s.percentage >= 10 ? s.count : ''}
+                  <Box key={s.name} title={`${s.name}: ${s.count} (${s.percentage}%)`} style={{ width: `${s.percentage}%`, minWidth: s.percentage > 0 ? 2 : 0, backgroundColor: s.color || tokens.colors.primaryScale[400], display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                    {s.percentage >= 10 && <Text style={{ fontSize: '9px', color: tokens.colors.common.white, fontWeight: tokens.typography.fontWeight.semibold }}>{s.count}</Text>}
                   </Box>
                 ))}
               </Box>
               <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[2], marginTop: tokens.spacing[2] }}>
                 {funnelStages.map(s => (
-                  <Box key={s.name} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>
-                    <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.sm, backgroundColor: s.color || tokens.colors.primaryScale[400] }} />{s.name}: {s.count}
+                  <Box key={s.name} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                    <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.sm, backgroundColor: s.color || tokens.colors.primaryScale[400] }} />
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{s.name}: {s.count}</Text>
                   </Box>
                 ))}
               </Box>
             </Box>
           )}
           {templateInfo && (
-            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, backgroundColor: tokens.colors.neutral[50], borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}` }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Template</Box>
-              <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>{templateInfo.name} ({templateInfo.stages.length} stages)</Box>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+              backgroundColor: tokens.colors.neutral[50], borderRadius: tokens.borderRadius.md,
+              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+            }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Template</Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>{templateInfo.name} ({templateInfo.stages.length} stages)</Text>
             </Box>
           )}
         </Box>
       ),
 
       pipeline: () => {
-        if (!funnelStages.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No pipeline data.</Box>;
+        if (!funnelStages.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}><Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No pipeline data.</Text></Box>;
         const max = Math.max(...funnelStages.map(s => s.count), 1);
         return (
           <Box style={{ padding: tokens.spacing[4], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
             {funnelStages.map(s => (
-              <Box key={s.name} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, backgroundColor: tokens.colors.neutral[50], borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}` }}>
-                <Box style={{ width: 80, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], flexShrink: 0 }}>{s.name}</Box>
+              <Box key={s.name} style={{
+                display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                backgroundColor: tokens.colors.neutral[50], borderRadius: tokens.borderRadius.md,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+              }}>
+                <Text style={{ width: 80, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[700], flexShrink: 0 }}>{s.name}</Text>
                 <Box style={{ flex: 1, height: 12, backgroundColor: tokens.colors.neutral[200], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
                   <Box style={{ width: `${(s.count / max) * 100}%`, height: '100%', backgroundColor: s.color || tokens.colors.primaryScale[400], borderRadius: tokens.borderRadius.full, transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }} />
                 </Box>
-                <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600], minWidth: 48, textAlign: 'right' as const }}>{s.count} ({s.percentage}%)</Box>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600], minWidth: 48, textAlign: 'right' as const }}>{s.count} ({s.percentage}%)</Text>
               </Box>
             ))}
           </Box>
@@ -183,20 +229,40 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
       },
 
       candidates: () => {
-        if (!candidates.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No candidates yet.</Box>;
+        if (!candidates.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const }}><Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No candidates yet.</Text></Box>;
         return (
           <Box style={{ padding: tokens.spacing[4], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
             {candidates.slice(0, 10).map(c => {
               const csc = statusColors(c.status, tokens);
               return (
-                <Box key={c.id} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}`, cursor: 'pointer', transition: `all ${tokens.motion.hover}`, ...hoverStyle }} onClick={() => onCandidateClick?.(c.id)}>
-                  <Avatar avatar={c.avatar} name={c.name} tokens={tokens} />
-                  <Box style={{ flex: 1, minWidth: 0 }}>
-                    <Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>{c.name}</Box>
-                    <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{c.stage}</Box>
+                <Box
+                  key={c.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View candidate ${c.name}`}
+                  onClick={() => onCandidateClick?.(c.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCandidateClick?.(c.id); } }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
+                    padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                    borderRadius: tokens.borderRadius.md,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                    ...hoverStyle, outline: 'none',
+                  }}
+                >
+                  <AvatarBox avatar={c.avatar} name={c.name} />
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>{c.name}</Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{c.stage}</Text>
                   </Box>
-                  <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: scoreColor(c.scorePercent, tokens) }}>{c.scorePercent}%</Box>
-                  <Box style={{ padding: `1px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium, backgroundColor: csc.bg, color: csc.color, textTransform: 'capitalize' as const }}>{c.status}</Box>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: scoreColor(c.scorePercent, tokens) }}>{c.scorePercent}%</Text>
+                  <Box style={{
+                    padding: `1px ${tokens.spacing[2]}px`, borderRadius: badgeRadius,
+                    fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium,
+                    backgroundColor: csc.bg, color: csc.color, textTransform: 'capitalize' as const,
+                  }}>
+                    <Text style={{ fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium, color: csc.color }}>{c.status}</Text>
+                  </Box>
                 </Box>
               );
             })}
@@ -205,17 +271,27 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
       },
 
       activity: () => {
-        if (!events.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No recent activity.</Box>;
+        if (!events.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const }}><Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No recent activity.</Text></Box>;
         return (
           <Box style={{ padding: tokens.spacing[4], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
             {events.slice(0, 10).map(ev => {
               const em = eventIcon(ev.type, tokens);
               return (
-                <Box key={ev.id} style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[50], border: `1px solid ${tokens.colors.neutral[100]}` }}>
-                  <Box style={{ width: 20, height: 20, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], color: em.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>{em.icon}</Box>
-                  <Box style={{ flex: 1, minWidth: 0 }}>
-                    <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.normal }}>{ev.message}</Box>
-                    <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: 2 }}>{timeAgo(ev.time)}</Box>
+                <Box key={ev.id} style={{
+                  display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2],
+                  padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                  borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.neutral[50],
+                  border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                }}>
+                  <Box style={{
+                    ...createIconContainerStyle(tokens, { size: 20, color: tokens.colors.neutral[100] }),
+                    marginTop: 1,
+                  }}>
+                    {em.icon}
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1, minWidth: 0 }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.normal }}>{ev.message}</Text>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400]}}>{timeAgo(ev.time)}</Text>
                   </Box>
                 </Box>
               );
@@ -226,32 +302,99 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
     };
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, border: `1px solid ${tokens.colors.neutral[100]}`, boxShadow: tokens.shadows.md, width: '100%', maxWidth: 480, overflow: 'hidden', ...glassCard, ...style }}>
+      <Box className={className} style={{
+        display: 'flex', flexDirection: 'column' as const,
+        ...cardBase,
+        width: '100%', maxWidth: 480, overflow: 'hidden',
+        ...entrance.animate, transition: entrance.transition,
+        ...style,
+      }}>
         {/* Header */}
-        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
+        <Box style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+          gap: tokens.spacing[3], flexWrap: 'wrap' as const,
+        }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flex: 1, minWidth: 0 }}>
-            <Box style={{ width: 32, height: 32, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.primaryScale[100], color: tokens.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Briefcase size={16} /></Box>
+            <Box style={{
+              ...iconContainer,
+              backgroundColor: tokens.colors.primaryScale[100],
+              color: tokens.colors.primaryScale[600],
+            }}>
+              <Briefcase size={16} color={tokens.colors.primaryScale[600]} />
+            </Box>
             <Box style={{ minWidth: 0 }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{jobInfo.title}</Box>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                <span>{jobInfo.code}</span><span>-</span>
-                <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}><Building2 size={10} />{jobInfo.clientName}</Box>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.md,
+                fontWeight: typo.headingWeight,
+                letterSpacing: typo.headingLetterSpacing,
+                color: tokens.colors.neutral[900],
+                whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis',
+              }}>{jobInfo.title}</Text>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{jobInfo.code}</Text>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[300] }}>-</Text>
+                <Box style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Building2 size={10} color={tokens.colors.neutral[500]} />
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{jobInfo.clientName}</Text>
+                </Box>
               </Box>
             </Box>
           </Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-            <Badge bg={sc.bg} color={sc.color} border={sc.border} tokens={tokens}><Box style={{ width: 5, height: 5, borderRadius: tokens.borderRadius.full, backgroundColor: sc.color }} />{jobInfo.status}</Badge>
-            <Badge bg={uc.bg} color={uc.color} border={uc.border} tokens={tokens}><AlertTriangle size={10} />{jobInfo.urgency}</Badge>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}><Clock size={10} />{jobInfo.daysOpen}d</Box>
+            <BadgeBox bg={sc.bg} color={sc.color} border={sc.border}>
+              <Box style={{ width: 5, height: 5, borderRadius: tokens.borderRadius.full, backgroundColor: sc.color }} />
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: sc.color }}>{jobInfo.status}</Text>
+            </BadgeBox>
+            <BadgeBox bg={uc.bg} color={uc.color} border={uc.border}>
+              <AlertTriangle size={10} />
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: uc.color }}>{jobInfo.urgency}</Text>
+            </BadgeBox>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+              <Clock size={10} color={tokens.colors.neutral[500]} />
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{jobInfo.daysOpen}d</Text>
+            </Box>
           </Box>
         </Box>
 
         {/* Tabs */}
-        <Box style={{ display: 'flex', gap: 0, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, padding: `0 ${tokens.spacing[4]}px` }}>
+        <Box style={{
+          display: 'flex', gap: 0,
+          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+          padding: `0 ${tokens.spacing[4]}px`,
+        }}>
           {compactTabs.map(tab => (
-            <button key={tab.key} onClick={() => handleTabChange(tab.key)} style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, border: 'none', borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${activeTab === tab.key ? tokens.colors.primaryScale[500] : 'transparent'}`, backgroundColor: 'transparent', cursor: 'pointer', fontSize: tokens.typography.fontSize.xs, fontWeight: activeTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium, color: activeTab === tab.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500], fontFamily: 'inherit', marginBottom: -1 }}>
-              {tab.label}
-            </button>
+            <Box
+              key={tab.key}
+              role="tab"
+              tabIndex={0}
+              aria-selected={activeTab === tab.key}
+              aria-label={tab.label}
+              onClick={() => handleTabChange(tab.key)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTabChange(tab.key); } }}
+              style={{
+                padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                borderBottom: `2px solid ${activeTab === tab.key ? tokens.colors.primaryScale[500] : 'transparent'}`,
+                backgroundColor: 'transparent',
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: activeTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
+                color: activeTab === tab.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
+                fontFamily: 'inherit',
+                cursor: 'pointer',
+                marginBottom: -1,
+                outline: 'none',
+                transition: `all ${tokens.motion.hover}`,
+              }}
+            >
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: activeTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
+                color: activeTab === tab.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
+              }}>
+                {tab.label}
+              </Text>
+            </Box>
           ))}
         </Box>
 

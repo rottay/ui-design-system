@@ -2,16 +2,38 @@
 
 /**
  * BhEvidenceBrowser - Split Pane Preset
- * Slite-inspired full split-pane layout: transcript left, evidence sidebar right,
- * with generous whitespace, warm neutrals, and clean filter pills.
+ * Full split-pane layout: transcript left, evidence sidebar right.
+ * Personality-driven typography, glass-aware surfaces, entrance animations,
+ * and full ARIA accessibility on all interactive elements.
+ *
+ * Aligned with dm-scoring Evidence entity (3-level impact: positive/negative/neutral).
  */
 
-import { useState, useMemo } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
-import type { BhEvidenceBrowserProps, EvidenceImpact, TranscriptSegment, EvidenceItem } from '../../core';
-import { getImpactColors, getImpactLabel, getSpeakerColors } from '../../core';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
-import { FileSearch, Quote, CheckCircle2, Filter, MessageSquare } from 'lucide-react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
+import type { BhEvidenceBrowserProps, EvidenceImpact, TranscriptSegment, EvidenceItem, EvidenceFilter } from '../../core';
+import { getImpactColors, getImpactLabel, getSpeakerColors, IMPACT_OPTIONS } from '../../core';
+import {
+  createCardStyle,
+  createSurfaceStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  createEmptyStateStyle,
+  createFilterPillStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  getAccentAwareLayout,
+  createDividerStyle,
+} from '../../../helpers';
+import { FileSearch, Quote, CheckCircle2, XCircle, Filter, MessageSquare, Clock, ShieldCheck } from 'lucide-react';
+
+/* ------------------------------------------------------------------ */
+/*  Mock Data (fallback for dev/storybook)                             */
+/* ------------------------------------------------------------------ */
 
 const MOCK_TRANSCRIPT: TranscriptSegment[] = [
   { id: 'ts-1', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'Can you describe your approach to system design?', timestamp: '00:00' },
@@ -21,173 +43,316 @@ const MOCK_TRANSCRIPT: TranscriptSegment[] = [
 ];
 
 const MOCK_EVIDENCE: EvidenceItem[] = [
-  { id: 'ev-1', quote: 'I start by identifying the key requirements and constraints', dimension: 'System Design', dimensionCode: 'SD', impact: 'positive', score: 8, transcriptSegmentId: 'ts-2', validated: true, timestamp: '00:15' },
-  { id: 'ev-2', quote: 'focusing on scalability and reliability', dimension: 'Architecture', dimensionCode: 'ARCH', impact: 'strong_positive', score: 9, transcriptSegmentId: 'ts-2', validated: true, timestamp: '00:22' },
-  { id: 'ev-3', quote: 'For payment systems I prioritize consistency', dimension: 'Trade-off Analysis', dimensionCode: 'TA', impact: 'positive', score: 7, transcriptSegmentId: 'ts-4', timestamp: '00:58' },
-  { id: 'ev-4', quote: 'for social feeds I lean toward availability with eventual consistency', dimension: 'Trade-off Analysis', dimensionCode: 'TA', impact: 'positive', score: 8, transcriptSegmentId: 'ts-4', timestamp: '01:05' },
+  { id: 'ev-1', quote: 'I start by identifying the key requirements and constraints', dimension: 'System Design', dimensionCode: 'SD', impact: 'positive', score: 8, transcriptSegmentId: 'ts-2', isValidated: true, timestamp: '00:15' },
+  { id: 'ev-2', quote: 'focusing on scalability and reliability', dimension: 'Architecture', dimensionCode: 'ARCH', impact: 'positive', score: 9, transcriptSegmentId: 'ts-2', isValidated: true, timestamp: '00:22' },
+  { id: 'ev-3', quote: 'For payment systems I prioritize consistency', dimension: 'Trade-off Analysis', dimensionCode: 'TA', impact: 'positive', score: 7, transcriptSegmentId: 'ts-4', isValidated: false, timestamp: '00:58' },
+  { id: 'ev-4', quote: 'for social feeds I lean toward availability with eventual consistency', dimension: 'Trade-off Analysis', dimensionCode: 'TA', impact: 'neutral', score: 8, transcriptSegmentId: 'ts-4', isValidated: false, timestamp: '01:05' },
 ];
+
+/* ------------------------------------------------------------------ */
+/*  Preset                                                              */
+/* ------------------------------------------------------------------ */
 
 export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
   name: 'BhEvidenceBrowser.SplitPane',
-  render: ({ primitives, props, tokens }: PresetContext<BhEvidenceBrowserProps>) => {
-    const { Box, Text } = primitives;
-    const impactColors = getImpactColors(tokens);
-    const speakerColors = getSpeakerColors(tokens);
+  render: (ctx: PresetContext<BhEvidenceBrowserProps>) => {
+    const { primitives: { Box, Text }, props, tokens: t } = ctx;
+    const isGlass = t.surface.useGlass;
 
     const {
-      transcript = MOCK_TRANSCRIPT, evidence = MOCK_EVIDENCE, dimensions = [],
+      transcript = MOCK_TRANSCRIPT,
+      evidence = MOCK_EVIDENCE,
+      dimensions = [],
       selectedEvidenceId: selectedEvidenceIdProp,
-      onEvidenceSelect, onValidate, filter, onFilterChange,
-      candidateName, interviewTitle, loading, className, style,
+      onEvidenceSelect,
+      onValidate,
+      filter,
+      onFilterChange,
+      candidateName,
+      interviewTitle,
+      loading,
+      className,
+      style,
     } = props;
 
+    /* -- State -------------------------------------------------------- */
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEvidenceIdProp ?? '');
-    const [internalFilter, setInternalFilter] = useState<{ dimension?: string; impact?: EvidenceImpact }>({});
+    const [internalFilter, setInternalFilter] = useState<EvidenceFilter>({});
+    const containerRef = useRef<HTMLDivElement>(null);
+
 
     const selectedEvidenceId = selectedEvidenceIdProp ?? internalSelectedId;
     const activeFilter = filter ?? internalFilter;
 
-    const handleEvidenceSelect = (id: string) => {
+    /* -- Memoized computations ---------------------------------------- */
+    const impactColors = useMemo(() => getImpactColors(t), [t]);
+    const speakerColors = useMemo(() => getSpeakerColors(t), [t]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
+    const entranceAnim = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionHeader = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const emptyStyle = useMemo(() => createEmptyStateStyle(t), [t]);
+    const dividerStyle = useMemo(() => createDividerStyle(t), [t]);
+
+    const filteredEvidence = useMemo(() => {
+      return evidence.filter(e => {
+        if (activeFilter.dimension && e.dimension !== activeFilter.dimension) return false;
+        if (activeFilter.impact && e.impact !== activeFilter.impact) return false;
+        if (activeFilter.isValidated !== undefined && e.isValidated !== activeFilter.isValidated) return false;
+        return true;
+      });
+    }, [evidence, activeFilter]);
+
+    const uniqueDimensions = useMemo(() => {
+      return dimensions.length > 0 ? dimensions : [...new Set(evidence.map(e => e.dimension))];
+    }, [dimensions, evidence]);
+
+    const highlightedSegmentIds = useMemo(() => {
+      return new Set(filteredEvidence.map(e => e.transcriptSegmentId).filter(Boolean));
+    }, [filteredEvidence]);
+
+    const validatedCount = useMemo(() => filteredEvidence.filter(e => e.isValidated).length, [filteredEvidence]);
+
+    /* -- Callbacks ---------------------------------------------------- */
+    const handleEvidenceSelect = useCallback((id: string) => {
       setInternalSelectedId(id);
       onEvidenceSelect?.(id);
-    };
+    }, [onEvidenceSelect]);
 
-    const handleFilterChange = (newFilter: typeof activeFilter) => {
+    const handleFilterChange = useCallback((newFilter: EvidenceFilter) => {
       setInternalFilter(newFilter);
-      onFilterChange?.(newFilter as any);
-    };
+      onFilterChange?.(newFilter);
+    }, [onFilterChange]);
 
-    const filteredEvidence = evidence.filter(e => {
-      if (activeFilter.dimension && e.dimension !== activeFilter.dimension) return false;
-      if (activeFilter.impact && e.impact !== activeFilter.impact) return false;
-      return true;
-    });
+    const handleValidate = useCallback((evidenceId: string, isValidated: boolean, e: React.MouseEvent) => {
+      e.stopPropagation();
+      onValidate?.(evidenceId, isValidated);
+    }, [onValidate]);
 
-    const uniqueDimensions = dimensions.length > 0 ? dimensions : [...new Set(evidence.map(e => e.dimension))];
-    const impactOptions: EvidenceImpact[] = ['strong_positive', 'positive', 'neutral', 'negative', 'strong_negative'];
-    const highlightedSegmentIds = new Set(filteredEvidence.map(e => e.transcriptSegmentId).filter(Boolean));
+    /* -- Entrance animation styles ------------------------------------ */
+    const animStyle = entranceAnim.animate;
+    const animTransition = entranceAnim.transition;
 
-    const pillStyle = (active: boolean) => ({
-      padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-      borderRadius: tokens.borderRadius.full,
-      fontSize: tokens.typography.fontSize.xs,
-      fontWeight: active ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium,
-      backgroundColor: active ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-      color: active ? tokens.colors.primaryScale[700] : tokens.colors.neutral[500],
-      border: `1px solid ${active ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
-      cursor: 'pointer',
-      transition: `all ${tokens.motion.hover}`,
-    });
-
+    /* -- Loading state ------------------------------------------------ */
     if (loading) {
       return (
         <Box className={className} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: `${tokens.spacing[10]}px`, ...style,
-        }}>
-          <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>Loading evidence...</Text>
+          padding: `${t.spacing[10]}px`,
+          ...style,
+        }} role="status" aria-label="Loading evidence browser">
+          <Text style={{ color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}>Loading evidence...</Text>
         </Box>
       );
     }
 
+    /* -- Render ------------------------------------------------------- */
     return (
-      <Box className={className} style={{
-        ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
-        borderRadius: tokens.borderRadius.lg,
-        border: `1px solid ${tokens.colors.neutral[100]}`,
-        overflow: 'hidden', ...style,
-      }}>
+      <div
+        ref={containerRef}
+        className={className}
+        role="region"
+        aria-label={interviewTitle ? `Evidence browser: ${interviewTitle}` : 'Evidence browser'}
+        style={{
+          ...createCardStyle(t, { elevation: 'sm', padding: 0, glass: isGlass }),
+          borderRadius: t.borderRadius.lg,
+          overflow: 'hidden',
+          ...animStyle,
+          transition: animTransition,
+          ...accentLayout.outer,
+          ...style,
+        }}
+      >
+        {/* Accent bar */}
+        {accentBar && <Box style={accentBar} />}
+        <Box style={accentLayout.inner}>
+
         {/* Header */}
         <Box style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+          padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+          borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }}>
-          <Box>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
             <Text style={{
-              fontSize: tokens.typography.fontSize.md,
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.neutral[900],
+              fontSize: t.typography.fontSize.md,
+              fontWeight: personalityTypo.headingWeight,
+              letterSpacing: personalityTypo.headingLetterSpacing,
+              color: t.colors.neutral[900],
             }}>
               {interviewTitle ?? 'Evidence Browser'}
             </Text>
             {candidateName && (
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: 2 }}>{candidateName}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                {candidateName}
+              </Text>
             )}
           </Box>
-          <Box style={{
-            ...createBadgeStyle(tokens, 'primary'),
-            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-          }}>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[700] }}>{filteredEvidence.length} items</Text>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            <Box style={{
+              ...createBadgeStyle(t, 'success'),
+              borderRadius: badgeRadius,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                {validatedCount}/{filteredEvidence.length} validated
+              </Text>
+            </Box>
+            <Box style={{
+              ...createBadgeStyle(t, 'primary'),
+              borderRadius: badgeRadius,
+            }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                {filteredEvidence.length} items
+              </Text>
+            </Box>
           </Box>
         </Box>
 
         {/* Filters */}
-        <Box style={{
-          padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
-          borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
-          display: 'flex', gap: tokens.spacing[3], flexWrap: 'wrap' as const, alignItems: 'center',
-        }}>
-          <Filter size={14} color={tokens.colors.neutral[400]} />
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            <Box onClick={() => handleFilterChange({ ...activeFilter, dimension: undefined })} style={pillStyle(!activeFilter.dimension)}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs }}>All</Text>
+        <Box
+          role="toolbar"
+          aria-label="Evidence filters"
+          style={{
+            padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
+            borderBottom: `1px solid ${t.colors.neutral[100]}`,
+            display: 'flex',
+            gap: t.spacing[3],
+            flexWrap: 'wrap' as const,
+            alignItems: 'center',
+          }}
+        >
+          <Filter size={14} color={t.colors.neutral[400]} aria-hidden="true" />
+
+          {/* Dimension filters */}
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' as const }} role="group" aria-label="Dimension filters">
+            <Box
+              onClick={() => handleFilterChange({ ...activeFilter, dimension: undefined })}
+              role="button"
+              tabIndex={0}
+              aria-pressed={!activeFilter.dimension}
+              aria-label="All dimensions"
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...activeFilter, dimension: undefined }); } }}
+              style={createFilterPillStyle(t, { active: !activeFilter.dimension })}
+            >
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>All</Text>
             </Box>
             {uniqueDimensions.map(dim => (
-              <Box key={dim} onClick={() => handleFilterChange({ ...activeFilter, dimension: dim })} style={pillStyle(activeFilter.dimension === dim)}>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{dim}</Text>
+              <Box
+                key={dim}
+                onClick={() => handleFilterChange({ ...activeFilter, dimension: dim })}
+                role="button"
+                tabIndex={0}
+                aria-pressed={activeFilter.dimension === dim}
+                aria-label={`Filter by ${dim}`}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...activeFilter, dimension: dim }); } }}
+                style={createFilterPillStyle(t, { active: activeFilter.dimension === dim })}
+              >
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{dim}</Text>
               </Box>
             ))}
           </Box>
-          <Box style={{ width: 1, height: 16, backgroundColor: tokens.colors.neutral[200] }} />
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-            <Box onClick={() => handleFilterChange({ ...activeFilter, impact: undefined })} style={pillStyle(!activeFilter.impact)}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs }}>All</Text>
+
+          {/* Divider */}
+          <Box style={{ width: 1, height: 16, backgroundColor: t.colors.neutral[200], flexShrink: 0 }} aria-hidden="true" />
+
+          {/* Impact filters */}
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' as const }} role="group" aria-label="Impact filters">
+            <Box
+              onClick={() => handleFilterChange({ ...activeFilter, impact: undefined })}
+              role="button"
+              tabIndex={0}
+              aria-pressed={!activeFilter.impact}
+              aria-label="All impacts"
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...activeFilter, impact: undefined }); } }}
+              style={createFilterPillStyle(t, { active: !activeFilter.impact })}
+            >
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>All</Text>
             </Box>
-            {impactOptions.map(imp => (
-              <Box key={imp} onClick={() => handleFilterChange({ ...activeFilter, impact: imp })} style={{
-                ...pillStyle(activeFilter.impact === imp),
-                ...(activeFilter.impact === imp ? { backgroundColor: impactColors[imp].bgColor, color: impactColors[imp].color, borderColor: impactColors[imp].border } : {}),
-              }}>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{getImpactLabel(imp)}</Text>
-              </Box>
-            ))}
+            {IMPACT_OPTIONS.map(imp => {
+              const isActive = activeFilter.impact === imp;
+              const ic = impactColors[imp];
+              return (
+                <Box
+                  key={imp}
+                  onClick={() => handleFilterChange({ ...activeFilter, impact: imp })}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isActive}
+                  aria-label={`Filter by ${getImpactLabel(imp)}`}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...activeFilter, impact: imp }); } }}
+                  style={{
+                    ...createFilterPillStyle(t, { active: isActive }),
+                    ...(isActive ? { backgroundColor: ic.bgColor, color: ic.color, borderColor: ic.border } : {}),
+                  }}
+                >
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{getImpactLabel(imp)}</Text>
+                </Box>
+              );
+            })}
           </Box>
         </Box>
 
-        {/* Split Pane */}
-        <Box style={{ display: 'flex', height: 520 }}>
+        {/* Split Pane - responsive with flex-wrap and min-width */}
+        <Box style={{ display: 'flex', flexWrap: 'wrap' as const, minHeight: 400 }}>
           {/* Transcript Panel */}
-          <Box style={{
-            flex: 1, overflowY: 'auto' as const,
-            padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
-            borderRight: `1px solid ${tokens.colors.neutral[100]}`,
-          }}>
-            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-              {transcript.map(seg => {
+          <Box
+            role="log"
+            aria-label="Interview transcript"
+            style={{
+              flex: '1 1 360px',
+              minWidth: 300,
+              maxHeight: 520,
+              overflowY: 'auto' as const,
+              padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
+              borderRight: `1px solid ${t.colors.neutral[100]}`,
+            }}
+          >
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
+              {transcript.map((seg, idx) => {
                 const isHighlighted = highlightedSegmentIds.has(seg.id);
                 const sc = speakerColors[seg.speaker];
+                const segEntrance = createEntranceAnimation(t, { index: idx });
                 return (
-                  <Box key={seg.id} style={{
-                    padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                    borderRadius: tokens.borderRadius.lg,
-                    background: isHighlighted ? tokens.colors.warningScale[50] : 'transparent',
-                    borderLeft: isHighlighted ? `3px solid ${tokens.colors.warningScale[400]}` : '3px solid transparent',
-                    transition: `all ${tokens.motion.hover}`,
-                  }}>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
-                      <Box style={{
-                        width: 8, height: 8, borderRadius: tokens.borderRadius.full,
+                  <Box
+                    key={seg.id}
+                    aria-label={`${seg.speakerName} at ${seg.timestamp}`}
+                    style={{
+                      padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                      borderRadius: t.borderRadius.lg,
+                      background: isHighlighted ? t.colors.warningScale[50] : 'transparent',
+                      borderLeft: isHighlighted ? `3px solid ${t.colors.warningScale[400]}` : '3px solid transparent',
+                      transition: `all ${t.motion.hover}`,
+                      ...segEntrance.animate,
+                    }}
+                  >
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
+                        width: 8, height: 8, borderRadius: t.borderRadius.full,
                         backgroundColor: sc.color, flexShrink: 0,
-                      }} />
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: sc.color }}>{seg.speakerName}</Text>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{seg.timestamp}</Text>
+                      }} aria-hidden="true" />
+                      <Text style={{
+                        fontSize: t.typography.fontSize.xs,
+                        fontWeight: t.typography.fontWeight.bold,
+                        color: sc.color,
+                      }}>{seg.speakerName}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{seg.timestamp}</Text>
+                      {isHighlighted && (
+                        <Box style={{
+                          ...createBadgeStyle(t, 'warning'),
+                          borderRadius: badgeRadius,
+                          padding: `0px ${t.spacing[1]}px`,
+                        }}>
+                          <Text style={{ fontSize: '10px' }}>has evidence</Text>
+                        </Box>
+                      )}
                     </Box>
                     <Text style={{
-                      fontSize: tokens.typography.fontSize.sm,
-                      color: tokens.colors.neutral[700],
-                      lineHeight: tokens.typography.lineHeight.relaxed,
+                      fontSize: t.typography.fontSize.sm,
+                      color: t.colors.neutral[700],
+                      lineHeight: t.typography.lineHeight.relaxed,
                     }}>{seg.text}</Text>
                   </Box>
                 );
@@ -196,93 +361,183 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
           </Box>
 
           {/* Evidence Sidebar */}
-          <Box style={{
-            width: 340, overflowY: 'auto' as const,
-            padding: `${tokens.spacing[4]}px ${tokens.spacing[4]}px`,
-            background: tokens.colors.neutral[50],
-          }}>
-            <Text style={{
-              fontSize: tokens.typography.fontSize.xs,
-              fontWeight: tokens.typography.fontWeight.bold,
-              color: tokens.colors.neutral[500],
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.05em',
-              marginBottom: tokens.spacing[3],
-            }}>
+          <Box
+            role="list"
+            aria-label={`Evidence items (${filteredEvidence.length})`}
+            style={{
+              flex: '0 0 340px',
+              minWidth: 280,
+              maxHeight: 520,
+              overflowY: 'auto' as const,
+              padding: `${t.spacing[4]}px`,
+              ...createSurfaceStyle(t, { elevation: 'sm', glass: isGlass }),
+              border: 'none',
+              borderRadius: 0,
+              backgroundColor: isGlass ? undefined : t.colors.neutral[50],
+            }}
+          >
+            <Text style={sectionHeader}>
               Evidence ({filteredEvidence.length})
             </Text>
-            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
-              {filteredEvidence.map(ev => {
+
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
+              {filteredEvidence.map((ev, idx) => {
                 const ic = impactColors[ev.impact];
                 const isSelected = selectedEvidenceId === ev.id;
+                const evEntrance = createEntranceAnimation(t, { index: idx });
+
                 return (
                   <Box
                     key={ev.id}
+                    role="listitem"
+                    aria-selected={isSelected}
+                    aria-label={`${ev.dimensionCode}: ${ev.quote.slice(0, 60)}${ev.quote.length > 60 ? '...' : ''} - ${getImpactLabel(ev.impact)}${ev.isValidated ? ' (validated)' : ' (unvalidated)'}`}
+                    tabIndex={0}
                     onClick={() => handleEvidenceSelect(ev.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEvidenceSelect(ev.id); } }}
                     style={{
-                      padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`,
-                      borderRadius: tokens.borderRadius.lg,
-                      backgroundColor: isSelected ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
-                      border: `1px solid ${isSelected ? tokens.colors.primaryScale[200] : tokens.colors.neutral[100]}`,
+                      padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
+                      borderRadius: t.borderRadius.lg,
+                      backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
+                      border: `1px solid ${isSelected ? t.colors.primaryScale[200] : t.colors.neutral[100]}`,
                       cursor: 'pointer',
-                      transition: `all ${tokens.motion.hover}`,
-                      boxShadow: tokens.shadows.sm,
+                      transition: `all ${t.motion.hover}`,
+                      boxShadow: t.shadows.sm,
+                      ...cardHover.base,
+                      ...evEntrance.animate,
+                      position: 'relative' as const,
+                      // Validation visual indicator: left accent stripe
+                      borderLeft: ev.isValidated
+                        ? `3px solid ${t.colors.successScale[400]}`
+                        : `3px solid ${t.colors.neutral[200]}`,
                     }}
                   >
-                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[2] }}>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>{ev.dimensionCode}</Text>
+                    {/* Top row: dimension + impact badge */}
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: t.spacing[2] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Text style={{
+                          fontSize: t.typography.fontSize.xs,
+                          fontWeight: t.typography.fontWeight.bold,
+                          color: t.colors.neutral[800],
+                        }}>{ev.dimensionCode}</Text>
+                        {ev.speakerRole && (
+                          <Text style={{
+                            fontSize: t.typography.fontSize.xs,
+                            color: t.colors.neutral[400],
+                          }}>{ev.speakerName || ev.speakerRole}</Text>
+                        )}
+                      </Box>
                       <Box style={{
-                        padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                        borderRadius: tokens.borderRadius.full,
-                        background: ic.bgColor, border: `1px solid ${ic.border}`,
+                        ...createBadgeStyle(t, ev.impact === 'positive' ? 'success' : ev.impact === 'negative' ? 'error' : 'secondary'),
+                        borderRadius: badgeRadius,
+                        backgroundColor: ic.bgColor,
+                        border: `1px solid ${ic.border}`,
+                        color: ic.color,
                       }}>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: ic.color, fontWeight: tokens.typography.fontWeight.semibold }}>{getImpactLabel(ev.impact)}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: ic.color, fontWeight: t.typography.fontWeight.semibold }}>
+                          {getImpactLabel(ev.impact)}
+                        </Text>
                       </Box>
                     </Box>
-                    <Box style={{ display: 'flex', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
-                      <Quote size={10} color={tokens.colors.neutral[300]} style={{ flexShrink: 0, marginTop: 3 }} />
+
+                    {/* Quote */}
+                    <Box style={{ display: 'flex', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
+                      <Quote size={10} color={t.colors.neutral[300]} style={{ flexShrink: 0, marginTop: 3 }} aria-hidden="true" />
                       <Text style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        color: tokens.colors.neutral[600],
+                        fontSize: t.typography.fontSize.sm,
+                        color: t.colors.neutral[600],
                         fontStyle: 'italic',
-                        lineHeight: tokens.typography.lineHeight.normal,
+                        lineHeight: t.typography.lineHeight.normal,
                       }}>
                         {ev.quote.length > 120 ? `${ev.quote.slice(0, 120)}...` : ev.quote}
                       </Text>
                     </Box>
+
+                    {/* Impact explanation (if present) */}
+                    {ev.impactExplanation && (
+                      <Text style={{
+                        fontSize: t.typography.fontSize.xs,
+                        color: t.colors.neutral[500],
+                        marginBottom: t.spacing[2],
+                        lineHeight: t.typography.lineHeight.normal,
+                      }}>
+                        {ev.impactExplanation}
+                      </Text>
+                    )}
+
+                    {/* Bottom row: score + validation status + validate button */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Score: {ev.score}</Text>
-                      {onValidate && (
-                        <Box
-                          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onValidate(ev.id, !ev.validated); }}
-                          style={{
-                            padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                            borderRadius: tokens.borderRadius.full,
-                            background: ev.validated ? tokens.colors.successScale[50] : tokens.colors.neutral[100],
-                            cursor: 'pointer',
-                            transition: `all ${tokens.motion.hover}`,
-                          }}
-                        >
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
+                          Score: {ev.score}
+                        </Text>
+                        {ev.similarityScore !== undefined && (
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>
+                            Match: {Math.round(ev.similarityScore * 100)}%
+                          </Text>
+                        )}
+                      </Box>
+
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                        {/* Validation indicator */}
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+                          {ev.isValidated ? (
+                            <ShieldCheck size={12} color={t.colors.successScale[500]} aria-hidden="true" />
+                          ) : (
+                            <Clock size={12} color={t.colors.neutral[300]} aria-hidden="true" />
+                          )}
                           <Text style={{
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: ev.validated ? tokens.colors.successScale[700] : tokens.colors.neutral[500],
-                            fontWeight: tokens.typography.fontWeight.medium,
+                            fontSize: t.typography.fontSize.xs,
+                            color: ev.isValidated ? t.colors.successScale[600] : t.colors.neutral[400],
+                            fontWeight: t.typography.fontWeight.medium,
                           }}>
-                            {ev.validated ? 'Validated' : 'Validate'}
+                            {ev.isValidated ? 'Validated' : 'Pending'}
                           </Text>
                         </Box>
-                      )}
+
+                        {/* Validate action button */}
+                        {onValidate && (
+                          <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label={ev.isValidated ? `Unvalidate evidence: ${ev.dimensionCode}` : `Validate evidence: ${ev.dimensionCode}`}
+                            onClick={(e: React.MouseEvent) => handleValidate(ev.id, !ev.isValidated, e)}
+                            onKeyDown={(e: React.KeyboardEvent) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onValidate(ev.id, !ev.isValidated);
+                              }
+                            }}
+                            style={{
+                              ...createBadgeStyle(t, ev.isValidated ? 'success' : 'secondary'),
+                              borderRadius: badgeRadius,
+                              cursor: 'pointer',
+                              transition: `all ${t.motion.hover}`,
+                            }}
+                          >
+                            <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                              {ev.isValidated ? 'Undo' : 'Validate'}
+                            </Text>
+                          </Box>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
                 );
               })}
+
+              {/* Empty state */}
               {filteredEvidence.length === 0 && (
-                <Box style={{
-                  padding: `${tokens.spacing[6]}px ${tokens.spacing[4]}px`,
-                  textAlign: 'center' as const,
-                }}>
-                  <FileSearch size={24} color={tokens.colors.neutral[300]} style={{ marginBottom: tokens.spacing[2] }} />
-                  <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[400] }}>
+                <Box style={emptyStyle}>
+                  <Box style={createIconContainerStyle(t, { size: 48 })}>
+                    <FileSearch size={24} color={t.colors.neutral[300]} aria-hidden="true" />
+                  </Box>
+                  <Text style={{
+                    fontSize: t.typography.fontSize.sm,
+                    color: t.colors.neutral[400],
+                    marginTop: t.spacing[2],
+                  }}>
                     No evidence matches the current filters
                   </Text>
                 </Box>
@@ -290,7 +545,8 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
             </Box>
           </Box>
         </Box>
-      </Box>
+        </Box>
+      </div>
     );
   },
 });

@@ -5,15 +5,24 @@
  * Side-by-side comparison of multiple negotiations or offer versions.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
-  createSectionHeaderStyle,
   createHoverStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createCardHoverStyles,
+  createPersonalitySectionHeaderStyle,
+  createIconContainerStyle,
+  createDividerStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  getCardPadding,
 } from '../../../helpers';
 import type { BhOfferNegotiationProps, OfferNegotiation, CompensationPackage } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
+import { Users, TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
 
 const MOCK_NEGOTIATIONS: OfferNegotiation[] = [
   {
@@ -69,8 +78,20 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const sectionHeader = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const cardPadding = useMemo(() => getCardPadding(tokens), [tokens]);
+    const divider = useMemo(() => createDividerStyle(tokens), [tokens]);
+    const iconContainer = useMemo(() => createIconContainerStyle(tokens, { size: 36 }), [tokens]);
+
+    const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
+    const handleCardEnter = useCallback((id: string) => setHoveredCard(id), []);
+    const handleCardLeave = useCallback(() => setHoveredCard(null), []);
 
     const items = negotiations.length > 0 ? negotiations : negotiation ? [negotiation] : [];
 
@@ -103,66 +124,128 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
           minHeight: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
+          ...entrance.animate,
+          transition: entrance.transition,
           ...style,
         }}
       >
-        <Text style={{ ...sectionHeader }}>Offer Comparison</Text>
+        {/* Header */}
+        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+          <Box style={createIconContainerStyle(tokens, { size: 32, color: tokens.colors.primaryScale[100] })}>
+            <Users size={16} color={tokens.colors.primaryScale[600]} />
+          </Box>
+          <Text style={{
+            fontSize: tokens.typography.fontSize.lg || '1.125rem',
+            fontWeight: typo.headingWeight,
+            letterSpacing: typo.headingLetterSpacing,
+            color: tokens.colors.neutral[900],
+          }}>
+            Offer Comparison
+          </Text>
+        </Box>
 
         {/* Comparison Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${items.length}, 1fr)`, gap: tokens.spacing[4] }}>
-          {items.map((neg) => {
+        <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${items.length}, 1fr)`, gap: tokens.spacing[4] }}>
+          {items.map((neg, negIdx) => {
             const latestStep = neg.steps[neg.steps.length - 1];
             const firstStep = neg.steps[0];
             const comp = latestStep?.compensation;
             const initialComp = firstStep?.compensation;
+            const stagger = createStaggerDelay(tokens, negIdx);
+            const itemEntrance = createEntranceAnimation(tokens, { index: negIdx });
+            const isHovered = hoveredCard === neg.id;
 
             return (
-              <Box key={neg.id} style={{ ...cardBase, padding: tokens.spacing[5], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+              <Box
+                key={neg.id}
+                style={{
+                  ...cardBase,
+                  padding: cardPadding,
+                  display: 'flex',
+                  flexDirection: 'column' as const,
+                  gap: tokens.spacing[4],
+                  ...cardHover.base,
+                  ...(isHovered ? cardHover.hover : {}),
+                  ...itemEntrance.animate,
+                  transition: itemEntrance.transition,
+                }}
+                onMouseEnter={() => handleCardEnter(neg.id)}
+                onMouseLeave={handleCardLeave}
+              >
                 {/* Header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                  <div
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                  <Box
                     style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: tokens.borderRadius.full,
+                      ...iconContainer,
                       backgroundColor: tokens.colors.primaryScale[100],
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.bold,
                       color: tokens.colors.primaryScale[700],
                     }}
                   >
-                    {neg.candidateName.charAt(0)}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[800] }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[700] }}>
+                      {neg.candidateName.charAt(0)}
+                    </Text>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.sm,
+                      fontWeight: typo.headingWeight,
+                      letterSpacing: typo.headingLetterSpacing,
+                      color: tokens.colors.neutral[800],
+                    }}>
                       {neg.candidateName}
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                       {neg.positionTitle}
                     </Text>
-                  </div>
-                  <div
+                  </Box>
+                  <Box
                     style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.sm,
+                      borderRadius: badgeRadius,
                       backgroundColor: getStatusColor(neg.status, tokens),
                       color: tokens.colors.common.white,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.semibold,
+                      display: 'inline-flex',
+                      alignItems: 'center',
                     }}
                   >
-                    {neg.status.replace('_', ' ')}
-                  </div>
-                </div>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.xs,
+                      fontWeight: tokens.typography.fontWeight.semibold,
+                      color: tokens.colors.common.white,
+                      textTransform: typo.labelTransform,
+                      letterSpacing: typo.labelLetterSpacing,
+                    }}>
+                      {neg.status.replace('_', ' ')}
+                    </Text>
+                  </Box>
+                </Box>
 
                 {/* Total */}
                 {comp && (
-                  <div style={{ textAlign: 'center' as const, padding: tokens.spacing[3], borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.primaryScale[50] }}>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Total Package</Text>
-                    <Text style={{ fontSize: tokens.typography.fontSize['2xl'] || '1.5rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[700] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
+                    textAlign: 'center' as const,
+                    padding: tokens.spacing[3],
+                    borderRadius: tokens.borderRadius.md,
+                    backgroundColor: tokens.colors.primaryScale[50],
+                  }}>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize.xs,
+                      color: tokens.colors.neutral[500],
+                      textTransform: typo.labelTransform,
+                      letterSpacing: typo.labelLetterSpacing,
+                    }}>
+                      Total Package
+                    </Text>
+                    <Text style={{
+                      fontSize: tokens.typography.fontSize['2xl'] || '1.5rem',
+                      fontWeight: typo.headingWeight,
+                      letterSpacing: typo.headingLetterSpacing,
+                      color: tokens.colors.primaryScale[700],
+                    }}>
                       {formatCurrency(totalCompValue(comp))}
                     </Text>
                     {initialComp && (
@@ -170,55 +253,68 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
                         Initial: {formatCurrency(totalCompValue(initialComp))}
                       </Text>
                     )}
-                  </div>
+                  </Box>
                 )}
 
                 {/* Field breakdown */}
                 {comp && (
-                  <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                     {compFields.map((field) => {
                       const val = (comp[field.key] as number) || 0;
                       const initialVal = initialComp ? ((initialComp[field.key] as number) || 0) : 0;
                       const diff = val - initialVal;
                       return (
-                        <div key={field.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                        <Box key={field.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.xs,
+                            color: tokens.colors.neutral[500],
+                            textTransform: typo.labelTransform,
+                            letterSpacing: typo.labelLetterSpacing,
+                          }}>
                             {field.label}
                           </Text>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                             <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
                               {formatCurrency(val)}
                             </Text>
                             {initialComp && diff !== 0 && (
-                              <Text
-                                style={{
-                                  fontSize: tokens.typography.fontSize.xs,
-                                  color: diff > 0 ? tokens.colors.successScale[500] : tokens.colors.errorScale[500],
-                                }}
-                              >
-                                {diff > 0 ? '+' : ''}{formatCurrency(diff)}
-                              </Text>
+                              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                                {diff > 0 ? (
+                                  <TrendingUp size={10} color={tokens.colors.successScale[500]} />
+                                ) : (
+                                  <TrendingDown size={10} color={tokens.colors.errorScale[500]} />
+                                )}
+                                <Text
+                                  style={{
+                                    fontSize: tokens.typography.fontSize.xs,
+                                    color: diff > 0 ? tokens.colors.successScale[500] : tokens.colors.errorScale[500],
+                                  }}
+                                >
+                                  {diff > 0 ? '+' : ''}{formatCurrency(diff)}
+                                </Text>
+                              </Box>
                             )}
-                          </div>
-                        </div>
+                          </Box>
+                        </Box>
                       );
                     })}
-                  </div>
+                  </Box>
                 )}
 
                 {/* Steps count */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', padding: `${tokens.spacing[2]}px 0`, borderTop: `1px solid ${tokens.colors.neutral[100]}` }}>
+                <Box style={{ ...divider }} />
+                <Box style={{ display: 'flex', justifyContent: 'space-between', paddingTop: tokens.spacing[1] }}>
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                     {neg.steps.length} steps
                   </Text>
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
                     Started {neg.createdAt}
                   </Text>
-                </div>
+                </Box>
               </Box>
             );
           })}
-        </div>
+        </Box>
       </Box>
     );
   },

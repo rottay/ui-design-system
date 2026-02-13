@@ -6,13 +6,18 @@
  * token balance, trend chart, generous whitespace and warm neutrals.
  */
 
-import { useMemo } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
+import { useMemo, useCallback, useEffect, useState } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
 import type { BhCostAnalyzerProps, ProviderCost } from '../../core';
 import { getAlertSeverityColors, getTrendColors, formatCurrency, formatTokens } from '../../core';
 import {
   createCardStyle, createSectionHeaderStyle, createStatusDotStyle, createBadgeStyle,
+  createCardHoverStyles, createEntranceAnimation, createStaggerDelay,
+  createIconContainerStyle, createPersonalitySectionHeaderStyle,
+  getPersonalityTypography, getPersonalityBadgeRadius, createPersonalityAccentBar,
+  createEmptyStateStyle,
 } from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import { DollarSign, TrendingUp, AlertCircle, Coins, BarChart3, Activity } from 'lucide-react';
 
 const MOCK_PROVIDERS: ProviderCost[] = [
@@ -25,8 +30,14 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
   name: 'BhCostAnalyzer.Dashboard',
   render: ({ primitives, props, tokens }: PresetContext<BhCostAnalyzerProps>) => {
     const { Box, Text } = primitives;
-    const alertColors = getAlertSeverityColors(tokens);
-    const trendColors = getTrendColors(tokens);
+    const isGlass = tokens.surface.useGlass;
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const alertColors = useMemo(() => getAlertSeverityColors(tokens), [tokens]);
+    const trendColors = useMemo(() => getTrendColors(tokens), [tokens]);
 
     const {
       providers = MOCK_PROVIDERS, models = [], trends = [], tokenBalance,
@@ -50,8 +61,12 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const totalCost = providers.reduce((sum, p) => sum + p.totalCost, 0);
     const maxProviderCost = Math.max(...providers.map(p => p.totalCost), 1);
 
+    const handleAlertAcknowledge = useCallback((alertId: string) => {
+      onAlertAcknowledge?.(alertId);
+    }, [onAlertAcknowledge]);
+
     const statCardStyle = (accentColor: string) => ({
-      ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
+      ...createCardStyle(tokens, { elevation: 'sm', padding: 0, glass: isGlass }),
       borderRadius: tokens.borderRadius.lg,
       border: `1px solid ${tokens.colors.neutral[100]}`,
       overflow: 'hidden' as const,
@@ -116,7 +131,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: ac.color }}>{alert.message}</Text>
                   </Box>
                   {onAlertAcknowledge && (
-                    <Box onClick={() => onAlertAcknowledge(alert.id)} style={{
+                    <Box onClick={() => handleAlertAcknowledge(alert.id)} role="button" tabIndex={0} aria-label={`Dismiss alert: ${alert.message}`} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleAlertAcknowledge(alert.id); } }} style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                       borderRadius: tokens.borderRadius.full,
                       background: ac.border, cursor: 'pointer',
@@ -148,8 +163,9 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                 <BarChart3 size={16} color={tokens.colors.neutral[500]} />
                 <Text style={{
                   fontSize: tokens.typography.fontSize.md,
-                  fontWeight: tokens.typography.fontWeight.bold,
+                  fontWeight: ptypo.headingWeight,
                   color: tokens.colors.neutral[900],
+                  letterSpacing: ptypo.headingLetterSpacing,
                 }}>Cost by Provider</Text>
               </Box>
             </Box>
@@ -178,7 +194,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                         height: '100%', width: `${barWidth}%`,
                         borderRadius: tokens.borderRadius.full,
                         backgroundColor: tokens.colors.primaryScale[400],
-                        transition: `width 0.3s ease`,
+                        transition: `width ${tokens.motion.hover}`,
                       }} />
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: tokens.spacing[2] }}>
@@ -212,12 +228,12 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                   marginBottom: tokens.spacing[3],
                 }}>{formatTokens(tokenBalance.current)}</Text>
                 <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Box>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginBottom: 2 }}>Burn Rate</Text>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>Burn Rate</Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{formatTokens(tokenBalance.dailyBurnRate)}/day</Text>
                   </Box>
-                  <Box>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginBottom: 2 }}>Depletion</Text>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginBottom: tokens.spacing[1] }}>Depletion</Text>
                     <Text style={{
                       fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
                       color: tokenBalance.projectedDepletionDays <= 7 ? tokens.colors.errorScale[600] : tokenBalance.projectedDepletionDays <= 30 ? tokens.colors.warningScale[600] : tokens.colors.successScale[600],
@@ -254,9 +270,9 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                       padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
                       borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
                     }}>
-                      <Box>
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                         <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800], fontWeight: tokens.typography.fontWeight.medium }}>{m.modelName}</Text>
-                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: 1 }}>{m.provider}</Text>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400]}}>{m.provider}</Text>
                       </Box>
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[700] }}>{formatCurrency(m.totalCost)}</Text>
                     </Box>
@@ -297,10 +313,10 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                       width: '100%', height: barHeight,
                       borderRadius: tokens.borderRadius.md,
                       background: tokens.colors.primaryScale[300],
-                      transition: `height 0.3s ease`,
+                      transition: `height ${tokens.motion.hover}`,
                     }} />
                     <Text style={{
-                      fontSize: '10px', color: tokens.colors.neutral[400],
+                      fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400],
                       whiteSpace: 'nowrap' as const,
                     }}>{point.label ?? point.date}</Text>
                   </Box>

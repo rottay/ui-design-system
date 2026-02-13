@@ -2,16 +2,31 @@
 
 /**
  * BhInterviewReplay - Compact Preset
- * Slite-inspired condensed transcript with timeline scrubber, speaker avatars,
+ * Condensed transcript with timeline scrubber, speaker avatars,
  * evidence markers, confidence badges, and playback summary stats.
+ * Personality-driven, glass-aware, accessible.
  */
 
-import { useState, useMemo } from 'react';
-import { createPreset, PresetContext } from '../../../factory';
+import { useState, useMemo, useCallback } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
 import type { BhInterviewReplayProps, TranscriptEntry } from '../../core';
 import { getSpeakerColors } from '../../core';
-import { createCardStyle, createBadgeStyle } from '../../../helpers';
+import {
+  createCardStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+  getAccentAwareLayout,
+} from '../../../helpers';
 import { MessageSquare, Bookmark, Users, Clock } from 'lucide-react';
+import type { DesignTokens } from '../../../../../types';
 
 const MOCK_TRANSCRIPT: TranscriptEntry[] = [
   { id: 't-1', speaker: 'interviewer', speakerName: 'AI Interviewer', text: 'Welcome! Could you walk me through a challenging technical project you led recently?', timestamp: '00:00', durationMs: 8000, confidence: 0.98 },
@@ -24,7 +39,7 @@ const MOCK_TRANSCRIPT: TranscriptEntry[] = [
 
 /* Timeline scrubber bar */
 function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
-  transcript: TranscriptEntry[]; speakerColors: ReturnType<typeof getSpeakerColors>; tokens: any; primitives: any;
+  transcript: TranscriptEntry[]; speakerColors: ReturnType<typeof getSpeakerColors>; tokens: DesignTokens; primitives: any;
 }) {
   const { Box } = primitives;
   const segments = useMemo(() => {
@@ -42,14 +57,18 @@ function TimelineScrubber({ transcript, speakerColors, tokens, primitives }: {
   );
 }
 
-/* Transcript entry child component (hooks-safe) */
-function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
-  entry: TranscriptEntry; speakerColors: ReturnType<typeof getSpeakerColors>; tokens: any; onEntrySelect?: (id: string) => void; primitives: any;
+/* Transcript entry child component */
+function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives, index }: {
+  entry: TranscriptEntry; speakerColors: ReturnType<typeof getSpeakerColors>; tokens: DesignTokens; onEntrySelect?: (id: string) => void; primitives: any; index: number;
 }) {
   const { Box, Text } = primitives;
   const [hovered, setHovered] = useState(false);
   const sc = speakerColors[entry.speaker];
   const initial = entry.speakerName.charAt(0).toUpperCase();
+  const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+  const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+  const entryAnim = useMemo(() => createEntranceAnimation(tokens, { index }), [tokens, index]);
+  const iconStyle = useMemo(() => createIconContainerStyle(tokens, { size: 24, color: sc.bgColor }), [tokens, sc.bgColor]);
 
   const durationStr = useMemo(() => {
     if (!entry.durationMs) return null;
@@ -61,15 +80,29 @@ function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
     ? (entry.confidence >= 0.7 ? 'success' : entry.confidence >= 0.4 ? 'warning' : 'error')
     : null;
 
-  const confidenceTextColor = entry.confidence !== undefined
-    ? (entry.confidence >= 0.7 ? tokens.colors.successScale[700] : entry.confidence >= 0.4 ? tokens.colors.warningScale[700] : tokens.colors.errorScale[700])
-    : undefined;
+  const handleClick = useCallback(() => {
+    onEntrySelect?.(entry.id);
+  }, [onEntrySelect, entry.id]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onEntrySelect?.(entry.id);
+    }
+  }, [onEntrySelect, entry.id]);
+
+  const handleMouseEnter = useCallback(() => setHovered(true), []);
+  const handleMouseLeave = useCallback(() => setHovered(false), []);
 
   return (
     <Box
-      onClick={() => onEntrySelect?.(entry.id)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      role="button"
+      tabIndex={0}
+      aria-label={`${entry.speakerName} at ${entry.timestamp}: ${entry.text.substring(0, 60)}`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`,
         borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
@@ -77,32 +110,35 @@ function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives }: {
         backgroundColor: hovered ? tokens.colors.neutral[50] : 'transparent',
         cursor: onEntrySelect ? 'pointer' : 'default',
         transition: `all ${tokens.motion.hover}`,
+        ...entryAnim.animate,
       }}
     >
       <Box style={{ display: 'flex', gap: tokens.spacing[2], alignItems: 'flex-start' }}>
-        <Box style={{
-          width: 24, height: 24, borderRadius: tokens.borderRadius.full,
-          backgroundColor: sc.bgColor, border: `1px solid ${sc.border}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }}>
+        <Box style={{ ...iconStyle, border: `1px solid ${sc.border}` }}>
           <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: sc.color, lineHeight: 1 }}>{initial}</Text>
         </Box>
         <Box style={{ flex: 1, minWidth: 0 }}>
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[1] }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: sc.color }}>{entry.speakerName}</Text>
+              <Text style={{
+                fontSize: tokens.typography.fontSize.xs,
+                fontWeight: personalityTypo.headingWeight,
+                color: sc.color,
+                letterSpacing: personalityTypo.labelLetterSpacing,
+                textTransform: personalityTypo.labelTransform,
+              }}>{entry.speakerName}</Text>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{entry.timestamp}</Text>
               {durationStr && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>({durationStr})</Text>}
             </Box>
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
               {entry.hasEvidence && (
-                <Box style={{ ...createBadgeStyle(tokens, 'warning'), padding: `0 ${tokens.spacing[1]}px` }}>
+                <Box style={{ ...createBadgeStyle(tokens, 'warning'), borderRadius: badgeRadius, padding: `0 ${tokens.spacing[1]}px` }}>
                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[700] }}>Evidence</Text>
                 </Box>
               )}
               {confidenceBadgeColor && (
-                <Box style={{ ...createBadgeStyle(tokens, confidenceBadgeColor), padding: `0 ${tokens.spacing[1]}px` }}>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: confidenceTextColor }}>{Math.round(entry.confidence! * 100)}%</Text>
+                <Box style={{ ...createBadgeStyle(tokens, confidenceBadgeColor), borderRadius: badgeRadius, padding: `0 ${tokens.spacing[1]}px` }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{Math.round(entry.confidence! * 100)}%</Text>
                 </Box>
               )}
             </Box>
@@ -119,7 +155,17 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
   name: 'BhInterviewReplay.Compact',
   render: ({ primitives, props, tokens }: PresetContext<BhInterviewReplayProps>) => {
     const { Box, Text } = primitives;
-    const speakerColors = getSpeakerColors(tokens);
+    const speakerColors = useMemo(() => getSpeakerColors(tokens), [tokens]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+    const entranceAnim = useMemo(() => createEntranceAnimation(tokens, { index: 0 }), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const headerIconStyle = useMemo(() => createIconContainerStyle(tokens, { size: 32, color: tokens.colors.primaryScale[50] }), [tokens]);
+
+    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+
     const { transcript = MOCK_TRANSCRIPT, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
 
     const stats = useMemo(() => {
@@ -131,11 +177,19 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
       return { durationStr, speakerCount: speakers.length, evidenceCount, entryCount: transcript.length };
     }, [transcript]);
 
+    const cardStyle = useMemo(() => ({
+      ...createCardStyle(tokens, { elevation: 'sm' as const, padding: 0, glass: isGlass }),
+      borderRadius: tokens.borderRadius.lg,
+      overflow: 'hidden' as const,
+      ...entranceAnim.animate,
+      transition: entranceAnim.transition,
+    }), [tokens, isGlass, entranceAnim]);
+
     if (loading) {
       return (
         <Box className={className} style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: `${tokens.spacing[10]}px`, ...style,
+          ...createEmptyStateStyle(tokens),
+          ...style,
         }}>
           <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>Loading transcript...</Text>
         </Box>
@@ -143,35 +197,33 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
     }
 
     return (
-      <Box className={className} style={{
-        ...createCardStyle(tokens, { elevation: 'sm', padding: 0 }),
-        borderRadius: tokens.borderRadius.lg,
-        border: `1px solid ${tokens.colors.neutral[100]}`,
-        overflow: 'hidden', ...style,
-      }}>
+      <Box className={className} style={{ ...cardStyle, ...style }}>
+        {/* Accent bar */}
+        {accentBar && <Box style={accentBar} />}
+
+        <Box style={accentLayout.inner}>
+
         {/* Header */}
         <Box style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`,
           borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
+          backgroundColor: tokens.colors.neutral[50],
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={{
-              width: 32, height: 32, borderRadius: tokens.borderRadius.lg,
-              backgroundColor: tokens.colors.primaryScale[50],
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
+            <Box style={headerIconStyle}>
               <MessageSquare size={16} color={tokens.colors.primaryScale[500]} />
             </Box>
             <Text style={{
               fontSize: tokens.typography.fontSize.md,
-              fontWeight: tokens.typography.fontWeight.bold,
+              fontWeight: personalityTypo.headingWeight,
               color: tokens.colors.neutral[900],
+              letterSpacing: personalityTypo.headingLetterSpacing,
             }}>
               {candidateName ?? 'Transcript'}{jobTitle ? ` - ${jobTitle}` : ''}
             </Text>
           </Box>
-          <Box style={{ ...createBadgeStyle(tokens, 'primary'), padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }}>
+          <Box style={{ ...createBadgeStyle(tokens, 'primary'), borderRadius: badgeRadius, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px` }}>
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[700] }}>{stats.entryCount} entries</Text>
           </Box>
         </Box>
@@ -205,14 +257,7 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
           padding: `${tokens.spacing[3]}px ${tokens.spacing[6]}px`,
           borderBottom: `1px solid ${tokens.colors.neutral[100]}`,
         }}>
-          <Text style={{
-            fontSize: tokens.typography.fontSize.xs,
-            fontWeight: tokens.typography.fontWeight.bold,
-            color: tokens.colors.neutral[500],
-            textTransform: 'uppercase' as const,
-            letterSpacing: '0.05em',
-            marginBottom: tokens.spacing[2],
-          }}>Timeline</Text>
+          <Text style={sectionHeaderStyle}>Timeline</Text>
           <TimelineScrubber transcript={transcript} speakerColors={speakerColors} tokens={tokens} primitives={primitives} />
           <Box style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[2] }}>
             {(['candidate', 'interviewer', 'system'] as const).map(role => {
@@ -222,7 +267,12 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
               return (
                 <Box key={role} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                   <Box style={{ width: 8, height: 8, borderRadius: tokens.borderRadius.full, backgroundColor: sc.color }} />
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], textTransform: 'capitalize' as const }}>{role} ({count})</Text>
+                  <Text style={{
+                    fontSize: tokens.typography.fontSize.xs,
+                    color: tokens.colors.neutral[500],
+                    textTransform: personalityTypo.labelTransform,
+                    letterSpacing: personalityTypo.labelLetterSpacing,
+                  }}>{role} ({count})</Text>
                 </Box>
               );
             })}
@@ -230,10 +280,11 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
         </Box>
 
         {/* Transcript entries */}
-        <Box style={{ maxHeight: 400, overflowY: 'auto' as const }}>
-          {transcript.map(entry => (
-            <EntryRow key={entry.id} entry={entry} speakerColors={speakerColors} tokens={tokens} onEntrySelect={onEntrySelect} primitives={primitives} />
+        <Box role="list" aria-label="Transcript entries" style={{ maxHeight: 400, overflowY: 'auto' as const }}>
+          {transcript.map((entry, idx) => (
+            <EntryRow key={entry.id} entry={entry} speakerColors={speakerColors} tokens={tokens} onEntrySelect={onEntrySelect} primitives={primitives} index={idx} />
           ))}
+        </Box>
         </Box>
       </Box>
     );

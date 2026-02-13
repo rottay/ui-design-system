@@ -5,12 +5,15 @@
  * Tabular view of recruiter capacity with sortable columns.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
   createSectionHeaderStyle,
   createHoverStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createEntranceAnimation,
 } from '../../../helpers';
 import type { BhCapacityPlannerProps, RecruiterCapacity, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
@@ -32,6 +35,15 @@ function getStatusColor(status: string, tokens: DesignTokens): string {
     case 'optimal': return tokens.colors.successScale[500];
     case 'underutilized': return tokens.colors.warningScale[500];
     default: return tokens.colors.neutral[500];
+  }
+}
+
+function getStatusBg(status: string, tokens: DesignTokens): string {
+  switch (status) {
+    case 'overloaded': return tokens.colors.errorScale[50];
+    case 'optimal': return tokens.colors.successScale[50];
+    case 'underutilized': return tokens.colors.warningScale[50];
+    default: return tokens.colors.neutral[50];
   }
 }
 
@@ -59,6 +71,19 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeR = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+
+    const handleRecruiterClick = useCallback((id: string) => {
+      const isSelected = selectedRecruiter === id;
+      onRecruiterSelect?.(isSelected ? null : id);
+    }, [selectedRecruiter, onRecruiterSelect]);
+
+    const handleAcceptSuggestion = useCallback((fromId: string, toId: string) => {
+      onAcceptSuggestion?.(fromId, toId);
+    }, [onAcceptSuggestion]);
+
+    const COLUMNS = ['Recruiter', 'Department', 'Assigned', 'Capacity', 'Utilization', 'Positions', 'Candidates', 'Status'];
 
     return (
       <Box
@@ -69,23 +94,25 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
           gap: tokens.spacing[6],
           padding: tokens.spacing[6],
           minHeight: '100%',
+          width: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
+          ...(isGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur } : {}),
           ...style,
         }}
       >
         {/* Summary */}
         {summary && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
             {[
               { label: 'Recruiters', value: String(summary.totalRecruiters) },
               { label: 'Avg Utilization', value: formatPercent(summary.avgUtilization) },
               { label: 'Overloaded', value: String(summary.overloadedCount) },
               { label: 'Underutilized', value: String(summary.underutilizedCount) },
               { label: 'Open Reqs', value: String(summary.totalOpenReqs) },
-            ].map((stat) => (
-              <Box key={stat.label} style={{ ...cardBase, padding: tokens.spacing[4], textAlign: 'center' as const }}>
-                <Text style={{ fontSize: tokens.typography.fontSize.lg || '1.125rem', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
+            ].map((stat, idx) => (
+              <Box key={stat.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, padding: tokens.spacing[4], textAlign: 'center' as const, ...createEntranceAnimation(tokens, { index: idx }).animate }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                   {stat.value}
                 </Text>
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
@@ -93,137 +120,170 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                 </Text>
               </Box>
             ))}
-          </div>
+          </Box>
         )}
 
         {/* Table */}
         <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-          <Text style={{ ...sectionHeader }}>Capacity Overview</Text>
+          <Text style={{ ...sectionHeader, fontWeight: personalityTypo.headingWeight, letterSpacing: personalityTypo.headingLetterSpacing }}>Capacity Overview</Text>
           {recruiters.length > 0 ? (
-            <div style={{ overflowX: 'auto' as const }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: tokens.typography.fontSize.sm }}>
-                <thead>
-                  <tr style={{ borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` }}>
-                    {['Recruiter', 'Department', 'Assigned', 'Capacity', 'Utilization', 'Positions', 'Candidates', 'Status'].map((col) => (
-                      <th
-                        key={col}
-                        style={{
-                          padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
-                          textAlign: 'left' as const,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[500],
-                          fontSize: tokens.typography.fontSize.xs,
-                          textTransform: 'uppercase' as const,
-                          letterSpacing: '0.05em',
-                        }}
-                      >
-                        {col}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {recruiters.map((rec) => {
-                    const isSelected = selectedRecruiter === rec.id;
-                    const statusColor = getStatusColor(rec.status, tokens);
+            <Box style={{ overflowX: 'auto' as const }} role="table" aria-label="Recruiter capacity overview">
+              {/* Table Header */}
+              <Box role="row" style={{
+                display: 'grid',
+                gridTemplateColumns: '1.5fr 1fr 80px 80px 140px 80px 100px 120px',
+                borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
+              }}>
+                {COLUMNS.map((col) => (
+                  <Box
+                    key={col}
+                    role="columnheader"
+                    style={{
+                      padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
+                      textAlign: 'left' as const,
+                    }}
+                  >
+                    <Text style={{
+                      fontWeight: tokens.typography.fontWeight.semibold,
+                      color: tokens.colors.neutral[500],
+                      fontSize: tokens.typography.fontSize.xs,
+                      textTransform: personalityTypo.labelTransform,
+                      letterSpacing: personalityTypo.labelLetterSpacing,
+                    }}>
+                      {col}
+                    </Text>
+                  </Box>
+                ))}
+              </Box>
 
-                    return (
-                      <tr
-                        key={rec.id}
-                        onClick={() => onRecruiterSelect?.(isSelected ? null : rec.id)}
-                        style={{
-                          ...hoverStyle,
-                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
-                          backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = isSelected ? tokens.colors.primaryScale[50] : tokens.colors.neutral[50])}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = isSelected ? tokens.colors.primaryScale[50] : 'transparent')}
-                      >
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                            <div
-                              style={{
-                                width: 28,
-                                height: 28,
-                                borderRadius: tokens.borderRadius.full,
-                                backgroundColor: tokens.colors.primaryScale[100],
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: tokens.typography.fontSize.xs,
-                                fontWeight: tokens.typography.fontWeight.semibold,
-                                color: tokens.colors.primaryScale[700],
-                                flexShrink: 0,
-                              }}
-                            >
-                              {rec.name.charAt(0)}
-                            </div>
-                            <Text style={{ fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>
-                              {rec.name}
-                            </Text>
-                          </div>
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[600] }}>
-                          {rec.department}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                          {rec.currentAssignments}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[600] }}>
-                          {rec.maxCapacity}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                            <div style={{ width: 60, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' }}>
-                              <div style={{ width: `${Math.min(rec.utilizationPercent, 100)}%`, height: '100%', borderRadius: tokens.borderRadius.full, backgroundColor: statusColor }} />
-                            </div>
-                            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusColor, fontWeight: tokens.typography.fontWeight.semibold }}>
-                              {formatPercent(rec.utilizationPercent)}
-                            </Text>
-                          </div>
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[700] }}>
-                          {rec.activePositions}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, color: tokens.colors.neutral[700] }}>
-                          {rec.activeCandidates}
-                        </td>
-                        <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
-                          <div
-                            style={{
-                              display: 'inline-block',
-                              padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.sm,
-                              backgroundColor: statusColor + '15',
-                              color: statusColor,
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.semibold,
-                              textTransform: 'capitalize' as const,
-                            }}
-                          >
-                            {rec.status}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+              {/* Table Body */}
+              {recruiters.map((rec) => {
+                const isSelected = selectedRecruiter === rec.id;
+                const statusColor = getStatusColor(rec.status, tokens);
+                const statusBg = getStatusBg(rec.status, tokens);
+
+                return (
+                  <Box
+                    key={rec.id}
+                    role="row"
+                    tabIndex={0}
+                    aria-label={`${rec.name}, ${rec.department}, ${rec.status} at ${rec.utilizationPercent}% utilization`}
+                    aria-selected={isSelected}
+                    onClick={() => handleRecruiterClick(rec.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick(rec.id); }}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1.5fr 1fr 80px 80px 140px 80px 100px 120px',
+                      borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                      backgroundColor: isSelected ? tokens.colors.primaryScale[50] : 'transparent',
+                      cursor: 'pointer',
+                      transition: `background-color ${tokens.motion.hover}`,
+                      alignItems: 'center',
+                    }}
+                    onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
+                      if (!isSelected) e.currentTarget.style.backgroundColor = tokens.colors.neutral[50];
+                    }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+                      e.currentTarget.style.backgroundColor = isSelected ? tokens.colors.primaryScale[50] : 'transparent';
+                    }}
+                  >
+                    {/* Recruiter */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                        <Box style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: tokens.borderRadius.full,
+                          backgroundColor: tokens.colors.primaryScale[100],
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                        }}>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[700] }}>
+                            {rec.name.charAt(0)}
+                          </Text>
+                        </Box>
+                        <Text style={{ fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800], fontSize: tokens.typography.fontSize.sm }}>
+                          {rec.name}
+                        </Text>
+                      </Box>
+                    </Box>
+                    {/* Department */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Text style={{ color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.sm }}>
+                        {rec.department}
+                      </Text>
+                    </Box>
+                    {/* Assigned */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Text style={{ fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], fontSize: tokens.typography.fontSize.sm }}>
+                        {rec.currentAssignments}
+                      </Text>
+                    </Box>
+                    {/* Capacity */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Text style={{ color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.sm }}>
+                        {rec.maxCapacity}
+                      </Text>
+                    </Box>
+                    {/* Utilization */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                        <Box style={{ width: 60, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' }} role="progressbar" aria-valuenow={rec.utilizationPercent} aria-valuemin={0} aria-valuemax={150} aria-label={`${rec.utilizationPercent}% utilization`}>
+                          <Box style={{ width: `${Math.min(rec.utilizationPercent, 100)}%`, height: '100%', borderRadius: tokens.borderRadius.full, backgroundColor: statusColor }} />
+                        </Box>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusColor, fontWeight: tokens.typography.fontWeight.semibold }}>
+                          {formatPercent(rec.utilizationPercent)}
+                        </Text>
+                      </Box>
+                    </Box>
+                    {/* Positions */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Text style={{ color: tokens.colors.neutral[700], fontSize: tokens.typography.fontSize.sm }}>
+                        {rec.activePositions}
+                      </Text>
+                    </Box>
+                    {/* Candidates */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Text style={{ color: tokens.colors.neutral[700], fontSize: tokens.typography.fontSize.sm }}>
+                        {rec.activeCandidates}
+                      </Text>
+                    </Box>
+                    {/* Status */}
+                    <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
+                      <Box style={{
+                        display: 'inline-block',
+                        padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                        borderRadius: badgeR,
+                        backgroundColor: statusBg,
+                        textTransform: 'capitalize' as const,
+                      }}>
+                        <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: statusColor }}>
+                          {rec.status}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
-              No recruiter data available
-            </div>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 120 }}>
+              <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
+                No recruiter data available
+              </Text>
+            </Box>
           )}
         </Box>
 
         {/* Suggestions */}
         {suggestions.length > 0 && (
           <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
-            <Text style={{ ...sectionHeader }}>Suggested Rebalancing</Text>
-            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
+            <Text style={{ ...sectionHeader, fontWeight: personalityTypo.headingWeight, letterSpacing: personalityTypo.headingLetterSpacing }}>Suggested Rebalancing</Text>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
               {suggestions.map((sug, i) => (
-                <div
+                <Box
                   key={i}
                   style={{
                     display: 'flex',
@@ -235,33 +295,38 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                     backgroundColor: tokens.colors.infoScale[50],
                   }}
                 >
-                  <div>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[800] }}>
                       {sug.fromRecruiterName} {'\u2192'} {sug.toRecruiterName} ({sug.candidateCount} candidates)
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                       {sug.reason}
                     </Text>
-                  </div>
+                  </Box>
                   {onAcceptSuggestion && (
-                    <div
-                      onClick={() => onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId)}
+                    <Box
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Accept: move ${sug.candidateCount} candidates from ${sug.fromRecruiterName} to ${sug.toRecruiterName}`}
+                      onClick={() => handleAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }}
                       style={{
-                        ...hoverStyle,
                         padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: tokens.colors.primaryScale[500],
-                        color: tokens.colors.common.white,
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.semibold,
+                        cursor: 'pointer',
+                        transition: `background-color ${tokens.motion.hover}`,
+                        flexShrink: 0,
                       }}
                     >
-                      Accept
-                    </div>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>
+                        Accept
+                      </Text>
+                    </Box>
                   )}
-                </div>
+                </Box>
               ))}
-            </div>
+            </Box>
           </Box>
         )}
       </Box>

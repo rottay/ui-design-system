@@ -6,7 +6,7 @@
  * at-risk items queue, and compliance history trend chart.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   Shield,
   AlertTriangle,
@@ -14,17 +14,8 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
-  ChevronDown,
-  ChevronRight,
-  Users,
-  CheckCircle2,
   XCircle,
   Timer,
-  Settings,
-  BarChart3,
-  Zap,
-  Bell,
-  ArrowRight,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
@@ -34,6 +25,9 @@ import {
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhSlaMonitorProps,
@@ -114,33 +108,48 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
     const [selectedStage, setSelectedStage] = useState<string | null>(selStageProp ?? null);
     const [activeTab, setActiveTab] = useState<'breaches' | 'at-risk'>('breaches');
 
-    const handleTimeRange = (val: string) => {
+    const handleTimeRange = useCallback((val: string) => {
       setTimeRange(val);
       onTimeRangeChange?.(val);
-    };
+    }, [onTimeRangeChange]);
 
-    const handleStageSelect = (stage: string) => {
+    const handleStageSelect = useCallback((stage: string) => {
       const next = selectedStage === stage ? null : stage;
       setSelectedStage(next);
       onStageSelect?.(next);
-    };
+    }, [selectedStage, onStageSelect]);
+
+    const handleTabChange = useCallback((tab: 'breaches' | 'at-risk') => {
+      setActiveTab(tab);
+    }, []);
 
     /* ---- Computed ---- */
-    const statusColors = getSlaStatusColors(t);
-    const compColor = getComplianceColor(t, compliance.percentage);
+    const statusColors = useMemo(() => getSlaStatusColors(t), [t]);
+    const compColor = useMemo(() => getComplianceColor(t, compliance.percentage), [t, compliance.percentage]);
     const histMin = useMemo(() => Math.min(...history.map(h => h.compliance), 0), [history]);
     const histMax = useMemo(() => Math.max(...history.map(h => h.compliance), 100), [history]);
     const histRange = histMax - histMin || 1;
 
     /* ---- Styles ---- */
-    const card = createCardStyle(t, { padding: 28 });
-    const hoverStyles = createCardHoverStyles(t);
-    const sectionLabel = createPersonalitySectionHeaderStyle(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return {
+          backdropFilter: t.glass.blur,
+          WebkitBackdropFilter: t.glass.blur,
+        };
+      }
+      return {};
+    }, [t]);
 
     /* ================================================================ */
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, width: '100%', gap: t.spacing[5], padding: t.spacing[7], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...glassStyle, ...style }} role="region" aria-label="SLA Monitor Dashboard">
 
         {/* === Header === */}
         <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -148,22 +157,25 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
             <Box style={createIconContainerStyle(t, { size: 44, color: t.colors.primaryScale[100] })}>
               <Shield size={22} color={t.colors.primaryScale[600]} />
             </Box>
-            <Box>
-              <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+              <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: typo.headingWeight, color: t.colors.neutral[900], letterSpacing: typo.headingLetterSpacing }}>
                 SLA Monitor
               </Text>
-              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
                 {breaches.length} active breach{breaches.length !== 1 ? 'es' : ''} -- {atRiskItems.length} at risk
               </Text>
             </Box>
           </Box>
 
           {/* Time range toggle */}
-          <Box style={{ display: 'flex', gap: t.spacing[1] }}>
+          <Box style={{ display: 'flex', gap: t.spacing[1] }} role="radiogroup" aria-label="Time range">
             {TIME_RANGE_OPTIONS.map(opt => (
               <Box
                 key={opt.value}
                 onClick={() => handleTimeRange(opt.value)}
+                role="radio"
+                aria-checked={timeRange === opt.value}
+                tabIndex={0}
                 style={{
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                   borderRadius: badgeRadius,
@@ -184,9 +196,9 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
         <Box style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: t.spacing[5] }}>
 
           {/* Compliance gauge */}
-          <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }}>
+          <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }} role="status" aria-label={`Overall compliance: ${compliance.percentage.toFixed(1)}%`}>
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Overall Compliance</Text>
-            <svg width={160} height={100} viewBox="0 0 160 100">
+            <svg width={160} height={100} viewBox="0 0 160 100" role="img" aria-hidden="true">
               {/* Background arc */}
               <path
                 d={`M 20 90 A 60 60 0 0 1 140 90`}
@@ -227,7 +239,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
           </Box>
 
           {/* Stage SLA bars */}
-          <Box style={{ ...card }}>
+          <Box style={{ ...card }} role="list" aria-label="Stage performance">
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Stage Performance</Text>
             {stageSlaData.map(stage => {
               const pct = (stage.avgHours / stage.limitHours) * 100;
@@ -237,6 +249,10 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                 <Box
                   key={stage.stageName}
                   onClick={() => handleStageSelect(stage.stageName)}
+                  role="listitem"
+                  tabIndex={0}
+                  aria-selected={isSelected}
+                  aria-label={`${stage.stageName}: ${stage.avgHours}h of ${stage.limitHours}h limit`}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -281,11 +297,15 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
           {/* Left: Breaches / At-risk */}
           <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
             {/* Tab header */}
-            <Box style={{ display: 'flex', borderBottom: `1px solid ${t.colors.neutral[200]}` }}>
+            <Box style={{ display: 'flex', borderBottom: `1px solid ${t.colors.neutral[200]}` }} role="tablist" aria-label="Alert categories">
               {(['breaches', 'at-risk'] as const).map(tab => (
                 <Box
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => handleTabChange(tab)}
+                  role="tab"
+                  tabIndex={0}
+                  aria-selected={activeTab === tab}
+                  aria-controls={`panel-${tab}`}
                   style={{
                     flex: 1,
                     padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
@@ -307,9 +327,9 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
             </Box>
 
             {/* Tab content */}
-            <Box style={{ padding: t.spacing[4], maxHeight: 320, overflow: 'auto' }}>
+            <Box style={{ padding: t.spacing[4], maxHeight: 320, overflow: 'auto' }} role="tabpanel" id={`panel-${activeTab}`}>
               {activeTab === 'breaches' && breaches.map(breach => (
-                <Box key={breach.id} style={{
+                <Box key={breach.id} role="listitem" style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: t.spacing[3],
@@ -322,15 +342,15 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                   <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.errorScale[100] })}>
                     <AlertTriangle size={16} color={t.colors.errorScale[600]} />
                   </Box>
-                  <Box style={{ flex: 1 }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
                       {breach.jobName}
                     </Text>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
                       {breach.stageName} -- {breach.assignedRecruiter}
                     </Text>
                   </Box>
-                  <Box style={{ textAlign: 'right' as const }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'right' as const }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.errorScale[600] }}>
                       {breach.actualHours}h
                     </Text>
@@ -344,32 +364,34 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
               {activeTab === 'at-risk' && atRiskItems.map(item => {
                 const urgentColor = item.hoursRemaining <= 4 ? t.colors.errorScale[600] : t.colors.warningScale[600];
                 const urgentBg = item.hoursRemaining <= 4 ? t.colors.errorScale[50] : t.colors.warningScale[50];
+                const urgentBorderColor = item.hoursRemaining <= 4 ? t.colors.errorScale[200] : t.colors.warningScale[200];
                 return (
-                  <Box key={item.id} style={{
+                  <Box key={item.id} role="listitem" aria-label={`${item.name}: ${item.hoursRemaining}h remaining`} style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: t.spacing[3],
                     padding: `${t.spacing[3]}px ${t.spacing[3]}px`,
                     marginBottom: t.spacing[2],
                     borderRadius: t.borderRadius.md,
-                    border: `1px solid ${t.colors.warningScale[200]}`,
+                    border: `1px solid ${urgentBorderColor}`,
                     backgroundColor: urgentBg,
                   }}>
-                  <Box style={createIconContainerStyle(t, { size: 32, color: `${urgentColor}20` })}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[100] })}>
                     <Timer size={16} color={urgentColor} />
                   </Box>
-                  <Box style={{ flex: 1 }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
                       {item.name}
                     </Text>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>
                       {item.stage} -- {item.assignee}
                     </Text>
                   </Box>
                   <Box style={{
-                    padding: `2px ${t.spacing[2]}px`,
+                    padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
                     borderRadius: badgeRadius,
-                    backgroundColor: `${urgentColor}15`,
+                    backgroundColor: urgentBg,
+                    border: `1px solid ${urgentBorderColor}`,
                   }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: urgentColor }}>
                       {item.hoursRemaining}h left
@@ -385,7 +407,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
           <Box style={{ ...card }}>
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Compliance Trend</Text>
             <Box style={{ display: 'flex', justifyContent: 'center' }}>
-              <svg width={420} height={200} viewBox="0 0 420 200">
+              <svg width={420} height={200} viewBox="0 0 420 200" role="img" aria-label="Compliance trend chart">
                 {/* Grid */}
                 {[0, 0.25, 0.5, 0.75, 1].map(frac => {
                   const y = 16 + (1 - frac) * 150;

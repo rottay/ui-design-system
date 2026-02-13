@@ -7,19 +7,31 @@
  * and adjustment recommendations.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createCardHoverStyles,
   createEmptyStateStyle,
+  createEntranceAnimation,
   createFilterPillStyle,
+  createFocusRingStyle,
   createHoverStyle,
+  createIconContainerStyle,
   createListItemStyle,
   createPanelHeaderStyle,
+  createPersonalitySectionHeaderStyle,
+  createProgressBarStyle,
   createSectionHeaderStyle,
   createSurfaceStyle,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  createDividerStyle,
+  getChartConfig,
   getHoverTransform,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type {
   BhCalibrationViewProps,
@@ -102,7 +114,7 @@ function getMisalignmentColor(misalignment: number, tokens: DesignTokens): strin
 export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
   name: 'BhCalibrationView.Session',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhCalibrationViewProps>) => {
-    const { Box, Stack } = primitives;
+    const { Box, Text, Stack } = primitives;
 
     const {
       rubricName,
@@ -123,6 +135,14 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
       style,
     } = props;
 
+    /* ----- personality + glass ----- */
+    const isGlass = tokens.surface.useGlass;
+    const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const focusRing = useMemo(() => createFocusRingStyle(tokens), [tokens]);
+    const chartConfig = useMemo(() => getChartConfig(tokens), [tokens]);
+    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+
     /* ----- internal state ----- */
     const [internalCurrentSample, setInternalCurrentSample] = useState(currentSampleIndexProp ?? 0);
     const [internalHumanScores, setInternalHumanScores] = useState<Record<string, number>>(() => {
@@ -131,11 +151,26 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
       return humanScoresProp ?? init;
     });
     const [internalShowAIScores, setInternalShowAIScores] = useState(showAIScoresProp ?? false);
-    const [internalSamples] = useState<CalibrationSample[]>(samples);
-    const [internalAlignmentMetrics] = useState<AlignmentMetrics | undefined>(alignmentMetricsProp);
+    const [internalSamples, setInternalSamples] = useState<CalibrationSample[]>(samples);
+    const [internalAlignmentMetrics, setInternalAlignmentMetrics] = useState<AlignmentMetrics | undefined>(alignmentMetricsProp);
     const [selectedDimension, setSelectedDimension] = useState<string | null>(null);
-    const [scrollPosition, setScrollPosition] = useState(0);
     const [internalIsSubmitting, setInternalIsSubmitting] = useState(isSubmittingProp ?? false);
+
+    /* ----- sync props -> internal state ----- */
+    useEffect(() => {
+      if (currentSampleIndexProp !== undefined) setInternalCurrentSample(currentSampleIndexProp);
+    }, [currentSampleIndexProp]);
+    useEffect(() => {
+      if (humanScoresProp !== undefined) setInternalHumanScores(humanScoresProp);
+    }, [humanScoresProp]);
+    useEffect(() => {
+      if (showAIScoresProp !== undefined) setInternalShowAIScores(showAIScoresProp);
+    }, [showAIScoresProp]);
+    useEffect(() => { setInternalSamples(samples); }, [samples]);
+    useEffect(() => { setInternalAlignmentMetrics(alignmentMetricsProp); }, [alignmentMetricsProp]);
+    useEffect(() => {
+      if (isSubmittingProp !== undefined) setInternalIsSubmitting(isSubmittingProp);
+    }, [isSubmittingProp]);
 
     const currentSampleIndex = currentSampleIndexProp ?? internalCurrentSample;
     const humanScores = humanScoresProp ?? internalHumanScores;
@@ -168,8 +203,17 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     }, [onSubmit]);
 
     /* ----- glass support ----- */
-    const glassCard = useMemo(() => createCardStyle(tokens, { glass: true, elevation: 'md' }), [tokens]);
+    const glassCard = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), [tokens, isGlass]);
     const surfaceBorder = useMemo(() => createSurfaceStyle(tokens, { elevation: 'sm' }), [tokens]);
+
+    /* ----- entrance animation ----- */
+    const entrance = useMemo(() => createEntranceAnimation(tokens, { index: 0 }), [tokens]);
+
+    /* ----- personality section header ----- */
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+    /* ----- icon container ----- */
+    const headerIconStyle = useMemo(() => createIconContainerStyle(tokens, { size: tokens.spacing[10], color: tokens.colors.primaryScale[100] }), [tokens]);
 
     /* ----- alignment rate badge ----- */
     const alignmentRate = alignmentMetrics?.agreementRate ?? 0;
@@ -189,7 +233,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     const perDimAlignment = alignmentMetrics?.perDimensionAlignment ?? [];
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', backgroundColor: tokens.colors.common.white, fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
 
         {/* ===== 1. Session Header ===== */}
         <Box style={{
@@ -198,49 +242,44 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          flexWrap: 'wrap' as const,
+          gap: tokens.spacing[3],
           backgroundColor: tokens.colors.common.white,
-          ...(tokens.surface.useGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg } : {}),
+          ...(isGlass && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg } : {}),
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
-            <Box style={{
-              width: tokens.spacing[10],
-              height: tokens.spacing[10],
-              borderRadius: tokens.borderRadius.lg,
-              backgroundColor: tokens.colors.primaryScale[100],
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+            <Box style={headerIconStyle}>
               <Target size={20} color={tokens.colors.primaryScale[600]} />
             </Box>
-            <Box>
-              <h2 style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+              <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], display: 'block' }}>
                 {rubricName}
-              </h2>
-              <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+              </Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
                 Calibration Session
-              </span>
+              </Text>
             </Box>
           </Box>
 
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3] }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const }}>
             {/* Progress badge */}
             <Box style={{
               ...createBadgeStyle(tokens, 'info'),
+              borderRadius: badgeRadius,
               gap: tokens.spacing[1],
             }}>
               <BarChart3 size={12} />
-              <span>{completedSamples}/{totalSamples} completed</span>
+              <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{completedSamples}/{totalSamples} completed</Text>
             </Box>
 
             {/* Status badge */}
             {showAIScores ? (
-              <Box style={createBadgeStyle(tokens, 'success')}>
+              <Box style={{ ...createBadgeStyle(tokens, 'success'), borderRadius: badgeRadius }}>
                 <CheckCircle size={12} style={{ marginRight: tokens.spacing[1] }} />
                 Revealed
               </Box>
             ) : (
-              <Box style={createBadgeStyle(tokens, 'warning')}>
+              <Box style={{ ...createBadgeStyle(tokens, 'warning'), borderRadius: badgeRadius }}>
                 <EyeOff size={12} style={{ marginRight: tokens.spacing[1] }} />
                 Scoring
               </Box>
@@ -250,10 +289,11 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
             {alignmentMetrics && (
               <Box style={{
                 ...createBadgeStyle(tokens, alignmentRatePct >= 70 ? 'success' : alignmentRatePct >= 50 ? 'warning' : 'error'),
+                borderRadius: badgeRadius,
                 gap: tokens.spacing[1],
               }}>
                 <TrendingUp size={12} />
-                <span>{alignmentRatePct}% alignment</span>
+                <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{alignmentRatePct}% alignment</Text>
               </Box>
             )}
           </Box>
@@ -284,12 +324,13 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
               }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                   <MessageSquare size={16} color={tokens.colors.neutral[500]} />
-                  <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                  <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
                     Sample {currentSampleIndex + 1} of {samples.length}
-                  </span>
+                  </Text>
                 </Box>
-                <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                <Box style={{ display: 'flex', gap: tokens.spacing[1] }} role="group" aria-label="Sample navigation">
                   <button
+                    aria-label="Previous sample"
                     onClick={() => handleSampleChange(Math.max(0, currentSampleIndex - 1))}
                     disabled={currentSampleIndex === 0}
                     style={{
@@ -302,11 +343,13 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       fontFamily: 'inherit',
                       display: 'flex',
                       alignItems: 'center',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <ChevronLeft size={14} />
                   </button>
                   <button
+                    aria-label="Next sample"
                     onClick={() => handleSampleChange(Math.min(samples.length - 1, currentSampleIndex + 1))}
                     disabled={currentSampleIndex === samples.length - 1}
                     style={{
@@ -319,6 +362,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       fontFamily: 'inherit',
                       display: 'flex',
                       alignItems: 'center',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
                   >
                     <ChevronRight size={14} />
@@ -362,24 +406,25 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           <User size={14} color={tokens.colors.neutral[500]} />
                         )}
                       </Box>
-                      <Box style={{ flex: 1 }}>
-                        <span style={{
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>
+                        <Text style={{
                           display: 'block',
                           fontSize: tokens.typography.fontSize.xs,
                           fontWeight: tokens.typography.fontWeight.semibold,
                           color: isCandidate ? tokens.colors.primaryScale[600] : isAI ? tokens.colors.secondaryScale[600] : tokens.colors.neutral[600],
                           marginBottom: tokens.spacing[1],
-                          textTransform: 'capitalize',
+                          textTransform: typo.labelTransform !== 'none' ? typo.labelTransform : ('capitalize' as any),
+                          letterSpacing: typo.labelLetterSpacing,
                         }}>
                           {line.speaker}
-                        </span>
-                        <span style={{
+                        </Text>
+                        <Text style={{
                           fontSize: tokens.typography.fontSize.sm,
                           color: tokens.colors.neutral[800],
                           lineHeight: tokens.typography.lineHeight.relaxed,
                         }}>
                           {line.text}
-                        </span>
+                        </Text>
                       </Box>
                     </Box>
                   );
@@ -416,20 +461,25 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 backgroundColor: tokens.colors.neutral[50],
               }}>
                 <Sliders size={16} color={tokens.colors.neutral[500]} />
-                <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: typo.headingWeight, color: tokens.colors.neutral[700] }}>
                   Score Dimensions
-                </span>
+                </Text>
               </Box>
 
               {/* Per-dimension sliders */}
               <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[4] }}>
                 <Stack direction="vertical" spacing="md">
-                  {dimensions.map((dimension) => {
+                  {dimensions.map((dimension, dimIdx) => {
                     const value = humanScores[dimension] ?? 50;
                     const scoreColor = getScoreColor(value, tokens);
+                    const dimEntrance = createEntranceAnimation(tokens, { index: dimIdx });
                     return (
                       <Box
                         key={dimension}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`${dimension} dimension, score ${value}`}
+                        aria-expanded={selectedDimension === dimension}
                         style={{
                           padding: tokens.spacing[3],
                           borderRadius: tokens.borderRadius.md,
@@ -437,17 +487,19 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           backgroundColor: selectedDimension === dimension ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                           cursor: 'pointer',
                           transition: `all ${tokens.motion.hover}`,
+                          ...dimEntrance.animate,
                         }}
                         onClick={() => setSelectedDimension(selectedDimension === dimension ? null : dimension)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedDimension(selectedDimension === dimension ? null : dimension); } }}
                       >
                         <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[2] }}>
-                          <span style={{
+                          <Text style={{
                             fontSize: tokens.typography.fontSize.sm,
                             fontWeight: tokens.typography.fontWeight.medium,
                             color: tokens.colors.neutral[800],
                           }}>
                             {dimension}
-                          </span>
+                          </Text>
                           <Box style={{
                             minWidth: tokens.spacing[10],
                             textAlign: 'center',
@@ -488,6 +540,10 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             min={0}
                             max={100}
                             value={value}
+                            aria-label={`Score for ${dimension}`}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                            aria-valuenow={value}
                             onChange={(e) => handleHumanScoreChange(dimension, Number(e.target.value))}
                             onClick={(e) => e.stopPropagation()}
                             style={{
@@ -506,8 +562,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
                         {/* Scale labels */}
                         <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>0</span>
-                          <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>100</span>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>0</Text>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>100</Text>
                         </Box>
                       </Box>
                     );
@@ -516,18 +572,15 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
                 {/* Notes textarea */}
                 <Box style={{ marginTop: tokens.spacing[4] }}>
-                  <label style={{
+                  <Text style={{
+                    ...sectionHeaderStyle,
                     display: 'block',
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
                     marginBottom: tokens.spacing[2],
                   }}>
                     Notes
-                  </label>
+                  </Text>
                   <textarea
+                    aria-label="Scoring notes"
                     placeholder="Add notes about this scoring..."
                     style={{
                       width: '100%',
@@ -542,15 +595,13 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       resize: 'vertical',
                       outline: 'none',
                       boxSizing: 'border-box',
+                      transition: `all ${tokens.motion.hover}`,
                     }}
-                  
                     onFocus={(e) => {
-                      e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
-                      e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
+                      Object.assign(e.currentTarget.style, focusRing.focus);
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.boxShadow = 'none';
-                      e.currentTarget.style.borderColor = tokens.colors.neutral[300];
+                      Object.assign(e.currentTarget.style, focusRing.blur);
                     }}
                   />
                 </Box>
@@ -563,6 +614,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 backgroundColor: tokens.colors.neutral[50],
               }}>
                 <button
+                  aria-label={isSubmitting ? 'Submitting calibration' : showAIScores ? 'Submit calibration' : 'Submit and reveal AI scores'}
+                  aria-busy={isSubmitting}
                   onClick={showAIScores ? handleSubmit : handleReveal}
                   disabled={isSubmitting}
                   style={{
@@ -620,18 +673,19 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
             }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                 <Award size={18} color={tokens.colors.primaryScale[600]} />
-                <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900] }}>
                   Score Comparison
-                </h3>
+                </Text>
               </Box>
 
               <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(dimensions.length, 4)}, 1fr)`, gap: tokens.spacing[3] }}>
-                {dimensions.map((dimension) => {
+                {dimensions.map((dimension, cIdx) => {
                   const humanVal = humanScores[dimension] ?? 0;
                   const aiVal = currentSample?.aiScores?.[dimension] ?? 0;
                   const diff = humanVal - aiVal;
                   const diffColors = getDiffColor(diff, tokens);
                   const isAgreed = Math.abs(diff) <= 10;
+                  const cEntrance = createEntranceAnimation(tokens, { index: cIdx });
 
                   return (
                     <Box
@@ -642,30 +696,29 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         borderRadius: tokens.borderRadius.md,
                         backgroundColor: isAgreed ? tokens.colors.successScale[50] : tokens.colors.errorScale[50],
                         border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isAgreed ? tokens.colors.successScale[200] : tokens.colors.errorScale[200]}`,
+                        ...cEntrance.animate,
+                        transition: cEntrance.transition,
                       }}
                     >
-                      <span style={{
+                      <Text style={{
+                        ...sectionHeaderStyle,
                         display: 'block',
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.semibold,
-                        color: tokens.colors.neutral[600],
                         marginBottom: tokens.spacing[2],
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
+                        color: tokens.colors.neutral[600],
                       }}>
                         {dimension}
-                      </span>
+                      </Text>
                       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: tokens.spacing[2] }}>
-                        <Box>
-                          <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Human</span>
-                          <span style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{humanVal}</span>
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                          <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Human</Text>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{humanVal}</Text>
                         </Box>
                         <Box style={{ textAlign: 'center' }}>
                           <ArrowRight size={16} color={tokens.colors.neutral[400]} />
                         </Box>
-                        <Box style={{ textAlign: 'right' }}>
-                          <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>AI</span>
-                          <span style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{aiVal}</span>
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], textAlign: 'right' }}>
+                          <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>AI</Text>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{aiVal}</Text>
                         </Box>
                       </Box>
                       <Box style={{
@@ -701,9 +754,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
               }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <Maximize2 size={18} color={tokens.colors.secondaryScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900] }}>
                     Alignment Scatter
-                  </h3>
+                  </Text>
                 </Box>
 
                 <Box style={{ display: 'flex', justifyContent: 'center' }}>
@@ -754,14 +807,14 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                 </Box>
 
                 {/* Legend */}
-                <Box style={{ display: 'flex', justifyContent: 'center', gap: tokens.spacing[4], marginTop: tokens.spacing[3] }}>
+                <Box style={{ display: 'flex', justifyContent: 'center', gap: tokens.spacing[4], marginTop: tokens.spacing[3], flexWrap: 'wrap' as const }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                     <Box style={{ width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[500] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Aligned</span>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Aligned</Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                     <Box style={{ width: tokens.spacing[3], height: tokens.spacing[3], borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.errorScale[400] }} />
-                    <span style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Outlier (&gt;25 diff)</span>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Outlier (&gt;25 diff)</Text>
                   </Box>
                 </Box>
               </Box>
@@ -775,118 +828,119 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
               }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <BarChart3 size={18} color={tokens.colors.infoScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900] }}>
                     Calibration Metrics
-                  </h3>
+                  </Text>
                 </Box>
 
                 {/* Metric cards */}
-                <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[3], marginBottom: tokens.spacing[4] }}>
+                <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: tokens.spacing[3], marginBottom: tokens.spacing[4] }}>
                   {/* Agreement Rate */}
-                  <Box style={{
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                     ...glassCard,
                     padding: tokens.spacing[4],
                     textAlign: 'center',
                   }}>
-                    <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: tokens.spacing[2] }}>
+                    <Text style={{ ...sectionHeaderStyle, display: 'block', marginBottom: tokens.spacing[2] }}>
                       Agreement Rate
-                    </span>
-                    <span style={{
+                    </Text>
+                    <Text style={{
                       display: 'block',
                       fontSize: tokens.typography.fontSize['2xl'],
                       fontWeight: tokens.typography.fontWeight.bold,
                       color: getAgreementColor(alignmentMetrics.agreementRate, tokens),
                     }}>
                       {Math.round(alignmentMetrics.agreementRate * 100)}%
-                    </span>
+                    </Text>
                   </Box>
 
                   {/* MAE */}
-                  <Box style={{
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                     ...glassCard,
                     padding: tokens.spacing[4],
                     textAlign: 'center',
                   }}>
-                    <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: tokens.spacing[2] }}>
+                    <Text style={{ ...sectionHeaderStyle, display: 'block', marginBottom: tokens.spacing[2] }}>
                       Mean Abs. Error
-                    </span>
-                    <span style={{
+                    </Text>
+                    <Text style={{
                       display: 'block',
                       fontSize: tokens.typography.fontSize['2xl'],
                       fontWeight: tokens.typography.fontWeight.bold,
                       color: alignmentMetrics.meanAbsoluteError <= 10 ? tokens.colors.successScale[600] : alignmentMetrics.meanAbsoluteError <= 20 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
                     }}>
                       {alignmentMetrics.meanAbsoluteError.toFixed(1)}
-                    </span>
+                    </Text>
                   </Box>
 
                   {/* Confidence Correlation */}
-                  <Box style={{
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1],
                     ...glassCard,
                     padding: tokens.spacing[4],
                     textAlign: 'center',
                   }}>
-                    <span style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: tokens.spacing[2] }}>
+                    <Text style={{ ...sectionHeaderStyle, display: 'block', marginBottom: tokens.spacing[2] }}>
                       Confidence Corr.
-                    </span>
-                    <span style={{
+                    </Text>
+                    <Text style={{
                       display: 'block',
                       fontSize: tokens.typography.fontSize['2xl'],
                       fontWeight: tokens.typography.fontWeight.bold,
                       color: alignmentMetrics.confidenceCorrelation >= 0.7 ? tokens.colors.successScale[600] : alignmentMetrics.confidenceCorrelation >= 0.4 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
                     }}>
                       {alignmentMetrics.confidenceCorrelation.toFixed(2)}
-                    </span>
+                    </Text>
                   </Box>
                 </Box>
 
                 {/* Per-dimension alignment heatmap */}
                 {perDimAlignment.length > 0 && (
                   <Box>
-                    <span style={{
+                    <Text style={{
+                      ...sectionHeaderStyle,
                       display: 'block',
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[500],
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
                       marginBottom: tokens.spacing[2],
                     }}>
                       Per-Dimension Alignment
-                    </span>
-                    <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(perDimAlignment.length, 6)}, 1fr)`, gap: tokens.spacing[2] }}>
-                      {perDimAlignment.map((item, idx) => (
-                        <Box
-                          key={idx}
-                          style={{
-                            padding: tokens.spacing[2],
-                            borderRadius: tokens.borderRadius.md,
-                            backgroundColor: getAgreementBgColor(item.agreement, tokens),
-                            textAlign: 'center',
-                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(item.agreement, tokens)}20`,
-                          }}
-                        >
-                          <span style={{
-                            display: 'block',
-                            fontSize: tokens.typography.fontSize.xs,
-                            color: tokens.colors.neutral[600],
-                            marginBottom: tokens.spacing[1],
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}>
-                            {item.dimension}
-                          </span>
-                          <span style={{
-                            display: 'block',
-                            fontSize: tokens.typography.fontSize.lg,
-                            fontWeight: tokens.typography.fontWeight.bold,
-                            color: getAgreementColor(item.agreement, tokens),
-                          }}>
-                            {Math.round(item.agreement * 100)}%
-                          </span>
-                        </Box>
-                      ))}
+                    </Text>
+                    <Box style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(80px, 1fr))`, gap: tokens.spacing[2] }}>
+                      {perDimAlignment.map((item, idx) => {
+                        const heatEntrance = createEntranceAnimation(tokens, { index: idx });
+                        return (
+                          <Box
+                            key={idx}
+                            style={{
+                              padding: tokens.spacing[2],
+                              borderRadius: tokens.borderRadius.md,
+                              backgroundColor: getAgreementBgColor(item.agreement, tokens),
+                              textAlign: 'center',
+                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(item.agreement, tokens)}20`,
+                              ...heatEntrance.animate,
+                              transition: heatEntrance.transition,
+                            }}
+                          >
+                            <Text style={{
+                              display: 'block',
+                              fontSize: tokens.typography.fontSize.xs,
+                              color: tokens.colors.neutral[600],
+                              marginBottom: tokens.spacing[1],
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}>
+                              {item.dimension}
+                            </Text>
+                            <Text style={{
+                              display: 'block',
+                              fontSize: tokens.typography.fontSize.lg,
+                              fontWeight: tokens.typography.fontWeight.bold,
+                              color: getAgreementColor(item.agreement, tokens),
+                            }}>
+                              {Math.round(item.agreement * 100)}%
+                            </Text>
+                          </Box>
+                        );
+                      })}
                     </Box>
                   </Box>
                 )}
@@ -900,52 +954,57 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
               }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <Lightbulb size={18} color={tokens.colors.warningScale[600]} />
-                  <h3 style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900] }}>
                     Adjustment Recommendations
-                  </h3>
+                  </Text>
                 </Box>
 
                 <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: tokens.spacing[3] }}>
-                  {adjustments.map((adj, idx) => (
-                    <Box
-                      key={idx}
-                      style={{
-                        ...glassCard,
-                        padding: tokens.spacing[4],
-                        borderLeft: `3px solid ${getMisalignmentColor(adj.misalignment, tokens)}`,
-                      }}
-                    >
-                      <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[2] }}>
-                        <span style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                          color: tokens.colors.neutral[800],
-                        }}>
-                          {adj.dimension}
-                        </span>
-                        <Box style={{
-                          padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                          borderRadius: tokens.borderRadius.sm,
-                          backgroundColor: `${getMisalignmentColor(adj.misalignment, tokens)}15`,
-                          color: getMisalignmentColor(adj.misalignment, tokens),
-                          fontSize: tokens.typography.fontSize.xs,
-                          fontWeight: tokens.typography.fontWeight.semibold,
-                        }}>
-                          {adj.misalignment > 0 ? '+' : ''}{(adj.misalignment * 100).toFixed(0)}%
+                  {adjustments.map((adj, idx) => {
+                    const adjEntrance = createEntranceAnimation(tokens, { index: idx });
+                    return (
+                      <Box
+                        key={idx}
+                        style={{
+                          ...glassCard,
+                          padding: tokens.spacing[4],
+                          borderLeft: `3px solid ${getMisalignmentColor(adj.misalignment, tokens)}`,
+                          ...adjEntrance.animate,
+                          transition: adjEntrance.transition,
+                        }}
+                      >
+                        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: tokens.spacing[2] }}>
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.sm,
+                            fontWeight: tokens.typography.fontWeight.semibold,
+                            color: tokens.colors.neutral[800],
+                          }}>
+                            {adj.dimension}
+                          </Text>
+                          <Box style={{
+                            padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
+                            borderRadius: badgeRadius,
+                            backgroundColor: `${getMisalignmentColor(adj.misalignment, tokens)}15`,
+                            color: getMisalignmentColor(adj.misalignment, tokens),
+                            fontSize: tokens.typography.fontSize.xs,
+                            fontWeight: tokens.typography.fontWeight.semibold,
+                          }}>
+                            {adj.misalignment > 0 ? '+' : ''}{(adj.misalignment * 100).toFixed(0)}%
+                          </Box>
+                        </Box>
+                        <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>
+                          <Info size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: tokens.spacing[1] }} />
+                          <Text style={{
+                            fontSize: tokens.typography.fontSize.sm,
+                            color: tokens.colors.neutral[600],
+                            lineHeight: tokens.typography.lineHeight.relaxed,
+                          }}>
+                            {adj.suggestedTweak}
+                          </Text>
                         </Box>
                       </Box>
-                      <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>
-                        <Info size={14} color={tokens.colors.neutral[400]} style={{ flexShrink: 0, marginTop: 2 }} />
-                        <span style={{
-                          fontSize: tokens.typography.fontSize.sm,
-                          color: tokens.colors.neutral[600],
-                          lineHeight: tokens.typography.lineHeight.relaxed,
-                        }}>
-                          {adj.suggestedTweak}
-                        </span>
-                      </Box>
-                    </Box>
-                  ))}
+                    );
+                  })}
                 </Box>
               </Box>
             )}

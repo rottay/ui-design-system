@@ -203,9 +203,9 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   </div>
                 )}
               </div>
-              <div>
+              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                 <div style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: t.typography.lineHeight.tight }}>{item.value}</div>
-                <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium, marginTop: t.spacing[1] }}>{item.label}</div>
+                <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>{item.label}</div>
               </div>
             </div>
           ))}
@@ -259,7 +259,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const MiniCard = ({ iv }: { iv: InterviewItem }) => {
       const isAi = iv.type === 'ai';
       return (
-        <div onClick={() => handleInterviewSelect(iv.id)} style={{ marginTop: 2, padding: `1px ${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, fontSize: '9px', fontWeight: t.typography.fontWeight.medium, backgroundColor: isAi ? t.colors.infoScale[50] : t.colors.secondaryScale[50], color: isAi ? t.colors.infoScale[700] : t.colors.secondaryScale[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+        <div onClick={() => handleInterviewSelect(iv.id)} style={{ marginTop: t.spacing[1], padding: `1px ${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, fontSize: '9px', fontWeight: t.typography.fontWeight.medium, backgroundColor: isAi ? t.colors.infoScale[50] : t.colors.secondaryScale[50], color: isAi ? t.colors.infoScale[700] : t.colors.secondaryScale[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
           {fmtTime(iv.dateTime)} {iv.candidateName.split(' ')[0]}
         </div>
       );
@@ -296,7 +296,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   </div>
                   {dayIvs.length > 0 && <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap' as const }}><TypeDot count={aiCt} scale="infoScale" /><TypeDot count={humanCt} scale="secondaryScale" /></div>}
                   {dayIvs.slice(0, 2).map(iv => <MiniCard key={iv.id} iv={iv} />)}
-                  {dayIvs.length > 2 && <div style={{ marginTop: 2, fontSize: '9px', color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>+{dayIvs.length - 2} more</div>}
+                  {dayIvs.length > 2 && <div style={{ marginTop: t.spacing[1], fontSize: '9px', color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>+{dayIvs.length - 2} more</div>}
                 </div>
               );
             })}
@@ -335,7 +335,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                       {hourIvs.map(iv => {
                         const isAi = iv.type === 'ai';
                         return (
-                          <div key={iv.id} onClick={() => handleInterviewSelect(iv.id)} onMouseEnter={() => setHoveredInterviewId(iv.id)} onMouseLeave={() => setHoveredInterviewId(null)} style={{ padding: `${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, backgroundColor: isAi ? t.colors.infoScale[100] : t.colors.secondaryScale[100], borderLeft: `3px solid ${isAi ? t.colors.infoScale[500] : t.colors.secondaryScale[500]}`, fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: isAi ? t.colors.infoScale[800] : t.colors.secondaryScale[800], cursor: 'pointer', transition: `all ${t.motion.hover}`, marginBottom: 2, overflow: 'hidden' as const, minHeight: `${Math.max(1, Math.round(iv.duration / 60)) * 28}px`, transform: hoveredInterviewId === iv.id ? t.motion.transform : 'none' }}>
+                          <div key={iv.id} onClick={() => handleInterviewSelect(iv.id)} onMouseEnter={() => setHoveredInterviewId(iv.id)} onMouseLeave={() => setHoveredInterviewId(null)} style={{ padding: `${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, backgroundColor: isAi ? t.colors.infoScale[100] : t.colors.secondaryScale[100], borderLeft: `3px solid ${isAi ? t.colors.infoScale[500] : t.colors.secondaryScale[500]}`, fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: isAi ? t.colors.infoScale[800] : t.colors.secondaryScale[800], cursor: 'pointer', transition: `all ${t.motion.hover}`, marginBottom: t.spacing[1], overflow: 'hidden' as const, minHeight: `${Math.max(1, Math.round(iv.duration / 60)) * 28}px`, transform: hoveredInterviewId === iv.id ? t.motion.transform : 'none' }}>
                             <div style={{ fontWeight: t.typography.fontWeight.semibold, whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{iv.candidateName}</div>
                             <div style={{ opacity: 0.8, marginTop: 1 }}>{fmtTime(iv.dateTime)} - {iv.duration}m</div>
                           </div>
@@ -423,7 +423,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               <div style={{ width: 48, height: 48, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], backgroundImage: iv.candidateAvatar ? `url(${iv.candidateAvatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{!iv.candidateAvatar && <User size={20} color={t.colors.primaryScale[600]} />}</div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{iv.candidateName}</div>
-                <div style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: 2 }}>{iv.jobTitle} &middot; {iv.stageName}</div>
+                <div style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{iv.jobTitle} &middot; {iv.stageName}</div>
               </div>
               <div style={{ display: 'flex', gap: t.spacing[2] }}><TypeBadge type={iv.type} tokens={t} size="md" /><Badge status={iv.status} tokens={t} /></div>
             </div>
@@ -449,7 +449,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
 
     // ─── Main ────────────────────────────────────────────────────────────
     return (
-      <div className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', fontFamily: 'inherit', position: 'relative' as const, ...style }}>
+      <div className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', position: 'relative' as const, ...style }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
           <div>

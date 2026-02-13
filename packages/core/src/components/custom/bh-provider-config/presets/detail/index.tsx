@@ -5,7 +5,7 @@
  * Per-provider detail view with split panel layout.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -142,23 +142,23 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
       return models.filter((m) => m.type === activeModelFilter);
     }, [models, activeModelFilter]);
 
-    const handleProviderSelect = (providerId: string) => {
+    const handleProviderSelect = useCallback((providerId: string) => {
       setInternalSelectedProvider(providerId);
       onProviderSelect?.(providerId);
-    };
+    }, [onProviderSelect]);
 
-    const handleModelFilterChange = (filter: ProviderType | 'all') => {
+    const handleModelFilterChange = useCallback((filter: ProviderType | 'all') => {
       setInternalModelFilter(filter);
       onModelFilterChange?.(filter);
-    };
+    }, [onModelFilterChange]);
 
-    const handleTestProvider = (providerId: string) => {
+    const handleTestProvider = useCallback((providerId: string) => {
       setInternalTestResults((prev) => [
         ...prev.filter((r) => r.providerId !== providerId),
         { providerId, status: 'testing' as TestStatus },
       ]);
       onTestProvider?.(providerId);
-    };
+    }, [onTestProvider]);
 
     const statusConfig = (status: ProviderStatus) => {
       switch (status) {
@@ -248,7 +248,12 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
               return (
                 <Box
                   key={provider.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Select ${provider.name}`}
+                  aria-pressed={isSelected}
                   onClick={() => handleProviderSelect(provider.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleProviderSelect(provider.id); } }}
                   style={{
                     padding: tokens.spacing[3],
                     borderRadius: tokens.borderRadius.md,
@@ -307,7 +312,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           color: tokens.colors.neutral[600],
                         }}
                       >
-                        {type}
+                        <Text>{type}</Text>
                       </Box>
                     ))}
                   </Box>
@@ -358,7 +363,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                   </Box>
                 </Box>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Test connection"
                   onClick={() => handleTestProvider(selectedProviderData.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTestProvider(selectedProviderData.id); } }}
                   style={{
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`,
                     borderRadius: tokens.borderRadius.md,
@@ -438,7 +447,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                 <Box style={{ display: 'flex', gap: tokens.spacing[2], flexWrap: 'wrap' as const }}>
                   {selectedProviderData.types.map((type) => (
                     <Box key={type} style={{ ...createBadgeStyle(tokens, typeColor(type)), padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px` }}>
-                      {type}
+                      <Text>{type}</Text>
                     </Box>
                   ))}
                 </Box>
@@ -477,7 +486,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                               fontSize: tokens.typography.fontSize.sm,
                               fontWeight: tokens.typography.fontWeight.medium,
                               color: tokens.colors.neutral[800],
-                              fontFamily: 'monospace',
+                              fontFamily: 'inherit',
                               display: 'block',
                             }}
                           >
@@ -489,7 +498,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                         </Box>
                         <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                           <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Rotate API key"
                             onClick={() => onRotateKey?.(key.id)}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRotateKey?.(key.id); } }}
                             style={{
                               padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                               borderRadius: tokens.borderRadius.md,
@@ -505,7 +518,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                             <Text>Rotate</Text>
                           </Box>
                           <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Revoke API key"
                             onClick={() => onRevokeKey?.(key.id)}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRevokeKey?.(key.id); } }}
                             style={{
                               padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                               borderRadius: tokens.borderRadius.md,
@@ -518,7 +535,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                               ...hoverStyle,
                             }}
                           >
-                            Revoke
+                            <Text>Revoke</Text>
                           </Box>
                         </Box>
                       </Box>
@@ -534,11 +551,16 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                     <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900] }}>
                       Models
                     </Text>
-                    <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+                    <Box role="radiogroup" aria-label="Filter by model type" style={{ display: 'flex', gap: tokens.spacing[1] }}>
                       {(['all', 'chat', 'tts', 'stt', 'conversational'] as const).map((f) => (
                         <Box
                           key={f}
+                          role="radio"
+                          tabIndex={0}
+                          aria-checked={activeModelFilter === f}
+                          aria-label={`Filter ${f}`}
                           onClick={() => handleModelFilterChange(f)}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleModelFilterChange(f); } }}
                           style={{
                             padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                             borderRadius: tokens.borderRadius.md,
@@ -553,7 +575,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                             ...hoverStyle,
                           }}
                         >
-                          {f}
+                          <Text>{f}</Text>
                         </Box>
                       ))}
                     </Box>
@@ -587,15 +609,15 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                               {model.name}
                             </Text>
                             <Box style={createBadgeStyle(tokens, typeColor(model.type))}>
-                              {model.type}
+                              <Text>{model.type}</Text>
                             </Box>
                             {model.deprecated && (
                               <Box style={{ ...createBadgeStyle(tokens, 'error'), fontSize: tokens.typography.fontSize.xs, padding: `0 ${tokens.spacing[1]}px` }}>
-                                deprecated
+                                <Text>deprecated</Text>
                               </Box>
                             )}
                           </Box>
-                          <Box style={{ display: 'flex', gap: tokens.spacing[3] }}>
+                          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                               ${model.costPer1kTokens.toFixed(4)}/1K
                             </Text>
@@ -616,7 +638,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                                     color: tokens.colors.neutral[600],
                                   }}
                                 >
-                                  {feat}
+                                  <Text>{feat}</Text>
                                 </Box>
                               ))}
                             </Box>

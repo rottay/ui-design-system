@@ -6,17 +6,23 @@
  * token usage trends, cost allocation, and spend forecasting.
  */
 
-import { useState, useMemo} from 'react';
-import { createPreset, PresetContext } from '../../../factory';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createCardHoverStyles,
   createDividerStyle,
+  createEmptyStateStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
   createFilterPillStyle,
   createHoverStyle,
+  createIconContainerStyle,
   createListItemStyle,
   createPanelHeaderStyle,
   createPersonalityAccentBar,
+  createPersonalitySectionHeaderStyle,
   createProgressBarStyle,
   createStatusDotStyle,
   createSurfaceStyle,
@@ -24,6 +30,7 @@ import {
   getPersonalityBadgeRadius,
   getPersonalityTypography,
 } from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import type { BhAdminCenterProps, DateRangeValue } from '../../core';
 import {
   getProviderStatusColors,
@@ -105,10 +112,14 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
     const [billingTab, setBillingTab] = useState<'overview' | 'usage' | 'invoices'>('overview');
     const [alertsExpanded, setAlertsExpanded] = useState(true);
 
-    const handleDateRange = (range: DateRangeValue) => {
+    const hoverStylesBilling = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const entranceBilling = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const sectionHeaderBilling = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+    const handleDateRange = useCallback((range: DateRangeValue) => {
       setDateRange(range);
       onDateRangeChange?.(range);
-    };
+    }, [onDateRangeChange]);
 
     /* ── Shared styles ─────────────────────────────────────────────── */
 
@@ -359,7 +370,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
       const Icon = isUp ? ArrowUpRight : ArrowDownRight;
       return (
         <Text style={{
-          display: 'inline-flex', alignItems: 'center', gap: 2,
+          display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1],
           padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
           borderRadius: tokens.borderRadius.full,
           fontSize: tokens.typography.fontSize.xs,
@@ -404,7 +415,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
               }}>
                 <Wallet size={18} color={tokens.colors.common.white} />
               </Box>
-              <Box>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                 <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{title}</Text>
                 <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Token usage, cost allocation & spend forecasting</Text>
               </Box>
@@ -485,8 +496,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 {alertsExpanded && (
                   <Box style={{ marginTop: tokens.spacing[3], display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {costAlerts.map((alert) => (
-                      <Box key={alert.id} onClick={() => onEventClick?.(alert.id)} style={{
-                        display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+                      <Box key={alert.id} onClick={() => onEventClick?.(alert.id)} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         backgroundColor: tokens.colors.common.white,
                         borderRadius: tokens.borderRadius.md,
@@ -525,15 +535,15 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 </Box>
 
                 {/* Daily Burn Rate */}
-                <Box style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.warningScale[500]}` }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, borderLeft: `3px solid ${tokens.colors.warningScale[500]}` }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <Flame size={14} color={tokens.colors.warningScale[600]} />
                     <Text style={sectionSub}>Daily Burn Rate</Text>
                   </Box>
-                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.warningScale[700] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                     {formatTokenBalance(billing.burnRate)}
                   </Text>
-                  <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     tokens per day
                   </Text>
                   {billing.monthlyTrend.length >= 2 && (
@@ -544,7 +554,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 </Box>
 
                 {/* Projected Runway */}
-                <Box style={{ ...cardBase, borderLeft: `3px solid ${billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[500] : billing.projectedRunwayDays < 30 ? tokens.colors.warningScale[500] : tokens.colors.successScale[500]}` }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, borderLeft: `3px solid ${billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[500] : billing.projectedRunwayDays < 30 ? tokens.colors.warningScale[500] : tokens.colors.successScale[500]}` }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <CalendarDays size={14} color={billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600]} />
                     <Text style={sectionSub}>Projected Runway</Text>
@@ -552,7 +562,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: billing.projectedRunwayDays < 14 ? tokens.colors.errorScale[600] : tokens.colors.neutral[900] }}>
                     {billing.projectedRunwayDays}
                   </Text>
-                  <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     days remaining
                   </Text>
                   {billing.projectedRunwayDays < 14 && (
@@ -571,7 +581,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 </Box>
 
                 {/* Monthly Cost */}
-                <Box style={{ ...cardBase, borderLeft: `3px solid ${tokens.colors.infoScale[500]}` }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...cardBase, borderLeft: `3px solid ${tokens.colors.infoScale[500]}` }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
                     <DollarSign size={14} color={tokens.colors.infoScale[600]} />
                     <Text style={sectionSub}>Monthly Cost</Text>
@@ -579,7 +589,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
                     {formatCurrency(billing.monthlyCost)}
                   </Text>
-                  <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                  <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                     current billing period
                   </Text>
                 </Box>
@@ -588,7 +598,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
 
             {/* ── Token Usage Trend (large area chart) ───────────── */}
             {billing && billing.monthlyTrend.length > 0 && (
-              <section style={{ ...cardBase }}>
+              <Box style={{ ...cardBase }}>
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[4] }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <TrendingUp size={18} color={tokens.colors.primaryScale[600]} />
@@ -638,12 +648,12 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                     </Box>
                   </Box>
                 )}
-              </section>
+              </Box>
             )}
 
             {/* ── Cost Allocation (donut + table) ────────────────── */}
             {costBreakdown.length > 0 && (
-              <section>
+              <Box>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                   <PieChart size={18} color={tokens.colors.primaryScale[600]} />
                   <Text style={sectionTitle}>Cost Allocation</Text>
@@ -768,14 +778,14 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                     </table>
                   </Box>
                 </Box>
-              </section>
+              </Box>
             )}
 
             {/* ── Provider Cost & KPI Row ─────────────────────────── */}
             <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
               {/* Provider costs */}
               {providers.length > 0 && (
-                <section style={{ ...cardBase }}>
+                <Box style={{ ...cardBase }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Layers size={16} color={tokens.colors.primaryScale[600]} />
                     <Text style={sectionTitle}>Provider Costs</Text>
@@ -823,12 +833,12 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       );
                     })}
                   </Box>
-                </section>
+                </Box>
               )}
 
               {/* Billing KPIs */}
               {kpis.length > 0 && (
-                <section style={{ ...cardBase }}>
+                <Box style={{ ...cardBase }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <BarChart3 size={16} color={tokens.colors.primaryScale[600]} />
                     <Text style={sectionTitle}>Key Metrics</Text>
@@ -850,7 +860,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       </Box>
                     ))}
                   </Box>
-                </section>
+                </Box>
               )}
             </Box>
 
@@ -858,7 +868,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
             <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: tokens.spacing[4] }}>
               {/* Compliance */}
               {compliance && (
-                <section style={{ ...cardBase }}>
+                <Box style={{ ...cardBase }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Shield size={16} color={tokens.colors.primaryScale[600]} />
                     <Text style={sectionTitle}>Compliance</Text>
@@ -924,12 +934,12 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       </svg>
                     </Box>
                   </Box>
-                </section>
+                </Box>
               )}
 
               {/* Quick Actions */}
               {quickActions.length > 0 && (
-                <section style={{ ...cardBase }}>
+                <Box style={{ ...cardBase }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[4] }}>
                     <Zap size={16} color={tokens.colors.primaryScale[600]} />
                     <Text style={sectionTitle}>Quick Actions</Text>
@@ -972,7 +982,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                         }}>
                           {action.icon}
                         </Text>
-                        <Box style={{ flex: 1 }}>
+                        <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>
                           <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
                             {action.label}
                           </Text>
@@ -984,7 +994,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       </Box>
                     ))}
                   </Box>
-                </section>
+                </Box>
               )}
             </Box>
 

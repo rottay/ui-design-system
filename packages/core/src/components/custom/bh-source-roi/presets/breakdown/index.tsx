@@ -6,7 +6,7 @@
  * cost analysis, and per-source drill-down panels.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   DollarSign,
   TrendingUp,
@@ -36,7 +36,10 @@ import {
   createIconContainerStyle,
   createPersonalitySectionHeaderStyle,
   getPersonalityBadgeRadius,
+  getPersonalityTypography,
   createProgressBarStyle,
+  createEntranceAnimation,
+  createStaggerDelay,
 } from '../../../helpers';
 import type {
   BhSourceRoiProps,
@@ -126,21 +129,24 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
     const [sortAsc, setSortAsc] = useState(false);
     const [expandedSource, setExpandedSource] = useState<string | null>(selProp ?? null);
 
-    const handleSort = (field: SortField) => {
-      if (sortBy === field) {
-        setSortAsc(!sortAsc);
-      } else {
-        setSortBy(field);
-        setSortAsc(false);
-      }
-      onSortChange?.(field);
-    };
 
-    const handleExpand = (id: string) => {
+    const handleSort = useCallback((field: SortField) => {
+      setSortBy(prev => {
+        if (prev === field) {
+          setSortAsc(a => !a);
+          return prev;
+        }
+        setSortAsc(false);
+        return field;
+      });
+      onSortChange?.(field);
+    }, [onSortChange]);
+
+    const handleExpand = useCallback((id: string) => {
       const next = expandedSource === id ? null : id;
       setExpandedSource(next);
       onSourceSelect?.(next);
-    };
+    }, [expandedSource, onSourceSelect]);
 
     const sorted = useMemo(() => {
       const arr = [...sources];
@@ -156,10 +162,22 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
     const maxCandidates = useMemo(() => Math.max(...sources.map(s => s.candidateCount), 1), [sources]);
 
     /* ---- Styles ---- */
-    const card = createCardStyle(t, { padding: 28 });
-    const hoverStyles = createCardHoverStyles(t);
-    const sectionLabel = createPersonalitySectionHeaderStyle(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const card = useMemo(() => createCardStyle(t, { padding: 28 }), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const typo = useMemo(() => getPersonalityTypography(t), [t]);
+
+    const glassStyle = useMemo(() => {
+      if (t.surface.useGlass && t.glass) {
+        return {
+          backdropFilter: t.glass.blur,
+          WebkitBackdropFilter: t.glass.blur,
+        };
+      }
+      return {};
+    }, [t]);
 
     /* ---- Sparkline helper ---- */
     const Sparkline = ({ sourceId, width = 80, height = 28 }: { sourceId: string; width?: number; height?: number }) => {
@@ -172,7 +190,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
         return `${x},${y}`;
       }).join(' ');
       return (
-        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+        <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Hire trend for source`}>
           <polyline points={points} fill="none" stroke={t.colors.primaryScale[400]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
@@ -181,16 +199,19 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
     const SortHeader = ({ label, field, width }: { label: string; field: SortField; width?: number }) => (
       <Box
         onClick={() => handleSort(field)}
+        role="columnheader"
+        tabIndex={0}
+        aria-sort={sortBy === field ? (sortAsc ? 'ascending' : 'descending') : 'none'}
         style={{
           width,
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
-          gap: 4,
+          gap: t.spacing[1],
           userSelect: 'none' as const,
         }}
       >
-        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: sortBy === field ? t.colors.primaryScale[600] : t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: sortBy === field ? t.colors.primaryScale[600] : t.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing }}>
           {label}
         </Text>
         {sortBy === field && (
@@ -201,7 +222,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
 
     /* ================================================================ */
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', ...glassStyle, ...entrance.animate, transition: entrance.transition, ...style }} role="region" aria-label="Source ROI Breakdown">
 
         {/* === Summary KPIs === */}
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: t.spacing[4] }}>
@@ -214,9 +235,9 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
           ].map((kpi, i) => {
             const Icon = kpi.icon;
             return (
-              <Box key={i} style={{ ...card, ...hoverStyles.base }}>
+              <Box key={i} style={{ ...card, ...hoverStyles.base, ...createEntranceAnimation(t, { index: i }).animate, transition: createEntranceAnimation(t, { index: i }).transition }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[2] }}>
-                  <Box style={createIconContainerStyle(t, { size: 32, color: `${kpi.color}18` })}>
+                  <Box style={createIconContainerStyle(t, { size: 32, color: t.colors.neutral[50] })}>
                     <Icon size={16} color={kpi.color} />
                   </Box>
                   <Text style={{ ...sectionLabel, marginBottom: 0 }}>{kpi.label}</Text>
@@ -230,9 +251,9 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
         </Box>
 
         {/* === Source Table === */}
-        <Box style={{ ...card, padding: 0, overflow: 'hidden' }}>
+        <Box style={{ ...card, padding: 0, overflow: 'hidden' }} role="table" aria-label="Source breakdown table">
           {/* Table header */}
-          <Box style={{
+          <Box role="row" style={{
             display: 'grid',
             gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr 1fr 80px',
             gap: t.spacing[3],
@@ -247,7 +268,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
             <SortHeader label="Cost/Hire" field="costPerHire" />
             <SortHeader label="Total Cost" field="totalCost" />
             <SortHeader label="Quality" field="qualityScore" />
-            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing }}>
               Trend
             </Text>
             <Box />
@@ -260,9 +281,13 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
             const qualColor = src.qualityScore >= 80 ? t.colors.successScale[600] : src.qualityScore >= 65 ? t.colors.warningScale[600] : t.colors.errorScale[600];
             const qualBg = src.qualityScore >= 80 ? t.colors.successScale[50] : src.qualityScore >= 65 ? t.colors.warningScale[50] : t.colors.errorScale[50];
             return (
-              <Box key={src.id}>
+              <Box key={src.id} role="rowgroup">
                 <Box
                   onClick={() => handleExpand(src.id)}
+                  role="row"
+                  tabIndex={0}
+                  aria-expanded={isExpanded}
+                  aria-label={`${src.name}: ${src.hireRate.toFixed(1)}% hire rate, ${formatCurrency(src.costPerHire)} per hire`}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr 1fr 80px',
@@ -280,7 +305,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                     <Box style={createIconContainerStyle(t, { size: 28, color: t.colors.primaryScale[50] })}>
                       <Icon size={14} color={t.colors.primaryScale[600]} />
                     </Box>
-                    <Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
                         {src.name}
                       </Text>
@@ -291,12 +316,12 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                   </Box>
 
                   {/* Candidates */}
-                  <Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                       {src.candidateCount.toLocaleString()}
                     </Text>
-                    <Box style={{ marginTop: 4, height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
-                      <Box style={{ height: '100%', width: `${(src.candidateCount / maxCandidates) * 100}%`, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[400] }} />
+                    <Box style={{ marginTop: t.spacing[1], height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+                      <Box style={{ height: '100%', width: `${(src.candidateCount / maxCandidates) * 100}%`, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[400], transition: `width ${t.motion.hover}` }} />
                     </Box>
                   </Box>
 
@@ -341,12 +366,12 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                         { label: 'Cost per Candidate', value: formatCurrency(src.costPerCandidate), sub: 'per applicant' },
                         { label: '90-day Retention', value: src.retentionRate90d ? `${src.retentionRate90d}%` : 'N/A', sub: 'post-hire retention' },
                       ].map((metric, i) => (
-                        <Box key={i} style={{ ...createCardStyle(t, { padding: 20 }) }}>
+                        <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...createCardStyle(t, { padding: 20 }) }}>
                           <Text style={{ ...sectionLabel, marginBottom: t.spacing[1] }}>{metric.label}</Text>
                           <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
                             {metric.value}
                           </Text>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginTop: 2 }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400]}}>
                             {metric.sub}
                           </Text>
                         </Box>

@@ -65,7 +65,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     return (
       <Box className={className} style={{
         ...createCardStyle(t, { elevation: 'md' }),
-        display: 'flex', flexDirection: 'column', height: '100%',
+        display: 'flex', flexDirection: 'column', width: '100%', height: '100%',
         backgroundColor: t.colors.common.white, overflow: 'hidden', ...style,
       }}>
         {/* Header */}
@@ -162,7 +162,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                     border: `1px solid ${t.colors.infoScale[200]}`,
                     display: 'flex', alignItems: 'flex-start', gap: t.spacing[2],
                   }}>
-                    <Info size={11} style={{ color: t.colors.infoScale[500], flexShrink: 0, marginTop: 2 }} />
+                    <Info size={11} style={{ color: t.colors.infoScale[500], flexShrink: 0, marginTop: t.spacing[1] }} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[700], lineHeight: 1.5 }}>{gap.recommendation}</Text>
                   </Box>
                 )}

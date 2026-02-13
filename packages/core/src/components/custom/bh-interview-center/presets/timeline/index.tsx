@@ -4,28 +4,50 @@
  * BhInterviewCenter - Timeline Preset
  * Horizontal day timeline with interview blocks positioned by time,
  * a "now" line indicator, status coloring, and interview detail on click.
+ * Personality-driven, glass-aware, fully accessible.
  */
 
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, createSurfaceStyle, getCardHoverShadow } from '../../../helpers';
+import {
+  createCardStyle,
+  createSurfaceStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
+  getCardHoverShadow,
+} from '../../../helpers';
 import type { BhInterviewCenterProps, InterviewItem, InterviewType, InterviewStatus, InterviewFilter, SortDirection } from '../../core';
 import { BH_INTERVIEW_CENTER_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import { Calendar, List, Clock, Bot, User, Video, Plus, ChevronLeft, ChevronRight, X, Filter, Search, TrendingUp, TrendingDown, CheckCircle2, XCircle, Timer, BarChart3, CalendarDays, Star, ExternalLink, Activity } from 'lucide-react';
 
-// ─── Config Maps ─────────────────────────────────────────────────────────────
+// ---- Config Maps ----
 
 const STATUS_MAP: Record<InterviewStatus, { label: string; scale: string }> = {
-  scheduled: { label: 'Scheduled', scale: 'infoScale' }, in_progress: { label: 'In Progress', scale: 'warningScale' },
-  completed: { label: 'Completed', scale: 'successScale' }, cancelled: { label: 'Cancelled', scale: 'neutral' },
+  scheduled: { label: 'Scheduled', scale: 'infoScale' },
+  in_progress: { label: 'In Progress', scale: 'warningScale' },
+  completed: { label: 'Completed', scale: 'successScale' },
+  cancelled: { label: 'Cancelled', scale: 'neutral' },
   no_show: { label: 'No Show', scale: 'errorScale' },
 };
-const TYPE_MAP: Record<InterviewType, { label: string; scale: string }> = { ai: { label: 'AI', scale: 'infoScale' }, human: { label: 'Human', scale: 'secondaryScale' } };
 
-function sc(t: DesignTokens, scale: string, shade: number) { return (t.colors as any)[scale]?.[shade] ?? (t.colors.neutral as any)[shade]; }
+const TYPE_MAP: Record<InterviewType, { label: string; scale: string }> = {
+  ai: { label: 'AI', scale: 'infoScale' },
+  human: { label: 'Human', scale: 'secondaryScale' },
+};
 
-// ─── Date/Time Helpers ───────────────────────────────────────────────────────
+function sc(t: DesignTokens, scale: string, shade: number) {
+  return (t.colors as any)[scale]?.[shade] ?? (t.colors.neutral as any)[shade];
+}
+
+// ---- Date/Time Helpers ----
 
 const fmtTime = (s: string) => { const d = new Date(s); const h = d.getHours(); const m = d.getMinutes(); return `${h % 12 || 12}:${m.toString().padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`; };
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -40,13 +62,23 @@ const getNowPos = () => { const n = new Date(); return Math.max(0, Math.min(1, (
 const fmtHour = (h: number) => h > 12 ? `${h - 12} PM` : h === 12 ? '12 PM' : `${h} AM`;
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-// ─── Timeline Preset ─────────────────────────────────────────────────────────
+// ---- Timeline Preset ----
 
 export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
   name: 'BhInterviewCenter.Timeline',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhInterviewCenterProps>) => {
-    const t = tokens; const isModern = t.surface.useGlass;
+    const { Box, Text } = primitives;
+    const t = tokens;
+    const isGlass = t.surface.useGlass;
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
+
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
     const { interviews, stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, sortDirection: controlledSortDirection, className, style } = props;
 
@@ -59,20 +91,35 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const [nowPos, setNowPos] = useState(getNowPos());
     const timelineRef = useRef<HTMLDivElement>(null);
 
+
     const filters = controlledFilters ?? internalFilters;
     const selectedInterview = controlledSelectedInterview ?? internalSelected;
     const sortDirection = controlledSortDirection ?? internalSortDir;
 
     useEffect(() => { const iv = setInterval(() => setNowPos(getNowPos()), 60000); return () => clearInterval(iv); }, []);
 
-    const glassCard = isModern && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {};
-    const glassSurface = isModern && t.glass ? { backdropFilter: t.glass.blurSm, WebkitBackdropFilter: t.glass.blurSm, backgroundColor: t.glass.bgLight, border: `${bdr} ${t.glass.borderLight}` } : {};
+    const glassCard = useMemo(() =>
+      isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${bdr} ${t.glass.border}` } : {},
+      [isGlass, t, bdr]
+    );
+    const glassSurface = useMemo(() =>
+      isGlass && t.glass ? { backdropFilter: t.glass.blurSm, WebkitBackdropFilter: t.glass.blurSm, backgroundColor: t.glass.bgLight, border: `${bdr} ${t.glass.borderLight}` } : {},
+      [isGlass, t, bdr]
+    );
 
     const handleFilterChange = useCallback((f: InterviewFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleSelect = useCallback((id: string | null) => { if (controlledSelectedInterview === undefined) setInternalSelected(id); onInterviewSelect?.(id); }, [controlledSelectedInterview, onInterviewSelect]);
     const handleStatusFilter = useCallback((s: InterviewStatus | null) => handleFilterChange({ ...filters, status: s }), [filters, handleFilterChange]);
     const handleTypeFilter = useCallback((tp: InterviewType | null) => handleFilterChange({ ...filters, type: tp }), [filters, handleFilterChange]);
     const navigateDate = useCallback((dir: 'prev' | 'next' | 'today') => { if (dir === 'today') { setCurrentDate(new Date()); return; } const d = new Date(currentDate); d.setDate(d.getDate() + (dir === 'next' ? 7 : -7)); setCurrentDate(d); }, [currentDate]);
+
+    const handleKeyNav = useCallback((e: React.KeyboardEvent, action: () => void) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); } }, []);
+
+    const animStyle = useCallback((index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    }), [entrance, t]);
 
     const filtered = useMemo(() => {
       let r = [...interviews];
@@ -94,13 +141,56 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const selectedData = useMemo(() => selectedInterview ? interviews.find(i => i.id === selectedInterview) ?? null : null, [selectedInterview, interviews]);
     const hasIvs = useMemo(() => weekDays.some(d => (byDay[`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`] || []).length > 0), [weekDays, byDay]);
 
-    // Chip helper
-    const Chip = ({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) => (
-      <button onClick={onClick} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, border: `${bdr} ${active ? t.colors.primaryScale[300] : t.colors.neutral[200]}`, backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white, color: active ? t.colors.primaryScale[600] : t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}`, outline: 'none' }}>{children}</button>
-    );
+    // ---- Sub-components ----
 
-    // Stats bar
-    const renderStats = () => {
+    const ChipBtn = useCallback(({ active, onClick, children, ariaLabel }: { active: boolean; onClick: () => void; children: React.ReactNode; ariaLabel: string }) => (
+      <Box
+        role="button"
+        tabIndex={0}
+        aria-label={ariaLabel}
+        aria-pressed={active}
+        onClick={onClick}
+        onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, onClick)}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+          padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+          borderRadius: badgeRadius,
+          fontSize: t.typography.fontSize.xs,
+          fontWeight: t.typography.fontWeight.medium,
+          border: `${bdr} ${active ? t.colors.primaryScale[300] : t.colors.neutral[200]}`,
+          backgroundColor: active ? t.colors.primaryScale[50] : t.colors.common.white,
+          color: active ? t.colors.primaryScale[600] : t.colors.neutral[600],
+          cursor: 'pointer', transition: `all ${t.motion.hover}`, outline: 'none',
+        }}
+      >{children}</Box>
+    ), [t, bdr, badgeRadius, handleKeyNav]);
+
+    const NavBtn = useCallback(({ dir, onClick }: { dir: 'prev' | 'today' | 'next'; onClick: () => void }) => (
+      <Box
+        role="button"
+        tabIndex={0}
+        aria-label={dir === 'prev' ? 'Previous week' : dir === 'next' ? 'Next week' : 'Go to this week'}
+        onClick={onClick}
+        onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, onClick)}
+        style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          width: dir === 'today' ? undefined : 28, height: 28,
+          padding: dir === 'today' ? `${t.spacing[1]}px ${t.spacing[3]}px` : 0,
+          borderRadius: t.borderRadius.md,
+          border: `${bdr} ${t.colors.neutral[200]}`,
+          backgroundColor: t.colors.common.white,
+          color: t.colors.neutral[dir === 'today' ? 700 : 600],
+          fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium,
+          cursor: 'pointer', outline: 'none', transition: `all ${t.motion.hover}`,
+        }}
+      >
+        {dir === 'prev' ? <ChevronLeft size={14} /> : dir === 'next' ? <ChevronRight size={14} /> : 'This Week'}
+      </Box>
+    ), [t, bdr, handleKeyNav]);
+
+    // ---- Stats Bar ----
+
+    const renderStats = useCallback(() => {
       if (!stats) return null;
       const items = [
         { label: 'Scheduled', value: stats.scheduledToday, icon: <CalendarDays size={14} />, scale: 'infoScale' },
@@ -111,22 +201,28 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
         { label: 'Completion', value: `${stats.completionRate}%`, icon: <BarChart3 size={14} />, scale: 'primaryScale', trend: stats.completionTrend },
       ];
       return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: `${t.spacing[3]}px ${t.spacing[4]}px`, ...createSurfaceStyle(t, { elevation: 'sm' }), backgroundColor: t.colors.common.white, marginBottom: t.spacing[4], flexWrap: 'wrap' as const, ...glassSurface }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: `${t.spacing[3]}px ${t.spacing[4]}px`, ...createSurfaceStyle(t, { elevation: 'sm' }), backgroundColor: t.colors.common.white, marginBottom: t.spacing[4], flexWrap: 'wrap' as const, ...glassSurface }} role="region" aria-label="Interview statistics">
           {items.map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.full, backgroundColor: sc(t, item.scale, 50), border: `${bdr} ${t.colors.neutral[100]}` }}>
-              <span style={{ color: sc(t, item.scale, 600), display: 'flex', alignItems: 'center' }}>{item.icon}</span>
-              <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{item.label}</span>
-              <span style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{item.value}</span>
-              {item.pulse && <span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.warningScale[500], boxShadow: `0 0 0 2px ${t.colors.warningScale[100]}` }} />}
-              {item.trend !== undefined && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 1, fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: item.trend >= 0 ? t.colors.successScale[600] : t.colors.errorScale[600] }}>{item.trend >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}{Math.abs(item.trend)}%</span>}
-            </div>
+            <Box key={idx} style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: sc(t, item.scale, 50), border: `${bdr} ${t.colors.neutral[100]}`, ...animStyle(idx) }}>
+              <Box style={{ color: sc(t, item.scale, 600), display: 'flex', alignItems: 'center' }}>{item.icon}</Box>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{item.label}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing }}>{item.value}</Text>
+              {item.pulse && <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.warningScale[500], boxShadow: `0 0 0 2px ${t.colors.warningScale[100]}` }} />}
+              {item.trend !== undefined && (
+                <Box style={{ display: 'inline-flex', alignItems: 'center', gap: 1, fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: item.trend >= 0 ? t.colors.successScale[600] : t.colors.errorScale[600] }}>
+                  {item.trend >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                  <Text style={{ fontSize: '10px', color: item.trend >= 0 ? t.colors.successScale[600] : t.colors.errorScale[600] }}>{Math.abs(item.trend)}%</Text>
+                </Box>
+              )}
+            </Box>
           ))}
-        </div>
+        </Box>
       );
-    };
+    }, [stats, t, glassSurface, bdr, badgeRadius, ptypo, animStyle]);
 
-    // Day row
-    const renderDayRow = (day: Date, dayIdx: number) => {
+    // ---- Day Row ----
+
+    const renderDayRow = useCallback((day: Date, dayIdx: number) => {
       const today = new Date(); const isToday = isSameDay(day, today);
       const key = `${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`;
       const dayIvs = byDay[key] || [];
@@ -136,154 +232,315 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       const trkH = 44; const rowH = Math.max(60, tracks.length * trkH + 16);
 
       return (
-        <div key={dayIdx} style={{ display: 'flex', minHeight: rowH, borderBottom: `${bdr} ${t.colors.neutral[100]}` }}>
-          <div style={{ width: 160, flexShrink: 0, padding: `${t.spacing[2]}px ${t.spacing[3]}px`, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', backgroundColor: isToday ? t.colors.primaryScale[50] : t.colors.common.white, borderRight: `${bdr} ${t.colors.neutral[200]}` }}>
-            <div style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: isToday ? t.colors.primaryScale[700] : t.colors.neutral[800] }}>
-              {DAY_NAMES[day.getDay()]}
-              {isToday && <span style={{ marginLeft: t.spacing[2], fontSize: '9px', fontWeight: t.typography.fontWeight.bold, color: t.colors.common.white, backgroundColor: t.colors.primaryScale[600], padding: `0 ${t.spacing[1]}px`, borderRadius: t.borderRadius.full }}>TODAY</span>}
-            </div>
-            <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 2 }}>{MONTHS[day.getMonth()]} {day.getDate()}</div>
-            {dayIvs.length > 0 && <span style={{ marginTop: t.spacing[1], fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: t.colors.primaryScale[600], backgroundColor: t.colors.primaryScale[100], padding: `0 ${t.spacing[1]}px`, borderRadius: t.borderRadius.full, display: 'inline-block', width: 'fit-content' }}>{dayIvs.length}</span>}
-          </div>
-          <div style={{ position: 'relative' as const, width: TL_W, flexShrink: 0, backgroundColor: isToday ? `${t.colors.primaryScale[50]}33` : 'transparent' }}>
-            {Array.from({ length: TL_HOURS }).map((_, hIdx) => <div key={hIdx} style={{ position: 'absolute' as const, left: hIdx * HOUR_W, top: 0, bottom: 0, width: 1, backgroundColor: t.colors.neutral[100] }} />)}
-            {isToday && <div style={{ position: 'absolute' as const, left: nowPos, top: 0, bottom: 0, width: 2, backgroundColor: t.colors.errorScale[500], zIndex: 10 }}><div style={{ position: 'absolute' as const, top: -4, left: -4, width: 10, height: 10, borderRadius: t.borderRadius.full, backgroundColor: t.colors.errorScale[500] }} /></div>}
+        <Box key={dayIdx} style={{ display: 'flex', minHeight: rowH, borderBottom: `${bdr} ${t.colors.neutral[100]}`, ...animStyle(dayIdx) }}>
+          <Box style={{ width: 160, flexShrink: 0, padding: `${t.spacing[2]}px ${t.spacing[3]}px`, display: 'flex', flexDirection: 'column' as const, justifyContent: 'center', backgroundColor: isToday ? t.colors.primaryScale[50] : t.colors.common.white, borderRight: `${bdr} ${t.colors.neutral[200]}` }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+              <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, color: isToday ? t.colors.primaryScale[700] : t.colors.neutral[800], letterSpacing: ptypo.headingLetterSpacing }}>
+                {DAY_NAMES[day.getDay()]}
+              </Text>
+              {isToday && <Box style={{ fontSize: '9px', fontWeight: t.typography.fontWeight.bold, color: t.colors.common.white, backgroundColor: t.colors.primaryScale[600], padding: `0 ${t.spacing[1]}px`, borderRadius: badgeRadius }}><Text style={{ fontSize: '9px', color: t.colors.common.white, fontWeight: t.typography.fontWeight.bold }}>TODAY</Text></Box>}
+            </Box>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{MONTHS[day.getMonth()]} {day.getDate()}</Text>
+            {dayIvs.length > 0 && (
+              <Box style={{ marginTop: t.spacing[1], fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: t.colors.primaryScale[600], backgroundColor: t.colors.primaryScale[100], padding: `0 ${t.spacing[1]}px`, borderRadius: badgeRadius, display: 'inline-block', width: 'fit-content' }}>
+                <Text style={{ fontSize: '10px', color: t.colors.primaryScale[600], fontWeight: t.typography.fontWeight.medium }}>{dayIvs.length}</Text>
+              </Box>
+            )}
+          </Box>
+          <Box style={{ position: 'relative' as const, width: TL_W, flexShrink: 0, backgroundColor: isToday ? `${t.colors.primaryScale[50]}33` : 'transparent' }}>
+            {Array.from({ length: TL_HOURS }).map((_, hIdx) => <Box key={hIdx} style={{ position: 'absolute' as const, left: hIdx * HOUR_W, top: 0, bottom: 0, width: 1, backgroundColor: t.colors.neutral[100] }} />)}
+            {isToday && (
+              <Box style={{ position: 'absolute' as const, left: nowPos, top: 0, bottom: 0, width: 2, backgroundColor: t.colors.errorScale[500], zIndex: 10 }} aria-label="Current time indicator">
+                <Box style={{ position: 'absolute' as const, top: -4, left: -4, width: 10, height: 10, borderRadius: t.borderRadius.full, backgroundColor: t.colors.errorScale[500] }} />
+              </Box>
+            )}
             {tracks.map((track, tIdx) => track.map(iv => {
               const left = getTimePos(iv.dateTime); const width = Math.max(getDurW(iv.duration), 60);
               const sCfg = STATUS_MAP[iv.status]; const isHov = hoveredId === iv.id; const isSel = selectedInterview === iv.id;
               return (
-                <div key={iv.id} onClick={() => handleSelect(iv.id)} onMouseEnter={() => setHoveredId(iv.id)} onMouseLeave={() => setHoveredId(null)} style={{ position: 'absolute' as const, left, top: 8 + tIdx * trkH, width, height: trkH - 8, borderRadius: t.borderRadius.md, backgroundColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 100 : 50), border: isSel ? `${bdr} ${t.colors.primaryScale[500]}` : `${bdr} ${sc(t, sCfg.scale, 200)}`, borderLeftWidth: 3, borderLeftColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 300 : 400), padding: `${t.spacing[1]}px ${t.spacing[2]}px`, cursor: 'pointer', transition: `all ${t.motion.hover}`, overflow: 'hidden' as const, display: 'flex', alignItems: 'center', gap: t.spacing[2], zIndex: isHov ? 5 : 1, transform: isHov ? t.motion.transform : 'none', boxShadow: isHov ? getCardHoverShadow(t, 'sm') : 'none' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, borderRadius: t.borderRadius.full, backgroundColor: sc(t, iv.type === 'ai' ? 'infoScale' : 'secondaryScale', 200), flexShrink: 0 }}>
+                <Box
+                  key={iv.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Interview with ${iv.candidateName}, ${sCfg.label}, ${fmtTime(iv.dateTime)}`}
+                  onClick={() => handleSelect(iv.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => handleSelect(iv.id))}
+                  onMouseEnter={() => setHoveredId(iv.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                  style={{
+                    position: 'absolute' as const, left, top: 8 + tIdx * trkH, width, height: trkH - 8,
+                    borderRadius: t.borderRadius.md,
+                    backgroundColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 100 : 50),
+                    border: isSel ? `${bdr} ${t.colors.primaryScale[500]}` : `${bdr} ${sc(t, sCfg.scale, 200)}`,
+                    borderLeftWidth: 3, borderLeftColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 300 : 400),
+                    padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                    cursor: 'pointer', transition: `all ${t.motion.hover}`, overflow: 'hidden' as const,
+                    display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                    zIndex: isHov ? 5 : 1,
+                    transform: isHov ? t.motion.transform : 'none',
+                    boxShadow: isHov ? getCardHoverShadow(t, 'sm') : 'none',
+                    outline: 'none',
+                  }}
+                >
+                  <Box style={{ ...createIconContainerStyle(t, { size: 20 }), flexShrink: 0 }}>
                     {iv.type === 'ai' ? <Bot size={10} color={sc(t, 'infoScale', 700)} /> : <User size={10} color={sc(t, 'secondaryScale', 700)} />}
-                  </span>
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontSize: '11px', fontWeight: t.typography.fontWeight.semibold, color: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 600 : 700), whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{iv.candidateName}</div>
-                    <div style={{ fontSize: '9px', color: t.colors.neutral[500], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{fmtTime(iv.dateTime)} &middot; {iv.duration}m</div>
-                  </div>
-                  {iv.score !== undefined && width > 150 && <span style={{ fontSize: '9px', fontWeight: t.typography.fontWeight.bold, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700], flexShrink: 0 }}>{iv.score}</span>}
-                </div>
+                  </Box>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], minWidth: 0, flex: 1 }}>
+                    <Text style={{ fontSize: '11px', fontWeight: ptypo.headingWeight, color: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 600 : 700), whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const, letterSpacing: ptypo.headingLetterSpacing }}>{iv.candidateName}</Text>
+                    <Text style={{ fontSize: '9px', color: t.colors.neutral[500], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{fmtTime(iv.dateTime)} - {iv.duration}m</Text>
+                  </Box>
+                  {iv.score !== undefined && width > 150 && (
+                    <Text style={{ fontSize: '9px', fontWeight: t.typography.fontWeight.bold, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700], flexShrink: 0 }}>{iv.score}</Text>
+                  )}
+                </Box>
               );
             }))}
-          </div>
-        </div>
+          </Box>
+        </Box>
       );
-    };
+    }, [byDay, hoveredId, selectedInterview, t, bdr, nowPos, badgeRadius, ptypo, animStyle, handleSelect, handleKeyNav]);
 
-    // Detail popup
-    const renderDetail = () => {
+    // ---- Detail Popup ----
+
+    const renderDetail = useCallback(() => {
       if (!selectedData) return null;
       const iv = selectedData; const sCfg = STATUS_MAP[iv.status]; const tCfg = TYPE_MAP[iv.type];
-      const labelSt = { fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: t.spacing[1] };
-      const valSt = { display: 'flex', alignItems: 'center', gap: t.spacing[2], fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium };
+      const labelSt: React.CSSProperties = { ...sectionLabel, marginBottom: t.spacing[1] };
+      const valSt: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: t.spacing[2], fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium };
       const fields: [string, React.ReactNode, string][] = [
         ['Date & Time', <CalendarDays size={14} color={t.colors.neutral[400]} />, `${fmtDate(new Date(iv.dateTime))} at ${fmtTime(iv.dateTime)}`],
         ['Duration', <Timer size={14} color={t.colors.neutral[400]} />, `${iv.duration} minutes`],
         [iv.type === 'ai' ? 'AI Agent' : 'Recruiter', iv.type === 'ai' ? <Bot size={14} color={sc(t, 'infoScale', 500)} /> : <User size={14} color={sc(t, 'secondaryScale', 500)} />, iv.type === 'ai' ? iv.agentName ?? 'AI Agent' : iv.recruiterName ?? 'Unassigned'],
       ];
       return (
-        <div style={{ position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0, backgroundColor: t.overlay?.light, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }} onClick={() => handleSelect(null)}>
-          <div onClick={e => e.stopPropagation()} style={{ ...createCardStyle(t, { elevation: 'xl', glass: isModern }), padding: 0, width: 440, maxHeight: '80vh', overflow: 'auto' as const, ...glassCard }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[4]}px ${t.spacing[5]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
-                <div style={{ width: 40, height: 40, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], backgroundImage: iv.candidateAvatar ? `url(${iv.candidateAvatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{!iv.candidateAvatar && <User size={18} color={t.colors.primaryScale[600]} />}</div>
-                <div><div style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{iv.candidateName}</div><div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 1 }}>{iv.jobTitle} &middot; {iv.stageName}</div></div>
-              </div>
-              <button onClick={() => handleSelect(null)} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[500], cursor: 'pointer', outline: 'none' }}><X size={14} /></button>
-            </div>
-            <div style={{ display: 'flex', gap: t.spacing[2], padding: `${t.spacing[3]}px ${t.spacing[5]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}` }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, tCfg.scale, 100), color: sc(t, tCfg.scale, 700), border: `${bdr} ${sc(t, tCfg.scale, 200)}` }}>{iv.type === 'ai' ? <Bot size={12} /> : <User size={12} />}{tCfg.label} Interview</span>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 100 : 50), color: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 600 : 700), border: `${bdr} ${sc(t, sCfg.scale, 200)}` }}><span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 400 : 500) }} />{sCfg.label}</span>
-            </div>
-            <div style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: `${t.spacing[3]}px ${t.spacing[4]}px` }}>
-              {fields.map(([label, icon, val], i) => <div key={i}><div style={labelSt}>{label}</div><div style={valSt}>{icon}{val}</div></div>)}
-              {iv.score !== undefined && <div><div style={labelSt}>Score</div><div style={{ ...valSt, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700], fontWeight: t.typography.fontWeight.semibold }}><Star size={14} />{iv.score}/100</div></div>}
-              {iv.location && <div><div style={labelSt}>Location</div><div style={valSt}><Video size={14} color={t.colors.neutral[400]} />{iv.location}</div></div>}
-            </div>
-            <div style={{ display: 'flex', gap: t.spacing[2], padding: `${t.spacing[3]}px ${t.spacing[5]}px ${t.spacing[4]}px`, borderTop: `${bdr} ${t.colors.neutral[100]}` }}>
-              <button style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', cursor: 'pointer', outline: 'none' }}><Video size={14} />Join Interview</button>
-              <button style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, backgroundColor: t.colors.common.white, color: t.colors.neutral[700], border: `${bdr} ${t.colors.neutral[200]}`, cursor: 'pointer', outline: 'none' }}><ExternalLink size={14} />Profile</button>
-            </div>
-          </div>
-        </div>
+        <Box
+          role="dialog"
+          aria-label={`Interview details for ${iv.candidateName}`}
+          aria-modal="true"
+          style={{ position: 'fixed' as const, top: 0, left: 0, right: 0, bottom: 0, backgroundColor: t.overlay?.light, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}
+          onClick={() => handleSelect(null)}
+        >
+          <Box onClick={(e: React.MouseEvent) => e.stopPropagation()} style={{ ...createCardStyle(t, { elevation: 'xl', glass: isGlass }), padding: 0, width: 440, maxHeight: '80vh', overflow: 'auto' as const, ...glassCard, ...accentBar }}>
+            {/* Header */}
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[4]}px ${t.spacing[5]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}`, backgroundColor: t.colors.neutral[50] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+                <Box style={{ width: 40, height: 40, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], backgroundImage: iv.candidateAvatar ? `url(${iv.candidateAvatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {!iv.candidateAvatar && <User size={18} color={t.colors.primaryScale[600]} />}
+                </Box>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], letterSpacing: ptypo.headingLetterSpacing }}>{iv.candidateName}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{iv.jobTitle} - {iv.stageName}</Text>
+                </Box>
+              </Box>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Close detail popup"
+                onClick={() => handleSelect(null)}
+                onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => handleSelect(null))}
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[500], cursor: 'pointer', outline: 'none' }}
+              >
+                <X size={14} />
+              </Box>
+            </Box>
+            {/* Badges */}
+            <Box style={{ display: 'flex', gap: t.spacing[2], padding: `${t.spacing[3]}px ${t.spacing[5]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}` }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, tCfg.scale, 100), color: sc(t, tCfg.scale, 700), border: `${bdr} ${sc(t, tCfg.scale, 200)}` }}>
+                {iv.type === 'ai' ? <Bot size={12} /> : <User size={12} />}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: sc(t, tCfg.scale, 700) }}>{tCfg.label} Interview</Text>
+              </Box>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 100 : 50), color: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 600 : 700), border: `${bdr} ${sc(t, sCfg.scale, 200)}` }}>
+                <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 400 : 500) }} />
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: sc(t, sCfg.scale, sCfg.scale === 'neutral' ? 600 : 700) }}>{sCfg.label}</Text>
+              </Box>
+            </Box>
+            {/* Fields */}
+            <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: `${t.spacing[3]}px ${t.spacing[4]}px` }}>
+              {fields.map(([label, icon, val], i) => (
+                <Box key={i}>
+                  <Text style={labelSt}>{label}</Text>
+                  <Box style={valSt}>{icon}<Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800] }}>{val}</Text></Box>
+                </Box>
+              ))}
+              {iv.score !== undefined && (
+                <Box>
+                  <Text style={labelSt}>Score</Text>
+                  <Box style={{ ...valSt, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700], fontWeight: t.typography.fontWeight.semibold }}>
+                    <Star size={14} /><Text style={{ fontSize: t.typography.fontSize.sm, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700] }}>{iv.score}/100</Text>
+                  </Box>
+                </Box>
+              )}
+              {iv.location && (
+                <Box>
+                  <Text style={labelSt}>Location</Text>
+                  <Box style={valSt}><Video size={14} color={t.colors.neutral[400]} /><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800] }}>{iv.location}</Text></Box>
+                </Box>
+              )}
+            </Box>
+            {/* Actions */}
+            <Box style={{ display: 'flex', gap: t.spacing[2], padding: `${t.spacing[3]}px ${t.spacing[5]}px ${t.spacing[4]}px`, borderTop: `${bdr} ${t.colors.neutral[100]}` }}>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Join interview"
+                onClick={() => {}}
+                onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => {})}
+                style={{ flex: 1, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', cursor: 'pointer', outline: 'none', letterSpacing: ptypo.headingLetterSpacing }}
+              >
+                <Video size={14} /><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white, fontWeight: ptypo.headingWeight }}>Join Interview</Text>
+              </Box>
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="View candidate profile"
+                onClick={() => {}}
+                onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => {})}
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, backgroundColor: t.colors.common.white, color: t.colors.neutral[700], border: `${bdr} ${t.colors.neutral[200]}`, cursor: 'pointer', outline: 'none' }}
+              >
+                <ExternalLink size={14} /><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>Profile</Text>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
       );
-    };
+    }, [selectedData, t, bdr, isGlass, glassCard, accentBar, sectionLabel, ptypo, badgeRadius, handleSelect, handleKeyNav]);
 
-    // Empty state
-    const renderEmpty = () => (
-      <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${t.spacing[12]}px ${t.spacing[6]}px`, textAlign: 'center' as const }}>
-        <div style={{ width: 64, height: 64, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: t.spacing[4] }}><Clock size={28} color={t.colors.primaryScale[400]} /></div>
-        <div style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2] }}>No interviews this week</div>
-        <div style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginBottom: t.spacing[6], maxWidth: 360, lineHeight: t.typography.lineHeight.relaxed }}>{searchQuery || filters.status || filters.type ? 'Try adjusting your filters or navigating to a different week.' : 'Schedule interviews to see them on the timeline.'}</div>
-        {onScheduleNew && <button onClick={onScheduleNew} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[5]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', cursor: 'pointer', boxShadow: t.shadows.sm, outline: 'none' }}><Plus size={16} />Schedule Interview</button>}
-      </div>
-    );
+    // ---- Empty State ----
+
+    const renderEmpty = useCallback(() => (
+      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...emptyState, padding: `${t.spacing[12]}px ${t.spacing[6]}px` }}>
+        <Box style={{ ...createIconContainerStyle(t, { size: 64 }), marginBottom: t.spacing[4] }}>
+          <Clock size={28} color={t.colors.primaryScale[400]} />
+        </Box>
+        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], marginBottom: t.spacing[2], letterSpacing: ptypo.headingLetterSpacing }}>No interviews this week</Text>
+        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginBottom: t.spacing[6], maxWidth: 360, lineHeight: t.typography.lineHeight.relaxed, textAlign: 'center' as const }}>{searchQuery || filters.status || filters.type ? 'Try adjusting your filters or navigating to a different week.' : 'Schedule interviews to see them on the timeline.'}</Text>
+        {onScheduleNew && (
+          <Box
+            role="button"
+            tabIndex={0}
+            aria-label="Schedule a new interview"
+            onClick={onScheduleNew}
+            onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, onScheduleNew)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[5]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', cursor: 'pointer', boxShadow: t.shadows.sm, outline: 'none', letterSpacing: ptypo.headingLetterSpacing }}
+          >
+            <Plus size={16} /><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white }}>Schedule Interview</Text>
+          </Box>
+        )}
+      </Box>
+    ), [emptyState, t, ptypo, searchQuery, filters, onScheduleNew, handleKeyNav]);
 
     const statusOpts: (InterviewStatus | null)[] = [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'];
     const typeOpts: (InterviewType | null)[] = [null, 'ai', 'human'];
 
     return (
-      <div className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', fontFamily: 'inherit', ...style }}>
+      <Box className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...style }}>
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
-          <div>
-            <h1 style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], margin: 0, lineHeight: t.typography.lineHeight.tight }}>Interview Center</h1>
-            <p style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], margin: 0, marginTop: t.spacing[1] }}>Manage and track all interviews across your pipeline</p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
-            <div style={{ display: 'flex', alignItems: 'center', borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, overflow: 'hidden' as const }}>
-              {[{ key: 'calendar', icon: <Calendar size={14} /> }, { key: 'list', icon: <List size={14} /> }, { key: 'timeline', icon: <Clock size={14} /> }].map(({ key, icon }) => (
-                <button key={key} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 28, border: 'none', backgroundColor: key === 'timeline' ? t.colors.primaryScale[50] : t.colors.common.white, color: key === 'timeline' ? t.colors.primaryScale[600] : t.colors.neutral[500], cursor: 'pointer', outline: 'none' }}>{icon}</button>
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4], ...animStyle(0) }}>
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+            <Text as="p" style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], margin: 0, lineHeight: t.typography.lineHeight.tight, letterSpacing: ptypo.headingLetterSpacing }}>Interview Center</Text>
+            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], margin: 0}}>Manage and track all interviews across your pipeline</Text>
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, overflow: 'hidden' as const }} role="group" aria-label="View mode toggle">
+              {[{ key: 'calendar', icon: <Calendar size={14} />, label: 'Calendar view' }, { key: 'list', icon: <List size={14} />, label: 'List view' }, { key: 'timeline', icon: <Clock size={14} />, label: 'Timeline view' }].map(({ key, icon, label }) => (
+                <Box
+                  key={key}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={label}
+                  aria-pressed={key === 'timeline'}
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 28, border: 'none', backgroundColor: key === 'timeline' ? t.colors.primaryScale[50] : t.colors.common.white, color: key === 'timeline' ? t.colors.primaryScale[600] : t.colors.neutral[500], cursor: 'pointer', outline: 'none' }}
+                >{icon}</Box>
               ))}
-            </div>
-            {onScheduleNew && <button onClick={onScheduleNew} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', cursor: 'pointer', boxShadow: t.shadows.sm, outline: 'none' }}><Plus size={16} />Schedule Interview</button>}
-          </div>
-        </div>
+            </Box>
+            {onScheduleNew && (
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Schedule a new interview"
+                onClick={onScheduleNew}
+                onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, onScheduleNew)}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, border: 'none', cursor: 'pointer', boxShadow: t.shadows.sm, outline: 'none' }}
+              >
+                <Plus size={16} /><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.common.white }}>Schedule Interview</Text>
+              </Box>
+            )}
+          </Box>
+        </Box>
 
         {renderStats()}
 
         {/* Toolbar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], flexWrap: 'wrap' as const }}>
+        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], flexWrap: 'wrap' as const, ...animStyle(1) }} role="toolbar" aria-label="Interview filters">
           <Filter size={14} color={t.colors.neutral[400]} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-            {statusOpts.map(s => <Chip key={s ?? 'all'} active={filters.status === s || (s === null && !filters.status)} onClick={() => handleStatusFilter(s)}>{s !== null && <span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, STATUS_MAP[s].scale, STATUS_MAP[s].scale === 'neutral' ? 400 : 500), flexShrink: 0 }} />}{s === null ? 'All' : STATUS_MAP[s].label}</Chip>)}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-            {typeOpts.map(tp => <Chip key={tp ?? 'all-types'} active={filters.type === tp || (tp === null && !filters.type)} onClick={() => handleTypeFilter(tp)}>{tp === 'ai' && <Bot size={10} />}{tp === 'human' && <User size={10} />}{tp === null ? 'All' : TYPE_MAP[tp].label}</Chip>)}
-          </div>
-          <div style={{ flex: 1 }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, minWidth: 180 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }} role="group" aria-label="Status filters">
+            {statusOpts.map(s => (
+              <ChipBtn key={s ?? 'all'} active={filters.status === s || (s === null && !filters.status)} onClick={() => handleStatusFilter(s)} ariaLabel={s === null ? 'Show all statuses' : `Filter by ${STATUS_MAP[s].label}`}>
+                {s !== null && <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, STATUS_MAP[s].scale, STATUS_MAP[s].scale === 'neutral' ? 400 : 500), flexShrink: 0 }} />}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: 'inherit' }}>{s === null ? 'All' : STATUS_MAP[s].label}</Text>
+              </ChipBtn>
+            ))}
+          </Box>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }} role="group" aria-label="Type filters">
+            {typeOpts.map(tp => (
+              <ChipBtn key={tp ?? 'all-types'} active={filters.type === tp || (tp === null && !filters.type)} onClick={() => handleTypeFilter(tp)} ariaLabel={tp === null ? 'Show all types' : `Filter by ${TYPE_MAP[tp].label}`}>
+                {tp === 'ai' && <Bot size={10} />}{tp === 'human' && <User size={10} />}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: 'inherit' }}>{tp === null ? 'All' : TYPE_MAP[tp].label}</Text>
+              </ChipBtn>
+            ))}
+          </Box>
+          <Box style={{ flex: 1 }} />
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, minWidth: 180 }}>
             <Search size={14} color={t.colors.neutral[400]} />
-            <input type="text" placeholder="Search..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], backgroundColor: 'transparent', flex: 1, padding: 0 }} />
-            {searchQuery && <X size={12} color={t.colors.neutral[400]} style={{ cursor: 'pointer' }} onClick={() => setSearchQuery('')} />}
-          </div>
-        </div>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              aria-label="Search interviews"
+              style={{ border: 'none', outline: 'none', fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], backgroundColor: 'transparent', flex: 1, padding: 0 }}
+            />
+            {searchQuery && (
+              <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Clear search"
+                onClick={() => setSearchQuery('')}
+                onKeyDown={(e: React.KeyboardEvent) => handleKeyNav(e, () => setSearchQuery(''))}
+                style={{ cursor: 'pointer', display: 'flex', color: t.colors.neutral[400] }}
+              >
+                <X size={12} />
+              </Box>
+            )}
+          </Box>
+        </Box>
 
         {/* Navigation */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-            {['prev', 'today', 'next'].map(dir => (
-              <button key={dir} onClick={() => navigateDate(dir as any)} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: dir === 'today' ? undefined : 28, height: 28, padding: dir === 'today' ? `${t.spacing[1]}px ${t.spacing[3]}px` : 0, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[dir === 'today' ? 700 : 600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', outline: 'none' }}>
-                {dir === 'prev' ? <ChevronLeft size={14} /> : dir === 'next' ? <ChevronRight size={14} /> : 'This Week'}
-              </button>
-            ))}
-            <span style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginLeft: t.spacing[2] }}>{fmtDate(weekDays[0])} - {fmtDate(weekDays[6])}</span>
-          </div>
-          <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>{filtered.length} interview{filtered.length !== 1 ? 's' : ''} this week</span>
-        </div>
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3], ...animStyle(2) }}>
+          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+            <NavBtn dir="prev" onClick={() => navigateDate('prev')} />
+            <NavBtn dir="today" onClick={() => navigateDate('today')} />
+            <NavBtn dir="next" onClick={() => navigateDate('next')} />
+            <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], marginLeft: t.spacing[2], letterSpacing: ptypo.headingLetterSpacing }}>{fmtDate(weekDays[0])} - {fmtDate(weekDays[6])}</Text>
+          </Box>
+          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>{filtered.length} interview{filtered.length !== 1 ? 's' : ''} this week</Text>
+        </Box>
 
         {/* Timeline */}
         {!hasIvs ? renderEmpty() : (
-          <div ref={timelineRef} style={{ ...createCardStyle(t, { elevation: 'sm', glass: isModern }), padding: 0, overflow: 'auto' as const, ...glassCard }}>
-            <div style={{ display: 'flex', marginLeft: 160, width: TL_W, borderBottom: `${bdr} ${t.colors.neutral[200]}`, flexShrink: 0 }}>
+          <div ref={timelineRef} style={{ ...createCardStyle(t, { elevation: 'sm', glass: isGlass }), padding: 0, overflow: 'auto' as const, ...glassCard, ...animStyle(3) }} role="region" aria-label="Weekly interview timeline">
+            <Box style={{ display: 'flex', marginLeft: 160, width: TL_W, borderBottom: `${bdr} ${t.colors.neutral[200]}`, flexShrink: 0, backgroundColor: t.colors.neutral[50] }}>
               {Array.from({ length: TL_HOURS }, (_, i) => i + TL_START).map(h => (
-                <div key={h} style={{ width: HOUR_W, flexShrink: 0, padding: `${t.spacing[2]}px 0`, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium, textAlign: 'center' as const, borderLeft: `${bdr} ${t.colors.neutral[100]}` }}>{fmtHour(h)}</div>
+                <Box key={h} style={{ width: HOUR_W, flexShrink: 0, padding: `${t.spacing[2]}px 0`, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium, textAlign: 'center' as const, borderLeft: `${bdr} ${t.colors.neutral[100]}` }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{fmtHour(h)}</Text>
+                </Box>
               ))}
-            </div>
+            </Box>
             {weekDays.map((day, idx) => renderDayRow(day, idx))}
           </div>
         )}
         {renderDetail()}
-      </div>
+      </Box>
     );
   },
 });

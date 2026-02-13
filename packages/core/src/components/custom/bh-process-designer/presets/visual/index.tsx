@@ -3,24 +3,38 @@
 /**
  * BhProcessDesigner - Visual Preset
  * Connected node diagram showing stages as cards with connectors and detail panel.
- * Slite-inspired: generous whitespace, warm neutrals, soft shadows, minimal borders.
+ * Personality-driven, glass-aware. Only uses Box and Text primitives.
  */
 
-import { useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createCardStyle,
-  createSectionHeaderStyle,
+  createBadgeStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createIconContainerStyle,
+  createPersonalitySectionHeaderStyle,
+  createPersonalityAccentBar,
+  getAccentAwareLayout,
+  createEmptyStateStyle,
   createHoverStyle,
-  createPanelHeaderStyle,
   createProgressBarStyle,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type { BhProcessDesignerProps, ProcessStage, ProcessTemplate, StageType } from '../../core';
+import type { DesignTokens } from '../../../../../types';
 import {
   Layers, Plus, Trash2, Clock, AlertTriangle, Target, ArrowDown,
   FileCheck, Phone, Code, Users, UserCheck, Award, Gift, Settings,
   Zap, GripVertical,
 } from 'lucide-react';
+
+/* ------------------------------------------------------------------ */
+/*  Mock data                                                          */
+/* ------------------------------------------------------------------ */
 
 const MOCK_TEMPLATE: ProcessTemplate = {
   id: 'tpl-1',
@@ -38,18 +52,22 @@ const MOCK_TEMPLATE: ProcessTemplate = {
   ],
 };
 
-function getStageColor(type: StageType, tokens: any): string {
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
+
+function getStageColor(type: StageType, t: DesignTokens): string {
   const map: Record<StageType, string> = {
-    application_review: tokens.colors.primaryScale[400],
-    phone_screen: tokens.colors.infoScale[400],
-    technical_interview: tokens.colors.warningScale[500],
-    onsite_interview: tokens.colors.successScale[500],
-    panel_review: tokens.colors.primaryScale[600],
-    reference_check: tokens.colors.infoScale[600],
-    offer: tokens.colors.successScale[600],
-    custom: tokens.colors.neutral[500],
+    application_review: t.colors.primaryScale[400],
+    phone_screen: t.colors.infoScale[400],
+    technical_interview: t.colors.warningScale[500],
+    onsite_interview: t.colors.successScale[500],
+    panel_review: t.colors.primaryScale[600],
+    reference_check: t.colors.infoScale[600],
+    offer: t.colors.successScale[600],
+    custom: t.colors.neutral[500],
   };
-  return map[type] || tokens.colors.neutral[500];
+  return map[type] || t.colors.neutral[500];
 }
 
 function getStageIcon(type: StageType, size: number = 16) {
@@ -69,11 +87,18 @@ function getStageTypeLabel(type: StageType): string {
   return type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
+/* ================================================================== */
+/*  Visual Preset                                                      */
+/* ================================================================== */
+
 export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
   name: 'BhProcessDesigner.Visual',
-  render: ({ primitives, props, tokens }: PresetContext<BhProcessDesignerProps>) => {
-    const { Box, Flex, Stack, Text } = primitives;
-    const isGlass = tokens.surface.useGlass && !!tokens.glass;
+  render: (ctx: PresetContext<BhProcessDesignerProps>) => {
+    const { primitives: { Box, Text }, props, tokens: t } = ctx;
+
+    const isGlass = t.surface.useGlass && !!t.glass;
+    const badgeRadius = getPersonalityBadgeRadius(t);
+    const ptypo = getPersonalityTypography(t);
 
     const {
       template = MOCK_TEMPLATE, selectedStage, onStageSelect, onStageReorder,
@@ -81,234 +106,275 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
       readOnly = false, className, style,
     } = props;
 
-    const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
-    const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
-    const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
+
+    const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
+
+    const handleStageSelect = useCallback((stageId: string | null) => {
+      onStageSelect?.(stageId);
+    }, [onStageSelect]);
+
+    const handleStageAdd = useCallback((afterId: string | null) => {
+      onStageAdd?.(afterId);
+    }, [onStageAdd]);
+
+    const handleStageRemove = useCallback((stageId: string) => {
+      onStageRemove?.(stageId);
+    }, [onStageRemove]);
+
+    const animStyle = useCallback((index: number) => ({
+      ...entrance.animate,
+      transition: entrance.transition,
+      transitionDelay: `${createStaggerDelay(t, index)}ms`,
+    }), [entrance, t]);
 
     if (!template) {
       return (
-        <Flex align="center" justify="center" direction="column" gap={8}
-          className={className} style={{ ...card, padding: tokens.spacing[10], ...style }}>
-          <Layers size={32} color={tokens.colors.neutral[300]} />
-          <Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>
+        <Box
+          className={className}
+          role="region"
+          aria-label="Process designer"
+          style={{
+            ...card,
+            ...createEmptyStateStyle(t),
+            ...style,
+          }}
+        >
+          <Layers size={32} color={t.colors.neutral[300]} />
+          <Text style={{ color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm, marginTop: t.spacing[2] }}>
             No process template loaded
           </Text>
-        </Flex>
+        </Box>
       );
     }
 
-    const stages = [...template.stages].sort((a, b) => a.order - b.order);
-    const selectedStageData = stages.find(s => s.id === selectedStage);
+    const stages = useMemo(
+      () => [...template.stages].sort((a, b) => a.order - b.order),
+      [template.stages],
+    );
+    const selectedStageData = useMemo(
+      () => stages.find(s => s.id === selectedStage),
+      [stages, selectedStage],
+    );
 
     return (
-      <Box className={className} style={{
-        display: 'flex', flexDirection: 'column' as const,
-        gap: tokens.spacing[5], ...style,
-      }}>
-        {/* ── Template Header ──────────────────────────── */}
-        <Box style={{ ...card, padding: tokens.spacing[5] }}>
-          <Flex align="center" justify="between">
-            <Stack gap={2}>
+      <Box
+        className={className}
+        role="region"
+        aria-label="Process designer"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          gap: t.spacing[5],
+          ...style,
+        }}
+      >
+        {/* Template Header */}
+        <Box style={{ ...card, padding: t.spacing[5], ...accentLayout.outer, ...animStyle(0) }}>
+          {accentBar && <Box style={accentBar} />}
+          <Box style={{ ...accentLayout.inner }}>
+          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
               <Text style={{
-                fontSize: tokens.typography.fontSize.xl || '1.25rem',
-                fontWeight: tokens.typography.fontWeight.bold,
-                color: tokens.colors.neutral[900],
+                fontSize: t.typography.fontSize.xl,
+                fontWeight: ptypo.headingWeight,
+                color: t.colors.neutral[900],
+                letterSpacing: ptypo.headingLetterSpacing,
+                display: 'block',
               }}>
                 {template.name}
               </Text>
               {template.description && (
-                <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
                   {template.description}
                 </Text>
               )}
-            </Stack>
-            <Flex align="center" gap={8}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+            </Box>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                 {stages.length} stages
               </Text>
               <Box style={{
-                padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.full,
-                backgroundColor: template.isActive ? tokens.colors.successScale[50] : tokens.colors.neutral[100],
-                color: template.isActive ? tokens.colors.successScale[700] : tokens.colors.neutral[500],
-                fontSize: tokens.typography.fontSize.xs,
-                fontWeight: tokens.typography.fontWeight.semibold,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${template.isActive ? tokens.colors.successScale[200] : tokens.colors.neutral[200]}`,
+                ...createBadgeStyle(t, template.isActive ? 'success' : 'secondary'),
+                borderRadius: badgeRadius,
               }}>
-                {template.isActive ? 'Active' : 'Draft'}
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>
+                  {template.isActive ? 'Active' : 'Draft'}
+                </Text>
               </Box>
-            </Flex>
-          </Flex>
+            </Box>
+          </Box>
+          </Box>
         </Box>
 
-        {/* ── Flow + Detail ────────────────────────────── */}
-        <div style={{
+        {/* Flow + Detail */}
+        <Box style={{
           display: 'grid',
           gridTemplateColumns: selectedStageData ? '1fr 380px' : '1fr',
-          gap: tokens.spacing[5],
+          gap: t.spacing[5],
         }}>
           {/* Process Flow */}
-          <Box style={{ ...card, padding: tokens.spacing[5] }}>
-            <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[4] }}>
-              <Layers size={14} color={tokens.colors.neutral[500]} />
-              <Text style={{ ...sectionHeader, marginBottom: 0 }}>Process Flow</Text>
-            </Flex>
+          <Box style={{ ...card, padding: t.spacing[5], ...animStyle(1) }}>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[4] }}>
+              <Layers size={14} color={t.colors.neutral[500]} />
+              <Text style={{ ...sectionLabel, marginBottom: 0 }}>Process Flow</Text>
+            </Box>
 
-            <Flex direction="column" align="center" gap={0}>
+            <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} role="list" aria-label="Process stages">
               {stages.map((stage, i) => {
                 const isSelected = selectedStage === stage.id;
-                const stageColor = getStageColor(stage.type, tokens);
+                const stageColor = getStageColor(stage.type, t);
                 const hasKO = stage.knockoutRules && stage.knockoutRules.length > 0;
                 const hasScoring = stage.scoringRubrics && stage.scoringRubrics.length > 0;
 
                 return (
-                  <Box key={stage.id} style={{
-                    display: 'flex', flexDirection: 'column' as const,
+                  <Box key={stage.id} role="listitem" style={{
+                    display: 'flex', flexDirection: 'column',
                     alignItems: 'center', width: '100%', maxWidth: 420,
                   }}>
                     {/* Connector */}
                     {i > 0 && (
-                      <Flex direction="column" align="center" style={{ padding: `${tokens.spacing[1]}px 0` }}>
-                        <ArrowDown size={16} color={tokens.colors.neutral[300]} />
-                      </Flex>
+                      <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: `${t.spacing[1]}px 0` }}>
+                        <ArrowDown size={16} color={t.colors.neutral[300]} />
+                      </Box>
                     )}
 
                     {/* Stage Node */}
-                    <Box onClick={() => onStageSelect?.(isSelected ? null : stage.id)}
+                    <Box
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`${stage.name} - ${getStageTypeLabel(stage.type)}${isSelected ? ' (selected)' : ''}`}
+                      aria-pressed={isSelected}
+                      onClick={() => handleStageSelect(isSelected ? null : stage.id)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageSelect(isSelected ? null : stage.id); } }}
                       style={{
-                        ...hov, width: '100%',
-                        padding: tokens.spacing[4],
-                        borderRadius: tokens.borderRadius.lg,
-                        border: `2px solid ${isSelected ? stageColor : tokens.colors.neutral[200]}`,
-                        backgroundColor: isSelected ? stageColor + '08' : tokens.colors.common.white,
-                        boxShadow: isSelected ? tokens.shadows.md : tokens.shadows.sm,
-                        position: 'relative' as const,
-                      }}>
+                        ...hoverStyles.base,
+                        width: '100%',
+                        padding: t.spacing[4],
+                        borderRadius: t.borderRadius.lg,
+                        border: `2px solid ${isSelected ? stageColor : t.colors.neutral[200]}`,
+                        backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
+                        boxShadow: isSelected ? t.shadows.md : t.shadows.sm,
+                        position: 'relative',
+                        cursor: 'pointer',
+                        transition: `all ${t.motion.hover}`,
+                      }}
+                    >
                       {/* Stage number badge */}
                       <Box style={{
-                        position: 'absolute' as const, top: -12, left: tokens.spacing[3],
-                        width: 24, height: 24, borderRadius: tokens.borderRadius.full,
-                        backgroundColor: stageColor, color: tokens.colors.common.white,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: tokens.typography.fontSize.xs,
-                        fontWeight: tokens.typography.fontWeight.bold,
+                        position: 'absolute', top: -12, left: t.spacing[3],
+                        ...createIconContainerStyle(t, { size: 24, color: stageColor }),
+                        color: t.colors.common.white,
+                        fontSize: t.typography.fontSize.xs,
+                        fontWeight: t.typography.fontWeight.bold,
                       }}>
                         {i + 1}
                       </Box>
 
-                      <Flex align="start" justify="between">
-                        <Flex align="center" gap={8}>
-                          <Box style={{
-                            width: 32, height: 32, borderRadius: tokens.borderRadius.lg,
-                            backgroundColor: stageColor + '15',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            color: stageColor, flexShrink: 0,
-                          }}>
+                      <Box style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                          <Box style={createIconContainerStyle(t, { size: 32, color: stageColor + '15' })}>
                             {getStageIcon(stage.type, 16)}
                           </Box>
-                          <Stack gap={1}>
+                          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                             <Text style={{
-                              fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.bold,
-                              color: tokens.colors.neutral[800],
+                              fontSize: t.typography.fontSize.sm,
+                              fontWeight: t.typography.fontWeight.bold,
+                              color: t.colors.neutral[800],
+                              display: 'block',
                             }}>
                               {stage.name}
                             </Text>
                             <Text style={{
-                              fontSize: tokens.typography.fontSize.xs,
+                              fontSize: t.typography.fontSize.xs,
                               color: stageColor,
-                              fontWeight: tokens.typography.fontWeight.medium,
+                              fontWeight: t.typography.fontWeight.medium,
                             }}>
                               {getStageTypeLabel(stage.type)}
                             </Text>
                             {stage.description && (
                               <Text style={{
-                                fontSize: tokens.typography.fontSize.xs,
-                                color: tokens.colors.neutral[500],
-                                marginTop: tokens.spacing[1],
+                                fontSize: t.typography.fontSize.xs,
+                                color: t.colors.neutral[500],
+                                marginTop: t.spacing[1],
                               }}>
                                 {stage.description}
                               </Text>
                             )}
-                          </Stack>
-                        </Flex>
+                          </Box>
+                        </Box>
 
-                        <Flex gap={4} style={{ flexShrink: 0 }}>
+                        <Box style={{ display: 'flex', gap: t.spacing[1], flexShrink: 0 }}>
                           {stage.isRequired && (
-                            <Box style={{
-                              padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.errorScale[50],
-                              color: tokens.colors.errorScale[600],
-                              fontSize: tokens.typography.fontSize.xs,
-                              fontWeight: tokens.typography.fontWeight.medium,
-                            }}>
-                              Required
+                            <Box style={{ ...createBadgeStyle(t, 'error'), borderRadius: badgeRadius }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>Required</Text>
                             </Box>
                           )}
                           {hasKO && (
-                            <Flex align="center" gap={3} style={{
-                              padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.warningScale[50],
-                              color: tokens.colors.warningScale[700],
-                              fontSize: tokens.typography.fontSize.xs,
-                            }}>
+                            <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeRadius, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                               <AlertTriangle size={10} />
-                              <Text style={{ fontSize: 'inherit', color: 'inherit' }}>KO</Text>
-                            </Flex>
-                          )}
-                          {hasScoring && (
-                            <Box style={{
-                              padding: `${tokens.spacing[0]}px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.full,
-                              backgroundColor: tokens.colors.primaryScale[50],
-                              color: tokens.colors.primaryScale[700],
-                              fontSize: tokens.typography.fontSize.xs,
-                            }}>
-                              Scored
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>KO</Text>
                             </Box>
                           )}
-                        </Flex>
-                      </Flex>
+                          {hasScoring && (
+                            <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeRadius }}>
+                              <Text style={{ fontSize: t.typography.fontSize.xs }}>Scored</Text>
+                            </Box>
+                          )}
+                        </Box>
+                      </Box>
 
                       {/* Meta row */}
-                      <Flex gap={12} style={{ marginTop: tokens.spacing[2] }}>
+                      <Box style={{ display: 'flex', gap: t.spacing[3], marginTop: t.spacing[2] }}>
                         {stage.durationDays && (
-                          <Flex align="center" gap={3} style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                             <Clock size={10} />
-                            <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{stage.durationDays}d</Text>
-                          </Flex>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{stage.durationDays}d</Text>
+                          </Box>
                         )}
                         {stage.interviewerCount && (
-                          <Flex align="center" gap={3} style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                             <Users size={10} />
-                            <Text style={{ fontSize: 'inherit', color: 'inherit' }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                               {stage.interviewerCount} interviewer{stage.interviewerCount > 1 ? 's' : ''}
                             </Text>
-                          </Flex>
+                          </Box>
                         )}
                         {stage.scoringRubrics && (
-                          <Flex align="center" gap={3} style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
+                          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                             <Target size={10} />
-                            <Text style={{ fontSize: 'inherit', color: 'inherit' }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                               {stage.scoringRubrics.length} dimensions
                             </Text>
-                          </Flex>
+                          </Box>
                         )}
-                      </Flex>
+                      </Box>
                     </Box>
 
                     {/* Add button */}
                     {!readOnly && (
-                      <Box onClick={() => onStageAdd?.(stage.id)} style={{
-                        ...hov, marginTop: tokens.spacing[1],
-                        width: 28, height: 28, borderRadius: tokens.borderRadius.full,
-                        border: `2px dashed ${tokens.colors.neutral[300]}`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: tokens.colors.neutral[400],
-                        backgroundColor: tokens.colors.common.white,
-                      }}>
+                      <Box
+                        tabIndex={0}
+                        role="button"
+                        aria-label={`Add stage after ${stage.name}`}
+                        onClick={() => handleStageAdd(stage.id)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageAdd(stage.id); } }}
+                        style={{
+                          marginTop: t.spacing[1],
+                          width: 28, height: 28, borderRadius: t.borderRadius.full,
+                          border: `2px dashed ${t.colors.neutral[300]}`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          color: t.colors.neutral[400],
+                          backgroundColor: t.colors.common.white,
+                          cursor: 'pointer',
+                          transition: `all ${t.motion.hover}`,
+                        }}
+                      >
                         <Plus size={14} />
                       </Box>
                     )}
@@ -319,155 +385,165 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
               {/* Empty add */}
               {stages.length === 0 && !readOnly && (
                 <Box
-                  onClick={() => onStageAdd?.(null)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Add first stage"
+                  onClick={() => handleStageAdd(null)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageAdd(null); } }}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    ...hov, padding: tokens.spacing[5],
-                    borderRadius: tokens.borderRadius.lg,
-                    border: `2px dashed ${tokens.colors.neutral[300]}`,
-                    color: tokens.colors.neutral[500],
-                    fontSize: tokens.typography.fontSize.sm,
+                    padding: t.spacing[5],
+                    borderRadius: t.borderRadius.lg,
+                    border: `2px dashed ${t.colors.neutral[300]}`,
+                    color: t.colors.neutral[500],
+                    fontSize: t.typography.fontSize.sm,
                     width: '100%', maxWidth: 420,
-                  }}>
+                    cursor: 'pointer',
+                    transition: `all ${t.motion.hover}`,
+                  }}
+                >
                   <Plus size={16} />
-                  <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Add First Stage</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>Add First Stage</Text>
                 </Box>
               )}
-            </Flex>
+            </Box>
           </Box>
 
-          {/* ── Stage Detail Panel ─────────────────────── */}
+          {/* Stage Detail Panel */}
           {selectedStageData && (
-            <Box style={{ ...card, padding: tokens.spacing[5] }}>
-              <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[4] }}>
-                <Text style={{ ...sectionHeader, marginBottom: 0 }}>Stage Configuration</Text>
+            <Box style={{ ...card, padding: t.spacing[5], ...animStyle(2) }}>
+              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
+                <Text style={{ ...sectionLabel, marginBottom: 0 }}>Stage Configuration</Text>
                 {!readOnly && onStageRemove && (
-                  <Box onClick={() => onStageRemove(selectedStageData.id)}
+                  <Box
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`Remove stage ${selectedStageData.name}`}
+                    onClick={() => handleStageRemove(selectedStageData.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageRemove(selectedStageData.id); } }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 4,
-                      ...hov, padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                      borderRadius: tokens.borderRadius.md,
-                      color: tokens.colors.errorScale[500],
-                      fontSize: tokens.typography.fontSize.xs,
-                      border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
-                    }}>
+                      padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
+                      borderRadius: t.borderRadius.md,
+                      color: t.colors.errorScale[500],
+                      fontSize: t.typography.fontSize.xs,
+                      border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.errorScale[200]}`,
+                      cursor: 'pointer',
+                      transition: `all ${t.motion.hover}`,
+                    }}
+                  >
                     <Trash2 size={12} />
-                    <Text style={{ fontSize: 'inherit', color: 'inherit' }}>Remove</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[500] }}>Remove</Text>
                   </Box>
                 )}
-              </Flex>
+              </Box>
 
-              <Stack gap={16}>
+              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
                 {/* Basic info */}
-                <Stack gap={4}>
-                  <Box>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>Name</Text>
-                    <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
+                <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+                  <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: t.spacing[1], display: 'block', textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Name</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
                       {selectedStageData.name}
                     </Text>
                   </Box>
                   <Box>
-                    <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[1] }}>Type</Text>
-                    <Flex align="center" gap={6}>
-                      <Box style={{
-                        width: 24, height: 24, borderRadius: tokens.borderRadius.md,
-                        backgroundColor: getStageColor(selectedStageData.type, tokens) + '15',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: getStageColor(selectedStageData.type, tokens),
-                      }}>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: t.spacing[1], display: 'block', textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Type</Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                      <Box style={createIconContainerStyle(t, { size: 24, color: getStageColor(selectedStageData.type, t) + '15' })}>
                         {getStageIcon(selectedStageData.type, 12)}
                       </Box>
                       <Text style={{
-                        fontSize: tokens.typography.fontSize.sm,
-                        color: getStageColor(selectedStageData.type, tokens),
-                        fontWeight: tokens.typography.fontWeight.medium,
+                        fontSize: t.typography.fontSize.sm,
+                        color: getStageColor(selectedStageData.type, t),
+                        fontWeight: t.typography.fontWeight.medium,
                       }}>
                         {getStageTypeLabel(selectedStageData.type)}
                       </Text>
-                    </Flex>
+                    </Box>
                   </Box>
-                </Stack>
+                </Box>
 
                 {/* Scoring Rubrics */}
                 {selectedStageData.scoringRubrics && selectedStageData.scoringRubrics.length > 0 && (
                   <Box>
-                    <Flex align="center" gap={4} style={{ marginBottom: tokens.spacing[3] }}>
-                      <Target size={12} color={tokens.colors.neutral[500]} />
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[3] }}>
+                      <Target size={12} color={t.colors.neutral[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                         Scoring Rubric ({selectedStageData.scoringRubrics.length} dimensions)
                       </Text>
-                    </Flex>
-                    <Stack gap={0}>
+                    </Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column' }}>
                       {selectedStageData.scoringRubrics.map(r => (
-                        <Flex key={r.id} justify="between" align="center" style={{
-                          padding: `${tokens.spacing[2]}px 0`,
-                          borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
+                        <Box key={r.id} style={{
+                          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                          padding: `${t.spacing[2]}px 0`,
+                          borderBottom: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[100]}`,
                         }}>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[700] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
                             {r.dimensionName}
                           </Text>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                             w:{r.weight} / max:{r.maxScore}
                           </Text>
-                        </Flex>
+                        </Box>
                       ))}
-                    </Stack>
+                    </Box>
                   </Box>
                 )}
 
                 {/* Knockout Rules */}
                 {selectedStageData.knockoutRules && selectedStageData.knockoutRules.length > 0 && (
                   <Box>
-                    <Flex align="center" gap={4} style={{ marginBottom: tokens.spacing[3] }}>
-                      <AlertTriangle size={12} color={tokens.colors.warningScale[500]} />
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[3] }}>
+                      <AlertTriangle size={12} color={t.colors.warningScale[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                         Knockout Rules ({selectedStageData.knockoutRules.length})
                       </Text>
-                    </Flex>
-                    <Stack gap={4}>
+                    </Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
                       {selectedStageData.knockoutRules.map(rule => (
                         <Box key={rule.id} style={{
-                          padding: tokens.spacing[3],
-                          borderRadius: tokens.borderRadius.lg,
-                          backgroundColor: tokens.colors.warningScale[50],
-                          border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[100]}`,
+                          padding: t.spacing[3],
+                          borderRadius: t.borderRadius.lg,
+                          backgroundColor: t.colors.warningScale[50],
+                          border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.warningScale[100]}`,
                         }}>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.warningScale[800] }}>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[800] }}>
                             {rule.field} {rule.operator.replace('_', ' ')} "{rule.value}" {'\u2192'} {rule.action}
                           </Text>
                         </Box>
                       ))}
-                    </Stack>
+                    </Box>
                   </Box>
                 )}
 
                 {/* Automations */}
                 {selectedStageData.automations && selectedStageData.automations.length > 0 && (
                   <Box>
-                    <Flex align="center" gap={4} style={{ marginBottom: tokens.spacing[3] }}>
-                      <Zap size={12} color={tokens.colors.neutral[500]} />
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[3] }}>
+                      <Zap size={12} color={t.colors.neutral[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                         Automations
                       </Text>
-                    </Flex>
-                    <Stack gap={4}>
+                    </Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
                       {selectedStageData.automations.map((auto, ai) => (
-                        <Flex key={ai} align="center" gap={6} style={{
-                          padding: tokens.spacing[2],
-                          fontSize: tokens.typography.fontSize.xs,
-                          color: tokens.colors.neutral[600],
+                        <Box key={ai} style={{
+                          display: 'flex', alignItems: 'center', gap: t.spacing[2],
+                          padding: t.spacing[2],
                         }}>
-                          <Zap size={10} color={tokens.colors.primaryScale[400]} />
-                          <Text style={{ fontSize: 'inherit', color: 'inherit' }}>{auto}</Text>
-                        </Flex>
+                          <Zap size={10} color={t.colors.primaryScale[400]} />
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{auto}</Text>
+                        </Box>
                       ))}
-                    </Stack>
+                    </Box>
                   </Box>
                 )}
-              </Stack>
+              </Box>
             </Box>
           )}
-        </div>
+        </Box>
       </Box>
     );
   },

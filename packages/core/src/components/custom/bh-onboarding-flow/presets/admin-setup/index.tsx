@@ -551,7 +551,7 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
               }}>
                 <Stack direction="horizontal" align="start" justify="space-between">
                   <Stack direction="horizontal" gap={tokens.spacing[2]} align="start">
-                    <HelpCircle size={16} color={tokens.colors.infoScale[600]} style={{ marginTop: 2, flexShrink: 0 }} />
+                    <HelpCircle size={16} color={tokens.colors.infoScale[600]} style={{ marginTop: tokens.spacing[1], flexShrink: 0 }} />
                     <div>
                       {currentTooltip.title && (
                         <p style={{

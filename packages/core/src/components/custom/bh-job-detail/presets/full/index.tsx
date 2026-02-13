@@ -6,9 +6,24 @@
  * activity timeline, analytics charts, and settings panel
  */
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createBadgeStyle, createCardStyle, createHoverStyle, createSurfaceStyle, getHoverTransform } from '../../../helpers';
+import {
+  createBadgeStyle,
+  createCardStyle,
+  createHoverStyle,
+  createSurfaceStyle,
+  getHoverTransform,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createCardHoverStyles,
+  getPersonalityTypography,
+  getPersonalityBadgeRadius,
+  createPersonalityAccentBar,
+  createPersonalitySectionHeaderStyle,
+  createIconContainerStyle,
+  createEmptyStateStyle,
+} from '../../../helpers';
 import type { BhJobDetailProps, JobDetailTab, MetricsTimeRange } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -72,58 +87,6 @@ function trendColor(trend: string | undefined, t: DesignTokens) {
   return trend === 'up' ? t.colors.successScale[600] : trend === 'down' ? t.colors.errorScale[600] : t.colors.neutral[500];
 }
 
-/* Sub-components */
-function Badge({ bg, color, border, children, tokens }: { bg: string; color: string; border: string; children: React.ReactNode; tokens: DesignTokens }) {
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: bg, color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${border}`, textTransform: 'capitalize' as const }}>
-      {children}
-    </span>
-  );
-}
-
-function Avatar({ avatar, name, tokens, size = 28 }: { avatar?: string; name: string; tokens: DesignTokens; size?: number }) {
-  if (avatar) return <img src={avatar} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' as const }} />;
-  return (
-    <span style={{ width: size, height: size, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[100], color: tokens.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold }}>
-      {name.charAt(0).toUpperCase()}
-    </span>
-  );
-}
-
-function Checkbox({ checked, tokens, onClick }: { checked: boolean; tokens: DesignTokens; onClick?: (e: React.MouseEvent) => void }) {
-  return (
-    <div onClick={onClick} style={{ width: 16, height: 16, borderRadius: tokens.borderRadius.sm, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${checked ? tokens.colors.primaryScale[500] : tokens.colors.neutral[300]}`, backgroundColor: checked ? tokens.colors.primaryScale[500] : tokens.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-      {checked && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke={tokens.colors.common.white} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>}
-    </div>
-  );
-}
-
-function SectionHeader({ expanded, onToggle, label, tokens }: { expanded: boolean; onToggle: () => void; label: string; tokens: DesignTokens }) {
-  return (
-    <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }} onClick={onToggle}>
-      {expanded ? <ChevronDown size={16} color={tokens.colors.neutral[500]} /> : <ChevronRight size={16} color={tokens.colors.neutral[500]} />}
-      <span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{label}</span>
-    </div>
-  );
-}
-
-function Toggle({ on, tokens }: { on: boolean; tokens: DesignTokens }) {
-  return (
-    <div style={{ width: 36, height: 20, borderRadius: tokens.borderRadius.full, backgroundColor: on ? tokens.colors.successScale[500] : tokens.colors.neutral[300], position: 'relative' as const, cursor: 'pointer', transition: `all ${tokens.motion.hover}` }}>
-      <div style={{ width: 16, height: 16, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.common.white, position: 'absolute' as const, top: 2, left: on ? 18 : 2, transition: `all ${tokens.motion.hover}`, boxShadow: tokens.shadows.sm }} />
-    </div>
-  );
-}
-
-function SettingRow({ label, children, tokens }: { label: string; children: React.ReactNode; tokens: DesignTokens }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, backgroundColor: tokens.colors.neutral[50], borderRadius: tokens.borderRadius.md, border: `1px solid ${tokens.colors.neutral[100]}` }}>
-      <span style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>{label}</span>
-      {children}
-    </div>
-  );
-}
-
 const SOURCE_COLORS = ['primaryScale', 'infoScale', 'successScale', 'warningScale', 'secondaryScale', 'errorScale'] as const;
 
 /* ------------------------------------------------------------------ */
@@ -133,8 +96,12 @@ const SOURCE_COLORS = ['primaryScale', 'infoScale', 'successScale', 'warningScal
 export const FullBhJobDetail = createPreset<BhJobDetailProps>(
   'BhJobDetail.Full',
   ({ primitives, props, tokens }: PresetContext<BhJobDetailProps>) => {
-    const { Box } = primitives;
-    const isModern = tokens.surface.useGlass;
+    const { Box, Text } = primitives;
+    const t = tokens;
+    const isGlass = t.surface.useGlass && !!t.glass;
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const { jobInfo, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], analytics, settings, activeTab: activeTabProp, onTabChange, onEdit, onPause, onClose, onDuplicate, onCandidateClick, onSettingsSave, className, style } = props;
 
@@ -145,13 +112,17 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     const [showActionMenu, setShowActionMenu] = useState(false);
 
     const activeTab = activeTabProp ?? internalTab;
-    const handleTabChange = (tab: JobDetailTab) => { onTabChange?.(tab); setInternalTab(tab); };
-    const toggleSection = (key: string) => setExpandedSections(p => ({ ...p, [key]: !p[key] }));
-    const toggleCandidate = (id: string) => setSelectedCandidates(p => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; });
+    const handleTabChange = useCallback((tab: JobDetailTab) => { onTabChange?.(tab); setInternalTab(tab); }, [onTabChange]);
+    const toggleSection = useCallback((key: string) => setExpandedSections(p => ({ ...p, [key]: !p[key] })), []);
+    const toggleCandidate = useCallback((id: string) => setSelectedCandidates(p => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; }), []);
+    const handleKeyAction = useCallback((e: React.KeyboardEvent, action: () => void) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); }
+    }, []);
 
-    const glassCard = isModern && tokens.glass ? { backdropFilter: tokens.glass.blur, WebkitBackdropFilter: tokens.glass.blur, backgroundColor: tokens.glass.bg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.glass.border}` } : {};
-    const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isModern }), [tokens, isModern]);
-    const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+    const glassCard = isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur, backgroundColor: t.glass.bg, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.glass.border}` } : {};
+    const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
+    const hoverStyle = useMemo(() => createHoverStyle(t), [t]);
+    const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
 
     const tabs: { key: JobDetailTab; label: string; icon: React.ReactNode }[] = [
       { key: 'overview', label: 'Overview', icon: <Eye size={14} /> },
@@ -160,12 +131,51 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
       { key: 'settings', label: 'Settings', icon: <Settings size={14} /> },
     ];
 
-    const sectionPad = `0 ${tokens.spacing[6]}px ${tokens.spacing[4]}px`;
+    const sectionPad = `0 ${t.spacing[6]}px ${t.spacing[4]}px`;
+
+    /* -- Sub-components -------------------------------------------- */
+
+    const Badge_ = useCallback(({ bg, color, border, children }: { bg: string; color: string; border: string; children: React.ReactNode }) => (
+      <Text style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, backgroundColor: bg, color, border: `${bdr} ${border}`, textTransform: 'capitalize' as const }}>{children}</Text>
+    ), [t, bdr]);
+
+    const Avatar_ = useCallback(({ avatar, name, size = 28 }: { avatar?: string; name: string; size?: number }) => {
+      if (avatar) return <img src={avatar} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' as const }} />;
+      return (
+        <Text style={{ width: size, height: size, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>{name.charAt(0).toUpperCase()}</Text>
+      );
+    }, [t]);
+
+    const Checkbox_ = useCallback(({ checked, onClick }: { checked: boolean; onClick?: (e: React.MouseEvent) => void }) => (
+      <Box role="checkbox" tabIndex={0} aria-checked={checked} aria-label={checked ? 'Deselect' : 'Select'} onClick={onClick} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => onClick?.({} as any))} style={{ width: 16, height: 16, borderRadius: t.borderRadius.sm, border: `${bdr} ${checked ? t.colors.primaryScale[500] : t.colors.neutral[300]}`, backgroundColor: checked ? t.colors.primaryScale[500] : t.colors.common.white, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+        {checked && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5l2 2 4-4" stroke={t.colors.common.white} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+      </Box>
+    ), [t, bdr, handleKeyAction]);
+
+    const SectionHeader_ = useCallback(({ expanded, onToggle, label }: { expanded: boolean; onToggle: () => void; label: string }) => (
+      <Box role="button" tabIndex={0} aria-expanded={expanded} aria-label={`Toggle ${label}`} onClick={onToggle} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, onToggle)} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3], transition: `all ${t.motion.hover}` }}>
+        {expanded ? <ChevronDown size={16} color={t.colors.neutral[500]} /> : <ChevronRight size={16} color={t.colors.neutral[500]} />}
+        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: ptypo.headingWeight, letterSpacing: ptypo.headingLetterSpacing, color: t.colors.neutral[700], textTransform: 'uppercase' as const }}>{label}</Text>
+      </Box>
+    ), [t, ptypo, handleKeyAction]);
+
+    const Toggle_ = useCallback(({ on }: { on: boolean }) => (
+      <Box style={{ width: 36, height: 20, borderRadius: t.borderRadius.full, backgroundColor: on ? t.colors.successScale[500] : t.colors.neutral[300], position: 'relative' as const, cursor: 'pointer', transition: `all ${t.motion.hover}` }} role="switch" aria-checked={on}>
+        <Box style={{ width: 16, height: 16, borderRadius: t.borderRadius.full, backgroundColor: t.colors.common.white, position: 'absolute' as const, top: 2, left: on ? 18 : 2, transition: `all ${t.motion.hover}`, boxShadow: t.shadows.sm }} />
+      </Box>
+    ), [t]);
+
+    const SettingRow_ = useCallback(({ label, children }: { label: string; children: React.ReactNode }) => (
+      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, backgroundColor: t.colors.neutral[50], borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[100]}` }}>
+        <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{label}</Text>
+        {children}
+      </Box>
+    ), [t, bdr]);
 
     /* Header */
-    const renderHeader = () => {
-      const sc = statusColors(jobInfo.status, tokens);
-      const uc = urgencyColors(jobInfo.urgency, tokens);
+    const renderHeader = useCallback(() => {
+      const sc = statusColors(jobInfo.status, t);
+      const uc = urgencyColors(jobInfo.urgency, t);
       const actions = [
         { label: 'Edit Job', icon: <Edit3 size={14} />, action: onEdit },
         { label: 'Pause Job', icon: <Pause size={14} />, action: onPause },
@@ -174,69 +184,72 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
       ];
 
       return (
-        <Box style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: `${tokens.spacing[5]}px ${tokens.spacing[6]}px`, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, gap: tokens.spacing[4], flexWrap: 'wrap' as const }}>
+        <Box style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', padding: `${t.spacing[5]}px ${t.spacing[6]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}`, gap: t.spacing[4], flexWrap: 'wrap' as const }}>
           <Box style={{ flex: 1, minWidth: 0 }}>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], flexWrap: 'wrap' as const, marginBottom: tokens.spacing[2] }}>
-              <Box style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight }}>{jobInfo.title}</Box>
-              <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[500], backgroundColor: tokens.colors.neutral[100], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md }}>{jobInfo.code}</Box>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], flexWrap: 'wrap' as const, marginBottom: t.spacing[2] }}>
+              <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: t.typography.lineHeight.tight }}>{jobInfo.title}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], backgroundColor: t.colors.neutral[100], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md }}>{jobInfo.code}</Text>
             </Box>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[4], flexWrap: 'wrap' as const }}>
-              <Badge bg={sc.bg} color={sc.color} border={sc.border} tokens={tokens}><Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: sc.color }} />{jobInfo.status}</Badge>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.sm }}><Building2 size={14} />{jobInfo.clientName}</Box>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], color: tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.sm }}><Clock size={14} />{jobInfo.daysOpen} days open</Box>
-              <Badge bg={uc.bg} color={uc.color} border={uc.border} tokens={tokens}><AlertTriangle size={12} />{jobInfo.urgency}</Badge>
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4], flexWrap: 'wrap' as const }}>
+              <Badge_ bg={sc.bg} color={sc.color} border={sc.border}><Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc.color }} />{jobInfo.status}</Badge_>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], color: t.colors.neutral[600], fontSize: t.typography.fontSize.sm }}><Building2 size={14} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{jobInfo.clientName}</Text></Box>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], color: t.colors.neutral[600], fontSize: t.typography.fontSize.sm }}><Clock size={14} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{jobInfo.daysOpen} days open</Text></Box>
+              <Badge_ bg={uc.bg} color={uc.color} border={uc.border}><AlertTriangle size={12} />{jobInfo.urgency}</Badge_>
             </Box>
           </Box>
           <Box style={{ position: 'relative' as const, flexShrink: 0 }}>
-            <button onClick={() => setShowActionMenu(!showActionMenu)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: tokens.spacing[9], height: tokens.spacing[9], border: `1px solid ${tokens.colors.neutral[100]}`, borderRadius: tokens.borderRadius.md, backgroundColor: tokens.colors.common.white, cursor: 'pointer', transition: `all ${tokens.motion.hover}`, color: tokens.colors.neutral[600], ...hoverStyle }}><MoreVertical size={16} /></button>
+            <Box role="button" tabIndex={0} aria-label="Actions menu" aria-expanded={showActionMenu} onClick={() => setShowActionMenu(!showActionMenu)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => setShowActionMenu(!showActionMenu))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: t.spacing[9], height: t.spacing[9], border: `${bdr} ${t.colors.neutral[100]}`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.common.white, cursor: 'pointer', transition: `all ${t.motion.hover}`, color: t.colors.neutral[600] }}><MoreVertical size={16} /></Box>
             {showActionMenu && (
-              <Box style={{ position: 'absolute' as const, top: '100%', right: 0, marginTop: tokens.spacing[1], backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, boxShadow: tokens.shadows.lg, border: `1px solid ${tokens.colors.neutral[100]}`, zIndex: 50, minWidth: 180, padding: `${tokens.spacing[1]}px 0`, ...glassCard }}>
+              <Box style={{ position: 'absolute' as const, top: '100%', right: 0, marginTop: t.spacing[1], backgroundColor: t.colors.common.white, borderRadius: t.borderRadius.lg, boxShadow: t.shadows.lg, border: `${bdr} ${t.colors.neutral[100]}`, zIndex: 50, minWidth: 180, padding: `${t.spacing[1]}px 0`, ...glassCard }} role="menu">
                 {actions.map(a => (
-                  <button key={a.label} onClick={() => { a.action?.(); setShowActionMenu(false); }} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], width: '100%', padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`, border: 'none', backgroundColor: 'transparent', cursor: 'pointer', transition: `all ${tokens.motion.hover}`, fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], fontFamily: 'inherit', textAlign: 'left' as const, ...hoverStyle }}>{a.icon}{a.label}</button>
+                  <Box key={a.label} role="menuitem" tabIndex={0} aria-label={a.label} onClick={() => { a.action?.(); setShowActionMenu(false); }} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => { a.action?.(); setShowActionMenu(false); })} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], width: '100%', padding: `${t.spacing[2]}px ${t.spacing[3]}px`, border: 'none', backgroundColor: 'transparent', cursor: 'pointer', transition: `all ${t.motion.hover}`, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{a.icon}<Text style={{ fontSize: 'inherit', color: 'inherit' }}>{a.label}</Text></Box>
                 ))}
               </Box>
             )}
           </Box>
         </Box>
       );
-    };
+    }, [jobInfo, showActionMenu, t, bdr, glassCard, onEdit, onPause, onClose, onDuplicate, handleKeyAction, Badge_]);
 
     /* Tabs */
-    const renderTabs = () => (
-      <Box style={{ display: 'flex', gap: 0, borderBottom: `1px solid ${tokens.colors.neutral[100]}`, padding: `0 ${tokens.spacing[6]}px` }}>
+    const renderTabs = useCallback(() => (
+      <Box style={{ display: 'flex', gap: 0, borderBottom: `${bdr} ${t.colors.neutral[100]}`, padding: `0 ${t.spacing[6]}px` }} role="tablist" aria-label="Job detail tabs">
         {tabs.map(tab => (
-          <button key={tab.key} onClick={() => handleTabChange(tab.key)} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, border: 'none', borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${activeTab === tab.key ? tokens.colors.primaryScale[500] : 'transparent'}`, backgroundColor: 'transparent', cursor: 'pointer', fontSize: tokens.typography.fontSize.sm, fontWeight: activeTab === tab.key ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.medium, color: activeTab === tab.key ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500], fontFamily: 'inherit', marginBottom: -1 }}>
-            {tab.icon}{tab.label}
-          </button>
+          <Box key={tab.key} role="tab" tabIndex={0} aria-selected={activeTab === tab.key} aria-label={tab.label} onClick={() => handleTabChange(tab.key)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => handleTabChange(tab.key))} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[3]}px ${t.spacing[4]}px`, border: 'none', borderBottom: `${bdr} ${activeTab === tab.key ? t.colors.primaryScale[500] : 'transparent'}`, backgroundColor: 'transparent', cursor: 'pointer', fontSize: t.typography.fontSize.sm, fontWeight: activeTab === tab.key ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, color: activeTab === tab.key ? t.colors.primaryScale[600] : t.colors.neutral[500], marginBottom: -1, transition: `all ${t.motion.hover}` }}>
+            {tab.icon}<Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{tab.label}</Text>
+          </Box>
         ))}
       </Box>
-    );
+    ), [activeTab, t, bdr, handleTabChange, handleKeyAction]);
 
     /* Metrics */
-    const renderMetrics = () => {
+    const renderMetrics = useCallback(() => {
       if (!metrics.length) return null;
       return (
-        <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(metrics.length, 6)}, 1fr)`, gap: tokens.spacing[3], padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px` }}>
-          {metrics.slice(0, 6).map((m, i) => (
-            <Box key={i} style={{ ...cardBase, padding: `${tokens.spacing[3]}px ${tokens.spacing[4]}px`, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>{m.label}</Box>
-                {m.icon && <Box style={{ color: tokens.colors.neutral[400] }}>{m.icon}</Box>}
-              </Box>
-              <Box style={{ fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>{m.value}</Box>
-              {m.trendValue !== undefined && (
-                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: trendColor(m.trend, tokens) }}>
-                  <TrendIcon trend={m.trend} /><span>{m.trend === 'up' ? '+' : ''}{m.trendValue}%</span>
+        <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(metrics.length, 6)}, 1fr)`, gap: t.spacing[3], padding: `${t.spacing[4]}px ${t.spacing[6]}px` }}>
+          {metrics.slice(0, 6).map((m, i) => {
+            const itemEntrance = createEntranceAnimation(t, { index: i });
+            return (
+              <Box key={i} style={{ ...cardBase, padding: `${t.spacing[3]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...itemEntrance.animate, transition: itemEntrance.transition }}>
+                <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], fontWeight: t.typography.fontWeight.medium }}>{m.label}</Text>
+                  {m.icon && <Box style={{ color: t.colors.neutral[400] }}>{m.icon}</Box>}
                 </Box>
-              )}
-            </Box>
-          ))}
+                <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{m.value}</Text>
+                {m.trendValue !== undefined && (
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: trendColor(m.trend, t) }}>
+                    <TrendIcon trend={m.trend} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{m.trend === 'up' ? '+' : ''}{m.trendValue}%</Text>
+                  </Box>
+                )}
+              </Box>
+            );
+          })}
         </Box>
       );
-    };
+    }, [metrics, cardBase, t]);
 
     /* Funnel */
-    const renderFunnel = () => {
+    const renderFunnel = useCallback(() => {
       if (!funnelStages.length) return null;
       const maxCount = Math.max(...funnelStages.map(s => s.count), 1);
       const W = 600, stH = 36, gap = 12, maxBar = W - 200;
@@ -244,10 +257,10 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
 
       return (
         <Box style={{ padding: sectionPad }}>
-          <SectionHeader expanded={!!expandedSections.funnel} onToggle={() => toggleSection('funnel')} label="Pipeline Funnel" tokens={tokens} />
+          <SectionHeader_ expanded={!!expandedSections.funnel} onToggle={() => toggleSection('funnel')} label="Pipeline Funnel" />
           {expandedSections.funnel && (
-            <Box style={{ ...cardBase, padding: tokens.spacing[4], overflow: 'auto' }}>
-              <svg width="100%" viewBox={`0 0 ${W} ${svgH}`} style={{ display: 'block', maxWidth: W }}>
+            <Box style={{ ...cardBase, padding: t.spacing[4], overflow: 'auto' }}>
+              <svg width="100%" viewBox={`0 0 ${W} ${svgH}`} style={{ display: 'block', maxWidth: W }} role="img" aria-label="Pipeline funnel chart">
                 {funnelStages.map((stage, idx) => {
                   const y = 10 + idx * (stH + gap);
                   const bw = Math.max((stage.count / maxCount) * maxBar, 4);
@@ -255,9 +268,9 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
                   const x = 160;
                   return (
                     <g key={stage.name}>
-                      <polygon points={`${x},${y} ${x + tw},${y} ${x + bw},${y + stH} ${x},${y + stH}`} fill={stage.color || tokens.colors.primaryScale[400]} opacity={0.85} />
-                      <text x={10} y={y + stH / 2 + 4} fill={tokens.colors.neutral[700]} fontSize={12} fontWeight={tokens.typography.fontWeight.medium}>{stage.name}</text>
-                      <text x={x + bw + 10} y={y + stH / 2 + 4} fill={tokens.colors.neutral[600]} fontSize={12} fontWeight={tokens.typography.fontWeight.semibold}>{stage.count} ({stage.percentage}%)</text>
+                      <polygon points={`${x},${y} ${x + tw},${y} ${x + bw},${y + stH} ${x},${y + stH}`} fill={stage.color || t.colors.primaryScale[400]} opacity={0.85} />
+                      <text x={10} y={y + stH / 2 + 4} fill={t.colors.neutral[700]} fontSize={12} fontWeight={t.typography.fontWeight.medium}>{stage.name}</text>
+                      <text x={x + bw + 10} y={y + stH / 2 + 4} fill={t.colors.neutral[600]} fontSize={12} fontWeight={t.typography.fontWeight.semibold}>{stage.count} ({stage.percentage}%)</text>
                     </g>
                   );
                 })}
@@ -266,37 +279,37 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
           )}
         </Box>
       );
-    };
+    }, [funnelStages, expandedSections.funnel, cardBase, t, sectionPad, toggleSection, SectionHeader_]);
 
     /* Candidates */
-    const renderCandidates = () => {
+    const renderCandidates = useCallback(() => {
       if (!candidates.length) return null;
       const display = activeTab === 'candidates' ? candidates : candidates.slice(0, 10);
       const gridCols = '40px 1fr 120px 160px 100px';
 
       return (
         <Box style={{ padding: sectionPad }}>
-          <SectionHeader expanded={!!expandedSections.candidates} onToggle={() => toggleSection('candidates')} label={`Top Candidates (${candidates.length})`} tokens={tokens} />
+          <SectionHeader_ expanded={!!expandedSections.candidates} onToggle={() => toggleSection('candidates')} label={`Top Candidates (${candidates.length})`} />
           {expandedSections.candidates && (
             <Box style={{ ...cardBase, padding: 0, overflow: 'hidden' }}>
-              <Box style={{ display: 'grid', gridTemplateColumns: gridCols, gap: tokens.spacing[3], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, backgroundColor: tokens.colors.neutral[50], borderBottom: `1px solid ${tokens.colors.neutral[100]}`, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
-                <Box /><Box>Candidate</Box><Box>Stage</Box><Box>Score</Box><Box>Status</Box>
+              <Box style={{ display: 'grid', gridTemplateColumns: gridCols, gap: t.spacing[3], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, backgroundColor: t.colors.neutral[50], borderBottom: `${bdr} ${t.colors.neutral[100]}`, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+                <Box /><Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>Candidate</Text><Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>Stage</Text><Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>Score</Text><Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>Status</Text>
               </Box>
               {display.map(c => {
-                const csc = statusColors(c.status, tokens);
+                const csc = statusColors(c.status, t);
                 const isSel = selectedCandidates.has(c.id);
                 return (
-                  <Box key={c.id} style={{ display: 'grid', gridTemplateColumns: gridCols, gap: tokens.spacing[3], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, alignItems: 'center', borderBottom: `1px solid ${tokens.colors.neutral[100]}`, cursor: 'pointer', backgroundColor: isSel ? tokens.colors.primaryScale[50] : tokens.colors.common.white, transition: `all ${tokens.motion.hover}` }} onClick={() => onCandidateClick?.(c.id)}>
-                    <Checkbox checked={isSel} tokens={tokens} onClick={(e) => { e.stopPropagation(); toggleCandidate(c.id); }} />
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}><Avatar avatar={c.avatar} name={c.name} tokens={tokens} /><Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800] }}>{c.name}</Box></Box>
-                    <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600] }}>{c.stage}</Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                      <Box style={{ flex: 1, height: 6, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full, overflow: 'hidden' }}>
-                        <Box style={{ width: `${c.scorePercent}%`, height: '100%', backgroundColor: scoreColor(c.scorePercent, tokens), borderRadius: tokens.borderRadius.full, transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }} />
+                  <Box key={c.id} role="button" tabIndex={0} aria-label={`Candidate ${c.name}`} onClick={() => onCandidateClick?.(c.id)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => onCandidateClick?.(c.id))} style={{ display: 'grid', gridTemplateColumns: gridCols, gap: t.spacing[3], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, alignItems: 'center', borderBottom: `${bdr} ${t.colors.neutral[100]}`, cursor: 'pointer', backgroundColor: isSel ? t.colors.primaryScale[50] : t.colors.common.white, transition: `all ${t.motion.hover}` }}>
+                    <Checkbox_ checked={isSel} onClick={(e) => { e.stopPropagation(); toggleCandidate(c.id); }} />
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}><Avatar_ avatar={c.avatar} name={c.name} /><Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{c.name}</Text></Box>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{c.stage}</Text>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                      <Box style={{ flex: 1, height: 6, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
+                        <Box style={{ width: `${c.scorePercent}%`, height: '100%', backgroundColor: scoreColor(c.scorePercent, t), borderRadius: t.borderRadius.full, transition: `width ${t.transitions?.normal || t.motion.hover}` }} />
                       </Box>
-                      <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[600], minWidth: 32, textAlign: 'right' as const }}>{c.scorePercent}%</Box>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], minWidth: 32, textAlign: 'right' as const }}>{c.scorePercent}%</Text>
                     </Box>
-                    <Badge bg={csc.bg} color={csc.color} border={csc.border} tokens={tokens}>{c.status}</Badge>
+                    <Badge_ bg={csc.bg} color={csc.color} border={csc.border}>{c.status}</Badge_>
                   </Box>
                 );
               })}
@@ -304,55 +317,55 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
           )}
         </Box>
       );
-    };
+    }, [candidates, activeTab, selectedCandidates, expandedSections.candidates, cardBase, t, bdr, sectionPad, onCandidateClick, toggleSection, toggleCandidate, handleKeyAction, Badge_, Avatar_, Checkbox_, SectionHeader_]);
 
     /* Template */
-    const renderTemplate = () => {
+    const renderTemplate = useCallback(() => {
       if (!templateInfo) return null;
       return (
         <Box style={{ padding: sectionPad }}>
-          <SectionHeader expanded={!!expandedSections.template} onToggle={() => toggleSection('template')} label="Hiring Template" tokens={tokens} />
+          <SectionHeader_ expanded={!!expandedSections.template} onToggle={() => toggleSection('template')} label="Hiring Template" />
           {expandedSections.template && (
-            <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-              <Box style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[3] }}>{templateInfo.name}</Box>
+            <Box style={{ ...cardBase, padding: t.spacing[4] }}>
+              <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[3] }}>{templateInfo.name}</Text>
               {[
                 { label: 'Stages', icon: <ClipboardList size={12} />, items: templateInfo.stages, render: (s: string, i: number) => (
-                  <Box key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.xs, backgroundColor: tokens.colors.primaryScale[50], color: tokens.colors.primaryScale[700], border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.primaryScale[200]}` }}>
-                    <Box style={{ width: 16, height: 16, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.primaryScale[100], color: tokens.colors.primaryScale[600], fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: tokens.typography.fontWeight.semibold }}>{i + 1}</Box>{s}
+                  <Box key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.xs, backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700], border: `${bdr} ${t.colors.primaryScale[200]}` }}>
+                    <Text style={{ width: 16, height: 16, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[600], fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: t.typography.fontWeight.semibold }}>{i + 1}</Text><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{s}</Text>
                   </Box>
                 )},
-                { label: 'AI Agents', icon: <Bot size={12} />, items: templateInfo.agents, render: (a: string, i: number) => <Box key={i} style={createBadgeStyle(tokens, 'info')}><Bot size={10} />{a}</Box> },
-                { label: 'Rubrics', icon: <FileText size={12} />, items: templateInfo.rubrics, render: (r: string, i: number) => <Box key={i} style={createBadgeStyle(tokens, 'secondary')}>{r}</Box> },
+                { label: 'AI Agents', icon: <Bot size={12} />, items: templateInfo.agents, render: (a: string, i: number) => <Text key={i} style={createBadgeStyle(t, 'info')}><Bot size={10} />{a}</Text> },
+                { label: 'Rubrics', icon: <FileText size={12} />, items: templateInfo.rubrics, render: (r: string, i: number) => <Text key={i} style={createBadgeStyle(t, 'secondary')}>{r}</Text> },
               ].map(section => (
-                <Box key={section.label} style={{ marginBottom: tokens.spacing[3] }}>
-                  <Box style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[2], display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>{section.icon}{section.label}</Box>
-                  <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: tokens.spacing[2] }}>{section.items.map(section.render)}</Box>
+                <Box key={section.label} style={{ marginBottom: t.spacing[3] }}>
+                  <Box style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], marginBottom: t.spacing[2], display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>{section.icon}<Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{section.label}</Text></Box>
+                  <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>{section.items.map(section.render)}</Box>
                 </Box>
               ))}
             </Box>
           )}
         </Box>
       );
-    };
+    }, [templateInfo, expandedSections.template, cardBase, t, bdr, sectionPad, toggleSection, SectionHeader_]);
 
     /* Activity */
-    const renderActivity = () => {
+    const renderActivity = useCallback(() => {
       if (!events.length) return null;
       return (
         <Box style={{ padding: sectionPad }}>
-          <SectionHeader expanded={!!expandedSections.activity} onToggle={() => toggleSection('activity')} label="Recent Activity" tokens={tokens} />
+          <SectionHeader_ expanded={!!expandedSections.activity} onToggle={() => toggleSection('activity')} label="Recent Activity" />
           {expandedSections.activity && (
-            <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
+            <Box style={{ ...cardBase, padding: t.spacing[4] }}>
               {events.slice(0, 15).map((ev, idx) => {
-                const em = eventIcon(ev.type, tokens);
+                const em = eventIcon(ev.type, t);
                 const isLast = idx === Math.min(events.length, 15) - 1;
                 return (
-                  <Box key={ev.id} style={{ display: 'flex', gap: tokens.spacing[3], position: 'relative' as const, paddingBottom: isLast ? 0 : tokens.spacing[3] }}>
-                    {!isLast && <Box style={{ position: 'absolute' as const, left: 11, top: 24, bottom: 0, width: 2, backgroundColor: tokens.colors.neutral[200] }} />}
-                    <Box style={{ width: 24, height: 24, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], color: em.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>{em.icon}</Box>
-                    <Box style={{ flex: 1, minWidth: 0 }}>
-                      <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], lineHeight: tokens.typography.lineHeight.normal }}>{ev.message}</Box>
-                      <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], marginTop: tokens.spacing[1] }}>{timeAgo(ev.time)}</Box>
+                  <Box key={ev.id} style={{ display: 'flex', gap: t.spacing[3], position: 'relative' as const, paddingBottom: isLast ? 0 : t.spacing[3] }}>
+                    {!isLast && <Box style={{ position: 'absolute' as const, left: 11, top: 24, bottom: 0, width: 2, backgroundColor: t.colors.neutral[200] }} />}
+                    <Box style={{ width: 24, height: 24, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], color: em.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, zIndex: 1 }}>{em.icon}</Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], lineHeight: t.typography.lineHeight.normal }}>{ev.message}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400]}}>{timeAgo(ev.time)}</Text>
                     </Box>
                   </Box>
                 );
@@ -361,11 +374,11 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
           )}
         </Box>
       );
-    };
+    }, [events, expandedSections.activity, cardBase, t, sectionPad, toggleSection, SectionHeader_]);
 
     /* Analytics */
-    const renderAnalytics = () => {
-      if (!analytics) return <Box style={{ padding: `${tokens.spacing[8]}px ${tokens.spacing[6]}px`, textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No analytics data available.</Box>;
+    const renderAnalytics = useCallback(() => {
+      if (!analytics) return <Box style={{ padding: `${t.spacing[8]}px ${t.spacing[6]}px`, textAlign: 'center' as const, color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}><Text style={{ fontSize: 'inherit', color: 'inherit' }}>No analytics data available.</Text></Box>;
       const { sources, timeToStage, scoreDistribution } = analytics;
       const maxSrc = Math.max(...sources.map(s => s.count), 1);
       const maxDays = Math.max(...timeToStage.map(s => Math.max(s.avgDays, s.targetDays)), 1);
@@ -373,113 +386,112 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
       const hW = Math.min(60, 400 / Math.max(scoreDistribution.length, 1)), hH = 160;
 
       return (
-        <Box style={{ padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[5] }}>
-          <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
+        <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[6]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
+          <Box style={{ display: 'flex', gap: t.spacing[2] }} role="radiogroup" aria-label="Time range">
             {(['7d', '14d', '30d', '90d'] as MetricsTimeRange[]).map(r => (
-              <button key={r} onClick={() => setMetricsTimeRange(r)} style={{ padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${metricsTimeRange === r ? tokens.colors.primaryScale[300] : tokens.colors.neutral[200]}`, backgroundColor: metricsTimeRange === r ? tokens.colors.primaryScale[50] : tokens.colors.common.white, color: metricsTimeRange === r ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600], fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, cursor: 'pointer', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>{r}</button>
+              <Box key={r} role="radio" tabIndex={0} aria-checked={metricsTimeRange === r} aria-label={`${r} range`} onClick={() => setMetricsTimeRange(r)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => setMetricsTimeRange(r))} style={{ padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `${bdr} ${metricsTimeRange === r ? t.colors.primaryScale[300] : t.colors.neutral[200]}`, backgroundColor: metricsTimeRange === r ? t.colors.primaryScale[50] : t.colors.common.white, color: metricsTimeRange === r ? t.colors.primaryScale[600] : t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{r}</Text>
+              </Box>
             ))}
           </Box>
 
-          {/* Sources */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700], marginBottom: tokens.spacing[3] }}>Source Breakdown</Box>
+          <Box style={{ ...cardBase, padding: t.spacing[4] }}>
+            <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], marginBottom: t.spacing[3] }}>Source Breakdown</Text>
             {sources.map((src, idx) => (
-              <Box key={src.name} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[2] }}>
-                <Box style={{ width: 100, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium, textAlign: 'right' as const, flexShrink: 0 }}>{src.name}</Box>
-                <Box style={{ flex: 1, maxWidth: 300, height: 18, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.sm, overflow: 'hidden' }}>
-                  <Box style={{ width: `${(src.count / maxSrc) * 100}%`, height: '100%', backgroundColor: tokens.colors[SOURCE_COLORS[idx % SOURCE_COLORS.length]][idx === 5 ? 400 : 500], borderRadius: tokens.borderRadius.sm, transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }} />
+              <Box key={src.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[2] }}>
+                <Text style={{ width: 100, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const, flexShrink: 0 }}>{src.name}</Text>
+                <Box style={{ flex: 1, maxWidth: 300, height: 18, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
+                  <Box style={{ width: `${(src.count / maxSrc) * 100}%`, height: '100%', backgroundColor: t.colors[SOURCE_COLORS[idx % SOURCE_COLORS.length]][idx === 5 ? 400 : 500], borderRadius: t.borderRadius.sm, transition: `width ${t.transitions?.normal || t.motion.hover}` }} />
                 </Box>
-                <Box style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], minWidth: 60 }}>{src.count} ({src.percentage}%)</Box>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], minWidth: 60 }}>{src.count} ({src.percentage}%)</Text>
               </Box>
             ))}
           </Box>
 
-          {/* Time to Stage */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700], marginBottom: tokens.spacing[3] }}>Time to Stage (days)</Box>
+          <Box style={{ ...cardBase, padding: t.spacing[4] }}>
+            <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], marginBottom: t.spacing[3] }}>Time to Stage (days)</Text>
             {timeToStage.map(e => (
-              <Box key={e.stageName} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[3], marginBottom: tokens.spacing[2] }}>
-                <Box style={{ width: 100, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium, textAlign: 'right' as const, flexShrink: 0 }}>{e.stageName}</Box>
+              <Box key={e.stageName} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[2] }}>
+                <Text style={{ width: 100, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const, flexShrink: 0 }}>{e.stageName}</Text>
                 <Box style={{ flex: 1, maxWidth: 240, display: 'flex', flexDirection: 'column' as const, gap: 2 }}>
-                  <Box style={{ height: 10, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.sm, overflow: 'hidden' }}>
-                    <Box style={{ width: `${(e.avgDays / maxDays) * 100}%`, height: '100%', backgroundColor: e.avgDays > e.targetDays ? tokens.colors.errorScale[400] : tokens.colors.primaryScale[400], borderRadius: tokens.borderRadius.sm }} />
+                  <Box style={{ height: 10, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
+                    <Box style={{ width: `${(e.avgDays / maxDays) * 100}%`, height: '100%', backgroundColor: e.avgDays > e.targetDays ? t.colors.errorScale[400] : t.colors.primaryScale[400], borderRadius: t.borderRadius.sm }} />
                   </Box>
-                  <Box style={{ height: 6, backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.sm, overflow: 'hidden' }}>
-                    <Box style={{ width: `${(e.targetDays / maxDays) * 100}%`, height: '100%', backgroundColor: tokens.colors.neutral[300], borderRadius: tokens.borderRadius.sm }} />
+                  <Box style={{ height: 6, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
+                    <Box style={{ width: `${(e.targetDays / maxDays) * 100}%`, height: '100%', backgroundColor: t.colors.neutral[300], borderRadius: t.borderRadius.sm }} />
                   </Box>
                 </Box>
-                <Box style={{ fontSize: tokens.typography.fontSize.xs, color: e.avgDays > e.targetDays ? tokens.colors.errorScale[600] : tokens.colors.neutral[500], minWidth: 60 }}>{e.avgDays}d / {e.targetDays}d</Box>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: e.avgDays > e.targetDays ? t.colors.errorScale[600] : t.colors.neutral[500], minWidth: 60 }}>{e.avgDays}d / {e.targetDays}d</Text>
               </Box>
             ))}
-            <Box style={{ display: 'flex', gap: tokens.spacing[4], marginTop: tokens.spacing[3] }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}><Box style={{ width: 12, height: 8, backgroundColor: tokens.colors.primaryScale[400], borderRadius: tokens.borderRadius.sm }} />Actual</Box>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}><Box style={{ width: 12, height: 6, backgroundColor: tokens.colors.neutral[300], borderRadius: tokens.borderRadius.sm }} />Target</Box>
+            <Box style={{ display: 'flex', gap: t.spacing[4], marginTop: t.spacing[3] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}><Box style={{ width: 12, height: 8, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm }} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>Actual</Text></Box>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}><Box style={{ width: 12, height: 6, backgroundColor: t.colors.neutral[300], borderRadius: t.borderRadius.sm }} /><Text style={{ fontSize: 'inherit', color: 'inherit' }}>Target</Text></Box>
             </Box>
           </Box>
 
-          {/* Score Distribution */}
-          <Box style={{ ...cardBase, padding: tokens.spacing[4] }}>
-            <Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700], marginBottom: tokens.spacing[3] }}>Score Distribution</Box>
-            <svg width="100%" viewBox={`0 0 ${scoreDistribution.length * (hW + 8) + 40} ${hH + 40}`} style={{ display: 'block', maxWidth: 500 }}>
+          <Box style={{ ...cardBase, padding: t.spacing[4] }}>
+            <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], marginBottom: t.spacing[3] }}>Score Distribution</Text>
+            <svg width="100%" viewBox={`0 0 ${scoreDistribution.length * (hW + 8) + 40} ${hH + 40}`} style={{ display: 'block', maxWidth: 500 }} role="img" aria-label="Score distribution chart">
               {scoreDistribution.map((b, i) => {
                 const bH = (b.count / maxBkt) * hH, x = 20 + i * (hW + 8), y = hH - bH + 10;
                 return (
                   <g key={b.range}>
-                    <rect x={x} y={y} width={hW} height={bH} fill={tokens.colors.primaryScale[400]} rx={3} opacity={0.85} />
-                    <text x={x + hW / 2} y={y - 4} textAnchor="middle" fill={tokens.colors.neutral[600]} fontSize={10} fontWeight={tokens.typography.fontWeight.medium}>{b.count}</text>
-                    <text x={x + hW / 2} y={hH + 24} textAnchor="middle" fill={tokens.colors.neutral[500]} fontSize={9}>{b.range}</text>
+                    <rect x={x} y={y} width={hW} height={bH} fill={t.colors.primaryScale[400]} rx={3} opacity={0.85} />
+                    <text x={x + hW / 2} y={y - 4} textAnchor="middle" fill={t.colors.neutral[600]} fontSize={10} fontWeight={t.typography.fontWeight.medium}>{b.count}</text>
+                    <text x={x + hW / 2} y={hH + 24} textAnchor="middle" fill={t.colors.neutral[500]} fontSize={9}>{b.range}</text>
                   </g>
                 );
               })}
-              <line x1={16} y1={hH + 10} x2={scoreDistribution.length * (hW + 8) + 20} y2={hH + 10} stroke={tokens.colors.neutral[200]} strokeWidth={1} />
+              <line x1={16} y1={hH + 10} x2={scoreDistribution.length * (hW + 8) + 20} y2={hH + 10} stroke={t.colors.neutral[200]} strokeWidth={1} />
             </svg>
           </Box>
         </Box>
       );
-    };
+    }, [analytics, metricsTimeRange, cardBase, t, bdr, handleKeyAction]);
 
     /* Settings */
-    const renderSettings = () => {
-      if (!settings) return <Box style={{ padding: `${tokens.spacing[8]}px ${tokens.spacing[6]}px`, textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No settings configured.</Box>;
+    const renderSettings = useCallback(() => {
+      if (!settings) return <Box style={{ padding: `${t.spacing[8]}px ${t.spacing[6]}px`, textAlign: 'center' as const, color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}><Text style={{ fontSize: 'inherit', color: 'inherit' }}>No settings configured.</Text></Box>;
 
       const settingSections = [
-        { icon: <ClipboardList size={16} color={tokens.colors.primaryScale[500]} />, label: 'Template Association', content: (
-          <SettingRow label={`Template ID: ${settings.templateId}`} tokens={tokens}><span /></SettingRow>
+        { icon: <ClipboardList size={16} color={t.colors.primaryScale[500]} />, label: 'Template Association', content: (
+          <SettingRow_ label={`Template ID: ${settings.templateId}`}><Box /></SettingRow_>
         )},
-        { icon: <Bell size={16} color={tokens.colors.infoScale[500]} />, label: 'Notifications', content: (
-          <SettingRow label="Email notifications" tokens={tokens}><Toggle on={settings.notifications} tokens={tokens} /></SettingRow>
+        { icon: <Bell size={16} color={t.colors.infoScale[500]} />, label: 'Notifications', content: (
+          <SettingRow_ label="Email notifications"><Toggle_ on={settings.notifications} /></SettingRow_>
         )},
-        { icon: <Shield size={16} color={tokens.colors.warningScale[500]} />, label: 'SLA Configuration', content: (
-          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+        { icon: <Shield size={16} color={t.colors.warningScale[500]} />, label: 'SLA Configuration', content: (
+          <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
             {[{ label: 'Max Days Open', value: settings.slaConfig.maxDaysOpen }, { label: 'Max Days Per Stage', value: settings.slaConfig.maxDaysPerStage }].map(item => (
-              <SettingRow key={item.label} label={item.label} tokens={tokens}><span style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{item.value} days</span></SettingRow>
+              <SettingRow_ key={item.label} label={item.label}><Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{item.value} days</Text></SettingRow_>
             ))}
-            <SettingRow label="Notify on Breach" tokens={tokens}><Toggle on={settings.slaConfig.notifyOnBreach} tokens={tokens} /></SettingRow>
+            <SettingRow_ label="Notify on Breach"><Toggle_ on={settings.slaConfig.notifyOnBreach} /></SettingRow_>
           </Box>
         )},
       ];
 
       return (
-        <Box style={{ padding: `${tokens.spacing[4]}px ${tokens.spacing[6]}px`, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+        <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[6]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[4] }}>
           {settingSections.map(s => (
-            <Box key={s.label} style={{ ...cardBase, padding: tokens.spacing[4] }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
-                {s.icon}<Box style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>{s.label}</Box>
+            <Box key={s.label} style={{ ...cardBase, padding: t.spacing[4] }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
+                {s.icon}<Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{s.label}</Text>
               </Box>
               {s.content}
             </Box>
           ))}
           {onSettingsSave && (
             <Box style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button onClick={() => onSettingsSave(settings)} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, border: 'none', backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, cursor: 'pointer', transition: `all ${tokens.motion.hover}`, fontFamily: 'inherit', ...hoverStyle }}><Save size={14} />Save Settings</button>
+              <Box role="button" tabIndex={0} aria-label="Save settings" onClick={() => onSettingsSave(settings)} onKeyDown={(e: React.KeyboardEvent) => handleKeyAction(e, () => onSettingsSave(settings))} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, border: 'none', backgroundColor: t.colors.primaryScale[600], color: t.colors.common.white, fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, cursor: 'pointer', transition: `all ${t.motion.hover}` }}><Save size={14} /><Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>Save Settings</Text></Box>
             </Box>
           )}
         </Box>
       );
-    };
+    }, [settings, cardBase, t, onSettingsSave, handleKeyAction, SettingRow_, Toggle_]);
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, backgroundColor: tokens.colors.common.white, borderRadius: tokens.borderRadius.lg, border: `1px solid ${tokens.colors.neutral[100]}`, boxShadow: tokens.shadows.lg, width: '100%', overflow: 'hidden', ...glassCard, ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, backgroundColor: t.colors.common.white, borderRadius: t.borderRadius.lg, border: `${bdr} ${t.colors.neutral[100]}`, boxShadow: t.shadows.lg, width: '100%', overflow: 'hidden', ...entrance.animate, transition: entrance.transition, ...glassCard, ...style }}>
         {renderHeader()}
         {renderTabs()}
         {activeTab === 'overview' && <>{renderMetrics()}{renderFunnel()}{renderCandidates()}{renderTemplate()}{renderActivity()}</>}

@@ -7,9 +7,14 @@
  * Slite-inspired warm design with generous whitespace.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
-import { createCardStyle, getPersonalityBadgeRadius } from '../../../helpers';
+import {
+  createCardStyle,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  createEntranceAnimation,
+} from '../../../helpers';
 import type { BhCapacityPlannerProps, RecruiterCapacity, RebalanceSuggestion, CapacitySummary } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -86,7 +91,7 @@ function UtilizationRing({ percent, status, t }: { percent: number; status: stri
         stroke={color} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={`${progress} ${circ}`}
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
-        style={{ transition: 'stroke-dasharray 0.5s ease' }}
+        style={{ transition: `stroke-dasharray ${t.personality.animation.entranceDuration}ms ease` }}
       />
       {percent > 100 && (
         <circle
@@ -95,7 +100,7 @@ function UtilizationRing({ percent, status, t }: { percent: number; status: stri
           strokeDasharray={`${((clamped - 100) / 100) * circ} ${circ}`}
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
           opacity={0.4}
-          style={{ transition: 'stroke-dasharray 0.5s ease' }}
+          style={{ transition: `stroke-dasharray ${t.personality.animation.entranceDuration}ms ease` }}
         />
       )}
       <text x={size / 2} y={size / 2} textAnchor="middle" dominantBaseline="central"
@@ -114,7 +119,9 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
   name: 'BhCapacityPlanner.Grid',
   render: ({ primitives, props, tokens: t }: PresetContext<BhCapacityPlannerProps>) => {
     const { Box, Text } = primitives;
-    const br = getPersonalityBadgeRadius(t);
+    const br = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const personalityTypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
       recruiters = DEFAULT_RECRUITERS,
@@ -128,16 +135,18 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
     const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;
-    const handleSelect = (id: string | null) => {
+    const handleSelect = useCallback((id: string | null) => {
       if (controlledSelected === undefined) setInternalSelected(id);
       onRecruiterSelect?.(id);
-    };
+    }, [controlledSelected, onRecruiterSelect]);
 
     return (
       <Box className={className} style={{
-        ...createCardStyle(t, { elevation: 'md' }),
-        display: 'flex', flexDirection: 'column', height: '100%',
-        backgroundColor: t.colors.neutral[50], overflow: 'hidden', ...style,
+        ...createCardStyle(t, { elevation: 'md', glass: isGlass }),
+        display: 'flex', flexDirection: 'column' as const, height: '100%', width: '100%',
+        backgroundColor: t.colors.neutral[50], overflow: 'hidden',
+        ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, WebkitBackdropFilter: t.glass.blur } : {}),
+        ...style,
       }}>
         {/* Header */}
         <Box style={{
@@ -147,14 +156,14 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
         }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
             <LayoutGrid size={16} style={{ color: t.colors.primaryScale[500] }} />
-            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
+            <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: personalityTypo.headingWeight, color: t.colors.neutral[900], letterSpacing: personalityTypo.headingLetterSpacing }}>
               Recruiter Capacity
             </Text>
           </Box>
 
           {/* Summary Metrics */}
           {summary && (
-            <Box style={{ display: 'flex', gap: t.spacing[5] }}>
+            <Box style={{ display: 'flex', gap: t.spacing[5], flexWrap: 'wrap' as const }}>
               {[
                 { label: 'Recruiters', value: summary.totalRecruiters, icon: Users, color: t.colors.primaryScale[600] },
                 { label: 'Avg Utilization', value: `${summary.avgUtilization}%`, icon: TrendingUp, color: t.colors.infoScale[600] },
@@ -164,7 +173,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
               ].map(m => {
                 const Icon = m.icon;
                 return (
-                  <Box key={m.label} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
+                  <Box key={m.label} style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[2] }}>
                     <Icon size={14} style={{ color: m.color }} />
                     <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: m.color }}>{m.value}</Text>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{m.label}</Text>
@@ -182,12 +191,20 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
               const isSelected = selected === rec.id;
               const sc = getStatusConfig(rec.status, t);
               return (
-                <Box key={rec.id} onClick={() => handleSelect(isSelected ? null : rec.id)} style={{
+                <Box key={rec.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${rec.name}, ${rec.department}, ${sc.label} at ${rec.utilizationPercent}%`}
+                  aria-pressed={isSelected}
+                  onClick={() => handleSelect(isSelected ? null : rec.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleSelect(isSelected ? null : rec.id); }}
+                  style={{
                   ...createCardStyle(t, { elevation: 'sm' }),
+                  ...createEntranceAnimation(t, { index: recruiters.indexOf(rec) }).animate,
                   padding: t.spacing[5], backgroundColor: t.colors.common.white,
                   border: `2px solid ${isSelected ? sc.color : t.colors.neutral[100]}`,
-                  cursor: 'pointer', transition: 'all 0.2s ease',
-                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  cursor: 'pointer', transition: `all ${t.motion.hover}`,
+                  display: 'flex', flexDirection: 'column' as const, alignItems: 'center',
                 }}>
                   {/* Avatar + Ring */}
                   <Box style={{ position: 'relative', marginBottom: t.spacing[3] }}>
@@ -223,7 +240,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                       { label: 'Positions', value: rec.activePositions },
                       { label: 'Candidates', value: rec.activeCandidates },
                     ].map(s => (
-                      <Box key={s.label} style={{ textAlign: 'center', flex: 1 }}>
+                      <Box key={s.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center', flex: 1 }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>{s.value}</Text>
                         <Text style={{ fontSize: 9, color: t.colors.neutral[400] }}>{s.label}</Text>
                       </Box>
@@ -265,7 +282,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                 </Text>
               </Box>
 
-              <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
                 {suggestions.map((sug, i) => (
                   <Box key={i} style={{
                     padding: `${t.spacing[4]}px ${t.spacing[4]}px`,
@@ -297,11 +314,17 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                       </Text>
                     </Box>
                     {onAcceptSuggestion && (
-                      <Box onClick={(e: any) => { e.stopPropagation(); onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }} style={{
+                      <Box
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Accept suggestion: move ${sug.candidateCount} candidates from ${sug.fromRecruiterName} to ${sug.toRecruiterName}`}
+                        onClick={(e: any) => { e.stopPropagation(); onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }}
+                        style={{
                         display: 'flex', alignItems: 'center', gap: t.spacing[1],
                         padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                         backgroundColor: t.colors.primaryScale[500], cursor: 'pointer',
-                        transition: 'background-color 0.15s ease', flexShrink: 0, marginLeft: t.spacing[4],
+                        transition: `background-color ${t.motion.hover}`, flexShrink: 0, marginLeft: t.spacing[4],
                       }}>
                         <CheckCircle2 size={12} style={{ color: t.colors.common.white }} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.common.white }}>Accept</Text>

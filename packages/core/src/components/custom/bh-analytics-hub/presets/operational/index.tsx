@@ -6,7 +6,7 @@
  * pipeline velocity, cost breakdown, and time-to-hire deep dives.
  */
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Filter,
   Clock,
@@ -32,7 +32,13 @@ import {
   createIconContainerStyle,
   getPersonalityBadgeRadius,
   createPersonalitySectionHeaderStyle,
+  getPersonalityTypography,
+  createEntranceAnimation,
+  createStaggerDelay,
+  createPersonalityAccentBar,
+  createEmptyStateStyle,
 } from '../../../helpers';
+import type { DesignTokens } from '../../../../../types';
 import type {
   BhAnalyticsHubProps,
   FunnelStage,
@@ -114,25 +120,32 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const [activeTab, setActiveTab] = useState<'funnel' | 'velocity' | 'cost' | 'sources'>('funnel');
     const [expandedJob, setExpandedJob] = useState<string | null>(null);
 
-    const card = createCardStyle(t, { padding: 28 });
-    const compactCard = createCardStyle(t, { padding: 20 });
-    const hoverStyles = createCardHoverStyles(t);
-    const badgeRadius = getPersonalityBadgeRadius(t);
-    const sectionLabel = createPersonalitySectionHeaderStyle(t);
+    const isGlass = t.surface.useGlass;
+    const card = useMemo(() => createCardStyle(t, { padding: 28, glass: isGlass }), [t, isGlass]);
+    const compactCard = useMemo(() => createCardStyle(t, { padding: 20, glass: isGlass }), [t, isGlass]);
+    const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
+    const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
+    const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
+    const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
-    const tabs = [
+    const handleTabChange = useCallback((tab: 'funnel' | 'velocity' | 'cost' | 'sources') => {
+      setActiveTab(tab);
+    }, []);
+
+    const tabs = useMemo(() => [
       { key: 'funnel' as const, label: 'Funnel Analysis', icon: GitBranch },
       { key: 'velocity' as const, label: 'Pipeline Velocity', icon: Timer },
       { key: 'cost' as const, label: 'Cost Breakdown', icon: DollarSign },
       { key: 'sources' as const, label: 'Source Effectiveness', icon: Layers },
-    ];
+    ], []);
 
     const SectionTitle = ({ children }: { children: string }) => (
-      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[5] }}>{children}</Text>
+      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[900], display: 'block', marginBottom: t.spacing[5], letterSpacing: ptypo.headingLetterSpacing }}>{children}</Text>
     );
 
     return (
-      <Box className={className} style={{ height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5], height: '100%', overflow: 'auto', backgroundColor: t.colors.neutral[50], padding: t.spacing[7], ...style }}>
 
         {/* ── Header ── */}
         <Flex align="center" justify="between" style={{ marginBottom: t.spacing[6] }}>
@@ -178,7 +191,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     <Box key={stage.name} style={{ display: 'grid', gridTemplateColumns: '110px 1fr 50px 60px', alignItems: 'center', gap: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const }}>{stage.name}</Text>
                       <Box style={{ height: 24, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden', position: 'relative' as const }}>
-                        <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${pct}%`, backgroundColor: colors[i % colors.length], borderRadius: t.borderRadius.sm, transition: 'width 400ms ease' }} />
+                        <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${pct}%`, backgroundColor: colors[i % colors.length], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{stage.count.toLocaleString()}</Text>
                       {i > 0 && (
@@ -241,7 +254,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                       </Box>
                       <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden', position: 'relative' as const }}>
                         <Box style={{ position: 'absolute' as const, left: `${Math.min(utilization, 100)}%`, top: -2, width: 2, height: 12, backgroundColor: t.colors.neutral[400] }} />
-                        <Box style={{ height: '100%', width: `${Math.min(utilization, 100)}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: 'width 400ms ease' }} />
+                        <Box style={{ height: '100%', width: `${Math.min(utilization, 100)}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
                       </Box>
                     </Box>
                   );
@@ -264,7 +277,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     {expandedJob === job.job && (
                       <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
                         {job.stages.map((s) => (
-                          <Box key={s.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <Box key={s.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], justifyContent: 'space-between' }}>
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{s.name}</Text>
                             <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{s.avgDays}d</Text>
                           </Box>
@@ -293,7 +306,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                         <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>${cat.costPerHire.toLocaleString()}</Text>
                       </Box>
                       <Box style={{ height: 12, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
-                        <Box style={{ height: '100%', width: `${(cat.costPerHire / maxCost) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm, transition: 'width 400ms ease' }} />
+                        <Box style={{ height: '100%', width: `${(cat.costPerHire / maxCost) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
                       </Box>
                       <Box style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
                         {cat.breakdown.map((b) => (
@@ -320,7 +333,7 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                   const TIcon = m.trend > 0 ? TrendingUp : TrendingDown;
                   return (
                     <Box key={m.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: t.spacing[4], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50] }}>
-                      <Box>
+                      <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'block', marginBottom: t.spacing[1] }}>{m.label}</Text>
                         <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{m.value}</Text>
                       </Box>

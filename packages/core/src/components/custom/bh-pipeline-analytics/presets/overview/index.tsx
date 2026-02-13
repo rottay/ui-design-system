@@ -118,11 +118,11 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     return (
       <Box className={className} style={{
         display: 'flex', flexDirection: 'column' as const,
-        gap: tokens.spacing[5], ...style,
+        gap: tokens.spacing[5], width: '100%', ...style,
       }}>
         {/* ── Summary Stats ────────────────────────────── */}
         {summary && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
+          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
             {[
               { label: 'Active Candidates', value: formatNumber(summary.totalActive) },
               { label: 'Total Hired', value: formatNumber(summary.totalHired) },
@@ -154,7 +154,7 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                 </Text>
               </Box>
             ))}
-          </div>
+          </Box>
         )}
 
         {/* ── Funnel Visualization ─────────────────────── */}
