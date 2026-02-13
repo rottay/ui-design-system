@@ -795,6 +795,58 @@ export function createErrorContainerStyle(tokens: DesignTokens): CSSProperties {
   };
 }
 
+/* ================================================================== */
+/*  LAYOUT & STAT HELPERS                                              */
+/*  Fix card stacking, accent bar layout, label-value gaps, stat colors */
+/* ================================================================== */
+
+/**
+ * Returns outer + inner layout styles for cards with accent bars.
+ * When barPosition is 'left', outer is flex-row so the bar sits left
+ * and content flows in a column inside inner.
+ * When barPosition is 'top' or 'none', outer is flex-column.
+ */
+export function getAccentAwareLayout(tokens: DesignTokens): {
+  outer: CSSProperties;
+  inner: CSSProperties;
+} {
+  const pos = tokens.personality.accent.barPosition;
+  if (pos === 'left') {
+    return {
+      outer: { display: 'flex', flexDirection: 'row' as const },
+      inner: { display: 'flex', flexDirection: 'column' as const, flex: 1, minWidth: 0, gap: tokens.spacing[2] },
+    };
+  }
+  return {
+    outer: { display: 'flex', flexDirection: 'column' as const },
+    inner: {},
+  };
+}
+
+/**
+ * Returns styles for a label + value vertical stack.
+ * Ensures text elements don't overlap by adding a gap.
+ */
+export function createLabelValuePairStyle(tokens: DesignTokens): CSSProperties {
+  return { display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] };
+}
+
+/**
+ * Creates card surface styles with flex-column layout baked in.
+ * Use this instead of createCardStyle when the card contains stacked content.
+ */
+export function createStatCardLayout(tokens: DesignTokens, options?: Parameters<typeof createCardStyle>[1]): CSSProperties {
+  return { ...createCardStyle(tokens, options), display: 'flex', flexDirection: 'column' as const };
+}
+
+/**
+ * Returns a professional neutral color for stat values.
+ * Use instead of warningScale/successScale/errorScale for metric numbers.
+ */
+export function getStatValueColor(tokens: DesignTokens): string {
+  return tokens.colors.neutral[900];
+}
+
 /**
  * Padding value based on personality card density.
  */

@@ -1369,16 +1369,10 @@ export { BhScorecardDetail } from './bh-scorecard-detail';
 export type {
   BhScorecardDetailProps,
   BhScorecardDetailPreset,
-  ScoreLevel as BhScorecardScoreLevel,
-  ScorecardHeader,
-  ScorecardDimension as BhScorecardDimension,
-  DimensionEvidence,
-  OverrideInfo,
-  CohortComparison as BhScorecardCohortComparison,
-  ScorecardSortBy,
-  ScorecardView,
+  DimensionScore,
+  ScorecardDetail,
 } from './bh-scorecard-detail';
-export { FullBhScorecardDetail, SummaryBhScorecardDetail } from './bh-scorecard-detail';
+export { PanelBhScorecardDetail, CompactBhScorecardDetail } from './bh-scorecard-detail';
 export { BH_SCORECARD_DETAIL_DEFAULTS } from './bh-scorecard-detail';
 
 // BhRankingBoard
@@ -3270,4 +3264,785 @@ export { BhProcessDesigner } from './bh-process-designer';
 export type { BhProcessDesignerProps, BhProcessDesignerPreset, StageType as BhStageType, KnockoutRule, ScoringRubric, ProcessStage, ProcessTemplate } from './bh-process-designer';
 export { VisualBhProcessDesigner, CompactBhProcessDesigner } from './bh-process-designer';
 export { BH_PROCESS_DESIGNER_DEFAULTS } from './bh-process-designer';
+
+// BhProctoringDashboard
+export { BhProctoringDashboard } from './bh-proctoring-dashboard';
+export type {
+  BhProctoringDashboardProps,
+  BhProctoringDashboardPreset,
+  ProctoringEventType,
+  ProctoringEventSeverity,
+  ProctoringEventSummary,
+  SeverityCount as ProctoringSeverityCount,
+  EventTypeCount as ProctoringEventTypeCount,
+  ProctoringStats,
+} from './bh-proctoring-dashboard';
+export { DashboardBhProctoringDashboard, CompactBhProctoringDashboard } from './bh-proctoring-dashboard';
+export { BH_PROCTORING_DASHBOARD_DEFAULTS } from './bh-proctoring-dashboard';
+
+// BhProctoringEventList
+export { BhProctoringEventList } from './bh-proctoring-event-list';
+export type {
+  BhProctoringEventListProps,
+  BhProctoringEventListPreset,
+  ProctoringEventItem,
+} from './bh-proctoring-event-list';
+export { TableBhProctoringEventList, CardsBhProctoringEventList } from './bh-proctoring-event-list';
+export { BH_PROCTORING_EVENT_LIST_DEFAULTS } from './bh-proctoring-event-list';
+
+// BhProctoringEventCard
+export { BhProctoringEventCard } from './bh-proctoring-event-card';
+export type {
+  BhProctoringEventCardProps,
+  BhProctoringEventCardPreset,
+  ProctoringEventMetadata,
+  ProctoringEventDetail as ProctoringEventCardDetail,
+} from './bh-proctoring-event-card';
+export { DefaultBhProctoringEventCard, CompactBhProctoringEventCard } from './bh-proctoring-event-card';
+export { BH_PROCTORING_EVENT_CARD_DEFAULTS } from './bh-proctoring-event-card';
+
+// BhProctoringTimeline
+export { BhProctoringTimeline } from './bh-proctoring-timeline';
+export type {
+  BhProctoringTimelineProps,
+  BhProctoringTimelinePreset,
+  TimelineEvent as ProctoringTimelineEvent,
+} from './bh-proctoring-timeline';
+export { HorizontalBhProctoringTimeline, VerticalBhProctoringTimeline } from './bh-proctoring-timeline';
+export { BH_PROCTORING_TIMELINE_DEFAULTS } from './bh-proctoring-timeline';
+
+// BhProctoringReview
+export { BhProctoringReview } from './bh-proctoring-review';
+export type {
+  BhProctoringReviewProps,
+  BhProctoringReviewPreset,
+  ProctoringEventDetail as ProctoringReviewEventDetail,
+  ReviewSubmission,
+} from './bh-proctoring-review';
+export { SplitBhProctoringReview, StackedBhProctoringReview } from './bh-proctoring-review';
+export { BH_PROCTORING_REVIEW_DEFAULTS } from './bh-proctoring-review';
+
+// BhProctoringAlert
+export { BhProctoringAlert } from './bh-proctoring-alert';
+export type {
+  BhProctoringAlertProps,
+  BhProctoringAlertPreset,
+  ProctoringAlertEvent,
+  AlertVariant as ProctoringAlertVariant,
+} from './bh-proctoring-alert';
+export { BannerBhProctoringAlert, ToastBhProctoringAlert } from './bh-proctoring-alert';
+export { BH_PROCTORING_ALERT_DEFAULTS } from './bh-proctoring-alert';
+
+// BhProctoringSeverity
+export { BhProctoringSeverity } from './bh-proctoring-severity';
+export type {
+  BhProctoringSeverityProps,
+  BhProctoringSeverityPreset,
+  SeverityCount as ProctoringSeveritySeverityCount,
+} from './bh-proctoring-severity';
+export { DonutBhProctoringSeverity, BarsBhProctoringSeverity } from './bh-proctoring-severity';
+export { BH_PROCTORING_SEVERITY_DEFAULTS } from './bh-proctoring-severity';
+
+// BhProctoringHeatmap
+export { BhProctoringHeatmap } from './bh-proctoring-heatmap';
+export type {
+  BhProctoringHeatmapProps,
+  BhProctoringHeatmapPreset,
+  HeatmapDataPoint,
+} from './bh-proctoring-heatmap';
+export { GridBhProctoringHeatmap, CompactBhProctoringHeatmap } from './bh-proctoring-heatmap';
+export { BH_PROCTORING_HEATMAP_DEFAULTS } from './bh-proctoring-heatmap';
+
+// BhProctoringSummary
+export { BhProctoringSummary } from './bh-proctoring-summary';
+export type {
+  BhProctoringSummaryProps,
+  BhProctoringSummaryPreset,
+  SeverityEventCounts,
+} from './bh-proctoring-summary';
+export { CardBhProctoringSummary, InlineBhProctoringSummary } from './bh-proctoring-summary';
+export { BH_PROCTORING_SUMMARY_DEFAULTS } from './bh-proctoring-summary';
+
+// BhProctoringActivity
+export { BhProctoringActivity } from './bh-proctoring-activity';
+export type {
+  BhProctoringActivityProps,
+  BhProctoringActivityPreset,
+  ProctoringActivityEvent,
+} from './bh-proctoring-activity';
+export { FeedBhProctoringActivity, CompactBhProctoringActivity } from './bh-proctoring-activity';
+export { BH_PROCTORING_ACTIVITY_DEFAULTS } from './bh-proctoring-activity';
+
+// BhScorecardDetail - Aliases
+// Note: BhScorecardDetail, types, presets, and defaults are already exported above (line ~1367).
+// Only adding aliased type names for backward compatibility.
+export type {
+  DimensionScore as BhScorecardDimensionScore,
+  ScorecardDetail as BhScorecardDetailData,
+} from './bh-scorecard-detail';
+
+// BhCalibrationScatter
+export { BhCalibrationScatter } from './bh-calibration-scatter';
+export type {
+  BhCalibrationScatterProps,
+  BhCalibrationScatterPreset,
+  ScatterPoint,
+  CalibrationStats,
+} from './bh-calibration-scatter';
+export { ChartBhCalibrationScatter, CompactBhCalibrationScatter } from './bh-calibration-scatter';
+export { BH_CALIBRATION_SCATTER_DEFAULTS } from './bh-calibration-scatter';
+
+// BhCalibrationDashboard
+export { BhCalibrationDashboard } from './bh-calibration-dashboard';
+export type {
+  BhCalibrationDashboardProps,
+  BhCalibrationDashboardPreset,
+  CalibrationSession,
+  CalibrationMetrics,
+} from './bh-calibration-dashboard';
+export { DashboardBhCalibrationDashboard, CompactBhCalibrationDashboard } from './bh-calibration-dashboard';
+export { BH_CALIBRATION_DASHBOARD_DEFAULTS } from './bh-calibration-dashboard';
+
+// BhScoringJobQueue
+export { BhScoringJobQueue } from './bh-scoring-job-queue';
+export type {
+  BhScoringJobQueueProps,
+  BhScoringJobQueuePreset,
+  ScoringJobStatus,
+  ScoringJobPriority,
+  ScoringJob,
+  QueueStats,
+} from './bh-scoring-job-queue';
+export { ListBhScoringJobQueue, CompactBhScoringJobQueue } from './bh-scoring-job-queue';
+export { BH_SCORING_JOB_QUEUE_DEFAULTS } from './bh-scoring-job-queue';
+
+// BhCalibrationSample
+export { BhCalibrationSample as BhCalibrationSampleReview } from './bh-calibration-sample';
+export type {
+  BhCalibrationSampleProps,
+  BhCalibrationSamplePreset,
+  CalibrationSampleStatus,
+  DimensionComparison,
+  CalibrationSample as CalibrationSampleData,
+} from './bh-calibration-sample';
+export { ReviewBhCalibrationSample, CompactBhCalibrationSample } from './bh-calibration-sample';
+export { BH_CALIBRATION_SAMPLE_DEFAULTS } from './bh-calibration-sample';
+
+// ── Batch 2: Pipeline & Kanban ──────────────────────────────────────
+
+// BhPipelineFilterBar
+export { BhPipelineFilterBar } from './bh-pipeline-filter-bar';
+export type {
+  BhPipelineFilterBarProps,
+  BhPipelineFilterBarPreset,
+  FilterType as PipelineFilterType,
+  FilterPriority as PipelineFilterPriority,
+  FilterOption as PipelineFilterOption,
+  FilterConfig as PipelineFilterConfig,
+  ActiveFilter as PipelineActiveFilter,
+  SavedPreset as PipelineFilterSavedPreset,
+} from './bh-pipeline-filter-bar';
+export { HorizontalBhPipelineFilterBar, DropdownBhPipelineFilterBar } from './bh-pipeline-filter-bar';
+export { BH_PIPELINE_FILTER_BAR_DEFAULTS } from './bh-pipeline-filter-bar';
+
+// BhPipelineStatsBar
+export { BhPipelineStatsBar } from './bh-pipeline-stats-bar';
+export type {
+  BhPipelineStatsBarProps,
+  BhPipelineStatsBarPreset,
+  TrendDirection as PipelineStatsTrendDirection,
+  StageConversion,
+  TimeToHireMetric,
+} from './bh-pipeline-stats-bar';
+export { DetailedBhPipelineStatsBar, CompactBhPipelineStatsBar } from './bh-pipeline-stats-bar';
+export { BH_PIPELINE_STATS_BAR_DEFAULTS } from './bh-pipeline-stats-bar';
+
+// BhPipelineBottleneck
+export { BhPipelineBottleneck } from './bh-pipeline-bottleneck';
+export type {
+  BhPipelineBottleneckProps,
+  BhPipelineBottleneckPreset,
+  BottleneckStage,
+} from './bh-pipeline-bottleneck';
+export { VisualBhPipelineBottleneck, ListBhPipelineBottleneck } from './bh-pipeline-bottleneck';
+export { BH_PIPELINE_BOTTLENECK_DEFAULTS } from './bh-pipeline-bottleneck';
+
+// BhPipelineComparison
+export { BhPipelineComparison } from './bh-pipeline-comparison';
+export type {
+  BhPipelineComparisonProps,
+  BhPipelineComparisonPreset,
+  ComparisonStage,
+  ComparisonJob,
+} from './bh-pipeline-comparison';
+export { SideBySideBhPipelineComparison, OverlayBhPipelineComparison } from './bh-pipeline-comparison';
+export { BH_PIPELINE_COMPARISON_DEFAULTS } from './bh-pipeline-comparison';
+
+// BhPipelineVelocityChart
+export { BhPipelineVelocityChart } from './bh-pipeline-velocity-chart';
+export type {
+  BhPipelineVelocityChartProps,
+  BhPipelineVelocityChartPreset,
+  VelocityDataPoint,
+  VelocityPeriod,
+} from './bh-pipeline-velocity-chart';
+export { LineBhPipelineVelocityChart, CompactBhPipelineVelocityChart } from './bh-pipeline-velocity-chart';
+export { BH_PIPELINE_VELOCITY_CHART_DEFAULTS } from './bh-pipeline-velocity-chart';
+
+// BhPipelineStageDrawer
+export { BhPipelineStageDrawer } from './bh-pipeline-stage-drawer';
+export type {
+  BhPipelineStageDrawerProps,
+  BhPipelineStageDrawerPreset,
+  CandidateStatus as PipelineCandidateStatus,
+  StageCandidate as PipelineStageCandidate,
+  StageDetail as PipelineStageDetail,
+  BulkActionType as PipelineBulkActionType,
+} from './bh-pipeline-stage-drawer';
+export { DrawerBhPipelineStageDrawer, ModalBhPipelineStageDrawer } from './bh-pipeline-stage-drawer';
+export { BH_PIPELINE_STAGE_DRAWER_DEFAULTS } from './bh-pipeline-stage-drawer';
+
+// BhPipelineKanbanCard
+export { BhPipelineKanbanCard } from './bh-pipeline-kanban-card';
+export type {
+  BhPipelineKanbanCardProps,
+  BhPipelineKanbanCardPreset,
+  KanbanCandidate as PipelineKanbanCandidate,
+  QuickActionType as PipelineQuickActionType,
+} from './bh-pipeline-kanban-card';
+export { StandardBhPipelineKanbanCard, MinimalBhPipelineKanbanCard } from './bh-pipeline-kanban-card';
+export { BH_PIPELINE_KANBAN_CARD_DEFAULTS } from './bh-pipeline-kanban-card';
+
+// BhPipelineGlobalKanban
+export { BhPipelineGlobalKanban } from './bh-pipeline-global-kanban';
+export type {
+  BhPipelineGlobalKanbanProps,
+  BhPipelineGlobalKanbanPreset,
+  KanbanStageCandidate as PipelineKanbanStageCandidate,
+  KanbanStage as PipelineKanbanStage,
+  KanbanFilters as PipelineKanbanFilters,
+} from './bh-pipeline-global-kanban';
+export { BoardBhPipelineGlobalKanban, CompactBhPipelineGlobalKanban } from './bh-pipeline-global-kanban';
+export { BH_PIPELINE_GLOBAL_KANBAN_DEFAULTS } from './bh-pipeline-global-kanban';
+
+// ── Batch 3: Interview Components ───────────────────────────────────
+
+// BhInterviewReplayEnhanced
+export { BhInterviewReplayEnhanced } from './bh-interview-replay-enhanced';
+export type {
+  BhInterviewReplayEnhancedProps,
+  BhInterviewReplayEnhancedPreset,
+  TranscriptSegment as EnhancedTranscriptSegment,
+  EvidenceMarker as EnhancedEvidenceMarker,
+} from './bh-interview-replay-enhanced';
+export { SplitBhInterviewReplayEnhanced, CompactBhInterviewReplayEnhanced } from './bh-interview-replay-enhanced';
+export { BH_INTERVIEW_REPLAY_ENHANCED_DEFAULTS } from './bh-interview-replay-enhanced';
+
+// ── Batch 4: Dashboard + Candidates (New Components) ────────────────
+
+// BhHiringFunnel
+export { BhHiringFunnel } from './bh-hiring-funnel';
+export type {
+  BhHiringFunnelProps,
+  BhHiringFunnelPreset,
+  FunnelStage as HiringFunnelStage,
+} from './bh-hiring-funnel';
+export { FunnelBhHiringFunnel, CompactBhHiringFunnel } from './bh-hiring-funnel';
+export { BH_HIRING_FUNNEL_DEFAULTS } from './bh-hiring-funnel';
+
+// BhTimeToHireChart
+export { BhTimeToHireChart } from './bh-time-to-hire-chart';
+export type {
+  BhTimeToHireChartProps,
+  BhTimeToHireChartPreset,
+  TimeToHireDataPoint,
+  DepartmentConfig,
+} from './bh-time-to-hire-chart';
+export { ChartBhTimeToHireChart, CompactBhTimeToHireChart } from './bh-time-to-hire-chart';
+export { BH_TIME_TO_HIRE_CHART_DEFAULTS } from './bh-time-to-hire-chart';
+
+// BhSourceEffectiveness
+export { BhSourceEffectiveness } from './bh-source-effectiveness';
+export type {
+  BhSourceEffectivenessProps,
+  BhSourceEffectivenessPreset,
+  SourceMetrics,
+} from './bh-source-effectiveness';
+export { DetailedBhSourceEffectiveness, CompactBhSourceEffectiveness } from './bh-source-effectiveness';
+export { BH_SOURCE_EFFECTIVENESS_DEFAULTS } from './bh-source-effectiveness';
+
+// BhCalendarHeatmap
+export { BhCalendarHeatmap } from './bh-calendar-heatmap';
+export type {
+  BhCalendarHeatmapProps,
+  BhCalendarHeatmapPreset,
+  HeatmapDay,
+} from './bh-calendar-heatmap';
+export { FullBhCalendarHeatmap, CompactBhCalendarHeatmap } from './bh-calendar-heatmap';
+export { BH_CALENDAR_HEATMAP_DEFAULTS } from './bh-calendar-heatmap';
+
+// BhCandidateComparison
+export { BhCandidateComparison } from './bh-candidate-comparison';
+export type {
+  BhCandidateComparisonProps,
+  BhCandidateComparisonPreset,
+  ComparisonCandidate as CandidateComparisonCandidate,
+} from './bh-candidate-comparison';
+export { SideBySideBhCandidateComparison, OverlayBhCandidateComparison } from './bh-candidate-comparison';
+export { BH_CANDIDATE_COMPARISON_DEFAULTS } from './bh-candidate-comparison';
+
+// BhEmailComposer
+export { BhEmailComposer } from './bh-email-composer';
+export type {
+  BhEmailComposerProps,
+  BhEmailComposerPreset,
+  EmailTemplate,
+  EmailVariable,
+} from './bh-email-composer';
+export { FullBhEmailComposer, MinimalBhEmailComposer } from './bh-email-composer';
+export { BH_EMAIL_COMPOSER_DEFAULTS } from './bh-email-composer';
+
+// BhOfferNegotiationTracker
+export { BhOfferNegotiationTracker } from './bh-offer-negotiation-tracker';
+export type {
+  BhOfferNegotiationTrackerProps,
+  BhOfferNegotiationTrackerPreset,
+  NegotiationRound,
+} from './bh-offer-negotiation-tracker';
+export { TimelineBhOfferNegotiationTracker, CompactBhOfferNegotiationTracker } from './bh-offer-negotiation-tracker';
+export { BH_OFFER_NEGOTIATION_TRACKER_DEFAULTS } from './bh-offer-negotiation-tracker';
+
+// BhOfferLetterPreview
+export { BhOfferLetterPreview } from './bh-offer-letter-preview';
+export type {
+  BhOfferLetterPreviewProps,
+  BhOfferLetterPreviewPreset,
+  OfferLetterData,
+} from './bh-offer-letter-preview';
+export { PreviewBhOfferLetterPreview, CompactBhOfferLetterPreview } from './bh-offer-letter-preview';
+export { BH_OFFER_LETTER_PREVIEW_DEFAULTS } from './bh-offer-letter-preview';
+
+// BhCandidateMerge
+export { BhCandidateMerge } from './bh-candidate-merge';
+export type {
+  BhCandidateMergeProps,
+  BhCandidateMergePreset,
+  MergeCandidate,
+  MergeField,
+} from './bh-candidate-merge';
+export { MergeBhCandidateMerge, CompactBhCandidateMerge } from './bh-candidate-merge';
+export { BH_CANDIDATE_MERGE_DEFAULTS } from './bh-candidate-merge';
+
+// BhDocumentViewer
+export { BhDocumentViewer } from './bh-document-viewer';
+export type {
+  BhDocumentViewerProps,
+  BhDocumentViewerPreset,
+  DocumentAnnotation,
+} from './bh-document-viewer';
+export { ViewerBhDocumentViewer, CompactBhDocumentViewer } from './bh-document-viewer';
+export { BH_DOCUMENT_VIEWER_DEFAULTS } from './bh-document-viewer';
+
+// BhOfferExpiration
+export { BhOfferExpiration } from './bh-offer-expiration';
+export type {
+  BhOfferExpirationProps,
+  BhOfferExpirationPreset,
+  ExpiringOffer,
+} from './bh-offer-expiration';
+export { CardsBhOfferExpiration, ListBhOfferExpiration } from './bh-offer-expiration';
+export { BH_OFFER_EXPIRATION_DEFAULTS } from './bh-offer-expiration';
+
+// BhCandidateBulkEmail
+export { BhCandidateBulkEmail } from './bh-candidate-bulk-email';
+export type {
+  BhCandidateBulkEmailProps,
+  BhCandidateBulkEmailPreset,
+  BulkEmailRecipient,
+} from './bh-candidate-bulk-email';
+export { FullBhCandidateBulkEmail, CompactBhCandidateBulkEmail } from './bh-candidate-bulk-email';
+export { BH_CANDIDATE_BULK_EMAIL_DEFAULTS } from './bh-candidate-bulk-email';
+
+// ============================================================================
+// BATCH 5: AI Studio, Agents & Providers (new components)
+// ============================================================================
+
+// BhAgentGalleryEnhanced
+export { BhAgentGalleryEnhanced } from './bh-agent-gallery-enhanced';
+export type {
+  BhAgentGalleryEnhancedProps,
+  BhAgentGalleryEnhancedPreset,
+  AgentCard,
+} from './bh-agent-gallery-enhanced';
+export { GalleryBhAgentGalleryEnhanced, CompactBhAgentGalleryEnhanced } from './bh-agent-gallery-enhanced';
+export { BH_AGENT_GALLERY_ENHANCED_DEFAULTS } from './bh-agent-gallery-enhanced';
+
+// BhCircuitBreakerViz
+export { BhCircuitBreakerViz } from './bh-circuit-breaker-viz';
+export type {
+  BhCircuitBreakerVizProps,
+  BhCircuitBreakerVizPreset,
+  CircuitNode,
+  CircuitConnection,
+} from './bh-circuit-breaker-viz';
+export { DiagramBhCircuitBreakerViz, CompactBhCircuitBreakerViz } from './bh-circuit-breaker-viz';
+export { BH_CIRCUIT_BREAKER_VIZ_DEFAULTS } from './bh-circuit-breaker-viz';
+
+// BhProviderLatency
+export { BhProviderLatency } from './bh-provider-latency';
+export type {
+  BhProviderLatencyProps,
+  BhProviderLatencyPreset,
+  LatencyDataPoint,
+} from './bh-provider-latency';
+export { ChartBhProviderLatency, CompactBhProviderLatency } from './bh-provider-latency';
+export { BH_PROVIDER_LATENCY_DEFAULTS } from './bh-provider-latency';
+
+// BhAgentVersionHistory
+export { BhAgentVersionHistory } from './bh-agent-version-history';
+export type {
+  BhAgentVersionHistoryProps,
+  BhAgentVersionHistoryPreset,
+  AgentVersion,
+} from './bh-agent-version-history';
+export { TimelineBhAgentVersionHistory, CompactBhAgentVersionHistory } from './bh-agent-version-history';
+export { BH_AGENT_VERSION_HISTORY_DEFAULTS } from './bh-agent-version-history';
+
+// BhAgentAbTest
+export { BhAgentAbTest } from './bh-agent-ab-test';
+export type {
+  BhAgentAbTestProps,
+  BhAgentAbTestPreset,
+  AbTestVariant,
+} from './bh-agent-ab-test';
+export { ConfigBhAgentAbTest, CompactBhAgentAbTest } from './bh-agent-ab-test';
+export { BH_AGENT_AB_TEST_DEFAULTS } from './bh-agent-ab-test';
+
+// BhVoiceCatalog
+export { BhVoiceCatalog } from './bh-voice-catalog';
+export type {
+  BhVoiceCatalogProps,
+  BhVoiceCatalogPreset,
+  VoiceProfile,
+} from './bh-voice-catalog';
+export { GridBhVoiceCatalog, CompactBhVoiceCatalog } from './bh-voice-catalog';
+export { BH_VOICE_CATALOG_DEFAULTS } from './bh-voice-catalog';
+
+// BhInterviewReplaySplit
+export { BhInterviewReplaySplit } from './bh-interview-replay-split';
+export type {
+  BhInterviewReplaySplitProps,
+  BhInterviewReplaySplitPreset,
+  ReplayTranscriptSegment,
+  ReplayEvidenceMarker,
+} from './bh-interview-replay-split';
+export { SplitBhInterviewReplaySplit, CompactBhInterviewReplaySplit } from './bh-interview-replay-split';
+export { BH_INTERVIEW_REPLAY_SPLIT_DEFAULTS } from './bh-interview-replay-split';
+
+// ============================================================================
+// BATCH 6: Jobs, Positions, Offers (new components)
+// ============================================================================
+
+// BhTeamList
+export { BhTeamList } from './bh-team-list';
+export type {
+  BhTeamListProps,
+  BhTeamListPreset,
+  TeamMember as TeamListMember,
+  TeamSummary,
+} from './bh-team-list';
+export { TableBhTeamList, CardsBhTeamList } from './bh-team-list';
+export { BH_TEAM_LIST_DEFAULTS } from './bh-team-list';
+
+// BhTeamCard
+export { BhTeamCard } from './bh-team-card';
+export type {
+  BhTeamCardProps,
+  BhTeamCardPreset,
+  TeamMetric,
+} from './bh-team-card';
+export { StandardBhTeamCard, CompactBhTeamCard } from './bh-team-card';
+export { BH_TEAM_CARD_DEFAULTS } from './bh-team-card';
+
+// BhTeamDetail
+export { BhTeamDetail } from './bh-team-detail';
+export type {
+  BhTeamDetailProps,
+  BhTeamDetailPreset,
+  TeamPosition,
+} from './bh-team-detail';
+export { FullBhTeamDetail, CompactBhTeamDetail } from './bh-team-detail';
+export { BH_TEAM_DETAIL_DEFAULTS } from './bh-team-detail';
+
+// BhTeamPerformance
+export { BhTeamPerformance } from './bh-team-performance';
+export type {
+  BhTeamPerformanceProps,
+  BhTeamPerformancePreset,
+  TeamPerfData,
+} from './bh-team-performance';
+export { ChartBhTeamPerformance, CompactBhTeamPerformance } from './bh-team-performance';
+export { BH_TEAM_PERFORMANCE_DEFAULTS } from './bh-team-performance';
+
+// BhClientCard
+export { BhClientCard } from './bh-client-card';
+export type {
+  BhClientCardProps,
+  BhClientCardPreset,
+} from './bh-client-card';
+export { StandardBhClientCard, CompactBhClientCard } from './bh-client-card';
+export { BH_CLIENT_CARD_DEFAULTS } from './bh-client-card';
+
+// BhClientList
+export { BhClientList } from './bh-client-list';
+export type {
+  BhClientListProps,
+  BhClientListPreset,
+  ClientListItem,
+} from './bh-client-list';
+export { TableBhClientList, GridBhClientList } from './bh-client-list';
+export { BH_CLIENT_LIST_DEFAULTS } from './bh-client-list';
+
+// BhClientDetail
+export { BhClientDetail } from './bh-client-detail';
+export type {
+  BhClientDetailProps,
+  BhClientDetailPreset,
+  ClientPosition as ClientDetailPosition,
+  RevenuePoint,
+} from './bh-client-detail';
+export { DashboardBhClientDetail, CompactBhClientDetail } from './bh-client-detail';
+export { BH_CLIENT_DETAIL_DEFAULTS } from './bh-client-detail';
+
+// BhClientForm
+export { BhClientForm } from './bh-client-form';
+export type {
+  BhClientFormProps,
+  BhClientFormPreset,
+  ClientFormData,
+} from './bh-client-form';
+export { FullBhClientForm, CompactBhClientForm } from './bh-client-form';
+export { BH_CLIENT_FORM_DEFAULTS } from './bh-client-form';
+
+// BhPositionSla
+export { BhPositionSla } from './bh-position-sla';
+export type {
+  BhPositionSlaProps,
+  BhPositionSlaPreset,
+  PositionSla,
+} from './bh-position-sla';
+export { MonitorBhPositionSla, CompactBhPositionSla } from './bh-position-sla';
+export { BH_POSITION_SLA_DEFAULTS } from './bh-position-sla';
+
+// BhPositionList
+export { BhPositionList } from './bh-position-list';
+export type {
+  BhPositionListProps,
+  BhPositionListPreset,
+  PositionListItem,
+} from './bh-position-list';
+export { TableBhPositionList, CardsBhPositionList } from './bh-position-list';
+export { BH_POSITION_LIST_DEFAULTS } from './bh-position-list';
+
+// BhPositionForm
+export { BhPositionForm } from './bh-position-form';
+export type {
+  BhPositionFormProps,
+  BhPositionFormPreset,
+  PositionFormData,
+} from './bh-position-form';
+export { FullBhPositionForm, CompactBhPositionForm } from './bh-position-form';
+export { BH_POSITION_FORM_DEFAULTS } from './bh-position-form';
+
+// BhApprovalCenter
+export { BhApprovalCenter } from './bh-approval-center';
+export type {
+  BhApprovalCenterProps,
+  BhApprovalCenterPreset,
+  ApprovalItem as BhApprovalCenterItem,
+} from './bh-approval-center';
+export { HubBhApprovalCenter, CompactBhApprovalCenter } from './bh-approval-center';
+export { BH_APPROVAL_CENTER_DEFAULTS } from './bh-approval-center';
+
+// BhApprovalChain
+export { BhApprovalChain } from './bh-approval-chain';
+export type {
+  BhApprovalChainProps,
+  BhApprovalChainPreset,
+  ApprovalChainStep,
+} from './bh-approval-chain';
+export { VerticalBhApprovalChain, CompactBhApprovalChain } from './bh-approval-chain';
+export { BH_APPROVAL_CHAIN_DEFAULTS } from './bh-approval-chain';
+
+// BhApprovalDetail
+export { BhApprovalDetail } from './bh-approval-detail';
+export type {
+  BhApprovalDetailProps,
+  BhApprovalDetailPreset,
+  ApprovalDetailData,
+} from './bh-approval-detail';
+export { DrawerBhApprovalDetail, CompactBhApprovalDetail } from './bh-approval-detail';
+export { BH_APPROVAL_DETAIL_DEFAULTS } from './bh-approval-detail';
+
+// BhAppealForm
+export { BhAppealForm } from './bh-appeal-form';
+export type { BhAppealFormProps, BhAppealFormPreset } from './bh-appeal-form';
+export { FormBhAppealForm, CompactBhAppealForm } from './bh-appeal-form';
+export { BH_APPEAL_FORM_DEFAULTS } from './bh-appeal-form';
+
+// BhAppealList
+export { BhAppealList } from './bh-appeal-list';
+export type { BhAppealListProps, BhAppealListPreset, AppealListItem } from './bh-appeal-list';
+export { TableBhAppealList, CompactBhAppealList } from './bh-appeal-list';
+export { BH_APPEAL_LIST_DEFAULTS } from './bh-appeal-list';
+
+// BhAppealReview
+export { BhAppealReview } from './bh-appeal-review';
+export type { BhAppealReviewProps, BhAppealReviewPreset, AppealData } from './bh-appeal-review';
+export { ReviewBhAppealReview, CompactBhAppealReview } from './bh-appeal-review';
+export { BH_APPEAL_REVIEW_DEFAULTS } from './bh-appeal-review';
+
+// BhAppealTimeline
+export { BhAppealTimeline } from './bh-appeal-timeline';
+export type { BhAppealTimelineProps, BhAppealTimelinePreset, AppealTimelineEvent } from './bh-appeal-timeline';
+export { TimelineBhAppealTimeline, CompactBhAppealTimeline } from './bh-appeal-timeline';
+export { BH_APPEAL_TIMELINE_DEFAULTS } from './bh-appeal-timeline';
+
+// BhComplianceChecker
+export { BhComplianceChecker } from './bh-compliance-checker';
+export type { BhComplianceCheckerProps, BhComplianceCheckerPreset, ComplianceRule } from './bh-compliance-checker';
+export { CheckerBhComplianceChecker, CompactBhComplianceChecker } from './bh-compliance-checker';
+export { BH_COMPLIANCE_CHECKER_DEFAULTS } from './bh-compliance-checker';
+
+// BhConversationAnalytics
+export { BhConversationAnalytics } from './bh-conversation-analytics';
+export type { BhConversationAnalyticsProps, BhConversationAnalyticsPreset, ConversationVolumePoint, ScoreDistribution as BhConversationScoreDistribution, AgentPerformance } from './bh-conversation-analytics';
+export { DashboardBhConversationAnalytics, CompactBhConversationAnalytics } from './bh-conversation-analytics';
+export { BH_CONVERSATION_ANALYTICS_DEFAULTS } from './bh-conversation-analytics';
+
+// BhDiversityDashboard
+export { BhDiversityDashboard } from './bh-diversity-dashboard';
+export type { BhDiversityDashboardProps, BhDiversityDashboardPreset, DiversityMetric, DiversitySegment } from './bh-diversity-dashboard';
+export { DashboardBhDiversityDashboard, CompactBhDiversityDashboard } from './bh-diversity-dashboard';
+export { BH_DIVERSITY_DASHBOARD_DEFAULTS } from './bh-diversity-dashboard';
+
+// BhGeographicMap
+export { BhGeographicMap } from './bh-geographic-map';
+export type { BhGeographicMapProps, BhGeographicMapPreset, GeoRegion } from './bh-geographic-map';
+export { MapBhGeographicMap, CompactBhGeographicMap } from './bh-geographic-map';
+export { BH_GEOGRAPHIC_MAP_DEFAULTS } from './bh-geographic-map';
+
+// BhMessageTemplateEditor
+export { BhMessageTemplateEditor } from './bh-message-template-editor';
+export type { BhMessageTemplateEditorProps, BhMessageTemplateEditorPreset, TemplateVariable } from './bh-message-template-editor';
+export { EditorBhMessageTemplateEditor, CompactBhMessageTemplateEditor } from './bh-message-template-editor';
+export { BH_MESSAGE_TEMPLATE_EDITOR_DEFAULTS } from './bh-message-template-editor';
+
+// BhMessageTemplateGallery
+export { BhMessageTemplateGallery } from './bh-message-template-gallery';
+export type { BhMessageTemplateGalleryProps, BhMessageTemplateGalleryPreset, MessageTemplate } from './bh-message-template-gallery';
+export { GalleryBhMessageTemplateGallery, CompactBhMessageTemplateGallery } from './bh-message-template-gallery';
+export { BH_MESSAGE_TEMPLATE_GALLERY_DEFAULTS } from './bh-message-template-gallery';
+
+// BhMessageTemplatePreview
+export { BhMessageTemplatePreview } from './bh-message-template-preview';
+export type { BhMessageTemplatePreviewProps, BhMessageTemplatePreviewPreset } from './bh-message-template-preview';
+export { PreviewBhMessageTemplatePreview, CompactBhMessageTemplatePreview } from './bh-message-template-preview';
+export { BH_MESSAGE_TEMPLATE_PREVIEW_DEFAULTS } from './bh-message-template-preview';
+
+// BhOutreachCampaign
+export { BhOutreachCampaign } from './bh-outreach-campaign';
+export type { BhOutreachCampaignProps, BhOutreachCampaignPreset, CampaignData } from './bh-outreach-campaign';
+export { ManagerBhOutreachCampaign, CompactBhOutreachCampaign } from './bh-outreach-campaign';
+export { BH_OUTREACH_CAMPAIGN_DEFAULTS } from './bh-outreach-campaign';
+
+// BhOutreachResponse
+export { BhOutreachResponse } from './bh-outreach-response';
+export type { BhOutreachResponseProps, BhOutreachResponsePreset, ResponseData } from './bh-outreach-response';
+export { AnalyticsBhOutreachResponse, CompactBhOutreachResponse } from './bh-outreach-response';
+export { BH_OUTREACH_RESPONSE_DEFAULTS } from './bh-outreach-response';
+
+// BhProviderCost
+export { BhProviderCost } from './bh-provider-cost';
+export type { BhProviderCostProps, BhProviderCostPreset, ProviderCostEntry, CostAlert, CostAlertSeverity, CostTrend } from './bh-provider-cost';
+export { DashboardBhProviderCost, CompactBhProviderCost } from './bh-provider-cost';
+export { BH_PROVIDER_COST_DEFAULTS } from './bh-provider-cost';
+
+// BhProviderHealth
+export { BhProviderHealth } from './bh-provider-health';
+export type { BhProviderHealthProps, BhProviderHealthPreset, ProviderHealthItem, ProviderHealthStatus, CircuitBreakerState as BhProviderHealthCircuitBreakerState, HealthIncident, HealthSummary } from './bh-provider-health';
+export { DashboardBhProviderHealth, CompactBhProviderHealth } from './bh-provider-health';
+export { BH_PROVIDER_HEALTH_DEFAULTS } from './bh-provider-health';
+
+// BhRecruiterPerformance
+export { BhRecruiterPerformance } from './bh-recruiter-performance';
+export type { BhRecruiterPerformanceProps, BhRecruiterPerformancePreset, RecruiterMetrics } from './bh-recruiter-performance';
+export { DashboardBhRecruiterPerformance, CompactBhRecruiterPerformance } from './bh-recruiter-performance';
+export { BH_RECRUITER_PERFORMANCE_DEFAULTS } from './bh-recruiter-performance';
+
+// BhRecruiterWorkload
+export { BhRecruiterWorkload } from './bh-recruiter-workload';
+export type { BhRecruiterWorkloadProps, BhRecruiterWorkloadPreset, RecruiterWorkload as BhRecruiterWorkloadData } from './bh-recruiter-workload';
+export { BalancerBhRecruiterWorkload, CompactBhRecruiterWorkload } from './bh-recruiter-workload';
+export { BH_RECRUITER_WORKLOAD_DEFAULTS } from './bh-recruiter-workload';
+
+// BhSkillGapDashboard
+export { BhSkillGapDashboard } from './bh-skill-gap-dashboard';
+export type { BhSkillGapDashboardProps, BhSkillGapDashboardPreset, SkillGapData } from './bh-skill-gap-dashboard';
+export { DashboardBhSkillGapDashboard, CompactBhSkillGapDashboard } from './bh-skill-gap-dashboard';
+export { BH_SKILL_GAP_DASHBOARD_DEFAULTS } from './bh-skill-gap-dashboard';
+
+// BhSprintBurndown
+export { BhSprintBurndown } from './bh-sprint-burndown';
+export type { BhSprintBurndownProps, BhSprintBurndownPreset, BurndownDataPoint } from './bh-sprint-burndown';
+export { ChartBhSprintBurndown, CompactBhSprintBurndown } from './bh-sprint-burndown';
+export { BH_SPRINT_BURNDOWN_DEFAULTS } from './bh-sprint-burndown';
+
+// BhSprintRetrospective
+export { BhSprintRetrospective } from './bh-sprint-retrospective';
+export type { BhSprintRetrospectiveProps, BhSprintRetrospectivePreset, RetroItem } from './bh-sprint-retrospective';
+export { FormBhSprintRetrospective, CompactBhSprintRetrospective } from './bh-sprint-retrospective';
+export { BH_SPRINT_RETROSPECTIVE_DEFAULTS } from './bh-sprint-retrospective';
+
+// BhSprintVelocity
+export { BhSprintVelocity } from './bh-sprint-velocity';
+export type { BhSprintVelocityProps, BhSprintVelocityPreset, SprintVelocityData } from './bh-sprint-velocity';
+export { ChartBhSprintVelocity, CompactBhSprintVelocity } from './bh-sprint-velocity';
+export { BH_SPRINT_VELOCITY_DEFAULTS } from './bh-sprint-velocity';
+
+// BhTokenBudget
+export { BhTokenBudget } from './bh-token-budget';
+export type { BhTokenBudgetProps, BhTokenBudgetPreset, BudgetAllocation } from './bh-token-budget';
+export { ConfigBhTokenBudget, CompactBhTokenBudget } from './bh-token-budget';
+export { BH_TOKEN_BUDGET_DEFAULTS } from './bh-token-budget';
+
+// BhTokenTransfer
+export { BhTokenTransfer } from './bh-token-transfer';
+export type { BhTokenTransferProps, BhTokenTransferPreset, TokenTransfer, TokenTransferTeam } from './bh-token-transfer';
+export { TimelineBhTokenTransfer, CompactBhTokenTransfer } from './bh-token-transfer';
+export { BH_TOKEN_TRANSFER_DEFAULTS } from './bh-token-transfer';
+
+// BhTokenUsageAnalytics
+export { BhTokenUsageAnalytics } from './bh-token-usage-analytics';
+export type { BhTokenUsageAnalyticsProps, BhTokenUsageAnalyticsPreset, TokenUsagePoint, TokenCategory } from './bh-token-usage-analytics';
+export { DetailedBhTokenUsageAnalytics, CompactBhTokenUsageAnalytics } from './bh-token-usage-analytics';
+export { BH_TOKEN_USAGE_ANALYTICS_DEFAULTS } from './bh-token-usage-analytics';
+
+// BhWorkflowAutomation
+export { BhWorkflowAutomation } from './bh-workflow-automation';
+export type { BhWorkflowAutomationProps, BhWorkflowAutomationPreset, WorkflowRule } from './bh-workflow-automation';
+export { BuilderBhWorkflowAutomation, CompactBhWorkflowAutomation } from './bh-workflow-automation';
+export { BH_WORKFLOW_AUTOMATION_DEFAULTS } from './bh-workflow-automation';
+
+// BhWorkflowNotification
+export { BhWorkflowNotification } from './bh-workflow-notification';
+export type { BhWorkflowNotificationProps, BhWorkflowNotificationPreset, NotificationRule } from './bh-workflow-notification';
+export { ConfigBhWorkflowNotification, CompactBhWorkflowNotification } from './bh-workflow-notification';
+export { BH_WORKFLOW_NOTIFICATION_DEFAULTS } from './bh-workflow-notification';
+
+// BhWorkflowStageEditor
+export { BhWorkflowStageEditor } from './bh-workflow-stage-editor';
+export type { BhWorkflowStageEditorProps, BhWorkflowStageEditorPreset, WorkflowStage } from './bh-workflow-stage-editor';
+export { EditorBhWorkflowStageEditor, CompactBhWorkflowStageEditor } from './bh-workflow-stage-editor';
+export { BH_WORKFLOW_STAGE_EDITOR_DEFAULTS } from './bh-workflow-stage-editor';
 
