@@ -6,20 +6,29 @@
  * score level config, knockout rules, scorecard preview, and validation panel.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createCardHoverStyles,
   createEmptyStateStyle,
+  createEntranceAnimation,
   createFilterPillStyle,
   createHoverStyle,
+  createIconContainerStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
+  createPersonalitySectionHeaderStyle,
   createProgressBarStyle,
   createSectionHeaderStyle,
   createStatusDotStyle,
+  createStaggerDelay,
   createSurfaceStyle,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  getAccentAwareLayout,
 } from '../../../helpers';
 import type {
   BhRubricBuilderProps,
@@ -206,7 +215,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     );
 
     const weightIsValid = useMemo(
-      () => Math.abs(totalWeight - 1.0) < 0.01,
+      () => Math.abs(totalWeight - 100) < 1,
       [totalWeight]
     );
 
@@ -227,6 +236,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
+    /* ── Mounted state for entrance animation ────────────────────── */
+
     const statusColors = useMemo(() => getRubricStatusColors(tokens), [tokens]);
     const scorableColors = useMemo(() => getScorableTypeColors(tokens), [tokens]);
     const dimColors = useMemo(() => getDimensionColors(tokens), [tokens]);
@@ -234,6 +245,26 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const cardInteractive = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass, interactive: true }), [tokens, isGlass]);
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
+
+    /* ── Personality + Animation ──────────────────────────────────── */
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+    /* ── Glass header style ───────────────────────────────────────── */
+    const headerGlassStyle = useMemo(() => {
+      const s: React.CSSProperties = {};
+      if (isGlass && tokens.glass) {
+        s.backdropFilter = tokens.glass.blur;
+        s.WebkitBackdropFilter = tokens.glass.blur;
+        s.backgroundColor = tokens.glass.bg;
+      }
+      return s;
+    }, [isGlass, tokens]);
 
     /* ── Handlers ─────────────────────────────────────────────────── */
     const handleDimensionSelect = useCallback(
@@ -328,15 +359,25 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     return (
       <Box
         className={className}
+        role="region"
+        aria-label={`Rubric editor: ${rubricName}`}
         style={{
           display: 'flex',
           flexDirection: 'column' as const,
           height: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
+          ...entrance.animate,
+          transition: entrance.transition,
+          width: '100%',
           ...style,
         }}
       >
+        {/* Accent bar */}
+        {accentBar && <Box style={accentBar} />}
+
+        <Box style={accentLayout.inner}>
+
         {/* ── Rubric Header ────────────────────────────────────────── */}
         <Flex
           align="center"
@@ -347,6 +388,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
+            ...headerGlassStyle,
           }}
         >
           <Flex align="center" gap={12} style={{ flex: 1 }}>
@@ -354,13 +396,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             <input
               type="text"
               value={rubricName}
+              aria-label="Rubric name"
               onChange={(e) => {
                 onChange?.('rubricName', e.target.value);
                 setLocalIsDirty(true);
               }}
               style={{
                 fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.semibold,
+                fontWeight: ptypo.headingWeight,
+                letterSpacing: ptypo.headingLetterSpacing,
                 color: tokens.colors.neutral[900],
                 border: 'none',
                 outline: 'none',
@@ -370,7 +414,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 minWidth: 200,
               }}
               placeholder="Rubric Name"
-            
+
               onFocus={(e) => {
                 e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                 e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
@@ -382,15 +426,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             />
 
             {/* Industry badge */}
-            <span style={{ ...createBadgeStyle(tokens, 'secondary') }}>{industry}</span>
+            <Text style={{ ...createBadgeStyle(tokens, 'secondary'), borderRadius: badgeRadius }}>{industry}</Text>
 
             {/* Scorable type badge */}
-            <span
+            <Text
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: scorableColors[scorableType].bg,
@@ -399,15 +443,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               }}
             >
               {formatScorableType(scorableType)}
-            </span>
+            </Text>
 
             {/* Status badge */}
-            <span
+            <Text
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: statusColors[status].bg,
@@ -416,14 +460,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 gap: tokens.spacing[1],
               }}
             >
-              <CircleDot size={10} />
+              <CircleDot size={10} aria-hidden="true" />
               {status.charAt(0).toUpperCase() + status.slice(1)}
-            </span>
+            </Text>
           </Flex>
 
           <Flex align="center" gap={8}>
             {localIsDirty && (
-              <span
+              <Text
+                aria-live="polite"
                 style={{
                   fontSize: tokens.typography.fontSize.xs,
                   color: tokens.colors.warningScale[600],
@@ -431,10 +476,12 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 }}
               >
                 Unsaved changes
-              </span>
+              </Text>
             )}
             <button
               onClick={handlePreviewToggle}
+              aria-label={localShowPreview ? 'Hide preview' : 'Show preview'}
+              aria-pressed={localShowPreview}
               style={{
                 ...hoverStyle,
                 display: 'flex',
@@ -460,6 +507,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save rubric"
               style={{
                 ...hoverStyle,
                 display: 'flex',
@@ -476,11 +524,12 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 transition: `all ${tokens.motion.hover}`,
               }}
             >
-              <Save size={14} />
+              <Save size={14} aria-hidden="true" />
               Save
             </button>
             <button
               onClick={onPublish}
+              aria-label="Publish rubric"
               style={{
                 ...hoverStyle,
                 display: 'flex',
@@ -497,16 +546,16 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 transition: `all ${tokens.motion.hover}`,
               }}
             >
-              <Send size={14} />
+              <Send size={14} aria-hidden="true" />
               Publish
             </button>
           </Flex>
         </Flex>
 
         {/* ── Main Content ─────────────────────────────────────────── */}
-        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        <Box style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           {/* ── Left: Dimensions + Weight ─────────────────────────── */}
-          <div
+          <Box
             style={{
               flex: 1,
               overflowY: 'auto',
@@ -517,8 +566,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             }}
           >
             {/* Dimensions List */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -526,25 +575,23 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                  <Sliders size={16} color={tokens.colors.primaryScale[600]} />
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                  <Sliders size={16} color={tokens.colors.primaryScale[600]} aria-hidden="true" />
                   <Text
                     style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[500],
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
+                      ...sectionHeaderStyle,
+                      marginBottom: 0,
                     }}
                   >
                     Dimensions ({sortedDimensions.length})
                   </Text>
-                </div>
+                </Box>
                 <button
                   onClick={() => {
                     onDimensionAdd?.();
                     setLocalIsDirty(true);
                   }}
+                  aria-label="Add scoring dimension"
                   style={{
                     ...hoverStyle,
                     display: 'flex',
@@ -561,18 +608,23 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     transition: `all ${tokens.motion.hover}`,
                   }}
                 >
-                  <Plus size={12} />
+                  <Plus size={12} aria-hidden="true" />
                   Add Dimension
                 </button>
-              </div>
+              </Box>
 
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
-                {sortedDimensions.map((dim, idx) => (
-                  <div
+              <Box role="list" aria-label="Scoring dimensions" style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                {sortedDimensions.map((dim, idx) => {
+                  const dimEntrance = createEntranceAnimation(tokens, { index: idx });
+                  return (
+                  <Box
                     key={dim.id}
+                    role="listitem"
+                    aria-selected={localSelectedDimension === dim.id}
+                    aria-label={`Dimension: ${dim.name}${dim.isKnockout ? ' (knockout)' : ''}, weight ${dim.weight.toFixed(0)}%`}
                     draggable
                     onDragStart={() => handleDragStart(dim.id)}
-                    onDragOver={(e) => {
+                    onDragOver={(e: React.DragEvent) => {
                       e.preventDefault();
                       handleDragOver(dim.id);
                     }}
@@ -580,6 +632,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     onClick={() => handleDimensionSelect(dim.id)}
                     style={{
                       ...cardInteractive,
+                      ...cardHover.base,
+                      ...dimEntrance.animate,
                       display: 'flex',
                       alignItems: 'stretch',
                       gap: 0,
@@ -597,7 +651,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     }}
                   >
                     {/* Color indicator + drag handle */}
-                    <div
+                    <Box
+                      aria-label="Drag to reorder"
                       style={{
                         display: 'flex',
                         flexDirection: 'column' as const,
@@ -610,8 +665,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         gap: tokens.spacing[1],
                       }}
                     >
-                      <GripVertical size={14} color={tokens.colors.neutral[400]} />
-                      <div
+                      <GripVertical size={14} color={tokens.colors.neutral[400]} aria-hidden="true" />
+                      <Box
                         style={{
                           width: 10,
                           height: 10,
@@ -619,10 +674,10 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           backgroundColor: dimColors[idx % dimColors.length],
                         }}
                       />
-                    </div>
+                    </Box>
 
                     {/* Content */}
-                    <div
+                    <Box
                       style={{
                         flex: 1,
                         padding: tokens.spacing[3],
@@ -632,7 +687,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       }}
                     >
                       {/* Name + code */}
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -642,19 +697,19 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         <Text
                           style={{
                             fontSize: tokens.typography.fontSize.sm,
-                            fontWeight: tokens.typography.fontWeight.semibold,
+                            fontWeight: ptypo.headingWeight,
                             color: tokens.colors.neutral[900],
                           }}
                         >
                           {dim.name}
                         </Text>
-                        <span
+                        <Text
                           style={{
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: tokens.spacing[1],
                             padding: `1px ${tokens.spacing[2]}px`,
-                            borderRadius: tokens.borderRadius.md,
+                            borderRadius: badgeRadius,
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.medium,
                             backgroundColor: tokens.colors.neutral[100],
@@ -662,11 +717,11 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             fontFamily: 'monospace',
                           }}
                         >
-                          <Hash size={10} />
+                          <Hash size={10} aria-hidden="true" />
                           {dim.code}
-                        </span>
+                        </Text>
                         {dim.isKnockout && (
-                          <span
+                          <Text
                             style={{
                               display: 'inline-flex',
                               alignItems: 'center',
@@ -676,11 +731,11 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               color: tokens.colors.errorScale[600],
                             }}
                           >
-                            <Flag size={10} color={tokens.colors.errorScale[500]} />
+                            <Flag size={10} color={tokens.colors.errorScale[500]} aria-hidden="true" />
                             Knockout
-                          </span>
+                          </Text>
                         )}
-                      </div>
+                      </Box>
 
                       {/* Description */}
                       {dim.description && (
@@ -696,7 +751,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       )}
 
                       {/* Weight slider */}
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -707,12 +762,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           style={{
                             fontSize: tokens.typography.fontSize.xs,
                             color: tokens.colors.neutral[500],
+                            textTransform: ptypo.labelTransform,
+                            letterSpacing: ptypo.labelLetterSpacing,
                             minWidth: 40,
                           }}
                         >
                           Weight:
                         </Text>
-                        <div
+                        <Box
                           style={{
                             flex: 1,
                             height: 6,
@@ -722,25 +779,26 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             overflow: 'hidden',
                           }}
                         >
-                          <div
+                          <Box
                             style={{
                               position: 'absolute' as const,
                               left: 0,
                               top: 0,
                               height: '100%',
-                              width: `${dim.weight * 100}%`,
+                              width: `${dim.weight}%`,
                               backgroundColor: dimColors[idx % dimColors.length],
                               borderRadius: tokens.borderRadius.full,
                               transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                             }}
                           />
-                        </div>
+                        </Box>
                         <input
                           type="range"
                           min={0}
                           max={100}
-                          value={Math.round(dim.weight * 100)}
-                          onChange={(e) => handleWeightChange(dim.id, Number(e.target.value) / 100)}
+                          value={Math.round(dim.weight)}
+                          aria-label={`Weight for ${dim.name}`}
+                          onChange={(e) => handleWeightChange(dim.id, Number(e.target.value))}
                           onClick={(e) => e.stopPropagation()}
                           style={{
                             width: 80,
@@ -756,13 +814,13 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             textAlign: 'right' as const,
                           }}
                         >
-                          {(dim.weight * 100).toFixed(0)}%
+                          {dim.weight.toFixed(0)}%
                         </Text>
-                      </div>
+                      </Box>
 
                       {/* Knockout threshold */}
                       {dim.isKnockout && dim.knockoutThreshold !== undefined && (
-                        <div
+                        <Box
                           style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -777,12 +835,12 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           >
                             Knockout threshold: &lt;{dim.knockoutThreshold}
                           </Text>
-                        </div>
+                        </Box>
                       )}
-                    </div>
+                    </Box>
 
                     {/* Remove */}
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'flex-start',
@@ -794,6 +852,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           e.stopPropagation();
                           handleDimensionRemove(dim.id);
                         }}
+                        aria-label={`Remove dimension ${dim.name}`}
                         style={{
                           ...hoverStyle,
                           border: 'none',
@@ -804,14 +863,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           borderRadius: tokens.borderRadius.md,
                         }}
                       >
-                        <Trash2 size={14} color={tokens.colors.neutral[400]} />
+                        <Trash2 size={14} color={tokens.colors.neutral[400]} aria-hidden="true" />
                       </button>
-                    </div>
-                  </div>
-                ))}
+                    </Box>
+                  </Box>
+                  );
+                })}
 
                 {sortedDimensions.length === 0 && (
-                  <div
+                  <Box
                     style={{
                       ...cardBase,
                       display: 'flex',
@@ -821,7 +881,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       color: tokens.colors.neutral[400],
                     }}
                   >
-                    <Sliders size={28} color={tokens.colors.neutral[300]} />
+                    <Box style={createIconContainerStyle(tokens, { size: 48 })}>
+                      <Sliders size={24} color={tokens.colors.neutral[300]} aria-hidden="true" />
+                    </Box>
                     <Text
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
@@ -831,15 +893,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     >
                       No dimensions added yet
                     </Text>
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* ── Weight Visualization (Pie Chart) ────────────────── */}
             {sortedDimensions.length > 0 && (
-              <div>
-                <div
+              <Box>
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -847,20 +909,18 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     marginBottom: tokens.spacing[3],
                   }}
                 >
-                  <BarChart3 size={16} color={tokens.colors.infoScale[600]} />
+                  <BarChart3 size={16} color={tokens.colors.infoScale[600]} aria-hidden="true" />
                   <Text
                     style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[500],
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
+                      ...sectionHeaderStyle,
+                      marginBottom: 0,
                     }}
                   >
                     Weight Distribution
                   </Text>
                   {/* Validation indicator */}
-                  <div
+                  <Box
+                    aria-live="polite"
                     style={{
                       marginLeft: 'auto',
                       display: 'flex',
@@ -874,15 +934,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     }}
                   >
                     {weightIsValid ? (
-                      <CheckCircle2 size={14} color={tokens.colors.successScale[500]} />
+                      <CheckCircle2 size={14} color={tokens.colors.successScale[500]} aria-hidden="true" />
                     ) : (
-                      <XCircle size={14} color={tokens.colors.errorScale[500]} />
+                      <XCircle size={14} color={tokens.colors.errorScale[500]} aria-hidden="true" />
                     )}
-                    Sum: {(totalWeight * 100).toFixed(0)}%
-                  </div>
-                </div>
+                    Sum: {totalWeight.toFixed(0)}%
+                  </Box>
+                </Box>
 
-                <div
+                <Box
                   style={{
                     ...cardBase,
                     padding: tokens.spacing[4],
@@ -938,7 +998,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           : tokens.colors.errorScale[600]
                       }
                     >
-                      {(totalWeight * 100).toFixed(0)}%
+                      {totalWeight.toFixed(0)}%
                     </text>
                     <text
                       x="80"
@@ -952,10 +1012,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   </svg>
 
                   {/* Legend */}
-                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+                  <Box role="list" aria-label="Dimension weight legend" style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                     {sortedDimensions.map((d, i) => (
-                      <div
+                      <Box
                         key={d.id}
+                        role="listitem"
+                        tabIndex={0}
+                        onClick={() => handleDimensionSelect(d.id)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionSelect(d.id); } }}
+                        aria-label={`${d.name}: ${d.weight.toFixed(0)}%`}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -972,9 +1037,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           transition: `all ${tokens.motion.hover}`,
                           ...hoverStyle,
                         }}
-                        onClick={() => handleDimensionSelect(d.id)}
                       >
-                        <div
+                        <Box
                           style={{
                             width: 8,
                             height: 8,
@@ -983,20 +1047,20 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             flexShrink: 0,
                           }}
                         />
-                        <span style={{ flex: 1 }}>{d.name}</span>
-                        <span style={{ fontWeight: tokens.typography.fontWeight.semibold }}>
-                          {(d.weight * 100).toFixed(0)}%
-                        </span>
-                      </div>
+                        <Text style={{ flex: 1 }}>{d.name}</Text>
+                        <Text style={{ fontWeight: tokens.typography.fontWeight.semibold }}>
+                          {d.weight.toFixed(0)}%
+                        </Text>
+                      </Box>
                     ))}
-                  </div>
-                </div>
-              </div>
+                  </Box>
+                </Box>
+              </Box>
             )}
 
             {/* ── Score Level Config ──────────────────────────────── */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1004,21 +1068,20 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <BarChart3 size={16} color={tokens.colors.warningScale[600]} />
+                <BarChart3 size={16} color={tokens.colors.warningScale[600]} aria-hidden="true" />
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
                   Score Levels
                 </Text>
-              </div>
+              </Box>
 
-              <div
+              <Box
+                role="table"
+                aria-label="Score level configuration"
                 style={{
                   ...cardBase,
                   padding: 0,
@@ -1026,7 +1089,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 }}
               >
                 {/* Table header */}
-                <div
+                <Box
+                  role="row"
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '24px 1fr 100px',
@@ -1034,22 +1098,20 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                     backgroundColor: tokens.colors.neutral[50],
                     borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
-                  <span />
-                  <span>Label</span>
-                  <span>Min Score</span>
-                </div>
+                  <Box role="columnheader" aria-label="Color" />
+                  <Box role="columnheader"><Text>Label</Text></Box>
+                  <Box role="columnheader"><Text>Min Score</Text></Box>
+                </Box>
 
                 {/* Table rows */}
                 {localScoreLevels.map((level, idx) => (
-                  <div
+                  <Box
                     key={idx}
+                    role="row"
                     style={{
                       display: 'grid',
                       gridTemplateColumns: '24px 1fr 100px',
@@ -1063,7 +1125,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     }}
                   >
                     {/* Color dot */}
-                    <div
+                    <Box
+                      role="cell"
                       style={{
                         width: 12,
                         height: 12,
@@ -1075,6 +1138,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     <input
                       type="text"
                       value={level.label}
+                      aria-label={`Score level ${idx + 1} label`}
+                      role="cell"
                       onChange={(e) => handleScoreLevelChange(idx, 'label', e.target.value)}
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
@@ -1086,7 +1151,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         padding: `${tokens.spacing[1]}px 0`,
                         width: '100%',
                       }}
-                    
+
                       onFocus={(e) => {
                         e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                         e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
@@ -1100,6 +1165,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     <input
                       type="number"
                       value={level.minScore}
+                      aria-label={`Score level ${idx + 1} minimum score`}
+                      role="cell"
                       onChange={(e) =>
                         handleScoreLevelChange(idx, 'minScore', Number(e.target.value))
                       }
@@ -1115,7 +1182,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       }}
                       min={0}
                       max={100}
-                    
+
                       onFocus={(e) => {
                         e.currentTarget.style.boxShadow = `0 0 0 2px ${tokens.colors.primaryScale[100]}`;
                         e.currentTarget.style.borderColor = tokens.colors.primaryScale[400];
@@ -1125,14 +1192,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         e.currentTarget.style.borderColor = tokens.colors.neutral[300];
                       }}
                     />
-                  </div>
+                  </Box>
                 ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* ── Knockout Rules Panel ────────────────────────────── */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1140,28 +1207,25 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <Flag size={16} color={tokens.colors.errorScale[600]} />
+                <Flag size={16} color={tokens.colors.errorScale[600]} aria-hidden="true" />
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
                   Knockout Rules ({knockoutDimensions.length})
                 </Text>
-              </div>
+              </Box>
 
-              <div
+              <Box
                 style={{
                   ...cardBase,
                   padding: tokens.spacing[3],
                 }}
               >
                 {knockoutDimensions.length === 0 ? (
-                  <div
+                  <Box
                     style={{
                       textAlign: 'center' as const,
                       padding: tokens.spacing[3],
@@ -1170,12 +1234,13 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     }}
                   >
                     No knockout dimensions configured
-                  </div>
+                  </Box>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+                  <Box role="list" aria-label="Knockout rules" style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                     {knockoutDimensions.map((dim) => (
-                      <div
+                      <Box
                         key={dim.id}
+                        role="listitem"
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -1186,13 +1251,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                         }}
                       >
-                        <Flag size={14} color={tokens.colors.errorScale[500]} />
-                        <div style={{ flex: 1 }}>
+                        <Flag size={14} color={tokens.colors.errorScale[500]} aria-hidden="true" />
+                        <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                           <Text
                             style={{
                               fontSize: tokens.typography.fontSize.sm,
                               fontWeight: tokens.typography.fontWeight.medium,
                               color: tokens.colors.errorScale[700],
+                              display: 'block',
                             }}
                           >
                             {dim.name}
@@ -1201,14 +1267,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             style={{
                               fontSize: tokens.typography.fontSize.xs,
                               color: tokens.colors.errorScale[600],
+                              display: 'block',
                             }}
                           >
                             {dim.knockoutThreshold !== undefined
                               ? `Auto-reject if score < ${dim.knockoutThreshold}`
                               : 'Knockout threshold not set'}
                           </Text>
-                        </div>
-                        <span
+                        </Box>
+                        <Text
                           style={{
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.semibold,
@@ -1217,17 +1284,17 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           }}
                         >
                           {dim.code}
-                        </span>
-                      </div>
+                        </Text>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* ── Right Panel: Preview + Validation ─────────────────── */}
-          <div
+          <Box
             style={{
               width: 360,
               borderLeft: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -1237,12 +1304,13 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               flexDirection: 'column' as const,
               gap: tokens.spacing[4],
               padding: tokens.spacing[4],
+              ...headerGlassStyle,
             }}
           >
             {/* ── Scorecard Preview ───────────────────────────────── */}
             {localShowPreview && sortedDimensions.length >= 3 && (
-              <div>
-                <div
+              <Box>
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1250,28 +1318,27 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     marginBottom: tokens.spacing[3],
                   }}
                 >
-                  <Radar size={16} color={tokens.colors.primaryScale[600]} />
+                  <Radar size={16} color={tokens.colors.primaryScale[600]} aria-hidden="true" />
                   <Text
                     style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[500],
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
+                      ...sectionHeaderStyle,
+                      marginBottom: 0,
                     }}
                   >
                     Scorecard Preview
                   </Text>
-                </div>
+                </Box>
 
-                <div
+                <Box
                   style={{
                     ...cardBase,
                     padding: tokens.spacing[4],
                   }}
                 >
                   {/* Mock scorecard */}
-                  <div
+                  <Box
+                    role="list"
+                    aria-label="Sample dimension scores"
                     style={{
                       display: 'flex',
                       flexDirection: 'column' as const,
@@ -1286,8 +1353,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         .find((l) => sampleScore >= l.minScore);
 
                       return (
-                        <div key={dim.id}>
-                          <div
+                        <Box key={dim.id} role="listitem" aria-label={`${dim.name}: score ${sampleScore}`}>
+                          <Box
                             style={{
                               display: 'flex',
                               alignItems: 'center',
@@ -1304,7 +1371,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             >
                               {dim.name}
                             </Text>
-                            <span
+                            <Text
                               style={{
                                 fontSize: tokens.typography.fontSize.xs,
                                 fontWeight: tokens.typography.fontWeight.semibold,
@@ -1312,9 +1379,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               }}
                             >
                               {sampleScore} - {matchingLevel?.label ?? 'N/A'}
-                            </span>
-                          </div>
-                          <div
+                            </Text>
+                          </Box>
+                          <Box
+                            role="progressbar"
+                            aria-valuenow={sampleScore}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                            aria-label={`${dim.name} score`}
                             style={{
                               height: 6,
                               backgroundColor: tokens.colors.neutral[100],
@@ -1322,7 +1394,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               overflow: 'hidden',
                             }}
                           >
-                            <div
+                            <Box
                               style={{
                                 height: '100%',
                                 width: `${sampleScore}%`,
@@ -1331,14 +1403,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                                 transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
                               }}
                             />
-                          </div>
-                        </div>
+                          </Box>
+                        </Box>
                       );
                     })}
-                  </div>
+                  </Box>
 
                   {/* Radar Chart */}
-                  <div
+                  <Box
                     style={{
                       display: 'flex',
                       justifyContent: 'center',
@@ -1426,14 +1498,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         );
                       })()}
                     </svg>
-                  </div>
-                </div>
-              </div>
+                  </Box>
+                </Box>
+              </Box>
             )}
 
             {/* ── Validation Panel ────────────────────────────────── */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -1441,21 +1513,20 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <Shield size={16} color={tokens.colors.successScale[600]} />
+                <Shield size={16} color={tokens.colors.successScale[600]} aria-hidden="true" />
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
                   Validation
                 </Text>
-              </div>
+              </Box>
 
-              <div
+              <Box
+                role="status"
+                aria-label="Rubric validation status"
                 style={{
                   ...cardBase,
                   padding: tokens.spacing[3],
@@ -1465,7 +1536,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 }}
               >
                 {/* Weight sum check */}
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1478,9 +1549,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   }}
                 >
                   {weightIsValid ? (
-                    <CheckCircle2 size={16} color={tokens.colors.successScale[500]} />
+                    <CheckCircle2 size={16} color={tokens.colors.successScale[500]} aria-hidden="true" />
                   ) : (
-                    <XCircle size={16} color={tokens.colors.errorScale[500]} />
+                    <XCircle size={16} color={tokens.colors.errorScale[500]} aria-hidden="true" />
                   )}
                   <Text
                     style={{
@@ -1491,13 +1562,13 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       fontWeight: tokens.typography.fontWeight.medium,
                     }}
                   >
-                    Weights sum to {(totalWeight * 100).toFixed(0)}%
+                    Weights sum to {totalWeight.toFixed(0)}%
                     {weightIsValid ? '' : ' (should be 100%)'}
                   </Text>
-                </div>
+                </Box>
 
                 {/* Codes unique check */}
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -1510,9 +1581,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   }}
                 >
                   {codesUnique ? (
-                    <CheckCircle2 size={16} color={tokens.colors.successScale[500]} />
+                    <CheckCircle2 size={16} color={tokens.colors.successScale[500]} aria-hidden="true" />
                   ) : (
-                    <XCircle size={16} color={tokens.colors.errorScale[500]} />
+                    <XCircle size={16} color={tokens.colors.errorScale[500]} aria-hidden="true" />
                   )}
                   <Text
                     style={{
@@ -1525,7 +1596,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   >
                     {codesUnique ? 'Dimension codes are unique' : 'Duplicate dimension codes found'}
                   </Text>
-                </div>
+                </Box>
 
                 {/* Score levels valid check */}
                 {(() => {
@@ -1534,7 +1605,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     (l, i) => i === 0 || l.minScore < sortedLevels[i - 1].minScore
                   );
                   return (
-                    <div
+                    <Box
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1547,9 +1618,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       }}
                     >
                       {thresholdsValid ? (
-                        <CheckCircle2 size={16} color={tokens.colors.successScale[500]} />
+                        <CheckCircle2 size={16} color={tokens.colors.successScale[500]} aria-hidden="true" />
                       ) : (
-                        <XCircle size={16} color={tokens.colors.errorScale[500]} />
+                        <XCircle size={16} color={tokens.colors.errorScale[500]} aria-hidden="true" />
                       )}
                       <Text
                         style={{
@@ -1564,13 +1635,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           ? 'Score level thresholds are valid'
                           : 'Overlapping score level thresholds'}
                       </Text>
-                    </div>
+                    </Box>
                   );
                 })()}
 
                 {/* Custom validation errors */}
                 {localValidationErrors.length > 0 && (
-                  <div
+                  <Box
+                    role="alert"
                     style={{
                       marginTop: tokens.spacing[2],
                       borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
@@ -1589,7 +1661,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       Additional Errors
                     </Text>
                     {localValidationErrors.map((err, idx) => (
-                      <div
+                      <Box
                         key={idx}
                         style={{
                           display: 'flex',
@@ -1601,9 +1673,10 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         <AlertCircle
                           size={14}
                           color={tokens.colors.errorScale[500]}
-                          style={{ flexShrink: 0, marginTop: 2 }}
+                          style={{ flexShrink: 0, marginTop: tokens.spacing[1] }}
+                          aria-hidden="true"
                         />
-                        <div>
+                        <Box>
                           <Text
                             style={{
                               fontSize: tokens.typography.fontSize.xs,
@@ -1621,17 +1694,17 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           >
                             {err.message}
                           </Text>
-                        </div>
-                      </div>
+                        </Box>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* ── Publish Action ──────────────────────────────────── */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   ...cardBase,
                   padding: tokens.spacing[4],
@@ -1639,7 +1712,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.warningScale[200]}`,
                 }}
               >
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'flex-start',
@@ -1649,13 +1722,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   <AlertTriangle
                     size={20}
                     color={tokens.colors.warningScale[500]}
-                    style={{ flexShrink: 0, marginTop: 2 }}
+                    style={{ flexShrink: 0, marginTop: tokens.spacing[1] }}
+                    aria-hidden="true"
                   />
-                  <div style={{ flex: 1 }}>
+                  <Box style={{ flex: 1 }}>
                     <Text
                       style={{
                         fontSize: tokens.typography.fontSize.sm,
-                        fontWeight: tokens.typography.fontWeight.semibold,
+                        fontWeight: ptypo.headingWeight,
                         color: tokens.colors.warningScale[800],
                         marginBottom: tokens.spacing[1],
                         display: 'block',
@@ -1678,6 +1752,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     <button
                       onClick={onPublish}
                       disabled={!weightIsValid || !codesUnique}
+                      aria-label="Publish rubric"
+                      aria-disabled={!weightIsValid || !codesUnique}
                       style={{
                         ...hoverStyle,
                         display: 'flex',
@@ -1697,15 +1773,16 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         opacity: weightIsValid && codesUnique ? 1 : 0.6,
                       }}
                     >
-                      <Send size={14} />
+                      <Send size={14} aria-hidden="true" />
                       Publish Rubric
                     </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        </Box>
       </Box>
     );
   },

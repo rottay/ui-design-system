@@ -7,18 +7,26 @@
  * dimension breakdown, and score level distribution.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
   createCardStyle,
+  createCardHoverStyles,
+  createEntranceAnimation,
   createHoverStyle,
+  createIconContainerStyle,
   createPanelHeaderStyle,
+  createPersonalityAccentBar,
+  createPersonalitySectionHeaderStyle,
   createProgressBarStyle,
   createSectionHeaderStyle,
   createStatusDotStyle,
   createSurfaceStyle,
   getHoverTransform,
+  getPersonalityBadgeRadius,
+  getPersonalityTypography,
+  getAccentAwareLayout,
 } from '../../../helpers';
 import type {
   BhRubricBuilderProps,
@@ -154,11 +162,33 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
+    /* ── Mounted for entrance animation ──────────────────────────── */
+
     const statusColors = useMemo(() => getRubricStatusColors(tokens), [tokens]);
     const scorableColors = useMemo(() => getScorableTypeColors(tokens), [tokens]);
     const dimColors = useMemo(() => getDimensionColors(tokens), [tokens]);
 
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
+
+    /* ── Personality + Animation ──────────────────────────────────── */
+    const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
+    const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
+    const cardHover = useMemo(() => createCardHoverStyles(tokens), [tokens]);
+    const accentBar = useMemo(() => createPersonalityAccentBar(tokens), [tokens]);
+    const accentLayout = useMemo(() => getAccentAwareLayout(tokens), [tokens]);
+    const entrance = useMemo(() => createEntranceAnimation(tokens), [tokens]);
+    const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
+
+    /* ── Glass header style ───────────────────────────────────────── */
+    const headerGlassStyle = useMemo(() => {
+      const s: React.CSSProperties = {};
+      if (isGlass && tokens.glass) {
+        s.backdropFilter = tokens.glass.blur;
+        s.WebkitBackdropFilter = tokens.glass.blur;
+        s.backgroundColor = tokens.glass.bg;
+      }
+      return s;
+    }, [isGlass, tokens]);
 
     /* ── Stable sample scores (using dimension order as seed) ────── */
     const sampleScores = useMemo(() => {
@@ -199,21 +229,35 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     /* ── State for selected dimension detail ──────────────────────── */
     const [selectedDim, setSelectedDim] = useState<string | null>(null);
 
+    const handleDimSelect = useCallback((dimId: string) => {
+      setSelectedDim((prev) => (prev === dimId ? null : dimId));
+    }, []);
+
     /* ================================================================ */
     /*  RENDER                                                          */
     /* ================================================================ */
     return (
       <Box
         className={className}
+        role="region"
+        aria-label={`Rubric preview: ${rubricName}`}
         style={{
           display: 'flex',
           flexDirection: 'column' as const,
           height: '100%',
           backgroundColor: tokens.colors.neutral[50],
           fontFamily: 'inherit',
+          ...entrance.animate,
+          transition: entrance.transition,
+          width: '100%',
           ...style,
         }}
       >
+        {/* Accent bar */}
+        {accentBar && <Box style={accentBar} />}
+
+        <Box style={accentLayout.inner}>
+
         {/* ── Header ───────────────────────────────────────────────── */}
         <Flex
           align="center"
@@ -224,6 +268,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             borderRadius: tokens.borderRadius.none,
             borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
             backgroundColor: tokens.colors.common.white,
+            ...headerGlassStyle,
           }}
         >
           <Flex align="center" gap={12}>
@@ -231,19 +276,20 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
             <Text
               style={{
                 fontSize: tokens.typography.fontSize.lg,
-                fontWeight: tokens.typography.fontWeight.semibold,
+                fontWeight: ptypo.headingWeight,
+                letterSpacing: ptypo.headingLetterSpacing,
                 color: tokens.colors.neutral[900],
               }}
             >
               {rubricName}
             </Text>
-            <span style={{ ...createBadgeStyle(tokens, 'secondary') }}>{industry}</span>
-            <span
+            <Text style={{ ...createBadgeStyle(tokens, 'secondary'), borderRadius: badgeRadius }}>{industry}</Text>
+            <Text
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: scorableColors[scorableType].bg,
@@ -252,13 +298,13 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               }}
             >
               {formatScorableType(scorableType)}
-            </span>
-            <span
+            </Text>
+            <Text
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.full,
+                borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
                 backgroundColor: statusColors[status].bg,
@@ -267,33 +313,33 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 gap: tokens.spacing[1],
               }}
             >
-              <CircleDot size={10} />
+              <CircleDot size={10} aria-hidden="true" />
               {status.charAt(0).toUpperCase() + status.slice(1)}
-            </span>
+            </Text>
           </Flex>
 
           <Flex align="center" gap={8}>
-            <span
+            <Text
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: tokens.spacing[1],
                 padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
-                borderRadius: tokens.borderRadius.md,
+                borderRadius: badgeRadius,
                 backgroundColor: tokens.colors.neutral[100],
                 fontSize: tokens.typography.fontSize.xs,
                 color: tokens.colors.neutral[600],
                 fontWeight: tokens.typography.fontWeight.medium,
               }}
             >
-              <User size={12} />
+              <User size={12} aria-hidden="true" />
               Sample Candidate Preview
-            </span>
+            </Text>
           </Flex>
         </Flex>
 
         {/* ── Content ──────────────────────────────────────────────── */}
-        <div
+        <Box
           style={{
             flex: 1,
             overflowY: 'auto',
@@ -303,9 +349,9 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
           }}
         >
           {/* ── Left: Score Details ───────────────────────────────── */}
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
             {/* Overall Score Card */}
-            <div
+            <Box
               style={{
                 ...cardBase,
                 padding: tokens.spacing[5],
@@ -315,7 +361,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
               }}
             >
               {/* Score circle */}
-              <div style={{ position: 'relative' as const }}>
+              <Box style={{ position: 'relative' as const }}>
                 <svg width="100" height="100" viewBox="0 0 100 100">
                   {/* Background circle */}
                   <circle
@@ -358,38 +404,35 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     / 100
                   </text>
                 </svg>
-              </div>
+              </Box>
 
-              <div style={{ flex: 1 }}>
+              <Box style={{ flex: 1 }}>
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
                     marginBottom: tokens.spacing[1],
                     display: 'block',
                   }}
                 >
                   Overall Score
                 </Text>
-                <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
-                  <Award size={18} color={overallLevel?.color ?? tokens.colors.neutral[500]} />
+                <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[2] }}>
+                  <Award size={18} color={overallLevel?.color ?? tokens.colors.neutral[500]} aria-hidden="true" />
                   <Text
                     style={{
                       fontSize: tokens.typography.fontSize.xl,
-                      fontWeight: tokens.typography.fontWeight.bold,
+                      fontWeight: ptypo.headingWeight,
                       color: overallLevel?.color ?? tokens.colors.neutral[700],
                     }}
                   >
                     {overallLevel?.label ?? 'N/A'}
                   </Text>
-                </div>
+                </Box>
 
                 {/* Knockout warning */}
                 {knockoutFailed.length > 0 && (
-                  <div
+                  <Box
+                    role="alert"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -400,7 +443,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.errorScale[200]}`,
                     }}
                   >
-                    <Flag size={12} color={tokens.colors.errorScale[500]} />
+                    <Flag size={12} color={tokens.colors.errorScale[500]} aria-hidden="true" />
                     <Text
                       style={{
                         fontSize: tokens.typography.fontSize.xs,
@@ -410,14 +453,14 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     >
                       {knockoutFailed.length} knockout{knockoutFailed.length > 1 ? 's' : ''} failed
                     </Text>
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* Dimension Scores */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -425,21 +468,18 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <BarChart3 size={16} color={tokens.colors.primaryScale[600]} />
+                <BarChart3 size={16} color={tokens.colors.primaryScale[600]} aria-hidden="true" />
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
                   Dimension Scores
                 </Text>
-              </div>
+              </Box>
 
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
+              <Box role="list" aria-label="Dimension scores" style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                 {sampleScores.map((score, idx) => {
                   const matchingLevel = [...scoreLevels]
                     .sort((a, b) => b.minScore - a.minScore)
@@ -450,18 +490,20 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     score.knockoutThreshold !== undefined &&
                     score.value < score.knockoutThreshold;
 
+                  const scoreEntrance = createEntranceAnimation(tokens, { index: idx });
+
                   return (
-                    <div
+                    <Box
                       key={sortedDimensions[idx].id}
-                      onClick={() =>
-                        setSelectedDim(
-                          selectedDim === sortedDimensions[idx].id
-                            ? null
-                            : sortedDimensions[idx].id
-                        )
-                      }
+                      role="listitem"
+                      aria-label={`${score.name}: ${score.value}${isKnockoutFailed ? ' - knockout failed' : ''}`}
+                      tabIndex={0}
+                      onClick={() => handleDimSelect(sortedDimensions[idx].id)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimSelect(sortedDimensions[idx].id); } }}
                       style={{
                         ...cardBase,
+                        ...cardHover.base,
+                        ...scoreEntrance.animate,
                         padding: tokens.spacing[3],
                         cursor: 'pointer',
                         transition: `all ${tokens.motion.hover}`,
@@ -474,7 +516,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         borderStyle: 'solid',
                       }}
                     >
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -482,8 +524,8 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           marginBottom: tokens.spacing[2],
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                          <div
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                          <Box
                             style={{
                               width: 10,
                               height: 10,
@@ -494,13 +536,13 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           <Text
                             style={{
                               fontSize: tokens.typography.fontSize.sm,
-                              fontWeight: tokens.typography.fontWeight.semibold,
+                              fontWeight: ptypo.headingWeight,
                               color: tokens.colors.neutral[900],
                             }}
                           >
                             {score.name}
                           </Text>
-                          <span
+                          <Text
                             style={{
                               fontSize: tokens.typography.fontSize.xs,
                               fontFamily: 'monospace',
@@ -508,10 +550,11 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             }}
                           >
                             {score.label}
-                          </span>
+                          </Text>
                           {score.isKnockout && (
                             <Flag
                               size={12}
+                              aria-hidden="true"
                               color={
                                 isKnockoutFailed
                                   ? tokens.colors.errorScale[500]
@@ -519,9 +562,9 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               }
                             />
                           )}
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
-                          <span
+                        </Box>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+                          <Text
                             style={{
                               fontSize: tokens.typography.fontSize.sm,
                               fontWeight: tokens.typography.fontWeight.bold,
@@ -529,13 +572,13 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             }}
                           >
                             {score.value}
-                          </span>
-                          <span
+                          </Text>
+                          <Text
                             style={{
                               display: 'inline-flex',
                               alignItems: 'center',
                               padding: `1px ${tokens.spacing[2]}px`,
-                              borderRadius: tokens.borderRadius.full,
+                              borderRadius: badgeRadius,
                               fontSize: tokens.typography.fontSize.xs,
                               fontWeight: tokens.typography.fontWeight.medium,
                               backgroundColor:
@@ -548,12 +591,16 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             }}
                           >
                             {isKnockoutFailed ? 'FAILED' : matchingLevel?.label ?? 'N/A'}
-                          </span>
-                        </div>
-                      </div>
+                          </Text>
+                        </Box>
+                      </Box>
 
                       {/* Score bar */}
-                      <div
+                      <Box
+                        role="progressbar"
+                        aria-valuenow={score.value}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
                         style={{
                           height: 6,
                           backgroundColor: tokens.colors.neutral[100],
@@ -561,7 +608,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           overflow: 'hidden',
                         }}
                       >
-                        <div
+                        <Box
                           style={{
                             height: '100%',
                             width: `${score.value}%`,
@@ -571,10 +618,10 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             borderRadius: tokens.borderRadius.full,
                           }}
                         />
-                      </div>
+                      </Box>
 
                       {/* Weight indicator */}
-                      <div
+                      <Box
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -588,7 +635,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             color: tokens.colors.neutral[400],
                           }}
                         >
-                          Weight: {(score.weight * 100).toFixed(0)}%
+                          Weight: {score.weight.toFixed(0)}%
                         </Text>
                         <Text
                           style={{
@@ -596,18 +643,18 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             color: tokens.colors.neutral[400],
                           }}
                         >
-                          Weighted: {Math.round(score.value * score.weight)}
+                          Weighted: {Math.round(score.value * score.weight / 100)}
                         </Text>
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
                   );
                 })}
-              </div>
-            </div>
+              </Box>
+            </Box>
 
             {/* Score Level Legend */}
-            <div>
-              <div
+            <Box>
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -615,21 +662,20 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <TrendingUp size={16} color={tokens.colors.warningScale[600]} />
+                <TrendingUp size={16} color={tokens.colors.warningScale[600]} aria-hidden="true" />
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
                   Score Levels
                 </Text>
-              </div>
+              </Box>
 
-              <div
+              <Box
+                role="list"
+                aria-label="Score level definitions"
                 style={{
                   ...cardBase,
                   padding: 0,
@@ -637,8 +683,9 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 }}
               >
                 {scoreLevels.map((level, idx) => (
-                  <div
+                  <Box
                     key={idx}
+                    role="listitem"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -650,7 +697,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           : 'none',
                     }}
                   >
-                    <div
+                    <Box
                       style={{
                         width: 12,
                         height: 12,
@@ -678,23 +725,23 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     >
                       {'\u2265'} {level.minScore}
                     </Text>
-                  </div>
+                  </Box>
                 ))}
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* ── Right: Radar + Weights ───────────────────────────── */}
-          <div style={{ width: 340, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
+          <Box style={{ width: 340, display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[4] }}>
             {/* Radar Chart */}
             {sampleScores.length >= 3 && (
-              <div
+              <Box
                 style={{
                   ...cardBase,
                   padding: tokens.spacing[4],
                 }}
               >
-                <div
+                <Box
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -702,21 +749,18 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     marginBottom: tokens.spacing[3],
                   }}
                 >
-                  <Radar size={16} color={tokens.colors.primaryScale[600]} />
+                  <Radar size={16} color={tokens.colors.primaryScale[600]} aria-hidden="true" />
                   <Text
                     style={{
-                      fontSize: tokens.typography.fontSize.xs,
-                      fontWeight: tokens.typography.fontWeight.semibold,
-                      color: tokens.colors.neutral[500],
-                      textTransform: 'uppercase' as const,
-                      letterSpacing: '0.05em',
+                      ...sectionHeaderStyle,
+                      marginBottom: 0,
                     }}
                   >
                     Competency Radar
                   </Text>
-                </div>
+                </Box>
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Box style={{ display: 'flex', justifyContent: 'center' }}>
                   <svg width="280" height="280" viewBox="0 0 280 280">
                     {(() => {
                       const radar = generateRadarPoints(sampleScores, 140, 140, 100);
@@ -789,18 +833,18 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       );
                     })()}
                   </svg>
-                </div>
-              </div>
+                </Box>
+              </Box>
             )}
 
             {/* Weight Distribution Pie */}
-            <div
+            <Box
               style={{
                 ...cardBase,
                 padding: tokens.spacing[4],
               }}
             >
-              <div
+              <Box
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -808,21 +852,18 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   marginBottom: tokens.spacing[3],
                 }}
               >
-                <BarChart3 size={16} color={tokens.colors.infoScale[600]} />
+                <BarChart3 size={16} color={tokens.colors.infoScale[600]} aria-hidden="true" />
                 <Text
                   style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    fontWeight: tokens.typography.fontWeight.semibold,
-                    color: tokens.colors.neutral[500],
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.05em',
+                    ...sectionHeaderStyle,
+                    marginBottom: 0,
                   }}
                 >
                   Weight Distribution
                 </Text>
-              </div>
+              </Box>
 
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: tokens.spacing[3] }}>
+              <Box style={{ display: 'flex', justifyContent: 'center', marginBottom: tokens.spacing[3] }}>
                 <svg width="140" height="140" viewBox="0 0 140 140">
                   {(() => {
                     const weights = sortedDimensions.map((d, i) => ({
@@ -863,13 +904,14 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     dims
                   </text>
                 </svg>
-              </div>
+              </Box>
 
               {/* Legend */}
-              <div style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
+              <Box role="list" aria-label="Weight distribution legend" style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>
                 {sortedDimensions.map((d, i) => (
-                  <div
+                  <Box
                     key={d.id}
+                    role="listitem"
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -878,7 +920,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       color: tokens.colors.neutral[600],
                     }}
                   >
-                    <div
+                    <Box
                       style={{
                         width: 8,
                         height: 8,
@@ -887,16 +929,17 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         flexShrink: 0,
                       }}
                     />
-                    <span style={{ flex: 1 }}>{d.name}</span>
-                    <span style={{ fontWeight: tokens.typography.fontWeight.semibold }}>
-                      {(d.weight * 100).toFixed(0)}%
-                    </span>
-                  </div>
+                    <Text style={{ flex: 1 }}>{d.name}</Text>
+                    <Text style={{ fontWeight: tokens.typography.fontWeight.semibold }}>
+                      {d.weight.toFixed(0)}%
+                    </Text>
+                  </Box>
                 ))}
-              </div>
-            </div>
-          </div>
-        </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        </Box>
       </Box>
     );
   },
