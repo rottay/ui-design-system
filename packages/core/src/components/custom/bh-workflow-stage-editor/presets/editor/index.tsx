@@ -49,6 +49,7 @@ function getStageTypeIcon(type: WorkflowStage['type']) {
     case 'manual': return User;
     case 'automated': return Cpu;
     case 'approval': return ShieldCheck;
+    default: return User;
   }
 }
 
@@ -57,6 +58,7 @@ function getStageTypeLabel(type: WorkflowStage['type']): string {
     case 'manual': return 'Manual';
     case 'automated': return 'Automated';
     case 'approval': return 'Approval';
+    default: return String(type ?? '');
   }
 }
 
@@ -65,6 +67,7 @@ function getStageTypeColor(type: WorkflowStage['type'], t: DesignTokens): { bg: 
     case 'manual': return { bg: t.colors.primaryScale[50], text: t.colors.primaryScale[600] };
     case 'automated': return { bg: t.colors.infoScale[50], text: t.colors.infoScale[600] };
     case 'approval': return { bg: t.colors.warningScale[50], text: t.colors.warningScale[600] };
+    default: return { bg: t.colors.neutral[50], text: t.colors.neutral[600] };
   }
 }
 
@@ -73,6 +76,7 @@ function getStageTypeBadgeKey(type: WorkflowStage['type']): 'primary' | 'info' |
     case 'manual': return 'primary';
     case 'automated': return 'info';
     case 'approval': return 'warning';
+    default: return 'primary';
   }
 }
 
@@ -106,7 +110,7 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
-    const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
+    const sortedStages = useMemo(() => [...stages].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)), [stages]);
 
     const handleMoveUp = useCallback((stageId: string, currentOrder: number) => {
       if (currentOrder > 1) onStageReorder?.(stageId, currentOrder - 1);
@@ -213,7 +217,7 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
                     padding: 0,
                     overflow: 'hidden',
                   }}
-                  onMouseEnter={() => setHoveredStage(stage.id)}
+                  onMouseEnter={() => setHoveredStage((stage.id ?? null))}
                   onMouseLeave={() => setHoveredStage(null)}
                 >
                   {/* Left color bar */}
@@ -264,7 +268,7 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
                     </Box>
                     {/* Actions */}
                     <Box style={{ display: 'flex', flexWrap: 'wrap', gap: t.spacing[1] }}>
-                      {stage.actions.map((action, ai) => (
+                      {(stage.actions ?? []).map((action, ai) => (
                         <Box key={ai} style={{
                           padding: `1px ${t.spacing[2]}px`,
                           borderRadius: badgeRadius,
@@ -292,17 +296,17 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
                     <Box
                       role="button" tabIndex={0}
                       aria-label={`Move ${stage.name} up`}
-                      onClick={() => handleMoveUp(stage.id, stage.order)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMoveUp(stage.id, stage.order); } }}
-                      style={{ cursor: stage.order > 1 ? 'pointer' : 'default', opacity: stage.order > 1 ? 1 : 0.3 }}
+                      onClick={() => handleMoveUp((stage.id ?? ''), (stage.order ?? 0))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMoveUp((stage.id ?? ''), (stage.order ?? 0)); } }}
+                      style={{ cursor: (stage.order ?? 0) > 1 ? 'pointer' : 'default', opacity: (stage.order ?? 0) > 1 ? 1 : 0.3 }}
                     >
                       <ChevronUp size={14} color={t.colors.neutral[500]} />
                     </Box>
                     <Box
                       role="button" tabIndex={0}
                       aria-label={`Edit ${stage.name}`}
-                      onClick={() => onStageEdit?.(stage.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStageEdit?.(stage.id); } }}
+                      onClick={() => onStageEdit?.((stage.id ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStageEdit?.((stage.id ?? '')); } }}
                       style={{ cursor: 'pointer' }}
                     >
                       <Pencil size={13} color={t.colors.primaryScale[500]} />
@@ -310,8 +314,8 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
                     <Box
                       role="button" tabIndex={0}
                       aria-label={`Delete ${stage.name}`}
-                      onClick={() => onStageDelete?.(stage.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStageDelete?.(stage.id); } }}
+                      onClick={() => onStageDelete?.((stage.id ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStageDelete?.((stage.id ?? '')); } }}
                       style={{ cursor: 'pointer' }}
                     >
                       <Trash2 size={13} color={t.colors.errorScale[500]} />
@@ -319,9 +323,9 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
                     <Box
                       role="button" tabIndex={0}
                       aria-label={`Move ${stage.name} down`}
-                      onClick={() => handleMoveDown(stage.id, stage.order)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMoveDown(stage.id, stage.order); } }}
-                      style={{ cursor: stage.order < sortedStages.length ? 'pointer' : 'default', opacity: stage.order < sortedStages.length ? 1 : 0.3 }}
+                      onClick={() => handleMoveDown((stage.id ?? ''), (stage.order ?? 0))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMoveDown((stage.id ?? ''), (stage.order ?? 0)); } }}
+                      style={{ cursor: (stage.order ?? 0) < sortedStages.length ? 'pointer' : 'default', opacity: (stage.order ?? 0) < sortedStages.length ? 1 : 0.3 }}
                     >
                       <ChevronDown size={14} color={t.colors.neutral[500]} />
                     </Box>

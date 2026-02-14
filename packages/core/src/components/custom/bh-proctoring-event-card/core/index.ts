@@ -2,61 +2,35 @@
  * BhProctoringEventCard - Core Interface
  * Individual event card showing severity badge, event type icon,
  * candidate info, metadata details, timestamp, and review actions.
+ *
+ * Uses ProctoringEventSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringEventCardPreset = 'default' | 'compact';
 
-export type ProctoringEventType =
-  | 'tab_switch'
-  | 'copy_paste'
-  | 'screen_share'
-  | 'unusual_typing'
-  | 'browser_focus_lost';
+/** Backward-compat aliases (old names from pre-migration) */
+export type ProctoringEventTypeValue = ProctoringEventType;
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
-export type ProctoringEventSeverity = 'low' | 'medium' | 'high' | 'critical';
-
-export interface ProctoringEventMetadata {
-  /** Number of tab switches detected */
-  tabSwitchCount?: number;
-  /** Length of pasted text in characters */
-  pastedTextLength?: number;
-  /** Duration the browser lost focus (in seconds) */
-  focusLostDuration?: number;
-  /** Screen share detected to external app */
-  screenShareTarget?: string;
-  /** Typing speed anomaly (words per minute) */
-  typingSpeedWpm?: number;
-  /** IP address at time of event */
-  ipAddress?: string;
-  /** Browser user agent */
-  userAgent?: string;
-  /** Additional context notes */
-  notes?: string;
-}
-
-export interface ProctoringEventDetail {
-  id: string;
-  candidateName: string;
+/** Extended event view combining DB entity with UI display fields */
+export interface ProctoringEventCardView {
+  /** The DB entity (all fields optional for safety) */
+  event?: Partial<ProctoringEventSelect>;
+  /** Display name of the candidate (resolved externally) */
+  candidateName?: string;
+  /** Candidate avatar URL (resolved externally) */
   candidateAvatar?: string;
-  eventType: ProctoringEventType;
-  severity: ProctoringEventSeverity;
-  timestamp: Date;
-  metadata: ProctoringEventMetadata;
-  reviewed: boolean;
-  reviewedBy?: string;
-  reviewedAt?: Date;
-  reviewNotes?: string;
-  dismissed: boolean;
 }
 
 export interface BhProctoringEventCardProps extends EngineAwareProps {
   preset?: BhProctoringEventCardPreset;
 
   /** The event to display */
-  event: ProctoringEventDetail;
+  event?: ProctoringEventCardView;
 
   /** Callback when the review button is clicked */
   onReview?: () => void;
@@ -80,3 +54,6 @@ export interface BhProctoringEventCardProps extends EngineAwareProps {
 export const BH_PROCTORING_EVENT_CARD_DEFAULTS: Partial<BhProctoringEventCardProps> = {
   preset: 'default',
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity };

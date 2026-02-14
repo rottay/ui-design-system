@@ -153,18 +153,24 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                 }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm }}>{interviewBrief.stageName}</Text>
                 </Box>
-                <Box style={{
-                  ...createBadgeStyle(t, interviewBrief.type === 'ai' ? 'info' : 'secondary'),
-                  fontSize: t.typography.fontSize.sm,
-                  padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
-                  display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
-                  borderRadius: badgeRadius,
-                }}>
-                  {interviewBrief.type === 'ai' ? <Bot size={14} /> : <User size={14} />}
-                  <Text style={{ fontSize: t.typography.fontSize.sm }}>
-                    {interviewBrief.type === 'ai' ? 'AI Interview' : 'Human Interview'}
-                  </Text>
-                </Box>
+                {(() => {
+                  const isAi = interviewBrief.type === 'ai' || interviewBrief.type === 'ai_voice' || interviewBrief.type === 'ai_chat';
+                  const modeLabels: Record<string, string> = { ai: 'AI', ai_voice: 'AI Voice', ai_chat: 'AI Chat', human: 'Human', human_video: 'Video', human_phone: 'Phone', in_person: 'In Person' };
+                  return (
+                    <Box style={{
+                      ...createBadgeStyle(t, isAi ? 'info' : 'secondary'),
+                      fontSize: t.typography.fontSize.sm,
+                      padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
+                      display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
+                      borderRadius: badgeRadius,
+                    }}>
+                      {isAi ? <Bot size={14} /> : <User size={14} />}
+                      <Text style={{ fontSize: t.typography.fontSize.sm }}>
+                        {modeLabels[interviewBrief.type] ?? interviewBrief.type} Interview
+                      </Text>
+                    </Box>
+                  );
+                })()}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Calendar size={14} color={t.colors.neutral[600]} />
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>
@@ -540,7 +546,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
                       {externalChecklist.map((item) => {
                         const currentStatus = checklistStatus[item.key] ?? item.status;
-                        const statusCfg = CHECKLIST_STATUS_CONFIG[currentStatus];
+                        const statusCfg = CHECKLIST_STATUS_CONFIG[currentStatus] || CHECKLIST_STATUS_CONFIG.pending;
                         const scale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
 
                         const StatusIcon = currentStatus === 'pass' ? CheckCircle : currentStatus === 'fail' ? XCircle : AlertTriangle;

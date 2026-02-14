@@ -98,12 +98,12 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     const {
-      jobName = 'Senior Frontend Engineer', pendingCount = 3,
-      candidates = DEFAULT_CANDIDATES,
+      jobName = '', pendingCount = 0,
+      candidates = [],
       selectedCandidate: scp, onCandidateSelect,
       decision: dp, onDecisionChange,
-      history = DEFAULT_HISTORY, historyFilter: hfp, onHistoryFilterChange,
-      advanceSteps = ['Technical Interview', 'Culture Interview', 'Final Round', 'Offer'],
+      history = [], historyFilter: hfp, onHistoryFilterChange,
+      advanceSteps = [],
       onSubmitDecision,
       className, style,
     } = props;

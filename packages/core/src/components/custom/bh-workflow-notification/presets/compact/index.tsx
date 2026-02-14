@@ -30,6 +30,7 @@ function getChannelIcon(channel: NotificationRule['channel']) {
     case 'email': return Mail;
     case 'slack': return MessageSquare;
     case 'in-app': return Inbox;
+    default: return Mail;
   }
 }
 
@@ -155,8 +156,8 @@ export const CompactBhWorkflowNotification = createPreset<BhWorkflowNotification
                   tabIndex={0}
                   aria-checked={rule.enabled}
                   aria-label={`Toggle ${rule.event}`}
-                  onClick={() => handleToggle(rule.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle(rule.id); } }}
+                  onClick={() => handleToggle((rule.id ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle((rule.id ?? '')); } }}
                   style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 0 }}
                 >
                   {rule.enabled

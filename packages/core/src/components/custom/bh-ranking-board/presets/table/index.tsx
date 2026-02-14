@@ -61,9 +61,9 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
-      jobName = 'Senior Frontend Engineer',
-      candidates = DEFAULT_CANDIDATES,
-      scoreDistribution = DEFAULT_DISTRIBUTION,
+      jobName = '',
+      candidates = [],
+      scoreDistribution = [],
       filters: fp, onFilterChange,
       selectedCandidates: scp, onSelectionChange, onCompare,
       decisions: dp, onDecisionChange,
@@ -109,7 +109,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
 
     const filtered = useMemo(() => {
       let list = [...candidates];
-      if (search) list = list.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
+      if (search) list = list.filter(c => (c.name || '').toLowerCase().includes(search.toLowerCase()));
       list.sort((a, b) => {
         let cmp = 0;
         if (sortBy === 'rank') cmp = a.rank - b.rank;

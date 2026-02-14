@@ -80,21 +80,44 @@ function getEventTypeLabel(type: ProctoringEventType): string {
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT = {
+/** Flat display shape resolved from ProctoringAlertEvent + its nested DB entity */
+interface ResolvedAlertEvent {
+  id: string;
+  candidateName: string;
+  eventType: ProctoringEventType;
+  severity: ProctoringEventSeverity;
+  timestamp: Date;
+  summary: string;
+}
+
+const MOCK_EVENT: ResolvedAlertEvent = {
   id: 'pe-toast-1',
   candidateName: 'Michael Chen',
-  eventType: 'copy_paste' as const,
-  severity: 'high' as const,
+  eventType: 'copy_paste',
+  severity: 'high',
   timestamp: new Date(Date.now() - 15000),
   summary: 'Copy/paste activity detected during assessment',
 };
+
+function resolveAlertEvent(raw: BhProctoringAlertProps['event']): ResolvedAlertEvent {
+  if (!raw) return MOCK_EVENT;
+  const flat = raw as any;
+  return {
+    id: flat.id ?? flat.event?.id ?? 'unknown',
+    candidateName: flat.candidateName ?? 'Unknown',
+    eventType: flat.eventType ?? flat.event?.eventType ?? 'tab_switch',
+    severity: flat.severity ?? flat.event?.severity ?? 'low',
+    timestamp: flat.timestamp ?? flat.event?.timestamp ?? new Date(),
+    summary: flat.summary ?? '',
+  };
+}
 
 /* ================================================================== */
 /*  Toast Preset                                                       */
@@ -110,7 +133,7 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event = MOCK_EVENT,
+      event: rawEvent,
       onReview,
       onDismiss,
       onClose,
@@ -118,7 +141,7 @@ export const ToastBhProctoringAlert = createPreset<BhProctoringAlertProps>({
       style,
     } = props;
 
-
+    const event = useMemo(() => resolveAlertEvent(rawEvent), [rawEvent]);
     const card = useMemo(() => createCardStyle(t, { elevation: 'lg', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const EventIcon = useMemo(() => getEventTypeIcon(event.eventType), [event.eventType]);

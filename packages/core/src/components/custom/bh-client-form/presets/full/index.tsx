@@ -32,19 +32,23 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 
 const EMPTY_FORM: ClientFormData = {
-  name: '',
-  tier: 'starter',
-  contactName: '',
-  contactEmail: '',
-  phone: '',
-  address: '',
-  notes: '',
+  displayName: '',
+  type: 'company',
+  tier: 'standard',
+  industry: '',
+  clientCompanyName: '',
+  firstName: '',
+  lastName: '',
+  personalEmail: '',
+  personalPhone: '',
+  description: '',
 };
 
 const TIER_OPTIONS: Array<{ value: ClientFormData['tier']; label: string; icon: typeof Star; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = [
-  { value: 'starter', label: 'Starter', icon: Star, color: t => t.colors.primaryScale[600], bg: t => t.colors.primaryScale[50] },
-  { value: 'business', label: 'Business', icon: Briefcase, color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
+  { value: 'standard', label: 'Standard', icon: Star, color: t => t.colors.primaryScale[600], bg: t => t.colors.primaryScale[50] },
+  { value: 'premium', label: 'Premium', icon: Briefcase, color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
   { value: 'enterprise', label: 'Enterprise', icon: Crown, color: t => t.colors.secondaryScale[600], bg: t => t.colors.secondaryScale[50] },
+  { value: 'strategic', label: 'Strategic', icon: Crown, color: t => t.colors.infoScale[600], bg: t => t.colors.infoScale[50] },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -92,7 +96,7 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
     const [form, setForm] = useState<ClientFormData>({
       ...EMPTY_FORM,
       ...initialData,
-    });
+    } as ClientFormData);
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
@@ -110,12 +114,12 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
     }, []);
 
     const handleSubmit = useCallback(() => {
-      if (!form.name || !form.contactName || !form.contactEmail) return;
+      if (!form.displayName) return;
       onSubmit?.(form);
     }, [form, onSubmit]);
 
     const isValid = useMemo(() => {
-      return form.name.trim() !== '' && form.contactName.trim() !== '' && form.contactEmail.trim() !== '';
+      return form.displayName.trim() !== '';
     }, [form]);
 
     const sectionLabel = useCallback((label: string) => ({
@@ -203,14 +207,14 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
               <Box style={{ position: 'relative' }}>
                 <Building2 size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
                 <input
-                  value={form.name}
-                  onChange={(e) => updateField('name', e.target.value)}
-                  onFocus={() => setFocusedField('name')}
+                  value={form.displayName}
+                  onChange={(e) => updateField('displayName', e.target.value)}
+                  onFocus={() => setFocusedField('displayName')}
                   onBlur={() => setFocusedField(null)}
                   placeholder="Enter company name"
                   aria-label="Company name"
                   style={{
-                    ...createInputStyle(t, focusedField === 'name'),
+                    ...createInputStyle(t, focusedField === 'displayName'),
                     paddingLeft: t.spacing[8],
                   }}
                 />
@@ -266,43 +270,43 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
           <Text style={sectionLabel('Contact Details')}>Contact Details</Text>
           <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
             <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[4] }}>
-              {/* Contact Name */}
+              {/* First Name */}
               <Box>
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' }}>
-                  Contact Name *
+                  First Name
                 </Text>
                 <Box style={{ position: 'relative' }}>
                   <User size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
                   <input
-                    value={form.contactName}
-                    onChange={(e) => updateField('contactName', e.target.value)}
-                    onFocus={() => setFocusedField('contactName')}
+                    value={form.firstName ?? ''}
+                    onChange={(e) => updateField('firstName', e.target.value)}
+                    onFocus={() => setFocusedField('firstName')}
                     onBlur={() => setFocusedField(null)}
-                    placeholder="Full name"
-                    aria-label="Contact name"
+                    placeholder="First name"
+                    aria-label="First name"
                     style={{
-                      ...createInputStyle(t, focusedField === 'contactName'),
+                      ...createInputStyle(t, focusedField === 'firstName'),
                       paddingLeft: t.spacing[8],
                     }}
                   />
                 </Box>
               </Box>
-              {/* Contact Email */}
+              {/* Last Name */}
               <Box>
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' }}>
-                  Contact Email *
+                  Last Name
                 </Text>
                 <Box style={{ position: 'relative' }}>
-                  <Mail size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
+                  <User size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
                   <input
-                    value={form.contactEmail}
-                    onChange={(e) => updateField('contactEmail', e.target.value)}
-                    onFocus={() => setFocusedField('contactEmail')}
+                    value={form.lastName ?? ''}
+                    onChange={(e) => updateField('lastName', e.target.value)}
+                    onFocus={() => setFocusedField('lastName')}
                     onBlur={() => setFocusedField(null)}
-                    placeholder="email@company.com"
-                    aria-label="Contact email"
+                    placeholder="Last name"
+                    aria-label="Last name"
                     style={{
-                      ...createInputStyle(t, focusedField === 'contactEmail'),
+                      ...createInputStyle(t, focusedField === 'lastName'),
                       paddingLeft: t.spacing[8],
                     }}
                   />
@@ -311,6 +315,27 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
             </Box>
 
             <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: t.spacing[4] }}>
+              {/* Email */}
+              <Box>
+                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' }}>
+                  Email
+                </Text>
+                <Box style={{ position: 'relative' }}>
+                  <Mail size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
+                  <input
+                    value={form.personalEmail ?? ''}
+                    onChange={(e) => updateField('personalEmail', e.target.value)}
+                    onFocus={() => setFocusedField('personalEmail')}
+                    onBlur={() => setFocusedField(null)}
+                    placeholder="email@company.com"
+                    aria-label="Email"
+                    style={{
+                      ...createInputStyle(t, focusedField === 'personalEmail'),
+                      paddingLeft: t.spacing[8],
+                    }}
+                  />
+                </Box>
+              </Box>
               {/* Phone */}
               <Box>
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' }}>
@@ -319,35 +344,14 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
                 <Box style={{ position: 'relative' }}>
                   <Phone size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
                   <input
-                    value={form.phone ?? ''}
-                    onChange={(e) => updateField('phone', e.target.value)}
-                    onFocus={() => setFocusedField('phone')}
+                    value={form.personalPhone ?? ''}
+                    onChange={(e) => updateField('personalPhone', e.target.value)}
+                    onFocus={() => setFocusedField('personalPhone')}
                     onBlur={() => setFocusedField(null)}
                     placeholder="+1 (555) 000-0000"
                     aria-label="Phone number"
                     style={{
-                      ...createInputStyle(t, focusedField === 'phone'),
-                      paddingLeft: t.spacing[8],
-                    }}
-                  />
-                </Box>
-              </Box>
-              {/* Address */}
-              <Box>
-                <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' }}>
-                  Address
-                </Text>
-                <Box style={{ position: 'relative' }}>
-                  <MapPin size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
-                  <input
-                    value={form.address ?? ''}
-                    onChange={(e) => updateField('address', e.target.value)}
-                    onFocus={() => setFocusedField('address')}
-                    onBlur={() => setFocusedField(null)}
-                    placeholder="123 Main St, City"
-                    aria-label="Address"
-                    style={{
-                      ...createInputStyle(t, focusedField === 'address'),
+                      ...createInputStyle(t, focusedField === 'personalPhone'),
                       paddingLeft: t.spacing[8],
                     }}
                   />
@@ -355,23 +359,23 @@ export const FullBhClientForm = createPreset<BhClientFormProps>({
               </Box>
             </Box>
 
-            {/* Notes */}
+            {/* Description */}
             <Box>
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700], marginBottom: t.spacing[1], display: 'block' }}>
-                Notes
+                Description
               </Text>
               <Box style={{ position: 'relative' }}>
                 <FileText size={14} style={{ position: 'absolute', left: t.spacing[3], top: t.spacing[3], color: t.colors.neutral[400] }} />
                 <textarea
-                  value={form.notes ?? ''}
-                  onChange={(e) => updateField('notes', e.target.value)}
-                  onFocus={() => setFocusedField('notes')}
+                  value={form.description ?? ''}
+                  onChange={(e) => updateField('description', e.target.value)}
+                  onFocus={() => setFocusedField('description')}
                   onBlur={() => setFocusedField(null)}
-                  placeholder="Additional notes about this client..."
-                  aria-label="Notes"
+                  placeholder="Additional details about this client..."
+                  aria-label="Description"
                   rows={3}
                   style={{
-                    ...createInputStyle(t, focusedField === 'notes'),
+                    ...createInputStyle(t, focusedField === 'description'),
                     paddingLeft: t.spacing[8],
                     resize: 'vertical' as const,
                     fontFamily: 'inherit',

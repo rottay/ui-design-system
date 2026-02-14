@@ -62,8 +62,7 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
     const t = tokens;
 
     const {
-      teamName = 'Engineering Hiring',
-      department = 'Engineering',
+      team,
       members: membersProp,
       positions: positionsProp,
       metrics: metricsProp,
@@ -73,6 +72,9 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
       className,
       style,
     } = props;
+
+    const teamName = team?.name ?? 'Engineering Hiring';
+    const teamType = team?.type ?? 'general';
 
     const members = membersProp?.length ? membersProp : MOCK_MEMBERS;
     const positions = positionsProp?.length ? positionsProp : MOCK_POSITIONS;
@@ -116,7 +118,7 @@ export const CompactBhTeamDetail = createPreset<BhTeamDetailProps>({
             </Text>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
               <Building2 size={11} style={{ color: t.colors.neutral[400] }} />
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{department}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: 'capitalize' as const }}>{teamType}</Text>
             </Box>
           </Box>
           <Box style={{ display: 'flex', gap: t.spacing[2] }}>

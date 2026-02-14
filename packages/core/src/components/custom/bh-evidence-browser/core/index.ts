@@ -1,15 +1,41 @@
+/**
+ * BhEvidenceBrowser - Core Interface
+ * Evidence browser for reviewing transcript quotes and their scoring impact.
+ *
+ * Uses EvidenceSelect from @rottay/scoring for DB types.
+ * UI types are defined here with proper fields for rendering.
+ */
+
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { EvidenceSelect } from '@rottay/scoring';
 
 export type BhEvidenceBrowserPreset = 'split-pane' | 'compact';
 
-/**
- * Evidence impact aligned with dm-scoring's 3-level EvidenceImpact type.
- * @see dm-scoring/domain/types/common - EVIDENCE_IMPACT_VALUES
- */
-export type EvidenceImpact = 'positive' | 'negative' | 'neutral';
+/** Evidence impact values for UI */
+export type EvidenceImpact = 'positive' | 'neutral' | 'negative';
+
 export type SpeakerRole = 'candidate' | 'interviewer' | 'system';
+
+/* ── UI types (what presets actually consume) ───────────────────────── */
+
+/** A single evidence item for UI rendering */
+export interface EvidenceItem {
+  id?: string;
+  quote?: string;
+  dimension?: string;
+  dimensionCode?: string;
+  impact?: EvidenceImpact | string;
+  score?: number;
+  transcriptSegmentId?: string;
+  isValidated?: boolean;
+  timestamp?: string;
+  impactExplanation?: string;
+  similarityScore?: number;
+  speakerRole?: string;
+  speakerName?: string;
+}
 
 export interface TranscriptSegment {
   id: string;
@@ -20,27 +46,6 @@ export interface TranscriptSegment {
   hasEvidence?: boolean;
 }
 
-/**
- * Evidence item aligned with dm-scoring Evidence entity.
- * @see dm-scoring/domain/entity/evidence
- */
-export interface EvidenceItem {
-  id: string;
-  quote: string;
-  dimension: string;
-  dimensionCode: string;
-  impact: EvidenceImpact;
-  impactExplanation?: string;
-  score: number;
-  speakerRole?: SpeakerRole;
-  speakerName?: string;
-  turnIndex?: number;
-  transcriptSegmentId?: string;
-  isValidated: boolean;
-  similarityScore?: number;
-  timestamp?: string;
-}
-
 export interface EvidenceFilter {
   dimension?: string;
   impact?: EvidenceImpact;
@@ -49,18 +54,44 @@ export interface EvidenceFilter {
 
 export interface BhEvidenceBrowserProps extends EngineAwareProps {
   preset?: BhEvidenceBrowserPreset;
-  transcript: TranscriptSegment[];
-  evidence: EvidenceItem[];
+
+  /** Transcript segments to display */
+  transcript?: TranscriptSegment[];
+
+  /** Evidence items (UI view model) */
+  evidence?: EvidenceItem[];
+
+  /** Available dimension names for filtering */
   dimensions?: string[];
+
+  /** Currently selected evidence ID */
   selectedEvidenceId?: string;
+
+  /** Callback when evidence is selected */
   onEvidenceSelect?: (evidenceId: string) => void;
+
+  /** Callback to validate/invalidate evidence */
   onValidate?: (evidenceId: string, isValidated: boolean) => void;
+
+  /** Active filter */
   filter?: EvidenceFilter;
+
+  /** Callback when filter changes */
   onFilterChange?: (filter: EvidenceFilter) => void;
+
+  /** Display name of the candidate */
   candidateName?: string;
+
+  /** Interview/session title */
   interviewTitle?: string;
+
+  /** Loading state */
   loading?: boolean;
+
+  /** Additional CSS class name(s) */
   className?: string;
+
+  /** Inline CSS styles */
   style?: CSSProperties;
 }
 
@@ -76,22 +107,22 @@ export function getImpactColors(tokens: DesignTokens) {
   };
 }
 
-export function getImpactLabel(impact: EvidenceImpact): string {
-  const labels: Record<EvidenceImpact, string> = {
+export function getImpactLabel(impact: string): string {
+  const labels: Record<string, string> = {
     positive: 'Positive',
     neutral: 'Neutral',
     negative: 'Negative',
   };
-  return labels[impact];
+  return labels[impact] ?? impact ?? '';
 }
 
-export function getImpactIcon(impact: EvidenceImpact): string {
-  const icons: Record<EvidenceImpact, string> = {
+export function getImpactIcon(impact: string): string {
+  const icons: Record<string, string> = {
     positive: '+',
     neutral: '~',
     negative: '-',
   };
-  return icons[impact];
+  return icons[impact] ?? '~';
 }
 
 export function getSpeakerColors(tokens: DesignTokens) {
@@ -104,3 +135,14 @@ export function getSpeakerColors(tokens: DesignTokens) {
 
 /** All valid impact values for filter iteration */
 export const IMPACT_OPTIONS: EvidenceImpact[] = ['positive', 'neutral', 'negative'];
+
+/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
+export function n(v: string | number | null | undefined): number {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const parsed = Number(v);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/** Re-export DB type for convenience */
+export type { EvidenceSelect };

@@ -184,11 +184,11 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
     /* ---- Stats Bar ---- */
     const renderStatsBar = useCallback(() => {
       if (!externalStats) return null;
-      const totalPending = Object.values(externalStats.pending).reduce((a, b) => a + b, 0);
+      const totalPending = Object.values(externalStats.pending ?? {}).reduce((a, b) => a + b, 0);
       const statItems = [
         { label: 'Total Pending', value: totalPending.toString(), icon: <Layers size={16} color={t.colors.primaryScale[600]} />, bg: t.colors.primaryScale[50] },
-        { label: 'Oldest Pending', value: `${externalStats.oldestPendingDays}d`, icon: <Timer size={16} color={t.colors.warningScale[600]} />, bg: t.colors.warningScale[50] },
-        { label: 'Avg Approval Time', value: `${externalStats.avgApprovalTime.toFixed(1)}h`, icon: <TrendingUp size={16} color={t.colors.successScale[600]} />, bg: t.colors.successScale[50] },
+        { label: 'Oldest Pending', value: `${externalStats.oldestPendingDays ?? 0}d`, icon: <Timer size={16} color={t.colors.warningScale[600]} />, bg: t.colors.warningScale[50] },
+        { label: 'Avg Approval Time', value: `${(externalStats.avgApprovalTime ?? 0).toFixed(1)}h`, icon: <TrendingUp size={16} color={t.colors.successScale[600]} />, bg: t.colors.successScale[50] },
       ];
 
       return (
@@ -351,12 +351,12 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                 </Box>
               )}
 
-              {externalDetail.relatedData.length > 0 && (
+              {(externalDetail.relatedData ?? []).length > 0 && (
                 <Box style={{ marginBottom: t.spacing[4] }}>
                   <Text style={{ ...sectionHeader, display: 'block', marginBottom: t.spacing[2] }}>Related Data</Text>
                   <Box style={{ borderRadius: t.borderRadius.md, overflow: 'hidden', border: `${bdr} ${t.colors.neutral[200]}` }}>
-                    {externalDetail.relatedData.map((data, idx) => (
-                      <Box key={idx} style={{ display: 'grid', gridTemplateColumns: '160px 1fr', borderBottom: idx < externalDetail.relatedData.length - 1 ? `${bdr} ${t.colors.neutral[100]}` : 'none' }}>
+                    {(externalDetail.relatedData ?? []).map((data, idx) => (
+                      <Box key={idx} style={{ display: 'grid', gridTemplateColumns: '160px 1fr', borderBottom: idx < (externalDetail.relatedData ?? []).length - 1 ? `${bdr} ${t.colors.neutral[100]}` : 'none' }}>
                         <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, backgroundColor: t.colors.neutral[50], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], borderRight: `${bdr} ${t.colors.neutral[200]}` }}>
                           <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{data.label}</Text>
                         </Box>
@@ -369,16 +369,16 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
                 </Box>
               )}
 
-              {externalDetail.chainSteps.length > 0 && (
+              {(externalDetail.chainSteps ?? []).length > 0 && (
                 <Box style={{ marginBottom: t.spacing[5] }}>
                   <Text style={{ ...sectionHeader, display: 'block', marginBottom: t.spacing[3] }}>Approval Chain</Text>
                   <Stack direction="horizontal" align="center" gap={0} style={{ overflowX: 'auto' as const }}>
-                    {externalDetail.chainSteps.map((step, idx) => {
-                      const stepColor = chainStepColors[step.status];
+                    {(externalDetail.chainSteps ?? []).map((step, idx) => {
+                      const stepColor = chainStepColors[step.status ?? 'pending'];
                       return (
                         <React.Fragment key={idx}>
                           {idx > 0 && (
-                            <Box style={{ width: 32, height: 2, backgroundColor: step.status === 'approved' || externalDetail.chainSteps[idx - 1].status === 'approved' ? t.colors.successScale[300] : t.colors.neutral[200], flexShrink: 0 }} />
+                            <Box style={{ width: 32, height: 2, backgroundColor: step.status === 'approved' || (externalDetail.chainSteps ?? [])[idx - 1]?.status === 'approved' ? t.colors.successScale[300] : t.colors.neutral[200], flexShrink: 0 }} />
                           )}
                           <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
                             <Box style={{ width: 36, height: 36, borderRadius: t.borderRadius.full, backgroundColor: stepColor.bg, border: `${bdr} ${stepColor.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stepColor.color }}>

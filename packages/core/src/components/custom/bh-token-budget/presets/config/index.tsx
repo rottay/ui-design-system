@@ -263,7 +263,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                   <Box
                     key={alloc.teamId}
                     role="listitem"
-                    aria-label={`${alloc.teamName}: ${currency}${alloc.used.toLocaleString()} of ${currency}${alloc.allocated.toLocaleString()}`}
+                    aria-label={`${alloc.teamName ?? ''}: ${currency}${(alloc.used ?? 0).toLocaleString()} of ${currency}${(alloc.allocated ?? 0).toLocaleString()}`}
                     style={{
                       padding: `${t.spacing[4]}px ${t.spacing[5]}px`,
                       borderBottom: `1px solid ${t.colors.neutral[100]}`,
@@ -283,7 +283,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                             {alloc.teamName}
                           </Text>
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                            {currency}{alloc.used.toLocaleString()} / {currency}{alloc.allocated.toLocaleString()}
+                            {currency}{(alloc.used ?? 0).toLocaleString()} / {currency}{(alloc.allocated ?? 0).toLocaleString()}
                           </Text>
                         </Box>
                       </Box>

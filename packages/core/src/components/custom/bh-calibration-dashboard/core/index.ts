@@ -1,31 +1,52 @@
 /**
  * BhCalibrationDashboard - Core Interface
  * Calibration session management dashboard for BitHire ATS platform
+ *
+ * Uses CalibrationSelect from @rottay/scoring as the DB entity type.
+ * CalibrationSessionView is a UI-friendly flat interface used by presets.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { CalibrationSelect } from '@rottay/scoring';
 
 export type BhCalibrationDashboardPreset = 'dashboard' | 'compact';
 
-export interface CalibrationSession {
+/** DB calibration status values */
+export type CalibrationStatus = CalibrationSelect['status'];
+
+/**
+ * UI-friendly calibration session view with flat fields.
+ * Pre-computed/mapped from DB data by the consuming application.
+ */
+export interface CalibrationSessionView {
+  /** Session identifier */
   id: string;
-  rubricName: string;
-  status: 'active' | 'completed' | 'paused';
-  progress: number; // 0-1
-  totalSamples: number;
-  completedSamples: number;
-  participants: string[];
-  agreementRate: number;
-  startedAt: Date;
+  /** Display name of the rubric (resolved externally) */
+  rubricName?: string;
+  /** Session status */
+  status: string;
+  /** Computed progress 0-1 */
+  progress?: number;
+  /** Total samples in the session */
+  totalSamples?: number;
+  /** Number of completed samples */
+  completedSamples?: number;
+  /** Participant names (resolved externally) */
+  participants?: string[];
+  /** Computed agreement rate */
+  agreementRate?: number;
+  /** When the session started */
+  startedAt?: Date;
+  /** When the session completed (if applicable) */
   completedAt?: Date;
 }
 
 export interface CalibrationMetrics {
-  activeSessions: number;
-  totalCompleted: number;
-  avgAgreementRate: number;
-  avgDeviation: number;
+  activeSessions?: number;
+  totalCompleted?: number;
+  avgAgreementRate?: number;
+  avgDeviation?: number;
   topPerformingRubric?: string;
   worstPerformingRubric?: string;
 }
@@ -34,10 +55,10 @@ export interface BhCalibrationDashboardProps extends EngineAwareProps {
   preset?: BhCalibrationDashboardPreset;
 
   /** List of calibration sessions */
-  sessions: CalibrationSession[];
+  sessions?: CalibrationSessionView[];
 
   /** Aggregate calibration metrics */
-  metrics: CalibrationMetrics;
+  metrics?: CalibrationMetrics;
 
   /** Callback when a session row is clicked */
   onSessionClick?: (sessionId: string) => void;
@@ -61,3 +82,17 @@ export interface BhCalibrationDashboardProps extends EngineAwareProps {
 export const BH_CALIBRATION_DASHBOARD_DEFAULTS: Partial<BhCalibrationDashboardProps> = {
   preset: 'dashboard',
 };
+
+/** Backward-compat alias (old name from pre-migration) */
+export type CalibrationSession = CalibrationSessionView;
+
+/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
+export function n(v: string | number | null | undefined): number {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const parsed = Number(v);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/** Re-export DB type for convenience */
+export type { CalibrationSelect };

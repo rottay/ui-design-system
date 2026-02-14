@@ -35,11 +35,12 @@ const MOCK_APPROVALS: ApprovalItem[] = [
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getPriorityColor(priority: ApprovalItem['priority'], t: DesignTokens): string {
+function getPriorityColor(priority: ApprovalItem['priority'] | undefined, t: DesignTokens): string {
   switch (priority) {
     case 'high': return t.colors.errorScale[500];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.neutral[400];
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -145,8 +146,8 @@ export const CompactBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                 role="listitem"
                 tabIndex={0}
                 aria-label={`${approval.entityTitle}, ${approval.priority} priority`}
-                onClick={() => handleClick(approval.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(approval.id); } }}
+                onClick={() => handleClick(approval.id ?? '')}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(approval.id ?? ''); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -168,10 +169,10 @@ export const CompactBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}>
-                    {approval.entityTitle}
+                    {approval.entityTitle ?? ''}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                    {approval.entityType} - {formatDistanceToNow(approval.requestedAt, { addSuffix: true })}
+                    {approval.entityType ?? ''} - {approval.requestedAt ? formatDistanceToNow(approval.requestedAt, { addSuffix: true }) : ''}
                   </Text>
                 </Box>
                 <ChevronRight size={12} color={t.colors.neutral[300]} />

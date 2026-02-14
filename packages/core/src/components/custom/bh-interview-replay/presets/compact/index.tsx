@@ -64,7 +64,7 @@ function EntryRow({ entry, speakerColors, tokens, onEntrySelect, primitives, ind
   const { Box, Text } = primitives;
   const [hovered, setHovered] = useState(false);
   const sc = speakerColors[entry.speaker];
-  const initial = entry.speakerName.charAt(0).toUpperCase();
+  const initial = (entry.speakerName || '').charAt(0).toUpperCase();
   const personalityTypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
   const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
   const entryAnim = useMemo(() => createEntranceAnimation(tokens, { index }), [tokens, index]);

@@ -1,19 +1,25 @@
 /**
  * BhWorkflowNotification - Core Interface
  * Notification configuration for workflow triggers for BitHire ATS platform
+ *
+ * DB Reference: DBApprovalRequest from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBApprovalRequest } from '@rottay/recruiter';
 
 export type BhWorkflowNotificationPreset = 'config' | 'compact';
 
+/** Re-export for consumer convenience */
+export type { DBApprovalRequest };
+
 export interface NotificationRule {
-  id: string;
-  event: string;
-  channel: 'email' | 'slack' | 'in-app';
-  recipients: string[];
-  enabled: boolean;
+  id?: string;
+  event?: string;
+  channel?: 'email' | 'slack' | 'in-app';
+  recipients?: string[];
+  enabled?: boolean;
   template?: string;
 }
 
@@ -21,7 +27,7 @@ export interface BhWorkflowNotificationProps extends EngineAwareProps {
   preset?: BhWorkflowNotificationPreset;
 
   /** Notification rules */
-  rules: NotificationRule[];
+  rules?: NotificationRule[];
 
   /** Callback to toggle a rule on/off */
   onRuleToggle?: (ruleId: string) => void;

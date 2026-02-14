@@ -24,7 +24,7 @@ import type {
   ScatterPoint,
   CalibrationStats,
 } from '../../core';
-import { BH_CALIBRATION_SCATTER_DEFAULTS } from '../../core';
+import { BH_CALIBRATION_SCATTER_DEFAULTS, n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -71,8 +71,8 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      points = MOCK_POINTS,
-      stats = MOCK_STATS,
+      points = [],
+      stats = { correlation: 0, meanDeviation: 0, sampleCount: 0, agreementRate: 0 },
       onPointClick,
       selectedPointId,
       showDiagonal = BH_CALIBRATION_SCATTER_DEFAULTS.showDiagonal,
@@ -104,8 +104,8 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
     const toY = (v: number) => cPad + pH - (v / maxVal) * pH;
 
     const correlationColor = useMemo(() => {
-      if (stats.correlation >= 0.8) return t.colors.successScale;
-      if (stats.correlation >= 0.6) return t.colors.warningScale;
+      if (n(stats.correlation) >= 0.8) return t.colors.successScale;
+      if (n(stats.correlation) >= 0.6) return t.colors.warningScale;
       return t.colors.errorScale;
     }, [stats.correlation, t]);
 
@@ -141,12 +141,12 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
             </Text>
           </Box>
           <Box style={{
-            ...createBadgeStyle(t, stats.agreementRate >= 0.7 ? 'success' : 'warning'),
+            ...createBadgeStyle(t, n(stats.agreementRate) >= 0.7 ? 'success' : 'warning'),
             borderRadius: badgeRadius,
             padding: `1px ${t.spacing[2]}px`,
           }}>
             <Text style={{ fontSize: t.typography.fontSize.xs }}>
-              {(stats.agreementRate * 100).toFixed(0)}%
+              {(n(stats.agreementRate) * 100).toFixed(0)}%
             </Text>
           </Box>
         </Box>
@@ -190,17 +190,17 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
               return (
                 <circle
                   key={p.id}
-                  cx={toX(p.humanScore)}
-                  cy={toY(p.aiScore)}
+                  cx={toX(n(p.humanScore))}
+                  cy={toY(n(p.aiScore))}
                   r={isSelected ? 4.5 : 3}
-                  fill={getDeviationColor(p.deviation, t)}
+                  fill={getDeviationColor(n(p.deviation), t)}
                   stroke={isSelected ? t.colors.neutral[900] : t.colors.common.white}
                   strokeWidth={isSelected ? 1.5 : 1}
                   style={{ cursor: 'pointer' }}
                   onClick={() => handleClick(p.id)}
                   role="button"
                   tabIndex={0}
-                  aria-label={`${p.candidateName}: Human ${p.humanScore}, AI ${p.aiScore}`}
+                  aria-label={`${p.candidateName}: Human ${n(p.humanScore)}, AI ${n(p.aiScore)}`}
                 />
               );
             })}
@@ -215,10 +215,10 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
         }}>
           {[
-            { label: 'Correlation', value: stats.correlation.toFixed(2), color: correlationColor },
-            { label: 'Mean Dev', value: stats.meanDeviation.toFixed(2), color: stats.meanDeviation <= 0.5 ? t.colors.successScale : t.colors.warningScale },
-            { label: 'Samples', value: String(stats.sampleCount), color: t.colors.infoScale },
-            { label: 'Agreement', value: `${(stats.agreementRate * 100).toFixed(0)}%`, color: stats.agreementRate >= 0.7 ? t.colors.successScale : t.colors.warningScale },
+            { label: 'Correlation', value: n(stats.correlation).toFixed(2), color: correlationColor },
+            { label: 'Mean Dev', value: n(stats.meanDeviation).toFixed(2), color: n(stats.meanDeviation) <= 0.5 ? t.colors.successScale : t.colors.warningScale },
+            { label: 'Samples', value: String(n(stats.sampleCount)), color: t.colors.infoScale },
+            { label: 'Agreement', value: `${(n(stats.agreementRate) * 100).toFixed(0)}%`, color: n(stats.agreementRate) >= 0.7 ? t.colors.successScale : t.colors.warningScale },
           ].map((s) => (
             <Box key={s.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center', padding: `${t.spacing[1]}px 0` }} role="status" aria-label={`${s.label}: ${s.value}`}>
               <Text style={{

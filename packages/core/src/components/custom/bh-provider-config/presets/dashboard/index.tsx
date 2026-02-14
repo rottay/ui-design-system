@@ -922,7 +922,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                           color: tokens.colors.neutral[700],
                         }}
                       >
-                        ${model.costPer1kTokens.toFixed(4)}
+                        ${(model.costPer1kTokens ?? 0).toFixed(4)}
                       </Text>
                       <Text
                         style={{
@@ -1091,7 +1091,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                                 color: tokens.colors.neutral[700],
                               }}
                             >
-                              ${model.costPer1kTokens.toFixed(4)}
+                              ${(model.costPer1kTokens ?? 0).toFixed(4)}
                             </Text>
                           </Box>
                         );
@@ -1133,7 +1133,7 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
                             {model.name}
                           </Text>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
-                            ${model.costPer1kTokens.toFixed(4)}
+                            ${(model.costPer1kTokens ?? 0).toFixed(4)}
                           </Text>
                           <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
                             {model.contextWindow >= 1000 ? `${(model.contextWindow / 1000).toFixed(0)}K` : model.contextWindow}

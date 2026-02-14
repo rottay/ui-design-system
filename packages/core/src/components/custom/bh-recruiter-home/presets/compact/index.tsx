@@ -112,7 +112,8 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     }, [t]);
 
     const {
-      recruiterName = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
+      recruiter,
+      recruiterName: recruiterNameProp = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
       kpiStats = DEFAULT_KPI,
       pipelineJobs = DEFAULT_PIPELINE,
       upcomingInterviews = DEFAULT_INTERVIEWS,
@@ -123,6 +124,10 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
       onNotificationDismiss,
       className, style,
     } = props;
+
+    const recruiterName = recruiter
+      ? `${recruiter.firstName ?? ''} ${recruiter.lastName ?? ''}`.trim() || recruiterNameProp
+      : recruiterNameProp;
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm' }), [t]);
 
@@ -151,8 +156,8 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
 
         {/* KPI row */}
         <Box role="list" aria-label="Key metrics" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[2] }}>
-          {kpiStats.map((kpi, idx) => (
-            <Box key={kpi.label} role="listitem" style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
+          {(kpiStats ?? []).map((kpi, idx) => (
+            <Box key={kpi.label ?? idx} role="listitem" style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
               ...cardBase, ...glassCardBg,
               padding: `${t.spacing[3]}px`, textAlign: 'center',
               ...entrance.animate,
@@ -163,15 +168,15 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: 1 }}>{kpi.value}</Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{kpi.label}</Text>
               <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1], marginTop: t.spacing[1] }}>
-                <Box style={{ color: getTrendColor(kpi.trend, t) }}>{getTrendIcon(kpi.trend)}</Box>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: getTrendColor(kpi.trend, t), fontWeight: t.typography.fontWeight.medium }}>{kpi.trendValue}%</Text>
+                <Box style={{ color: getTrendColor((kpi.trend ?? ''), t) }}>{getTrendIcon((kpi.trend ?? ''))}</Box>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: getTrendColor((kpi.trend ?? ''), t), fontWeight: t.typography.fontWeight.medium }}>{kpi.trendValue}%</Text>
               </Box>
             </Box>
           ))}
         </Box>
 
         {/* Notifications */}
-        {notifications.length > 0 && (
+        {(notifications ?? []).length > 0 && (
           <Box role="alert" style={{
             ...cardBase, ...glassCardBg,
             padding: `${t.spacing[3]}px`,
@@ -180,8 +185,8 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
               <Bell size={12} style={{ color: t.colors.warningScale[600] }} />
               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Alerts</Text>
             </Box>
-            {notifications.map(n => {
-              const ns = getNotifStyle(n.type, t);
+            {(notifications ?? []).map(n => {
+              const ns = getNotifStyle(n.type ?? 'candidate', t);
               return (
                 <Box key={n.id} style={{
                   display: 'flex', alignItems: 'center', gap: t.spacing[2],
@@ -195,8 +200,8 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       role="button"
                       tabIndex={0}
                       aria-label="Dismiss"
-                      onClick={() => handleNotifDismiss(n.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss(n.id); } }}
+                      onClick={() => handleNotifDismiss((n.id ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss((n.id ?? '')); } }}
                       style={{ color: t.colors.neutral[400], cursor: 'pointer', flexShrink: 0 }}
                     ><X size={10} /></Box>
                   )}
@@ -208,7 +213,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
 
         {/* Quick actions row */}
         <Box role="list" aria-label="Quick actions" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[2] }}>
-          {quickActions.map((qa, idx) => (
+          {(quickActions ?? []).map((qa, idx) => (
             <Box
               key={qa.key}
               role="listitem"
@@ -235,16 +240,16 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
         <Box>
           <Text style={{ ...sectionHeaderStyle }}>Pipeline</Text>
           <Box role="list" aria-label="Pipeline jobs" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-            {pipelineJobs.map((job, idx) => {
-              const total = job.stages.reduce((a, s) => a + s.count, 0);
+            {(pipelineJobs ?? []).map((job, idx) => {
+              const total = (job.stages ?? []).reduce((a, s) => a + (s.count ?? 0), 0);
               return (
                 <Box
                   key={job.id}
                   role="listitem"
                   tabIndex={0}
                   aria-label={job.title}
-                  onClick={() => handlePipelineClick(job.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePipelineClick(job.id); } }}
+                  onClick={() => handlePipelineClick((job.id ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePipelineClick((job.id ?? '')); } }}
                   style={{
                     ...cardBase, ...glassCardBg, ...hoverStyles.base,
                     padding: `${t.spacing[3]}px`, cursor: 'pointer',
@@ -261,8 +266,8 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                     </Box>
                   </Box>
                   <Box style={{ display: 'flex', gap: t.spacing[1], height: 4, borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
-                    {job.stages.map((stage, si) => {
-                      const pct = total > 0 ? (stage.count / total) * 100 : 0;
+                    {(job.stages ?? []).map((stage, si) => {
+                      const pct = total > 0 ? ((stage.count ?? 0) / total) * 100 : 0;
                       const colors = [t.colors.primaryScale[400], t.colors.infoScale[400], t.colors.warningScale[400], t.colors.successScale[400]];
                       return (
                         <Box key={stage.name} style={{
@@ -282,14 +287,14 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
         <Box>
           <Text style={{ ...sectionHeaderStyle }}>Next Interviews</Text>
           <Box role="list" aria-label="Upcoming interviews" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
-            {upcomingInterviews.map((iv, idx) => (
+            {(upcomingInterviews ?? []).map((iv, idx) => (
               <Box
                 key={iv.id}
                 role="listitem"
                 tabIndex={0}
                 aria-label={`Interview with ${iv.candidateName}`}
-                onClick={() => handleInterviewClick(iv.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInterviewClick(iv.id); } }}
+                onClick={() => handleInterviewClick((iv.id ?? ''))}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInterviewClick((iv.id ?? '')); } }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: t.spacing[2],
                   padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
@@ -305,7 +310,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                   backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700],
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, flexShrink: 0,
-                }}>{iv.candidateName.split(' ').map(p => p[0]).join('').slice(0, 2)}</Box>
+                }}>{(iv.candidateName ?? '').split(' ').map(p => p[0]).join('').slice(0, 2)}</Box>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{iv.candidateName}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{iv.stageName}</Text>
@@ -320,7 +325,7 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                     }}><Sparkles size={7} /> AI</Box>
                   )}
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontWeight: t.typography.fontWeight.medium }}>
-                    {formatDistanceToNow(iv.time, { addSuffix: false })}
+                    {formatDistanceToNow((iv.time ?? new Date()), { addSuffix: false })}
                   </Text>
                 </Box>
               </Box>

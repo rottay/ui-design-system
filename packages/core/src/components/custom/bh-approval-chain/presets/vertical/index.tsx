@@ -52,6 +52,7 @@ function getStepConfig(status: ApprovalChainStep['status'], t: DesignTokens) {
     case 'pending':
       return { label: 'Pending', color: t.colors.warningScale[600], bg: t.colors.warningScale[50], border: t.colors.warningScale[200], icon: Clock };
     case 'skipped':
+    default:
       return { label: 'Skipped', color: t.colors.neutral[400], bg: t.colors.neutral[100], border: t.colors.neutral[200], icon: SkipForward };
   }
 }
@@ -92,7 +93,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     }), [entrance, t]);
 
-    const sorted = useMemo(() => [...steps].sort((a, b) => a.order - b.order), [steps]);
+    const sorted = useMemo(() => [...(steps ?? [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)), [steps]);
 
     const completedCount = useMemo(
       () => steps.filter(s => s.status === 'approved').length,
@@ -141,7 +142,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
             marginTop: t.spacing[3],
           }}>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-              {completedCount} of {steps.length} steps completed
+              {completedCount} of {(steps ?? []).length} steps completed
             </Text>
             <Box style={{
               flex: 1, height: 4, borderRadius: t.borderRadius.full,
@@ -149,7 +150,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
             }}>
               <Box style={{
                 height: '100%',
-                width: `${(completedCount / steps.length) * 100}%`,
+                width: `${(steps ?? []).length > 0 ? (completedCount / (steps ?? []).length) * 100 : 0}%`,
                 backgroundColor: t.colors.successScale[500],
                 borderRadius: t.borderRadius.full,
                 transition: `width ${t.motion.hover}`,
@@ -170,7 +171,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
           )}
 
           {sorted.map((step, idx) => {
-            const cfg = getStepConfig(step.status, t);
+            const cfg = getStepConfig(step.status ?? 'pending', t);
             const StepIcon = cfg.icon;
             const isCurrent = step.id === currentStepId || (step.status === 'pending' && idx === sorted.findIndex(s => s.status === 'pending'));
             const isLast = idx === sorted.length - 1;
@@ -223,8 +224,8 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
                   tabIndex={0}
                   role="button"
                   aria-label={`${step.approverName}, ${step.approverRole}, ${cfg.label}`}
-                  onClick={() => handleClick(step.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(step.id); } }}
+                  onClick={() => handleClick((step.id ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((step.id ?? '')); } }}
                   style={{
                     flex: 1,
                     padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
@@ -244,7 +245,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
                         fontWeight: t.typography.fontWeight.semibold,
                         color: t.colors.neutral[900],
                       }}>
-                        {step.approverName}
+                        {step.approverName ?? ''}
                       </Text>
                     </Box>
                     <Text style={{
@@ -255,13 +256,13 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
                       borderRadius: badgeRadius,
                       backgroundColor: cfg.bg,
                     }}>
-                      {cfg.label}
+                      {cfg.label ?? ''}
                     </Text>
                   </Box>
 
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: step.comment ? t.spacing[2] : 0 }}>
-                    {step.approverRole}
-                    {step.decidedAt && ` - ${formatDistanceToNow(step.decidedAt, { addSuffix: true })}`}
+                    {step.approverRole ?? ''}
+                    {step.decidedAt ? ` - ${formatDistanceToNow(step.decidedAt, { addSuffix: true })}` : ''}
                   </Text>
 
                   {step.comment && (

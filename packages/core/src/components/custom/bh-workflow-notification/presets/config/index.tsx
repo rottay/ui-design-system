@@ -38,6 +38,7 @@ function getChannelIcon(channel: NotificationRule['channel']) {
     case 'email': return Mail;
     case 'slack': return MessageSquare;
     case 'in-app': return Inbox;
+    default: return Mail;
   }
 }
 
@@ -46,6 +47,7 @@ function getChannelLabel(channel: NotificationRule['channel']): string {
     case 'email': return 'Email';
     case 'slack': return 'Slack';
     case 'in-app': return 'In-App';
+    default: return String(channel ?? '');
   }
 }
 
@@ -54,6 +56,7 @@ function getChannelColor(channel: NotificationRule['channel'], t: DesignTokens) 
     case 'email': return { fg: t.colors.primaryScale[600], bg: t.colors.primaryScale[50] };
     case 'slack': return { fg: t.colors.warningScale[600], bg: t.colors.warningScale[50] };
     case 'in-app': return { fg: t.colors.infoScale[600], bg: t.colors.infoScale[50] };
+    default: return { fg: t.colors.neutral[600], bg: t.colors.neutral[50] };
   }
 }
 
@@ -209,7 +212,7 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
                     key={rule.id}
                     role="listitem"
                     aria-label={`${rule.event} via ${getChannelLabel(rule.channel)}, ${rule.enabled ? 'enabled' : 'disabled'}`}
-                    onMouseEnter={() => setHoveredRule(rule.id)}
+                    onMouseEnter={() => setHoveredRule((rule.id ?? null))}
                     onMouseLeave={() => setHoveredRule(null)}
                     style={{
                       display: 'flex',
@@ -246,7 +249,7 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Users size={10} color={t.colors.neutral[400]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                            {rule.recipients.length} recipient{rule.recipients.length !== 1 ? 's' : ''}
+                            {(rule.recipients ?? []).length} recipient{(rule.recipients ?? []).length !== 1 ? 's' : ''}
                           </Text>
                         </Box>
                       </Box>
@@ -259,8 +262,8 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
                         tabIndex={0}
                         aria-checked={rule.enabled}
                         aria-label={`Toggle ${rule.event}`}
-                        onClick={() => handleToggle(rule.id)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle(rule.id); } }}
+                        onClick={() => handleToggle((rule.id ?? ''))}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle((rule.id ?? '')); } }}
                         style={{
                           cursor: 'pointer',
                           display: 'flex',
@@ -276,8 +279,8 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
                         role="button"
                         tabIndex={0}
                         aria-label={`Edit ${rule.event} rule`}
-                        onClick={() => handleEdit(rule.id)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEdit(rule.id); } }}
+                        onClick={() => handleEdit((rule.id ?? ''))}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEdit((rule.id ?? '')); } }}
                         style={{
                           width: 28,
                           height: 28,

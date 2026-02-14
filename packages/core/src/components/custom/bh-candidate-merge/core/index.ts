@@ -1,21 +1,18 @@
 /**
  * BhCandidateMerge - Core Interface
  * Duplicate detection with field-level merge UI
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBCandidate[] for the records to merge.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 export type BhCandidateMergePreset = 'merge' | 'compact';
 
-export interface MergeCandidate {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  source: string;
-  appliedAt: string;
-}
+export type RecruiterCandidate = DBCandidate;
 
 export interface MergeField {
   field: string;
@@ -26,11 +23,11 @@ export interface MergeField {
 export interface BhCandidateMergeProps extends EngineAwareProps {
   preset?: BhCandidateMergePreset;
 
-  /** Candidate records to merge */
-  candidates: MergeCandidate[];
+  /** Candidate records to merge - accepts DBCandidate[] from @rottay/recruiter */
+  candidates?: DBCandidate[];
 
   /** Fields to merge with values from each candidate */
-  mergeFields: MergeField[];
+  mergeFields?: MergeField[];
 
   /** Title */
   title?: string;
@@ -60,3 +57,14 @@ export interface BhCandidateMergeProps extends EngineAwareProps {
 export const BH_CANDIDATE_MERGE_DEFAULTS: Partial<BhCandidateMergeProps> = {
   preset: 'merge',
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use RecruiterCandidate (DBCandidate) instead */
+export type MergeCandidate = RecruiterCandidate;
+
+/**
+ * Get the candidate's full name from DB fields.
+ */
+export function getCandidateFullName(candidate: DBCandidate): string {
+  return `${candidate.firstName ?? ''} ${candidate.lastName ?? ''}`.trim();
+}

@@ -557,7 +557,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                                 <Star size={14} strokeWidth={2} style={{ color: tokens.colors.warningScale[500], fill: tokens.colors.warningScale[500] }} />
                                 <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>
-                                  {agent.rating.toFixed(1)}
+                                  {(agent.rating ?? 0).toFixed(1)}
                                 </Text>
                               </Box>
                             )}
@@ -565,7 +565,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                               <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                                 <Download size={14} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
                                 <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>
-                                  {agent.downloads.toLocaleString()}
+                                  {(agent.downloads ?? 0).toLocaleString()}
                                 </Text>
                               </Box>
                             )}
@@ -678,13 +678,13 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1], marginLeft: 'auto' }}>
                               <Star size={12} strokeWidth={2} style={{ color: tokens.colors.warningScale[500], fill: tokens.colors.warningScale[500] }} />
                               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
-                                {agent.rating.toFixed(1)}
+                                {(agent.rating ?? 0).toFixed(1)}
                               </Text>
                               {agent.downloads !== undefined && (
                                 <>
                                   <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400], margin: `0 ${tokens.spacing[1]}px` }}>|</Text>
                                   <Download size={12} strokeWidth={1.5} style={{ color: tokens.colors.neutral[400] }} />
-                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{agent.downloads.toLocaleString()}</Text>
+                                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{(agent.downloads ?? 0).toLocaleString()}</Text>
                                 </>
                               )}
                             </Box>
@@ -998,7 +998,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
                         Estimated Cost per Conversation
                       </Text>
                       <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.infoScale[800] }}>
-                        ${previewData.estimatedCost.toFixed(2)}
+                        ${(previewData.estimatedCost ?? 0).toFixed(2)}
                       </Text>
                     </Box>
                   </>

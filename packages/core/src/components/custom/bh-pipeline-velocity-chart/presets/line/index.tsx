@@ -148,12 +148,12 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
     /* Chart metrics */
     const chartMetrics = useMemo(() => {
       if (data.length === 0) return null;
-      const counts = data.map(d => d.count);
-      const targets = data.filter(d => d.target != null).map(d => d.target!);
+      const counts = data.map(d => d.count ?? 0);
+      const targets = data.filter(d => d.target != null).map(d => d.target ?? 0);
       const allValues = [...counts, ...(showTarget ? targets : [])];
       const maxVal = Math.max(...allValues, 1);
       const minVal = Math.min(...allValues, 0);
-      const avg = counts.reduce((s, c) => s + c, 0) / counts.length;
+      const avg = counts.length > 0 ? counts.reduce((s, c) => s + c, 0) / counts.length : 0;
       const totalProcessed = counts.reduce((s, c) => s + c, 0);
       return { maxVal, minVal, avg, totalProcessed };
     }, [data, showTarget]);
@@ -174,7 +174,7 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
       const { maxVal } = chartMetrics;
       return data.map((d, i) => ({
         x: padLeft + (i / Math.max(data.length - 1, 1)) * chartW,
-        y: padTop + chartH - (d.count / (maxVal * 1.1)) * chartH,
+        y: padTop + chartH - ((d.count ?? 0) / (maxVal * 1.1)) * chartH,
       }));
     }, [data, chartMetrics, chartW, chartH]);
 
@@ -226,7 +226,7 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
       for (let i = 0; i < data.length; i += step) {
         labels.push({
           x: padLeft + (i / Math.max(data.length - 1, 1)) * chartW,
-          label: formatDateLabel(data[i].date),
+          label: formatDateLabel((data[i].date ?? '')),
         });
       }
       return labels;
@@ -524,7 +524,7 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
                   ...(isGlass && t.glass ? { backdropFilter: t.glass.blur, backgroundColor: 'rgba(0,0,0,0.8)' } : {}),
                 }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, display: 'block', color: t.colors.common.white }}>
-                    {tooltipData.count} candidates
+                    {tooltipData.count ?? 0} candidates
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300], display: 'block' }}>
                     {tooltipData.date}

@@ -1,13 +1,18 @@
 /**
  * BhProcessDesigner - Core Interface
  * Visual workflow builder for hiring process templates.
- * Tables: recruiting_hiring_process_templates
+ *
+ * DB Reference: DBHiringProcessTemplate from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBHiringProcessTemplate } from '@rottay/recruiter';
 
 export type BhProcessDesignerPreset = 'visual' | 'compact';
+
+/** Re-export for consumer convenience */
+export type { DBHiringProcessTemplate };
 
 export type StageType = 'application_review' | 'phone_screen' | 'technical_interview' | 'onsite_interview' | 'panel_review' | 'reference_check' | 'offer' | 'custom';
 

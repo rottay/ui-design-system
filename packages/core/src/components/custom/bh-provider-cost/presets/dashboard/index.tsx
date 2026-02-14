@@ -357,7 +357,7 @@ export const DashboardBhProviderCost = createPreset<BhProviderCostProps>({
                           borderRadius: badgeRadius,
                         }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                            {alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
+                            {(alert.severity || '').charAt(0).toUpperCase() + (alert.severity || '').slice(1)}
                           </Text>
                         </Box>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>

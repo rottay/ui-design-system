@@ -190,7 +190,7 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                     padding: 0,
                     overflow: 'hidden',
                   }}
-                  onMouseEnter={() => setHoveredRule(rule.id)}
+                  onMouseEnter={() => setHoveredRule((rule.id ?? null))}
                   onMouseLeave={() => setHoveredRule(null)}
                 >
                   {/* Rule header */}
@@ -231,8 +231,8 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                         tabIndex={0}
                         aria-checked={rule.enabled}
                         aria-label={`Toggle rule: ${rule.name}`}
-                        onClick={() => handleToggle(rule.id)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle(rule.id); } }}
+                        onClick={() => handleToggle((rule.id ?? ''))}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle((rule.id ?? '')); } }}
                         style={{
                           width: 36, height: 20, borderRadius: t.borderRadius.full,
                           backgroundColor: rule.enabled ? t.colors.successScale[500] : t.colors.neutral[300],
@@ -256,8 +256,8 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                             role="button"
                             tabIndex={0}
                             aria-label={`Edit rule: ${rule.name}`}
-                            onClick={() => handleEdit(rule.id)}
-                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEdit(rule.id); } }}
+                            onClick={() => handleEdit((rule.id ?? ''))}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEdit((rule.id ?? '')); } }}
                             style={{
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
                               width: 28, height: 28, borderRadius: t.borderRadius.md,
@@ -273,8 +273,8 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                             role="button"
                             tabIndex={0}
                             aria-label={`Delete rule: ${rule.name}`}
-                            onClick={() => handleDelete(rule.id)}
-                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDelete(rule.id); } }}
+                            onClick={() => handleDelete((rule.id ?? ''))}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDelete((rule.id ?? '')); } }}
                             style={{
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
                               width: 28, height: 28, borderRadius: t.borderRadius.md,
@@ -313,14 +313,14 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                             <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>WHEN</Text>
                           </Box>
                           <Text style={{ fontSize: t.typography.fontSize.sm, color: colors.text }}>
-                            {rule.trigger.replace(/^WHEN\s*/i, '')}
+                            {(rule.trigger ?? '').replace(/^WHEN\s*/i, '')}
                           </Text>
                         </Box>
                       );
                     })()}
 
                     {/* IF blocks */}
-                    {rule.conditions.map((cond, ci) => {
+                    {(rule.conditions ?? []).map((cond, ci) => {
                       const colors = getBlockColor('IF', t);
                       return (
                         <Box key={ci} style={{
@@ -345,7 +345,7 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                     })}
 
                     {/* THEN blocks */}
-                    {rule.actions.map((action, ai) => {
+                    {(rule.actions ?? []).map((action, ai) => {
                       const colors = getBlockColor('THEN', t);
                       return (
                         <Box key={ai} style={{

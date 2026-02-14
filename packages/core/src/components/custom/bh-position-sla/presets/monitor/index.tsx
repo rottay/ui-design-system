@@ -26,14 +26,14 @@ import {
   createCardHoverStyles,
   getAccentAwareLayout,
 } from '../../../helpers';
-import type { BhPositionSlaProps, PositionSla } from '../../core';
+import type { BhPositionSlaProps, PositionSlaData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_POSITIONS: PositionSla[] = [
+const MOCK_POSITIONS: PositionSlaData[] = [
   { id: 'ps-1', positionTitle: 'Senior Backend Engineer', clientName: 'Acme Corp', slaDeadline: new Date('2026-02-20'), daysRemaining: 8, status: 'on-track', currentStage: 'Technical Interview', candidateCount: 12 },
   { id: 'ps-2', positionTitle: 'Product Manager', clientName: 'Horizon Labs', slaDeadline: new Date('2026-02-15'), daysRemaining: 3, status: 'at-risk', currentStage: 'Final Round', candidateCount: 4 },
   { id: 'ps-3', positionTitle: 'UX Designer', clientName: 'Nova Ventures', slaDeadline: new Date('2026-02-10'), daysRemaining: -2, status: 'breached', currentStage: 'Sourcing', candidateCount: 2 },
@@ -45,7 +45,7 @@ const MOCK_POSITIONS: PositionSla[] = [
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getStatusConfig(status: PositionSla['status'], t: DesignTokens) {
+function getStatusConfig(status: PositionSlaData['status'], t: DesignTokens) {
   switch (status) {
     case 'on-track':
       return { label: 'On Track', color: t.colors.successScale[600], bg: t.colors.successScale[50], badge: 'success' as const, icon: CheckCircle };

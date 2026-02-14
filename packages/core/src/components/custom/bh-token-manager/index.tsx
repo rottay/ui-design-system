@@ -11,11 +11,11 @@ import { BH_TOKEN_MANAGER_PRESETS } from './presets';
 export {
   type BhTokenManagerProps,
   type BhTokenManagerPreset,
-  type TokenBalance,
+  type TokenBalanceSummary,
   type ConsumptionDataPoint,
   type CostBreakdownItem,
   type TeamQuota,
-  type TokenTransaction,
+  type TokenTransactionDisplay,
   type AlertConfig,
   type ForecastPoint,
   BH_TOKEN_MANAGER_DEFAULTS,

@@ -1,30 +1,27 @@
 /**
  * BhPositionList - Core Interface
  * Position DataTable with filters for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBPosition[] directly - no mapping needed.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBPosition } from '@rottay/recruiter';
 
 export type BhPositionListPreset = 'table' | 'cards';
 
-export interface PositionListItem {
-  id: string;
-  title: string;
-  clientName: string;
-  department: string;
-  status: 'open' | 'filled' | 'closed' | 'on-hold';
-  priority: 'high' | 'medium' | 'low';
-  candidates: number;
-  daysOpen: number;
-  assignee: string;
-}
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterPosition = DBPosition;
 
 export interface BhPositionListProps extends EngineAwareProps {
   preset?: BhPositionListPreset;
 
-  /** Array of positions to display */
-  positions: PositionListItem[];
+  /** Array of positions to display - accepts DBPosition[] directly from @rottay/recruiter */
+  positions?: DBPosition[];
 
   /** Callback when a position is clicked */
   onPositionClick?: (positionId: string) => void;
@@ -52,3 +49,7 @@ export const BH_POSITION_LIST_DEFAULTS: Partial<BhPositionListProps> = {
   preset: 'table',
   loading: false,
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use RecruiterPosition (DBPosition) instead */
+export type PositionListItem = RecruiterPosition;

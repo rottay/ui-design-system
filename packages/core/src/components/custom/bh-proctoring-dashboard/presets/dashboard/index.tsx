@@ -44,55 +44,60 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: ProctoringEventSeverity | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
-function getSeverityBg(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityBg(severity: ProctoringEventSeverity | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[50];
     case 'high': return t.colors.errorScale[50];
     case 'medium': return t.colors.warningScale[50];
     case 'low': return t.colors.infoScale[50];
+    default: return t.colors.neutral[50];
   }
 }
 
-function getSeverityBadgeKey(severity: ProctoringEventSeverity): 'error' | 'warning' | 'info' {
+function getSeverityBadgeKey(severity: ProctoringEventSeverity | undefined): 'error' | 'warning' | 'info' {
   switch (severity) {
     case 'critical':
     case 'high': return 'error';
     case 'medium': return 'warning';
     case 'low': return 'info';
+    default: return 'info';
   }
 }
 
-function getEventTypeIcon(type: ProctoringEventType) {
+function getEventTypeIcon(type: ProctoringEventType | undefined) {
   switch (type) {
     case 'tab_switch': return MonitorOff;
     case 'copy_paste': return Clipboard;
     case 'screen_share': return ScreenShare;
     case 'unusual_typing': return Keyboard;
     case 'browser_focus_lost': return Globe;
+    default: return Activity;
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType): string {
+function getEventTypeLabel(type: ProctoringEventType | undefined): string {
   switch (type) {
     case 'tab_switch': return 'Tab Switch';
     case 'copy_paste': return 'Copy/Paste';
     case 'screen_share': return 'Screen Share';
     case 'unusual_typing': return 'Unusual Typing';
     case 'browser_focus_lost': return 'Focus Lost';
+    default: return 'Unknown';
   }
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -220,10 +225,10 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
     const chartCfg = getChartConfig(t);
 
     const {
-      stats = MOCK_STATS,
-      severityCounts = MOCK_SEVERITY,
-      eventTypeCounts = MOCK_EVENT_TYPES,
-      recentEvents = MOCK_EVENTS,
+      stats = { totalEvents: 0, unreviewedCount: 0, suspiciousCandidates: 0, averageRiskScore: 0 },
+      severityCounts = [],
+      eventTypeCounts = [],
+      recentEvents = [],
       onEventClick,
       onReviewEvent,
       onDismissEvent,
@@ -269,7 +274,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
 
     /* Risk score color */
     const riskColor = useMemo(() => {
-      const r = stats.averageRiskScore;
+      const r = stats.averageRiskScore ?? 0;
       if (r >= 0.75) return t.colors.errorScale[600];
       if (r >= 0.5) return t.colors.warningScale[600];
       if (r >= 0.25) return t.colors.warningScale[400];
@@ -281,7 +286,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
       { label: 'Total Events', value: stats.totalEvents, icon: Activity, color: t.colors.primaryScale },
       { label: 'Unreviewed', value: stats.unreviewedCount, icon: Eye, color: t.colors.warningScale },
       { label: 'Suspicious Candidates', value: stats.suspiciousCandidates, icon: AlertTriangle, color: t.colors.errorScale },
-      { label: 'Avg Risk Score', value: `${(stats.averageRiskScore * 100).toFixed(0)}%`, icon: Shield, color: stats.averageRiskScore >= 0.5 ? t.colors.errorScale : t.colors.successScale },
+      { label: 'Avg Risk Score', value: `${((stats.averageRiskScore ?? 0) * 100).toFixed(0)}%`, icon: Shield, color: (stats.averageRiskScore ?? 0) >= 0.5 ? t.colors.errorScale : t.colors.successScale },
     ], [stats, t, riskColor]);
 
     const animStyle = (index: number) => ({
@@ -329,7 +334,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
                 </Text>
               </Box>
             </Box>
-            {stats.unreviewedCount > 0 && (
+            {(stats.unreviewedCount ?? 0) > 0 && (
               <Box style={{
                 ...createBadgeStyle(t, 'warning'),
                 borderRadius: badgeRadius,
@@ -516,7 +521,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
                     key={event.id}
                     role="listitem"
                     tabIndex={0}
-                    aria-label={`${event.candidateName ?? 'Unknown'}: ${getEventTypeLabel(event.eventType)}, ${getSeverityLabel(event.severity)} severity`}
+                    aria-label={`${event.candidateName ?? 'Unknown'}: ${getEventTypeLabel(event.eventType)}, ${getSeverityLabel(event.severity ?? 'low')} severity`}
                     onClick={() => handleEventClick(event.id)}
                     onMouseEnter={() => setHoveredEvent(event.id)}
                     onMouseLeave={() => setHoveredEvent(null)}
@@ -559,11 +564,11 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
                           {event.candidateName ?? 'Unknown Candidate'}
                         </Text>
                         <Box style={{
-                          ...createBadgeStyle(t, getSeverityBadgeKey(event.severity)),
+                          ...createBadgeStyle(t, getSeverityBadgeKey(event.severity ?? 'low')),
                           borderRadius: badgeRadius,
                         }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                            {getSeverityLabel(event.severity)}
+                            {getSeverityLabel(event.severity ?? 'low')}
                           </Text>
                         </Box>
                       </Box>
@@ -572,7 +577,7 @@ export const DashboardBhProctoringDashboard = createPreset<BhProctoringDashboard
                           {getEventTypeLabel(event.eventType)}
                         </Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                          {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                          {event.timestamp ? formatDistanceToNow(event.timestamp, { addSuffix: true }) : ''}
                         </Text>
                       </Box>
                     </Box>

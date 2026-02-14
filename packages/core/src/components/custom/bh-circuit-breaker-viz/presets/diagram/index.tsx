@@ -273,7 +273,7 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
                   Successes
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                  {selectedNode.successCount.toLocaleString()}
+                  {(selectedNode.successCount ?? 0).toLocaleString()}
                 </Text>
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -281,7 +281,7 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
                   Failures
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                  {selectedNode.failureCount.toLocaleString()}
+                  {(selectedNode.failureCount ?? 0).toLocaleString()}
                 </Text>
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>

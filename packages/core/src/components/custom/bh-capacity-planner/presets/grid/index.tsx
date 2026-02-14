@@ -189,15 +189,15 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
             {recruiters.map(rec => {
               const isSelected = selected === rec.id;
-              const sc = getStatusConfig(rec.status, t);
+              const sc = getStatusConfig((rec.status ?? ''), t);
               return (
                 <Box key={rec.id}
                   role="button"
                   tabIndex={0}
                   aria-label={`${rec.name}, ${rec.department}, ${sc.label} at ${rec.utilizationPercent}%`}
                   aria-pressed={isSelected}
-                  onClick={() => handleSelect(isSelected ? null : rec.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleSelect(isSelected ? null : rec.id); }}
+                  onClick={() => handleSelect((isSelected ? null : rec.id ?? null))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleSelect((isSelected ? null : rec.id ?? null)); }}
                   style={{
                   ...createCardStyle(t, { elevation: 'sm' }),
                   ...createEntranceAnimation(t, { index: recruiters.indexOf(rec) }).animate,
@@ -208,7 +208,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                 }}>
                   {/* Avatar + Ring */}
                   <Box style={{ position: 'relative', marginBottom: t.spacing[3] }}>
-                    <UtilizationRing percent={rec.utilizationPercent} status={rec.status} t={t} />
+                    <UtilizationRing percent={rec.utilizationPercent ?? 0} status={rec.status ?? ''} t={t} />
                     <Box style={{
                       position: 'absolute', top: 14, left: 14, width: 48, height: 48,
                       borderRadius: t.borderRadius.full, overflow: 'hidden',
@@ -219,7 +219,7 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                         <img src={rec.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       ) : (
                         <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
-                          {rec.name.split(' ').map(n => n[0]).join('')}
+                          {(rec.name ?? '').split(' ').map(n => n[0]).join('')}
                         </Text>
                       )}
                     </Box>
@@ -318,8 +318,8 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                         role="button"
                         tabIndex={0}
                         aria-label={`Accept suggestion: move ${sug.candidateCount} candidates from ${sug.fromRecruiterName} to ${sug.toRecruiterName}`}
-                        onClick={(e: any) => { e.stopPropagation(); onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') onAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }}
+                        onClick={(e: any) => { e.stopPropagation(); onAcceptSuggestion((sug.fromRecruiterId ?? ''), (sug.toRecruiterId ?? '')); }}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') onAcceptSuggestion((sug.fromRecruiterId ?? ''), (sug.toRecruiterId ?? '')); }}
                         style={{
                         display: 'flex', alignItems: 'center', gap: t.spacing[1],
                         padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,

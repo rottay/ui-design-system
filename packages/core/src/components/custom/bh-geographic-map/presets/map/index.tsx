@@ -89,12 +89,12 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
     }, [onRegionClick]);
 
     const totalCandidates = useMemo(
-      () => regions.reduce((sum, r) => sum + r.candidateCount, 0),
+      () => regions.reduce((sum, r) => sum + (r.candidateCount ?? 0), 0),
       [regions],
     );
 
     const maxCount = useMemo(
-      () => Math.max(...regions.map(r => r.candidateCount), 1),
+      () => Math.max(...regions.map(r => r.candidateCount ?? 0), 1),
       [regions],
     );
 
@@ -184,10 +184,10 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
 
                   {/* Region bubbles */}
                   {regions.map((region) => {
-                    const pos = geoToSvg(region.latitude, region.longitude, svgWidth, svgHeight);
+                    const pos = geoToSvg(region.latitude ?? 0, region.longitude ?? 0, svgWidth, svgHeight);
                     const minR = 6;
                     const maxR = 28;
-                    const r = minR + ((region.candidateCount / maxCount) * (maxR - minR));
+                    const r = minR + (((region.candidateCount ?? 0) / maxCount) * (maxR - minR));
                     const isHovered = hoveredRegion === region.id;
                     const isSelected = selectedRegionId === region.id;
 
@@ -217,8 +217,8 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
                             cursor: 'pointer',
                             transition: `opacity ${t.motion.hover}, r ${t.motion.hover}`,
                           }}
-                          onClick={() => handleClick(region.id)}
-                          onMouseEnter={() => setHoveredRegion(region.id)}
+                          onClick={() => handleClick((region.id ?? ''))}
+                          onMouseEnter={() => setHoveredRegion((region.id ?? null))}
                           onMouseLeave={() => setHoveredRegion(null)}
                         />
                         {/* Label for larger bubbles */}
@@ -233,7 +233,7 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
                             fontWeight={600}
                             style={{ pointerEvents: 'none' }}
                           >
-                            {region.candidateCount}
+                            {region.candidateCount ?? 0}
                           </text>
                         )}
                       </g>
@@ -263,17 +263,17 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
               </Text>
             </Box>
             <Box role="list" aria-label="Candidate regions">
-              {[...regions].sort((a, b) => b.candidateCount - a.candidateCount).map((region) => {
-                const pct = totalCandidates > 0 ? (region.candidateCount / totalCandidates) * 100 : 0;
+              {[...regions].sort((a, b) => (b.candidateCount ?? 0) - (a.candidateCount ?? 0)).map((region) => {
+                const pct = totalCandidates > 0 ? ((region.candidateCount ?? 0) / totalCandidates) * 100 : 0;
                 const isSelected = selectedRegionId === region.id;
                 return (
                   <Box
                     key={region.id}
                     role="listitem"
                     tabIndex={0}
-                    aria-label={`${region.name}: ${region.candidateCount} candidates`}
-                    onClick={() => handleClick(region.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(region.id); } }}
+                    aria-label={`${region.name}: ${region.candidateCount ?? 0} candidates`}
+                    onClick={() => handleClick((region.id ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((region.id ?? '')); } }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -303,7 +303,7 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
                         ...createBadgeStyle(t, 'primary'),
                         borderRadius: badgeRadius,
                       }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{region.candidateCount}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{region.candidateCount ?? 0}</Text>
                       </Box>
                     </Box>
                   </Box>

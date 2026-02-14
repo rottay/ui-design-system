@@ -460,7 +460,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
           <Box style={{ display: 'flex', gap: 0, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, marginLeft: -tokens.spacing[5], marginRight: -tokens.spacing[5], paddingLeft: tokens.spacing[5] }}>
             {(['overview', 'usage', 'invoices'] as const).map((tab) => (
               <Box key={tab} onClick={() => setBillingTab(tab)} style={tabBtn(billingTab === tab)}>
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                {(tab || '').charAt(0).toUpperCase() + (tab || '').slice(1)}
               </Box>
             ))}
           </Box>
@@ -607,7 +607,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {(['breakdown', 'trend', 'forecast'] as const).map((v) => (
                       <Box key={v} onClick={() => setCostView(v)} style={pillBtn(costView === v)}>
-                        {v.charAt(0).toUpperCase() + v.slice(1)}
+                        {(v || '').charAt(0).toUpperCase() + (v || '').slice(1)}
                       </Box>
                     ))}
                   </Box>
@@ -889,7 +889,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       <Text style={{
                         ...createBadgeStyle(tokens, compliance.dataRetention === 'ok' ? 'success' : compliance.dataRetention === 'warning' ? 'warning' : 'error'),
                       }}>
-                        {compliance.dataRetention.toUpperCase()}
+                        {(compliance.dataRetention || '').toUpperCase()}
                       </Text>
                     </Box>
                     {/* GDPR */}

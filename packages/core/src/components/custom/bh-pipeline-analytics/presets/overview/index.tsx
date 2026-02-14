@@ -35,13 +35,15 @@ const MOCK_SUMMARY: PipelineSummary = {
   totalActive: 342, totalHired: 12, avgTimeToHireDays: 26.1, overallConversionRate: 3.5, bottleneckCount: 1,
 };
 
-function formatNumber(value: number): string {
+function formatNumber(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '0';
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
   return value.toLocaleString();
 }
 
-function formatPercent(value: number): string {
+function formatPercent(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '0.0%';
   return `${value.toFixed(1)}%`;
 }
 
@@ -99,12 +101,12 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
     const chartColors = getChartColors(tokens);
 
-    const maxCount = useMemo(() => stages.length > 0 ? Math.max(...stages.map(s => s.count)) : 1, [stages]);
+    const maxCount = useMemo(() => (stages ?? []).length > 0 ? Math.max(...(stages ?? []).map(s => s.count ?? 0)) : 1, [stages]);
 
     const funnelWidth = 500;
     const stageHeight = 40;
     const stageGap = 12;
-    const funnelHeight = stages.length * (stageHeight + stageGap) + 20;
+    const funnelHeight = (stages ?? []).length * (stageHeight + stageGap) + 20;
 
     /* ── Summary stat icons ──────────────────────────── */
     const statIcons: Record<string, React.ReactNode> = {
@@ -124,11 +126,11 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
         {summary && (
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
             {[
-              { label: 'Active Candidates', value: formatNumber(summary.totalActive) },
-              { label: 'Total Hired', value: formatNumber(summary.totalHired) },
-              { label: 'Avg Time to Hire', value: `${summary.avgTimeToHireDays}d` },
-              { label: 'Overall Conversion', value: formatPercent(summary.overallConversionRate) },
-              { label: 'Bottlenecks', value: String(summary.bottleneckCount) },
+              { label: 'Active Candidates', value: formatNumber(summary?.totalActive) },
+              { label: 'Total Hired', value: formatNumber(summary?.totalHired) },
+              { label: 'Avg Time to Hire', value: `${summary?.avgTimeToHireDays ?? 0}d` },
+              { label: 'Overall Conversion', value: formatPercent(summary?.overallConversionRate) },
+              { label: 'Bottlenecks', value: String(summary?.bottleneckCount ?? 0) },
             ].map(stat => (
               <Box key={stat.label} style={{
                 ...card, padding: tokens.spacing[4],
@@ -163,28 +165,30 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
             <BarChart3 size={14} color={tokens.colors.neutral[500]} />
             <Text style={{ ...sectionHeader, marginBottom: 0 }}>Application Pipeline Funnel</Text>
           </Flex>
-          {stages.length > 0 ? (
+          {(stages ?? []).length > 0 ? (
             <Flex justify="center">
               <svg
                 viewBox={`0 0 ${funnelWidth} ${funnelHeight}`}
                 style={{ width: '100%', maxWidth: funnelWidth, height: 'auto' }}
                 preserveAspectRatio="xMidYMid meet"
               >
-                {stages.map((stage, i) => {
+                {(stages ?? []).map((stage, i) => {
                   const y = 10 + i * (stageHeight + stageGap);
-                  const widthPct = maxCount > 0 ? stage.count / maxCount : 0;
-                  const nextWidthPct = i < stages.length - 1 && maxCount > 0
-                    ? stages[i + 1].count / maxCount : widthPct * 0.8;
+                  const stageCount = stage.count ?? 0;
+                  const widthPct = maxCount > 0 ? stageCount / maxCount : 0;
+                  const safeStages = stages ?? [];
+                  const nextWidthPct = i < safeStages.length - 1 && maxCount > 0
+                    ? (safeStages[i + 1]?.count ?? 0) / maxCount : widthPct * 0.8;
                   const maxTrapWidth = funnelWidth - 140;
                   const topWidth = Math.max(widthPct * maxTrapWidth, 60);
                   const bottomWidth = Math.max(nextWidthPct * maxTrapWidth, 40);
                   const centerX = funnelWidth / 2;
-                  const isBottleneck = bottlenecks.some(b => b.stageId === stage.id);
+                  const isBottleneck = (bottlenecks ?? []).some(b => b.stageId === stage.id);
                   const colorIndex = i % chartColors.length;
 
                   return (
-                    <g key={stage.id}
-                      onClick={() => onStageSelect?.(selectedStage === stage.id ? null : stage.id)}
+                    <g key={stage.id ?? `stage-${i}`}
+                      onClick={() => onStageSelect?.(selectedStage === stage.id ? null : stage.id ?? null)}
                       style={{ cursor: 'pointer' }}>
                       <path
                         d={funnelTrapezoid(topWidth, bottomWidth, y, stageHeight, centerX)}
@@ -196,12 +200,12 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                         textAnchor="middle" fontSize={tokens.typography.fontSize.xs}
                         fontWeight={tokens.typography.fontWeight.semibold}
                         fill={tokens.colors.common.white}>
-                        {stage.name}
+                        {stage.name ?? 'Unknown'}
                       </text>
                       <text x={centerX} y={y + stageHeight / 2 + 12}
                         textAnchor="middle" fontSize={tokens.typography.fontSize.xs}
                         fill={tokens.overlay?.white || 'rgba(255,255,255,0.8)'}>
-                        {formatNumber(stage.count)}
+                        {formatNumber(stageCount)}
                       </text>
                       <text x={funnelWidth - 10} y={y + stageHeight / 2 + 4}
                         textAnchor="end" fontSize={tokens.typography.fontSize.xs}
@@ -209,15 +213,15 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                         fill={tokens.colors.neutral[600]}>
                         {formatPercent(stage.conversionRate)}
                       </text>
-                      {showComparison && stage.previousPeriodCount !== undefined && (
+                      {showComparison && stage.previousPeriodCount != null && (
                         <text x={funnelWidth - 10} y={y + stageHeight / 2 + 18}
                           textAnchor="end" fontSize={tokens.typography.fontSize.xs}
-                          fill={stage.count >= stage.previousPeriodCount
+                          fill={stageCount >= (stage.previousPeriodCount ?? 0)
                             ? tokens.colors.successScale[500]
                             : tokens.colors.errorScale[500]}>
-                          {stage.count >= stage.previousPeriodCount ? '\u2191' : '\u2193'}{' '}
-                          {stage.previousPeriodCount !== 0
-                            ? formatPercent(Math.abs(((stage.count - stage.previousPeriodCount) / stage.previousPeriodCount) * 100))
+                          {stageCount >= (stage.previousPeriodCount ?? 0) ? '\u2191' : '\u2193'}{' '}
+                          {(stage.previousPeriodCount ?? 0) !== 0
+                            ? formatPercent(Math.abs(((stageCount - (stage.previousPeriodCount ?? 0)) / (stage.previousPeriodCount ?? 1)) * 100))
                             : 'N/A'}
                         </text>
                       )}
@@ -237,46 +241,46 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
         </Box>
 
         {/* ── Bottleneck Alerts ─────────────────────────── */}
-        {bottlenecks.length > 0 && (
+        {(bottlenecks ?? []).length > 0 && (
           <Box style={{ ...card, padding: tokens.spacing[5] }}>
             <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[4] }}>
               <AlertTriangle size={14} color={tokens.colors.errorScale[500]} />
               <Text style={{ ...sectionHeader, marginBottom: 0 }}>Bottleneck Detection</Text>
             </Flex>
             <Stack gap={8}>
-              {bottlenecks.map(b => (
-                <Box key={b.stageId}
-                  onClick={() => onBottleneckSelect?.(b.stageId)}
+              {(bottlenecks ?? []).map(b => (
+                <Box key={b.stageId ?? 'unknown'}
+                  onClick={() => b.stageId && onBottleneckSelect?.(b.stageId)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 12,
                     ...hov, padding: tokens.spacing[4],
                     borderRadius: tokens.borderRadius.lg,
-                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getSeverityColor(b.severity, tokens)}30`,
+                    border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getSeverityColor(b.severity ?? 'low', tokens)}30`,
                     backgroundColor: tokens.colors.common.white,
                   }}>
-                  <Box style={createStatusDotStyle(tokens, getSeverityColor(b.severity, tokens))} />
+                  <Box style={createStatusDotStyle(tokens, getSeverityColor(b.severity ?? 'low', tokens))} />
                   <Stack gap={2} style={{ flex: 1 }}>
                     <Text style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.semibold,
                       color: tokens.colors.neutral[800],
                     }}>
-                      {b.stageName}
+                      {b.stageName ?? 'Unknown'}
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                      {b.reason}
+                      {b.reason ?? ''}
                     </Text>
                   </Stack>
                   <Stack gap={1} style={{ textAlign: 'right' as const, flexShrink: 0 }}>
                     <Text style={{
                       fontSize: tokens.typography.fontSize.sm,
                       fontWeight: tokens.typography.fontWeight.bold,
-                      color: getSeverityColor(b.severity, tokens),
+                      color: getSeverityColor(b.severity ?? 'low', tokens),
                     }}>
-                      +{b.avgDelayDays}d delay
+                      +{b.avgDelayDays ?? 0}d delay
                     </Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                      {b.impactedCandidates} candidates
+                      {b.impactedCandidates ?? 0} candidates
                     </Text>
                   </Stack>
                 </Box>

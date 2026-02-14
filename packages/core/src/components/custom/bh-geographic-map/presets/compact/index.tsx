@@ -71,17 +71,17 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
     }, [onRegionClick]);
 
     const totalCandidates = useMemo(
-      () => regions.reduce((sum, r) => sum + r.candidateCount, 0),
+      () => regions.reduce((sum, r) => sum + (r.candidateCount ?? 0), 0),
       [regions],
     );
 
     const maxCount = useMemo(
-      () => Math.max(...regions.map(r => r.candidateCount), 1),
+      () => Math.max(...regions.map(r => r.candidateCount ?? 0), 1),
       [regions],
     );
 
     const topRegions = useMemo(
-      () => [...regions].sort((a, b) => b.candidateCount - a.candidateCount).slice(0, 4),
+      () => [...regions].sort((a, b) => (b.candidateCount ?? 0) - (a.candidateCount ?? 0)).slice(0, 4),
       [regions],
     );
 
@@ -145,8 +145,8 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
           >
             <rect x="0" y="0" width={miniW} height={miniH} fill={t.colors.neutral[50]} rx={4} />
             {regions.map((region) => {
-              const pos = geoToSvg(region.latitude, region.longitude, miniW, miniH);
-              const r = 3 + ((region.candidateCount / maxCount) * 8);
+              const pos = geoToSvg(region.latitude ?? 0, region.longitude ?? 0, miniW, miniH);
+              const r = 3 + (((region.candidateCount ?? 0) / maxCount) * 8);
               const isSelected = selectedRegionId === region.id;
 
               return (
@@ -160,7 +160,7 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
                   stroke={t.colors.common.white}
                   strokeWidth={1}
                   style={{ cursor: 'pointer' }}
-                  onClick={() => handleClick(region.id)}
+                  onClick={() => handleClick((region.id ?? ''))}
                 />
               );
             })}
@@ -174,9 +174,9 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
               key={region.id}
               role="listitem"
               tabIndex={0}
-              aria-label={`${region.name}: ${region.candidateCount} candidates`}
-              onClick={() => handleClick(region.id)}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(region.id); } }}
+              aria-label={`${region.name}: ${region.candidateCount ?? 0} candidates`}
+              onClick={() => handleClick((region.id ?? ''))}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((region.id ?? '')); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -194,7 +194,7 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
                 </Text>
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                {region.candidateCount}
+                {region.candidateCount ?? 0}
               </Text>
             </Box>
           ))}

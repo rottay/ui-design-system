@@ -1,10 +1,18 @@
 /**
  * BhInterviewReplaySplit - Core Interface
  * Waveform + synced transcript + evidence markers
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBInterview } from '@rottay/recruiter';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 export type BhInterviewReplaySplitPreset = 'split' | 'compact';
 
@@ -26,6 +34,10 @@ export interface ReplayEvidenceMarker {
 
 export interface BhInterviewReplaySplitProps extends EngineAwareProps {
   preset?: BhInterviewReplaySplitPreset;
+
+  /** Optional DB interview for pre-populating data */
+  interview?: DBInterview;
+
   transcript: ReplayTranscriptSegment[];
   evidenceMarkers?: ReplayEvidenceMarker[];
   duration: number;

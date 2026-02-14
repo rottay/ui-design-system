@@ -65,7 +65,8 @@ function eventIcon(type: string, t: DesignTokens) {
   return m[type] ?? { icon: <FileText size={sz} />, color: t.colors.neutral[400] };
 }
 
-function timeAgo(date: Date): string {
+function timeAgo(date: Date | null | undefined): string {
+  if (!date) return '';
   const d = Math.floor((Date.now() - date.getTime()) / 1000);
   if (d < 60) return `${d}s ago`;
   if (d < 3600) return `${Math.floor(d / 60)}m ago`;
@@ -103,7 +104,9 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
-    const { jobInfo, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], analytics, settings, activeTab: activeTabProp, onTabChange, onEdit, onPause, onClose, onDuplicate, onCandidateClick, onSettingsSave, className, style } = props;
+    const JOB_INFO_DEFAULT = { title: '', code: '', status: 'draft' as const, clientName: '', daysOpen: 0, urgency: 'low' as const };
+    const { jobInfo: _jobInfo = JOB_INFO_DEFAULT, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], analytics, settings, activeTab: activeTabProp, onTabChange, onEdit, onPause, onClose, onDuplicate, onCandidateClick, onSettingsSave, className, style } = props;
+    const jobInfo = _jobInfo ?? JOB_INFO_DEFAULT;
 
     const [internalTab, setInternalTab] = useState<JobDetailTab>('overview');
     const [selectedCandidates, setSelectedCandidates] = useState<Set<string>>(new Set());
@@ -142,7 +145,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     const Avatar_ = useCallback(({ avatar, name, size = 28 }: { avatar?: string; name: string; size?: number }) => {
       if (avatar) return <img src={avatar} alt={name} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' as const }} />;
       return (
-        <Text style={{ width: size, height: size, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>{name.charAt(0).toUpperCase()}</Text>
+        <Text style={{ width: size, height: size, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[600], display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>{(name || '').charAt(0).toUpperCase()}</Text>
       );
     }, [t]);
 
@@ -251,7 +254,7 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     /* Funnel */
     const renderFunnel = useCallback(() => {
       if (!funnelStages.length) return null;
-      const maxCount = Math.max(...funnelStages.map(s => s.count), 1);
+      const maxCount = Math.max(...(funnelStages ?? []).map(s => s.count ?? 0), 1);
       const W = 600, stH = 36, gap = 12, maxBar = W - 200;
       const svgH = 60 + funnelStages.length * (stH + gap);
 
@@ -329,17 +332,17 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
             <Box style={{ ...cardBase, padding: t.spacing[4] }}>
               <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[3] }}>{templateInfo.name}</Text>
               {[
-                { label: 'Stages', icon: <ClipboardList size={12} />, items: templateInfo.stages, render: (s: string, i: number) => (
+                { label: 'Stages', icon: <ClipboardList size={12} />, items: templateInfo.stages ?? [], render: (s: string, i: number) => (
                   <Box key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, fontSize: t.typography.fontSize.xs, backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[700], border: `${bdr} ${t.colors.primaryScale[200]}` }}>
                     <Text style={{ width: 16, height: 16, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[600], fontSize: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: t.typography.fontWeight.semibold }}>{i + 1}</Text><Text style={{ fontSize: 'inherit', color: 'inherit' }}>{s}</Text>
                   </Box>
                 )},
-                { label: 'AI Agents', icon: <Bot size={12} />, items: templateInfo.agents, render: (a: string, i: number) => <Text key={i} style={createBadgeStyle(t, 'info')}><Bot size={10} />{a}</Text> },
-                { label: 'Rubrics', icon: <FileText size={12} />, items: templateInfo.rubrics, render: (r: string, i: number) => <Text key={i} style={createBadgeStyle(t, 'secondary')}>{r}</Text> },
+                { label: 'AI Agents', icon: <Bot size={12} />, items: templateInfo.agents ?? [], render: (a: string, i: number) => <Text key={i} style={createBadgeStyle(t, 'info')}><Bot size={10} />{a}</Text> },
+                { label: 'Rubrics', icon: <FileText size={12} />, items: templateInfo.rubrics ?? [], render: (r: string, i: number) => <Text key={i} style={createBadgeStyle(t, 'secondary')}>{r}</Text> },
               ].map(section => (
                 <Box key={section.label} style={{ marginBottom: t.spacing[3] }}>
                   <Box style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[500], marginBottom: t.spacing[2], display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>{section.icon}<Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>{section.label}</Text></Box>
-                  <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>{section.items.map(section.render)}</Box>
+                  <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: t.spacing[2] }}>{(section.items ?? []).map(section.render)}</Box>
                 </Box>
               ))}
             </Box>
@@ -379,11 +382,11 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
     /* Analytics */
     const renderAnalytics = useCallback(() => {
       if (!analytics) return <Box style={{ padding: `${t.spacing[8]}px ${t.spacing[6]}px`, textAlign: 'center' as const, color: t.colors.neutral[400], fontSize: t.typography.fontSize.sm }}><Text style={{ fontSize: 'inherit', color: 'inherit' }}>No analytics data available.</Text></Box>;
-      const { sources, timeToStage, scoreDistribution } = analytics;
-      const maxSrc = Math.max(...sources.map(s => s.count), 1);
-      const maxDays = Math.max(...timeToStage.map(s => Math.max(s.avgDays, s.targetDays)), 1);
-      const maxBkt = Math.max(...scoreDistribution.map(b => b.count), 1);
-      const hW = Math.min(60, 400 / Math.max(scoreDistribution.length, 1)), hH = 160;
+      const { sources = [], timeToStage = [], scoreDistribution = [] } = analytics;
+      const maxSrc = Math.max(...(sources ?? []).map(s => s.count ?? 0), 1);
+      const maxDays = Math.max(...(timeToStage ?? []).map(s => Math.max(s.avgDays ?? 0, s.targetDays ?? 0)), 1);
+      const maxBkt = Math.max(...(scoreDistribution ?? []).map(b => b.count ?? 0), 1);
+      const hW = Math.min(60, 400 / Math.max((scoreDistribution ?? []).length, 1)), hH = 160;
 
       return (
         <Box style={{ padding: `${t.spacing[4]}px ${t.spacing[6]}px`, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[5] }}>
@@ -456,17 +459,17 @@ export const FullBhJobDetail = createPreset<BhJobDetailProps>(
 
       const settingSections = [
         { icon: <ClipboardList size={16} color={t.colors.primaryScale[500]} />, label: 'Template Association', content: (
-          <SettingRow_ label={`Template ID: ${settings.templateId}`}><Box /></SettingRow_>
+          <SettingRow_ label={`Template ID: ${settings.templateId ?? 'N/A'}`}><Box /></SettingRow_>
         )},
         { icon: <Bell size={16} color={t.colors.infoScale[500]} />, label: 'Notifications', content: (
-          <SettingRow_ label="Email notifications"><Toggle_ on={settings.notifications} /></SettingRow_>
+          <SettingRow_ label="Email notifications"><Toggle_ on={settings.notifications ?? false} /></SettingRow_>
         )},
         { icon: <Shield size={16} color={t.colors.warningScale[500]} />, label: 'SLA Configuration', content: (
           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[2] }}>
-            {[{ label: 'Max Days Open', value: settings.slaConfig.maxDaysOpen }, { label: 'Max Days Per Stage', value: settings.slaConfig.maxDaysPerStage }].map(item => (
+            {[{ label: 'Max Days Open', value: settings.slaConfig?.maxDaysOpen ?? 0 }, { label: 'Max Days Per Stage', value: settings.slaConfig?.maxDaysPerStage ?? 0 }].map(item => (
               <SettingRow_ key={item.label} label={item.label}><Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{item.value} days</Text></SettingRow_>
             ))}
-            <SettingRow_ label="Notify on Breach"><Toggle_ on={settings.slaConfig.notifyOnBreach} /></SettingRow_>
+            <SettingRow_ label="Notify on Breach"><Toggle_ on={settings.slaConfig?.notifyOnBreach ?? false} /></SettingRow_>
           </Box>
         )},
       ];

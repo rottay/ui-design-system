@@ -280,7 +280,7 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
                         borderRadius: badgeRadius,
                       }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                          {campaign.status.charAt(0).toUpperCase() + campaign.status.slice(1)}
+                          {(campaign.status || '').charAt(0).toUpperCase() + (campaign.status || '').slice(1)}
                         </Text>
                       </Box>
                       <ChevronRight size={14} color={t.colors.neutral[300]} />

@@ -11,6 +11,7 @@ export {
   type BhProctoringSummaryProps,
   type BhProctoringSummaryPreset,
   type ProctoringEventSeverity,
+  type ProctoringEventSeverityValue,
   type SeverityEventCounts,
   BH_PROCTORING_SUMMARY_DEFAULTS,
 } from './core';

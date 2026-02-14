@@ -1,55 +1,41 @@
 /**
  * BhClientDirectory - Core Interface
  * Client Management Directory for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBClient[] directly - no mapping needed.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBClient } from '@rottay/recruiter';
 
 export type BhClientDirectoryPreset = 'directory' | 'cards';
 
-export type ClientType = 'individual' | 'company';
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterClient = DBClient;
 
-export type ClientStatus = 'active' | 'inactive' | 'pending_approval' | 'suspended';
+/**
+ * DB-aligned status values for filtering.
+ */
+export type ClientStatusFilter = 'draft' | 'pending_approval' | 'active' | 'suspended' | 'terminated' | 'archived' | 'all';
 
-export type ClientTier = 'standard' | 'premium' | 'enterprise';
+/**
+ * DB-aligned tier values for filtering.
+ */
+export type ClientTierFilter = 'standard' | 'premium' | 'enterprise' | 'strategic' | 'all';
 
-export type ApprovalStatus = 'pending' | 'reviewed' | 'approved' | 'rejected';
-
-export interface ClientContact {
-  name: string;
-  email: string;
-  phone: string;
-  role: string;
-}
-
-export interface ClientItem {
-  id: string;
-  name: string;
-  type: ClientType;
-  status: ClientStatus;
-  tier: ClientTier;
-  industry: string;
-  positionsCount: number;
-  revenue: number;
-  approvalStatus: ApprovalStatus;
-  contacts: ClientContact[];
-  contractInfo?: {
-    terms: string;
-    startDate: string;
-    endDate: string;
-  };
-  feeStructure?: {
-    type: 'percentage' | 'fixed' | 'retainer';
-    value: number;
-    currency?: string;
-  };
-}
+/**
+ * DB-aligned type values for filtering.
+ */
+export type ClientTypeFilter = 'individual' | 'company' | 'all';
 
 export interface ClientFilter {
-  type?: ClientType | 'all';
-  status?: ClientStatus | 'all';
-  tier?: ClientTier | 'all';
+  type?: ClientTypeFilter;
+  status?: ClientStatusFilter;
+  tier?: ClientTierFilter;
   industry?: string;
   search?: string;
 }
@@ -59,8 +45,8 @@ export type ViewMode = 'list' | 'grid';
 export interface BhClientDirectoryProps extends EngineAwareProps {
   preset?: BhClientDirectoryPreset;
 
-  /** Array of client items to display */
-  clients: ClientItem[];
+  /** Array of clients to display - accepts DBClient[] directly from @rottay/recruiter */
+  clients?: DBClient[];
 
   /** Active filters for the directory */
   filters?: ClientFilter;
@@ -75,10 +61,10 @@ export interface BhClientDirectoryProps extends EngineAwareProps {
   selectedClient?: string | null;
 
   /** Callback when add client is triggered */
-  onAddClient?: (client: Partial<ClientItem>) => void;
+  onAddClient?: (client: Partial<DBClient>) => void;
 
   /** Callback when edit client is triggered */
-  onEditClient?: (clientId: string, updates: Partial<ClientItem>) => void;
+  onEditClient?: (clientId: string, updates: Partial<DBClient>) => void;
 
   /** Current view mode */
   viewMode?: ViewMode;
@@ -104,3 +90,22 @@ export const BH_CLIENT_DIRECTORY_DEFAULTS: Partial<BhClientDirectoryProps> = {
     search: '',
   },
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use ClientTypeFilter instead */
+export type ClientType = ClientTypeFilter;
+/** @deprecated Use ClientStatusFilter instead */
+export type ClientStatus = ClientStatusFilter;
+/** @deprecated Use ClientTierFilter instead */
+export type ClientTier = ClientTierFilter;
+/** @deprecated Approval status is now part of ClientStatusFilter ('pending_approval') */
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+/** @deprecated Contact info is part of DBClient directly */
+export interface ClientContact {
+  name: string;
+  email?: string;
+  phone?: string;
+  role?: string;
+}
+/** @deprecated Use RecruiterClient (DBClient) instead */
+export type ClientItem = RecruiterClient;

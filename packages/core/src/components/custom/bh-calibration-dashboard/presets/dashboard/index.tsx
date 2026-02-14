@@ -33,6 +33,7 @@ import type {
   CalibrationSession,
   CalibrationMetrics,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -67,7 +68,7 @@ function getStatusIcon(status: string) {
 }
 
 function getStatusLabel(status: string): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 function getAgreementColor(rate: number, t: DesignTokens): string {
@@ -131,8 +132,8 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sessions = MOCK_SESSIONS,
-      metrics = MOCK_METRICS,
+      sessions = [],
+      metrics = { activeSessions: 0, totalCompleted: 0, avgAgreementRate: 0, avgDeviation: 0 },
       onSessionClick,
       onCreateSession,
       selectedSessionId,
@@ -160,15 +161,15 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
     );
 
     const maxAgreement = useMemo(
-      () => Math.max(...sessions.map(s => s.agreementRate), 0.01),
+      () => Math.max(...sessions.map(s => n(s.agreementRate)), 0.01),
       [sessions],
     );
 
     const metricCards = useMemo(() => [
-      { label: 'Active Sessions', value: metrics.activeSessions, icon: PlayCircle, color: t.colors.successScale },
-      { label: 'Completed', value: metrics.totalCompleted, icon: CheckCircle, color: t.colors.primaryScale },
-      { label: 'Avg Agreement', value: `${(metrics.avgAgreementRate * 100).toFixed(0)}%`, icon: Target, color: metrics.avgAgreementRate >= 0.7 ? t.colors.successScale : t.colors.warningScale },
-      { label: 'Avg Deviation', value: metrics.avgDeviation.toFixed(2), icon: BarChart3, color: metrics.avgDeviation <= 0.5 ? t.colors.successScale : t.colors.warningScale },
+      { label: 'Active Sessions', value: n(metrics.activeSessions), icon: PlayCircle, color: t.colors.successScale },
+      { label: 'Completed', value: n(metrics.totalCompleted), icon: CheckCircle, color: t.colors.primaryScale },
+      { label: 'Avg Agreement', value: `${(n(metrics.avgAgreementRate) * 100).toFixed(0)}%`, icon: Target, color: n(metrics.avgAgreementRate) >= 0.7 ? t.colors.successScale : t.colors.warningScale },
+      { label: 'Avg Deviation', value: n(metrics.avgDeviation).toFixed(2), icon: BarChart3, color: n(metrics.avgDeviation) <= 0.5 ? t.colors.successScale : t.colors.warningScale },
     ], [metrics, t]);
 
     const animStyle = (index: number) => ({
@@ -339,15 +340,15 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                   const isHovered = hoveredSession === session.id;
                   const isSelected = selectedSessionId === session.id;
                   const statusColor = getStatusColor(session.status, t);
-                  const agrColor = getAgreementColor(session.agreementRate, t);
-                  const progressPct = (session.progress * 100).toFixed(0);
+                  const agrColor = getAgreementColor(n(session.agreementRate), t);
+                  const progressPct = (n(session.progress) * 100).toFixed(0);
 
                   return (
                     <Box
                       key={session.id}
                       role="listitem"
                       tabIndex={0}
-                      aria-label={`${session.rubricName}: ${getStatusLabel(session.status)}, ${progressPct}% progress, ${(session.agreementRate * 100).toFixed(0)}% agreement`}
+                      aria-label={`${session.rubricName ?? ''}: ${getStatusLabel(session.status)}, ${progressPct}% progress, ${(n(session.agreementRate) * 100).toFixed(0)}% agreement`}
                       onClick={() => handleSessionClick(session.id)}
                       onMouseEnter={() => setHoveredSession(session.id)}
                       onMouseLeave={() => setHoveredSession(null)}
@@ -418,7 +419,7 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                         {/* Participant avatars */}
                         <Box style={{ display: 'flex', alignItems: 'center' }}>
-                          {session.participants.slice(0, 3).map((name, idx) => (
+                          {(session.participants ?? []).slice(0, 3).map((name, idx) => (
                             <Box
                               key={name}
                               style={{
@@ -436,11 +437,11 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                               aria-label={name}
                             >
                               <Text style={{ fontSize: 9, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
-                                {name.charAt(0)}
+                                {(name || '').charAt(0)}
                               </Text>
                             </Box>
                           ))}
-                          {session.participants.length > 3 && (
+                          {(session.participants ?? []).length > 3 && (
                             <Box style={{
                               width: 22, height: 22,
                               borderRadius: t.borderRadius.full,
@@ -450,7 +451,7 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                               marginLeft: -6,
                             }}>
                               <Text style={{ fontSize: 9, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[600] }}>
-                                +{session.participants.length - 3}
+                                +{(session.participants ?? []).length - 3}
                               </Text>
                             </Box>
                           )}
@@ -459,14 +460,14 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: agrColor }} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                            {(session.agreementRate * 100).toFixed(0)}% agree
+                            {(n(session.agreementRate) * 100).toFixed(0)}% agree
                           </Text>
                         </Box>
 
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Clock size={11} color={t.colors.neutral[400]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                            {formatDistanceToNow(session.startedAt, { addSuffix: true })}
+                            {formatDistanceToNow((session.startedAt ?? new Date()), { addSuffix: true })}
                           </Text>
                         </Box>
                       </Box>
@@ -481,8 +482,8 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
               <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Agreement Rates</Text>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                 {sessions.map((session) => {
-                  const barPct = (session.agreementRate / Math.max(maxAgreement, 1)) * 100;
-                  const agrColor = getAgreementColor(session.agreementRate, t);
+                  const barPct = (n(session.agreementRate) / Math.max(maxAgreement, 1)) * 100;
+                  const agrColor = getAgreementColor(n(session.agreementRate), t);
 
                   return (
                     <Box key={session.id}>
@@ -505,7 +506,7 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                           color: agrColor,
                           marginLeft: t.spacing[2],
                         }}>
-                          {(session.agreementRate * 100).toFixed(0)}%
+                          {(n(session.agreementRate) * 100).toFixed(0)}%
                         </Text>
                       </Box>
                       <Box style={{

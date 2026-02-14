@@ -9,18 +9,18 @@ import type { EngineAwareProps } from '../../../../core/types';
 export type BhGeographicMapPreset = 'map' | 'compact';
 
 export interface GeoRegion {
-  id: string;
-  name: string;
-  candidateCount: number;
-  latitude: number;
-  longitude: number;
+  id?: string;
+  name?: string;
+  candidateCount?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface BhGeographicMapProps extends EngineAwareProps {
   preset?: BhGeographicMapPreset;
 
   /** Regions with candidate counts */
-  regions: GeoRegion[];
+  regions?: GeoRegion[];
 
   /** Dashboard title */
   title?: string;

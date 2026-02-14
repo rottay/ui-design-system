@@ -267,7 +267,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
     /* ---------- Agent type icon ---------- */
     const getAgentTypeIcon = (type: AgentType, size: number) => {
       switch (type) {
-        case 'conversational':
+        case 'conversation':
           return <Bot size={size} />;
         case 'phone':
           return <Phone size={size} />;
@@ -930,7 +930,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               Temperature
             </Text>
             <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.semibold }}>
-              {agentData.temperature.toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
+              {(agentData.temperature ?? 0).toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
             </Text>
           </Box>
           <input
@@ -989,7 +989,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 Top-P
               </Text>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                {agentData.topP.toFixed(2)}
+                {(agentData.topP ?? 0).toFixed(2)}
               </Text>
             </Box>
             <input
@@ -1323,7 +1323,7 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             </Box>
             <Box style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], lineHeight: tokens.typography.lineHeight.relaxed }}>
               <Box><strong style={{ color: tokens.colors.neutral[800] }}>Model:</strong> {agentData.model}</Box>
-              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Temperature:</strong> {agentData.temperature.toFixed(1)}</Box>
+              <Box><strong style={{ color: tokens.colors.neutral[800] }}>Temperature:</strong> {(agentData.temperature ?? 0).toFixed(1)}</Box>
               <Box><strong style={{ color: tokens.colors.neutral[800] }}>Max Tokens:</strong> {agentData.maxTokens}</Box>
             </Box>
           </Box>

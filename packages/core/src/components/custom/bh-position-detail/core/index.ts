@@ -1,61 +1,58 @@
 /**
  * BhPositionDetail - Core Interface
  * Position / Client Requisition Detail for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts a DBPosition directly - no mapping needed.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBPosition } from '@rottay/recruiter';
 
 export type BhPositionDetailPreset = 'standard';
 
-export type PositionStatus = 'draft' | 'open' | 'in-progress' | 'on-hold' | 'filled' | 'cancelled';
-export type FeeStructure = 'percentage' | 'fixed' | 'retainer';
-export type PositionEventType = 'created' | 'opened' | 'job-linked' | 'team-assigned' | 'milestone-reached' | 'sla-breach' | 'filled' | 'note';
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterPosition = DBPosition;
+
+/**
+ * Tab options for the position detail view.
+ */
 export type PositionTab = 'overview' | 'jobs' | 'team' | 'financials' | 'sla';
 
-export interface PositionInfo {
-  title: string;
-  clientName: string;
-  status: PositionStatus;
-  deadline: Date;
-  feeStructure: FeeStructure;
-}
-
-export interface RequirementSummary {
-  description: string;
-  skills: string[];
-  seniority: string;
-  location: string;
-  headcount: number;
-  filled: number;
-}
-
+/**
+ * Linked job for display (simplified).
+ */
 export interface LinkedJob {
   id: string;
   title: string;
   candidateCount: number;
-  status: 'draft' | 'open' | 'paused' | 'closed' | 'filled';
+  status: string;
 }
 
+/**
+ * Team assignment for display.
+ */
 export interface TeamAssignment {
   teamName: string;
   leadRecruiter: string;
   allocationPercent: number;
 }
 
-export interface FinancialTracker {
-  feeType: FeeStructure;
-  amount: number;
-  projectedCost: number;
-  actualCost: number;
-}
-
+/**
+ * SLA milestone for the position.
+ */
 export interface SlaMilestone {
   label: string;
   deadline: Date;
   completed: boolean;
 }
 
+/**
+ * SLA monitoring data (computed from DB fields).
+ */
 export interface SlaMonitor {
   deadline: Date;
   milestones: SlaMilestone[];
@@ -63,9 +60,12 @@ export interface SlaMonitor {
   progress: number;
 }
 
+/**
+ * Position activity event.
+ */
 export interface PositionEvent {
   id: string;
-  type: PositionEventType;
+  type: string;
   message: string;
   time: Date;
 }
@@ -73,20 +73,14 @@ export interface PositionEvent {
 export interface BhPositionDetailProps extends EngineAwareProps {
   preset?: BhPositionDetailPreset;
 
-  /** Core position information */
-  positionInfo: PositionInfo;
-
-  /** Requirements summary */
-  requirements?: RequirementSummary;
+  /** Position data - accepts DBPosition directly from @rottay/recruiter */
+  position?: DBPosition;
 
   /** Linked jobs */
   linkedJobs?: LinkedJob[];
 
   /** Team assignments */
   teamAssignments?: TeamAssignment[];
-
-  /** Financial tracker data */
-  financials?: FinancialTracker;
 
   /** SLA monitoring data */
   slaMonitor?: SlaMonitor;
@@ -119,3 +113,32 @@ export interface BhPositionDetailProps extends EngineAwareProps {
 export const BH_POSITION_DETAIL_DEFAULTS: Partial<BhPositionDetailProps> = {
   preset: 'standard',
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use RecruiterPosition (DBPosition) instead */
+export type PositionInfo = RecruiterPosition;
+/** @deprecated Requirements are now part of DBPosition jsonb fields */
+export interface RequirementSummary {
+  label: string;
+  met: boolean;
+  detail?: string;
+}
+/** @deprecated Financial tracking is now part of DBPosition directly */
+export interface FinancialTracker {
+  totalFee: number;
+  invoiced: number;
+  collected: number;
+  outstanding: number;
+  currency?: string;
+}
+/** @deprecated Use DBPosition.status field (string) instead */
+export type PositionStatus = string;
+/** @deprecated Fee structure is part of DBPosition billing fields */
+export interface FeeStructure {
+  type: 'contingency' | 'retained' | 'flat';
+  percentage?: number;
+  flatAmount?: number;
+  currency?: string;
+}
+/** @deprecated Use PositionEvent['type'] instead */
+export type PositionEventType = string;

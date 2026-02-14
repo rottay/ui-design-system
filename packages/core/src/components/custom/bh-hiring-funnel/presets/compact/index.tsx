@@ -69,7 +69,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
-    const maxCount = useMemo(() => Math.max(...stages.map(s => s.count), 1), [stages]);
+    const maxCount = useMemo(() => Math.max(...stages.map(s => s.count ?? 0), 1), [stages]);
 
     const handleClick = useCallback((name: string) => {
       onStageClick?.(name);
@@ -125,7 +125,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
             </Box>
           )}
           {stages.map((stage, i) => {
-            const barWidth = (stage.count / maxCount) * 100;
+            const barWidth = ((stage.count ?? 0) / maxCount) * 100;
             const stageColor = getStageColor(i, t, stage.color);
             const isSelected = selectedStage === stage.name;
 
@@ -134,12 +134,12 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
                 key={stage.name}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${stage.name}: ${stage.count}, ${stage.conversionRate}%`}
-                onClick={() => handleClick(stage.name)}
+                aria-label={`${stage.name}: ${stage.count ?? 0}, ${stage.conversionRate ?? 0}%`}
+                onClick={() => handleClick((stage.name ?? ''))}
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    handleClick(stage.name);
+                    handleClick((stage.name ?? ''));
                   }
                 }}
                 style={{
@@ -190,7 +190,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
                   textAlign: 'right',
                   flexShrink: 0,
                 }}>
-                  {stage.count}
+                  {stage.count ?? 0}
                 </Text>
               </Box>
             );
@@ -216,7 +216,7 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
               padding: `1px ${t.spacing[2]}px`,
             }}>
               <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                {((stages[stages.length - 1].count / stages[0].count) * 100).toFixed(1)}%
+                {(stages[0].count ?? 0) > 0 ? (((stages[stages.length - 1].count ?? 0) / (stages[0].count ?? 1)) * 100).toFixed(1) : 0}%
               </Text>
             </Box>
           </Box>

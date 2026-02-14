@@ -1,10 +1,13 @@
 /**
  * BhAgentTester - Core Interface
  * Agent Validation Console for BitHire ATS platform
+ *
+ * Types imported from @rottay/ia-chat (single source of truth).
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBAgent } from '@rottay/ia-chat';
 
 export type BhAgentTesterPreset = 'standard';
 

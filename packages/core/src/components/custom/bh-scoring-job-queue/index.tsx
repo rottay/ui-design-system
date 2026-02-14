@@ -10,7 +10,8 @@ import { BH_SCORING_JOB_QUEUE_PRESETS } from './presets';
 export {
   type BhScoringJobQueueProps,
   type BhScoringJobQueuePreset,
-  type ScoringJob,
+  type ScoringJobView,
+  type ScoringJobSelect,
   type ScoringJobStatus,
   type ScoringJobPriority,
   type QueueStats,

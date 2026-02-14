@@ -202,13 +202,13 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <TrendingUp size={12} strokeWidth={1.5} style={{ color: t.colors.neutral[400] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                        {agent.usageCount.toLocaleString()}
+                        {(agent.usageCount ?? 0).toLocaleString()}
                       </Text>
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Star size={12} strokeWidth={1.5} style={{ color: t.colors.warningScale[500] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                        {agent.avgScore.toFixed(1)}
+                        {(agent.avgScore ?? 0).toFixed(1)}
                       </Text>
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>

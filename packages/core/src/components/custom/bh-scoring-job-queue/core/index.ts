@@ -1,31 +1,38 @@
 /**
  * BhScoringJobQueue - Core Interface
  * Scoring job queue management for the BitHire ATS platform
+ *
+ * Uses ScoringJobSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ScoringJobSelect } from '@rottay/scoring';
 
 export type BhScoringJobQueuePreset = 'list' | 'compact';
 
-export type ScoringJobStatus = 'queued' | 'processing' | 'completed' | 'failed' | 'paused';
+/** DB-aligned status values from ScoringJobSelect.status */
+export type ScoringJobStatus = ScoringJobSelect['status'];
+
+/** UI priority derived from ScoringJobSelect.priority (integer) */
 export type ScoringJobPriority = 'low' | 'normal' | 'high' | 'urgent';
 
-export interface ScoringJob {
-  id: string;
-  scorableId: string;
-  candidateName: string;
-  jobTitle: string;
-  rubricName: string;
-  status: ScoringJobStatus;
-  progress: number;
-  priority: ScoringJobPriority;
-  queuedAt: Date;
-  startedAt?: Date;
-  completedAt?: Date;
+/** Extended job view combining DB entity with UI display fields */
+export interface ScoringJobView {
+  /** The DB entity (all fields optional for safety) */
+  job?: Partial<ScoringJobSelect>;
+  /** Display name of candidate (resolved from scorable) */
+  candidateName?: string;
+  /** Display name of position (resolved from scorable) */
+  jobTitle?: string;
+  /** Display name of rubric (resolved from rubric) */
+  rubricName?: string;
+  /** Progress 0-1 (UI-computed) */
+  progress?: number;
+  /** UI priority label (mapped from numeric priority) */
+  priorityLabel?: ScoringJobPriority;
+  /** Estimated duration in ms (UI-computed) */
   estimatedDuration?: number;
-  errorMessage?: string;
-  retryCount: number;
 }
 
 export interface QueueStats {
@@ -42,10 +49,10 @@ export interface BhScoringJobQueueProps extends EngineAwareProps {
   preset?: BhScoringJobQueuePreset;
 
   /** List of scoring jobs */
-  jobs: ScoringJob[];
+  jobs?: ScoringJobView[];
 
   /** Queue statistics */
-  stats: QueueStats;
+  stats?: QueueStats;
 
   /** Callback when a job row is clicked */
   onJobClick?: (jobId: string) => void;
@@ -75,3 +82,9 @@ export interface BhScoringJobQueueProps extends EngineAwareProps {
 export const BH_SCORING_JOB_QUEUE_DEFAULTS: Partial<BhScoringJobQueueProps> = {
   preset: 'list',
 };
+
+/** Backward-compat alias (old name from pre-migration) */
+export type ScoringJob = ScoringJobView;
+
+/** Re-export DB type for convenience */
+export type { ScoringJobSelect };

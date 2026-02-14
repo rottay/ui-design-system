@@ -127,7 +127,7 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
       if (bottleneckStage) onBottleneckClick?.(bottleneckStage);
     }, [onBottleneckClick, bottleneckStage]);
 
-    const maxRate = useMemo(() => Math.max(...conversionRates.map(c => c.rate), 1), [conversionRates]);
+    const maxRate = useMemo(() => Math.max(...conversionRates.map(c => c.rate ?? 0), 1), [conversionRates]);
 
     const animStyle = (index: number) => ({
       ...entrance.animate,
@@ -188,7 +188,7 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
           </Box>
 
           {/* Time to Hire */}
-          <Box style={{ ...card, ...hoverStyles.base, ...animStyle(2) }} role="status" aria-label={`Average time to hire: ${avgTimeToHire.days} days`}>
+          <Box style={{ ...card, ...hoverStyles.base, ...animStyle(2) }} role="status" aria-label={`Average time to hire: ${avgTimeToHire?.days ?? 0} days`}>
             {accentBar && <Box style={accentBar} />}
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
               <Box style={createIconContainerStyle(t, { size: 40, color: t.colors.warningScale[50] })}>
@@ -197,11 +197,12 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                   <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                    {avgTimeToHire.days}d
+                    {avgTimeToHire?.days ?? 0}d
                   </Text>
                   {(() => {
-                    const TrendIcon = getTrendIcon(avgTimeToHire.trend);
-                    return <TrendIcon size={16} color={getTrendColor(avgTimeToHire.trend, t, true)} />;
+                    const trend = avgTimeToHire?.trend ?? 'flat';
+                    const TrendIcon = getTrendIcon(trend);
+                    return <TrendIcon size={16} color={getTrendColor(trend, t, true)} />;
                   })()}
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>
@@ -280,7 +281,7 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
               flexWrap: 'wrap',
             }}>
               {conversionRates.map((conv, i) => {
-                const barColor = getConversionColor(conv.rate, t);
+                const barColor = getConversionColor((conv.rate ?? 0), t);
                 const isHovered = hoveredConversion === i;
                 const TrendIcon = conv.trend ? getTrendIcon(conv.trend) : null;
 
@@ -295,8 +296,8 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
                     role="button"
                     tabIndex={0}
                     aria-label={`${conv.fromStage} to ${conv.toStage}: ${conv.rate}% conversion`}
-                    onClick={() => handleConversionClick(conv.fromStage, conv.toStage)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleConversionClick(conv.fromStage, conv.toStage); } }}
+                    onClick={() => handleConversionClick((conv.fromStage ?? ''), (conv.toStage ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleConversionClick((conv.fromStage ?? ''), (conv.toStage ?? '')); } }}
                     onMouseEnter={() => setHoveredConversion(i)}
                     onMouseLeave={() => setHoveredConversion(null)}
                   >
@@ -322,7 +323,7 @@ export const DetailedBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>(
                       <Box style={{
                         width: '60%',
                         maxWidth: 40,
-                        height: `${(conv.rate / 100) * 100}%`,
+                        height: `${((conv.rate ?? 0) / 100) * 100}%`,
                         backgroundColor: isHovered ? barColor : barColor,
                         opacity: isHovered ? 1 : 0.8,
                         borderRadius: `${t.borderRadius.sm} ${t.borderRadius.sm} 0 0`,

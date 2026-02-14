@@ -13,7 +13,8 @@ export {
   type BhProctoringEventListPreset,
   type ProctoringEventType,
   type ProctoringEventSeverity,
-  type ProctoringEventItem,
+  type ProctoringEventListItem,
+  type ProctoringEventSelect,
   BH_PROCTORING_EVENT_LIST_DEFAULTS,
 } from './core';
 

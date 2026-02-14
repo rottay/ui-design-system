@@ -1,11 +1,20 @@
 /**
  * BhInterviewPlayer - Core Interface
  * Interview Replay player for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * Player-specific types (TranscriptLine, InterviewScorecard, etc.) are UI-only.
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBInterview } from '@rottay/recruiter';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 // ============================================================================
 // Preset Type
@@ -92,6 +101,10 @@ export interface InterviewInfo {
 
 export interface BhInterviewPlayerProps extends EngineAwareProps {
   preset?: BhInterviewPlayerPreset;
+
+  /** Optional DB interview for pre-populating data */
+  interview?: DBInterview;
+
   interviewInfo: InterviewInfo;
   transcript: TranscriptLine[];
   scorecard: InterviewScorecard;

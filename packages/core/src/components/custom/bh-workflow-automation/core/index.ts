@@ -1,20 +1,26 @@
 /**
  * BhWorkflowAutomation - Core Interface
  * Visual rule builder WHEN/IF/THEN for BitHire ATS platform
+ *
+ * DB Reference: DBApprovalRequest from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApprovalRequest } from '@rottay/recruiter';
 
 export type BhWorkflowAutomationPreset = 'builder' | 'compact';
 
+/** Re-export for consumer convenience */
+export type { DBApprovalRequest };
+
 export interface WorkflowRule {
-  id: string;
-  name: string;
-  trigger: string;
-  conditions: string[];
-  actions: string[];
-  enabled: boolean;
+  id?: string;
+  name?: string;
+  trigger?: string;
+  conditions?: string[];
+  actions?: string[];
+  enabled?: boolean;
   lastTriggered?: Date;
 }
 
@@ -22,7 +28,7 @@ export interface BhWorkflowAutomationProps extends EngineAwareProps {
   preset?: BhWorkflowAutomationPreset;
 
   /** List of automation rules */
-  rules: WorkflowRule[];
+  rules?: WorkflowRule[];
 
   /** Callback when a rule is toggled */
   onRuleToggle?: (ruleId: string) => void;

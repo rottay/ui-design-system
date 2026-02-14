@@ -14,9 +14,26 @@ import {
   createIconContainerStyle, createEmptyStateStyle, getPersonalityTypography,
   getPersonalityBadgeRadius, getCardPadding,
 } from '../../../helpers';
-import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
+import type { BhJobBoardProps, JobDisplayStatus, JobHiringUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
+import type { DBJob } from '@rottay/recruiter';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
+
+/* ------------------------------------------------------------------ */
+/*  DBJob field helpers (compute derived values from real DB data)       */
+/* ------------------------------------------------------------------ */
+
+function getJobLocation(job: DBJob): string {
+  const loc = job.primaryLocation as any;
+  if (!loc) return '';
+  return [loc.city, loc.state, loc.country].filter(Boolean).join(', ');
+}
+
+function getJobDaysOpen(job: DBJob): number {
+  if (!job.publishedAt) return 0;
+  const pub = typeof job.publishedAt === 'string' ? new Date(job.publishedAt) : job.publishedAt;
+  return Math.max(0, Math.floor((Date.now() - pub.getTime()) / 86400000));
+}
 import {
   Briefcase, Plus, Search, LayoutGrid, List, Columns3, MapPin, Clock,
   Users, Eye, Pencil, Pause, Play, X, ChevronDown, AlertCircle, Globe,
@@ -30,23 +47,29 @@ import {
 interface StatusConfig { label: string; color: string; bgColor: string; borderColor: string; dotColor: string }
 interface UrgencyConfig { label: string; color: string; bgColor: string; borderColor: string }
 
-function getStatusConfig(tokens: DesignTokens): Record<JobStatus, StatusConfig> {
+function getStatusConfig(tokens: DesignTokens): Record<string, StatusConfig> {
   return {
     published: { label: 'Published', color: tokens.colors.successScale[700], bgColor: tokens.colors.successScale[50], borderColor: tokens.colors.successScale[200], dotColor: tokens.colors.successScale[500] },
     draft: { label: 'Draft', color: tokens.colors.neutral[600], bgColor: tokens.colors.neutral[50], borderColor: tokens.colors.neutral[200], dotColor: tokens.colors.neutral[400] },
+    pending_approval: { label: 'Pending', color: tokens.colors.infoScale[700], bgColor: tokens.colors.infoScale[50], borderColor: tokens.colors.infoScale[200], dotColor: tokens.colors.infoScale[500] },
     paused: { label: 'Paused', color: tokens.colors.warningScale[700], bgColor: tokens.colors.warningScale[50], borderColor: tokens.colors.warningScale[200], dotColor: tokens.colors.warningScale[500] },
     closed: { label: 'Closed', color: tokens.colors.errorScale[700], bgColor: tokens.colors.errorScale[50], borderColor: tokens.colors.errorScale[200], dotColor: tokens.colors.errorScale[500] },
+    archived: { label: 'Archived', color: tokens.colors.neutral[500], bgColor: tokens.colors.neutral[50], borderColor: tokens.colors.neutral[200], dotColor: tokens.colors.neutral[300] },
   };
 }
 
-function getUrgencyConfig(tokens: DesignTokens): Record<JobUrgency, UrgencyConfig> {
+const DEFAULT_STATUS_CFG: StatusConfig = { label: 'Unknown', color: '#666', bgColor: '#f5f5f5', borderColor: '#ddd', dotColor: '#999' };
+
+function getUrgencyConfig(tokens: DesignTokens): Record<string, UrgencyConfig> {
   return {
     low: { label: 'Low', color: tokens.colors.successScale[700], bgColor: tokens.colors.successScale[50], borderColor: tokens.colors.successScale[200] },
-    medium: { label: 'Medium', color: tokens.colors.infoScale[700], bgColor: tokens.colors.infoScale[50], borderColor: tokens.colors.infoScale[200] },
+    normal: { label: 'Normal', color: tokens.colors.infoScale[700], bgColor: tokens.colors.infoScale[50], borderColor: tokens.colors.infoScale[200] },
     high: { label: 'High', color: tokens.colors.warningScale[700], bgColor: tokens.colors.warningScale[50], borderColor: tokens.colors.warningScale[200] },
-    critical: { label: 'Critical', color: tokens.colors.errorScale[700], bgColor: tokens.colors.errorScale[50], borderColor: tokens.colors.errorScale[200] },
+    urgent: { label: 'Urgent', color: tokens.colors.errorScale[700], bgColor: tokens.colors.errorScale[50], borderColor: tokens.colors.errorScale[200] },
   };
 }
+
+const DEFAULT_URGENCY_CFG: UrgencyConfig = { label: 'Normal', color: '#666', bgColor: '#f5f5f5', borderColor: '#ddd' };
 
 const STAGE_COLORS_KEYS = ['primaryScale', 'infoScale', 'warningScale', 'successScale', 'secondaryScale', 'errorScale'] as const;
 function getStageColors(tokens: DesignTokens): string[] {
@@ -64,24 +87,32 @@ function getStatColors(key: string, tokens: DesignTokens) {
 /*  Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-function filterAndSortJobs(jobs: JobItem[], filters: JobBoardFilter, searchQuery: string, sortBy: string, sortDirection: SortDirection, clients: { id: string; name: string }[]): JobItem[] {
+function filterAndSortJobs(jobs: DBJob[], filters: JobBoardFilter, searchQuery: string, sortBy: string, sortDirection: SortDirection, clients: { id: string; name: string }[]): DBJob[] {
   let result = [...jobs];
   if (filters.status) result = result.filter(j => j.status === filters.status);
-  if (filters.department) result = result.filter(j => j.department === filters.department);
-  if (filters.urgency) result = result.filter(j => j.urgency === filters.urgency);
-  if (filters.clientId) result = result.filter(j => j.clientName === clients.find(c => c.id === filters.clientId)?.name);
+  if (filters.department) result = result.filter(j => (j.departmentName || '') === filters.department);
+  if (filters.urgency) result = result.filter(j => (j.hiringUrgency || 'normal') === filters.urgency);
   if (searchQuery) {
     const lower = searchQuery.toLowerCase();
-    result = result.filter(j => j.title.toLowerCase().includes(lower) || j.code.toLowerCase().includes(lower) || j.department.toLowerCase().includes(lower) || j.location.toLowerCase().includes(lower) || (j.clientName && j.clientName.toLowerCase().includes(lower)));
+    result = result.filter(j =>
+      (j.title || '').toLowerCase().includes(lower) ||
+      (j.code || j.slug || '').toLowerCase().includes(lower) ||
+      (j.departmentName || '').toLowerCase().includes(lower) ||
+      getJobLocation(j).toLowerCase().includes(lower)
+    );
   }
   result.sort((a, b) => {
     let aVal: number | string = 0, bVal: number | string = 0;
     switch (sortBy) {
-      case 'daysOpen': aVal = a.daysOpen; bVal = b.daysOpen; break;
-      case 'candidateCount': aVal = a.candidateCount; bVal = b.candidateCount; break;
-      case 'title': aVal = a.title.toLowerCase(); bVal = b.title.toLowerCase(); break;
-      case 'urgency': { const o: Record<JobUrgency, number> = { low: 0, medium: 1, high: 2, critical: 3 }; aVal = o[a.urgency]; bVal = o[b.urgency]; break; }
-      default: aVal = a.daysOpen; bVal = b.daysOpen;
+      case 'publishedAt': {
+        const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const bDate = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        aVal = aDate; bVal = bDate; break;
+      }
+      case 'totalApplications': aVal = a.totalApplications || 0; bVal = b.totalApplications || 0; break;
+      case 'title': aVal = (a.title || '').toLowerCase(); bVal = (b.title || '').toLowerCase(); break;
+      case 'hiringUrgency': { const o: Record<string, number> = { low: 0, normal: 1, high: 2, urgent: 3 }; aVal = o[a.hiringUrgency || 'normal'] ?? 1; bVal = o[b.hiringUrgency || 'normal'] ?? 1; break; }
+      default: { const aDate = a.publishedAt ? new Date(a.publishedAt).getTime() : 0; const bDate = b.publishedAt ? new Date(b.publishedAt).getTime() : 0; aVal = aDate; bVal = bDate; }
     }
     if (typeof aVal === 'string' && typeof bVal === 'string') return sortDirection === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
     return sortDirection === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
@@ -103,7 +134,7 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
     const STAGE_COLORS = useMemo(() => getStageColors(tokens), [tokens]);
 
     const {
-      jobs, stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
+      jobs = [], stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
       selectedJobs: controlledSelectedJobs, onSelectionChange, searchQuery: controlledSearchQuery, onSearchChange,
       sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange,
       emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments = [], clients = [], className, style,
@@ -111,7 +142,7 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
 
     const [internalViewMode, setInternalViewMode] = useState<ViewMode>('grid');
     const [internalFilters, setInternalFilters] = useState<JobBoardFilter>({});
-    const [internalSortBy, setInternalSortBy] = useState(BH_JOB_BOARD_DEFAULTS.sortBy ?? 'daysOpen');
+    const [internalSortBy, setInternalSortBy] = useState(BH_JOB_BOARD_DEFAULTS.sortBy ?? 'publishedAt');
     const [internalSortDirection, setInternalSortDirection] = useState<SortDirection>(BH_JOB_BOARD_DEFAULTS.sortDirection ?? 'desc');
     const [internalSearchQuery, setInternalSearchQuery] = useState('');
     const [internalSelectedJobs, setInternalSelectedJobs] = useState<string[]>([]);
@@ -147,7 +178,7 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
       onSelectionChange?.(next);
     }, [selectedJobs, controlledSelectedJobs, onSelectionChange]);
 
-    const filteredJobs = useMemo(() => filterAndSortJobs(jobs, filters, searchQuery, sortBy, sortDirection, clients), [jobs, filters, searchQuery, sortBy, sortDirection, clients]);
+    const filteredJobs = useMemo(() => filterAndSortJobs(jobs as DBJob[], filters, searchQuery, sortBy, sortDirection, clients), [jobs, filters, searchQuery, sortBy, sortDirection, clients]);
     const hasActiveFilters = !!(searchQuery || filters.status || filters.department || filters.urgency || filters.clientId);
 
     /* Dropdown renderer */
@@ -188,8 +219,8 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
             const statEntrance = createEntranceAnimation(tokens, { index: i });
             return (
               <Box key={stat.key} role="button" tabIndex={0} aria-label={`Filter by ${stat.label}`} aria-pressed={isActive}
-                onClick={() => handleFilterChange({ ...filters, status: stat.key === 'total' ? null : (stat.key === filters.status ? null : stat.key as JobStatus) })}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, status: stat.key === 'total' ? null : (stat.key === filters.status ? null : stat.key as JobStatus) }); } }}
+                onClick={() => handleFilterChange({ ...filters, status: stat.key === 'total' ? null : (stat.key === filters.status ? null : stat.key as JobDisplayStatus) })}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, status: stat.key === 'total' ? null : (stat.key === filters.status ? null : stat.key as JobDisplayStatus) }); } }}
                 style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `16px 12px`, borderRadius: tokens.borderRadius.lg, backgroundColor: isActive ? kc.bg : tokens.colors.common.white, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${isActive ? kc.border : tokens.colors.neutral[100]}`, transition: `all ${tokens.motion.hover}`, boxShadow: isActive ? tokens.shadows.sm : 'none', outline: 'none', ...statEntrance.animate }}>
                 <Text style={{ fontSize: tokens.typography.fontSize['2xl'], fontWeight: typo.headingWeight, color: isActive ? kc.text : tokens.colors.neutral[900], lineHeight: '1' }}>{stat.count}</Text>
                 <Text style={{ fontSize: tokens.typography.fontSize.xs, color: isActive ? kc.text : tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium, marginTop: 6, textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing }}>{stat.label}</Text>
@@ -202,7 +233,7 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
 
     /* Filter Bar */
     const renderFilterBar = () => {
-      const statusOptions: (JobStatus | null)[] = [null, 'published', 'draft', 'paused', 'closed'];
+      const statusOptions: (string | null)[] = [null, 'published', 'draft', 'pending_approval', 'paused', 'closed'];
       return (
         <Box style={{ display: 'flex', alignItems: 'center', gap: 10, paddingBottom: 16, marginBottom: 4, flexWrap: 'wrap' as const }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -210,11 +241,11 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
               const isActive = filters.status === status || (status === null && !filters.status);
               return (
                 <Box key={status ?? 'all'} role="button" tabIndex={0} aria-label={`Filter ${status ?? 'all'}`} aria-pressed={isActive}
-                  onClick={() => handleFilterChange({ ...filters, status })}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, status }); } }}
+                  onClick={() => handleFilterChange({ ...filters, status: status as JobDisplayStatus | null })}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, status: status as JobDisplayStatus | null }); } }}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: `5px 12px`, borderRadius: tokens.borderRadius.full, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: isActive ? tokens.colors.primaryScale[600] : tokens.colors.neutral[100], color: isActive ? tokens.colors.common.white : tokens.colors.neutral[600], outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
-                  {status !== null && <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: isActive ? tokens.colors.common.white : STATUS_CONFIG[status].dotColor, flexShrink: 0, opacity: isActive ? 0.8 : 1 }} />}
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: isActive ? tokens.colors.common.white : tokens.colors.neutral[600] }}>{status === null ? 'All' : STATUS_CONFIG[status].label}</Text>
+                  {status !== null && <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: isActive ? tokens.colors.common.white : (STATUS_CONFIG[status] || DEFAULT_STATUS_CFG).dotColor, flexShrink: 0, opacity: isActive ? 0.8 : 1 }} />}
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: isActive ? tokens.colors.common.white : tokens.colors.neutral[600] }}>{status === null ? 'All' : (STATUS_CONFIG[status] || DEFAULT_STATUS_CFG).label}</Text>
                 </Box>
               );
             })}
@@ -257,9 +288,12 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
     };
 
     /* Job Card */
-    const renderJobCard = useCallback((job: JobItem, index: number) => {
-      const statusCfg = STATUS_CONFIG[job.status];
-      const urgencyCfg = URGENCY_CONFIG[job.urgency];
+    const renderJobCard = useCallback((job: DBJob, index: number) => {
+      const statusCfg = STATUS_CONFIG[job.status] || DEFAULT_STATUS_CFG;
+      const urgencyCfg = URGENCY_CONFIG[job.hiringUrgency || 'normal'] || DEFAULT_URGENCY_CFG;
+      const daysOpen = getJobDaysOpen(job);
+      const location = getJobLocation(job);
+      const isRemote = job.workMode === 'remote';
       const isHovered = hoveredJobId === job.id;
       const isSelected = selectedJobs.includes(job.id);
       const itemEntrance = createEntranceAnimation(tokens, { index });
@@ -302,16 +336,16 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
           {/* Title + code */}
           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], marginBottom: 10 }}>
             <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, letterSpacing: typo.headingLetterSpacing, color: tokens.colors.neutral[900], lineHeight: tokens.typography.lineHeight.tight, marginBottom: 4 }}>{job.title}</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>{job.code} - {job.department}</Text>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>{job.code || job.slug}{job.departmentName ? ` - ${job.departmentName}` : ''}</Text>
           </Box>
 
           {/* Location */}
           <Box style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 16 }}>
-            {job.isRemote ? <><Globe size={12} color={tokens.colors.neutral[500]} /><Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Remote</Text></> : <><MapPin size={12} color={tokens.colors.neutral[500]} /><Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.location}</Text></>}
-            {job.clientName && <>
+            {isRemote ? <><Globe size={12} color={tokens.colors.neutral[500]} /><Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Remote</Text></> : location ? <><MapPin size={12} color={tokens.colors.neutral[500]} /><Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{location}</Text></> : null}
+            {job.teamName && <>
               <Text style={{ color: tokens.colors.neutral[300], fontSize: tokens.typography.fontSize.xs }}>-</Text>
               <Building2 size={11} color={tokens.colors.neutral[500]} />
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.clientName}</Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.teamName}</Text>
             </>}
           </Box>
 
@@ -320,24 +354,25 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <Users size={12} color={tokens.colors.neutral[600]} />
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium }}>{job.candidateCount} candidates</Text>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium }}>{job.totalApplications || 0} candidates</Text>
               </Box>
             </Box>
             {/* SVG progress bar - allowed */}
             {(() => {
-              const total = job.candidatesByStage.reduce((sum, s) => sum + s.count, 0);
+              const stages = ((job as any).candidatesByStage || []) as { stage: string; count: number }[];
+              const total = stages.reduce((sum: number, s: { count: number }) => sum + (s.count || 0), 0);
               if (total === 0) return <Box style={{ height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], width: '100%' }} />;
               const W = 200, H = 6;
               let x = 0;
               return (
                 <svg width="100%" height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const, display: 'block' }}>
                   <rect x={0} y={0} width={W} height={H} fill={tokens.colors.neutral[100]} rx={3} />
-                  {job.candidatesByStage.map((stage, idx) => { const w = (stage.count / total) * W; const cx = x; x += w; return <rect key={stage.stage} x={cx} y={0} width={w} height={H} fill={STAGE_COLORS[idx % STAGE_COLORS.length]} rx={idx === 0 ? 3 : 0} />; })}
+                  {stages.map((stage: { stage: string; count: number }, idx: number) => { const w = ((stage.count || 0) / total) * W; const cx = x; x += w; return <rect key={stage.stage} x={cx} y={0} width={w} height={H} fill={STAGE_COLORS[idx % STAGE_COLORS.length]} rx={idx === 0 ? 3 : 0} />; })}
                 </svg>
               );
             })()}
             <Box style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 8, marginTop: 8 }}>
-              {job.candidatesByStage.map((stage, idx) => (
+              {(((job as any).candidatesByStage || []) as { stage: string; count: number }[]).map((stage: { stage: string; count: number }, idx: number) => (
                 <Box key={stage.stage} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: STAGE_COLORS[idx % STAGE_COLORS.length], flexShrink: 0 }} />
                   <Text style={{ fontSize: '10px', color: tokens.colors.neutral[500] }}>{stage.stage} ({stage.count})</Text>
@@ -350,12 +385,12 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
           <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 16, paddingTop: 16, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Box style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                <Clock size={12} color={job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500]} />
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>{job.daysOpen}d open</Text>
+                <Clock size={12} color={daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500], fontWeight: tokens.typography.fontWeight.medium }}>{daysOpen}d open</Text>
               </Box>
               {/* Avatar stack */}
               <Box style={{ display: 'flex', alignItems: 'center' }}>
-                {job.recruiterAvatars.slice(0, 3).map((avatar, idx) => (
+                {(((job as any).recruiterAvatars || []) as string[]).slice(0, 3).map((avatar: string, idx: number) => (
                   <Box key={idx} style={{
                     width: 26, height: 26, borderRadius: tokens.borderRadius.full,
                     border: `2px solid ${tokens.colors.common.white}`,
@@ -369,9 +404,9 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
                     {!avatar && <Users size={11} color={tokens.colors.primaryScale[600]} />}
                   </Box>
                 ))}
-                {job.recruiterAvatars.length > 3 && (
+                {(((job as any).recruiterAvatars || []) as string[]).length > 3 && (
                   <Box style={{ width: 26, height: 26, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, marginLeft: -8, backgroundColor: tokens.colors.neutral[100], display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 0 }}>
-                    <Text style={{ fontSize: '9px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{job.recruiterAvatars.length - 3}</Text>
+                    <Text style={{ fontSize: '9px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{(((job as any).recruiterAvatars || []) as string[]).length - 3}</Text>
                   </Box>
                 )}
               </Box>

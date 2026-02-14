@@ -10,7 +10,10 @@ import { BH_OFFER_NEGOTIATION_TRACKER_PRESETS } from './presets';
 export {
   type BhOfferNegotiationTrackerProps,
   type BhOfferNegotiationTrackerPreset,
+  type DBOffer,
+  type RecruiterOffer,
   type NegotiationRound,
+  offerToNegotiationRounds,
   BH_OFFER_NEGOTIATION_TRACKER_DEFAULTS,
 } from './core';
 

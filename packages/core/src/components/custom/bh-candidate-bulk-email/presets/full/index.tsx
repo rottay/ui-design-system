@@ -25,18 +25,20 @@ import {
   getAccentAwareLayout,
 } from '../../../helpers';
 import type { BhCandidateBulkEmailProps, BulkEmailRecipient } from '../../core';
+import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
 const MOCK_RECIPIENTS: BulkEmailRecipient[] = [
-  { id: 'br-1', name: 'Sarah Johnson', email: 'sarah.johnson@email.com', variables: { position: 'Senior Frontend Engineer', interviewDate: 'March 15, 2026' } },
-  { id: 'br-2', name: 'Michael Chen', email: 'michael.chen@email.com', variables: { position: 'Backend Developer', interviewDate: 'March 16, 2026' } },
-  { id: 'br-3', name: 'Emily Rodriguez', email: 'emily.r@email.com', variables: { position: 'Product Designer', interviewDate: 'March 17, 2026' } },
-  { id: 'br-4', name: 'James Kim', email: 'james.kim@email.com', variables: { position: 'DevOps Engineer', interviewDate: 'March 18, 2026' } },
-  { id: 'br-5', name: 'Anna Kowalski', email: 'anna.k@email.com', variables: { position: 'Data Analyst', interviewDate: 'March 19, 2026' } },
+  { candidate: { id: 'br-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@email.com' } as DBCandidate, variables: { position: 'Senior Frontend Engineer', interviewDate: 'March 15, 2026' } },
+  { candidate: { id: 'br-2', firstName: 'Michael', lastName: 'Chen', email: 'michael.chen@email.com' } as DBCandidate, variables: { position: 'Backend Developer', interviewDate: 'March 16, 2026' } },
+  { candidate: { id: 'br-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily.r@email.com' } as DBCandidate, variables: { position: 'Product Designer', interviewDate: 'March 17, 2026' } },
+  { candidate: { id: 'br-4', firstName: 'James', lastName: 'Kim', email: 'james.kim@email.com' } as DBCandidate, variables: { position: 'DevOps Engineer', interviewDate: 'March 18, 2026' } },
+  { candidate: { id: 'br-5', firstName: 'Anna', lastName: 'Kowalski', email: 'anna.k@email.com' } as DBCandidate, variables: { position: 'Data Analyst', interviewDate: 'March 19, 2026' } },
 ];
 
 const MOCK_SUBJECT = 'Interview Invitation - {{position}}';
@@ -83,7 +85,7 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
     } = props;
 
     const [localSelected, setLocalSelected] = useState<Set<string>>(
-      new Set(propSelectedIds ?? recipients.map(r => r.id)),
+      new Set(propSelectedIds ?? recipients.map(r => r.candidate.id)),
     );
     const [previewId, setPreviewId] = useState<string | null>(propPreviewId ?? null);
 
@@ -111,23 +113,23 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
       if (localSelected.size === recipients.length) {
         setLocalSelected(new Set());
       } else {
-        setLocalSelected(new Set(recipients.map(r => r.id)));
+        setLocalSelected(new Set(recipients.map(r => r.candidate.id)));
       }
     }, [recipients, localSelected.size]);
 
     const previewRecipient = useMemo(
-      () => recipients.find(r => r.id === previewId),
+      () => recipients.find(r => r.candidate.id === previewId),
       [recipients, previewId],
     );
 
     const resolvedPreviewSubject = useMemo(() => {
       if (!previewRecipient) return subject;
-      return resolveTemplate(subject, previewRecipient.variables, previewRecipient.name);
+      return resolveTemplate(subject, previewRecipient.variables, getCandidateFullName(previewRecipient.candidate));
     }, [previewRecipient, subject]);
 
     const resolvedPreviewBody = useMemo(() => {
       if (!previewRecipient) return body;
-      return resolveTemplate(body, previewRecipient.variables, previewRecipient.name);
+      return resolveTemplate(body, previewRecipient.variables, getCandidateFullName(previewRecipient.candidate));
     }, [previewRecipient, body]);
 
     const animStyle = useMemo(() => ({
@@ -247,12 +249,14 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
                 </Box>
               )}
               {recipients.map((recipient, i) => {
-                const isSelected = localSelected.has(recipient.id);
-                const isPreviewing = previewId === recipient.id;
+                const cand = recipient.candidate;
+                const recipientName = getCandidateFullName(cand);
+                const isSelected = localSelected.has(cand.id);
+                const isPreviewing = previewId === cand.id;
 
                 return (
                   <Box
-                    key={recipient.id}
+                    key={cand.id}
                     role="listitem"
                     style={{
                       display: 'flex',
@@ -269,9 +273,9 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
                       tabIndex={0}
                       role="checkbox"
                       aria-checked={isSelected}
-                      aria-label={`Select ${recipient.name}`}
-                      onClick={() => handleToggle(recipient.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle(recipient.id); } }}
+                      aria-label={`Select ${recipientName}`}
+                      onClick={() => handleToggle(cand.id)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleToggle(cand.id); } }}
                       style={{ cursor: 'pointer', flexShrink: 0 }}
                     >
                       {isSelected ? (
@@ -291,10 +295,10 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                       }}>
-                        {recipient.name}
+                        {recipientName}
                       </Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {recipient.email}
+                        {cand.email ?? ''}
                       </Text>
                     </Box>
 
@@ -302,9 +306,9 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
                     <Box
                       tabIndex={0}
                       role="button"
-                      aria-label={`Preview email for ${recipient.name}`}
-                      onClick={() => handlePreview(recipient.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePreview(recipient.id); } }}
+                      aria-label={`Preview email for ${recipientName}`}
+                      onClick={() => handlePreview(cand.id)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePreview(cand.id); } }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -345,7 +349,7 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
                     textTransform: ptypo.labelTransform,
                     letterSpacing: ptypo.labelLetterSpacing,
                   }}>
-                    Preview for {previewRecipient.name}
+                    Preview for {getCandidateFullName(previewRecipient.candidate)}
                   </Text>
                 </Box>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
@@ -368,7 +372,7 @@ export const FullBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>(
                       borderRadius: badgeRadius,
                     }}>
                       <User size={10} style={{ marginRight: 3 }} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{previewRecipient.name}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{getCandidateFullName(previewRecipient.candidate)}</Text>
                     </Box>
                   </Box>
                   <Text style={{

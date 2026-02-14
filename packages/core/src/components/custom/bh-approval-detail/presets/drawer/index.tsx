@@ -62,18 +62,21 @@ const MOCK_APPROVAL: ApprovalDetailData = {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-const ENTITY_ICONS: Record<ApprovalDetailData['entityType'], typeof Briefcase> = {
+const ENTITY_ICONS: Partial<Record<NonNullable<ApprovalDetailData['entityType']>, typeof Briefcase>> = {
   offer: FileText,
   position: Briefcase,
   budget: DollarSign,
   job: Users,
+  client: Users,
+  impersonation_request: FileText,
 };
 
-function getPriorityConfig(priority: ApprovalDetailData['priority'], t: DesignTokens) {
+function getPriorityConfig(priority: ApprovalDetailData['priority'] | undefined, t: DesignTokens) {
   switch (priority) {
     case 'high': return { label: 'High', badge: 'error' as const, color: t.colors.errorScale[600] };
     case 'medium': return { label: 'Medium', badge: 'warning' as const, color: t.colors.warningScale[600] };
-    case 'low': return { label: 'Low', badge: 'secondary' as const, color: t.colors.neutral[500] };
+    case 'low':
+    default: return { label: 'Low', badge: 'secondary' as const, color: t.colors.neutral[500] };
   }
 }
 
@@ -103,7 +106,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approval = MOCK_APPROVAL,
+      approval: _approval = MOCK_APPROVAL,
       onApprove,
       onReject,
       onComment,
@@ -112,6 +115,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
       className,
       style,
     } = props;
+    const approval = _approval ?? MOCK_APPROVAL;
 
     const [comment, setComment] = useState('');
 
@@ -126,7 +130,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     }), [entrance]);
 
     const priorityCfg = useMemo(() => getPriorityConfig(approval.priority, t), [approval.priority, t]);
-    const EntityIcon = ENTITY_ICONS[approval.entityType] ?? FileText;
+    const EntityIcon = (approval.entityType ? ENTITY_ICONS[approval.entityType] : undefined) ?? FileText;
     const isPending = approval.status === 'pending';
 
     const handleComment = useCallback(() => {
@@ -137,7 +141,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     }, [comment, onComment]);
 
     const completedSteps = useMemo(
-      () => approval.chain.filter(s => s.status === 'approved').length,
+      () => (approval.chain ?? []).filter(s => s.status === 'approved').length,
       [approval.chain],
     );
 
@@ -189,7 +193,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>{priorityCfg.label}</Text>
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                    {approval.entityType.charAt(0).toUpperCase() + approval.entityType.slice(1)}
+                    {(approval.entityType || '').charAt(0).toUpperCase() + (approval.entityType || '').slice(1)}
                   </Text>
                 </Box>
               </Box>
@@ -221,13 +225,13 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <User size={12} color={t.colors.neutral[400]} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                {approval.requestedBy}
+                {approval.requestedBy ?? ''}
               </Text>
             </Box>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Calendar size={12} color={t.colors.neutral[400]} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                {formatDistanceToNow(approval.requestedAt, { addSuffix: true })}
+                {approval.requestedAt ? formatDistanceToNow(approval.requestedAt, { addSuffix: true }) : ''}
               </Text>
             </Box>
           </Box>
@@ -254,13 +258,13 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
           <Text style={{
             ...createPersonalitySectionHeaderStyle(t),
           }}>
-            Approval Chain ({completedSteps}/{approval.chain.length})
+            Approval Chain ({completedSteps}/{(approval.chain ?? []).length})
           </Text>
           <Box style={{ marginBottom: t.spacing[5] }}>
-            {approval.chain.map((step, idx) => {
-              const stepCfg = getStatusConfig(step.status, t);
+            {(approval.chain ?? []).map((step, idx) => {
+              const stepCfg = getStatusConfig(step.status ?? 'pending', t);
               const StepIcon = stepCfg.icon;
-              const isLast = idx === approval.chain.length - 1;
+              const isLast = idx === (approval.chain ?? []).length - 1;
 
               return (
                 <Box key={idx} style={{ display: 'flex', gap: t.spacing[3], marginBottom: isLast ? 0 : t.spacing[1] }}>
@@ -276,7 +280,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
                   <Box style={{ flex: 1, paddingBottom: isLast ? 0 : t.spacing[2] }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
-                        {step.approverName}
+                        {step.approverName ?? ''}
                       </Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: stepCfg.color }}>{stepCfg.label}</Text>
                     </Box>
@@ -321,7 +325,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
                       {att.name}
                     </Text>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                      {att.type.toUpperCase()}
+                      {(att.type || '').toUpperCase()}
                     </Text>
                   </Box>
                 ))}

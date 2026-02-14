@@ -1,26 +1,35 @@
 /**
  * BhPipelineGlobalKanban - Core Interface
- * Full pipeline Kanban board with columns per stage
+ * Full pipeline Kanban board with columns per stage.
+ * Candidate cards map to DBApplication records.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApplication, ApplicationStatusValue } from '@rottay/recruiter';
 
 export type BhPipelineGlobalKanbanPreset = 'board' | 'compact';
 
+/**
+ * Kanban card candidate - maps to a DBApplication with candidate info.
+ * All fields optional for null-safety.
+ */
 export interface KanbanStageCandidate {
-  id: string;
-  name: string;
-  avatarInitial: string;
+  id?: string;
+  name?: string;
+  avatarInitial?: string;
   score?: number;
-  appliedAt: Date;
+  appliedAt?: Date | string | null;
   tags?: string[];
+  /** Optional: raw application record for consumers who need full data */
+  application?: Partial<DBApplication>;
 }
 
 export interface KanbanStage {
-  id: string;
-  name: string;
-  candidates: KanbanStageCandidate[];
+  id?: string;
+  name?: string;
+  status?: ApplicationStatusValue;
+  candidates?: KanbanStageCandidate[];
   color?: string;
   limit?: number;
 }

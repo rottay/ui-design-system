@@ -45,8 +45,11 @@ function getScoreBadgeKey(score: number): 'success' | 'warning' | 'error' {
   return 'error';
 }
 
-function getDaysInStage(appliedAt: Date): number {
-  return Math.floor((Date.now() - appliedAt.getTime()) / (1000 * 60 * 60 * 24));
+function getDaysInStage(appliedAt: Date | string | null | undefined): number {
+  if (!appliedAt) return 0;
+  const date = typeof appliedAt === 'string' ? new Date(appliedAt) : appliedAt;
+  if (isNaN(date.getTime())) return 0;
+  return Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 function getDaysColor(days: number, t: DesignTokens): string {
@@ -144,7 +147,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = MOCK_STAGES,
+      stages = [],
       onCardMove,
       onCardClick,
       onStageClick,
@@ -178,7 +181,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
 
     /* Total candidates count */
     const totalCandidates = useMemo(
-      () => stages.reduce((sum, s) => sum + s.candidates.length, 0),
+      () => (stages ?? []).reduce((sum, s) => sum + (s.candidates ?? []).length, 0),
       [stages],
     );
 
@@ -248,10 +251,11 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
           padding: t.spacing[4],
           overflow: 'auto',
         }}>
-          {stages.map((stage, stageIndex) => {
+          {(stages ?? []).map((stage, stageIndex) => {
+            const stageCandidates = stage.candidates ?? [];
             const stageColor = stage.color ?? getDefaultStageColor(stageIndex, t);
             const stageColorLight = getDefaultStageColorLight(stageIndex, t);
-            const isOverLimit = stage.limit != null && stage.candidates.length >= stage.limit;
+            const isOverLimit = stage.limit != null && stageCandidates.length >= stage.limit;
             const isDragOver = dragOverStage === stage.id;
 
             return (
@@ -275,12 +279,12 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                 }}
                 onDragOver={(e: React.DragEvent) => {
                   e.preventDefault();
-                  setDragOverStage(stage.id);
+                  setDragOverStage((stage.id ?? null));
                 }}
                 onDragLeave={() => setDragOverStage(null)}
                 onDrop={() => setDragOverStage(null)}
                 role="region"
-                aria-label={`${stage.name} stage, ${stage.candidates.length} candidates`}
+                aria-label={`${stage.name ?? 'Unknown'} stage, ${stageCandidates.length} candidates`}
               >
                 {/* Column Header */}
                 <Box
@@ -294,11 +298,11 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                     cursor: 'pointer',
                     flexShrink: 0,
                   }}
-                  onClick={() => handleStageClick(stage.id)}
+                  onClick={() => stage.id && handleStageClick(stage.id)}
                   role="button"
                   tabIndex={0}
-                  aria-label={`View ${stage.name} stage details`}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageClick(stage.id); } }}
+                  aria-label={`View ${stage.name ?? 'Unknown'} stage details`}
+                  onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && stage.id) { e.preventDefault(); handleStageClick(stage.id); } }}
                 >
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                     <Box style={{
@@ -311,7 +315,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                       color: t.colors.neutral[800],
                       letterSpacing: ptypo.headingLetterSpacing,
                     }}>
-                      {stage.name}
+                      {stage.name ?? 'Unknown'}
                     </Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
@@ -324,7 +328,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                       padding: `0px ${t.spacing[2]}px`,
                     }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>
-                        {stage.candidates.length}
+                        {stageCandidates.length}
                         {stage.limit != null && `/${stage.limit}`}
                       </Text>
                     </Box>
@@ -356,8 +360,8 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                   display: 'flex',
                   flexDirection: 'column',
                   gap: t.spacing[2],
-                }} role="list" aria-label={`${stage.name} candidates`}>
-                  {stage.candidates.length === 0 && (
+                }} role="list" aria-label={`${stage.name ?? 'Unknown'} candidates`}>
+                  {stageCandidates.length === 0 && (
                     <Box style={{
                       ...createEmptyStateStyle(t),
                       padding: `${t.spacing[6]}px ${t.spacing[3]}px`,
@@ -372,22 +376,23 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                     </Box>
                   )}
 
-                  {stage.candidates.map((candidate, cardIndex) => {
-                    const isSelected = selectedCardId === candidate.id;
-                    const isHovered = hoveredCard === candidate.id;
+                  {stageCandidates.map((candidate, cardIndex) => {
+                    const candidateId = candidate.id ?? `card-${cardIndex}`;
+                    const isSelected = selectedCardId === candidateId;
+                    const isHovered = hoveredCard === candidateId;
                     const daysInStage = getDaysInStage(candidate.appliedAt);
 
                     return (
                       <Box
-                        key={candidate.id}
+                        key={candidateId}
                         role="listitem"
                         tabIndex={0}
-                        aria-label={`${candidate.name}, score ${candidate.score ?? 'N/A'}, ${daysInStage} days`}
+                        aria-label={`${candidate.name ?? 'Unknown'}, score ${candidate.score ?? 'N/A'}, ${daysInStage} days`}
                         draggable
-                        onClick={() => handleCardClick(candidate.id)}
-                        onMouseEnter={() => setHoveredCard(candidate.id)}
+                        onClick={() => handleCardClick(candidateId)}
+                        onMouseEnter={() => setHoveredCard(candidateId)}
                         onMouseLeave={() => setHoveredCard(null)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(candidate.id); } }}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(candidateId); } }}
                         style={{
                           ...card,
                           padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
@@ -417,7 +422,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                             display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                           }}>
                             <Text style={{ fontSize: 9, fontWeight: t.typography.fontWeight.bold, color: stageColor }}>
-                              {candidate.avatarInitial}
+                              {candidate.avatarInitial ?? '?'}
                             </Text>
                           </Box>
                           <Text style={{
@@ -427,7 +432,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                             flex: 1, minWidth: 0,
                             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                           }}>
-                            {candidate.name}
+                            {candidate.name ?? 'Unknown'}
                           </Text>
                           {candidate.score != null && (
                             <Box style={{
@@ -466,8 +471,8 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                             borderTop: `1px solid ${t.colors.neutral[100]}`,
                           }}>
                             <button
-                              onClick={(e) => { e.stopPropagation(); onCardMove?.(candidate.id, stage.id, stages[stageIndex + 1]?.id ?? stage.id); }}
-                              aria-label={`Advance ${candidate.name}`}
+                              onClick={(e) => { e.stopPropagation(); onCardMove?.(candidateId, stage.id ?? '', (stages ?? [])[stageIndex + 1]?.id ?? stage.id ?? ''); }}
+                              aria-label={`Advance ${candidate.name ?? 'candidate'}`}
                               style={{
                                 display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                                 padding: `1px ${t.spacing[2]}px`,
@@ -482,7 +487,7 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                             </button>
                             <button
                               onClick={(e) => { e.stopPropagation(); }}
-                              aria-label={`Reject ${candidate.name}`}
+                              aria-label={`Reject ${candidate.name ?? 'candidate'}`}
                               style={{
                                 display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                                 padding: `1px ${t.spacing[2]}px`,
@@ -509,8 +514,8 @@ export const BoardBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanbanPr
                   flexShrink: 0,
                 }}>
                   <button
-                    onClick={() => handleAddCandidate(stage.id)}
-                    aria-label={`Add candidate to ${stage.name}`}
+                    onClick={() => stage.id && handleAddCandidate(stage.id)}
+                    aria-label={`Add candidate to ${stage.name ?? 'stage'}`}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       gap: t.spacing[1],

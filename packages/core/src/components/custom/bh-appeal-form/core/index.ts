@@ -1,15 +1,24 @@
 /**
  * BhAppealForm - Core Interface
  * Appeal submission form for BitHire ATS platform
+ *
+ * Uses AppealSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { AppealSelect } from '@rottay/scoring';
 
 export type BhAppealFormPreset = 'form' | 'compact';
 
+/** DB appeal status values */
+export type AppealStatus = AppealSelect['status'];
+
 export interface BhAppealFormProps extends EngineAwareProps {
   preset?: BhAppealFormPreset;
+
+  /** Existing appeal DB entity (for editing) */
+  appeal?: Partial<AppealSelect>;
 
   /** Candidate name */
   candidateName?: string;
@@ -17,7 +26,7 @@ export interface BhAppealFormProps extends EngineAwareProps {
   /** Position title */
   positionTitle?: string;
 
-  /** Original decision */
+  /** Original decision description */
   originalDecision?: string;
 
   /** Appeal reason text */
@@ -51,3 +60,6 @@ export interface BhAppealFormProps extends EngineAwareProps {
 export const BH_APPEAL_FORM_DEFAULTS: Partial<BhAppealFormProps> = {
   preset: 'form',
 };
+
+/** Re-export DB type for convenience */
+export type { AppealSelect };

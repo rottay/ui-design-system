@@ -27,7 +27,13 @@ import {
  * Default Data
  * -------------------------------------------------------------------------*/
 
-const DEFAULT_CLIENT = {
+interface ClientDisplay {
+  name: string;
+  contactName: string;
+  contactEmail: string;
+}
+
+const DEFAULT_CLIENT: ClientDisplay = {
   name: 'Acme Corporation',
   contactName: 'Jennifer Walsh',
   contactEmail: 'jennifer.walsh@acme.com',
@@ -109,7 +115,7 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
     }, [t]);
 
     const {
-      client = DEFAULT_CLIENT,
+      client: clientProp,
       positions = DEFAULT_POSITIONS,
       interviews = DEFAULT_INTERVIEWS,
       metrics = DEFAULT_METRICS,
@@ -117,6 +123,15 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
       onPositionSelect,
       className, style,
     } = props;
+
+    const client: ClientDisplay = useMemo(() => {
+      if (!clientProp) return DEFAULT_CLIENT;
+      return {
+        name: clientProp.displayName ?? clientProp.clientCompanyName ?? '',
+        contactName: clientProp.firstName ? `${clientProp.firstName} ${clientProp.lastName ?? ''}`.trim() : '',
+        contactEmail: clientProp.personalEmail ?? '',
+      };
+    }, [clientProp]);
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
 
@@ -167,7 +182,7 @@ export const OperationalBhClientPortal = createPreset<BhClientPortalProps>({
               <>
                 <Box style={createIconContainerStyle(t, { size: 36, color: t.colors.primaryScale[100] })}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
-                    {client.name.charAt(0)}
+                    {(client.name || '').charAt(0)}
                   </Text>
                 </Box>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>

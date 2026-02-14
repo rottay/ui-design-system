@@ -17,25 +17,25 @@ import {
   getPersonalityTypography,
   getPersonalityBadgeRadius,
 } from '../../../helpers';
-import type { BhCandidateKanbanProps, KanbanCandidate, KanbanStage, CandidateSource, AiRecommendation, KanbanFilter } from '../../core';
+import type { BhCandidateKanbanProps, KanbanCandidate, KanbanStage, AiRecommendation, KanbanFilter } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import { Search, X, ChevronDown, ChevronRight, Calendar, MessageSquare, ThumbsDown, Clock, Sparkles, Users } from 'lucide-react';
 
 function getScoreColor(s: number, t: DesignTokens): string { return s >= 75 ? t.colors.successScale[500] : s >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500]; }
 function getAiColor(r: AiRecommendation, t: DesignTokens): string { return r === 'advance' ? t.colors.successScale[500] : r === 'hold' ? t.colors.warningScale[500] : t.colors.errorScale[500]; }
-function getSourceConfig(s: CandidateSource, t: DesignTokens) {
-  const m: Record<CandidateSource, { label: string; bg: string; text: string }> = {
+function getSourceConfig(s: string, t: DesignTokens) {
+  const m: Record<string, { label: string; bg: string; text: string }> = {
     applied: { label: 'Applied', bg: t.colors.primaryScale[50], text: t.colors.primaryScale[700] },
     referral: { label: 'Referral', bg: t.colors.successScale[50], text: t.colors.successScale[700] },
     sourced: { label: 'Sourced', bg: t.colors.infoScale[50], text: t.colors.infoScale[700] },
     agency: { label: 'Agency', bg: t.colors.warningScale[50], text: t.colors.warningScale[700] },
     internal: { label: 'Internal', bg: t.colors.secondaryScale[50], text: t.colors.secondaryScale[700] },
   };
-  return m[s];
+  return m[s] ?? { label: s, bg: t.colors.neutral[50], text: t.colors.neutral[700] };
 }
 function getInitials(n: string): string { const p = n.trim().split(/\s+/); return p.length >= 2 ? (p[0][0] + p[p.length - 1][0]).toUpperCase() : (p[0]?.[0] ?? '').toUpperCase(); }
 function matchesFilters(c: KanbanCandidate, f: KanbanFilter | undefined, q: string): boolean {
-  if (q) { const ql = q.toLowerCase(); if (!c.name.toLowerCase().includes(ql) && !c.email?.toLowerCase().includes(ql)) return false; }
+  if (q) { const ql = q.toLowerCase(); if (!(c.name || '').toLowerCase().includes(ql) && !c.email?.toLowerCase().includes(ql)) return false; }
   if (!f) return true;
   if (f.source?.length && !f.source.includes(c.source)) return false;
   if (f.aiRecommendation?.length && !f.aiRecommendation.includes(c.aiRecommendation)) return false;
@@ -86,7 +86,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     const isGlass = t.surface.useGlass;
     const ptypo = getPersonalityTypography(t);
 
-    const { jobName = 'Senior Frontend Engineer', totalCandidates = 18, stages = DEFAULT_STAGES, candidates: cp = DEFAULT_CANDIDATES, onCandidateClick, onScheduleInterview, onAddNote, onReject, filters: fp, onFilterChange, searchQuery: sqp, onSearchChange, className, style } = props;
+    const { jobName = '', totalCandidates = 0, stages = [], candidates: cp = [], onCandidateClick, onScheduleInterview, onAddNote, onReject, filters: fp, onFilterChange, searchQuery: sqp, onSearchChange, className, style } = props;
     const [iSearch, setISearch] = useState('');
     const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
     const [hovered, setHovered] = useState<string | null>(null);
@@ -95,7 +95,7 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     const sq = sqp ?? iSearch;
     const sorted = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
     const filtered = useMemo(() => cp.filter(c => matchesFilters(c, fp, sq)), [cp, fp, sq]);
-    const sources: CandidateSource[] = ['applied', 'referral', 'sourced', 'agency', 'internal'];
+    const sources: string[] = ['applied', 'referral', 'sourced', 'agency', 'internal'];
     const bySrc = useMemo(() => { const m: Record<string, KanbanCandidate[]> = {}; sources.forEach(s => { m[s] = filtered.filter(c => c.source === s); }); return m; }, [filtered]);
     const br = getPersonalityBadgeRadius(t);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

@@ -1,36 +1,44 @@
 /**
  * BhProctoringActivity - Core Interface
  * Activity feed showing proctoring events in chronological order
+ *
+ * Uses ProctoringEventSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringActivityPreset = 'feed' | 'compact';
 
-export type ProctoringEventType =
-  | 'tab_switch'
-  | 'copy_paste'
-  | 'screen_share'
-  | 'unusual_typing'
-  | 'browser_focus_lost';
+/** Backward-compat aliases (old names from pre-migration) */
+export type ProctoringEventTypeValue = ProctoringEventType;
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
-export type ProctoringEventSeverity = 'low' | 'medium' | 'high' | 'critical';
-
+/**
+ * UI-friendly proctoring activity event with flat fields.
+ * Pre-computed/mapped from DB data by the consuming application.
+ */
 export interface ProctoringActivityEvent {
+  /** Event identifier */
   id: string;
-  candidateName: string;
-  eventType: ProctoringEventType;
-  severity: ProctoringEventSeverity;
-  timestamp: Date;
-  description: string;
+  /** Display name of the candidate (resolved externally) */
+  candidateName?: string;
+  /** Type of proctoring event */
+  eventType?: ProctoringEventType;
+  /** Event severity */
+  severity?: ProctoringEventSeverity;
+  /** When the event occurred */
+  timestamp?: Date;
+  /** Event description (UI-computed) */
+  description?: string;
 }
 
 export interface BhProctoringActivityProps extends EngineAwareProps {
   preset?: BhProctoringActivityPreset;
 
   /** Events to display */
-  events: ProctoringActivityEvent[];
+  events?: ProctoringActivityEvent[];
 
   /** Callback when an event is clicked */
   onEventClick?: (eventId: string) => void;
@@ -60,3 +68,6 @@ export const BH_PROCTORING_ACTIVITY_DEFAULTS: Partial<BhProctoringActivityProps>
   showTimestamps: true,
   groupByCandidate: false,
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity };

@@ -25,14 +25,14 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhRecruiterPerformanceProps, RecruiterMetrics } from '../../core';
+import type { BhRecruiterPerformanceProps, RecruiterPerformanceItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RECRUITERS: RecruiterMetrics[] = [
+const MOCK_RECRUITERS: RecruiterPerformanceItem[] = [
   { recruiterId: 'r-1', name: 'Alice Morgan', hires: 12, timeToFill: 28, qualityScore: 92, candidateSatisfaction: 88, pipelineVelocity: 85, activePositions: 6 },
   { recruiterId: 'r-2', name: 'Bob Chen', hires: 9, timeToFill: 35, qualityScore: 78, candidateSatisfaction: 82, pipelineVelocity: 72, activePositions: 8 },
   { recruiterId: 'r-3', name: 'Carla Ruiz', hires: 15, timeToFill: 22, qualityScore: 95, candidateSatisfaction: 91, pipelineVelocity: 90, activePositions: 5 },
@@ -43,7 +43,7 @@ const MOCK_RECRUITERS: RecruiterMetrics[] = [
 /*  Radar Chart (SVG)                                                  */
 /* ------------------------------------------------------------------ */
 
-const RADAR_METRICS: { key: keyof RecruiterMetrics; label: string; max: number }[] = [
+const RADAR_METRICS: { key: keyof RecruiterPerformanceItem; label: string; max: number }[] = [
   { key: 'qualityScore', label: 'Quality', max: 100 },
   { key: 'candidateSatisfaction', label: 'Satisfaction', max: 100 },
   { key: 'pipelineVelocity', label: 'Velocity', max: 100 },
@@ -107,7 +107,7 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
     const radarPoints = useMemo(() => {
       if (!selected) return '';
       return RADAR_METRICS.map((m, i) => {
-        const val = (selected[m.key] as number) / m.max;
+        const val = ((selected[m.key] as number) ?? 0) / m.max;
         const pt = polarToCartesian(radarCx, radarCy, radarR * val, i * angleStep);
         return `${pt.x},${pt.y}`;
       }).join(' ');
@@ -197,10 +197,10 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
               {selected && (
                 <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                   {[
-                    { label: 'Quality Score', value: selected.qualityScore, max: 100, icon: Award, color: t.colors.successScale },
-                    { label: 'Satisfaction', value: selected.candidateSatisfaction, max: 100, icon: Users, color: t.colors.primaryScale },
-                    { label: 'Pipeline Velocity', value: selected.pipelineVelocity, max: 100, icon: Activity, color: t.colors.infoScale },
-                    { label: 'Time to Fill', value: selected.timeToFill, max: 60, icon: Clock, color: t.colors.warningScale },
+                    { label: 'Quality Score', value: selected.qualityScore ?? 0, max: 100, icon: Award, color: t.colors.successScale },
+                    { label: 'Satisfaction', value: selected.candidateSatisfaction ?? 0, max: 100, icon: Users, color: t.colors.primaryScale },
+                    { label: 'Pipeline Velocity', value: selected.pipelineVelocity ?? 0, max: 100, icon: Activity, color: t.colors.infoScale },
+                    { label: 'Time to Fill', value: selected.timeToFill ?? 0, max: 60, icon: Clock, color: t.colors.warningScale },
                   ].map((metric) => {
                     const pct = (metric.value / metric.max) * 100;
                     const bar = createProgressBarStyle(t, { percent: pct, color: metric.color[500] });
@@ -249,9 +249,9 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
                     key={r.recruiterId}
                     role="row"
                     tabIndex={0}
-                    aria-label={`${r.name}: ${r.hires} hires, ${r.timeToFill}d TTF, ${r.qualityScore} quality`}
-                    onClick={() => handleClick(r.recruiterId)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(r.recruiterId); } }}
+                    aria-label={`${r.name ?? ''}: ${r.hires ?? 0} hires, ${r.timeToFill ?? 0}d TTF, ${r.qualityScore ?? 0} quality`}
+                    onClick={() => handleClick((r.recruiterId ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((r.recruiterId ?? '')); } }}
                     style={{
                       display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr',
                       padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
@@ -261,12 +261,12 @@ export const DashboardBhRecruiterPerformance = createPreset<BhRecruiterPerforman
                       transition: `background-color ${t.motion.hover}`,
                     }}
                   >
-                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{r.name}</Text></Box>
-                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.hires}</Text></Box>
-                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.timeToFill}d</Text></Box>
-                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: r.qualityScore >= 85 ? t.colors.successScale[600] : t.colors.neutral[700] }}>{r.qualityScore}</Text></Box>
-                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.candidateSatisfaction}</Text></Box>
-                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.pipelineVelocity}</Text></Box>
+                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{r.name ?? ''}</Text></Box>
+                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.hires ?? 0}</Text></Box>
+                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.timeToFill ?? 0}d</Text></Box>
+                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: (r.qualityScore ?? 0) >= 85 ? t.colors.successScale[600] : t.colors.neutral[700] }}>{r.qualityScore ?? 0}</Text></Box>
+                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.candidateSatisfaction ?? 0}</Text></Box>
+                    <Box role="cell"><Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{r.pipelineVelocity ?? 0}</Text></Box>
                   </Box>
                 );
               })}

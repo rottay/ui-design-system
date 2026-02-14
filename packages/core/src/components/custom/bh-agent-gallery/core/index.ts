@@ -1,31 +1,49 @@
 /**
  * BhAgentGallery - Core Interface
  * Agent Browse & Select for BitHire ATS platform
+ *
+ * Types imported from @rottay/ia-chat (single source of truth).
+ * DBAgent fields: id, tenantId, name, description, type, provider, config, isActive, isDefault, createdAt, updatedAt, createdBy, updatedBy
+ * DBAgent.type enum: 'conversation' | 'phone' | 'chat'
+ * DBAgent.provider enum: 'vapi' | 'retell' | 'bland' | 'elevenlabs' | 'openai' | 'anthropic' | 'groq' | 'google' | 'mistral' | 'azure'
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBAgent } from '@rottay/ia-chat';
 
 export type BhAgentGalleryPreset = 'gallery' | 'list';
 
 export type AgentTab = 'my' | 'team' | 'marketplace';
 
+/** Display-level status derived from DBAgent.isActive + external logic */
 export type AgentStatus = 'active' | 'inactive' | 'draft' | 'error';
 
+/** Display-level agent role (mapped from DBAgent.type + config at the API layer) */
 export type AgentType = 'screener' | 'interviewer' | 'scheduler' | 'outreach' | 'sourcer' | 'custom';
 
+/**
+ * Gallery card data - display-oriented projection of DBAgent
+ * with computed/joined fields for the UI.
+ */
 export interface AgentSummary {
+  /** DBAgent.id */
   id: string;
+  /** DBAgent.name */
   name: string;
+  /** Mapped from DBAgent.type + config */
   type: AgentType;
   language: string;
+  /** DBAgent.provider */
   voiceProvider: string;
   status: AgentStatus;
   usageSparkline: number[];
+  /** DBAgent.isDefault */
   isDefault: boolean;
   rating?: number;
   downloads?: number;
   author?: string;
+  /** DBAgent.description */
   description?: string;
   lastUsed?: Date;
   tags?: string[];

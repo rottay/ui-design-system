@@ -3,11 +3,19 @@
  * Evaluation Template Builder for BitHire ATS platform
  */
 
+/**
+ * DB Reference: DBHiringProcessTemplate from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBHiringProcessTemplate } from '@rottay/recruiter';
 
 export type BhTemplateDesignerPreset = 'canvas' | 'form';
+
+/** Re-export for consumer convenience */
+export type { DBHiringProcessTemplate };
 
 /* ── Stage Types ────────────────────────────────────────────────────── */
 

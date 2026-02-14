@@ -1,17 +1,27 @@
-import type { ReactNode, CSSProperties } from 'react';
+/**
+ * BhCandidateOutreach - Core Interface
+ * Multi-channel outreach with templates, A/B testing, and scheduling
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * Recipients are derived from DBCandidate records.
+ */
+
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBCandidate } from '@rottay/recruiter';
 
 export type BhCandidateOutreachPreset = 'composer' | 'tracker';
 
+export type RecruiterCandidate = DBCandidate;
+
 export type OutreachChannel = 'email' | 'sms' | 'whatsapp' | 'linkedin';
 
+/**
+ * Outreach recipient wraps a DBCandidate for display in the outreach UI.
+ */
 export interface OutreachRecipient {
-  id: string;
-  name: string;
-  avatar?: string;
-  email?: string;
-  phone?: string;
+  candidate: DBCandidate;
 }
 
 export interface OutreachTemplate {
@@ -75,6 +85,24 @@ export const BH_CANDIDATE_OUTREACH_DEFAULTS: Partial<BhCandidateOutreachProps> =
   preset: 'composer',
 };
 
+/**
+ * Get the candidate's full name from DB fields.
+ */
+export function getCandidateFullName(candidate: DBCandidate): string {
+  return `${candidate.firstName ?? ''} ${candidate.lastName ?? ''}`.trim();
+}
+
+/**
+ * Get initials from a full name string.
+ */
+export function getRecipientInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  }
+  return name.charAt(0).toUpperCase();
+}
+
 export function getChannelColors(tokens: DesignTokens) {
   return {
     email: { color: tokens.colors.primaryScale[700], bgColor: tokens.colors.primaryScale[50], border: tokens.colors.primaryScale[200], iconBg: tokens.colors.primaryScale[100] },
@@ -91,14 +119,6 @@ export function getMetricColors(tokens: DesignTokens) {
     replied: { color: tokens.colors.successScale[600], bgColor: tokens.colors.successScale[50] },
     bounced: { color: tokens.colors.errorScale[600], bgColor: tokens.colors.errorScale[50] },
   };
-}
-
-export function getRecipientInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length >= 2) {
-    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
-  }
-  return name.charAt(0).toUpperCase();
 }
 
 export function resolveVariables(

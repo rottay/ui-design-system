@@ -4,16 +4,23 @@
  * BhInterviewCenter - Calendar Preset
  * Full calendar view with stats bar, view toggle, month/week/day views,
  * filter bar, quick schedule FAB, and interview detail popup.
+ *
+ * Uses DBInterview from @rottay/recruiter as the data source.
  */
 
 import { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import { createCardStyle, createSurfaceStyle } from '../../../helpers';
 import type {
-  BhInterviewCenterProps, InterviewItem, InterviewType,
-  InterviewStatus, InterviewFilter, CalendarView, SortDirection,
+  BhInterviewCenterProps, InterviewDisplayStatus, InterviewDisplayMode,
+  InterviewFilter, CalendarView, SortDirection,
 } from '../../core';
-import { BH_INTERVIEW_CENTER_DEFAULTS } from '../../core';
+import {
+  BH_INTERVIEW_CENTER_DEFAULTS, isAiInterview, getInterviewDateStr,
+  getInterviewDuration, getInterviewScore, getInterviewStatusLabel,
+  getInterviewModeLabel,
+} from '../../core';
+import type { DBInterview } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Calendar, List, Clock, Bot, User, Video, Plus, ChevronLeft, ChevronRight,
@@ -21,26 +28,39 @@ import {
   BarChart3, CalendarDays, CalendarRange, CalendarClock, Star, ExternalLink, Activity,
 } from 'lucide-react';
 
-// ─── Compact Config Maps ─────────────────────────────────────────────────────
+// --- Config Maps ---
 
-const STATUS_MAP: Record<InterviewStatus, { label: string; scale: string }> = {
+const STATUS_MAP: Record<string, { label: string; scale: string }> = {
+  pending: { label: 'Pending', scale: 'infoScale' },
   scheduled: { label: 'Scheduled', scale: 'infoScale' },
+  invitation_sent: { label: 'Invited', scale: 'infoScale' },
+  ready: { label: 'Ready', scale: 'infoScale' },
   in_progress: { label: 'In Progress', scale: 'warningScale' },
   completed: { label: 'Completed', scale: 'successScale' },
+  scored: { label: 'Scored', scale: 'successScale' },
+  approved: { label: 'Approved', scale: 'successScale' },
   cancelled: { label: 'Cancelled', scale: 'neutral' },
+  expired: { label: 'Expired', scale: 'neutral' },
   no_show: { label: 'No Show', scale: 'errorScale' },
+  technical_issue: { label: 'Tech Issue', scale: 'errorScale' },
+  candidate_declined: { label: 'Declined', scale: 'errorScale' },
 };
 
-const TYPE_MAP: Record<InterviewType, { label: string; scale: string }> = {
-  ai: { label: 'AI Interview', scale: 'infoScale' },
-  human: { label: 'Human Interview', scale: 'secondaryScale' },
-};
+function getStatusCfg(status: string | null | undefined) {
+  return STATUS_MAP[status ?? ''] ?? { label: status ?? 'Unknown', scale: 'neutral' };
+}
 
 function sc(t: DesignTokens, scale: string, shade: number) {
   return (t.colors as any)[scale]?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 
-// ─── Date Helpers ────────────────────────────────────────────────────────────
+/** Extract a display name from interview metadata or fall back to ID */
+function getDisplayName(iv: DBInterview, key: string, fallback?: string): string {
+  const meta = iv.metadata as Record<string, any> | null;
+  return meta?.[key] ?? fallback ?? '';
+}
+
+// --- Date Helpers ---
 
 function getMonthDays(year: number, month: number): Date[] {
   const days: Date[] = [];
@@ -62,7 +82,8 @@ function getWeekDays(date: Date): Date[] {
   return days;
 }
 
-const isSameDay = (a: Date, b: Date) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+const isSameDay = (a: Date, b: Date) =>
+  a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 
 function fmtTime(dateStr: string) {
   const d = new Date(dateStr); const h = d.getHours(); const m = d.getMinutes();
@@ -77,10 +98,10 @@ const HOURS = Array.from({ length: 13 }, (_, i) => i + 7);
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const fmtHour = (h: number) => h > 12 ? `${h - 12} PM` : h === 12 ? '12 PM' : `${h} AM`;
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+// --- Sub-components ---
 
-function Badge({ status, tokens: t }: { status: InterviewStatus; tokens: DesignTokens }) {
-  const cfg = STATUS_MAP[status];
+function Badge({ status, tokens: t }: { status: string; tokens: DesignTokens }) {
+  const cfg = getStatusCfg(status);
   const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, cfg.scale, cfg.scale === 'neutral' ? 100 : 50), color: sc(t, cfg.scale, cfg.scale === 'neutral' ? 600 : 700), border: `${bdr} ${sc(t, cfg.scale, 200)}` }}>
@@ -90,14 +111,14 @@ function Badge({ status, tokens: t }: { status: InterviewStatus; tokens: DesignT
   );
 }
 
-function TypeBadge({ type, tokens: t, size = 'sm' }: { type: InterviewType; tokens: DesignTokens; size?: 'sm' | 'md' }) {
-  const cfg = TYPE_MAP[type];
+function ModeBadge({ isAi, tokens: t, size = 'sm' }: { isAi: boolean; tokens: DesignTokens; size?: 'sm' | 'md' }) {
+  const scale = isAi ? 'infoScale' : 'secondaryScale';
   const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
   const iconSize = size === 'sm' ? 10 : 12;
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: size === 'sm' ? `0 ${t.spacing[1]}px` : `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: size === 'sm' ? '10px' : t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, cfg.scale, 100), color: sc(t, cfg.scale, 700), border: `${bdr} ${sc(t, cfg.scale, 200)}`, whiteSpace: 'nowrap' as const }}>
-      {type === 'ai' ? <Bot size={iconSize} /> : <User size={iconSize} />}
-      {size === 'md' && (type === 'ai' ? 'AI' : 'Human')}
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: size === 'sm' ? `0 ${t.spacing[1]}px` : `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.full, fontSize: size === 'sm' ? '10px' : t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, backgroundColor: sc(t, scale, 100), color: sc(t, scale, 700), border: `${bdr} ${sc(t, scale, 200)}`, whiteSpace: 'nowrap' as const }}>
+      {isAi ? <Bot size={iconSize} /> : <User size={iconSize} />}
+      {size === 'md' && (isAi ? 'AI' : 'Human')}
     </span>
   );
 }
@@ -120,7 +141,7 @@ function ChipBtn({ active, onClick, children, tokens: t }: { active: boolean; on
   );
 }
 
-// ─── Calendar Preset ─────────────────────────────────────────────────────────
+// --- Calendar Preset ---
 
 export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
   name: 'BhInterviewCenter.Calendar',
@@ -129,7 +150,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const isModern = t.surface.useGlass;
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
 
-    const { interviews, stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, calendarView: controlledCalendarView, onCalendarViewChange, sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange, className, style } = props;
+    const { interviews = [], stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, calendarView: controlledCalendarView, onCalendarViewChange, sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange, className, style } = props;
 
     const [internalCalendarView, setInternalCalendarView] = useState<CalendarView>(BH_INTERVIEW_CENTER_DEFAULTS.calendarView ?? 'week');
     const [internalFilters, setInternalFilters] = useState<InterviewFilter>({});
@@ -149,8 +170,12 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const handleFilterChange = useCallback((f: InterviewFilter) => { if (controlledFilters === undefined) setInternalFilters(f); onFilterChange?.(f); }, [controlledFilters, onFilterChange]);
     const handleCalendarViewChange = useCallback((v: CalendarView) => { if (controlledCalendarView === undefined) setInternalCalendarView(v); onCalendarViewChange?.(v); }, [controlledCalendarView, onCalendarViewChange]);
     const handleInterviewSelect = useCallback((id: string | null) => { if (controlledSelectedInterview === undefined) setInternalSelectedInterview(id); onInterviewSelect?.(id); }, [controlledSelectedInterview, onInterviewSelect]);
-    const handleStatusFilter = useCallback((s: InterviewStatus | null) => handleFilterChange({ ...filters, status: s }), [filters, handleFilterChange]);
-    const handleTypeFilter = useCallback((tp: InterviewType | null) => handleFilterChange({ ...filters, type: tp }), [filters, handleFilterChange]);
+    const handleStatusFilter = useCallback((s: InterviewDisplayStatus | null) => handleFilterChange({ ...filters, status: s }), [filters, handleFilterChange]);
+    const handleModeFilter = useCallback((isAi: boolean | null) => {
+      if (isAi === null) handleFilterChange({ ...filters, mode: undefined });
+      else if (isAi) handleFilterChange({ ...filters, mode: 'ai_voice' });
+      else handleFilterChange({ ...filters, mode: 'human_video' });
+    }, [filters, handleFilterChange]);
 
     const navigateDate = useCallback((dir: 'prev' | 'next' | 'today') => {
       if (dir === 'today') { setCurrentDate(new Date()); return; }
@@ -164,22 +189,39 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const filteredInterviews = useMemo(() => {
       let result = [...interviews];
       if (filters.status) result = result.filter(i => i.status === filters.status);
-      if (filters.type) result = result.filter(i => i.type === filters.type);
-      if (filters.dateRange) { const [s, e] = filters.dateRange; result = result.filter(i => { const d = new Date(i.dateTime); return d >= new Date(s) && d <= new Date(e); }); }
-      result.sort((a, b) => { const diff = new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime(); return sortDirection === 'asc' ? diff : -diff; });
+      if (filters.mode) {
+        const isAiFilter = filters.mode === 'ai_voice' || filters.mode === 'ai_chat';
+        result = result.filter(i => isAiFilter ? isAiInterview(i) : !isAiInterview(i));
+      }
+      if (filters.dateRange) {
+        const [s, e] = filters.dateRange;
+        result = result.filter(i => {
+          const d = new Date(getInterviewDateStr(i));
+          return d >= new Date(s) && d <= new Date(e);
+        });
+      }
+      result.sort((a, b) => {
+        const diff = new Date(getInterviewDateStr(a)).getTime() - new Date(getInterviewDateStr(b)).getTime();
+        return sortDirection === 'asc' ? diff : -diff;
+      });
       return result;
     }, [interviews, filters, sortDirection]);
 
     const interviewsByDate = useMemo(() => {
-      const map: Record<string, InterviewItem[]> = {};
-      filteredInterviews.forEach(iv => { const d = new Date(iv.dateTime); const k = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; if (!map[k]) map[k] = []; map[k].push(iv); });
+      const map: Record<string, DBInterview[]> = {};
+      filteredInterviews.forEach(iv => {
+        const d = new Date(getInterviewDateStr(iv));
+        const k = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+        if (!map[k]) map[k] = [];
+        map[k].push(iv);
+      });
       return map;
     }, [filteredInterviews]);
 
     const getForDate = (date: Date) => interviewsByDate[`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`] || [];
     const selectedData = useMemo(() => selectedInterview ? interviews.find(i => i.id === selectedInterview) ?? null : null, [selectedInterview, interviews]);
 
-    // ─── Stats Bar ───────────────────────────────────────────────────────
+    // --- Stats Bar ---
     const renderStatsBar = () => {
       if (!stats) return null;
       const items = [
@@ -213,7 +255,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       );
     };
 
-    // ─── View Toggle ─────────────────────────────────────────────────────
+    // --- View Toggle ---
     const ViewToggle = ({ views, activeKey }: { views: { key: string; icon: React.ReactNode; label?: string }[]; activeKey: string }) => (
       <div style={{ display: 'flex', alignItems: 'center', borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, overflow: 'hidden' as const }}>
         {views.map(({ key, icon, label }) => (
@@ -224,55 +266,56 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       </div>
     );
 
-    // ─── Filter Bar ──────────────────────────────────────────────────────
-    const statusOpts: (InterviewStatus | null)[] = [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'];
-    const typeOpts: (InterviewType | null)[] = [null, 'ai', 'human'];
+    // --- Filter Bar ---
+    const statusOpts: (InterviewDisplayStatus | null)[] = [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'];
 
     const renderFilterBar = () => (
       <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: `${t.spacing[3]}px 0`, marginBottom: t.spacing[3], flexWrap: 'wrap' as const }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
           <Filter size={14} color={t.colors.neutral[400]} />
-          {statusOpts.map(s => (
-            <ChipBtn key={s ?? 'all'} active={filters.status === s || (s === null && !filters.status)} onClick={() => handleStatusFilter(s)} tokens={t}>
-              {s !== null && <span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, STATUS_MAP[s].scale, STATUS_MAP[s].scale === 'neutral' ? 400 : 500), flexShrink: 0 }} />}
-              {s === null ? 'All' : STATUS_MAP[s].label}
-            </ChipBtn>
-          ))}
+          {statusOpts.map(s => {
+            const cfg = s ? getStatusCfg(s) : null;
+            return (
+              <ChipBtn key={s ?? 'all'} active={filters.status === s || (s === null && !filters.status)} onClick={() => handleStatusFilter(s)} tokens={t}>
+                {s !== null && cfg && <span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, cfg.scale, cfg.scale === 'neutral' ? 400 : 500), flexShrink: 0 }} />}
+                {s === null ? 'All' : cfg?.label ?? s}
+              </ChipBtn>
+            );
+          })}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-          {typeOpts.map(tp => (
-            <ChipBtn key={tp ?? 'all-types'} active={filters.type === tp || (tp === null && !filters.type)} onClick={() => handleTypeFilter(tp)} tokens={t}>
-              {tp === 'ai' && <Bot size={12} />}{tp === 'human' && <User size={12} />}
-              {tp === null ? 'All Types' : tp === 'ai' ? 'AI' : 'Human'}
-            </ChipBtn>
-          ))}
+          <ChipBtn active={!filters.mode} onClick={() => handleModeFilter(null)} tokens={t}>All Types</ChipBtn>
+          <ChipBtn active={filters.mode === 'ai_voice' || filters.mode === 'ai_chat'} onClick={() => handleModeFilter(true)} tokens={t}><Bot size={12} />AI</ChipBtn>
+          <ChipBtn active={filters.mode === 'human_video' || filters.mode === 'human_phone' || filters.mode === 'in_person'} onClick={() => handleModeFilter(false)} tokens={t}><User size={12} />Human</ChipBtn>
         </div>
         <div style={{ flex: 1 }} />
         <ViewToggle views={[{ key: 'month', icon: <CalendarDays size={14} />, label: 'Month' }, { key: 'week', icon: <CalendarRange size={14} />, label: 'Week' }, { key: 'day', icon: <CalendarClock size={14} />, label: 'Day' }]} activeKey={calendarView} />
       </div>
     );
 
-    // ─── Calendar Navigation ─────────────────────────────────────────────
+    // --- Calendar Navigation ---
     const navLabel = calendarView === 'month' ? fmtMonthYear(currentDate) : calendarView === 'week' ? `${fmtDate(getWeekDays(currentDate)[0])} - ${fmtDate(getWeekDays(currentDate)[6])}` : fmtDate(currentDate);
 
-    // ─── Interview Mini Card (shared) ────────────────────────────────────
-    const MiniCard = ({ iv }: { iv: InterviewItem }) => {
-      const isAi = iv.type === 'ai';
+    // --- Interview Mini Card ---
+    const MiniCard = ({ iv }: { iv: DBInterview }) => {
+      const isAi = isAiInterview(iv);
+      const dateStr = getInterviewDateStr(iv);
+      const name = getDisplayName(iv, 'candidateName', 'Candidate');
       return (
         <div onClick={() => handleInterviewSelect(iv.id)} style={{ marginTop: t.spacing[1], padding: `1px ${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, fontSize: '9px', fontWeight: t.typography.fontWeight.medium, backgroundColor: isAi ? t.colors.infoScale[50] : t.colors.secondaryScale[50], color: isAi ? t.colors.infoScale[700] : t.colors.secondaryScale[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
-          {fmtTime(iv.dateTime)} {iv.candidateName.split(' ')[0]}
+          {fmtTime(dateStr)} {name.split(' ')[0]}
         </div>
       );
     };
 
-    // ─── Type Count Dot ──────────────────────────────────────────────────
+    // --- Type Count Dot ---
     const TypeDot = ({ count, scale }: { count: number; scale: string }) => count > 0 ? (
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2, fontSize: '9px', color: sc(t, scale, 600), fontWeight: t.typography.fontWeight.medium }}>
         <span style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: sc(t, scale, 500) }} />{count}
       </span>
     ) : null;
 
-    // ─── Month View ──────────────────────────────────────────────────────
+    // --- Month View ---
     const renderMonthView = () => {
       const days = getMonthDays(currentDate.getFullYear(), currentDate.getMonth());
       const today = new Date();
@@ -286,8 +329,8 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               const isCurMonth = day.getMonth() === currentDate.getMonth();
               const isToday = isSameDay(day, today);
               const dayIvs = getForDate(day);
-              const aiCt = dayIvs.filter(i => i.type === 'ai').length;
-              const humanCt = dayIvs.filter(i => i.type === 'human').length;
+              const aiCt = dayIvs.filter(i => isAiInterview(i)).length;
+              const humanCt = dayIvs.filter(i => !isAiInterview(i)).length;
               return (
                 <div key={idx} style={{ minHeight: 90, padding: t.spacing[2], borderRight: (idx + 1) % 7 !== 0 ? `${bdr} ${t.colors.neutral[100]}` : 'none', borderBottom: idx < days.length - 7 ? `${bdr} ${t.colors.neutral[100]}` : 'none', backgroundColor: isToday ? t.colors.primaryScale[50] : isCurMonth ? t.colors.common.white : t.colors.neutral[50], cursor: dayIvs.length > 0 ? 'pointer' : 'default' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
@@ -305,7 +348,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       );
     };
 
-    // ─── Week View ───────────────────────────────────────────────────────
+    // --- Week View ---
     const renderWeekView = () => {
       const weekDays = getWeekDays(currentDate);
       const today = new Date();
@@ -329,15 +372,18 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 <div style={{ padding: `${t.spacing[1]}px ${t.spacing[2]}px`, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const, position: 'relative' as const, top: -6 }}>{fmtHour(hour)}</div>
                 {weekDays.map((day, dayIdx) => {
                   const isToday = isSameDay(day, today);
-                  const hourIvs = getForDate(day).filter(i => new Date(i.dateTime).getHours() === hour);
+                  const hourIvs = getForDate(day).filter(i => new Date(getInterviewDateStr(i)).getHours() === hour);
                   return (
                     <div key={dayIdx} style={{ borderLeft: `${bdr} ${t.colors.neutral[100]}`, padding: 2, backgroundColor: isToday ? `${t.colors.primaryScale[50]}33` : 'transparent', position: 'relative' as const }}>
                       {hourIvs.map(iv => {
-                        const isAi = iv.type === 'ai';
+                        const isAi = isAiInterview(iv);
+                        const dateStr = getInterviewDateStr(iv);
+                        const duration = getInterviewDuration(iv);
+                        const name = getDisplayName(iv, 'candidateName', 'Candidate');
                         return (
-                          <div key={iv.id} onClick={() => handleInterviewSelect(iv.id)} onMouseEnter={() => setHoveredInterviewId(iv.id)} onMouseLeave={() => setHoveredInterviewId(null)} style={{ padding: `${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, backgroundColor: isAi ? t.colors.infoScale[100] : t.colors.secondaryScale[100], borderLeft: `3px solid ${isAi ? t.colors.infoScale[500] : t.colors.secondaryScale[500]}`, fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: isAi ? t.colors.infoScale[800] : t.colors.secondaryScale[800], cursor: 'pointer', transition: `all ${t.motion.hover}`, marginBottom: t.spacing[1], overflow: 'hidden' as const, minHeight: `${Math.max(1, Math.round(iv.duration / 60)) * 28}px`, transform: hoveredInterviewId === iv.id ? t.motion.transform : 'none' }}>
-                            <div style={{ fontWeight: t.typography.fontWeight.semibold, whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{iv.candidateName}</div>
-                            <div style={{ opacity: 0.8, marginTop: 1 }}>{fmtTime(iv.dateTime)} - {iv.duration}m</div>
+                          <div key={iv.id} onClick={() => handleInterviewSelect(iv.id)} onMouseEnter={() => setHoveredInterviewId(iv.id)} onMouseLeave={() => setHoveredInterviewId(null)} style={{ padding: `${t.spacing[1]}px`, borderRadius: t.borderRadius.sm, backgroundColor: isAi ? t.colors.infoScale[100] : t.colors.secondaryScale[100], borderLeft: `3px solid ${isAi ? t.colors.infoScale[500] : t.colors.secondaryScale[500]}`, fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: isAi ? t.colors.infoScale[800] : t.colors.secondaryScale[800], cursor: 'pointer', transition: `all ${t.motion.hover}`, marginBottom: t.spacing[1], overflow: 'hidden' as const, minHeight: `${Math.max(1, Math.round(duration / 60)) * 28}px`, transform: hoveredInterviewId === iv.id ? t.motion.transform : 'none' }}>
+                            <div style={{ fontWeight: t.typography.fontWeight.semibold, whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{name}</div>
+                            <div style={{ opacity: 0.8, marginTop: 1 }}>{fmtTime(dateStr)} - {duration}m</div>
                           </div>
                         );
                       })}
@@ -351,7 +397,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       );
     };
 
-    // ─── Day View ────────────────────────────────────────────────────────
+    // --- Day View ---
     const renderDayView = () => {
       const today = new Date();
       const isToday = isSameDay(currentDate, today);
@@ -366,25 +412,30 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
             <span style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{dayIvs.length} interview{dayIvs.length !== 1 ? 's' : ''}</span>
           </div>
           {HOURS.map(hour => {
-            const hourIvs = dayIvs.filter(i => new Date(i.dateTime).getHours() === hour);
+            const hourIvs = dayIvs.filter(i => new Date(getInterviewDateStr(i)).getHours() === hour);
             return (
               <div key={hour} style={{ display: 'grid', gridTemplateColumns: '80px 1fr', minHeight: 70, borderBottom: `${bdr} ${t.colors.neutral[100]}` }}>
                 <div style={{ padding: `${t.spacing[2]}px ${t.spacing[3]}px`, fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400], fontWeight: t.typography.fontWeight.medium, textAlign: 'right' as const, borderRight: `${bdr} ${t.colors.neutral[100]}` }}>{fmtHour(hour)}:00</div>
                 <div style={{ padding: t.spacing[1] }}>
                   {hourIvs.map(iv => {
-                    const isAi = iv.type === 'ai';
+                    const isAi = isAiInterview(iv);
+                    const dateStr = getInterviewDateStr(iv);
+                    const duration = getInterviewDuration(iv);
+                    const name = getDisplayName(iv, 'candidateName', 'Candidate');
+                    const jobTitle = getDisplayName(iv, 'jobTitle', '');
+                    const stageName = getDisplayName(iv, 'stageName', '');
                     return (
                       <div key={iv.id} onClick={() => handleInterviewSelect(iv.id)} onMouseEnter={() => setHoveredInterviewId(iv.id)} onMouseLeave={() => setHoveredInterviewId(null)} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: isAi ? t.colors.infoScale[50] : t.colors.secondaryScale[50], borderLeft: `4px solid ${isAi ? t.colors.infoScale[500] : t.colors.secondaryScale[500]}`, cursor: 'pointer', transition: `all ${t.motion.hover}`, marginBottom: t.spacing[1], transform: hoveredInterviewId === iv.id ? t.motion.transform : 'none' }}>
-                        <div style={{ width: 36, height: 36, borderRadius: t.borderRadius.full, backgroundColor: isAi ? t.colors.infoScale[200] : t.colors.secondaryScale[200], backgroundImage: iv.candidateAvatar ? `url(${iv.candidateAvatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          {!iv.candidateAvatar && <User size={16} color={isAi ? t.colors.infoScale[600] : t.colors.secondaryScale[600]} />}
+                        <div style={{ width: 36, height: 36, borderRadius: t.borderRadius.full, backgroundColor: isAi ? t.colors.infoScale[200] : t.colors.secondaryScale[200], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <User size={16} color={isAi ? t.colors.infoScale[600] : t.colors.secondaryScale[600]} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{iv.candidateName}</div>
-                          <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 1 }}>{iv.jobTitle} &middot; {iv.stageName}</div>
+                          <div style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{name}</div>
+                          {(jobTitle || stageName) && <div style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 1 }}>{[jobTitle, stageName].filter(Boolean).join(' \u00B7 ')}</div>}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexShrink: 0 }}>
-                          <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{fmtTime(iv.dateTime)} &middot; {iv.duration}m</span>
-                          <TypeBadge type={iv.type} tokens={t} size="md" />
+                          <span style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{fmtTime(dateStr)} &middot; {duration}m</span>
+                          <ModeBadge isAi={isAi} tokens={t} size="md" />
                           <Badge status={iv.status} tokens={t} />
                         </div>
                       </div>
@@ -398,16 +449,27 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       );
     };
 
-    // ─── Detail Popup ────────────────────────────────────────────────────
+    // --- Detail Popup ---
     const renderDetailPopup = () => {
       if (!selectedData) return null;
       const iv = selectedData;
+      const isAi = isAiInterview(iv);
+      const dateStr = getInterviewDateStr(iv);
+      const duration = getInterviewDuration(iv);
+      const score = getInterviewScore(iv);
+      const name = getDisplayName(iv, 'candidateName', 'Candidate');
+      const jobTitle = getDisplayName(iv, 'jobTitle', '');
+      const stageName = getDisplayName(iv, 'stageName', '');
+      const interviewer = isAi
+        ? getDisplayName(iv, 'agentName', 'AI Agent')
+        : (iv.interviewerName ?? getDisplayName(iv, 'recruiterName', 'Unassigned'));
+
       const detailFields: [string, React.ReactNode, React.ReactNode][] = [
-        ['Date & Time', <CalendarDays size={14} color={t.colors.neutral[400]} />, `${fmtDate(new Date(iv.dateTime))} at ${fmtTime(iv.dateTime)}`],
-        ['Duration', <Timer size={14} color={t.colors.neutral[400]} />, `${iv.duration} minutes`],
-        [iv.type === 'ai' ? 'AI Agent' : 'Recruiter', iv.type === 'ai' ? <Bot size={14} color={t.colors.infoScale[500]} /> : <User size={14} color={t.colors.secondaryScale[500]} />, iv.type === 'ai' ? iv.agentName ?? 'AI Agent' : iv.recruiterName ?? 'Unassigned'],
+        ['Date & Time', <CalendarDays size={14} color={t.colors.neutral[400]} />, `${fmtDate(new Date(dateStr))} at ${fmtTime(dateStr)}`],
+        ['Duration', <Timer size={14} color={t.colors.neutral[400]} />, `${duration} minutes`],
+        ['Mode', <Video size={14} color={t.colors.neutral[400]} />, getInterviewModeLabel(iv.interviewMode)],
+        [isAi ? 'AI Agent' : 'Interviewer', isAi ? <Bot size={14} color={t.colors.infoScale[500]} /> : <User size={14} color={t.colors.secondaryScale[500]} />, interviewer],
       ];
-      if (iv.location) detailFields.push(['Location', <Video size={14} color={t.colors.neutral[400]} />, iv.location]);
 
       const labelSt = { fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[500], textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: t.spacing[1] };
       const valSt = { display: 'flex', alignItems: 'center', gap: t.spacing[2], fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], fontWeight: t.typography.fontWeight.medium };
@@ -420,20 +482,20 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               <NavBtn onClick={() => handleInterviewSelect(null)} tokens={t}><X size={14} /></NavBtn>
             </div>
             <div style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px`, display: 'flex', alignItems: 'center', gap: t.spacing[3], borderBottom: `${bdr} ${t.colors.neutral[100]}` }}>
-              <div style={{ width: 48, height: 48, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], backgroundImage: iv.candidateAvatar ? `url(${iv.candidateAvatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{!iv.candidateAvatar && <User size={20} color={t.colors.primaryScale[600]} />}</div>
+              <div style={{ width: 48, height: 48, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><User size={20} color={t.colors.primaryScale[600]} /></div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{iv.candidateName}</div>
-                <div style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{iv.jobTitle} &middot; {iv.stageName}</div>
+                <div style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{name}</div>
+                {(jobTitle || stageName) && <div style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{[jobTitle, stageName].filter(Boolean).join(' \u00B7 ')}</div>}
               </div>
-              <div style={{ display: 'flex', gap: t.spacing[2] }}><TypeBadge type={iv.type} tokens={t} size="md" /><Badge status={iv.status} tokens={t} /></div>
+              <div style={{ display: 'flex', gap: t.spacing[2] }}><ModeBadge isAi={isAi} tokens={t} size="md" /><Badge status={iv.status} tokens={t} /></div>
             </div>
             <div style={{ padding: `${t.spacing[4]}px ${t.spacing[5]}px` }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: `${t.spacing[3]}px ${t.spacing[4]}px` }}>
                 {detailFields.map(([label, icon, val], i) => (
                   <div key={i}><div style={labelSt}>{label}</div><div style={valSt}>{icon}{val}</div></div>
                 ))}
-                {iv.score !== undefined && (
-                  <div><div style={labelSt}>Score</div><div style={{ ...valSt, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700], fontWeight: t.typography.fontWeight.semibold }}><Star size={14} />{iv.score}/100</div></div>
+                {score !== undefined && (
+                  <div><div style={labelSt}>Score</div><div style={{ ...valSt, color: score >= 80 ? t.colors.successScale[700] : score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700], fontWeight: t.typography.fontWeight.semibold }}><Star size={14} />{score}/100</div></div>
                 )}
               </div>
               <div style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[5], paddingTop: t.spacing[4], borderTop: `${bdr} ${t.colors.neutral[100]}` }}>
@@ -447,7 +509,7 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       );
     };
 
-    // ─── Main ────────────────────────────────────────────────────────────
+    // --- Main ---
     return (
       <div className={className} style={{ padding: t.spacing[6], backgroundColor: t.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', position: 'relative' as const, ...style }}>
         {/* Header */}

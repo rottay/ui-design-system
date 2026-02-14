@@ -1,35 +1,32 @@
 /**
  * BhProctoringReview - Core Interface
  * Split-view event detail + review form for proctoring events
+ *
+ * Uses ProctoringEventSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringReviewPreset = 'split' | 'stacked';
 
-export type ProctoringEventType =
-  | 'tab_switch'
-  | 'copy_paste'
-  | 'screen_share'
-  | 'unusual_typing'
-  | 'browser_focus_lost';
+/** Backward-compat aliases (old names from pre-migration) */
+export type ProctoringEventTypeValue = ProctoringEventType;
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
-export type ProctoringEventSeverity = 'low' | 'medium' | 'high' | 'critical';
-
-export interface ProctoringEventDetail {
-  id: string;
-  scorableId: string;
-  candidateName: string;
-  eventType: ProctoringEventType;
-  severity: ProctoringEventSeverity;
-  timestamp: Date;
-  description: string;
-  metadata?: Record<string, unknown>;
+/** Extended event view combining DB entity with UI display fields */
+export interface ProctoringReviewEventView {
+  /** The DB entity (all fields optional for safety) */
+  event?: Partial<ProctoringEventSelect>;
+  /** Display name of the candidate (resolved externally) */
+  candidateName?: string;
+  /** Event description (UI-computed) */
+  description?: string;
+  /** Screenshot URL (resolved externally) */
   screenshotUrl?: string;
+  /** Session duration in seconds (UI-computed) */
   sessionDuration?: number;
-  reviewed: boolean;
-  dismissed: boolean;
 }
 
 export interface ReviewSubmission {
@@ -43,7 +40,7 @@ export interface BhProctoringReviewProps extends EngineAwareProps {
   preset?: BhProctoringReviewPreset;
 
   /** Full event detail to review */
-  event: ProctoringEventDetail;
+  event?: ProctoringReviewEventView;
 
   /** Callback when review is submitted */
   onSubmitReview?: (review: ReviewSubmission) => void;
@@ -67,3 +64,6 @@ export interface BhProctoringReviewProps extends EngineAwareProps {
 export const BH_PROCTORING_REVIEW_DEFAULTS: Partial<BhProctoringReviewProps> = {
   preset: 'split',
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity };

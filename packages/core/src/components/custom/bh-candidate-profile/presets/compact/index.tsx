@@ -27,6 +27,8 @@ import {
   getAccentAwareLayout,
 } from '../../../helpers';
 import type { BhCandidateProfileProps } from '../../core';
+import { getCandidateFullName, getCandidateRole, getCandidateLocation, getCandidateSkills } from '../../core';
+import type { DBCandidate } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../types';
 import {
   Briefcase, MapPin, Mail, Phone, Star,
@@ -38,21 +40,20 @@ import {
 /* ------------------------------------------------------------------ */
 
 const DEFAULT_CANDIDATE = {
-  id: 'c-1', name: 'Sarah Johnson', avatar: '',
-  currentRole: 'Senior Frontend Engineer at Google',
-  location: 'San Francisco, CA', email: 'sarah.j@google.com',
-  phone: '+1 (415) 555-0127', source: 'LinkedIn',
-  status: 'active', doNotContact: false,
-};
-
-const DEFAULT_SKILLS = [
-  { name: 'React', proficiency: 95 },
-  { name: 'TypeScript', proficiency: 92 },
-  { name: 'Next.js', proficiency: 88 },
-  { name: 'GraphQL', proficiency: 80 },
-  { name: 'Node.js', proficiency: 75 },
-  { name: 'System Design', proficiency: 70 },
-];
+  id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', avatarUrl: null,
+  currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google',
+  currentLocation: { city: 'San Francisco', state: 'CA' },
+  email: 'sarah.j@google.com', phone: '+1 (415) 555-0127',
+  source: 'linkedin', status: 'active',
+  skills: [
+    { name: 'React', level: 'expert', yearsOfExperience: 6 },
+    { name: 'TypeScript', level: 'expert', yearsOfExperience: 5 },
+    { name: 'Next.js', level: 'advanced', yearsOfExperience: 4 },
+    { name: 'GraphQL', level: 'advanced', yearsOfExperience: 3 },
+    { name: 'Node.js', level: 'intermediate', yearsOfExperience: 5 },
+    { name: 'System Design', level: 'intermediate', yearsOfExperience: 3 },
+  ],
+} as DBCandidate;
 
 const DEFAULT_STATS = {
   activeApplications: 3,
@@ -68,7 +69,7 @@ const DEFAULT_STATS = {
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  return name.charAt(0).toUpperCase();
+  return (name || '').charAt(0).toUpperCase();
 }
 
 function getStatusConfig(status: string, tokens: DesignTokens) {
@@ -98,7 +99,10 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const { Box, Text } = primitives;
     const t = tokens;
     const candidate = props.candidate ?? DEFAULT_CANDIDATE;
-    const skills = props.skills ?? DEFAULT_SKILLS;
+    const fullName = useMemo(() => getCandidateFullName(candidate), [candidate]);
+    const role = useMemo(() => getCandidateRole(candidate), [candidate]);
+    const location = useMemo(() => getCandidateLocation(candidate), [candidate]);
+    const skills = useMemo(() => getCandidateSkills(candidate), [candidate]);
     const stats = props.stats ?? DEFAULT_STATS;
 
 
@@ -107,7 +111,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const ptypo = useMemo(() => getPersonalityTypography(t), [t]);
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
-    const statusConfig = useMemo(() => getStatusConfig(candidate.status ?? 'active', t), [candidate.status, t]);
+    const statusConfig = useMemo(() => getStatusConfig((candidate.status as string) ?? 'active', t), [candidate.status, t]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
@@ -185,10 +189,10 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.semibold,
             color: t.colors.primaryScale[700],
           }}>
-            {candidate.avatar
-              ? <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {candidate.avatarUrl
+              ? <img src={candidate.avatarUrl} alt={fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               : <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
-                  {getInitials(candidate.name)}
+                  {getInitials(fullName)}
                 </Text>
             }
           </Box>
@@ -200,7 +204,7 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 color: t.colors.neutral[900],
                 letterSpacing: ptypo.headingLetterSpacing,
               }}>
-                {candidate.name}
+                {fullName}
               </Text>
               <Box style={{
                 display: 'inline-flex', alignItems: 'center', gap: 4,
@@ -212,16 +216,16 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: statusConfig.text }}>{statusConfig.label}</Text>
               </Box>
             </Box>
-            {candidate.currentRole && (
+            {role && (
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[1] }}>
                 <Briefcase size={13} color={t.colors.neutral[400]} />
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{candidate.currentRole}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{role}</Text>
               </Box>
             )}
-            {candidate.location && (
+            {location && (
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                 <MapPin size={13} color={t.colors.neutral[400]} />
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{candidate.location}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{location}</Text>
               </Box>
             )}
           </Box>
@@ -254,7 +258,9 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
           <Text style={sectionLabel}>Top Skills</Text>
           <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
             {skills.slice(0, 5).map(skill => {
-              const progressStyle = createProgressBarStyle(t, { percent: skill.proficiency, color: getScoreColor(skill.proficiency, t) });
+              const yoe = skill.yearsOfExperience ?? 0;
+              const proficiency = Math.min(100, yoe * 12);
+              const progressStyle = createProgressBarStyle(t, { percent: proficiency, color: getScoreColor(proficiency, t) });
               return (
                 <Box key={skill.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700], width: 80, flexShrink: 0, fontWeight: t.typography.fontWeight.medium }}>
@@ -265,8 +271,8 @@ export const CompactBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                       <Box style={{ ...progressStyle.fill, height: 4 }} />
                     </Box>
                   </Box>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], width: 28, textAlign: 'right' }}>
-                    {skill.proficiency}
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], width: 40, textAlign: 'right' }}>
+                    {skill.level ?? `${yoe}y`}
                   </Text>
                 </Box>
               );

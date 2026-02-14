@@ -92,9 +92,9 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
     const {
-      jobName = 'Senior Frontend Engineer',
-      pendingCount = 6,
-      candidates = DEFAULT_CANDIDATES,
+      jobName = '',
+      pendingCount = 0,
+      candidates = [],
       bulkDecisions: bulkDecisionsProp,
       onBulkDecisionChange,
       onBulkSubmit,
@@ -300,7 +300,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
                 display: 'flex', alignItems: 'center', gap: 2,
                 transition: `all ${t.motion.hover}`,
               }}>
-                <Text style={{ fontSize: t.typography.fontSize.xs }}>{field.charAt(0).toUpperCase() + field.slice(1)}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs }}>{(field || '').charAt(0).toUpperCase() + (field || '').slice(1)}</Text>
                 {sortBy === field && (sortDir === 'asc' ? <ChevronUp size={10} /> : <ChevronDown size={10} />)}
               </Box>
             ))}

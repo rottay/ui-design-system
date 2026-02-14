@@ -121,7 +121,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
               borderRadius: tokens.borderRadius.sm,
               transition: `background-color ${tokens.transitions?.fast || tokens.motion.hover}`,
             }}
-            title={`${hl.dimensionName}: ${hl.score} (${(hl.confidence * 100).toFixed(0)}% confidence)`}
+            title={`${hl.dimensionName}: ${hl.score} (${((hl.confidence ?? 0) * 100).toFixed(0)}% confidence)`}
           >
             <Text style={{ display: 'inline' }}>{text.slice(hl.startOffset, hl.endOffset)}</Text>
           </Box>

@@ -10,7 +10,11 @@ import { BH_OFFER_EXPIRATION_PRESETS } from './presets';
 export {
   type BhOfferExpirationProps,
   type BhOfferExpirationPreset,
+  type DBOffer,
+  type RecruiterOffer,
   type ExpiringOffer,
+  offerToExpiringOffer,
+  offersToExpiringOffers,
   BH_OFFER_EXPIRATION_DEFAULTS,
 } from './core';
 

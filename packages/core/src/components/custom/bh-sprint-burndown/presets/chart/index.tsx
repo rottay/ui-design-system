@@ -52,15 +52,15 @@ const MOCK_DATA: BurndownDataPoint[] = [
 /* ------------------------------------------------------------------ */
 
 function getPointsOnTrack(data: BurndownDataPoint[]): boolean {
-  if (data.length < 2) return true;
+  if ((data ?? []).length < 2) return true;
   const last = data[data.length - 1];
-  return last.actual <= last.ideal * 1.15;
+  return (last?.actual ?? 0) <= (last?.ideal ?? 0) * 1.15;
 }
 
 function getVelocityStatus(data: BurndownDataPoint[], t: DesignTokens): { label: string; color: string; bg: string } {
-  if (data.length < 2) return { label: 'No data', color: t.colors.neutral[500], bg: t.colors.neutral[50] };
+  if ((data ?? []).length < 2) return { label: 'No data', color: t.colors.neutral[500], bg: t.colors.neutral[50] };
   const last = data[data.length - 1];
-  const ratio = last.actual / Math.max(last.ideal, 1);
+  const ratio = (last?.actual ?? 0) / Math.max(last?.ideal ?? 1, 1);
   if (ratio <= 1) return { label: 'Ahead', color: t.colors.successScale[700], bg: t.colors.successScale[50] };
   if (ratio <= 1.15) return { label: 'On Track', color: t.colors.infoScale[700], bg: t.colors.infoScale[50] };
   if (ratio <= 1.3) return { label: 'Slightly Behind', color: t.colors.warningScale[700], bg: t.colors.warningScale[50] };
@@ -108,8 +108,8 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
 
     const velocity = useMemo(() => getVelocityStatus(data, t), [data, t]);
     const remainingPoints = useMemo(() => {
-      if (data.length === 0) return totalPoints;
-      return data[data.length - 1].actual;
+      if ((data ?? []).length === 0) return totalPoints ?? 0;
+      return data[data.length - 1]?.actual ?? 0;
     }, [data, totalPoints]);
 
     const progress = useMemo(() => createProgressBarStyle(t, {
@@ -123,20 +123,20 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const plotW = chartWidth - padding.left - padding.right;
     const plotH = chartHeight - padding.top - padding.bottom;
 
-    const maxPoints = useMemo(() => Math.max(totalPoints, ...data.map(d => Math.max(d.ideal, d.actual))), [data, totalPoints]);
-    const maxDay = useMemo(() => Math.max(daysTotal, ...data.map(d => d.day)), [data, daysTotal]);
+    const maxPoints = useMemo(() => Math.max(totalPoints ?? 0, ...(data ?? []).map(d => Math.max(d.ideal ?? 0, d.actual ?? 0))), [data, totalPoints]);
+    const maxDay = useMemo(() => Math.max(daysTotal ?? 0, ...(data ?? []).map(d => d.day ?? 0)), [data, daysTotal]);
 
     const toX = useCallback((day: number) => padding.left + (day / maxDay) * plotW, [maxDay, plotW]);
     const toY = useCallback((pts: number) => padding.top + (1 - pts / maxPoints) * plotH, [maxPoints, plotH]);
 
     const idealPath = useMemo(() => {
       if (data.length === 0) return '';
-      return data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${toX(d.day)} ${toY(d.ideal)}`).join(' ');
+      return data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${toX((d.day ?? 0))} ${toY((d.ideal ?? 0))}`).join(' ');
     }, [data, toX, toY]);
 
     const actualPath = useMemo(() => {
       if (data.length === 0) return '';
-      return data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${toX(d.day)} ${toY(d.actual)}`).join(' ');
+      return data.map((d, i) => `${i === 0 ? 'M' : 'L'} ${toX((d.day ?? 0))} ${toY((d.actual ?? 0))}`).join(' ');
     }, [data, toX, toY]);
 
     const yTicks = useMemo(() => {
@@ -304,7 +304,7 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
                 {data.filter((_, i) => i % Math.max(1, Math.floor(data.length / 6)) === 0 || i === data.length - 1).map(d => (
                   <text
                     key={d.day}
-                    x={toX(d.day)}
+                    x={toX((d.day ?? 0))}
                     y={chartHeight - 6}
                     textAnchor="middle"
                     fill={t.colors.neutral[400]}
@@ -339,8 +339,8 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
                 {chartCfg.showDots && data.map(d => (
                   <circle
                     key={d.day}
-                    cx={toX(d.day)}
-                    cy={toY(d.actual)}
+                    cx={toX((d.day ?? 0))}
+                    cy={toY((d.actual ?? 0))}
                     r={3}
                     fill={t.colors.common.white}
                     stroke={t.colors.primaryScale[500]}

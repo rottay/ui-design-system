@@ -34,18 +34,47 @@ import {
   createDividerStyle,
   getAccentAwareLayout,
 } from '../../../helpers';
-import type { BhClientListProps, ClientListItem } from '../../core';
+import type { BhClientListProps, RecruiterClient } from '../../core';
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                             */
+/* ------------------------------------------------------------------ */
+function getClientName(client: RecruiterClient): string {
+  return client.displayName ?? client.clientCompanyName ?? '';
+}
+
+function getTierInfo(tier: string | null | undefined, t: any) {
+  switch (tier) {
+    case 'enterprise': return { color: 'primary' as const, icon: Crown, bg: t.colors.primaryScale[100] };
+    case 'premium': return { color: 'info' as const, icon: Shield, bg: t.colors.infoScale[100] };
+    case 'strategic': return { color: 'warning' as const, icon: Crown, bg: t.colors.warningScale[100] };
+    case 'standard':
+    default: return { color: 'secondary' as const, icon: Zap, bg: t.colors.secondaryScale[100] };
+  }
+}
+
+function getStatusInfo(status: string | null | undefined) {
+  switch (status) {
+    case 'active': return { color: 'success' as const, icon: CheckCircle2 };
+    case 'suspended': return { color: 'warning' as const, icon: AlertTriangle };
+    case 'terminated':
+    case 'archived': return { color: 'error' as const, icon: Clock };
+    case 'draft':
+    case 'pending_approval':
+    default: return { color: 'secondary' as const, icon: Clock };
+  }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_CLIENTS: ClientListItem[] = [
-  { id: 'c1', name: 'Acme Corporation', tier: 'enterprise', contractStatus: 'active', openPositions: 12, totalHires: 48, revenue: 125000 },
-  { id: 'c2', name: 'TechStart Inc.', tier: 'starter', contractStatus: 'active', openPositions: 3, totalHires: 8, revenue: 15000 },
-  { id: 'c3', name: 'GlobalBank Ltd.', tier: 'enterprise', contractStatus: 'expiring', openPositions: 8, totalHires: 35, revenue: 98000 },
-  { id: 'c4', name: 'Velocity Partners', tier: 'business', contractStatus: 'active', openPositions: 6, totalHires: 22, revenue: 55000 },
-  { id: 'c5', name: 'NovaTech Solutions', tier: 'business', contractStatus: 'expired', openPositions: 0, totalHires: 15, revenue: 42000 },
-  { id: 'c6', name: 'Pinnacle Health', tier: 'enterprise', contractStatus: 'active', openPositions: 15, totalHires: 62, revenue: 180000 },
+const MOCK_CLIENTS: RecruiterClient[] = [
+  { id: 'c1', tenantId: 't', type: 'company', displayName: 'Acme Corporation', clientCompanyName: 'Acme Corporation', tier: 'enterprise', status: 'active', openPositions: 12, totalPositions: 20, totalRevenue: '125000' } as any,
+  { id: 'c2', tenantId: 't', type: 'company', displayName: 'TechStart Inc.', clientCompanyName: 'TechStart Inc.', tier: 'standard', status: 'active', openPositions: 3, totalPositions: 5, totalRevenue: '15000' } as any,
+  { id: 'c3', tenantId: 't', type: 'company', displayName: 'GlobalBank Ltd.', clientCompanyName: 'GlobalBank Ltd.', tier: 'enterprise', status: 'suspended', openPositions: 8, totalPositions: 15, totalRevenue: '98000' } as any,
+  { id: 'c4', tenantId: 't', type: 'company', displayName: 'Velocity Partners', clientCompanyName: 'Velocity Partners', tier: 'premium', status: 'active', openPositions: 6, totalPositions: 10, totalRevenue: '55000' } as any,
+  { id: 'c5', tenantId: 't', type: 'company', displayName: 'NovaTech Solutions', clientCompanyName: 'NovaTech Solutions', tier: 'premium', status: 'terminated', openPositions: 0, totalPositions: 8, totalRevenue: '42000' } as any,
+  { id: 'c6', tenantId: 't', type: 'company', displayName: 'Pinnacle Health', clientCompanyName: 'Pinnacle Health', tier: 'enterprise', status: 'active', openPositions: 15, totalPositions: 25, totalRevenue: '180000' } as any,
 ];
 
 /* ------------------------------------------------------------------ */
@@ -79,21 +108,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
 
     const handleClientClick = useCallback((clientId: string) => { onClientClick?.(clientId); }, [onClientClick]);
 
-    const tierInfo = useCallback((tierVal: ClientListItem['tier']) => {
-      switch (tierVal) {
-        case 'enterprise': return { color: 'primary' as const, icon: Crown, bg: t.colors.primaryScale[100] };
-        case 'business': return { color: 'info' as const, icon: Shield, bg: t.colors.infoScale[100] };
-        case 'starter': return { color: 'secondary' as const, icon: Zap, bg: t.colors.secondaryScale[100] };
-      }
-    }, [t]);
-
-    const contractInfo = useCallback((status: ClientListItem['contractStatus']) => {
-      switch (status) {
-        case 'active': return { color: 'success' as const, icon: CheckCircle2 };
-        case 'expiring': return { color: 'warning' as const, icon: AlertTriangle };
-        case 'expired': return { color: 'error' as const, icon: Clock };
-      }
-    }, []);
+    // Use top-level helper functions for tier/status rendering
 
     const formatRevenue = useCallback((amount: number) => {
       return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
@@ -141,8 +156,9 @@ export const GridBhClientList = createPreset<BhClientListProps>({
           {clients.map((client, idx) => {
             const isSelected = selectedClientId === client.id;
             const entrance = createEntranceAnimation(t, { index: idx });
-            const ti = tierInfo(client.tier);
-            const ci = contractInfo(client.contractStatus);
+            const clientDisplayName = getClientName(client);
+            const ti = getTierInfo(client.tier, t);
+            const ci = getStatusInfo(client.status);
             const TierIcon = ti.icon;
             const ContractIcon = ci.icon;
             const accent = createPersonalityAccentBar(t, { color: isSelected ? t.colors.primaryScale[500] : ti.bg });
@@ -152,7 +168,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                 key={client.id}
                 role="button"
                 tabIndex={0}
-                aria-label={`View client ${client.name}`}
+                aria-label={`View client ${clientDisplayName}`}
                 aria-selected={isSelected}
                 onClick={() => handleClientClick(client.id)}
                 onKeyDown={(e: React.KeyboardEvent) => {
@@ -195,12 +211,12 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                       <Building size={17} />
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, minWidth: 0 }}>
-                      {client.name}
+                      {clientDisplayName}
                     </Text>
                   </Box>
                   <Box style={{ ...createBadgeStyle(t, ti.color), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <TierIcon size={10} />
-                    <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.tier}</Text>
+                    <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.tier ?? 'standard'}</Text>
                   </Box>
                 </Box>
 
@@ -208,7 +224,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                 <Box style={{ marginBottom: t.spacing[3] }}>
                   <Box style={{ ...createBadgeStyle(t, ci.color), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <ContractIcon size={10} />
-                    <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.contractStatus}</Text>
+                    <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.status ?? 'draft'}</Text>
                   </Box>
                 </Box>
 
@@ -222,7 +238,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Revenue</Text>
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
-                      {formatRevenue(client.revenue)}
+                      {formatRevenue(Number(client.totalRevenue ?? 0))}
                     </Text>
                   </Box>
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -231,7 +247,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Open</Text>
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
-                      {client.openPositions}
+                      {client.openPositions ?? 0}
                     </Text>
                   </Box>
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -240,7 +256,7 @@ export const GridBhClientList = createPreset<BhClientListProps>({
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Hires</Text>
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
-                      {client.totalHires}
+                      {client.totalPositions ?? 0}
                     </Text>
                   </Box>
                 </Box>

@@ -11,6 +11,7 @@ import { BH_INTERVIEW_REPLAY_ENHANCED_PRESETS } from './presets';
 export {
   type BhInterviewReplayEnhancedProps,
   type BhInterviewReplayEnhancedPreset,
+  type RecruiterInterview,
   type TranscriptSegment,
   type EvidenceMarker,
   BH_INTERVIEW_REPLAY_ENHANCED_DEFAULTS,

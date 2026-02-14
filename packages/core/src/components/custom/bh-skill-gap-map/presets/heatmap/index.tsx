@@ -130,9 +130,9 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     }, [activePriority, onPriorityFilterChange]);
 
     /* ── Derived ───────────────────────────────────────────────── */
-    const filteredGaps = useMemo(() => activePriority.length > 0 ? gaps.filter(g => activePriority.includes(g.priority)) : gaps, [gaps, activePriority]);
-    const dims = useMemo(() => dimsProp?.length ? dimsProp : [...new Set(heatmapData.map(c => c.dimension))], [dimsProp, heatmapData]);
-    const cands = useMemo(() => candsProp?.length ? candsProp : [...new Set(heatmapData.map(c => c.candidate))], [candsProp, heatmapData]);
+    const filteredGaps = useMemo(() => activePriority.length > 0 ? gaps.filter(g => g.priority && activePriority.includes(g.priority)) : gaps, [gaps, activePriority]);
+    const dims = useMemo(() => dimsProp?.length ? dimsProp : [...new Set(heatmapData.map(c => c.dimension).filter(Boolean) as string[])], [dimsProp, heatmapData]);
+    const cands = useMemo(() => candsProp?.length ? candsProp : [...new Set(heatmapData.map(c => c.candidate).filter(Boolean) as string[])], [candsProp, heatmapData]);
     const selectedGap = useMemo(() => gaps.find(g => g.id === selectedGapId), [gaps, selectedGapId]);
 
     if (loading) {
@@ -181,10 +181,10 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
           {summary && (
             <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
               {[
-                { label: 'Total Gaps', value: summary.totalGaps, icon: <BarChart3 size={16} />, color: t.colors.neutral[700], bg: t.colors.neutral[50] },
-                { label: 'Critical', value: summary.criticalGaps, icon: <AlertTriangle size={16} />, color: t.colors.errorScale[600], bg: t.colors.errorScale[50] },
-                { label: 'Avg Gap Size', value: summary.averageGapSize.toFixed(1), icon: <TrendingDown size={16} />, color: t.colors.warningScale[600], bg: t.colors.warningScale[50] },
-                { label: 'Top Dimension', value: summary.mostCommonDimension, icon: <Target size={16} />, color: t.colors.primaryScale[600], bg: t.colors.primaryScale[50] },
+                { label: 'Total Gaps', value: summary.totalGaps ?? 0, icon: <BarChart3 size={16} />, color: t.colors.neutral[700], bg: t.colors.neutral[50] },
+                { label: 'Critical', value: summary.criticalGaps ?? 0, icon: <AlertTriangle size={16} />, color: t.colors.errorScale[600], bg: t.colors.errorScale[50] },
+                { label: 'Avg Gap Size', value: (summary.averageGapSize ?? 0).toFixed(1), icon: <TrendingDown size={16} />, color: t.colors.warningScale[600], bg: t.colors.warningScale[50] },
+                { label: 'Top Dimension', value: summary.mostCommonDimension ?? 'N/A', icon: <Target size={16} />, color: t.colors.primaryScale[600], bg: t.colors.primaryScale[50] },
               ].map(s => (
                 <Box key={s.label} style={{
                   padding: `${t.spacing[4]}px`, borderRadius: t.borderRadius.xl,
@@ -280,17 +280,20 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
           </Text>
           <Box role="list" aria-label="Identified skill gaps" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
             {filteredGaps.map((gap, gi) => {
-              const colors = pc[gap.priority];
+              const gapPriority = gap.priority ?? 'low';
+              const colors = pc[gapPriority];
               const isSelected = selectedGapId === gap.id;
-              const pct = gap.requiredLevel > 0 ? Math.round((gap.currentLevel / gap.requiredLevel) * 100) : 0;
+              const currentLevel = gap.currentLevel ?? 0;
+              const requiredLevel = gap.requiredLevel ?? 0;
+              const pct = requiredLevel > 0 ? Math.round((currentLevel / requiredLevel) * 100) : 0;
               const barColor = pct >= 80 ? t.colors.successScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
 
               const gapEntrance = createEntranceAnimation(t, { index: gi });
               return (
-                <Box key={gap.id} role="listitem" aria-selected={isSelected} tabIndex={0}
-                  onClick={() => handleGapSelect(gap.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleGapSelect(gap.id); } }}
-                  aria-label={`${gap.dimension}: ${gap.priority} priority, gap size ${gap.gapSize}`}
+                <Box key={gap.id ?? gi} role="listitem" aria-selected={isSelected} tabIndex={0}
+                  onClick={() => handleGapSelect(gap.id ?? '')}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleGapSelect(gap.id ?? ''); } }}
+                  aria-label={`${gap.dimension ?? 'Unknown'}: ${gapPriority} priority, gap size ${gap.gapSize ?? 0}`}
                   style={{
                   ...cardHover.base,
                   ...gapEntrance.animate,
@@ -302,19 +305,19 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                 }}>
                   <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{gap.dimension}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{gap.dimension ?? 'Unknown'}</Text>
                       <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: colors.bgColor, border: `1px solid ${colors.border}` }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: colors.color, textTransform: 'capitalize' }}>{gap.priority}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: colors.color, textTransform: 'capitalize' }}>{gapPriority}</Text>
                       </Box>
                     </Box>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{gap.candidateCount} candidates</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{gap.candidateCount ?? 0} candidates</Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Box role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`${gap.dimension} completion`} style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
+                    <Box role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`${gap.dimension ?? 'Unknown'} completion`} style={{ flex: 1, height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
                       <Box style={{ height: '100%', width: `${pct}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], minWidth: 36, textAlign: 'right' }}>
-                      {gap.currentLevel}/{gap.requiredLevel}
+                      {currentLevel}/{requiredLevel}
                     </Text>
                   </Box>
                   {isSelected && gap.recommendation && (

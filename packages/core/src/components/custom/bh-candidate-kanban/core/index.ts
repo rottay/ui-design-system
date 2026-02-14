@@ -1,28 +1,44 @@
 /**
  * BhCandidateKanban - Core Interface
  * Pipeline Kanban Board for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBApplication[] for pipeline cards.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApplication } from '@rottay/recruiter';
 
 export type BhCandidateKanbanPreset = 'board' | 'swimlane';
 
-export type CandidateSource = 'applied' | 'referral' | 'sourced' | 'agency' | 'internal';
+export type RecruiterApplication = DBApplication;
 
 export type AiRecommendation = 'advance' | 'hold' | 'reject';
 
 export type SlaStatus = 'green' | 'yellow' | 'red';
 
+/**
+ * Kanban card data - extends DB application with display-only fields
+ * that are joined/computed at the API layer.
+ */
 export interface KanbanCandidate {
+  /** Application ID */
   id: string;
+  /** Candidate display name (joined from candidate table) */
   name: string;
   avatar?: string;
+  /** Overall score from application (overallScore or aiMatchScore) */
   scorePercent: number;
+  /** Computed: days in current stage */
   daysInStage: number;
-  source: CandidateSource;
+  /** Application source */
+  source: string;
+  /** Application tags */
   tags: string[];
+  /** AI recommendation (computed externally) */
   aiRecommendation: AiRecommendation;
+  /** Current stage ID for column placement */
   stageId: string;
   email?: string;
 }
@@ -36,7 +52,7 @@ export interface KanbanStage {
 }
 
 export interface KanbanFilter {
-  source?: CandidateSource[];
+  source?: string[];
   aiRecommendation?: AiRecommendation[];
   tags?: string[];
   scoreMin?: number;
@@ -51,10 +67,10 @@ export interface BulkAction {
 
 export interface BhCandidateKanbanProps extends EngineAwareProps {
   preset?: BhCandidateKanbanPreset;
-  jobName: string;
-  totalCandidates: number;
-  stages: KanbanStage[];
-  candidates: KanbanCandidate[];
+  jobName?: string;
+  totalCandidates?: number;
+  stages?: KanbanStage[];
+  candidates?: KanbanCandidate[];
   onCandidateMove?: (candidateId: string, fromStageId: string, toStageId: string) => void;
   onCandidateClick?: (candidateId: string) => void;
   onScheduleInterview?: (candidateId: string) => void;
@@ -82,3 +98,7 @@ export const BH_CANDIDATE_KANBAN_DEFAULTS: Partial<BhCandidateKanbanProps> = {
   searchQuery: '',
   bulkSelection: [],
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use KanbanCandidate['source'] - source is a string field on KanbanCandidate */
+export type CandidateSource = string;

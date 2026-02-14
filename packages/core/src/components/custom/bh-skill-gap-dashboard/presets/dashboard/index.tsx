@@ -37,6 +37,7 @@ function getPriorityColor(priority: SkillGapData['priority'], t: any): string {
     case 'high': return t.colors.errorScale[600];
     case 'medium': return t.colors.warningScale[600];
     case 'low': return t.colors.successScale[600];
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -44,7 +45,8 @@ function getPriorityBadgeKey(priority: SkillGapData['priority']): 'error' | 'war
   switch (priority) {
     case 'high': return 'error';
     case 'medium': return 'warning';
-    case 'low': return 'success';
+    case 'low':
+    default: return 'success';
   }
 }
 
@@ -98,18 +100,18 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
     }, [onSkillClick]);
 
     const sortedSkills = useMemo(
-      () => [...skills].sort((a, b) => b.gap - a.gap),
+      () => [...skills].sort((a, b) => (b.gap ?? 0) - (a.gap ?? 0)),
       [skills],
     );
 
     const stats = useMemo(() => {
       const highPriority = skills.filter(s => s.priority === 'high').length;
-      const avgGap = skills.length > 0 ? skills.reduce((sum, s) => sum + s.gap, 0) / skills.length : 0;
-      const totalPool = skills.reduce((sum, s) => sum + s.candidatePool, 0);
+      const avgGap = skills.length > 0 ? skills.reduce((sum, s) => sum + (s.gap ?? 0), 0) / skills.length : 0;
+      const totalPool = skills.reduce((sum, s) => sum + (s.candidatePool ?? 0), 0);
       return { highPriority, avgGap, totalPool };
     }, [skills]);
 
-    const maxGap = useMemo(() => Math.max(...skills.map(s => s.gap), 1), [skills]);
+    const maxGap = useMemo(() => Math.max(...skills.map(s => s.gap ?? 0), 1), [skills]);
 
     const animStyle = (index: number) => ({
       ...entrance.animate,
@@ -170,9 +172,9 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
           }}>
             {[
               { label: 'High Priority Gaps', value: stats.highPriority, icon: AlertTriangle, color: t.colors.errorScale },
-              { label: 'Average Gap', value: `${stats.avgGap.toFixed(1)}%`, icon: TrendingDown, color: t.colors.warningScale },
+              { label: 'Average Gap', value: `${(stats.avgGap ?? 0).toFixed(1)}%`, icon: TrendingDown, color: t.colors.warningScale },
               { label: 'Total Skills', value: skills.length, icon: BarChart3, color: t.colors.primaryScale },
-              { label: 'Candidate Pool', value: stats.totalPool.toLocaleString(), icon: Users, color: t.colors.infoScale },
+              { label: 'Candidate Pool', value: (stats.totalPool ?? 0).toLocaleString(), icon: Users, color: t.colors.infoScale },
             ].map((sc, i) => {
               const Icon = sc.icon;
               return (
@@ -241,20 +243,26 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
                 </Box>
               )}
               {sortedSkills.map((skill) => {
-                const isHovered = hoveredSkill === skill.skill;
-                const barPct = (skill.gap / maxGap) * 100;
-                const gapColor = getPriorityColor(skill.priority, t);
+                const skillName = skill.skill ?? 'Unknown';
+                const gap = skill.gap ?? 0;
+                const current = skill.current ?? 0;
+                const required = skill.required ?? 0;
+                const candidatePool = skill.candidatePool ?? 0;
+                const priority = skill.priority;
+                const isHovered = hoveredSkill === skillName;
+                const barPct = (gap / maxGap) * 100;
+                const gapColor = getPriorityColor(priority, t);
 
                 return (
                   <Box
-                    key={skill.skill}
+                    key={skillName}
                     role="listitem"
                     tabIndex={0}
-                    aria-label={`${skill.skill}: gap ${skill.gap}%, priority ${skill.priority}`}
-                    onClick={() => handleSkillClick(skill.skill)}
-                    onMouseEnter={() => setHoveredSkill(skill.skill)}
+                    aria-label={`${skillName}: gap ${gap}%, priority ${priority ?? 'none'}`}
+                    onClick={() => handleSkillClick(skillName)}
+                    onMouseEnter={() => setHoveredSkill(skillName)}
                     onMouseLeave={() => setHoveredSkill(null)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSkillClick(skill.skill); } }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSkillClick(skillName); } }}
                     style={{
                       padding: `${t.spacing[4]}px ${t.spacing[5]}px`,
                       borderBottom: `1px solid ${t.colors.neutral[100]}`,
@@ -270,24 +278,24 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
                           fontWeight: t.typography.fontWeight.semibold,
                           color: t.colors.neutral[900],
                         }}>
-                          {skill.skill}
+                          {skillName}
                         </Text>
                         <Box style={{
-                          ...createBadgeStyle(t, getPriorityBadgeKey(skill.priority)),
+                          ...createBadgeStyle(t, getPriorityBadgeKey(priority)),
                           borderRadius: badgeRadius,
                         }}>
-                          <Text style={{ fontSize: t.typography.fontSize.xs }}>{skill.priority}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs }}>{priority ?? 'none'}</Text>
                         </Box>
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Users size={12} color={t.colors.neutral[400]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                            {skill.candidatePool}
+                            {candidatePool}
                           </Text>
                         </Box>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: gapColor }}>
-                          -{skill.gap}%
+                          -{gap}%
                         </Text>
                         <ChevronRight size={14} color={t.colors.neutral[300]} />
                       </Box>
@@ -295,7 +303,7 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
                     {/* Gap bar */}
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], width: 50 }}>
-                        {skill.current}%
+                        {current}%
                       </Text>
                       <Box style={{
                         flex: 1,
@@ -313,7 +321,7 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
                         }} />
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], width: 50, textAlign: 'right' }}>
-                        {skill.required}%
+                        {required}%
                       </Text>
                     </Box>
                   </Box>

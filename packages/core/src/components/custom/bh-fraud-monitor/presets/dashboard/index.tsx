@@ -347,7 +347,7 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
                       fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold,
                       color: check.flagged ? tokens.colors.errorScale[600] : tokens.colors.neutral[600],
                     }}>
-                      {(check.similarityScore * 100).toFixed(0)}%
+                      {((check.similarityScore ?? 0) * 100).toFixed(0)}%
                     </Text>
                     {check.flagged && (
                       <Box style={{

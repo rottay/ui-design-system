@@ -17,6 +17,7 @@ import {
   createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhOfferNegotiationTrackerProps, NegotiationRound } from '../../core';
+import { offerToNegotiationRounds } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 const MOCK_ROUNDS: NegotiationRound[] = [
@@ -26,7 +27,7 @@ const MOCK_ROUNDS: NegotiationRound[] = [
 ];
 
 function formatCurrency(value: number, currency: string): string {
-  return `${currency}${value.toLocaleString()}`;
+  return `${currency}${(value || 0).toLocaleString()}`;
 }
 
 function getStatusBadge(status: NegotiationRound['status']): 'success' | 'error' | 'warning' | 'info' {
@@ -48,12 +49,16 @@ export const CompactBhOfferNegotiationTracker = createPreset<BhOfferNegotiationT
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      rounds = MOCK_ROUNDS,
-      candidateName = 'Sarah Johnson',
+      offer,
+      rounds: roundsProp,
+      candidateName: candidateNameProp,
       currency = '$',
       className,
       style,
     } = props;
+
+    const rounds = roundsProp ?? (offer ? offerToNegotiationRounds(offer) : MOCK_ROUNDS);
+    const candidateName = candidateNameProp ?? '';
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -104,7 +109,7 @@ export const CompactBhOfferNegotiationTracker = createPreset<BhOfferNegotiationT
               padding: `1px ${t.spacing[2]}px`,
             }}>
               <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                {lastRound.status.charAt(0).toUpperCase() + lastRound.status.slice(1)}
+                {(lastRound.status || '').charAt(0).toUpperCase() + (lastRound.status || '').slice(1)}
               </Text>
             </Box>
           )}

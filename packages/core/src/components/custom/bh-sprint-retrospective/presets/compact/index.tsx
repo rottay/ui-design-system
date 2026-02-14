@@ -45,6 +45,7 @@ function getCategoryIcon(category: RetroItem['category']) {
     case 'good': return Smile;
     case 'improve': return AlertTriangle;
     case 'action': return Zap;
+    default: return Zap;
   }
 }
 
@@ -61,6 +62,7 @@ function getCategoryBadge(category: RetroItem['category']): 'success' | 'warning
     case 'good': return 'success';
     case 'improve': return 'warning';
     case 'action': return 'primary';
+    default: return 'primary';
   }
 }
 
@@ -106,7 +108,7 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
     }), [items]);
 
     const topItems = useMemo(
-      () => [...items].sort((a, b) => b.votes - a.votes).slice(0, 5),
+      () => [...items].sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0)).slice(0, 5),
       [items],
     );
 
@@ -241,8 +243,8 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
                       tabIndex={0}
                       role="button"
                       aria-label={`Vote (${item.votes})`}
-                      onClick={() => handleVote(item.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVote(item.id); } }}
+                      onClick={() => handleVote((item.id ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVote((item.id ?? '')); } }}
                       style={{
                         display: 'flex', alignItems: 'center', gap: t.spacing[1],
                         padding: `1px ${t.spacing[1]}px`,

@@ -87,13 +87,13 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
 
     const avgVel = useMemo(() => {
       if (averageVelocity !== undefined) return averageVelocity;
-      if (sprints.length === 0) return 0;
-      return Math.round(sprints.reduce((sum, s) => sum + s.completed, 0) / sprints.length);
+      if ((sprints ?? []).length === 0) return 0;
+      return Math.round((sprints ?? []).reduce((sum, s) => sum + (s.completed ?? 0), 0) / (sprints ?? []).length);
     }, [averageVelocity, sprints]);
 
-    const maxPlanned = useMemo(() => Math.max(...sprints.map(s => s.planned), 1), [sprints]);
-    const totalCompleted = useMemo(() => sprints.reduce((s, d) => s + d.completed, 0), [sprints]);
-    const totalCarryOver = useMemo(() => sprints.reduce((s, d) => s + d.carryOver, 0), [sprints]);
+    const maxPlanned = useMemo(() => Math.max(...(sprints ?? []).map(s => s.planned ?? 0), 1), [sprints]);
+    const totalCompleted = useMemo(() => (sprints ?? []).reduce((s, d) => s + (d.completed ?? 0), 0), [sprints]);
+    const totalCarryOver = useMemo(() => (sprints ?? []).reduce((s, d) => s + (d.carryOver ?? 0), 0), [sprints]);
 
     /* SVG bar chart */
     const chartWidth = 560;
@@ -250,8 +250,8 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
                 {/* Bars */}
                 {sprints.map((sprint, i) => {
                   const x = padding.left + i * barGroupWidth + gap;
-                  const completedH = (sprint.completed / maxPlanned) * plotH;
-                  const carryH = (sprint.carryOver / maxPlanned) * plotH;
+                  const completedH = ((sprint.completed ?? 0) / maxPlanned) * plotH;
+                  const carryH = ((sprint.carryOver ?? 0) / maxPlanned) * plotH;
                   const isHovered = hoveredBar === sprint.sprintName;
                   const completedY = padding.top + plotH - completedH;
                   const carryY = completedY - carryH;
@@ -270,13 +270,13 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
                           transition: `fill ${t.motion.hover}, height ${chartCfg.animationDuration}ms ease, y ${chartCfg.animationDuration}ms ease`,
                           cursor: onSprintClick ? 'pointer' : 'default',
                         }}
-                        onMouseEnter={() => setHoveredBar(sprint.sprintName)}
+                        onMouseEnter={() => setHoveredBar((sprint.sprintName ?? null))}
                         onMouseLeave={() => setHoveredBar(null)}
-                        onClick={() => handleSprintClick(sprint.sprintName)}
+                        onClick={() => handleSprintClick((sprint.sprintName ?? ''))}
                       />
 
                       {/* Carry-over bar */}
-                      {sprint.carryOver > 0 && (
+                      {(sprint.carryOver ?? 0) > 0 && (
                         <rect
                           x={x}
                           y={carryY}
@@ -288,18 +288,18 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
                             transition: `fill ${t.motion.hover}, height ${chartCfg.animationDuration}ms ease, y ${chartCfg.animationDuration}ms ease`,
                             cursor: onSprintClick ? 'pointer' : 'default',
                           }}
-                          onMouseEnter={() => setHoveredBar(sprint.sprintName)}
+                          onMouseEnter={() => setHoveredBar((sprint.sprintName ?? null))}
                           onMouseLeave={() => setHoveredBar(null)}
-                          onClick={() => handleSprintClick(sprint.sprintName)}
+                          onClick={() => handleSprintClick((sprint.sprintName ?? ''))}
                         />
                       )}
 
                       {/* Planned line marker */}
                       <line
                         x1={x - 3}
-                        y1={padding.top + plotH - (sprint.planned / maxPlanned) * plotH}
+                        y1={padding.top + plotH - ((sprint.planned ?? 0) / maxPlanned) * plotH}
                         x2={x + barW + 3}
-                        y2={padding.top + plotH - (sprint.planned / maxPlanned) * plotH}
+                        y2={padding.top + plotH - ((sprint.planned ?? 0) / maxPlanned) * plotH}
                         stroke={t.colors.neutral[500]}
                         strokeWidth={2}
                         strokeLinecap="round"
@@ -314,7 +314,7 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
                         fontSize={10}
                         fontWeight={isHovered ? 600 : 400}
                       >
-                        {sprint.sprintName.replace('Sprint ', 'S')}
+                        {(sprint.sprintName ?? '').replace('Sprint ', 'S')}
                       </text>
 
                       {/* Value label on hover */}

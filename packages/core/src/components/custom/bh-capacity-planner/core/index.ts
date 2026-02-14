@@ -1,43 +1,48 @@
 /**
  * BhCapacityPlanner - Core Interface
  * Recruiter workload visualization with utilization and rebalancing.
- * Tables: recruiting_recruiters (capacity fields) + recruiting_applications (assigned)
+ *
+ * DB Reference: DBRecruiter from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBRecruiter } from '@rottay/recruiter';
 
 export type BhCapacityPlannerPreset = 'grid' | 'list';
 
+/** Re-export for consumer convenience */
+export type { DBRecruiter };
+
 export interface RecruiterCapacity {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   avatar?: string;
-  department: string;
-  currentAssignments: number;
-  maxCapacity: number;
-  utilizationPercent: number;
-  activePositions: number;
-  activeCandidates: number;
-  avgTimePerCandidate: number;
-  status: 'underutilized' | 'optimal' | 'overloaded';
+  department?: string;
+  currentAssignments?: number;
+  maxCapacity?: number;
+  utilizationPercent?: number;
+  activePositions?: number;
+  activeCandidates?: number;
+  avgTimePerCandidate?: number;
+  status?: 'underutilized' | 'optimal' | 'overloaded';
 }
 
 export interface RebalanceSuggestion {
-  fromRecruiterId: string;
-  fromRecruiterName: string;
-  toRecruiterId: string;
-  toRecruiterName: string;
-  candidateCount: number;
-  reason: string;
+  fromRecruiterId?: string;
+  fromRecruiterName?: string;
+  toRecruiterId?: string;
+  toRecruiterName?: string;
+  candidateCount?: number;
+  reason?: string;
 }
 
 export interface CapacitySummary {
-  totalRecruiters: number;
-  avgUtilization: number;
-  overloadedCount: number;
-  underutilizedCount: number;
-  totalOpenReqs: number;
+  totalRecruiters?: number;
+  avgUtilization?: number;
+  overloadedCount?: number;
+  underutilizedCount?: number;
+  totalOpenReqs?: number;
 }
 
 export interface BhCapacityPlannerProps extends EngineAwareProps {

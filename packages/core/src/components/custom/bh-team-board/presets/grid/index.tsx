@@ -45,7 +45,7 @@ import {
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
-  TeamItem,
+  RecruiterTeam,
   TeamMember,
   TeamKpiData,
   SprintData,
@@ -53,15 +53,27 @@ import type {
 } from '../../core';
 
 /* ------------------------------------------------------------------ */
+/*  Helpers                                                             */
+/* ------------------------------------------------------------------ */
+function getTeamLeadName(team: RecruiterTeam): string {
+  return (team as any).leaderName ?? 'Unassigned';
+}
+
+function getTeamPerformanceScore(team: RecruiterTeam): number {
+  const perf = team.performanceMetrics as Record<string, any> | null;
+  return perf?.score ?? perf?.performanceScore ?? 0;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: TeamItem[] = [
-  { id: 't1', name: 'Engineering Hiring', leadName: 'Sofia Martinez', memberCount: 6, activeJobs: 12, capacityUsed: 78, capacityTotal: 100, performanceScore: 88 },
-  { id: 't2', name: 'Product & Design', leadName: 'James Chen', memberCount: 4, activeJobs: 8, capacityUsed: 65, capacityTotal: 100, performanceScore: 82 },
-  { id: 't3', name: 'GTM Recruiting', leadName: 'Priya Sharma', memberCount: 5, activeJobs: 10, capacityUsed: 92, capacityTotal: 100, performanceScore: 74 },
-  { id: 't4', name: 'Executive Search', leadName: 'Marcus Williams', memberCount: 3, activeJobs: 4, capacityUsed: 56, capacityTotal: 100, performanceScore: 91 },
-  { id: 't5', name: 'Campus & Intern', leadName: 'Aisha Okafor', memberCount: 3, activeJobs: 6, capacityUsed: 42, capacityTotal: 80, performanceScore: 79 },
-  { id: 't6', name: 'Remote Talent', leadName: 'Liam O\'Brien', memberCount: 4, activeJobs: 7, capacityUsed: 88, capacityTotal: 100, performanceScore: 85 },
+const MOCK_TEAMS: RecruiterTeam[] = [
+  { id: 't1', tenantId: 't', companyId: 'c', name: 'Engineering Hiring', code: 'ENG', type: 'technical', description: null, leaderId: 'l1', managerId: null, directorId: null, members: [], activeMemberCount: 6, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 12, currentUtilization: 78, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 88 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't2', tenantId: 't', companyId: 'c', name: 'Product & Design', code: 'PD', type: 'general', description: null, leaderId: 'l2', managerId: null, directorId: null, members: [], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 8, currentUtilization: 65, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 82 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't3', tenantId: 't', companyId: 'c', name: 'GTM Recruiting', code: 'GTM', type: 'volume', description: null, leaderId: 'l3', managerId: null, directorId: null, members: [], activeMemberCount: 5, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 10, currentUtilization: 92, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 74 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't4', tenantId: 't', companyId: 'c', name: 'Executive Search', code: 'EXEC', type: 'executive', description: null, leaderId: 'l4', managerId: null, directorId: null, members: [], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 4, currentUtilization: 56, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 91 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't5', tenantId: 't', companyId: 'c', name: 'Campus & Intern', code: 'CAMP', type: 'specialized', description: null, leaderId: 'l5', managerId: null, directorId: null, members: [], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 80, currentActivePositions: 6, currentUtilization: 42, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 79 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't6', tenantId: 't', companyId: 'c', name: 'Remote Talent', code: 'REM', type: 'general', description: null, leaderId: 'l6', managerId: null, directorId: null, members: [], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 7, currentUtilization: 88, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 85 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
 ];
 
 const MOCK_MEMBERS: TeamMember[] = [
@@ -180,7 +192,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
     /* -- Derived data ------------------------------------------------ */
     const activeTeam = useMemo(() => teams.find((team) => team.id === selectedId), [teams, selectedId]);
-    const totalMembers = useMemo(() => teams.reduce((s, team) => s + team.memberCount, 0), [teams]);
+    const totalMembers = useMemo(() => teams.reduce((s, team) => s + (team.activeMemberCount ?? 0), 0), [teams]);
     const filteredTargets = useMemo(
       () => targets.filter((tgt) => tgt.period === period || !tgt.period),
       [targets, period],
@@ -221,13 +233,15 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
     );
 
     /* -- Team Card -------------------------------------------------- */
-    const TeamCard = ({ team, idx }: { team: TeamItem; idx: number }) => {
+    const TeamCard = ({ team, idx }: { team: RecruiterTeam; idx: number }) => {
       const isSelected = selectedId === team.id;
-      const capPct = clamp(team.capacityUsed, team.capacityTotal);
+      const capPct = clamp(team.currentUtilization ?? 0, 100);
+      const perfScore = getTeamPerformanceScore(team);
+      const leadName = getTeamLeadName(team);
       const r = 22;
       const sw = 4;
       const sz = (r + sw) * 2;
-      const ring = perfRing(team.performanceScore, r);
+      const ring = perfRing(perfScore, r);
       const entrance = createEntranceAnimation(t, { index: idx });
       const accent = createPersonalityAccentBar(t, {
         color: isSelected ? t.colors.primaryScale[500] : t.colors.neutral[200],
@@ -281,7 +295,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 justifyContent: 'center',
               }}>
                 <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.bold }}>
-                  {team.leadName.charAt(0).toUpperCase()}
+                  {(leadName || '').charAt(0).toUpperCase()}
                 </Text>
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -289,7 +303,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                   {team.name}
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                  Lead: {team.leadName}
+                  Lead: {leadName}
                 </Text>
               </Box>
             </Box>
@@ -299,7 +313,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
               <circle cx={sz / 2} cy={sz / 2} r={r} fill="none" stroke={t.colors.neutral[100]} strokeWidth={sw} />
               <circle
                 cx={sz / 2} cy={sz / 2} r={r} fill="none"
-                stroke={perfColor(team.performanceScore)}
+                stroke={perfColor(perfScore)}
                 strokeWidth={sw}
                 strokeDasharray={ring.dashArray}
                 strokeLinecap="round"
@@ -307,7 +321,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 style={{ transition: `stroke-dasharray ${t.motion.hover}` }}
               />
               <text x={sz / 2} y={sz / 2} textAnchor="middle" dominantBaseline="central" fill={t.colors.neutral[900]} fontSize={t.typography.fontSize.xs} fontWeight={t.typography.fontWeight.bold}>
-                {team.performanceScore}
+                {perfScore}
               </text>
             </svg>
           </Box>
@@ -316,11 +330,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
           <Box style={{ display: 'flex', gap: t.spacing[2], flexWrap: 'wrap' as const, flex: viewMode === 'list' ? 1 : undefined }}>
             <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
               <Users size={12} />
-              <Text style={{ fontSize: 'inherit' }}>{team.memberCount} members</Text>
+              <Text style={{ fontSize: 'inherit' }}>{team.activeMemberCount ?? 0} members</Text>
             </Box>
             <Box style={{ ...createBadgeStyle(t, 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
               <Briefcase size={12} />
-              <Text style={{ fontSize: 'inherit' }}>{team.activeJobs} jobs</Text>
+              <Text style={{ fontSize: 'inherit' }}>{team.currentActivePositions ?? 0} jobs</Text>
             </Box>
           </Box>
 
@@ -329,7 +343,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
             <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Capacity</Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>
-                {team.capacityUsed}/{team.capacityTotal}
+                {team.currentActivePositions ?? 0}/{team.maxActivePositions ?? 0}
               </Text>
             </Box>
             <Box style={progressBar.track}>
@@ -508,7 +522,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                     {activeTeam.name}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
-                    Led by {activeTeam.leadName} {' \u00B7 '} {activeTeam.memberCount} members {' \u00B7 '} {activeTeam.activeJobs} active jobs
+                    Led by {getTeamLeadName(activeTeam)} {' \u00B7 '} {activeTeam.activeMemberCount ?? 0} members {' \u00B7 '} {activeTeam.currentActivePositions ?? 0} active jobs
                   </Text>
                 </Box>
               </Box>
@@ -518,7 +532,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 <KpiMini label="Hires vs Target" value={`${kpis.hiresVsTarget.actual}/${kpis.hiresVsTarget.target}`} icon={<Target size={14} />} scale="successScale" />
                 <KpiMini label="SLA Compliance" value={`${kpis.slaCompliance}%`} icon={<CheckCircle2 size={14} />} scale="infoScale" />
                 <KpiMini label="Satisfaction" value={`${kpis.satisfactionScore}/5`} icon={<Star size={14} />} scale="warningScale" />
-                <KpiMini label="Performance" value={`${activeTeam.performanceScore}`} icon={<Award size={14} />} scale="primaryScale" />
+                <KpiMini label="Performance" value={`${getTeamPerformanceScore(activeTeam)}`} icon={<Award size={14} />} scale="primaryScale" />
               </Box>
 
               {/* Two-column: Members + Sprint */}
@@ -587,7 +601,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                           }}>
                             <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>
-                              {member.name.charAt(0)}
+                              {(member.name || '').charAt(0)}
                             </Text>
                           </Box>
                           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>

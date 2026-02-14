@@ -1,30 +1,38 @@
 /**
  * BhPipelineStageDrawer - Core Interface
- * Drawer/panel with stage detail, conversion trend, bulk actions
+ * Drawer/panel with stage detail, conversion trend, bulk actions.
+ * Renders application data from DBApplication records.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApplication, ApplicationStatusValue } from '@rottay/recruiter';
 
 export type BhPipelineStageDrawerPreset = 'drawer' | 'modal';
 
-export type CandidateStatus = 'active' | 'on_hold' | 'rejected' | 'advanced' | 'new';
+/**
+ * Candidate display status - uses DB ApplicationStatusValue for active pipeline statuses,
+ * plus UI-specific states like 'advanced' and 'new'.
+ */
+export type CandidateStatus = ApplicationStatusValue | 'active' | 'advanced' | 'new';
 
 export interface StageCandidate {
-  id: string;
-  name: string;
-  avatarInitial: string;
-  status: CandidateStatus;
-  appliedAt: Date;
+  id?: string;
+  name?: string;
+  avatarInitial?: string;
+  status?: CandidateStatus;
+  appliedAt?: Date | string | null;
   score?: number;
+  /** Optional: raw application record */
+  application?: Partial<DBApplication>;
 }
 
 export interface StageDetail {
-  name: string;
-  candidateCount: number;
-  avgDays: number;
-  conversionRate: number;
-  candidates: StageCandidate[];
+  name?: string;
+  candidateCount?: number;
+  avgDays?: number;
+  conversionRate?: number;
+  candidates?: StageCandidate[];
 }
 
 export type BulkActionType = 'advance' | 'reject' | 'send_email';

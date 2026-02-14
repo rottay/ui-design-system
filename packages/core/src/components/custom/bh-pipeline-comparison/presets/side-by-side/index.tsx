@@ -138,13 +138,13 @@ export const SideBySideBhPipelineComparison = createPreset<BhPipelineComparisonP
     /* Compute paired stages for comparison */
     const pairedStages = useMemo(() => {
       const stageNames = new Set([
-        ...jobA.stages.map(s => s.name),
-        ...jobB.stages.map(s => s.name),
+        ...(jobA.stages ?? []).map(s => s.name),
+        ...(jobB.stages ?? []).map(s => s.name),
       ]);
       return Array.from(stageNames).map(name => ({
         name,
-        a: jobA.stages.find(s => s.name === name) ?? null,
-        b: jobB.stages.find(s => s.name === name) ?? null,
+        a: (jobA.stages ?? []).find(s => s.name === name) ?? null,
+        b: (jobB.stages ?? []).find(s => s.name === name) ?? null,
       }));
     }, [jobA, jobB]);
 
@@ -250,7 +250,7 @@ export const SideBySideBhPipelineComparison = createPreset<BhPipelineComparisonP
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{jobA.timeToHireDays}d</Text>
               </Box>
               <Box style={{
-                ...createBadgeStyle(t, getConversionBadge(jobA.overallConversionRate)),
+                ...createBadgeStyle(t, getConversionBadge((jobA.overallConversionRate ?? 0))),
                 borderRadius: badgeRadius,
                 padding: `0 ${t.spacing[1]}px`,
               }}>
@@ -296,7 +296,7 @@ export const SideBySideBhPipelineComparison = createPreset<BhPipelineComparisonP
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{jobB.timeToHireDays}d</Text>
               </Box>
               <Box style={{
-                ...createBadgeStyle(t, getConversionBadge(jobB.overallConversionRate)),
+                ...createBadgeStyle(t, getConversionBadge((jobB.overallConversionRate ?? 0))),
                 borderRadius: badgeRadius,
                 padding: `0 ${t.spacing[1]}px`,
               }}>
@@ -328,8 +328,8 @@ export const SideBySideBhPipelineComparison = createPreset<BhPipelineComparisonP
                 <Box
                   tabIndex={0}
                   aria-label={`${jobA.title} ${pair.name}: ${pair.a?.candidateCount ?? 0} candidates, ${pair.a?.conversionRate ?? 0}% conversion`}
-                  onClick={() => pair.a && handleStageClick(jobA.id, pair.name)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && pair.a) { e.preventDefault(); handleStageClick(jobA.id, pair.name); } }}
+                  onClick={() => pair.a && handleStageClick((jobA.id ?? ''), (pair.name ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && pair.a) { e.preventDefault(); handleStageClick((jobA.id ?? ''), (pair.name ?? '')); } }}
                   style={{
                     padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                     borderRight: `1px solid ${t.colors.neutral[100]}`,
@@ -386,8 +386,8 @@ export const SideBySideBhPipelineComparison = createPreset<BhPipelineComparisonP
                 <Box
                   tabIndex={0}
                   aria-label={`${jobB.title} ${pair.name}: ${pair.b?.candidateCount ?? 0} candidates, ${pair.b?.conversionRate ?? 0}% conversion`}
-                  onClick={() => pair.b && handleStageClick(jobB.id, pair.name)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && pair.b) { e.preventDefault(); handleStageClick(jobB.id, pair.name); } }}
+                  onClick={() => pair.b && handleStageClick((jobB.id ?? ''), (pair.name ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && pair.b) { e.preventDefault(); handleStageClick((jobB.id ?? ''), (pair.name ?? '')); } }}
                   style={{
                     padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                     cursor: pair.b ? 'pointer' : 'default',
@@ -441,8 +441,8 @@ export const SideBySideBhPipelineComparison = createPreset<BhPipelineComparisonP
               justifyContent: 'center',
               minWidth: 60,
             }}>
-              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: getDeltaColor(jobA.overallConversionRate - jobB.overallConversionRate, t) }}>
-                {getDeltaLabel(jobA.overallConversionRate - jobB.overallConversionRate, '%')}
+              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: getDeltaColor((jobA.overallConversionRate ?? 0) - (jobB.overallConversionRate ?? 0), t) }}>
+                {getDeltaLabel((jobA.overallConversionRate ?? 0) - (jobB.overallConversionRate ?? 0), '%')}
               </Text>
             </Box>
           )}

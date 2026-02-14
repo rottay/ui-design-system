@@ -1,37 +1,46 @@
 /**
  * BhSprintBurndown - Core Interface
  * Sprint burndown chart with actual vs ideal line for BitHire ATS platform
+ *
+ * DB Reference: DBTeamSprint from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBTeamSprint } from '@rottay/recruiter';
 
 export type BhSprintBurndownPreset = 'chart' | 'compact';
 
+/** Re-export for consumer convenience */
+export type { DBTeamSprint };
+
 export interface BurndownDataPoint {
-  day: number;
-  ideal: number;
-  actual: number;
-  date: string;
+  day?: number;
+  ideal?: number;
+  actual?: number;
+  date?: string;
 }
 
 export interface BhSprintBurndownProps extends EngineAwareProps {
   preset?: BhSprintBurndownPreset;
 
-  /** Burndown data points */
-  data: BurndownDataPoint[];
+  /** Sprint data - accepts DBTeamSprint directly from @rottay/recruiter */
+  sprint?: DBTeamSprint;
 
-  /** Sprint name */
+  /** Burndown data points */
+  data?: BurndownDataPoint[];
+
+  /** Sprint name (falls back to sprint?.name if not provided) */
   sprintName?: string;
 
   /** Total story points in the sprint */
-  totalPoints: number;
+  totalPoints?: number;
 
   /** Total days in the sprint */
-  daysTotal: number;
+  daysTotal?: number;
 
   /** Days elapsed so far */
-  daysElapsed: number;
+  daysElapsed?: number;
 
   /** Card title */
   title?: string;

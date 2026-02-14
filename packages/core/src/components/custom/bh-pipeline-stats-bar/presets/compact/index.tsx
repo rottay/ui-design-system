@@ -116,7 +116,7 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
 
     const overallConversion = useMemo(() => {
       if (conversionRates.length === 0) return 0;
-      const product = conversionRates.reduce((acc, c) => acc * (c.rate / 100), 1);
+      const product = conversionRates.reduce((acc, c) => acc * ((c.rate ?? 0) / 100), 1);
       return Math.round(product * 100);
     }, [conversionRates]);
 
@@ -125,7 +125,8 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
       transition: entrance.transition,
     }), [entrance]);
 
-    const TrendIcon = getTrendIcon(avgTimeToHire.trend);
+    const tthTrend = avgTimeToHire?.trend ?? 'flat';
+    const TrendIcon = getTrendIcon(tthTrend);
 
     return (
       <Box
@@ -224,14 +225,14 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
             padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
             flex: '1 1 auto',
             minWidth: 120,
-          }} role="status" aria-label={`Average time to hire: ${avgTimeToHire.days} days`}>
+          }} role="status" aria-label={`Average time to hire: ${avgTimeToHire?.days ?? 0} days`}>
             <Clock size={16} color={t.colors.warningScale[500]} />
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                 <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: 1 }}>
-                  {avgTimeToHire.days}d
+                  {avgTimeToHire?.days ?? 0}d
                 </Text>
-                <TrendIcon size={12} color={getTrendColor(avgTimeToHire.trend, t, true)} />
+                <TrendIcon size={12} color={getTrendColor(tthTrend, t, true)} />
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                 Time to Hire
@@ -259,7 +260,7 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
               >
                 {i > 0 && <ArrowRight size={10} color={t.colors.neutral[300]} />}
                 <Box style={{
-                  ...createBadgeStyle(t, conv.rate >= 50 ? 'success' : conv.rate >= 30 ? 'warning' : 'error'),
+                  ...createBadgeStyle(t, (conv.rate ?? 0) >= 50 ? 'success' : (conv.rate ?? 0) >= 30 ? 'warning' : 'error'),
                   borderRadius: badgeRadius,
                   padding: `1px ${t.spacing[1]}px`,
                 }}>

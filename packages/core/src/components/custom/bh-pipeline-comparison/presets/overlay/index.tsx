@@ -137,13 +137,13 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
     /* Compute paired stages */
     const pairedStages = useMemo(() => {
       const stageNames = new Set([
-        ...jobA.stages.map(s => s.name),
-        ...jobB.stages.map(s => s.name),
+        ...(jobA.stages ?? []).map(s => s.name),
+        ...(jobB.stages ?? []).map(s => s.name),
       ]);
       return Array.from(stageNames).map(name => ({
         name,
-        a: jobA.stages.find(s => s.name === name) ?? null,
-        b: jobB.stages.find(s => s.name === name) ?? null,
+        a: (jobA.stages ?? []).find(s => s.name === name) ?? null,
+        b: (jobB.stages ?? []).find(s => s.name === name) ?? null,
       }));
     }, [jobA, jobB]);
 
@@ -270,7 +270,7 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
               return (
                 <Box
                   key={pair.name}
-                  onMouseEnter={() => setHoveredStage(pair.name)}
+                  onMouseEnter={() => setHoveredStage((pair.name ?? null))}
                   onMouseLeave={() => setHoveredStage(null)}
                   style={{ ...animStyle(i) }}
                 >

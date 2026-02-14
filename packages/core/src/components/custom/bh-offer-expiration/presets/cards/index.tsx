@@ -26,6 +26,7 @@ import {
   createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhOfferExpirationProps, ExpiringOffer } from '../../core';
+import { offersToExpiringOffers } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -87,7 +88,9 @@ export const CardsBhOfferExpiration = createPreset<BhOfferExpirationProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      offers = MOCK_OFFERS,
+      dbOffers,
+      candidateNames,
+      offers: offersProp,
       title = 'Expiring Offers',
       onOfferClick,
       onExtend,
@@ -95,6 +98,9 @@ export const CardsBhOfferExpiration = createPreset<BhOfferExpirationProps>({
       className,
       style,
     } = props;
+
+    const offers = offersProp
+      ?? (dbOffers && dbOffers.length > 0 ? offersToExpiringOffers(dbOffers, candidateNames) : MOCK_OFFERS);
 
     const [hoveredOffer, setHoveredOffer] = useState<string | null>(null);
 
@@ -168,7 +174,7 @@ export const CardsBhOfferExpiration = createPreset<BhOfferExpirationProps>({
               borderRadius: badgeRadius,
             }}>
               <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                {offer.status.charAt(0).toUpperCase() + offer.status.slice(1)}
+                {(offer.status || '').charAt(0).toUpperCase() + (offer.status || '').slice(1)}
               </Text>
             </Box>
           </Box>

@@ -1,7 +1,16 @@
+/**
+ * BhOnboardingFlow - Core Interface
+ * DB Reference: DBRecruiter from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBRecruiter } from '@rottay/recruiter';
 
 export type BhOnboardingFlowPreset = 'admin-setup' | 'recruiter-welcome';
+
+/** Re-export for consumer convenience */
+export type { DBRecruiter };
 
 export interface OnboardingStep {
   key: string;

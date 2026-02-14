@@ -102,8 +102,8 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      metrics = MOCK_METRICS,
-      totalCandidates = 1090,
+      metrics = [],
+      totalCandidates = 0,
       title = 'Diversity & Inclusion',
       onSegmentClick,
       loading,
@@ -185,7 +185,7 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
             {[
               { label: 'Total Candidates', value: totalCandidates.toLocaleString(), icon: Users, color: t.colors.primaryScale },
               { label: 'Categories', value: metrics.length.toString(), icon: PieChart, color: t.colors.secondaryScale },
-              { label: 'Segments', value: metrics.reduce((s, m) => s + m.segments.length, 0).toString(), icon: BarChart3, color: t.colors.infoScale },
+              { label: 'Segments', value: metrics.reduce((s, m) => s + (m.segments ?? []).length, 0).toString(), icon: BarChart3, color: t.colors.infoScale },
             ].map((sc, i) => {
               const Icon = sc.icon;
               return (
@@ -243,11 +243,11 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
                   overflow: 'hidden',
                   marginBottom: t.spacing[4],
                 }} role="img" aria-label={`${metric.category} distribution`}>
-                  {metric.segments.map((seg, si) => (
+                  {(metric.segments ?? []).map((seg, si) => (
                     <Box
                       key={seg.label}
                       style={{
-                        flex: seg.percentage,
+                        flex: seg.percentage ?? 0,
                         backgroundColor: colors[si % colors.length],
                         transition: `flex ${t.motion.hover}`,
                       }}
@@ -257,14 +257,14 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
 
                 {/* Legend */}
                 <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-                  {metric.segments.map((seg, si) => (
+                  {(metric.segments ?? []).map((seg, si) => (
                     <Box
                       key={seg.label}
                       role="button"
                       tabIndex={0}
-                      aria-label={`${seg.label}: ${seg.count} (${seg.percentage}%)`}
-                      onClick={() => handleSegmentClick(metric.category, seg.label)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick(metric.category, seg.label); } }}
+                      aria-label={`${seg.label}: ${seg.count ?? 0} (${seg.percentage ?? 0}%)`}
+                      onClick={() => handleSegmentClick((metric.category ?? ''), (seg.label ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSegmentClick((metric.category ?? ''), (seg.label ?? '')); } }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -287,10 +287,10 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>
-                          {seg.count}
+                          {seg.count ?? 0}
                         </Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                          {seg.percentage}%
+                          {seg.percentage ?? 0}%
                         </Text>
                       </Box>
                     </Box>

@@ -194,7 +194,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
                 fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.bold,
                 color: tokens.colors.primaryScale[700],
               }}>
-                {context.candidateName.charAt(0).toUpperCase()}
+                {(context.candidateName || '').charAt(0).toUpperCase()}
               </Text>
             </Box>
             <Box>

@@ -1,27 +1,45 @@
 /**
  * BhAppealList - Core Interface
  * Appeal list with status tracking for BitHire ATS platform
+ *
+ * Uses AppealSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { AppealSelect, AppealStatusValue } from '@rottay/scoring';
 
 export type BhAppealListPreset = 'table' | 'compact';
 
+/** DB appeal status values: 'pending' | 'under_review' | 'approved' | 'rejected' */
+export type AppealStatus = AppealStatusValue;
+
+/** UI appeal status for display purposes */
+export type AppealListItemStatus = 'pending' | 'under-review' | 'approved' | 'denied';
+
+/** Extended appeal view combining DB entity with UI display fields */
 export interface AppealListItem {
-  id: string;
-  candidateName: string;
-  positionTitle: string;
-  status: 'pending' | 'under-review' | 'approved' | 'denied';
-  submittedAt: Date;
-  priority: 'high' | 'medium' | 'low';
+  /** The DB entity (all fields optional for safety) */
+  appeal?: Partial<AppealSelect>;
+  /** Unique appeal identifier (convenience field) */
+  id?: string;
+  /** Display name of the candidate (resolved externally) */
+  candidateName?: string;
+  /** Position title (resolved externally) */
+  positionTitle?: string;
+  /** UI status for display (mapped from DB status) */
+  status?: AppealListItemStatus;
+  /** When the appeal was submitted */
+  submittedAt?: Date;
+  /** UI priority (computed) */
+  priority?: 'high' | 'medium' | 'low';
 }
 
 export interface BhAppealListProps extends EngineAwareProps {
   preset?: BhAppealListPreset;
 
   /** List of appeals */
-  appeals: AppealListItem[];
+  appeals?: AppealListItem[];
 
   /** Callback when an appeal is clicked */
   onAppealClick?: (appealId: string) => void;
@@ -48,3 +66,6 @@ export interface BhAppealListProps extends EngineAwareProps {
 export const BH_APPEAL_LIST_DEFAULTS: Partial<BhAppealListProps> = {
   preset: 'table',
 };
+
+/** Re-export DB types for convenience */
+export type { AppealSelect, AppealStatusValue };

@@ -123,8 +123,8 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
               role="listitem"
               tabIndex={0}
               aria-label={`Rule: ${rule.name}, ${rule.enabled ? 'enabled' : 'disabled'}`}
-              onClick={() => onRuleEdit?.(rule.id)}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRuleEdit?.(rule.id); } }}
+              onClick={() => onRuleEdit?.((rule.id ?? ''))}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRuleEdit?.((rule.id ?? '')); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -153,7 +153,7 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                   {rule.name}
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                  {rule.conditions.length} condition{rule.conditions.length !== 1 ? 's' : ''} / {rule.actions.length} action{rule.actions.length !== 1 ? 's' : ''}
+                  {(rule.conditions ?? []).length} condition{(rule.conditions ?? []).length !== 1 ? 's' : ''} / {(rule.actions ?? []).length} action{(rule.actions ?? []).length !== 1 ? 's' : ''}
                 </Text>
               </Box>
               <Box
@@ -161,8 +161,8 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
                 tabIndex={0}
                 aria-checked={rule.enabled}
                 aria-label={`Toggle ${rule.name}`}
-                onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleToggle(rule.id); }}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleToggle(rule.id); } }}
+                onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleToggle((rule.id ?? '')); }}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleToggle((rule.id ?? '')); } }}
                 style={{
                   width: 28, height: 16, borderRadius: t.borderRadius.full,
                   backgroundColor: rule.enabled ? t.colors.successScale[500] : t.colors.neutral[300],

@@ -1,14 +1,18 @@
 /**
- * BhProctoringeverity - Core Interface
+ * BhProctoringSeverity - Core Interface
  * Interactive visualization of events grouped by severity
+ *
+ * Uses ProctoringEventSeverityValue from @rottay/scoring for severity type reference.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringSeverityPreset = 'donut' | 'bars';
 
-export type ProctoringEventSeverity = 'low' | 'medium' | 'high' | 'critical';
+/** Backward-compat alias (old name from pre-migration) */
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
 export interface SeverityCount {
   severity: ProctoringEventSeverity;
@@ -19,7 +23,7 @@ export interface BhProctoringSeverityProps extends EngineAwareProps {
   preset?: BhProctoringSeverityPreset;
 
   /** Severity distribution data */
-  severityCounts: SeverityCount[];
+  severityCounts?: SeverityCount[];
 
   /** Callback when a severity segment is clicked */
   onSeverityClick?: (severity: ProctoringEventSeverity) => void;
@@ -52,3 +56,6 @@ export const BH_PROCTORING_SEVERITY_DEFAULTS: Partial<BhProctoringSeverityProps>
   showPercentages: true,
   size: 180,
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSeverity };

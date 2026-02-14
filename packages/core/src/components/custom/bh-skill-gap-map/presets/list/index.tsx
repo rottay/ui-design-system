@@ -50,7 +50,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
 
     const counts = useMemo(() => {
       const c = { critical: 0, high: 0, medium: 0, low: 0 };
-      gaps.forEach(g => { c[g.priority]++; });
+      gaps.forEach(g => { if (g.priority && c[g.priority] !== undefined) c[g.priority]++; });
       return c;
     }, [gaps]);
 
@@ -95,12 +95,15 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
         {/* Gap rows */}
         <Box style={{ flex: 1, overflowY: 'auto' }}>
           {gaps.map((gap, gi) => {
-            const colors = pc[gap.priority];
-            const pct = gap.requiredLevel > 0 ? Math.round((gap.currentLevel / gap.requiredLevel) * 100) : 0;
+            const gapPriority = gap.priority ?? 'low';
+            const colors = pc[gapPriority];
+            const currentLevel = gap.currentLevel ?? 0;
+            const requiredLevel = gap.requiredLevel ?? 0;
+            const pct = requiredLevel > 0 ? Math.round((currentLevel / requiredLevel) * 100) : 0;
             const barColor = pct >= 80 ? t.colors.successScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
 
             return (
-              <Box key={gap.id} onClick={() => onGapSelect?.(gap.id)} style={{
+              <Box key={gap.id ?? gi} onClick={() => onGapSelect?.(gap.id ?? '')} style={{
                 padding: `${t.spacing[4]}px ${t.spacing[6]}px`,
                 borderBottom: gi < gaps.length - 1 ? `1px solid ${t.colors.neutral[50]}` : undefined,
                 borderLeft: `3px solid ${colors.color}`,
@@ -114,13 +117,13 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                       padding: `1px ${t.spacing[2]}px`, borderRadius: br,
                       backgroundColor: t.colors.secondaryScale[50], border: `1px solid ${t.colors.secondaryScale[200]}`,
                     }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.secondaryScale[700] }}>{gap.dimensionCode}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.secondaryScale[700] }}>{gap.dimensionCode ?? '--'}</Text>
                     </Box>
-                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{gap.dimension}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{gap.dimension ?? 'Unknown'}</Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                     <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: colors.bgColor, border: `1px solid ${colors.border}` }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: colors.color, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>{gap.priority}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: colors.color, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>{gapPriority}</Text>
                     </Box>
                     {onGapSelect && <ChevronRight size={14} style={{ color: t.colors.neutral[400] }} />}
                   </Box>
@@ -132,7 +135,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                     <Box style={{ height: '100%', width: `${pct}%`, backgroundColor: barColor, borderRadius: t.borderRadius.full, transition: 'width 0.4s ease' }} />
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600], minWidth: 36, textAlign: 'right' }}>
-                    {gap.currentLevel}/{gap.requiredLevel}
+                    {currentLevel}/{requiredLevel}
                   </Text>
                 </Box>
 
@@ -141,7 +144,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Gap:</Text>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: colors.color }}>{gap.gapSize}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: colors.color }}>{gap.gapSize ?? 0}</Text>
                     </Box>
                     <Box style={{
                       display: 'inline-flex', alignItems: 'center', gap: 3,
@@ -149,7 +152,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
                       backgroundColor: t.colors.infoScale[50], border: `1px solid ${t.colors.infoScale[200]}`,
                     }}>
                       <Users size={10} style={{ color: t.colors.infoScale[600] }} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[700] }}>{gap.candidateCount} candidates</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.infoScale[700] }}>{gap.candidateCount ?? 0} candidates</Text>
                     </Box>
                   </Box>
                 </Box>

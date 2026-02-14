@@ -25,10 +25,9 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 
 const EMPTY_FORM: ClientFormData = {
-  name: '',
-  tier: 'starter',
-  contactName: '',
-  contactEmail: '',
+  displayName: '',
+  type: 'company',
+  tier: 'standard',
 };
 
 /* ------------------------------------------------------------------ */
@@ -76,7 +75,7 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
     const [form, setForm] = useState<ClientFormData>({
       ...EMPTY_FORM,
       ...initialData,
-    });
+    } as ClientFormData);
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -92,12 +91,12 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
     }, []);
 
     const handleSubmit = useCallback(() => {
-      if (!form.name || !form.contactName || !form.contactEmail) return;
+      if (!form.displayName) return;
       onSubmit?.(form);
     }, [form, onSubmit]);
 
     const isValid = useMemo(() => {
-      return form.name.trim() !== '' && form.contactName.trim() !== '' && form.contactEmail.trim() !== '';
+      return form.displayName.trim() !== '';
     }, [form]);
 
     return (
@@ -138,13 +137,13 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
 
         <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
           <input
-            value={form.name}
-            onChange={(e) => updateField('name', e.target.value)}
-            onFocus={() => setFocusedField('name')}
+            value={form.displayName}
+            onChange={(e) => updateField('displayName', e.target.value)}
+            onFocus={() => setFocusedField('displayName')}
             onBlur={() => setFocusedField(null)}
-            placeholder="Company name *"
-            aria-label="Company name"
-            style={createInputStyle(t, focusedField === 'name')}
+            placeholder="Display name *"
+            aria-label="Display name"
+            style={createInputStyle(t, focusedField === 'displayName')}
           />
 
           <select
@@ -156,29 +155,30 @@ export const CompactBhClientForm = createPreset<BhClientFormProps>({
               cursor: 'pointer',
             }}
           >
-            <option value="starter">Starter</option>
-            <option value="business">Business</option>
+            <option value="standard">Standard</option>
+            <option value="premium">Premium</option>
             <option value="enterprise">Enterprise</option>
+            <option value="strategic">Strategic</option>
           </select>
 
           <input
-            value={form.contactName}
-            onChange={(e) => updateField('contactName', e.target.value)}
-            onFocus={() => setFocusedField('contactName')}
+            value={form.personalEmail ?? ''}
+            onChange={(e) => updateField('personalEmail', e.target.value)}
+            onFocus={() => setFocusedField('personalEmail')}
             onBlur={() => setFocusedField(null)}
-            placeholder="Contact name *"
-            aria-label="Contact name"
-            style={createInputStyle(t, focusedField === 'contactName')}
+            placeholder="Email"
+            aria-label="Email"
+            style={createInputStyle(t, focusedField === 'personalEmail')}
           />
 
           <input
-            value={form.contactEmail}
-            onChange={(e) => updateField('contactEmail', e.target.value)}
-            onFocus={() => setFocusedField('contactEmail')}
+            value={form.personalPhone ?? ''}
+            onChange={(e) => updateField('personalPhone', e.target.value)}
+            onFocus={() => setFocusedField('personalPhone')}
             onBlur={() => setFocusedField(null)}
-            placeholder="Contact email *"
-            aria-label="Contact email"
-            style={createInputStyle(t, focusedField === 'contactEmail')}
+            placeholder="Phone"
+            aria-label="Phone"
+            style={createInputStyle(t, focusedField === 'personalPhone')}
           />
         </Box>
 

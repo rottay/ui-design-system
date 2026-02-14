@@ -91,19 +91,19 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
 
-    const maxCount = useMemo(() => Math.max(...days.map(d => d.count), 1), [days]);
-    const totalActivity = useMemo(() => days.reduce((s, d) => s + d.count, 0), [days]);
+    const maxCount = useMemo(() => Math.max(...days.map(d => d.count ?? 0), 1), [days]);
+    const totalActivity = useMemo(() => days.reduce((s, d) => s + (d.count ?? 0), 0), [days]);
 
     /* Build week columns */
     const { weeks, monthPositions } = useMemo(() => {
-      const dayMap = new Map(days.map(d => [d.date, d.count]));
+      const dayMap = new Map(days.map(d => [d.date, d.count ?? 0]));
       const weeksCols: Array<Array<{ date: string; count: number; dayOfWeek: number }>> = [];
       const monthPos: Array<{ label: string; weekIndex: number }> = [];
 
       if (days.length === 0) return { weeks: weeksCols, monthPositions: monthPos };
 
-      const startDate = new Date(days[0].date);
-      const endDate = new Date(days[days.length - 1].date);
+      const startDate = new Date(days[0].date ?? '');
+      const endDate = new Date(days[days.length - 1].date ?? '');
       let currentDate = new Date(startDate);
       let currentWeek: Array<{ date: string; count: number; dayOfWeek: number }> = [];
       let lastMonth = -1;
@@ -203,7 +203,7 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
               borderRadius: badgeRadius,
             }}>
               <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                {hoveredDay.date}: {hoveredDay.count} {activityLabel}
+                {hoveredDay.date}: {hoveredDay.count ?? 0} {activityLabel}
               </Text>
             </Box>
           )}

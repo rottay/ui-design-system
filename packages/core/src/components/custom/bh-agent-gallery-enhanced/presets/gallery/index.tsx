@@ -282,13 +282,13 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <TrendingUp size={14} strokeWidth={1.5} style={{ color: t.colors.neutral[400] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>
-                        {agent.usageCount.toLocaleString()} uses
+                        {(agent.usageCount ?? 0).toLocaleString()} uses
                       </Text>
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Star size={14} strokeWidth={1.5} style={{ color: t.colors.warningScale[500] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>
-                        {agent.avgScore.toFixed(1)}
+                        {(agent.avgScore ?? 0).toFixed(1)}
                       </Text>
                     </Box>
                   </Box>
@@ -298,7 +298,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Avg Score</Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700], fontWeight: t.typography.fontWeight.semibold }}>
-                        {agent.avgScore.toFixed(1)}/10
+                        {(agent.avgScore ?? 0).toFixed(1)}/10
                       </Text>
                     </Box>
                     <Box style={scoreBar.track}>

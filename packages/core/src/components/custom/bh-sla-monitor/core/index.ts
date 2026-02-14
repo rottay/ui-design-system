@@ -3,11 +3,19 @@
  * SLA Tracking Dashboard for BitHire ATS platform
  */
 
+/**
+ * DB Reference: DBJob from @rottay/recruiter (SLA relates to job stages)
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBJob } from '@rottay/recruiter';
 
 export type BhSlaMonitorPreset = 'standard';
+
+/** Re-export for consumer convenience */
+export type { DBJob };
 
 /* -- SLA Compliance --------------------------------------------------- */
 

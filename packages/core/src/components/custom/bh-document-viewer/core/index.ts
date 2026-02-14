@@ -1,6 +1,7 @@
 /**
  * BhDocumentViewer - Core Interface
  * PDF/image viewer placeholder with annotation tools
+ * (Generic UI - no direct DB entity mapping)
  */
 
 import type { CSSProperties } from 'react';
@@ -9,11 +10,11 @@ import type { EngineAwareProps } from '../../../../types';
 export type BhDocumentViewerPreset = 'viewer' | 'compact';
 
 export interface DocumentAnnotation {
-  id: string;
-  page: number;
-  x: number;
-  y: number;
-  text: string;
+  id?: string;
+  page?: number;
+  x?: number;
+  y?: number;
+  text?: string;
   color?: string;
 }
 

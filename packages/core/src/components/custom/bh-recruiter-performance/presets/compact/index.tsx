@@ -18,14 +18,14 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhRecruiterPerformanceProps, RecruiterMetrics } from '../../core';
+import type { BhRecruiterPerformanceProps, RecruiterPerformanceItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RECRUITERS: RecruiterMetrics[] = [
+const MOCK_RECRUITERS: RecruiterPerformanceItem[] = [
   { recruiterId: 'r-1', name: 'Alice Morgan', hires: 12, timeToFill: 28, qualityScore: 92, candidateSatisfaction: 88, pipelineVelocity: 85, activePositions: 6 },
   { recruiterId: 'r-2', name: 'Bob Chen', hires: 9, timeToFill: 35, qualityScore: 78, candidateSatisfaction: 82, pipelineVelocity: 72, activePositions: 8 },
   { recruiterId: 'r-3', name: 'Carla Ruiz', hires: 15, timeToFill: 22, qualityScore: 95, candidateSatisfaction: 91, pipelineVelocity: 90, activePositions: 5 },
@@ -56,7 +56,7 @@ export const CompactBhRecruiterPerformance = createPreset<BhRecruiterPerformance
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
-    const sorted = useMemo(() => [...recruiters].sort((a, b) => b.qualityScore - a.qualityScore), [recruiters]);
+    const sorted = useMemo(() => [...(recruiters ?? [])].sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0)), [recruiters]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -94,7 +94,7 @@ export const CompactBhRecruiterPerformance = createPreset<BhRecruiterPerformance
             </Text>
           </Box>
           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-            {recruiters.length} recruiters
+            {(recruiters ?? []).length} recruiters
           </Text>
         </Box>
 
@@ -114,9 +114,9 @@ export const CompactBhRecruiterPerformance = createPreset<BhRecruiterPerformance
                 key={r.recruiterId}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${i + 1}. ${r.name}: Quality ${r.qualityScore}, ${r.hires} hires`}
-                onClick={() => onRecruiterClick?.(r.recruiterId)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRecruiterClick?.(r.recruiterId); } }}
+                aria-label={`${i + 1}. ${r.name ?? ''}: Quality ${r.qualityScore ?? 0}, ${r.hires ?? 0} hires`}
+                onClick={() => onRecruiterClick?.((r.recruiterId ?? ''))}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRecruiterClick?.((r.recruiterId ?? '')); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -146,18 +146,18 @@ export const CompactBhRecruiterPerformance = createPreset<BhRecruiterPerformance
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}>
-                    {r.name}
+                    {r.name ?? ''}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    {r.hires} hires / {r.timeToFill}d TTF
+                    {r.hires ?? 0} hires / {r.timeToFill ?? 0}d TTF
                   </Text>
                 </Box>
                 <Box style={{
-                  ...createBadgeStyle(t, r.qualityScore >= 85 ? 'success' : r.qualityScore >= 70 ? 'warning' : 'error'),
+                  ...createBadgeStyle(t, (r.qualityScore ?? 0) >= 85 ? 'success' : (r.qualityScore ?? 0) >= 70 ? 'warning' : 'error'),
                   borderRadius: badgeRadius,
                   padding: `1px ${t.spacing[2]}px`,
                 }}>
-                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{r.qualityScore}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{r.qualityScore ?? 0}</Text>
                 </Box>
               </Box>
             );

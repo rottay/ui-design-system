@@ -367,7 +367,7 @@ export const TimelineBhTokenTransfer = createPreset<BhTokenTransferProps>({
                         }}>
                           <Coins size={12} color={t.colors.primaryScale[600]} />
                           <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.primaryScale[700] }}>
-                            {transfer.amount.toLocaleString()}
+                            {(transfer.amount ?? 0).toLocaleString()}
                           </Text>
                         </Box>
 

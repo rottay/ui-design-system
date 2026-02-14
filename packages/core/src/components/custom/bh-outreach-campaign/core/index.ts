@@ -1,13 +1,26 @@
 /**
  * BhOutreachCampaign - Core Interface
  * Campaign manager with response analytics for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component uses DBOutreachActivity as the base entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBOutreachActivity } from '@rottay/recruiter';
 
 export type BhOutreachCampaignPreset = 'manager' | 'compact';
 
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterOutreachActivity = DBOutreachActivity;
+
+/**
+ * Campaign-level aggregation data (computed from outreach activities).
+ * Not a direct DB entity - campaigns are aggregated from activities.
+ */
 export interface CampaignData {
   id: string;
   name: string;
@@ -21,8 +34,11 @@ export interface CampaignData {
 export interface BhOutreachCampaignProps extends EngineAwareProps {
   preset?: BhOutreachCampaignPreset;
 
-  /** List of campaigns */
-  campaigns: CampaignData[];
+  /** List of campaigns (aggregated from outreach activities) */
+  campaigns?: CampaignData[];
+
+  /** Raw outreach activities for reference */
+  activities?: DBOutreachActivity[];
 
   /** Callback when a campaign is clicked */
   onCampaignClick?: (id: string) => void;

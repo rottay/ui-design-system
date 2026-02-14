@@ -24,7 +24,8 @@ import {
 import type {
   BhCandidateOutreachProps, OutreachRecipient, CampaignMetrics, ABVariant,
 } from '../../core';
-import { getMetricColors, getRecipientInitials } from '../../core';
+import { getMetricColors, getRecipientInitials, getCandidateFullName } from '../../core';
+import type { DBCandidate } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Send, Eye, MessageSquare, AlertTriangle, TrendingUp,
@@ -36,12 +37,12 @@ import {
  * -------------------------------------------------------------------------*/
 
 const DEFAULT_RECIPIENTS: OutreachRecipient[] = [
-  { id: 'r-1', name: 'Sarah Johnson', email: 'sarah.j@google.com' },
-  { id: 'r-2', name: 'Michael Chen', email: 'mchen@stripe.com' },
-  { id: 'r-3', name: 'Emily Rodriguez', email: 'emily@meta.com' },
-  { id: 'r-4', name: 'James Kim', email: 'jkim@anthropic.com' },
-  { id: 'r-5', name: 'Anna Kowalski', email: 'anna@vercel.com' },
-  { id: 'r-6', name: 'David Thompson', email: 'david@linear.app' },
+  { candidate: { id: 'r-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.j@google.com' } as DBCandidate },
+  { candidate: { id: 'r-2', firstName: 'Michael', lastName: 'Chen', email: 'mchen@stripe.com' } as DBCandidate },
+  { candidate: { id: 'r-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily@meta.com' } as DBCandidate },
+  { candidate: { id: 'r-4', firstName: 'James', lastName: 'Kim', email: 'jkim@anthropic.com' } as DBCandidate },
+  { candidate: { id: 'r-5', firstName: 'Anna', lastName: 'Kowalski', email: 'anna@vercel.com' } as DBCandidate },
+  { candidate: { id: 'r-6', firstName: 'David', lastName: 'Thompson', email: 'david@linear.app' } as DBCandidate },
 ];
 
 const DEFAULT_METRICS: CampaignMetrics = { sent: 156, opened: 98, replied: 34, bounced: 5 };

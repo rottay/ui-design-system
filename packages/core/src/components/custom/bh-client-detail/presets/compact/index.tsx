@@ -76,21 +76,21 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
     const t = tokens;
 
     const {
-      clientName = 'Acme Corporation',
-      tier = 'enterprise',
-      contractStatus = 'active',
-      positions: positionsProp,
-      revenueHistory: revenueProp,
-      totalRevenue = 125000,
-      currency = 'USD',
+      client,
+      positions: positionsProp = [],
+      revenueHistory: revenueProp = [],
       onPositionClick,
       loading,
       className,
       style,
     } = props;
 
-    const positions = positionsProp?.length ? positionsProp : MOCK_POSITIONS;
-    const revenueHistory = revenueProp?.length ? revenueProp : MOCK_REVENUE;
+    const clientName = client?.displayName ?? client?.clientCompanyName ?? '';
+    const tier = (client?.tier ?? 'enterprise') as string;
+    const contractStatus = (client?.status ?? 'active') as string;
+    const totalRevenue = Number(client?.totalRevenue ?? 0);
+    const positions = positionsProp;
+    const revenueHistory = revenueProp;
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 20 }), [t]);
@@ -104,16 +104,22 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
     const tierConfig = useMemo(() => {
       switch (tier) {
         case 'enterprise': return { badge: 'primary' as const, icon: Crown };
-        case 'business': return { badge: 'info' as const, icon: Shield };
-        case 'starter': return { badge: 'secondary' as const, icon: Zap };
+        case 'premium': return { badge: 'info' as const, icon: Shield };
+        case 'strategic': return { badge: 'warning' as const, icon: Crown };
+        case 'standard':
+        default: return { badge: 'secondary' as const, icon: Zap };
       }
     }, [tier]);
 
     const contractConfig = useMemo(() => {
       switch (contractStatus) {
         case 'active': return { badge: 'success' as const, icon: CheckCircle2 };
-        case 'expiring': return { badge: 'warning' as const, icon: AlertTriangle };
-        case 'expired': return { badge: 'error' as const, icon: Clock };
+        case 'suspended': return { badge: 'warning' as const, icon: AlertTriangle };
+        case 'pending_approval': return { badge: 'warning' as const, icon: Clock };
+        case 'terminated':
+        case 'archived': return { badge: 'error' as const, icon: XCircle };
+        case 'draft':
+        default: return { badge: 'secondary' as const, icon: Clock };
       }
     }, [contractStatus]);
 

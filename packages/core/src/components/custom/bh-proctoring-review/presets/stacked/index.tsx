@@ -28,7 +28,7 @@ import {
 } from '../../../helpers';
 import type {
   BhProctoringReviewProps,
-  ProctoringEventType,
+  ProctoringReviewEventView,
   ProctoringEventSeverity,
   ReviewSubmission,
 } from '../../core';
@@ -38,55 +38,60 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
-function getSeverityBg(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityBg(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[50];
     case 'high': return t.colors.errorScale[50];
     case 'medium': return t.colors.warningScale[50];
     case 'low': return t.colors.infoScale[50];
+    default: return t.colors.neutral[50];
   }
 }
 
-function getSeverityBadgeKey(severity: ProctoringEventSeverity): 'error' | 'warning' | 'info' {
+function getSeverityBadgeKey(severity: string | undefined): 'error' | 'warning' | 'info' {
   switch (severity) {
     case 'critical':
     case 'high': return 'error';
     case 'medium': return 'warning';
-    case 'low': return 'info';
+    case 'low':
+    default: return 'info';
   }
 }
 
-function getEventTypeIcon(type: ProctoringEventType) {
+function getEventTypeIcon(type: string | undefined) {
   switch (type) {
     case 'tab_switch': return MonitorOff;
     case 'copy_paste': return Clipboard;
     case 'screen_share': return ScreenShare;
     case 'unusual_typing': return Keyboard;
     case 'browser_focus_lost': return Globe;
+    default: return AlertTriangle;
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType): string {
+function getEventTypeLabel(type: string | undefined): string {
   switch (type) {
     case 'tab_switch': return 'Tab Switch';
     case 'copy_paste': return 'Copy/Paste';
     case 'screen_share': return 'Screen Share';
     case 'unusual_typing': return 'Unusual Typing';
     case 'browser_focus_lost': return 'Focus Lost';
+    default: return 'Unknown';
   }
 }
 
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+function getSeverityLabel(severity: string | undefined): string {
+  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
 }
 
 const SEVERITY_OPTIONS: ProctoringEventSeverity[] = ['low', 'medium', 'high', 'critical'];
@@ -95,18 +100,20 @@ const SEVERITY_OPTIONS: ProctoringEventSeverity[] = ['low', 'medium', 'high', 'c
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT = {
-  id: 'pe-1',
-  scorableId: 'int-1',
+const MOCK_EVENT: ProctoringReviewEventView = {
+  event: {
+    id: 'pe-1',
+    scorableId: 'int-1',
+    eventType: 'screen_share',
+    severity: 'critical',
+    timestamp: new Date(Date.now() - 300000),
+    metadata: { duration: 45, application: 'Discord' },
+    reviewed: false,
+    dismissed: false,
+  },
   candidateName: 'Sarah Johnson',
-  eventType: 'screen_share' as const,
-  severity: 'critical' as const,
-  timestamp: new Date(Date.now() - 300000),
   description: 'Candidate initiated a screen sharing session with an external application during the coding assessment.',
-  metadata: { duration: 45, application: 'Discord' },
   sessionDuration: 2400,
-  reviewed: false,
-  dismissed: false,
 };
 
 /* ================================================================== */
@@ -123,7 +130,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event = MOCK_EVENT,
+      event: eventView = MOCK_EVENT,
       onSubmitReview,
       onDismiss,
       onSeverityOverride,
@@ -132,8 +139,21 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
       style,
     } = props;
 
+    /* Safely extract fields from the View wrapper */
+    const ev = eventView?.event;
+    const eventId = ev?.id ?? '';
+    const eventType = ev?.eventType;
+    const severity = ev?.severity;
+    const timestamp = ev?.timestamp ?? new Date();
+    const metadata = ev?.metadata as Record<string, unknown> | undefined;
+    const reviewed = ev?.reviewed ?? false;
+    const dismissed = ev?.dismissed ?? false;
+    const candidateName = eventView?.candidateName ?? 'Unknown';
+    const description = eventView?.description ?? '';
+    const sessionDuration = eventView?.sessionDuration;
+
     const [notes, setNotes] = useState('');
-    const [severityOverride, setSeverityOverride] = useState<ProctoringEventSeverity>(event.severity);
+    const [severityOverride, setSeverityOverride] = useState<ProctoringEventSeverity | undefined>(severity);
     const [showSeverityDropdown, setShowSeverityDropdown] = useState(false);
 
 
@@ -143,28 +163,28 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
 
-    const EventIcon = useMemo(() => getEventTypeIcon(event.eventType), [event.eventType]);
-    const sevColor = useMemo(() => getSeverityColor(event.severity, t), [event.severity, t]);
+    const EventIcon = useMemo(() => getEventTypeIcon(eventType), [eventType]);
+    const sevColor = useMemo(() => getSeverityColor(severity, t), [severity, t]);
 
     const handleSubmit = useCallback((action: 'confirm' | 'dismiss') => {
       const review: ReviewSubmission = {
-        eventId: event.id,
+        eventId,
         notes,
-        severityOverride: severityOverride !== event.severity ? severityOverride : undefined,
+        severityOverride: severityOverride !== severity ? severityOverride : undefined,
         action,
       };
       onSubmitReview?.(review);
-    }, [event.id, event.severity, notes, severityOverride, onSubmitReview]);
+    }, [eventId, severity, notes, severityOverride, onSubmitReview]);
 
     const handleDismiss = useCallback(() => {
-      onDismiss?.(event.id);
-    }, [event.id, onDismiss]);
+      onDismiss?.(eventId);
+    }, [eventId, onDismiss]);
 
     const handleSeverityChange = useCallback((sev: ProctoringEventSeverity) => {
       setSeverityOverride(sev);
       setShowSeverityDropdown(false);
-      onSeverityOverride?.(event.id, sev);
-    }, [event.id, onSeverityOverride]);
+      onSeverityOverride?.(eventId, sev);
+    }, [eventId, onSeverityOverride]);
 
     const animStyle = (index: number) => ({
       ...entrance.animate,
@@ -197,7 +217,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
             alignItems: 'center',
             gap: t.spacing[3],
           }}>
-            <Box style={createIconContainerStyle(t, { size: 36, color: getSeverityBg(event.severity, t) })}>
+            <Box style={createIconContainerStyle(t, { size: 36, color: getSeverityBg(severity, t) })}>
               <EventIcon size={18} color={sevColor} />
             </Box>
             <Box style={{ flex: 1, minWidth: 0 }}>
@@ -207,19 +227,19 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
                   fontWeight: ptypo.headingWeight,
                   color: t.colors.neutral[900],
                 }}>
-                  {getEventTypeLabel(event.eventType)}
+                  {getEventTypeLabel(eventType)}
                 </Text>
                 <Box style={{
-                  ...createBadgeStyle(t, getSeverityBadgeKey(event.severity)),
+                  ...createBadgeStyle(t, getSeverityBadgeKey(severity)),
                   borderRadius: badgeRadius,
                 }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                    {getSeverityLabel(event.severity)}
+                    {getSeverityLabel(severity)}
                   </Text>
                 </Box>
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: 1 }}>
-                {event.candidateName} -- {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                {candidateName} -- {formatDistanceToNow(timestamp, { addSuffix: true })}
               </Text>
             </Box>
           </Box>
@@ -232,18 +252,18 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
               lineHeight: 1.6,
               display: 'block',
             }}>
-              {event.description}
+              {description}
             </Text>
 
             {/* Metadata row */}
-            {event.metadata && Object.keys(event.metadata).length > 0 && (
+            {metadata && Object.keys(metadata).length > 0 && (
               <Box style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: t.spacing[3],
                 marginTop: t.spacing[3],
               }}>
-                {Object.entries(event.metadata).map(([key, value]) => (
+                {Object.entries(metadata).map(([key, value]) => (
                   <Box key={key} style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -260,7 +280,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
                     </Text>
                   </Box>
                 ))}
-                {event.sessionDuration && (
+                {sessionDuration && (
                   <Box style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -271,7 +291,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
                   }}>
                     <Clock size={10} color={t.colors.neutral[400]} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                      {Math.floor(event.sessionDuration / 60)}m session
+                      {Math.floor(sessionDuration / 60)}m session
                     </Text>
                   </Box>
                 )}

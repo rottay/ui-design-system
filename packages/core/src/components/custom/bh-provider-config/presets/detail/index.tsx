@@ -160,28 +160,31 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
       onTestProvider?.(providerId);
     }, [onTestProvider]);
 
-    const statusConfig = (status: ProviderStatus) => {
+    const statusConfig = (status: ProviderStatus | undefined) => {
       switch (status) {
         case 'healthy': return { color: tokens.colors.successScale[500], label: 'Healthy' };
         case 'degraded': return { color: tokens.colors.warningScale[500], label: 'Degraded' };
         case 'down': return { color: tokens.colors.errorScale[500], label: 'Down' };
+        default: return { color: tokens.colors.neutral[400], label: 'Unknown' };
       }
     };
 
-    const circuitConfig = (state: CircuitBreakerState) => {
+    const circuitConfig = (state: CircuitBreakerState | undefined) => {
       switch (state) {
         case 'closed': return { color: tokens.colors.successScale[500], label: 'Closed' };
         case 'open': return { color: tokens.colors.errorScale[500], label: 'Open' };
         case 'half-open': return { color: tokens.colors.warningScale[500], label: 'Half-Open' };
+        default: return { color: tokens.colors.neutral[400], label: 'Unknown' };
       }
     };
 
-    const typeColor = (type: ProviderType): 'primary' | 'success' | 'warning' | 'info' => {
+    const typeColor = (type: ProviderType | undefined): 'primary' | 'success' | 'warning' | 'info' => {
       switch (type) {
         case 'chat': return 'primary';
         case 'tts': return 'success';
         case 'stt': return 'info';
         case 'conversational': return 'warning';
+        default: return 'primary';
       }
     };
 
@@ -493,7 +496,7 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                             {key.maskedKey}
                           </Text>
                           <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                            Last used: {formatRelativeTime(key.lastUsed)} &middot; Created: {formatShortDate(key.createdAt)}
+                            Last used: {key.lastUsed ? formatRelativeTime(key.lastUsed) : '--'} &middot; Created: {key.createdAt ? formatShortDate(key.createdAt) : '--'}
                           </Text>
                         </Box>
                         <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
@@ -619,10 +622,10 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
                           </Box>
                           <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[3] }}>
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                              ${model.costPer1kTokens.toFixed(4)}/1K
+                              ${(model.costPer1kTokens ?? 0).toFixed(4)}/1K
                             </Text>
                             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                              {model.contextWindow >= 1000 ? `${(model.contextWindow / 1000).toFixed(0)}K` : model.contextWindow} ctx
+                              {(model.contextWindow ?? 0) >= 1000 ? `${((model.contextWindow ?? 0) / 1000).toFixed(0)}K` : model.contextWindow ?? 0} ctx
                             </Text>
                           </Box>
                           {model.features.length > 0 && (

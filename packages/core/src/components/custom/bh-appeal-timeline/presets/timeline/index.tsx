@@ -115,7 +115,7 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     }, [onEventClick]);
 
     const sortedEvents = useMemo(
-      () => [...events].sort((a, b) => a.date.getTime() - b.date.getTime()),
+      () => [...events].sort((a, b) => (a.date?.getTime?.() ?? 0) - (b.date?.getTime?.() ?? 0)),
       [events],
     );
 
@@ -233,7 +233,7 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>{getEventLabel(event.type)}</Text>
                         </Box>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                          {formatDistanceToNow(event.date, { addSuffix: true })}
+                          {formatDistanceToNow((event.date ?? new Date()), { addSuffix: true })}
                         </Text>
                       </Box>
                       <Text style={{

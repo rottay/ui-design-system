@@ -43,8 +43,11 @@ function getScoreBadgeKey(score: number): 'success' | 'warning' | 'error' {
   return 'error';
 }
 
-function getDaysInStage(appliedAt: Date): number {
-  return Math.floor((Date.now() - appliedAt.getTime()) / (1000 * 60 * 60 * 24));
+function getDaysInStage(appliedAt: Date | string | null | undefined): number {
+  if (!appliedAt) return 0;
+  const date = typeof appliedAt === 'string' ? new Date(appliedAt) : appliedAt;
+  if (isNaN(date.getTime())) return 0;
+  return Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 function getDaysColor(days: number, t: DesignTokens): string {
@@ -97,14 +100,16 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
 
+    const candidateId = candidate?.id ?? '';
+
     const handleClick = useCallback(() => {
-      onClick?.(candidate.id);
-    }, [onClick, candidate.id]);
+      if (candidateId) onClick?.(candidateId);
+    }, [onClick, candidateId]);
 
     const handleQuickAction = useCallback((action: QuickActionType, e: React.MouseEvent) => {
       e.stopPropagation();
-      onQuickAction?.(action, candidate.id);
-    }, [onQuickAction, candidate.id]);
+      if (candidateId) onQuickAction?.(action, candidateId);
+    }, [onQuickAction, candidateId]);
 
     const daysInStage = useMemo(() => getDaysInStage(candidate.appliedAt), [candidate.appliedAt]);
 
@@ -117,7 +122,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
       <Box
         className={className}
         role="article"
-        aria-label={`${candidate.name}, score ${candidate.score ?? 'N/A'}`}
+        aria-label={`${candidate?.name ?? 'Unknown'}, score ${candidate?.score ?? 'N/A'}`}
         tabIndex={0}
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -160,7 +165,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
             fontWeight: t.typography.fontWeight.bold,
             color: t.colors.primaryScale[700],
           }}>
-            {candidate.avatarInitial}
+            {candidate?.avatarInitial ?? '?'}
           </Text>
         </Box>
 
@@ -175,7 +180,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
             textOverflow: 'ellipsis',
             display: 'block',
           }}>
-            {candidate.name}
+            {candidate?.name ?? 'Unknown'}
           </Text>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
             <Clock size={9} color={getDaysColor(daysInStage, t)} />
@@ -211,7 +216,7 @@ export const MinimalBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardProp
                 <button
                   key={qa.action}
                   onClick={(e) => handleQuickAction(qa.action, e)}
-                  aria-label={`${qa.label} ${candidate.name}`}
+                  aria-label={`${qa.label} ${candidate?.name ?? 'Unknown'}`}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     width: 20, height: 20, borderRadius: t.borderRadius.sm,

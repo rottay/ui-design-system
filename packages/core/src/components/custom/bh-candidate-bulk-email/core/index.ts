@@ -1,17 +1,26 @@
 /**
  * BhCandidateBulkEmail - Core Interface
  * Multi-candidate email with per-candidate preview
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * Recipients are derived from DBCandidate records.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 export type BhCandidateBulkEmailPreset = 'full' | 'compact';
 
+export type RecruiterCandidate = DBCandidate;
+
+/**
+ * Recipient for bulk email - wraps a DBCandidate with template variables.
+ */
 export interface BulkEmailRecipient {
-  id: string;
-  name: string;
-  email: string;
+  /** Candidate record from DB */
+  candidate: DBCandidate;
+  /** Template variables for personalization (e.g. { position: 'Senior Dev' }) */
   variables: Record<string, string>;
 }
 
@@ -19,7 +28,7 @@ export interface BhCandidateBulkEmailProps extends EngineAwareProps {
   preset?: BhCandidateBulkEmailPreset;
 
   /** Recipients for the bulk email */
-  recipients: BulkEmailRecipient[];
+  recipients?: BulkEmailRecipient[];
 
   /** Email subject template */
   subject?: string;
@@ -31,18 +40,18 @@ export interface BhCandidateBulkEmailProps extends EngineAwareProps {
   title?: string;
 
   /** Callback when a recipient is toggled */
-  onRecipientToggle?: (recipientId: string) => void;
+  onRecipientToggle?: (candidateId: string) => void;
 
   /** Callback when send is triggered */
   onSend?: () => void;
 
   /** Callback when preview is requested for a recipient */
-  onPreview?: (recipientId: string) => void;
+  onPreview?: (candidateId: string) => void;
 
-  /** Selected recipient IDs */
+  /** Selected candidate IDs */
   selectedIds?: string[];
 
-  /** Currently previewing recipient ID */
+  /** Currently previewing candidate ID */
   previewId?: string | null;
 
   /** Loading state */
@@ -58,3 +67,10 @@ export interface BhCandidateBulkEmailProps extends EngineAwareProps {
 export const BH_CANDIDATE_BULK_EMAIL_DEFAULTS: Partial<BhCandidateBulkEmailProps> = {
   preset: 'full',
 };
+
+/**
+ * Get the candidate's full name from DB fields.
+ */
+export function getCandidateFullName(candidate: DBCandidate): string {
+  return `${candidate.firstName ?? ''} ${candidate.lastName ?? ''}`.trim();
+}

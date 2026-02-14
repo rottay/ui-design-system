@@ -123,9 +123,9 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
       departments.forEach(dept => {
         const dateMap = new Map<string, number>();
         data.filter(d => d.department === dept.name).forEach(d => {
-          dateMap.set(d.date, d.days);
+          dateMap.set((d.date ?? ''), d.days ?? 0);
         });
-        deptMap.set(dept.name, dateMap);
+        deptMap.set((dept.name ?? ''), dateMap);
       });
 
       return { dates, deptMap };
@@ -139,7 +139,7 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
     const plotH = height - padding.top - padding.bottom;
 
     /* Scale calculations */
-    const allDays = useMemo(() => data.map(d => d.days), [data]);
+    const allDays = useMemo(() => data.map(d => d.days ?? 0), [data]);
     const maxDays = useMemo(() => Math.max(...allDays, targetDays, 1), [allDays, targetDays]);
     const yMax = useMemo(() => Math.ceil(maxDays / 10) * 10 + 5, [maxDays]);
 
@@ -154,17 +154,17 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
     /* Build path strings for each department */
     const deptPaths = useMemo(() => {
       return departments.map((dept, di) => {
-        const dateMap = chartData.deptMap.get(dept.name);
+        const dateMap = chartData.deptMap.get((dept.name ?? ''));
         if (!dateMap) return { dept, path: '', rollingPath: '', points: [] as Array<{ x: number; y: number; val: number; date: string }> };
 
         const values: number[] = [];
         const points: Array<{ x: number; y: number; val: number; date: string }> = [];
 
         chartData.dates.forEach((date, i) => {
-          const val = dateMap.get(date);
+          const val = dateMap.get((date ?? ''));
           if (val !== undefined) {
             values.push(val);
-            points.push({ x: xScale(i), y: yScale(val), val, date });
+            points.push({ x: xScale(i), y: yScale(val), val, date: date ?? '' });
           }
         });
 
@@ -194,7 +194,7 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
       return departments.map(dept => {
         const deptData = data.filter(d => d.department === dept.name);
         const avg = deptData.length > 0
-          ? deptData.reduce((s, d) => s + d.days, 0) / deptData.length
+          ? deptData.reduce((s, d) => s + (d.days ?? 0), 0) / deptData.length
           : 0;
         return { name: dept.name, avg: Math.round(avg) };
       });
@@ -334,7 +334,7 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
                     fontSize={10}
                     textAnchor="middle"
                   >
-                    {date.slice(5)}
+                    {date?.slice(5)}
                   </text>
                 ))}
 
@@ -410,12 +410,12 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
                   tabIndex={0}
                   role="button"
                   aria-label={`Toggle ${dept.name} department`}
-                  onMouseEnter={() => setHoveredDept(dept.name)}
+                  onMouseEnter={() => setHoveredDept((dept.name ?? null))}
                   onMouseLeave={() => setHoveredDept(null)}
                   onKeyDown={(e: React.KeyboardEvent) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      setHoveredDept(prev => prev === dept.name ? null : dept.name);
+                      setHoveredDept((prev => prev === dept.name ? null : dept.name ?? null));
                     }
                   }}
                   style={{

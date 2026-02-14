@@ -42,6 +42,7 @@ function getStageTypeColor(type: WorkflowStage['type'], t: DesignTokens): string
     case 'manual': return t.colors.primaryScale[500];
     case 'automated': return t.colors.infoScale[500];
     case 'approval': return t.colors.warningScale[500];
+    default: return t.colors.neutral[500];
   }
 }
 
@@ -68,7 +69,7 @@ export const CompactBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPr
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
-    const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
+    const sortedStages = useMemo(() => [...stages].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)), [stages]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -126,8 +127,8 @@ export const CompactBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPr
               role="listitem"
               tabIndex={0}
               aria-label={`Stage ${stage.order}: ${stage.name}`}
-              onClick={() => onStageEdit?.(stage.id)}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStageEdit?.(stage.id); } }}
+              onClick={() => onStageEdit?.((stage.id ?? ''))}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStageEdit?.((stage.id ?? '')); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -161,7 +162,7 @@ export const CompactBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPr
                   {stage.name}
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                  {stage.type} / {stage.actions.length} action{stage.actions.length !== 1 ? 's' : ''}
+                  {stage.type} / {(stage.actions ?? []).length} action{(stage.actions ?? []).length !== 1 ? 's' : ''}
                 </Text>
               </Box>
               <ChevronRight size={12} color={t.colors.neutral[300]} />

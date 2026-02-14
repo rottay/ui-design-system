@@ -1,6 +1,7 @@
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { ScorecardSelect, DimensionScoreSelect } from '@rottay/scoring';
 
 export type BhComparisonViewPreset = 'standard';
 
@@ -8,12 +9,17 @@ export interface ComparisonCandidate {
   id: string;
   name: string;
   avatar?: string;
+  /** Scorecard DB entity (optional) */
+  scorecard?: Partial<ScorecardSelect>;
   overallScore: number;
   rank: number;
   dimensionScores: { dimension: string; score: number }[];
   strengths: string[];
   weaknesses: string[];
 }
+
+/** Re-export DB types for convenience */
+export type { ScorecardSelect, DimensionScoreSelect };
 
 export interface ComparisonRow {
   dimension: string;

@@ -57,9 +57,11 @@ function getScoreBadgeKey(score: number): 'success' | 'warning' | 'error' {
   return 'error';
 }
 
-function getDaysInStage(appliedAt: Date): number {
-  const diffMs = Date.now() - appliedAt.getTime();
-  return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+function getDaysInStage(appliedAt: Date | string | null | undefined): number {
+  if (!appliedAt) return 0;
+  const date = typeof appliedAt === 'string' ? new Date(appliedAt) : appliedAt;
+  if (isNaN(date.getTime())) return 0;
+  return Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
 }
 
 function getDaysColor(days: number, t: DesignTokens): string {
@@ -115,21 +117,23 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
 
+    const candidateId = candidate?.id ?? '';
+
     const handleClick = useCallback(() => {
-      onClick?.(candidate.id);
-    }, [onClick, candidate.id]);
+      if (candidateId) onClick?.(candidateId);
+    }, [onClick, candidateId]);
 
     const handleExpand = useCallback((e: React.MouseEvent) => {
       e.stopPropagation();
-      onExpand?.(candidate.id);
-    }, [onExpand, candidate.id]);
+      if (candidateId) onExpand?.(candidateId);
+    }, [onExpand, candidateId]);
 
     const handleQuickAction = useCallback((action: QuickActionType, e: React.MouseEvent) => {
       e.stopPropagation();
-      onQuickAction?.(action, candidate.id);
-    }, [onQuickAction, candidate.id]);
+      if (candidateId) onQuickAction?.(action, candidateId);
+    }, [onQuickAction, candidateId]);
 
-    const daysInStage = useMemo(() => getDaysInStage(candidate.appliedAt), [candidate.appliedAt]);
+    const daysInStage = useMemo(() => getDaysInStage(candidate?.appliedAt), [candidate?.appliedAt]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -140,7 +144,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
       <Box
         className={className}
         role="article"
-        aria-label={`Candidate card: ${candidate.name}, score ${candidate.score ?? 'N/A'}, ${daysInStage} days in stage`}
+        aria-label={`Candidate card: ${candidate?.name ?? 'Unknown'}, score ${candidate?.score ?? 'N/A'}, ${daysInStage} days in stage`}
         tabIndex={0}
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -198,7 +202,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
                 fontWeight: t.typography.fontWeight.bold,
                 color: t.colors.primaryScale[700],
               }}>
-                {candidate.avatarInitial}
+                {candidate?.avatarInitial ?? '?'}
               </Text>
             </Box>
 
@@ -213,7 +217,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
                 textOverflow: 'ellipsis',
                 display: 'block',
               }}>
-                {candidate.name}
+                {candidate?.name ?? 'Unknown'}
               </Text>
             </Box>
 
@@ -248,7 +252,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
               {daysInStage}d in stage
             </Text>
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginLeft: t.spacing[1] }}>
-              Applied {formatDistanceToNow(candidate.appliedAt, { addSuffix: true })}
+              Applied {candidate?.appliedAt ? formatDistanceToNow(new Date(candidate.appliedAt), { addSuffix: true }) : 'N/A'}
             </Text>
           </Box>
 
@@ -291,7 +295,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
                     <button
                       key={qa.action}
                       onClick={(e) => handleQuickAction(qa.action, e)}
-                      aria-label={`${qa.label} ${candidate.name}`}
+                      aria-label={`${qa.label} ${candidate?.name ?? 'Unknown'}`}
                       style={{
                         display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                         padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
@@ -313,7 +317,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
               </Box>
               <button
                 onClick={handleExpand}
-                aria-label={`Expand ${candidate.name} details`}
+                aria-label={`Expand ${candidate?.name ?? 'Unknown'} details`}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   width: 24, height: 24, borderRadius: t.borderRadius.md,

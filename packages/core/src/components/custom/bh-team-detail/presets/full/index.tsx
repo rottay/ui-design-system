@@ -73,8 +73,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
     const t = tokens;
 
     const {
-      teamName = 'Engineering Hiring',
-      department = 'Engineering',
+      team,
       members: membersProp,
       positions: positionsProp,
       metrics: metricsProp,
@@ -84,6 +83,9 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
       className,
       style,
     } = props;
+
+    const teamName = team?.name ?? 'Engineering Hiring';
+    const teamType = team?.type ?? 'general';
 
     const members = membersProp?.length ? membersProp : MOCK_MEMBERS;
     const positions = positionsProp?.length ? positionsProp : MOCK_POSITIONS;
@@ -149,7 +151,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginTop: t.spacing[1] }}>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Building2 size={13} style={{ color: t.colors.neutral[400] }} />
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{department}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], textTransform: 'capitalize' as const }}>{teamType}</Text>
                 </Box>
                 <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   <Users size={11} />

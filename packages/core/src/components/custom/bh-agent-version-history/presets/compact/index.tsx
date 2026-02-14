@@ -19,19 +19,21 @@ import type { BhAgentVersionHistoryProps, AgentVersion } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import { GitBranch, RotateCcw, Activity } from 'lucide-react';
 
-function getVersionStatusBadge(status: AgentVersion['status']): 'success' | 'secondary' | 'warning' {
+function getVersionStatusBadge(status: AgentVersion['status'] | undefined): 'success' | 'secondary' | 'warning' {
   switch (status) {
     case 'active': return 'success';
     case 'deprecated': return 'secondary';
-    case 'draft': return 'warning';
+    case 'draft':
+    default: return 'warning';
   }
 }
 
-function getStatusLabel(status: AgentVersion['status']): string {
+function getStatusLabel(status: AgentVersion['status'] | undefined): string {
   switch (status) {
     case 'active': return 'Active';
     case 'deprecated': return 'Deprecated';
-    case 'draft': return 'Draft';
+    case 'draft':
+    default: return 'Draft';
   }
 }
 
@@ -67,7 +69,7 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
     const sortedVersions = useMemo(() => {
-      return [...versions].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      return [...versions].sort((a, b) => (b.createdAt?.getTime?.() ?? 0) - (a.createdAt?.getTime?.() ?? 0));
     }, [versions]);
 
     if (loading) {
@@ -153,7 +155,7 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
                   {/* Metrics */}
                   {version.metrics && (
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], flexShrink: 0 }}>
-                      {version.metrics.avgScore.toFixed(1)} avg
+                      {(version.metrics.avgScore ?? 0).toFixed(1)} avg
                     </Text>
                   )}
 

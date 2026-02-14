@@ -30,10 +30,9 @@ import {
 } from '../../../helpers';
 import type {
   BhProctoringEventCardProps,
-  ProctoringEventDetail,
+  ProctoringEventCardView,
   ProctoringEventType,
   ProctoringEventSeverity,
-  ProctoringEventMetadata,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
@@ -41,64 +40,70 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
-function getSeverityBg(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityBg(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[50];
     case 'high': return t.colors.errorScale[50];
     case 'medium': return t.colors.warningScale[50];
     case 'low': return t.colors.infoScale[50];
+    default: return t.colors.neutral[50];
   }
 }
 
-function getSeverityBadgeKey(severity: ProctoringEventSeverity): 'error' | 'warning' | 'info' {
+function getSeverityBadgeKey(severity: string | undefined): 'error' | 'warning' | 'info' {
   switch (severity) {
     case 'critical':
     case 'high': return 'error';
     case 'medium': return 'warning';
-    case 'low': return 'info';
+    case 'low':
+    default: return 'info';
   }
 }
 
-function getEventTypeIcon(type: ProctoringEventType) {
+function getEventTypeIcon(type: string | undefined) {
   switch (type) {
     case 'tab_switch': return MonitorOff;
     case 'copy_paste': return Clipboard;
     case 'screen_share': return ScreenShare;
     case 'unusual_typing': return Keyboard;
     case 'browser_focus_lost': return Globe;
+    default: return Shield;
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType): string {
+function getEventTypeLabel(type: string | undefined): string {
   switch (type) {
     case 'tab_switch': return 'Tab Switch';
     case 'copy_paste': return 'Copy/Paste';
     case 'screen_share': return 'Screen Share';
     case 'unusual_typing': return 'Unusual Typing';
     case 'browser_focus_lost': return 'Focus Lost';
+    default: return 'Unknown';
   }
 }
 
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+function getSeverityLabel(severity: string | undefined): string {
+  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
 }
 
-function getEventTypeDescription(type: ProctoringEventType): string {
+function getEventTypeDescription(type: string | undefined): string {
   switch (type) {
     case 'tab_switch': return 'Candidate switched to a different browser tab during the assessment.';
     case 'copy_paste': return 'Copy/paste activity was detected in the assessment interface.';
     case 'screen_share': return 'Screen sharing to an external application was detected.';
     case 'unusual_typing': return 'Typing pattern anomaly detected, possibly indicating external assistance.';
     case 'browser_focus_lost': return 'Browser window lost focus, indicating candidate navigated away.';
+    default: return 'A proctoring event was detected during the assessment.';
   }
 }
 
@@ -106,23 +111,24 @@ function getEventTypeDescription(type: ProctoringEventType): string {
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT: ProctoringEventDetail = {
-  id: 'pe-detail-1',
-  candidateName: 'Sarah Johnson',
-  candidateAvatar: undefined,
-  eventType: 'screen_share',
-  severity: 'critical',
-  timestamp: new Date(Date.now() - 300000),
-  metadata: {
-    screenShareTarget: 'Discord',
-    tabSwitchCount: 3,
-    focusLostDuration: 45,
-    ipAddress: '192.168.1.42',
-    userAgent: 'Chrome 120 / macOS',
-    notes: 'Detected active screen share to Discord for 45 seconds during coding challenge.',
+const MOCK_EVENT: ProctoringEventCardView = {
+  event: {
+    id: 'pe-detail-1',
+    eventType: 'screen_share',
+    severity: 'critical',
+    timestamp: new Date(Date.now() - 300000),
+    metadata: {
+      screenShareTarget: 'Discord',
+      tabSwitchCount: 3,
+      focusLostDuration: 45,
+      ipAddress: '192.168.1.42',
+      userAgent: 'Chrome 120 / macOS',
+      notes: 'Detected active screen share to Discord for 45 seconds during coding challenge.',
+    },
+    reviewed: false,
+    dismissed: false,
   },
-  reviewed: false,
-  dismissed: false,
+  candidateName: 'Sarah Johnson',
 };
 
 /* ================================================================== */
@@ -139,7 +145,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event = MOCK_EVENT,
+      event: eventView = MOCK_EVENT,
       onReview,
       onDismiss,
       onClick,
@@ -148,8 +154,19 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
       style,
     } = props;
 
-    const [isHovered, setIsHovered] = useState(false);
+    const ev = eventView?.event;
+    const candidateName = eventView?.candidateName ?? 'Unknown';
+    const eventType = ev?.eventType;
+    const severity = ev?.severity;
+    const timestamp = ev?.timestamp;
+    const metadata = (ev?.metadata ?? {}) as Record<string, unknown>;
+    const reviewed = ev?.reviewed ?? false;
+    const dismissed = ev?.dismissed ?? false;
+    const reviewedBy = ev?.reviewedBy;
+    const reviewedAt = ev?.reviewedAt;
+    const reviewNotes = ev?.reviewNotes;
 
+    const [isHovered, setIsHovered] = useState(false);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const hoverStyles = useMemo(() => createCardHoverStyles(t), [t]);
@@ -158,9 +175,9 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
     const divider = useMemo(() => createDividerStyle(t), [t]);
 
-    const sevColor = useMemo(() => getSeverityColor(event.severity, t), [event.severity, t]);
-    const sevBg = useMemo(() => getSeverityBg(event.severity, t), [event.severity, t]);
-    const EventIcon = useMemo(() => getEventTypeIcon(event.eventType), [event.eventType]);
+    const sevColor = useMemo(() => getSeverityColor(severity, t), [severity, t]);
+    const sevBg = useMemo(() => getSeverityBg(severity, t), [severity, t]);
+    const EventIcon = useMemo(() => getEventTypeIcon(eventType), [eventType]);
 
     const handleClick = useCallback(() => {
       onClick?.();
@@ -184,7 +201,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     /* Build metadata items */
     const metadataItems = useMemo(() => {
       const items: { icon: typeof Hash; label: string; value: string }[] = [];
-      const m = event.metadata;
+      const m = metadata;
 
       if (m.tabSwitchCount !== undefined) {
         items.push({ icon: Hash, label: 'Tab Switches', value: String(m.tabSwitchCount) });
@@ -196,24 +213,24 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
         items.push({ icon: Timer, label: 'Focus Lost', value: `${m.focusLostDuration}s` });
       }
       if (m.screenShareTarget) {
-        items.push({ icon: Monitor, label: 'Shared To', value: m.screenShareTarget });
+        items.push({ icon: Monitor, label: 'Shared To', value: String(m.screenShareTarget) });
       }
       if (m.typingSpeedWpm !== undefined) {
         items.push({ icon: Zap, label: 'Typing Speed', value: `${m.typingSpeedWpm} WPM` });
       }
       if (m.ipAddress) {
-        items.push({ icon: MapPin, label: 'IP Address', value: m.ipAddress });
+        items.push({ icon: MapPin, label: 'IP Address', value: String(m.ipAddress) });
       }
 
       return items;
-    }, [event.metadata]);
+    }, [metadata]);
 
     return (
       <Box
         className={className}
         role="article"
         tabIndex={onClick ? 0 : undefined}
-        aria-label={`Proctoring event: ${event.candidateName}, ${getEventTypeLabel(event.eventType)}, ${getSeverityLabel(event.severity)} severity`}
+        aria-label={`Proctoring event: ${candidateName}, ${getEventTypeLabel(eventType)}, ${getSeverityLabel(severity)} severity`}
         onClick={onClick ? handleClick : undefined}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -256,42 +273,42 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
                   color: t.colors.neutral[900],
                   letterSpacing: ptypo.headingLetterSpacing,
                 }}>
-                  {event.candidateName}
+                  {candidateName}
                 </Text>
                 <Box style={{
-                  ...createBadgeStyle(t, getSeverityBadgeKey(event.severity)),
+                  ...createBadgeStyle(t, getSeverityBadgeKey(severity)),
                   borderRadius: badgeRadius,
                 }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                    {getSeverityLabel(event.severity)}
+                    {getSeverityLabel(severity)}
                   </Text>
                 </Box>
               </Box>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                 <EventIcon size={12} color={t.colors.neutral[500]} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>
-                  {getEventTypeLabel(event.eventType)}
+                  {getEventTypeLabel(eventType)}
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                  {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                  {timestamp ? formatDistanceToNow(timestamp, { addSuffix: true }) : 'Unknown'}
                 </Text>
               </Box>
             </Box>
           </Box>
 
           {/* Status badge */}
-          {event.reviewed && (
+          {reviewed && (
             <Box style={{
-              ...createBadgeStyle(t, event.dismissed ? 'secondary' : 'success'),
+              ...createBadgeStyle(t, dismissed ? 'secondary' : 'success'),
               borderRadius: badgeRadius,
               display: 'inline-flex',
               alignItems: 'center',
               gap: t.spacing[1],
               flexShrink: 0,
             }}>
-              {event.dismissed ? <EyeOff size={10} /> : <CheckCircle size={10} />}
+              {dismissed ? <EyeOff size={10} /> : <CheckCircle size={10} />}
               <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                {event.dismissed ? 'Dismissed' : 'Reviewed'}
+                {dismissed ? 'Dismissed' : 'Reviewed'}
               </Text>
             </Box>
           )}
@@ -304,7 +321,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
             color: t.colors.neutral[600],
             lineHeight: 1.6,
           }}>
-            {getEventTypeDescription(event.eventType)}
+            {getEventTypeDescription(eventType)}
           </Text>
         </Box>
 
@@ -374,7 +391,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
         )}
 
         {/* Notes */}
-        {event.metadata.notes && (
+        {!!metadata.notes && (
           <Box style={{ padding: `0 ${t.spacing[5]}px ${t.spacing[3]}px` }}>
             <Box style={{
               padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
@@ -391,14 +408,14 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
                 color: t.colors.warningScale[800],
                 lineHeight: 1.5,
               }}>
-                {event.metadata.notes}
+                {String(metadata.notes)}
               </Text>
             </Box>
           </Box>
         )}
 
         {/* Review Info */}
-        {event.reviewed && event.reviewedBy && (
+        {reviewed && reviewedBy && (
           <Box style={{ padding: `0 ${t.spacing[5]}px ${t.spacing[3]}px` }}>
             <Box style={{
               padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
@@ -406,16 +423,16 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
               borderRadius: t.borderRadius.md,
               border: `1px solid ${t.colors.successScale[100]}`,
             }}>
-              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: event.reviewNotes ? t.spacing[1] : 0 }}>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: reviewNotes ? t.spacing[1] : 0 }}>
                 <User size={12} color={t.colors.successScale[600]} />
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700] }}>
-                  Reviewed by {event.reviewedBy}
-                  {event.reviewedAt && ` - ${formatDistanceToNow(event.reviewedAt, { addSuffix: true })}`}
+                  Reviewed by {reviewedBy}
+                  {reviewedAt && ` - ${formatDistanceToNow(reviewedAt, { addSuffix: true })}`}
                 </Text>
               </Box>
-              {event.reviewNotes && (
+              {reviewNotes && (
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600], marginTop: t.spacing[1] }}>
-                  {event.reviewNotes}
+                  {reviewNotes}
                 </Text>
               )}
             </Box>
@@ -423,7 +440,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
         )}
 
         {/* Actions Footer */}
-        {!event.reviewed && (onReview || onDismiss) && (
+        {!reviewed && (onReview || onDismiss) && (
           <Box style={{
             padding: `${t.spacing[3]}px ${t.spacing[5]}px`,
             borderTop: `1px solid ${t.colors.neutral[100]}`,

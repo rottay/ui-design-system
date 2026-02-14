@@ -40,6 +40,7 @@ import type {
   DimensionAdjustment,
   TranscriptLine,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Target,
@@ -216,7 +217,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     const headerIconStyle = useMemo(() => createIconContainerStyle(tokens, { size: tokens.spacing[10], color: tokens.colors.primaryScale[100] }), [tokens]);
 
     /* ----- alignment rate badge ----- */
-    const alignmentRate = alignmentMetrics?.agreementRate ?? 0;
+    const alignmentRate = n(alignmentMetrics?.agreementRate);
     const alignmentRatePct = Math.round(alignmentRate * 100);
 
     /* ----- scatter data ----- */
@@ -226,7 +227,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
       const ai = currentSample.aiScores ?? {};
       return dimensions
         .filter(d => human[d] !== undefined && ai[d] !== undefined)
-        .map(d => ({ dimension: d, humanScore: human[d], aiScore: ai[d] }));
+        .map(d => ({ dimension: d, humanScore: n(human[d]), aiScore: n(ai[d]) }));
     }, [currentSample, humanScores, dimensions]);
 
     /* ----- heatmap data (per-dimension alignment) ----- */
@@ -373,8 +374,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
               {/* Transcript lines */}
               <Box style={{ flex: 1, overflow: 'auto', padding: tokens.spacing[4] }}>
                 {currentSample?.transcriptLines?.map((line: TranscriptLine, idx: number) => {
-                  const isCandidate = line.speaker.toLowerCase() === 'candidate';
-                  const isAI = line.speaker.toLowerCase() === 'ai' || line.speaker.toLowerCase() === 'agent';
+                  const isCandidate = (line.speaker || '').toLowerCase() === 'candidate';
+                  const isAI = (line.speaker || '').toLowerCase() === 'ai' || (line.speaker || '').toLowerCase() === 'agent';
                   return (
                     <Box
                       key={idx}
@@ -848,9 +849,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       display: 'block',
                       fontSize: tokens.typography.fontSize['2xl'],
                       fontWeight: tokens.typography.fontWeight.bold,
-                      color: getAgreementColor(alignmentMetrics.agreementRate, tokens),
+                      color: getAgreementColor(n(alignmentMetrics.agreementRate), tokens),
                     }}>
-                      {Math.round(alignmentMetrics.agreementRate * 100)}%
+                      {Math.round(n(alignmentMetrics.agreementRate) * 100)}%
                     </Text>
                   </Box>
 
@@ -867,9 +868,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       display: 'block',
                       fontSize: tokens.typography.fontSize['2xl'],
                       fontWeight: tokens.typography.fontWeight.bold,
-                      color: alignmentMetrics.meanAbsoluteError <= 10 ? tokens.colors.successScale[600] : alignmentMetrics.meanAbsoluteError <= 20 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
+                      color: n(alignmentMetrics.meanAbsoluteError) <= 10 ? tokens.colors.successScale[600] : n(alignmentMetrics.meanAbsoluteError) <= 20 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
                     }}>
-                      {alignmentMetrics.meanAbsoluteError.toFixed(1)}
+                      {n(alignmentMetrics.meanAbsoluteError).toFixed(1)}
                     </Text>
                   </Box>
 
@@ -886,9 +887,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       display: 'block',
                       fontSize: tokens.typography.fontSize['2xl'],
                       fontWeight: tokens.typography.fontWeight.bold,
-                      color: alignmentMetrics.confidenceCorrelation >= 0.7 ? tokens.colors.successScale[600] : alignmentMetrics.confidenceCorrelation >= 0.4 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
+                      color: n(alignmentMetrics.confidenceCorrelation) >= 0.7 ? tokens.colors.successScale[600] : n(alignmentMetrics.confidenceCorrelation) >= 0.4 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600],
                     }}>
-                      {alignmentMetrics.confidenceCorrelation.toFixed(2)}
+                      {n(alignmentMetrics.confidenceCorrelation).toFixed(2)}
                     </Text>
                   </Box>
                 </Box>
@@ -912,9 +913,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             style={{
                               padding: tokens.spacing[2],
                               borderRadius: tokens.borderRadius.md,
-                              backgroundColor: getAgreementBgColor(item.agreement, tokens),
+                              backgroundColor: getAgreementBgColor(n(item.agreement), tokens),
                               textAlign: 'center',
-                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(item.agreement, tokens)}20`,
+                              border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(n(item.agreement), tokens)}20`,
                               ...heatEntrance.animate,
                               transition: heatEntrance.transition,
                             }}
@@ -934,9 +935,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                               display: 'block',
                               fontSize: tokens.typography.fontSize.lg,
                               fontWeight: tokens.typography.fontWeight.bold,
-                              color: getAgreementColor(item.agreement, tokens),
+                              color: getAgreementColor(n(item.agreement), tokens),
                             }}>
-                              {Math.round(item.agreement * 100)}%
+                              {Math.round(n(item.agreement) * 100)}%
                             </Text>
                           </Box>
                         );
@@ -968,7 +969,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                         style={{
                           ...glassCard,
                           padding: tokens.spacing[4],
-                          borderLeft: `3px solid ${getMisalignmentColor(adj.misalignment, tokens)}`,
+                          borderLeft: `3px solid ${getMisalignmentColor(n(adj.misalignment), tokens)}`,
                           ...adjEntrance.animate,
                           transition: adjEntrance.transition,
                         }}
@@ -984,12 +985,12 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           <Box style={{
                             padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                             borderRadius: badgeRadius,
-                            backgroundColor: `${getMisalignmentColor(adj.misalignment, tokens)}15`,
-                            color: getMisalignmentColor(adj.misalignment, tokens),
+                            backgroundColor: `${getMisalignmentColor(n(adj.misalignment), tokens)}15`,
+                            color: getMisalignmentColor(n(adj.misalignment), tokens),
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.semibold,
                           }}>
-                            {adj.misalignment > 0 ? '+' : ''}{(adj.misalignment * 100).toFixed(0)}%
+                            {n(adj.misalignment) > 0 ? '+' : ''}{(n(adj.misalignment) * 100).toFixed(0)}%
                           </Box>
                         </Box>
                         <Box style={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[2] }}>

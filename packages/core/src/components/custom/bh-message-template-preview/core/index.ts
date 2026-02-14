@@ -1,12 +1,18 @@
 /**
  * BhMessageTemplatePreview - Core Interface
  * Template preview with sample data for BitHire ATS platform
+ *
+ * DB Reference: DBMessageTemplate from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBMessageTemplate } from '@rottay/recruiter';
 
 export type BhMessageTemplatePreviewPreset = 'preview' | 'compact';
+
+/** Re-export for consumer convenience */
+export type { DBMessageTemplate };
 
 export interface BhMessageTemplatePreviewProps extends EngineAwareProps {
   preset?: BhMessageTemplatePreviewPreset;

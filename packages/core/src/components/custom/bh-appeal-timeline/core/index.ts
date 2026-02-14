@@ -1,26 +1,32 @@
 /**
  * BhAppealTimeline - Core Interface
  * Appeal process timeline for BitHire ATS platform
+ *
+ * Uses AppealSelect from @rottay/scoring for entity context.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { AppealSelect } from '@rottay/scoring';
 
 export type BhAppealTimelinePreset = 'timeline' | 'compact';
 
 export interface AppealTimelineEvent {
   id: string;
   type: 'submitted' | 'assigned' | 'reviewed' | 'decision' | 'notified';
-  description: string;
-  date: Date;
-  actor: string;
+  description?: string;
+  date?: Date;
+  actor?: string;
 }
 
 export interface BhAppealTimelineProps extends EngineAwareProps {
   preset?: BhAppealTimelinePreset;
 
+  /** The appeal DB entity */
+  appeal?: Partial<AppealSelect>;
+
   /** Timeline events */
-  events: AppealTimelineEvent[];
+  events?: AppealTimelineEvent[];
 
   /** Appeal ID reference */
   appealId?: string;
@@ -44,3 +50,6 @@ export interface BhAppealTimelineProps extends EngineAwareProps {
 export const BH_APPEAL_TIMELINE_DEFAULTS: Partial<BhAppealTimelineProps> = {
   preset: 'timeline',
 };
+
+/** Re-export DB type for convenience */
+export type { AppealSelect };

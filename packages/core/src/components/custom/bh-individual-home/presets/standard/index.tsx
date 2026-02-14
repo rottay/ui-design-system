@@ -38,7 +38,7 @@ const SCHEDULE_TYPE_CONFIG: Record<ScheduleItem['type'], { label: string; iconKe
   'offer-call': { label: 'Offer Call', iconKey: 'gift' },
 };
 
-const CANDIDATE_STATUS_MAP: Record<RecentCandidate['status'], { label: string; colorKey: 'primary' | 'info' | 'warning' | 'success' | 'error' | 'secondary' }> = {
+const CANDIDATE_STATUS_MAP: Record<NonNullable<RecentCandidate['status']>, { label: string; colorKey: 'primary' | 'info' | 'warning' | 'success' | 'error' | 'secondary' }> = {
   new: { label: 'New', colorKey: 'info' },
   screening: { label: 'Screening', colorKey: 'warning' },
   interviewing: { label: 'Interviewing', colorKey: 'primary' },
@@ -60,7 +60,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const {
-      welcome, pipelines = [], schedule = [], wizardSteps,
+      welcome = { name: '', greeting: 'Welcome' }, pipelines = [], schedule = [], wizardSteps,
       performance, recentCandidates = [], tokenBalance,
       onCandidateClick, onScheduleAction, onJobClick,
       onWizardStepClick, onViewAllCandidates, onViewAllSchedule,
@@ -413,7 +413,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
 
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                     {schedule.map((item) => {
-                      const typeConfig = SCHEDULE_TYPE_CONFIG[item.type];
+                      const typeConfig = SCHEDULE_TYPE_CONFIG[item.type] || SCHEDULE_TYPE_CONFIG['phone-screen'];
                       const dotColor = statusDotColors[item.status ?? 'upcoming'];
                       const icon = scheduleIconMap[typeConfig.iconKey];
 
@@ -533,13 +533,13 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
 
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                     {recentCandidates.slice(0, 10).map((candidate) => {
-                      const statusCfg = CANDIDATE_STATUS_MAP[candidate.status];
+                      const statusCfg = CANDIDATE_STATUS_MAP[candidate.status ?? 'new'] ?? CANDIDATE_STATUS_MAP.new;
                       const badgeStyle = createBadgeStyle(tokens, statusCfg.colorKey);
 
                       return (
                         <Box
                           key={candidate.id}
-                          onClick={() => onCandidateClick?.(candidate.id)}
+                          onClick={() => onCandidateClick?.((candidate.id ?? ''))}
                           style={{
                             display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                             padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -585,24 +585,24 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                           <Box style={{ width: 60, display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-end', gap: tokens.spacing[1] }}>
                             <Text style={{
                               fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium,
-                              color: candidate.score >= 80
+                              color: (candidate.score ?? 0) >= 80
                                 ? tokens.colors.successScale[700]
-                                : candidate.score >= 50
+                                : (candidate.score ?? 0) >= 50
                                   ? tokens.colors.warningScale[700]
                                   : tokens.colors.neutral[600],
                             }}>
-                              {candidate.score}%
+                              {candidate.score ?? 0}%
                             </Text>
                             <Box style={{
                               width: '100%', height: 4, backgroundColor: tokens.colors.neutral[100],
                               borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const,
                             }}>
                               <Box style={{
-                                width: `${candidate.score}%`, height: '100%',
+                                width: `${candidate.score ?? 0}%`, height: '100%',
                                 borderRadius: tokens.borderRadius.full,
-                                backgroundColor: candidate.score >= 80
+                                backgroundColor: (candidate.score ?? 0) >= 80
                                   ? tokens.colors.successScale[500]
-                                  : candidate.score >= 50
+                                  : (candidate.score ?? 0) >= 50
                                     ? tokens.colors.warningScale[500]
                                     : tokens.colors.neutral[400],
                               }} />
@@ -617,7 +617,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                             {[Eye, MessageSquare, MoreHorizontal].map((Icon, i) => (
                               <Box
                                 key={i}
-                                onClick={(e: React.MouseEvent) => { e.stopPropagation(); if (i === 0) onCandidateClick?.(candidate.id); }}
+                                onClick={(e: React.MouseEvent) => { e.stopPropagation(); if (i === 0) onCandidateClick?.((candidate.id ?? '')); }}
                                 style={{
                                   padding: `${tokens.spacing[1]}px`, borderRadius: tokens.borderRadius.md,
                                   cursor: 'pointer', display: 'flex', alignItems: 'center',
@@ -752,7 +752,7 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
                       </Box>
                       <Box style={{ textAlign: 'right' as const }}>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                          ${tokenBalance.costPerInterview.toFixed(2)} / interview
+                          ${(tokenBalance.costPerInterview || 0).toFixed(2)} / interview
                         </Text>
                         {usagePercent !== null && (
                           <Box style={{

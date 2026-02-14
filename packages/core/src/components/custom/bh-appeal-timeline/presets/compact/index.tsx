@@ -84,7 +84,7 @@ export const CompactBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     }, [onEventClick]);
 
     const sortedEvents = useMemo(
-      () => [...events].sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, 5),
+      () => [...events].sort((a, b) => (b.date?.getTime?.() ?? 0) - (a.date?.getTime?.() ?? 0)).slice(0, 5),
       [events],
     );
 
@@ -179,7 +179,7 @@ export const CompactBhAppealTimeline = createPreset<BhAppealTimelineProps>({
                     {event.description}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    {event.actor} {formatDistanceToNow(event.date, { addSuffix: true })}
+                    {event.actor} {formatDistanceToNow((event.date ?? new Date()), { addSuffix: true })}
                   </Text>
                 </Box>
               </Box>

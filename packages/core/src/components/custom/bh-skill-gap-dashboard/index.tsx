@@ -11,6 +11,7 @@ export {
   type BhSkillGapDashboardProps,
   type BhSkillGapDashboardPreset,
   type SkillGapData,
+  type SkillGapAnalysisSelect,
   BH_SKILL_GAP_DASHBOARD_DEFAULTS,
 } from './core';
 

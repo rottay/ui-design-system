@@ -36,6 +36,7 @@ import type {
   AlignmentMetrics,
   DimensionAdjustment,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Target,
@@ -143,9 +144,9 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
     const completedSamples = useMemo(() => progress?.completed ?? samples.filter(s => s.humanScores && s.aiScores).length, [progress, samples]);
     const totalSamples = useMemo(() => progress?.total ?? samples.length, [progress, samples]);
-    const agreementRate = alignmentMetrics?.agreementRate ?? 0;
-    const mae = alignmentMetrics?.meanAbsoluteError ?? 0;
-    const confidenceCorr = alignmentMetrics?.confidenceCorrelation ?? 0;
+    const agreementRate = n(alignmentMetrics?.agreementRate);
+    const mae = n(alignmentMetrics?.meanAbsoluteError);
+    const confidenceCorr = n(alignmentMetrics?.confidenceCorrelation);
     const perDimAlignment = useMemo(() => alignmentMetrics?.perDimensionAlignment ?? [], [alignmentMetrics]);
 
     const glassCard = useMemo(() => createCardStyle(tokens, { glass: isGlass, elevation: 'md' }), [tokens, isGlass]);
@@ -435,9 +436,9 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           style={{
                             padding: tokens.spacing[3],
                             borderRadius: tokens.borderRadius.md,
-                            backgroundColor: getAgreementBg(item.agreement, tokens),
+                            backgroundColor: getAgreementBg(n(item.agreement), tokens),
                             textAlign: 'center',
-                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(item.agreement, tokens)}30`,
+                            border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${getAgreementColor(n(item.agreement), tokens)}30`,
                             transition: heatEntrance.transition || `all ${tokens.motion.hover}`,
                             ...heatEntrance.animate,
                           }}
@@ -445,8 +446,8 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[600], marginBottom: tokens.spacing[1], whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {item.dimension}
                           </Text>
-                          <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: getAgreementColor(item.agreement, tokens) }}>
-                            {Math.round(item.agreement * 100)}%
+                          <Text style={{ display: 'block', fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: getAgreementColor(n(item.agreement), tokens) }}>
+                            {Math.round(n(item.agreement) * 100)}%
                           </Text>
                         </Box>
                       );
@@ -586,7 +587,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
               {adjustments.length > 0 ? (
                 adjustments.map((adj, idx) => {
                   const isExpanded = expandedAdjustment === adj.dimension;
-                  const misColor = getMisalignmentColor(adj.misalignment, tokens);
+                  const misColor = getMisalignmentColor(n(adj.misalignment), tokens);
                   const adjEntrance = createEntranceAnimation(tokens, { index: idx });
                   return (
                     <Box
@@ -604,7 +605,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                       <button
                         aria-expanded={isExpanded}
                         aria-controls={`adj-detail-${adj.dimension}`}
-                        aria-label={`${adj.dimension} adjustment, ${(adj.misalignment * 100).toFixed(0)}% misalignment`}
+                        aria-label={`${adj.dimension} adjustment, ${(n(adj.misalignment) * 100).toFixed(0)}% misalignment`}
                         onClick={() => handleAdjustmentToggle(adj.dimension)}
                         style={{
                           width: '100%',
@@ -634,7 +635,7 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
                             fontSize: tokens.typography.fontSize.xs,
                             fontWeight: tokens.typography.fontWeight.semibold,
                           }}>
-                            {adj.misalignment > 0 ? '+' : ''}{(adj.misalignment * 100).toFixed(0)}%
+                            {n(adj.misalignment) > 0 ? '+' : ''}{(n(adj.misalignment) * 100).toFixed(0)}%
                           </Box>
                           {isExpanded ? <ChevronUp size={16} color={tokens.colors.neutral[400]} /> : <ChevronDown size={16} color={tokens.colors.neutral[400]} />}
                         </Box>

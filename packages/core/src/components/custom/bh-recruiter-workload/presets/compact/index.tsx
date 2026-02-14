@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * BhRecruiterWorkload - Compact Preset
+ * BhRecruiterWorkloadItem - Compact Preset
  * Condensed workload bars for sidebar or widget placement.
  */
 
@@ -19,14 +19,14 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhRecruiterWorkloadProps, RecruiterWorkload } from '../../core';
+import type { BhRecruiterWorkloadItemProps, RecruiterWorkloadItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RECRUITERS: RecruiterWorkload[] = [
+const MOCK_RECRUITERS: RecruiterWorkloadItem[] = [
   { recruiterId: 'r-1', name: 'Alice Morgan', activePositions: 6, capacity: 8, interviews: 12, pendingTasks: 5 },
   { recruiterId: 'r-2', name: 'Bob Chen', activePositions: 8, capacity: 8, interviews: 15, pendingTasks: 10 },
   { recruiterId: 'r-3', name: 'Carla Ruiz', activePositions: 4, capacity: 8, interviews: 8, pendingTasks: 3 },
@@ -47,9 +47,9 @@ function getUtilizationColor(pct: number, t: DesignTokens): string {
 /*  Compact Preset                                                     */
 /* ================================================================== */
 
-export const CompactBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps>({
+const CompactBhRecruiterWorkloadItem = createPreset<BhRecruiterWorkloadItemProps>({
   name: 'BhRecruiterWorkload.Compact',
-  render: (ctx: PresetContext<BhRecruiterWorkloadProps>) => {
+  render: (ctx: PresetContext<BhRecruiterWorkloadItemProps>) => {
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
@@ -66,7 +66,7 @@ export const CompactBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps>
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
-    const overloadedCount = useMemo(() => recruiters.filter(r => r.activePositions > r.capacity).length, [recruiters]);
+    const overloadedCount = useMemo(() => (recruiters ?? []).filter(r => (r.activePositions ?? 0) > (r.capacity ?? 0)).length, [recruiters]);
 
     const animStyle = useMemo(() => ({
       ...entrance.animate,
@@ -123,14 +123,14 @@ export const CompactBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps>
               </Text>
             </Box>
           )}
-          {recruiters.map((r) => {
-            const pct = Math.round((r.activePositions / r.capacity) * 100);
+          {(recruiters ?? []).map((r) => {
+            const pct = Math.round(((r.activePositions ?? 0) / Math.max(r.capacity ?? 1, 1)) * 100);
             const color = getUtilizationColor(pct, t);
             const bar = createProgressBarStyle(t, { percent: Math.min(pct, 100), color });
             return (
               <Box key={r.recruiterId} style={{ marginBottom: t.spacing[2] }}>
                 <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{r.name}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{r.name ?? ''}</Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: pct > 100 ? t.colors.errorScale[600] : t.colors.neutral[500] }}>
                     {pct}%
                   </Text>
@@ -144,3 +144,7 @@ export const CompactBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps>
     );
   },
 });
+
+// Export with the canonical name (barrel expects this) + legacy alias
+export { CompactBhRecruiterWorkloadItem as CompactBhRecruiterWorkload };
+export { CompactBhRecruiterWorkloadItem };

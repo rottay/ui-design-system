@@ -2,39 +2,35 @@
  * BhProctoringEventList - Core Interface
  * DataTable-style list of proctoring events with severity badges,
  * type icons, candidate names, and review status.
+ *
+ * Uses ProctoringEventSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringEventListPreset = 'table' | 'cards';
 
-export type ProctoringEventType =
-  | 'tab_switch'
-  | 'copy_paste'
-  | 'screen_share'
-  | 'unusual_typing'
-  | 'browser_focus_lost';
+/** Backward-compat aliases (old names from pre-migration) */
+export type ProctoringEventTypeValue = ProctoringEventType;
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
-export type ProctoringEventSeverity = 'low' | 'medium' | 'high' | 'critical';
-
-export interface ProctoringEventItem {
-  id: string;
-  candidateName: string;
+/** Extended event view combining DB entity with UI display fields */
+export interface ProctoringEventListItem {
+  /** The DB entity (all fields optional for safety) */
+  event?: Partial<ProctoringEventSelect>;
+  /** Display name of the candidate (resolved externally) */
+  candidateName?: string;
+  /** Candidate avatar URL (resolved externally) */
   candidateAvatar?: string;
-  eventType: ProctoringEventType;
-  severity: ProctoringEventSeverity;
-  timestamp: Date;
-  reviewed: boolean;
-  dismissed: boolean;
-  metadata?: Record<string, unknown>;
 }
 
 export interface BhProctoringEventListProps extends EngineAwareProps {
   preset?: BhProctoringEventListPreset;
 
   /** Array of proctoring events to display */
-  events: ProctoringEventItem[];
+  events?: ProctoringEventListItem[];
 
   /** Callback when an event row/card is clicked */
   onEventClick?: (eventId: string) => void;
@@ -81,3 +77,6 @@ export const BH_PROCTORING_EVENT_LIST_DEFAULTS: Partial<BhProctoringEventListPro
   sortBy: 'timestamp',
   sortOrder: 'desc',
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity };

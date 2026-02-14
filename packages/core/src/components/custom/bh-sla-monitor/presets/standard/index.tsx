@@ -196,7 +196,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
         <Box style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: t.spacing[5] }}>
 
           {/* Compliance gauge */}
-          <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }} role="status" aria-label={`Overall compliance: ${compliance.percentage.toFixed(1)}%`}>
+          <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center' }} role="status" aria-label={`Overall compliance: ${(compliance.percentage ?? 0).toFixed(1)}%`}>
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Overall Compliance</Text>
             <svg width={160} height={100} viewBox="0 0 160 100" role="img" aria-hidden="true">
               {/* Background arc */}
@@ -225,7 +225,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                 );
               })()}
               <text x={80} y={78} textAnchor="middle" fontSize={28} fontWeight={700} fill={compColor.color}>
-                {compliance.percentage.toFixed(1)}%
+                {(compliance.percentage ?? 0).toFixed(1)}%
               </text>
             </svg>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[3] }}>

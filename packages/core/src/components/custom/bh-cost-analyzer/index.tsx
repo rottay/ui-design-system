@@ -7,7 +7,7 @@ import type { BhCostAnalyzerProps } from './core';
 import { BH_COST_ANALYZER_DEFAULTS } from './core';
 import { BH_COST_ANALYZER_PRESETS } from './presets';
 
-export { type BhCostAnalyzerProps, type BhCostAnalyzerPreset, type ProviderCost, type ModelCost, type CostTrendPoint, type TokenBalance, type BudgetAlert, type CostSummary, type CostCategory, type TrendDirection, BH_COST_ANALYZER_DEFAULTS } from './core';
+export { type BhCostAnalyzerProps, type BhCostAnalyzerPreset, type ProviderCost, type ModelCost, type CostTrendPoint, type TokenBalanceSummary, type BudgetAlert, type CostSummary, type CostCategory, type TrendDirection, BH_COST_ANALYZER_DEFAULTS } from './core';
 export * from './presets';
 
 export function BhCostAnalyzer(props: BhCostAnalyzerProps): React.ReactElement {

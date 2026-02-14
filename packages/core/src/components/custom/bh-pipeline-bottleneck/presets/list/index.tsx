@@ -40,7 +40,7 @@ import type { DesignTokens } from '../../../../../types';
 
 function getStageStatusColor(stage: BottleneckStage, t: DesignTokens): string {
   if (stage.isBottleneck) return t.colors.errorScale[500];
-  const ratio = stage.avgDaysInStage / Math.max(stage.expectedDays, 1);
+  const ratio = (stage.avgDaysInStage ?? 0) / Math.max(stage.expectedDays ?? 1, 1);
   if (ratio > 1.5) return t.colors.warningScale[500];
   if (ratio > 1) return t.colors.warningScale[300];
   return t.colors.successScale[500];
@@ -48,13 +48,13 @@ function getStageStatusColor(stage: BottleneckStage, t: DesignTokens): string {
 
 function getStageStatusBadge(stage: BottleneckStage): 'error' | 'warning' | 'success' {
   if (stage.isBottleneck) return 'error';
-  const ratio = stage.avgDaysInStage / Math.max(stage.expectedDays, 1);
+  const ratio = (stage.avgDaysInStage ?? 0) / Math.max(stage.expectedDays ?? 1, 1);
   if (ratio > 1) return 'warning';
   return 'success';
 }
 
 function getDelayLabel(stage: BottleneckStage): string {
-  const diff = stage.avgDaysInStage - stage.expectedDays;
+  const diff = (stage.avgDaysInStage ?? 0) - (stage.expectedDays ?? 0);
   if (diff <= 0) return 'On track';
   return `+${diff}d over`;
 }
@@ -110,8 +110,8 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
     const sortedStages = useMemo(() => {
       return [...stages].sort((a, b) => {
         if (a.isBottleneck !== b.isBottleneck) return a.isBottleneck ? -1 : 1;
-        const ratioA = a.avgDaysInStage / Math.max(a.expectedDays, 1);
-        const ratioB = b.avgDaysInStage / Math.max(b.expectedDays, 1);
+        const ratioA = (a.avgDaysInStage ?? 0) / Math.max(a.expectedDays ?? 1, 1);
+        const ratioB = (b.avgDaysInStage ?? 0) / Math.max(b.expectedDays ?? 1, 1);
         return ratioB - ratioA;
       });
     }, [stages]);
@@ -171,17 +171,17 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
           )}
           {sortedStages.map((stage, i) => {
             const statusColor = getStageStatusColor(stage, t);
-            const maxDays = Math.max(...stages.map(s => s.avgDaysInStage), 1);
-            const barWidth = (stage.avgDaysInStage / maxDays) * 100;
+            const maxDays = Math.max(...(stages ?? []).map(s => s.avgDaysInStage ?? 0), 1);
+            const barWidth = ((stage.avgDaysInStage ?? 0) / maxDays) * 100;
 
             return (
               <Box
                 key={stage.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${stage.name}: ${stage.candidateCount} candidates, ${stage.avgDaysInStage} days average, ${stage.isBottleneck ? 'bottleneck' : getDelayLabel(stage)}`}
-                onClick={() => handleStageClick(stage.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageClick(stage.id); } }}
+                aria-label={`${stage.name ?? 'Unknown'}: ${stage.candidateCount ?? 0} candidates, ${stage.avgDaysInStage ?? 0} days average, ${stage.isBottleneck ? 'bottleneck' : getDelayLabel(stage)}`}
+                onClick={() => stage.id && handleStageClick(stage.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && stage.id) { e.preventDefault(); handleStageClick(stage.id); } }}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -204,7 +204,7 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
                       fontWeight: stage.isBottleneck ? t.typography.fontWeight.bold : t.typography.fontWeight.medium,
                       color: stage.isBottleneck ? t.colors.errorScale[700] : t.colors.neutral[800],
                     }}>
-                      {stage.name}
+                      {stage.name ?? 'Unknown'}
                     </Text>
                     {stage.isBottleneck && (
                       <Box style={{
@@ -224,13 +224,13 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Users size={12} color={t.colors.neutral[400]} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {stage.candidateCount}
+                        {stage.candidateCount ?? 0}
                       </Text>
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Clock size={12} color={t.colors.neutral[400]} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {stage.avgDaysInStage}d
+                        {stage.avgDaysInStage ?? 0}d
                       </Text>
                     </Box>
                     <ChevronRight size={14} color={t.colors.neutral[300]} />
@@ -264,7 +264,7 @@ export const ListBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps>(
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>{getDelayLabel(stage)}</Text>
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    Expected: {stage.expectedDays}d
+                    Expected: {stage.expectedDays ?? 0}d
                   </Text>
                 </Box>
               </Box>

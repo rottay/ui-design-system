@@ -46,18 +46,19 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
     const t = tokens;
 
     const {
-      clientName = 'Acme Corporation',
-      tier = 'enterprise',
-      contractStatus = 'active',
-      openPositions = 12,
-      totalHires = 48,
-      revenue = 125000,
-      currency = 'USD',
-      contactName = 'Jane Wilson',
+      client,
       onClick,
       className,
       style,
     } = props;
+
+    const clientName = client?.displayName ?? client?.clientCompanyName ?? 'Acme Corporation';
+    const tier = client?.tier ?? 'enterprise';
+    const status = client?.status ?? 'active';
+    const openPositions = client?.openPositions ?? 12;
+    const totalHires = (client as any)?.totalHires ?? 48;
+    const revenue = Number(client?.totalRevenue ?? 125000);
+    const contactName = (client as any)?.contactName ?? '';
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 24 }), [t]);
@@ -70,18 +71,24 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
     const tierColor = useMemo(() => {
       switch (tier) {
         case 'enterprise': return { badge: 'primary' as const, icon: Crown, bg: t.colors.primaryScale[100], fg: t.colors.primaryScale[700] };
-        case 'business': return { badge: 'info' as const, icon: Shield, bg: t.colors.infoScale[100], fg: t.colors.infoScale[700] };
-        case 'starter': return { badge: 'secondary' as const, icon: Zap, bg: t.colors.secondaryScale[100], fg: t.colors.secondaryScale[700] };
+        case 'premium': return { badge: 'info' as const, icon: Shield, bg: t.colors.infoScale[100], fg: t.colors.infoScale[700] };
+        case 'strategic': return { badge: 'warning' as const, icon: Crown, bg: t.colors.warningScale[100], fg: t.colors.warningScale[700] };
+        case 'standard':
+        default: return { badge: 'secondary' as const, icon: Zap, bg: t.colors.secondaryScale[100], fg: t.colors.secondaryScale[700] };
       }
     }, [tier, t]);
 
     const contractColor = useMemo(() => {
-      switch (contractStatus) {
+      switch (status) {
         case 'active': return { badge: 'success' as const, icon: CheckCircle2 };
-        case 'expiring': return { badge: 'warning' as const, icon: AlertTriangle };
-        case 'expired': return { badge: 'error' as const, icon: Clock };
+        case 'suspended': return { badge: 'warning' as const, icon: AlertTriangle };
+        case 'terminated':
+        case 'archived': return { badge: 'error' as const, icon: Clock };
+        case 'draft':
+        case 'pending_approval':
+        default: return { badge: 'secondary' as const, icon: Clock };
       }
-    }, [contractStatus]);
+    }, [status]);
 
     const accent = useMemo(
       () => createPersonalityAccentBar(t, { color: tierColor.bg }),
@@ -90,8 +97,8 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
 
     const formattedRevenue = useMemo(() => {
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(revenue);
-    }, [revenue, currency]);
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(revenue);
+    }, [revenue]);
 
     const handleClick = useCallback(() => { onClick?.(); }, [onClick]);
 
@@ -164,7 +171,7 @@ export const StandardBhClientCard = createPreset<BhClientCardProps>({
         <Box style={{ marginBottom: t.spacing[4] }}>
           <Box style={{ ...createBadgeStyle(t, contractColor.badge), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
             <ContractIcon size={11} />
-            <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>Contract {contractStatus}</Text>
+            <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{status}</Text>
           </Box>
         </Box>
 

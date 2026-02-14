@@ -158,7 +158,7 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
     const allIncidents = useMemo(() => {
       return providers
         .flatMap((p) => p.incidents.map((i) => ({ ...i, providerName: p.name })))
-        .sort((a, b) => b.startedAt.getTime() - a.startedAt.getTime());
+        .sort((a, b) => (b.startedAt?.getTime?.() ?? 0) - (a.startedAt?.getTime?.() ?? 0));
     }, [providers]);
 
     const statusConfig = useCallback((status: ProviderHealthItem['status']) => {

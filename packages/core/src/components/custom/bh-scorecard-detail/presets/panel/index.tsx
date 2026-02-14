@@ -33,6 +33,7 @@ import type {
   DimensionScore,
   ScorecardDetail,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -64,7 +65,7 @@ function getStatusBadgeKey(status: string): 'primary' | 'warning' | 'success' {
 }
 
 function getStatusLabel(status: string): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -172,13 +173,13 @@ function RadarChart({ dimensions, tokens: t, size = 240 }: {
   tokens: DesignTokens;
   size?: number;
 }) {
-  const n = dimensions.length;
-  if (n < 3) return null;
+  const dimCount = dimensions.length;
+  if (dimCount < 3) return null;
 
   const cx = size / 2;
   const cy = size / 2;
   const maxR = (size / 2) - 36;
-  const step = (2 * Math.PI) / n;
+  const step = (2 * Math.PI) / dimCount;
 
   const polygon = (radius: number) =>
     dimensions.map((_, i) => {
@@ -188,7 +189,7 @@ function RadarChart({ dimensions, tokens: t, size = 240 }: {
 
   const dataPolygon = dimensions.map((d, i) => {
     const a = i * step - Math.PI / 2;
-    const r = (d.score / d.maxScore) * maxR;
+    const r = (n(d.score) / (n(d.maxScore) || 1)) * maxR;
     return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
   }).join(' ');
 
@@ -196,10 +197,11 @@ function RadarChart({ dimensions, tokens: t, size = 240 }: {
     const a = i * step - Math.PI / 2;
     const lx = cx + (maxR + 24) * Math.cos(a);
     const ly = cy + (maxR + 24) * Math.sin(a);
-    const label = d.dimensionName.length > 14
-      ? d.dimensionName.slice(0, 12) + '..'
-      : d.dimensionName;
-    return { label, x: lx, y: ly, score: d.score, maxScore: d.maxScore, a, i };
+    const dimName = d.dimensionName ?? '';
+    const label = dimName.length > 14
+      ? dimName.slice(0, 12) + '..'
+      : dimName;
+    return { label, x: lx, y: ly, score: n(d.score), maxScore: n(d.maxScore), a, i };
   });
 
   return (
@@ -208,7 +210,7 @@ function RadarChart({ dimensions, tokens: t, size = 240 }: {
       height={size}
       viewBox={`0 0 ${size} ${size}`}
       role="img"
-      aria-label={`Radar chart: ${dimensions.map(d => `${d.dimensionName}: ${d.score}/${d.maxScore}`).join(', ')}`}
+      aria-label={`Radar chart: ${dimensions.map(d => `${d.dimensionName ?? ''}: ${n(d.score)}/${n(d.maxScore)}`).join(', ')}`}
     >
       {[0.2, 0.4, 0.6, 0.8, 1].map(p => (
         <polygon
@@ -241,7 +243,7 @@ function RadarChart({ dimensions, tokens: t, size = 240 }: {
       />
       {dimensions.map((d, i) => {
         const a = i * step - Math.PI / 2;
-        const r = (d.score / d.maxScore) * maxR;
+        const r = (n(d.score) / (n(d.maxScore) || 1)) * maxR;
         return (
           <circle
             key={d.dimensionId}
@@ -249,7 +251,7 @@ function RadarChart({ dimensions, tokens: t, size = 240 }: {
             cy={cy + r * Math.sin(a)}
             r={4}
             fill={t.colors.common.white}
-            stroke={getScoreColor(d.score, d.maxScore, t)}
+            stroke={getScoreColor(n(d.score), n(d.maxScore) || 1, t)}
             strokeWidth={2}
           />
         );
@@ -309,14 +311,15 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
       onDimensionClick?.(dimId);
     }, [onDimensionClick]);
 
+    const dims = scorecard.dimensions ?? [];
     const sortedByScore = useMemo(
-      () => [...scorecard.dimensions].sort((a, b) => b.score - a.score),
-      [scorecard.dimensions],
+      () => [...dims].sort((a, b) => n(b.score) - n(a.score)),
+      [dims],
     );
 
     const maxDimScore = useMemo(
-      () => Math.max(...scorecard.dimensions.map(d => d.maxScore), 1),
-      [scorecard.dimensions],
+      () => Math.max(...dims.map(d => n(d.maxScore)), 1),
+      [dims],
     );
 
     const animStyle = (index: number) => ({
@@ -362,11 +365,11 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                     {scorecard.candidateName}
                   </Text>
                   <Box style={{
-                    ...createBadgeStyle(t, getStatusBadgeKey(scorecard.status)),
+                    ...createBadgeStyle(t, getStatusBadgeKey((scorecard.status ?? ''))),
                     borderRadius: badgeRadius,
                   }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                      {getStatusLabel(scorecard.status)}
+                      {getStatusLabel((scorecard.status ?? ''))}
                     </Text>
                   </Box>
                 </Box>
@@ -437,7 +440,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
 
         <Box style={accentLayout.inner}>
               <Text style={{ ...sectionLabel, marginBottom: 0 }}>Overall Score</Text>
-              <ScoreGauge score={scorecard.overallScore} maxScore={scorecard.maxScore} tokens={t} />
+              <ScoreGauge score={n(scorecard.overallScore)} maxScore={n(scorecard.maxScore) || 1} tokens={t} />
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                 {scorecard.calibrated && (
                   <Box style={{
@@ -458,7 +461,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
             <Box style={{ ...card, ...animStyle(1) }}>
               <Text style={{ ...sectionLabel, marginBottom: t.spacing[4] }}>Dimension Radar</Text>
               <Box style={{ display: 'flex', justifyContent: 'center' }}>
-                <RadarChart dimensions={scorecard.dimensions} tokens={t} />
+                <RadarChart dimensions={dims} tokens={t} />
               </Box>
             </Box>
           </Box>
@@ -468,26 +471,26 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[4] }}>
               <Text style={sectionLabel}>Dimension Breakdown</Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                {scorecard.dimensions.length} dimensions
+                {dims.length} dimensions
               </Text>
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
               {sortedByScore.map((dim) => {
-                const barPct = (dim.score / dim.maxScore) * 100;
+                const barPct = (n(dim.score) / (n(dim.maxScore) || 1)) * 100;
                 const isHovered = hoveredDim === dim.dimensionId;
-                const confColor = getConfidenceColor(dim.confidence, t);
-                const scoreColor = getScoreColor(dim.score, dim.maxScore, t);
+                const confColor = getConfidenceColor(n(dim.confidence), t);
+                const scoreColor = getScoreColor(n(dim.score), n(dim.maxScore) || 1, t);
 
                 return (
                   <Box
                     key={dim.dimensionId}
                     role="button"
                     tabIndex={0}
-                    aria-label={`${dim.dimensionName}: ${dim.score} out of ${dim.maxScore}, weight ${(dim.weight * 100).toFixed(0)}%, confidence ${(dim.confidence * 100).toFixed(0)}%, ${dim.evidenceCount} evidence items`}
-                    onClick={() => handleDimClick(dim.dimensionId)}
-                    onMouseEnter={() => setHoveredDim(dim.dimensionId)}
+                    aria-label={`${dim.dimensionName ?? ''}: ${n(dim.score)} out of ${n(dim.maxScore)}, weight ${(n(dim.weight) * 100).toFixed(0)}%, confidence ${(n(dim.confidence) * 100).toFixed(0)}%, ${dim.evidenceCount ?? 0} evidence items`}
+                    onClick={() => handleDimClick((dim.dimensionId ?? ''))}
+                    onMouseEnter={() => setHoveredDim((dim.dimensionId ?? null))}
                     onMouseLeave={() => setHoveredDim(null)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick(dim.dimensionId); } }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick((dim.dimensionId ?? '')); } }}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -538,7 +541,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                         minWidth: 36,
                         textAlign: 'right' as const,
                       }}>
-                        {dim.score.toFixed(1)}
+                        {n(dim.score).toFixed(1)}
                       </Text>
                     </Box>
 
@@ -550,7 +553,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                       justifyContent: 'center',
                     }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                        {(dim.weight * 100).toFixed(0)}%
+                        {((dim.weight ?? 0) * 100).toFixed(0)}%
                       </Text>
                     </Box>
 
@@ -563,7 +566,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                         flexShrink: 0,
                       }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {(dim.confidence * 100).toFixed(0)}%
+                        {((dim.confidence ?? 0) * 100).toFixed(0)}%
                       </Text>
                     </Box>
 
@@ -600,7 +603,7 @@ export const PanelBhScorecardDetail = createPreset<BhScorecardDetailProps>({
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                 <Clock size={14} color={t.colors.neutral[400]} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>
-                  {formatDistanceToNow(scorecard.scoredAt, { addSuffix: true })}
+                  {formatDistanceToNow(new Date(scorecard.scoredAt!), { addSuffix: true })}
                 </Text>
               </Box>
             </Box>

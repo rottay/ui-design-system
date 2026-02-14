@@ -30,6 +30,7 @@ function getStatusBadgeKey(status: AppealData['status']): 'warning' | 'info' | '
     case 'under-review': return 'info';
     case 'approved': return 'success';
     case 'denied': return 'error';
+    default: return 'warning';
   }
 }
 
@@ -39,6 +40,7 @@ function getStatusLabel(status: AppealData['status']): string {
     case 'under-review': return 'Under Review';
     case 'approved': return 'Approved';
     case 'denied': return 'Denied';
+    default: return 'Pending';
   }
 }
 
@@ -157,7 +159,7 @@ export const CompactBhAppealReview = createPreset<BhAppealReviewProps>({
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[2] }}>
             <Clock size={10} color={t.colors.neutral[400]} />
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-              {formatDistanceToNow(appeal.submittedAt, { addSuffix: true })}
+              {formatDistanceToNow(appeal.submittedAt ?? new Date(), { addSuffix: true })}
             </Text>
           </Box>
         </Box>

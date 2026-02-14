@@ -1,12 +1,19 @@
 /**
  * BhProctoringHeatmap - Core Interface
  * Heatmap showing event density by hour and day of week
+ *
+ * Pure visualization component. Uses ProctoringEventSeverityValue
+ * from @rottay/scoring for severity type reference.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringHeatmapPreset = 'grid' | 'compact';
+
+/** Backward-compat alias (old name from pre-migration) */
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
 export interface HeatmapDataPoint {
   /** Day of week: 0 = Sunday, 6 = Saturday */
@@ -21,7 +28,7 @@ export interface BhProctoringHeatmapProps extends EngineAwareProps {
   preset?: BhProctoringHeatmapPreset;
 
   /** Heatmap data points */
-  data: HeatmapDataPoint[];
+  data?: HeatmapDataPoint[];
 
   /** Callback when a cell is clicked */
   onCellClick?: (day: number, hour: number, count: number) => void;
@@ -47,3 +54,6 @@ export const BH_PROCTORING_HEATMAP_DEFAULTS: Partial<BhProctoringHeatmapProps> =
   colorScale: 'error',
   showValues: false,
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSeverity };

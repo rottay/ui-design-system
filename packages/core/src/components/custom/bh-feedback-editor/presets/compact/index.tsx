@@ -124,7 +124,7 @@ export const CompactBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
             <Box style={createIconContainerStyle(tokens, { size: 28, color: tokens.colors.primaryScale[100] })}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[700] }}>
-                {context.candidateName.charAt(0).toUpperCase()}
+                {(context.candidateName || '').charAt(0).toUpperCase()}
               </Text>
             </Box>
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1] }}>

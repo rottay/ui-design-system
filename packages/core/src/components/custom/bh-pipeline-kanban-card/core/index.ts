@@ -1,21 +1,30 @@
 /**
  * BhPipelineKanbanCard - Core Interface
- * Enhanced draggable pipeline card for individual candidates
+ * Enhanced draggable pipeline card for individual candidates.
+ * Card data maps to a DBApplication record.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApplication, ApplicationStatusValue } from '@rottay/recruiter';
 
 export type BhPipelineKanbanCardPreset = 'standard' | 'minimal';
 
+/**
+ * Kanban candidate - maps to a DBApplication with candidate display info.
+ * All fields optional for null-safety.
+ */
 export interface KanbanCandidate {
-  id: string;
-  name: string;
-  avatarInitial: string;
+  id?: string;
+  name?: string;
+  avatarInitial?: string;
   score?: number;
-  stage: string;
-  appliedAt: Date;
+  stage?: string;
+  status?: ApplicationStatusValue;
+  appliedAt?: Date | string | null;
   tags?: string[];
+  /** Optional: raw application record for consumers who need full data */
+  application?: Partial<DBApplication>;
 }
 
 export type QuickActionType = 'advance' | 'reject' | 'schedule';

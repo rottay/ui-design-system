@@ -454,7 +454,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
           color, backgroundColor: bg,
         }}>
           <Icon size={12} />
-          {isUp ? '+' : ''}{trend.toFixed(1)}%
+          {isUp ? '+' : ''}{(trend ?? 0).toFixed(1)}%
         </Text>
       );
     };
@@ -583,15 +583,15 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                 </Box>
                 <Box style={gridFour}>
                   {renderStatusCircleSvg(
-                    systemHealth.providersUp,
-                    systemHealth.providersTotal,
+                    systemHealth.providersUp ?? 0,
+                    systemHealth.providersTotal ?? 0,
                     'Providers Up',
                     tokens.colors.successScale[500],
                     tokens.colors.successScale[100],
                     <Server size={16} color={tokens.colors.successScale[600]} />,
                   )}
                   {renderStatusCircleSvg(
-                    systemHealth.interviewsRunning,
+                    systemHealth.interviewsRunning ?? 0,
                     100,
                     'Interviews Running',
                     tokens.colors.infoScale[500],
@@ -599,20 +599,20 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     <Users size={16} color={tokens.colors.infoScale[600]} />,
                   )}
                   {renderStatusCircleSvg(
-                    Math.min(systemHealth.tokenBalance, 100),
+                    Math.min(systemHealth.tokenBalance ?? 0, 100),
                     100,
-                    `Token Balance: ${formatTokenBalance(systemHealth.tokenBalance)}`,
+                    `Token Balance: ${formatTokenBalance(systemHealth.tokenBalance ?? 0)}`,
                     tokens.colors.primaryScale[500],
                     tokens.colors.primaryScale[100],
                     <Zap size={16} color={tokens.colors.primaryScale[600]} />,
                   )}
                   {renderStatusCircleSvg(
-                    systemHealth.slaCompliance,
+                    systemHealth.slaCompliance ?? 0,
                     100,
                     'SLA Compliance',
-                    systemHealth.slaCompliance >= 95 ? tokens.colors.successScale[500] : systemHealth.slaCompliance >= 80 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500],
-                    systemHealth.slaCompliance >= 95 ? tokens.colors.successScale[100] : systemHealth.slaCompliance >= 80 ? tokens.colors.warningScale[100] : tokens.colors.errorScale[100],
-                    <Shield size={16} color={systemHealth.slaCompliance >= 95 ? tokens.colors.successScale[600] : systemHealth.slaCompliance >= 80 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />,
+                    (systemHealth.slaCompliance ?? 0) >= 95 ? tokens.colors.successScale[500] : (systemHealth.slaCompliance ?? 0) >= 80 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500],
+                    (systemHealth.slaCompliance ?? 0) >= 95 ? tokens.colors.successScale[100] : (systemHealth.slaCompliance ?? 0) >= 80 ? tokens.colors.warningScale[100] : tokens.colors.errorScale[100],
+                    <Shield size={16} color={(systemHealth.slaCompliance ?? 0) >= 95 ? tokens.colors.successScale[600] : (systemHealth.slaCompliance ?? 0) >= 80 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />,
                   )}
                 </Box>
               </Box>
@@ -630,7 +630,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {providerStatuses.map((s) => (
                       <Box key={s} onClick={() => setProviderFilter(s)} style={pillBtn(providerFilter === s)}>
-                        {s === 'all' ? 'All' : s.charAt(0).toUpperCase() + s.slice(1)}
+                        {s === 'all' ? 'All' : (s || '').charAt(0).toUpperCase() + (s || '').slice(1)}
                       </Box>
                     ))}
                   </Box>
@@ -714,28 +714,28 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                       <Text style={sectionSub}>Token Balance</Text>
                       <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                        {formatTokenBalance(billing.tokenBalance)}
+                        {formatTokenBalance(billing.tokenBalance ?? 0)}
                       </Text>
                     </Box>
                     {/* Burn rate */}
                     <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                       <Text style={sectionSub}>Burn Rate</Text>
                       <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                        {formatTokenBalance(billing.burnRate)}<Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>/day</Text>
+                        {formatTokenBalance(billing.burnRate ?? 0)}<Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>/day</Text>
                       </Text>
                     </Box>
                     {/* Projected runway */}
                     <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                       <Text style={sectionSub}>Projected Runway</Text>
                       <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                        {billing.projectedRunwayDays} <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>days</Text>
+                        {billing.projectedRunwayDays ?? 0} <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.normal, color: tokens.colors.neutral[500] }}>days</Text>
                       </Text>
                     </Box>
                     {/* Monthly cost */}
                     <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                       <Text style={sectionSub}>Monthly Cost</Text>
                       <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.lg, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                        {formatCurrency(billing.monthlyCost)}
+                        {formatCurrency(billing.monthlyCost ?? 0)}
                       </Text>
                     </Box>
                   </Box>
@@ -745,7 +745,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     <Text style={{ ...sectionSub, marginBottom: tokens.spacing[3] }}>Monthly Token Trend</Text>
                     <Box style={{ flex: 1, minHeight: 200 }}>
                       {renderAreaChartSvg(
-                        billing.monthlyTrend,
+                        billing.monthlyTrend ?? [],
                         520,
                         200,
                         tokens.colors.primaryScale[500],
@@ -768,15 +768,15 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                 <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: tokens.spacing[4] }}>
                   {kpis.slice(0, 6).map((kpi, i) => (
                     <Box key={i} style={{ ...cardBase }}>
-                      <Text style={{ ...sectionSub, marginBottom: tokens.spacing[1] }}>{kpi.label}</Text>
+                      <Text style={{ ...sectionSub, marginBottom: tokens.spacing[1] }}>{kpi.label ?? ''}</Text>
                       <Box style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
                         <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                          {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
+                          {typeof kpi.value === 'number' ? (kpi.value ?? 0).toLocaleString() : (kpi.value ?? '')}
                         </Text>
-                        {renderTrend(kpi.trend)}
+                        {renderTrend(kpi.trend ?? 0)}
                       </Box>
                       <Text style={{ margin: 0, marginTop: tokens.spacing[1], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                        vs prev: {typeof kpi.previousValue === 'number' ? kpi.previousValue.toLocaleString() : kpi.previousValue}
+                        vs prev: {typeof kpi.previousValue === 'number' ? (kpi.previousValue ?? 0).toLocaleString() : (kpi.previousValue ?? '')}
                       </Text>
                     </Box>
                   ))}
@@ -797,7 +797,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     {/* Donut */}
                     <Box>
                       {renderDonutChart(
-                        Object.entries(users.byRole).map(([role, count], i) => ({
+                        Object.entries(users.byRole ?? {}).map(([role, count], i) => ({
                           label: role,
                           value: count,
                           color: roleColors[i % roleColors.length],
@@ -810,7 +810,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       <Box style={{ marginBottom: tokens.spacing[3], display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
                         <Text style={sectionSub}>Total Users</Text>
                         <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xl, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                          {users.totalUsers.toLocaleString()}
+                          {(users.totalUsers || 0).toLocaleString()}
                         </Text>
                       </Box>
                       <Box style={{ marginBottom: tokens.spacing[3], display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
@@ -821,7 +821,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       </Box>
                       {/* Role legend */}
                       <Box style={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing[1] }}>
-                        {Object.entries(users.byRole).map(([role, count], i) => (
+                        {Object.entries(users.byRole ?? {}).map(([role, count], i) => (
                           <Box key={role} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                             <Box style={{
                               width: 8, height: 8, borderRadius: tokens.borderRadius.full,
@@ -863,7 +863,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     </Box>
                   ) : (
                     filteredEvents.map((evt) => {
-                      const sc = severityColors[evt.severity];
+                      const sc = severityColors[evt.severity ?? 'low'] ?? severityColors.low;
                       return (
                         <Box
                           key={evt.id}
@@ -883,10 +883,10 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                           </Text>
                           <Box style={{ flex: 1, minWidth: 0 }}>
                             <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[900] }}>
-                              {evt.message}
+                              {evt.message ?? ''}
                             </Text>
                             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginTop: tokens.spacing[1] }}>
-                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{evt.time}</Text>
+                              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{evt.time ?? ''}</Text>
                               <Text style={{
                                 padding: `0 ${tokens.spacing[2]}px`,
                                 borderRadius: tokens.borderRadius.full,
@@ -954,21 +954,21 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                 </Box>
                 <Box style={gridThree}>
                   {/* Data Retention */}
-                  <Box style={{ ...cardBase, borderTop: `3px solid ${complianceColors[compliance.dataRetention].color}` }}>
+                  <Box style={{ ...cardBase, borderTop: `3px solid ${(complianceColors[compliance.dataRetention ?? 'ok'] ?? complianceColors.ok).color}` }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
-                      <Database size={16} color={complianceColors[compliance.dataRetention].color} />
+                      <Database size={16} color={(complianceColors[compliance.dataRetention ?? 'ok'] ?? complianceColors.ok).color} />
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>Data Retention</Text>
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                       <Text style={{
-                        ...createBadgeStyle(tokens, compliance.dataRetention === 'ok' ? 'success' : compliance.dataRetention === 'warning' ? 'warning' : 'error'),
+                        ...createBadgeStyle(tokens, (compliance.dataRetention ?? 'ok') === 'ok' ? 'success' : (compliance.dataRetention ?? 'ok') === 'warning' ? 'warning' : 'error'),
                       }}>
                         {compliance.dataRetention === 'ok' ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
-                        <Text style={{ marginLeft: 4 }}>{compliance.dataRetention.toUpperCase()}</Text>
+                        <Text style={{ marginLeft: 4 }}>{(compliance.dataRetention || '').toUpperCase()}</Text>
                       </Text>
                     </Box>
                     <Text style={{ margin: 0, marginTop: tokens.spacing[2], fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
-                      Retention policies are {compliance.dataRetention === 'ok' ? 'compliant' : 'requiring attention'}
+                      Retention policies are {(compliance.dataRetention ?? 'ok') === 'ok' ? 'compliant' : 'requiring attention'}
                     </Text>
                   </Box>
 
@@ -979,7 +979,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>GDPR Requests</Text>
                     </Box>
                     <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                      {compliance.gdprRequests}
+                      {compliance.gdprRequests ?? 0}
                     </Text>
                     <Text style={{ margin: 0, fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>
                       Pending data subject requests
@@ -987,14 +987,14 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   </Box>
 
                   {/* Audit Completeness */}
-                  <Box style={{ ...cardBase, borderTop: `3px solid ${compliance.auditCompleteness >= 90 ? tokens.colors.successScale[500] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}` }}>
+                  <Box style={{ ...cardBase, borderTop: `3px solid ${(compliance.auditCompleteness ?? 0) >= 90 ? tokens.colors.successScale[500] : (compliance.auditCompleteness ?? 0) >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}` }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], marginBottom: tokens.spacing[3] }}>
-                      <FileText size={16} color={compliance.auditCompleteness >= 90 ? tokens.colors.successScale[600] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />
+                      <FileText size={16} color={(compliance.auditCompleteness ?? 0) >= 90 ? tokens.colors.successScale[600] : (compliance.auditCompleteness ?? 0) >= 70 ? tokens.colors.warningScale[600] : tokens.colors.errorScale[600]} />
                       <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>Audit Completeness</Text>
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'flex-end', gap: tokens.spacing[2] }}>
                       <Text style={{ margin: 0, fontSize: tokens.typography.fontSize['2xl'], fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[900] }}>
-                        {formatPercentage(compliance.auditCompleteness)}
+                        {formatPercentage(compliance.auditCompleteness ?? 0)}
                       </Text>
                     </Box>
                     <Box style={{ marginTop: tokens.spacing[2] }}>
@@ -1002,9 +1002,9 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                         <rect x="0" y="0" width="100%" height="8" rx="4" fill={tokens.colors.neutral[100]} />
                         <rect
                           x="0" y="0"
-                          width={`${compliance.auditCompleteness}%`}
+                          width={`${compliance.auditCompleteness ?? 0}%`}
                           height="8" rx="4"
-                          fill={compliance.auditCompleteness >= 90 ? tokens.colors.successScale[500] : compliance.auditCompleteness >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}
+                          fill={(compliance.auditCompleteness ?? 0) >= 90 ? tokens.colors.successScale[500] : (compliance.auditCompleteness ?? 0) >= 70 ? tokens.colors.warningScale[500] : tokens.colors.errorScale[500]}
                           style={{ transition: `width ${tokens.transitions?.normal || tokens.motion.hover}` }}
                         />
                       </svg>

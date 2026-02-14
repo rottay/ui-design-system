@@ -27,58 +27,30 @@ import {
   createEmptyStateStyle,
   createPersonalitySkeletonStyle,
 } from '../../../helpers';
-import type { BhTeamListProps, TeamSummary } from '../../core';
+import type { BhTeamListProps, RecruiterTeam } from '../../core';
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                             */
+/* ------------------------------------------------------------------ */
+function getTeamMembers(team: RecruiterTeam): Array<{ id: string; name: string; role: string; avatarInitial: string }> {
+  const members = team.members as Array<Record<string, any>> | null;
+  if (!Array.isArray(members)) return [];
+  return members.map((m: any) => ({
+    id: m.id ?? '',
+    name: m.name ?? '',
+    role: m.role ?? 'member',
+    avatarInitial: (m.name ?? '').charAt(0).toUpperCase(),
+  }));
+}
 
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: TeamSummary[] = [
-  {
-    id: 't1',
-    name: 'Engineering Hiring',
-    memberCount: 6,
-    members: [
-      { id: 'm1', name: 'Sofia Martinez', role: 'Team Lead', avatarInitial: 'S' },
-      { id: 'm2', name: 'Alex Kim', role: 'Sr. Recruiter', avatarInitial: 'A' },
-      { id: 'm3', name: 'Rachel Green', role: 'Recruiter', avatarInitial: 'R' },
-    ],
-    openPositions: 12,
-    department: 'Engineering',
-  },
-  {
-    id: 't2',
-    name: 'Product & Design',
-    memberCount: 4,
-    members: [
-      { id: 'm4', name: 'James Chen', role: 'Team Lead', avatarInitial: 'J' },
-      { id: 'm5', name: 'Priya Sharma', role: 'Recruiter', avatarInitial: 'P' },
-    ],
-    openPositions: 8,
-    department: 'Product',
-  },
-  {
-    id: 't3',
-    name: 'GTM Recruiting',
-    memberCount: 5,
-    members: [
-      { id: 'm6', name: 'Marcus Williams', role: 'Team Lead', avatarInitial: 'M' },
-      { id: 'm7', name: 'Aisha Okafor', role: 'Sr. Recruiter', avatarInitial: 'A' },
-      { id: 'm8', name: 'Liam O\'Brien', role: 'Recruiter', avatarInitial: 'L' },
-    ],
-    openPositions: 10,
-    department: 'Sales',
-  },
-  {
-    id: 't4',
-    name: 'Executive Search',
-    memberCount: 3,
-    members: [
-      { id: 'm9', name: 'Nina Patel', role: 'Team Lead', avatarInitial: 'N' },
-      { id: 'm10', name: 'Dave Johnson', role: 'Recruiter', avatarInitial: 'D' },
-    ],
-    openPositions: 4,
-    department: 'Executive',
-  },
+const MOCK_TEAMS: RecruiterTeam[] = [
+  { id: 't1', tenantId: 't', companyId: 'c', name: 'Engineering Hiring', code: 'ENG', type: 'technical', description: null, leaderId: 'l1', managerId: null, directorId: null, members: [{ id: 'm1', name: 'Sofia Martinez', role: 'team_lead' }, { id: 'm2', name: 'Alex Kim', role: 'senior_member' }, { id: 'm3', name: 'Rachel Green', role: 'member' }], activeMemberCount: 6, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 12, currentUtilization: 78, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't2', tenantId: 't', companyId: 'c', name: 'Product & Design', code: 'PD', type: 'general', description: null, leaderId: 'l2', managerId: null, directorId: null, members: [{ id: 'm4', name: 'James Chen', role: 'team_lead' }, { id: 'm5', name: 'Priya Sharma', role: 'member' }], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 8, currentUtilization: 65, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't3', tenantId: 't', companyId: 'c', name: 'GTM Recruiting', code: 'GTM', type: 'volume', description: null, leaderId: 'l3', managerId: null, directorId: null, members: [{ id: 'm6', name: 'Marcus Williams', role: 'team_lead' }, { id: 'm7', name: 'Aisha Okafor', role: 'senior_member' }, { id: 'm8', name: 'Liam O\'Brien', role: 'member' }], activeMemberCount: 5, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 10, currentUtilization: 92, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't4', tenantId: 't', companyId: 'c', name: 'Executive Search', code: 'EXEC', type: 'executive', description: null, leaderId: 'l4', managerId: null, directorId: null, members: [{ id: 'm9', name: 'Nina Patel', role: 'team_lead' }, { id: 'm10', name: 'Dave Johnson', role: 'member' }], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 4, currentUtilization: 56, assignedClientIds: [], primaryClientIds: [], performanceMetrics: {}, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
 ];
 
 /* ------------------------------------------------------------------ */
@@ -237,7 +209,7 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
                   color: t.colors.primaryScale[700],
                 }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold }}>
-                    {team.name.charAt(0)}
+                    {(team.name || '').charAt(0)}
                   </Text>
                 </Box>
                 <Box>
@@ -245,69 +217,74 @@ export const TableBhTeamList = createPreset<BhTeamListProps>({
                     {team.name}
                   </Text>
                   {/* Avatar stack */}
-                  <Box style={{ display: 'flex', alignItems: 'center', marginTop: t.spacing[1] }}>
-                    {team.members.slice(0, 3).map((member, mIdx) => (
-                      <Box
-                        key={member.id}
-                        style={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: t.borderRadius.full,
-                          backgroundColor: t.colors.secondaryScale[100 + (mIdx * 100) as 100 | 200 | 300] || t.colors.secondaryScale[100],
-                          color: t.colors.secondaryScale[700],
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          border: `2px solid ${t.colors.common.white}`,
-                          marginLeft: mIdx > 0 ? -6 : 0,
-                          zIndex: 3 - mIdx,
-                          position: 'relative' as const,
-                        }}
-                      >
-                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>{member.avatarInitial}</Text>
+                  {(() => {
+                    const memberDisplay = getTeamMembers(team);
+                    return (
+                      <Box style={{ display: 'flex', alignItems: 'center', marginTop: t.spacing[1] }}>
+                        {memberDisplay.slice(0, 3).map((member, mIdx) => (
+                          <Box
+                            key={member.id}
+                            style={{
+                              width: 22,
+                              height: 22,
+                              borderRadius: t.borderRadius.full,
+                              backgroundColor: t.colors.secondaryScale[100 + (mIdx * 100) as 100 | 200 | 300] || t.colors.secondaryScale[100],
+                              color: t.colors.secondaryScale[700],
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: `2px solid ${t.colors.common.white}`,
+                              marginLeft: mIdx > 0 ? -6 : 0,
+                              zIndex: 3 - mIdx,
+                              position: 'relative' as const,
+                            }}
+                          >
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>{member.avatarInitial}</Text>
+                          </Box>
+                        ))}
+                        {memberDisplay.length > 3 && (
+                          <Box
+                            style={{
+                              width: 22,
+                              height: 22,
+                              borderRadius: t.borderRadius.full,
+                              backgroundColor: t.colors.neutral[100],
+                              color: t.colors.neutral[600],
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              border: `2px solid ${t.colors.common.white}`,
+                              marginLeft: -6,
+                              position: 'relative' as const,
+                            }}
+                          >
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>+{memberDisplay.length - 3}</Text>
+                          </Box>
+                        )}
                       </Box>
-                    ))}
-                    {team.members.length > 3 && (
-                      <Box
-                        style={{
-                          width: 22,
-                          height: 22,
-                          borderRadius: t.borderRadius.full,
-                          backgroundColor: t.colors.neutral[100],
-                          color: t.colors.neutral[600],
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          border: `2px solid ${t.colors.common.white}`,
-                          marginLeft: -6,
-                          position: 'relative' as const,
-                        }}
-                      >
-                        <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold }}>+{team.members.length - 3}</Text>
-                      </Box>
-                    )}
-                  </Box>
+                    );
+                  })()}
                 </Box>
               </Box>
 
-              {/* Department */}
+              {/* Type */}
               <Box>
                 <Box style={{ ...createBadgeStyle(t, 'secondary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   <Building2 size={11} />
-                  <Text style={{ fontSize: 'inherit' }}>{team.department}</Text>
+                  <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{team.type ?? 'general'}</Text>
                 </Box>
               </Box>
 
               {/* Members count */}
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], textAlign: 'center' as const }}>
-                {team.memberCount}
+                {team.activeMemberCount ?? 0}
               </Text>
 
               {/* Open positions */}
               <Box style={{ textAlign: 'center' as const }}>
-                <Box style={{ ...createBadgeStyle(t, team.openPositions > 8 ? 'warning' : 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Box style={{ ...createBadgeStyle(t, (team.currentActivePositions ?? 0) > 8 ? 'warning' : 'success'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                   <Briefcase size={11} />
-                  <Text style={{ fontSize: 'inherit' }}>{team.openPositions}</Text>
+                  <Text style={{ fontSize: 'inherit' }}>{team.currentActivePositions ?? 0}</Text>
                 </Box>
               </Box>
 

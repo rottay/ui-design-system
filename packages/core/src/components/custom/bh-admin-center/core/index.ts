@@ -1,17 +1,28 @@
+/**
+ * BhAdminCenter - Core Interface
+ * Admin Dashboard for BitHire ATS platform
+ *
+ * DB References: DBAuditLog, DBTokenBalance from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBAuditLog, DBTokenBalance } from '@rottay/recruiter';
 
 export type BhAdminCenterPreset = 'overview' | 'billing';
+
+/** Re-export for consumer convenience */
+export type { DBAuditLog, DBTokenBalance };
 
 /* ── System Health ───────────────────────────────────────────────────── */
 
 export interface SystemHealthStatus {
-  providersUp: number;
-  providersTotal: number;
-  interviewsRunning: number;
-  tokenBalance: number;
-  slaCompliance: number;
+  providersUp?: number;
+  providersTotal?: number;
+  interviewsRunning?: number;
+  tokenBalance?: number;
+  slaCompliance?: number;
 }
 
 export type ProviderStatusType = 'healthy' | 'degraded' | 'down';
@@ -164,17 +175,20 @@ export function getComplianceColors(tokens: DesignTokens) {
   };
 }
 
-export function formatTokenBalance(value: number): string {
+export function formatTokenBalance(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '0';
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
   return String(value);
 }
 
-export function formatCurrency(value: number): string {
+export function formatCurrency(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '$0.00';
   return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-export function formatPercentage(value: number): string {
+export function formatPercentage(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '0.0%';
   return `${value.toFixed(1)}%`;
 }
 

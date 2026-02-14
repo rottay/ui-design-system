@@ -3,9 +3,10 @@
  * Candidate Rankings Board for BitHire ATS platform
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { ScorecardSelect } from '@rottay/scoring';
 
 export type BhRankingBoardPreset = 'table' | 'comparison';
 

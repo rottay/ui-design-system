@@ -12,8 +12,9 @@ export {
   type BhProctoringReviewPreset,
   type ProctoringEventType,
   type ProctoringEventSeverity,
-  type ProctoringEventDetail,
+  type ProctoringReviewEventView,
   type ReviewSubmission,
+  type ProctoringEventSelect,
   BH_PROCTORING_REVIEW_DEFAULTS,
 } from './core';
 

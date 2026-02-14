@@ -1,8 +1,19 @@
-import type { ReactNode, CSSProperties } from 'react';
+/**
+ * BhCandidateImport - Core Interface
+ * Step-by-step candidate import wizard
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The dedup match references DBCandidate for existing candidate records.
+ */
+
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBCandidate } from '@rottay/recruiter';
 
 export type BhCandidateImportPreset = 'standard';
+
+export type RecruiterCandidate = DBCandidate;
 
 export type ImportMethod = 'manual' | 'csv' | 'integration';
 
@@ -19,10 +30,15 @@ export interface FieldMapping {
 }
 
 export interface DedupMatch {
+  /** ID of the existing candidate in DB */
   candidateId: string;
+  /** Display name (from the existing candidate) */
   name: string;
+  /** Email of the existing candidate */
   email: string;
+  /** Similarity score 0-100 */
   similarity: number;
+  /** Action chosen by user */
   action: 'merge' | 'skip' | 'create';
 }
 

@@ -19,10 +19,39 @@ import {
   createStaggerDelay,
 } from '../../../helpers';
 import type {
-  BhClientDirectoryProps, ClientItem, ClientFilter,
-  ClientType, ClientStatus, ClientTier, ApprovalStatus,
+  BhClientDirectoryProps, ClientFilter,
+  ClientStatusFilter, ClientTierFilter, ClientTypeFilter,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+
+/* ---------------------------------------------------------------------------
+ * Local display types (enriched from DBClient for rendering)
+ * -------------------------------------------------------------------------*/
+
+type ClientStatus = 'active' | 'suspended' | 'pending_approval' | 'draft' | 'terminated' | 'archived';
+type ClientTier = 'standard' | 'premium' | 'enterprise' | 'strategic';
+
+interface ClientContact {
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+}
+
+interface ClientItem {
+  id: string;
+  name: string;
+  type: 'company' | 'individual';
+  status: ClientStatus;
+  tier: ClientTier;
+  industry: string;
+  positionsCount: number;
+  revenue: number;
+  approvalStatus?: string;
+  contacts: ClientContact[];
+  contractInfo?: { terms: string; startDate: string; endDate: string };
+  feeStructure?: { type: 'percentage' | 'retainer' | 'fixed'; value: number; currency?: string };
+}
 import {
   Search, Plus, Building2, User, X, Mail, Phone, Briefcase,
   DollarSign, Calendar, FileText, CheckCircle2, Clock, XCircle,
@@ -33,25 +62,48 @@ import {
  * Helpers
  * -------------------------------------------------------------------------*/
 
-const STATUS_CFG: Record<ClientStatus, { label: string; color: (t: DesignTokens) => string }> = {
+const STATUS_CFG: Record<string, { label: string; color: (t: DesignTokens) => string }> = {
   active: { label: 'Active', color: t => t.colors.successScale[500] },
-  inactive: { label: 'Inactive', color: t => t.colors.neutral[400] },
-  pending_approval: { label: 'Pending', color: t => t.colors.warningScale[500] },
   suspended: { label: 'Suspended', color: t => t.colors.errorScale[500] },
+  pending_approval: { label: 'Pending', color: t => t.colors.warningScale[500] },
+  draft: { label: 'Draft', color: t => t.colors.neutral[400] },
+  terminated: { label: 'Terminated', color: t => t.colors.errorScale[600] },
+  archived: { label: 'Archived', color: t => t.colors.neutral[400] },
 };
 
-const TIER_CFG: Record<ClientTier, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
+const TIER_CFG: Record<string, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
   standard: { label: 'Standard', color: t => t.colors.primaryScale[600], bg: t => t.colors.primaryScale[50] },
   premium: { label: 'Premium', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
   enterprise: { label: 'Enterprise', color: t => t.colors.secondaryScale[600], bg: t => t.colors.secondaryScale[50] },
+  strategic: { label: 'Strategic', color: t => t.colors.infoScale[600], bg: t => t.colors.infoScale[50] },
 };
 
 function fmtRev(v: number): string { return v >= 1e6 ? `$${(v / 1e6).toFixed(1)}M` : v >= 1e3 ? `$${(v / 1e3).toFixed(0)}K` : `$${v}`; }
 function fmtFee(f: ClientItem['feeStructure']): string {
   if (!f) return 'N/A';
   if (f.type === 'percentage') return `${f.value}%`;
-  if (f.type === 'retainer') return `${f.currency ?? 'USD'} ${f.value.toLocaleString()}/mo`;
-  return `${f.currency ?? 'USD'} ${f.value.toLocaleString()}`;
+  if (f.type === 'retainer') return `${f.currency ?? 'USD'} ${(f.value ?? 0).toLocaleString()}/mo`;
+  return `${f.currency ?? 'USD'} ${(f.value ?? 0).toLocaleString()}`;
+}
+
+/**
+ * Map a DBClient (or any record) to the local ClientItem for rendering.
+ */
+function toClientItem(raw: any): ClientItem {
+  return {
+    id: raw.id ?? '',
+    name: raw.displayName ?? raw.clientCompanyName ?? raw.name ?? '',
+    type: raw.type ?? 'company',
+    status: raw.status ?? 'draft',
+    tier: raw.tier ?? 'standard',
+    industry: raw.industry ?? '',
+    positionsCount: raw.openPositions ?? raw.positionsCount ?? 0,
+    revenue: Number(raw.totalRevenue ?? raw.revenue ?? 0),
+    approvalStatus: raw.approvalStatus,
+    contacts: Array.isArray(raw.contacts) ? raw.contacts : [],
+    contractInfo: raw.contractInfo,
+    feeStructure: raw.feeStructure,
+  };
 }
 
 function filterClients(clients: ClientItem[], f: ClientFilter): ClientItem[] {
@@ -59,7 +111,7 @@ function filterClients(clients: ClientItem[], f: ClientFilter): ClientItem[] {
     if (f.type && f.type !== 'all' && c.type !== f.type) return false;
     if (f.status && f.status !== 'all' && c.status !== f.status) return false;
     if (f.tier && f.tier !== 'all' && c.tier !== f.tier) return false;
-    if (f.search) { const q = f.search.toLowerCase(); if (!c.name.toLowerCase().includes(q) && !c.industry.toLowerCase().includes(q)) return false; }
+    if (f.search) { const q = f.search.toLowerCase(); if (!(c.name || '').toLowerCase().includes(q) && !(c.industry || '').toLowerCase().includes(q)) return false; }
     return true;
   });
 }
@@ -69,7 +121,7 @@ const DEFAULT_CLIENTS: ClientItem[] = [
   { id: 'cl-2', name: 'Horizon Labs', type: 'company', status: 'active', tier: 'premium', industry: 'Healthcare', positionsCount: 5, revenue: 180000, approvalStatus: 'approved', contacts: [{ name: 'Mark Rivera', email: 'mark@horizon.io', phone: '+1 (555) 200-3000', role: 'HR Director' }], feeStructure: { type: 'retainer', value: 8000 } },
   { id: 'cl-3', name: 'Nova Ventures', type: 'company', status: 'pending_approval', tier: 'standard', industry: 'Finance', positionsCount: 3, revenue: 75000, approvalStatus: 'pending', contacts: [{ name: 'Sam Ortiz', email: 'sam@nova.vc', phone: '+1 (555) 300-4000', role: 'Talent Lead' }], feeStructure: { type: 'fixed', value: 25000 } },
   { id: 'cl-4', name: 'David Chen', type: 'individual', status: 'active', tier: 'standard', industry: 'Consulting', positionsCount: 1, revenue: 15000, approvalStatus: 'approved', contacts: [{ name: 'David Chen', email: 'david@chen.consulting', phone: '+1 (555) 400-5000', role: 'Owner' }] },
-  { id: 'cl-5', name: 'Meridian Group', type: 'company', status: 'inactive', tier: 'premium', industry: 'Real Estate', positionsCount: 0, revenue: 95000, approvalStatus: 'approved', contacts: [{ name: 'Kate Yu', email: 'kate@meridian.com', phone: '+1 (555) 500-6000', role: 'COO' }] },
+  { id: 'cl-5', name: 'Meridian Group', type: 'company', status: 'archived', tier: 'premium', industry: 'Real Estate', positionsCount: 0, revenue: 95000, approvalStatus: 'approved', contacts: [{ name: 'Kate Yu', email: 'kate@meridian.com', phone: '+1 (555) 500-6000', role: 'COO' }] },
 ];
 
 /* ---------------------------------------------------------------------------
@@ -91,7 +143,7 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
     }, [t]);
 
     const {
-      clients = DEFAULT_CLIENTS,
+      clients: clientsProp,
       filters: filtersProp,
       onFilterChange,
       onClientSelect,
@@ -100,6 +152,11 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
       onEditClient,
       className, style,
     } = props;
+
+    const clients: ClientItem[] = useMemo(
+      () => clientsProp?.length ? clientsProp.map(toClientItem) : DEFAULT_CLIENTS,
+      [clientsProp],
+    );
 
     const [internalSelected, setInternalSelected] = useState<string | null>(selectedProp ?? null);
     const [internalFilters, setInternalFilters] = useState<ClientFilter>(filtersProp ?? { type: 'all', status: 'all', tier: 'all', search: '' });
@@ -244,8 +301,8 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
             )}
             {filtered.map((client, idx) => {
               const isActive = client.id === selectedId;
-              const sc = STATUS_CFG[client.status];
-              const tc = TIER_CFG[client.tier];
+              const sc = STATUS_CFG[client.status] ?? STATUS_CFG.draft;
+              const tc = TIER_CFG[client.tier] ?? TIER_CFG.standard;
               const itemEntrance = createEntranceAnimation(t, { index: idx });
               return (
                 <Box
@@ -317,9 +374,9 @@ export const DirectoryBhClientDirectory = createPreset<BhClientDirectoryProps>({
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{selected.name}</Text>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
-                      <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: TIER_CFG[selected.tier].bg(t) }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: TIER_CFG[selected.tier].color(t) }}>
-                          <Star size={9} style={{ verticalAlign: 'middle', marginRight: t.spacing[1] }} />{TIER_CFG[selected.tier].label}
+                      <Box style={{ padding: `0 ${t.spacing[2]}px`, borderRadius: br, backgroundColor: (TIER_CFG[selected.tier] ?? TIER_CFG.standard).bg(t) }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: (TIER_CFG[selected.tier] ?? TIER_CFG.standard).color(t) }}>
+                          <Star size={9} style={{ verticalAlign: 'middle', marginRight: t.spacing[1] }} />{(TIER_CFG[selected.tier] ?? TIER_CFG.standard).label}
                         </Text>
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{selected.industry}</Text>

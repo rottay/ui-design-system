@@ -47,6 +47,7 @@ function getStatusBadgeKey(status: CandidateStatus): 'success' | 'info' | 'warni
     case 'on_hold': return 'warning';
     case 'rejected': return 'error';
     case 'advanced': return 'primary';
+    default: return 'info';
   }
 }
 
@@ -57,6 +58,7 @@ function getStatusLabel(status: CandidateStatus): string {
     case 'on_hold': return 'On Hold';
     case 'rejected': return 'Rejected';
     case 'advanced': return 'Advanced';
+    default: return status;
   }
 }
 
@@ -93,7 +95,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stage = MOCK_STAGE,
+      stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] },
       isOpen = true,
       onClose,
       onBulkAction,
@@ -253,9 +255,9 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
           }}>
             <Box style={{ display: 'flex', gap: t.spacing[5] }}>
               {[
-                { label: 'Candidates', value: String(stage.candidateCount), icon: Users },
-                { label: 'Avg Days', value: stage.avgDays.toFixed(1), icon: Clock },
-                { label: 'Conversion', value: `${(stage.conversionRate * 100).toFixed(0)}%`, icon: TrendingUp },
+                { label: 'Candidates', value: String(stage.candidateCount ?? 0), icon: Users },
+                { label: 'Avg Days', value: (stage.avgDays ?? 0).toFixed(1), icon: Clock },
+                { label: 'Conversion', value: `${((stage.conversionRate ?? 0) * 100).toFixed(0)}%`, icon: TrendingUp },
               ].map((stat) => {
                 const Icon = stat.icon;
                 return (
@@ -324,7 +326,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
 
           {/* Candidate List */}
           <Box style={{ flex: 1, overflow: 'auto' }} role="list" aria-label="Stage candidates">
-            {stage.candidates.length === 0 && (
+            {(stage.candidates ?? []).length === 0 && (
               <Box style={createEmptyStateStyle(t)}>
                 <Users size={32} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />
                 <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>
@@ -332,19 +334,19 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                 </Text>
               </Box>
             )}
-            {stage.candidates.map((candidate, i) => {
-              const isSelected = selectedIds.has(candidate.id);
+            {(stage.candidates ?? []).map((candidate, i) => {
+              const isSelected = selectedIds.has((candidate.id ?? ''));
               const isHovered = hoveredCandidate === candidate.id;
               return (
                 <Box
                   key={candidate.id}
                   role="listitem"
                   tabIndex={0}
-                  aria-label={`${candidate.name}, ${getStatusLabel(candidate.status)}`}
-                  onClick={() => handleCandidateClick(candidate.id)}
-                  onMouseEnter={() => setHoveredCandidate(candidate.id)}
+                  aria-label={`${candidate.name}, ${getStatusLabel(candidate.status!)}`}
+                  onClick={() => handleCandidateClick((candidate.id ?? ''))}
+                  onMouseEnter={() => setHoveredCandidate((candidate.id ?? null))}
                   onMouseLeave={() => setHoveredCandidate(null)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCandidateClick(candidate.id); } }}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCandidateClick((candidate.id ?? '')); } }}
                   style={{
                     display: 'flex', alignItems: 'center', gap: t.spacing[3],
                     padding: `${t.spacing[3]}px ${t.spacing[6]}px`,
@@ -355,7 +357,7 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                   }}
                 >
                   <button
-                    onClick={(e) => toggleSelect(candidate.id, e)}
+                    onClick={(e) => toggleSelect((candidate.id ?? ''), e)}
                     aria-label={isSelected ? `Deselect ${candidate.name}` : `Select ${candidate.name}`}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -385,12 +387,12 @@ export const ModalBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerProp
                       }}>
                         {candidate.name}
                       </Text>
-                      <Box style={{ ...createBadgeStyle(t, getStatusBadgeKey(candidate.status)), borderRadius: badgeRadius, padding: `0px ${t.spacing[1]}px` }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status)}</Text>
+                      <Box style={{ ...createBadgeStyle(t, getStatusBadgeKey(candidate.status!)), borderRadius: badgeRadius, padding: `0px ${t.spacing[1]}px` }}>
+                        <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status!)}</Text>
                       </Box>
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                      Applied {formatDistanceToNow(candidate.appliedAt, { addSuffix: true })}
+                      Applied {formatDistanceToNow((typeof candidate.appliedAt! === 'string' ? new Date(candidate.appliedAt!) : candidate.appliedAt!), { addSuffix: true })}
                     </Text>
                   </Box>
 

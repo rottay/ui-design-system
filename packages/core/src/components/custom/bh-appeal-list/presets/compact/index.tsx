@@ -31,6 +31,7 @@ function getStatusBadgeKey(status: AppealListItem['status']): 'warning' | 'info'
     case 'under-review': return 'info';
     case 'approved': return 'success';
     case 'denied': return 'error';
+    default: return 'warning';
   }
 }
 
@@ -40,6 +41,7 @@ function getStatusLabel(status: AppealListItem['status']): string {
     case 'under-review': return 'Review';
     case 'approved': return 'Approved';
     case 'denied': return 'Denied';
+    default: return 'Pending';
   }
 }
 
@@ -67,7 +69,7 @@ export const CompactBhAppealList = createPreset<BhAppealListProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      appeals = MOCK_APPEALS,
+      appeals = [],
       onAppealClick,
       selectedAppealId,
       className,
@@ -87,7 +89,7 @@ export const CompactBhAppealList = createPreset<BhAppealListProps>({
       transition: entrance.transition,
     }), [entrance]);
 
-    const pendingCount = useMemo(() => appeals.filter(a => a.status === 'pending' || a.status === 'under-review').length, [appeals]);
+    const pendingCount = useMemo(() => appeals.filter((a) => a.status === 'pending' || a.status === 'under-review').length, [appeals]);
 
     return (
       <Box
@@ -134,15 +136,16 @@ export const CompactBhAppealList = createPreset<BhAppealListProps>({
         {/* List */}
         <Box role="list" aria-label="Appeals">
           {appeals.slice(0, 5).map((appeal) => {
-            const isSelected = selectedAppealId === appeal.id;
+            const appealId = appeal.id ?? '';
+            const isSelected = selectedAppealId === appealId;
             return (
               <Box
-                key={appeal.id}
+                key={appealId}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${appeal.candidateName}: ${getStatusLabel(appeal.status)}`}
-                onClick={() => handleClick(appeal.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(appeal.id); } }}
+                aria-label={`${appeal.candidateName ?? ''}: ${getStatusLabel(appeal.status)}`}
+                onClick={() => handleClick(appealId)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(appealId); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -166,7 +169,7 @@ export const CompactBhAppealList = createPreset<BhAppealListProps>({
                     {appeal.candidateName}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    {appeal.positionTitle} {formatDistanceToNow(appeal.submittedAt, { addSuffix: true })}
+                    {appeal.positionTitle ?? ''} {formatDistanceToNow(appeal.submittedAt ?? new Date(), { addSuffix: true })}
                   </Text>
                 </Box>
                 <Box style={{

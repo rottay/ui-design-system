@@ -1,5 +1,13 @@
+/**
+ * BhManagerConsole - Core Interface
+ * Manager Team Dashboard for BitHire ATS platform
+ *
+ * DB References: DBRecruiter, DBTeam, DBRecruiterMetrics from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBRecruiter, DBTeam, DBRecruiterMetrics } from '@rottay/recruiter';
 
 export type BhManagerConsolePreset = 'overview' | 'performance';
 
@@ -10,69 +18,72 @@ export type TrendDirection = 'up' | 'down' | 'flat';
 export type DateRangeOption = '7d' | '14d' | '30d' | '90d';
 export type MetricViewMode = 'heatmap' | 'list';
 
+/** Re-export for consumer convenience */
+export type { DBRecruiter, DBTeam, DBRecruiterMetrics };
+
 export interface Team {
-  id: string;
-  name: string;
-  memberCount: number;
-  lead: string;
+  id?: string;
+  name?: string;
+  memberCount?: number;
+  lead?: string;
 }
 
 export interface TeamKpi {
-  label: string;
-  value: string | number;
-  trend: TrendDirection;
-  trendValue: string;
-  sparklineData: number[];
+  label?: string;
+  value?: string | number;
+  trend?: TrendDirection;
+  trendValue?: string;
+  sparklineData?: number[];
 }
 
 export interface RecruiterWorkload {
-  recruiterId: string;
-  name: string;
+  recruiterId?: string;
+  name?: string;
   avatar?: string;
-  metrics: Record<string, number>;
+  metrics?: Record<string, number>;
 }
 
 export interface SlaItem {
-  stage: string;
-  avgHours: number;
-  limitHours: number;
-  status: SlaStatus;
+  stage?: string;
+  avgHours?: number;
+  limitHours?: number;
+  status?: SlaStatus;
 }
 
 export interface TaskCard {
-  id: string;
-  title: string;
-  priority: TaskPriority;
-  assignee: string;
-  dueDate: string;
+  id?: string;
+  title?: string;
+  priority?: TaskPriority;
+  assignee?: string;
+  dueDate?: string;
 }
 
 export interface PipelineStage {
-  name: string;
-  count: number;
-  percentage: number;
-  color: string;
+  name?: string;
+  count?: number;
+  percentage?: number;
+  color?: string;
 }
 
 export interface PerformanceAlert {
-  id: string;
-  recruiterName: string;
-  metric: string;
-  threshold: number;
-  actual: number;
-  severity: AlertSeverity;
+  id?: string;
+  recruiterName?: string;
+  metric?: string;
+  threshold?: number;
+  actual?: number;
+  severity?: AlertSeverity;
 }
 
 export interface SprintSummary {
-  total: number;
-  completed: number;
-  inProgress: number;
-  blocked: number;
+  total?: number;
+  completed?: number;
+  inProgress?: number;
+  blocked?: number;
 }
 
 export interface BhManagerConsoleProps extends EngineAwareProps {
   preset?: BhManagerConsolePreset;
-  teams: Team[];
+  teams?: Team[];
   selectedTeamId?: string;
   onTeamChange?: (teamId: string) => void;
   kpis?: TeamKpi[];

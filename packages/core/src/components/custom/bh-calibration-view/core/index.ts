@@ -1,10 +1,13 @@
 /**
  * BhCalibrationView - Core Interface
- * Human-AI Calibration for the BitHire ATS platform
+ * Human-AI Calibration session view for the BitHire ATS platform
+ *
+ * Uses CalibrationSelect and CalibrationSampleSelect from @rottay/scoring.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { CalibrationSelect, CalibrationSampleSelect } from '@rottay/scoring';
 
 export type BhCalibrationViewPreset = 'session' | 'results';
 
@@ -13,38 +16,41 @@ export interface TranscriptLine {
   text: string;
 }
 
-export interface CalibrationSample {
+export interface CalibrationSampleData {
   id: string;
-  transcriptLines: TranscriptLine[];
+  transcriptLines?: TranscriptLine[];
   humanScores?: Record<string, number>;
   aiScores?: Record<string, number>;
 }
 
 export interface AlignmentMetrics {
-  agreementRate: number;
-  meanAbsoluteError: number;
-  confidenceCorrelation: number;
-  perDimensionAlignment: { dimension: string; agreement: number }[];
+  agreementRate?: number;
+  meanAbsoluteError?: number;
+  confidenceCorrelation?: number;
+  perDimensionAlignment?: { dimension: string; agreement: number }[];
 }
 
 export interface DimensionAdjustment {
   dimension: string;
-  misalignment: number;
-  suggestedTweak: string;
+  misalignment?: number;
+  suggestedTweak?: string;
 }
 
 export interface BhCalibrationViewProps extends EngineAwareProps {
   /** Preset to use */
   preset?: BhCalibrationViewPreset;
 
+  /** The calibration DB entity */
+  calibration?: Partial<CalibrationSelect>;
+
   /** Name of the rubric being calibrated */
-  rubricName: string;
+  rubricName?: string;
 
   /** Scoring dimensions */
-  dimensions: string[];
+  dimensions?: string[];
 
   /** Calibration samples */
-  samples: CalibrationSample[];
+  samples?: CalibrationSampleData[];
 
   /** Current sample index */
   currentSampleIndex?: number;
@@ -89,3 +95,17 @@ export interface BhCalibrationViewProps extends EngineAwareProps {
 export const BH_CALIBRATION_VIEW_DEFAULTS: Partial<BhCalibrationViewProps> = {
   preset: 'session',
 };
+
+/** Backward-compat alias (old name from pre-migration) */
+export type CalibrationSample = CalibrationSampleData;
+
+/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
+export function n(v: string | number | null | undefined): number {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const parsed = Number(v);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/** Re-export DB types for convenience */
+export type { CalibrationSelect, CalibrationSampleSelect };

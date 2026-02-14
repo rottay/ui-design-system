@@ -1,47 +1,50 @@
 /**
  * BhRecruiterHome - Core Interface
  * Recruiter Main Dashboard for BitHire ATS platform
+ *
+ * DB References: DBRecruiter, DBJob, DBRecruiterMetrics from @rottay/recruiter
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBRecruiter, DBJob, DBRecruiterMetrics } from '@rottay/recruiter';
 
 export type BhRecruiterHomePreset = 'overview' | 'compact';
 
 export interface KpiStat {
-  label: string;
-  value: string | number;
-  trend: 'up' | 'down' | 'flat';
-  trendValue: number;
+  label?: string;
+  value?: string | number;
+  trend?: 'up' | 'down' | 'flat';
+  trendValue?: number;
   icon?: ReactNode;
   sparklineData?: number[];
 }
 
 export interface PipelineStage {
-  name: string;
-  count: number;
+  name?: string;
+  count?: number;
 }
 
 export interface PipelineJob {
-  id: string;
-  title: string;
-  stages: PipelineStage[];
+  id?: string;
+  title?: string;
+  stages?: PipelineStage[];
 }
 
 export interface UpcomingInterview {
-  id: string;
-  candidateName: string;
+  id?: string;
+  candidateName?: string;
   candidateAvatar?: string;
-  jobTitle: string;
-  stageName: string;
-  time: Date;
+  jobTitle?: string;
+  stageName?: string;
+  time?: Date;
   isAI?: boolean;
 }
 
 export interface QuickAction {
   key: string;
   label: string;
-  icon: ReactNode;
+  icon?: ReactNode;
   description?: string;
   onClick?: () => void;
 }
@@ -50,10 +53,10 @@ export type ActivityType = 'applied' | 'interview' | 'offer' | 'hired' | 'reject
 export type EntityType = 'candidate' | 'job' | 'interview' | 'offer';
 
 export interface ActivityItem {
-  id: string;
-  type: ActivityType;
-  message: string;
-  time: Date;
+  id?: string;
+  type?: ActivityType;
+  message?: string;
+  time?: Date;
   entityType?: EntityType;
   entityName?: string;
 }
@@ -61,27 +64,33 @@ export interface ActivityItem {
 export type NotificationType = 'breach' | 'approval' | 'candidate';
 
 export interface Notification {
-  id: string;
-  type: NotificationType;
-  message: string;
-  time: Date;
+  id?: string;
+  type?: NotificationType;
+  message?: string;
+  time?: Date;
 }
 
 export interface AISuggestion {
-  id: string;
-  action: string;
-  confidence: number;
-  reason: string;
+  id?: string;
+  action?: string;
+  confidence?: number;
+  reason?: string;
 }
 
 export interface PerformanceMetric {
-  label: string;
-  value: number;
-  target: number;
+  label?: string;
+  value?: number;
+  target?: number;
 }
+
+/** Re-export DB types for consumer convenience */
+export type { DBRecruiter, DBJob, DBRecruiterMetrics };
 
 export interface BhRecruiterHomeProps extends EngineAwareProps {
   preset?: BhRecruiterHomePreset;
+
+  /** Recruiter DB entity (optional, used to derive recruiterName) */
+  recruiter?: Partial<DBRecruiter> | null;
 
   /** Recruiter name displayed in the header greeting */
   recruiterName?: string;

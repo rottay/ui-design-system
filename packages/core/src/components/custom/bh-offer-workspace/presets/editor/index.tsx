@@ -16,9 +16,9 @@ import {
   getCardPadding,
 } from '../../../helpers';
 import type {
-  BhOfferWorkspaceProps, CompensationData, ApprovalStep, OfferStatus,
+  BhOfferWorkspaceProps, ApprovalStep,
 } from '../../core';
-import { getOfferStatusConfig, getOfferPipelineSteps, formatCurrency } from '../../core';
+import { getOfferStatusConfig, getOfferPipelineSteps, formatCurrency, getOfferCompensation } from '../../core';
 import {
   DollarSign, Gift, Truck, Briefcase, Shield, Clock,
   Check, X, ChevronRight, Edit3, Save, Send, FileText,
@@ -39,16 +39,30 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const p = c.primaryScale;
 
     const {
-      candidateName, jobTitle, status, compensation, benefits,
-      relocationPackage, employmentTerms, approvalSteps,
-      negotiationHistory, documents, onSave, onSubmitApproval,
-      onSendOffer, isEditing, onEditToggle, currentVersion,
-      showNegotiationHistory, onHistoryToggle, showComparison,
-      onComparisonToggle, signatureStatus, className, style,
+      offer,
+      candidateName: candidateNameProp, jobTitle: jobTitleProp, status: statusProp,
+      benefits = [],
+      approvalSteps = [], negotiationHistory = [], documents = [],
+      onSave, onSubmitApproval, onSendOffer, isEditing, onEditToggle,
+      currentVersion: currentVersionProp, showNegotiationHistory, onHistoryToggle,
+      showComparison, onComparisonToggle, signatureStatus, className, style,
     } = props;
 
-    const [offerData, setOfferData] = useState<CompensationData>(compensation);
-    const [localCurrentVersion] = useState(currentVersion);
+    const candidateName = candidateNameProp ?? '';
+    const jobTitle = jobTitleProp ?? offer?.jobTitleOffered ?? '';
+    const status = statusProp ?? offer?.status ?? 'draft';
+    const compensation = getOfferCompensation(offer);
+
+    const relocationOffered = offer?.relocationOffered ?? false;
+    const relocationAmount = offer?.relocationAmount ?? 0;
+    const relocationCurrency = offer?.relocationCurrency ?? compensation.currency;
+    const probationDays = offer?.probationPeriodDays ?? 90;
+    const startDate = offer?.proposedStartDate ? new Date(offer.proposedStartDate).toLocaleDateString() : '';
+    const workLocation = offer?.workLocation ?? '';
+    const remoteType = offer?.remoteType ?? '';
+
+    const [offerData, setOfferData] = useState(compensation);
+    const [localCurrentVersion] = useState(currentVersionProp ?? offer?.version ?? 1);
     const [approvalStatus] = useState(approvalSteps);
     const [localShowHistory, setLocalShowHistory] = useState(showNegotiationHistory);
     const [activeSection, setActiveSection] = useState<string>('compensation');
@@ -118,7 +132,8 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
       textAlign: 'left' as const, width: '100%', outline: 'none',
     }), [hov, sp, t, p, n, ty]);
 
-    const handleCompChange = useCallback((field: keyof CompensationData, value: number | string) => {
+    type CompFields = ReturnType<typeof getOfferCompensation>;
+    const handleCompChange = useCallback((field: keyof CompFields, value: number | string) => {
       setOfferData((prev) => ({ ...prev, [field]: value }));
     }, []);
     const toggleEditing = useCallback(() => { setLocalIsEditing(!localIsEditing); onEditToggle?.(); }, [localIsEditing, onEditToggle]);
@@ -127,7 +142,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
 
     /* Field helper: editable number or display */
     const Field = useCallback(({ label, field, value, suffix, fmt }: {
-      label: string; field?: keyof CompensationData; value: number | string;
+      label: string; field?: keyof CompFields; value: number | string;
       suffix?: string; fmt?: (v: number) => string;
     }) => (
       <Box style={{ ...card, display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
@@ -169,8 +184,10 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     ], []);
 
     const renderCompensation = () => {
-      const pct = offerData.marketRangeMax > offerData.marketRangeMin
-        ? Math.max(0, Math.min(100, ((offerData.baseSalary - offerData.marketRangeMin) / (offerData.marketRangeMax - offerData.marketRangeMin)) * 100))
+      const marketMin = 0;
+      const marketMax = offerData.baseSalary > 0 ? Math.round(offerData.baseSalary * 1.3) : 100000;
+      const pct = marketMax > marketMin
+        ? Math.max(0, Math.min(100, ((offerData.baseSalary - marketMin) / (marketMax - marketMin)) * 100))
         : 50;
 
       return (
@@ -204,8 +221,8 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             </Box>
             <Box style={{ marginTop: sp[3] }}>
               <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: sp[1] }}>
-                <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Min: {fmtC(offerData.marketRangeMin)}</Text>
-                <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Max: {fmtC(offerData.marketRangeMax)}</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Min: {fmtC(marketMin)}</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: n[500] }}>Max: {fmtC(marketMax)}</Text>
               </Box>
               <svg width="100%" height="32" viewBox="0 0 400 32" preserveAspectRatio="none" style={{ display: 'block' }}>
                 <rect x="0" y="10" width="400" height="12" rx="6" fill={n[200]} />
@@ -258,12 +275,12 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   )}
                 </Box>
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[1] }}>
-                  <Text style={lbl}>Vesting (years)</Text>
+                  <Text style={lbl}>Vesting (months)</Text>
                   {localIsEditing ? (
                     <input
                       type="number"
-                      value={offerData.vestingYears ?? 4}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('vestingYears', Number(e.target.value))}
+                      value={offerData.vestingMonths ?? 48}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCompChange('vestingMonths', Number(e.target.value))}
                       style={inp}
                     />
                   ) : (
@@ -272,13 +289,13 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                       fontWeight: typo.headingWeight,
                       color: n[900],
                     }}>
-                      {offerData.vestingYears ?? 4} years
+                      {Math.round((offerData.vestingMonths ?? 48) / 12)} years
                     </Text>
                   )}
                 </Box>
               </Box>
               {!localIsEditing && (offerData.equityShares ?? 0) > 0 && (() => {
-                const yrs = offerData.vestingYears ?? 4;
+                const yrs = Math.max(1, Math.round((offerData.vestingMonths ?? 48) / 12));
                 const sharesPer = Math.floor((offerData.equityShares ?? 0) / yrs);
                 return (
                   <Box style={{ marginTop: sp[4] }}>
@@ -366,7 +383,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     );
 
     const renderRelocation = () => {
-      if (!relocationPackage && !localIsEditing) {
+      if (!relocationOffered && !localIsEditing) {
         return (
           <Box style={card}>
             <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
@@ -377,7 +394,6 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
           </Box>
         );
       }
-      const relo = relocationPackage ?? { budget: 0, movingAllowance: 0, tempHousing: false };
       return (
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
           <Box style={{ display: 'flex', alignItems: 'center', gap: sp[2] }}>
@@ -385,31 +401,14 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             <Text style={secTitle}>Relocation Package</Text>
           </Box>
           <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[4] }}>
-            <Field label="Relocation Budget" value={relo.budget} fmt={(v) => formatCurrency(v, compensation.currency)} />
-            <Field label="Moving Allowance" value={relo.movingAllowance} fmt={(v) => formatCurrency(v, compensation.currency)} />
+            <Field label="Relocation Amount" value={relocationAmount} fmt={(v) => formatCurrency(v, relocationCurrency)} />
+            <Field label="Type" value={offer?.relocationType ?? 'N/A'} />
           </Box>
-          <Box style={card}>
-            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                <Text style={{ fontSize: ty.fontSize.md, fontWeight: ty.fontWeight.medium, color: n[800] }}>Temporary Housing</Text>
-                <Text style={{ fontSize: ty.fontSize.xs, color: n[500]}}>Cover housing for the first 90 days</Text>
-              </Box>
-              {localIsEditing ? (
-                <Box
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Toggle temporary housing"
-                  style={{ display: 'flex', cursor: 'pointer', outline: 'none' }}
-                >
-                  {relo.tempHousing ? <ToggleRight size={26} color={c.successScale[500]} /> : <ToggleLeft size={26} color={n[400]} />}
-                </Box>
-              ) : (
-                <Box style={createBadgeStyle(t, relo.tempHousing ? 'success' : 'secondary')}>
-                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{relo.tempHousing ? 'Included' : 'Not Included'}</Text>
-                </Box>
-              )}
+          {offer?.relocationDetails && (
+            <Box style={card}>
+              <Text style={{ fontSize: ty.fontSize.sm, color: n[700] }}>{offer.relocationDetails}</Text>
             </Box>
-          </Box>
+          )}
         </Box>
       );
     };
@@ -417,9 +416,9 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const renderTerms = () => {
       const arrColors: Record<string, 'primary' | 'success' | 'warning'> = { onsite: 'primary', remote: 'success', hybrid: 'warning' };
       const termFields = [
-        { label: 'Start Date', Icon: Calendar, iconColor: c.infoScale[500], value: employmentTerms.startDate, type: 'date' },
-        { label: 'Probation Period', Icon: Clock, iconColor: c.warningScale[500], value: employmentTerms.probationPeriod, type: 'text' },
-        { label: 'Notice Period', Icon: AlertCircle, iconColor: c.errorScale[500], value: employmentTerms.noticePeriod, type: 'text' },
+        { label: 'Start Date', Icon: Calendar, iconColor: c.infoScale[500], value: startDate, type: 'date' },
+        { label: 'Probation Period', Icon: Clock, iconColor: c.warningScale[500], value: probationDays ? `${probationDays} days` : '', type: 'text' },
+        { label: 'Employment Type', Icon: AlertCircle, iconColor: c.errorScale[500], value: offer?.employmentType ?? '', type: 'text' },
       ];
       return (
         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: sp[4] }}>
@@ -465,12 +464,12 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                       role="button"
                       tabIndex={0}
                       aria-label={`Select ${arr} arrangement`}
-                      aria-pressed={employmentTerms.workArrangement === arr}
+                      aria-pressed={remoteType === arr}
                       style={{
                         ...hov, flex: 1, padding: `${sp[2]}px`, borderRadius: t.borderRadius.md,
-                        border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${employmentTerms.workArrangement === arr ? p[300] : n[200]}`,
-                        backgroundColor: employmentTerms.workArrangement === arr ? p[50] : c.common.white,
-                        color: employmentTerms.workArrangement === arr ? p[700] : n[600],
+                        border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${remoteType === arr ? p[300] : n[200]}`,
+                        backgroundColor: remoteType === arr ? p[50] : c.common.white,
+                        color: remoteType === arr ? p[700] : n[600],
                         fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.medium,
                         textTransform: 'capitalize' as const, textAlign: 'center' as const,
                         outline: 'none',
@@ -479,7 +478,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                       <Text style={{
                         fontSize: ty.fontSize.xs,
                         fontWeight: ty.fontWeight.medium,
-                        color: employmentTerms.workArrangement === arr ? p[700] : n[600],
+                        color: remoteType === arr ? p[700] : n[600],
                         textTransform: 'capitalize' as const,
                       }}>
                         {arr}
@@ -488,8 +487,8 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                   ))}
                 </Box>
               ) : (
-                <Box style={createBadgeStyle(t, arrColors[employmentTerms.workArrangement] ?? 'primary')}>
-                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{employmentTerms.workArrangement}</Text>
+                <Box style={createBadgeStyle(t, arrColors[remoteType] ?? 'primary')}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{remoteType || workLocation || 'TBD'}</Text>
                 </Box>
               )}
             </Box>
@@ -532,7 +531,7 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                         }} />
                       ) : (
                         <Box style={createIconContainerStyle(t, { size: 32, color: cfg.scale[100] })}>
-                          <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: cfg.scale[700] }}>{step.approverName.charAt(0).toUpperCase()}</Text>
+                          <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: cfg.scale[700] }}>{(step.approverName || '?').charAt(0).toUpperCase()}</Text>
                         </Box>
                       )}
                       <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
@@ -677,10 +676,10 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
               </Text>
             </Box>
             <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: sp[3] }}>
-              {sigCard(localSignatureStatus.companySigned, 'Company Signature')}
-              {sigCard(localSignatureStatus.candidateSigned, 'Candidate Signature')}
+              {sigCard(localSignatureStatus?.companySigned!, 'Company Signature')}
+              {sigCard(localSignatureStatus?.candidateSigned!, 'Candidate Signature')}
             </Box>
-            {localSignatureStatus.signedDate && <Text style={{ fontSize: ty.fontSize.xs, color: n[500], marginTop: sp[2] }}>Signed on: {localSignatureStatus.signedDate}</Text>}
+            {localSignatureStatus?.signedDate && <Text style={{ fontSize: ty.fontSize.xs, color: n[500], marginTop: sp[2] }}>Signed on: {localSignatureStatus.signedDate}</Text>}
           </Box>
           <Box style={{
             display: 'flex', alignItems: 'center', gap: sp[2],

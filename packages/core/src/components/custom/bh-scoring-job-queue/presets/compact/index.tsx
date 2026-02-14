@@ -25,7 +25,7 @@ import {
 } from '../../../helpers';
 import type {
   BhScoringJobQueueProps,
-  ScoringJob,
+  ScoringJobView,
   ScoringJobStatus,
   ScoringJobPriority,
   QueueStats,
@@ -45,18 +45,18 @@ function getPriorityColor(priority: ScoringJobPriority, t: DesignTokens): string
   }
 }
 
-function getStatusBadgeKey(status: ScoringJobStatus): 'primary' | 'success' | 'error' | 'warning' | 'secondary' {
+function getStatusBadgeKey(status: ScoringJobStatus | string): 'primary' | 'success' | 'error' | 'warning' | 'secondary' {
   switch (status) {
-    case 'queued': return 'secondary';
+    case 'pending': return 'secondary';
     case 'processing': return 'primary';
     case 'completed': return 'success';
     case 'failed': return 'error';
-    case 'paused': return 'warning';
+    default: return 'secondary';
   }
 }
 
-function getStatusLabel(status: ScoringJobStatus): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+function getStatusLabel(status: ScoringJobStatus | string): string {
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -72,10 +72,10 @@ const MOCK_STATS: QueueStats = {
   avgProcessingTime: 45000,
 };
 
-const MOCK_JOBS: ScoringJob[] = [
-  { id: 'sj-1', scorableId: 'sc-1', candidateName: 'Sarah Johnson', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', status: 'processing', progress: 0.65, priority: 'urgent', queuedAt: new Date(Date.now() - 120000), startedAt: new Date(Date.now() - 60000), estimatedDuration: 90000, retryCount: 0 },
-  { id: 'sj-2', scorableId: 'sc-2', candidateName: 'Michael Chen', jobTitle: 'Backend Developer', rubricName: 'System Design Rubric', status: 'processing', progress: 0.3, priority: 'high', queuedAt: new Date(Date.now() - 300000), startedAt: new Date(Date.now() - 120000), estimatedDuration: 120000, retryCount: 0 },
-  { id: 'sj-3', scorableId: 'sc-3', candidateName: 'Emily Rodriguez', jobTitle: 'Full Stack Engineer', rubricName: 'Code Review Assessment', status: 'queued', progress: 0, priority: 'normal', queuedAt: new Date(Date.now() - 600000), retryCount: 0 },
+const MOCK_JOBS: ScoringJobView[] = [
+  { job: { id: 'sj-1', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 120000), startedAt: new Date(Date.now() - 60000) } as any, candidateName: 'Sarah Johnson', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', progress: 0.65, priorityLabel: 'urgent', estimatedDuration: 90000 },
+  { job: { id: 'sj-2', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 300000), startedAt: new Date(Date.now() - 120000) } as any, candidateName: 'Michael Chen', jobTitle: 'Backend Developer', rubricName: 'System Design Rubric', progress: 0.3, priorityLabel: 'high', estimatedDuration: 120000 },
+  { job: { id: 'sj-3', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 600000) } as any, candidateName: 'Emily Rodriguez', jobTitle: 'Full Stack Engineer', rubricName: 'Code Review Assessment', progress: 0, priorityLabel: 'normal' },
 ];
 
 /* ================================================================== */
@@ -92,8 +92,8 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobs = MOCK_JOBS,
-      stats = MOCK_STATS,
+      jobs = [],
+      stats = { totalJobs: 0, queued: 0, processing: 0, completed: 0, failed: 0, avgProcessingTime: 0 },
       onJobClick,
       selectedJobId,
       className,
@@ -113,11 +113,11 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
       transition: entrance.transition,
     }), [entrance]);
 
-    /* Get the top 3 active jobs (processing first, then queued) */
+    /* Get the top 3 active jobs (processing first, then pending) */
     const activeJobs = useMemo(() => {
-      const statusOrder: Record<ScoringJobStatus, number> = { processing: 0, queued: 1, paused: 2, failed: 3, completed: 4 };
+      const statusOrder: Record<string, number> = { processing: 0, pending: 1, failed: 3, completed: 4 };
       return [...jobs]
-        .sort((a, b) => statusOrder[a.status] - statusOrder[b.status])
+        .sort((a, b) => (statusOrder[a.job?.status ?? 'pending'] ?? 2) - (statusOrder[b.job?.status ?? 'pending'] ?? 2))
         .slice(0, 3);
     }, [jobs]);
 
@@ -226,19 +226,22 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
 
         {/* Top active jobs */}
         <Box role="list" aria-label="Active scoring jobs">
-          {activeJobs.map((job) => {
-            const isSelected = selectedJobId === job.id;
+          {activeJobs.map((jv, i) => {
+            const id = jv.job?.id ?? '';
+            const status = jv.job?.status ?? 'pending';
+            const priority = jv.priorityLabel ?? 'normal';
+            const isSelected = selectedJobId === id;
             return (
               <Box
-                key={job.id}
+                key={id || i}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${job.candidateName}: ${getStatusLabel(job.status)}`}
-                onClick={() => handleClick(job.id)}
+                aria-label={`${jv.candidateName ?? 'Unknown'}: ${getStatusLabel(status)}`}
+                onClick={() => handleClick(id)}
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    handleClick(job.id);
+                    handleClick(id);
                   }
                 }}
                 style={{
@@ -249,7 +252,7 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                   borderBottom: `1px solid ${t.colors.neutral[50]}`,
                   cursor: 'pointer',
                   backgroundColor: isSelected ? t.colors.primaryScale[50] : t.colors.common.white,
-                  borderLeft: `2px solid ${getPriorityColor(job.priority, t)}`,
+                  borderLeft: `2px solid ${getPriorityColor(priority, t)}`,
                   transition: `background-color ${t.motion.hover}`,
                 }}
               >
@@ -263,21 +266,21 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                     }}>
-                      {job.candidateName}
+                      {jv.candidateName ?? 'Unknown'}
                     </Text>
                     <Box style={{
-                      ...createBadgeStyle(t, getStatusBadgeKey(job.status)),
+                      ...createBadgeStyle(t, getStatusBadgeKey(status)),
                       borderRadius: badgeRadius,
                       padding: `0px ${t.spacing[1]}px`,
                     }}>
-                      <Text style={{ fontSize: 9 }}>{getStatusLabel(job.status)}</Text>
+                      <Text style={{ fontSize: 9 }}>{getStatusLabel(status)}</Text>
                     </Box>
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    {job.jobTitle}
+                    {jv.jobTitle ?? ''}
                   </Text>
                   {/* Mini progress for processing */}
-                  {job.status === 'processing' && (
+                  {status === 'processing' && (
                     <Box style={{
                       height: 3,
                       borderRadius: t.borderRadius.full,
@@ -287,7 +290,7 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                     }}>
                       <Box style={{
                         height: '100%',
-                        width: `${Math.round(job.progress * 100)}%`,
+                        width: `${Math.round((jv.progress ?? 0) * 100)}%`,
                         borderRadius: t.borderRadius.full,
                         backgroundColor: t.colors.primaryScale[500],
                         transition: 'width 0.4s ease',

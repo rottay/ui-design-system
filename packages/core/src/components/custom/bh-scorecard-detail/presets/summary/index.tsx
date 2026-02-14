@@ -29,6 +29,7 @@ import type {
   DimensionScore,
   ScorecardDetail,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -66,7 +67,7 @@ function getStatusBadgeKey(status: string): 'primary' | 'warning' | 'success' {
 }
 
 function getStatusLabel(status: string): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -130,20 +131,22 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
       transition: entrance.transition,
     }), [entrance]);
 
+    const dims = scorecard.dimensions ?? [];
+
     const sortedDims = useMemo(
-      () => [...scorecard.dimensions].sort((a: DimensionScore, b: DimensionScore) => b.score - a.score),
-      [scorecard.dimensions],
+      () => [...dims].sort((a: DimensionScore, b: DimensionScore) => n(b.score) - n(a.score)),
+      [dims],
     );
 
     const topDims = sortedDims.slice(0, 3);
     const bottomDims = sortedDims.slice(-3).reverse();
     const displayDims = expanded ? sortedDims : sortedDims.slice(0, 5);
 
-    const overallPct = (scorecard.overallScore / scorecard.maxScore) * 100;
-    const overallColor = getScoreColor(scorecard.overallScore, scorecard.maxScore, t);
+    const overallPct = (n(scorecard.overallScore) / (n(scorecard.maxScore) || 1)) * 100;
+    const overallColor = getScoreColor(n(scorecard.overallScore), n(scorecard.maxScore) || 1, t);
 
-    const avgConfidence = scorecard.dimensions.length > 0
-      ? scorecard.dimensions.reduce((sum: number, d: DimensionScore) => sum + d.confidence, 0) / scorecard.dimensions.length
+    const avgConfidence = dims.length > 0
+      ? dims.reduce((sum: number, d: DimensionScore) => sum + n(d.confidence), 0) / dims.length
       : 0;
 
     return (
@@ -186,11 +189,11 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
             </Box>
           </Box>
           <Box style={{
-            ...createBadgeStyle(t, getStatusBadgeKey(scorecard.status)),
+            ...createBadgeStyle(t, getStatusBadgeKey((scorecard.status ?? ''))),
             borderRadius: badgeRadius,
             padding: `1px ${t.spacing[2]}px`,
           }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(scorecard.status)}</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel((scorecard.status ?? ''))}</Text>
           </Box>
         </Box>
 
@@ -208,9 +211,9 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
               fontWeight: t.typography.fontWeight.bold,
               color: t.colors.neutral[900],
             }}>
-              {scorecard.overallScore.toFixed(1)}
+              {n(scorecard.overallScore).toFixed(1)}
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontWeight: t.typography.fontWeight.normal }}>
-                /{scorecard.maxScore}
+                /{n(scorecard.maxScore)}
               </Text>
             </Text>
           </Box>
@@ -280,9 +283,9 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                   key={dim.dimensionId}
                   role="button"
                   tabIndex={0}
-                  aria-label={`${dim.dimensionName}: ${dim.score}/${dim.maxScore}`}
-                  onClick={() => handleDimClick(dim.dimensionId)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick(dim.dimensionId); } }}
+                  aria-label={`${dim.dimensionName}: ${n(dim.score)}/${n(dim.maxScore)}`}
+                  onClick={() => handleDimClick((dim.dimensionId ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick((dim.dimensionId ?? '')); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -308,7 +311,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                     color: t.colors.successScale[600],
                     marginLeft: t.spacing[2],
                   }}>
-                    {dim.score.toFixed(1)}
+                    {n(dim.score).toFixed(1)}
                   </Text>
                 </Box>
               ))}
@@ -341,9 +344,9 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                   key={dim.dimensionId}
                   role="button"
                   tabIndex={0}
-                  aria-label={`${dim.dimensionName}: ${dim.score}/${dim.maxScore}`}
-                  onClick={() => handleDimClick(dim.dimensionId)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick(dim.dimensionId); } }}
+                  aria-label={`${dim.dimensionName}: ${n(dim.score)}/${n(dim.maxScore)}`}
+                  onClick={() => handleDimClick((dim.dimensionId ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick((dim.dimensionId ?? '')); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -369,7 +372,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                     color: t.colors.warningScale[600],
                     marginLeft: t.spacing[2],
                   }}>
-                    {dim.score.toFixed(1)}
+                    {n(dim.score).toFixed(1)}
                   </Text>
                 </Box>
               ))}
@@ -390,17 +393,17 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
               textTransform: 'uppercase' as const,
               letterSpacing: '0.05em',
             }}>
-              Dimensions ({scorecard.dimensions.length})
+              Dimensions ({dims.length})
             </Text>
           </Box>
           {displayDims.map((dim: DimensionScore) => {
             const isHov = hoveredDim === dim.dimensionId;
-            const barPct = (dim.score / dim.maxScore) * 100;
+            const barPct = (n(dim.score) / (n(dim.maxScore) || 1)) * 100;
             return (
               <Box key={dim.dimensionId}
-                onMouseEnter={() => setHoveredDim(dim.dimensionId)}
+                onMouseEnter={() => setHoveredDim((dim.dimensionId ?? null))}
                 onMouseLeave={() => setHoveredDim(null)}
-                onClick={() => handleDimClick(dim.dimensionId)}
+                onClick={() => handleDimClick((dim.dimensionId ?? ''))}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   cursor: 'pointer',
@@ -421,7 +424,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                 }}>
                   <Box style={{
                     width: `${barPct}%`, height: '100%',
-                    backgroundColor: getScoreColor(dim.score, dim.maxScore, t),
+                    backgroundColor: getScoreColor(n(dim.score), n(dim.maxScore) || 1, t),
                     borderRadius: t.borderRadius.full,
                     transition: `width ${t.motion.hover}`,
                   }} />
@@ -430,12 +433,12 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                   fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold,
                   color: t.colors.neutral[700], minWidth: 24, textAlign: 'right' as const,
                 }}>
-                  {dim.score.toFixed(1)}
+                  {n(dim.score).toFixed(1)}
                 </Text>
               </Box>
             );
           })}
-          {scorecard.dimensions.length > 5 && (
+          {dims.length > 5 && (
             <Box
               onClick={() => setExpanded(!expanded)}
               style={{
@@ -449,7 +452,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
               }}>
               {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
               <Text style={{ fontSize: 'inherit', color: 'inherit', fontWeight: 'inherit' }}>
-                {expanded ? 'Show less' : `Show ${scorecard.dimensions.length - 5} more`}
+                {expanded ? 'Show less' : `Show ${dims.length - 5} more`}
               </Text>
             </Box>
           )}
@@ -469,7 +472,7 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
             </Text>
             <Clock size={12} color={t.colors.neutral[400]} />
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-              {formatDistanceToNow(scorecard.scoredAt, { addSuffix: true })}
+              {formatDistanceToNow(new Date(scorecard.scoredAt!), { addSuffix: true })}
             </Text>
           </Box>
           {scorecard.calibrated ? (

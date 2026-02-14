@@ -9,24 +9,24 @@ import type { EngineAwareProps } from '../../../../core/types';
 export type BhDiversityDashboardPreset = 'dashboard' | 'compact';
 
 export interface DiversitySegment {
-  label: string;
-  count: number;
-  percentage: number;
+  label?: string;
+  count?: number;
+  percentage?: number;
 }
 
 export interface DiversityMetric {
-  category: string;
-  segments: DiversitySegment[];
+  category?: string;
+  segments?: DiversitySegment[];
 }
 
 export interface BhDiversityDashboardProps extends EngineAwareProps {
   preset?: BhDiversityDashboardPreset;
 
   /** Diversity metrics by category */
-  metrics: DiversityMetric[];
+  metrics?: DiversityMetric[];
 
   /** Total candidates count */
-  totalCandidates: number;
+  totalCandidates?: number;
 
   /** Dashboard title */
   title?: string;

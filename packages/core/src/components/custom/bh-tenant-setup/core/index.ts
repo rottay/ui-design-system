@@ -3,11 +3,20 @@
  * Tenant Onboarding wizard for BitHire ATS platform
  */
 
+/**
+ * BhTenantSetup - Core Interface
+ * DB Reference: DBTeam from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBTeam } from '@rottay/recruiter';
 
 export type BhTenantSetupPreset = 'full' | 'quick';
+
+/** Re-export for consumer convenience */
+export type { DBTeam };
 
 export interface SetupStep {
   key: string;

@@ -41,6 +41,7 @@ function getStepIcon(status: ApprovalChainStep['status']) {
     case 'rejected': return XCircle;
     case 'pending': return Clock;
     case 'skipped': return SkipForward;
+    default: return Clock;
   }
 }
 
@@ -50,6 +51,7 @@ function getStepColor(status: ApprovalChainStep['status'], t: DesignTokens): str
     case 'rejected': return t.colors.errorScale[500];
     case 'pending': return t.colors.warningScale[500];
     case 'skipped': return t.colors.neutral[400];
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -83,7 +85,7 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
       transition: entrance.transition,
     }), [entrance]);
 
-    const sorted = useMemo(() => [...steps].sort((a, b) => a.order - b.order), [steps]);
+    const sorted = useMemo(() => [...(steps ?? [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)), [steps]);
 
     const completedCount = useMemo(
       () => steps.filter(s => s.status === 'approved').length,
@@ -118,7 +120,7 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
             </Text>
           </Box>
           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-            {completedCount}/{steps.length}
+            {completedCount}/{(steps ?? []).length}
           </Text>
         </Box>
 
@@ -144,8 +146,8 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
           )}
 
           {sorted.map((step, idx) => {
-            const Icon = getStepIcon(step.status);
-            const color = getStepColor(step.status, t);
+            const Icon = getStepIcon(step.status ?? 'pending');
+            const color = getStepColor(step.status ?? 'pending', t);
             const isLast = idx === sorted.length - 1;
 
             return (
@@ -154,8 +156,8 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
                 tabIndex={0}
                 role="button"
                 aria-label={`${step.approverName}: ${step.status}`}
-                onClick={() => handleClick(step.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(step.id); } }}
+                onClick={() => handleClick((step.id ?? ''))}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((step.id ?? '')); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -174,7 +176,7 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}>
-                    {step.approverName}
+                    {step.approverName ?? ''}
                   </Text>
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color, flexShrink: 0 }}>

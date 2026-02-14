@@ -40,17 +40,18 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
     const t = tokens;
 
     const {
-      clientName = 'Acme Corporation',
-      tier = 'enterprise',
-      contractStatus = 'active',
-      openPositions = 12,
-      totalHires = 48,
-      revenue = 125000,
-      currency = 'USD',
+      client,
       onClick,
       className,
       style,
     } = props;
+
+    const clientName = client?.displayName ?? client?.clientCompanyName ?? 'Acme Corporation';
+    const tier = client?.tier ?? 'enterprise';
+    const status = client?.status ?? 'active';
+    const openPositions = client?.openPositions ?? 12;
+    const totalHires = (client as any)?.totalHires ?? 48;
+    const revenue = Number(client?.totalRevenue ?? 125000);
 
     /* -- Styles ---------------------------------------------------- */
     const card = useMemo(() => createCardStyle(t, { padding: 14 }), [t]);
@@ -62,18 +63,24 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
     const tierBadge = useMemo(() => {
       switch (tier) {
         case 'enterprise': return { color: 'primary' as const, icon: Crown };
-        case 'business': return { color: 'info' as const, icon: Shield };
-        case 'starter': return { color: 'secondary' as const, icon: Zap };
+        case 'premium': return { color: 'info' as const, icon: Shield };
+        case 'strategic': return { color: 'warning' as const, icon: Crown };
+        case 'standard':
+        default: return { color: 'secondary' as const, icon: Zap };
       }
     }, [tier]);
 
     const contractBadge = useMemo(() => {
-      switch (contractStatus) {
+      switch (status) {
         case 'active': return { color: 'success' as const, icon: CheckCircle2 };
-        case 'expiring': return { color: 'warning' as const, icon: AlertTriangle };
-        case 'expired': return { color: 'error' as const, icon: Clock };
+        case 'suspended': return { color: 'warning' as const, icon: AlertTriangle };
+        case 'terminated':
+        case 'archived': return { color: 'error' as const, icon: Clock };
+        case 'draft':
+        case 'pending_approval':
+        default: return { color: 'secondary' as const, icon: Clock };
       }
-    }, [contractStatus]);
+    }, [status]);
 
     const formattedRevenue = useMemo(() => {
       if (revenue >= 1000000) return `${(revenue / 1000000).toFixed(1)}M`;
@@ -142,7 +149,7 @@ export const CompactBhClientCard = createPreset<BhClientCardProps>({
         {/* Contract */}
         <Box style={{ ...createBadgeStyle(t, contractBadge.color), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
           <ContractIcon size={10} />
-          <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{contractStatus}</Text>
+          <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{status}</Text>
         </Box>
 
         {/* Revenue */}

@@ -44,15 +44,17 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
     const t = tokens;
 
     const {
-      teamName = 'Engineering Hiring',
-      department = 'Engineering',
-      memberCount = 6,
-      metrics: metricsProp,
-      status = 'active',
+      team,
+      metrics: metricsProp = [],
       onClick,
       className,
       style,
     } = props;
+
+    const teamName = team?.name ?? 'Engineering Hiring';
+    const teamType = team?.type ?? 'general';
+    const memberCount = team?.activeMemberCount ?? 6;
+    const status = team?.status ?? 'active';
 
     const metrics = metricsProp?.length ? metricsProp : MOCK_METRICS;
     const displayMetrics = metrics.slice(0, 2);
@@ -115,7 +117,7 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
           </Text>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[1] }}>
             <Building2 size={10} style={{ color: t.colors.neutral[400] }} />
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{department}</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: 'capitalize' as const }}>{teamType}</Text>
           </Box>
         </Box>
 

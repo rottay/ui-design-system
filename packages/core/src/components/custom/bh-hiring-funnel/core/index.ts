@@ -9,9 +9,9 @@ import type { EngineAwareProps } from '../../../../types';
 export type BhHiringFunnelPreset = 'funnel' | 'compact';
 
 export interface FunnelStage {
-  name: string;
-  count: number;
-  conversionRate: number;
+  name?: string;
+  count?: number;
+  conversionRate?: number;
   color?: string;
 }
 
@@ -19,7 +19,7 @@ export interface BhHiringFunnelProps extends EngineAwareProps {
   preset?: BhHiringFunnelPreset;
 
   /** Funnel stages data */
-  stages: FunnelStage[];
+  stages?: FunnelStage[];
 
   /** Title for the funnel chart */
   title?: string;

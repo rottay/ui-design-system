@@ -7,50 +7,43 @@
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { ApplicationStatusValue } from '@rottay/recruiter';
 
 export type BhPipelineAnalyticsPreset = 'overview' | 'detailed';
 
-export type PipelineStageStatus =
-  | 'new'
-  | 'sourced'
-  | 'screening'
-  | 'phone_screen'
-  | 'technical_interview'
-  | 'onsite_interview'
-  | 'panel_review'
-  | 'reference_check'
-  | 'offer_pending'
-  | 'offer_extended'
-  | 'offer_accepted'
-  | 'hired';
+/**
+ * Pipeline stage status - uses DB ApplicationStatusValue where applicable,
+ * plus custom stage names for UI grouping.
+ */
+export type PipelineStageStatus = ApplicationStatusValue | string;
 
 export interface PipelineStage {
-  id: string;
-  name: string;
-  status: PipelineStageStatus;
-  count: number;
+  id?: string;
+  name?: string;
+  status?: PipelineStageStatus;
+  count?: number;
   previousPeriodCount?: number;
-  conversionRate: number;
-  avgTimeInStageDays: number;
+  conversionRate?: number;
+  avgTimeInStageDays?: number;
   slaLimitDays?: number;
-  dropoffCount: number;
+  dropoffCount?: number;
 }
 
 export interface PipelineBottleneck {
-  stageId: string;
-  stageName: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  reason: string;
-  avgDelayDays: number;
-  impactedCandidates: number;
+  stageId?: string;
+  stageName?: string;
+  severity?: 'low' | 'medium' | 'high' | 'critical';
+  reason?: string;
+  avgDelayDays?: number;
+  impactedCandidates?: number;
 }
 
 export interface PipelineSummary {
-  totalActive: number;
-  totalHired: number;
-  avgTimeToHireDays: number;
-  overallConversionRate: number;
-  bottleneckCount: number;
+  totalActive?: number;
+  totalHired?: number;
+  avgTimeToHireDays?: number;
+  overallConversionRate?: number;
+  bottleneckCount?: number;
 }
 
 export interface BhPipelineAnalyticsProps extends EngineAwareProps {

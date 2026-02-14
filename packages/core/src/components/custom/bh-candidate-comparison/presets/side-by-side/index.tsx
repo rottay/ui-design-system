@@ -25,7 +25,9 @@ import {
   getAccentAwareLayout,
 } from '../../../helpers';
 import type { BhCandidateComparisonProps, ComparisonCandidate } from '../../core';
+import { getCandidateFullName, getCandidateRole, getCandidateExperience } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -33,28 +35,16 @@ import type { DesignTokens } from '../../../../../types';
 
 const MOCK_CANDIDATES: ComparisonCandidate[] = [
   {
-    id: 'c-1',
-    name: 'Sarah Johnson',
+    candidate: { id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google', yearsOfExperience: 8 } as unknown as DBCandidate,
     scores: { 'Technical': 92, 'Communication': 85, 'Leadership': 78, 'Problem Solving': 90, 'Culture Fit': 88 },
-    experience: '8 years',
-    education: 'M.S. Computer Science',
-    status: 'Final Round',
   },
   {
-    id: 'c-2',
-    name: 'Michael Chen',
+    candidate: { id: 'c-2', firstName: 'Michael', lastName: 'Chen', currentTitle: 'Full Stack Developer', currentCompany: 'Stripe', yearsOfExperience: 6 } as unknown as DBCandidate,
     scores: { 'Technical': 88, 'Communication': 92, 'Leadership': 85, 'Problem Solving': 82, 'Culture Fit': 90 },
-    experience: '6 years',
-    education: 'B.S. Software Engineering',
-    status: 'Final Round',
   },
   {
-    id: 'c-3',
-    name: 'Emily Rodriguez',
+    candidate: { id: 'c-3', firstName: 'Emily', lastName: 'Rodriguez', currentTitle: 'Staff Engineer', currentCompany: 'Meta', yearsOfExperience: 10 } as unknown as DBCandidate,
     scores: { 'Technical': 95, 'Communication': 78, 'Leadership': 72, 'Problem Solving': 94, 'Culture Fit': 80 },
-    experience: '10 years',
-    education: 'Ph.D. Computer Science',
-    status: 'Offer Pending',
   },
 ];
 
@@ -93,7 +83,7 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = MOCK_CANDIDATES,
+      candidates = [],
       dimensions,
       title = 'Candidate Comparison',
       onCandidateSelect,
@@ -131,7 +121,7 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
         let best = { value: 0, candidateId: '' };
         candidates.forEach(c => {
           if ((c.scores[dim] ?? 0) > best.value) {
-            best = { value: c.scores[dim] ?? 0, candidateId: c.id };
+            best = { value: c.scores[dim] ?? 0, candidateId: c.candidate.id };
           }
         });
         bests[dim] = best;
@@ -193,23 +183,27 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
               gap: t.spacing[3],
               marginBottom: t.spacing[5],
             }}>
-              {candidates.slice(0, 4).map((candidate, i) => {
+              {candidates.slice(0, 4).map((compCandidate, i) => {
                 const color = getCandidateColor(i, t);
-                const isHighlighted = highlightedId === candidate.id;
-                const totalScore = dims.reduce((s, d) => s + (candidate.scores[d] ?? 0), 0);
+                const cand = compCandidate.candidate;
+                const name = getCandidateFullName(cand);
+                const roleStr = getCandidateRole(cand);
+                const expStr = getCandidateExperience(cand);
+                const isHighlighted = highlightedId === cand.id;
+                const totalScore = dims.reduce((s, d) => s + (compCandidate.scores[d] ?? 0), 0);
                 const avgScore = dims.length > 0 ? Math.round(totalScore / dims.length) : 0;
 
                 return (
                   <Box
-                    key={candidate.id}
+                    key={cand.id}
                     tabIndex={0}
                     role="button"
-                    aria-label={`${candidate.name}, average score ${avgScore}`}
-                    onClick={() => handleSelect(candidate.id)}
+                    aria-label={`${name}, average score ${avgScore}`}
+                    onClick={() => handleSelect(cand.id)}
                     onKeyDown={(e: React.KeyboardEvent) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        handleSelect(candidate.id);
+                        handleSelect(cand.id);
                       }
                     }}
                     style={{
@@ -242,7 +236,7 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
                         fontWeight: t.typography.fontWeight.bold,
                         color: t.colors.common.white,
                       }}>
-                        {candidate.name.charAt(0)}
+                        {name.charAt(0)}
                       </Text>
                     </Box>
                     <Text style={{
@@ -251,24 +245,20 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
                       color: t.colors.neutral[900],
                       marginBottom: t.spacing[1],
                     }}>
-                      {candidate.name}
+                      {name}
                     </Text>
-                    <Box style={{
-                      ...createBadgeStyle(t, 'primary'),
-                      borderRadius: badgeRadius,
-                      justifyContent: 'center',
-                      marginBottom: t.spacing[2],
-                    }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{candidate.status}</Text>
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1], marginBottom: t.spacing[1] }}>
-                      <Briefcase size={11} color={t.colors.neutral[400]} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{candidate.experience}</Text>
-                    </Box>
-                    <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1] }}>
-                      <GraduationCap size={11} color={t.colors.neutral[400]} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{candidate.education}</Text>
-                    </Box>
+                    {roleStr && (
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1], marginBottom: t.spacing[1] }}>
+                        <Briefcase size={11} color={t.colors.neutral[400]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{roleStr}</Text>
+                      </Box>
+                    )}
+                    {expStr && (
+                      <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1] }}>
+                        <Award size={11} color={t.colors.neutral[400]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{expStr}</Text>
+                      </Box>
+                    )}
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
                       marginTop: t.spacing[3],
                       padding: `${t.spacing[2]}px 0`,
@@ -315,7 +305,7 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
                   </Text>
                 </Box>
                 {candidates.slice(0, 4).map((c, i) => (
-                  <Box key={c.id} style={{
+                  <Box key={c.candidate.id} style={{
                     padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                     textAlign: 'center',
                   }}>
@@ -324,7 +314,7 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
                       fontWeight: t.typography.fontWeight.semibold,
                       color: getCandidateColor(i, t),
                     }}>
-                      {c.name.split(' ')[0]}
+                      {(c.candidate.firstName ?? '').split(' ')[0] || getCandidateFullName(c.candidate).split(' ')[0]}
                     </Text>
                   </Box>
                 ))}
@@ -351,9 +341,9 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
                   </Box>
                   {candidates.slice(0, 4).map((c) => {
                     const score = c.scores[dim] ?? 0;
-                    const isBest = bestScores[dim]?.candidateId === c.id;
+                    const isBest = bestScores[dim]?.candidateId === c.candidate.id;
                     return (
-                      <Box key={c.id} style={{
+                      <Box key={c.candidate.id} style={{
                         padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                         textAlign: 'center',
                         backgroundColor: isBest ? t.colors.successScale[50] : 'transparent',

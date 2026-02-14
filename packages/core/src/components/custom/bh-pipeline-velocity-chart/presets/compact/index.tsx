@@ -101,10 +101,10 @@ export const CompactBhPipelineVelocityChart = createPreset<BhPipelineVelocityCha
     /* Metrics */
     const metrics = useMemo(() => {
       if (data.length === 0) return null;
-      const counts = data.map(d => d.count);
+      const counts = data.map(d => d.count ?? 0);
       const total = counts.reduce((s, c) => s + c, 0);
-      const avg = total / counts.length;
-      const recentAvg = counts.slice(-7).reduce((s, c) => s + c, 0) / Math.min(7, counts.length);
+      const avg = counts.length > 0 ? total / counts.length : 0;
+      const recentAvg = counts.slice(-7).reduce((s, c) => s + c, 0) / Math.min(7, Math.max(counts.length, 1));
       const prevAvg = counts.slice(0, -7).reduce((s, c) => s + c, 0) / Math.max(1, counts.length - 7);
       const trend = recentAvg >= prevAvg ? 'up' : 'down';
       const trendPct = prevAvg > 0 ? Math.abs(((recentAvg - prevAvg) / prevAvg) * 100) : 0;
@@ -116,7 +116,7 @@ export const CompactBhPipelineVelocityChart = createPreset<BhPipelineVelocityCha
     const sparkHeight = 40;
     const sparkPoints = useMemo(() => {
       if (data.length < 2) return [];
-      const counts = data.map(d => d.count);
+      const counts = data.map(d => d.count ?? 0);
       const maxVal = Math.max(...counts, 1);
       const minVal = Math.min(...counts, 0);
       const range = maxVal - minVal || 1;

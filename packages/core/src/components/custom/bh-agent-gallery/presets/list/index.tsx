@@ -575,7 +575,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
                               <Star size={12} strokeWidth={2} style={{ color: tokens.colors.warningScale[500], fill: tokens.colors.warningScale[500] }} />
                               <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[700] }}>
-                                {agent.rating.toFixed(1)}
+                                {(agent.rating ?? 0).toFixed(1)}
                               </Text>
                             </Box>
                           )}
@@ -766,7 +766,7 @@ export const ListBhAgentGallery = createPreset<BhAgentGalleryProps>({
                   >
                     <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.infoScale[700], fontWeight: tokens.typography.fontWeight.medium }}>Est. Cost</Text>
                     <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.infoScale[800] }}>
-                      ${previewData.estimatedCost.toFixed(2)}
+                      ${(previewData.estimatedCost ?? 0).toFixed(2)}
                     </Text>
                   </Box>
                 )}

@@ -76,7 +76,7 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
     const STAGE_COLORS = useMemo(() => getStageColors(tokens), [tokens]);
 
     const {
-      jobs, stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
+      jobs = [], stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
       selectedJobs: controlledSelectedJobs, onSelectionChange, searchQuery: controlledSearchQuery, onSearchChange,
       emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments = [], clients = [], className, style,
     } = props;
@@ -116,27 +116,27 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
     const handleDragEnd = useCallback(() => { setDragState(null); setDragOverColumn(null); }, []);
 
     const filteredJobs = useMemo(() => {
-      let result = [...jobs];
+      let result = [...(jobs as JobItem[])];
       if (filters.department) result = result.filter(j => j.department === filters.department);
       if (filters.urgency) result = result.filter(j => j.urgency === filters.urgency);
       if (filters.clientId) result = result.filter(j => j.clientName === clients.find(c => c.id === filters.clientId)?.name);
       if (searchQuery) {
         const lower = searchQuery.toLowerCase();
-        result = result.filter(j => j.title.toLowerCase().includes(lower) || j.code.toLowerCase().includes(lower) || j.department.toLowerCase().includes(lower) || j.location.toLowerCase().includes(lower) || (j.clientName && j.clientName.toLowerCase().includes(lower)));
+        result = result.filter(j => (j.title || '').toLowerCase().includes(lower) || (j.code || '').toLowerCase().includes(lower) || (j.department || '').toLowerCase().includes(lower) || (j.location || '').toLowerCase().includes(lower) || (j.clientName && j.clientName.toLowerCase().includes(lower)));
       }
       return result;
     }, [jobs, filters, searchQuery, clients]);
 
     const jobsByStatus = useMemo(() => {
       const grouped: Record<JobStatus, JobItem[]> = { draft: [], published: [], paused: [], closed: [] };
-      filteredJobs.forEach(job => grouped[job.status].push(job));
+      filteredJobs.forEach(job => { if (grouped[job.status]) grouped[job.status].push(job); });
       Object.values(grouped).forEach(arr => arr.sort((a, b) => b.daysOpen - a.daysOpen));
       return grouped;
     }, [filteredJobs]);
 
     /* Kanban Card */
     const renderKanbanCard = (job: JobItem, idx: number) => {
-      const urgencyCfg = URGENCY_CONFIG[job.urgency];
+      const urgencyCfg = URGENCY_CONFIG[job.urgency] || URGENCY_CONFIG.medium;
       const isHovered = hoveredJobId === job.id;
       const isDragging = dragState?.jobId === job.id;
       const isSelected = selectedJobs.includes(job.id);
@@ -193,14 +193,14 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
             <Text style={{ fontSize: '10px', color: tokens.colors.neutral[600], fontWeight: tokens.typography.fontWeight.medium, marginBottom: 4 }}>{job.candidateCount} candidates</Text>
             {/* SVG mini-bar - allowed */}
             {(() => {
-              const total = job.candidatesByStage.reduce((sum, s) => sum + s.count, 0);
+              const total = (job.candidatesByStage || []).reduce((sum, s) => sum + s.count, 0);
               if (total === 0) return <Box style={{ height: 5, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], width: '100%' }} />;
               const W = 160, H = 5;
               let x = 0;
               return (
                 <svg width="100%" height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ borderRadius: tokens.borderRadius.full, overflow: 'hidden' as const, display: 'block' }}>
                   <rect x={0} y={0} width={W} height={H} fill={tokens.colors.neutral[100]} rx={2.5} />
-                  {job.candidatesByStage.map((stage, si) => { const w = (stage.count / total) * W; const cx = x; x += w; return <rect key={stage.stage} x={cx} y={0} width={w} height={H} fill={STAGE_COLORS[si % STAGE_COLORS.length]} rx={si === 0 ? 2.5 : 0} />; })}
+                  {(job.candidatesByStage || []).map((stage, si) => { const w = (stage.count / total) * W; const cx = x; x += w; return <rect key={stage.stage} x={cx} y={0} width={w} height={H} fill={STAGE_COLORS[si % STAGE_COLORS.length]} rx={si === 0 ? 2.5 : 0} />; })}
                 </svg>
               );
             })()}
@@ -213,14 +213,14 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
                 <Text style={{ fontSize: '10px', fontWeight: tokens.typography.fontWeight.medium, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[500] }}>{job.daysOpen}d</Text>
               </Box>
               <Box style={{ display: 'flex', alignItems: 'center' }}>
-                {job.recruiterAvatars.slice(0, 2).map((avatar, ai) => (
+                {(job.recruiterAvatars || []).slice(0, 2).map((avatar, ai) => (
                   <Box key={ai} style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, marginLeft: ai > 0 ? -7 : 0, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 2 - ai }}>
                     {!avatar && <Users size={8} color={tokens.colors.primaryScale[600]} />}
                   </Box>
                 ))}
-                {job.recruiterAvatars.length > 2 && (
+                {(job.recruiterAvatars || []).length > 2 && (
                   <Box style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, marginLeft: -7, backgroundColor: tokens.colors.neutral[100], display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: '8px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{job.recruiterAvatars.length - 2}</Text>
+                    <Text style={{ fontSize: '8px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{(job.recruiterAvatars || []).length - 2}</Text>
                   </Box>
                 )}
               </Box>

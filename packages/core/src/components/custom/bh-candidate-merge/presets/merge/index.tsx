@@ -24,16 +24,18 @@ import {
   createEmptyStateStyle,
   getAccentAwareLayout,
 } from '../../../helpers';
-import type { BhCandidateMergeProps, MergeCandidate, MergeField } from '../../core';
+import type { BhCandidateMergeProps, MergeField } from '../../core';
+import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_CANDIDATES: MergeCandidate[] = [
-  { id: 'mc-1', name: 'Sarah Johnson', email: 'sarah.johnson@gmail.com', phone: '+1 (555) 123-4567', source: 'LinkedIn', appliedAt: '2026-01-10' },
-  { id: 'mc-2', name: 'Sarah M. Johnson', email: 's.johnson@yahoo.com', phone: '+1 (555) 123-4567', source: 'Career Page', appliedAt: '2026-01-15' },
+const MOCK_CANDIDATES: DBCandidate[] = [
+  { id: 'mc-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@gmail.com', phone: '+1 (555) 123-4567', source: 'linkedin' } as DBCandidate,
+  { id: 'mc-2', firstName: 'Sarah M.', lastName: 'Johnson', email: 's.johnson@yahoo.com', phone: '+1 (555) 123-4567', source: 'career_page' } as DBCandidate,
 ];
 
 const MOCK_FIELDS: MergeField[] = [
@@ -73,13 +75,13 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = MOCK_CANDIDATES,
-      mergeFields = MOCK_FIELDS,
+      candidates = [],
+      mergeFields = [],
       title = 'Merge Duplicates',
       onFieldSelect,
       onMerge,
       onCancel,
-      confidenceScore = 87,
+      confidenceScore = 0,
       loading,
       className,
       style,
@@ -169,7 +171,9 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
           backgroundColor: t.colors.neutral[50],
         }}>
-          {candidates.map((candidate, i) => (
+          {candidates.map((candidate, i) => {
+            const fullName = getCandidateFullName(candidate);
+            return (
             <Box key={candidate.id} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
               ...animStyle(i),
               padding: t.spacing[3],
@@ -194,17 +198,18 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
                   fontWeight: t.typography.fontWeight.bold,
                   color: i === 0 ? t.colors.primaryScale[700] : t.colors.warningScale[700],
                 }}>
-                  {candidate.name.charAt(0)}
+                  {fullName.charAt(0)}
                 </Text>
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
-                {candidate.name}
+                {fullName}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                via {candidate.source}
+                via {candidate.source ?? 'Unknown'}
               </Text>
             </Box>
-          ))}
+            );
+          })}
         </Box>
 
         {/* Field merge rows */}

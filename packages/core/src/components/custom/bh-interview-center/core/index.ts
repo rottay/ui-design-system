@@ -1,34 +1,48 @@
 /**
  * BhInterviewCenter - Core Interface
  * Interview Management Hub for the BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBInterview[] directly - no mapping needed.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBInterview } from '@rottay/recruiter';
 
 export type BhInterviewCenterPreset = 'calendar' | 'list' | 'timeline';
 
-export type InterviewType = 'ai' | 'human';
+/**
+ * Re-export the DB type for convenience.
+ * Consumers can import { RecruiterInterview } from the DS or use DBInterview from @rottay/recruiter.
+ */
+export type RecruiterInterview = DBInterview;
 
-export type InterviewStatus = 'scheduled' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+/**
+ * Interview status values the UI cares about for filtering/display.
+ * Subset of the full InterviewStatus in the DB schema.
+ */
+export type InterviewDisplayStatus =
+  | 'pending'
+  | 'scheduled'
+  | 'invitation_sent'
+  | 'ready'
+  | 'in_progress'
+  | 'completed'
+  | 'scored'
+  | 'approved'
+  | 'cancelled'
+  | 'expired'
+  | 'no_show'
+  | 'technical_issue'
+  | 'candidate_declined';
+
+/**
+ * Interview mode from the DB schema.
+ */
+export type InterviewDisplayMode = 'ai_voice' | 'ai_chat' | 'human_video' | 'human_phone' | 'in_person';
 
 export type CalendarView = 'month' | 'week' | 'day';
-
-export interface InterviewItem {
-  id: string;
-  candidateName: string;
-  candidateAvatar?: string;
-  jobTitle: string;
-  stageName: string;
-  type: InterviewType;
-  status: InterviewStatus;
-  dateTime: string;
-  duration: number;
-  score?: number;
-  recruiterName?: string;
-  agentName?: string;
-  location?: string;
-}
 
 export interface InterviewStats {
   scheduledToday: number;
@@ -41,8 +55,8 @@ export interface InterviewStats {
 }
 
 export interface InterviewFilter {
-  status?: InterviewStatus | null;
-  type?: InterviewType | null;
+  status?: InterviewDisplayStatus | null;
+  mode?: InterviewDisplayMode | null;
   dateRange?: [string, string];
   jobId?: string | null;
   recruiterId?: string | null;
@@ -50,12 +64,20 @@ export interface InterviewFilter {
 
 export type SortDirection = 'asc' | 'desc';
 
+/**
+ * Backward-compatible type aliases.
+ * These were removed/renamed but are still referenced by consumers.
+ */
+export type InterviewType = InterviewDisplayMode;
+export type InterviewStatus = InterviewDisplayStatus;
+export type InterviewItem = InterviewFilter;
+
 export interface BhInterviewCenterProps extends EngineAwareProps {
   /** Preset to use */
   preset?: BhInterviewCenterPreset;
 
-  /** Interview items to display */
-  interviews: InterviewItem[];
+  /** Interview items to display - accepts DBInterview[] directly from @rottay/recruiter */
+  interviews?: DBInterview[];
 
   /** Summary statistics */
   stats?: InterviewStats;
@@ -106,6 +128,64 @@ export interface BhInterviewCenterProps extends EngineAwareProps {
 export const BH_INTERVIEW_CENTER_DEFAULTS: Partial<BhInterviewCenterProps> = {
   preset: 'calendar',
   calendarView: 'week',
-  sortBy: 'dateTime',
+  sortBy: 'scheduledAt',
   sortDirection: 'asc',
 };
+
+// ---------------------------------------------------------------------------
+// Helpers for deriving display values from DBInterview
+// ---------------------------------------------------------------------------
+
+/** Whether an interview is AI-based (ai_voice or ai_chat) */
+export function isAiInterview(interview: DBInterview): boolean {
+  return interview.interviewMode === 'ai_voice' || interview.interviewMode === 'ai_chat';
+}
+
+/** Human-readable label for interview mode */
+export function getInterviewModeLabel(mode: string | null | undefined): string {
+  const labels: Record<string, string> = {
+    ai_voice: 'AI Voice',
+    ai_chat: 'AI Chat',
+    human_video: 'Video',
+    human_phone: 'Phone',
+    in_person: 'In Person',
+  };
+  return labels[mode ?? ''] ?? 'Unknown';
+}
+
+/** Human-readable label for interview status */
+export function getInterviewStatusLabel(status: string | null | undefined): string {
+  const labels: Record<string, string> = {
+    pending: 'Pending',
+    scheduled: 'Scheduled',
+    invitation_sent: 'Invitation Sent',
+    ready: 'Ready',
+    in_progress: 'In Progress',
+    completed: 'Completed',
+    scored: 'Scored',
+    approved: 'Approved',
+    cancelled: 'Cancelled',
+    expired: 'Expired',
+    no_show: 'No Show',
+    technical_issue: 'Technical Issue',
+    candidate_declined: 'Declined',
+  };
+  return labels[status ?? ''] ?? 'Unknown';
+}
+
+/** Get the effective date string from a DBInterview (scheduledAt or createdAt) */
+export function getInterviewDateStr(interview: DBInterview): string {
+  if (interview.scheduledAt) return new Date(interview.scheduledAt).toISOString();
+  return new Date(interview.createdAt).toISOString();
+}
+
+/** Get the effective duration in minutes */
+export function getInterviewDuration(interview: DBInterview): number {
+  return interview.actualDurationMinutes ?? interview.scheduledDurationMinutes ?? 30;
+}
+
+/** Get score as a number, or undefined */
+export function getInterviewScore(interview: DBInterview): number | undefined {
+  if (interview.score == null) return undefined;
+  return Number(interview.score);
+}

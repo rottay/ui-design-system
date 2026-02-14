@@ -38,12 +38,13 @@ import {
 
 const VARIANT_COLORS = ['primaryScale', 'secondaryScale', 'infoScale', 'warningScale'] as const;
 
-function getStatusInfo(status: BhAgentAbTestProps['status'], t: DesignTokens) {
+function getStatusInfo(status: BhAgentAbTestProps['status'] | undefined, t: DesignTokens) {
   switch (status) {
     case 'draft': return { bg: t.colors.neutral[100], color: t.colors.neutral[600], label: 'Draft', badgeColor: 'secondary' as const };
     case 'running': return { bg: t.colors.successScale[100], color: t.colors.successScale[700], label: 'Running', badgeColor: 'success' as const };
     case 'completed': return { bg: t.colors.primaryScale[100], color: t.colors.primaryScale[700], label: 'Completed', badgeColor: 'primary' as const };
-    case 'paused': return { bg: t.colors.warningScale[100], color: t.colors.warningScale[700], label: 'Paused', badgeColor: 'warning' as const };
+    case 'paused':
+    default: return { bg: t.colors.warningScale[100], color: t.colors.warningScale[700], label: 'Paused', badgeColor: 'warning' as const };
   }
 }
 
@@ -56,7 +57,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
     const {
       testName = 'A/B Test',
       variants = [],
-      status,
+      status = 'draft',
       startDate,
       endDate,
       onTrafficChange,
@@ -89,8 +90,8 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
     // Find winner (highest avg score with enough conversations)
     const winner = useMemo(() => {
       if (status !== 'completed' || variants.length < 2) return null;
-      const sorted = [...variants].sort((a, b) => b.metrics.avgScore - a.metrics.avgScore);
-      if (sorted[0].metrics.conversations > 10) return sorted[0];
+      const sorted = [...variants].sort((a, b) => (b.metrics?.avgScore ?? 0) - (a.metrics?.avgScore ?? 0));
+      if ((sorted[0].metrics?.conversations ?? 0) > 10) return sorted[0];
       return null;
     }, [variants, status]);
 
@@ -334,7 +335,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Conversations</Text>
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                        {variant.metrics.conversations.toLocaleString()}
+                        {(variant.metrics?.conversations ?? 0).toLocaleString()}
                       </Text>
                     </Box>
 
@@ -344,7 +345,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Avg Score</Text>
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                        {variant.metrics.avgScore.toFixed(1)}
+                        {(variant.metrics?.avgScore ?? 0).toFixed(1)}
                       </Text>
                     </Box>
 
@@ -354,7 +355,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Completion</Text>
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                        {variant.metrics.completionRate.toFixed(0)}%
+                        {(variant.metrics?.completionRate ?? 0).toFixed(0)}%
                       </Text>
                     </Box>
 
@@ -364,7 +365,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Avg Duration</Text>
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                        {variant.metrics.avgDuration.toFixed(0)}s
+                        {(variant.metrics?.avgDuration ?? 0).toFixed(0)}s
                       </Text>
                     </Box>
                   </Box>

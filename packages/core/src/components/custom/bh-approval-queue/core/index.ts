@@ -3,9 +3,18 @@
  * Pending Approvals Queue for BitHire ATS platform
  */
 
+/**
+ * BhApprovalQueue - Core Interface
+ * DB Reference: DBApprovalRequest from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBApprovalRequest } from '@rottay/recruiter';
+
+/** Re-export for consumer convenience */
+export type { DBApprovalRequest };
 
 export type BhApprovalQueuePreset = 'standard';
 

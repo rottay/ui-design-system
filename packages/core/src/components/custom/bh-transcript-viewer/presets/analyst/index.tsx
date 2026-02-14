@@ -378,7 +378,7 @@ export const AnalystBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
                           <Box style={bar.fill} />
                         </Box>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>
-                          {(ev.highlight.confidence * 100).toFixed(0)}%
+                          {((ev.highlight.confidence ?? 0) * 100).toFixed(0)}%
                         </Text>
                       </Box>
                     </Box>

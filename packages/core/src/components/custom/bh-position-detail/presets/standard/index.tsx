@@ -153,11 +153,9 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
 
     const {
-      positionInfo,
-      requirements,
+      position,
       linkedJobs = [],
       teamAssignments = [],
-      financials,
       slaMonitor,
       events = [],
       onTabChange,
@@ -168,6 +166,40 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
       className,
       style,
     } = props;
+
+    /* ---- DB field adapters ---- */
+    const positionInfo = useMemo(() => ({
+      title: position?.title ?? '',
+      clientName: (position as any)?.clientName ?? '',
+      status: (position?.status ?? 'open') as string,
+      deadline: position?.targetCloseDate ? new Date(position.targetCloseDate as any) : new Date(),
+      feeStructure: (position?.feeType ?? 'percentage') as string,
+    }), [position]);
+
+    const requirements = useMemo(() => {
+      if (!position) return null;
+      const salaryRange = position.salaryRange as Record<string, any> | null;
+      return {
+        description: position.description ?? '',
+        headcount: position.openings ?? 1,
+        filled: position.filledCount ?? 0,
+        skills: ((position as any)?.skills ?? []) as string[],
+        seniority: position.seniorityLevel ?? 'mid',
+        location: position.workMode ?? 'onsite',
+        salaryMin: salaryRange?.min ?? 0,
+        salaryMax: salaryRange?.max ?? 0,
+      };
+    }, [position]);
+
+    const financials = useMemo(() => {
+      if (!position) return null;
+      return {
+        feeType: position.feeType ?? 'percentage',
+        amount: Number(position.feePercentage ?? 0),
+        projectedCost: Number((position as any)?.projectedCost ?? 0),
+        actualCost: Number((position as any)?.actualCost ?? 0),
+      };
+    }, [position]);
 
     /* ---- internal state ---- */
     const [activeTab, setActiveTab] = useState<PositionTab>('overview');

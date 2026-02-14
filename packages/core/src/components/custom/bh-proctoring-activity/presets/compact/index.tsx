@@ -73,7 +73,7 @@ function getEventTypeLabel(type: ProctoringEventType): string {
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -115,7 +115,7 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
     const displayEvents = useMemo(() => {
-      const sorted = [...events].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      const sorted = [...events].sort((a, b) => (b.timestamp?.getTime?.() ?? 0) - (a.timestamp?.getTime?.() ?? 0));
       return sorted.slice(0, maxItems);
     }, [events, maxItems]);
 
@@ -175,15 +175,15 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
           )}
 
           {displayEvents.map((event, index) => {
-            const EventIcon = getEventTypeIcon(event.eventType);
-            const sevColor = getSeverityColor(event.severity, t);
+            const EventIcon = getEventTypeIcon(event.eventType ?? 'tab_switch');
+            const sevColor = getSeverityColor(event.severity ?? 'low', t);
 
             return (
               <Box
                 key={event.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${event.candidateName}: ${getEventTypeLabel(event.eventType)}`}
+                aria-label={`${event.candidateName}: ${getEventTypeLabel(event.eventType ?? 'tab_switch')}`}
                 onClick={() => handleClick(event.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(event.id); } }}
                 style={{
@@ -227,12 +227,12 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
                       color: t.colors.neutral[500],
                       whiteSpace: 'nowrap',
                     }}>
-                      {getEventTypeLabel(event.eventType)}
+                      {getEventTypeLabel(event.eventType ?? 'tab_switch')}
                     </Text>
                   </Box>
                   {showTimestamps && (
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                      {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                      {event.timestamp ? formatDistanceToNow(event.timestamp, { addSuffix: true }) : ''}
                     </Text>
                   )}
                 </Box>

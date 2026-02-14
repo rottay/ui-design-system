@@ -76,7 +76,7 @@ export const CompactBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
       return departments.map(dept => {
         const deptData = data.filter(d => d.department === dept.name);
         const avg = deptData.length > 0
-          ? deptData.reduce((s, d) => s + d.days, 0) / deptData.length
+          ? deptData.reduce((s, d) => s + (d.days ?? 0), 0) / deptData.length
           : 0;
         return { name: dept.name, avg: Math.round(avg), color: dept.color };
       });

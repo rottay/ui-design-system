@@ -28,9 +28,12 @@ const EMPTY_FORM: PositionFormData = {
   title: '',
   clientId: '',
   department: '',
-  priority: 'medium',
+  priority: 'normal',
   description: '',
-  requirements: [],
+  requirements: '',
+  fillType: 'permanent',
+  seniorityLevel: 'mid',
+  workMode: 'onsite',
 };
 
 const DEFAULT_CLIENTS = [
@@ -85,7 +88,7 @@ export const CompactBhPositionForm = createPreset<BhPositionFormProps>({
     const [form, setForm] = useState<PositionFormData>({
       ...EMPTY_FORM,
       ...initialData,
-    });
+    } as PositionFormData);
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -176,9 +179,11 @@ export const CompactBhPositionForm = createPreset<BhPositionFormProps>({
             aria-label="Priority"
             style={{ ...createInputStyle(t, false), cursor: 'pointer' }}
           >
-            <option value="high">High Priority</option>
-            <option value="medium">Medium Priority</option>
-            <option value="low">Low Priority</option>
+            <option value="critical">Critical</option>
+            <option value="urgent">Urgent</option>
+            <option value="high">High</option>
+            <option value="normal">Normal</option>
+            <option value="low">Low</option>
           </select>
         </Box>
 

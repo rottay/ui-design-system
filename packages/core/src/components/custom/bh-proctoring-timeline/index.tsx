@@ -13,7 +13,8 @@ export {
   type BhProctoringTimelinePreset,
   type ProctoringEventType,
   type ProctoringEventSeverity,
-  type TimelineEvent,
+  type TimelineEventView,
+  type ProctoringEventSelect,
   BH_PROCTORING_TIMELINE_DEFAULTS,
 } from './core';
 

@@ -91,7 +91,7 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
 
-    const maxCount = useMemo(() => Math.max(...stages.map(s => s.count), 1), [stages]);
+    const maxCount = useMemo(() => Math.max(...stages.map(s => s.count ?? 0), 1), [stages]);
 
     const handleStageClick = useCallback((name: string) => {
       onStageClick?.(name);
@@ -160,7 +160,7 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
             style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}
           >
             {stages.map((stage, i) => {
-              const barWidth = (stage.count / maxCount) * 100;
+              const barWidth = ((stage.count ?? 0) / maxCount) * 100;
               const stageColor = getStageColor(i, t, stage.color);
               const isHovered = hoveredStage === stage.name;
               const isSelected = selectedStage === stage.name;
@@ -171,14 +171,14 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
                   <Box
                     role="listitem"
                     tabIndex={0}
-                    aria-label={`${stage.name}: ${stage.count} candidates, ${stage.conversionRate}% conversion`}
-                    onClick={() => handleStageClick(stage.name)}
-                    onMouseEnter={() => setHoveredStage(stage.name)}
+                    aria-label={`${stage.name ?? 'Unknown'}: ${stage.count ?? 0} candidates, ${stage.conversionRate ?? 0}% conversion`}
+                    onClick={() => handleStageClick((stage.name ?? ''))}
+                    onMouseEnter={() => setHoveredStage((stage.name ?? null))}
                     onMouseLeave={() => setHoveredStage(null)}
                     onKeyDown={(e: React.KeyboardEvent) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        handleStageClick(stage.name);
+                        handleStageClick((stage.name ?? ''));
                       }
                     }}
                     style={{
@@ -236,7 +236,7 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
                             fontWeight: t.typography.fontWeight.bold,
                             color: t.colors.common.white,
                           }}>
-                            {stage.count.toLocaleString()}
+                            {(stage.count ?? 0).toLocaleString()}
                           </Text>
                         </Box>
                       </Box>
@@ -244,13 +244,13 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
 
                     {/* Conversion badge */}
                     <Box style={{
-                      ...createBadgeStyle(t, stage.conversionRate >= 50 ? 'success' : stage.conversionRate >= 25 ? 'warning' : 'error'),
+                      ...createBadgeStyle(t, (stage.conversionRate ?? 0) >= 50 ? 'success' : (stage.conversionRate ?? 0) >= 25 ? 'warning' : 'error'),
                       borderRadius: badgeRadius,
                       minWidth: 52,
                       justifyContent: 'center',
                     }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                        {stage.conversionRate}%
+                        {stage.conversionRate ?? 0}%
                       </Text>
                     </Box>
                   </Box>
@@ -296,8 +296,8 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
                   fontWeight: t.typography.fontWeight.bold,
                   color: t.colors.neutral[900],
                 }}>
-                  {stages.length > 1
-                    ? `${((stages[stages.length - 1].count / stages[0].count) * 100).toFixed(1)}%`
+                  {stages.length > 1 && (stages[0].count ?? 0) > 0
+                    ? `${(((stages[stages.length - 1].count ?? 0) / (stages[0].count ?? 1)) * 100).toFixed(1)}%`
                     : '100%'}
                 </Text>
               </Box>

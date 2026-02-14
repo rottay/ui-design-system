@@ -1170,7 +1170,7 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                   )}
 
                   {transcript.map((line, i) => {
-                    const isAgent = line.speaker.toLowerCase() === 'agent';
+                    const isAgent = (line.speaker || '').toLowerCase() === 'agent';
                     return (
                       <Box
                         key={`transcript-${i}`}
@@ -1252,9 +1252,9 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                     }}
                   >
                     {[
-                      { label: 'LLM Tokens', value: costEstimate.tokens.toLocaleString(), unit: 'tokens', cost: costEstimate.tokens * 0.000003 },
-                      { label: 'Voice Minutes', value: costEstimate.voiceMinutes.toFixed(1), unit: 'min', cost: costEstimate.voiceMinutes * 0.02 },
-                      { label: 'API Calls', value: costEstimate.apiCalls.toString(), unit: 'calls', cost: costEstimate.apiCalls * 0.001 },
+                      { label: 'LLM Tokens', value: (costEstimate.tokens ?? 0).toLocaleString(), unit: 'tokens', cost: (costEstimate.tokens ?? 0) * 0.000003 },
+                      { label: 'Voice Minutes', value: (costEstimate.voiceMinutes ?? 0).toFixed(1), unit: 'min', cost: (costEstimate.voiceMinutes ?? 0) * 0.02 },
+                      { label: 'API Calls', value: (costEstimate.apiCalls ?? 0).toString(), unit: 'calls', cost: (costEstimate.apiCalls ?? 0) * 0.001 },
                     ].map((row, i) => (
                       <Box
                         key={row.label}

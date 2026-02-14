@@ -9,13 +9,13 @@ import type { EngineAwareProps } from '../../../../types';
 export type BhTimeToHireChartPreset = 'chart' | 'compact';
 
 export interface TimeToHireDataPoint {
-  date: string;
-  department: string;
-  days: number;
+  date?: string;
+  department?: string;
+  days?: number;
 }
 
 export interface DepartmentConfig {
-  name: string;
+  name?: string;
   color?: string;
 }
 
@@ -23,10 +23,10 @@ export interface BhTimeToHireChartProps extends EngineAwareProps {
   preset?: BhTimeToHireChartPreset;
 
   /** Data points for the chart */
-  data: TimeToHireDataPoint[];
+  data?: TimeToHireDataPoint[];
 
   /** Department configurations */
-  departments: DepartmentConfig[];
+  departments?: DepartmentConfig[];
 
   /** Target days to hire (draws horizontal line) */
   targetDays?: number;

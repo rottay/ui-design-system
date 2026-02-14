@@ -1,6 +1,12 @@
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBInterview } from '@rottay/recruiter';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 export type BhInterviewReplayPreset = 'full' | 'compact';
 
@@ -52,6 +58,10 @@ export interface ReplayScoreSummary {
 
 export interface BhInterviewReplayProps extends EngineAwareProps {
   preset?: BhInterviewReplayPreset;
+
+  /** Optional DB interview for pre-populating data */
+  interview?: DBInterview;
+
   transcript: TranscriptEntry[];
   scoreOverlay?: ScoreOverlayPoint[];
   evidenceMarkers?: EvidenceMarker[];

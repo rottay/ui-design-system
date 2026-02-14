@@ -44,9 +44,9 @@ const MOCK_DATA: BurndownDataPoint[] = [
 /* ------------------------------------------------------------------ */
 
 function getVelocityBadge(data: BurndownDataPoint[], t: DesignTokens): 'success' | 'warning' | 'error' | 'info' {
-  if (data.length < 2) return 'info';
+  if ((data ?? []).length < 2) return 'info';
   const last = data[data.length - 1];
-  const ratio = last.actual / Math.max(last.ideal, 1);
+  const ratio = (last?.actual ?? 0) / Math.max(last?.ideal ?? 1, 1);
   if (ratio <= 1) return 'success';
   if (ratio <= 1.15) return 'info';
   if (ratio <= 1.3) return 'warning';
@@ -54,9 +54,9 @@ function getVelocityBadge(data: BurndownDataPoint[], t: DesignTokens): 'success'
 }
 
 function getVelocityLabel(data: BurndownDataPoint[]): string {
-  if (data.length < 2) return 'No data';
+  if ((data ?? []).length < 2) return 'No data';
   const last = data[data.length - 1];
-  const ratio = last.actual / Math.max(last.ideal, 1);
+  const ratio = (last?.actual ?? 0) / Math.max(last?.ideal ?? 1, 1);
   if (ratio <= 1) return 'Ahead';
   if (ratio <= 1.15) return 'On Track';
   if (ratio <= 1.3) return 'Slightly Behind';
@@ -99,8 +99,8 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     }), [entrance]);
 
     const remainingPoints = useMemo(() => {
-      if (data.length === 0) return totalPoints;
-      return data[data.length - 1].actual;
+      if ((data ?? []).length === 0) return totalPoints ?? 0;
+      return data[data.length - 1]?.actual ?? 0;
     }, [data, totalPoints]);
 
     const completedPct = useMemo(
@@ -114,14 +114,14 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const sparkW = 200;
     const sparkH = 40;
 
-    const maxPts = useMemo(() => Math.max(totalPoints, ...data.map(d => Math.max(d.ideal, d.actual))), [data, totalPoints]);
-    const maxDay = useMemo(() => Math.max(daysTotal, ...data.map(d => d.day)), [data, daysTotal]);
+    const maxPts = useMemo(() => Math.max(totalPoints ?? 0, ...(data ?? []).map(d => Math.max(d.ideal ?? 0, d.actual ?? 0))), [data, totalPoints]);
+    const maxDay = useMemo(() => Math.max(daysTotal ?? 0, ...(data ?? []).map(d => d.day ?? 0)), [data, daysTotal]);
 
     const sparkline = useMemo(() => {
       if (data.length === 0) return '';
       return data.map((d, i) => {
-        const x = (d.day / maxDay) * sparkW;
-        const y = (1 - d.actual / maxPts) * sparkH;
+        const x = ((d.day ?? 0) / maxDay) * sparkW;
+        const y = (1 - (d.actual ?? 0) / maxPts) * sparkH;
         return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
       }).join(' ');
     }, [data, maxDay, maxPts]);
@@ -129,8 +129,8 @@ export const CompactBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const idealLine = useMemo(() => {
       if (data.length === 0) return '';
       return data.map((d, i) => {
-        const x = (d.day / maxDay) * sparkW;
-        const y = (1 - d.ideal / maxPts) * sparkH;
+        const x = ((d.day ?? 0) / maxDay) * sparkW;
+        const y = (1 - (d.ideal ?? 0) / maxPts) * sparkH;
         return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
       }).join(' ');
     }, [data, maxDay, maxPts]);

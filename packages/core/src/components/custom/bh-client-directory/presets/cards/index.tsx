@@ -20,10 +20,39 @@ import {
   createStaggerDelay,
 } from '../../../helpers';
 import type {
-  BhClientDirectoryProps, ClientItem, ClientFilter,
-  ClientType, ClientStatus, ClientTier, ApprovalStatus,
+  BhClientDirectoryProps, ClientFilter,
+  ClientStatusFilter, ClientTierFilter, ClientTypeFilter,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+
+/* ---------------------------------------------------------------------------
+ * Local display types (enriched from DBClient for rendering)
+ * -------------------------------------------------------------------------*/
+
+type ClientStatus = 'active' | 'suspended' | 'pending_approval' | 'draft' | 'terminated' | 'archived';
+type ClientTier = 'standard' | 'premium' | 'enterprise' | 'strategic';
+
+interface ClientContact {
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+}
+
+interface ClientItem {
+  id: string;
+  name: string;
+  type: 'company' | 'individual';
+  status: ClientStatus;
+  tier: ClientTier;
+  industry: string;
+  positionsCount: number;
+  revenue: number;
+  approvalStatus?: string;
+  contacts: ClientContact[];
+  contractInfo?: { terms: string; startDate: string; endDate: string };
+  feeStructure?: { type: 'percentage' | 'retainer' | 'fixed'; value: number; currency?: string };
+}
 import {
   Search, Plus, Building2, User, ChevronDown, ChevronUp, X,
   Mail, Phone, Briefcase, DollarSign, Calendar, FileText,
@@ -34,17 +63,20 @@ import {
  * Helpers
  * -------------------------------------------------------------------------*/
 
-const STATUS_MAP: Record<ClientStatus, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
+const STATUS_MAP: Record<string, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
   active: { label: 'Active', color: t => t.colors.successScale[600], bg: t => t.colors.successScale[50] },
-  inactive: { label: 'Inactive', color: t => t.colors.neutral[500], bg: t => t.colors.neutral[100] },
-  pending_approval: { label: 'Pending', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
   suspended: { label: 'Suspended', color: t => t.colors.errorScale[600], bg: t => t.colors.errorScale[50] },
+  pending_approval: { label: 'Pending', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
+  draft: { label: 'Draft', color: t => t.colors.neutral[500], bg: t => t.colors.neutral[100] },
+  terminated: { label: 'Terminated', color: t => t.colors.errorScale[600], bg: t => t.colors.errorScale[50] },
+  archived: { label: 'Archived', color: t => t.colors.neutral[500], bg: t => t.colors.neutral[100] },
 };
 
-const TIER_MAP: Record<ClientTier, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
+const TIER_MAP: Record<string, { label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
   standard: { label: 'Standard', color: t => t.colors.primaryScale[600], bg: t => t.colors.primaryScale[50] },
   premium: { label: 'Premium', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
   enterprise: { label: 'Enterprise', color: t => t.colors.secondaryScale[600], bg: t => t.colors.secondaryScale[50] },
+  strategic: { label: 'Strategic', color: t => t.colors.infoScale[600], bg: t => t.colors.infoScale[50] },
 };
 
 function formatRevenue(v: number): string {
@@ -56,8 +88,28 @@ function formatRevenue(v: number): string {
 function formatFee(f: ClientItem['feeStructure']): string {
   if (!f) return 'N/A';
   if (f.type === 'percentage') return `${f.value}%`;
-  if (f.type === 'retainer') return `${f.currency ?? 'USD'} ${f.value.toLocaleString()}/mo`;
-  return `${f.currency ?? 'USD'} ${f.value.toLocaleString()}`;
+  if (f.type === 'retainer') return `${f.currency ?? 'USD'} ${(f.value ?? 0).toLocaleString()}/mo`;
+  return `${f.currency ?? 'USD'} ${(f.value ?? 0).toLocaleString()}`;
+}
+
+/**
+ * Map a DBClient (or any record) to the local ClientItem for rendering.
+ */
+function toClientItem(raw: any): ClientItem {
+  return {
+    id: raw.id ?? '',
+    name: raw.displayName ?? raw.clientCompanyName ?? raw.name ?? '',
+    type: raw.type ?? 'company',
+    status: raw.status ?? 'draft',
+    tier: raw.tier ?? 'standard',
+    industry: raw.industry ?? '',
+    positionsCount: raw.openPositions ?? raw.positionsCount ?? 0,
+    revenue: Number(raw.totalRevenue ?? raw.revenue ?? 0),
+    approvalStatus: raw.approvalStatus,
+    contacts: Array.isArray(raw.contacts) ? raw.contacts : [],
+    contractInfo: raw.contractInfo,
+    feeStructure: raw.feeStructure,
+  };
 }
 
 function filterClients(clients: ClientItem[], f: ClientFilter): ClientItem[] {
@@ -67,7 +119,7 @@ function filterClients(clients: ClientItem[], f: ClientFilter): ClientItem[] {
     if (f.tier && f.tier !== 'all' && c.tier !== f.tier) return false;
     if (f.search) {
       const q = f.search.toLowerCase();
-      if (!c.name.toLowerCase().includes(q) && !c.industry.toLowerCase().includes(q)) return false;
+      if (!(c.name || '').toLowerCase().includes(q) && !(c.industry || '').toLowerCase().includes(q)) return false;
     }
     return true;
   });
@@ -99,7 +151,7 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
     }, [t]);
 
     const {
-      clients = DEFAULT_CLIENTS,
+      clients: clientsProp,
       filters: filtersProp,
       onFilterChange,
       onClientSelect,
@@ -107,6 +159,11 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
       onEditClient,
       className, style,
     } = props;
+
+    const clients: ClientItem[] = useMemo(
+      () => clientsProp?.length ? clientsProp.map(toClientItem) : DEFAULT_CLIENTS,
+      [clientsProp],
+    );
 
     const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
@@ -285,8 +342,8 @@ export const CardsBhClientDirectory = createPreset<BhClientDirectoryProps>({
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: t.spacing[4] }}>
             {filtered.map((client, idx) => {
               const isExpanded = expandedCard === client.id;
-              const st = STATUS_MAP[client.status];
-              const ti = TIER_MAP[client.tier];
+              const st = STATUS_MAP[client.status] ?? STATUS_MAP.draft;
+              const ti = TIER_MAP[client.tier] ?? TIER_MAP.standard;
               const itemEntrance = createEntranceAnimation(t, { index: idx });
 
               return (

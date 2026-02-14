@@ -26,12 +26,15 @@ import {
 } from '../../../helpers';
 import type {
   BhCandidateSearchProps,
-  SearchResult,
   SavedSearch,
   SearchFilter,
   FacetCount,
 } from '../../core';
-import { getMatchScoreColor, getStatusColors, getCandidateInitials } from '../../core';
+import {
+  getMatchScoreColor, getStatusColors, getCandidateInitials,
+  getCandidateFullName, getCandidateRole, getCandidateLocation, getCandidateSkillNames,
+} from '../../core';
+import type { DBCandidate } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Search,
@@ -70,14 +73,24 @@ const DEFAULT_SAVED_SEARCHES: SavedSearch[] = [
   { id: 'ss-3', name: 'Active ML Candidates', query: 'machine learning', filters: { skills: ['Python', 'TensorFlow'], status: ['active'] }, resultCount: 23 },
 ];
 
-const DEFAULT_RESULTS: SearchResult[] = [
-  { id: 'c-1', name: 'Sarah Johnson', avatar: '', matchScore: 95, highlights: ['React', 'TypeScript', 'Next.js'], currentRole: 'Senior Frontend Engineer at Google', location: 'San Francisco, CA', skills: ['React', 'TypeScript', 'Next.js', 'GraphQL', 'Node.js'], status: 'active', email: 'sarah.j@google.com' },
-  { id: 'c-2', name: 'Michael Chen', avatar: '', matchScore: 88, highlights: ['React', 'Python', 'AWS'], currentRole: 'Full Stack Developer at Stripe', location: 'New York, NY', skills: ['React', 'Python', 'AWS', 'Docker', 'PostgreSQL'], status: 'active', email: 'm.chen@stripe.com' },
-  { id: 'c-3', name: 'Emily Rodriguez', avatar: '', matchScore: 92, highlights: ['System Design', 'Go'], currentRole: 'Staff Engineer at Meta', location: 'Seattle, WA', skills: ['Go', 'Kubernetes', 'System Design', 'gRPC', 'Terraform'], status: 'active', email: 'e.rodriguez@meta.com' },
-  { id: 'c-4', name: 'James Kim', avatar: '', matchScore: 85, highlights: ['Python', 'PyTorch'], currentRole: 'ML Engineer at Anthropic', location: 'San Francisco, CA', skills: ['Python', 'PyTorch', 'Transformers', 'CUDA', 'MLOps'], status: 'active', email: 'j.kim@anthropic.com' },
-  { id: 'c-5', name: 'Anna Kowalski', avatar: '', matchScore: 78, highlights: ['AWS', 'Terraform'], currentRole: 'DevOps Lead at Vercel', location: 'Remote', skills: ['AWS', 'Terraform', 'Docker', 'CI/CD', 'Kubernetes'], status: 'passive', email: 'a.kowalski@vercel.com' },
-  { id: 'c-6', name: 'David Thompson', avatar: '', matchScore: 91, highlights: ['Leadership', 'Architecture'], currentRole: 'VP Engineering at Linear', location: 'New York, NY', skills: ['Leadership', 'Architecture', 'TypeScript', 'React', 'PostgreSQL'], status: 'active', email: 'd.thompson@linear.app' },
+const DEFAULT_RESULTS: DBCandidate[] = [
+  { id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', avatarUrl: null, currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google', currentLocation: { city: 'San Francisco', state: 'CA' }, skills: [{ name: 'React' }, { name: 'TypeScript' }, { name: 'Next.js' }, { name: 'GraphQL' }, { name: 'Node.js' }], status: 'active', email: 'sarah.j@google.com' } as DBCandidate,
+  { id: 'c-2', firstName: 'Michael', lastName: 'Chen', avatarUrl: null, currentTitle: 'Full Stack Developer', currentCompany: 'Stripe', currentLocation: { city: 'New York', state: 'NY' }, skills: [{ name: 'React' }, { name: 'Python' }, { name: 'AWS' }, { name: 'Docker' }, { name: 'PostgreSQL' }], status: 'active', email: 'm.chen@stripe.com' } as DBCandidate,
+  { id: 'c-3', firstName: 'Emily', lastName: 'Rodriguez', avatarUrl: null, currentTitle: 'Staff Engineer', currentCompany: 'Meta', currentLocation: { city: 'Seattle', state: 'WA' }, skills: [{ name: 'Go' }, { name: 'Kubernetes' }, { name: 'System Design' }, { name: 'gRPC' }, { name: 'Terraform' }], status: 'active', email: 'e.rodriguez@meta.com' } as DBCandidate,
+  { id: 'c-4', firstName: 'James', lastName: 'Kim', avatarUrl: null, currentTitle: 'ML Engineer', currentCompany: 'Anthropic', currentLocation: { city: 'San Francisco', state: 'CA' }, skills: [{ name: 'Python' }, { name: 'PyTorch' }, { name: 'Transformers' }, { name: 'CUDA' }, { name: 'MLOps' }], status: 'active', email: 'j.kim@anthropic.com' } as DBCandidate,
+  { id: 'c-5', firstName: 'Anna', lastName: 'Kowalski', avatarUrl: null, currentTitle: 'DevOps Lead', currentCompany: 'Vercel', currentLocation: { city: 'Remote' }, skills: [{ name: 'AWS' }, { name: 'Terraform' }, { name: 'Docker' }, { name: 'CI/CD' }, { name: 'Kubernetes' }], status: 'inactive', email: 'a.kowalski@vercel.com' } as DBCandidate,
+  { id: 'c-6', firstName: 'David', lastName: 'Thompson', avatarUrl: null, currentTitle: 'VP Engineering', currentCompany: 'Linear', currentLocation: { city: 'New York', state: 'NY' }, skills: [{ name: 'Leadership' }, { name: 'Architecture' }, { name: 'TypeScript' }, { name: 'React' }, { name: 'PostgreSQL' }], status: 'active', email: 'd.thompson@linear.app' } as DBCandidate,
 ];
+
+const DEFAULT_MATCH_SCORES: Record<string, number> = {
+  'c-1': 95, 'c-2': 88, 'c-3': 92, 'c-4': 85, 'c-5': 78, 'c-6': 91,
+};
+
+const DEFAULT_HIGHLIGHTS: Record<string, string[]> = {
+  'c-1': ['React', 'TypeScript', 'Next.js'], 'c-2': ['React', 'Python', 'AWS'],
+  'c-3': ['System Design', 'Go'], 'c-4': ['Python', 'PyTorch'],
+  'c-5': ['AWS', 'Terraform'], 'c-6': ['Leadership', 'Architecture'],
+};
 
 const DEFAULT_FACETS: FacetCount[] = [
   { dimension: 'skills', value: 'React', count: 45 },
@@ -99,7 +112,7 @@ const DEFAULT_FACETS: FacetCount[] = [
 const EXPERIENCE_OPTIONS = [0, 1, 2, 3, 5, 7, 10, 15, 20];
 const EDUCATION_OPTIONS = ['Any', 'High School', "Associate's", "Bachelor's", "Master's", 'PhD'];
 const AVAILABILITY_OPTIONS = ['Any', 'Immediately', '2 weeks', '1 month', '3 months'];
-const STATUS_OPTIONS = ['active', 'passive', 'not-looking', 'hired', 'rejected'];
+const STATUS_OPTIONS = ['active', 'inactive', 'hired', 'do_not_contact', 'blacklisted'];
 const SOURCE_OPTIONS = ['LinkedIn', 'Referral', 'Job Board', 'Direct', 'Agency', 'Event'];
 
 /* ------------------------------------------------------------------ */
@@ -247,8 +260,10 @@ function CheckboxFacetList({ facets, activeValues, onToggle, tokens: t, primitiv
 /*  Candidate Result Card                                              */
 /* ------------------------------------------------------------------ */
 
-function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendOutreach, onAddToJob, tokens: t, primitives }: {
-  candidate: SearchResult;
+function CandidateResultCard({ candidate, matchScore, candidateHighlights, isSelected, onToggleSelection, onSendOutreach, onAddToJob, tokens: t, primitives }: {
+  candidate: DBCandidate;
+  matchScore: number;
+  candidateHighlights: string[];
   isSelected: boolean;
   onToggleSelection: (id: string) => void;
   onSendOutreach?: (ids: string[]) => void;
@@ -258,8 +273,12 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
 }) {
   const { Box, Text } = primitives;
   const [isHovered, setIsHovered] = useState(false);
-  const scoreColors = useMemo(() => getMatchScoreColor(candidate.matchScore, t), [candidate.matchScore, t]);
-  const statusColors = useMemo(() => getStatusColors(candidate.status, t), [candidate.status, t]);
+  const fullName = useMemo(() => getCandidateFullName(candidate), [candidate]);
+  const role = useMemo(() => getCandidateRole(candidate), [candidate]);
+  const location = useMemo(() => getCandidateLocation(candidate), [candidate]);
+  const skillNames = useMemo(() => getCandidateSkillNames(candidate), [candidate]);
+  const scoreColors = useMemo(() => getMatchScoreColor(matchScore, t), [matchScore, t]);
+  const statusColors = useMemo(() => getStatusColors(candidate.status ?? 'active', t), [candidate.status, t]);
   const cardHover = useMemo(() => createCardHoverStyles(t), [t]);
   const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
@@ -292,7 +311,7 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
         role="checkbox"
         tabIndex={0}
         aria-checked={isSelected}
-        aria-label={`Select ${candidate.name}`}
+        aria-label={`Select ${fullName}`}
         onClick={handleCheckboxClick}
         onKeyDown={handleCheckboxKey}
         style={{
@@ -315,9 +334,9 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
         fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold,
         color: t.colors.primaryScale[700],
       }}>
-        {candidate.avatar
-          ? <Box as="img" src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          : <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>{getCandidateInitials(candidate.name)}</Text>
+        {candidate.avatarUrl
+          ? <Box as="img" src={candidate.avatarUrl} alt={fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          : <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>{getCandidateInitials(fullName)}</Text>
         }
       </Box>
 
@@ -325,7 +344,7 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
       <Box style={{ flex: 1, minWidth: 0 }}>
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: 4 }}>
           <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
-            {candidate.name}
+            {fullName}
           </Text>
           <Box style={{
             display: 'inline-flex', alignItems: 'center', gap: 4,
@@ -335,22 +354,26 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
             color: statusColors.text, textTransform: 'capitalize' as const,
           }}>
             <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusColors.text }} />
-            <Text style={{ fontSize: t.typography.fontSize.xs, color: statusColors.text }}>{candidate.status.replace('-', ' ')}</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs, color: statusColors.text }}>{(candidate.status ?? 'active').replace(/_/g, ' ')}</Text>
           </Box>
         </Box>
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4], marginBottom: t.spacing[2] }}>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-            <Briefcase size={13} color={t.colors.neutral[400]} />
-            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{candidate.currentRole}</Text>
-          </Box>
-          <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-            <MapPin size={13} color={t.colors.neutral[400]} />
-            <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{candidate.location}</Text>
-          </Box>
+          {role && (
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+              <Briefcase size={13} color={t.colors.neutral[400]} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{role}</Text>
+            </Box>
+          )}
+          {location && (
+            <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
+              <MapPin size={13} color={t.colors.neutral[400]} />
+              <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{location}</Text>
+            </Box>
+          )}
         </Box>
         <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap' }}>
-          {candidate.skills.slice(0, 5).map(skill => {
-            const isHighlighted = candidate.highlights.includes(skill);
+          {skillNames.slice(0, 5).map(skill => {
+            const isHighlighted = candidateHighlights.includes(skill);
             return (
               <Box key={skill} style={{
                 padding: `2px ${t.spacing[2]}px`, borderRadius: badgeRadius,
@@ -364,16 +387,16 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
               </Box>
             );
           })}
-          {candidate.skills.length > 5 && (
+          {skillNames.length > 5 && (
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], alignSelf: 'center' }}>
-              +{candidate.skills.length - 5} more
+              +{skillNames.length - 5} more
             </Text>
           )}
         </Box>
       </Box>
 
       {/* Match score ring */}
-      <ScoreRingInner score={candidate.matchScore} tokens={t} Box={Box} Text={Text} />
+      <ScoreRingInner score={matchScore} tokens={t} Box={Box} Text={Text} />
 
       {/* Quick actions */}
       <Box style={{
@@ -384,7 +407,7 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
         <Box
           role="button"
           tabIndex={0}
-          aria-label={`Email ${candidate.name}`}
+          aria-label={`Email ${fullName}`}
           onClick={handleEmailClick}
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSendOutreach?.([candidate.id]); } }}
           style={{
@@ -402,7 +425,7 @@ function CandidateResultCard({ candidate, isSelected, onToggleSelection, onSendO
         <Box
           role="button"
           tabIndex={0}
-          aria-label={`Add ${candidate.name} to job`}
+          aria-label={`Add ${fullName} to job`}
           onClick={handleAddClick}
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAddToJob?.([candidate.id]); } }}
           style={{
@@ -437,7 +460,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
       searchQuery: searchQueryProp, onSearchChange,
       filters: filtersProp, onFilterChange,
       savedSearches: savedSearchesProp, onSaveSearch, onLoadSearch, onDeleteSearch,
-      results: resultsProp, facetCounts: facetCountsProp,
+      results: resultsProp, matchScores: matchScoresProp, highlights: highlightsProp, facetCounts: facetCountsProp,
       selectedCandidates: selectedCandidatesProp, onSelectionChange,
       onAddToJob, onSendOutreach, onExport, onCompare,
       showAdvanced: showAdvancedProp, onToggleAdvanced,
@@ -452,7 +475,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
     const [internalQuery, setInternalQuery] = useState(searchQueryProp ?? '');
     const [internalFilters, setInternalFilters] = useState<Partial<SearchFilter>>(filtersProp ?? {});
     const [internalSavedSearches, setInternalSavedSearches] = useState<SavedSearch[]>(savedSearchesProp ?? DEFAULT_SAVED_SEARCHES);
-    const [internalResults] = useState<SearchResult[]>(resultsProp ?? DEFAULT_RESULTS);
+    const [internalResults] = useState<DBCandidate[]>(resultsProp ?? DEFAULT_RESULTS);
     const [internalSelected, setInternalSelected] = useState<string[]>(selectedCandidatesProp ?? []);
     const [internalShowAdvanced, setInternalShowAdvanced] = useState(showAdvancedProp ?? false);
     const [showSaveDialog, setShowSaveDialog] = useState(false);
@@ -466,6 +489,8 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
     const activeFilters = filtersProp ?? internalFilters;
     const savedSearches = savedSearchesProp ?? internalSavedSearches;
     const results = resultsProp ?? internalResults;
+    const matchScores = matchScoresProp ?? DEFAULT_MATCH_SCORES;
+    const highlights = highlightsProp ?? DEFAULT_HIGHLIGHTS;
     const facetCounts = facetCountsProp ?? DEFAULT_FACETS;
     const selectedCandidates = selectedCandidatesProp ?? internalSelected;
     const showAdvanced = showAdvancedProp ?? internalShowAdvanced;
@@ -1091,7 +1116,7 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                           <Box style={{ width: 8, height: 8, borderRadius: t.borderRadius.full, backgroundColor: statusColorSet.text }} />
                           <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], textTransform: 'capitalize' as const }}>
-                            {status.replace('-', ' ')}
+                            {status.replace(/_/g, ' ')}
                           </Text>
                         </Box>
                         {facet && <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{facet.count}</Text>}
@@ -1139,6 +1164,8 @@ export const StandardBhCandidateSearch = createPreset<BhCandidateSearchProps>({
                 <CandidateResultCard
                   key={candidate.id}
                   candidate={candidate}
+                  matchScore={matchScores[candidate.id] ?? 0}
+                  candidateHighlights={highlights[candidate.id] ?? []}
                   isSelected={selectedCandidates.includes(candidate.id)}
                   onToggleSelection={handleSelectionToggle}
                   onSendOutreach={onSendOutreach}

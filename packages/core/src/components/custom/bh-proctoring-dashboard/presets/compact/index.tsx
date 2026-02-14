@@ -38,36 +38,39 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers (reused from dashboard)                                    */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: ProctoringEventSeverity | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
-function getSeverityBadgeKey(severity: ProctoringEventSeverity): 'error' | 'warning' | 'info' {
+function getSeverityBadgeKey(severity: ProctoringEventSeverity | undefined): 'error' | 'warning' | 'info' {
   switch (severity) {
     case 'critical':
     case 'high': return 'error';
     case 'medium': return 'warning';
     case 'low': return 'info';
+    default: return 'info';
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType): string {
+function getEventTypeLabel(type: ProctoringEventType | undefined): string {
   switch (type) {
     case 'tab_switch': return 'Tab Switch';
     case 'copy_paste': return 'Copy/Paste';
     case 'screen_share': return 'Screen Share';
     case 'unusual_typing': return 'Unusual Typing';
     case 'browser_focus_lost': return 'Focus Lost';
+    default: return 'Unknown';
   }
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -108,9 +111,9 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stats = MOCK_STATS,
-      severityCounts = MOCK_SEVERITY,
-      recentEvents = MOCK_EVENTS,
+      stats = { totalEvents: 0, unreviewedCount: 0, suspiciousCandidates: 0, averageRiskScore: 0 },
+      severityCounts = [],
+      recentEvents = [],
       onEventClick,
       selectedEventId,
       className,
@@ -166,7 +169,7 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
               Proctoring
             </Text>
           </Box>
-          {stats.unreviewedCount > 0 && (
+          {(stats.unreviewedCount ?? 0) > 0 && (
             <Box style={{
               ...createBadgeStyle(t, 'warning'),
               borderRadius: badgeRadius,
@@ -206,7 +209,7 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
           {[
             { label: 'Events', value: stats.totalEvents },
             { label: 'Suspicious', value: stats.suspiciousCandidates },
-            { label: 'Risk', value: `${(stats.averageRiskScore * 100).toFixed(0)}%` },
+            { label: 'Risk', value: `${((stats.averageRiskScore ?? 0) * 100).toFixed(0)}%` },
           ].map((s) => (
             <Box key={s.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center' }} role="status" aria-label={`${s.label}: ${s.value}`}>
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>
@@ -255,7 +258,7 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
                     {event.candidateName ?? 'Unknown'}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    {getEventTypeLabel(event.eventType)} {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                    {getEventTypeLabel(event.eventType)} {event.timestamp ? formatDistanceToNow(event.timestamp, { addSuffix: true }) : ''}
                   </Text>
                 </Box>
                 {event.reviewed ? (

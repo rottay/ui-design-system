@@ -10,21 +10,21 @@ import type { EngineAwareProps } from '../../../../types';
 export type BhPipelineComparisonPreset = 'side-by-side' | 'overlay';
 
 export interface ComparisonStage {
-  name: string;
-  candidateCount: number;
-  conversionRate: number;
-  avgDaysInStage: number;
+  name?: string;
+  candidateCount?: number;
+  conversionRate?: number;
+  avgDaysInStage?: number;
 }
 
 export interface ComparisonJob {
-  id: string;
-  title: string;
+  id?: string;
+  title?: string;
   department?: string;
   recruiter?: string;
-  totalCandidates: number;
-  stages: ComparisonStage[];
-  timeToHireDays: number;
-  overallConversionRate: number;
+  totalCandidates?: number;
+  stages?: ComparisonStage[];
+  timeToHireDays?: number;
+  overallConversionRate?: number;
 }
 
 export interface BhPipelineComparisonProps extends EngineAwareProps {

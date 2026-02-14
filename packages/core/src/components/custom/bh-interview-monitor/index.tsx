@@ -11,6 +11,7 @@ import { BH_INTERVIEW_MONITOR_PRESETS } from './presets';
 export {
   type BhInterviewMonitorProps,
   type BhInterviewMonitorPreset,
+  type RecruiterInterview,
   type ActiveSession,
   type ProviderStatus,
   type MonitorAlert,

@@ -30,8 +30,7 @@ import {
 } from '../../../helpers';
 import type {
   BhProctoringTimelineProps,
-  TimelineEvent,
-  ProctoringEventType,
+  TimelineEventView,
   ProctoringEventSeverity,
 } from '../../core';
 import type { DesignTokens } from '../../../../../types';
@@ -40,55 +39,60 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
-function getSeverityBg(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityBg(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[50];
     case 'high': return t.colors.errorScale[50];
     case 'medium': return t.colors.warningScale[50];
     case 'low': return t.colors.infoScale[50];
+    default: return t.colors.neutral[50];
   }
 }
 
-function getSeverityBadgeKey(severity: ProctoringEventSeverity): 'error' | 'warning' | 'info' {
+function getSeverityBadgeKey(severity: string | undefined): 'error' | 'warning' | 'info' {
   switch (severity) {
     case 'critical':
     case 'high': return 'error';
     case 'medium': return 'warning';
-    case 'low': return 'info';
+    case 'low':
+    default: return 'info';
   }
 }
 
-function getEventTypeIcon(type: ProctoringEventType) {
+function getEventTypeIcon(type: string | undefined) {
   switch (type) {
     case 'tab_switch': return MonitorOff;
     case 'copy_paste': return Clipboard;
     case 'screen_share': return ScreenShare;
     case 'unusual_typing': return Keyboard;
     case 'browser_focus_lost': return Globe;
+    default: return AlertTriangle;
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType): string {
+function getEventTypeLabel(type: string | undefined): string {
   switch (type) {
     case 'tab_switch': return 'Tab Switch';
     case 'copy_paste': return 'Copy/Paste';
     case 'screen_share': return 'Screen Share';
     case 'unusual_typing': return 'Unusual Typing';
     case 'browser_focus_lost': return 'Focus Lost';
+    default: return 'Unknown';
   }
 }
 
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+function getSeverityLabel(severity: string | undefined): string {
+  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
 }
 
 function formatTime(date: Date): string {
@@ -111,15 +115,15 @@ function formatFullTime(date: Date): string {
 const NOW = new Date();
 const TWO_HOURS_AGO = new Date(NOW.getTime() - 2 * 60 * 60 * 1000);
 
-const MOCK_EVENTS: TimelineEvent[] = [
-  { id: 'vtl-1', eventType: 'screen_share', severity: 'critical', timestamp: new Date(NOW.getTime() - 15 * 60 * 1000), candidateName: 'Sarah Johnson', label: 'Screen share detected' },
-  { id: 'vtl-2', eventType: 'copy_paste', severity: 'high', timestamp: new Date(NOW.getTime() - 30 * 60 * 1000), candidateName: 'Michael Chen', label: 'Large paste detected' },
-  { id: 'vtl-3', eventType: 'tab_switch', severity: 'medium', timestamp: new Date(NOW.getTime() - 45 * 60 * 1000), candidateName: 'Emily Rodriguez' },
-  { id: 'vtl-4', eventType: 'unusual_typing', severity: 'medium', timestamp: new Date(NOW.getTime() - 55 * 60 * 1000), candidateName: 'James Kim' },
-  { id: 'vtl-5', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(NOW.getTime() - 70 * 60 * 1000), candidateName: 'Anna Kowalski' },
-  { id: 'vtl-6', eventType: 'tab_switch', severity: 'low', timestamp: new Date(NOW.getTime() - 85 * 60 * 1000), candidateName: 'David Park' },
-  { id: 'vtl-7', eventType: 'copy_paste', severity: 'high', timestamp: new Date(NOW.getTime() - 100 * 60 * 1000), candidateName: 'Lisa Martinez', label: 'Multiple pastes' },
-  { id: 'vtl-8', eventType: 'browser_focus_lost', severity: 'medium', timestamp: new Date(NOW.getTime() - 110 * 60 * 1000), candidateName: 'Robert Taylor' },
+const MOCK_EVENTS: TimelineEventView[] = [
+  { event: { id: 'vtl-1', eventType: 'screen_share', severity: 'critical', timestamp: new Date(NOW.getTime() - 15 * 60 * 1000) }, candidateName: 'Sarah Johnson', label: 'Screen share detected' },
+  { event: { id: 'vtl-2', eventType: 'copy_paste', severity: 'high', timestamp: new Date(NOW.getTime() - 30 * 60 * 1000) }, candidateName: 'Michael Chen', label: 'Large paste detected' },
+  { event: { id: 'vtl-3', eventType: 'tab_switch', severity: 'medium', timestamp: new Date(NOW.getTime() - 45 * 60 * 1000) }, candidateName: 'Emily Rodriguez' },
+  { event: { id: 'vtl-4', eventType: 'unusual_typing', severity: 'medium', timestamp: new Date(NOW.getTime() - 55 * 60 * 1000) }, candidateName: 'James Kim' },
+  { event: { id: 'vtl-5', eventType: 'browser_focus_lost', severity: 'low', timestamp: new Date(NOW.getTime() - 70 * 60 * 1000) }, candidateName: 'Anna Kowalski' },
+  { event: { id: 'vtl-6', eventType: 'tab_switch', severity: 'low', timestamp: new Date(NOW.getTime() - 85 * 60 * 1000) }, candidateName: 'David Park' },
+  { event: { id: 'vtl-7', eventType: 'copy_paste', severity: 'high', timestamp: new Date(NOW.getTime() - 100 * 60 * 1000) }, candidateName: 'Lisa Martinez', label: 'Multiple pastes' },
+  { event: { id: 'vtl-8', eventType: 'browser_focus_lost', severity: 'medium', timestamp: new Date(NOW.getTime() - 110 * 60 * 1000) }, candidateName: 'Robert Taylor' },
 ];
 
 /* ================================================================== */
@@ -172,7 +176,11 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
 
     /* Sort events by timestamp descending (most recent first) */
     const sortedEvents = useMemo(
-      () => [...events].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()),
+      () => [...events].sort((a, b) => {
+        const tsA = a.event?.timestamp?.getTime() ?? 0;
+        const tsB = b.event?.timestamp?.getTime() ?? 0;
+        return tsB - tsA;
+      }),
       [events],
     );
 
@@ -330,16 +338,23 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
               borderRadius: t.borderRadius.full,
             }} />
 
-            {sortedEvents.map((event, i) => {
-              const isHovered = hoveredEvent === event.id;
-              const isSelected = selectedEventId === event.id;
-              const sevColor = getSeverityColor(event.severity, t);
-              const sevBg = getSeverityBg(event.severity, t);
-              const EventIcon = getEventTypeIcon(event.eventType);
+            {sortedEvents.map((item, i) => {
+              const itemId = item.event?.id ?? '';
+              const itemSeverity = item.event?.severity;
+              const itemEventType = item.event?.eventType;
+              const itemTimestamp = item.event?.timestamp ?? new Date();
+              const itemCandidateName = item.candidateName ?? 'Unknown';
+              const itemLabel = item.label;
+
+              const isHovered = hoveredEvent === itemId;
+              const isSelected = selectedEventId === itemId;
+              const sevColor = getSeverityColor(itemSeverity, t);
+              const sevBg = getSeverityBg(itemSeverity, t);
+              const EventIcon = getEventTypeIcon(itemEventType);
 
               return (
                 <Box
-                  key={event.id}
+                  key={itemId || i}
                   role="listitem"
                   style={{
                     display: 'flex',
@@ -362,11 +377,11 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
                     <Box
                       role="button"
                       tabIndex={0}
-                      aria-label={`${event.candidateName}: ${getEventTypeLabel(event.eventType)}, ${getSeverityLabel(event.severity)}`}
-                      onClick={() => handleEventClick(event.id)}
-                      onMouseEnter={() => setHoveredEvent(event.id)}
+                      aria-label={`${itemCandidateName}: ${getEventTypeLabel(itemEventType)}, ${getSeverityLabel(itemSeverity)}`}
+                      onClick={() => handleEventClick(itemId)}
+                      onMouseEnter={() => setHoveredEvent(itemId)}
                       onMouseLeave={() => setHoveredEvent(null)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEventClick(event.id); } }}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEventClick(itemId); } }}
                       style={{
                         width: 42,
                         height: 42,
@@ -388,8 +403,8 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
 
                   {/* Event Content Card */}
                   <Box
-                    onClick={() => handleEventClick(event.id)}
-                    onMouseEnter={() => setHoveredEvent(event.id)}
+                    onClick={() => handleEventClick(itemId)}
+                    onMouseEnter={() => setHoveredEvent(itemId)}
                     onMouseLeave={() => setHoveredEvent(null)}
                     style={{
                       flex: 1,
@@ -421,22 +436,22 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                         }}>
-                          {event.candidateName}
+                          {itemCandidateName}
                         </Text>
                         <Box style={{
-                          ...createBadgeStyle(t, getSeverityBadgeKey(event.severity)),
+                          ...createBadgeStyle(t, getSeverityBadgeKey(itemSeverity)),
                           borderRadius: badgeRadius,
                           flexShrink: 0,
                         }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                            {getSeverityLabel(event.severity)}
+                            {getSeverityLabel(itemSeverity)}
                           </Text>
                         </Box>
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
                         <Clock size={11} color={t.colors.neutral[400]} />
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                          {formatFullTime(event.timestamp)}
+                          {formatFullTime(itemTimestamp)}
                         </Text>
                       </Box>
                     </Box>
@@ -449,28 +464,28 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
                       justifyContent: 'space-between',
                     }}>
                       <Box>
-                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: event.label ? 4 : 0 }}>
+                        <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: itemLabel ? 4 : 0 }}>
                           <EventIcon size={13} color={t.colors.neutral[500]} />
                           <Text style={{
                             fontSize: t.typography.fontSize.sm,
                             color: t.colors.neutral[700],
                             fontWeight: t.typography.fontWeight.medium,
                           }}>
-                            {getEventTypeLabel(event.eventType)}
+                            {getEventTypeLabel(itemEventType)}
                           </Text>
                         </Box>
-                        {event.label && (
+                        {itemLabel && (
                           <Text style={{
                             fontSize: t.typography.fontSize.xs,
                             color: t.colors.neutral[500],
                             marginTop: t.spacing[1],
                           }}>
-                            {event.label}
+                            {itemLabel}
                           </Text>
                         )}
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                        {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                        {formatDistanceToNow(itemTimestamp, { addSuffix: true })}
                       </Text>
                     </Box>
                   </Box>

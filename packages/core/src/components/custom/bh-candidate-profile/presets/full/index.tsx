@@ -22,10 +22,6 @@ import {
 import type {
   BhCandidateProfileProps,
   CandidateTab,
-  CandidateInfo,
-  CandidateSkill,
-  Experience,
-  Education,
   CandidateApplication,
   CandidateInterview,
   ScoreCard,
@@ -33,6 +29,11 @@ import type {
   CandidateEvent,
   CandidateStats,
 } from '../../core';
+import {
+  getCandidateFullName, getCandidateRole, getCandidateLocation,
+  getCandidateSkills, getCandidateLanguages, getCandidateLinks, getCandidateCompensation,
+} from '../../core';
+import type { DBCandidate } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Briefcase, MapPin, Mail, Phone, ExternalLink, Star, Edit2,
@@ -46,31 +47,34 @@ import {
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
 
-const DEFAULT_CANDIDATE: CandidateInfo = {
-  id: 'c-1', name: 'Sarah Johnson', avatar: '',
-  currentRole: 'Senior Frontend Engineer at Google',
-  location: 'San Francisco, CA', email: 'sarah.j@google.com',
-  phone: '+1 (415) 555-0127', source: 'LinkedIn',
-  status: 'active', doNotContact: false,
-};
-
-const DEFAULT_SKILLS: CandidateSkill[] = [
-  { name: 'React', proficiency: 95 }, { name: 'TypeScript', proficiency: 92 },
-  { name: 'Next.js', proficiency: 88 }, { name: 'GraphQL', proficiency: 80 },
-  { name: 'Node.js', proficiency: 75 }, { name: 'System Design', proficiency: 70 },
-  { name: 'Testing', proficiency: 85 }, { name: 'CI/CD', proficiency: 65 },
-];
-
-const DEFAULT_EXPERIENCE: Experience[] = [
-  { company: 'Google', role: 'Senior Frontend Engineer', startDate: '2021-03', current: true, description: 'Leading frontend architecture for Google Cloud Console. Managing team of 5 engineers.' },
-  { company: 'Stripe', role: 'Frontend Engineer', startDate: '2018-06', endDate: '2021-02', current: false, description: 'Built payment dashboard components used by 100k+ merchants.' },
-  { company: 'Airbnb', role: 'Junior Developer', startDate: '2016-01', endDate: '2018-05', current: false, description: 'Worked on search and listing pages with React.' },
-];
-
-const DEFAULT_EDUCATION: Education[] = [
-  { institution: 'Stanford University', degree: 'M.S.', field: 'Computer Science', year: 2016 },
-  { institution: 'UC Berkeley', degree: 'B.S.', field: 'Computer Science', year: 2014 },
-];
+const DEFAULT_CANDIDATE = {
+  id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', avatarUrl: null,
+  currentTitle: 'Senior Frontend Engineer', currentCompany: 'Google',
+  currentLocation: { city: 'San Francisco', state: 'CA' },
+  email: 'sarah.j@google.com', phone: '+1 (415) 555-0127',
+  source: 'linkedin', status: 'active',
+  skills: [
+    { name: 'React', level: 'expert', yearsOfExperience: 6 },
+    { name: 'TypeScript', level: 'expert', yearsOfExperience: 5 },
+    { name: 'Next.js', level: 'advanced', yearsOfExperience: 4 },
+    { name: 'GraphQL', level: 'advanced', yearsOfExperience: 3 },
+    { name: 'Node.js', level: 'intermediate', yearsOfExperience: 5 },
+    { name: 'System Design', level: 'intermediate', yearsOfExperience: 3 },
+    { name: 'Testing', level: 'advanced', yearsOfExperience: 5 },
+    { name: 'CI/CD', level: 'intermediate', yearsOfExperience: 3 },
+  ],
+  languages: [
+    { language: 'English', proficiency: 'Native' },
+    { language: 'Spanish', proficiency: 'Conversational' },
+  ],
+  linkedinUrl: 'https://linkedin.com/in/sarahjohnson',
+  githubUrl: 'https://github.com/sarahjohnson',
+  portfolioUrl: 'https://sarahjohnson.dev',
+  websiteUrl: null,
+  expectedSalaryMin: 180000, expectedSalaryMax: 220000, expectedSalaryCurrency: 'USD',
+  yearsOfExperience: 8,
+  resumeUrl: null,
+} as unknown as DBCandidate;
 
 const DEFAULT_APPLICATIONS: CandidateApplication[] = [
   { id: 'a-1', jobName: 'Staff Frontend Engineer', stage: 'Technical Interview', scorePercent: 92, pipelineProgress: 0.6, recruiterName: 'Alex Rivera', status: 'interviewing' },
@@ -108,7 +112,7 @@ const DEFAULT_STATS: CandidateStats = {
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  return name.charAt(0).toUpperCase();
+  return (name || '').charAt(0).toUpperCase();
 }
 
 function getStatusConfig(status: string, t: DesignTokens) {
@@ -206,17 +210,18 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
   render: ({ primitives, props, tokens: t }: PresetContext<BhCandidateProfileProps>) => {
     const { Box, Text } = primitives;
     const candidate = props.candidate ?? DEFAULT_CANDIDATE;
-    const skills = props.skills ?? DEFAULT_SKILLS;
-    const experience = props.experience ?? DEFAULT_EXPERIENCE;
-    const education = props.education ?? DEFAULT_EDUCATION;
+    const fullName = useMemo(() => getCandidateFullName(candidate), [candidate]);
+    const role = useMemo(() => getCandidateRole(candidate), [candidate]);
+    const location = useMemo(() => getCandidateLocation(candidate), [candidate]);
+    const skills = useMemo(() => getCandidateSkills(candidate), [candidate]);
+    const candidateLanguages = useMemo(() => getCandidateLanguages(candidate), [candidate]);
+    const candidateLinks = useMemo(() => getCandidateLinks(candidate), [candidate]);
+    const compensationRange = useMemo(() => getCandidateCompensation(candidate) ?? { min: 0, max: 0, currency: 'USD' }, [candidate]);
     const applications = props.applications ?? DEFAULT_APPLICATIONS;
     const interviews = props.interviews ?? DEFAULT_INTERVIEWS;
     const notes = props.notes ?? DEFAULT_NOTES;
     const events = props.events ?? DEFAULT_EVENTS;
     const stats = props.stats ?? DEFAULT_STATS;
-    const compensationRange = props.compensationRange ?? { min: 180000, max: 220000, currency: 'USD' };
-    const languages = props.languages ?? [{ name: 'English', level: 'Native' }, { name: 'Spanish', level: 'Conversational' }];
-    const links = props.links ?? [{ label: 'LinkedIn', url: '#' }, { label: 'GitHub', url: '#' }, { label: 'Portfolio', url: '#' }];
     const documents = props.documents ?? [
       { id: 'd-1', name: 'Resume_Sarah_Johnson.pdf', type: 'pdf', uploadedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) },
       { id: 'd-2', name: 'Cover_Letter.pdf', type: 'pdf', uploadedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000) },
@@ -225,7 +230,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
     const [activeTab, setActiveTab] = useState<CandidateTab>(props.defaultTab ?? 'profile');
     const [newNoteContent, setNewNoteContent] = useState('');
 
-    const statusConfig = getStatusConfig(candidate.status ?? 'active', t);
+    const statusConfig = getStatusConfig((candidate.status as string) ?? 'active', t);
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const handleTabChange = useCallback((tab: CandidateTab) => {
@@ -259,66 +264,42 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
         <SectionCard title="Skills">
           <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
             {skills.map(skill => {
-              const pb = createProgressBarStyle(t, { percent: skill.proficiency, color: getScoreColor(skill.proficiency, t) });
+              const yoe = skill.yearsOfExperience ?? 0;
+              const proficiency = Math.min(100, yoe * 12); // approximate proficiency from years
+              const pb = createProgressBarStyle(t, { percent: proficiency, color: getScoreColor(proficiency, t) });
               return (
                 <Box key={skill.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], width: 120, flexShrink: 0, fontWeight: t.typography.fontWeight.medium }}>{skill.name}</Text>
                   <Box style={{ flex: 1 }}><Box style={{ ...pb.track, height: 6 }}><Box style={{ ...pb.fill, height: 6 }} /></Box></Box>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], width: 32, textAlign: 'right' }}>{skill.proficiency}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[600], width: 48, textAlign: 'right' }}>{skill.level ?? `${yoe}y`}</Text>
                 </Box>
               );
             })}
           </Box>
         </SectionCard>
 
-        {/* Experience */}
-        <SectionCard title="Experience">
-          <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[5] }}>
-            {experience.map((exp, idx) => (
-              <Box key={idx} style={{ display: 'flex', gap: t.spacing[4] }}>
-                <Box style={{
-                  width: 40, height: 40, borderRadius: t.borderRadius.lg, flexShrink: 0,
-                  backgroundColor: t.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <Building size={18} color={t.colors.primaryScale[500]} />
-                </Box>
-                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
-                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], marginBottom: t.spacing[1] }}>{exp.role}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], marginBottom: 4 }}>{exp.company}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], marginBottom: t.spacing[2] }}>
-                    {exp.startDate} - {exp.current ? 'Present' : exp.endDate}
-                  </Text>
-                  {exp.description && (
-                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600], lineHeight: t.typography.lineHeight.relaxed }}>{exp.description}</Text>
-                  )}
-                </Box>
+        {/* Experience summary */}
+        {(role || candidate.yearsOfExperience != null) && (
+          <SectionCard title="Experience">
+            <Box style={{ display: 'flex', gap: t.spacing[4] }}>
+              <Box style={{
+                width: 40, height: 40, borderRadius: t.borderRadius.lg, flexShrink: 0,
+                backgroundColor: t.colors.primaryScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Building size={18} color={t.colors.primaryScale[500]} />
               </Box>
-            ))}
-          </Box>
-        </SectionCard>
-
-        {/* Education */}
-        <SectionCard title="Education">
-          <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
-            {education.map((edu, idx) => (
-              <Box key={idx} style={{ display: 'flex', gap: t.spacing[4] }}>
-                <Box style={{
-                  width: 40, height: 40, borderRadius: t.borderRadius.lg, flexShrink: 0,
-                  backgroundColor: t.colors.warningScale[50], display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <GraduationCap size={18} color={t.colors.warningScale[600]} />
-                </Box>
-                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
-                  <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>
-                    {edu.degree} in {edu.field}
-                  </Text>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{edu.institution}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>Class of {edu.year}</Text>
-                </Box>
+              <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
+                {role && <Text style={{ fontSize: t.typography.fontSize.md, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{role}</Text>}
+                {candidate.yearsOfExperience != null && (
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{candidate.yearsOfExperience} years of experience</Text>
+                )}
+                {candidate.headline && (
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginTop: t.spacing[2], lineHeight: t.typography.lineHeight.relaxed }}>{candidate.headline}</Text>
+                )}
               </Box>
-            ))}
-          </Box>
-        </SectionCard>
+            </Box>
+          </SectionCard>
+        )}
 
         {/* Additional info: compensation, languages, links */}
         <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: t.spacing[4] }}>
@@ -326,30 +307,34 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <DollarSign size={16} color={t.colors.successScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                ${(compensationRange.min / 1000).toFixed(0)}k - ${(compensationRange.max / 1000).toFixed(0)}k
+                ${((compensationRange.min ?? 0) / 1000).toFixed(0)}k - ${((compensationRange.max ?? 0) / 1000).toFixed(0)}k
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{compensationRange.currency}</Text>
             </Box>
           </SectionCard>
           <SectionCard title="Languages">
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-              {languages.map(lang => (
-                <Box key={lang.name} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{lang.name}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{lang.level}</Text>
+              {candidateLanguages.length > 0 ? candidateLanguages.map(lang => (
+                <Box key={lang.language} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], justifyContent: 'space-between' }}>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{lang.language}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>{lang.proficiency}</Text>
                 </Box>
-              ))}
+              )) : (
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>No languages listed</Text>
+              )}
             </Box>
           </SectionCard>
           <SectionCard title="Links">
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-              {links.map(link => (
+              {candidateLinks.length > 0 ? candidateLinks.map(link => (
                 <Box key={link.label} onClick={() => {}} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], cursor: 'pointer', color: t.colors.primaryScale[600] }}>
                   <Globe size={14} />
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium }}>{link.label}</Text>
                   <ExternalLink size={12} />
                 </Box>
-              ))}
+              )) : (
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>No links available</Text>
+              )}
             </Box>
           </SectionCard>
         </Box>
@@ -601,9 +586,9 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold,
               color: t.colors.primaryScale[700],
             }}>
-              {candidate.avatar
-                ? <img src={candidate.avatar} alt={candidate.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                : getInitials(candidate.name)
+              {candidate.avatarUrl
+                ? <img src={candidate.avatarUrl} alt={fullName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : getInitials(fullName)
               }
             </Box>
 
@@ -611,7 +596,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
             <Box style={{ flex: 1 }}>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[1] }}>
                 <Text style={{ fontSize: t.typography.fontSize.xl, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                  {candidate.name}
+                  {fullName}
                 </Text>
                 <Box style={{
                   display: 'inline-flex', alignItems: 'center', gap: 4,
@@ -622,7 +607,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusConfig.dot }} />
                   {statusConfig.label}
                 </Box>
-                {candidate.doNotContact && (
+                {candidate.status === 'do_not_contact' && (
                   <Box style={{
                     display: 'inline-flex', alignItems: 'center', gap: 4,
                     padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius,
@@ -634,16 +619,16 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                 )}
               </Box>
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4], marginBottom: t.spacing[2] }}>
-                {candidate.currentRole && (
+                {role && (
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <Briefcase size={14} color={t.colors.neutral[400]} />
-                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{candidate.currentRole}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600] }}>{role}</Text>
                   </Box>
                 )}
-                {candidate.location && (
+                {location && (
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                     <MapPin size={14} color={t.colors.neutral[400]} />
-                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{candidate.location}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500] }}>{location}</Text>
                   </Box>
                 )}
               </Box>

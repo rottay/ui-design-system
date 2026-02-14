@@ -40,7 +40,7 @@ import type { DesignTokens } from '../../../../../types';
 
 function getStageColor(stage: BottleneckStage, t: DesignTokens): string {
   if (stage.isBottleneck) return t.colors.errorScale[500];
-  const ratio = stage.avgDaysInStage / Math.max(stage.expectedDays, 1);
+  const ratio = (stage.avgDaysInStage ?? 0) / Math.max(stage.expectedDays ?? 1, 1);
   if (ratio > 1.5) return t.colors.warningScale[500];
   if (ratio > 1) return t.colors.warningScale[300];
   return t.colors.successScale[500];
@@ -48,7 +48,7 @@ function getStageColor(stage: BottleneckStage, t: DesignTokens): string {
 
 function getStageBg(stage: BottleneckStage, t: DesignTokens): string {
   if (stage.isBottleneck) return t.colors.errorScale[50];
-  const ratio = stage.avgDaysInStage / Math.max(stage.expectedDays, 1);
+  const ratio = (stage.avgDaysInStage ?? 0) / Math.max(stage.expectedDays ?? 1, 1);
   if (ratio > 1.5) return t.colors.warningScale[50];
   if (ratio > 1) return t.colors.warningScale[50];
   return t.colors.successScale[50];
@@ -105,12 +105,12 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
     }, [onStageClick]);
 
     const maxCandidates = useMemo(
-      () => Math.max(...stages.map(s => s.candidateCount), 1),
+      () => Math.max(...(stages ?? []).map(s => s.candidateCount ?? 0), 1),
       [stages],
     );
 
     const bottleneckStage = useMemo(
-      () => stages.find(s => s.isBottleneck),
+      () => (stages ?? []).find(s => s.isBottleneck),
       [stages],
     );
 
@@ -171,7 +171,7 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
               gap: 4,
             }}>
               <AlertTriangle size={12} />
-              <Text style={{ fontSize: t.typography.fontSize.xs }}>Bottleneck: {bottleneckStage.name}</Text>
+              <Text style={{ fontSize: t.typography.fontSize.xs }}>Bottleneck: {bottleneckStage.name ?? 'Unknown'}</Text>
             </Box>
           )}
         </Box>
@@ -185,8 +185,8 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
             gap: t.spacing[2],
             marginBottom: t.spacing[6],
           }} role="list" aria-label="Pipeline stages visualization">
-            {stages.map((stage, i) => {
-              const widthPct = (stage.candidateCount / maxCandidates) * 100;
+            {(stages ?? []).map((stage, i) => {
+              const widthPct = ((stage.candidateCount ?? 0) / maxCandidates) * 100;
               const stageColor = getStageColor(stage, t);
               const isHovered = hoveredStage === stage.id;
               const isBottleneck = stage.isBottleneck;
@@ -207,10 +207,10 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
                   {/* Stage bar (narrowing) */}
                   <Box
                     tabIndex={0}
-                    aria-label={`${stage.name}: ${stage.candidateCount} candidates, ${stage.avgDaysInStage} days average${isBottleneck ? ', bottleneck' : ''}`}
-                    onClick={() => handleStageClick(stage.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageClick(stage.id); } }}
-                    onMouseEnter={() => setHoveredStage(stage.id)}
+                    aria-label={`${stage.name ?? 'Unknown'}: ${stage.candidateCount ?? 0} candidates, ${stage.avgDaysInStage ?? 0} days average${isBottleneck ? ', bottleneck' : ''}`}
+                    onClick={() => stage.id && handleStageClick(stage.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if ((e.key === 'Enter' || e.key === ' ') && stage.id) { e.preventDefault(); handleStageClick(stage.id); } }}
+                    onMouseEnter={() => setHoveredStage((stage.id ?? null))}
                     onMouseLeave={() => setHoveredStage(null)}
                     style={{
                       width: `${Math.max(widthPct, 20)}%`,
@@ -234,7 +234,7 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
                       fontWeight: t.typography.fontWeight.bold,
                       color: isHovered ? t.colors.common.white : stageColor,
                     }}>
-                      {stage.candidateCount}
+                      {stage.candidateCount ?? 0}
                     </Text>
                     {isBottleneck && (
                       <Box style={{
@@ -271,7 +271,7 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
                     textAlign: 'center',
                     whiteSpace: 'nowrap',
                   }}>
-                    {stage.name}
+                    {stage.name ?? 'Unknown'}
                   </Text>
                 </Box>
               );
@@ -282,10 +282,10 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
           <Box>
             <Text style={{ ...sectionLabel, marginBottom: t.spacing[3] }}>Days in Stage</Text>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-              {stages.map((stage, i) => {
-                const maxDays = Math.max(...stages.map(s => s.avgDaysInStage), 1);
-                const barWidth = (stage.avgDaysInStage / maxDays) * 100;
-                const expectedWidth = (stage.expectedDays / maxDays) * 100;
+              {(stages ?? []).map((stage, i) => {
+                const maxDays = Math.max(...(stages ?? []).map(s => s.avgDaysInStage ?? 0), 1);
+                const barWidth = ((stage.avgDaysInStage ?? 0) / maxDays) * 100;
+                const expectedWidth = ((stage.expectedDays ?? 0) / maxDays) * 100;
                 const stageColor = getStageColor(stage, t);
 
                 return (
@@ -298,7 +298,7 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
                           color: stage.isBottleneck ? t.colors.errorScale[700] : t.colors.neutral[700],
                           minWidth: 80,
                         }}>
-                          {stage.name}
+                          {stage.name ?? 'Unknown'}
                         </Text>
                         {stage.isBottleneck && (
                           <Box style={{
@@ -311,7 +311,7 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
                         )}
                       </Box>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {stage.avgDaysInStage}d / {stage.expectedDays}d expected
+                        {stage.avgDaysInStage ?? 0}d / {stage.expectedDays ?? 0}d expected
                       </Text>
                     </Box>
                     <Box style={{ position: 'relative', height: 8, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>

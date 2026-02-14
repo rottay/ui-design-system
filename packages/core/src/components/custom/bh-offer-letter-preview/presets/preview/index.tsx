@@ -22,6 +22,7 @@ import {
   getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type { BhOfferLetterPreviewProps, OfferLetterData } from '../../core';
+import { offerToLetterData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -70,8 +71,10 @@ export const PreviewBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      letterData = MOCK_LETTER,
-      companyName = 'Acme Corp',
+      offer,
+      candidateName: candidateNameProp,
+      letterData: letterDataProp,
+      companyName = '',
       currency = '$',
       highlightVariables = true,
       onDownload,
@@ -79,6 +82,9 @@ export const PreviewBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
       className,
       style,
     } = props;
+
+    const letterData = letterDataProp
+      ?? (offer ? offerToLetterData(offer, candidateNameProp) : { candidateName: '', position: '', salary: 0, startDate: '', benefits: [] });
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -244,7 +250,7 @@ export const PreviewBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
             </Text>
             <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], marginBottom: t.spacing[2], lineHeight: 1.7 }}>
               Your annual base salary will be{' '}
-              <Text style={varStyle}>{currency}{letterData.salary.toLocaleString()}</Text>,{' '}
+              <Text style={varStyle}>{currency}{(letterData.salary ?? 0).toLocaleString()}</Text>,{' '}
               payable on a bi-weekly basis. Your anticipated start date is{' '}
               <Text style={varStyle}>{letterData.startDate}</Text>.
             </Text>

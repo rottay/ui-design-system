@@ -1,38 +1,41 @@
 /**
  * BhCalibrationScatter - Core Interface
- * Human vs AI score scatter plot for calibration analysis in BitHire ATS platform
+ * Human vs AI score scatter plot for calibration analysis
+ *
+ * Uses CalibrationSampleSelect from @rottay/scoring for data context.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { CalibrationSampleSelect, CalibrationSelect } from '@rottay/scoring';
 
 export type BhCalibrationScatterPreset = 'chart' | 'compact';
 
 export interface ScatterPoint {
   id: string;
-  humanScore: number; // 0-5
-  aiScore: number; // 0-5
-  candidateName: string;
+  humanScore: number;
+  aiScore: number;
+  candidateName?: string;
   dimensionName?: string;
-  deviation: number;
-  calibrated: boolean;
+  deviation?: number;
+  calibrated?: boolean;
 }
 
 export interface CalibrationStats {
-  correlation: number;
-  meanDeviation: number;
-  sampleCount: number;
-  agreementRate: number;
+  correlation?: number;
+  meanDeviation?: number;
+  sampleCount?: number;
+  agreementRate?: number;
 }
 
 export interface BhCalibrationScatterProps extends EngineAwareProps {
   preset?: BhCalibrationScatterPreset;
 
   /** Data points for the scatter plot */
-  points: ScatterPoint[];
+  points?: ScatterPoint[];
 
   /** Aggregate calibration statistics */
-  stats: CalibrationStats;
+  stats?: CalibrationStats;
 
   /** Callback when a point is clicked */
   onPointClick?: (pointId: string) => void;
@@ -61,3 +64,14 @@ export const BH_CALIBRATION_SCATTER_DEFAULTS: Partial<BhCalibrationScatterProps>
   showRegressionLine: false,
   showDiagonal: true,
 };
+
+/** Safe numeric coercion for DB string -> number fields */
+export function n(v: string | number | null | undefined): number {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const parsed = Number(v);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/** Re-export DB types for convenience */
+export type { CalibrationSampleSelect, CalibrationSelect };

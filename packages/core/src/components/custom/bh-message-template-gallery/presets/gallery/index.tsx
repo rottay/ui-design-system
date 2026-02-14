@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * BhMessageTemplateGallery - Gallery Preset
+ * BhMessageTemplateItemGallery - Gallery Preset
  * Full template gallery with search, category filters, card grid,
  * and usage stats. Personality-driven, glass-aware.
  */
@@ -25,14 +25,14 @@ import {
   createEmptyStateStyle,
   formatDistanceToNow,
 } from '../../../helpers';
-import type { BhMessageTemplateGalleryProps, MessageTemplate } from '../../core';
+import type { BhMessageTemplateItemGalleryProps, MessageTemplateItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_TEMPLATES: MessageTemplate[] = [
+const MOCK_TEMPLATES: MessageTemplateItem[] = [
   { id: 'mt-1', name: 'Initial Outreach', category: 'Sourcing', subject: 'Exciting opportunity at {{company}}', preview: 'Hi {{firstName}}, I came across your profile and was impressed by...', usageCount: 342, lastUsed: new Date(Date.now() - 86400000), tags: ['sourcing', 'cold-outreach'] },
   { id: 'mt-2', name: 'Interview Invitation', category: 'Scheduling', subject: 'Interview invitation - {{position}}', preview: 'Dear {{firstName}}, We are pleased to invite you for an interview...', usageCount: 256, lastUsed: new Date(Date.now() - 172800000), tags: ['scheduling', 'interview'] },
   { id: 'mt-3', name: 'Rejection - Post Interview', category: 'Rejection', subject: 'Update on your application', preview: 'Dear {{firstName}}, Thank you for taking the time to interview...', usageCount: 189, lastUsed: new Date(Date.now() - 43200000), tags: ['rejection', 'post-interview'] },
@@ -45,9 +45,9 @@ const MOCK_TEMPLATES: MessageTemplate[] = [
 /*  Gallery Preset                                                     */
 /* ================================================================== */
 
-export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGalleryProps>({
+const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGalleryProps>({
   name: 'BhMessageTemplateGallery.Gallery',
-  render: (ctx: PresetContext<BhMessageTemplateGalleryProps>) => {
+  render: (ctx: PresetContext<BhMessageTemplateItemGalleryProps>) => {
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
@@ -74,7 +74,7 @@ export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     const categories = useMemo(() => {
-      const cats = new Set(templates.map(t => t.category));
+      const cats = new Set((templates ?? []).map(t => t.category ?? ''));
       return Array.from(cats).sort();
     }, [templates]);
 
@@ -85,7 +85,7 @@ export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
       }
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        result = result.filter(t => t.name.toLowerCase().includes(q) || t.subject.toLowerCase().includes(q) || t.tags.some(tag => tag.includes(q)));
+        result = result.filter(t => (t.name ?? '').toLowerCase().includes(q) || (t.subject ?? '').toLowerCase().includes(q) || (t.tags ?? []).some(tag => (tag ?? '').includes(q)));
       }
       return result;
     }, [templates, selectedCategory, searchQuery]);
@@ -223,9 +223,9 @@ export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
                   role="button"
                   tabIndex={0}
                   aria-label={`Template: ${tmpl.name}, Category: ${tmpl.category}, Used ${tmpl.usageCount} times`}
-                  onClick={() => handleClick(tmpl.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(tmpl.id); } }}
-                  onMouseEnter={() => setHoveredId(tmpl.id)}
+                  onClick={() => handleClick((tmpl.id ?? ''))}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((tmpl.id ?? '')); } }}
+                  onMouseEnter={() => setHoveredId((tmpl.id ?? null))}
                   onMouseLeave={() => setHoveredId(null)}
                   style={{
                     ...card,
@@ -282,7 +282,7 @@ export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
                   {/* Footer: tags + usage */}
                   <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box style={{ display: 'flex', gap: t.spacing[1], flexWrap: 'wrap' }}>
-                      {tmpl.tags.slice(0, 2).map(tag => (
+                      {(tmpl.tags ?? []).slice(0, 2).map(tag => (
                         <Box key={tag} style={{
                           padding: `0 ${t.spacing[1]}px`,
                           borderRadius: t.borderRadius.sm,
@@ -294,7 +294,7 @@ export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                        {tmpl.usageCount} uses
+                        {tmpl.usageCount ?? 0} uses
                       </Text>
                       {tmpl.lastUsed && (
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>
@@ -312,3 +312,7 @@ export const GalleryBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
     );
   },
 });
+
+// Export with the canonical name (barrel expects this) + legacy alias
+export { GalleryBhMessageTemplateItemGallery as GalleryBhMessageTemplateGallery };
+export { GalleryBhMessageTemplateItemGallery };

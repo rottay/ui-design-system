@@ -71,6 +71,7 @@ function getCategoryConfig(category: RetroItem['category'], t: DesignTokens) {
         badge: 'warning' as const,
       };
     case 'action':
+    default:
       return {
         label: 'Action Items',
         icon: Zap,
@@ -142,12 +143,12 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
     }), [entrance, t]);
 
     const categorizedItems = useMemo(() => ({
-      good: items.filter(i => i.category === 'good').sort((a, b) => b.votes - a.votes),
-      improve: items.filter(i => i.category === 'improve').sort((a, b) => b.votes - a.votes),
-      action: items.filter(i => i.category === 'action').sort((a, b) => b.votes - a.votes),
+      good: items.filter(i => i.category === 'good').sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0)),
+      improve: items.filter(i => i.category === 'improve').sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0)),
+      action: items.filter(i => i.category === 'action').sort((a, b) => (b.votes ?? 0) - (a.votes ?? 0)),
     }), [items]);
 
-    const totalVotes = useMemo(() => items.reduce((s, i) => s + i.votes, 0), [items]);
+    const totalVotes = useMemo(() => items.reduce((s, i) => s + (i.votes ?? 0), 0), [items]);
 
     if (loading) {
       return (
@@ -293,8 +294,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
                               tabIndex={0}
                               role="button"
                               aria-label={`Vote for "${item.text}" (${item.votes} votes)`}
-                              onClick={() => handleVote(item.id)}
-                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVote(item.id); } }}
+                              onClick={() => handleVote((item.id ?? ''))}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVote((item.id ?? '')); } }}
                               style={{
                                 display: 'flex', alignItems: 'center', gap: t.spacing[1],
                                 padding: `2px ${t.spacing[2]}px`,
@@ -317,8 +318,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
                               tabIndex={0}
                               role="button"
                               aria-label={`Delete "${item.text}"`}
-                              onClick={() => handleDelete(item.id)}
-                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDelete(item.id); } }}
+                              onClick={() => handleDelete((item.id ?? ''))}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDelete((item.id ?? '')); } }}
                               style={{
                                 display: 'flex', alignItems: 'center',
                                 padding: 2,

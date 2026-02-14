@@ -630,7 +630,7 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
 
                     {/* Conversations */}
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>
-                      {agent.totalConversations.toLocaleString()}
+                      {(agent.totalConversations || 0).toLocaleString()}
                     </Text>
 
                     {/* Score bar */}

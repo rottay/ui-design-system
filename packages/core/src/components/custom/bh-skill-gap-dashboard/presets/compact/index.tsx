@@ -29,7 +29,8 @@ function getPriorityBadgeKey(priority: SkillGapData['priority']): 'error' | 'war
   switch (priority) {
     case 'high': return 'error';
     case 'medium': return 'warning';
-    case 'low': return 'success';
+    case 'low':
+    default: return 'success';
   }
 }
 
@@ -72,7 +73,7 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
     }, [onSkillClick]);
 
     const sortedSkills = useMemo(
-      () => [...skills].sort((a, b) => b.gap - a.gap).slice(0, 5),
+      () => [...skills].sort((a, b) => (b.gap ?? 0) - (a.gap ?? 0)).slice(0, 5),
       [skills],
     );
 
@@ -127,14 +128,19 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
 
         {/* Skill list */}
         <Box role="list" aria-label="Top skill gaps">
-          {sortedSkills.map((skill) => (
+          {sortedSkills.map((skill) => {
+            const skillName = skill.skill ?? 'Unknown';
+            const gap = skill.gap ?? 0;
+            const candidatePool = skill.candidatePool ?? 0;
+            const priority = skill.priority;
+            return (
             <Box
-              key={skill.skill}
+              key={skillName}
               role="listitem"
               tabIndex={0}
-              aria-label={`${skill.skill}: gap ${skill.gap}%`}
-              onClick={() => handleClick(skill.skill)}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(skill.skill); } }}
+              aria-label={`${skillName}: gap ${gap}%`}
+              onClick={() => handleClick(skillName)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(skillName); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -155,23 +161,24 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}>
-                    {skill.skill}
+                    {skillName}
                   </Text>
                   <Box style={{
-                    ...createBadgeStyle(t, getPriorityBadgeKey(skill.priority)),
+                    ...createBadgeStyle(t, getPriorityBadgeKey(priority)),
                     borderRadius: badgeRadius,
                     padding: `0px ${t.spacing[1]}px`,
                   }}>
-                    <Text style={{ fontSize: 9 }}>{skill.priority}</Text>
+                    <Text style={{ fontSize: 9 }}>{priority ?? 'none'}</Text>
                   </Box>
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                  Gap: {skill.gap}% | Pool: {skill.candidatePool}
+                  Gap: {gap}% | Pool: {candidatePool}
                 </Text>
               </Box>
               <ChevronRight size={12} color={t.colors.neutral[300]} />
             </Box>
-          ))}
+            );
+          })}
           {skills.length === 0 && (
             <Box style={{ ...createEmptyStateStyle(t), padding: t.spacing[4] }}>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>

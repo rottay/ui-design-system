@@ -17,6 +17,7 @@ export {
   type KnockoutStat,
   type TrendPoint,
   type CohortComparison,
+  type SkillGapSummary,
   type SkillGap,
   type ScoringFilter,
   BH_SCORING_INSIGHTS_DEFAULTS,

@@ -20,21 +20,23 @@ import type { BhAgentAbTestProps, AbTestVariant } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import { FlaskConical, Trophy, Activity, Star, Users } from 'lucide-react';
 
-function getStatusBadge(status: BhAgentAbTestProps['status']): 'success' | 'secondary' | 'primary' | 'warning' {
+function getStatusBadge(status: BhAgentAbTestProps['status'] | undefined): 'success' | 'secondary' | 'primary' | 'warning' {
   switch (status) {
     case 'draft': return 'secondary';
     case 'running': return 'success';
     case 'completed': return 'primary';
-    case 'paused': return 'warning';
+    case 'paused':
+    default: return 'warning';
   }
 }
 
-function getStatusLabel(status: BhAgentAbTestProps['status']): string {
+function getStatusLabel(status: BhAgentAbTestProps['status'] | undefined): string {
   switch (status) {
     case 'draft': return 'Draft';
     case 'running': return 'Running';
     case 'completed': return 'Completed';
-    case 'paused': return 'Paused';
+    case 'paused':
+    default: return 'Paused';
   }
 }
 
@@ -47,7 +49,7 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
     const {
       testName = 'A/B Test',
       variants = [],
-      status,
+      status = 'draft',
       startDate,
       onVariantClick,
       loading = false,
@@ -63,12 +65,12 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
     // Determine winner
     const winner = useMemo(() => {
       if (variants.length < 2) return null;
-      const sorted = [...variants].sort((a, b) => b.metrics.avgScore - a.metrics.avgScore);
+      const sorted = [...variants].sort((a, b) => (b.metrics?.avgScore ?? 0) - (a.metrics?.avgScore ?? 0));
       return sorted[0];
     }, [variants]);
 
     const totalConversations = useMemo(() => {
-      return variants.reduce((sum, v) => sum + v.metrics.conversations, 0);
+      return variants.reduce((sum, v) => sum + (v.metrics?.conversations ?? 0), 0);
     }, [variants]);
 
     if (loading) {
@@ -163,7 +165,7 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
                   <Star size={12} strokeWidth={1.5} style={{ color: t.colors.warningScale[500] }} />
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>
-                    {variant.metrics.avgScore.toFixed(1)}
+                    {(variant.metrics?.avgScore ?? 0).toFixed(1)}
                   </Text>
                 </Box>
 
@@ -171,7 +173,7 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
                   <Users size={12} strokeWidth={1.5} style={{ color: t.colors.neutral[400] }} />
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                    {variant.metrics.conversations}
+                    {variant.metrics?.conversations ?? 0}
                   </Text>
                 </Box>
               </Box>

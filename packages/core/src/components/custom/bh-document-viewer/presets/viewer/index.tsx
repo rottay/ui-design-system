@@ -145,7 +145,7 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
                 {documentName}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                {documentType.toUpperCase()} - {totalPages} page{totalPages > 1 ? 's' : ''}
+                {(documentType || '').toUpperCase()} - {totalPages} page{totalPages > 1 ? 's' : ''}
               </Text>
             </Box>
           </Box>
@@ -290,8 +290,8 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
                 tabIndex={0}
                 role="button"
                 aria-label={`Annotation: ${ann.text}`}
-                onClick={() => onAnnotationClick?.(ann.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAnnotationClick?.(ann.id); } }}
+                onClick={() => onAnnotationClick?.((ann.id ?? ''))}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAnnotationClick?.((ann.id ?? '')); } }}
                 style={{
                   position: 'absolute',
                   left: `${ann.x}%`,

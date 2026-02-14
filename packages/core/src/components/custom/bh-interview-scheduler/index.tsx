@@ -11,6 +11,7 @@ import { BH_INTERVIEW_SCHEDULER_PRESETS } from './presets';
 export {
   type BhInterviewSchedulerProps,
   type BhInterviewSchedulerPreset,
+  type RecruiterInterview,
   type ScheduleCandidate,
   type InterviewTypeConfig,
   type ScheduleData,

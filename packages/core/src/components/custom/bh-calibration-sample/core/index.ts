@@ -1,40 +1,53 @@
 /**
  * BhCalibrationSample - Core Interface
  * Calibration sample review for comparing human vs AI scoring
- * in the BitHire ATS platform
+ *
+ * Uses CalibrationSampleSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { CalibrationSampleSelect } from '@rottay/scoring';
 
 export type BhCalibrationSamplePreset = 'review' | 'compact';
 
-export type CalibrationSampleStatus = 'pending' | 'reviewed' | 'adjusted';
-
+/** Dimension-level comparison data (from CalibrationSampleSelect.dimensionComparisons jsonb) */
 export interface DimensionComparison {
-  dimensionName: string;
-  humanScore: number;
-  aiScore: number;
-  deviation: number;
-  maxScore: number;
-  weight: number;
+  dimensionName?: string;
+  humanScore?: number;
+  aiScore?: number;
+  deviation?: number;
+  maxScore?: number;
+  weight?: number;
   humanNotes?: string;
   aiNotes?: string;
-  agreed: boolean;
+  agreed?: boolean;
 }
 
-export interface CalibrationSample {
+/**
+ * UI-friendly calibration sample view with flat fields.
+ * Pre-computed/mapped from DB data by the consuming application.
+ */
+export interface CalibrationSampleView {
+  /** Sample identifier */
   id: string;
-  scorableId: string;
-  candidateName: string;
-  dimensions: DimensionComparison[];
-  overallHumanScore: number;
-  overallAiScore: number;
-  overallDeviation: number;
-  agreementRate: number;
-  status: CalibrationSampleStatus;
-  reviewedBy?: string;
-  reviewedAt?: Date;
+  /** Scorable entity identifier */
+  scorableId?: string;
+  /** Display name of the candidate (resolved externally) */
+  candidateName?: string;
+  /** Parsed dimension comparisons */
+  dimensions?: DimensionComparison[];
+  /** Overall human score */
+  overallHumanScore?: number;
+  /** Overall AI score */
+  overallAiScore?: number;
+  /** Overall deviation between human and AI */
+  overallDeviation?: number;
+  /** Computed agreement rate (0-1) */
+  agreementRate?: number;
+  /** Review status (UI-derived) */
+  status?: 'pending' | 'reviewed' | 'adjusted';
+  /** Adjustment notes */
   adjustmentNotes?: string;
 }
 
@@ -43,7 +56,7 @@ export interface BhCalibrationSampleProps extends EngineAwareProps {
   preset?: BhCalibrationSamplePreset;
 
   /** Calibration sample data */
-  sample: CalibrationSample;
+  sample?: CalibrationSampleView;
 
   /** Callback to adjust a dimension score */
   onAdjustScore?: (dimensionName: string, newScore: number) => void;
@@ -67,3 +80,18 @@ export interface BhCalibrationSampleProps extends EngineAwareProps {
 export const BH_CALIBRATION_SAMPLE_DEFAULTS: Partial<BhCalibrationSampleProps> = {
   preset: 'review',
 };
+
+/** Backward-compat aliases (old names from pre-migration) */
+export type CalibrationSample = CalibrationSampleView;
+export type CalibrationSampleStatus = 'pending' | 'reviewed' | 'adjusted';
+
+/** Convert Drizzle numeric string to number. Handles null/undefined/string/number safely. */
+export function n(v: string | number | null | undefined): number {
+  if (v == null) return 0;
+  if (typeof v === 'number') return v;
+  const parsed = Number(v);
+  return isNaN(parsed) ? 0 : parsed;
+}
+
+/** Re-export DB type for convenience */
+export type { CalibrationSampleSelect };

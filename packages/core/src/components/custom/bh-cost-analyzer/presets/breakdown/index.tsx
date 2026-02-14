@@ -142,7 +142,7 @@ function ModelRow({ model, maxCost, totalCost, providerColorMap, tokens, primiti
           </Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Requests</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600] }}>{model.requestCount.toLocaleString()}</Text>
+            <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[600] }}>{(model.requestCount || 0).toLocaleString()}</Text>
           </Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
             <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>Avg</Text>

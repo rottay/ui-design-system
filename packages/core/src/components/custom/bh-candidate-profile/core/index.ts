@@ -1,55 +1,30 @@
 /**
  * BhCandidateProfile - Core Interface
  * Comprehensive Candidate View for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBCandidate directly - no mapping needed.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 export type BhCandidateProfilePreset = 'full' | 'compact';
 
+export type RecruiterCandidate = DBCandidate;
+
 export type CandidateTab = 'profile' | 'applications' | 'interviews' | 'scores' | 'notes' | 'activity' | 'documents';
 
-export interface CandidateInfo {
-  id: string;
-  name: string;
-  avatar?: string;
-  currentRole?: string;
-  location?: string;
-  email?: string;
-  phone?: string;
-  source?: string;
-  status?: string;
-  doNotContact: boolean;
-}
-
-export interface CandidateSkill {
-  name: string;
-  proficiency: number; // 0-100
-}
-
-export interface Experience {
-  company: string;
-  role: string;
-  startDate: string;
-  endDate?: string;
-  current: boolean;
-  description?: string;
-}
-
-export interface Education {
-  institution: string;
-  degree: string;
-  field: string;
-  year: number;
-}
-
+/**
+ * Application info for the applications tab (UI-specific, not a DB entity replacement).
+ */
 export interface CandidateApplication {
   id: string;
   jobName: string;
   stage: string;
   scorePercent: number;
-  pipelineProgress: number; // 0-1
+  pipelineProgress: number;
   recruiterName?: string;
   recruiterAvatar?: string;
   status: string;
@@ -101,17 +76,8 @@ export interface CandidateStats {
 export interface BhCandidateProfileProps extends EngineAwareProps {
   preset?: BhCandidateProfilePreset;
 
-  /** Primary candidate information */
-  candidate?: CandidateInfo;
-
-  /** Candidate skills with proficiency levels */
-  skills?: CandidateSkill[];
-
-  /** Work experience history */
-  experience?: Experience[];
-
-  /** Education history */
-  education?: Education[];
+  /** Primary candidate data - accepts DBCandidate directly from @rottay/recruiter */
+  candidate?: DBCandidate;
 
   /** Active and past applications */
   applications?: CandidateApplication[];
@@ -130,15 +96,6 @@ export interface BhCandidateProfileProps extends EngineAwareProps {
 
   /** Summary statistics */
   stats?: CandidateStats;
-
-  /** Compensation range (min and max) */
-  compensationRange?: { min: number; max: number; currency?: string };
-
-  /** Languages spoken */
-  languages?: { name: string; level: string }[];
-
-  /** External profile links */
-  links?: { label: string; url: string }[];
 
   /** Document attachments */
   documents?: { id: string; name: string; type: string; uploadedAt: Date }[];
@@ -187,3 +144,94 @@ export const BH_CANDIDATE_PROFILE_DEFAULTS: Partial<BhCandidateProfileProps> = {
   preset: 'full',
   defaultTab: 'profile',
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use RecruiterCandidate (DBCandidate) instead */
+export type CandidateInfo = RecruiterCandidate;
+/** @deprecated Use getCandidateSkills() return type instead */
+export type CandidateSkill = { name: string; level?: string; yearsOfExperience?: number };
+/** @deprecated Work experience - extract from DBCandidate.workExperience jsonb field */
+export interface Experience {
+  company: string;
+  title: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
+}
+/** @deprecated Education - extract from DBCandidate.education jsonb field */
+export interface Education {
+  institution: string;
+  degree: string;
+  field?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+/**
+ * Get the candidate's full name from DB fields.
+ */
+export function getCandidateFullName(candidate: DBCandidate): string {
+  return `${candidate.firstName ?? ''} ${candidate.lastName ?? ''}`.trim();
+}
+
+/**
+ * Get the candidate's current role display string.
+ */
+export function getCandidateRole(candidate: DBCandidate): string {
+  const title = candidate.currentTitle ?? '';
+  const company = candidate.currentCompany ?? '';
+  if (title && company) return `${title} at ${company}`;
+  return title || company || '';
+}
+
+/**
+ * Extract location string from the jsonb currentLocation field.
+ */
+export function getCandidateLocation(candidate: DBCandidate): string {
+  const loc = candidate.currentLocation as { city?: string; state?: string; country?: string } | null;
+  if (!loc) return '';
+  const parts = [loc.city, loc.state, loc.country].filter(Boolean);
+  return parts.join(', ');
+}
+
+/**
+ * Extract skill objects from the jsonb skills field.
+ */
+export function getCandidateSkills(candidate: DBCandidate): Array<{ name: string; level?: string; yearsOfExperience?: number }> {
+  const skills = candidate.skills as Array<{ name?: string; level?: string; yearsOfExperience?: number }> | null;
+  if (!Array.isArray(skills)) return [];
+  return skills.filter(s => s.name).map(s => ({ name: s.name!, level: s.level, yearsOfExperience: s.yearsOfExperience }));
+}
+
+/**
+ * Extract languages from the jsonb languages field.
+ */
+export function getCandidateLanguages(candidate: DBCandidate): Array<{ language: string; proficiency: string }> {
+  const langs = candidate.languages as Array<{ language?: string; proficiency?: string }> | null;
+  if (!Array.isArray(langs)) return [];
+  return langs.filter(l => l.language).map(l => ({ language: l.language!, proficiency: l.proficiency ?? '' }));
+}
+
+/**
+ * Build external links from DB URL fields.
+ */
+export function getCandidateLinks(candidate: DBCandidate): Array<{ label: string; url: string }> {
+  const links: Array<{ label: string; url: string }> = [];
+  if (candidate.linkedinUrl) links.push({ label: 'LinkedIn', url: candidate.linkedinUrl });
+  if (candidate.githubUrl) links.push({ label: 'GitHub', url: candidate.githubUrl });
+  if (candidate.portfolioUrl) links.push({ label: 'Portfolio', url: candidate.portfolioUrl });
+  if (candidate.websiteUrl) links.push({ label: 'Website', url: candidate.websiteUrl });
+  return links;
+}
+
+/**
+ * Get compensation range from DB fields.
+ */
+export function getCandidateCompensation(candidate: DBCandidate): { min: number; max: number; currency: string } | null {
+  if (candidate.expectedSalaryMin == null && candidate.expectedSalaryMax == null) return null;
+  return {
+    min: candidate.expectedSalaryMin ?? 0,
+    max: candidate.expectedSalaryMax ?? 0,
+    currency: candidate.expectedSalaryCurrency ?? 'USD',
+  };
+}

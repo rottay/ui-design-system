@@ -216,7 +216,7 @@ export const DropdownBhPipelineFilterBar = createPreset<BhPipelineFilterBarProps
               >
                 <Text style={{ fontSize: t.typography.fontSize.xs }}>{af.label}</Text>
                 <button
-                  onClick={(e) => { e.stopPropagation(); handleFilterRemove(af.filterId); }}
+                  onClick={(e) => { e.stopPropagation(); handleFilterRemove((af.filterId ?? '')); }}
                   aria-label={`Remove filter: ${af.label}`}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -271,7 +271,7 @@ export const DropdownBhPipelineFilterBar = createPreset<BhPipelineFilterBarProps
               marginBottom: t.spacing[4],
             }}>
               {filters.map((filter, fi) => {
-                const Icon = getFilterIcon(filter.id);
+                const Icon = getFilterIcon((filter.id ?? ''));
                 const activeValue = activeFilters.find(af => af.filterId === filter.id);
                 return (
                   <Box
@@ -305,18 +305,18 @@ export const DropdownBhPipelineFilterBar = createPreset<BhPipelineFilterBarProps
                     ) : filter.options ? (
                       <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
                         {filter.options
-                          .filter(o => !searchQuery || o.label.toLowerCase().includes(searchQuery.toLowerCase()))
+                          .filter(o => !searchQuery || (o.label ?? '').toLowerCase().includes(searchQuery.toLowerCase()))
                           .map((opt) => {
                             const isSelected = activeValue?.value === opt.value ||
-                              (Array.isArray(activeValue?.value) && activeValue.value.includes(opt.value));
+                              (Array.isArray(activeValue?.value) && (activeValue?.value as string[]).includes(opt.value));
                             return (
                               <Box
                                 key={opt.value}
                                 role="option"
                                 aria-selected={isSelected}
                                 tabIndex={0}
-                                onClick={() => handleFilterSelect(filter.id, opt.value)}
-                                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterSelect(filter.id, opt.value); } }}
+                                onClick={() => handleFilterSelect((filter.id ?? ''), opt.value)}
+                                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterSelect((filter.id ?? ''), opt.value); } }}
                                 style={{
                                   display: 'flex',
                                   alignItems: 'center',
@@ -364,7 +364,7 @@ export const DropdownBhPipelineFilterBar = createPreset<BhPipelineFilterBarProps
                 {savedPresets.map((preset) => (
                   <button
                     key={preset.id}
-                    onClick={() => handlePresetLoad(preset.id)}
+                    onClick={() => handlePresetLoad((preset.id ?? ''))}
                     aria-label={`Load preset: ${preset.name}`}
                     style={{
                       display: 'inline-flex',

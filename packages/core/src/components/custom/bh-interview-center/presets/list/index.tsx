@@ -2,9 +2,11 @@
 
 /**
  * BhInterviewCenter - List Preset
- * Sortable table view with status badges, type indicators,
+ * Sortable table view with status badges, mode indicators,
  * stats bar, filter pills, search, and row actions.
  * Personality-driven, glass-aware, fully accessible.
+ *
+ * Uses DBInterview from @rottay/recruiter (single source of truth).
  */
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
@@ -23,59 +25,92 @@ import {
   createEmptyStateStyle,
   getAccentAwareLayout,
 } from '../../../helpers';
-import type { BhInterviewCenterProps, InterviewItem, InterviewType, InterviewStatus, InterviewFilter, SortDirection } from '../../core';
-import { BH_INTERVIEW_CENTER_DEFAULTS } from '../../core';
+import type { BhInterviewCenterProps, InterviewDisplayStatus, InterviewDisplayMode, InterviewFilter, SortDirection } from '../../core';
+import { BH_INTERVIEW_CENTER_DEFAULTS, isAiInterview, getInterviewModeLabel, getInterviewStatusLabel, getInterviewDateStr, getInterviewDuration, getInterviewScore } from '../../core';
+import type { DBInterview } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Calendar, List, Clock, Bot, User, Plus, ChevronDown, ChevronUp, X, Filter, Search,
   TrendingUp, TrendingDown, CheckCircle2, XCircle, Timer, BarChart3, CalendarDays,
-  Star, Eye, ExternalLink, ArrowUpDown, Activity,
+  Star, Eye, ExternalLink, ArrowUpDown, Activity, Phone, Video, MapPin,
 } from 'lucide-react';
 
 type ScaleKey = 'infoScale' | 'warningScale' | 'successScale' | 'neutral' | 'errorScale' | 'secondaryScale' | 'primaryScale';
 
-const STATUS_MAP: Record<InterviewStatus, { label: string; scale: ScaleKey }> = {
+const STATUS_MAP: Record<string, { label: string; scale: ScaleKey }> = {
+  pending: { label: 'Pending', scale: 'warningScale' },
   scheduled: { label: 'Scheduled', scale: 'infoScale' },
+  invitation_sent: { label: 'Invited', scale: 'infoScale' },
+  ready: { label: 'Ready', scale: 'primaryScale' },
   in_progress: { label: 'In Progress', scale: 'warningScale' },
   completed: { label: 'Completed', scale: 'successScale' },
+  scored: { label: 'Scored', scale: 'successScale' },
+  approved: { label: 'Approved', scale: 'successScale' },
   cancelled: { label: 'Cancelled', scale: 'neutral' },
+  expired: { label: 'Expired', scale: 'neutral' },
   no_show: { label: 'No Show', scale: 'errorScale' },
+  technical_issue: { label: 'Tech Issue', scale: 'errorScale' },
+  candidate_declined: { label: 'Declined', scale: 'errorScale' },
 };
 
-const TYPE_MAP: Record<InterviewType, { label: string; scale: ScaleKey }> = {
-  ai: { label: 'AI', scale: 'infoScale' },
-  human: { label: 'Human', scale: 'secondaryScale' },
+const MODE_MAP: Record<string, { label: string; scale: ScaleKey }> = {
+  ai_voice: { label: 'AI Voice', scale: 'infoScale' },
+  ai_chat: { label: 'AI Chat', scale: 'infoScale' },
+  human_video: { label: 'Video', scale: 'secondaryScale' },
+  human_phone: { label: 'Phone', scale: 'secondaryScale' },
+  in_person: { label: 'In Person', scale: 'secondaryScale' },
 };
 
-const statusCfg = (t: DesignTokens, s: InterviewStatus) => {
-  const { scale } = STATUS_MAP[s];
-  const sc = (t.colors as any)[scale];
-  return { label: STATUS_MAP[s].label, color: sc[700] ?? sc[600], bg: sc[50] ?? sc[100], border: sc[200], dot: sc[500] ?? sc[400] };
+const statusCfg = (t: DesignTokens, s: string | null | undefined) => {
+  const entry = STATUS_MAP[s ?? ''] ?? { label: 'Unknown', scale: 'neutral' as ScaleKey };
+  const sc = (t.colors as any)[entry.scale];
+  return { label: entry.label, color: sc?.[700] ?? sc?.[600], bg: sc?.[50] ?? sc?.[100], border: sc?.[200], dot: sc?.[500] ?? sc?.[400] };
 };
 
-const typeCfg = (t: DesignTokens, ty: InterviewType) => {
-  const { scale } = TYPE_MAP[ty];
-  const sc = (t.colors as any)[scale];
-  return { label: TYPE_MAP[ty].label, color: sc[700], bg: sc[100], border: sc[200] };
+const modeCfg = (t: DesignTokens, m: string | null | undefined) => {
+  const entry = MODE_MAP[m ?? ''] ?? { label: 'Unknown', scale: 'neutral' as ScaleKey };
+  const sc = (t.colors as any)[entry.scale];
+  return { label: entry.label, color: sc?.[700], bg: sc?.[100], border: sc?.[200] };
 };
 
-function fmtTime(d: string) { const x = new Date(d), h = x.getHours(), m = x.getMinutes(); return `${h % 12 || 12}:${m.toString().padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`; }
-function fmtDate(d: string) { const x = new Date(d); return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][x.getMonth()]} ${x.getDate()}`; }
+/** Safe display name extraction from metadata jsonb or fallback */
+function getDisplayName(iv: DBInterview, field: string, fallback: string): string {
+  const meta = iv.metadata as Record<string, unknown> | null | undefined;
+  if (meta && typeof meta === 'object' && typeof (meta as any)[field] === 'string') {
+    return (meta as any)[field] as string;
+  }
+  return fallback;
+}
+
+function fmtTime(d: string | Date | null | undefined) {
+  if (!d) return '--';
+  const x = new Date(d);
+  if (isNaN(x.getTime())) return '--';
+  const h = x.getHours(), m = x.getMinutes();
+  return `${h % 12 || 12}:${m.toString().padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
+}
+
+function fmtDate(d: string | Date | null | undefined) {
+  if (!d) return '--';
+  const x = new Date(d);
+  if (isNaN(x.getTime())) return '--';
+  return `${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][x.getMonth()]} ${x.getDate()}`;
+}
 
 const TABLE_COLUMNS = [
   { key: 'candidateName', label: 'Candidate', sortable: true },
   { key: 'jobTitle', label: 'Position', sortable: true },
   { key: 'stageName', label: 'Stage', sortable: true },
-  { key: 'type', label: 'Type', sortable: true },
+  { key: 'mode', label: 'Mode', sortable: true },
   { key: 'status', label: 'Status', sortable: true },
-  { key: 'dateTime', label: 'Date & Time', sortable: true },
+  { key: 'scheduledAt', label: 'Date & Time', sortable: true },
   { key: 'duration', label: 'Duration', sortable: true },
   { key: 'score', label: 'Score', sortable: true },
   { key: 'interviewer', label: 'Interviewer', sortable: false },
   { key: 'actions', label: '', sortable: false },
 ];
 
-const GRID_COLS = '1fr 1fr 100px 90px 120px 160px 90px 80px 1fr 80px';
+const GRID_COLS = '1fr 1fr 100px 100px 120px 160px 90px 80px 1fr 80px';
 
 export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
   name: 'BhInterviewCenter.List',
@@ -94,15 +129,14 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
-    const { interviews, stats, filters: cFilters, onFilterChange, selectedInterview: cSel, onInterviewSelect, onScheduleNew, sortBy: cSort, sortDirection: cDir, onSortChange, className, style } = props;
+    const { interviews = [], stats, filters: cFilters, onFilterChange, selectedInterview: cSel, onInterviewSelect, onScheduleNew, sortBy: cSort, sortDirection: cDir, onSortChange, className, style } = props;
 
     const [iFilters, setIFilters] = useState<InterviewFilter>({});
     const [iSel, setISel] = useState<string | null>(null);
-    const [iSort, setISort] = useState(BH_INTERVIEW_CENTER_DEFAULTS.sortBy ?? 'dateTime');
+    const [iSort, setISort] = useState(BH_INTERVIEW_CENTER_DEFAULTS.sortBy ?? 'scheduledAt');
     const [iDir, setIDir] = useState<SortDirection>(BH_INTERVIEW_CENTER_DEFAULTS.sortDirection ?? 'asc');
     const [search, setSearch] = useState('');
     const [hovered, setHovered] = useState<string | null>(null);
-
 
     const filters = cFilters ?? iFilters;
     const sel = cSel ?? iSel;
@@ -125,21 +159,44 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const filtered = useMemo(() => {
       let r = [...interviews];
       if (filters.status) r = r.filter(i => i.status === filters.status);
-      if (filters.type) r = r.filter(i => i.type === filters.type);
-      if (filters.dateRange) { const [s, e] = filters.dateRange; r = r.filter(i => { const d = new Date(i.dateTime); return d >= new Date(s) && d <= new Date(e); }); }
-      if (search) { const q = search.toLowerCase(); r = r.filter(i => [i.candidateName, i.jobTitle, i.stageName, i.recruiterName, i.agentName].some(v => v?.toLowerCase().includes(q))); }
+      if (filters.mode) {
+        const isAiMode = filters.mode === 'ai_voice' || filters.mode === 'ai_chat';
+        if (isAiMode) {
+          r = r.filter(i => i.interviewMode === 'ai_voice' || i.interviewMode === 'ai_chat');
+        } else {
+          r = r.filter(i => i.interviewMode === filters.mode);
+        }
+      }
+      if (filters.dateRange) {
+        const [s, e] = filters.dateRange;
+        r = r.filter(i => {
+          const dateStr = getInterviewDateStr(i);
+          const d = new Date(dateStr);
+          return d >= new Date(s) && d <= new Date(e);
+        });
+      }
+      if (search) {
+        const q = search.toLowerCase();
+        r = r.filter(i => {
+          const candidateName = getDisplayName(i, 'candidateName', '');
+          const jobTitle = getDisplayName(i, 'jobTitle', '');
+          const stageName = getDisplayName(i, 'stageName', '');
+          const interviewerName = i.interviewerName ?? '';
+          return [candidateName, jobTitle, stageName, interviewerName].some(v => v.toLowerCase().includes(q));
+        });
+      }
       r.sort((a, b) => {
         let av: number | string = 0, bv: number | string = 0;
         switch (sortBy) {
-          case 'dateTime': av = new Date(a.dateTime).getTime(); bv = new Date(b.dateTime).getTime(); break;
-          case 'candidateName': av = a.candidateName.toLowerCase(); bv = b.candidateName.toLowerCase(); break;
-          case 'jobTitle': av = a.jobTitle.toLowerCase(); bv = b.jobTitle.toLowerCase(); break;
-          case 'stageName': av = a.stageName.toLowerCase(); bv = b.stageName.toLowerCase(); break;
-          case 'duration': av = a.duration; bv = b.duration; break;
-          case 'score': av = a.score ?? 0; bv = b.score ?? 0; break;
-          case 'type': av = a.type; bv = b.type; break;
-          case 'status': { const o: Record<InterviewStatus, number> = { scheduled: 0, in_progress: 1, completed: 2, cancelled: 3, no_show: 4 }; av = o[a.status]; bv = o[b.status]; break; }
-          default: av = new Date(a.dateTime).getTime(); bv = new Date(b.dateTime).getTime();
+          case 'scheduledAt': av = new Date(getInterviewDateStr(a)).getTime(); bv = new Date(getInterviewDateStr(b)).getTime(); break;
+          case 'candidateName': av = getDisplayName(a, 'candidateName', '').toLowerCase(); bv = getDisplayName(b, 'candidateName', '').toLowerCase(); break;
+          case 'jobTitle': av = getDisplayName(a, 'jobTitle', '').toLowerCase(); bv = getDisplayName(b, 'jobTitle', '').toLowerCase(); break;
+          case 'stageName': av = getDisplayName(a, 'stageName', '').toLowerCase(); bv = getDisplayName(b, 'stageName', '').toLowerCase(); break;
+          case 'duration': av = getInterviewDuration(a); bv = getInterviewDuration(b); break;
+          case 'score': av = getInterviewScore(a) ?? 0; bv = getInterviewScore(b) ?? 0; break;
+          case 'mode': av = a.interviewMode ?? ''; bv = b.interviewMode ?? ''; break;
+          case 'status': av = a.status ?? ''; bv = b.status ?? ''; break;
+          default: av = new Date(getInterviewDateStr(a)).getTime(); bv = new Date(getInterviewDateStr(b)).getTime();
         }
         if (typeof av === 'string') return sortDir === 'asc' ? av.localeCompare(bv as string) : (bv as string).localeCompare(av);
         return sortDir === 'asc' ? av - (bv as number) : (bv as number) - av;
@@ -163,8 +220,12 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
       transitionDelay: `${createStaggerDelay(t, index)}ms`,
     }), [entrance, t]);
 
-    const statuses: (InterviewStatus | null)[] = useMemo(() => [null, 'scheduled', 'in_progress', 'completed', 'cancelled', 'no_show'], []);
-    const types: (InterviewType | null)[] = useMemo(() => [null, 'ai', 'human'], []);
+    const statusOptions: (InterviewDisplayStatus | null)[] = useMemo(() => [null, 'pending', 'scheduled', 'invitation_sent', 'ready', 'in_progress', 'completed', 'scored', 'approved', 'cancelled', 'expired', 'no_show', 'technical_issue', 'candidate_declined'], []);
+    const modeGroups: ({ key: string; label: string; icon?: React.ReactNode } | null)[] = useMemo(() => [
+      null,
+      { key: 'ai', label: 'AI' },
+      { key: 'human', label: 'Human' },
+    ], []);
 
     const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
     const clearSearch = useCallback(() => setSearch(''), []);
@@ -225,24 +286,39 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3], flexWrap: 'wrap' as const }} role="toolbar" aria-label="Interview filters">
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
             <Filter size={14} color={t.colors.neutral[400]} />
-            {statuses.map(s => {
+            {statusOptions.slice(0, 8).map(s => {
               const a = filters.status === s || (s === null && !filters.status);
+              const entry = s ? STATUS_MAP[s] : null;
               return (
-                <Box key={s ?? 'all'} role="button" tabIndex={0} aria-label={s === null ? 'All statuses' : STATUS_MAP[s].label} aria-pressed={a} onClick={() => handleFilter({ ...filters, status: s })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilter({ ...filters, status: s }); } }} style={pillStyle(a)}>
+                <Box key={s ?? 'all'} role="button" tabIndex={0} aria-label={s === null ? 'All statuses' : (entry?.label ?? s)} aria-pressed={a} onClick={() => handleFilter({ ...filters, status: s as InterviewDisplayStatus | undefined })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilter({ ...filters, status: s as InterviewDisplayStatus | undefined }); } }} style={pillStyle(a)}>
                   {s !== null && <Box style={{ width: 6, height: 6, borderRadius: t.borderRadius.full, backgroundColor: statusCfg(t, s).dot, flexShrink: 0 }} />}
-                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{s === null ? 'All' : STATUS_MAP[s].label}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{s === null ? 'All' : (entry?.label ?? s)}</Text>
                 </Box>
               );
             })}
           </Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-            {types.map(ty => {
-              const a = filters.type === ty || (ty === null && !filters.type);
+            {modeGroups.map(mg => {
+              const key = mg?.key ?? 'all-modes';
+              const isAiFilter = filters.mode === 'ai_voice' || filters.mode === 'ai_chat';
+              const isHumanFilter = filters.mode === 'human_video' || filters.mode === 'human_phone' || filters.mode === 'in_person';
+              const a = mg === null ? !filters.mode : mg.key === 'ai' ? isAiFilter : isHumanFilter;
               return (
-                <Box key={ty ?? 'all-types'} role="button" tabIndex={0} aria-label={ty === null ? 'All types' : TYPE_MAP[ty].label} aria-pressed={a} onClick={() => handleFilter({ ...filters, type: ty })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilter({ ...filters, type: ty }); } }} style={pillStyle(a)}>
-                  {ty === 'ai' && <Bot size={10} />}
-                  {ty === 'human' && <User size={10} />}
-                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{ty === null ? 'All' : TYPE_MAP[ty].label}</Text>
+                <Box key={key} role="button" tabIndex={0} aria-label={mg === null ? 'All modes' : mg.label} aria-pressed={a} onClick={() => {
+                  if (mg === null) handleFilter({ ...filters, mode: undefined });
+                  else if (mg.key === 'ai') handleFilter({ ...filters, mode: 'ai_voice' as InterviewDisplayMode });
+                  else handleFilter({ ...filters, mode: 'human_video' as InterviewDisplayMode });
+                }} onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (mg === null) handleFilter({ ...filters, mode: undefined });
+                    else if (mg.key === 'ai') handleFilter({ ...filters, mode: 'ai_voice' as InterviewDisplayMode });
+                    else handleFilter({ ...filters, mode: 'human_video' as InterviewDisplayMode });
+                  }
+                }} style={pillStyle(a)}>
+                  {mg?.key === 'ai' && <Bot size={10} />}
+                  {mg?.key === 'human' && <User size={10} />}
+                  <Text style={{ fontSize: t.typography.fontSize.xs }}>{mg === null ? 'All' : mg.label}</Text>
                 </Box>
               );
             })}
@@ -292,14 +368,21 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: ptypo.headingWeight, color: t.colors.neutral[800], marginBottom: t.spacing[2], marginTop: t.spacing[4] }}>No interviews found</Text>
               <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500], marginBottom: t.spacing[6], maxWidth: 360, lineHeight: t.typography.lineHeight.relaxed }}>
-                {search || filters.status || filters.type ? 'Try adjusting your filters or search query.' : 'Schedule your first interview to get started.'}
+                {search || filters.status || filters.mode ? 'Try adjusting your filters or search query.' : 'Schedule your first interview to get started.'}
               </Text>
             </Box>
           ) : filtered.map((iv, idx) => {
             const sc = statusCfg(t, iv.status);
-            const tc = typeCfg(t, iv.type);
+            const mc = modeCfg(t, iv.interviewMode);
             const isH = hovered === iv.id;
             const isS = sel === iv.id;
+            const candidateName = getDisplayName(iv, 'candidateName', 'Candidate');
+            const jobTitle = getDisplayName(iv, 'jobTitle', 'Position');
+            const stageName = getDisplayName(iv, 'stageName', '--');
+            const dateStr = getInterviewDateStr(iv);
+            const duration = getInterviewDuration(iv);
+            const score = getInterviewScore(iv);
+            const isAi = isAiInterview(iv);
 
             return (
               <Box key={iv.id} role="row" aria-selected={isS} onClick={() => handleSelect(iv.id)} onMouseEnter={() => setHovered(iv.id)} onMouseLeave={() => setHovered(null)} style={{ display: 'grid', gridTemplateColumns: GRID_COLS, padding: `${t.spacing[3]}px ${t.spacing[4]}px`, borderBottom: `${bdr} ${t.colors.neutral[100]}`, backgroundColor: isS ? t.colors.primaryScale[50] : isH ? t.colors.neutral[50] : t.colors.common.white, cursor: 'pointer', transition: `all ${t.motion.hover}`, alignItems: 'center' }}>
@@ -308,16 +391,16 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                   <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <User size={14} color={t.colors.primaryScale[600]} />
                   </Box>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{iv.candidateName}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{candidateName}</Text>
                 </Box>
                 {/* Position */}
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], padding: `0 ${t.spacing[1]}px`, whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{iv.jobTitle}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700], padding: `0 ${t.spacing[1]}px`, whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>{jobTitle}</Text>
                 {/* Stage */}
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, padding: `0 ${t.spacing[1]}px` }}>{iv.stageName}</Text>
-                {/* Type */}
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium, padding: `0 ${t.spacing[1]}px` }}>{stageName}</Text>
+                {/* Mode */}
                 <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
-                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: tc.bg, border: `${bdr} ${tc.border}` }}>
-                    <Text style={{ fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: tc.color }}>{tc.label}</Text>
+                  <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[0]}px ${t.spacing[2]}px`, borderRadius: badgeRadius, backgroundColor: mc.bg, border: `${bdr} ${mc.border}` }}>
+                    <Text style={{ fontSize: '10px', fontWeight: t.typography.fontWeight.medium, color: mc.color }}>{mc.label}</Text>
                   </Box>
                 </Box>
                 {/* Status */}
@@ -329,20 +412,20 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 </Box>
                 {/* DateTime */}
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], padding: `0 ${t.spacing[1]}px` }}>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{fmtDate(iv.dateTime)}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{fmtTime(iv.dateTime)}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{fmtDate(dateStr)}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{fmtTime(dateStr)}</Text>
                 </Box>
                 {/* Duration */}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `0 ${t.spacing[1]}px` }}>
                   <Clock size={12} color={t.colors.neutral[400]} />
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{iv.duration}m</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], fontWeight: t.typography.fontWeight.medium }}>{duration}m</Text>
                 </Box>
                 {/* Score */}
                 <Box style={{ padding: `0 ${t.spacing[1]}px` }}>
-                  {iv.score !== undefined ? (
+                  {score !== undefined ? (
                     <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
-                      <Star size={12} color={iv.score >= 80 ? t.colors.successScale[500] : iv.score >= 60 ? t.colors.warningScale[500] : t.colors.errorScale[500]} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: iv.score >= 80 ? t.colors.successScale[700] : iv.score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700] }}>{iv.score}</Text>
+                      <Star size={12} color={score >= 80 ? t.colors.successScale[500] : score >= 60 ? t.colors.warningScale[500] : t.colors.errorScale[500]} />
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: score >= 80 ? t.colors.successScale[700] : score >= 60 ? t.colors.warningScale[700] : t.colors.errorScale[700] }}>{score}</Text>
                     </Box>
                   ) : (
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>--</Text>
@@ -350,17 +433,17 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
                 </Box>
                 {/* Interviewer */}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], padding: `0 ${t.spacing[1]}px`, overflow: 'hidden' }}>
-                  {iv.type === 'ai' ? <Bot size={12} color={t.colors.infoScale[500]} /> : <User size={12} color={t.colors.secondaryScale[500]} />}
+                  {isAi ? <Bot size={12} color={t.colors.infoScale[500]} /> : <User size={12} color={t.colors.secondaryScale[500]} />}
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], whiteSpace: 'nowrap' as const, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {iv.type === 'ai' ? (iv.agentName ?? 'AI Agent') : (iv.recruiterName ?? 'Unassigned')}
+                    {isAi ? (getDisplayName(iv, 'agentName', 'AI Agent')) : (iv.interviewerName ?? 'Unassigned')}
                   </Text>
                 </Box>
                 {/* Actions */}
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], opacity: isH ? 1 : 0, transition: `opacity ${t.motion.hover}`, padding: `0 ${t.spacing[1]}px` }}>
-                  <Box role="button" tabIndex={0} aria-label={`View details for ${iv.candidateName}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(iv.id); }} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleSelect(iv.id); } }} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box role="button" tabIndex={0} aria-label={`View details for ${candidateName}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleSelect(iv.id); }} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); handleSelect(iv.id); } }} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Eye size={12} />
                   </Box>
-                  <Box role="button" tabIndex={0} aria-label={`Open profile for ${iv.candidateName}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); }} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box role="button" tabIndex={0} aria-label={`Open profile for ${candidateName}`} onClick={(e: React.MouseEvent) => { e.stopPropagation(); }} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: t.borderRadius.md, border: `${bdr} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <ExternalLink size={12} />
                   </Box>
                 </Box>

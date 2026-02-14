@@ -39,7 +39,7 @@ import type {
   KnockoutStat,
   TrendPoint,
   CohortComparison,
-  SkillGap,
+  SkillGapSummary,
 } from '../../core';
 
 /* ------------------------------------------------------------------ */
@@ -97,7 +97,7 @@ const MOCK_COHORTS: CohortComparison[] = [
   { groupName: 'Job Boards', avgScore: 65.3, count: 112 },
 ];
 
-const MOCK_GAPS: SkillGap[] = [
+const MOCK_GAPS: SkillGapSummary[] = [
   { dimension: 'System Design', avgScore: 58, gapFromTarget: -22 },
   { dimension: 'Leadership', avgScore: 62, gapFromTarget: -18 },
   { dimension: 'Data Analysis', avgScore: 65, gapFromTarget: -15 },
@@ -216,7 +216,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
         {/* -- KPI Cards -- */}
         <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: t.spacing[4], marginBottom: t.spacing[7] }}>
           {kpis.map((kpi, idx) => {
-            const isPositive = kpi.trend > 0;
+            const isPositive = (kpi.trend ?? 0) > 0;
             const invertedMetric = kpi.label.includes('Knockout') || kpi.label.includes('Variance');
             const trendColor = invertedMetric ? (isPositive ? t.colors.errorScale[600] : t.colors.successScale[600]) : (isPositive ? t.colors.successScale[600] : t.colors.errorScale[600]);
             const TrendIcon = isPositive ? TrendingUp : TrendingDown;
@@ -239,10 +239,10 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     <TrendIcon size={14} color={trendColor} />
-                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(kpi.trend).toFixed(1)}%</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: trendColor }}>{Math.abs(kpi.trend ?? 0).toFixed(1)}%</Text>
                   </Box>
                 </Box>
-                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{typeof kpi.value === 'number' ? kpi.value.toFixed(1) : kpi.value}</Text>
+                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], display: 'block' }}>{typeof kpi.value === 'number' ? (kpi.value ?? 0).toFixed(1) : kpi.value}</Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1] }}>{kpi.label}</Text>
               </Box>
             );
@@ -311,7 +311,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{cohort.groupName}</Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{cohort.count} candidates</Text>
                       </Box>
-                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{cohort.avgScore.toFixed(1)}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: cs[700] }}>{(cohort.avgScore ?? 0).toFixed(1)}</Text>
                     </Box>
                   );
                 })}

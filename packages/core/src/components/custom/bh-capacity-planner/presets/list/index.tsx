@@ -106,7 +106,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
             {[
               { label: 'Recruiters', value: String(summary.totalRecruiters) },
-              { label: 'Avg Utilization', value: formatPercent(summary.avgUtilization) },
+              { label: 'Avg Utilization', value: formatPercent((summary.avgUtilization ?? 0)) },
               { label: 'Overloaded', value: String(summary.overloadedCount) },
               { label: 'Underutilized', value: String(summary.underutilizedCount) },
               { label: 'Open Reqs', value: String(summary.totalOpenReqs) },
@@ -159,8 +159,8 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
               {/* Table Body */}
               {recruiters.map((rec) => {
                 const isSelected = selectedRecruiter === rec.id;
-                const statusColor = getStatusColor(rec.status, tokens);
-                const statusBg = getStatusBg(rec.status, tokens);
+                const statusColor = getStatusColor((rec.status ?? ''), tokens);
+                const statusBg = getStatusBg((rec.status ?? ''), tokens);
 
                 return (
                   <Box
@@ -169,8 +169,8 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                     tabIndex={0}
                     aria-label={`${rec.name}, ${rec.department}, ${rec.status} at ${rec.utilizationPercent}% utilization`}
                     aria-selected={isSelected}
-                    onClick={() => handleRecruiterClick(rec.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick(rec.id); }}
+                    onClick={() => handleRecruiterClick((rec.id ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick((rec.id ?? '')); }}
                     style={{
                       display: 'grid',
                       gridTemplateColumns: '1.5fr 1fr 80px 80px 140px 80px 100px 120px',
@@ -201,7 +201,7 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                           flexShrink: 0,
                         }}>
                           <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[700] }}>
-                            {rec.name.charAt(0)}
+                            {(rec.name || '').charAt(0)}
                           </Text>
                         </Box>
                         <Text style={{ fontWeight: tokens.typography.fontWeight.medium, color: tokens.colors.neutral[800], fontSize: tokens.typography.fontSize.sm }}>
@@ -231,10 +231,10 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                     <Box role="cell" style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                         <Box style={{ width: 60, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: tokens.colors.neutral[100], overflow: 'hidden' }} role="progressbar" aria-valuenow={rec.utilizationPercent} aria-valuemin={0} aria-valuemax={150} aria-label={`${rec.utilizationPercent}% utilization`}>
-                          <Box style={{ width: `${Math.min(rec.utilizationPercent, 100)}%`, height: '100%', borderRadius: tokens.borderRadius.full, backgroundColor: statusColor }} />
+                          <Box style={{ width: `${Math.min((rec.utilizationPercent ?? 0), 100)}%`, height: '100%', borderRadius: tokens.borderRadius.full, backgroundColor: statusColor }} />
                         </Box>
                         <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusColor, fontWeight: tokens.typography.fontWeight.semibold }}>
-                          {formatPercent(rec.utilizationPercent)}
+                          {formatPercent((rec.utilizationPercent ?? 0))}
                         </Text>
                       </Box>
                     </Box>
@@ -308,8 +308,8 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
                       role="button"
                       tabIndex={0}
                       aria-label={`Accept: move ${sug.candidateCount} candidates from ${sug.fromRecruiterName} to ${sug.toRecruiterName}`}
-                      onClick={() => handleAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleAcceptSuggestion(sug.fromRecruiterId, sug.toRecruiterId); }}
+                      onClick={() => handleAcceptSuggestion((sug.fromRecruiterId ?? ''), (sug.toRecruiterId ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleAcceptSuggestion((sug.fromRecruiterId ?? ''), (sug.toRecruiterId ?? '')); }}
                       style={{
                         padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
                         borderRadius: tokens.borderRadius.md,

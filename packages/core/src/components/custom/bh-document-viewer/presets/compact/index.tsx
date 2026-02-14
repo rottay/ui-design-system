@@ -103,7 +103,7 @@ export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
                 borderRadius: badgeRadius,
                 padding: `0 ${t.spacing[1]}px`,
               }}>
-                <Text style={{ fontSize: 9 }}>{documentType.toUpperCase()}</Text>
+                <Text style={{ fontSize: 9 }}>{(documentType || '').toUpperCase()}</Text>
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
                 {totalPages} pg

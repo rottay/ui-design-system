@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * BhMessageTemplateGallery - Compact Preset
+ * BhMessageTemplateItemGallery - Compact Preset
  * Condensed template list for sidebar or widget placement.
  */
 
@@ -18,14 +18,14 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhMessageTemplateGalleryProps, MessageTemplate } from '../../core';
+import type { BhMessageTemplateItemGalleryProps, MessageTemplateItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_TEMPLATES: MessageTemplate[] = [
+const MOCK_TEMPLATES: MessageTemplateItem[] = [
   { id: 'mt-1', name: 'Initial Outreach', category: 'Sourcing', subject: 'Exciting opportunity', preview: 'Hi {{firstName}}...', usageCount: 342, tags: ['sourcing'] },
   { id: 'mt-2', name: 'Interview Invitation', category: 'Scheduling', subject: 'Interview invitation', preview: 'Dear {{firstName}}...', usageCount: 256, tags: ['scheduling'] },
   { id: 'mt-3', name: 'Rejection', category: 'Rejection', subject: 'Application update', preview: 'Dear {{firstName}}...', usageCount: 189, tags: ['rejection'] },
@@ -35,9 +35,9 @@ const MOCK_TEMPLATES: MessageTemplate[] = [
 /*  Compact Preset                                                     */
 /* ================================================================== */
 
-export const CompactBhMessageTemplateGallery = createPreset<BhMessageTemplateGalleryProps>({
+const CompactBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGalleryProps>({
   name: 'BhMessageTemplateGallery.Compact',
-  render: (ctx: PresetContext<BhMessageTemplateGalleryProps>) => {
+  render: (ctx: PresetContext<BhMessageTemplateItemGalleryProps>) => {
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
@@ -111,8 +111,8 @@ export const CompactBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
               role="listitem"
               tabIndex={0}
               aria-label={`${tmpl.name}: ${tmpl.usageCount} uses`}
-              onClick={() => onTemplateClick?.(tmpl.id)}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTemplateClick?.(tmpl.id); } }}
+              onClick={() => onTemplateClick?.((tmpl.id ?? ''))}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTemplateClick?.((tmpl.id ?? '')); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -134,10 +134,10 @@ export const CompactBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                 }}>
-                  {tmpl.name}
+                  {tmpl.name ?? ''}
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                  {tmpl.category} / {tmpl.usageCount} uses
+                  {tmpl.category ?? ''} / {tmpl.usageCount ?? 0} uses
                 </Text>
               </Box>
               <ChevronRight size={12} color={t.colors.neutral[300]} />
@@ -148,3 +148,7 @@ export const CompactBhMessageTemplateGallery = createPreset<BhMessageTemplateGal
     );
   },
 });
+
+// Export with the canonical name (barrel expects this) + legacy alias
+export { CompactBhMessageTemplateItemGallery as CompactBhMessageTemplateGallery };
+export { CompactBhMessageTemplateItemGallery };

@@ -47,6 +47,7 @@ function getStatusColor(status: CandidateStatus, t: DesignTokens): string {
     case 'on_hold': return t.colors.warningScale[600];
     case 'rejected': return t.colors.errorScale[600];
     case 'advanced': return t.colors.primaryScale[600];
+    default: return t.colors.neutral[600];
   }
 }
 
@@ -57,6 +58,7 @@ function getStatusBg(status: CandidateStatus, t: DesignTokens): string {
     case 'on_hold': return t.colors.warningScale[50];
     case 'rejected': return t.colors.errorScale[50];
     case 'advanced': return t.colors.primaryScale[50];
+    default: return t.colors.neutral[50];
   }
 }
 
@@ -67,6 +69,7 @@ function getStatusBadgeKey(status: CandidateStatus): 'success' | 'info' | 'warni
     case 'on_hold': return 'warning';
     case 'rejected': return 'error';
     case 'advanced': return 'primary';
+    default: return 'info';
   }
 }
 
@@ -77,6 +80,7 @@ function getStatusLabel(status: CandidateStatus): string {
     case 'on_hold': return 'On Hold';
     case 'rejected': return 'Rejected';
     case 'advanced': return 'Advanced';
+    default: return status;
   }
 }
 
@@ -116,7 +120,7 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stage = MOCK_STAGE,
+      stage = { name: '', candidateCount: 0, avgDays: 0, conversionRate: 0, candidates: [] },
       isOpen = true,
       onClose,
       onBulkAction,
@@ -156,14 +160,16 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
       });
     }, []);
 
+    const stageCandidates = stage.candidates ?? [];
+
     const toggleSelectAll = useCallback(() => {
       setSelectedIds(prev => {
-        if (prev.size === stage.candidates.length) {
+        if (prev.size === stageCandidates.length) {
           return new Set();
         }
-        return new Set(stage.candidates.map(c => c.id));
+        return new Set(stageCandidates.map(c => c.id ?? '').filter(Boolean));
       });
-    }, [stage.candidates]);
+    }, [stageCandidates]);
 
     const handleBulkAction = useCallback((action: BulkActionType) => {
       onBulkAction?.(action, Array.from(selectedIds));
@@ -196,7 +202,7 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
 
     if (!isOpen) return <Box style={{ display: 'none' }} />;
 
-    const allSelected = selectedIds.size === stage.candidates.length && stage.candidates.length > 0;
+    const allSelected = selectedIds.size === stageCandidates.length && stageCandidates.length > 0;
 
     return (
       <Box
@@ -271,9 +277,9 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
             gap: t.spacing[3],
           }}>
             {[
-              { label: 'Candidates', value: String(stage.candidateCount), icon: Users, color: t.colors.primaryScale },
-              { label: 'Avg Days', value: stage.avgDays.toFixed(1), icon: Clock, color: t.colors.warningScale },
-              { label: 'Conversion', value: `${(stage.conversionRate * 100).toFixed(0)}%`, icon: TrendingUp, color: t.colors.successScale },
+              { label: 'Candidates', value: String(stage.candidateCount ?? 0), icon: Users, color: t.colors.primaryScale },
+              { label: 'Avg Days', value: (stage.avgDays ?? 0).toFixed(1), icon: Clock, color: t.colors.warningScale },
+              { label: 'Conversion', value: `${((stage.conversionRate ?? 0) * 100).toFixed(0)}%`, icon: TrendingUp, color: t.colors.successScale },
             ].map((stat) => {
               const Icon = stat.icon;
               return (
@@ -417,13 +423,13 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
             </Text>
           </Box>
           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-            {stage.candidates.length} total
+            {stageCandidates.length} total
           </Text>
         </Box>
 
         {/* Candidate List */}
         <Box style={{ flex: 1, overflow: 'auto' }} role="list" aria-label="Stage candidates">
-          {stage.candidates.length === 0 && (
+          {stageCandidates.length === 0 && (
             <Box style={createEmptyStateStyle(t)}>
               <Users size={32} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />
               <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>
@@ -431,8 +437,8 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
               </Text>
             </Box>
           )}
-          {stage.candidates.map((candidate, i) => {
-            const isSelected = selectedIds.has(candidate.id);
+          {stageCandidates.map((candidate, i) => {
+            const isSelected = selectedIds.has((candidate.id ?? ''));
             const isHovered = hoveredCandidate === candidate.id;
 
             return (
@@ -440,11 +446,11 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
                 key={candidate.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${candidate.name}, ${getStatusLabel(candidate.status)}${candidate.score != null ? `, score ${candidate.score}` : ''}`}
-                onClick={() => handleCandidateClick(candidate.id)}
-                onMouseEnter={() => setHoveredCandidate(candidate.id)}
+                aria-label={`${candidate.name}, ${getStatusLabel(candidate.status!)}${candidate.score != null ? `, score ${candidate.score}` : ''}`}
+                onClick={() => handleCandidateClick((candidate.id ?? ''))}
+                onMouseEnter={() => setHoveredCandidate((candidate.id ?? null))}
                 onMouseLeave={() => setHoveredCandidate(null)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCandidateClick(candidate.id); } }}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCandidateClick((candidate.id ?? '')); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -464,7 +470,7 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
               >
                 {/* Checkbox */}
                 <button
-                  onClick={(e) => toggleSelect(candidate.id, e)}
+                  onClick={(e) => toggleSelect((candidate.id ?? ''), e)}
                   aria-label={isSelected ? `Deselect ${candidate.name}` : `Select ${candidate.name}`}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -506,15 +512,15 @@ export const DrawerBhPipelineStageDrawer = createPreset<BhPipelineStageDrawerPro
                       {candidate.name}
                     </Text>
                     <Box style={{
-                      ...createBadgeStyle(t, getStatusBadgeKey(candidate.status)),
+                      ...createBadgeStyle(t, getStatusBadgeKey(candidate.status!)),
                       borderRadius: badgeRadius,
                       padding: `0px ${t.spacing[1]}px`,
                     }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status)}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(candidate.status!)}</Text>
                     </Box>
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    Applied {formatDistanceToNow(candidate.appliedAt, { addSuffix: true })}
+                    Applied {formatDistanceToNow((typeof candidate.appliedAt! === 'string' ? new Date(candidate.appliedAt!) : candidate.appliedAt!), { addSuffix: true })}
                   </Text>
                 </Box>
 

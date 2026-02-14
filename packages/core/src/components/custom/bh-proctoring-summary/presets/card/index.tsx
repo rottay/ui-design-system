@@ -34,17 +34,18 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+function getSeverityLabel(severity: string | undefined): string {
+  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
 }
 
 function getRiskColor(score: number, t: DesignTokens): string {
@@ -264,7 +265,7 @@ export const CardBhProctoringSummary = createPreset<BhProctoringSummaryProps>({
                     borderTop: `2px solid ${getSeverityColor(sev, t)}`,
                   }}
                   role="status"
-                  aria-label={`${getSeverityLabel(sev)}: ${eventCounts[sev]} events`}
+                  aria-label={`${getSeverityLabel(sev)}: ${eventCounts[sev] ?? 0} events`}
                 >
                   <Text style={{
                     fontSize: t.typography.fontSize.lg,
@@ -272,7 +273,7 @@ export const CardBhProctoringSummary = createPreset<BhProctoringSummaryProps>({
                     color: t.colors.neutral[900],
                     display: 'block',
                   }}>
-                    {eventCounts[sev]}
+                    {eventCounts[sev] ?? 0}
                   </Text>
                   <Text style={{
                     fontSize: t.typography.fontSize.xs,

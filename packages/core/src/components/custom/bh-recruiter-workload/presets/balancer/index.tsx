@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * BhRecruiterWorkload - Balancer Preset
+ * BhRecruiterWorkloadItem - Balancer Preset
  * Visual workload distribution with capacity gauges and utilization bars.
  * Personality-driven, glass-aware.
  */
@@ -25,14 +25,14 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhRecruiterWorkloadProps, RecruiterWorkload } from '../../core';
+import type { BhRecruiterWorkloadItemProps, RecruiterWorkloadItem } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_RECRUITERS: RecruiterWorkload[] = [
+const MOCK_RECRUITERS: RecruiterWorkloadItem[] = [
   { recruiterId: 'r-1', name: 'Alice Morgan', activePositions: 6, capacity: 8, interviews: 12, pendingTasks: 5 },
   { recruiterId: 'r-2', name: 'Bob Chen', activePositions: 8, capacity: 8, interviews: 15, pendingTasks: 10 },
   { recruiterId: 'r-3', name: 'Carla Ruiz', activePositions: 4, capacity: 8, interviews: 8, pendingTasks: 3 },
@@ -62,9 +62,9 @@ function getUtilizationBadgeKey(pct: number): 'error' | 'warning' | 'success' | 
 /*  Balancer Preset                                                    */
 /* ================================================================== */
 
-export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps>({
+const BalancerBhRecruiterWorkloadItem = createPreset<BhRecruiterWorkloadItemProps>({
   name: 'BhRecruiterWorkload.Balancer',
-  render: (ctx: PresetContext<BhRecruiterWorkloadProps>) => {
+  render: (ctx: PresetContext<BhRecruiterWorkloadItemProps>) => {
     const { primitives: { Box, Text }, props, tokens: t } = ctx;
 
     const isGlass = t.surface.useGlass;
@@ -86,13 +86,13 @@ export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-    const overloadedCount = useMemo(() => recruiters.filter(r => r.activePositions > r.capacity).length, [recruiters]);
+    const overloadedCount = useMemo(() => (recruiters ?? []).filter(r => (r.activePositions ?? 0) > (r.capacity ?? 0)).length, [recruiters]);
     const avgUtilization = useMemo(() => {
-      if (recruiters.length === 0) return 0;
-      return Math.round(recruiters.reduce((s, r) => s + (r.activePositions / r.capacity) * 100, 0) / recruiters.length);
+      if ((recruiters ?? []).length === 0) return 0;
+      return Math.round((recruiters ?? []).reduce((s, r) => s + ((r.activePositions ?? 0) / Math.max(r.capacity ?? 1, 1)) * 100, 0) / (recruiters ?? []).length);
     }, [recruiters]);
 
-    const sorted = useMemo(() => [...recruiters].sort((a, b) => (b.activePositions / b.capacity) - (a.activePositions / a.capacity)), [recruiters]);
+    const sorted = useMemo(() => [...(recruiters ?? [])].sort((a, b) => ((b.activePositions ?? 0) / Math.max(b.capacity ?? 1, 1)) - ((a.activePositions ?? 0) / Math.max(a.capacity ?? 1, 1))), [recruiters]);
 
     const animStyle = (index: number) => ({
       ...entrance.animate,
@@ -163,8 +163,8 @@ export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps
           }}>
             {[
               { label: 'Avg Utilization', value: `${avgUtilization}%`, icon: Scale, color: avgUtilization > 100 ? t.colors.errorScale : t.colors.primaryScale },
-              { label: 'Total Interviews', value: recruiters.reduce((s, r) => s + r.interviews, 0), icon: Calendar, color: t.colors.infoScale },
-              { label: 'Pending Tasks', value: recruiters.reduce((s, r) => s + r.pendingTasks, 0), icon: ListTodo, color: t.colors.warningScale },
+              { label: 'Total Interviews', value: (recruiters ?? []).reduce((s, r) => s + (r.interviews ?? 0), 0), icon: Calendar, color: t.colors.infoScale },
+              { label: 'Pending Tasks', value: (recruiters ?? []).reduce((s, r) => s + (r.pendingTasks ?? 0), 0), icon: ListTodo, color: t.colors.warningScale },
             ].map((stat, i) => {
               const StatIcon = stat.icon;
               return (
@@ -191,7 +191,7 @@ export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps
           <Text style={{ ...sectionLabel, marginBottom: t.spacing[3] }}>Team Workload</Text>
           <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
             {sorted.map((r, i) => {
-              const utilization = Math.round((r.activePositions / r.capacity) * 100);
+              const utilization = Math.round(((r.activePositions ?? 0) / Math.max(r.capacity ?? 1, 1)) * 100);
               const isOverloaded = utilization > 100;
               const color = getUtilizationColor(utilization, t);
               const bar = createProgressBarStyle(t, { percent: Math.min(utilization, 100), color });
@@ -227,7 +227,7 @@ export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps
                   <Box style={{ marginBottom: t.spacing[2] }}>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {r.activePositions} / {r.capacity} positions
+                        {r.activePositions ?? 0} / {r.capacity ?? 0} positions
                       </Text>
                     </Box>
                     <Box style={bar.track}><Box style={bar.fill} /></Box>
@@ -236,11 +236,11 @@ export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps
                   <Box style={{ display: 'flex', gap: t.spacing[4] }}>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Calendar size={12} color={t.colors.neutral[400]} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{r.interviews} interviews</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{r.interviews ?? 0} interviews</Text>
                     </Box>
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <ListTodo size={12} color={t.colors.neutral[400]} />
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{r.pendingTasks} tasks</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{r.pendingTasks ?? 0} tasks</Text>
                     </Box>
                   </Box>
                 </Box>
@@ -252,3 +252,7 @@ export const BalancerBhRecruiterWorkload = createPreset<BhRecruiterWorkloadProps
     );
   },
 });
+
+// Export with the canonical name (barrel expects this) + legacy alias
+export { BalancerBhRecruiterWorkloadItem as BalancerBhRecruiterWorkload };
+export { BalancerBhRecruiterWorkloadItem };

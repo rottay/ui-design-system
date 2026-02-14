@@ -35,12 +35,15 @@ const MOCK_SUMMARY: PipelineSummary = {
   totalActive: 342, totalHired: 12, avgTimeToHireDays: 26.1, overallConversionRate: 3.5, bottleneckCount: 1,
 };
 
-function formatNumber(value: number): string {
+function formatNumber(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '0';
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
   return value.toLocaleString();
 }
 
-function formatPercent(value: number): string {
+function formatPercent(value: number | null | undefined): string {
+  if (value == null || isNaN(value)) return '0.0%';
   return `${value.toFixed(1)}%`;
 }
 
@@ -86,7 +89,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);
     const hov = useMemo(() => createHoverStyle(tokens), [tokens]);
     const chartColors = getChartColors(tokens);
-    const maxTime = useMemo(() => stages.length > 0 ? Math.max(...stages.map(s => s.avgTimeInStageDays)) : 1, [stages]);
+    const maxTime = useMemo(() => (stages ?? []).length > 0 ? Math.max(...(stages ?? []).map(s => s.avgTimeInStageDays ?? 0)) : 1, [stages]);
 
     return (
       <Box className={className} style={{
@@ -97,11 +100,11 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
         {summary && (
           <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: tokens.spacing[4] }}>
             {[
-              { label: 'Active', value: formatNumber(summary.totalActive), color: tokens.colors.primaryScale[600], icon: <Users size={14} /> },
-              { label: 'Hired', value: formatNumber(summary.totalHired), color: tokens.colors.successScale[600], icon: <TrendingUp size={14} /> },
-              { label: 'Avg Days', value: `${summary.avgTimeToHireDays}d`, color: tokens.colors.warningScale[600], icon: <Clock size={14} /> },
-              { label: 'Conversion', value: formatPercent(summary.overallConversionRate), color: tokens.colors.infoScale[600], icon: <Target size={14} /> },
-              { label: 'Bottlenecks', value: String(summary.bottleneckCount), color: summary.bottleneckCount > 0 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600], icon: <AlertTriangle size={14} /> },
+              { label: 'Active', value: formatNumber(summary?.totalActive), color: tokens.colors.primaryScale[600], icon: <Users size={14} /> },
+              { label: 'Hired', value: formatNumber(summary?.totalHired), color: tokens.colors.successScale[600], icon: <TrendingUp size={14} /> },
+              { label: 'Avg Days', value: `${summary?.avgTimeToHireDays ?? 0}d`, color: tokens.colors.warningScale[600], icon: <Clock size={14} /> },
+              { label: 'Conversion', value: formatPercent(summary?.overallConversionRate), color: tokens.colors.infoScale[600], icon: <Target size={14} /> },
+              { label: 'Bottlenecks', value: String(summary?.bottleneckCount ?? 0), color: (summary?.bottleneckCount ?? 0) > 0 ? tokens.colors.errorScale[600] : tokens.colors.successScale[600], icon: <AlertTriangle size={14} /> },
             ].map(stat => (
               <Box key={stat.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], ...card, padding: tokens.spacing[4], textAlign: 'center' as const }}>
                 <Flex align="center" justify="center" gap={6} style={{ marginBottom: tokens.spacing[2] }}>
@@ -157,14 +160,16 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                   </tr>
                 </thead>
                 <tbody>
-                  {stages.map((stage, i) => {
-                    const isOverSla = stage.slaLimitDays !== undefined && stage.avgTimeInStageDays > stage.slaLimitDays;
-                    const isBottleneck = bottlenecks.some(b => b.stageId === stage.id);
-                    const barWidth = maxTime > 0 ? (stage.avgTimeInStageDays / maxTime) * 180 : 0;
+                  {(stages ?? []).map((stage, i) => {
+                    const avgTime = stage.avgTimeInStageDays ?? 0;
+                    const slaLimit = stage.slaLimitDays;
+                    const isOverSla = slaLimit != null && avgTime > slaLimit;
+                    const isBottleneck = (bottlenecks ?? []).some(b => b.stageId === stage.id);
+                    const barWidth = maxTime > 0 ? (avgTime / maxTime) * 180 : 0;
 
                     return (
-                      <tr key={stage.id}
-                        onClick={() => onStageSelect?.(selectedStage === stage.id ? null : stage.id)}
+                      <tr key={stage.id ?? `stage-${i}`}
+                        onClick={() => onStageSelect?.(selectedStage === stage.id ? null : stage.id ?? null)}
                         style={{
                           ...hov,
                           borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
@@ -185,7 +190,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                               fontWeight: tokens.typography.fontWeight.medium,
                               color: tokens.colors.neutral[800],
                             }}>
-                              {stage.name}
+                              {stage.name ?? 'Unknown'}
                             </Text>
                           </Flex>
                         </td>
@@ -194,14 +199,14 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                             <Text style={{ color: tokens.colors.neutral[700] }}>
                               {formatNumber(stage.count)}
                             </Text>
-                            {showComparison && stage.previousPeriodCount !== undefined && (
+                            {showComparison && stage.previousPeriodCount != null && (
                               <Flex align="center" gap={2} style={{
                                 fontSize: tokens.typography.fontSize.xs,
-                                color: stage.count >= stage.previousPeriodCount
+                                color: (stage.count ?? 0) >= (stage.previousPeriodCount ?? 0)
                                   ? tokens.colors.successScale[500]
                                   : tokens.colors.errorScale[500],
                               }}>
-                                {stage.count >= stage.previousPeriodCount
+                                {(stage.count ?? 0) >= (stage.previousPeriodCount ?? 0)
                                   ? <ArrowUpRight size={10} />
                                   : <ArrowDownRight size={10} />}
                               </Flex>
@@ -220,19 +225,19 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                           color: isOverSla ? tokens.colors.errorScale[600] : tokens.colors.neutral[700],
                           fontWeight: isOverSla ? tokens.typography.fontWeight.bold : tokens.typography.fontWeight.normal,
                         }}>
-                          {stage.avgTimeInStageDays}d
+                          {avgTime}d
                         </td>
                         <td style={{
                           padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
                           color: tokens.colors.neutral[500],
                         }}>
-                          {stage.slaLimitDays !== undefined ? `${stage.slaLimitDays}d` : '--'}
+                          {slaLimit != null ? `${slaLimit}d` : '--'}
                         </td>
                         <td style={{
                           padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px`,
-                          color: stage.dropoffCount > 0 ? tokens.colors.errorScale[500] : tokens.colors.neutral[400],
+                          color: (stage.dropoffCount ?? 0) > 0 ? tokens.colors.errorScale[500] : tokens.colors.neutral[400],
                         }}>
-                          {stage.dropoffCount > 0 ? `-${stage.dropoffCount}` : '0'}
+                          {(stage.dropoffCount ?? 0) > 0 ? `-${stage.dropoffCount}` : '0'}
                         </td>
                         <td style={{ padding: `${tokens.spacing[3]}px ${tokens.spacing[3]}px` }}>
                           <Box style={{ position: 'relative' as const, height: 20 }}>
@@ -244,10 +249,10 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                                 ? tokens.colors.errorScale[400]
                                 : chartColors[i % chartColors.length],
                             }} />
-                            {stage.slaLimitDays !== undefined && (
+                            {slaLimit != null && (
                               <Box style={{
                                 position: 'absolute' as const, top: -2,
-                                left: maxTime > 0 ? (stage.slaLimitDays / maxTime) * 180 : 0,
+                                left: maxTime > 0 ? (slaLimit / maxTime) * 180 : 0,
                                 width: 2, height: 24,
                                 borderLeft: `2px dashed ${tokens.colors.neutral[400]}`,
                               }} />
@@ -271,7 +276,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
         </Box>
 
         {/* ── Bottleneck Detail ─────────────────────────── */}
-        {bottlenecks.length > 0 && (
+        {(bottlenecks ?? []).length > 0 && (
           <Box style={{ ...card, padding: tokens.spacing[5] }}>
             <Flex align="center" gap={6} style={{ marginBottom: tokens.spacing[4] }}>
               <AlertTriangle size={14} color={tokens.colors.errorScale[500]} />
@@ -282,13 +287,13 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
               gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
               gap: tokens.spacing[4],
             }}>
-              {bottlenecks.map(b => (
-                <Box key={b.stageId}
-                  onClick={() => onBottleneckSelect?.(b.stageId)}
+              {(bottlenecks ?? []).map(b => (
+                <Box key={b.stageId ?? 'unknown'}
+                  onClick={() => b.stageId && onBottleneckSelect?.(b.stageId)}
                   style={{
                     ...hov, padding: tokens.spacing[4],
                     borderRadius: tokens.borderRadius.lg,
-                    border: `2px solid ${getSeverityColor(b.severity, tokens)}`,
+                    border: `2px solid ${getSeverityColor((b.severity ?? ''), tokens)}`,
                     backgroundColor: tokens.colors.common.white,
                   }}>
                   <Flex align="center" justify="between" style={{ marginBottom: tokens.spacing[3] }}>
@@ -297,18 +302,18 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                       color: tokens.colors.neutral[800],
                       fontSize: tokens.typography.fontSize.sm,
                     }}>
-                      {b.stageName}
+                      {b.stageName ?? 'Unknown'}
                     </Text>
                     <Box style={{
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                       borderRadius: tokens.borderRadius.full,
-                      backgroundColor: getSeverityColor(b.severity, tokens),
+                      backgroundColor: getSeverityColor(b.severity ?? 'low', tokens),
                       color: tokens.colors.common.white,
                       fontSize: tokens.typography.fontSize.xs,
                       fontWeight: tokens.typography.fontWeight.semibold,
                       textTransform: 'uppercase' as const,
                     }}>
-                      {b.severity}
+                      {b.severity ?? 'low'}
                     </Box>
                   </Flex>
                   <Text style={{
@@ -317,7 +322,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                     marginBottom: tokens.spacing[3],
                     lineHeight: 1.5,
                   }}>
-                    {b.reason}
+                    {b.reason ?? ''}
                   </Text>
                   <Flex gap={16}>
                     <Stack gap={1}>
@@ -325,9 +330,9 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                       <Text style={{
                         fontSize: tokens.typography.fontSize.sm,
                         fontWeight: tokens.typography.fontWeight.bold,
-                        color: getSeverityColor(b.severity, tokens),
+                        color: getSeverityColor(b.severity ?? 'low', tokens),
                       }}>
-                        +{b.avgDelayDays}d
+                        +{b.avgDelayDays ?? 0}d
                       </Text>
                     </Stack>
                     <Stack gap={1}>
@@ -337,7 +342,7 @@ export const DetailedBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
                         fontWeight: tokens.typography.fontWeight.bold,
                         color: tokens.colors.neutral[800],
                       }}>
-                        {b.impactedCandidates}
+                        {b.impactedCandidates ?? 0}
                       </Text>
                     </Stack>
                   </Flex>

@@ -53,7 +53,8 @@ function eventIcon(type: string, t: DesignTokens) {
   return m[type] ?? { icon: <FileText size={sz} />, color: t.colors.neutral[400] };
 }
 
-function timeAgo(date: Date): string {
+function timeAgo(date: Date | null | undefined): string {
+  if (!date) return '';
   const d = Math.floor((Date.now() - date.getTime()) / 1000);
   if (d < 60) return `${d}s ago`;
   if (d < 3600) return `${Math.floor(d / 60)}m ago`;
@@ -87,7 +88,9 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
     const { Box, Text } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
-    const { jobInfo, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], activeTab: activeTabProp, onTabChange, onCandidateClick, className, style } = props;
+    const JOB_INFO_DEFAULT = { title: '', code: '', status: 'draft' as const, clientName: '', daysOpen: 0, urgency: 'low' as const };
+    const { jobInfo: _jobInfo = JOB_INFO_DEFAULT, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], activeTab: activeTabProp, onTabChange, onCandidateClick, className, style } = props;
+    const jobInfo = _jobInfo ?? JOB_INFO_DEFAULT;
 
     const [internalTab, setInternalTab] = useState<CompactTab>('summary');
     const activeTab = (activeTabProp as string) === 'overview' ? 'summary' : ((activeTabProp as string) ?? internalTab) as CompactTab;
@@ -133,7 +136,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
           ...createIconContainerStyle(tokens, { size, color: tokens.colors.primaryScale[100] }),
         }}>
           <Text style={{ fontSize: '10px', fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>
-            {name.charAt(0).toUpperCase()}
+            {(name || '').charAt(0).toUpperCase()}
           </Text>
         </Box>
       );
@@ -199,7 +202,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
               border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`,
             }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Template</Text>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>{templateInfo.name} ({templateInfo.stages.length} stages)</Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.primaryScale[600] }}>{templateInfo.name ?? ''} ({(templateInfo.stages ?? []).length} stages)</Text>
             </Box>
           )}
         </Box>
@@ -207,7 +210,7 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
 
       pipeline: () => {
         if (!funnelStages.length) return <Box style={{ padding: tokens.spacing[6], textAlign: 'center' as const, color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}><Text style={{ color: tokens.colors.neutral[400], fontSize: tokens.typography.fontSize.sm }}>No pipeline data.</Text></Box>;
-        const max = Math.max(...funnelStages.map(s => s.count), 1);
+        const max = Math.max(...(funnelStages ?? []).map(s => s.count ?? 0), 1);
         return (
           <Box style={{ padding: tokens.spacing[4], display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
             {funnelStages.map(s => (

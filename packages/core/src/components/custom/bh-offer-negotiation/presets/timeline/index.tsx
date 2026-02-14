@@ -22,6 +22,7 @@ import {
   getCardPadding,
 } from '../../../helpers';
 import type { BhOfferNegotiationProps, NegotiationStep, CompensationPackage, OfferNegotiation } from '../../core';
+import { offerToNegotiation } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import { Clock, Check, X, RotateCcw, User, Building2, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
@@ -43,7 +44,7 @@ const MOCK_NEGOTIATION: OfferNegotiation = {
 function formatCurrency(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
-  return `$${value.toLocaleString()}`;
+  return `$${(value || 0).toLocaleString()}`;
 }
 
 function totalCompValue(comp: CompensationPackage): number {
@@ -63,7 +64,7 @@ function getStepColor(type: string, tokens: DesignTokens): string {
 }
 
 function getStepLabel(type: string): string {
-  return type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  return (type || '').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 function getStatusColor(status: string, tokens: DesignTokens): string {
@@ -82,13 +83,18 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
     const { Box, Text } = primitives;
 
     const {
-      negotiation = MOCK_NEGOTIATION,
+      offer,
+      candidateName: candidateNameProp,
+      negotiation: negotiationProp,
       selectedStep,
       onStepSelect,
       onAction,
       className,
       style,
     } = props;
+
+    const negotiation = negotiationProp
+      ?? (offer ? offerToNegotiation(offer, candidateNameProp) : MOCK_NEGOTIATION);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -165,7 +171,7 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
                     fontWeight: tokens.typography.fontWeight.bold,
                     color: tokens.colors.primaryScale[700],
                   }}>
-                    {negotiation.candidateName.charAt(0)}
+                    {(negotiation.candidateName || '').charAt(0)}
                   </Text>
                 )}
               </Box>
@@ -227,9 +233,9 @@ export const TimelineBhOfferNegotiation = createPreset<BhOfferNegotiationProps>(
             {steps.map((step, i) => {
               const isSelected = selectedStep === i;
               const stepColor = getStepColor(step.type, tokens);
-              const comp = step.compensation;
-              const prevComp = i > 0 ? steps[i - 1].compensation : null;
-              const salaryDiff = prevComp ? comp.baseSalary - prevComp.baseSalary : 0;
+              const comp = step.compensation || { baseSalary: 0 } as any;
+              const prevComp = i > 0 ? steps[i - 1]?.compensation : null;
+              const salaryDiff = prevComp ? (comp.baseSalary || 0) - (prevComp.baseSalary || 0) : 0;
               const stepEntrance = createEntranceAnimation(tokens, { index: i });
               const isHovered = hoveredStep === step.id;
 

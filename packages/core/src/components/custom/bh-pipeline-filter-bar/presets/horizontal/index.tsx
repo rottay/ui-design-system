@@ -142,7 +142,7 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
       if (!filterCfg?.options) return [];
       if (!searchQuery) return filterCfg.options;
       return filterCfg.options.filter(o =>
-        o.label.toLowerCase().includes(searchQuery.toLowerCase())
+        (o.label ?? '').toLowerCase().includes(searchQuery.toLowerCase())
       );
     }, [activeDropdown, filters, searchQuery]);
 
@@ -180,14 +180,14 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
 
           {/* Filter buttons */}
           {filters.map((filter) => {
-            const Icon = getFilterIcon(filter.id);
+            const Icon = getFilterIcon((filter.id ?? ''));
             const isActive = activeFilters.some(af => af.filterId === filter.id);
             const isOpen = activeDropdown === filter.id;
 
             return (
               <Box key={filter.id} style={{ position: 'relative' }}>
                 <button
-                  onClick={() => handleToggleDropdown(filter.id)}
+                  onClick={() => handleToggleDropdown((filter.id ?? ''))}
                   aria-label={`Filter by ${filter.label}`}
                   aria-expanded={isOpen}
                   aria-haspopup="listbox"
@@ -259,8 +259,8 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
                         role="option"
                         aria-selected={activeFilters.some(af => af.filterId === filter.id && (af.value === opt.value || (Array.isArray(af.value) && af.value.includes(opt.value))))}
                         tabIndex={0}
-                        onClick={() => handleFilterSelect(filter.id, opt.value)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterSelect(filter.id, opt.value); } }}
+                        onClick={() => handleFilterSelect((filter.id ?? ''), opt.value)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterSelect((filter.id ?? ''), opt.value); } }}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -339,8 +339,8 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
                     key={preset.id}
                     role="option"
                     tabIndex={0}
-                    onClick={() => handlePresetLoad(preset.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePresetLoad(preset.id); } }}
+                    onClick={() => handlePresetLoad((preset.id ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePresetLoad((preset.id ?? '')); } }}
                     style={{
                       padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
                       cursor: 'pointer',
@@ -353,7 +353,7 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
                       {preset.name}
                     </Text>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                      {preset.filters.length} filters - {formatDistanceToNow(preset.createdAt, { addSuffix: true })}
+                      {(preset.filters ?? []).length} filters - {formatDistanceToNow(new Date(preset.createdAt!), { addSuffix: true })}
                     </Text>
                   </Box>
                 ))}
@@ -414,7 +414,7 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
                   {af.label}
                 </Text>
                 <button
-                  onClick={() => handleFilterRemove(af.filterId)}
+                  onClick={() => handleFilterRemove((af.filterId ?? ''))}
                   aria-label={`Remove filter: ${af.label}`}
                   style={{
                     display: 'flex',

@@ -25,40 +25,53 @@ import {
   createPersonalitySectionHeaderStyle,
   getAccentAwareLayout,
 } from '../../../helpers';
-import type { BhPositionListProps, PositionListItem } from '../../core';
+import type { BhPositionListProps, RecruiterPosition } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_POSITIONS: PositionListItem[] = [
-  { id: 'pl-1', title: 'Senior Frontend Engineer', clientName: 'Acme Corp', department: 'Engineering', status: 'open', priority: 'high', candidates: 15, daysOpen: 12, assignee: 'Sarah Kim' },
-  { id: 'pl-2', title: 'Product Manager', clientName: 'Horizon Labs', department: 'Product', status: 'open', priority: 'medium', candidates: 8, daysOpen: 25, assignee: 'Tom Walsh' },
-  { id: 'pl-3', title: 'UX Designer', clientName: 'Nova Ventures', department: 'Design', status: 'on-hold', priority: 'low', candidates: 3, daysOpen: 45, assignee: 'Emily Chen' },
-  { id: 'pl-4', title: 'Backend Developer', clientName: 'Acme Corp', department: 'Engineering', status: 'open', priority: 'high', candidates: 22, daysOpen: 5, assignee: 'Sarah Kim' },
-  { id: 'pl-5', title: 'Data Analyst', clientName: 'Meridian Group', department: 'Analytics', status: 'filled', priority: 'medium', candidates: 10, daysOpen: 60, assignee: 'Mark Rivera' },
-  { id: 'pl-6', title: 'DevOps Lead', clientName: 'Acme Corp', department: 'Infrastructure', status: 'closed', priority: 'low', candidates: 6, daysOpen: 90, assignee: 'Tom Walsh' },
+const MOCK_POSITIONS: RecruiterPosition[] = [
+  { id: 'pl-1', tenantId: 't', clientId: 'c1', code: 'FE-01', title: 'Senior Frontend Engineer', status: 'open', priority: 'high', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 12 * 86400000) } as any,
+  { id: 'pl-2', tenantId: 't', clientId: 'c2', code: 'PM-01', title: 'Product Manager', status: 'open', priority: 'normal', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 25 * 86400000) } as any,
+  { id: 'pl-3', tenantId: 't', clientId: 'c3', code: 'UX-01', title: 'UX Designer', status: 'on_hold', priority: 'low', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 45 * 86400000) } as any,
+  { id: 'pl-4', tenantId: 't', clientId: 'c1', code: 'BE-01', title: 'Backend Developer', status: 'open', priority: 'high', openings: 2, filledCount: 0, createdAt: new Date(Date.now() - 5 * 86400000) } as any,
+  { id: 'pl-5', tenantId: 't', clientId: 'c4', code: 'DA-01', title: 'Data Analyst', status: 'filled', priority: 'normal', openings: 1, filledCount: 1, createdAt: new Date(Date.now() - 60 * 86400000) } as any,
+  { id: 'pl-6', tenantId: 't', clientId: 'c1', code: 'DO-01', title: 'DevOps Lead', status: 'closed', priority: 'low', openings: 1, filledCount: 1, createdAt: new Date(Date.now() - 90 * 86400000) } as any,
 ];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getStatusConfig(status: PositionListItem['status'], t: DesignTokens) {
+function getDaysOpen(position: RecruiterPosition): number {
+  const created = position.createdAt ? new Date(position.createdAt as any) : new Date();
+  return Math.floor((Date.now() - created.getTime()) / 86400000);
+}
+
+function getStatusConfig(status: string | null | undefined, t: DesignTokens) {
   switch (status) {
     case 'open': return { label: 'Open', badge: 'success' as const, color: t.colors.successScale[600] };
     case 'filled': return { label: 'Filled', badge: 'info' as const, color: t.colors.infoScale[600] };
-    case 'closed': return { label: 'Closed', badge: 'secondary' as const, color: t.colors.neutral[500] };
-    case 'on-hold': return { label: 'On Hold', badge: 'warning' as const, color: t.colors.warningScale[600] };
+    case 'closed':
+    case 'cancelled':
+    case 'archived': return { label: 'Closed', badge: 'secondary' as const, color: t.colors.neutral[500] };
+    case 'on_hold': return { label: 'On Hold', badge: 'warning' as const, color: t.colors.warningScale[600] };
+    case 'draft':
+    case 'pending_approval':
+    default: return { label: status ?? 'Draft', badge: 'secondary' as const, color: t.colors.neutral[500] };
   }
 }
 
-function getPriorityConfig(priority: PositionListItem['priority'], t: DesignTokens) {
+function getPriorityConfig(priority: string | null | undefined, t: DesignTokens) {
   switch (priority) {
-    case 'high': return { label: 'High', color: t.colors.errorScale[600], bg: t.colors.errorScale[50] };
-    case 'medium': return { label: 'Medium', color: t.colors.warningScale[600], bg: t.colors.warningScale[50] };
-    case 'low': return { label: 'Low', color: t.colors.neutral[500], bg: t.colors.neutral[100] };
+    case 'high':
+    case 'urgent':
+    case 'critical': return { label: 'High', color: t.colors.errorScale[600], bg: t.colors.errorScale[50] };
+    case 'normal': return { label: 'Medium', color: t.colors.warningScale[600], bg: t.colors.warningScale[50] };
+    case 'low':
+    default: return { label: 'Low', color: t.colors.neutral[500], bg: t.colors.neutral[100] };
   }
 }
 
@@ -118,9 +131,9 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         result = result.filter(p =>
-          p.title.toLowerCase().includes(q) ||
-          p.clientName.toLowerCase().includes(q) ||
-          p.assignee.toLowerCase().includes(q)
+          (p.title || '').toLowerCase().includes(q) ||
+          (p.code || '').toLowerCase().includes(q) ||
+          (p.clientId || '').toLowerCase().includes(q)
         );
       }
       return [...result].sort((a, b) => {
@@ -261,13 +274,14 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
             const statusCfg = getStatusConfig(pos.status, t);
             const priorityCfg = getPriorityConfig(pos.priority, t);
             const isSelected = selectedPositionId === pos.id;
+            const daysOpen = getDaysOpen(pos);
 
             return (
               <Box
                 key={pos.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${pos.title} at ${pos.clientName}`}
+                aria-label={`${pos.title ?? ''}`}
                 onClick={() => handleClick(pos.id)}
                 onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(pos.id); } }}
                 style={{
@@ -290,15 +304,15 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}>
-                    {pos.title}
+                    {pos.title ?? ''}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                    {pos.department}
+                    {pos.code ?? ''}
                   </Text>
                 </Box>
                 <Box style={{ flex: 2 }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
-                    {pos.clientName}
+                    {pos.clientId ?? ''}
                   </Text>
                 </Box>
                 <Box style={{ flex: 1.5 }}>
@@ -325,19 +339,19 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
                 <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 3 }}>
                   <Users size={11} color={t.colors.neutral[400]} />
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
-                    {pos.candidates}
+                    {pos.openings ?? 0}
                   </Text>
                 </Box>
                 <Box style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 3 }}>
                   <Clock size={11} color={t.colors.neutral[400]} />
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: pos.daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[700] }}>
-                    {pos.daysOpen}d
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[700] }}>
+                    {daysOpen}d
                   </Text>
                 </Box>
                 <Box style={{ flex: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
                   <User size={11} color={t.colors.neutral[400]} />
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
-                    {pos.assignee}
+                    {pos.filledCount ?? 0}/{pos.openings ?? 0}
                   </Text>
                 </Box>
               </Box>

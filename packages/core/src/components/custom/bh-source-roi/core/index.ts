@@ -1,7 +1,9 @@
 /**
  * BhSourceRoi - Core Interface
  * Source channel analysis showing hire rate vs cost by source.
- * Tables: recruiting_candidates.source + recruiting_metrics_search_costs
+ *
+ * Source ROI analytics are computed from candidates, outreach activities,
+ * and search cost logs. The component works with aggregated metrics data.
  */
 
 import type { CSSProperties } from 'react';
@@ -9,6 +11,9 @@ import type { EngineAwareProps } from '../../../../core/types';
 
 export type BhSourceRoiPreset = 'summary' | 'breakdown';
 
+/**
+ * Source channel data (computed/aggregated from DB entities).
+ */
 export interface SourceChannel {
   id: string;
   name: string;
@@ -24,6 +29,9 @@ export interface SourceChannel {
   retentionRate90d?: number;
 }
 
+/**
+ * Source trend over time (computed/aggregated).
+ */
 export interface SourceTrend {
   month: string;
   sourceId: string;
@@ -31,6 +39,9 @@ export interface SourceTrend {
   cost: number;
 }
 
+/**
+ * ROI summary metrics (computed/aggregated).
+ */
 export interface SourceRoiSummary {
   totalSpend: number;
   totalHires: number;
@@ -42,13 +53,13 @@ export interface SourceRoiSummary {
 export interface BhSourceRoiProps extends EngineAwareProps {
   preset?: BhSourceRoiPreset;
 
-  /** Source channel data */
+  /** Source channel data (computed/aggregated) */
   sources?: SourceChannel[];
 
-  /** Trend data over time */
+  /** Trend data over time (computed/aggregated) */
   trends?: SourceTrend[];
 
-  /** Summary metrics */
+  /** Summary metrics (computed/aggregated) */
   summary?: SourceRoiSummary;
 
   /** Sort field */

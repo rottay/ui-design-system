@@ -1,13 +1,27 @@
 /**
  * BhAuditTrail - Core Interface
  * Activity & Audit Log for BitHire ATS platform
+ *
+ * DB Reference: DBAuditLog, DBAuditAction, DBActorType from @rottay/recruiter
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBAuditLog } from '@rottay/recruiter';
+import type { DBAuditLog as DBIaChatAuditLog } from '@rottay/ia-chat';
 
 export type BhAuditTrailPreset = 'timeline' | 'table';
+
+/** Re-export for consumer convenience */
+export type { DBAuditLog };
+
+/**
+ * Re-export the ia-chat audit log type for AI-specific audit trails.
+ * DBAuditLog (recruiter) tracks recruiting entity changes.
+ * DBIaChatAuditLog tracks AI provider operations (api_key rotation, config changes, etc.).
+ */
+export type IaChatAuditLog = DBIaChatAuditLog;
 
 /* -- Entity & Action Types -------------------------------------------- */
 
@@ -66,6 +80,8 @@ export interface BhAuditTrailProps extends EngineAwareProps {
 
   /* data */
   events?: AuditEvent[];
+  /** AI provider audit logs - accepts DBIaChatAuditLog[] from @rottay/ia-chat */
+  aiAuditEvents?: DBIaChatAuditLog[];
   stats?: AuditStats;
 
   /* state & callbacks */

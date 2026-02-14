@@ -5,56 +5,58 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { ApplicationSourceValue } from '@rottay/recruiter';
 
 export type BhAnalyticsHubPreset = 'executive' | 'operational';
 
 export type DateRangePreset = '7d' | '30d' | '90d' | 'year' | 'custom';
 
 export interface FunnelStage {
-  name: string;
-  count: number;
-  conversionPercent: number;
+  name?: string;
+  count?: number;
+  conversionPercent?: number;
   prevPeriodCount?: number;
 }
 
 export interface TimeToHireData {
-  job: string;
-  avgDays: number;
-  stages: { name: string; avgDays: number }[];
+  job?: string;
+  avgDays?: number;
+  stages?: { name?: string; avgDays?: number }[];
 }
 
 export interface SourceEffectiveness {
-  source: string;
-  candidateCount: number;
-  qualityScore: number;
+  /** Source identifier - maps to DB ApplicationSourceValue */
+  source?: ApplicationSourceValue | string;
+  candidateCount?: number;
+  qualityScore?: number;
 }
 
 export interface RecruiterPerformance {
-  name: string;
+  name?: string;
   avatar?: string;
-  hires: number;
-  velocity: number;
-  pipelineValue: number;
-  satisfaction: number;
-  sparkline: number[];
+  hires?: number;
+  velocity?: number;
+  pipelineValue?: number;
+  satisfaction?: number;
+  sparkline?: number[];
 }
 
 export interface CostAnalysis {
-  category: string;
-  costPerHire: number;
-  breakdown: { item: string; cost: number }[];
+  category?: string;
+  costPerHire?: number;
+  breakdown?: { item?: string; cost?: number }[];
 }
 
 export interface PipelineVelocity {
-  stage: string;
-  avgDays: number;
-  slaLimit: number;
+  stage?: string;
+  avgDays?: number;
+  slaLimit?: number;
 }
 
 export interface TrendComparison {
-  date: string;
-  current: number;
-  previous: number;
+  date?: string;
+  current?: number;
+  previous?: number;
 }
 
 export interface BhAnalyticsHubProps extends EngineAwareProps {

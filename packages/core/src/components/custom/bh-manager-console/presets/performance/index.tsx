@@ -120,8 +120,8 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
 
     const sorted = useMemo(() => {
       return [...recruiters].sort((a, b) => {
-        const va = a.metrics[sortCol] ?? 0;
-        const vb = b.metrics[sortCol] ?? 0;
+        const va = (a.metrics ?? {} as any)[sortCol] ?? 0;
+        const vb = (b.metrics ?? {} as any)[sortCol] ?? 0;
         return sortAsc ? va - vb : vb - va;
       });
     }, [recruiters, sortCol, sortAsc]);
@@ -214,14 +214,15 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   </Text>
                 </Box>
               </Box>
-              {kpi.sparklineData.length > 1 && (
+              {(kpi.sparklineData ?? []).length > 1 && (
                 <Box style={{ marginTop: t.spacing[2] }}>
                   <svg width={100} height={24} viewBox="0 0 100 24">
                     {(() => {
-                      const max = Math.max(...kpi.sparklineData);
-                      const min = Math.min(...kpi.sparklineData);
+                      const data = kpi.sparklineData ?? [];
+                      const max = Math.max(...data);
+                      const min = Math.min(...data);
                       const range = max - min || 1;
-                      const pts = kpi.sparklineData.map((v, idx) => `${(idx / (kpi.sparklineData.length - 1)) * 100},${22 - ((v - min) / range) * 20}`).join(' ');
+                      const pts = data.map((v, idx) => `${(idx / (data.length - 1)) * 100},${22 - ((v - min) / range) * 20}`).join(' ');
                       return <polyline points={pts} fill="none" stroke={t.colors.primaryScale[400]} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />;
                     })()}
                   </svg>
@@ -276,8 +277,8 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 role="row"
                 tabIndex={onRecruiterClick ? 0 : undefined}
                 aria-label={`Rank ${rank}: ${rec.name}`}
-                onClick={() => handleRecruiterClick(rec.recruiterId)}
-                onKeyDown={onRecruiterClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick(rec.recruiterId); } : undefined}
+                onClick={() => handleRecruiterClick((rec.recruiterId ?? ''))}
+                onKeyDown={onRecruiterClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') handleRecruiterClick((rec.recruiterId ?? '')); } : undefined}
                 style={{
                   display: 'grid',
                   gridTemplateColumns: `48px 180px repeat(${PERF_COLUMNS.length}, 1fr)`,
@@ -302,7 +303,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                   <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.primaryScale[700] }}>
-                      {rec.name.split(' ').map(n => n[0]).join('')}
+                      {(rec.name ?? '').split(' ').map(n => n[0]).join('')}
                     </Text>
                   </Box>
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
@@ -310,7 +311,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   </Text>
                 </Box>
                 {PERF_COLUMNS.map(col => {
-                  const val = rec.metrics[col] ?? 0;
+                  const val = (rec.metrics ?? {} as any)[col] ?? 0;
                   const isHighlight = col === sortCol;
                   return (
                     <Text key={col} style={{
@@ -338,8 +339,8 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                 {pipeline.map((stage, idx) => {
                   const barW = 60;
                   const x = 40 + idx * 90;
-                  const maxCount = Math.max(...pipeline.map(p => p.count), 1);
-                  const barH = (stage.count / maxCount) * 130;
+                  const maxCount = Math.max(...pipeline.map(p => p.count ?? 0), 1);
+                  const barH = ((stage.count ?? 0) / maxCount) * 130;
                   const y = 150 - barH;
                   return (
                     <g key={stage.name}>
@@ -352,7 +353,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                       </text>
                       {idx < pipeline.length - 1 && (
                         <text x={x + barW + 15} y={90} textAnchor="middle" fontSize={9} fill={t.colors.neutral[400]}>
-                          {Math.round((pipeline[idx + 1].count / stage.count) * 100)}%
+                          {Math.round(((pipeline[idx + 1]?.count ?? 0) / (stage.count ?? 1)) * 100)}%
                         </text>
                       )}
                     </g>
@@ -401,7 +402,7 @@ export const PerformanceBhManagerConsole = createPreset<BhManagerConsoleProps>({
                   </Text>
                   {/* Delta bar */}
                   <Box style={{ marginTop: t.spacing[2], height: 6, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden', position: 'relative' as const }}>
-                    <Box style={{ height: '100%', width: `${Math.min((alert.actual / alert.threshold) * 100, 100)}%`, borderRadius: t.borderRadius.full, backgroundColor: isCritical ? t.colors.errorScale[500] : t.colors.warningScale[500], opacity: 0.7 }} />
+                    <Box style={{ height: '100%', width: `${Math.min(((alert.actual ?? 0) / (alert.threshold ?? 1)) * 100, 100)}%`, borderRadius: t.borderRadius.full, backgroundColor: isCritical ? t.colors.errorScale[500] : t.colors.warningScale[500], opacity: 0.7 }} />
                   </Box>
                 </Box>
               );

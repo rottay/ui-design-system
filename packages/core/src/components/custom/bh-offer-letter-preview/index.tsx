@@ -10,7 +10,10 @@ import { BH_OFFER_LETTER_PREVIEW_PRESETS } from './presets';
 export {
   type BhOfferLetterPreviewProps,
   type BhOfferLetterPreviewPreset,
+  type DBOffer,
+  type RecruiterOffer,
   type OfferLetterData,
+  offerToLetterData,
   BH_OFFER_LETTER_PREVIEW_DEFAULTS,
 } from './core';
 

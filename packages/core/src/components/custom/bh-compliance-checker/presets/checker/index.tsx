@@ -40,6 +40,7 @@ function getStatusIcon(status: ComplianceRule['status']) {
     case 'fail': return XCircle;
     case 'warning': return AlertTriangle;
     case 'na': return MinusCircle;
+    default: return MinusCircle;
   }
 }
 
@@ -49,6 +50,7 @@ function getStatusColor(status: ComplianceRule['status'], t: DesignTokens): stri
     case 'fail': return t.colors.errorScale[600];
     case 'warning': return t.colors.warningScale[600];
     case 'na': return t.colors.neutral[400];
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -58,6 +60,7 @@ function getStatusBg(status: ComplianceRule['status'], t: DesignTokens): string 
     case 'fail': return t.colors.errorScale[50];
     case 'warning': return t.colors.warningScale[50];
     case 'na': return t.colors.neutral[100];
+    default: return t.colors.neutral[100];
   }
 }
 
@@ -67,6 +70,7 @@ function getStatusBadgeKey(status: ComplianceRule['status']): 'success' | 'error
     case 'fail': return 'error';
     case 'warning': return 'warning';
     case 'na': return 'secondary';
+    default: return 'secondary';
   }
 }
 
@@ -76,6 +80,7 @@ function getStatusLabel(status: ComplianceRule['status']): string {
     case 'fail': return 'Fail';
     case 'warning': return 'Warning';
     case 'na': return 'N/A';
+    default: return String(status ?? '');
   }
 }
 
@@ -200,8 +205,8 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
     const categories = useMemo(() => {
       const cats = new Map<string, ComplianceRule[]>();
       rules.forEach(r => {
-        if (!cats.has(r.category)) cats.set(r.category, []);
-        cats.get(r.category)!.push(r);
+        if (!cats.has((r.category ?? ''))) cats.set((r.category ?? ''), []);
+        cats.get((r.category ?? ''))!.push(r);
       });
       return Array.from(cats.entries());
     }, [rules]);
@@ -369,10 +374,10 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
                       role="listitem"
                       tabIndex={0}
                       aria-label={`${rule.name}: ${getStatusLabel(rule.status)}`}
-                      onClick={() => handleClick(rule.id)}
-                      onMouseEnter={() => setHoveredRule(rule.id)}
+                      onClick={() => handleClick((rule.id ?? ''))}
+                      onMouseEnter={() => setHoveredRule((rule.id ?? null))}
                       onMouseLeave={() => setHoveredRule(null)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(rule.id); } }}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((rule.id ?? '')); } }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -412,7 +417,7 @@ export const CheckerBhComplianceChecker = createPreset<BhComplianceCheckerProps>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Clock size={10} color={t.colors.neutral[400]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                            {formatDistanceToNow(rule.lastChecked, { addSuffix: true })}
+                            {formatDistanceToNow((rule.lastChecked ?? new Date()), { addSuffix: true })}
                           </Text>
                         </Box>
                         <Box style={{

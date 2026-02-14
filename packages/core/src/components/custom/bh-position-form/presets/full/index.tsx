@@ -9,8 +9,8 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
-  Briefcase, FileText, Plus, X, Save, Loader2,
-  DollarSign, AlertCircle, ChevronDown, Trash2,
+  Briefcase, FileText, X, Save, Loader2,
+  DollarSign, AlertCircle, ChevronDown,
   Flag, Building2, FolderOpen,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
@@ -35,10 +35,13 @@ const EMPTY_FORM: PositionFormData = {
   title: '',
   clientId: '',
   department: '',
-  priority: 'medium',
+  priority: 'normal',
   description: '',
-  requirements: [],
-  salary: { min: 0, max: 0, currency: 'USD' },
+  requirements: '',
+  fillType: 'permanent',
+  seniorityLevel: 'mid',
+  workMode: 'onsite',
+  salaryRange: { min: 0, max: 0, currency: 'USD' },
 };
 
 const DEFAULT_CLIENTS = [
@@ -48,8 +51,10 @@ const DEFAULT_CLIENTS = [
 ];
 
 const PRIORITY_OPTIONS: Array<{ value: PositionFormData['priority']; label: string; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = [
-  { value: 'high', label: 'High', color: t => t.colors.errorScale[600], bg: t => t.colors.errorScale[50] },
-  { value: 'medium', label: 'Medium', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
+  { value: 'critical', label: 'Critical', color: t => t.colors.errorScale[700], bg: t => t.colors.errorScale[50] },
+  { value: 'urgent', label: 'Urgent', color: t => t.colors.errorScale[600], bg: t => t.colors.errorScale[50] },
+  { value: 'high', label: 'High', color: t => t.colors.errorScale[500], bg: t => t.colors.errorScale[50] },
+  { value: 'normal', label: 'Normal', color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
   { value: 'low', label: 'Low', color: t => t.colors.neutral[500], bg: t => t.colors.neutral[100] },
 ];
 
@@ -99,9 +104,8 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
     const [form, setForm] = useState<PositionFormData>({
       ...EMPTY_FORM,
       ...initialData,
-    });
+    } as PositionFormData);
     const [focusedField, setFocusedField] = useState<string | null>(null);
-    const [newRequirement, setNewRequirement] = useState('');
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
@@ -117,16 +121,7 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
       setForm(prev => ({ ...prev, [field]: value }));
     }, []);
 
-    const addRequirement = useCallback(() => {
-      if (newRequirement.trim()) {
-        setForm(prev => ({ ...prev, requirements: [...prev.requirements, newRequirement.trim()] }));
-        setNewRequirement('');
-      }
-    }, [newRequirement]);
-
-    const removeRequirement = useCallback((index: number) => {
-      setForm(prev => ({ ...prev, requirements: prev.requirements.filter((_, i) => i !== index) }));
-    }, []);
+    // requirements is now a string field
 
     const handleSubmit = useCallback(() => {
       if (!form.title || !form.clientId) return;
@@ -321,65 +316,19 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
           {/* Requirements */}
           <Text style={sectionLabel('Requirements')}>Requirements</Text>
           <Box style={{ marginBottom: t.spacing[6] }}>
-            <Box style={{ display: 'flex', gap: t.spacing[2], marginBottom: t.spacing[3] }}>
-              <input
-                value={newRequirement}
-                onChange={(e) => setNewRequirement(e.target.value)}
-                onFocus={() => setFocusedField('requirement')}
-                onBlur={() => setFocusedField(null)}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addRequirement(); } }}
-                placeholder="Add a requirement..."
-                aria-label="New requirement"
-                style={{ ...createInputStyle(t, focusedField === 'requirement'), flex: 1 }}
-              />
-              <Box
-                tabIndex={0}
-                role="button"
-                aria-label="Add requirement"
-                onClick={addRequirement}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addRequirement(); } }}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  width: 36, height: 36, borderRadius: t.borderRadius.md,
-                  backgroundColor: t.colors.primaryScale[500],
-                  cursor: 'pointer', flexShrink: 0,
-                }}
-              >
-                <Plus size={16} color={t.colors.common.white} />
-              </Box>
-            </Box>
-            {form.requirements.map((req, idx) => (
-              <Box key={idx} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: `${t.spacing[2]}px ${t.spacing[3]}px`,
-                borderRadius: t.borderRadius.md,
-                border: `1px solid ${t.colors.neutral[100]}`,
-                marginBottom: t.spacing[2],
-                backgroundColor: t.colors.neutral[50],
-              }}>
-                <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[800], flex: 1 }}>
-                  {req}
-                </Text>
-                <Box
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Remove requirement: ${req}`}
-                  onClick={() => removeRequirement(idx)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); removeRequirement(idx); } }}
-                  style={{ cursor: 'pointer', flexShrink: 0, display: 'flex' }}
-                >
-                  <Trash2 size={12} color={t.colors.errorScale[400]} />
-                </Box>
-              </Box>
-            ))}
-            {form.requirements.length === 0 && (
-              <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], fontStyle: 'italic' }}>
-                No requirements added yet
-              </Text>
-            )}
+            <textarea
+              value={form.requirements ?? ''}
+              onChange={(e) => updateField('requirements', e.target.value)}
+              onFocus={() => setFocusedField('requirements')}
+              onBlur={() => setFocusedField(null)}
+              placeholder="List required skills, qualifications, and experience..."
+              aria-label="Requirements"
+              rows={4}
+              style={{ ...createInputStyle(t, focusedField === 'requirements'), resize: 'vertical' as const, fontFamily: 'inherit' }}
+            />
           </Box>
 
-          {/* Salary */}
+          {/* Salary Range */}
           <Text style={sectionLabel('Salary Range')}>Salary Range</Text>
           <Box style={{ display: 'flex', gap: t.spacing[4], marginBottom: t.spacing[6] }}>
             <Box style={{ flex: 1 }}>
@@ -390,8 +339,8 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
                 <DollarSign size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
                 <input
                   type="number"
-                  value={form.salary?.min ?? 0}
-                  onChange={(e) => updateField('salary', { ...form.salary!, min: Number(e.target.value) })}
+                  value={form.salaryRange?.min ?? 0}
+                  onChange={(e) => updateField('salaryRange', { ...(form.salaryRange ?? { min: 0, max: 0, currency: 'USD' }), min: Number(e.target.value) })}
                   aria-label="Minimum salary"
                   style={{ ...createInputStyle(t, false), paddingLeft: t.spacing[8] }}
                 />
@@ -405,8 +354,8 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
                 <DollarSign size={14} style={{ position: 'absolute', left: t.spacing[3], top: '50%', transform: 'translateY(-50%)', color: t.colors.neutral[400] }} />
                 <input
                   type="number"
-                  value={form.salary?.max ?? 0}
-                  onChange={(e) => updateField('salary', { ...form.salary!, max: Number(e.target.value) })}
+                  value={form.salaryRange?.max ?? 0}
+                  onChange={(e) => updateField('salaryRange', { ...(form.salaryRange ?? { min: 0, max: 0, currency: 'USD' }), max: Number(e.target.value) })}
                   aria-label="Maximum salary"
                   style={{ ...createInputStyle(t, false), paddingLeft: t.spacing[8] }}
                 />
@@ -417,8 +366,8 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
                 Currency
               </Text>
               <select
-                value={form.salary?.currency ?? 'USD'}
-                onChange={(e) => updateField('salary', { ...form.salary!, currency: e.target.value })}
+                value={form.salaryRange?.currency ?? 'USD'}
+                onChange={(e) => updateField('salaryRange', { ...(form.salaryRange ?? { min: 0, max: 0, currency: 'USD' }), currency: e.target.value })}
                 aria-label="Salary currency"
                 style={{ ...createInputStyle(t, false), cursor: 'pointer' }}
               >

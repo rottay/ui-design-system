@@ -49,18 +49,21 @@ const MOCK_APPROVALS: ApprovalItem[] = [
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-const ENTITY_CONFIG: Record<ApprovalItem['entityType'], { label: string; icon: typeof Briefcase; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
+const ENTITY_CONFIG: Record<string, { label: string; icon: typeof Briefcase; color: (t: DesignTokens) => string; bg: (t: DesignTokens) => string }> = {
   offer: { label: 'Offers', icon: FileText, color: t => t.colors.successScale[600], bg: t => t.colors.successScale[50] },
   position: { label: 'Positions', icon: Briefcase, color: t => t.colors.primaryScale[600], bg: t => t.colors.primaryScale[50] },
   budget: { label: 'Budgets', icon: DollarSign, color: t => t.colors.warningScale[600], bg: t => t.colors.warningScale[50] },
   job: { label: 'Jobs', icon: Users, color: t => t.colors.infoScale[600], bg: t => t.colors.infoScale[50] },
+  client: { label: 'Clients', icon: Users, color: t => t.colors.secondaryScale[600], bg: t => t.colors.secondaryScale[50] },
+  impersonation_request: { label: 'Impersonation', icon: Shield, color: t => t.colors.errorScale[600], bg: t => t.colors.errorScale[50] },
 };
 
-function getPriorityConfig(priority: ApprovalItem['priority'], t: DesignTokens) {
+function getPriorityConfig(priority: ApprovalItem['priority'] | undefined, t: DesignTokens) {
   switch (priority) {
     case 'high': return { label: 'High', badge: 'error' as const, color: t.colors.errorScale[600] };
     case 'medium': return { label: 'Medium', badge: 'warning' as const, color: t.colors.warningScale[600] };
-    case 'low': return { label: 'Low', badge: 'secondary' as const, color: t.colors.neutral[500] };
+    case 'low':
+    default: return { label: 'Low', badge: 'secondary' as const, color: t.colors.neutral[500] };
   }
 }
 
@@ -75,9 +78,9 @@ function groupItems(items: ApprovalItem[], groupBy: string): Record<string, Appr
 }
 
 function getGroupLabel(key: string, groupBy: string): string {
-  if (groupBy === 'entityType') return ENTITY_CONFIG[key as ApprovalItem['entityType']]?.label ?? key;
-  if (groupBy === 'priority') return `${key.charAt(0).toUpperCase()}${key.slice(1)} Priority`;
-  if (groupBy === 'status') return key.charAt(0).toUpperCase() + key.slice(1);
+  if (groupBy === 'entityType') return ENTITY_CONFIG[key]?.label ?? key;
+  if (groupBy === 'priority') return `${(key || '').charAt(0).toUpperCase()}${(key || '').slice(1)} Priority`;
+  if (groupBy === 'status') return (key || '').charAt(0).toUpperCase() + (key || '').slice(1);
   return key;
 }
 
@@ -121,10 +124,10 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     }), [entrance, t]);
 
     const stats = useMemo(() => ({
-      pending: approvals.filter(a => a.status === 'pending').length,
-      approved: approvals.filter(a => a.status === 'approved').length,
-      rejected: approvals.filter(a => a.status === 'rejected').length,
-      highPriority: approvals.filter(a => a.priority === 'high' && a.status === 'pending').length,
+      pending: (approvals ?? []).filter(a => a.status === 'pending').length,
+      approved: (approvals ?? []).filter(a => a.status === 'approved').length,
+      rejected: (approvals ?? []).filter(a => a.status === 'rejected').length,
+      highPriority: (approvals ?? []).filter(a => a.priority === 'high' && a.status === 'pending').length,
     }), [approvals]);
 
     const grouped = useMemo(() => groupItems(approvals, groupBy), [approvals, groupBy]);
@@ -226,7 +229,7 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
           )}
 
           {Object.entries(grouped).map(([key, items]) => {
-            const entityCfg = ENTITY_CONFIG[key as ApprovalItem['entityType']];
+            const entityCfg = ENTITY_CONFIG[key];
             const Icon = entityCfg?.icon ?? FileText;
 
             return (
@@ -255,10 +258,10 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                         role="listitem"
                         tabIndex={0}
                         aria-label={`${approval.entityTitle}, ${priorityCfg.label} priority, ${approval.status}`}
-                        onClick={() => handleClick(approval.id)}
-                        onMouseEnter={() => setHoveredId(approval.id)}
+                        onClick={() => handleClick((approval.id ?? ''))}
+                        onMouseEnter={() => setHoveredId((approval.id ?? null))}
                         onMouseLeave={() => setHoveredId(null)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(approval.id); } }}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((approval.id ?? '')); } }}
                         style={{
                           ...animStyle(globalIdx++),
                           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -277,7 +280,7 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                               color: t.colors.neutral[900],
                               whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                             }}>
-                              {approval.entityTitle}
+                              {approval.entityTitle ?? ''}
                             </Text>
                             <Box style={{ ...createBadgeStyle(t, priorityCfg.badge), borderRadius: badgeRadius, padding: `0 ${t.spacing[2]}px` }}>
                               <Text style={{ fontSize: t.typography.fontSize.xs }}>{priorityCfg.label}</Text>
@@ -285,10 +288,10 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                           </Box>
                           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                              by {approval.requestedBy}
+                              by {approval.requestedBy ?? ''}
                             </Text>
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                              {formatDistanceToNow(approval.requestedAt, { addSuffix: true })}
+                              {approval.requestedAt ? formatDistanceToNow(approval.requestedAt, { addSuffix: true }) : ''}
                             </Text>
                           </Box>
                         </Box>
@@ -300,8 +303,8 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                               tabIndex={0}
                               role="button"
                               aria-label={`Approve ${approval.entityTitle}`}
-                              onClick={(e: React.MouseEvent) => handleApprove(e, approval.id)}
-                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onApprove?.(approval.id); } }}
+                              onClick={(e: React.MouseEvent) => handleApprove(e, (approval.id ?? ''))}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onApprove?.((approval.id ?? '')); } }}
                               style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 width: 28, height: 28, borderRadius: t.borderRadius.md,
@@ -318,8 +321,8 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
                               tabIndex={0}
                               role="button"
                               aria-label={`Reject ${approval.entityTitle}`}
-                              onClick={(e: React.MouseEvent) => handleReject(e, approval.id)}
-                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onReject?.(approval.id); } }}
+                              onClick={(e: React.MouseEvent) => handleReject(e, (approval.id ?? ''))}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onReject?.((approval.id ?? '')); } }}
                               style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 width: 28, height: 28, borderRadius: t.borderRadius.md,

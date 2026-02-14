@@ -1,18 +1,27 @@
 /**
  * BhTokenBudget - Core Interface
  * Budget configuration and alert thresholds for BitHire ATS platform
+ *
+ * Token types imported from @rottay/recruiter (single source of truth).
+ * TokenBalance fields: currentBalance, reservedBalance, lowBalanceThreshold, etc.
+ * DBQuota fields from @rottay/ia-chat: quotaLimit, quotaUsed, alertThreshold, etc.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBQuota } from '@rottay/ia-chat';
+import type { TokenBalance as DBTokenBalance } from '@rottay/recruiter';
 
 export type BhTokenBudgetPreset = 'config' | 'compact';
 
 export interface BudgetAllocation {
   teamId: string;
   teamName: string;
+  /** Maps to quota allocation or team token budget */
   allocated: number;
+  /** Maps to DBQuota.quotaUsed */
   used: number;
+  /** Maps to DBQuota.alertThreshold */
   alertThreshold: number;
 }
 
@@ -20,13 +29,13 @@ export interface BhTokenBudgetProps extends EngineAwareProps {
   preset?: BhTokenBudgetPreset;
 
   /** List of team budget allocations */
-  allocations: BudgetAllocation[];
+  allocations?: BudgetAllocation[];
 
   /** Total budget amount */
-  totalBudget: number;
+  totalBudget?: number;
 
   /** Total used amount */
-  totalUsed: number;
+  totalUsed?: number;
 
   /** Currency symbol */
   currency?: string;

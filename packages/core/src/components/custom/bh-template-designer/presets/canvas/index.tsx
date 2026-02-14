@@ -420,7 +420,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
               }}
             >
               <CircleDot size={10} />
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {(status || '').charAt(0).toUpperCase() + (status || '').slice(1)}
             </span>
           </div>
 

@@ -24,7 +24,8 @@ import type {
   BhCandidateOutreachProps, OutreachRecipient, OutreachTemplate,
   ABVariant, ScheduleConfig, OutreachChannel,
 } from '../../core';
-import { getChannelColors, getRecipientInitials, getChannelLabel } from '../../core';
+import { getChannelColors, getRecipientInitials, getChannelLabel, getCandidateFullName } from '../../core';
+import type { DBCandidate } from '@rottay/recruiter';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
   Mail, MessageSquare, Linkedin, Send, Clock, Users, Eye,
@@ -37,11 +38,11 @@ import {
  * -------------------------------------------------------------------------*/
 
 const DEFAULT_RECIPIENTS: OutreachRecipient[] = [
-  { id: 'r-1', name: 'Sarah Johnson', email: 'sarah.j@google.com', phone: '+1 415-555-0127' },
-  { id: 'r-2', name: 'Michael Chen', email: 'mchen@stripe.com', phone: '+1 415-555-0189' },
-  { id: 'r-3', name: 'Emily Rodriguez', email: 'emily@meta.com' },
-  { id: 'r-4', name: 'James Kim', email: 'jkim@anthropic.com' },
-  { id: 'r-5', name: 'Anna Kowalski', email: 'anna@vercel.com' },
+  { candidate: { id: 'r-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.j@google.com', phone: '+1 415-555-0127' } as DBCandidate },
+  { candidate: { id: 'r-2', firstName: 'Michael', lastName: 'Chen', email: 'mchen@stripe.com', phone: '+1 415-555-0189' } as DBCandidate },
+  { candidate: { id: 'r-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily@meta.com' } as DBCandidate },
+  { candidate: { id: 'r-4', firstName: 'James', lastName: 'Kim', email: 'jkim@anthropic.com' } as DBCandidate },
+  { candidate: { id: 'r-5', firstName: 'Anna', lastName: 'Kowalski', email: 'anna@vercel.com' } as DBCandidate },
 ];
 
 const DEFAULT_TEMPLATES: OutreachTemplate[] = [
@@ -245,8 +246,10 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                   border: `1px solid ${t.colors.neutral[200]}`, minHeight: 40,
                 }}
               >
-                {recipients.slice(0, 8).map(r => (
-                  <Box key={r.id} role="listitem" style={{
+                {recipients.slice(0, 8).map(r => {
+                  const rName = getCandidateFullName(r.candidate);
+                  return (
+                  <Box key={r.candidate.id} role="listitem" style={{
                     display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                     padding: `2px ${t.spacing[2]}px 2px 2px`, borderRadius: br, backgroundColor: t.colors.neutral[50],
                     fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700],
@@ -255,10 +258,11 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
                       width: 18, height: 18, borderRadius: t.borderRadius.full,
                       backgroundColor: t.colors.primaryScale[100], color: t.colors.primaryScale[700],
                       display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, fontWeight: t.typography.fontWeight.bold,
-                    }}>{getRecipientInitials(r.name)}</Box>
-                    {r.name}
+                    }}>{getRecipientInitials(rName)}</Box>
+                    {rName}
                   </Box>
-                ))}
+                  );
+                })}
                 {recipients.length > 8 && (
                   <Box style={{
                     padding: `2px ${t.spacing[2]}px`, borderRadius: br,

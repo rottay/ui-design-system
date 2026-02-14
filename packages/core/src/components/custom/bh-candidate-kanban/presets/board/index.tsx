@@ -30,7 +30,6 @@ import type {
   BhCandidateKanbanProps,
   KanbanCandidate,
   KanbanStage,
-  CandidateSource,
   AiRecommendation,
   SlaStatus,
   KanbanFilter,
@@ -74,15 +73,15 @@ function getAiLabel(rec: AiRecommendation): string {
   }
 }
 
-function getSourceConfig(source: CandidateSource, t: DesignTokens) {
-  const m: Record<CandidateSource, { label: string; bg: string; text: string }> = {
+function getSourceConfig(source: string, t: DesignTokens) {
+  const m: Record<string, { label: string; bg: string; text: string }> = {
     applied: { label: 'Applied', bg: t.colors.primaryScale[50], text: t.colors.primaryScale[700] },
     referral: { label: 'Referral', bg: t.colors.successScale[50], text: t.colors.successScale[700] },
     sourced: { label: 'Sourced', bg: t.colors.infoScale[50], text: t.colors.infoScale[700] },
     agency: { label: 'Agency', bg: t.colors.warningScale[50], text: t.colors.warningScale[700] },
     internal: { label: 'Internal', bg: t.colors.secondaryScale[50], text: t.colors.secondaryScale[700] },
   };
-  return m[source];
+  return m[source] ?? { label: source, bg: t.colors.neutral[50], text: t.colors.neutral[700] };
 }
 
 function getSlaStatus(c: KanbanCandidate, stage: KanbanStage): SlaStatus {
@@ -117,7 +116,7 @@ function getInitials(name: string): string {
 function matchesFilters(c: KanbanCandidate, f: KanbanFilter | undefined, q: string): boolean {
   if (q) {
     const ql = q.toLowerCase();
-    if (!c.name.toLowerCase().includes(ql) && !c.email?.toLowerCase().includes(ql) && !c.tags.some(t => t.toLowerCase().includes(ql))) return false;
+    if (!(c.name || '').toLowerCase().includes(ql) && !c.email?.toLowerCase().includes(ql) && !(c.tags || []).some(t => t.toLowerCase().includes(ql))) return false;
   }
   if (!f) return true;
   if (f.source?.length && !f.source.includes(c.source)) return false;
@@ -204,8 +203,8 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobName = 'Senior Frontend Engineer', totalCandidates = 16,
-      stages = DEFAULT_STAGES, candidates: cp = DEFAULT_CANDIDATES,
+      jobName = '', totalCandidates = 0,
+      stages = [], candidates: cp = [],
       onCandidateMove, onCandidateClick, onScheduleInterview, onAddNote, onReject, onHold,
       filters: fp, onFilterChange, searchQuery: sqp, onSearchChange,
       selectedCandidate: selp, bulkSelection: bsp, onBulkSelectionChange, onBulkAction,
@@ -544,7 +543,7 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
           }} role="group" aria-label="Filter options">
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Text style={{ ...sectionLabel, marginBottom: 0 }}>Source</Text>
-              {(['applied', 'referral', 'sourced', 'agency', 'internal'] as CandidateSource[]).map(src => {
+              {(['applied', 'referral', 'sourced', 'agency', 'internal'] as string[]).map(src => {
                 const active = filters.source?.includes(src);
                 const sc = getSourceConfig(src, t);
                 return (

@@ -1,30 +1,36 @@
 /**
  * BhApprovalDetail - Core Interface
  * Approval detail drawer/panel for BitHire ATS platform
+ *
+ * DB Reference: DBApprovalRequest from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApprovalRequest } from '@rottay/recruiter';
 
 export type BhApprovalDetailPreset = 'drawer' | 'compact';
 
+/** Re-export for consumer convenience */
+export type { DBApprovalRequest };
+
 export interface ApprovalDetailData {
-  id: string;
-  entityType: 'offer' | 'position' | 'budget' | 'job';
-  entityTitle: string;
-  requestedBy: string;
-  requestedAt: Date;
-  description: string;
-  priority: 'high' | 'medium' | 'low';
-  status: 'pending' | 'approved' | 'rejected';
-  chain: Array<{
-    approverName: string;
-    status: string;
+  id?: string;
+  entityType?: 'offer' | 'position' | 'budget' | 'job' | 'client' | 'impersonation_request';
+  entityTitle?: string;
+  requestedBy?: string;
+  requestedAt?: Date;
+  description?: string;
+  priority?: 'high' | 'medium' | 'low' | 'normal' | 'urgent';
+  status?: 'pending' | 'approved' | 'rejected' | 'changes_requested' | 'auto_approved' | 'cancelled';
+  chain?: Array<{
+    approverName?: string;
+    status?: string;
     decidedAt?: Date;
   }>;
   attachments?: Array<{
-    name: string;
-    type: string;
+    name?: string;
+    type?: string;
   }>;
 }
 
@@ -32,7 +38,7 @@ export interface BhApprovalDetailProps extends EngineAwareProps {
   preset?: BhApprovalDetailPreset;
 
   /** The approval data to display */
-  approval: ApprovalDetailData;
+  approval?: ApprovalDetailData | null;
 
   /** Callback when approve is clicked */
   onApprove?: () => void;

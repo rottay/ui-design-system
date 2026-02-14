@@ -33,6 +33,7 @@ function getStatusIcon(status: ComplianceRule['status']) {
     case 'fail': return XCircle;
     case 'warning': return AlertTriangle;
     case 'na': return MinusCircle;
+    default: return MinusCircle;
   }
 }
 
@@ -42,6 +43,7 @@ function getStatusColor(status: ComplianceRule['status'], t: DesignTokens): stri
     case 'fail': return t.colors.errorScale[600];
     case 'warning': return t.colors.warningScale[600];
     case 'na': return t.colors.neutral[400];
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -51,6 +53,7 @@ function getStatusBadgeKey(status: ComplianceRule['status']): 'success' | 'error
     case 'fail': return 'error';
     case 'warning': return 'warning';
     case 'na': return 'secondary';
+    default: return 'secondary';
   }
 }
 
@@ -60,6 +63,7 @@ function getStatusLabel(status: ComplianceRule['status']): string {
     case 'fail': return 'Fail';
     case 'warning': return 'Warn';
     case 'na': return 'N/A';
+    default: return String(status ?? '');
   }
 }
 
@@ -187,8 +191,8 @@ export const CompactBhComplianceChecker = createPreset<BhComplianceCheckerProps>
                 role="listitem"
                 tabIndex={0}
                 aria-label={`${rule.name}: ${getStatusLabel(rule.status)}`}
-                onClick={() => handleClick(rule.id)}
-                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(rule.id); } }}
+                onClick={() => handleClick((rule.id ?? ''))}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((rule.id ?? '')); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

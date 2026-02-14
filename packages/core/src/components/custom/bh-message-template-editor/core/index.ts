@@ -1,12 +1,18 @@
 /**
  * BhMessageTemplateEditor - Core Interface
  * Template creation/edit with variable highlighting for BitHire ATS platform
+ *
+ * DB Reference: DBMessageTemplate from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBMessageTemplate } from '@rottay/recruiter';
 
 export type BhMessageTemplateEditorPreset = 'editor' | 'compact';
+
+/** Re-export for consumer convenience */
+export type { DBMessageTemplate };
 
 export interface TemplateVariable {
   key: string;

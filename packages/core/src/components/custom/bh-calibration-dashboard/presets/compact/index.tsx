@@ -26,6 +26,7 @@ import type {
   CalibrationSession,
   CalibrationMetrics,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -60,7 +61,7 @@ function getStatusIcon(status: string) {
 }
 
 function getStatusLabel(status: string): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -106,8 +107,8 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sessions = MOCK_SESSIONS,
-      metrics = MOCK_METRICS,
+      sessions = [],
+      metrics = { activeSessions: 0, totalCompleted: 0, avgAgreementRate: 0, avgDeviation: 0 },
       onSessionClick,
       selectedSessionId,
       className,
@@ -160,7 +161,7 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
               Calibration
             </Text>
           </Box>
-          {metrics.activeSessions > 0 && (
+          {(metrics.activeSessions ?? 0) > 0 && (
             <Box style={{
               ...createBadgeStyle(t, 'success'),
               borderRadius: badgeRadius,
@@ -180,9 +181,9 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }}>
           {[
-            { label: 'Completed', value: metrics.totalCompleted },
-            { label: 'Agreement', value: `${(metrics.avgAgreementRate * 100).toFixed(0)}%` },
-            { label: 'Deviation', value: metrics.avgDeviation.toFixed(2) },
+            { label: 'Completed', value: n(metrics.totalCompleted) },
+            { label: 'Agreement', value: `${(n(metrics.avgAgreementRate) * 100).toFixed(0)}%` },
+            { label: 'Deviation', value: n(metrics.avgDeviation).toFixed(2) },
           ].map((s) => (
             <Box key={s.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], textAlign: 'center' }} role="status" aria-label={`${s.label}: ${s.value}`}>
               <Text style={{
@@ -249,13 +250,13 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
                     }}>
                       <Box style={{
                         height: '100%',
-                        width: `${session.progress * 100}%`,
+                        width: `${n(session.progress) * 100}%`,
                         borderRadius: t.borderRadius.full,
                         backgroundColor: statusColor,
                       }} />
                     </Box>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                      {(session.agreementRate * 100).toFixed(0)}% agree
+                      {(n(session.agreementRate) * 100).toFixed(0)}% agree
                     </Text>
                   </Box>
                 </Box>

@@ -257,7 +257,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                 gap: t.spacing[3],
               }}>
                 {activeSessions.map((session, sIdx) => {
-                  const statusCfg = SESSION_STATUS_CONFIG[session.status];
+                  const statusCfg = SESSION_STATUS_CONFIG[session.status] || SESSION_STATUS_CONFIG.connected;
                   const isSelected = selectedSession === session.id;
                   const statusScale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
 
@@ -394,8 +394,8 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                   gap: t.spacing[3],
                 }}>
                   {providerHealth.map((provider, pIdx) => {
-                    const statusCfg = PROVIDER_STATUS_CONFIG[provider.status];
-                    const cbCfg = CIRCUIT_BREAKER_CONFIG[provider.circuitBreaker];
+                    const statusCfg = PROVIDER_STATUS_CONFIG[provider.status] || PROVIDER_STATUS_CONFIG.healthy;
+                    const cbCfg = CIRCUIT_BREAKER_CONFIG[provider.circuitBreaker] || CIRCUIT_BREAKER_CONFIG.closed;
                     const statusScale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
                     const cbScale = t.colors[`${cbCfg.colorKey}Scale` as const] as any;
                     const latencyPercent = Math.min(100, (provider.latencyMs / maxLatency) * 100);
@@ -587,7 +587,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
 
             {/* Alerts */}
             {alerts.length > 0 && (() => {
-              const sortedAlerts = [...alerts].sort((a, b) => b.time.getTime() - a.time.getTime());
+              const sortedAlerts = [...alerts].sort((a, b) => (b.time?.getTime?.() ?? 0) - (a.time?.getTime?.() ?? 0));
 
               return (
                 <Box style={{ ...cardBase, ...animStyle(4) }} role="region" aria-label="System alerts">
@@ -609,7 +609,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                     maxHeight: 320, overflowY: 'auto' as const,
                   }}>
                     {sortedAlerts.map((alert) => {
-                      const severityCfg = ALERT_SEVERITY_CONFIG[alert.severity];
+                      const severityCfg = ALERT_SEVERITY_CONFIG[alert.severity] || ALERT_SEVERITY_CONFIG.info;
                       const scale = t.colors[`${severityCfg.colorKey}Scale` as const] as any;
                       const AlertIcon = alert.severity === 'error' ? XCircle
                         : alert.severity === 'warning' ? AlertTriangle

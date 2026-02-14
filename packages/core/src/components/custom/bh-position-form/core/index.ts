@@ -1,21 +1,37 @@
 /**
  * BhPositionForm - Core Interface
  * Position creation/edit form for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The form uses DBPosition fields for initial data and submission.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBPosition } from '@rottay/recruiter';
 
 export type BhPositionFormPreset = 'full' | 'compact';
 
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterPosition = DBPosition;
+
+/**
+ * Form data shape for position creation/editing.
+ * Uses a subset of DBPosition fields relevant to the form.
+ */
 export interface PositionFormData {
   title: string;
   clientId: string;
-  department: string;
-  priority: 'high' | 'medium' | 'low';
-  description: string;
-  requirements: string[];
-  salary?: {
+  department?: string;
+  priority: 'low' | 'normal' | 'high' | 'urgent' | 'critical';
+  description?: string;
+  requirements?: string;
+  fillType: 'permanent' | 'contract' | 'contract_to_hire' | 'temporary';
+  seniorityLevel: 'intern' | 'entry' | 'mid' | 'senior' | 'lead' | 'manager' | 'director' | 'executive';
+  workMode: 'onsite' | 'hybrid' | 'remote' | 'flexible';
+  salaryRange?: {
     min: number;
     max: number;
     currency: string;
@@ -25,8 +41,8 @@ export interface PositionFormData {
 export interface BhPositionFormProps extends EngineAwareProps {
   preset?: BhPositionFormPreset;
 
-  /** Initial form data for editing */
-  initialData?: Partial<PositionFormData>;
+  /** Initial form data for editing - accepts partial DBPosition */
+  initialData?: Partial<DBPosition>;
 
   /** Available clients for dropdown */
   clients?: Array<{ id: string; name: string }>;

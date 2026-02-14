@@ -3,10 +3,18 @@
  * Template Browse & Select screen for BitHire ATS platform
  */
 
+/**
+ * DB Reference: DBHiringProcessTemplate from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBHiringProcessTemplate } from '@rottay/recruiter';
 
 export type BhTemplateLibraryPreset = 'cards' | 'table';
+
+/** Re-export for consumer convenience */
+export type { DBHiringProcessTemplate };
 
 /* ── Template Data ──────────────────────────────────────────────────── */
 

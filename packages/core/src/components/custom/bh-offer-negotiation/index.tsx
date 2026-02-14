@@ -10,10 +10,13 @@ import { BH_OFFER_NEGOTIATION_PRESETS } from './presets';
 export {
   type BhOfferNegotiationProps,
   type BhOfferNegotiationPreset,
+  type DBOffer,
+  type RecruiterOffer,
   type NegotiationStepType,
   type CompensationPackage,
   type NegotiationStep,
   type OfferNegotiation,
+  offerToNegotiation,
   BH_OFFER_NEGOTIATION_DEFAULTS,
 } from './core';
 export * from './presets';

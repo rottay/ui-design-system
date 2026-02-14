@@ -1464,11 +1464,11 @@ export { BhTokenManager } from './bh-token-manager';
 export type {
   BhTokenManagerProps,
   BhTokenManagerPreset,
-  TokenBalance as BhTokenBalance,
+  TokenBalanceSummary as BhTokenBalanceSummary,
   ConsumptionDataPoint,
   CostBreakdownItem,
   TeamQuota,
-  TokenTransaction,
+  TokenTransactionDisplay,
   AlertConfig,
   ForecastPoint,
 } from './bh-token-manager';
@@ -1586,7 +1586,7 @@ export type {
   ProviderCost,
   ModelCost,
   CostTrendPoint,
-  TokenBalance as CostTokenBalance,
+  TokenBalanceSummary as CostTokenBalanceSummary,
   BudgetAlert,
   CostSummary,
   CostCategory,
@@ -3285,7 +3285,8 @@ export { BhProctoringEventList } from './bh-proctoring-event-list';
 export type {
   BhProctoringEventListProps,
   BhProctoringEventListPreset,
-  ProctoringEventItem,
+  ProctoringEventListItem,
+  ProctoringEventSelect as ProctoringEventListSelect,
 } from './bh-proctoring-event-list';
 export { TableBhProctoringEventList, CardsBhProctoringEventList } from './bh-proctoring-event-list';
 export { BH_PROCTORING_EVENT_LIST_DEFAULTS } from './bh-proctoring-event-list';
@@ -3295,8 +3296,8 @@ export { BhProctoringEventCard } from './bh-proctoring-event-card';
 export type {
   BhProctoringEventCardProps,
   BhProctoringEventCardPreset,
-  ProctoringEventMetadata,
-  ProctoringEventDetail as ProctoringEventCardDetail,
+  ProctoringEventCardView,
+  ProctoringEventSelect as ProctoringEventCardSelect,
 } from './bh-proctoring-event-card';
 export { DefaultBhProctoringEventCard, CompactBhProctoringEventCard } from './bh-proctoring-event-card';
 export { BH_PROCTORING_EVENT_CARD_DEFAULTS } from './bh-proctoring-event-card';
@@ -3306,7 +3307,8 @@ export { BhProctoringTimeline } from './bh-proctoring-timeline';
 export type {
   BhProctoringTimelineProps,
   BhProctoringTimelinePreset,
-  TimelineEvent as ProctoringTimelineEvent,
+  TimelineEventView as ProctoringTimelineEvent,
+  ProctoringEventSelect as ProctoringTimelineSelect,
 } from './bh-proctoring-timeline';
 export { HorizontalBhProctoringTimeline, VerticalBhProctoringTimeline } from './bh-proctoring-timeline';
 export { BH_PROCTORING_TIMELINE_DEFAULTS } from './bh-proctoring-timeline';
@@ -3316,7 +3318,8 @@ export { BhProctoringReview } from './bh-proctoring-review';
 export type {
   BhProctoringReviewProps,
   BhProctoringReviewPreset,
-  ProctoringEventDetail as ProctoringReviewEventDetail,
+  ProctoringReviewEventView,
+  ProctoringEventSelect as ProctoringReviewSelect,
   ReviewSubmission,
 } from './bh-proctoring-review';
 export { SplitBhProctoringReview, StackedBhProctoringReview } from './bh-proctoring-review';
@@ -3410,7 +3413,7 @@ export type {
   BhScoringJobQueuePreset,
   ScoringJobStatus,
   ScoringJobPriority,
-  ScoringJob,
+  ScoringJobView as ScoringJob,
   QueueStats,
 } from './bh-scoring-job-queue';
 export { ListBhScoringJobQueue, CompactBhScoringJobQueue } from './bh-scoring-job-queue';

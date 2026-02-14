@@ -1,12 +1,21 @@
 /**
  * BhInterviewScheduler - Core Interface
  * Schedule & Configure Interviews for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBInterview for pre-populating scheduling data.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBInterview } from '@rottay/recruiter';
 
 export type BhInterviewSchedulerPreset = 'standard' | 'compact';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 export interface ScheduleCandidate {
   id: string;
@@ -54,6 +63,9 @@ export interface AvailableInterviewer {
 
 export interface BhInterviewSchedulerProps extends EngineAwareProps {
   preset?: BhInterviewSchedulerPreset;
+
+  /** Optional existing interview to pre-populate from */
+  interview?: DBInterview;
 
   /** Candidate to schedule an interview for */
   candidate?: ScheduleCandidate | null;

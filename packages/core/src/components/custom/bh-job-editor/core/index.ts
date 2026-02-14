@@ -1,16 +1,22 @@
 /**
  * BhJobEditor - Core Interface
  * Job Creation/Editing wizard for BitHire ATS platform
+ *
+ * DB Reference: DBJob from @rottay/recruiter
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBJob } from '@rottay/recruiter';
 
 export type BhJobEditorPreset = 'wizard' | 'single-page';
 
-export type EmploymentType = 'full-time' | 'part-time' | 'contract' | 'internship';
-export type SeniorityLevel = 'intern' | 'junior' | 'mid' | 'senior' | 'lead' | 'director' | 'executive';
-export type WorkArrangement = 'onsite' | 'remote' | 'hybrid';
+/** Re-export for consumer convenience */
+export type { DBJob };
+
+export type EmploymentType = 'full-time' | 'part-time' | 'contract' | 'internship' | 'full_time' | 'part_time' | 'temporary';
+export type SeniorityLevel = 'intern' | 'junior' | 'mid' | 'senior' | 'lead' | 'director' | 'executive' | 'entry' | 'manager';
+export type WorkArrangement = 'onsite' | 'remote' | 'hybrid' | 'flexible';
 
 export interface SkillTag {
   name: string;

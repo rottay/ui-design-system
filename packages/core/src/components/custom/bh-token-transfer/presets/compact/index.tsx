@@ -296,7 +296,7 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
                       fontWeight: t.typography.fontWeight.bold,
                       color: t.colors.primaryScale[700],
                     }}>
-                      {transfer.amount.toLocaleString()}
+                      {(transfer.amount ?? 0).toLocaleString()}
                     </Text>
                   </Box>
 

@@ -11,8 +11,8 @@ export type BhPipelineVelocityChartPreset = 'line' | 'compact';
 export type VelocityPeriod = 30 | 60 | 90;
 
 export interface VelocityDataPoint {
-  date: string;
-  count: number;
+  date?: string;
+  count?: number;
   target?: number;
 }
 

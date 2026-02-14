@@ -31,12 +31,13 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: string | undefined, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -188,7 +189,7 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
         {/* Severity mini-dots */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexShrink: 0 }}>
           {severities.map((sev) => {
-            const count = eventCounts[sev];
+            const count = eventCounts[sev] ?? 0;
             if (count === 0) return null;
             return (
               <Box

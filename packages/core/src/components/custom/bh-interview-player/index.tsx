@@ -11,6 +11,7 @@ import { BH_INTERVIEW_PLAYER_PRESETS } from './presets';
 export {
   type BhInterviewPlayerProps,
   type BhInterviewPlayerPreset,
+  type RecruiterInterview,
   type TranscriptLine,
   type EvidenceHighlight,
   type ScorecardDimension,

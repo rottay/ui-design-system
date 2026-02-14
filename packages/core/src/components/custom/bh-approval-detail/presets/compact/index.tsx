@@ -47,11 +47,12 @@ const MOCK_APPROVAL: ApprovalDetailData = {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getPriorityConfig(priority: ApprovalDetailData['priority'], t: DesignTokens) {
+function getPriorityConfig(priority: ApprovalDetailData['priority'] | undefined, t: DesignTokens) {
   switch (priority) {
     case 'high': return { label: 'High', badge: 'error' as const };
     case 'medium': return { label: 'Medium', badge: 'warning' as const };
-    case 'low': return { label: 'Low', badge: 'secondary' as const };
+    case 'low':
+    default: return { label: 'Low', badge: 'secondary' as const };
   }
 }
 
@@ -85,7 +86,7 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approval = MOCK_APPROVAL,
+      approval: _approval = MOCK_APPROVAL,
       onApprove,
       onReject,
       onClose,
@@ -93,6 +94,7 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
       className,
       style,
     } = props;
+    const approval = _approval ?? MOCK_APPROVAL;
 
     const [expanded, setExpanded] = useState(false);
 
@@ -147,7 +149,7 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
                 <Text style={{ fontSize: t.typography.fontSize.xs }}>{priorityCfg.label}</Text>
               </Box>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                {formatDistanceToNow(approval.requestedAt, { addSuffix: true })}
+                {approval.requestedAt ? formatDistanceToNow(approval.requestedAt, { addSuffix: true }) : ''}
               </Text>
             </Box>
           </Box>
@@ -175,14 +177,14 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
               <Text style={{ ...createPersonalitySectionHeaderStyle(t), fontSize: t.typography.fontSize.xs, marginBottom: t.spacing[2] }}>
                 Chain
               </Text>
-              {approval.chain.map((step, idx) => {
-                const Icon = getStepIcon(step.status);
-                const color = getStepColor(step.status, t);
+              {(approval.chain ?? []).map((step, idx) => {
+                const Icon = getStepIcon(step.status ?? 'pending');
+                const color = getStepColor(step.status ?? 'pending', t);
                 return (
                   <Box key={idx} style={{ display: 'flex', flexDirection: 'row' as const, alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[1] }}>
                     <Icon size={12} color={color} style={{ flexShrink: 0 }} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700], flex: 1 }}>
-                      {step.approverName}
+                      {step.approverName ?? ''}
                     </Text>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color, flexShrink: 0 }}>{step.status}</Text>
                   </Box>

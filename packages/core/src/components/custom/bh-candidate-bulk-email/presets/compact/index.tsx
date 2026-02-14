@@ -17,12 +17,14 @@ import {
   createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhCandidateBulkEmailProps, BulkEmailRecipient } from '../../core';
+import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 const MOCK_RECIPIENTS: BulkEmailRecipient[] = [
-  { id: 'br-1', name: 'Sarah Johnson', email: 'sarah@email.com', variables: { position: 'Senior Frontend Engineer' } },
-  { id: 'br-2', name: 'Michael Chen', email: 'michael@email.com', variables: { position: 'Backend Developer' } },
-  { id: 'br-3', name: 'Emily Rodriguez', email: 'emily@email.com', variables: { position: 'Product Designer' } },
+  { candidate: { id: 'br-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah@email.com' } as DBCandidate, variables: { position: 'Senior Frontend Engineer' } },
+  { candidate: { id: 'br-2', firstName: 'Michael', lastName: 'Chen', email: 'michael@email.com' } as DBCandidate, variables: { position: 'Backend Developer' } },
+  { candidate: { id: 'br-3', firstName: 'Emily', lastName: 'Rodriguez', email: 'emily@email.com' } as DBCandidate, variables: { position: 'Product Designer' } },
 ];
 
 export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProps>({
@@ -45,7 +47,7 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
     } = props;
 
     const [localSelected, setLocalSelected] = useState<Set<string>>(
-      new Set(propSelectedIds ?? recipients.map(r => r.id)),
+      new Set(propSelectedIds ?? recipients.map(r => r.candidate.id)),
     );
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -141,18 +143,20 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
             </Box>
           )}
           {recipients.map((r) => {
-            const isSelected = localSelected.has(r.id);
+            const cand = r.candidate;
+            const recipientName = getCandidateFullName(cand);
+            const isSelected = localSelected.has(cand.id);
             return (
               <Box
-                key={r.id}
+                key={cand.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${r.name} (${r.email})`}
-                onClick={() => handleToggle(r.id)}
+                aria-label={`${recipientName} (${cand.email ?? ''})`}
+                onClick={() => handleToggle(cand.id)}
                 onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    handleToggle(r.id);
+                    handleToggle(cand.id);
                   }
                 }}
                 style={{
@@ -179,11 +183,11 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                   }}>
-                    {r.name}
+                    {recipientName}
                   </Text>
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                  {r.email.split('@')[0]}
+                  {(cand.email ?? '').split('@')[0]}
                 </Text>
               </Box>
             );

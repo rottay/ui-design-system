@@ -365,7 +365,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
     /* ---------- Agent type icon ---------- */
     const getAgentTypeIcon = (type: AgentType, size: number) => {
       switch (type) {
-        case 'conversational':
+        case 'conversation':
           return <Bot size={size} />;
         case 'phone':
           return <Phone size={size} />;
@@ -1373,7 +1373,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   fontWeight: tokens.typography.fontWeight.semibold,
                 }}
               >
-                {agentData.temperature.toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
+                {(agentData.temperature ?? 0).toFixed(1)} - {getTemperatureLabel(agentData.temperature)}
               </Text>
             </Box>
             <input
@@ -1468,7 +1468,7 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     color: tokens.colors.neutral[500],
                   }}
                 >
-                  {agentData.topP.toFixed(2)}
+                  {(agentData.topP ?? 0).toFixed(2)}
                 </Text>
               </Box>
               <input

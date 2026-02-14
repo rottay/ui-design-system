@@ -1,15 +1,21 @@
 /**
  * BhJobDetail - Core Interface
  * Job Detail Page for BitHire ATS platform
+ *
+ * DB Reference: DBJob, DBJobStatus from @rottay/recruiter
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBJob } from '@rottay/recruiter';
 
 export type BhJobDetailPreset = 'full' | 'compact';
 
-export type JobStatus = 'draft' | 'open' | 'paused' | 'closed' | 'filled';
-export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
+/** Re-export for consumer convenience */
+export type { DBJob };
+
+export type JobStatus = 'draft' | 'open' | 'paused' | 'closed' | 'filled' | 'pending_approval' | 'published' | 'archived';
+export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical' | 'normal' | 'urgent';
 export type CandidateStatus = 'new' | 'screening' | 'interview' | 'offer' | 'hired' | 'rejected' | 'withdrawn';
 export type JobEventType = 'created' | 'opened' | 'candidate-added' | 'stage-change' | 'interview-scheduled' | 'offer-sent' | 'closed' | 'note';
 export type MetricsTimeRange = '7d' | '14d' | '30d' | '90d';
@@ -101,8 +107,11 @@ export type JobDetailTab = 'overview' | 'candidates' | 'analytics' | 'settings';
 export interface BhJobDetailProps extends EngineAwareProps {
   preset?: BhJobDetailPreset;
 
+  /** Optional raw DB job entity for direct binding */
+  job?: Partial<DBJob> | null;
+
   /** Core job information */
-  jobInfo: JobInfo;
+  jobInfo?: JobInfo | null;
 
   /** KPI metric cards */
   metrics?: JobMetric[];

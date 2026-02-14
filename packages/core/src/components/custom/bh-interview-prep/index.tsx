@@ -11,6 +11,7 @@ import { BH_INTERVIEW_PREP_PRESETS } from './presets';
 export {
   type BhInterviewPrepProps,
   type BhInterviewPrepPreset,
+  type RecruiterInterview,
   type InterviewBrief,
   type CandidateBrief,
   type EvaluationFocus,

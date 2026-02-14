@@ -1,7 +1,18 @@
+/**
+ * BhIndividualHome - Core Interface
+ * Individual Contributor Dashboard for BitHire ATS platform
+ *
+ * DB References: DBRecruiter, DBJob, DBCandidate from @rottay/recruiter
+ */
+
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBRecruiter, DBJob, DBCandidate } from '@rottay/recruiter';
 
 export type BhIndividualHomePreset = 'standard';
+
+/** Re-export for consumer convenience */
+export type { DBRecruiter, DBJob, DBCandidate };
 
 export interface WelcomeInfo {
   name: string;
@@ -50,10 +61,10 @@ export interface PerformanceRing {
 }
 
 export interface RecentCandidate {
-  id: string;
-  name: string;
-  status: 'new' | 'screening' | 'interviewing' | 'offer' | 'hired' | 'rejected';
-  score: number;
+  id?: string;
+  name?: string;
+  status?: 'new' | 'screening' | 'interviewing' | 'offer' | 'hired' | 'rejected';
+  score?: number;
   avatar?: string;
   jobTitle?: string;
   appliedDate?: string;
@@ -68,7 +79,7 @@ export interface TokenBalance {
 
 export interface BhIndividualHomeProps extends EngineAwareProps {
   preset?: BhIndividualHomePreset;
-  welcome: WelcomeInfo;
+  welcome?: WelcomeInfo;
   pipelines?: PipelinePreview[];
   schedule?: ScheduleItem[];
   wizardSteps?: WizardStep[];

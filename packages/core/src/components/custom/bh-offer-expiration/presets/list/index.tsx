@@ -17,6 +17,7 @@ import {
   createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhOfferExpirationProps, ExpiringOffer } from '../../core';
+import { offersToExpiringOffers } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 const MOCK_OFFERS: ExpiringOffer[] = [
@@ -42,11 +43,16 @@ export const ListBhOfferExpiration = createPreset<BhOfferExpirationProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      offers = MOCK_OFFERS,
+      dbOffers,
+      candidateNames,
+      offers: offersProp,
       onOfferClick,
       className,
       style,
     } = props;
+
+    const offers = offersProp
+      ?? (dbOffers && dbOffers.length > 0 ? offersToExpiringOffers(dbOffers, candidateNames) : MOCK_OFFERS);
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -38,6 +38,7 @@ import {
   getScorableTypeColors,
   getDimensionColors,
   formatScorableType,
+  n,
 } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -139,24 +140,24 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const { Box, Flex, Stack, Text } = primitives;
 
     const {
-      rubricName,
-      industry,
-      scorableType,
-      status,
-      dimensions: dimensionsProp,
-      scoreLevels,
+      rubricName = '',
+      industry = '',
+      scorableType = 'interview' as const,
+      status = 'draft',
+      dimensions: dimensionsProp = [],
+      scoreLevels = [{ label: 'Low', minScore: 0, color: '#ef4444' }, { label: 'Medium', minScore: 40, color: '#f59e0b' }, { label: 'High', minScore: 70, color: '#22c55e' }],
       className,
       style,
     } = props;
 
     /* ── Derived ──────────────────────────────────────────────────── */
     const sortedDimensions = useMemo(
-      () => [...dimensionsProp].sort((a, b) => a.order - b.order),
+      () => [...dimensionsProp].sort((a, b) => n(a.order) - n(b.order)),
       [dimensionsProp]
     );
 
     const totalWeight = useMemo(
-      () => dimensionsProp.reduce((sum, d) => sum + d.weight, 0),
+      () => dimensionsProp.reduce((sum, d) => sum + n(d.weight), 0),
       [dimensionsProp]
     );
 
@@ -193,15 +194,15 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     /* ── Stable sample scores (using dimension order as seed) ────── */
     const sampleScores = useMemo(() => {
       return sortedDimensions.map((d, i) => {
-        const seed = ((d.order * 17 + i * 31) % 40) + 55;
+        const seed = ((n(d.order) * 17 + i * 31) % 40) + 55;
         return {
-          label: d.code || d.name.substring(0, 4),
+          label: d.code || (d.name ?? '').substring(0, 4),
           name: d.name,
           value: seed,
           maxValue: 100,
-          weight: d.weight,
+          weight: n(d.weight),
           isKnockout: d.isKnockout,
-          knockoutThreshold: d.knockoutThreshold,
+          knockoutThreshold: n(d.knockoutThreshold),
         };
       });
     }, [sortedDimensions]);
@@ -292,9 +293,9 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
-                backgroundColor: scorableColors[scorableType].bg,
-                color: scorableColors[scorableType].color,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scorableColors[scorableType].border}`,
+                backgroundColor: (scorableColors as Record<string, any>)[scorableType]?.bg,
+                color: (scorableColors as Record<string, any>)[scorableType]?.color,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${(scorableColors as Record<string, any>)[scorableType]?.border}`,
               }}
             >
               {formatScorableType(scorableType)}
@@ -307,14 +308,14 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
-                backgroundColor: statusColors[status].bg,
-                color: statusColors[status].color,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusColors[status].border}`,
+                backgroundColor: (statusColors as Record<string, any>)[status]?.bg,
+                color: (statusColors as Record<string, any>)[status]?.color,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${(statusColors as Record<string, any>)[status]?.border}`,
                 gap: tokens.spacing[1],
               }}
             >
               <CircleDot size={10} aria-hidden="true" />
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {(status || '').charAt(0).toUpperCase() + (status || '').slice(1)}
             </Text>
           </Flex>
 
@@ -498,8 +499,8 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       role="listitem"
                       aria-label={`${score.name}: ${score.value}${isKnockoutFailed ? ' - knockout failed' : ''}`}
                       tabIndex={0}
-                      onClick={() => handleDimSelect(sortedDimensions[idx].id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimSelect(sortedDimensions[idx].id); } }}
+                      onClick={() => handleDimSelect((sortedDimensions[idx].id ?? ''))}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimSelect((sortedDimensions[idx].id ?? '')); } }}
                       style={{
                         ...cardBase,
                         ...cardHover.base,
@@ -635,7 +636,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             color: tokens.colors.neutral[400],
                           }}
                         >
-                          Weight: {score.weight.toFixed(0)}%
+                          Weight: {(score.weight || 0).toFixed(0)}%
                         </Text>
                         <Text
                           style={{
@@ -867,8 +868,8 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 <svg width="140" height="140" viewBox="0 0 140 140">
                   {(() => {
                     const weights = sortedDimensions.map((d, i) => ({
-                      label: d.name,
-                      value: d.weight,
+                      label: d.name ?? '',
+                      value: n(d.weight),
                       color: dimColors[i % dimColors.length],
                     }));
                     const slices = generatePieSlices(weights, 70, 70, 60);
@@ -931,7 +932,7 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     />
                     <Text style={{ flex: 1 }}>{d.name}</Text>
                     <Text style={{ fontWeight: tokens.typography.fontWeight.semibold }}>
-                      {d.weight.toFixed(0)}%
+                      {n(d.weight).toFixed(0)}%
                     </Text>
                   </Box>
                 ))}

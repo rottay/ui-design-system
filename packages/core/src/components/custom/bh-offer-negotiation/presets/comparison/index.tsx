@@ -21,6 +21,7 @@ import {
   getCardPadding,
 } from '../../../helpers';
 import type { BhOfferNegotiationProps, OfferNegotiation, CompensationPackage } from '../../core';
+import { offerToNegotiation } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import { Users, TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
 
@@ -46,7 +47,7 @@ const MOCK_NEGOTIATIONS: OfferNegotiation[] = [
 function formatCurrency(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}K`;
-  return `$${value.toLocaleString()}`;
+  return `$${(value || 0).toLocaleString()}`;
 }
 
 function totalCompValue(comp: CompensationPackage): number {
@@ -69,12 +70,20 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
     const { Box, Text } = primitives;
 
     const {
-      negotiations = MOCK_NEGOTIATIONS,
+      offer,
+      offers: offersProp,
+      candidateName: candidateNameProp,
+      negotiations: negotiationsProp,
       negotiation,
       onAction,
       className,
       style,
     } = props;
+
+    const negotiations = negotiationsProp
+      ?? (offersProp && offersProp.length > 0
+        ? offersProp.map((o) => offerToNegotiation(o, candidateNameProp))
+        : MOCK_NEGOTIATIONS);
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
@@ -184,7 +193,7 @@ export const ComparisonBhOfferNegotiation = createPreset<BhOfferNegotiationProps
                     }}
                   >
                     <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.primaryScale[700] }}>
-                      {neg.candidateName.charAt(0)}
+                      {(neg.candidateName || '').charAt(0)}
                     </Text>
                   </Box>
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[1], flex: 1 }}>

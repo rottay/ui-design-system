@@ -16,7 +16,7 @@ import {
   getCardPadding,
 } from '../../../helpers';
 import type { BhOfferWorkspaceProps, ApprovalStep } from '../../core';
-import { getOfferStatusConfig, getOfferPipelineSteps, formatCurrency } from '../../core';
+import { getOfferStatusConfig, getOfferPipelineSteps, formatCurrency, getOfferCompensation } from '../../core';
 import {
   DollarSign, Shield, Clock, Check, X, Send, FileText,
   PenTool, History, User, BarChart3, ArrowRight,
@@ -35,10 +35,21 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const p = c.primaryScale;
 
     const {
-      candidateName, jobTitle, status, compensation, employmentTerms,
-      approvalSteps, negotiationHistory, documents, onSendOffer,
-      currentVersion, signatureStatus, className, style,
+      offer,
+      candidateName: candidateNameProp, jobTitle: jobTitleProp, status: statusProp,
+      approvalSteps = [], negotiationHistory = [],
+      documents = [], onSendOffer, currentVersion: currentVersionProp,
+      signatureStatus, className, style,
     } = props;
+
+    const candidateName = candidateNameProp ?? '';
+    const jobTitle = jobTitleProp ?? offer?.jobTitleOffered ?? '';
+    const status = statusProp ?? offer?.status ?? 'draft';
+    const currentVersion = currentVersionProp ?? offer?.version ?? 1;
+    const compensation = getOfferCompensation(offer);
+    const startDate = offer?.proposedStartDate ? new Date(offer.proposedStartDate).toLocaleDateString() : 'TBD';
+    const workLocation = offer?.remoteType ?? offer?.workLocation ?? 'TBD';
+    const probationDays = offer?.probationPeriodDays ?? 90;
 
     const [expanded, setExpanded] = useState<Record<string, boolean>>({
       pipeline: true, approval: true, compensation: false, documents: false, history: false,
@@ -66,10 +77,13 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     }))(), [hov, sp, t.borderRadius.md, c.common.white, t.surface.borderWidth, t.surface.borderStyle, n]);
 
     /* Summary Stats */
-    const totalComp = compensation.baseSalary + compensation.signingBonus + Math.round(compensation.baseSalary * (compensation.annualBonusPercent / 100));
+    const base = compensation.baseSalary;
+    const signing = compensation.signingBonus;
+    const bonusPct = compensation.annualBonusPercent;
+    const totalComp = base + signing + Math.round(base * (bonusPct / 100));
     const approvedCt = approvalSteps.filter((s) => s.status === 'approved').length;
     const signedDocs = documents.filter((d) => d.status === 'signed').length;
-    const allSigned = signatureStatus.candidateSigned && signatureStatus.companySigned;
+    const allSigned = signatureStatus?.candidateSigned && signatureStatus?.companySigned;
 
     const stats = useMemo(() => [
       { label: 'Total Compensation', value: formatCurrency(totalComp, compensation.currency), Icon: DollarSign, color: p },
@@ -282,7 +296,7 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                       <Box style={{
                         ...createIconContainerStyle(t, { size: 28, color: sc[100] }),
                       }}>
-                        <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: sc[700] }}>{step.approverName.charAt(0)}</Text>
+                        <Text style={{ fontSize: ty.fontSize.xs, fontWeight: ty.fontWeight.semibold, color: sc[700] }}>{(step.approverName || '?').charAt(0)}</Text>
                       </Box>
                     )}
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
@@ -332,15 +346,15 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
             <Box style={{ marginTop: sp[3], display: 'flex', gap: sp[3], flexWrap: 'wrap' as const }}>
               <Box style={{ ...createBadgeStyle(t, 'info'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
                 <Calendar size={12} />
-                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Start: {employmentTerms.startDate}</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Start: {startDate}</Text>
               </Box>
               <Box style={{ ...createBadgeStyle(t, 'secondary'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
                 <Briefcase size={12} />
-                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{employmentTerms.workArrangement}</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>{workLocation}</Text>
               </Box>
               <Box style={{ ...createBadgeStyle(t, 'warning'), display: 'inline-flex', alignItems: 'center', gap: sp[1] }}>
                 <Clock size={12} />
-                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Probation: {employmentTerms.probationPeriod}</Text>
+                <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Probation: {probationDays} days</Text>
               </Box>
             </Box>
           </Section>
@@ -373,11 +387,11 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
                 <Text style={{ fontSize: ty.fontSize.sm, fontWeight: ty.fontWeight.medium, color: n[700] }}>E-Signatures</Text>
               </Box>
               <Box style={{ display: 'flex', gap: sp[2] }}>
-                <Box style={createBadgeStyle(t, signatureStatus.companySigned ? 'success' : 'secondary')}>
-                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Company {signatureStatus.companySigned ? 'Signed' : 'Pending'}</Text>
+                <Box style={createBadgeStyle(t, signatureStatus?.companySigned ? 'success' : 'secondary')}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Company {signatureStatus?.companySigned ? 'Signed' : 'Pending'}</Text>
                 </Box>
-                <Box style={createBadgeStyle(t, signatureStatus.candidateSigned ? 'success' : 'secondary')}>
-                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Candidate {signatureStatus.candidateSigned ? 'Signed' : 'Pending'}</Text>
+                <Box style={createBadgeStyle(t, signatureStatus?.candidateSigned ? 'success' : 'secondary')}>
+                  <Text style={{ fontSize: ty.fontSize.xs, color: 'inherit' }}>Candidate {signatureStatus?.candidateSigned ? 'Signed' : 'Pending'}</Text>
                 </Box>
               </Box>
             </Box>

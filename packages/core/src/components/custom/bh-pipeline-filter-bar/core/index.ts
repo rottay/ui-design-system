@@ -1,43 +1,50 @@
 /**
  * BhPipelineFilterBar - Core Interface
  * Pipeline filter bar with filters for job, recruiter, date range,
- * priority, source, and saved presets for BitHire ATS platform
+ * priority, source, and saved presets for BitHire ATS platform.
+ * References DB enum types for filter option values.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type {
+  ApplicationStatusValue,
+  ApplicationSourceValue,
+  ApplicationPriorityValue,
+} from '@rottay/recruiter';
 
 export type BhPipelineFilterBarPreset = 'horizontal' | 'dropdown';
 
 export type FilterType = 'select' | 'multiselect' | 'daterange' | 'search' | 'toggle';
 
-export type FilterPriority = 'critical' | 'high' | 'medium' | 'low';
+/** Filter priority uses DB ApplicationPriorityValue */
+export type FilterPriority = ApplicationPriorityValue;
 
 export interface FilterOption {
   value: string;
-  label: string;
+  label?: string;
   count?: number;
 }
 
 export interface FilterConfig {
-  id: string;
-  label: string;
-  type: FilterType;
+  id?: string;
+  label?: string;
+  type?: FilterType;
   options?: FilterOption[];
   placeholder?: string;
 }
 
 export interface ActiveFilter {
-  filterId: string;
-  value: string | string[];
-  label: string;
+  filterId?: string;
+  value?: string | string[];
+  label?: string;
 }
 
 export interface SavedPreset {
-  id: string;
-  name: string;
-  filters: ActiveFilter[];
-  createdAt: Date;
+  id?: string;
+  name?: string;
+  filters?: ActiveFilter[];
+  createdAt?: Date | string | null;
 }
 
 export interface BhPipelineFilterBarProps extends EngineAwareProps {

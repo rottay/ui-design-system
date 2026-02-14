@@ -1,24 +1,31 @@
 /**
  * BhScoringInsights - Core Interface
  * Scoring Analytics for the BitHire ATS platform
+ *
+ * This component works with analytics/aggregated data, not raw DB entities.
+ * All data props are optional with safe defaults.
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { ScorecardSelect, DimensionScoreSelect, RubricSelect } from '@rottay/scoring';
 
 export type BhScoringInsightsPreset = 'dashboard' | 'detailed';
+
+/** DB score level values from ScorecardSelect.scoreLevel */
+export type ScoreLevelValue = 'excellent' | 'good' | 'average' | 'below' | 'poor';
+
+export type ScoreColorKey = 'success' | 'primary' | 'warning' | 'error' | 'info' | 'secondary';
 
 export interface ScoringKpi {
   label: string;
   value: number;
-  trend: number;
-  previousValue: number;
+  trend?: number;
+  previousValue?: number;
 }
 
-export type ScoreColorKey = 'success' | 'primary' | 'warning' | 'error' | 'info' | 'secondary';
-
 export interface LevelDistribution {
-  level: string;
+  level: ScoreLevelValue | string;
   count: number;
   color?: string;
   colorKey?: ScoreColorKey;
@@ -47,7 +54,7 @@ export interface CohortComparison {
   count: number;
 }
 
-export interface SkillGap {
+export interface SkillGapSummary {
   dimension: string;
   avgScore: number;
   gapFromTarget: number;
@@ -65,25 +72,25 @@ export interface BhScoringInsightsProps extends EngineAwareProps {
   preset?: BhScoringInsightsPreset;
 
   /** KPI summary cards */
-  kpis: ScoringKpi[];
+  kpis?: ScoringKpi[];
 
   /** Level distribution data */
-  levelDistribution: LevelDistribution[];
+  levelDistribution?: LevelDistribution[];
 
   /** Heatmap data (dimension x job) */
-  heatmapData: HeatmapCell[];
+  heatmapData?: HeatmapCell[];
 
   /** Knockout statistics per dimension */
-  knockoutStats: KnockoutStat[];
+  knockoutStats?: KnockoutStat[];
 
   /** Trend data over time */
-  trendData: TrendPoint[];
+  trendData?: TrendPoint[];
 
   /** Cohort comparison groups */
-  cohortComparisons: CohortComparison[];
+  cohortComparisons?: CohortComparison[];
 
   /** Skill gap analysis */
-  skillGaps: SkillGap[];
+  skillGaps?: SkillGapSummary[];
 
   /** Active filters */
   filters?: ScoringFilter;
@@ -125,3 +132,9 @@ export interface BhScoringInsightsProps extends EngineAwareProps {
 export const BH_SCORING_INSIGHTS_DEFAULTS: Partial<BhScoringInsightsProps> = {
   preset: 'dashboard',
 };
+
+/** Backward-compat alias (old name from pre-migration) */
+export type SkillGap = SkillGapSummary;
+
+/** Re-export DB types for convenience */
+export type { ScorecardSelect, DimensionScoreSelect, RubricSelect };

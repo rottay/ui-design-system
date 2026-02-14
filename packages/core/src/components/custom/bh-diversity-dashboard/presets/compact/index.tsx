@@ -70,8 +70,8 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
     const colors = useMemo(() => SEGMENT_COLORS(t), [t]);
 
     const {
-      metrics = MOCK_METRICS,
-      totalCandidates = 1090,
+      metrics = [],
+      totalCandidates = 0,
       onSegmentClick,
       className,
       style,
@@ -154,16 +154,16 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
                 overflow: 'hidden',
                 marginBottom: t.spacing[1],
               }}>
-                {metric.segments.map((seg, si) => (
+                {(metric.segments ?? []).map((seg, si) => (
                   <Box
                     key={seg.label}
                     role="button"
                     tabIndex={0}
-                    aria-label={`${seg.label}: ${seg.percentage}%`}
-                    onClick={() => handleClick(metric.category, seg.label)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(metric.category, seg.label); } }}
+                    aria-label={`${seg.label}: ${seg.percentage ?? 0}%`}
+                    onClick={() => handleClick((metric.category ?? ''), (seg.label ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick((metric.category ?? ''), (seg.label ?? '')); } }}
                     style={{
-                      flex: seg.percentage,
+                      flex: seg.percentage ?? 0,
                       backgroundColor: colors[si % colors.length],
                       cursor: 'pointer',
                       transition: `flex ${t.motion.hover}`,
@@ -173,7 +173,7 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
               </Box>
               {/* Mini legend */}
               <Box style={{ display: 'flex', gap: t.spacing[2], flexWrap: 'wrap' }}>
-                {metric.segments.slice(0, 3).map((seg, si) => (
+                {(metric.segments ?? []).slice(0, 3).map((seg, si) => (
                   <Box key={seg.label} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Box style={{
                       width: 6, height: 6,
@@ -181,7 +181,7 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
                       backgroundColor: colors[si % colors.length],
                     }} />
                     <Text style={{ fontSize: 9, color: t.colors.neutral[500] }}>
-                      {seg.label} {seg.percentage}%
+                      {seg.label} {seg.percentage ?? 0}%
                     </Text>
                   </Box>
                 ))}

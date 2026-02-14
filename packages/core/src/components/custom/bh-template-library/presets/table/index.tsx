@@ -116,9 +116,9 @@ function filterTemplates(templates: TemplateItem[], filters: TemplateFilter): Te
     if (filters.search) {
       const q = filters.search.toLowerCase();
       if (
-        !t.name.toLowerCase().includes(q) &&
-        !t.industry.toLowerCase().includes(q) &&
-        !t.category.toLowerCase().includes(q)
+        !(t.name || '').toLowerCase().includes(q) &&
+        !(t.industry || '').toLowerCase().includes(q) &&
+        !(t.category || '').toLowerCase().includes(q)
       )
         return false;
     }

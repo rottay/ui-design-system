@@ -1,25 +1,26 @@
 /**
  * BhTeamBoard - Core Interface
  * Team Management Board for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The component accepts DBTeam[] directly - no mapping needed.
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBTeam } from '@rottay/recruiter';
 
 export type BhTeamBoardPreset = 'grid' | 'detail';
 
-export interface TeamItem {
-  id: string;
-  name: string;
-  leadName: string;
-  leadAvatar?: string;
-  memberCount: number;
-  activeJobs: number;
-  capacityUsed: number;
-  capacityTotal: number;
-  performanceScore: number;
-}
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterTeam = DBTeam;
 
+/**
+ * Member representation for display purposes.
+ * Not a DB entity - these are derived from the members JSONB in DBTeam.
+ */
 export interface TeamMember {
   id: string;
   name: string;
@@ -30,6 +31,9 @@ export interface TeamMember {
   hires: number;
 }
 
+/**
+ * KPI data for the selected team (computed/aggregated, not stored directly).
+ */
 export interface TeamKpiData {
   hiresVsTarget: { actual: number; target: number };
   velocityTrend: number[];
@@ -37,6 +41,9 @@ export interface TeamKpiData {
   satisfactionScore: number;
 }
 
+/**
+ * Sprint data (computed/aggregated from team sprints).
+ */
 export interface SprintData {
   total: number;
   completed: number;
@@ -45,6 +52,9 @@ export interface SprintData {
   burndownData: number[];
 }
 
+/**
+ * Target metrics for the team.
+ */
 export interface TeamTarget {
   metric: string;
   period: string;
@@ -55,8 +65,8 @@ export interface TeamTarget {
 export interface BhTeamBoardProps extends EngineAwareProps {
   preset?: BhTeamBoardPreset;
 
-  /** All teams to display */
-  teams?: TeamItem[];
+  /** All teams to display - accepts DBTeam[] directly from @rottay/recruiter */
+  teams?: DBTeam[];
 
   /** Currently selected team ID */
   selectedTeam?: string | null;
@@ -127,3 +137,7 @@ export const BH_TEAM_BOARD_DEFAULTS: Partial<BhTeamBoardProps> = {
   viewMode: 'grid',
   targetPeriod: 'monthly',
 };
+
+// ---- Backward-compatible aliases (pre-DB-migration names) ----
+/** @deprecated Use RecruiterTeam (DBTeam) instead */
+export type TeamItem = RecruiterTeam;

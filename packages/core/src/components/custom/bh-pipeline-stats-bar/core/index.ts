@@ -12,16 +12,16 @@ export type BhPipelineStatsBarPreset = 'detailed' | 'compact';
 export type TrendDirection = 'up' | 'down' | 'flat';
 
 export interface StageConversion {
-  fromStage: string;
-  toStage: string;
-  rate: number;
-  candidateCount: number;
+  fromStage?: string;
+  toStage?: string;
+  rate?: number;
+  candidateCount?: number;
   trend?: TrendDirection;
 }
 
 export interface TimeToHireMetric {
-  days: number;
-  trend: TrendDirection;
+  days?: number;
+  trend?: TrendDirection;
   previousDays?: number;
 }
 

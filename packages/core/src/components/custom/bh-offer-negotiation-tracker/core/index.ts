@@ -1,10 +1,18 @@
 /**
  * BhOfferNegotiationTracker - Core Interface
- * Visual negotiation timeline with salary progression
+ * Visual negotiation timeline with salary progression.
+ *
+ * Uses DBOffer from @rottay/recruiter as the single source of truth.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBOffer } from '@rottay/recruiter';
+
+export type { DBOffer } from '@rottay/recruiter';
+
+/** Convenience alias */
+export type RecruiterOffer = DBOffer;
 
 export type BhOfferNegotiationTrackerPreset = 'timeline' | 'compact';
 
@@ -17,11 +25,58 @@ export interface NegotiationRound {
   notes?: string;
 }
 
+/**
+ * Extract NegotiationRound[] from a DBOffer for timeline display.
+ * Maps the negotiation_history JSONB + base salary into rounds.
+ */
+export function offerToNegotiationRounds(offer: DBOffer): NegotiationRound[] {
+  const history = Array.isArray(offer.negotiationHistory) ? offer.negotiationHistory : [];
+  const candidateCounter = offer.candidateCounter as Record<string, any> | null;
+
+  const rounds: NegotiationRound[] = [];
+
+  // Initial offer round
+  rounds.push({
+    id: `${offer.id}-r0`,
+    date: offer.createdAt ? new Date(offer.createdAt).toISOString().split('T')[0] : '',
+    offeredSalary: offer.salary ?? 0,
+    requestedSalary: (candidateCounter as any)?.salary ?? offer.salary ?? 0,
+    status: history.length > 0 ? 'countered' : mapOfferStatus(offer.status),
+    notes: offer.internalNotes ?? undefined,
+  });
+
+  // Additional rounds from history
+  history.forEach((entry: any, i: number) => {
+    rounds.push({
+      id: `${offer.id}-r${i + 1}`,
+      date: entry?.date ?? '',
+      offeredSalary: entry?.offeredSalary ?? entry?.compensation?.baseSalary ?? entry?.salary ?? 0,
+      requestedSalary: entry?.requestedSalary ?? entry?.compensation?.baseSalary ?? entry?.salary ?? 0,
+      status: entry?.status ?? (i === history.length - 1 ? mapOfferStatus(offer.status) : 'countered'),
+      notes: entry?.notes ?? undefined,
+    });
+  });
+
+  return rounds;
+}
+
+function mapOfferStatus(status: string): NegotiationRound['status'] {
+  switch (status) {
+    case 'accepted': return 'accepted';
+    case 'declined': return 'rejected';
+    case 'negotiating': return 'countered';
+    default: return 'pending';
+  }
+}
+
 export interface BhOfferNegotiationTrackerProps extends EngineAwareProps {
   preset?: BhOfferNegotiationTrackerPreset;
 
-  /** Negotiation rounds */
-  rounds: NegotiationRound[];
+  /** The DB offer entity - single source of truth */
+  offer?: DBOffer;
+
+  /** Negotiation rounds (pre-mapped, overrides offer) */
+  rounds?: NegotiationRound[];
 
   /** Candidate name */
   candidateName?: string;

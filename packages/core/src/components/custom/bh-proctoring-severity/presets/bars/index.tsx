@@ -31,17 +31,18 @@ import type { DesignTokens } from '../../../../../types';
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getSeverityColor(severity: ProctoringEventSeverity, t: DesignTokens): string {
+function getSeverityColor(severity: ProctoringEventSeverity | string, t: DesignTokens): string {
   switch (severity) {
     case 'critical': return t.colors.errorScale[600];
     case 'high': return t.colors.errorScale[400];
     case 'medium': return t.colors.warningScale[500];
     case 'low': return t.colors.infoScale[500];
+    default: return t.colors.neutral[400];
   }
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -69,7 +70,7 @@ export const BarsBhProctoringSeverity = createPreset<BhProctoringSeverityProps>(
     const chartCfg = getChartConfig(t);
 
     const {
-      severityCounts = MOCK_SEVERITY,
+      severityCounts = [],
       onSeverityClick,
       selectedSeverity,
       showLabels = true,

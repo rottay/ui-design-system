@@ -2,10 +2,18 @@
  * BhInterviewReplayEnhanced - Core Interface
  * Enhanced Interview Replay with split waveform, synced transcript,
  * evidence markers, and speed controls.
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBInterview } from '@rottay/recruiter';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 export type BhInterviewReplayEnhancedPreset = 'split' | 'compact';
 
@@ -29,6 +37,10 @@ export interface EvidenceMarker {
 
 export interface BhInterviewReplayEnhancedProps extends EngineAwareProps {
   preset?: BhInterviewReplayEnhancedPreset;
+
+  /** Optional DB interview for pre-populating data */
+  interview?: DBInterview;
+
   candidateName?: string;
   interviewTitle?: string;
   duration?: number;  // total seconds

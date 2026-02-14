@@ -21,38 +21,49 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhPositionListProps, PositionListItem } from '../../core';
+import type { BhPositionListProps, RecruiterPosition } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_POSITIONS: PositionListItem[] = [
-  { id: 'pl-1', title: 'Senior Frontend Engineer', clientName: 'Acme Corp', department: 'Engineering', status: 'open', priority: 'high', candidates: 15, daysOpen: 12, assignee: 'Sarah Kim' },
-  { id: 'pl-2', title: 'Product Manager', clientName: 'Horizon Labs', department: 'Product', status: 'open', priority: 'medium', candidates: 8, daysOpen: 25, assignee: 'Tom Walsh' },
-  { id: 'pl-3', title: 'UX Designer', clientName: 'Nova Ventures', department: 'Design', status: 'on-hold', priority: 'low', candidates: 3, daysOpen: 45, assignee: 'Emily Chen' },
-  { id: 'pl-4', title: 'Backend Developer', clientName: 'Acme Corp', department: 'Engineering', status: 'open', priority: 'high', candidates: 22, daysOpen: 5, assignee: 'Sarah Kim' },
+const MOCK_POSITIONS: RecruiterPosition[] = [
+  { id: 'pl-1', tenantId: 't', clientId: 'c1', code: 'FE-01', title: 'Senior Frontend Engineer', status: 'open', priority: 'high', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 12 * 86400000) } as any,
+  { id: 'pl-2', tenantId: 't', clientId: 'c2', code: 'PM-01', title: 'Product Manager', status: 'open', priority: 'normal', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 25 * 86400000) } as any,
+  { id: 'pl-3', tenantId: 't', clientId: 'c3', code: 'UX-01', title: 'UX Designer', status: 'on_hold', priority: 'low', openings: 1, filledCount: 0, createdAt: new Date(Date.now() - 45 * 86400000) } as any,
+  { id: 'pl-4', tenantId: 't', clientId: 'c1', code: 'BE-01', title: 'Backend Developer', status: 'open', priority: 'high', openings: 2, filledCount: 0, createdAt: new Date(Date.now() - 5 * 86400000) } as any,
 ];
 
 /* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function getStatusConfig(status: PositionListItem['status'], t: DesignTokens) {
+function getDaysOpen(position: RecruiterPosition): number {
+  const created = position.createdAt ? new Date(position.createdAt as any) : new Date();
+  return Math.floor((Date.now() - created.getTime()) / 86400000);
+}
+
+function getStatusConfig(status: string | null | undefined, t: DesignTokens) {
   switch (status) {
     case 'open': return { label: 'Open', badge: 'success' as const };
     case 'filled': return { label: 'Filled', badge: 'info' as const };
-    case 'closed': return { label: 'Closed', badge: 'secondary' as const };
-    case 'on-hold': return { label: 'On Hold', badge: 'warning' as const };
+    case 'closed':
+    case 'cancelled':
+    case 'archived': return { label: 'Closed', badge: 'secondary' as const };
+    case 'on_hold': return { label: 'On Hold', badge: 'warning' as const };
+    default: return { label: status ?? 'Draft', badge: 'secondary' as const };
   }
 }
 
-function getPriorityColor(priority: PositionListItem['priority'], t: DesignTokens): string {
+function getPriorityColor(priority: string | null | undefined, t: DesignTokens): string {
   switch (priority) {
-    case 'high': return t.colors.errorScale[500];
-    case 'medium': return t.colors.warningScale[500];
-    case 'low': return t.colors.neutral[400];
+    case 'high':
+    case 'urgent':
+    case 'critical': return t.colors.errorScale[500];
+    case 'normal': return t.colors.warningScale[500];
+    case 'low':
+    default: return t.colors.neutral[400];
   }
 }
 
@@ -124,7 +135,7 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
                 key={pos.id}
                 role="listitem"
                 tabIndex={0}
-                aria-label={`${pos.title} at ${pos.clientName}`}
+                aria-label={`${pos.title ?? ''}`}
                 onClick={() => handleClick(pos.id)}
                 onMouseEnter={() => setHoveredId(pos.id)}
                 onMouseLeave={() => setHoveredId(null)}
@@ -147,7 +158,7 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
                     fontWeight: t.typography.fontWeight.semibold,
                     color: t.colors.neutral[900],
                   }}>
-                    {pos.title}
+                    {pos.title ?? ''}
                   </Text>
                   <Box style={{ ...createBadgeStyle(t, statusCfg.badge), borderRadius: badgeRadius }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>{statusCfg.label}</Text>
@@ -156,27 +167,32 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
 
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], marginBottom: t.spacing[3] }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                    {pos.clientName}
+                    {pos.code ?? ''}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                    {pos.department}
+                    {pos.clientId ?? ''}
                   </Text>
                 </Box>
 
-                <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                    <Users size={11} color={t.colors.neutral[400]} />
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{pos.candidates}</Text>
-                  </Box>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                    <Clock size={11} color={t.colors.neutral[400]} />
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: pos.daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[600] }}>{pos.daysOpen}d</Text>
-                  </Box>
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                    <User size={11} color={t.colors.neutral[400]} />
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{pos.assignee}</Text>
-                  </Box>
-                </Box>
+                {(() => {
+                  const daysOpen = getDaysOpen(pos);
+                  return (
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[4] }}>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <Users size={11} color={t.colors.neutral[400]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{pos.openings ?? 0}</Text>
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <Clock size={11} color={t.colors.neutral[400]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: daysOpen > 30 ? t.colors.warningScale[600] : t.colors.neutral[600] }}>{daysOpen}d</Text>
+                      </Box>
+                      <Box style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <User size={11} color={t.colors.neutral[400]} />
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{pos.filledCount ?? 0}/{pos.openings ?? 0}</Text>
+                      </Box>
+                    </Box>
+                  );
+                })()}
               </Box>
             );
           })}

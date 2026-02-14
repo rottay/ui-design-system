@@ -1,28 +1,34 @@
 /**
  * BhApprovalCenter - Core Interface
  * Central hub for approvals grouped by entity type in BitHire ATS platform
+ *
+ * DB Reference: DBApprovalRequest from @rottay/recruiter
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBApprovalRequest } from '@rottay/recruiter';
 
 export type BhApprovalCenterPreset = 'hub' | 'compact';
 
+/** Re-export for consumer convenience */
+export type { DBApprovalRequest };
+
 export interface ApprovalItem {
-  id: string;
-  entityType: 'offer' | 'position' | 'budget' | 'job';
-  entityTitle: string;
-  requestedBy: string;
-  requestedAt: Date;
-  priority: 'high' | 'medium' | 'low';
-  status: 'pending' | 'approved' | 'rejected';
+  id?: string;
+  entityType?: 'offer' | 'position' | 'budget' | 'job' | 'client' | 'impersonation_request';
+  entityTitle?: string;
+  requestedBy?: string;
+  requestedAt?: Date;
+  priority?: 'high' | 'medium' | 'low' | 'normal' | 'urgent';
+  status?: 'pending' | 'approved' | 'rejected' | 'changes_requested' | 'auto_approved' | 'cancelled';
 }
 
 export interface BhApprovalCenterProps extends EngineAwareProps {
   preset?: BhApprovalCenterPreset;
 
   /** Array of approval items */
-  approvals: ApprovalItem[];
+  approvals?: ApprovalItem[];
 
   /** How to group approvals */
   groupBy?: 'entityType' | 'priority' | 'status';

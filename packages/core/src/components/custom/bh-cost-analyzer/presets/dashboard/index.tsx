@@ -85,7 +85,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
               { label: 'Total Spend', value: formatCurrency(summary.totalSpend), color: tokens.colors.neutral[800], icon: <DollarSign size={16} /> },
               { label: 'Cost / Interview', value: formatCurrency(summary.costPerInterview), color: tokens.colors.neutral[800], icon: <BarChart3 size={16} /> },
               { label: 'Cost / Hire', value: formatCurrency(summary.costPerHire), color: tokens.colors.neutral[800], icon: <TrendingUp size={16} /> },
-              { label: 'MoM Change', value: `${summary.monthOverMonthChange >= 0 ? '+' : ''}${summary.monthOverMonthChange.toFixed(1)}%`, color: summary.monthOverMonthChange > 10 ? tokens.colors.errorScale[600] : summary.monthOverMonthChange < 0 ? tokens.colors.successScale[600] : tokens.colors.neutral[700], icon: <Activity size={16} /> },
+              { label: 'MoM Change', value: `${(summary.monthOverMonthChange ?? 0) >= 0 ? '+' : ''}${(summary.monthOverMonthChange ?? 0).toFixed(1)}%`, color: (summary.monthOverMonthChange ?? 0) > 10 ? tokens.colors.errorScale[600] : (summary.monthOverMonthChange ?? 0) < 0 ? tokens.colors.successScale[600] : tokens.colors.neutral[700], icon: <Activity size={16} /> },
             ].map(stat => (
               <Box key={stat.label} style={statCardStyle(stat.color)}>
                 <Box style={{
@@ -199,7 +199,7 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: tokens.spacing[2] }}>
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{formatTokens(prov.tokenCount)} tokens</Text>
-                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{prov.share.toFixed(1)}% share</Text>
+                      <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{(prov.share ?? 0).toFixed(1)}% share</Text>
                     </Box>
                   </Box>
                 );

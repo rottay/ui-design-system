@@ -1,28 +1,44 @@
 /**
  * BhClientForm - Core Interface
  * Client creation/edit form for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * The form uses DBClient fields for initial data and submission.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBClient } from '@rottay/recruiter';
 
 export type BhClientFormPreset = 'full' | 'compact';
 
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterClient = DBClient;
+
+/**
+ * Form data shape for client creation/editing.
+ * Uses a subset of DBClient fields relevant to the form.
+ */
 export interface ClientFormData {
-  name: string;
-  tier: 'enterprise' | 'business' | 'starter';
-  contactName: string;
-  contactEmail: string;
-  phone?: string;
-  address?: string;
-  notes?: string;
+  displayName: string;
+  type: 'individual' | 'company';
+  tier: 'standard' | 'premium' | 'enterprise' | 'strategic';
+  industry?: string;
+  clientCompanyName?: string;
+  firstName?: string;
+  lastName?: string;
+  personalEmail?: string;
+  personalPhone?: string;
+  description?: string;
 }
 
 export interface BhClientFormProps extends EngineAwareProps {
   preset?: BhClientFormPreset;
 
-  /** Initial form data for editing */
-  initialData?: Partial<ClientFormData>;
+  /** Initial form data for editing - accepts partial DBClient */
+  initialData?: Partial<DBClient>;
 
   /** Callback when form is submitted */
   onSubmit?: (data: ClientFormData) => void;

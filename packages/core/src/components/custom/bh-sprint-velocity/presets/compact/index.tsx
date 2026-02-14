@@ -75,19 +75,19 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
 
     const avgVel = useMemo(() => {
       if (averageVelocity !== undefined) return averageVelocity;
-      if (sprints.length === 0) return 0;
-      return Math.round(sprints.reduce((sum, s) => sum + s.completed, 0) / sprints.length);
+      if ((sprints ?? []).length === 0) return 0;
+      return Math.round((sprints ?? []).reduce((sum, s) => sum + (s.completed ?? 0), 0) / (sprints ?? []).length);
     }, [averageVelocity, sprints]);
 
-    const maxVal = useMemo(() => Math.max(...sprints.map(s => s.planned), 1), [sprints]);
+    const maxVal = useMemo(() => Math.max(...(sprints ?? []).map(s => s.planned ?? 0), 1), [sprints]);
 
     const trend = useMemo(() => {
       if (sprints.length < 2) return 0;
-      const recent = sprints.slice(-3);
-      const older = sprints.slice(-6, -3);
+      const recent = (sprints ?? []).slice(-3);
+      const older = (sprints ?? []).slice(-6, -3);
       if (older.length === 0) return 0;
-      const recentAvg = recent.reduce((s, d) => s + d.completed, 0) / recent.length;
-      const olderAvg = older.reduce((s, d) => s + d.completed, 0) / older.length;
+      const recentAvg = recent.reduce((s, d) => s + (d.completed ?? 0), 0) / recent.length;
+      const olderAvg = older.reduce((s, d) => s + (d.completed ?? 0), 0) / older.length;
       return Math.round(((recentAvg - olderAvg) / Math.max(olderAvg, 1)) * 100);
     }, [sprints]);
 
@@ -181,15 +181,15 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
           ) : (
             <Box style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 48 }}>
               {sprints.map(sprint => {
-                const pct = (sprint.completed / maxVal) * 100;
+                const pct = ((sprint.completed ?? 0) / maxVal) * 100;
                 return (
                   <Box
                     key={sprint.sprintName}
                     tabIndex={onSprintClick ? 0 : undefined}
                     role={onSprintClick ? 'button' : undefined}
                     aria-label={onSprintClick ? `${sprint.sprintName}: ${sprint.completed} completed` : undefined}
-                    onClick={onSprintClick ? () => handleSprintClick(sprint.sprintName) : undefined}
-                    onKeyDown={onSprintClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSprintClick(sprint.sprintName); } } : undefined}
+                    onClick={onSprintClick ? () => handleSprintClick((sprint.sprintName ?? '')) : undefined}
+                    onKeyDown={onSprintClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSprintClick((sprint.sprintName ?? '')); } } : undefined}
                     style={{
                       flex: 1,
                       height: `${pct}%`,

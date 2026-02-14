@@ -224,8 +224,8 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             <SectionTitle>Hiring Funnel</SectionTitle>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
               {funnelData.map((stage, i) => {
-                const maxCount = Math.max(...funnelData.map((s) => s.count), 1);
-                const pct = (stage.count / maxCount) * 100;
+                const maxCount = Math.max(...funnelData.map((s) => s.count ?? 0), 1);
+                const pct = ((stage.count ?? 0) / maxCount) * 100;
                 const prevPct = stage.prevPeriodCount ? (stage.prevPeriodCount / maxCount) * 100 : 0;
                 const colors = [t.colors.primaryScale[500], t.colors.primaryScale[400], t.colors.infoScale[500], t.colors.warningScale[500], t.colors.successScale[500]];
                 return (
@@ -233,8 +233,8 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{stage.name}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{stage.count.toLocaleString()}</Text>
-                        {i > 0 && <Box style={{ ...createBadgeStyle(t, stage.conversionPercent >= 40 ? 'success' : stage.conversionPercent >= 20 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{stage.conversionPercent}%</Box>}
+                        <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{(stage.count ?? 0).toLocaleString()}</Text>
+                        {i > 0 && <Box style={{ ...createBadgeStyle(t, (stage.conversionPercent ?? 0) >= 40 ? 'success' : (stage.conversionPercent ?? 0) >= 20 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{stage.conversionPercent ?? 0}%</Box>}
                       </Box>
                     </Box>
                     <Box style={{ position: 'relative' as const, height: 20, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
@@ -256,12 +256,12 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             }>Hiring Trend</SectionTitle>
             {trendData.length > 0 && (() => {
               const cW = 480; const cH = 200; const pad = 32;
-              const allVals = trendData.flatMap((d) => comparisonPeriod ? [d.current, d.previous] : [d.current]);
+              const allVals = trendData.flatMap((d) => comparisonPeriod ? [d.current ?? 0, d.previous ?? 0] : [d.current ?? 0]);
               const maxV = Math.max(...allVals, 1); const minV = Math.min(...allVals, 0); const range = maxV - minV || 1;
               const stepX = (cW - pad * 2) / (trendData.length - 1 || 1);
               const toP = (v: number, i: number) => ({ x: pad + i * stepX, y: cH - pad - ((v - minV) / range) * (cH - pad * 2) });
-              const cur = trendData.map((d, i) => toP(d.current, i));
-              const prev = trendData.map((d, i) => toP(d.previous, i));
+              const cur = trendData.map((d, i) => toP(d.current ?? 0, i));
+              const prev = trendData.map((d, i) => toP(d.previous ?? 0, i));
 
               return (
                 <svg width="100%" viewBox={`0 0 ${cW} ${cH}`} style={{ display: 'block' }}>
@@ -269,7 +269,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     const y = cH - pad - p * (cH - pad * 2);
                     return <g key={p}><line x1={pad} y1={y} x2={cW - pad} y2={y} stroke={t.colors.neutral[100]} /><text x={pad - 8} y={y + 4} textAnchor="end" fill={t.colors.neutral[400]} fontSize="10">{Math.round(minV + p * range)}</text></g>;
                   })}
-                  {trendData.map((d, i) => <text key={i} x={pad + i * stepX} y={cH - 8} textAnchor="middle" fill={t.colors.neutral[400]} fontSize="10">{d.date}</text>)}
+                  {trendData.map((d, i) => <text key={i} x={pad + i * stepX} y={cH - 8} textAnchor="middle" fill={t.colors.neutral[400]} fontSize="10">{d.date ?? ''}</text>)}
                   {comparisonPeriod && <polyline points={prev.map((p) => `${p.x},${p.y}`).join(' ')} fill="none" stroke={t.colors.neutral[300]} strokeWidth="2" strokeDasharray="4 4" />}
                   <defs><linearGradient id="exec-trend-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={t.colors.primaryScale[500]} stopOpacity="0.15" /><stop offset="100%" stopColor={t.colors.primaryScale[500]} stopOpacity="0" /></linearGradient></defs>
                   <polygon points={`${cur[0].x},${cH - pad} ${cur.map((p) => `${p.x},${p.y}`).join(' ')} ${cur[cur.length - 1].x},${cH - pad}`} fill="url(#exec-trend-g)" />
@@ -301,14 +301,14 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                     <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: i === 0 ? t.colors.warningScale[700] : t.colors.neutral[600] }}>{i + 1}</Text>
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.primaryScale[700], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold }}>{rec.name.charAt(0)}</Box>
+                    <Box style={{ width: 32, height: 32, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[100], display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.primaryScale[700], fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold }}>{(rec.name || '').charAt(0)}</Box>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[900] }}>{rec.name}</Text>
                   </Box>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{rec.hires}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{rec.velocity}d</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>${(rec.pipelineValue / 1000).toFixed(0)}k</Text>
-                  <Box style={{ ...createBadgeStyle(t, rec.satisfaction >= 90 ? 'success' : rec.satisfaction >= 85 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{rec.satisfaction}%</Box>
-                  <svg width={48} height={20} viewBox="0 0 48 20"><polyline points={sparkPoints(rec.sparkline, 48, 20)} fill="none" stroke={t.colors.successScale[400]} strokeWidth="1.5" strokeLinecap="round" /></svg>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{rec.hires ?? 0}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{rec.velocity ?? 0}d</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>${((rec.pipelineValue ?? 0) / 1000).toFixed(0)}k</Text>
+                  <Box style={{ ...createBadgeStyle(t, (rec.satisfaction ?? 0) >= 90 ? 'success' : (rec.satisfaction ?? 0) >= 85 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{rec.satisfaction ?? 0}%</Box>
+                  <svg width={48} height={20} viewBox="0 0 48 20"><polyline points={sparkPoints(rec.sparkline ?? [], 48, 20)} fill="none" stroke={t.colors.successScale[400]} strokeWidth="1.5" strokeLinecap="round" /></svg>
                 </Box>
               ))}
             </Box>
@@ -319,19 +319,19 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             <SectionTitle>Source Quality</SectionTitle>
             <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
               {sourceData.map((src) => {
-                const maxC = Math.max(...sourceData.map((s) => s.candidateCount), 1);
-                const qColor = src.qualityScore >= 80 ? t.colors.successScale : src.qualityScore >= 70 ? t.colors.warningScale : t.colors.errorScale;
+                const maxC = Math.max(...sourceData.map((s) => s.candidateCount ?? 0), 1);
+                const qColor = (src.qualityScore ?? 0) >= 80 ? t.colors.successScale : (src.qualityScore ?? 0) >= 70 ? t.colors.warningScale : t.colors.errorScale;
                 return (
                   <Box key={src.source}>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{src.source}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{src.candidateCount}</Text>
-                        <Box style={{ ...createBadgeStyle(t, src.qualityScore >= 80 ? 'success' : src.qualityScore >= 70 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>Q:{src.qualityScore}</Box>
+                        <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{src.candidateCount ?? 0}</Text>
+                        <Box style={{ ...createBadgeStyle(t, (src.qualityScore ?? 0) >= 80 ? 'success' : (src.qualityScore ?? 0) >= 70 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>Q:{src.qualityScore ?? 0}</Box>
                       </Box>
                     </Box>
                     <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
-                      <Box style={{ height: '100%', width: `${(src.candidateCount / maxC) * 100}%`, backgroundColor: qColor[400], borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
+                      <Box style={{ height: '100%', width: `${((src.candidateCount ?? 0) / maxC) * 100}%`, backgroundColor: qColor[400], borderRadius: t.borderRadius.full, transition: `width ${t.motion.hover}` }} />
                     </Box>
                   </Box>
                 );

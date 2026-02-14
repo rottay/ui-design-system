@@ -153,7 +153,8 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     }, [t]);
 
     const {
-      recruiterName = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
+      recruiter,
+      recruiterName: recruiterNameProp = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
       kpiStats = DEFAULT_KPI,
       pipelineJobs = DEFAULT_PIPELINE,
       upcomingInterviews = DEFAULT_INTERVIEWS,
@@ -169,6 +170,10 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
       onActivityClick,
       className, style,
     } = props;
+
+    const recruiterName = recruiter
+      ? `${recruiter.firstName ?? ''} ${recruiter.lastName ?? ''}`.trim() || recruiterNameProp
+      : recruiterNameProp;
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'md' }), [t]);
 
@@ -201,9 +206,9 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
         </Box>
 
         {/* KPI Ribbon */}
-        <Box role="list" aria-label="Key performance indicators" style={{ display: 'grid', gridTemplateColumns: `repeat(${kpiStats.length}, 1fr)`, gap: t.spacing[4] }}>
-          {kpiStats.map((kpi, idx) => (
-            <Box key={kpi.label} role="listitem" style={{
+        <Box role="list" aria-label="Key performance indicators" style={{ display: 'grid', gridTemplateColumns: `repeat(${(kpiStats ?? []).length || 1}, 1fr)`, gap: t.spacing[4] }}>
+          {(kpiStats ?? []).map((kpi, idx) => (
+            <Box key={kpi.label ?? idx} role="listitem" style={{
               ...cardBase, ...glassCardBg,
               padding: `${t.spacing[5]}px`, display: 'flex', alignItems: 'flex-start', gap: t.spacing[3],
               overflow: 'hidden', position: 'relative',
@@ -217,11 +222,11 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                 backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[600],
               }}>{kpi.icon}</Box>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
-                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>{kpi.label}</Text>
-                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: 1.2 }}>{kpi.value}</Text>
+                <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>{kpi.label ?? ''}</Text>
+                <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900], lineHeight: 1.2 }}>{kpi.value ?? 0}</Text>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginTop: t.spacing[1] }}>
-                  <Box style={{ color: getTrendColor(kpi.trend, t) }}>{getTrendIcon(kpi.trend)}</Box>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: getTrendColor(kpi.trend, t), fontWeight: t.typography.fontWeight.medium }}>{kpi.trendValue}%</Text>
+                  <Box style={{ color: getTrendColor(kpi.trend ?? 'flat', t) }}>{getTrendIcon(kpi.trend ?? 'flat')}</Box>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: getTrendColor(kpi.trend ?? 'flat', t), fontWeight: t.typography.fontWeight.medium }}>{kpi.trendValue ?? 0}%</Text>
                 </Box>
               </Box>
             </Box>
@@ -229,7 +234,7 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
         </Box>
 
         {/* Notifications bar */}
-        {notifications.length > 0 && (
+        {(notifications ?? []).length > 0 && (
           <Box role="alert" aria-label="Notifications" style={{
             ...cardBase, ...glassCardBg, padding: `${t.spacing[4]}px ${t.spacing[5]}px`,
             display: 'flex', flexDirection: 'column', gap: t.spacing[2],
@@ -238,23 +243,23 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
               <Bell size={14} style={{ color: t.colors.warningScale[600] }} />
               <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], textTransform: ptypo.labelTransform, letterSpacing: ptypo.labelLetterSpacing }}>Notifications</Text>
             </Box>
-            {notifications.map(n => {
-              const nc = getNotifIcon(n.type, t);
+            {(notifications ?? []).map(n => {
+              const nc = getNotifIcon(n.type ?? 'candidate', t);
               return (
                 <Box key={n.id} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3],
                   padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.lg,
                   backgroundColor: nc.bg,
                 }}>
                   <Box style={{ color: nc.color, flexShrink: 0 }}>{nc.icon}</Box>
-                  <Text style={{ flex: 1, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{n.message}</Text>
-                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], flexShrink: 0 }}>{formatDistanceToNow(n.time, { addSuffix: true })}</Text>
+                  <Text style={{ flex: 1, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{n.message ?? ''}</Text>
+                  <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], flexShrink: 0 }}>{n.time ? formatDistanceToNow(n.time, { addSuffix: true }) : ''}</Text>
                   {onNotificationDismiss && (
                     <Box
                       role="button"
                       tabIndex={0}
                       aria-label="Dismiss notification"
-                      onClick={() => handleNotifDismiss(n.id)}
-                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss(n.id); } }}
+                      onClick={() => handleNotifDismiss(n.id ?? '')}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleNotifDismiss(n.id ?? ''); } }}
                       style={{ color: t.colors.neutral[400], cursor: 'pointer', flexShrink: 0 }}
                     ><X size={12} /></Box>
                   )}
@@ -267,8 +272,8 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
         {/* Quick Actions */}
         <Box>
           <Text style={{ ...sectionHeaderStyle }}>Quick Actions</Text>
-          <Box role="list" aria-label="Quick actions" style={{ display: 'grid', gridTemplateColumns: `repeat(${quickActions.length}, 1fr)`, gap: t.spacing[3] }}>
-            {quickActions.map((qa, idx) => (
+          <Box role="list" aria-label="Quick actions" style={{ display: 'grid', gridTemplateColumns: `repeat(${(quickActions ?? []).length || 1}, 1fr)`, gap: t.spacing[3] }}>
+            {(quickActions ?? []).map((qa, idx) => (
               <Box
                 key={qa.key}
                 role="listitem"
@@ -301,16 +306,16 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
           <Box>
             <Text style={{ ...sectionHeaderStyle }}>Active Pipeline</Text>
             <Box role="list" aria-label="Active pipeline jobs" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
-              {pipelineJobs.map((job, idx) => {
-                const total = job.stages.reduce((a, s) => a + s.count, 0);
+              {(pipelineJobs ?? []).map((job, idx) => {
+                const total = (job.stages ?? []).reduce((a, s) => a + (s.count ?? 0), 0);
                 return (
                   <Box
                     key={job.id}
                     role="listitem"
                     tabIndex={0}
                     aria-label={job.title}
-                    onClick={() => handlePipelineJobClick(job.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePipelineJobClick(job.id); } }}
+                    onClick={() => handlePipelineJobClick(job.id ?? '')}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePipelineJobClick(job.id ?? ''); } }}
                     style={{
                       ...cardBase, ...glassCardBg, ...hoverStyles.base,
                       padding: `${t.spacing[4]}px`, cursor: 'pointer',
@@ -319,25 +324,25 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                     }}
                   >
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
-                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{job.title}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900] }}>{job.title ?? ''}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], color: t.colors.neutral[400] }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{total} candidates</Text>
                         <ChevronRight size={14} />
                       </Box>
                     </Box>
                     <Box style={{ display: 'flex', gap: t.spacing[2] }}>
-                      {job.stages.map((stage, si) => {
+                      {(job.stages ?? []).map((stage, si) => {
                         const colors = [t.colors.primaryScale[400], t.colors.infoScale[400], t.colors.warningScale[400], t.colors.successScale[400]];
                         return (
-                          <Box key={stage.name} style={{ flex: 1, textAlign: 'center' }}>
-                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: t.spacing[1] }}>{stage.name}</Text>
+                          <Box key={stage.name ?? si} style={{ flex: 1, textAlign: 'center' }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginBottom: t.spacing[1] }}>{stage.name ?? ''}</Text>
                             <Box style={{
                               height: 28, borderRadius: t.borderRadius.md,
                               backgroundColor: colors[si % colors.length],
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              opacity: stage.count > 0 ? 1 : 0.3,
+                              opacity: (stage.count ?? 0) > 0 ? 1 : 0.3,
                             }}>
-                              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.common.white }}>{stage.count}</Text>
+                              <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.common.white }}>{stage.count ?? 0}</Text>
                             </Box>
                           </Box>
                         );
@@ -355,14 +360,14 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
             <Box>
               <Text style={{ ...sectionHeaderStyle }}>Upcoming Interviews</Text>
               <Box role="list" aria-label="Upcoming interviews" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-                {upcomingInterviews.map((iv, idx) => (
+                {(upcomingInterviews ?? []).map((iv, idx) => (
                   <Box
                     key={iv.id}
                     role="listitem"
                     tabIndex={0}
-                    aria-label={`Interview with ${iv.candidateName}`}
-                    onClick={() => handleInterviewClick(iv.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInterviewClick(iv.id); } }}
+                    aria-label={`Interview with ${iv.candidateName ?? 'Unknown'}`}
+                    onClick={() => handleInterviewClick(iv.id ?? '')}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleInterviewClick(iv.id ?? ''); } }}
                     style={{
                       ...cardBase, ...glassCardBg,
                       padding: `${t.spacing[3]}px`, cursor: 'pointer',
@@ -378,15 +383,15 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, flexShrink: 0,
                     }}>
-                      {iv.candidateName.split(' ').map(p => p[0]).join('').slice(0, 2)}
+                      {(iv.candidateName ?? '').split(' ').map(p => p?.[0] ?? '').join('').slice(0, 2)}
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{iv.candidateName}</Text>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{iv.stageName} - {iv.jobTitle}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{iv.candidateName ?? ''}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>{iv.stageName ?? ''} - {iv.jobTitle ?? ''}</Text>
                     </Box>
                     <Box style={{ textAlign: 'right', flexShrink: 0 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[600] }}>
-                        {formatDistanceToNow(iv.time, { addSuffix: false })}
+                        {iv.time ? formatDistanceToNow(iv.time, { addSuffix: false }) : ''}
                       </Text>
                       {iv.isAI && (
                         <Box style={{
@@ -403,15 +408,15 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
             </Box>
 
             {/* AI Suggestions */}
-            {showAISuggestions && aiSuggestions.length > 0 && (
+            {showAISuggestions && (aiSuggestions ?? []).length > 0 && (
               <Box>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: t.spacing[2] }}>
                   <Sparkles size={12} style={{ color: t.colors.secondaryScale[600] }} />
                   <Text style={{ ...sectionHeaderStyle, marginBottom: 0 }}>AI Suggested Actions</Text>
                 </Box>
                 <Box role="list" aria-label="AI suggestions" style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
-                  {aiSuggestions.map((sg, idx) => (
-                    <Box key={sg.id} role="listitem" style={{
+                  {(aiSuggestions ?? []).map((sg, idx) => (
+                    <Box key={sg.id ?? idx} role="listitem" style={{
                       ...cardBase, ...glassCardBg,
                       padding: `${t.spacing[3]}px`, position: 'relative', overflow: 'hidden',
                       ...entrance.animate,
@@ -424,23 +429,23 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                           backgroundColor: t.colors.secondaryScale[50], color: t.colors.secondaryScale[600],
                         }}><Zap size={13} /></Box>
                         <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{sg.action}</Text>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{sg.reason}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>{sg.action ?? ''}</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500]}}>{sg.reason ?? ''}</Text>
                         </Box>
                         <Box style={{
                           padding: `0 ${t.spacing[1]}px`, borderRadius: br,
-                          backgroundColor: sg.confidence >= 90 ? t.colors.successScale[50] : t.colors.warningScale[50],
-                          color: sg.confidence >= 90 ? t.colors.successScale[700] : t.colors.warningScale[700],
+                          backgroundColor: (sg.confidence ?? 0) >= 90 ? t.colors.successScale[50] : t.colors.warningScale[50],
+                          color: (sg.confidence ?? 0) >= 90 ? t.colors.successScale[700] : t.colors.warningScale[700],
                           fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold,
-                        }}>{sg.confidence}%</Box>
+                        }}>{sg.confidence ?? 0}%</Box>
                       </Box>
                       <Box style={{ display: 'flex', gap: t.spacing[1], marginTop: t.spacing[2], justifyContent: 'flex-end' }}>
                         <Box
                           role="button"
                           tabIndex={0}
-                          aria-label={`Accept suggestion: ${sg.action}`}
-                          onClick={() => handleSuggestionAccept(sg.id)}
-                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSuggestionAccept(sg.id); } }}
+                          aria-label={`Accept suggestion: ${sg.action ?? ''}`}
+                          onClick={() => handleSuggestionAccept(sg.id ?? '')}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSuggestionAccept(sg.id ?? ''); } }}
                           style={{
                             display: 'flex', alignItems: 'center', gap: t.spacing[1],
                             padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br, border: 'none',
@@ -452,9 +457,9 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
                         <Box
                           role="button"
                           tabIndex={0}
-                          aria-label={`Dismiss suggestion: ${sg.action}`}
-                          onClick={() => handleSuggestionDismiss(sg.id)}
-                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSuggestionDismiss(sg.id); } }}
+                          aria-label={`Dismiss suggestion: ${sg.action ?? ''}`}
+                          onClick={() => handleSuggestionDismiss(sg.id ?? '')}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSuggestionDismiss(sg.id ?? ''); } }}
                           style={{
                             display: 'flex', alignItems: 'center', gap: t.spacing[1],
                             padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: br,
@@ -482,28 +487,28 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
               ...cardBase, ...glassCardBg, padding: `${t.spacing[3]}px`,
               display: 'flex', flexDirection: 'column',
             }}>
-              {activityFeed.map((act, idx) => (
+              {(activityFeed ?? []).map((act, idx) => (
                 <Box
                   key={act.id}
                   role="listitem"
                   tabIndex={0}
-                  aria-label={act.message}
-                  onClick={() => handleActivityClick(act.id)}
-                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivityClick(act.id); } }}
+                  aria-label={act.message ?? ''}
+                  onClick={() => handleActivityClick(act.id ?? '')}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleActivityClick(act.id ?? ''); } }}
                   style={{
                     display: 'flex', alignItems: 'flex-start', gap: t.spacing[3],
                     padding: `${t.spacing[3]}px`, cursor: 'pointer',
-                    borderBottom: idx < activityFeed.length - 1 ? `1px solid ${t.colors.neutral[50]}` : undefined,
+                    borderBottom: idx < (activityFeed ?? []).length - 1 ? `1px solid ${t.colors.neutral[50]}` : undefined,
                     transition: `background-color ${t.motion.hover}`,
                   }}
                 >
                   <Box style={{
                     ...createIconContainerStyle(t, { size: 28 }),
                     backgroundColor: t.colors.primaryScale[50], color: t.colors.primaryScale[600],
-                  }}>{getActivityIcon(act.type)}</Box>
+                  }}>{getActivityIcon(act.type ?? 'note')}</Box>
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1, minWidth: 0 }}>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{act.message}</Text>
-                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400]}}>{formatDistanceToNow(act.time, { addSuffix: true })}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>{act.message ?? ''}</Text>
+                    <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400]}}>{act.time ? formatDistanceToNow(act.time, { addSuffix: true }) : ''}</Text>
                   </Box>
                 </Box>
               ))}
@@ -517,23 +522,25 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
               ...cardBase, ...glassCardBg, padding: `${t.spacing[4]}px`,
               display: 'flex', flexDirection: 'column', gap: t.spacing[3],
             }}>
-              {performanceMetrics.map((pm, idx) => {
-                const pct = pm.target > 0 ? Math.min(100, Math.round((pm.value / pm.target) * 100)) : 0;
+              {(performanceMetrics ?? []).map((pm, idx) => {
+                const pmValue = pm.value ?? 0;
+                const pmTarget = pm.target ?? 0;
+                const pct = pmTarget > 0 ? Math.min(100, Math.round((pmValue / pmTarget) * 100)) : 0;
                 const onTrack = pct >= 80;
                 const bar = createProgressBarStyle(t, {
                   percent: pct,
                   color: onTrack ? t.colors.successScale[500] : t.colors.warningScale[500],
                 });
                 return (
-                  <Box key={pm.label} role="listitem" style={{
+                  <Box key={pm.label ?? idx} role="listitem" style={{
                     ...entrance.animate,
                     transitionDelay: `${createStaggerDelay(t, idx)}ms`,
                     transition: entrance.transition,
                   }}>
                     <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{pm.label}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{pm.label ?? ''}</Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: onTrack ? t.colors.successScale[600] : t.colors.warningScale[600] }}>
-                        {pm.value}/{pm.target}
+                        {pmValue}/{pmTarget}
                       </Text>
                     </Box>
                     <Box style={bar.track}>

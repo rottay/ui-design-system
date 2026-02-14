@@ -31,7 +31,7 @@ import {
 } from '../../../helpers';
 import type {
   BhScoringJobQueueProps,
-  ScoringJob,
+  ScoringJobView,
   ScoringJobStatus,
   ScoringJobPriority,
   QueueStats,
@@ -52,30 +52,30 @@ function getPriorityColor(priority: ScoringJobPriority, t: DesignTokens): string
 }
 
 function getPriorityLabel(priority: ScoringJobPriority): string {
-  return priority.charAt(0).toUpperCase() + priority.slice(1);
+  return (priority || '').charAt(0).toUpperCase() + (priority || '').slice(1);
 }
 
-function getStatusBadgeKey(status: ScoringJobStatus): 'primary' | 'success' | 'error' | 'warning' | 'secondary' {
+function getStatusBadgeKey(status: ScoringJobStatus | string): 'primary' | 'success' | 'error' | 'warning' | 'secondary' {
   switch (status) {
-    case 'queued': return 'secondary';
+    case 'pending': return 'secondary';
     case 'processing': return 'primary';
     case 'completed': return 'success';
     case 'failed': return 'error';
-    case 'paused': return 'warning';
+    default: return 'secondary';
   }
 }
 
-function getStatusLabel(status: ScoringJobStatus): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+function getStatusLabel(status: ScoringJobStatus | string): string {
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
-function getStatusIcon(status: ScoringJobStatus) {
+function getStatusIcon(status: ScoringJobStatus | string) {
   switch (status) {
-    case 'queued': return Clock;
+    case 'pending': return Clock;
     case 'processing': return Loader;
     case 'completed': return CheckCircle;
     case 'failed': return XCircle;
-    case 'paused': return Pause;
+    default: return Clock;
   }
 }
 
@@ -90,18 +90,34 @@ function formatDuration(ms: number): string {
 
 type SortKey = 'priority' | 'status' | 'time';
 
-function sortJobs(jobs: ScoringJob[], sortBy: SortKey): ScoringJob[] {
+function getJobId(j: ScoringJobView): string {
+  return j.job?.id ?? '';
+}
+
+function getJobStatus(j: ScoringJobView): string {
+  return j.job?.status ?? 'pending';
+}
+
+function getJobPriority(j: ScoringJobView): ScoringJobPriority {
+  return j.priorityLabel ?? 'normal';
+}
+
+function getJobCreatedAt(j: ScoringJobView): Date {
+  return j.job?.createdAt ? new Date(j.job.createdAt) : new Date();
+}
+
+function sortJobs(jobs: ScoringJobView[], sortBy: SortKey): ScoringJobView[] {
   const priorityOrder: Record<ScoringJobPriority, number> = { urgent: 0, high: 1, normal: 2, low: 3 };
-  const statusOrder: Record<ScoringJobStatus, number> = { processing: 0, queued: 1, paused: 2, failed: 3, completed: 4 };
+  const statusOrder: Record<string, number> = { processing: 0, pending: 1, failed: 3, completed: 4 };
 
   return [...jobs].sort((a, b) => {
     switch (sortBy) {
       case 'priority':
-        return priorityOrder[a.priority] - priorityOrder[b.priority];
+        return (priorityOrder[getJobPriority(a)] ?? 2) - (priorityOrder[getJobPriority(b)] ?? 2);
       case 'status':
-        return statusOrder[a.status] - statusOrder[b.status];
+        return (statusOrder[getJobStatus(a)] ?? 2) - (statusOrder[getJobStatus(b)] ?? 2);
       case 'time':
-        return b.queuedAt.getTime() - a.queuedAt.getTime();
+        return getJobCreatedAt(b).getTime() - getJobCreatedAt(a).getTime();
       default:
         return 0;
     }
@@ -121,14 +137,14 @@ const MOCK_STATS: QueueStats = {
   avgProcessingTime: 45000,
 };
 
-const MOCK_JOBS: ScoringJob[] = [
-  { id: 'sj-1', scorableId: 'sc-1', candidateName: 'Sarah Johnson', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', status: 'processing', progress: 0.65, priority: 'urgent', queuedAt: new Date(Date.now() - 120000), startedAt: new Date(Date.now() - 60000), estimatedDuration: 90000, retryCount: 0 },
-  { id: 'sj-2', scorableId: 'sc-2', candidateName: 'Michael Chen', jobTitle: 'Backend Developer', rubricName: 'System Design Rubric', status: 'processing', progress: 0.3, priority: 'high', queuedAt: new Date(Date.now() - 300000), startedAt: new Date(Date.now() - 120000), estimatedDuration: 120000, retryCount: 0 },
-  { id: 'sj-3', scorableId: 'sc-3', candidateName: 'Emily Rodriguez', jobTitle: 'Full Stack Engineer', rubricName: 'Code Review Assessment', status: 'queued', progress: 0, priority: 'normal', queuedAt: new Date(Date.now() - 600000), retryCount: 0 },
-  { id: 'sj-4', scorableId: 'sc-4', candidateName: 'James Kim', jobTitle: 'DevOps Engineer', rubricName: 'Infrastructure Rubric', status: 'failed', progress: 0.45, priority: 'high', queuedAt: new Date(Date.now() - 1800000), startedAt: new Date(Date.now() - 1200000), errorMessage: 'Timeout: LLM provider did not respond within 60s', retryCount: 2 },
-  { id: 'sj-5', scorableId: 'sc-5', candidateName: 'Anna Kowalski', jobTitle: 'Data Scientist', rubricName: 'ML Knowledge Assessment', status: 'completed', progress: 1, priority: 'normal', queuedAt: new Date(Date.now() - 3600000), startedAt: new Date(Date.now() - 3540000), completedAt: new Date(Date.now() - 3500000), retryCount: 0 },
-  { id: 'sj-6', scorableId: 'sc-6', candidateName: 'David Park', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', status: 'paused', progress: 0.2, priority: 'low', queuedAt: new Date(Date.now() - 7200000), startedAt: new Date(Date.now() - 7000000), retryCount: 0 },
-  { id: 'sj-7', scorableId: 'sc-7', candidateName: 'Lisa Wang', jobTitle: 'Product Manager', rubricName: 'PM Case Study Rubric', status: 'queued', progress: 0, priority: 'urgent', queuedAt: new Date(Date.now() - 180000), retryCount: 0 },
+const MOCK_JOBS: ScoringJobView[] = [
+  { job: { id: 'sj-1', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 120000), startedAt: new Date(Date.now() - 60000) } as any, candidateName: 'Sarah Johnson', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', progress: 0.65, priorityLabel: 'urgent', estimatedDuration: 90000 },
+  { job: { id: 'sj-2', status: 'processing' as const, attempts: 0, createdAt: new Date(Date.now() - 300000), startedAt: new Date(Date.now() - 120000) } as any, candidateName: 'Michael Chen', jobTitle: 'Backend Developer', rubricName: 'System Design Rubric', progress: 0.3, priorityLabel: 'high', estimatedDuration: 120000 },
+  { job: { id: 'sj-3', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 600000) } as any, candidateName: 'Emily Rodriguez', jobTitle: 'Full Stack Engineer', rubricName: 'Code Review Assessment', progress: 0, priorityLabel: 'normal' },
+  { job: { id: 'sj-4', status: 'failed' as const, attempts: 2, createdAt: new Date(Date.now() - 1800000), startedAt: new Date(Date.now() - 1200000), errorMessage: 'Timeout: LLM provider did not respond within 60s' } as any, candidateName: 'James Kim', jobTitle: 'DevOps Engineer', rubricName: 'Infrastructure Rubric', progress: 0.45, priorityLabel: 'high' },
+  { job: { id: 'sj-5', status: 'completed' as const, attempts: 0, createdAt: new Date(Date.now() - 3600000), startedAt: new Date(Date.now() - 3540000), completedAt: new Date(Date.now() - 3500000) } as any, candidateName: 'Anna Kowalski', jobTitle: 'Data Scientist', rubricName: 'ML Knowledge Assessment', progress: 1, priorityLabel: 'normal' },
+  { job: { id: 'sj-6', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 7200000), startedAt: new Date(Date.now() - 7000000) } as any, candidateName: 'David Park', jobTitle: 'Senior Frontend Engineer', rubricName: 'Technical Assessment v2', progress: 0.2, priorityLabel: 'low' },
+  { job: { id: 'sj-7', status: 'pending' as const, attempts: 0, createdAt: new Date(Date.now() - 180000) } as any, candidateName: 'Lisa Wang', jobTitle: 'Product Manager', rubricName: 'PM Case Study Rubric', progress: 0, priorityLabel: 'urgent' },
 ];
 
 /* ================================================================== */
@@ -145,8 +161,8 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobs = MOCK_JOBS,
-      stats = MOCK_STATS,
+      jobs = [],
+      stats = { totalJobs: 0, queued: 0, processing: 0, completed: 0, failed: 0, avgProcessingTime: 0 },
       onJobClick,
       onRetryJob,
       onCancelJob,
@@ -384,25 +400,28 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                   </Text>
                 </Box>
               )}
-              {sortedJobs.map((job, i) => {
-                const StatusIcon = getStatusIcon(job.status);
-                const isHovered = hoveredJobId === job.id;
-                const isSelected = selectedJobId === job.id;
-                const priorityColor = getPriorityColor(job.priority, t);
+              {sortedJobs.map((jv, i) => {
+                const id = getJobId(jv);
+                const status = getJobStatus(jv);
+                const priority = getJobPriority(jv);
+                const StatusIcon = getStatusIcon(status as ScoringJobStatus);
+                const isHovered = hoveredJobId === id;
+                const isSelected = selectedJobId === id;
+                const priorityColor = getPriorityColor(priority, t);
 
                 return (
                   <Box
-                    key={job.id}
+                    key={id || i}
                     role="listitem"
                     tabIndex={0}
-                    aria-label={`${job.candidateName}: ${job.jobTitle}, ${getStatusLabel(job.status)}, ${getPriorityLabel(job.priority)} priority`}
-                    onClick={() => handleJobClick(job.id)}
-                    onMouseEnter={() => setHoveredJobId(job.id)}
+                    aria-label={`${jv.candidateName ?? 'Unknown'}: ${jv.jobTitle ?? ''}, ${getStatusLabel(status as ScoringJobStatus)}, ${getPriorityLabel(priority)} priority`}
+                    onClick={() => handleJobClick(id)}
+                    onMouseEnter={() => setHoveredJobId(id)}
                     onMouseLeave={() => setHoveredJobId(null)}
                     onKeyDown={(e: React.KeyboardEvent) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        handleJobClick(job.id);
+                        handleJobClick(id);
                       }
                     }}
                     style={{
@@ -424,22 +443,22 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                     {/* Priority + Status icon */}
                     <Box style={createIconContainerStyle(t, {
                       size: 36,
-                      color: job.status === 'failed'
+                      color: status === 'failed'
                         ? t.colors.errorScale[50]
-                        : job.status === 'completed'
+                        : status === 'completed'
                           ? t.colors.successScale[50]
-                          : job.status === 'processing'
+                          : status === 'processing'
                             ? t.colors.primaryScale[50]
                             : t.colors.neutral[50],
                     })}>
                       <StatusIcon
                         size={16}
                         color={
-                          job.status === 'failed'
+                          status === 'failed'
                             ? t.colors.errorScale[600]
-                            : job.status === 'completed'
+                            : status === 'completed'
                               ? t.colors.successScale[600]
-                              : job.status === 'processing'
+                              : status === 'processing'
                                 ? t.colors.primaryScale[600]
                                 : t.colors.neutral[500]
                         }
@@ -457,17 +476,17 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                         }}>
-                          {job.candidateName}
+                          {jv.candidateName ?? 'Unknown'}
                         </Text>
                         <Box style={{
-                          ...createBadgeStyle(t, getStatusBadgeKey(job.status)),
+                          ...createBadgeStyle(t, getStatusBadgeKey(status as ScoringJobStatus)),
                           borderRadius: badgeRadius,
                         }}>
                           <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                            {getStatusLabel(job.status)}
+                            {getStatusLabel(status as ScoringJobStatus)}
                           </Text>
                         </Box>
-                        {job.priority === 'urgent' && (
+                        {priority === 'urgent' && (
                           <Box style={{
                             ...createBadgeStyle(t, 'error'),
                             borderRadius: badgeRadius,
@@ -479,7 +498,7 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                             <Text style={{ fontSize: t.typography.fontSize.xs }}>Urgent</Text>
                           </Box>
                         )}
-                        {job.priority === 'high' && (
+                        {priority === 'high' && (
                           <Box style={{
                             ...createBadgeStyle(t, 'warning'),
                             borderRadius: badgeRadius,
@@ -490,19 +509,19 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                       </Box>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexWrap: 'wrap' }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                          {job.jobTitle}
+                          {jv.jobTitle ?? ''}
                         </Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>|</Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                          {job.rubricName}
+                          {jv.rubricName ?? ''}
                         </Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                          {formatDistanceToNow(job.queuedAt, { addSuffix: true })}
+                          {formatDistanceToNow(getJobCreatedAt(jv), { addSuffix: true })}
                         </Text>
                       </Box>
 
                       {/* Progress bar for processing jobs */}
-                      {job.status === 'processing' && (
+                      {status === 'processing' && (
                         <Box style={{ marginTop: t.spacing[2] }}>
                           <Box style={{
                             height: 6,
@@ -512,7 +531,7 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                           }}>
                             <Box style={{
                               height: '100%',
-                              width: `${Math.round(job.progress * 100)}%`,
+                              width: `${Math.round((jv.progress ?? 0) * 100)}%`,
                               borderRadius: t.borderRadius.full,
                               backgroundColor: t.colors.primaryScale[500],
                               transition: 'width 0.4s ease',
@@ -520,11 +539,11 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                           </Box>
                           <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: t.spacing[1] }}>
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                              {Math.round(job.progress * 100)}%
+                              {Math.round((jv.progress ?? 0) * 100)}%
                             </Text>
-                            {job.estimatedDuration && job.startedAt && (
+                            {jv.estimatedDuration && jv.job?.startedAt && (
                               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                                ETA: {formatDuration(Math.max(0, job.estimatedDuration - (Date.now() - job.startedAt.getTime())))}
+                                ETA: {formatDuration(Math.max(0, jv.estimatedDuration - (Date.now() - new Date(jv.job.startedAt).getTime())))}
                               </Text>
                             )}
                           </Box>
@@ -532,8 +551,8 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                       )}
 
                       {/* Error message for failed jobs */}
-                      {job.status === 'failed' && job.errorMessage && (
-                        <Box style={{ 
+                      {status === 'failed' && jv.job?.errorMessage && (
+                        <Box style={{
                           marginTop: t.spacing[2],
                           padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
                           backgroundColor: t.colors.errorScale[50],
@@ -544,11 +563,11 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                         }}>
                           <AlertTriangle size={10} color={t.colors.errorScale[500]} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[700] }}>
-                            {job.errorMessage}
+                            {jv.job.errorMessage}
                           </Text>
-                          {job.retryCount > 0 && (
+                          {(jv.job?.attempts ?? 0) > 0 && (
                             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[400], marginLeft: t.spacing[1] }}>
-                              (retried {job.retryCount}x)
+                              (retried {jv.job?.attempts ?? 0}x)
                             </Text>
                           )}
                         </Box>
@@ -559,9 +578,9 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                     <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], flexShrink: 0 }}>
                       {isHovered && (
                         <Box style={{ display: 'flex', gap: t.spacing[1] }}>
-                          {job.status === 'failed' && (
+                          {status === 'failed' && (
                             <button
-                              onClick={(e) => handleRetry(job.id, e)}
+                              onClick={(e) => handleRetry(id, e)}
                               aria-label="Retry job"
                               style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -575,9 +594,9 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                               <RotateCcw size={13} />
                             </button>
                           )}
-                          {job.status === 'processing' && (
+                          {status === 'processing' && (
                             <button
-                              onClick={(e) => handlePause(job.id, e)}
+                              onClick={(e) => handlePause(id, e)}
                               aria-label="Pause job"
                               style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -591,25 +610,9 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
                               <Pause size={13} />
                             </button>
                           )}
-                          {job.status === 'paused' && (
+                          {(status === 'pending' || status === 'processing') && (
                             <button
-                              onClick={(e) => handlePause(job.id, e)}
-                              aria-label="Resume job"
-                              style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                width: 28, height: 28, borderRadius: t.borderRadius.md,
-                                border: `1px solid ${t.colors.neutral[200]}`,
-                                backgroundColor: t.colors.common.white, color: t.colors.successScale[600],
-                                cursor: 'pointer', padding: 0, boxShadow: t.shadows.sm,
-                                transition: `transform ${t.motion.hover}`,
-                              }}
-                            >
-                              <Play size={13} />
-                            </button>
-                          )}
-                          {(job.status === 'queued' || job.status === 'processing' || job.status === 'paused') && (
-                            <button
-                              onClick={(e) => handleCancel(job.id, e)}
+                              onClick={(e) => handleCancel(id, e)}
                               aria-label="Cancel job"
                               style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',

@@ -1,32 +1,41 @@
 /**
  * BhProctoringDashboard - Core Interface
  * Proctoring event monitoring dashboard for BitHire ATS platform
+ *
+ * Uses ProctoringEventSelect from @rottay/scoring as the entity type.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity } from '@rottay/scoring';
 
 export type BhProctoringDashboardPreset = 'dashboard' | 'compact';
 
-export type ProctoringEventType =
-  | 'tab_switch'
-  | 'copy_paste'
-  | 'screen_share'
-  | 'unusual_typing'
-  | 'browser_focus_lost';
+/** Backward-compat aliases (old names from pre-migration) */
+export type ProctoringEventTypeValue = ProctoringEventType;
+export type ProctoringEventSeverityValue = ProctoringEventSeverity;
 
-export type ProctoringEventSeverity = 'low' | 'medium' | 'high' | 'critical';
-
+/**
+ * UI-friendly proctoring event summary with flat fields.
+ * Pre-computed/mapped from DB data by the consuming application.
+ */
 export interface ProctoringEventSummary {
+  /** Event identifier */
   id: string;
-  scorableId: string;
+  /** Scorable entity identifier */
+  scorableId?: string;
+  /** Display name of the candidate (resolved externally) */
   candidateName?: string;
-  eventType: ProctoringEventType;
-  severity: ProctoringEventSeverity;
-  timestamp: Date;
-  reviewed: boolean;
-  dismissed: boolean;
-  metadata?: Record<string, unknown>;
+  /** Type of proctoring event */
+  eventType?: ProctoringEventType;
+  /** Event severity */
+  severity?: ProctoringEventSeverity;
+  /** When the event occurred */
+  timestamp?: Date;
+  /** Whether the event has been reviewed */
+  reviewed?: boolean;
+  /** Whether the event has been dismissed */
+  dismissed?: boolean;
 }
 
 export interface SeverityCount {
@@ -40,26 +49,26 @@ export interface EventTypeCount {
 }
 
 export interface ProctoringStats {
-  totalEvents: number;
-  unreviewedCount: number;
-  suspiciousCandidates: number;
-  averageRiskScore: number;
+  totalEvents?: number;
+  unreviewedCount?: number;
+  suspiciousCandidates?: number;
+  averageRiskScore?: number;
 }
 
 export interface BhProctoringDashboardProps extends EngineAwareProps {
   preset?: BhProctoringDashboardPreset;
 
   /** Summary statistics */
-  stats: ProctoringStats;
+  stats?: ProctoringStats;
 
   /** Severity distribution for donut chart */
-  severityCounts: SeverityCount[];
+  severityCounts?: SeverityCount[];
 
   /** Event type distribution for bar chart */
-  eventTypeCounts: EventTypeCount[];
+  eventTypeCounts?: EventTypeCount[];
 
   /** Recent events feed */
-  recentEvents: ProctoringEventSummary[];
+  recentEvents?: ProctoringEventSummary[];
 
   /** Callback when an event is clicked */
   onEventClick?: (eventId: string) => void;
@@ -92,3 +101,6 @@ export interface BhProctoringDashboardProps extends EngineAwareProps {
 export const BH_PROCTORING_DASHBOARD_DEFAULTS: Partial<BhProctoringDashboardProps> = {
   preset: 'dashboard',
 };
+
+/** Re-export DB types for convenience */
+export type { ProctoringEventSelect, ProctoringEventType, ProctoringEventSeverity };

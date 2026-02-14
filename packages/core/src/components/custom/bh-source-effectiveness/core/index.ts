@@ -1,6 +1,10 @@
 /**
  * BhSourceEffectiveness - Core Interface
  * Grouped bars for volume+quality with line for hire rate
+ *
+ * Source/effectiveness analytics are computed from candidate and outreach data.
+ * The DB type is referenced for context but the component works with
+ * aggregated metrics data.
  */
 
 import type { CSSProperties } from 'react';
@@ -8,6 +12,9 @@ import type { EngineAwareProps } from '../../../../types';
 
 export type BhSourceEffectivenessPreset = 'detailed' | 'compact';
 
+/**
+ * Source metrics data (computed/aggregated from candidates and outreach activities).
+ */
 export interface SourceMetrics {
   source: string;
   applicants: number;
@@ -20,8 +27,8 @@ export interface SourceMetrics {
 export interface BhSourceEffectivenessProps extends EngineAwareProps {
   preset?: BhSourceEffectivenessPreset;
 
-  /** Source metrics data */
-  sources: SourceMetrics[];
+  /** Source metrics data (computed/aggregated) */
+  sources?: SourceMetrics[];
 
   /** Title */
   title?: string;

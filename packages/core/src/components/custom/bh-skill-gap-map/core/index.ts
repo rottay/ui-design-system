@@ -1,52 +1,87 @@
+/**
+ * BhSkillGapMap - Core Interface
+ * Heatmap and list visualization of skill gaps across dimensions and candidates
+ *
+ * Uses SkillGapAnalysisSelect from @rottay/scoring for entity reference.
+ */
+
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { SkillGapAnalysisSelect } from '@rottay/scoring';
 
 export type BhSkillGapMapPreset = 'heatmap' | 'list';
 
 export type GapPriority = 'critical' | 'high' | 'medium' | 'low';
 
 export interface SkillGapItem {
-  id: string;
-  dimension: string;
-  dimensionCode: string;
-  currentLevel: number;
-  requiredLevel: number;
-  gapSize: number;
-  priority: GapPriority;
-  candidateCount: number;
+  id?: string;
+  dimension?: string;
+  dimensionCode?: string;
+  currentLevel?: number;
+  requiredLevel?: number;
+  gapSize?: number;
+  priority?: GapPriority;
+  candidateCount?: number;
   recommendation?: string;
 }
 
 export interface DimensionHeatmapCell {
-  dimension: string;
-  candidate: string;
-  candidateId: string;
-  score: number;
-  maxScore: number;
-  gapSize: number;
+  dimension?: string;
+  candidate?: string;
+  candidateId?: string;
+  score?: number;
+  maxScore?: number;
+  gapSize?: number;
 }
 
 export interface GapSummary {
-  totalGaps: number;
-  criticalGaps: number;
-  averageGapSize: number;
-  mostCommonDimension: string;
+  totalGaps?: number;
+  criticalGaps?: number;
+  averageGapSize?: number;
+  mostCommonDimension?: string;
 }
 
 export interface BhSkillGapMapProps extends EngineAwareProps {
   preset?: BhSkillGapMapPreset;
-  gaps: SkillGapItem[];
+
+  /** The DB entity for reference (all fields optional for safety) */
+  analysis?: Partial<SkillGapAnalysisSelect>;
+
+  /** Skill gap items (UI-computed from analysis.gaps) */
+  gaps?: SkillGapItem[];
+
+  /** Heatmap data */
   heatmapData?: DimensionHeatmapCell[];
+
+  /** Summary statistics */
   summary?: GapSummary;
+
+  /** Dimension labels */
   dimensions?: string[];
+
+  /** Candidate labels */
   candidates?: string[];
+
+  /** Currently selected gap */
   selectedGapId?: string;
+
+  /** Callback when a gap is selected */
   onGapSelect?: (gapId: string) => void;
+
+  /** Priority filter */
   priorityFilter?: GapPriority[];
+
+  /** Callback when priority filter changes */
   onPriorityFilterChange?: (priorities: GapPriority[]) => void;
+
+  /** Loading state */
   loading?: boolean;
+
+  /** Additional CSS class name(s) */
   className?: string;
+
+  /** Inline CSS styles */
   style?: CSSProperties;
 }
 
@@ -80,3 +115,6 @@ export function getScoreBgColor(score: number, maxScore: number, tokens: DesignT
   if (ratio >= 0.2) return tokens.colors.errorScale[50];
   return tokens.colors.errorScale[100];
 }
+
+/** Re-export DB type for convenience */
+export type { SkillGapAnalysisSelect };

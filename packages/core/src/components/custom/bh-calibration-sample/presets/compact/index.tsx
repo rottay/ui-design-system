@@ -28,6 +28,7 @@ import type {
   DimensionComparison,
   CalibrationSampleStatus,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -63,7 +64,7 @@ function getStatusBadgeKey(status: CalibrationSampleStatus): 'secondary' | 'succ
 }
 
 function getStatusLabel(status: CalibrationSampleStatus): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -119,13 +120,13 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
 
     /* Top disagreements: sorted by absolute deviation descending, only non-agreed */
     const topDisagreements = useMemo(() => {
-      return [...sample.dimensions]
+      return [...(sample.dimensions ?? [])]
         .filter((d) => !d.agreed)
-        .sort((a, b) => Math.abs(b.deviation) - Math.abs(a.deviation))
+        .sort((a, b) => Math.abs(n(b.deviation)) - Math.abs(n(a.deviation)))
         .slice(0, 3);
     }, [sample.dimensions]);
 
-    const agreementPct = Math.round(sample.agreementRate * 100);
+    const agreementPct = Math.round(n(sample.agreementRate) * 100);
 
     return (
       <Box
@@ -159,11 +160,11 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
             </Text>
           </Box>
           <Box style={{
-            ...createBadgeStyle(t, getStatusBadgeKey(sample.status)),
+            ...createBadgeStyle(t, getStatusBadgeKey(sample.status!)),
             borderRadius: badgeRadius,
             padding: `1px ${t.spacing[2]}px`,
           }}>
-            <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(sample.status)}</Text>
+            <Text style={{ fontSize: t.typography.fontSize.xs }}>{getStatusLabel(sample.status!)}</Text>
           </Box>
         </Box>
 
@@ -190,7 +191,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }}>
           {/* Human Score */}
-          <Box style={{ textAlign: 'center' }} role="status" aria-label={`Human score: ${sample.overallHumanScore.toFixed(1)}`}>
+          <Box style={{ textAlign: 'center' }} role="status" aria-label={`Human score: ${n(sample.overallHumanScore).toFixed(1)}`}>
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: t.spacing[1] }}>
               <User size={10} color={t.colors.infoScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Human</Text>
@@ -201,12 +202,12 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
               color: t.colors.neutral[900],
               display: 'block',
             }}>
-              {sample.overallHumanScore.toFixed(1)}
+              {n(sample.overallHumanScore).toFixed(1)}
             </Text>
           </Box>
 
           {/* AI Score */}
-          <Box style={{ textAlign: 'center' }} role="status" aria-label={`AI score: ${sample.overallAiScore.toFixed(1)}`}>
+          <Box style={{ textAlign: 'center' }} role="status" aria-label={`AI score: ${n(sample.overallAiScore).toFixed(1)}`}>
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: t.spacing[1] }}>
               <Bot size={10} color={t.colors.primaryScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>AI</Text>
@@ -217,7 +218,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
               color: t.colors.neutral[900],
               display: 'block',
             }}>
-              {sample.overallAiScore.toFixed(1)}
+              {n(sample.overallAiScore).toFixed(1)}
             </Text>
           </Box>
 
@@ -229,7 +230,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
             <Text style={{
               fontSize: t.typography.fontSize.lg,
               fontWeight: t.typography.fontWeight.bold,
-              color: getAgreementColor(sample.agreementRate, t),
+              color: getAgreementColor(n(sample.agreementRate), t),
               display: 'block',
             }}>
               {agreementPct}%
@@ -244,12 +245,12 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
           overflow: 'hidden',
         }} role="img" aria-label={`Agreement: ${agreementPct}%`}>
           <Box style={{
-            flex: sample.agreementRate,
+            flex: n(sample.agreementRate),
             backgroundColor: t.colors.successScale[500],
             transition: 'flex 0.4s ease',
           }} />
           <Box style={{
-            flex: 1 - sample.agreementRate,
+            flex: 1 - n(sample.agreementRate),
             backgroundColor: t.colors.errorScale[300],
             transition: 'flex 0.4s ease',
           }} />
@@ -278,7 +279,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
 
             <Box role="list" aria-label="Top disagreements">
               {topDisagreements.map((dim) => {
-                const devColor = getDeviationColor(dim.deviation, t);
+                const devColor = getDeviationColor(n(dim.deviation), t);
                 return (
                   <Box
                     key={dim.dimensionName}
@@ -305,20 +306,20 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
                         {dim.dimensionName}
                       </Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                        H: {dim.humanScore.toFixed(1)} | AI: {dim.aiScore.toFixed(1)}
+                        H: {n(dim.humanScore).toFixed(1)} | AI: {n(dim.aiScore).toFixed(1)}
                       </Text>
                     </Box>
                     <Box style={{
                       padding: `0px ${t.spacing[1]}px`,
                       borderRadius: badgeRadius,
-                      backgroundColor: getDeviationBg(dim.deviation, t),
+                      backgroundColor: getDeviationBg(n(dim.deviation), t),
                     }}>
                       <Text style={{
                         fontSize: t.typography.fontSize.xs,
                         fontWeight: t.typography.fontWeight.bold,
                         color: devColor,
                       }}>
-                        {dim.deviation >= 0 ? '+' : ''}{dim.deviation.toFixed(1)}
+                        {n(dim.deviation) >= 0 ? '+' : ''}{n(dim.deviation).toFixed(1)}
                       </Text>
                     </Box>
                   </Box>

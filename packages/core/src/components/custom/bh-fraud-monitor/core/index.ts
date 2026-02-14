@@ -1,8 +1,17 @@
+/**
+ * BhFraudMonitor - Core Interface
+ * DB Reference: DBInterview from @rottay/recruiter
+ */
+
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBInterview } from '@rottay/recruiter';
 
 export type BhFraudMonitorPreset = 'dashboard' | 'compact';
+
+/** Re-export for consumer convenience */
+export type { DBInterview };
 
 export type EventSeverity = 'critical' | 'high' | 'medium' | 'low';
 export type EventType = 'tab_switch' | 'copy_paste' | 'screen_share' | 'browser_resize' | 'focus_loss' | 'suspicious_timing' | 'similarity_flag';

@@ -35,6 +35,7 @@ import type {
   DimensionComparison,
   CalibrationSampleStatus,
 } from '../../core';
+import { n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -77,7 +78,7 @@ function getStatusBadgeKey(status: CalibrationSampleStatus): 'secondary' | 'succ
 }
 
 function getStatusLabel(status: CalibrationSampleStatus): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
+  return (status || '').charAt(0).toUpperCase() + (status || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -161,7 +162,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
     const gaugeSize = 100;
     const gaugeR = 38;
     const gaugeCircumference = 2 * Math.PI * gaugeR;
-    const gaugeFill = sample.agreementRate * gaugeCircumference;
+    const gaugeFill = n(sample.agreementRate) * gaugeCircumference;
 
     return (
       <Box
@@ -200,11 +201,11 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                     {sample.candidateName}
                   </Text>
                   <Box style={{
-                    ...createBadgeStyle(t, getStatusBadgeKey(sample.status)),
+                    ...createBadgeStyle(t, getStatusBadgeKey(sample.status!)),
                     borderRadius: badgeRadius,
                   }}>
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                      {getStatusLabel(sample.status)}
+                      {getStatusLabel(sample.status!)}
                     </Text>
                   </Box>
                 </Box>
@@ -242,7 +243,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
             marginBottom: t.spacing[7],
           }}>
             {/* Human Score */}
-            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(0) }} role="status" aria-label={`Overall human score: ${sample.overallHumanScore.toFixed(1)} out of 5`}>
+            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(0) }} role="status" aria-label={`Overall human score: ${n(sample.overallHumanScore).toFixed(1)} out of 5`}>
               {accentBar && <Box style={accentBar} />}
 
         <Box style={accentLayout.inner}>
@@ -265,7 +266,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                 color: t.colors.neutral[900],
                 display: 'block',
               }}>
-                {sample.overallHumanScore.toFixed(1)}
+                {n(sample.overallHumanScore).toFixed(1)}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                 out of 5.0
@@ -273,7 +274,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
             </Box>
 
             {/* AI Score */}
-            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(1) }} role="status" aria-label={`Overall AI score: ${sample.overallAiScore.toFixed(1)} out of 5`}>
+            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(1) }} role="status" aria-label={`Overall AI score: ${n(sample.overallAiScore).toFixed(1)} out of 5`}>
               {accentBar && <Box style={accentBar} />}
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
                 <Box style={createIconContainerStyle(t, { size: 36, color: t.colors.primaryScale[50] })}>
@@ -294,7 +295,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                 color: t.colors.neutral[900],
                 display: 'block',
               }}>
-                {sample.overallAiScore.toFixed(1)}
+                {n(sample.overallAiScore).toFixed(1)}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                 out of 5.0
@@ -302,11 +303,11 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
             </Box>
 
             {/* Overall Deviation */}
-            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(2) }} role="status" aria-label={`Overall deviation: ${sample.overallDeviation.toFixed(2)}`}>
+            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(2) }} role="status" aria-label={`Overall deviation: ${n(sample.overallDeviation).toFixed(2)}`}>
               {accentBar && <Box style={accentBar} />}
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
-                <Box style={createIconContainerStyle(t, { size: 36, color: getDeviationBg(sample.overallDeviation, t) })}>
-                  <Target size={18} color={getDeviationColor(sample.overallDeviation, t)} />
+                <Box style={createIconContainerStyle(t, { size: 36, color: getDeviationBg(n(sample.overallDeviation), t) })}>
+                  <Target size={18} color={getDeviationColor(n(sample.overallDeviation), t)} />
                 </Box>
                 <Text style={{
                   fontSize: t.typography.fontSize.xs,
@@ -320,10 +321,10 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
               <Text style={{
                 fontSize: t.typography.fontSize['2xl'],
                 fontWeight: t.typography.fontWeight.bold,
-                color: getDeviationColor(sample.overallDeviation, t),
+                color: getDeviationColor(n(sample.overallDeviation), t),
                 display: 'block',
               }}>
-                {sample.overallDeviation >= 0 ? '+' : ''}{sample.overallDeviation.toFixed(2)}
+                {n(sample.overallDeviation) >= 0 ? '+' : ''}{n(sample.overallDeviation).toFixed(2)}
               </Text>
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                 AI - Human
@@ -331,11 +332,11 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
             </Box>
 
             {/* Agreement Rate Gauge */}
-            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(3) }} role="status" aria-label={`Agreement rate: ${Math.round(sample.agreementRate * 100)}%`}>
+            <Box style={{ ...card, ...hoverStyles.base, ...animStyle(3) }} role="status" aria-label={`Agreement rate: ${Math.round(n(sample.agreementRate) * 100)}%`}>
               {accentBar && <Box style={accentBar} />}
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginBottom: t.spacing[3] }}>
-                <Box style={createIconContainerStyle(t, { size: 36, color: getAgreementBg(sample.agreementRate, t) })}>
-                  <Percent size={18} color={getAgreementColor(sample.agreementRate, t)} />
+                <Box style={createIconContainerStyle(t, { size: 36, color: getAgreementBg(n(sample.agreementRate), t) })}>
+                  <Percent size={18} color={getAgreementColor(n(sample.agreementRate), t)} />
                 </Box>
                 <Text style={{
                   fontSize: t.typography.fontSize.xs,
@@ -369,7 +370,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                       cy={gaugeSize / 2}
                       r={gaugeR}
                       fill="none"
-                      stroke={getAgreementColor(sample.agreementRate, t)}
+                      stroke={getAgreementColor(n(sample.agreementRate), t)}
                       strokeWidth={8}
                       strokeDasharray={`${gaugeFill} ${gaugeCircumference}`}
                       strokeLinecap="round"
@@ -383,9 +384,9 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                     <Text style={{
                       fontSize: t.typography.fontSize.lg,
                       fontWeight: t.typography.fontWeight.bold,
-                      color: getAgreementColor(sample.agreementRate, t),
+                      color: getAgreementColor(n(sample.agreementRate), t),
                     }}>
-                      {Math.round(sample.agreementRate * 100)}%
+                      {Math.round(n(sample.agreementRate) * 100)}%
                     </Text>
                   </Box>
                 </Box>
@@ -431,12 +432,12 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
             </Box>
 
             <Box role="list" aria-label="Dimension comparisons">
-              {sample.dimensions.map((dim) => {
+              {(sample.dimensions ?? []).map((dim) => {
                 const isExpanded = expandedDimension === dim.dimensionName;
-                const adjustedScore = adjustments[dim.dimensionName];
-                const humanBarPct = (dim.humanScore / dim.maxScore) * 100;
-                const aiBarPct = (dim.aiScore / dim.maxScore) * 100;
-                const devColor = getDeviationColor(dim.deviation, t);
+                const adjustedScore = (adjustments as Record<string, number | undefined>)[dim.dimensionName ?? ''];
+                const humanBarPct = (n(dim.humanScore) / (n(dim.maxScore) || 1)) * 100;
+                const aiBarPct = (n(dim.aiScore) / (n(dim.maxScore) || 1)) * 100;
+                const devColor = getDeviationColor(n(dim.deviation), t);
 
                 return (
                   <Box key={dim.dimensionName} role="listitem">
@@ -451,14 +452,14 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                         cursor: 'pointer',
                         transition: `background-color ${t.motion.hover}`,
                       }}
-                      onClick={() => toggleDimension(dim.dimensionName)}
+                      onClick={() => toggleDimension((dim.dimensionName ?? ''))}
                       tabIndex={0}
                       aria-expanded={isExpanded}
-                      aria-label={`${dim.dimensionName}: Human ${dim.humanScore}, AI ${dim.aiScore}, deviation ${dim.deviation.toFixed(1)}`}
+                      aria-label={`${dim.dimensionName}: Human ${n(dim.humanScore)}, AI ${n(dim.aiScore)}, deviation ${n(dim.deviation).toFixed(1)}`}
                       onKeyDown={(e: React.KeyboardEvent) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          toggleDimension(dim.dimensionName);
+                          toggleDimension((dim.dimensionName ?? ''));
                         }
                       }}
                     >
@@ -476,7 +477,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
 
                       {/* Weight */}
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], display: 'flex', alignItems: 'center' }}>
-                        {Math.round(dim.weight * 100)}%
+                        {Math.round(n(dim.weight) * 100)}%
                       </Text>
 
                       {/* Human Score Bar */}
@@ -497,7 +498,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                           }} />
                         </Box>
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[700], minWidth: 24 }}>
-                          {dim.humanScore.toFixed(1)}
+                          {n(dim.humanScore).toFixed(1)}
                         </Text>
                       </Box>
 
@@ -519,7 +520,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                           }} />
                         </Box>
                         <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[700], minWidth: 24 }}>
-                          {dim.aiScore.toFixed(1)}
+                          {n(dim.aiScore).toFixed(1)}
                         </Text>
                       </Box>
 
@@ -528,14 +529,14 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                         <Box style={{
                           padding: `1px ${t.spacing[2]}px`,
                           borderRadius: badgeRadius,
-                          backgroundColor: getDeviationBg(dim.deviation, t),
+                          backgroundColor: getDeviationBg(n(dim.deviation), t),
                         }}>
                           <Text style={{
                             fontSize: t.typography.fontSize.xs,
                             fontWeight: t.typography.fontWeight.bold,
                             color: devColor,
                           }}>
-                            {dim.deviation >= 0 ? '+' : ''}{dim.deviation.toFixed(1)}
+                            {n(dim.deviation) >= 0 ? '+' : ''}{n(dim.deviation).toFixed(1)}
                           </Text>
                         </Box>
                       </Box>
@@ -628,8 +629,8 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                             max={dim.maxScore}
                             step={0.1}
                             value={adjustedScore !== undefined ? adjustedScore : ''}
-                            placeholder={dim.aiScore.toFixed(1)}
-                            onChange={(e) => handleAdjust(dim.dimensionName, parseFloat(e.target.value) || 0)}
+                            placeholder={n(dim.aiScore).toFixed(1)}
+                            onChange={(e) => handleAdjust((dim.dimensionName ?? ''), parseFloat(e.target.value) || 0)}
                             aria-label={`Adjust score for ${dim.dimensionName}`}
                             style={{
                               width: 64,
@@ -651,7 +652,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                               onClick={() => {
                                 setAdjustments((prev) => {
                                   const next = { ...prev };
-                                  delete next[dim.dimensionName];
+                                  delete (next as Record<string, any>)[dim.dimensionName ?? ''];
                                   return next;
                                 });
                               }}
@@ -674,7 +675,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
                 );
               })}
 
-              {sample.dimensions.length === 0 && (
+              {(sample.dimensions ?? []).length === 0 && (
                 <Box style={createEmptyStateStyle(t)}>
                   <Scale size={32} style={{ marginBottom: t.spacing[2], opacity: 0.4 }} />
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[400] }}>

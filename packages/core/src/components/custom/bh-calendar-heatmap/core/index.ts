@@ -9,15 +9,15 @@ import type { EngineAwareProps } from '../../../../types';
 export type BhCalendarHeatmapPreset = 'full' | 'compact';
 
 export interface HeatmapDay {
-  date: string;
-  count: number;
+  date?: string;
+  count?: number;
 }
 
 export interface BhCalendarHeatmapProps extends EngineAwareProps {
   preset?: BhCalendarHeatmapPreset;
 
   /** Daily activity data */
-  days: HeatmapDay[];
+  days?: HeatmapDay[];
 
   /** Title */
   title?: string;

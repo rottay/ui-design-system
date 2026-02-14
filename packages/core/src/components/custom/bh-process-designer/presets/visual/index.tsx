@@ -84,7 +84,7 @@ function getStageIcon(type: StageType, size: number = 16) {
 }
 
 function getStageTypeLabel(type: StageType): string {
-  return type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  return (type || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
 /* ================================================================== */

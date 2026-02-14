@@ -16,6 +16,7 @@ import {
   getPersonalityBadgeRadius,
 } from '../../../helpers';
 import type { BhOfferLetterPreviewProps, OfferLetterData } from '../../core';
+import { offerToLetterData } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 const MOCK_LETTER: OfferLetterData = {
@@ -36,13 +37,18 @@ export const CompactBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      letterData = MOCK_LETTER,
-      companyName = 'Acme Corp',
+      offer,
+      candidateName: candidateNameProp,
+      letterData: letterDataProp,
+      companyName = '',
       currency = '$',
       onDownload,
       className,
       style,
     } = props;
+
+    const letterData = letterDataProp
+      ?? (offer ? offerToLetterData(offer, candidateNameProp) : { candidateName: '', position: '', salary: 0, startDate: '', benefits: [] });
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
@@ -123,7 +129,7 @@ export const CompactBhOfferLetterPreview = createPreset<BhOfferLetterPreviewProp
                 fontWeight: t.typography.fontWeight.bold,
                 color: t.colors.neutral[900],
               }}>
-                {currency}{letterData.salary.toLocaleString()}/yr
+                {currency}{(letterData.salary ?? 0).toLocaleString()}/yr
               </Text>
             </Box>
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>

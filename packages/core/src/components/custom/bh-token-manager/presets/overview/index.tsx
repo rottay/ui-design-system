@@ -26,11 +26,11 @@ import {
 } from '../../../helpers';
 import type {
   BhTokenManagerProps,
-  TokenBalance,
+  TokenBalanceSummary,
   ConsumptionDataPoint,
   CostBreakdownItem,
   TeamQuota,
-  TokenTransaction,
+  TokenTransactionDisplay,
   AlertConfig,
   ForecastPoint,
 } from '../../core';
@@ -42,7 +42,7 @@ import type { DesignTokens } from '../../../../../core/types/tokens';
 function formatTokenCount(value: number): string {
   if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
   if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
-  return value.toLocaleString();
+  return (value || 0).toLocaleString();
 }
 
 /* ------------------------------------------------------------------ */
@@ -596,7 +596,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                       color: costGrouping === grp ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                     }}
                   >
-                    {grp.charAt(0).toUpperCase() + grp.slice(1)}
+                    {(grp || '').charAt(0).toUpperCase() + (grp || '').slice(1)}
                   </Box>
                 ))}
               </Box>
@@ -790,7 +790,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                     color: transactionFilter === f ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                   }}
                 >
-                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                  {(f || '').charAt(0).toUpperCase() + (f || '').slice(1)}
                 </Box>
               ))}
             </Box>
@@ -848,7 +848,7 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
                     </td>
                     <td style={{ padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px` }}>
                       <Text style={txTypeBadge(tx.type)}>
-                        {tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}
+                        {(tx.type || '').charAt(0).toUpperCase() + (tx.type || '').slice(1)}
                       </Text>
                     </td>
                     <td

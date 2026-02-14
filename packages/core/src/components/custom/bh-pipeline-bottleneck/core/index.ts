@@ -6,16 +6,18 @@
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { ApplicationStatusValue } from '@rottay/recruiter';
 
 export type BhPipelineBottleneckPreset = 'visual' | 'list';
 
 export interface BottleneckStage {
-  id: string;
-  name: string;
-  candidateCount: number;
-  avgDaysInStage: number;
-  expectedDays: number;
-  isBottleneck: boolean;
+  id?: string;
+  name?: string;
+  status?: ApplicationStatusValue;
+  candidateCount?: number;
+  avgDaysInStage?: number;
+  expectedDays?: number;
+  isBottleneck?: boolean;
 }
 
 export interface BhPipelineBottleneckProps extends EngineAwareProps {

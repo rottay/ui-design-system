@@ -1,7 +1,12 @@
 /**
  * BhTranscriptViewer - Core Interface
  * Interview transcript viewer with highlighted evidence from scoring.
- * Tables: dm-scoring evidence + transcripts from recruiting_interviews
+ * Tables: dm-scoring evidence + transcripts from recruiting_interviews.
+ *
+ * Transcript data comes from recruiting_interviews; scoring evidence from dm-scoring.
+ * The component does not directly use DB types from @rottay/ia-chat since transcripts
+ * are stored in the recruiting module, but it references provider request context
+ * indirectly (via interview AI session data).
  */
 
 import type { CSSProperties } from 'react';

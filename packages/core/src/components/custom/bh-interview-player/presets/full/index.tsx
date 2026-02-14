@@ -77,8 +77,9 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
     }), [entrance, t]);
 
     const {
-      interviewInfo, transcript, scorecard, notes, insights,
-      audioUrl, audioDuration,
+      interviewInfo = { candidateName: '', jobTitle: '', stageName: '', date: '', duration: 0, status: '' },
+      transcript = [], scorecard, notes = [], insights,
+      audioUrl = '', audioDuration = 0,
       onAddNote, onApproveScore, onRequestRescore, onFlagForReview, onDownloadTranscript,
       className, style,
     } = props;

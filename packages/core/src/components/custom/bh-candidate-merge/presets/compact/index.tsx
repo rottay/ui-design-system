@@ -16,12 +16,14 @@ import {
   getPersonalityBadgeRadius,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhCandidateMergeProps, MergeCandidate, MergeField } from '../../core';
+import type { BhCandidateMergeProps, MergeField } from '../../core';
+import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
-const MOCK_CANDIDATES: MergeCandidate[] = [
-  { id: 'mc-1', name: 'Sarah Johnson', email: 'sarah.johnson@gmail.com', source: 'LinkedIn', appliedAt: '2026-01-10' },
-  { id: 'mc-2', name: 'Sarah M. Johnson', email: 's.johnson@yahoo.com', source: 'Career Page', appliedAt: '2026-01-15' },
+const MOCK_CANDIDATES: DBCandidate[] = [
+  { id: 'mc-1', firstName: 'Sarah', lastName: 'Johnson', email: 'sarah.johnson@gmail.com', source: 'linkedin' } as DBCandidate,
+  { id: 'mc-2', firstName: 'Sarah M.', lastName: 'Johnson', email: 's.johnson@yahoo.com', source: 'career_page' } as DBCandidate,
 ];
 
 const MOCK_FIELDS: MergeField[] = [
@@ -39,10 +41,10 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = MOCK_CANDIDATES,
-      mergeFields = MOCK_FIELDS,
+      candidates = [],
+      mergeFields = [],
       onMerge,
-      confidenceScore = 87,
+      confidenceScore = 0,
       className,
       style,
     } = props;
@@ -100,7 +102,9 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
         </Box>
 
         <Box style={{ padding: `${t.spacing[3]}px ${t.spacing[4]}px` }}>
-          {candidates.map((c, i) => (
+          {candidates.map((c, i) => {
+            const fullName = getCandidateFullName(c);
+            return (
             <Box key={c.id} style={{
               display: 'flex',
               alignItems: 'center',
@@ -119,7 +123,7 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
                 flexShrink: 0,
               }}>
                 <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: i === 0 ? t.colors.primaryScale[700] : t.colors.warningScale[700] }}>
-                  {c.name.charAt(0)}
+                  {fullName.charAt(0)}
                 </Text>
               </Box>
               <Box style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -131,14 +135,15 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                 }}>
-                  {c.name}
+                  {fullName}
                 </Text>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                  {c.email}
+                  {c.email ?? ''}
                 </Text>
               </Box>
             </Box>
-          ))}
+            );
+          })}
 
           {conflictCount > 0 && (
             <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.warningScale[600], marginTop: t.spacing[2] }}>

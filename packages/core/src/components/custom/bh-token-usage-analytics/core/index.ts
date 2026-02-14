@@ -1,20 +1,29 @@
 /**
  * BhTokenUsageAnalytics - Core Interface
  * AreaChart consumption, PieChart by category for BitHire ATS platform
+ *
+ * Usage types imported from @rottay/ia-chat (single source of truth).
+ * DBUsage fields: metricType, quantity, cost, currency, requestCount, etc.
+ * Token types from @rottay/recruiter: TokenBalance.lifetimeConsumed, etc.
  */
 
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../types';
+import type { DBUsage } from '@rottay/ia-chat';
 
 export type BhTokenUsageAnalyticsPreset = 'detailed' | 'compact';
 
 export interface TokenUsagePoint {
+  /** Period date */
   date: string;
+  /** DBUsage.quantity for token metric type */
   tokens: number;
+  /** DBUsage.cost */
   cost: number;
 }
 
 export interface TokenCategory {
+  /** DBUsage.metricType or provider category */
   category: string;
   tokens: number;
   percentage: number;
@@ -24,21 +33,21 @@ export interface BhTokenUsageAnalyticsProps extends EngineAwareProps {
   preset?: BhTokenUsageAnalyticsPreset;
 
   /** Usage data over time */
-  usageData: TokenUsagePoint[];
+  usageData?: TokenUsagePoint[];
 
   /** Token usage by category */
-  categories: TokenCategory[];
+  categories?: TokenCategory[];
 
   /** Total tokens consumed */
-  totalTokens: number;
+  totalTokens?: number;
 
   /** Total cost */
-  totalCost: number;
+  totalCost?: number;
 
   /** Budget limit */
   budget?: number;
 
-  /** Currency code */
+  /** Currency code (defaults to DBUsage.currency = 'USD') */
   currency?: string;
 
   /** Component title */

@@ -80,8 +80,8 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
-      jobName = 'Senior Frontend Engineer',
-      candidates = DEFAULT_CANDIDATES,
+      jobName = '',
+      candidates = [],
       selectedCandidates: scp, onSelectionChange,
       onDecisionChange, onCompare,
       className, style,

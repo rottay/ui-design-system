@@ -12,7 +12,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import type { BhEvidenceBrowserProps, EvidenceImpact, TranscriptSegment, EvidenceItem, EvidenceFilter } from '../../core';
-import { getImpactColors, getImpactLabel, getSpeakerColors, IMPACT_OPTIONS } from '../../core';
+import { getImpactColors, getImpactLabel, getSpeakerColors, IMPACT_OPTIONS, n } from '../../core';
 import {
   createCardStyle,
   createSurfaceStyle,
@@ -382,7 +382,7 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
 
             <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
               {filteredEvidence.map((ev, idx) => {
-                const ic = impactColors[ev.impact];
+                const ic = (impactColors as Record<string, any>)[ev.impact ?? ''];
                 const isSelected = selectedEvidenceId === ev.id;
                 const evEntrance = createEntranceAnimation(t, { index: idx });
 
@@ -391,10 +391,10 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
                     key={ev.id}
                     role="listitem"
                     aria-selected={isSelected}
-                    aria-label={`${ev.dimensionCode}: ${ev.quote.slice(0, 60)}${ev.quote.length > 60 ? '...' : ''} - ${getImpactLabel(ev.impact)}${ev.isValidated ? ' (validated)' : ' (unvalidated)'}`}
+                    aria-label={`${ev.dimensionCode}: ${(ev.quote ?? '').slice(0, 60)}${(ev.quote ?? '').length > 60 ? '...' : ''} - ${getImpactLabel((ev.impact ?? ''))}${ev.isValidated ? ' (validated)' : ' (unvalidated)'}`}
                     tabIndex={0}
-                    onClick={() => handleEvidenceSelect(ev.id)}
-                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEvidenceSelect(ev.id); } }}
+                    onClick={() => handleEvidenceSelect((ev.id ?? ''))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleEvidenceSelect((ev.id ?? '')); } }}
                     style={{
                       padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
                       borderRadius: t.borderRadius.lg,
@@ -435,7 +435,7 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
                         color: ic.color,
                       }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: ic.color, fontWeight: t.typography.fontWeight.semibold }}>
-                          {getImpactLabel(ev.impact)}
+                          {getImpactLabel((ev.impact ?? ''))}
                         </Text>
                       </Box>
                     </Box>
@@ -449,7 +449,7 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
                         fontStyle: 'italic',
                         lineHeight: t.typography.lineHeight.normal,
                       }}>
-                        {ev.quote.length > 120 ? `${ev.quote.slice(0, 120)}...` : ev.quote}
+                        {(ev.quote ?? '').length > 120 ? `${(ev.quote ?? '').slice(0, 120)}...` : ev.quote}
                       </Text>
                     </Box>
 
@@ -469,11 +469,11 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
-                          Score: {ev.score}
+                          Score: {n(ev.score)}
                         </Text>
                         {ev.similarityScore !== undefined && (
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[300] }}>
-                            Match: {Math.round(ev.similarityScore * 100)}%
+                            Match: {Math.round(n(ev.similarityScore) * 100)}%
                           </Text>
                         )}
                       </Box>
@@ -501,12 +501,12 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
                             role="button"
                             tabIndex={0}
                             aria-label={ev.isValidated ? `Unvalidate evidence: ${ev.dimensionCode}` : `Validate evidence: ${ev.dimensionCode}`}
-                            onClick={(e: React.MouseEvent) => handleValidate(ev.id, !ev.isValidated, e)}
+                            onClick={(e: React.MouseEvent) => handleValidate((ev.id ?? ''), !ev.isValidated, e)}
                             onKeyDown={(e: React.KeyboardEvent) => {
                               if (e.key === 'Enter' || e.key === ' ') {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                onValidate(ev.id, !ev.isValidated);
+                                onValidate((ev.id ?? ''), !ev.isValidated);
                               }
                             }}
                             style={{

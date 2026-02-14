@@ -25,11 +25,12 @@ import type { BhAgentVersionHistoryProps, AgentVersion } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 import { GitBranch, RotateCcw, CheckCircle, Archive, FileEdit, Activity, Star, BarChart3, User } from 'lucide-react';
 
-function getVersionStatusInfo(status: AgentVersion['status'], t: DesignTokens) {
+function getVersionStatusInfo(status: AgentVersion['status'] | undefined, t: DesignTokens) {
   switch (status) {
     case 'active': return { bg: t.colors.successScale[100], color: t.colors.successScale[700], badgeColor: 'success' as const, label: 'Active' };
     case 'deprecated': return { bg: t.colors.neutral[100], color: t.colors.neutral[500], badgeColor: 'secondary' as const, label: 'Deprecated' };
-    case 'draft': return { bg: t.colors.warningScale[100], color: t.colors.warningScale[700], badgeColor: 'warning' as const, label: 'Draft' };
+    case 'draft':
+    default: return { bg: t.colors.warningScale[100], color: t.colors.warningScale[700], badgeColor: 'warning' as const, label: 'Draft' };
   }
 }
 
@@ -70,7 +71,7 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
 
     // Sort versions by date descending
     const sortedVersions = useMemo(() => {
-      return [...versions].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      return [...versions].sort((a, b) => (b.createdAt?.getTime?.() ?? 0) - (a.createdAt?.getTime?.() ?? 0));
     }, [versions]);
 
     if (loading) {
@@ -198,13 +199,13 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <Star size={14} strokeWidth={1.5} style={{ color: t.colors.warningScale[500] }} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                            Score: {version.metrics.avgScore.toFixed(1)}
+                            Score: {(version.metrics.avgScore ?? 0).toFixed(1)}
                           </Text>
                         </Box>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
                           <BarChart3 size={14} strokeWidth={1.5} style={{ color: t.colors.primaryScale[500] }} />
                           <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>
-                            Completion: {version.metrics.completionRate.toFixed(0)}%
+                            Completion: {(version.metrics.completionRate ?? 0).toFixed(0)}%
                           </Text>
                         </Box>
                       </Box>

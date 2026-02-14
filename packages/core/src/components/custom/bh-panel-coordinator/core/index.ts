@@ -1,8 +1,16 @@
+/**
+ * DB Reference: DBInterview from @rottay/recruiter
+ */
+
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBInterview } from '@rottay/recruiter';
 
 export type BhPanelCoordinatorPreset = 'timeline' | 'summary';
+
+/** Re-export for consumer convenience */
+export type { DBInterview };
 
 export type AggregationStrategy = 'average' | 'weighted_average' | 'max' | 'min' | 'consensus';
 export type Recommendation = 'strong_hire' | 'hire' | 'no_hire' | 'strong_no_hire';

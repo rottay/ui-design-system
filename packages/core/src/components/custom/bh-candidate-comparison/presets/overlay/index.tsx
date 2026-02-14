@@ -21,18 +21,18 @@ import {
   getAccentAwareLayout,
 } from '../../../helpers';
 import type { BhCandidateComparisonProps, ComparisonCandidate } from '../../core';
+import { getCandidateFullName } from '../../core';
 import type { DesignTokens } from '../../../../../types';
+import type { DBCandidate } from '@rottay/recruiter';
 
 const MOCK_CANDIDATES: ComparisonCandidate[] = [
   {
-    id: 'c-1', name: 'Sarah Johnson',
+    candidate: { id: 'c-1', firstName: 'Sarah', lastName: 'Johnson', yearsOfExperience: 8 } as unknown as DBCandidate,
     scores: { 'Technical': 92, 'Communication': 85, 'Leadership': 78, 'Problem Solving': 90, 'Culture Fit': 88 },
-    experience: '8 years', education: 'M.S. Computer Science', status: 'Final Round',
   },
   {
-    id: 'c-2', name: 'Michael Chen',
+    candidate: { id: 'c-2', firstName: 'Michael', lastName: 'Chen', yearsOfExperience: 6 } as unknown as DBCandidate,
     scores: { 'Technical': 88, 'Communication': 92, 'Leadership': 85, 'Problem Solving': 82, 'Culture Fit': 90 },
-    experience: '6 years', education: 'B.S. Software Engineering', status: 'Final Round',
   },
 ];
 
@@ -51,7 +51,7 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = MOCK_CANDIDATES,
+      candidates = [],
       dimensions,
       title = 'Candidate Radar',
       onCandidateSelect,
@@ -151,7 +151,7 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
                 height={size}
                 viewBox={`0 0 ${size} ${size}`}
                 role="img"
-                aria-label={`Radar chart comparing ${candidates.map(c => c.name).join(', ')}`}
+                aria-label={`Radar chart comparing ${candidates.map(c => getCandidateFullName(c.candidate)).join(', ')}`}
               >
                 {/* Grid rings */}
                 {[20, 40, 60, 80, 100].map(level => {
@@ -205,13 +205,13 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
                 })}
 
                 {/* Candidate polygons */}
-                {candidates.slice(0, 4).map((candidate, ci) => {
+                {candidates.slice(0, 4).map((compCandidate, ci) => {
                   const color = getCandidateColor(ci, t);
-                  const isActive = hoveredId === null || hoveredId === candidate.id || highlightedId === candidate.id;
+                  const isActive = hoveredId === null || hoveredId === compCandidate.candidate.id || highlightedId === compCandidate.candidate.id;
                   return (
-                    <g key={candidate.id} style={{ transition: `opacity ${t.motion.hover}` }} opacity={isActive ? 1 : 0.15}>
+                    <g key={compCandidate.candidate.id} style={{ transition: `opacity ${t.motion.hover}` }} opacity={isActive ? 1 : 0.15}>
                       <polygon
-                        points={getPolygonPoints(candidate.scores)}
+                        points={getPolygonPoints(compCandidate.scores)}
                         fill={color}
                         fillOpacity={0.1}
                         stroke={color}
@@ -219,7 +219,7 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
                         strokeLinejoin="round"
                       />
                       {dims.map((dim, di) => {
-                        const p = getPoint(di, candidate.scores[dim] ?? 0);
+                        const p = getPoint(di, compCandidate.scores[dim] ?? 0);
                         return (
                           <circle
                             key={di}
@@ -245,26 +245,28 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
               justifyContent: 'center',
               gap: t.spacing[3],
             }}>
-              {candidates.slice(0, 4).map((candidate, ci) => {
+              {candidates.slice(0, 4).map((compCandidate, ci) => {
                 const color = getCandidateColor(ci, t);
-                const isActive = hoveredId === null || hoveredId === candidate.id;
+                const cand = compCandidate.candidate;
+                const name = getCandidateFullName(cand);
+                const isActive = hoveredId === null || hoveredId === cand.id;
                 const avgScore = dims.length > 0
-                  ? Math.round(dims.reduce((s, d) => s + (candidate.scores[d] ?? 0), 0) / dims.length)
+                  ? Math.round(dims.reduce((s, d) => s + (compCandidate.scores[d] ?? 0), 0) / dims.length)
                   : 0;
 
                 return (
                   <Box
-                    key={candidate.id}
+                    key={cand.id}
                     tabIndex={0}
                     role="button"
-                    aria-label={`${candidate.name}: avg ${avgScore}`}
-                    onMouseEnter={() => setHoveredId(candidate.id)}
+                    aria-label={`${name}: avg ${avgScore}`}
+                    onMouseEnter={() => setHoveredId(cand.id)}
                     onMouseLeave={() => setHoveredId(null)}
-                    onClick={() => onCandidateSelect?.(candidate.id)}
+                    onClick={() => onCandidateSelect?.(cand.id)}
                     onKeyDown={(e: React.KeyboardEvent) => {
                       if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
-                        onCandidateSelect?.(candidate.id);
+                        onCandidateSelect?.(cand.id);
                       }
                     }}
                     style={{
@@ -287,7 +289,7 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
                       flexShrink: 0,
                     }} />
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[700] }}>
-                      {candidate.name}
+                      {name}
                     </Text>
                     <Text style={{
                       fontSize: t.typography.fontSize.xs,

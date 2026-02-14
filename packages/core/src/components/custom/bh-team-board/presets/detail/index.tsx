@@ -37,7 +37,7 @@ import {
 } from '../../../helpers';
 import type {
   BhTeamBoardProps,
-  TeamItem,
+  RecruiterTeam,
   TeamMember,
   TeamKpiData,
   SprintData,
@@ -45,13 +45,25 @@ import type {
 } from '../../core';
 
 /* ------------------------------------------------------------------ */
+/*  Helpers                                                             */
+/* ------------------------------------------------------------------ */
+function getTeamLeadName(team: RecruiterTeam): string {
+  return (team as any).leaderName ?? 'Unassigned';
+}
+
+function getTeamPerformanceScore(team: RecruiterTeam): number {
+  const perf = team.performanceMetrics as Record<string, any> | null;
+  return perf?.score ?? perf?.performanceScore ?? 0;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_TEAMS: TeamItem[] = [
-  { id: 't1', name: 'Engineering Hiring', leadName: 'Sofia Martinez', memberCount: 6, activeJobs: 12, capacityUsed: 78, capacityTotal: 100, performanceScore: 88 },
-  { id: 't2', name: 'Product & Design', leadName: 'James Chen', memberCount: 4, activeJobs: 8, capacityUsed: 65, capacityTotal: 100, performanceScore: 82 },
-  { id: 't3', name: 'GTM Recruiting', leadName: 'Priya Sharma', memberCount: 5, activeJobs: 10, capacityUsed: 92, capacityTotal: 100, performanceScore: 74 },
-  { id: 't4', name: 'Executive Search', leadName: 'Marcus Williams', memberCount: 3, activeJobs: 4, capacityUsed: 56, capacityTotal: 100, performanceScore: 91 },
+const MOCK_TEAMS: RecruiterTeam[] = [
+  { id: 't1', tenantId: 't', companyId: 'c', name: 'Engineering Hiring', code: 'ENG', type: 'technical', description: null, leaderId: 'l1', managerId: null, directorId: null, members: [], activeMemberCount: 6, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 12, currentUtilization: 78, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 88 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't2', tenantId: 't', companyId: 'c', name: 'Product & Design', code: 'PD', type: 'general', description: null, leaderId: 'l2', managerId: null, directorId: null, members: [], activeMemberCount: 4, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 8, currentUtilization: 65, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 82 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't3', tenantId: 't', companyId: 'c', name: 'GTM Recruiting', code: 'GTM', type: 'volume', description: null, leaderId: 'l3', managerId: null, directorId: null, members: [], activeMemberCount: 5, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 10, currentUtilization: 92, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 74 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 't4', tenantId: 't', companyId: 'c', name: 'Executive Search', code: 'EXEC', type: 'executive', description: null, leaderId: 'l4', managerId: null, directorId: null, members: [], activeMemberCount: 3, specializations: [], industries: [], locations: [], seniorityLevels: [], capacity: {}, maxActivePositions: 100, currentActivePositions: 4, currentUtilization: 56, assignedClientIds: [], primaryClientIds: [], performanceMetrics: { score: 91 }, kpiTargets: null, kpiActuals: null, monthlyPlacementTarget: 5, quarterlyRevenueTarget: '100000', status: 'active', tags: [], internalNotes: null, isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
 ];
 
 const MOCK_MEMBERS: TeamMember[] = [
@@ -147,7 +159,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
 
           {teams.map(tm => {
             const isSelected = selectedTeam === tm.id;
-            const capPct = (tm.capacityUsed / Math.max(tm.capacityTotal, 1)) * 100;
+            const capPct = tm.currentUtilization ?? 0;
             const capColor = capPct >= 90 ? t.colors.errorScale[500] : capPct >= 70 ? t.colors.warningScale[500] : t.colors.successScale[500];
             return (
               <Box
@@ -174,7 +186,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                   <ChevronRight size={14} color={t.colors.neutral[400]} />
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500], marginTop: t.spacing[1], display: 'block' }}>
-                  {tm.memberCount} members -- {tm.activeJobs} jobs
+                  {tm.activeMemberCount ?? 0} members -- {tm.currentActivePositions ?? 0} jobs
                 </Text>
                 <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginTop: t.spacing[2] }}>
                   <Box style={{ flex: 1, height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
@@ -199,20 +211,20 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                     {activeTeam.name}
                   </Text>
                   <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[500]}}>
-                    Led by {activeTeam.leadName} -- Performance: {activeTeam.performanceScore}/100
+                    Led by {getTeamLeadName(activeTeam)} -- Performance: {getTeamPerformanceScore(activeTeam)}/100
                   </Text>
                 </Box>
                 <Box style={{
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                   borderRadius: badgeRadius,
-                  backgroundColor: activeTeam.performanceScore >= 85 ? t.colors.successScale[50] : activeTeam.performanceScore >= 70 ? t.colors.warningScale[50] : t.colors.errorScale[50],
+                  backgroundColor: getTeamPerformanceScore(activeTeam) >= 85 ? t.colors.successScale[50] : getTeamPerformanceScore(activeTeam) >= 70 ? t.colors.warningScale[50] : t.colors.errorScale[50],
                 }}>
                   <Text style={{
                     fontSize: t.typography.fontSize.sm,
                     fontWeight: t.typography.fontWeight.bold,
-                    color: activeTeam.performanceScore >= 85 ? t.colors.successScale[600] : activeTeam.performanceScore >= 70 ? t.colors.warningScale[600] : t.colors.errorScale[600],
+                    color: getTeamPerformanceScore(activeTeam) >= 85 ? t.colors.successScale[600] : getTeamPerformanceScore(activeTeam) >= 70 ? t.colors.warningScale[600] : t.colors.errorScale[600],
                   }}>
-                    {activeTeam.performanceScore}
+                    {getTeamPerformanceScore(activeTeam)}
                   </Text>
                 </Box>
               </Box>
@@ -238,7 +250,7 @@ export const DetailBhTeamBoard = createPreset<BhTeamBoardProps>({
                   <Text style={{ ...sectionLabel, marginBottom: t.spacing[1], display: 'block' }}>Satisfaction</Text>
                   <Box style={{ display: 'flex', alignItems: 'baseline', gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize['2xl'], fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                      {teamKpis.satisfactionScore.toFixed(1)}
+                      {(teamKpis.satisfactionScore ?? 0).toFixed(1)}
                     </Text>
                     <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/5.0</Text>
                   </Box>

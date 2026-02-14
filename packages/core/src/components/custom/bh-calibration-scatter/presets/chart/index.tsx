@@ -33,7 +33,7 @@ import type {
   ScatterPoint,
   CalibrationStats,
 } from '../../core';
-import { BH_CALIBRATION_SCATTER_DEFAULTS } from '../../core';
+import { BH_CALIBRATION_SCATTER_DEFAULTS, n } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -55,22 +55,24 @@ function getDeviationBg(deviation: number, t: DesignTokens): string {
 }
 
 function computeRegressionLine(points: ScatterPoint[]): { slope: number; intercept: number } | null {
-  const n = points.length;
-  if (n < 2) return null;
+  const len = points.length;
+  if (len < 2) return null;
 
   let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
   for (const p of points) {
-    sumX += p.humanScore;
-    sumY += p.aiScore;
-    sumXY += p.humanScore * p.aiScore;
-    sumXX += p.humanScore * p.humanScore;
+    const hs = n(p.humanScore);
+    const as = n(p.aiScore);
+    sumX += hs;
+    sumY += as;
+    sumXY += hs * as;
+    sumXX += hs * hs;
   }
 
-  const denom = n * sumXX - sumX * sumX;
+  const denom = len * sumXX - sumX * sumX;
   if (Math.abs(denom) < 1e-10) return null;
 
-  const slope = (n * sumXY - sumX * sumY) / denom;
-  const intercept = (sumY - slope * sumX) / n;
+  const slope = (len * sumXY - sumX * sumY) / denom;
+  const intercept = (sumY - slope * sumX) / len;
   return { slope, intercept };
 }
 
@@ -121,8 +123,8 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      points = MOCK_POINTS,
-      stats = MOCK_STATS,
+      points = [],
+      stats = { correlation: 0, meanDeviation: 0, sampleCount: 0, agreementRate: 0 },
       onPointClick,
       selectedPointId,
       showRegressionLine = BH_CALIBRATION_SCATTER_DEFAULTS.showRegressionLine,
@@ -173,10 +175,10 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
     );
 
     const statItems = useMemo(() => [
-      { label: 'Correlation', value: stats.correlation.toFixed(2), icon: TrendingUp, color: t.colors.primaryScale },
-      { label: 'Mean Deviation', value: stats.meanDeviation.toFixed(2), icon: Target, color: stats.meanDeviation <= 0.5 ? t.colors.successScale : t.colors.warningScale },
-      { label: 'Samples', value: String(stats.sampleCount), icon: BarChart3, color: t.colors.infoScale },
-      { label: 'Agreement', value: `${(stats.agreementRate * 100).toFixed(0)}%`, icon: CheckCircle, color: stats.agreementRate >= 0.7 ? t.colors.successScale : t.colors.warningScale },
+      { label: 'Correlation', value: n(stats.correlation).toFixed(2), icon: TrendingUp, color: t.colors.primaryScale },
+      { label: 'Mean Deviation', value: n(stats.meanDeviation).toFixed(2), icon: Target, color: n(stats.meanDeviation) <= 0.5 ? t.colors.successScale : t.colors.warningScale },
+      { label: 'Samples', value: String(n(stats.sampleCount)), icon: BarChart3, color: t.colors.infoScale },
+      { label: 'Agreement', value: `${(n(stats.agreementRate) * 100).toFixed(0)}%`, icon: CheckCircle, color: n(stats.agreementRate) >= 0.7 ? t.colors.successScale : t.colors.warningScale },
     ], [stats, t]);
 
     return (
@@ -322,14 +324,14 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
                 {points.map((p) => {
                   const isHovered = hoveredPoint === p.id;
                   const isSelected = selectedPointId === p.id;
-                  const pointColor = getDeviationColor(p.deviation, t);
+                  const pointColor = getDeviationColor(n(p.deviation), t);
                   const r = isHovered || isSelected ? 7 : 5;
 
                   return (
                     <g key={p.id}>
                       <circle
-                        cx={toX(p.humanScore)}
-                        cy={toY(p.aiScore)}
+                        cx={toX(n(p.humanScore))}
+                        cy={toY(n(p.aiScore))}
                         r={r}
                         fill={pointColor}
                         stroke={isSelected ? t.colors.neutral[900] : t.colors.common.white}
@@ -343,7 +345,7 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
                         onClick={() => handlePointClick(p.id)}
                         role="button"
                         tabIndex={0}
-                        aria-label={`${p.candidateName}: Human ${p.humanScore}, AI ${p.aiScore}, deviation ${p.deviation.toFixed(2)}`}
+                        aria-label={`${p.candidateName}: Human ${n(p.humanScore)}, AI ${n(p.aiScore)}, deviation ${n(p.deviation).toFixed(2)}`}
                       />
                     </g>
                   );
@@ -354,8 +356,8 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
               {hoveredData && (
                 <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1],
                   position: 'absolute',
-                  top: toY(hoveredData.aiScore) - 80,
-                  left: toX(hoveredData.humanScore) + 12,
+                  top: toY(n(hoveredData.aiScore)) - 80,
+                  left: toX(n(hoveredData.humanScore)) + 12,
                   ...createCardStyle(t, { elevation: 'md', glass: isGlass }),
                   padding: t.spacing[3],
                   minWidth: 180,
@@ -380,13 +382,13 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>Human</Text>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                        {hoveredData.humanScore.toFixed(1)}
+                        {n(hoveredData.humanScore).toFixed(1)}
                       </Text>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400], display: 'block' }}>AI</Text>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>
-                        {hoveredData.aiScore.toFixed(1)}
+                        {n(hoveredData.aiScore).toFixed(1)}
                       </Text>
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
@@ -394,9 +396,9 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
                       <Text style={{
                         fontSize: t.typography.fontSize.sm,
                         fontWeight: t.typography.fontWeight.bold,
-                        color: getDeviationColor(hoveredData.deviation, t),
+                        color: getDeviationColor(n(hoveredData.deviation), t),
                       }}>
-                        {hoveredData.deviation > 0 ? '+' : ''}{hoveredData.deviation.toFixed(2)}
+                        {n(hoveredData.deviation) > 0 ? '+' : ''}{n(hoveredData.deviation).toFixed(2)}
                       </Text>
                     </Box>
                   </Box>

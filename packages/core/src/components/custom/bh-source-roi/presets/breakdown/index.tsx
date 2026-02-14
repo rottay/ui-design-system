@@ -287,7 +287,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                   role="row"
                   tabIndex={0}
                   aria-expanded={isExpanded}
-                  aria-label={`${src.name}: ${src.hireRate.toFixed(1)}% hire rate, ${formatCurrency(src.costPerHire)} per hire`}
+                  aria-label={`${src.name}: ${(src.hireRate ?? 0).toFixed(1)}% hire rate, ${formatCurrency(src.costPerHire)} per hire`}
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 1fr 1fr 80px',
@@ -318,7 +318,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
                   {/* Candidates */}
                   <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800] }}>
-                      {src.candidateCount.toLocaleString()}
+                      {(src.candidateCount ?? 0).toLocaleString()}
                     </Text>
                     <Box style={{ marginTop: t.spacing[1], height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
                       <Box style={{ height: '100%', width: `${(src.candidateCount / maxCandidates) * 100}%`, borderRadius: t.borderRadius.full, backgroundColor: t.colors.primaryScale[400], transition: `width ${t.motion.hover}` }} />
@@ -327,7 +327,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
 
                   {/* Hire rate */}
                   <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: src.hireRate >= 10 ? t.colors.successScale[600] : t.colors.neutral[700] }}>
-                    {src.hireRate.toFixed(1)}%
+                    {(src.hireRate ?? 0).toFixed(1)}%
                   </Text>
 
                   {/* Cost per hire */}

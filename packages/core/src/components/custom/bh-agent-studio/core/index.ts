@@ -1,16 +1,23 @@
 /**
  * BhAgentStudio - Core Interface
  * AI Agent Builder for BitHire ATS platform
+ *
+ * Types imported from @rottay/ia-chat (single source of truth).
+ * DBAgent.type enum: 'conversation' | 'phone' | 'chat'
+ * DBAgent.provider enum: 'vapi' | 'retell' | 'bland' | 'elevenlabs' | 'openai' | 'anthropic' | 'groq' | 'google' | 'mistral' | 'azure'
  */
 
-import type { ReactNode, CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBAgent } from '@rottay/ia-chat';
 
 export type BhAgentStudioPreset = 'full' | 'guided';
 
-export type AgentType = 'conversational' | 'phone' | 'chat';
+/** Maps to DBAgent.type enum values */
+export type AgentType = 'conversation' | 'phone' | 'chat';
 
+/** Subset of DBAgent.provider values relevant for voice */
 export type VoiceProvider = 'elevenlabs' | 'azure' | 'google';
 
 export interface PersonalityTrait {
@@ -106,7 +113,7 @@ export interface BhAgentStudioProps extends EngineAwareProps {
 export const DEFAULT_AGENT_DATA: AgentData = {
   name: '',
   description: '',
-  type: 'conversational',
+  type: 'conversation',
   language: 'English',
   accent: 'US',
   voiceProvider: 'elevenlabs',
@@ -152,8 +159,8 @@ export const BH_AGENT_STUDIO_DEFAULTS: Partial<BhAgentStudioProps> = {
 
 export function getAgentTypeConfig(tokens: DesignTokens) {
   return {
-    conversational: {
-      label: 'Conversational',
+    conversation: {
+      label: 'Conversation',
       description: 'Free-form dialogue agent for screening and assessments',
       color: tokens.colors.primaryScale[500],
       bgColor: tokens.colors.primaryScale[50],

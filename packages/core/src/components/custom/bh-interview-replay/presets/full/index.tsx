@@ -250,11 +250,11 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
                       <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[400] }}>{entry.timestamp}</Text>
                       {entry.confidence !== undefined && (
                         <Box style={{
-                          ...createBadgeStyle(tokens, entry.confidence >= 0.7 ? 'success' : entry.confidence >= 0.4 ? 'warning' : 'error'),
+                          ...createBadgeStyle(tokens, (entry.confidence ?? 0) >= 0.7 ? 'success' : (entry.confidence ?? 0) >= 0.4 ? 'warning' : 'error'),
                           borderRadius: badgeRadius,
                           padding: `0 ${tokens.spacing[1]}px`,
                         }}>
-                          <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{(entry.confidence * 100).toFixed(0)}%</Text>
+                          <Text style={{ fontSize: tokens.typography.fontSize.xs }}>{((entry.confidence ?? 0) * 100).toFixed(0)}%</Text>
                         </Box>
                       )}
                     </Box>

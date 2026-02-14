@@ -1,17 +1,27 @@
 /**
  * BhInterviewPrep - Core Interface
  * Interview Preparation Briefing for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * Prep-specific types (InterviewBrief, CandidateBrief, etc.) are UI-only.
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBInterview } from '@rottay/recruiter';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 export type BhInterviewPrepPreset = 'standard';
 
 export interface InterviewBrief {
   jobTitle: string;
   stageName: string;
-  type: 'ai' | 'human';
+  /** Interview mode: 'ai' for AI, 'human' for human, or DB modes */
+  type: 'ai' | 'human' | 'ai_voice' | 'ai_chat' | 'human_video' | 'human_phone' | 'in_person';
   dateTime: Date;
   estimatedDuration: number;
 }
@@ -47,6 +57,9 @@ export interface ChecklistItem {
 
 export interface BhInterviewPrepProps extends EngineAwareProps {
   preset?: BhInterviewPrepPreset;
+
+  /** Optional DB interview for pre-populating data */
+  interview?: DBInterview;
 
   /** Interview details and logistics */
   interviewBrief?: InterviewBrief;

@@ -13,8 +13,8 @@ export {
   type BhProctoringEventCardPreset,
   type ProctoringEventType,
   type ProctoringEventSeverity,
-  type ProctoringEventDetail,
-  type ProctoringEventMetadata,
+  type ProctoringEventCardView,
+  type ProctoringEventSelect,
   BH_PROCTORING_EVENT_CARD_DEFAULTS,
 } from './core';
 

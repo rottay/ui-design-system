@@ -10,6 +10,7 @@ import { BH_INTERVIEW_REPLAY_SPLIT_PRESETS } from './presets';
 export {
   type BhInterviewReplaySplitProps,
   type BhInterviewReplaySplitPreset,
+  type RecruiterInterview,
   type ReplayTranscriptSegment,
   type ReplayEvidenceMarker,
   BH_INTERVIEW_REPLAY_SPLIT_DEFAULTS,

@@ -88,21 +88,45 @@ function getEventTypeLabel(type: ProctoringEventType): string {
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
 /* ------------------------------------------------------------------ */
 
-const MOCK_EVENT = {
+/** Flat display shape resolved from ProctoringAlertEvent + its nested DB entity */
+interface ResolvedAlertEvent {
+  id: string;
+  candidateName: string;
+  eventType: ProctoringEventType;
+  severity: ProctoringEventSeverity;
+  timestamp: Date;
+  summary: string;
+}
+
+const MOCK_EVENT: ResolvedAlertEvent = {
   id: 'pe-alert-1',
   candidateName: 'Sarah Johnson',
-  eventType: 'screen_share' as const,
-  severity: 'critical' as const,
+  eventType: 'screen_share',
+  severity: 'critical',
   timestamp: new Date(Date.now() - 30000),
   summary: 'Screen sharing detected during active coding assessment',
 };
+
+function resolveAlertEvent(raw: BhProctoringAlertProps['event']): ResolvedAlertEvent {
+  if (!raw) return MOCK_EVENT;
+  // Support both flat (mock/inline) and nested (ProctoringAlertEvent) shapes
+  const flat = raw as any;
+  return {
+    id: flat.id ?? flat.event?.id ?? 'unknown',
+    candidateName: flat.candidateName ?? 'Unknown',
+    eventType: flat.eventType ?? flat.event?.eventType ?? 'tab_switch',
+    severity: flat.severity ?? flat.event?.severity ?? 'low',
+    timestamp: flat.timestamp ?? flat.event?.timestamp ?? new Date(),
+    summary: flat.summary ?? '',
+  };
+}
 
 /* ================================================================== */
 /*  Banner Preset                                                      */
@@ -118,7 +142,7 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event = MOCK_EVENT,
+      event: rawEvent,
       onReview,
       onDismiss,
       onClose,
@@ -126,7 +150,7 @@ export const BannerBhProctoringAlert = createPreset<BhProctoringAlertProps>({
       style,
     } = props;
 
-
+    const event = useMemo(() => resolveAlertEvent(rawEvent), [rawEvent]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const EventIcon = useMemo(() => getEventTypeIcon(event.eventType), [event.eventType]);
     const sevColor = useMemo(() => getSeverityColor(event.severity, t), [event.severity, t]);

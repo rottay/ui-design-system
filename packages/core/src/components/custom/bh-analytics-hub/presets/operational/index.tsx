@@ -184,8 +184,8 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <SectionTitle>Conversion Funnel</SectionTitle>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
                 {funnelData.map((stage, i) => {
-                  const maxW = Math.max(...funnelData.map((s) => s.count), 1);
-                  const pct = (stage.count / maxW) * 100;
+                  const maxW = Math.max(...funnelData.map((s) => s.count ?? 0), 1);
+                  const pct = ((stage.count ?? 0) / maxW) * 100;
                   const colors = [t.colors.primaryScale[500], t.colors.primaryScale[400], t.colors.infoScale[400], t.colors.infoScale[500], t.colors.warningScale[400], t.colors.successScale[400], t.colors.successScale[500]];
                   return (
                     <Box key={stage.name} style={{ display: 'grid', gridTemplateColumns: '110px 1fr 50px 60px', alignItems: 'center', gap: t.spacing[2] }}>
@@ -193,10 +193,10 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                       <Box style={{ height: 24, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden', position: 'relative' as const }}>
                         <Box style={{ position: 'absolute' as const, left: 0, top: 0, height: '100%', width: `${pct}%`, backgroundColor: colors[i % colors.length], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
                       </Box>
-                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{stage.count.toLocaleString()}</Text>
+                      <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>{(stage.count ?? 0).toLocaleString()}</Text>
                       {i > 0 && (
-                        <Box style={{ ...createBadgeStyle(t, stage.conversionPercent >= 50 ? 'success' : stage.conversionPercent >= 30 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
-                          {stage.conversionPercent}%
+                        <Box style={{ ...createBadgeStyle(t, (stage.conversionPercent ?? 0) >= 50 ? 'success' : (stage.conversionPercent ?? 0) >= 30 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
+                          {stage.conversionPercent ?? 0}%
                         </Box>
                       )}
                     </Box>
@@ -211,8 +211,8 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                 {funnelData.slice(0, -1).map((stage, i) => {
                   const next = funnelData[i + 1];
-                  const dropped = stage.count - next.count;
-                  const dropRate = Math.round((dropped / stage.count) * 100);
+                  const dropped = (stage.count ?? 0) - (next.count ?? 0);
+                  const dropRate = (stage.count ?? 0) > 0 ? Math.round((dropped / (stage.count ?? 1)) * 100) : 0;
                   return (
                     <Box key={stage.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], padding: t.spacing[3], borderRadius: t.borderRadius.md, backgroundColor: dropRate > 50 ? t.colors.errorScale[50] : t.colors.neutral[50] }}>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flex: 1 }}>
@@ -238,16 +238,16 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <SectionTitle>Stage Velocity vs SLA</SectionTitle>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[3] }}>
                 {velocityData.map((v) => {
-                  const utilization = (v.avgDays / v.slaLimit) * 100;
-                  const isOver = v.avgDays > v.slaLimit;
+                  const utilization = ((v.avgDays ?? 0) / Math.max(v.slaLimit ?? 1, 1)) * 100;
+                  const isOver = (v.avgDays ?? 0) > (v.slaLimit ?? 0);
                   const barColor = isOver ? t.colors.errorScale[500] : utilization > 80 ? t.colors.warningScale[500] : t.colors.successScale[500];
                   return (
                     <Box key={v.stage}>
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[1] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[700] }}>{v.stage}</Text>
                         <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: isOver ? t.colors.errorScale[700] : t.colors.neutral[900] }}>{v.avgDays}d</Text>
-                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/ {v.slaLimit}d SLA</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: isOver ? t.colors.errorScale[700] : t.colors.neutral[900] }}>{v.avgDays ?? 0}d</Text>
+                          <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>/ {v.slaLimit ?? 0}d SLA</Text>
                           {isOver && <AlertTriangle size={14} color={t.colors.errorScale[500]} />}
                           {!isOver && <CheckCircle2 size={14} color={t.colors.successScale[500]} />}
                         </Box>
@@ -267,19 +267,19 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
                 {timeToHireData.map((job) => (
                   <Box key={job.job}>
-                    <Box onClick={() => setExpandedJob(expandedJob === job.job ? null : job.job)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[3]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], cursor: 'pointer', ...hoverStyles.base }}>
+                    <Box onClick={() => setExpandedJob(expandedJob === (job.job ?? '') ? null : (job.job ?? ''))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[3]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], cursor: 'pointer', ...hoverStyles.base }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{job.job}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: job.avgDays > 30 ? t.colors.warningScale[700] : t.colors.neutral[900] }}>{job.avgDays}d</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: (job.avgDays ?? 0) > 30 ? t.colors.warningScale[700] : t.colors.neutral[900] }}>{job.avgDays ?? 0}d</Text>
                         <ChevronDown size={14} color={t.colors.neutral[400]} style={{ transform: expandedJob === job.job ? 'rotate(180deg)' : 'none', transition: `transform ${t.motion.hover}` } as any} />
                       </Box>
                     </Box>
                     {expandedJob === job.job && (
                       <Box style={{ padding: `${t.spacing[2]}px ${t.spacing[4]}px`, display: 'flex', flexDirection: 'column', gap: t.spacing[1] }}>
-                        {job.stages.map((s) => (
-                          <Box key={s.name} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], justifyContent: 'space-between' }}>
-                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{s.name}</Text>
-                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{s.avgDays}d</Text>
+                        {(job.stages ?? []).map((s) => (
+                          <Box key={s.name ?? ''} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], justifyContent: 'space-between' }}>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600] }}>{s.name ?? ''}</Text>
+                            <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700] }}>{s.avgDays ?? 0}d</Text>
                           </Box>
                         ))}
                       </Box>
@@ -298,20 +298,20 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <SectionTitle>Cost per Hire by Category</SectionTitle>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[4] }}>
                 {costData.map((cat) => {
-                  const maxCost = Math.max(...costData.map((c) => c.costPerHire), 1);
+                  const maxCost = Math.max(...costData.map((c) => c.costPerHire ?? 0), 1);
                   return (
                     <Box key={cat.category}>
                       <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[2] }}>
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{cat.category}</Text>
-                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>${cat.costPerHire.toLocaleString()}</Text>
+                        <Text style={{ fontSize: t.typography.fontSize.lg, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[900] }}>${(cat.costPerHire ?? 0).toLocaleString()}</Text>
                       </Box>
                       <Box style={{ height: 12, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.sm, overflow: 'hidden' }}>
-                        <Box style={{ height: '100%', width: `${(cat.costPerHire / maxCost) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
+                        <Box style={{ height: '100%', width: `${((cat.costPerHire ?? 0) / maxCost) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.sm, transition: `width ${t.motion.hover}` }} />
                       </Box>
                       <Box style={{ display: 'flex', gap: t.spacing[2], marginTop: t.spacing[2], flexWrap: 'wrap' as const }}>
-                        {cat.breakdown.map((b) => (
-                          <Box key={b.item} style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
-                            {b.item}: ${b.cost}
+                        {(cat.breakdown ?? []).map((b) => (
+                          <Box key={b.item ?? ''} style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>
+                            {b.item ?? ''}: ${b.cost ?? 0}
                           </Box>
                         ))}
                       </Box>
@@ -360,13 +360,13 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
                 ))}
               </Box>
               {sourceData.map((src) => {
-                const effectiveness = Math.round((src.qualityScore * src.candidateCount) / 100);
-                const maxEff = Math.max(...sourceData.map((s) => Math.round((s.qualityScore * s.candidateCount) / 100)), 1);
+                const effectiveness = Math.round(((src.qualityScore ?? 0) * (src.candidateCount ?? 0)) / 100);
+                const maxEff = Math.max(...sourceData.map((s) => Math.round(((s.qualityScore ?? 0) * (s.candidateCount ?? 0)) / 100)), 1);
                 return (
                   <Box key={src.source} style={{ display: 'grid', gridTemplateColumns: '1fr 100px 100px 120px', gap: t.spacing[3], padding: `${t.spacing[3]}px 0`, borderBottom: `1px solid ${t.colors.neutral[100]}`, alignItems: 'center' }}>
                     <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{src.source}</Text>
-                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{src.candidateCount}</Text>
-                    <Box style={{ ...createBadgeStyle(t, src.qualityScore >= 80 ? 'success' : src.qualityScore >= 70 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{src.qualityScore}/100</Box>
+                    <Text style={{ fontSize: t.typography.fontSize.sm, color: t.colors.neutral[700] }}>{src.candidateCount ?? 0}</Text>
+                    <Box style={{ ...createBadgeStyle(t, (src.qualityScore ?? 0) >= 80 ? 'success' : (src.qualityScore ?? 0) >= 70 ? 'warning' : 'error'), borderRadius: badgeRadius, fontSize: t.typography.fontSize.xs }}>{src.qualityScore ?? 0}/100</Box>
                     <Box style={{ height: 8, backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.full, overflow: 'hidden' }}>
                       <Box style={{ height: '100%', width: `${(effectiveness / maxEff) * 100}%`, backgroundColor: t.colors.primaryScale[400], borderRadius: t.borderRadius.full }} />
                     </Box>

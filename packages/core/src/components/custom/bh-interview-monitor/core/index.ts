@@ -1,10 +1,19 @@
 /**
  * BhInterviewMonitor - Core Interface
  * Real-Time Interview Dashboard for BitHire ATS platform
+ *
+ * Types are imported from @rottay/recruiter (single source of truth).
+ * Monitor-specific types (ActiveSession, ProviderStatus, etc.) are UI-only.
  */
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
+import type { DBInterview } from '@rottay/recruiter';
+
+/**
+ * Re-export the DB type for convenience.
+ */
+export type RecruiterInterview = DBInterview;
 
 export type BhInterviewMonitorPreset = 'standard';
 

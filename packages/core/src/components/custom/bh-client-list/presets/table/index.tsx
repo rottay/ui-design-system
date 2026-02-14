@@ -33,18 +33,47 @@ import {
   createEntranceAnimation,
   createEmptyStateStyle,
 } from '../../../helpers';
-import type { BhClientListProps, ClientListItem } from '../../core';
+import type { BhClientListProps, RecruiterClient } from '../../core';
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                             */
+/* ------------------------------------------------------------------ */
+function getClientName(client: RecruiterClient): string {
+  return client.displayName ?? client.clientCompanyName ?? '';
+}
+
+function getTierBadge(tier: string | null | undefined) {
+  switch (tier) {
+    case 'enterprise': return { color: 'primary' as const, icon: Crown };
+    case 'premium': return { color: 'info' as const, icon: Shield };
+    case 'strategic': return { color: 'warning' as const, icon: Crown };
+    case 'standard':
+    default: return { color: 'secondary' as const, icon: Zap };
+  }
+}
+
+function getStatusBadge(status: string | null | undefined) {
+  switch (status) {
+    case 'active': return { color: 'success' as const, icon: CheckCircle2 };
+    case 'suspended': return { color: 'warning' as const, icon: AlertTriangle };
+    case 'terminated':
+    case 'archived': return { color: 'error' as const, icon: Clock };
+    case 'draft':
+    case 'pending_approval':
+    default: return { color: 'secondary' as const, icon: Clock };
+  }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
 /* ------------------------------------------------------------------ */
-const MOCK_CLIENTS: ClientListItem[] = [
-  { id: 'c1', name: 'Acme Corporation', tier: 'enterprise', contractStatus: 'active', openPositions: 12, totalHires: 48, revenue: 125000 },
-  { id: 'c2', name: 'TechStart Inc.', tier: 'starter', contractStatus: 'active', openPositions: 3, totalHires: 8, revenue: 15000 },
-  { id: 'c3', name: 'GlobalBank Ltd.', tier: 'enterprise', contractStatus: 'expiring', openPositions: 8, totalHires: 35, revenue: 98000 },
-  { id: 'c4', name: 'Velocity Partners', tier: 'business', contractStatus: 'active', openPositions: 6, totalHires: 22, revenue: 55000 },
-  { id: 'c5', name: 'NovaTech Solutions', tier: 'business', contractStatus: 'expired', openPositions: 0, totalHires: 15, revenue: 42000 },
-  { id: 'c6', name: 'Pinnacle Health', tier: 'enterprise', contractStatus: 'active', openPositions: 15, totalHires: 62, revenue: 180000 },
+const MOCK_CLIENTS: RecruiterClient[] = [
+  { id: 'c1', tenantId: 't', type: 'company', firstName: null, lastName: null, clientCompanyName: 'Acme Corporation', displayName: 'Acme Corporation', tier: 'enterprise', contractType: 'retained', status: 'active', openPositions: 12, totalPositions: 20, totalRevenue: '125000', isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 'c2', tenantId: 't', type: 'company', firstName: null, lastName: null, clientCompanyName: 'TechStart Inc.', displayName: 'TechStart Inc.', tier: 'standard', contractType: 'contingency', status: 'active', openPositions: 3, totalPositions: 5, totalRevenue: '15000', isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 'c3', tenantId: 't', type: 'company', firstName: null, lastName: null, clientCompanyName: 'GlobalBank Ltd.', displayName: 'GlobalBank Ltd.', tier: 'enterprise', contractType: 'exclusive', status: 'suspended', openPositions: 8, totalPositions: 15, totalRevenue: '98000', isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 'c4', tenantId: 't', type: 'company', firstName: null, lastName: null, clientCompanyName: 'Velocity Partners', displayName: 'Velocity Partners', tier: 'premium', contractType: 'contingency', status: 'active', openPositions: 6, totalPositions: 10, totalRevenue: '55000', isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 'c5', tenantId: 't', type: 'company', firstName: null, lastName: null, clientCompanyName: 'NovaTech Solutions', displayName: 'NovaTech Solutions', tier: 'premium', contractType: 'hybrid', status: 'terminated', openPositions: 0, totalPositions: 8, totalRevenue: '42000', isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
+  { id: 'c6', tenantId: 't', type: 'company', firstName: null, lastName: null, clientCompanyName: 'Pinnacle Health', displayName: 'Pinnacle Health', tier: 'enterprise', contractType: 'retained', status: 'active', openPositions: 15, totalPositions: 25, totalRevenue: '180000', isActive: true, createdBy: 'u1', updatedBy: 'u1', createdAt: new Date(), updatedAt: new Date() } as any,
 ];
 
 /* ------------------------------------------------------------------ */
@@ -79,21 +108,7 @@ export const TableBhClientList = createPreset<BhClientListProps>({
     const handleClientClick = useCallback((clientId: string) => { onClientClick?.(clientId); }, [onClientClick]);
     const handleSortChange = useCallback((field: string) => { onSortChange?.(field); }, [onSortChange]);
 
-    const tierBadge = useCallback((tierVal: ClientListItem['tier']) => {
-      switch (tierVal) {
-        case 'enterprise': return { color: 'primary' as const, icon: Crown };
-        case 'business': return { color: 'info' as const, icon: Shield };
-        case 'starter': return { color: 'secondary' as const, icon: Zap };
-      }
-    }, []);
-
-    const contractBadge = useCallback((status: ClientListItem['contractStatus']) => {
-      switch (status) {
-        case 'active': return { color: 'success' as const, icon: CheckCircle2 };
-        case 'expiring': return { color: 'warning' as const, icon: AlertTriangle };
-        case 'expired': return { color: 'error' as const, icon: Clock };
-      }
-    }, []);
+    // Use top-level helper functions for tier/status badge rendering
 
     const formatRevenue = useCallback((amount: number) => {
       if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
@@ -134,7 +149,7 @@ export const TableBhClientList = createPreset<BhClientListProps>({
     const columns = [
       { key: 'name', label: 'Client', width: '2fr' },
       { key: 'tier', label: 'Tier', width: '100px' },
-      { key: 'contractStatus', label: 'Contract', width: '110px' },
+      { key: 'status', label: 'Status', width: '110px' },
       { key: 'openPositions', label: 'Open Roles', width: '90px' },
       { key: 'totalHires', label: 'Hires', width: '70px' },
       { key: 'revenue', label: 'Revenue', width: '100px' },
@@ -200,8 +215,9 @@ export const TableBhClientList = createPreset<BhClientListProps>({
         {clients.map((client, idx) => {
           const isSelected = selectedClientId === client.id;
           const entrance = createEntranceAnimation(t, { index: idx });
-          const tb = tierBadge(client.tier);
-          const cb = contractBadge(client.contractStatus);
+          const clientDisplayName = getClientName(client);
+          const tb = getTierBadge(client.tier);
+          const cb = getStatusBadge(client.status);
           const TierIcon = tb.icon;
           const ContractIcon = cb.icon;
 
@@ -210,7 +226,7 @@ export const TableBhClientList = createPreset<BhClientListProps>({
               key={client.id}
               role="button"
               tabIndex={0}
-              aria-label={`View client ${client.name}`}
+              aria-label={`View client ${clientDisplayName}`}
               aria-selected={isSelected}
               onClick={() => handleClientClick(client.id)}
               onKeyDown={(e: React.KeyboardEvent) => {
@@ -244,11 +260,11 @@ export const TableBhClientList = createPreset<BhClientListProps>({
                   flexShrink: 0,
                 }}>
                   <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold }}>
-                    {client.name.charAt(0)}
+                    {(clientDisplayName || '').charAt(0)}
                   </Text>
                 </Box>
                 <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, minWidth: 0 }}>
-                  {client.name}
+                  {clientDisplayName}
                 </Text>
               </Box>
 
@@ -256,7 +272,7 @@ export const TableBhClientList = createPreset<BhClientListProps>({
               <Box>
                 <Box style={{ ...createBadgeStyle(t, tb.color), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <TierIcon size={10} />
-                  <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.tier}</Text>
+                  <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.tier ?? 'standard'}</Text>
                 </Box>
               </Box>
 
@@ -264,23 +280,23 @@ export const TableBhClientList = createPreset<BhClientListProps>({
               <Box>
                 <Box style={{ ...createBadgeStyle(t, cb.color), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <ContractIcon size={10} />
-                  <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.contractStatus}</Text>
+                  <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{client.status ?? 'draft'}</Text>
                 </Box>
               </Box>
 
               {/* Open positions */}
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[700], textAlign: 'center' as const }}>
-                {client.openPositions}
+                {client.openPositions ?? 0}
               </Text>
 
               {/* Hires */}
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[900], textAlign: 'center' as const }}>
-                {client.totalHires}
+                {client.totalPositions ?? 0}
               </Text>
 
               {/* Revenue */}
               <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.bold, color: t.colors.neutral[800] }}>
-                {formatRevenue(client.revenue)}
+                {formatRevenue(Number(client.totalRevenue ?? 0))}
               </Text>
 
               {/* Chevron */}

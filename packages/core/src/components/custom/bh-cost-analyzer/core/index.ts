@@ -1,24 +1,54 @@
+/**
+ * BhCostAnalyzer - Core Interface
+ *
+ * Types imported from @rottay/ia-chat (single source of truth).
+ * DBUsage fields: cost, currency, quantity, requestCount, etc.
+ * DBProviderPricing fields: unitPrice, currency, providerCode, metricType, etc.
+ * DBPricingConfig fields: markupPercent, discountPercent, tokenRate, etc.
+ * Token types from @rottay/recruiter: TokenBalance.currentBalance, etc.
+ */
+
 import type { CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../core/types';
 import type { DesignTokens } from '../../../../core/types/tokens';
+import type { DBUsage, DBProviderPricing, DBPricingConfig } from '@rottay/ia-chat';
+import type { TokenBalance as DBTokenBalance, DBSearchCostLog } from '@rottay/recruiter';
 
 export type BhCostAnalyzerPreset = 'dashboard' | 'breakdown';
+
+/**
+ * Re-export the DB type for convenience.
+ * DBSearchCostLog tracks position search expenses (labor, advertising, tools, etc.).
+ */
+export type RecruiterSearchCostLog = DBSearchCostLog;
 
 export type CostCategory = 'interview' | 'evaluation' | 'rubric' | 'email' | 'other';
 export type TrendDirection = 'up' | 'down' | 'flat';
 
+/**
+ * Provider cost - aggregated from DBUsage records per provider.
+ */
 export interface ProviderCost {
+  /** DBProvider.id */
   providerId: string;
+  /** DBProvider.name */
   providerName: string;
+  /** Sum of DBUsage.cost */
   totalCost: number;
+  /** Sum of DBUsage.quantity for token metric */
   tokenCount: number;
+  /** Sum of DBUsage.requestCount */
   requestCount: number;
   share: number;
   trend: TrendDirection;
   trendValue: number;
 }
 
+/**
+ * Model cost - aggregated from DBUsage records per model.
+ */
 export interface ModelCost {
+  /** DBModel.id via DBUsage.modelId */
   modelId: string;
   modelName: string;
   provider: string;
@@ -29,13 +59,19 @@ export interface ModelCost {
 }
 
 export interface CostTrendPoint {
+  /** DBUsage.periodStart */
   date: string;
+  /** DBUsage.cost */
   cost: number;
   tokens: number;
   label?: string;
 }
 
-export interface TokenBalance {
+/**
+ * Token balance summary - derived from DBTokenBalance fields.
+ */
+export interface TokenBalanceSummary {
+  /** DBTokenBalance.currentBalance */
   current: number;
   dailyBurnRate: number;
   projectedDepletionDays: number;
@@ -59,15 +95,17 @@ export interface CostSummary {
 
 export interface BhCostAnalyzerProps extends EngineAwareProps {
   preset?: BhCostAnalyzerPreset;
-  providers: ProviderCost[];
+  providers?: ProviderCost[];
   models?: ModelCost[];
   trends?: CostTrendPoint[];
-  tokenBalance?: TokenBalance;
+  tokenBalance?: TokenBalanceSummary;
   alerts?: BudgetAlert[];
   summary?: CostSummary;
   categoryFilter?: CostCategory;
   onCategoryFilterChange?: (category: CostCategory) => void;
   onAlertAcknowledge?: (alertId: string) => void;
+  /** Search cost logs - accepts DBSearchCostLog[] from @rottay/recruiter for position search expenses */
+  searchCosts?: DBSearchCostLog[];
   loading?: boolean;
   className?: string;
   style?: CSSProperties;

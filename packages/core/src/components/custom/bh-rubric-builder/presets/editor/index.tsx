@@ -43,6 +43,7 @@ import {
   getScorableTypeColors,
   getDimensionColors,
   formatScorableType,
+  n,
 } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
 import {
@@ -169,12 +170,12 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const { Box, Flex, Stack, Text } = primitives;
 
     const {
-      rubricName,
-      industry,
-      scorableType,
-      status,
-      dimensions: dimensionsProp,
-      scoreLevels: scoreLevelsProp,
+      rubricName = '',
+      industry = '',
+      scorableType = 'interview' as const,
+      status = 'draft',
+      dimensions: dimensionsProp = [],
+      scoreLevels: scoreLevelsProp = [{ label: 'Low', minScore: 0, color: '#ef4444' }, { label: 'Medium', minScore: 40, color: '#f59e0b' }, { label: 'High', minScore: 70, color: '#22c55e' }],
       selectedDimension: selectedDimensionProp = null,
       validationErrors: validationErrorsProp,
       isDirty: isDirtyProp,
@@ -199,18 +200,18 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       over: null,
     });
     const [localScoreLevels, setLocalScoreLevels] = useState<ScoreLevel[]>(scoreLevelsProp);
-    const [localValidationErrors, setLocalValidationErrors] = useState<ValidationError[]>(validationErrorsProp);
+    const [localValidationErrors, setLocalValidationErrors] = useState<ValidationError[]>(validationErrorsProp!);
     const [localShowPreview, setLocalShowPreview] = useState(showPreviewProp);
     const [localIsDirty, setLocalIsDirty] = useState(isDirtyProp);
 
     /* ── Derived ──────────────────────────────────────────────────── */
     const sortedDimensions = useMemo(
-      () => [...localDimensions].sort((a, b) => a.order - b.order),
+      () => [...localDimensions].sort((a, b) => n(a.order) - n(b.order)),
       [localDimensions]
     );
 
     const totalWeight = useMemo(
-      () => localDimensions.reduce((sum, d) => sum + d.weight, 0),
+      () => localDimensions.reduce((sum, d) => sum + n(d.weight), 0),
       [localDimensions]
     );
 
@@ -314,7 +315,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
         const fromDim = localDimensions.find((d) => d.id === dragState.dragging);
         const toDim = localDimensions.find((d) => d.id === dragState.over);
         if (fromDim && toDim) {
-          onDimensionReorder?.(fromDim.id, toDim.order);
+          onDimensionReorder?.((fromDim.id ?? ''), (toDim.order ?? 0));
           setLocalIsDirty(true);
         }
       }
@@ -346,7 +347,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
     const sampleScores = useMemo(
       () =>
         sortedDimensions.map((d) => ({
-          label: d.code || d.name.substring(0, 4),
+          label: d.code || (d.name ?? '').substring(0, 4),
           value: 60 + Math.floor(Math.random() * 35),
           maxValue: 100,
         })),
@@ -437,9 +438,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
-                backgroundColor: scorableColors[scorableType].bg,
-                color: scorableColors[scorableType].color,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${scorableColors[scorableType].border}`,
+                backgroundColor: (scorableColors as Record<string, any>)[scorableType]?.bg,
+                color: (scorableColors as Record<string, any>)[scorableType]?.color,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${(scorableColors as Record<string, any>)[scorableType]?.border}`,
               }}
             >
               {formatScorableType(scorableType)}
@@ -454,14 +455,14 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 borderRadius: badgeRadius,
                 fontSize: tokens.typography.fontSize.xs,
                 fontWeight: tokens.typography.fontWeight.medium,
-                backgroundColor: statusColors[status].bg,
-                color: statusColors[status].color,
-                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusColors[status].border}`,
+                backgroundColor: (statusColors as Record<string, any>)[status]?.bg,
+                color: (statusColors as Record<string, any>)[status]?.color,
+                border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${(statusColors as Record<string, any>)[status]?.border}`,
                 gap: tokens.spacing[1],
               }}
             >
               <CircleDot size={10} aria-hidden="true" />
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {(status || '').charAt(0).toUpperCase() + (status || '').slice(1)}
             </Text>
           </Flex>
 
@@ -621,15 +622,15 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     key={dim.id}
                     role="listitem"
                     aria-selected={localSelectedDimension === dim.id}
-                    aria-label={`Dimension: ${dim.name}${dim.isKnockout ? ' (knockout)' : ''}, weight ${dim.weight.toFixed(0)}%`}
+                    aria-label={`Dimension: ${dim.name}${dim.isKnockout ? ' (knockout)' : ''}, weight ${n(dim.weight).toFixed(0)}%`}
                     draggable
-                    onDragStart={() => handleDragStart(dim.id)}
+                    onDragStart={() => handleDragStart((dim.id ?? ''))}
                     onDragOver={(e: React.DragEvent) => {
                       e.preventDefault();
-                      handleDragOver(dim.id);
+                      handleDragOver((dim.id ?? ''));
                     }}
                     onDragEnd={handleDragEnd}
-                    onClick={() => handleDimensionSelect(dim.id)}
+                    onClick={() => handleDimensionSelect(dim.id!)}
                     style={{
                       ...cardInteractive,
                       ...cardHover.base,
@@ -785,7 +786,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                               left: 0,
                               top: 0,
                               height: '100%',
-                              width: `${dim.weight}%`,
+                              width: `${n(dim.weight)}%`,
                               backgroundColor: dimColors[idx % dimColors.length],
                               borderRadius: tokens.borderRadius.full,
                               transition: `width ${tokens.transitions?.normal || tokens.motion.hover}`,
@@ -796,9 +797,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                           type="range"
                           min={0}
                           max={100}
-                          value={Math.round(dim.weight)}
+                          value={Math.round(n(dim.weight))}
                           aria-label={`Weight for ${dim.name}`}
-                          onChange={(e) => handleWeightChange(dim.id, Number(e.target.value))}
+                          onChange={(e) => handleWeightChange((dim.id ?? ''), Number(e.target.value))}
                           onClick={(e) => e.stopPropagation()}
                           style={{
                             width: 80,
@@ -814,7 +815,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             textAlign: 'right' as const,
                           }}
                         >
-                          {dim.weight.toFixed(0)}%
+                          {n(dim.weight).toFixed(0)}%
                         </Text>
                       </Box>
 
@@ -850,7 +851,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDimensionRemove(dim.id);
+                          handleDimensionRemove((dim.id ?? ''));
                         }}
                         aria-label={`Remove dimension ${dim.name}`}
                         style={{
@@ -955,8 +956,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   <svg width="160" height="160" viewBox="0 0 160 160">
                     {(() => {
                       const weights = sortedDimensions.map((d, i) => ({
-                        label: d.name,
-                        value: d.weight,
+                        label: d.name ?? '',
+                        value: n(d.weight),
                         color: dimColors[i % dimColors.length],
                       }));
                       const slices = generatePieSlices(weights, 80, 80, 70);
@@ -1018,9 +1019,9 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         key={d.id}
                         role="listitem"
                         tabIndex={0}
-                        onClick={() => handleDimensionSelect(d.id)}
-                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionSelect(d.id); } }}
-                        aria-label={`${d.name}: ${d.weight.toFixed(0)}%`}
+                        onClick={() => handleDimensionSelect(d.id!)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimensionSelect(d.id!); } }}
+                        aria-label={`${d.name}: ${n(d.weight).toFixed(0)}%`}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -1049,7 +1050,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                         />
                         <Text style={{ flex: 1 }}>{d.name}</Text>
                         <Text style={{ fontWeight: tokens.typography.fontWeight.semibold }}>
-                          {d.weight.toFixed(0)}%
+                          {(d.weight || 0).toFixed(0)}%
                         </Text>
                       </Box>
                     ))}

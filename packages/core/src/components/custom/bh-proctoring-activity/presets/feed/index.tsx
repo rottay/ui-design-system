@@ -86,7 +86,7 @@ function getEventTypeLabel(type: ProctoringEventType): string {
 }
 
 function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return severity.charAt(0).toUpperCase() + severity.slice(1);
+  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -136,7 +136,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
 
     const displayEvents = useMemo(() => {
-      const sorted = [...events].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      const sorted = [...events].sort((a, b) => (b.timestamp?.getTime?.() ?? 0) - (a.timestamp?.getTime?.() ?? 0));
       return sorted.slice(0, maxItems);
     }, [events, maxItems]);
 
@@ -144,9 +144,10 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
       if (!groupByCandidate) return null;
       const groups = new Map<string, ProctoringActivityEvent[]>();
       displayEvents.forEach(ev => {
-        const existing = groups.get(ev.candidateName) ?? [];
+        const name = ev.candidateName ?? 'Unknown';
+        const existing = groups.get(name) ?? [];
         existing.push(ev);
-        groups.set(ev.candidateName, existing);
+        groups.set(name, existing);
       });
       return groups;
     }, [displayEvents, groupByCandidate]);
@@ -161,8 +162,8 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
     }), [entrance]);
 
     const renderEvent = (event: ProctoringActivityEvent, index: number) => {
-      const EventIcon = getEventTypeIcon(event.eventType);
-      const sevColor = getSeverityColor(event.severity, t);
+      const EventIcon = getEventTypeIcon(event.eventType ?? 'tab_switch');
+      const sevColor = getSeverityColor(event.severity ?? 'low', t);
       const isHovered = hoveredEvent === event.id;
 
       return (
@@ -170,7 +171,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
           key={event.id}
           role="listitem"
           tabIndex={0}
-          aria-label={`${event.candidateName}: ${getEventTypeLabel(event.eventType)}, ${getSeverityLabel(event.severity)}`}
+          aria-label={`${event.candidateName}: ${getEventTypeLabel(event.eventType ?? 'tab_switch')}, ${getSeverityLabel(event.severity ?? 'low')}`}
           onClick={() => handleClick(event.id)}
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(event.id); } }}
           onMouseEnter={() => setHoveredEvent(event.id)}
@@ -195,7 +196,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
             paddingTop: t.spacing[1],
             flexShrink: 0,
           }}>
-            <Box style={createIconContainerStyle(t, { size: 32, color: getSeverityBg(event.severity, t) })}>
+            <Box style={createIconContainerStyle(t, { size: 32, color: getSeverityBg(event.severity ?? 'low', t) })}>
               <EventIcon size={14} color={sevColor} />
             </Box>
             {/* Vertical line connector */}
@@ -219,11 +220,11 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
                 {event.candidateName}
               </Text>
               <Box style={{
-                ...createBadgeStyle(t, getSeverityBadgeKey(event.severity)),
+                ...createBadgeStyle(t, getSeverityBadgeKey(event.severity ?? 'low')),
                 borderRadius: badgeRadius,
               }}>
                 <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                  {getSeverityLabel(event.severity)}
+                  {getSeverityLabel(event.severity ?? 'low')}
                 </Text>
               </Box>
               <Text style={{
@@ -231,7 +232,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
                 fontWeight: t.typography.fontWeight.medium,
                 color: t.colors.neutral[600],
               }}>
-                {getEventTypeLabel(event.eventType)}
+                {getEventTypeLabel(event.eventType ?? 'tab_switch')}
               </Text>
             </Box>
             <Text style={{
@@ -248,7 +249,7 @@ export const FeedBhProctoringActivity = createPreset<BhProctoringActivityProps>(
                 color: t.colors.neutral[400],
                 marginTop: t.spacing[1],
               }}>
-                {formatDistanceToNow(event.timestamp, { addSuffix: true })}
+                {event.timestamp ? formatDistanceToNow(event.timestamp, { addSuffix: true }) : ''}
               </Text>
             )}
           </Box>

@@ -65,20 +65,20 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
 
-    const maxCount = useMemo(() => Math.max(...days.map(d => d.count), 1), [days]);
-    const total = useMemo(() => days.reduce((s, d) => s + d.count, 0), [days]);
+    const maxCount = useMemo(() => Math.max(...days.map(d => d.count ?? 0), 1), [days]);
+    const total = useMemo(() => days.reduce((s, d) => s + (d.count ?? 0), 0), [days]);
 
     /* Group by month */
     const months = useMemo(() => {
       const map = new Map<string, HeatmapDay[]>();
       days.forEach(day => {
-        const month = day.date.slice(0, 7);
+        const month = (day.date ?? '').slice(0, 7);
         if (!map.has(month)) map.set(month, []);
         map.get(month)!.push(day);
       });
       return Array.from(map.entries()).map(([month, monthDays]) => ({
         label: MONTH_LABELS[parseInt(month.slice(5, 7)) - 1],
-        total: monthDays.reduce((s, d) => s + d.count, 0),
+        total: monthDays.reduce((s, d) => s + (d.count ?? 0), 0),
         days: monthDays,
       }));
     }, [days]);
@@ -151,7 +151,7 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
                       width: 8,
                       height: 8,
                       borderRadius: 1,
-                      backgroundColor: getHeatColor(day.count, maxCount, t),
+                      backgroundColor: getHeatColor((day.count ?? 0), maxCount, t),
                       transition: `background-color ${t.motion.hover}`,
                     }}
                   />

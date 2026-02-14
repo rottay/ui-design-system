@@ -256,7 +256,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
             <Box role="list" aria-label="Source comparison bars">
               {sortedByMetric.map((src, idx) => {
                 const Icon = SOURCE_ICONS[src.type] || Globe;
-                const val = (src as any)[metricView] as number;
+                const val = ((src as any)[metricView] as number) ?? 0;
                 const barPct = (val / maxMetric) * 100;
                 const isSelected = selectedId === src.id;
                 const barColor = sourceColors[idx % sourceColors.length];
@@ -396,7 +396,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                       </Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], marginTop: t.spacing[1] }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[600] }}>
-                          {src.hireRate.toFixed(1)}% hire rate
+                          {(src.hireRate ?? 0).toFixed(1)}% hire rate
                         </Text>
                         <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[400] }}>
                           {formatCurrency(src.costPerHire)}/hire

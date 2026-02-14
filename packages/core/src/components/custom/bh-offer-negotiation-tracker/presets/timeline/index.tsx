@@ -25,6 +25,7 @@ import {
   createEmptyStateStyle,
 } from '../../../helpers';
 import type { BhOfferNegotiationTrackerProps, NegotiationRound } from '../../core';
+import { offerToNegotiationRounds } from '../../core';
 import type { DesignTokens } from '../../../../../types';
 
 /* ------------------------------------------------------------------ */
@@ -70,7 +71,7 @@ function getStatusBadge(status: NegotiationRound['status']): 'success' | 'error'
 }
 
 function formatCurrency(value: number, currency: string): string {
-  return `${currency}${value.toLocaleString()}`;
+  return `${currency}${(value || 0).toLocaleString()}`;
 }
 
 /* ================================================================== */
@@ -87,11 +88,12 @@ export const TimelineBhOfferNegotiationTracker = createPreset<BhOfferNegotiation
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      rounds = MOCK_ROUNDS,
-      candidateName = 'Sarah Johnson',
-      position = 'Senior Frontend Engineer',
-      budgetMin = 115000,
-      budgetMax = 140000,
+      offer,
+      rounds: roundsProp,
+      candidateName: candidateNameProp,
+      position: positionProp,
+      budgetMin: budgetMinProp = 115000,
+      budgetMax: budgetMaxProp = 140000,
       currency = '$',
       title = 'Offer Negotiation',
       onRoundClick,
@@ -99,6 +101,12 @@ export const TimelineBhOfferNegotiationTracker = createPreset<BhOfferNegotiation
       className,
       style,
     } = props;
+
+    const rounds = roundsProp ?? (offer ? offerToNegotiationRounds(offer) : MOCK_ROUNDS);
+    const candidateName = candidateNameProp ?? '';
+    const position = positionProp ?? offer?.jobTitleOffered ?? 'Senior Frontend Engineer';
+    const budgetMin = budgetMinProp;
+    const budgetMax = budgetMaxProp;
 
     const [hoveredRound, setHoveredRound] = useState<string | null>(null);
 
@@ -276,7 +284,7 @@ export const TimelineBhOfferNegotiationTracker = createPreset<BhOfferNegotiation
                         borderRadius: badgeRadius,
                       }}>
                         <Text style={{ fontSize: t.typography.fontSize.xs }}>
-                          {round.status.charAt(0).toUpperCase() + round.status.slice(1)}
+                          {(round.status || '').charAt(0).toUpperCase() + (round.status || '').slice(1)}
                         </Text>
                       </Box>
                     </Box>
