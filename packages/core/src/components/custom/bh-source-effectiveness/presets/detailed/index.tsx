@@ -54,7 +54,7 @@ export const DetailedBhSourceEffectiveness = createPreset<BhSourceEffectivenessP
     const chartCfg = getChartConfig(t);
 
     const {
-      sources = MOCK_SOURCES,
+      sources: rawSources = MOCK_SOURCES,
       title = 'Source Effectiveness',
       onSourceClick,
       selectedSource,
@@ -62,6 +62,8 @@ export const DetailedBhSourceEffectiveness = createPreset<BhSourceEffectivenessP
       className,
       style,
     } = props;
+
+    const sources = Array.isArray(rawSources) ? rawSources : MOCK_SOURCES;
 
     const [hoveredSource, setHoveredSource] = useState<string | null>(null);
 

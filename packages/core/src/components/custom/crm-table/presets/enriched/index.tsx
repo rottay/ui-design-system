@@ -27,11 +27,11 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
     const {
       columns,
       data,
-      breadcrumbs = [],
+      breadcrumbs: rawBreadcrumbs = [],
       onRowClick,
       onEnrich,
       onFindPeople,
-      contextMenuItems = [],
+      contextMenuItems: rawContextMenuItems = [],
       onContextMenuAction,
       selectedRows: selectedRowsProp,
       onRowSelect,
@@ -49,6 +49,9 @@ export const EnrichedCrmTable = createPreset<CrmTableProps>({
       className,
       style,
     } = props;
+
+    const breadcrumbs = Array.isArray(rawBreadcrumbs) ? rawBreadcrumbs : [];
+    const contextMenuItems = Array.isArray(rawContextMenuItems) ? rawContextMenuItems : [];
 
     const [internalSort, setInternalSort] = useState<{ column: string; direction: 'asc' | 'desc' }>({
       column: sortColumnProp ?? '', direction: sortDirectionProp ?? 'asc',

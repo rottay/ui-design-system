@@ -52,12 +52,14 @@ export const CompactBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
       templateName = 'Initial Outreach',
       subject = 'Exciting opportunity at {{company}}',
       body = 'Hi {{firstName}}, I came across your profile...',
-      sampleData = DEFAULT_SAMPLE,
+      sampleData: rawSampleData = DEFAULT_SAMPLE,
       recipientName = 'Alex Rivera',
       onSend,
       className,
       style,
     } = props;
+
+    const sampleData = Array.isArray(rawSampleData) ? rawSampleData : DEFAULT_SAMPLE;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -98,7 +98,7 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
     const ptypo = getPersonalityTypography(t);
 
     const {
-      candidate = MOCK_CANDIDATE,
+      candidate: rawCandidate = MOCK_CANDIDATE,
       isDragging = false,
       isSelected = false,
       onQuickAction,
@@ -107,6 +107,8 @@ export const StandardBhPipelineKanbanCard = createPreset<BhPipelineKanbanCardPro
       className,
       style,
     } = props;
+
+    const candidate = Array.isArray(rawCandidate) ? rawCandidate : MOCK_CANDIDATE;
 
     const [isHovered, setIsHovered] = useState(false);
 

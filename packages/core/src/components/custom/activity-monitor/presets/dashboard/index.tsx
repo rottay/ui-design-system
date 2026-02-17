@@ -27,7 +27,7 @@ export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
 
     const {
       logs,
-      timeline = [],
+      timeline: rawTimeline = [],
       timeRange: timeRangeProp,
       onTimeRangeChange,
       selectedLogId: selectedLogIdProp,
@@ -43,6 +43,8 @@ export const DashboardActivityMonitor = createPreset<ActivityMonitorProps>({
       className,
       style,
     } = props;
+
+    const timeline = Array.isArray(rawTimeline) ? rawTimeline : [];
 
     const [internalTimeRange, setInternalTimeRange] = useState<TimeRange>(timeRangeProp ?? '24h');
     const [internalSelectedLog, setInternalSelectedLog] = useState(selectedLogIdProp ?? '');

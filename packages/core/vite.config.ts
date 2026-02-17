@@ -41,6 +41,8 @@ export default defineConfig({
         'framer-motion',
         'lucide-react',
         'dayjs',
+        // @rottay domain modules (provided by consuming app)
+        /^@rottay\/.*/,
         // Externalize submodules for better tree-shaking
         /^antd\/.*/,
         /^@ant-design\/icons\/.*/,

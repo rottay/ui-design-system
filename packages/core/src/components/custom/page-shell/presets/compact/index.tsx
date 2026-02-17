@@ -14,15 +14,19 @@ export default createPreset<PageShellProps>('compact', (context) => {
   const {
     title,
     description,
-    breadcrumbs = [],
-    actions = [],
-    tabs = [],
+    breadcrumbs: rawBreadcrumbs = [],
+    actions: rawActions = [],
+    tabs: rawTabs = [],
     activeTab,
     onTabChange,
     children,
     className,
     style,
   } = props;
+
+    const breadcrumbs = Array.isArray(rawBreadcrumbs) ? rawBreadcrumbs : [];
+    const actions = Array.isArray(rawActions) ? rawActions : [];
+    const tabs = Array.isArray(rawTabs) ? rawTabs : [];
 
   const handleBreadcrumbClick = (breadcrumb: typeof breadcrumbs[0]) => {
     if (breadcrumb.onClick) {

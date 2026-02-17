@@ -92,12 +92,14 @@ export const CompactBhComplianceChecker = createPreset<BhComplianceCheckerProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules = MOCK_RULES,
+      rules: rawRules = MOCK_RULES,
       overallScore = 82,
       onRuleClick,
       className,
       style,
     } = props;
+
+    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

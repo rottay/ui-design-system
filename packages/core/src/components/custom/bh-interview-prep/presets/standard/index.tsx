@@ -76,11 +76,13 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
 
     const {
       interviewBrief, candidateBrief, evaluationFocus, scriptOverview,
-      checklist: externalChecklist = [], onChecklistUpdate,
+      checklist: rawExternalChecklist = [], onChecklistUpdate,
       expandedSections: externalExpandedSections, onSectionToggle,
       showFullRubric: externalShowFullRubric = false, onRubricToggle,
       className, style,
     } = props;
+
+    const externalChecklist = Array.isArray(rawExternalChecklist) ? rawExternalChecklist : [];
 
     const [checklistStatus, setChecklistStatus] = useState<Record<string, ChecklistItem['status']>>(() => {
       const map: Record<string, ChecklistItem['status']> = {};

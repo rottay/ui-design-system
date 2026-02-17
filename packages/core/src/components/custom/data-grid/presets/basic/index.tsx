@@ -70,7 +70,7 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
       searchable = true,
       searchPlaceholder = DATA_GRID_DEFAULTS.searchPlaceholder,
       onSearch,
-      filters = [],
+      filters: rawFilters = [],
       onFilterClick,
       totalRows,
       visibleColumns,
@@ -88,6 +88,8 @@ export const BasicDataGrid = createPreset<DataGridProps & Record<string, unknown
       className,
       style,
     } = props;
+
+    const filters = Array.isArray(rawFilters) ? rawFilters : [];
 
     // ========================================================================
     // Internal State

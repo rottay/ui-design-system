@@ -106,9 +106,9 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
     const t = tokens;
 
     const {
-      volumeData = MOCK_VOLUME,
-      scoreDistribution = MOCK_SCORE_DIST,
-      agentPerformance = MOCK_AGENTS,
+      volumeData: rawVolumeData = MOCK_VOLUME,
+      scoreDistribution: rawScoreDistribution = MOCK_SCORE_DIST,
+      agentPerformance: rawAgentPerformance = MOCK_AGENTS,
       totalConversations = 1401,
       avgScore = 83,
       avgCompletionRate = 90.6,
@@ -119,6 +119,10 @@ export const DashboardBhConversationAnalytics = createPreset<BhConversationAnaly
       className,
       style,
     } = props;
+
+    const volumeData = Array.isArray(rawVolumeData) ? rawVolumeData : MOCK_VOLUME;
+    const scoreDistribution = Array.isArray(rawScoreDistribution) ? rawScoreDistribution : MOCK_SCORE_DIST;
+    const agentPerformance = Array.isArray(rawAgentPerformance) ? rawAgentPerformance : MOCK_AGENTS;
 
     /* --- Glass / personality tokens --- */
     const isGlass = t.surface.useGlass && !!t.glass;

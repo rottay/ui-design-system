@@ -33,7 +33,7 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      variables = MOCK_VARIABLES,
+      variables: rawVariables = MOCK_VARIABLES,
       subject = 'Interview Invitation - Senior Frontend Engineer',
       body = 'Dear Sarah Johnson,\n\nWe are pleased to invite you for an interview...\n\nBest regards,\nAlex Thompson',
       recipientName = 'Sarah Johnson',
@@ -43,6 +43,8 @@ export const MinimalBhEmailComposer = createPreset<BhEmailComposerProps>({
       className,
       style,
     } = props;
+
+    const variables = Array.isArray(rawVariables) ? rawVariables : MOCK_VARIABLES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

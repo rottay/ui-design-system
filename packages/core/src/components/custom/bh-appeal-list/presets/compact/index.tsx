@@ -69,12 +69,14 @@ export const CompactBhAppealList = createPreset<BhAppealListProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      appeals = [],
+      appeals: rawAppeals = [],
       onAppealClick,
       selectedAppealId,
       className,
       style,
     } = props;
+
+    const appeals = Array.isArray(rawAppeals) ? rawAppeals : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -78,7 +78,7 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      skills = MOCK_SKILLS,
+      skills: rawSkills = MOCK_SKILLS,
       department,
       title = 'Skill Gap Analysis',
       onSkillClick,
@@ -86,6 +86,8 @@ export const DashboardBhSkillGapDashboard = createPreset<BhSkillGapDashboardProp
       className,
       style,
     } = props;
+
+    const skills = Array.isArray(rawSkills) ? rawSkills : MOCK_SKILLS;
 
     const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 

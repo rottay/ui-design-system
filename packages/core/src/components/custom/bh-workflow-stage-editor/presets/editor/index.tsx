@@ -94,7 +94,7 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = MOCK_STAGES,
+      stages: rawStages = MOCK_STAGES,
       onStageReorder,
       onStageEdit,
       onStageDelete,
@@ -103,6 +103,8 @@ export const EditorBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPro
       className,
       style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
 

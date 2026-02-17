@@ -21,8 +21,8 @@ export const StandardPageHeader = createPreset<PageHeaderProps>({
     const {
       title,
       subtitle,
-      breadcrumb = [],
-      actions = [],
+      breadcrumb: rawBreadcrumb = [],
+      actions: rawActions = [],
       extra,
       icon,
       status,
@@ -31,6 +31,9 @@ export const StandardPageHeader = createPreset<PageHeaderProps>({
       className,
       style,
     } = props;
+
+    const breadcrumb = Array.isArray(rawBreadcrumb) ? rawBreadcrumb : [];
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
     const [hoveredAction, setHoveredAction] = useState<string | null>(null);
     const [hoveredBreadcrumb, setHoveredBreadcrumb] = useState<number | null>(null);

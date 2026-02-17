@@ -85,9 +85,9 @@ export const DropdownBhPipelineFilterBar = createPreset<BhPipelineFilterBarProps
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
     const {
-      filters = MOCK_FILTERS,
-      activeFilters = MOCK_ACTIVE,
-      savedPresets = MOCK_PRESETS,
+      filters: rawFilters = MOCK_FILTERS,
+      activeFilters: rawActiveFilters = MOCK_ACTIVE,
+      savedPresets: rawSavedPresets = MOCK_PRESETS,
       onFilterChange,
       onFilterRemove,
       onPresetSave,
@@ -96,6 +96,10 @@ export const DropdownBhPipelineFilterBar = createPreset<BhPipelineFilterBarProps
       className,
       style,
     } = props;
+
+    const filters = Array.isArray(rawFilters) ? rawFilters : MOCK_FILTERS;
+    const activeFilters = Array.isArray(rawActiveFilters) ? rawActiveFilters : MOCK_ACTIVE;
+    const savedPresets = Array.isArray(rawSavedPresets) ? rawSavedPresets : MOCK_PRESETS;
 
     const [isExpanded, setIsExpanded] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');

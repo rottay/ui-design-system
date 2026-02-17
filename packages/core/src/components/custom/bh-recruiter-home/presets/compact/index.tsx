@@ -114,16 +114,22 @@ export const CompactBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const {
       recruiter,
       recruiterName: recruiterNameProp = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
-      kpiStats = DEFAULT_KPI,
-      pipelineJobs = DEFAULT_PIPELINE,
-      upcomingInterviews = DEFAULT_INTERVIEWS,
-      quickActions = DEFAULT_ACTIONS,
-      notifications = DEFAULT_NOTIFS,
+      kpiStats: rawKpiStats = DEFAULT_KPI,
+      pipelineJobs: rawPipelineJobs = DEFAULT_PIPELINE,
+      upcomingInterviews: rawUpcomingInterviews = DEFAULT_INTERVIEWS,
+      quickActions: rawQuickActions = DEFAULT_ACTIONS,
+      notifications: rawNotifications = DEFAULT_NOTIFS,
       dateRangeLabel = BH_RECRUITER_HOME_DEFAULTS.dateRangeLabel,
       onQuickAction, onPipelineJobClick, onInterviewClick,
       onNotificationDismiss,
       className, style,
     } = props;
+
+    const kpiStats = Array.isArray(rawKpiStats) ? rawKpiStats : DEFAULT_KPI;
+    const pipelineJobs = Array.isArray(rawPipelineJobs) ? rawPipelineJobs : DEFAULT_PIPELINE;
+    const upcomingInterviews = Array.isArray(rawUpcomingInterviews) ? rawUpcomingInterviews : DEFAULT_INTERVIEWS;
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : DEFAULT_ACTIONS;
+    const notifications = Array.isArray(rawNotifications) ? rawNotifications : DEFAULT_NOTIFS;
 
     const recruiterName = recruiter
       ? `${recruiter.firstName ?? ''} ${recruiter.lastName ?? ''}`.trim() || recruiterNameProp

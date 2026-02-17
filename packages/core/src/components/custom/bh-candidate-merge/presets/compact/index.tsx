@@ -41,13 +41,16 @@ export const CompactBhCandidateMerge = createPreset<BhCandidateMergeProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = [],
-      mergeFields = [],
+      candidates: rawCandidates = [],
+      mergeFields: rawMergeFields = [],
       onMerge,
       confidenceScore = 0,
       className,
       style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
+    const mergeFields = Array.isArray(rawMergeFields) ? rawMergeFields : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

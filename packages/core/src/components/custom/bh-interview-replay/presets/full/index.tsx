@@ -53,13 +53,17 @@ export const FullBhInterviewReplay = createPreset<BhInterviewReplayProps>({
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      transcript = MOCK_TRANSCRIPT, scoreOverlay = [], evidenceMarkers = [],
+      transcript: rawTranscript = MOCK_TRANSCRIPT, scoreOverlay: rawScoreOverlay = [], evidenceMarkers: rawEvidenceMarkers = [],
       persona, scoreSummary, candidateName, jobTitle,
       interviewDate, duration,
       selectedEntryId: selectedEntryIdProp, onEntrySelect,
       showScoreOverlay: showScoreOverlayProp, onToggleScoreOverlay,
       loading, className, style,
     } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
+    const scoreOverlay = Array.isArray(rawScoreOverlay) ? rawScoreOverlay : [];
+    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : [];
 
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEntryIdProp ?? '');
     const [internalShowOverlay, setInternalShowOverlay] = useState(showScoreOverlayProp ?? true);

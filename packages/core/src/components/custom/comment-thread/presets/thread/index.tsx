@@ -27,10 +27,10 @@ export const ThreadCommentThread = createPreset<CommentThreadProps>({
 
     const {
       comments,
-      categories = [],
+      categories: rawCategories = [],
       activeCategoryKey,
       onCategorySelect,
-      members = [],
+      members: rawMembers = [],
       title = 'Discussion',
       description,
       onReply,
@@ -41,6 +41,9 @@ export const ThreadCommentThread = createPreset<CommentThreadProps>({
       className,
       style,
     } = props;
+
+    const categories = Array.isArray(rawCategories) ? rawCategories : [];
+    const members = Array.isArray(rawMembers) ? rawMembers : [];
 
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
     const [replyText, setReplyText] = useState('');

@@ -85,7 +85,10 @@ export const MonitorEvDynamicPricing = createPreset<EvDynamicPricingProps>({
     const { primitives, props, tokens } = ctx;
     const { Box, Text } = primitives;
 
-    const { tiers = MOCK_TIERS, history: priceHistory = MOCK_HISTORY } = props;
+    const { tiers: rawTiers = MOCK_TIERS, history: rawPriceHistory = MOCK_HISTORY } = props;
+
+    const tiers = Array.isArray(rawTiers) ? rawTiers : MOCK_TIERS;
+    const priceHistory = Array.isArray(rawPriceHistory) ? rawPriceHistory : MOCK_HISTORY;
 
     const totalRevenue = tiers.reduce(
       (sum, tier) => sum + tier.currentPrice * tier.sold,

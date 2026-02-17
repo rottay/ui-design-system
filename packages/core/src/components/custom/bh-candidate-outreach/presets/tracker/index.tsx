@@ -96,11 +96,15 @@ export const TrackerBhCandidateOutreach = createPreset<BhCandidateOutreachProps>
     }, [t]);
 
     const {
-      campaignMetrics = DEFAULT_METRICS,
-      variants = DEFAULT_VARIANTS,
-      recipients = DEFAULT_RECIPIENTS,
+      campaignMetrics: rawCampaignMetrics = DEFAULT_METRICS,
+      variants: rawVariants = DEFAULT_VARIANTS,
+      recipients: rawRecipients = DEFAULT_RECIPIENTS,
       className, style,
     } = props;
+
+    const campaignMetrics = Array.isArray(rawCampaignMetrics) ? rawCampaignMetrics : DEFAULT_METRICS;
+    const variants = Array.isArray(rawVariants) ? rawVariants : DEFAULT_VARIANTS;
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : DEFAULT_RECIPIENTS;
 
     const [activeTab, setActiveTab] = useState<'overview' | 'recipients' | 'ab'>('overview');
 

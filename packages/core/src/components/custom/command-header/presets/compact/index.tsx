@@ -22,12 +22,15 @@ export const CompactCommandHeader = createPreset<CommandHeaderProps>({
       title,
       subtitle,
       icon,
-      metrics = [],
+      metrics: rawMetrics = [],
       primaryAction,
-      systemStatus = [],
+      systemStatus: rawSystemStatus = [],
       className,
       style,
     } = props;
+
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
+    const systemStatus = Array.isArray(rawSystemStatus) ? rawSystemStatus : [];
 
     const getTrendColor = (positive?: boolean) =>
       positive ? tokens.colors.successScale[400] : tokens.colors.errorScale[400];

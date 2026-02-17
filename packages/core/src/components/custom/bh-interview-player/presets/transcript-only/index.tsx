@@ -68,10 +68,12 @@ export const TranscriptOnlyBhInterviewPlayer = createPreset<BhInterviewPlayerPro
 
     const {
       interviewInfo = { candidateName: '', jobTitle: '', stageName: '', date: '', duration: 0, status: '' },
-      transcript = [], scorecard,
+      transcript: rawTranscript = [], scorecard,
       onApproveScore, onRequestRescore, onFlagForReview, onDownloadTranscript,
       className, style,
     } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : [];
 
     const [expandedScorecard, setExpandedScorecard] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');

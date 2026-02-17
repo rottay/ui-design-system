@@ -22,8 +22,8 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
       filterConfig,
       filters,
       onFiltersChange,
-      quickPresets = [],
-      savedFilters = [],
+      quickPresets: rawQuickPresets = [],
+      savedFilters: rawSavedFilters = [],
       onSaveFilter,
       onDeleteSavedFilter,
       onLoadSavedFilter,
@@ -35,6 +35,9 @@ export const PanelFilterBuilder = createPreset<FilterBuilderProps>({
       className,
       style,
     } = props;
+
+    const quickPresets = Array.isArray(rawQuickPresets) ? rawQuickPresets : [];
+    const savedFilters = Array.isArray(rawSavedFilters) ? rawSavedFilters : [];
 
     const [showSecondary, setShowSecondary] = useState(false);
     const [showSaveModal, setShowSaveModal] = useState(false);

@@ -25,16 +25,21 @@ export const FullCommandHeader = createPreset<CommandHeaderProps>({
       title,
       subtitle,
       icon,
-      quickActions = [],
-      metrics = [],
-      activities = [],
+      quickActions: rawQuickActions = [],
+      metrics: rawMetrics = [],
+      activities: rawActivities = [],
       insight,
-      systemStatus = [],
+      systemStatus: rawSystemStatus = [],
       primaryAction,
       effects = {},
       className,
       style,
     } = props;
+
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
+    const activities = Array.isArray(rawActivities) ? rawActivities : [];
+    const systemStatus = Array.isArray(rawSystemStatus) ? rawSystemStatus : [];
 
     const [activeMetricIndex, setActiveMetricIndex] = useState(0);
 

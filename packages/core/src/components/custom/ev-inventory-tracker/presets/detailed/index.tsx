@@ -44,7 +44,10 @@ export const DetailedEvInventoryTracker = createPreset<EvInventoryTrackerProps>(
   name: 'EvInventoryTracker.Detailed',
   render: ({ primitives, props, tokens, engine }: PresetContext<EvInventoryTrackerProps>) => {
     const { Box, Text } = primitives;
-    const { items = MOCK_ITEMS, movements = MOCK_MOVEMENTS, onItemClick, className, style } = props;
+    const { items: rawItems = MOCK_ITEMS, movements: rawMovements = MOCK_MOVEMENTS, onItemClick, className, style } = props;
+
+    const items = Array.isArray(rawItems) ? rawItems : MOCK_ITEMS;
+    const movements = Array.isArray(rawMovements) ? rawMovements : MOCK_MOVEMENTS;
 
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All');

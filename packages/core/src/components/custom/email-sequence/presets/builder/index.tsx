@@ -40,15 +40,15 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
       title = 'Email Sequence',
       status = 'draft',
       isSaved = true,
-      steps = [],
-      contacts = [],
+      steps: rawSteps = [],
+      contacts: rawContacts = [],
       activeStepId: controlledActiveStepId,
       onActiveStepChange,
       selectedContactId: controlledSelectedContactId,
       onSelectedContactChange,
       searchQuery: controlledSearchQuery,
       onSearchQueryChange,
-      toolbarActions = [],
+      toolbarActions: rawToolbarActions = [],
       onToolbarAction,
       onStepChange,
       onStepAdd,
@@ -59,6 +59,10 @@ export const BuilderEmailSequence = createPreset<EmailSequenceProps>({
       className,
       style,
     } = props;
+
+    const steps = Array.isArray(rawSteps) ? rawSteps : [];
+    const contacts = Array.isArray(rawContacts) ? rawContacts : [];
+    const toolbarActions = Array.isArray(rawToolbarActions) ? rawToolbarActions : [];
 
     const [internalActiveStepId, setInternalActiveStepId] = useState<string | undefined>(
       controlledActiveStepId ?? steps[0]?.id,

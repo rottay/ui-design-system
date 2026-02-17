@@ -48,12 +48,14 @@ export const CompactBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules = MOCK_RULES,
+      rules: rawRules = MOCK_RULES,
       onRuleToggle,
       onRuleEdit,
       className,
       style,
     } = props;
+
+    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

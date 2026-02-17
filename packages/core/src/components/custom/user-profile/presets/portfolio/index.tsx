@@ -31,7 +31,7 @@ export const PortfolioUserProfile = createPreset<UserProfileProps>({
     const { Box, Stack } = primitives;
     const {
       user,
-      navItems = [],
+      navItems: rawNavItems = [],
       activeNavKey = 'profile',
       onNavSelect,
       tabs = [
@@ -44,13 +44,16 @@ export const PortfolioUserProfile = createPreset<UserProfileProps>({
       ],
       activeTab: controlledActiveTab,
       onTabChange,
-      actions = [],
+      actions: rawActions = [],
       onSave,
       onCopy,
       loading,
       className,
       style,
     } = props;
+
+    const navItems = Array.isArray(rawNavItems) ? rawNavItems : [];
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
     const AVAILABILITY_CONFIG: Record<AvailabilityStatus, { label: string; dotColor: string }> = {
       available: { label: 'Available', dotColor: tokens.colors.successScale[500] },

@@ -67,12 +67,14 @@ export const CompactBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      campaigns = MOCK_CAMPAIGNS,
+      campaigns: rawCampaigns = MOCK_CAMPAIGNS,
       onCampaignClick,
       selectedCampaignId,
       className,
       style,
     } = props;
+
+    const campaigns = Array.isArray(rawCampaigns) ? rawCampaigns : MOCK_CAMPAIGNS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

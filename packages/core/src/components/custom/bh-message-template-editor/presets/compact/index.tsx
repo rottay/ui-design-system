@@ -48,12 +48,14 @@ export const CompactBhMessageTemplateEditor = createPreset<BhMessageTemplateEdit
       templateName = 'New Template',
       subject = 'Exciting opportunity',
       body = 'Hi {{firstName}}, we have a {{position}} role at {{company}}...',
-      variables = DEFAULT_VARIABLES,
+      variables: rawVariables = DEFAULT_VARIABLES,
       onSave,
       onCancel,
       className,
       style,
     } = props;
+
+    const variables = Array.isArray(rawVariables) ? rawVariables : DEFAULT_VARIABLES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -92,7 +92,7 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
 
     const {
       initialData,
-      clients = DEFAULT_CLIENTS,
+      clients: rawClients = DEFAULT_CLIENTS,
       onSubmit,
       onCancel,
       isEditing = false,
@@ -100,6 +100,8 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
       className,
       style,
     } = props;
+
+    const clients = Array.isArray(rawClients) ? rawClients : DEFAULT_CLIENTS;
 
     const [form, setForm] = useState<PositionFormData>({
       ...EMPTY_FORM,

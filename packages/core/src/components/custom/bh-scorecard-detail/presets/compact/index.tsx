@@ -96,11 +96,13 @@ export const CompactBhScorecardDetail = createPreset<BhScorecardDetailProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      scorecard = MOCK_SCORECARD,
+      scorecard: rawScorecard = MOCK_SCORECARD,
       onDimensionClick,
       className,
       style,
     } = props;
+
+    const scorecard = Array.isArray(rawScorecard) ? rawScorecard : MOCK_SCORECARD;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

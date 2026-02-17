@@ -104,10 +104,12 @@ export const StorefrontEvMerchStore = createPreset<EvMerchStoreProps>({
     const { Box, Text } = primitives;
 
     const {
-      products = MOCK_PRODUCTS,
+      products: rawProducts = MOCK_PRODUCTS,
       onProductClick,
       onAddToCart,
     } = props;
+
+    const products = Array.isArray(rawProducts) ? rawProducts : MOCK_PRODUCTS;
 
     const categories = Array.from(new Set(products.map((p) => p.category)));
 

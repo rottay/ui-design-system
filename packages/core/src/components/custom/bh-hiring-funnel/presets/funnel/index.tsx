@@ -72,7 +72,7 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = MOCK_STAGES,
+      stages: rawStages = MOCK_STAGES,
       title = 'Hiring Funnel',
       onStageClick,
       selectedStage,
@@ -80,6 +80,8 @@ export const FunnelBhHiringFunnel = createPreset<BhHiringFunnelProps>({
       className,
       style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
 

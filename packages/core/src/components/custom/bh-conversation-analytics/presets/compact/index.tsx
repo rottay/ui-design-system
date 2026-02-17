@@ -88,8 +88,8 @@ export const CompactBhConversationAnalytics = createPreset<BhConversationAnalyti
     const t = tokens;
 
     const {
-      volumeData = MOCK_VOLUME,
-      agentPerformance = MOCK_AGENTS,
+      volumeData: rawVolumeData = MOCK_VOLUME,
+      agentPerformance: rawAgentPerformance = MOCK_AGENTS,
       totalConversations = 1401,
       avgScore = 83,
       avgCompletionRate = 90.6,
@@ -98,6 +98,9 @@ export const CompactBhConversationAnalytics = createPreset<BhConversationAnalyti
       className,
       style,
     } = props;
+
+    const volumeData = Array.isArray(rawVolumeData) ? rawVolumeData : MOCK_VOLUME;
+    const agentPerformance = Array.isArray(rawAgentPerformance) ? rawAgentPerformance : MOCK_AGENTS;
 
     /* --- Glass / personality tokens --- */
     const isGlass = t.surface.useGlass && !!t.glass;

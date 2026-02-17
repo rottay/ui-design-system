@@ -6,7 +6,7 @@
  * confidence badge, and action buttons. Glass-aware, personality-driven.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   GitMerge, AlertTriangle, CheckCircle, XCircle,
   User, Mail, Phone, Globe, Calendar,
@@ -47,6 +47,12 @@ const MOCK_FIELDS: MergeField[] = [
 ];
 
 /* ------------------------------------------------------------------ */
+/*  Stable empty constants                                             */
+/* ------------------------------------------------------------------ */
+const EMPTY_CANDIDATES: DBCandidate[] = [];
+const EMPTY_MERGE_FIELDS: MergeField[] = [];
+
+/* ------------------------------------------------------------------ */
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
@@ -75,8 +81,8 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = [],
-      mergeFields = [],
+      candidates: rawCandidates = [],
+      mergeFields: rawMergeFields = [],
       title = 'Merge Duplicates',
       onFieldSelect,
       onMerge,
@@ -87,8 +93,10 @@ export const MergeBhCandidateMerge = createPreset<BhCandidateMergeProps>({
       style,
     } = props;
 
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : EMPTY_CANDIDATES;
+    const mergeFields = Array.isArray(rawMergeFields) ? rawMergeFields : EMPTY_MERGE_FIELDS;
+
     const [localFields, setLocalFields] = useState(mergeFields);
-    useEffect(() => { setLocalFields(mergeFields); }, [mergeFields]);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

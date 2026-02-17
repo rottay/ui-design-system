@@ -86,7 +86,7 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approval: _approval = MOCK_APPROVAL,
+      approval: raw_approval = MOCK_APPROVAL,
       onApprove,
       onReject,
       onClose,
@@ -94,6 +94,8 @@ export const CompactBhApprovalDetail = createPreset<BhApprovalDetailProps>({
       className,
       style,
     } = props;
+
+    const _approval = Array.isArray(raw_approval) ? raw_approval : MOCK_APPROVAL;
     const approval = _approval ?? MOCK_APPROVAL;
 
     const [expanded, setExpanded] = useState(false);

@@ -105,9 +105,9 @@ export const LogPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>({
     const OPERATION_STATUS_CONFIG = useMemo(() => getOperationStatusConfig(tokens), [tokens]);
 
     const {
-      providers = [],
-      operations = [],
-      mappings = [],
+      providers: rawProviders = [],
+      operations: rawOperations = [],
+      mappings: rawMappings = [],
       onOperationClick,
       onExportLogs,
       filterProviderId,
@@ -119,6 +119,10 @@ export const LogPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>({
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
+    const operations = Array.isArray(rawOperations) ? rawOperations : [];
+    const mappings = Array.isArray(rawMappings) ? rawMappings : [];
 
     // ─── State ──────────────────────────────────────────────────────────
 

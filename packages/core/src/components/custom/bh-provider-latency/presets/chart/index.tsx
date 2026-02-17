@@ -37,8 +37,8 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
     const t = tokens;
 
     const {
-      data = [],
-      providers = [],
+      data: rawData = [],
+      providers: rawProviders = [],
       selectedProvider: controlledProvider,
       targetLatency = 500,
       onProviderChange,
@@ -47,6 +47,9 @@ export const ChartBhProviderLatency = createPreset<BhProviderLatencyProps>({
       className,
       style,
     } = props;
+
+    const data = Array.isArray(rawData) ? rawData : [];
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
 
     const [localProvider, setLocalProvider] = useState<string | null>(null);
     const selectedProvider = controlledProvider ?? localProvider ?? (providers.length > 0 ? providers[0] : null);

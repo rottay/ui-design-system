@@ -128,18 +128,26 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      kpis = MOCK_KPIS,
-      levelDistribution = MOCK_DISTRIBUTION,
-      heatmapData = MOCK_HEATMAP,
-      knockoutStats = MOCK_KNOCKOUTS,
-      trendData = MOCK_TREND,
-      cohortComparisons = MOCK_COHORTS,
-      skillGaps = MOCK_GAPS,
+      kpis: rawKpis = MOCK_KPIS,
+      levelDistribution: rawLevelDistribution = MOCK_DISTRIBUTION,
+      heatmapData: rawHeatmapData = MOCK_HEATMAP,
+      knockoutStats: rawKnockoutStats = MOCK_KNOCKOUTS,
+      trendData: rawTrendData = MOCK_TREND,
+      cohortComparisons: rawCohortComparisons = MOCK_COHORTS,
+      skillGaps: rawSkillGaps = MOCK_GAPS,
       filters,
       onFilterChange,
       className,
       style,
     } = props;
+
+    const kpis = Array.isArray(rawKpis) ? rawKpis : MOCK_KPIS;
+    const levelDistribution = Array.isArray(rawLevelDistribution) ? rawLevelDistribution : MOCK_DISTRIBUTION;
+    const heatmapData = Array.isArray(rawHeatmapData) ? rawHeatmapData : MOCK_HEATMAP;
+    const knockoutStats = Array.isArray(rawKnockoutStats) ? rawKnockoutStats : MOCK_KNOCKOUTS;
+    const trendData = Array.isArray(rawTrendData) ? rawTrendData : MOCK_TREND;
+    const cohortComparisons = Array.isArray(rawCohortComparisons) ? rawCohortComparisons : MOCK_COHORTS;
+    const skillGaps = Array.isArray(rawSkillGaps) ? rawSkillGaps : MOCK_GAPS;
 
     const [activeSection, setActiveSection] = useState<'overview' | 'heatmap' | 'gaps'>('overview');
     const handleSetActiveSection = useCallback((key: 'overview' | 'heatmap' | 'gaps') => {

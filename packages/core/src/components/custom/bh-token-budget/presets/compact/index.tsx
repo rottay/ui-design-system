@@ -48,13 +48,15 @@ export const CompactBhTokenBudget = createPreset<BhTokenBudgetProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      allocations = MOCK_ALLOCATIONS,
+      allocations: rawAllocations = MOCK_ALLOCATIONS,
       totalBudget = 10000,
       totalUsed = 6700,
       currency = '$',
       className,
       style,
     } = props;
+
+    const allocations = Array.isArray(rawAllocations) ? rawAllocations : MOCK_ALLOCATIONS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

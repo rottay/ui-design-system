@@ -134,7 +134,7 @@ function RadarChart({ candidates, dimensions, tokens: t }: { candidates: Compari
 
 export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
   name: 'BhComparisonView.Standard',
-  render: ({ primitives, props, tokens: t }: PresetContext<BhComparisonViewProps>) => {
+  render: ({ primitives, props, tokens: t, ext }: PresetContext<BhComparisonViewProps>) => {
     const { Box, Text } = primitives;
     const br = getPersonalityBadgeRadius(t);
     const dc = useMemo(() => getDecisionColors(t), [t]);
@@ -149,12 +149,18 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
     }, [t]);
 
     const {
-      candidates = DEFAULT_CANDIDATES, comparisonRows = DEFAULT_ROWS,
+      candidates: rawCandidates = DEFAULT_CANDIDATES, comparisonRows: rawComparisonRows = DEFAULT_ROWS,
       onAddCandidate, onRemoveCandidate, highlightBest: hbp = true,
       onHighlightToggle, decisions: dp, onDecisionChange,
       showRadar: srp = true, onRadarToggle,
       className, style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : DEFAULT_CANDIDATES;
+    const comparisonRows = Array.isArray(rawComparisonRows) ? rawComparisonRows : DEFAULT_ROWS;
+
+    // Extension helpers
+    const extA11y = ext.a11yConfig();
 
     const [highlightBest, setHighlightBest] = useState(hbp);
     const [showRadar, setShowRadar] = useState(srp);
@@ -189,7 +195,9 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
         ...cardBase,
         display: 'flex', flexDirection: 'column', width: '100%', height: '100%',
         ...glassCardBg, overflow: 'hidden', ...style,
-      }}>
+      }}
+        {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
+        {ext.slot('header:start')}
         {/* Header */}
         <Box style={{
           padding: `${t.spacing[5]}px ${t.spacing[6]}px`,
@@ -434,7 +442,10 @@ export const StandardBhComparisonView = createPreset<BhComparisonViewProps>({
               </Box>
             ))}
           </Box>
+
+          {ext.slot('detail')}
         </Box>
+        {ext.slot('footer')}
       </Box>
     );
   },

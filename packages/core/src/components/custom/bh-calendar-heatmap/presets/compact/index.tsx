@@ -55,11 +55,13 @@ export const CompactBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      days = MOCK_DAYS,
+      days: rawDays = MOCK_DAYS,
       activityLabel = 'interviews',
       className,
       style,
     } = props;
+
+    const days = Array.isArray(rawDays) ? rawDays : MOCK_DAYS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

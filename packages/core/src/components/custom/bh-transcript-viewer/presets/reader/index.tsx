@@ -65,7 +65,7 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
     const defaultDimensions = useMemo(() => createMockDimensions(tokens), [tokens]);
 
     const {
-      meta = MOCK_META,
+      meta: rawMeta = MOCK_META,
       segments = defaultSegments,
       dimensions = defaultDimensions,
       selectedDimension,
@@ -76,6 +76,8 @@ export const ReaderBhTranscriptViewer = createPreset<BhTranscriptViewerProps>({
       className,
       style,
     } = props;
+
+    const meta = Array.isArray(rawMeta) ? rawMeta : MOCK_META;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

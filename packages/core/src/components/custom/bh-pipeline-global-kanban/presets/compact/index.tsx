@@ -141,7 +141,7 @@ export const CompactBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanban
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = [],
+      stages: rawStages = [],
       onCardClick,
       onStageClick,
       onAddCandidate,
@@ -149,6 +149,8 @@ export const CompactBhPipelineGlobalKanban = createPreset<BhPipelineGlobalKanban
       className,
       style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : [];
 
     const [hoveredCard, setHoveredCard] = useState<string | null>(null);
     const [expandedStage, setExpandedStage] = useState<string | null>(stages[0]?.id ?? null);

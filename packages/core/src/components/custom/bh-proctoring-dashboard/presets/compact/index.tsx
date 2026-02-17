@@ -58,20 +58,8 @@ function getSeverityBadgeKey(severity: ProctoringEventSeverity | undefined): 'er
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType | undefined): string {
-  switch (type) {
-    case 'tab_switch': return 'Tab Switch';
-    case 'copy_paste': return 'Copy/Paste';
-    case 'screen_share': return 'Screen Share';
-    case 'unusual_typing': return 'Unusual Typing';
-    case 'browser_focus_lost': return 'Focus Lost';
-    default: return 'Unknown';
-  }
-}
-
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -112,13 +100,16 @@ export const CompactBhProctoringDashboard = createPreset<BhProctoringDashboardPr
 
     const {
       stats = { totalEvents: 0, unreviewedCount: 0, suspiciousCandidates: 0, averageRiskScore: 0 },
-      severityCounts = [],
-      recentEvents = [],
+      severityCounts: rawSeverityCounts = [],
+      recentEvents: rawRecentEvents = [],
       onEventClick,
       selectedEventId,
       className,
       style,
     } = props;
+
+    const severityCounts = Array.isArray(rawSeverityCounts) ? rawSeverityCounts : [];
+    const recentEvents = Array.isArray(rawRecentEvents) ? rawRecentEvents : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

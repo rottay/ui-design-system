@@ -38,7 +38,10 @@ export const CompactBhInterviewScheduler = createPreset<BhInterviewSchedulerProp
   name: 'BhInterviewScheduler.Compact',
   render: ({ primitives, props, tokens }: PresetContext<BhInterviewSchedulerProps>) => {
     const { Box, Text } = primitives;
-    const { candidate: externalCandidate, interviewType: externalType, onTypeChange, templateStage, scheduleData: externalSchedule, onScheduleChange, agentConfig: externalAgentConfig, onAgentConfigChange, agents = [], interviewers = [], onConfirm, onCancel, estimatedCost, className, style } = props;
+    const { candidate: externalCandidate, interviewType: externalType, onTypeChange, templateStage, scheduleData: externalSchedule, onScheduleChange, agentConfig: externalAgentConfig, onAgentConfigChange, agents: rawAgents = [], interviewers: rawInterviewers = [], onConfirm, onCancel, estimatedCost, className, style } = props;
+
+    const agents = Array.isArray(rawAgents) ? rawAgents : [];
+    const interviewers = Array.isArray(rawInterviewers) ? rawInterviewers : [];
 
     const [interviewType, setInterviewType] = useState<InterviewTypeConfig>(externalType ?? { type: 'ai' });
     const [scheduleData, setScheduleData] = useState<ScheduleData>(externalSchedule ?? { date: '', time: '', timezone: 'America/New_York', estimatedDuration: 30 });

@@ -60,7 +60,7 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      context, templates = [],
+      context, templates: rawTemplates = [],
       selectedTemplate: selectedTemplateProp, onTemplateSelect,
       messageContent: messageContentProp, onMessageChange,
       subject: subjectProp, onSubjectChange,
@@ -70,6 +70,8 @@ export const StandardBhFeedbackEditor = createPreset<BhFeedbackEditorProps>({
       showPreview: showPreviewProp, onPreviewToggle,
       onSend, recipientPreview, className, style,
     } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : [];
 
     const [internalSelectedTemplate, setInternalSelectedTemplate] = useState<string | null>(null);
     const [internalMessage, setInternalMessage] = useState('');

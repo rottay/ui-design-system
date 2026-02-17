@@ -12,10 +12,12 @@ export const illustrationPreset = createPreset<EmptyStateProps>((context: Preset
     title,
     description,
     illustration,
-    actions = [],
+    actions: rawActions = [],
     className,
     style,
   } = props;
+
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
   return (
     <Box

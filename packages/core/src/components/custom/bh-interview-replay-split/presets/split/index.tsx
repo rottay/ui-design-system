@@ -65,8 +65,8 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
     const t = tokens;
 
     const {
-      transcript = [],
-      evidenceMarkers = [],
+      transcript: rawTranscript = [],
+      evidenceMarkers: rawEvidenceMarkers = [],
       duration,
       currentTime: controlledTime,
       isPlaying: controlledPlaying,
@@ -80,6 +80,9 @@ export const SplitBhInterviewReplaySplit = createPreset<BhInterviewReplaySplitPr
       className,
       style,
     } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : [];
+    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : [];
 
     const [localTime, setLocalTime] = useState(0);
     const [localPlaying, setLocalPlaying] = useState(false);

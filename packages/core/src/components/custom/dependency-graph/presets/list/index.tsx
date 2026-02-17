@@ -32,7 +32,7 @@ export const ListDependencyGraph = createPreset<DependencyGraphProps>({
     const {
       nodes,
       links,
-      breadcrumbs = [],
+      breadcrumbs: rawBreadcrumbs = [],
       onLinkClick,
       onAddDependency,
       title = 'Dependencies',
@@ -40,6 +40,8 @@ export const ListDependencyGraph = createPreset<DependencyGraphProps>({
       className,
       style,
     } = props;
+
+    const breadcrumbs = Array.isArray(rawBreadcrumbs) ? rawBreadcrumbs : [];
 
     type SortKey = 'source' | 'relationship' | 'offset' | 'target' | 'critical';
     const [sortColumn, setSortColumn] = useState<SortKey | null>(null);

@@ -114,7 +114,9 @@ export const PipelineEvSponsorshipHub = createPreset<EvSponsorshipHubProps>({
     const { primitives, props, tokens } = ctx;
     const { Box, Text } = primitives;
 
-    const { sponsors = MOCK_SPONSORS, onStatusChange, onSponsorClick } = props;
+    const { sponsors: rawSponsors = MOCK_SPONSORS, onStatusChange, onSponsorClick } = props;
+
+    const sponsors = Array.isArray(rawSponsors) ? rawSponsors : MOCK_SPONSORS;
 
     const columns: Array<{ status: Sponsor['status']; label: string }> = [
       { status: 'lead', label: 'Lead' },

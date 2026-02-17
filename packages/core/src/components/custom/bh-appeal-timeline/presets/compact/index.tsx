@@ -69,11 +69,13 @@ export const CompactBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events = MOCK_EVENTS,
+      events: rawEvents = MOCK_EVENTS,
       onEventClick,
       className,
       style,
     } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

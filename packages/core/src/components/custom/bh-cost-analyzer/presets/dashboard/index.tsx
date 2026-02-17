@@ -40,10 +40,15 @@ export const DashboardBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const trendColors = useMemo(() => getTrendColors(tokens), [tokens]);
 
     const {
-      providers = MOCK_PROVIDERS, models = [], trends = [], tokenBalance,
-      alerts = [], summary, onAlertAcknowledge,
+      providers: rawProviders = MOCK_PROVIDERS, models: rawModels = [], trends: rawTrends = [], tokenBalance,
+      alerts: rawAlerts = [], summary, onAlertAcknowledge,
       loading, className, style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const models = Array.isArray(rawModels) ? rawModels : [];
+    const trends = Array.isArray(rawTrends) ? rawTrends : [];
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : [];
 
     if (loading) {
       return (

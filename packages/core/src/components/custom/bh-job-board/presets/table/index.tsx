@@ -6,7 +6,7 @@
  * candidate trends, warm neutral palette, and generous whitespace.
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle, createCardStyle, createSurfaceStyle, createHoverStyle,
@@ -16,6 +16,7 @@ import {
 import type { BhJobBoardProps, JobItem, JobStatus, JobUrgency, JobBoardFilter, ViewMode, SortDirection } from '../../core';
 import { BH_JOB_BOARD_DEFAULTS } from '../../core';
 import type { DesignTokens } from '../../../../../core/types/tokens';
+import type { ResolvedColumn, ActionDefinition } from '../../../../../core/types/extensions';
 import {
   Briefcase, Plus, Search, LayoutGrid, List, Columns3, MapPin, Clock,
   Users, Eye, X, ChevronDown, ChevronUp, Globe, ChevronsUpDown,
@@ -104,7 +105,7 @@ function filterAndSortJobs(jobs: JobItem[], filters: JobBoardFilter, searchQuery
 
 export const TableBhJobBoard = createPreset<BhJobBoardProps>({
   name: 'BhJobBoard.Table',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhJobBoardProps>) => {
+  render: ({ primitives, props, tokens, engine, ext }: PresetContext<BhJobBoardProps>) => {
     const { Box, Text } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
@@ -112,11 +113,26 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
     const URGENCY_CONFIG = useMemo(() => getUrgencyConfig(tokens), [tokens]);
 
     const {
-      jobs = [], stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
+      jobs: rawJobs = [], stats: rawStats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
       selectedJobs: controlledSelectedJobs, onSelectionChange, searchQuery: controlledSearchQuery, onSearchChange,
       sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange,
-      emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments = [], clients = [], className, style,
+      emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments: rawDepartments = [], clients: rawClients = [], className, style,
     } = props;
+
+    const jobs = Array.isArray(rawJobs) ? rawJobs : [];
+    const stats = Array.isArray(rawStats) ? rawStats : [];
+    const departments = Array.isArray(rawDepartments) ? rawDepartments : [];
+    const clients = Array.isArray(rawClients) ? rawClients : [];
+
+    // Resolve columns with extensions (extra, hidden, order, overrides)
+    const resolvedColumns = useMemo(() => ext.columns(TABLE_COLUMNS), [ext]);
+    // Merge toolbar/row actions from extensions
+    const extToolbarActions = useMemo(() => ext.toolbarActions(), [ext]);
+    const extRowActions = useMemo(() => ext.rowActions(), [ext]);
+    // Extension-provided empty state
+    const extEmptyState = ext.emptyState();
+    // Extension-provided accessibility config
+    const extA11y = ext.a11yConfig();
 
     const [internalFilters, setInternalFilters] = useState<JobBoardFilter>({});
     const [internalSortBy, setInternalSortBy] = useState(BH_JOB_BOARD_DEFAULTS.sortBy ?? 'daysOpen');
@@ -289,10 +305,10 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
       );
     };
 
-    /* Table header */
+    /* Table header - uses resolved columns (merged with extensions) */
     const renderTableHeader = () => (
       <Box style={{ display: 'flex', alignItems: 'center', padding: `${tokens.spacing[2]}px ${tokens.spacing[5]}px`, backgroundColor: tokens.colors.neutral[50], borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-        {TABLE_COLUMNS.map(col => (
+        {resolvedColumns.map(col => (
           <Box key={col.key}
             role={col.sortable ? 'button' : undefined}
             tabIndex={col.sortable ? 0 : undefined}
@@ -302,23 +318,123 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
             style={{ flex: col.width ? `0 0 ${typeof col.width === 'number' ? col.width + 'px' : col.width}` : '1', display: 'flex', alignItems: 'center', justifyContent: col.align === 'center' ? 'center' : col.align === 'right' ? 'flex-end' : 'flex-start', gap: tokens.spacing[1], padding: `0 ${tokens.spacing[2]}px`, userSelect: 'none' as const, outline: 'none' }}>
             {col.key === 'select'
               ? <CheckboxBox checked={allSelected} onClick={(e) => { e.stopPropagation(); handleSelectAll(); }} label="Select all" />
-              : <>
-                  <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing }}>{col.label}</Text>
-                  {col.sortable && renderSortIcon(col.key)}
-                </>
+              : col.renderHeader
+                ? col.renderHeader()
+                : <>
+                    <Text style={{ fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[500], textTransform: typo.labelTransform, letterSpacing: typo.labelLetterSpacing }}>{col.label}</Text>
+                    {col.sortable && renderSortIcon(col.key)}
+                  </>
             }
           </Box>
         ))}
       </Box>
     );
 
-    /* Table row */
-    const renderTableRow = (job: JobItem) => {
+    /* Default cell renderer for known column keys */
+    const renderDefaultCell = (col: ResolvedColumn, job: JobItem) => {
       const statusCfg = STATUS_CONFIG[job.status] || STATUS_CONFIG.draft;
       const urgencyCfg = URGENCY_CONFIG[job.urgency] || URGENCY_CONFIG.medium;
+      const cellPad = `0 ${tokens.spacing[2]}px`;
+
+      switch (col.key) {
+        case 'select':
+          return (
+            <Box style={{ flex: '0 0 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
+              <CheckboxBox checked={selectedJobs.includes(job.id)} onClick={(e) => { e.stopPropagation(); handleSelectionToggle(job.id); }} label={`Select ${job.title}`} />
+            </Box>
+          );
+        case 'title':
+          return (
+            <Box style={{ flex: 1, padding: cellPad, overflow: 'hidden' as const }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.title}</Text>
+              <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.code}</Text>
+                {job.clientName && <>
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[300] }}>-</Text>
+                  <Building2 size={10} color={tokens.colors.neutral[400]} />
+                  <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.clientName}</Text>
+                </>}
+              </Box>
+            </Box>
+          );
+        case 'status':
+          return (
+            <Box style={{ flex: '0 0 120px', padding: cellPad }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: statusCfg.bgColor, color: statusCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}` }}>
+                <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: statusCfg.dotColor }} />
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusCfg.color }}>{statusCfg.label}</Text>
+              </Box>
+            </Box>
+          );
+        case 'department':
+          return (
+            <Box style={{ flex: '0 0 140px', padding: cellPad, overflow: 'hidden' as const }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.department}</Text>
+            </Box>
+          );
+        case 'urgency':
+          return (
+            <Box style={{ flex: '0 0 100px', padding: cellPad }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
+                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: urgencyCfg.color }}>{urgencyCfg.label}</Text>
+              </Box>
+            </Box>
+          );
+        case 'candidateCount':
+          return (
+            <Box style={{ flex: '0 0 130px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[2], padding: cellPad }}>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{job.candidateCount}</Text>
+              {renderSparkline(job)}
+            </Box>
+          );
+        case 'daysOpen':
+          return (
+            <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
+              <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
+                <Clock size={12} color={job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600]} />
+                <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600] }}>{job.daysOpen}d</Text>
+              </Box>
+            </Box>
+          );
+        case 'location':
+          return (
+            <Box style={{ flex: '0 0 150px', padding: cellPad, display: 'flex', alignItems: 'center', gap: tokens.spacing[1], overflow: 'hidden' as const }}>
+              {job.isRemote ? <><Globe size={12} color={tokens.colors.neutral[600]} /><Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>Remote</Text></> : <><MapPin size={12} color={tokens.colors.neutral[600]} /><Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.location}</Text></>}
+            </Box>
+          );
+        case 'recruiters':
+          return (
+            <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
+              <Box style={{ display: 'flex', alignItems: 'center' }}>
+                {(job.recruiterAvatars || []).slice(0, 3).map((avatar, idx) => (
+                  <Box key={idx} style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: idx > 0 ? -6 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 3 - idx }}>
+                    {!avatar && <Users size={9} color={tokens.colors.primaryScale[600]} />}
+                  </Box>
+                ))}
+                {(job.recruiterAvatars || []).length > 3 && (
+                  <Box style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.neutral[100], marginLeft: -6, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 0 }}>
+                    <Text style={{ fontSize: '9px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{(job.recruiterAvatars || []).length - 3}</Text>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          );
+        case 'actions':
+          return null; // Handled separately
+        default:
+          return null;
+      }
+    };
+
+    /* Table row - renders resolved columns including extra/overridden ones */
+    const renderTableRow = (job: JobItem) => {
+      const statusCfg = STATUS_CONFIG[job.status] || STATUS_CONFIG.draft;
       const isHovered = hoveredRowId === job.id;
       const isSelected = selectedJobs.includes(job.id);
       const cellPad = `0 ${tokens.spacing[2]}px`;
+
+      // Merge extension row actions with defaults
+      const allRowActions = extRowActions;
 
       return (
         <Box key={job.id} role="row" tabIndex={0} aria-label={`${job.title} - ${statusCfg.label}`} aria-selected={isSelected}
@@ -326,95 +442,93 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
           onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onJobClick?.(job.id); } }}
           onMouseEnter={() => setHoveredRowId(job.id)} onMouseLeave={() => setHoveredRowId(null)}
           style={{ display: 'flex', alignItems: 'center', padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, backgroundColor: isSelected ? tokens.colors.primaryScale[50] : isHovered ? tokens.colors.neutral[50] : tokens.colors.common.white, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
-          <Box style={{ flex: '0 0 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
-            <CheckboxBox checked={isSelected} onClick={(e) => { e.stopPropagation(); handleSelectionToggle(job.id); }} label={`Select ${job.title}`} />
-          </Box>
-          <Box style={{ flex: 1, padding: cellPad, overflow: 'hidden' as const }}>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[900], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.title}</Text>
-            <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.code}</Text>
-              {job.clientName && <>
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[300] }}>-</Text>
-                <Building2 size={10} color={tokens.colors.neutral[400]} />
-                <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>{job.clientName}</Text>
-              </>}
-            </Box>
-          </Box>
-          <Box style={{ flex: '0 0 120px', padding: cellPad }}>
-            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: statusCfg.bgColor, color: statusCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${statusCfg.borderColor}` }}>
-              <Box style={{ width: 6, height: 6, borderRadius: tokens.borderRadius.full, backgroundColor: statusCfg.dotColor }} />
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: statusCfg.color }}>{statusCfg.label}</Text>
-            </Box>
-          </Box>
-          <Box style={{ flex: '0 0 140px', padding: cellPad, overflow: 'hidden' as const }}>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[700], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.department}</Text>
-          </Box>
-          <Box style={{ flex: '0 0 100px', padding: cellPad }}>
-            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1], padding: `2px ${tokens.spacing[2]}px`, borderRadius: badgeRadius, fontSize: tokens.typography.fontSize.xs, fontWeight: tokens.typography.fontWeight.medium, backgroundColor: urgencyCfg.bgColor, color: urgencyCfg.color, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${urgencyCfg.borderColor}` }}>
-              <Text style={{ fontSize: tokens.typography.fontSize.xs, color: urgencyCfg.color }}>{urgencyCfg.label}</Text>
-            </Box>
-          </Box>
-          <Box style={{ flex: '0 0 130px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[2], padding: cellPad }}>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.neutral[800] }}>{job.candidateCount}</Text>
-            {renderSparkline(job)}
-          </Box>
-          <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
-            <Box style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[1] }}>
-              <Clock size={12} color={job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600]} />
-              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.medium, color: job.daysOpen > 30 ? tokens.colors.warningScale[600] : tokens.colors.neutral[600] }}>{job.daysOpen}d</Text>
-            </Box>
-          </Box>
-          <Box style={{ flex: '0 0 150px', padding: cellPad, display: 'flex', alignItems: 'center', gap: tokens.spacing[1], overflow: 'hidden' as const }}>
-            {job.isRemote ? <><Globe size={12} color={tokens.colors.neutral[600]} /><Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600] }}>Remote</Text></> : <><MapPin size={12} color={tokens.colors.neutral[600]} /><Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[600], whiteSpace: 'nowrap' as const, overflow: 'hidden' as const, textOverflow: 'ellipsis' as const }}>{job.location}</Text></>}
-          </Box>
-          <Box style={{ flex: '0 0 100px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: cellPad }}>
-            <Box style={{ display: 'flex', alignItems: 'center' }}>
-              {(job.recruiterAvatars || []).slice(0, 3).map((avatar, idx) => (
-                <Box key={idx} style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.primaryScale[100], backgroundImage: avatar ? `url(${avatar})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center', marginLeft: idx > 0 ? -6 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 3 - idx }}>
-                  {!avatar && <Users size={9} color={tokens.colors.primaryScale[600]} />}
+          {resolvedColumns.map(col => {
+            if (col.key === 'actions') {
+              return (
+                <Box key="actions" style={{ flex: '0 0 80px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[1], opacity: isHovered ? 1 : 0, transition: `opacity ${tokens.motion.hover}`, padding: cellPad }}>
+                  <Box role="button" tabIndex={0} aria-label="View job" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onJobClick?.(job.id); }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onJobClick?.(job.id); } }}
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+                    <Eye size={12} />
+                  </Box>
+                  {allRowActions.length > 0 ? (
+                    allRowActions.slice(0, 2).map(action => (
+                      <Box key={action.key} role="button" tabIndex={0} aria-label={action.label}
+                        onClick={(e: React.MouseEvent) => { e.stopPropagation(); action.onClick(job as any, e); }}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); action.onClick(job as any); } }}
+                        style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: action.variant === 'danger' ? tokens.colors.errorScale[600] : tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+                        {action.icon || <MoreHorizontal size={12} />}
+                      </Box>
+                    ))
+                  ) : (
+                    <Box role="button" tabIndex={0} aria-label="More actions" onClick={(e: React.MouseEvent) => { e.stopPropagation(); }}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); } }}
+                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
+                      <MoreHorizontal size={12} />
+                    </Box>
+                  )}
                 </Box>
-              ))}
-              {(job.recruiterAvatars || []).length > 3 && (
-                <Box style={{ width: 22, height: 22, borderRadius: tokens.borderRadius.full, border: `2px solid ${tokens.colors.common.white}`, backgroundColor: tokens.colors.neutral[100], marginLeft: -6, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' as const, zIndex: 0 }}>
-                  <Text style={{ fontSize: '9px', fontWeight: tokens.typography.fontWeight.bold, color: tokens.colors.neutral[600] }}>+{(job.recruiterAvatars || []).length - 3}</Text>
+              );
+            }
+
+            // Extra column from extensions - use its render function
+            if (col._isExtra && col.render) {
+              return (
+                <Box key={col.key} style={{ flex: col.width ? `0 0 ${typeof col.width === 'number' ? col.width + 'px' : col.width}` : '1', display: 'flex', alignItems: 'center', justifyContent: col.align === 'center' ? 'center' : col.align === 'right' ? 'flex-end' : 'flex-start', padding: cellPad, overflow: 'hidden' as const }}>
+                  {col.render(job as any, filteredJobs.indexOf(job))}
                 </Box>
-              )}
-            </Box>
-          </Box>
-          <Box style={{ flex: '0 0 80px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: tokens.spacing[1], opacity: isHovered ? 1 : 0, transition: `opacity ${tokens.motion.hover}`, padding: cellPad }}>
-            <Box role="button" tabIndex={0} aria-label="View job" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onJobClick?.(job.id); }}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onJobClick?.(job.id); } }}
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
-              <Eye size={12} />
-            </Box>
-            <Box role="button" tabIndex={0} aria-label="More actions" onClick={(e: React.MouseEvent) => { e.stopPropagation(); }}
-              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); } }}
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, borderRadius: tokens.borderRadius.md, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.common.white, color: tokens.colors.neutral[600], transition: `all ${tokens.motion.hover}`, outline: 'none' }}>
-              <MoreHorizontal size={12} />
-            </Box>
-          </Box>
+              );
+            }
+
+            // Default column with render override
+            if (col._renderOverride) {
+              return (
+                <Box key={col.key} style={{ flex: col.width ? `0 0 ${typeof col.width === 'number' ? col.width + 'px' : col.width}` : '1', display: 'flex', alignItems: 'center', justifyContent: col.align === 'center' ? 'center' : col.align === 'right' ? 'flex-end' : 'flex-start', padding: cellPad, overflow: 'hidden' as const }}>
+                  {col._renderOverride((job as any)[col.key], job as any, filteredJobs.indexOf(job))}
+                </Box>
+              );
+            }
+
+            // Default cell renderer
+            const defaultCell = renderDefaultCell(col, job);
+            if (defaultCell !== null) return <React.Fragment key={col.key}>{defaultCell}</React.Fragment>;
+
+            return null;
+          })}
         </Box>
       );
     };
 
-    /* Empty state */
-    const renderEmptyState = () => (
-      <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px`, textAlign: 'center' as const, backgroundColor: tokens.colors.common.white }}>
-        <Box style={createIconContainerStyle(tokens, { size: 56, color: tokens.colors.primaryScale[50] })}>
-          <Briefcase size={24} color={tokens.colors.primaryScale[400]} />
+    /* Empty state - supports extension override */
+    const renderEmptyState = () => {
+      const customEmpty = extEmptyState;
+      return (
+        <Box style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: `${tokens.spacing[12]}px ${tokens.spacing[6]}px`, textAlign: 'center' as const, backgroundColor: tokens.colors.common.white }}>
+          {customEmpty?.icon || (
+            <Box style={createIconContainerStyle(tokens, { size: 56, color: tokens.colors.primaryScale[50] })}>
+              <Briefcase size={24} color={tokens.colors.primaryScale[400]} />
+            </Box>
+          )}
+          <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[2], marginTop: tokens.spacing[4] }}>{customEmpty?.title || emptyText}</Text>
+          <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[5], maxWidth: 320 }}>{customEmpty?.description || 'Try adjusting your filters or search query.'}</Text>
+          {customEmpty?.action ? (
+            <Box role="button" tabIndex={0} aria-label={customEmpty.action.label} onClick={customEmpty.action.onClick}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); customEmpty.action!.onClick(); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              <Plus size={16} color={tokens.colors.common.white} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.common.white }}>{customEmpty.action.label}</Text>
+            </Box>
+          ) : onCreateJob && (
+            <Box role="button" tabIndex={0} aria-label="Create job" onClick={onCreateJob}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              <Plus size={16} color={tokens.colors.common.white} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.common.white }}>Create Job</Text>
+            </Box>
+          )}
         </Box>
-        <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[800], marginBottom: tokens.spacing[2], marginTop: tokens.spacing[4] }}>{emptyText}</Text>
-        <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: tokens.spacing[5], maxWidth: 320 }}>Try adjusting your filters or search query.</Text>
-        {onCreateJob && (
-          <Box role="button" tabIndex={0} aria-label="Create job" onClick={onCreateJob}
-            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: tokens.spacing[2], padding: `${tokens.spacing[2]}px ${tokens.spacing[4]}px`, borderRadius: tokens.borderRadius.md, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
-            <Plus size={16} color={tokens.colors.common.white} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.common.white }}>Create Job</Text>
-          </Box>
-        )}
-      </Box>
-    );
+      );
+    };
 
     /* Stats summary */
     const renderStatsSummary = () => {
@@ -435,12 +549,18 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
     };
 
     return (
-      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
-        {renderHeader()}
+      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}
+        {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}
+        {...(extA11y.role ? { role: extA11y.role } : {})}>
+        {ext.slot('header:start')}
+        {ext.section('header', renderHeader)}
+        {ext.slot('header:end')}
         {renderStatsSummary()}
         <Box style={{ ...createSurfaceStyle(tokens, { elevation: 'sm' }), backgroundColor: tokens.colors.common.white, overflow: 'hidden' as const, borderRadius: tokens.borderRadius.lg, border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}` }}>
-          {renderToolbar()}
-          {filteredJobs.length === 0 ? renderEmptyState() : (
+          {ext.slot('toolbar:start')}
+          {ext.section('toolbar', renderToolbar)}
+          {ext.slot('toolbar:end')}
+          {filteredJobs.length === 0 ? (ext.hasSlot('empty') ? ext.slot('empty') : renderEmptyState()) : (
             <>
               {renderTableHeader()}
               <Box role="table">{filteredJobs.map(job => renderTableRow(job))}</Box>
@@ -450,9 +570,11 @@ export const TableBhJobBoard = createPreset<BhJobBoardProps>({
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${tokens.spacing[3]}px ${tokens.spacing[5]}px`, borderTop: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`, backgroundColor: tokens.colors.neutral[50] }}>
               <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.neutral[500] }}>Showing {filteredJobs.length} of {jobs.length} jobs</Text>
               {selectedJobs.length > 0 && <Text style={{ fontSize: tokens.typography.fontSize.xs, color: tokens.colors.primaryScale[600], fontWeight: tokens.typography.fontWeight.medium }}>{selectedJobs.length} selected</Text>}
+              {ext.slot('footer:end')}
             </Box>
           )}
         </Box>
+        {ext.slot('footer')}
       </Box>
     );
   },

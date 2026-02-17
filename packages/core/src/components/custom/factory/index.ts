@@ -6,10 +6,11 @@
  */
 
 import React, { ComponentType, useMemo } from 'react';
-import type { EngineName, TenantConfig, DesignTokens } from '../../../types';
+import type { EngineName, TenantConfig, DesignTokens, ComponentExtensions, ExtensionHelpers } from '../../../types';
 import { useTenant } from '../../../core/hooks/tenant';
 import { useTokens } from '../../../core/hooks/tokens';
 import { useEngineContext } from '../../../core/providers/engine';
+import { createExtensionHelpers } from './extensions';
 
 // Re-export primitives for use in presets
 import * as Primitives from '../../primitives';
@@ -28,6 +29,8 @@ export interface PresetContext<P = unknown> {
   tenant: TenantConfig;
   /** Active engine name (set by the app, not by the design system) */
   engine: EngineName;
+  /** Extension helpers - always available, no-op when no extensions */
+  ext: ExtensionHelpers;
 }
 
 /**
@@ -77,13 +80,38 @@ export function createPreset<P extends object>(
     const tokens = useTokens();
     const { engine } = useEngineContext();
 
+    // Extract extensions from props (available on all EngineAwareProps)
+    const extensions = (props as Record<string, unknown>).extensions as ComponentExtensions | undefined;
+
+    const ext = useMemo(
+      () => createExtensionHelpers(extensions, tokens),
+      [extensions, tokens],
+    );
+
+    // Sanitize null prop values to undefined so destructuring defaults work.
+    // e.g. `const { items = [] } = props` catches undefined but NOT null.
+    // useServerAction initially returns data: null, which pages may pass through.
+    //
+    // NOTE: This conversion is safe for presets that just destructure-and-render.
+    // Presets that sync props to state via useEffect MUST use stable constants
+    // instead of destructuring defaults (see bh-interview-monitor for example).
+    const safeProps = useMemo(() => {
+      const result = {} as Record<string, unknown>;
+      for (const key in props) {
+        const val = (props as Record<string, unknown>)[key];
+        result[key] = val === null ? undefined : val;
+      }
+      return result as P;
+    }, [props]);
+
     const context = useMemo<PresetContext<P>>(() => ({
       primitives: Primitives,
-      props,
+      props: safeProps,
       tokens,
       tenant,
       engine,
-    }), [props, tokens, tenant, engine]);
+      ext,
+    }), [safeProps, tokens, tenant, engine, ext]);
 
     return resolved.render(context);
   };

@@ -63,7 +63,7 @@ export const SidebarPlUserProfileEditor = createPreset<PlUserProfileEditorProps>
       onSave,
       onCancel,
       saving = false,
-      errors = [],
+      errors: rawErrors = [],
       departments = PL_USER_PROFILE_EDITOR_DEFAULTS.departments || [],
       timezones = PL_USER_PROFILE_EDITOR_DEFAULTS.timezones || [],
       dateFormats = PL_USER_PROFILE_EDITOR_DEFAULTS.dateFormats || [],
@@ -76,6 +76,8 @@ export const SidebarPlUserProfileEditor = createPreset<PlUserProfileEditorProps>
       className,
       style,
     } = props;
+
+    const errors = Array.isArray(rawErrors) ? rawErrors : [];
 
     // ─── Internal State ──────────────────────────────────────────────────
     const [editedProfile, setEditedProfile] = useState<UserProfile>(profile);

@@ -140,10 +140,10 @@ export const DashboardBhProviderCost = createPreset<BhProviderCostProps>({
     const chartCfg = useMemo(() => getChartConfig(t), [t]);
 
     const {
-      providers = MOCK_PROVIDERS,
-      alerts = MOCK_ALERTS,
-      totalBudget = MOCK_TOTAL_BUDGET,
-      totalSpent = MOCK_TOTAL_SPENT,
+      providers: rawProviders = MOCK_PROVIDERS,
+      alerts: rawAlerts = MOCK_ALERTS,
+      totalBudget: rawTotalBudget = MOCK_TOTAL_BUDGET,
+      totalSpent: rawTotalSpent = MOCK_TOTAL_SPENT,
       currency = 'USD',
       period = 'This Month',
       onProviderClick,
@@ -152,6 +152,11 @@ export const DashboardBhProviderCost = createPreset<BhProviderCostProps>({
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : MOCK_ALERTS;
+    const totalBudget = Array.isArray(rawTotalBudget) ? rawTotalBudget : MOCK_TOTAL_BUDGET;
+    const totalSpent = Array.isArray(rawTotalSpent) ? rawTotalSpent : MOCK_TOTAL_SPENT;
 
     const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
 

@@ -89,7 +89,7 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions = MOCK_POSITIONS,
+      positions: rawPositions = MOCK_POSITIONS,
       onPositionClick,
       selectedPositionId,
       sortBy: sortByProp,
@@ -98,6 +98,8 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
       className,
       style,
     } = props;
+
+    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
 
 
     const [internalSort, setInternalSort] = useState<string>(sortByProp ?? 'daysOpen');
@@ -127,7 +129,7 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
     }, [sortBy, onSortChange]);
 
     const filtered = useMemo(() => {
-      let result = positions;
+      let result = Array.isArray(positions) ? positions : MOCK_POSITIONS;
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         result = result.filter(p =>

@@ -43,7 +43,10 @@ export const StandardEvLiveChat = createPreset<EvLiveChatProps>({
     const [searchTerm, setSearchTerm] = useState('');
     const [filterMode, setFilterMode] = useState<'all' | 'highlighted' | 'reactions'>('all');
     const [hoveredMsg, setHoveredMsg] = useState<string | null>(null);
-    const { messages = MOCK_MSGS, pinnedMessage = MOCK_PINNED, onSend, onPin, onReact, onDelete, className, style } = props;
+    const { messages: rawMessages = MOCK_MSGS, pinnedMessage: rawPinnedMessage = MOCK_PINNED, onSend, onPin, onReact, onDelete, className, style } = props;
+
+    const messages = Array.isArray(rawMessages) ? rawMessages : MOCK_MSGS;
+    const pinnedMessage = Array.isArray(rawPinnedMessage) ? rawPinnedMessage : MOCK_PINNED;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

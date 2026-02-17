@@ -186,8 +186,8 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
 
     const {
       config: configProp,
-      mappings = [],
-      logs = [],
+      mappings: rawMappings = [],
+      logs: rawLogs = [],
       onSync,
       onResolveConflict,
       onToggleAutoProvision,
@@ -196,6 +196,9 @@ export const StatusPlScimDirectorySync = createPreset<PlScimDirectorySyncProps>(
       className,
       style,
     } = props;
+
+    const mappings = Array.isArray(rawMappings) ? rawMappings : [];
+    const logs = Array.isArray(rawLogs) ? rawLogs : [];
 
     // Provide default config if not provided
     const config = configProp || {

@@ -150,7 +150,8 @@ export function getStatusColors(status: string, tokens: DesignTokens): { bg: str
   }
 }
 
-export function getCandidateInitials(name: string): string {
+export function getCandidateInitials(name?: string | null): string {
+  if (!name) return '?';
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) {
     return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();

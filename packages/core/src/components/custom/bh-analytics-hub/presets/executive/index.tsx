@@ -113,10 +113,10 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const {
       dateRange = '30d',
       onDateRangeChange,
-      funnelData = MOCK_FUNNEL,
-      recruiterData = MOCK_RECRUITERS,
-      sourceData = MOCK_SOURCES,
-      trendData = MOCK_TREND,
+      funnelData: rawFunnelData = MOCK_FUNNEL,
+      recruiterData: rawRecruiterData = MOCK_RECRUITERS,
+      sourceData: rawSourceData = MOCK_SOURCES,
+      trendData: rawTrendData = MOCK_TREND,
       comparisonPeriod = true,
       onComparisonToggle,
       onExport,
@@ -124,6 +124,11 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
       className,
       style,
     } = props;
+
+    const funnelData = Array.isArray(rawFunnelData) ? rawFunnelData : MOCK_FUNNEL;
+    const recruiterData = Array.isArray(rawRecruiterData) ? rawRecruiterData : MOCK_RECRUITERS;
+    const sourceData = Array.isArray(rawSourceData) ? rawSourceData : MOCK_SOURCES;
+    const trendData = Array.isArray(rawTrendData) ? rawTrendData : MOCK_TREND;
 
     const [activeDateRange, setActiveDateRange] = useState<DateRangePreset>(dateRange);
     const [selectedKpi, setSelectedKpi] = useState<string | null>(null);

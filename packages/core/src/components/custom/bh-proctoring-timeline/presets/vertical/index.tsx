@@ -80,20 +80,8 @@ function getEventTypeIcon(type: string | undefined) {
   }
 }
 
-function getEventTypeLabel(type: string | undefined): string {
-  switch (type) {
-    case 'tab_switch': return 'Tab Switch';
-    case 'copy_paste': return 'Copy/Paste';
-    case 'screen_share': return 'Screen Share';
-    case 'unusual_typing': return 'Unusual Typing';
-    case 'browser_focus_lost': return 'Focus Lost';
-    default: return 'Unknown';
-  }
-}
-
-function getSeverityLabel(severity: string | undefined): string {
-  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 
 function formatTime(date: Date): string {
   const h = date.getHours().toString().padStart(2, '0');
@@ -140,7 +128,7 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events = MOCK_EVENTS,
+      events: rawEvents = MOCK_EVENTS,
       startTime = TWO_HOURS_AGO,
       endTime = NOW,
       onEventClick,
@@ -150,6 +138,8 @@ export const VerticalBhProctoringTimeline = createPreset<BhProctoringTimelinePro
       className,
       style,
     } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
 
     const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
 

@@ -41,7 +41,7 @@ const DEFAULT_CANDIDATES: RankedCandidate[] = [
 
 function MiniRadar({ candidates, tokens: t }: { candidates: RankedCandidate[]; tokens: DesignTokens }) {
   if (candidates.length === 0) return null;
-  const dims = candidates[0].stageScores.map(s => s.stage);
+  const dims = (candidates[0].stageScores ?? []).map(s => s.stage);
   const size = 180; const cx = size / 2; const cy = size / 2; const maxR = 70;
   const n = dims.length;
   const angles = dims.map((_, i) => (Math.PI * 2 * i) / n - Math.PI / 2);
@@ -60,7 +60,7 @@ function MiniRadar({ candidates, tokens: t }: { candidates: RankedCandidate[]; t
           <text x={lp.x} y={lp.y} textAnchor="middle" dominantBaseline="middle" style={{ fontSize: 8, fill: t.colors.neutral[500] }}>{dims[i]}</text></g>);
       })}
       {candidates.map((cand, ci) => {
-        const pts = cand.stageScores.map((ss, i) => { const p = getP(angles[i], ss.score); return `${p.x},${p.y}`; }).join(' ');
+        const pts = (cand.stageScores ?? []).map((ss, i) => { const p = getP(angles[i], ss.score); return `${p.x},${p.y}`; }).join(' ');
         return <polygon key={cand.id} points={pts} fill={`${colors[ci % colors.length]}20`} stroke={colors[ci % colors.length]} strokeWidth="2" />;
       })}
     </svg>
@@ -81,18 +81,20 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
 
     const {
       jobName = '',
-      candidates = [],
+      candidates: rawCandidates = [],
       selectedCandidates: scp, onSelectionChange,
       onDecisionChange, onCompare,
       className, style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
 
     const compared = useMemo(() => {
       if (scp && scp.length >= 2) return candidates.filter(c => scp.includes(c.id)).slice(0, 3);
       return candidates.slice(0, 2);
     }, [candidates, scp]);
 
-    const stages = compared.length > 0 ? compared[0].stageScores.map(s => s.stage) : [];
+    const stages = compared.length > 0 ? (compared[0].stageScores ?? []).map(s => s.stage) : [];
 
     const handleDecision = useCallback((candidateId: string, action: DecisionAction) => {
       onDecisionChange?.(candidateId, action);
@@ -242,7 +244,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
               <Box key={c.id}>
                 <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.neutral[800], marginBottom: t.spacing[2] }}>{c.name}</Text>
                 <Box style={{ marginBottom: t.spacing[3] }}>
-                  {c.strengths.map((s, i) => (
+                  {(c.strengths ?? []).map((s, i) => (
                     <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: 4 }}>
                       <ThumbsUp size={10} style={{ color: t.colors.successScale[500] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.successScale[700] }}>{s}</Text>
@@ -250,7 +252,7 @@ export const ComparisonBhRankingBoard = createPreset<BhRankingBoardProps>({
                   ))}
                 </Box>
                 <Box>
-                  {c.weaknesses.map((w, i) => (
+                  {(c.weaknesses ?? []).map((w, i) => (
                     <Box key={i} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], marginBottom: 4 }}>
                       <AlertTriangle size={10} style={{ color: t.colors.errorScale[500] }} />
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.errorScale[700] }}>{w}</Text>

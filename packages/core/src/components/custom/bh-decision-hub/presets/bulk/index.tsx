@@ -94,12 +94,14 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
     const {
       jobName = '',
       pendingCount = 0,
-      candidates = [],
+      candidates: rawCandidates = [],
       bulkDecisions: bulkDecisionsProp,
       onBulkDecisionChange,
       onBulkSubmit,
       className, style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
 
     /* -- state ---------------------------------------------------------- */
     const [internalBulk, setInternalBulk] = useState<BulkDecisionEntry[]>([]);

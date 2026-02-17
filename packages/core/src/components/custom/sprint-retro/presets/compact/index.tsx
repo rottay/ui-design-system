@@ -28,7 +28,7 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
       title = SPRINT_RETRO_DEFAULTS.title,
       teamName,
       columns,
-      participants = [],
+      participants: rawParticipants = [],
       onAddNote,
       onEditNote,
       onDeleteNote,
@@ -40,6 +40,8 @@ export const CompactSprintRetro = createPreset<SprintRetroProps>({
       className,
       style,
     } = props;
+
+    const participants = Array.isArray(rawParticipants) ? rawParticipants : [];
 
     const [addingToColumn, setAddingToColumn] = useState<string | null>(null);
     const [newNoteContent, setNewNoteContent] = useState('');

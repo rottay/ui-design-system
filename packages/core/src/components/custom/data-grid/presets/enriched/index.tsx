@@ -104,7 +104,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
       searchable = true,
       searchPlaceholder = DATA_GRID_DEFAULTS.searchPlaceholder,
       onSearch,
-      filters = [],
+      filters: rawFilters = [],
       onFilterClick,
       totalRows,
       visibleColumns,
@@ -129,7 +129,7 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
       freezeFirstColumn = true,
       showEnrichmentButton = true,
       onAddEnrichment,
-      breadcrumbs = [],
+      breadcrumbs: rawBreadcrumbs = [],
       onboardingProgress,
       onboardingLabel,
       onDismissOnboarding,
@@ -137,6 +137,9 @@ export const EnrichedDataGrid = createPreset<EnrichedDataGridProps & Record<stri
       columnReorderable = false,
       onColumnReorder,
     } = props;
+
+    const filters = Array.isArray(rawFilters) ? rawFilters : [];
+    const breadcrumbs = Array.isArray(rawBreadcrumbs) ? rawBreadcrumbs : [];
 
     // ========================================================================
     // Internal State

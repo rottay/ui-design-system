@@ -12,7 +12,9 @@ export const Compact = createPreset<BillingPanelProps>((context: PresetContext<B
   const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
-  const { plan, invoices = [], paymentMethod, onChangePlan, onUpdatePayment, onDownloadInvoice, className, style } = props;
+  const { plan, invoices: rawInvoices = [], paymentMethod, onChangePlan, onUpdatePayment, onDownloadInvoice, className, style } = props;
+
+    const invoices = Array.isArray(rawInvoices) ? rawInvoices : [];
 
   const [activeTab, setActiveTab] = useState<'plan' | 'payment' | 'invoices'>('plan');
 

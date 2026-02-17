@@ -79,20 +79,8 @@ function getEventTypeIcon(type: string | undefined) {
   }
 }
 
-function getEventTypeLabel(type: string | undefined): string {
-  switch (type) {
-    case 'tab_switch': return 'Tab Switch';
-    case 'copy_paste': return 'Copy/Paste';
-    case 'screen_share': return 'Screen Share';
-    case 'unusual_typing': return 'Unusual Typing';
-    case 'browser_focus_lost': return 'Focus Lost';
-    default: return 'Unknown';
-  }
-}
-
-function getSeverityLabel(severity: string | undefined): string {
-  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 
 const SEVERITY_OPTIONS: ProctoringEventSeverity[] = ['low', 'medium', 'high', 'critical'];
 
@@ -130,7 +118,7 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event: eventView = MOCK_EVENT,
+      event: rawEventView = MOCK_EVENT,
       onSubmitReview,
       onDismiss,
       onSeverityOverride,
@@ -138,6 +126,8 @@ export const StackedBhProctoringReview = createPreset<BhProctoringReviewProps>({
       className,
       style,
     } = props;
+
+    const eventView = Array.isArray(rawEventView) ? rawEventView : MOCK_EVENT;
 
     /* Safely extract fields from the View wrapper */
     const ev = eventView?.event;

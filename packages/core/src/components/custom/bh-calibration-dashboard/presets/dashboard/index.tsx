@@ -132,7 +132,7 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sessions = [],
+      sessions: rawSessions = [],
       metrics = { activeSessions: 0, totalCompleted: 0, avgAgreementRate: 0, avgDeviation: 0 },
       onSessionClick,
       onCreateSession,
@@ -141,6 +141,8 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
       className,
       style,
     } = props;
+
+    const sessions = Array.isArray(rawSessions) ? rawSessions : [];
 
     const [hoveredSession, setHoveredSession] = useState<string | null>(null);
 

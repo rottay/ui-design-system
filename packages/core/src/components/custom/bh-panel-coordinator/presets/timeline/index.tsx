@@ -54,11 +54,14 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
     const stageColors = getStageStatusColors(tokens);
 
     const {
-      stages = MOCK_STAGES, members = MOCK_MEMBERS, consensus, candidateName, positionTitle,
+      stages: rawStages = MOCK_STAGES, members: rawMembers = MOCK_MEMBERS, consensus, candidateName, positionTitle,
       selectedStageId: selectedStageIdProp, onStageSelect,
       selectedMemberId: selectedMemberIdProp, onMemberSelect,
       onFinalDecision, loading, className, style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const members = Array.isArray(rawMembers) ? rawMembers : MOCK_MEMBERS;
 
     const [internalStage, setInternalStage] = useState(selectedStageIdProp ?? '');
     const [internalMember, setInternalMember] = useState(selectedMemberIdProp ?? '');
@@ -167,7 +170,7 @@ export const TimelineBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>(
           </Box>
           <Flex gap={0}>
             {sortedStages.map((stage, i) => {
-              const sc = stageColors[stage.status];
+              const sc = stageColors[stage.status] ?? { bgColor: tokens.colors.neutral[200], color: tokens.colors.neutral[600] };
               const isSelected = selectedStageId === stage.id;
               const stageMembers = members.filter(m => m.stageId === stage.id);
               const memberScores = stageMembers.map(m => m.overallScore ?? 0);

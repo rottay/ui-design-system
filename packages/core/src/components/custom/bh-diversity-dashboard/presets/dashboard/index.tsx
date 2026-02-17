@@ -102,7 +102,7 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      metrics = [],
+      metrics: rawMetrics = [],
       totalCandidates = 0,
       title = 'Diversity & Inclusion',
       onSegmentClick,
@@ -110,6 +110,8 @@ export const DashboardBhDiversityDashboard = createPreset<BhDiversityDashboardPr
       className,
       style,
     } = props;
+
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

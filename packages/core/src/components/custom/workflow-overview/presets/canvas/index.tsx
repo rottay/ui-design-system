@@ -30,7 +30,7 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
     const {
       nodes,
       connections,
-      tabs = [],
+      tabs: rawTabs = [],
       activeTab,
       onTabChange,
       onNodeClick,
@@ -52,6 +52,8 @@ export const CanvasWorkflowOverview = createPreset<WorkflowOverviewProps>({
       pannable = true,
       gridSnap = 0,
     } = props;
+
+    const tabs = Array.isArray(rawTabs) ? rawTabs : [];
 
     // Zoom
     const [internalZoom, setInternalZoom] = useState(zoomLevelProp ?? 100);

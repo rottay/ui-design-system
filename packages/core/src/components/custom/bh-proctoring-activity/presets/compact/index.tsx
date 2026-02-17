@@ -62,19 +62,8 @@ function getEventTypeIcon(type: ProctoringEventType) {
   }
 }
 
-function getEventTypeLabel(type: ProctoringEventType): string {
-  switch (type) {
-    case 'tab_switch': return 'Tab Switch';
-    case 'copy_paste': return 'Copy/Paste';
-    case 'screen_share': return 'Screen Share';
-    case 'unusual_typing': return 'Unusual Typing';
-    case 'browser_focus_lost': return 'Focus Lost';
-  }
-}
-
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -102,13 +91,15 @@ export const CompactBhProctoringActivity = createPreset<BhProctoringActivityProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events = MOCK_EVENTS,
+      events: rawEvents = MOCK_EVENTS,
       onEventClick,
       maxItems = 10,
       showTimestamps = true,
       className,
       style,
     } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

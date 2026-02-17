@@ -68,7 +68,7 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      regions = MOCK_REGIONS,
+      regions: rawRegions = MOCK_REGIONS,
       title = 'Geographic Distribution',
       onRegionClick,
       selectedRegionId,
@@ -76,6 +76,8 @@ export const MapBhGeographicMap = createPreset<BhGeographicMapProps>({
       className,
       style,
     } = props;
+
+    const regions = Array.isArray(rawRegions) ? rawRegions : MOCK_REGIONS;
 
     const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 

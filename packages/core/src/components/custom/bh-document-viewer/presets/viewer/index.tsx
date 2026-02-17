@@ -54,7 +54,7 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
       documentType = 'pdf',
       totalPages = 3,
       currentPage: propPage = 1,
-      annotations = MOCK_ANNOTATIONS,
+      annotations: rawAnnotations = MOCK_ANNOTATIONS,
       onPageChange,
       onAnnotationClick,
       onDownload,
@@ -62,6 +62,8 @@ export const ViewerBhDocumentViewer = createPreset<BhDocumentViewerProps>({
       className,
       style,
     } = props;
+
+    const annotations = Array.isArray(rawAnnotations) ? rawAnnotations : MOCK_ANNOTATIONS;
 
     const [page, setPage] = useState(propPage);
     const [zoom, setZoom] = useState(propZoom);

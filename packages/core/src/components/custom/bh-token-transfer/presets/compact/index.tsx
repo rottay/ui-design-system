@@ -137,7 +137,7 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
     const {
-      transfers = MOCK_TRANSFERS,
+      transfers: rawTransfers = MOCK_TRANSFERS,
       onApprove,
       onReject,
       onRequestTransfer,
@@ -145,6 +145,8 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
       className,
       style,
     } = props;
+
+    const transfers = Array.isArray(rawTransfers) ? rawTransfers : MOCK_TRANSFERS;
 
 
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

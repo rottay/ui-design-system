@@ -53,7 +53,7 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
       templateName = 'New Template',
       subject = 'Exciting opportunity at {{company}}',
       body = 'Hi {{firstName}},\n\nI came across your profile and was impressed by your experience. We have an exciting {{position}} role at {{company}} that I think would be a great fit.\n\nWould you be open to a brief conversation?\n\nBest regards,\n{{recruiterName}}',
-      variables = DEFAULT_VARIABLES,
+      variables: rawVariables = DEFAULT_VARIABLES,
       category = 'Sourcing',
       onNameChange,
       onSubjectChange,
@@ -64,6 +64,8 @@ export const EditorBhMessageTemplateEditor = createPreset<BhMessageTemplateEdito
       className,
       style,
     } = props;
+
+    const variables = Array.isArray(rawVariables) ? rawVariables : DEFAULT_VARIABLES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

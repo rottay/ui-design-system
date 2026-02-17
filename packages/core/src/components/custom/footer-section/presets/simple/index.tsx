@@ -22,14 +22,17 @@ export const SimpleFooterSection = createPreset<FooterSectionProps>({
     const { Box, Text, Stack, Divider } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
-      columns = [],
-      social = [],
+      columns: rawColumns = [],
+      social: rawSocial = [],
       copyright,
       newsletter,
       logo,
       className,
       style,
     } = props;
+
+    const columns = Array.isArray(rawColumns) ? rawColumns : [];
+    const social = Array.isArray(rawSocial) ? rawSocial : [];
 
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
     const [hoveredSocial, setHoveredSocial] = useState<string | null>(null);

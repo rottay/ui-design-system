@@ -21,7 +21,7 @@ export const PolicyMfaConfigPanel = createPreset<MfaConfigPanelProps>({
     const { Box, Stack } = primitives;
 
     const {
-      policies = [],
+      policies: rawPolicies = [],
       onPolicyToggle,
       title = 'MFA Policies',
       subtitle = 'Configure authentication requirements',
@@ -29,6 +29,8 @@ export const PolicyMfaConfigPanel = createPreset<MfaConfigPanelProps>({
       className,
       style,
     } = props;
+
+    const policies = Array.isArray(rawPolicies) ? rawPolicies : [];
 
     return (
       <Box className={className} style={{ ...createCardStyle(tokens, { elevation: 'sm' }), ...style }}>

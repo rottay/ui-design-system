@@ -41,11 +41,14 @@ export const DashboardBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const {
-      events = MOCK_EVENTS, similarityChecks = [], stats,
+      events: rawEvents = MOCK_EVENTS, similarityChecks: rawSimilarityChecks = [], stats,
       selectedEventId: selectedEventIdProp, onEventSelect, onReviewAction,
       severityFilter: severityFilterProp, onSeverityFilterChange,
       loading, className, style,
     } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
+    const similarityChecks = Array.isArray(rawSimilarityChecks) ? rawSimilarityChecks : [];
 
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEventIdProp ?? '');
     const [internalSeverityFilter, setInternalSeverityFilter] = useState<EventSeverity[]>([]);

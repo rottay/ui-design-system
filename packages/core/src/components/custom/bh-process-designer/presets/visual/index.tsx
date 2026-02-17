@@ -101,10 +101,12 @@ export const VisualBhProcessDesigner = createPreset<BhProcessDesignerProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      template = MOCK_TEMPLATE, selectedStage, onStageSelect, onStageReorder,
+      template: rawTemplate = MOCK_TEMPLATE, selectedStage, onStageSelect, onStageReorder,
       onStageAdd, onStageRemove, onStageUpdate, onTemplateUpdate,
       readOnly = false, className, style,
     } = props;
+
+    const template = Array.isArray(rawTemplate) ? rawTemplate : MOCK_TEMPLATE;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

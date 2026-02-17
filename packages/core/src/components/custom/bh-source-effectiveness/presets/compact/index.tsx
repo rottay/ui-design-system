@@ -36,12 +36,14 @@ export const CompactBhSourceEffectiveness = createPreset<BhSourceEffectivenessPr
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      sources = MOCK_SOURCES,
+      sources: rawSources = MOCK_SOURCES,
       onSourceClick,
       selectedSource,
       className,
       style,
     } = props;
+
+    const sources = Array.isArray(rawSources) ? rawSources : MOCK_SOURCES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

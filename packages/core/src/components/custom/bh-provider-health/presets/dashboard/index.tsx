@@ -117,7 +117,7 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
     const { Box, Text } = primitives;
 
     const {
-      providers = MOCK_PROVIDERS,
+      providers: rawProviders = MOCK_PROVIDERS,
       summary: controlledSummary,
       selectedProvider,
       onProviderSelect,
@@ -126,6 +126,8 @@ export const DashboardBhProviderHealth = createPreset<BhProviderHealthProps>({
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

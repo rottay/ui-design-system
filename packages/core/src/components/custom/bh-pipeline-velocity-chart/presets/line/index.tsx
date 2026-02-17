@@ -6,7 +6,7 @@
  * period selector, and hover tooltips. Personality-driven, glass-aware.
  */
 
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import {
   TrendingUp, Calendar, Target, BarChart3, Activity,
 } from 'lucide-react';
@@ -109,10 +109,8 @@ export const LineBhPipelineVelocityChart = createPreset<BhPipelineVelocityChartP
     } = props;
 
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [activePeriod, setActivePeriod] = useState<VelocityPeriod>(periodProp);
+    const [activePeriod, setActivePeriod] = useState<VelocityPeriod>(periodProp ?? 30 as VelocityPeriod);
     const svgRef = useRef<SVGSVGElement>(null);
-
-    useEffect(() => { setActivePeriod(periodProp); }, [periodProp]);
 
     const data = useMemo(() => dataProp ?? MOCK_DATA_30, [dataProp]);
 

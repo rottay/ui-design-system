@@ -99,13 +99,17 @@ export const SplitBhInterviewReplayEnhanced = createPreset<BhInterviewReplayEnha
       currentTime: currentTimeProp,
       isPlaying: isPlayingProp,
       playbackSpeed: speedProp,
-      transcript = MOCK_TRANSCRIPT,
-      evidenceMarkers = MOCK_EVIDENCE,
-      waveformData = MOCK_WAVEFORM,
+      transcript: rawTranscript = MOCK_TRANSCRIPT,
+      evidenceMarkers: rawEvidenceMarkers = MOCK_EVIDENCE,
+      waveformData: rawWaveformData = MOCK_WAVEFORM,
       onPlay, onPause, onSeek, onSpeedChange,
       onEvidenceClick, onTranscriptSegmentClick,
       loading, className, style,
     } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
+    const evidenceMarkers = Array.isArray(rawEvidenceMarkers) ? rawEvidenceMarkers : MOCK_EVIDENCE;
+    const waveformData = Array.isArray(rawWaveformData) ? rawWaveformData : MOCK_WAVEFORM;
 
     const [internalTime, setInternalTime] = useState(currentTimeProp ?? 35);
     const [internalPlaying, setInternalPlaying] = useState(isPlayingProp ?? false);

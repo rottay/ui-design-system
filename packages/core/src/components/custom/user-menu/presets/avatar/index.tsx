@@ -20,12 +20,14 @@ export const AvatarUserMenu = createPreset<UserMenuProps>({
     const { Box, Card, Stack, Avatar } = primitives;
     const {
       user,
-      items = [],
+      items: rawItems = [],
       onLogout,
       showLogout = true,
       className,
       style,
     } = props;
+
+    const items = Array.isArray(rawItems) ? rawItems : [];
 
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);

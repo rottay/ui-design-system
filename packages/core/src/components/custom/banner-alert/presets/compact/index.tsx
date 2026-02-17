@@ -17,12 +17,14 @@ export const compactPreset = createPreset<BannerAlertProps>((context: PresetCont
     title,
     description,
     icon,
-    actions = [],
+    actions: rawActions = [],
     dismissible = true,
     onDismiss,
     className,
     style,
   } = props;
+
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
   const [isDismissed, setIsDismissed] = useState(false);
 

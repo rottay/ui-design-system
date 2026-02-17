@@ -83,7 +83,7 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = [],
+      candidates: rawCandidates = [],
       dimensions,
       title = 'Candidate Comparison',
       onCandidateSelect,
@@ -91,6 +91,8 @@ export const SideBySideBhCandidateComparison = createPreset<BhCandidateCompariso
       className,
       style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

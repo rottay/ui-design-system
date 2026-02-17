@@ -98,11 +98,11 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
     const { Box, Text } = primitives;
 
     const {
-      providers = [],
+      providers: rawProviders = [],
       selectedProvider: controlledSelectedProvider,
       onProviderSelect,
-      apiKeys = [],
-      models = [],
+      apiKeys: rawApiKeys = [],
+      models: rawModels = [],
       fallbackChain,
       onFallbackReorder,
       testResults: controlledTestResults,
@@ -119,6 +119,10 @@ export const DashboardBhProviderConfig = createPreset<BhProviderConfigProps>({
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
+    const apiKeys = Array.isArray(rawApiKeys) ? rawApiKeys : [];
+    const models = Array.isArray(rawModels) ? rawModels : [];
 
     const [internalSelectedProvider, setInternalSelectedProvider] = useState<string | null>(null);
     const [internalShowKeyModal, setInternalShowKeyModal] = useState(false);

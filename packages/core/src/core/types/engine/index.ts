@@ -1,4 +1,5 @@
 import type { ComponentType, CSSProperties } from 'react';
+import type { ComponentExtensions } from '../extensions';
 
 /**
  * Nombres de engines disponibles en el sistema Rottay.
@@ -27,6 +28,12 @@ export interface EngineAwareProps {
    * Inline CSS styles for the component.
    */
   style?: CSSProperties;
+  /**
+   * Extension points for customizing component rendering.
+   * Allows apps to inject columns, actions, filters, slots, and more
+   * without modifying the design system presets.
+   */
+  extensions?: ComponentExtensions;
 }
 
 /**

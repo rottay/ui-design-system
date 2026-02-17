@@ -21,13 +21,15 @@ export const EnterpriseAuthLayout = createPreset<AuthLayoutProps>({
       subtitle,
       children,
       logo,
-      socialProviders = [],
+      socialProviders: rawSocialProviders = [],
       showTerms,
       termsContent,
       footer,
       className,
       style,
     } = props;
+
+    const socialProviders = Array.isArray(rawSocialProviders) ? rawSocialProviders : [];
 
     const brandLogo = logo || tenant.branding.logo;
 

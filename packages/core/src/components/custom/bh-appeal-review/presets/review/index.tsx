@@ -81,7 +81,7 @@ export const ReviewBhAppealReview = createPreset<BhAppealReviewProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      appeal = MOCK_APPEAL,
+      appeal: rawAppeal = MOCK_APPEAL,
       onApprove,
       onDeny,
       onAddNote,
@@ -90,6 +90,8 @@ export const ReviewBhAppealReview = createPreset<BhAppealReviewProps>({
       className,
       style,
     } = props;
+
+    const appeal = Array.isArray(rawAppeal) ? rawAppeal : MOCK_APPEAL;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

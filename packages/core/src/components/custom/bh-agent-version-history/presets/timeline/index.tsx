@@ -41,7 +41,7 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
     const t = tokens;
 
     const {
-      versions = [],
+      versions: rawVersions = [],
       agentName,
       selectedVersionId: controlledSelected,
       onVersionClick,
@@ -50,6 +50,8 @@ export const TimelineBhAgentVersionHistory = createPreset<BhAgentVersionHistoryP
       className,
       style,
     } = props;
+
+    const versions = Array.isArray(rawVersions) ? rawVersions : [];
 
     const [localSelected, setLocalSelected] = useState<string | null>(null);
     const selectedVersionId = controlledSelected ?? localSelected;

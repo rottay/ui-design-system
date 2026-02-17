@@ -52,7 +52,11 @@ export const OverviewEvInventoryTracker = createPreset<EvInventoryTrackerProps>(
   name: 'EvInventoryTracker.Overview',
   render: ({ primitives, props, tokens, engine }: PresetContext<EvInventoryTrackerProps>) => {
     const { Box, Text } = primitives;
-    const { items = MOCK_ITEMS, alerts = MOCK_ALERTS, movements = MOCK_MOVEMENTS, onItemClick, onAlertAcknowledge, className, style } = props;
+    const { items: rawItems = MOCK_ITEMS, alerts: rawAlerts = MOCK_ALERTS, movements: rawMovements = MOCK_MOVEMENTS, onItemClick, onAlertAcknowledge, className, style } = props;
+
+    const items = Array.isArray(rawItems) ? rawItems : MOCK_ITEMS;
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : MOCK_ALERTS;
+    const movements = Array.isArray(rawMovements) ? rawMovements : MOCK_MOVEMENTS;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

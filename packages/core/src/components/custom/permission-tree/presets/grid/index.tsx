@@ -14,7 +14,7 @@ export const GridPermissionTree = createPreset<PermissionTreeProps>({
     const { Box } = primitives;
     const {
       items,
-      checkedKeys = [],
+      checkedKeys: rawCheckedKeys = [],
       onCheck,
       grantedKeys,
       showStatus = PERMISSION_TREE_DEFAULTS.showStatus,
@@ -26,6 +26,8 @@ export const GridPermissionTree = createPreset<PermissionTreeProps>({
       className,
       style,
     } = props;
+
+    const checkedKeys = Array.isArray(rawCheckedKeys) ? rawCheckedKeys : [];
 
     const [search, setSearch] = useState('');
 

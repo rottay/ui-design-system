@@ -58,11 +58,13 @@ export const CompactBhSkillGapDashboard = createPreset<BhSkillGapDashboardProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      skills = MOCK_SKILLS,
+      skills: rawSkills = MOCK_SKILLS,
       onSkillClick,
       className,
       style,
     } = props;
+
+    const skills = Array.isArray(rawSkills) ? rawSkills : MOCK_SKILLS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

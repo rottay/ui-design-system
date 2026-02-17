@@ -98,7 +98,7 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approvals = MOCK_APPROVALS,
+      approvals: rawApprovals = MOCK_APPROVALS,
       groupBy = 'entityType',
       onApprovalClick,
       onApprove,
@@ -108,6 +108,8 @@ export const HubBhApprovalCenter = createPreset<BhApprovalCenterProps>({
       className,
       style,
     } = props;
+
+    const approvals = Array.isArray(rawApprovals) ? rawApprovals : MOCK_APPROVALS;
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 

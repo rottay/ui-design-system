@@ -163,7 +163,10 @@ export const BreakdownBhCostAnalyzer = createPreset<BhCostAnalyzerProps>({
     const ptypo = useMemo(() => getPersonalityTypography(tokens), [tokens]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const { providers = MOCK_PROVIDERS, models = MOCK_MODELS, loading, className, style } = props;
+    const { providers: rawProviders = MOCK_PROVIDERS, models: rawModels = MOCK_MODELS, loading, className, style } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const models = Array.isArray(rawModels) ? rawModels : MOCK_MODELS;
 
     const { maxCost, totalCost, providerColorMap } = useMemo(() => {
       const max = models.reduce((m, v) => Math.max(m, v.totalCost), 0);

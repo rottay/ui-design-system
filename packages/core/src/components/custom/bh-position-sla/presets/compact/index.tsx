@@ -56,12 +56,13 @@ export const CompactBhPositionSla = createPreset<BhPositionSlaProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions = MOCK_POSITIONS,
+      positions: rawPositions = MOCK_POSITIONS,
       onPositionClick,
       className,
       style,
     } = props;
 
+    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

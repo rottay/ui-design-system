@@ -101,7 +101,9 @@ export const InventoryEvMerchStore = createPreset<EvMerchStoreProps>({
     const { primitives, props, tokens } = ctx;
     const { Box, Text } = primitives;
 
-    const { products = MOCK_PRODUCTS, onReorder, onProductClick } = props;
+    const { products: rawProducts = MOCK_PRODUCTS, onReorder, onProductClick } = props;
+
+    const products = Array.isArray(rawProducts) ? rawProducts : MOCK_PRODUCTS;
 
     const lowStockThreshold = 20;
     const criticalStockThreshold = 10;

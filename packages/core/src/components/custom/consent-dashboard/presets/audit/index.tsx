@@ -23,13 +23,15 @@ export const AuditConsentDashboard = createPreset<ConsentDashboardProps>({
     const statusColors = getConsentStatusColors(tokens);
 
     const {
-      auditLog = [],
+      auditLog: rawAuditLog = [],
       consents,
       title = 'Consent Audit Log',
       loading,
       className,
       style,
     } = props;
+
+    const auditLog = Array.isArray(rawAuditLog) ? rawAuditLog : [];
 
     const getConsentLabel = (consentId: string) => {
       return consents.find(c => c.id === consentId)?.label || consentId;

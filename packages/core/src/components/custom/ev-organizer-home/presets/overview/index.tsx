@@ -27,17 +27,23 @@ export const OverviewEvOrganizerHome = createPreset<EvOrganizerHomeProps>({
 
     const {
       organizerName = 'Organizer',
-      kpis = [],
-      upcomingEvents = [],
-      revenueSources = [],
-      lineupSlots = [],
-      quickActions = [],
+      kpis: rawKpis = [],
+      upcomingEvents: rawUpcomingEvents = [],
+      revenueSources: rawRevenueSources = [],
+      lineupSlots: rawLineupSlots = [],
+      quickActions: rawQuickActions = [],
       dateRangeLabel = 'Last 30 days',
       onEventClick,
       onActionClick,
       className,
       style,
     } = props;
+
+    const kpis = Array.isArray(rawKpis) ? rawKpis : [];
+    const upcomingEvents = Array.isArray(rawUpcomingEvents) ? rawUpcomingEvents : [];
+    const revenueSources = Array.isArray(rawRevenueSources) ? rawRevenueSources : [];
+    const lineupSlots = Array.isArray(rawLineupSlots) ? rawLineupSlots : [];
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
 
     const [selectedRange, setSelectedRange] = useState(dateRangeLabel);
 

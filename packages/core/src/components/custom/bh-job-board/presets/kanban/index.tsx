@@ -68,7 +68,7 @@ function getStageColors(tokens: DesignTokens): string[] {
 
 export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
   name: 'BhJobBoard.Kanban',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhJobBoardProps>) => {
+  render: ({ primitives, props, tokens, engine, ext }: PresetContext<BhJobBoardProps>) => {
     const { Box, Text } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const STATUS_COLUMNS = useMemo(() => getStatusColumns(tokens), [tokens]);
@@ -76,10 +76,19 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
     const STAGE_COLORS = useMemo(() => getStageColors(tokens), [tokens]);
 
     const {
-      jobs = [], stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
+      jobs: rawJobs = [], stats: rawStats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
       selectedJobs: controlledSelectedJobs, onSelectionChange, searchQuery: controlledSearchQuery, onSearchChange,
-      emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments = [], clients = [], className, style,
+      emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments: rawDepartments = [], clients: rawClients = [], className, style,
     } = props;
+
+    const jobs = Array.isArray(rawJobs) ? rawJobs : [];
+    const stats = Array.isArray(rawStats) ? rawStats : [];
+    const departments = Array.isArray(rawDepartments) ? rawDepartments : [];
+    const clients = Array.isArray(rawClients) ? rawClients : [];
+
+    // Extension helpers
+    const extEmptyState = ext.emptyState();
+    const extA11y = ext.a11yConfig();
 
     const [internalFilters, setInternalFilters] = useState<JobBoardFilter>({});
     const [internalSearchQuery, setInternalSearchQuery] = useState('');
@@ -372,22 +381,32 @@ export const KanbanBhJobBoard = createPreset<BhJobBoardProps>({
     const showGlobalEmpty = filteredJobs.length === 0 && !!(searchQuery || filters.department || filters.urgency || filters.clientId);
 
     return (
-      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', display: 'flex', flexDirection: 'column' as const, ...entrance.animate, transition: entrance.transition, ...style }}>
-        {renderHeader()}
-        {renderFilterBar()}
+      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', display: 'flex', flexDirection: 'column' as const, ...entrance.animate, transition: entrance.transition, ...style }}
+        {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
+        {ext.slot('header:start')}
+        {ext.section('header', renderHeader)}
+        {ext.slot('header:end')}
+        {ext.slot('toolbar:start')}
+        {ext.section('toolbar', renderFilterBar)}
+        {ext.slot('toolbar:end')}
         {showGlobalEmpty ? (
-          <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '64px 32px', textAlign: 'center' as const }}>
-            <Box style={createIconContainerStyle(tokens, { size: 72, color: tokens.colors.primaryScale[50] })}>
-              <Briefcase size={30} color={tokens.colors.primaryScale[400]} />
+          ext.hasSlot('empty') ? ext.slot('empty') : (
+            <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '64px 32px', textAlign: 'center' as const }}>
+              {extEmptyState?.icon || (
+                <Box style={createIconContainerStyle(tokens, { size: 72, color: tokens.colors.primaryScale[50] })}>
+                  <Briefcase size={30} color={tokens.colors.primaryScale[400]} />
+                </Box>
+              )}
+              <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900], marginBottom: 8, marginTop: 20 }}>{extEmptyState?.title || emptyText}</Text>
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>{extEmptyState?.description || 'Try adjusting your filters or search query.'}</Text>
             </Box>
-            <Text style={{ fontSize: tokens.typography.fontSize.md, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900], marginBottom: 8, marginTop: 20 }}>{emptyText}</Text>
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500] }}>Try adjusting your filters or search query.</Text>
-          </Box>
+          )
         ) : (
           <Box style={{ display: 'flex', gap: 16, flex: 1, overflowX: 'auto' as const, paddingBottom: 8 }}>
             {STATUS_COLUMNS.map((col, i) => renderKanbanColumn(col, i))}
           </Box>
         )}
+        {ext.slot('footer')}
       </Box>
     );
   },

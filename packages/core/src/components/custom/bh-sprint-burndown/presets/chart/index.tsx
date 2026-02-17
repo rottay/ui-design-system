@@ -82,7 +82,7 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      data = MOCK_DATA,
+      data: rawData = MOCK_DATA,
       sprintName = 'Sprint 12',
       totalPoints = 40,
       daysTotal = 10,
@@ -92,6 +92,8 @@ export const ChartBhSprintBurndown = createPreset<BhSprintBurndownProps>({
       className,
       style,
     } = props;
+
+    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

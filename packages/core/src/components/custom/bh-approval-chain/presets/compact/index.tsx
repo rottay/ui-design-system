@@ -69,12 +69,14 @@ export const CompactBhApprovalChain = createPreset<BhApprovalChainProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      steps = MOCK_STEPS,
+      steps: rawSteps = MOCK_STEPS,
       entityTitle,
       onStepClick,
       className,
       style,
     } = props;
+
+    const steps = Array.isArray(rawSteps) ? rawSteps : MOCK_STEPS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

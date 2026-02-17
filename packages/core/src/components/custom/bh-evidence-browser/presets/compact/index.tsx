@@ -51,7 +51,7 @@ export const CompactBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
     const isGlass = t.surface.useGlass;
 
     const {
-      evidence = MOCK_EVIDENCE,
+      evidence: rawEvidence = MOCK_EVIDENCE,
       selectedEvidenceId: selectedEvidenceIdProp,
       onEvidenceSelect,
       onValidate,
@@ -61,6 +61,8 @@ export const CompactBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
       className,
       style,
     } = props;
+
+    const evidence = Array.isArray(rawEvidence) ? rawEvidence : MOCK_EVIDENCE;
 
     /* -- State -------------------------------------------------------- */
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEvidenceIdProp ?? '');

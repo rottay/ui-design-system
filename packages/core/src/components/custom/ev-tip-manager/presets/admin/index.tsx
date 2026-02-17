@@ -52,7 +52,10 @@ export const AdminEvTipManager = createPreset<EvTipManagerProps>({
   name: 'EvTipManager.Admin',
   render: ({ primitives, props, tokens, engine }: PresetContext<EvTipManagerProps>) => {
     const { Box, Text } = primitives;
-    const { tips = MOCK_TIPS, payouts = MOCK_PAYOUTS, className, style } = props;
+    const { tips: rawTips = MOCK_TIPS, payouts: rawPayouts = MOCK_PAYOUTS, className, style } = props;
+
+    const tips = Array.isArray(rawTips) ? rawTips : MOCK_TIPS;
+    const payouts = Array.isArray(rawPayouts) ? rawPayouts : MOCK_PAYOUTS;
 
     const [searchTerm, setSearchTerm] = useState('');
     const [activeFilter, setActiveFilter] = useState<string | null>(null);

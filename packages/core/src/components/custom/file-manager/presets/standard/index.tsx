@@ -26,21 +26,21 @@ export const StandardFileManager = createPreset<FileManagerProps>({
     const { Box, Stack } = primitives;
     const {
       files,
-      navItems = [],
+      navItems: rawNavItems = [],
       activeNavKey,
       onNavSelect,
-      quickAccess = [],
-      actions = [],
+      quickAccess: rawQuickAccess = [],
+      actions: rawActions = [],
       viewMode: controlledViewMode,
       onViewModeChange,
       onFileClick,
       onFileDoubleClick,
-      suggestedFiles = [],
+      suggestedFiles: rawSuggestedFiles = [],
       searchPlaceholder = FILE_MANAGER_DEFAULTS.searchPlaceholder,
       onSearch,
       title = FILE_MANAGER_DEFAULTS.title,
       headerRight,
-      filterTabs = [],
+      filterTabs: rawFilterTabs = [],
       activeFilterTab,
       onFilterTabChange,
       loading,
@@ -52,10 +52,17 @@ export const StandardFileManager = createPreset<FileManagerProps>({
       onFileMove,
       onFileDelete,
       onFileStar,
-      contextMenuItems = [],
+      contextMenuItems: rawContextMenuItems = [],
       onContextMenuAction,
       uploadable: uploadableProp,
     } = props;
+
+    const navItems = Array.isArray(rawNavItems) ? rawNavItems : [];
+    const quickAccess = Array.isArray(rawQuickAccess) ? rawQuickAccess : [];
+    const actions = Array.isArray(rawActions) ? rawActions : [];
+    const suggestedFiles = Array.isArray(rawSuggestedFiles) ? rawSuggestedFiles : [];
+    const filterTabs = Array.isArray(rawFilterTabs) ? rawFilterTabs : [];
+    const contextMenuItems = Array.isArray(rawContextMenuItems) ? rawContextMenuItems : [];
 
     const canUpload = uploadableProp ?? !!onFileUpload;
 

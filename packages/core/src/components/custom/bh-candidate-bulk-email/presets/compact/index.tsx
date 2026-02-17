@@ -37,7 +37,7 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      recipients = MOCK_RECIPIENTS,
+      recipients: rawRecipients = MOCK_RECIPIENTS,
       subject = 'Interview Invitation',
       onRecipientToggle,
       onSend,
@@ -45,6 +45,8 @@ export const CompactBhCandidateBulkEmail = createPreset<BhCandidateBulkEmailProp
       className,
       style,
     } = props;
+
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : MOCK_RECIPIENTS;
 
     const [localSelected, setLocalSelected] = useState<Set<string>>(
       new Set(propSelectedIds ?? recipients.map(r => r.candidate.id)),

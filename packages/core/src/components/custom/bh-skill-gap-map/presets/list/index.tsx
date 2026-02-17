@@ -42,11 +42,13 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const pc = getPriorityColors(t);
 
     const {
-      gaps = DEFAULT_GAPS,
+      gaps: rawGaps = DEFAULT_GAPS,
       onGapSelect,
       loading,
       className, style,
     } = props;
+
+    const gaps = Array.isArray(rawGaps) ? rawGaps : DEFAULT_GAPS;
 
     const counts = useMemo(() => {
       const c = { critical: 0, high: 0, medium: 0, low: 0 };

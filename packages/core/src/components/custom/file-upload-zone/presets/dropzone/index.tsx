@@ -21,7 +21,7 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
   const { Box, Text } = primitives;
 
   const {
-    files = [],
+    files: rawFiles = [],
     onFilesAdd,
     onFileRemove,
     onRetry,
@@ -35,6 +35,8 @@ export default createPreset<FileUploadZoneProps>((context: PresetContext<FileUpl
     className,
     style,
   } = props;
+
+    const files = Array.isArray(rawFiles) ? rawFiles : [];
 
   const [isDragging, setIsDragging] = useState(false);
   const [hoveredFile, setHoveredFile] = useState<string | null>(null);

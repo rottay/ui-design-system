@@ -22,7 +22,10 @@ export const DashboardPmRevenueDashboard = createPreset<PmRevenueDashboardProps>
   name: 'PmRevenueDashboard.Dashboard',
   render: ({ primitives, props, tokens, engine }: PresetContext<PmRevenueDashboardProps>) => {
     const { Spinner } = primitives;
-    const { loading, className, style, metrics = [], chartData = [], timeRange, onTimeRangeChange } = props;
+    const { loading, className, style, metrics: rawMetrics = [], chartData: rawChartData = [], timeRange, onTimeRangeChange } = props;
+
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
+    const chartData = Array.isArray(rawChartData) ? rawChartData : [];
 
     if (loading) {
       return (

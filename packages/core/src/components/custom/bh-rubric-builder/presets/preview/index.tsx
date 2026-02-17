@@ -144,11 +144,13 @@ export const PreviewBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       industry = '',
       scorableType = 'interview' as const,
       status = 'draft',
-      dimensions: dimensionsProp = [],
+      dimensions: rawDimensionsProp = [],
       scoreLevels = [{ label: 'Low', minScore: 0, color: '#ef4444' }, { label: 'Medium', minScore: 40, color: '#f59e0b' }, { label: 'High', minScore: 70, color: '#22c55e' }],
       className,
       style,
     } = props;
+
+    const dimensionsProp = Array.isArray(rawDimensionsProp) ? rawDimensionsProp : [];
 
     /* ── Derived ──────────────────────────────────────────────────── */
     const sortedDimensions = useMemo(

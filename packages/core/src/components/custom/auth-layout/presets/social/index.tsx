@@ -20,11 +20,13 @@ export const SocialAuthLayout = createPreset<AuthLayoutProps>({
       subtitle,
       children,
       logo,
-      socialProviders = [],
+      socialProviders: rawSocialProviders = [],
       footer,
       className,
       style,
     } = props;
+
+    const socialProviders = Array.isArray(rawSocialProviders) ? rawSocialProviders : [];
 
     const surfaceStyle = useMemo(() => createSurfaceStyle(tokens, {
       elevation: 'md',

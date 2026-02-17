@@ -14,7 +14,7 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
   render: ({ primitives, props, tokens, engine }: PresetContext<ConsentBannerProps>) => {
     const { Box } = primitives;
     const {
-      categories = DEFAULT_CATEGORIES,
+      categories: rawCategories = DEFAULT_CATEGORIES,
       onAccept,
       onReject,
       title = CONSENT_BANNER_DEFAULTS.title,
@@ -27,6 +27,8 @@ export const ModalConsentBanner = createPreset<ConsentBannerProps>({
       className,
       style,
     } = props;
+
+    const categories = Array.isArray(rawCategories) ? rawCategories : DEFAULT_CATEGORIES;
 
     const [consents, setConsents] = useState<Record<string, boolean>>(() => {
       const initial: Record<string, boolean> = {};

@@ -166,7 +166,9 @@ export const CompactBhInterviewReplay = createPreset<BhInterviewReplayProps>({
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
-    const { transcript = MOCK_TRANSCRIPT, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
+    const { transcript: rawTranscript = MOCK_TRANSCRIPT, candidateName, jobTitle, onEntrySelect, loading, className, style } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
 
     const stats = useMemo(() => {
       const totalMs = transcript.reduce((s, e) => s + (e.durationMs ?? 0), 0);

@@ -91,10 +91,14 @@ export const OverviewBhPipelineAnalytics = createPreset<BhPipelineAnalyticsProps
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const {
-      stages = MOCK_STAGES, bottlenecks = [], summary = MOCK_SUMMARY,
+      stages: rawStages = MOCK_STAGES, bottlenecks: rawBottlenecks = [], summary: rawSummary = MOCK_SUMMARY,
       showComparison = false, onStageSelect, selectedStage,
       onBottleneckSelect, className, style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const bottlenecks = Array.isArray(rawBottlenecks) ? rawBottlenecks : [];
+    const summary = Array.isArray(rawSummary) ? rawSummary : MOCK_SUMMARY;
 
     const card = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);
     const sectionHeader = useMemo(() => createSectionHeaderStyle(tokens), [tokens]);

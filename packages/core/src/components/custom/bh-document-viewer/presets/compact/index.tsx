@@ -36,11 +36,13 @@ export const CompactBhDocumentViewer = createPreset<BhDocumentViewerProps>({
       documentName = 'Resume_Sarah_Johnson.pdf',
       documentType = 'pdf',
       totalPages = 3,
-      annotations = MOCK_ANNOTATIONS,
+      annotations: rawAnnotations = MOCK_ANNOTATIONS,
       onDownload,
       className,
       style,
     } = props;
+
+    const annotations = Array.isArray(rawAnnotations) ? rawAnnotations : MOCK_ANNOTATIONS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -21,10 +21,10 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
     const { Box } = primitives;
     const {
       placeholder = COMMAND_SEARCH_DEFAULTS.placeholder,
-      results = [],
-      categories = [],
-      quickActions = [],
-      recentSearches = [],
+      results: rawResults = [],
+      categories: rawCategories = [],
+      quickActions: rawQuickActions = [],
+      recentSearches: rawRecentSearches = [],
       onSearch,
       onSelect,
       onRecentSelect,
@@ -34,6 +34,11 @@ export const InlineCommandSearch = createPreset<CommandSearchProps>({
       className,
       style,
     } = props;
+
+    const results = Array.isArray(rawResults) ? rawResults : [];
+    const categories = Array.isArray(rawCategories) ? rawCategories : [];
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
+    const recentSearches = Array.isArray(rawRecentSearches) ? rawRecentSearches : [];
 
     const [query, setQuery] = useState('');
     const [isFocused, setIsFocused] = useState(false);

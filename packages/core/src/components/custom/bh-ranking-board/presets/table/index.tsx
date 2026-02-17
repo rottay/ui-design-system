@@ -62,8 +62,8 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
 
     const {
       jobName = '',
-      candidates = [],
-      scoreDistribution = [],
+      candidates: rawCandidates = [],
+      scoreDistribution: rawScoreDistribution = [],
       filters: fp, onFilterChange,
       selectedCandidates: scp, onSelectionChange, onCompare,
       decisions: dp, onDecisionChange,
@@ -72,6 +72,9 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
       expandedCandidate: ecp, onCandidateExpand,
       className, style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
+    const scoreDistribution = Array.isArray(rawScoreDistribution) ? rawScoreDistribution : [];
 
     const [iSearch, setISearch] = useState('');
     const [iSelected, setISelected] = useState<string[]>([]);
@@ -333,7 +336,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                   </Box>
                   {/* Stage scores mini bars */}
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1] }}>
-                    {c.stageScores.map(ss => (
+                    {(c.stageScores ?? []).map(ss => (
                       <Box key={ss.stage} style={{ flex: 1 }} title={`${ss.stage}: ${ss.score}`}>
                         <Box style={{ height: 4, borderRadius: t.borderRadius.full, backgroundColor: t.colors.neutral[100], overflow: 'hidden' }}>
                           <Box style={{ height: '100%', width: `${ss.score}%`, backgroundColor: getScoreBarColor(ss.score, t), borderRadius: t.borderRadius.full }} />
@@ -374,13 +377,13 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                   }}>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600], marginBottom: t.spacing[1] }}>Strengths</Text>
-                      {c.strengths.map((s, i) => (
+                      {(c.strengths ?? []).map((s, i) => (
                         <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {s}</Text>
                       ))}
                     </Box>
                     <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], flex: 1 }}>
                       <Text style={{ fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.semibold, color: t.colors.errorScale[600], marginBottom: t.spacing[1] }}>Weaknesses</Text>
-                      {c.weaknesses.map((w, i) => (
+                      {(c.weaknesses ?? []).map((w, i) => (
                         <Text key={i} style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], marginBottom: t.spacing[1] }}>- {w}</Text>
                       ))}
                     </Box>

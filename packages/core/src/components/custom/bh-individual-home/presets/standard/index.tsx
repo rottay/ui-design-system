@@ -60,12 +60,16 @@ export const StandardBhIndividualHome = createPreset<BhIndividualHomeProps>({
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
 
     const {
-      welcome = { name: '', greeting: 'Welcome' }, pipelines = [], schedule = [], wizardSteps,
-      performance, recentCandidates = [], tokenBalance,
+      welcome = { name: '', greeting: 'Welcome' }, pipelines: rawPipelines = [], schedule: rawSchedule = [], wizardSteps,
+      performance, recentCandidates: rawRecentCandidates = [], tokenBalance,
       onCandidateClick, onScheduleAction, onJobClick,
       onWizardStepClick, onViewAllCandidates, onViewAllSchedule,
       onBuyTokens, className, style,
     } = props;
+
+    const pipelines = Array.isArray(rawPipelines) ? rawPipelines : [];
+    const schedule = Array.isArray(rawSchedule) ? rawSchedule : [];
+    const recentCandidates = Array.isArray(rawRecentCandidates) ? rawRecentCandidates : [];
 
     const [showWizard, setShowWizard] = useState(() => {
       if (!wizardSteps) return false;

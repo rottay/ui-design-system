@@ -118,14 +118,19 @@ export const ExecutiveBhClientPortal = createPreset<BhClientPortalProps>({
 
     const {
       client: clientProp,
-      positions = DEFAULT_POSITIONS,
-      pipeline = DEFAULT_PIPELINE,
-      interviews = DEFAULT_INTERVIEWS,
-      metrics = DEFAULT_METRICS,
+      positions: rawPositions = DEFAULT_POSITIONS,
+      pipeline: rawPipeline = DEFAULT_PIPELINE,
+      interviews: rawInterviews = DEFAULT_INTERVIEWS,
+      metrics: rawMetrics = DEFAULT_METRICS,
       selectedPosition: controlledSelected,
       onPositionSelect,
       className, style,
     } = props;
+
+    const positions = Array.isArray(rawPositions) ? rawPositions : DEFAULT_POSITIONS;
+    const pipeline = Array.isArray(rawPipeline) ? rawPipeline : DEFAULT_PIPELINE;
+    const interviews = Array.isArray(rawInterviews) ? rawInterviews : DEFAULT_INTERVIEWS;
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : DEFAULT_METRICS;
 
     const client: ClientDisplay = useMemo(() => {
       if (!clientProp) return DEFAULT_CLIENT;

@@ -25,7 +25,7 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
       value: controlledValue,
       defaultValue = '',
       onChange,
-      suggestions = [],
+      suggestions: rawSuggestions = [],
       onSuggestionSelect,
       loading,
       showShortcut = true,
@@ -33,6 +33,8 @@ export const CommandSearchBar = createPreset<SearchBarProps>({
       className,
       style
     } = props;
+
+    const suggestions = Array.isArray(rawSuggestions) ? rawSuggestions : [];
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);

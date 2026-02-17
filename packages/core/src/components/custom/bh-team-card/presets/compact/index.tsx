@@ -45,11 +45,13 @@ export const CompactBhTeamCard = createPreset<BhTeamCardProps>({
 
     const {
       team,
-      metrics: metricsProp = [],
+      metrics: rawMetricsProp = [],
       onClick,
       className,
       style,
     } = props;
+
+    const metricsProp = Array.isArray(rawMetricsProp) ? rawMetricsProp : [];
 
     const teamName = team?.name ?? 'Engineering Hiring';
     const teamType = team?.type ?? 'general';

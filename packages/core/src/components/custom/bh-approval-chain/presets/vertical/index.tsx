@@ -71,7 +71,7 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      steps = MOCK_STEPS,
+      steps: rawSteps = MOCK_STEPS,
       entityTitle = 'Offer for Sarah Johnson - Sr. Engineer',
       entityType = 'Offer',
       currentStepId,
@@ -80,6 +80,8 @@ export const VerticalBhApprovalChain = createPreset<BhApprovalChainProps>({
       className,
       style,
     } = props;
+
+    const steps = Array.isArray(rawSteps) ? rawSteps : MOCK_STEPS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);

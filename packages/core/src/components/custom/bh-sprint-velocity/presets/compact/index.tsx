@@ -51,7 +51,7 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      sprints = MOCK_SPRINTS,
+      sprints: rawSprints = MOCK_SPRINTS,
       averageVelocity,
       title,
       onSprintClick,
@@ -59,6 +59,8 @@ export const CompactBhSprintVelocity = createPreset<BhSprintVelocityProps>({
       className,
       style,
     } = props;
+
+    const sprints = Array.isArray(rawSprints) ? rawSprints : MOCK_SPRINTS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

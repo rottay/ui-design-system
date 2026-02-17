@@ -71,7 +71,7 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      points = [],
+      points: rawPoints = [],
       stats = { correlation: 0, meanDeviation: 0, sampleCount: 0, agreementRate: 0 },
       onPointClick,
       selectedPointId,
@@ -79,6 +79,8 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
       className,
       style,
     } = props;
+
+    const points = Array.isArray(rawPoints) ? rawPoints : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -11,8 +11,8 @@ export const StandardPreset = createPreset<TagInputProps>((context) => {
   const { primitives, props, tokens } = context;
   const { Box, Text } = primitives;
   const {
-    tags = [],
-    suggestions = [],
+    tags: rawTags = [],
+    suggestions: rawSuggestions = [],
     onAdd,
     onRemove,
     placeholder = 'Add tags...',
@@ -20,6 +20,9 @@ export const StandardPreset = createPreset<TagInputProps>((context) => {
     className,
     style,
   } = props;
+
+    const tags = Array.isArray(rawTags) ? rawTags : [];
+    const suggestions = Array.isArray(rawSuggestions) ? rawSuggestions : [];
 
   const [inputValue, setInputValue] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);

@@ -75,7 +75,7 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      days = MOCK_DAYS,
+      days: rawDays = MOCK_DAYS,
       title = 'Interview Activity',
       activityLabel = 'interviews',
       onDayClick,
@@ -83,6 +83,8 @@ export const FullBhCalendarHeatmap = createPreset<BhCalendarHeatmapProps>({
       className,
       style,
     } = props;
+
+    const days = Array.isArray(rawDays) ? rawDays : MOCK_DAYS;
 
     const [hoveredDay, setHoveredDay] = useState<HeatmapDay | null>(null);
 

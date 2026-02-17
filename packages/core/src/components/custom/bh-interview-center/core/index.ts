@@ -175,8 +175,10 @@ export function getInterviewStatusLabel(status: string | null | undefined): stri
 
 /** Get the effective date string from a DBInterview (scheduledAt or createdAt) */
 export function getInterviewDateStr(interview: DBInterview): string {
-  if (interview.scheduledAt) return new Date(interview.scheduledAt).toISOString();
-  return new Date(interview.createdAt).toISOString();
+  const raw = interview.scheduledAt ?? interview.createdAt;
+  if (!raw) return new Date(0).toISOString();
+  const d = new Date(raw);
+  return isNaN(d.getTime()) ? new Date(0).toISOString() : d.toISOString();
 }
 
 /** Get the effective duration in minutes */

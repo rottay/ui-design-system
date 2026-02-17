@@ -6,7 +6,7 @@
  * detail panel with approval chain, action buttons, and history timeline.
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { createPreset, type PresetContext } from '../../../factory';
 import {
   createBadgeStyle,
@@ -80,6 +80,9 @@ const CATEGORY_ICONS: Record<ApprovalCategory, React.ReactNode> = {
 
 const ALL_CATEGORIES: ApprovalCategory[] = ['clients', 'positions', 'offers', 'other'];
 
+const EMPTY_ITEMS: ApprovalItem[] = [];
+const EMPTY_HISTORY: ApprovalHistory[] = [];
+
 export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
   name: 'BhApprovalQueue.Standard',
   render: ({ primitives, props, tokens, engine }: PresetContext<BhApprovalQueueProps>) => {
@@ -92,9 +95,9 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
 
     const {
       stats: externalStats,
-      items: externalItems = [],
+      items: rawExternalItems = [],
       detail: externalDetail,
-      history: externalHistory = [],
+      history: rawExternalHistory = [],
       activeCategory: externalActiveCategory,
       onCategoryChange,
       selectedApproval: externalSelectedApproval,
@@ -112,17 +115,14 @@ export const StandardBhApprovalQueue = createPreset<BhApprovalQueueProps>({
       style,
     } = props;
 
+    const externalItems = Array.isArray(rawExternalItems) ? rawExternalItems : EMPTY_ITEMS;
+    const externalHistory = Array.isArray(rawExternalHistory) ? rawExternalHistory : EMPTY_HISTORY;
+
     const [activeCategory, setActiveCategory] = useState<ApprovalCategory>(externalActiveCategory ?? 'clients');
     const [selectedApproval, setSelectedApproval] = useState<string | null>(externalSelectedApproval ?? null);
-    const [showHistory, setShowHistory] = useState(externalShowHistory);
-    const [approvalNotes, setApprovalNotes] = useState(externalApprovalNotes);
-    const [rejectReason, setRejectReason] = useState(externalRejectReason);
-
-    useEffect(() => { if (externalActiveCategory) setActiveCategory(externalActiveCategory); }, [externalActiveCategory]);
-    useEffect(() => { if (externalSelectedApproval !== undefined) setSelectedApproval(externalSelectedApproval); }, [externalSelectedApproval]);
-    useEffect(() => { setShowHistory(externalShowHistory); }, [externalShowHistory]);
-    useEffect(() => { setApprovalNotes(externalApprovalNotes); }, [externalApprovalNotes]);
-    useEffect(() => { setRejectReason(externalRejectReason); }, [externalRejectReason]);
+    const [showHistory, setShowHistory] = useState(externalShowHistory ?? false);
+    const [approvalNotes, setApprovalNotes] = useState(externalApprovalNotes ?? '');
+    const [rejectReason, setRejectReason] = useState(externalRejectReason ?? '');
 
     const handleCategoryChange = useCallback((category: ApprovalCategory) => {
       setActiveCategory(category); setSelectedApproval(null); onCategoryChange?.(category); onApprovalSelect?.(null);

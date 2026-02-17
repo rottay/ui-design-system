@@ -10,7 +10,9 @@ import {
 export const GridPreset = createPreset<ColorPalettePickerProps>((context) => {
   const { primitives, props, tokens } = context;
   const { Box, Text, Button } = primitives;
-  const { palettes, value, onChange, recentColors = [], className, style } = props;
+  const { palettes, value, onChange, recentColors: rawRecentColors = [], className, style } = props;
+
+    const recentColors = Array.isArray(rawRecentColors) ? rawRecentColors : [];
 
   const [selectedPalette, setSelectedPalette] = useState(palettes[0]?.key || '');
 

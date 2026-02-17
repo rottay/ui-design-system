@@ -150,7 +150,9 @@ export const CalendarBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const isModern = t.surface.useGlass;
     const bdr = `${t.surface.borderWidth} ${t.surface.borderStyle}`;
 
-    const { interviews = [], stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, calendarView: controlledCalendarView, onCalendarViewChange, sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange, className, style } = props;
+    const { interviews: rawInterviews = [], stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, calendarView: controlledCalendarView, onCalendarViewChange, sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange, className, style } = props;
+
+    const interviews = Array.isArray(rawInterviews) ? rawInterviews : [];
 
     const [internalCalendarView, setInternalCalendarView] = useState<CalendarView>(BH_INTERVIEW_CENTER_DEFAULTS.calendarView ?? 'week');
     const [internalFilters, setInternalFilters] = useState<InterviewFilter>({});

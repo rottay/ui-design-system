@@ -34,7 +34,7 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
     const { Box, Stack } = primitives;
     const {
       user,
-      navItems = [],
+      navItems: rawNavItems = [],
       activeNavKey = 'profile',
       onNavSelect,
       tabs = [
@@ -48,7 +48,7 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
       activeTab: controlledActiveTab,
       onTabChange,
       mediaUpload,
-      actions = [],
+      actions: rawActions = [],
       onSave,
       onCopy,
       editable,
@@ -56,6 +56,9 @@ export const StandardUserProfile = createPreset<UserProfileProps>({
       className,
       style,
     } = props;
+
+    const navItems = Array.isArray(rawNavItems) ? rawNavItems : [];
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
     const AVAILABILITY_CONFIG: Record<AvailabilityStatus, { label: string; color: string; dotColor: string }> = {
       available: { label: 'Available', color: tokens.colors.successScale[500], dotColor: tokens.colors.successScale[500] },

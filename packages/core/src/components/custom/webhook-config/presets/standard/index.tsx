@@ -11,7 +11,9 @@ export const Standard = createPreset<WebhookConfigProps>((context: PresetContext
   const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
-  const { webhooks, events, deliveryLogs = [], onCreate, onDelete, onToggle, onTest, className, style } = props;
+  const { webhooks, events, deliveryLogs: rawDeliveryLogs = [], onCreate, onDelete, onToggle, onTest, className, style } = props;
+
+    const deliveryLogs = Array.isArray(rawDeliveryLogs) ? rawDeliveryLogs : [];
 
   const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 

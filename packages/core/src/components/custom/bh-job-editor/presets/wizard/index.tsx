@@ -116,7 +116,10 @@ export const WizardBhJobEditor = createPreset<BhJobEditorProps>({
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
 
-    const { formData: formDataProp, steps: stepsProp, currentStep: currentStepProp, validationErrors: validationErrorsProp, onChange, onStepChange, onSave, onPublish, onPreview, isDirty: isDirtyProp, templates = [], clients = [], className, style } = props;
+    const { formData: formDataProp, steps: stepsProp, currentStep: currentStepProp, validationErrors: validationErrorsProp, onChange, onStepChange, onSave, onPublish, onPreview, isDirty: isDirtyProp, templates: rawTemplates = [], clients: rawClients = [], className, style } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : [];
+    const clients = Array.isArray(rawClients) ? rawClients : [];
 
     const defaultForm = BH_JOB_EDITOR_DEFAULTS.formData as JobFormData;
     const [internalFormData, setInternalFormData] = useState<Partial<JobFormData>>(formDataProp ?? defaultForm);

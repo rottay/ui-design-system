@@ -97,7 +97,7 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
     const ptypo = getPersonalityTypography(t);
 
     const {
-      items = MOCK_ITEMS,
+      items: rawItems = MOCK_ITEMS,
       sprintName = 'Sprint 12',
       onAddItem,
       onVote,
@@ -106,6 +106,8 @@ export const FormBhSprintRetrospective = createPreset<BhSprintRetrospectiveProps
       className,
       style,
     } = props;
+
+    const items = Array.isArray(rawItems) ? rawItems : MOCK_ITEMS;
 
     const [newItemTexts, setNewItemTexts] = useState<Record<string, string>>({ good: '', improve: '', action: '' });
 

@@ -38,7 +38,7 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
     const t = tokens;
 
     const {
-      agents = [],
+      agents: rawAgents = [],
       categories: propCategories,
       searchQuery: controlledSearch,
       selectedCategory: controlledCategory,
@@ -49,6 +49,8 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
       className,
       style,
     } = props;
+
+    const agents = Array.isArray(rawAgents) ? rawAgents : [];
 
     const [localSearch, setLocalSearch] = useState('');
     const [localCategory, setLocalCategory] = useState<string | null>(null);

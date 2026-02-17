@@ -162,12 +162,12 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
 
     const {
       balance,
-      consumptionData = [],
-      costBreakdown = [],
-      teamQuotas = [],
-      transactions = [],
-      alerts = [],
-      forecast = [],
+      consumptionData: rawConsumptionData = [],
+      costBreakdown: rawCostBreakdown = [],
+      teamQuotas: rawTeamQuotas = [],
+      transactions: rawTransactions = [],
+      alerts: rawAlerts = [],
+      forecast: rawForecast = [],
       timeRange: controlledTimeRange,
       onTimeRangeChange,
       costGrouping: controlledCostGrouping,
@@ -185,6 +185,13 @@ export const OverviewBhTokenManager = createPreset<BhTokenManagerProps>({
       className,
       style,
     } = props;
+
+    const consumptionData = Array.isArray(rawConsumptionData) ? rawConsumptionData : [];
+    const costBreakdown = Array.isArray(rawCostBreakdown) ? rawCostBreakdown : [];
+    const teamQuotas = Array.isArray(rawTeamQuotas) ? rawTeamQuotas : [];
+    const transactions = Array.isArray(rawTransactions) ? rawTransactions : [];
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : [];
+    const forecast = Array.isArray(rawForecast) ? rawForecast : [];
 
     const [localTimeRange, setLocalTimeRange] = useState<'7d' | '30d' | '90d' | 'year'>('30d');
     const [localCostGrouping, setLocalCostGrouping] = useState<'provider' | 'operation' | 'team'>('provider');

@@ -53,13 +53,15 @@ export const CompactBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     ];
 
     const {
-      nodes = MOCK_NODES,
+      nodes: rawNodes = MOCK_NODES,
       onNodeClick,
       selectedNodeId: controlledSelected,
       loading = false,
       className,
       style,
     } = props;
+
+    const nodes = Array.isArray(rawNodes) ? rawNodes : MOCK_NODES;
 
     const [localSelected, setLocalSelected] = useState<string | null>(null);
     const selectedNodeId = controlledSelected ?? localSelected;

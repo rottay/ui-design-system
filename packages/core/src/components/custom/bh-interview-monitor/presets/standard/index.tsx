@@ -68,6 +68,12 @@ function formatDuration(totalSeconds: number): string {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
+// Stable empty array constants to prevent re-render loops
+const EMPTY_SESSIONS: ActiveSession[] = [];
+const EMPTY_PROVIDERS: ProviderStatus[] = [];
+const EMPTY_ALERTS: MonitorAlert[] = [];
+const EMPTY_COMPLETIONS: never[] = [];
+
 const pulseKeyframes = `@keyframes bhMonitorPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`;
 
 export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>({
@@ -88,25 +94,23 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
 
 
     const {
-      activeSessions: externalSessions = [], providerHealth: externalProviderHealth = [],
-      alerts: externalAlerts = [], metricsData: externalMetrics,
-      recentCompletions = [], onEndSession, onTransferToHuman, onRetryProvider,
+      activeSessions: rawSessions, providerHealth: rawProviderHealth,
+      alerts: rawAlerts, metricsData,
+      recentCompletions: rawRecentCompletions, onEndSession, onTransferToHuman, onRetryProvider,
       selectedSession: externalSelectedSession, onSessionSelect,
       autoRefresh: externalAutoRefresh = true, onAutoRefreshToggle,
       className, style,
     } = props;
 
-    const [activeSessions, setActiveSessions] = useState<ActiveSession[]>(externalSessions);
+    // Use props directly - no state duplication to avoid render loops from new array refs
+    const activeSessions = Array.isArray(rawSessions) ? rawSessions : EMPTY_SESSIONS;
+    const providerHealth = Array.isArray(rawProviderHealth) ? rawProviderHealth : EMPTY_PROVIDERS;
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : EMPTY_ALERTS;
+    const recentCompletions = Array.isArray(rawRecentCompletions) ? rawRecentCompletions : EMPTY_COMPLETIONS;
+
     const [selectedSession, setSelectedSession] = useState<string | null>(externalSelectedSession ?? null);
-    const [alerts, setAlerts] = useState<MonitorAlert[]>(externalAlerts);
-    const [providerHealth, setProviderHealth] = useState<ProviderStatus[]>(externalProviderHealth);
-    const [metricsData, setMetricsData] = useState(externalMetrics);
     const [autoRefresh, setAutoRefresh] = useState(externalAutoRefresh);
 
-    useEffect(() => { setActiveSessions(externalSessions); }, [externalSessions]);
-    useEffect(() => { setAlerts(externalAlerts); }, [externalAlerts]);
-    useEffect(() => { setProviderHealth(externalProviderHealth); }, [externalProviderHealth]);
-    useEffect(() => { setMetricsData(externalMetrics); }, [externalMetrics]);
     useEffect(() => {
       if (externalSelectedSession !== undefined) setSelectedSession(externalSelectedSession);
     }, [externalSelectedSession]);
@@ -143,7 +147,13 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
       border: `${bdr} ${t.colors.neutral[100]}`,
       padding: `${t.spacing[5]}px`,
       ...glassCard,
-      ...accentBar,
+      // NOTE: accentBar sets width/height meant for a child element, not the card itself.
+      // Using borderLeft instead to avoid collapsing the card width.
+      ...(accentBar ? {
+        borderLeftWidth: 4,
+        borderLeftStyle: 'solid' as const,
+        borderLeftColor: t.colors.primary,
+      } : {}),
     }), [t, bdr, glassCard, accentBar]);
 
     return (

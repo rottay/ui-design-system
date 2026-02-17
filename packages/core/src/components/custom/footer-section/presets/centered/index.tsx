@@ -14,7 +14,10 @@ export const CenteredFooterSection = createPreset<FooterSectionProps>({
   name: 'FooterSection.Centered',
   render: ({ primitives, props, tokens, engine }: PresetContext<FooterSectionProps>) => {
     const { Box, Stack } = primitives;
-    const { columns = [], social = [], copyright, logo, className, style } = props;
+    const { columns: rawColumns = [], social: rawSocial = [], copyright, logo, className, style } = props;
+
+    const columns = Array.isArray(rawColumns) ? rawColumns : [];
+    const social = Array.isArray(rawSocial) ? rawSocial : [];
 
     // Flatten all links from all columns
     const allLinks = columns.flatMap((col) => col.links);

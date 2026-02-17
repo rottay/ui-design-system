@@ -174,7 +174,7 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       style,
       // Expandable
       expandedRowRender,
-      defaultExpandedRowKeys = [],
+      defaultExpandedRowKeys: rawDefaultExpandedRowKeys = [],
       onExpand,
       expandRowByClick = false,
       // Filters
@@ -185,12 +185,12 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       selectable = false,
       selectedRowKeys: controlledSelectedKeys,
       onSelectionChange,
-      bulkActions = [],
+      bulkActions: rawBulkActions = [],
       // Row Actions
       rowActions = [],
       // Search
       searchPlaceholder = 'Filter...',
-      searchableFields = [],
+      searchableFields: rawSearchableFields = [],
       onSearch,
       // Pagination
       pagination = true,
@@ -211,6 +211,10 @@ export const ProfessionalDataTable = createPreset<ProfessionalDataTableProps & R
       columnReorderable = false,
       onColumnReorder,
     } = props;
+
+    const defaultExpandedRowKeys = Array.isArray(rawDefaultExpandedRowKeys) ? rawDefaultExpandedRowKeys : [];
+    const bulkActions = Array.isArray(rawBulkActions) ? rawBulkActions : [];
+    const searchableFields = Array.isArray(rawSearchableFields) ? rawSearchableFields : [];
 
     // ========================================================================
     // Internal State

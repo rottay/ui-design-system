@@ -151,7 +151,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
     const { Box, Text } = primitives;
 
     const {
-      templates = [],
+      templates: rawTemplates = [],
       filters: controlledFilters,
       onFilterChange,
       selectedTemplate: controlledSelected,
@@ -164,6 +164,8 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
       className,
       style,
     } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : [];
 
     /* ── Local state ──────────────────────────────────────────── */
     const [localFilters, setLocalFilters] = useState<TemplateFilter>({

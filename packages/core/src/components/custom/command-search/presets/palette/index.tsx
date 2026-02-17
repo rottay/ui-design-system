@@ -23,10 +23,10 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
     const { Box } = primitives;
     const {
       placeholder = COMMAND_SEARCH_DEFAULTS.placeholder,
-      results = [],
-      categories = [],
-      quickActions = [],
-      recentSearches = [],
+      results: rawResults = [],
+      categories: rawCategories = [],
+      quickActions: rawQuickActions = [],
+      recentSearches: rawRecentSearches = [],
       onSearch,
       onSelect,
       onRecentSelect,
@@ -39,6 +39,11 @@ export const PaletteCommandSearch = createPreset<CommandSearchProps>({
       className,
       style,
     } = props;
+
+    const results = Array.isArray(rawResults) ? rawResults : [];
+    const categories = Array.isArray(rawCategories) ? rawCategories : [];
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
+    const recentSearches = Array.isArray(rawRecentSearches) ? rawRecentSearches : [];
 
     const [internalOpen, setInternalOpen] = useState(false);
     const [query, setQuery] = useState('');

@@ -57,15 +57,19 @@ export const ListBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     const { Box, Text } = primitives;
 
     const {
-      recruiters = MOCK_RECRUITERS,
-      suggestions = [],
-      summary = MOCK_SUMMARY,
+      recruiters: rawRecruiters = MOCK_RECRUITERS,
+      suggestions: rawSuggestions = [],
+      summary: rawSummary = MOCK_SUMMARY,
       selectedRecruiter,
       onRecruiterSelect,
       onAcceptSuggestion,
       className,
       style,
     } = props;
+
+    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : MOCK_RECRUITERS;
+    const suggestions = Array.isArray(rawSuggestions) ? rawSuggestions : [];
+    const summary = Array.isArray(rawSummary) ? rawSummary : MOCK_SUMMARY;
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const cardBase = useMemo(() => createCardStyle(tokens, { elevation: 'sm', glass: isGlass }), [tokens, isGlass]);

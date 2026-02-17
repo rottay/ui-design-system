@@ -97,11 +97,11 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
     const { Box, Text } = primitives;
 
     const {
-      providers = [],
+      providers: rawProviders = [],
       selectedProvider: controlledSelectedProvider,
       onProviderSelect,
-      apiKeys = [],
-      models = [],
+      apiKeys: rawApiKeys = [],
+      models: rawModels = [],
       testResults: controlledTestResults,
       onTestProvider,
       onRotateKey,
@@ -111,6 +111,10 @@ export const DetailBhProviderConfig = createPreset<BhProviderConfigProps>({
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
+    const apiKeys = Array.isArray(rawApiKeys) ? rawApiKeys : [];
+    const models = Array.isArray(rawModels) ? rawModels : [];
 
     const [internalSelectedProvider, setInternalSelectedProvider] = useState<string | null>(
       providers.length > 0 ? providers[0].id : null

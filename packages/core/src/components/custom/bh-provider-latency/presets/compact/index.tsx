@@ -41,14 +41,17 @@ export const CompactBhProviderLatency = createPreset<BhProviderLatencyProps>({
     const t = tokens;
 
     const {
-      data = [],
-      providers = [],
+      data: rawData = [],
+      providers: rawProviders = [],
       targetLatency = 500,
       onProviderChange,
       loading = false,
       className,
       style,
     } = props;
+
+    const data = Array.isArray(rawData) ? rawData : [];
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
 
     const isGlass = t.surface.useGlass && !!t.glass;
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

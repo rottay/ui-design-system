@@ -126,7 +126,7 @@ function filterAndSortJobs(jobs: DBJob[], filters: JobBoardFilter, searchQuery: 
 
 export const GridBhJobBoard = createPreset<BhJobBoardProps>({
   name: 'BhJobBoard.Grid',
-  render: ({ primitives, props, tokens, engine }: PresetContext<BhJobBoardProps>) => {
+  render: ({ primitives, props, tokens, engine, ext }: PresetContext<BhJobBoardProps>) => {
     const { Box, Text } = primitives;
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const STATUS_CONFIG = useMemo(() => getStatusConfig(tokens), [tokens]);
@@ -134,11 +134,22 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
     const STAGE_COLORS = useMemo(() => getStageColors(tokens), [tokens]);
 
     const {
-      jobs = [], stats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
+      jobs: rawJobs = [], stats: rawStats = [], filters: controlledFilters, onFilterChange, onViewModeChange, onJobClick, onCreateJob,
       selectedJobs: controlledSelectedJobs, onSelectionChange, searchQuery: controlledSearchQuery, onSearchChange,
       sortBy: controlledSortBy, sortDirection: controlledSortDirection, onSortChange,
-      emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments = [], clients = [], className, style,
+      emptyText = BH_JOB_BOARD_DEFAULTS.emptyText, departments: rawDepartments = [], clients: rawClients = [], className, style,
     } = props;
+
+    const jobs = Array.isArray(rawJobs) ? rawJobs : [];
+    const stats = Array.isArray(rawStats) ? rawStats : [];
+    const departments = Array.isArray(rawDepartments) ? rawDepartments : [];
+    const clients = Array.isArray(rawClients) ? rawClients : [];
+
+    // Extension helpers
+    const extEmptyState = ext.emptyState();
+    const extRowActions = useMemo(() => ext.rowActions(), [ext]);
+    const extA11y = ext.a11yConfig();
+    const extLayout = ext.layoutConfig();
 
     const [internalViewMode, setInternalViewMode] = useState<ViewMode>('grid');
     const [internalFilters, setInternalFilters] = useState<JobBoardFilter>({});
@@ -430,25 +441,38 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
       );
     }, [cardBase, cardPadding, tokens, typo, badgeRadius, hoveredJobId, selectedJobs, STATUS_CONFIG, URGENCY_CONFIG, STAGE_COLORS, handleSelectionToggle, onJobClick, Box, Text]);
 
-    /* Empty state */
-    const renderEmptyState = () => (
-      <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '64px 32px', textAlign: 'center' as const }}>
-        <Box style={createIconContainerStyle(tokens, { size: 72, color: tokens.colors.primaryScale[50] })}>
-          <Briefcase size={30} color={tokens.colors.primaryScale[400]} />
+    /* Empty state - supports extension override */
+    const renderEmptyState = () => {
+      const customEmpty = extEmptyState;
+      return (
+        <Box style={{ ...cardBase, display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center', padding: '64px 32px', textAlign: 'center' as const }}>
+          {customEmpty?.icon || (
+            <Box style={createIconContainerStyle(tokens, { size: 72, color: tokens.colors.primaryScale[50] })}>
+              <Briefcase size={30} color={tokens.colors.primaryScale[400]} />
+            </Box>
+          )}
+          <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900], marginBottom: 8, marginTop: 20 }}>{customEmpty?.title || (hasActiveFilters ? emptyText : 'No jobs yet')}</Text>
+          <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: 24, maxWidth: 380, lineHeight: tokens.typography.lineHeight.relaxed }}>{customEmpty?.description || (hasActiveFilters ? 'Try adjusting your filters or search query to find what you are looking for.' : 'Create your first job posting to start attracting candidates and filling positions.')}</Text>
+          {customEmpty?.action ? (
+            <Box role="button" tabIndex={0} aria-label={customEmpty.action.label}
+              onClick={customEmpty.action.onClick}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); customEmpty.action!.onClick(); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: `10px 20px`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              <Plus size={16} color={tokens.colors.common.white} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>{customEmpty.action.label}</Text>
+            </Box>
+          ) : onCreateJob && (
+            <Box role="button" tabIndex={0} aria-label="Create your first job"
+              onClick={onCreateJob}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: `10px 20px`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
+              <Plus size={16} color={tokens.colors.common.white} />
+              <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>Create your first job</Text>
+            </Box>
+          )}
         </Box>
-        <Text style={{ fontSize: tokens.typography.fontSize.lg, fontWeight: typo.headingWeight, color: tokens.colors.neutral[900], marginBottom: 8, marginTop: 20 }}>{hasActiveFilters ? emptyText : 'No jobs yet'}</Text>
-        <Text style={{ fontSize: tokens.typography.fontSize.sm, color: tokens.colors.neutral[500], marginBottom: 24, maxWidth: 380, lineHeight: tokens.typography.lineHeight.relaxed }}>{hasActiveFilters ? 'Try adjusting your filters or search query to find what you are looking for.' : 'Create your first job posting to start attracting candidates and filling positions.'}</Text>
-        {onCreateJob && (
-          <Box role="button" tabIndex={0} aria-label="Create your first job"
-            onClick={onCreateJob}
-            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCreateJob(); } }}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: `10px 20px`, borderRadius: tokens.borderRadius.lg, fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, backgroundColor: tokens.colors.primaryScale[600], color: tokens.colors.common.white, boxShadow: tokens.shadows.sm, outline: 'none', fontFamily: 'inherit', transition: `all ${tokens.motion.hover}` }}>
-            <Plus size={16} color={tokens.colors.common.white} />
-            <Text style={{ fontSize: tokens.typography.fontSize.sm, fontWeight: tokens.typography.fontWeight.semibold, color: tokens.colors.common.white }}>Create your first job</Text>
-          </Box>
-        )}
-      </Box>
-    );
+      );
+    };
 
     /* Header */
     const renderHeader = () => (
@@ -476,16 +500,24 @@ export const GridBhJobBoard = createPreset<BhJobBoardProps>({
       </Box>
     );
 
+    const gridCols = extLayout.gridColumns?.desktop ?? 3;
+
     return (
-      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}>
-        {renderHeader()}
+      <Box className={className} style={{ padding: 28, backgroundColor: tokens.colors.neutral[50], minHeight: '100%', width: '100%', fontFamily: 'inherit', ...entrance.animate, transition: entrance.transition, ...style }}
+        {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
+        {ext.slot('header:start')}
+        {ext.section('header', renderHeader)}
+        {ext.slot('header:end')}
         {renderStatsRibbon()}
-        {renderFilterBar()}
-        {filteredJobs.length === 0 ? renderEmptyState() : (
-          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+        {ext.slot('toolbar:start')}
+        {ext.section('toolbar', renderFilterBar)}
+        {ext.slot('toolbar:end')}
+        {filteredJobs.length === 0 ? (ext.hasSlot('empty') ? ext.slot('empty') : renderEmptyState()) : (
+          <Box style={{ display: 'grid', gridTemplateColumns: `repeat(${gridCols}, 1fr)`, gap: typeof extLayout.gap === 'number' ? extLayout.gap : 16 }}>
             {filteredJobs.map((job, i) => renderJobCard(job, i))}
           </Box>
         )}
+        {ext.slot('footer')}
       </Box>
     );
   },

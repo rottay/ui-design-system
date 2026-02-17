@@ -95,7 +95,7 @@ export const TableBhAppealList = createPreset<BhAppealListProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      appeals = [],
+      appeals: rawAppeals = [],
       onAppealClick,
       selectedAppealId,
       filterStatus = null,
@@ -104,6 +104,8 @@ export const TableBhAppealList = createPreset<BhAppealListProps>({
       className,
       style,
     } = props;
+
+    const appeals = Array.isArray(rawAppeals) ? rawAppeals : [];
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 

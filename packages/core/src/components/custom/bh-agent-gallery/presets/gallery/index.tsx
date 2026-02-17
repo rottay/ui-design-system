@@ -141,7 +141,7 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
     const { Box, Text } = primitives;
 
     const {
-      agents = [],
+      agents: rawAgents = [],
       activeTab: controlledTab,
       onTabChange,
       filters: controlledFilters,
@@ -162,6 +162,8 @@ export const GalleryBhAgentGallery = createPreset<BhAgentGalleryProps>({
       className,
       style,
     } = props;
+
+    const agents = Array.isArray(rawAgents) ? rawAgents : [];
 
     /* ---- Local state with controlled/uncontrolled support ---- */
     const [localTab, setLocalTab] = useState<AgentTab>('my');

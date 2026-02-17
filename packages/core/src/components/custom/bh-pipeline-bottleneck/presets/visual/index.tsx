@@ -83,12 +83,14 @@ export const VisualBhPipelineBottleneck = createPreset<BhPipelineBottleneckProps
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = MOCK_STAGES,
+      stages: rawStages = MOCK_STAGES,
       totalCandidates = MOCK_TOTAL,
       onStageClick,
       className,
       style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
 

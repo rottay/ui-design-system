@@ -101,7 +101,9 @@ export const TimelineBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const accentBar = useMemo(() => createPersonalityAccentBar(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
-    const { interviews = [], stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, sortDirection: controlledSortDirection, className, style } = props;
+    const { interviews: rawInterviews = [], stats, filters: controlledFilters, onFilterChange, selectedInterview: controlledSelectedInterview, onInterviewSelect, onScheduleNew, sortDirection: controlledSortDirection, className, style } = props;
+
+    const interviews = Array.isArray(rawInterviews) ? rawInterviews : [];
 
     const [internalFilters, setInternalFilters] = useState<InterviewFilter>({});
     const [internalSelected, setInternalSelected] = useState<string | null>(null);

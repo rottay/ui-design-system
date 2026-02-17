@@ -15,7 +15,7 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
   render: ({ primitives, props, tokens, engine }: PresetContext<ConsentBannerProps>) => {
     const { Box } = primitives;
     const {
-      categories = DEFAULT_CATEGORIES,
+      categories: rawCategories = DEFAULT_CATEGORIES,
       onAccept,
       onReject,
       position = CONSENT_BANNER_DEFAULTS.position,
@@ -31,6 +31,8 @@ export const BarConsentBanner = createPreset<ConsentBannerProps>({
       className,
       style,
     } = props;
+
+    const categories = Array.isArray(rawCategories) ? rawCategories : DEFAULT_CATEGORIES;
 
     const [showPreferences, setShowPreferences] = useState(false);
     const [consents, setConsents] = useState<Record<string, boolean>>(() => {

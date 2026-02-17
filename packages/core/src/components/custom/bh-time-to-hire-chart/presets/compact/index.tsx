@@ -61,12 +61,15 @@ export const CompactBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      data = MOCK_DATA,
-      departments = MOCK_DEPARTMENTS,
+      data: rawData = MOCK_DATA,
+      departments: rawDepartments = MOCK_DEPARTMENTS,
       targetDays = 30,
       className,
       style,
     } = props;
+
+    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
+    const departments = Array.isArray(rawDepartments) ? rawDepartments : MOCK_DEPARTMENTS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

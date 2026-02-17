@@ -14,7 +14,9 @@ export const CenteredHeroSection = createPreset<HeroSectionProps>({
   name: 'HeroSection.Centered',
   render: ({ primitives, props, tokens, engine }: PresetContext<HeroSectionProps>) => {
     const { Box, Stack, Button } = primitives;
-    const { title, subtitle, description, actions = [], media, badge, className, style } = props;
+    const { title, subtitle, description, actions: rawActions = [], media, badge, className, style } = props;
+
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
     return (
       <Box

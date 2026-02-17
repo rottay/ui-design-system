@@ -60,7 +60,7 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
       templateName = 'Initial Outreach',
       subject = 'Exciting opportunity at {{company}}',
       body = 'Hi {{firstName}},\n\nI came across your profile and was impressed by your experience. We have an exciting {{position}} role at {{company}} that I think would be a great fit.\n\nWould you be open to a brief conversation?\n\nBest regards,\n{{recruiterName}}',
-      sampleData = DEFAULT_SAMPLE_DATA,
+      sampleData: rawSampleData = DEFAULT_SAMPLE_DATA,
       recipientName = 'Alex Rivera',
       recipientEmail = 'alex.rivera@example.com',
       onSend,
@@ -70,6 +70,8 @@ export const PreviewBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
       className,
       style,
     } = props;
+
+    const sampleData = Array.isArray(rawSampleData) ? rawSampleData : DEFAULT_SAMPLE_DATA;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

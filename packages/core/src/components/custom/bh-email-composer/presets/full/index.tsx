@@ -77,8 +77,8 @@ export const FullBhEmailComposer = createPreset<BhEmailComposerProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      templates = MOCK_TEMPLATES,
-      variables = MOCK_VARIABLES,
+      templates: rawTemplates = MOCK_TEMPLATES,
+      variables: rawVariables = MOCK_VARIABLES,
       selectedTemplateId,
       subject: propSubject,
       body: propBody,
@@ -93,6 +93,9 @@ export const FullBhEmailComposer = createPreset<BhEmailComposerProps>({
       className,
       style,
     } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : MOCK_TEMPLATES;
+    const variables = Array.isArray(rawVariables) ? rawVariables : MOCK_VARIABLES;
 
     const [activeTemplateId, setActiveTemplateId] = useState<string | null>(selectedTemplateId ?? templates[0]?.id ?? null);
     const [showTemplates, setShowTemplates] = useState(false);

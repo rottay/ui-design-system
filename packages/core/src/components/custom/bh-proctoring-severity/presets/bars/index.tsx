@@ -41,9 +41,8 @@ function getSeverityColor(severity: ProctoringEventSeverity | string, t: DesignT
   }
 }
 
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getSeverityLabel } from '@rottay/scoring';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -70,7 +69,7 @@ export const BarsBhProctoringSeverity = createPreset<BhProctoringSeverityProps>(
     const chartCfg = getChartConfig(t);
 
     const {
-      severityCounts = [],
+      severityCounts: rawSeverityCounts = [],
       onSeverityClick,
       selectedSeverity,
       showLabels = true,
@@ -78,6 +77,8 @@ export const BarsBhProctoringSeverity = createPreset<BhProctoringSeverityProps>(
       className,
       style,
     } = props;
+
+    const severityCounts = Array.isArray(rawSeverityCounts) ? rawSeverityCounts : [];
 
     const [hoveredBar, setHoveredBar] = useState<ProctoringEventSeverity | null>(null);
 

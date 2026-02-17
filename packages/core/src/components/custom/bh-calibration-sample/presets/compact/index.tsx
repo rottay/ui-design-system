@@ -103,11 +103,13 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sample = MOCK_SAMPLE,
+      sample: rawSample = MOCK_SAMPLE,
       onSubmitReview,
       className,
       style,
     } = props;
+
+    const sample = Array.isArray(rawSample) ? rawSample : MOCK_SAMPLE;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

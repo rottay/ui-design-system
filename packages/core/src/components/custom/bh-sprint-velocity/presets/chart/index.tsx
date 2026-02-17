@@ -57,7 +57,7 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
     const chartCfg = getChartConfig(t);
 
     const {
-      sprints = MOCK_SPRINTS,
+      sprints: rawSprints = MOCK_SPRINTS,
       averageVelocity,
       title = 'Sprint Velocity',
       onSprintClick,
@@ -65,6 +65,8 @@ export const ChartBhSprintVelocity = createPreset<BhSprintVelocityProps>({
       className,
       style,
     } = props;
+
+    const sprints = Array.isArray(rawSprints) ? rawSprints : MOCK_SPRINTS;
 
     const [hoveredBar, setHoveredBar] = useState<string | null>(null);
 

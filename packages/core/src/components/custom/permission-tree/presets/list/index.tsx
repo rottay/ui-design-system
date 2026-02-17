@@ -18,7 +18,7 @@ export const ListPermissionTree = createPreset<PermissionTreeProps>({
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const {
       items,
-      checkedKeys = [],
+      checkedKeys: rawCheckedKeys = [],
       onCheck,
       grantedKeys,
       showStatus = PERMISSION_TREE_DEFAULTS.showStatus,
@@ -30,6 +30,8 @@ export const ListPermissionTree = createPreset<PermissionTreeProps>({
       className,
       style,
     } = props;
+
+    const checkedKeys = Array.isArray(rawCheckedKeys) ? rawCheckedKeys : [];
 
     const [search, setSearch] = useState('');
     const [collapsedCategories, setCollapsedCategories] = useState<Set<string>>(new Set());

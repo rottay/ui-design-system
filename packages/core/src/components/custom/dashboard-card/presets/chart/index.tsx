@@ -61,7 +61,9 @@ export const ChartDashboardCard = createPreset<DashboardCardProps>({
   name: 'DashboardCard.Chart',
   render: ({ primitives, props, tokens, engine }: PresetContext<DashboardCardProps>) => {
     const { Box, Stack, Spinner } = primitives;
-    const { title, value, chartData = [], trend, color = 'default', onClick, loading, className, style } = props;
+    const { title, value, chartData: rawChartData = [], trend, color = 'default', onClick, loading, className, style } = props;
+
+    const chartData = Array.isArray(rawChartData) ? rawChartData : [];
     const [isHovered, setIsHovered] = useState(false);
 
     const scaleMap: Record<string, any> = {

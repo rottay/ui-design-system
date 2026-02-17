@@ -107,13 +107,15 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sessions = [],
+      sessions: rawSessions = [],
       metrics = { activeSessions: 0, totalCompleted: 0, avgAgreementRate: 0, avgDeviation: 0 },
       onSessionClick,
       selectedSessionId,
       className,
       style,
     } = props;
+
+    const sessions = Array.isArray(rawSessions) ? rawSessions : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

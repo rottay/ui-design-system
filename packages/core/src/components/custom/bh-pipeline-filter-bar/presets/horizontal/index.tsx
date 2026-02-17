@@ -86,9 +86,9 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
     const ptypo = getPersonalityTypography(t);
 
     const {
-      filters = MOCK_FILTERS,
-      activeFilters = MOCK_ACTIVE,
-      savedPresets = MOCK_PRESETS,
+      filters: rawFilters = MOCK_FILTERS,
+      activeFilters: rawActiveFilters = MOCK_ACTIVE,
+      savedPresets: rawSavedPresets = MOCK_PRESETS,
       onFilterChange,
       onFilterRemove,
       onPresetSave,
@@ -97,6 +97,10 @@ export const HorizontalBhPipelineFilterBar = createPreset<BhPipelineFilterBarPro
       className,
       style,
     } = props;
+
+    const filters = Array.isArray(rawFilters) ? rawFilters : MOCK_FILTERS;
+    const activeFilters = Array.isArray(rawActiveFilters) ? rawActiveFilters : MOCK_ACTIVE;
+    const savedPresets = Array.isArray(rawSavedPresets) ? rawSavedPresets : MOCK_PRESETS;
 
     const [searchQuery, setSearchQuery] = useState('');
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

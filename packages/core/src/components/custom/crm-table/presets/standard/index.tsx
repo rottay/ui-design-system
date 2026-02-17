@@ -26,7 +26,7 @@ export const StandardCrmTable = createPreset<CrmTableProps>({
     const {
       columns,
       data,
-      breadcrumbs = [],
+      breadcrumbs: rawBreadcrumbs = [],
       onRowClick,
       selectedRows: selectedRowsProp,
       onRowSelect,
@@ -39,6 +39,8 @@ export const StandardCrmTable = createPreset<CrmTableProps>({
       className,
       style,
     } = props;
+
+    const breadcrumbs = Array.isArray(rawBreadcrumbs) ? rawBreadcrumbs : [];
 
     const [internalSort, setInternalSort] = useState<{ column: string; direction: 'asc' | 'desc' }>({
       column: sortColumnProp ?? '', direction: sortDirectionProp ?? 'asc',

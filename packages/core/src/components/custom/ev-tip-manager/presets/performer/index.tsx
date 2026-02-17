@@ -39,7 +39,11 @@ export const PerformerEvTipManager = createPreset<EvTipManagerProps>({
   name: 'EvTipManager.Performer',
   render: ({ primitives, props, tokens, engine }: PresetContext<EvTipManagerProps>) => {
     const { Box, Text } = primitives;
-    const { tips = MOCK_TIPS, stats = MOCK_STATS, payouts = MOCK_PAYOUTS, onRequestPayout, className, style } = props;
+    const { tips: rawTips = MOCK_TIPS, stats: rawStats = MOCK_STATS, payouts: rawPayouts = MOCK_PAYOUTS, onRequestPayout, className, style } = props;
+
+    const tips = Array.isArray(rawTips) ? rawTips : MOCK_TIPS;
+    const stats = Array.isArray(rawStats) ? rawStats : MOCK_STATS;
+    const payouts = Array.isArray(rawPayouts) ? rawPayouts : MOCK_PAYOUTS;
 
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState<'all' | 'fiat' | 'crypto'>('all');

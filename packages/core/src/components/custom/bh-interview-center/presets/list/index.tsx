@@ -129,7 +129,9 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
     const accentLayout = useMemo(() => getAccentAwareLayout(t), [t]);
     const emptyState = useMemo(() => createEmptyStateStyle(t), [t]);
 
-    const { interviews = [], stats, filters: cFilters, onFilterChange, selectedInterview: cSel, onInterviewSelect, onScheduleNew, sortBy: cSort, sortDirection: cDir, onSortChange, className, style } = props;
+    const { interviews: rawInterviews = [], stats, filters: cFilters, onFilterChange, selectedInterview: cSel, onInterviewSelect, onScheduleNew, sortBy: cSort, sortDirection: cDir, onSortChange, className, style } = props;
+
+    const interviews = Array.isArray(rawInterviews) ? rawInterviews : [];
 
     const [iFilters, setIFilters] = useState<InterviewFilter>({});
     const [iSel, setISel] = useState<string | null>(null);

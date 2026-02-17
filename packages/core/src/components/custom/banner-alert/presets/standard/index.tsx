@@ -16,12 +16,14 @@ export const standardPreset = createPreset<BannerAlertProps>((context: PresetCon
     title,
     description,
     icon,
-    actions = [],
+    actions: rawActions = [],
     dismissible = true,
     onDismiss,
     className,
     style,
   } = props;
+
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
   const [isDismissed, setIsDismissed] = useState(false);
 

@@ -42,7 +42,9 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(tokens), [tokens]);
     const hoverStyles = useMemo(() => createCardHoverStyles(tokens), [tokens]);
     const sectionLabel = useMemo(() => createPersonalitySectionHeaderStyle(tokens), [tokens]);
-    const { events = MOCK_EVENTS, stats, selectedEventId, onEventSelect, loading, className, style } = props;
+    const { events: rawEvents = MOCK_EVENTS, stats, selectedEventId, onEventSelect, loading, className, style } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     const handleEventSelect = useCallback((id: string) => {

@@ -48,7 +48,7 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
 
     const {
       testName = 'A/B Test',
-      variants = [],
+      variants: rawVariants = [],
       status = 'draft',
       startDate,
       onVariantClick,
@@ -56,6 +56,8 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
       className,
       style,
     } = props;
+
+    const variants = Array.isArray(rawVariants) ? rawVariants : [];
 
     const isGlass = t.surface.useGlass && !!t.glass;
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

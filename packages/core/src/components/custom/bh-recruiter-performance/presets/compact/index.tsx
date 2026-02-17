@@ -45,12 +45,14 @@ export const CompactBhRecruiterPerformance = createPreset<BhRecruiterPerformance
     const ptypo = getPersonalityTypography(t);
 
     const {
-      recruiters = MOCK_RECRUITERS,
+      recruiters: rawRecruiters = MOCK_RECRUITERS,
       selectedRecruiterId,
       onRecruiterClick,
       className,
       style,
     } = props;
+
+    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : MOCK_RECRUITERS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

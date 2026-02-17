@@ -12,7 +12,9 @@ export const Standard = createPreset<ImportExportPanelProps>((context: PresetCon
   const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
-  const { mode, columns = [], formats = ['csv', 'json', 'xlsx'], onImport, onExport, className, style } = props;
+  const { mode, columns: rawColumns = [], formats = ['csv', 'json', 'xlsx'], onImport, onExport, className, style } = props;
+
+    const columns = Array.isArray(rawColumns) ? rawColumns : [];
 
   const [step, setStep] = useState<'upload' | 'preview' | 'mapping' | 'confirm'>('upload');
   const [selectedFormat, setSelectedFormat] = useState(formats[0]);

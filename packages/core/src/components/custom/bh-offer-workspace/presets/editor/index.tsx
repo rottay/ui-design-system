@@ -41,12 +41,17 @@ export const EditorBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const {
       offer,
       candidateName: candidateNameProp, jobTitle: jobTitleProp, status: statusProp,
-      benefits = [],
-      approvalSteps = [], negotiationHistory = [], documents = [],
+      benefits: rawBenefits = [],
+      approvalSteps: rawApprovalSteps = [], negotiationHistory: rawNegotiationHistory = [], documents: rawDocuments = [],
       onSave, onSubmitApproval, onSendOffer, isEditing, onEditToggle,
       currentVersion: currentVersionProp, showNegotiationHistory, onHistoryToggle,
       showComparison, onComparisonToggle, signatureStatus, className, style,
     } = props;
+
+    const benefits = Array.isArray(rawBenefits) ? rawBenefits : [];
+    const approvalSteps = Array.isArray(rawApprovalSteps) ? rawApprovalSteps : [];
+    const negotiationHistory = Array.isArray(rawNegotiationHistory) ? rawNegotiationHistory : [];
+    const documents = Array.isArray(rawDocuments) ? rawDocuments : [];
 
     const candidateName = candidateNameProp ?? '';
     const jobTitle = jobTitleProp ?? offer?.jobTitleOffered ?? '';

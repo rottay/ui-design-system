@@ -123,7 +123,7 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      points = [],
+      points: rawPoints = [],
       stats = { correlation: 0, meanDeviation: 0, sampleCount: 0, agreementRate: 0 },
       onPointClick,
       selectedPointId,
@@ -133,6 +133,8 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
       className,
       style,
     } = props;
+
+    const points = Array.isArray(rawPoints) ? rawPoints : [];
 
     const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
 

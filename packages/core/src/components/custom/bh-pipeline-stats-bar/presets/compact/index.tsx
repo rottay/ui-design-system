@@ -92,16 +92,21 @@ export const CompactBhPipelineStatsBar = createPreset<BhPipelineStatsBarProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      conversionRates = MOCK_CONVERSIONS,
-      avgTimeToHire = MOCK_TIME_TO_HIRE,
-      bottleneckStage = MOCK_BOTTLENECK,
+      conversionRates: rawConversionRates = MOCK_CONVERSIONS,
+      avgTimeToHire: rawAvgTimeToHire = MOCK_TIME_TO_HIRE,
+      bottleneckStage: rawBottleneckStage = MOCK_BOTTLENECK,
       totalCandidates = MOCK_TOTAL,
-      activeJobs = MOCK_ACTIVE_JOBS,
+      activeJobs: rawActiveJobs = MOCK_ACTIVE_JOBS,
       onConversionClick,
       onBottleneckClick,
       className,
       style,
     } = props;
+
+    const conversionRates = Array.isArray(rawConversionRates) ? rawConversionRates : MOCK_CONVERSIONS;
+    const avgTimeToHire = Array.isArray(rawAvgTimeToHire) ? rawAvgTimeToHire : MOCK_TIME_TO_HIRE;
+    const bottleneckStage = Array.isArray(rawBottleneckStage) ? rawBottleneckStage : MOCK_BOTTLENECK;
+    const activeJobs = Array.isArray(rawActiveJobs) ? rawActiveJobs : MOCK_ACTIVE_JOBS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

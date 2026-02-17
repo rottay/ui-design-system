@@ -43,7 +43,7 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
 
     const {
       tasks,
-      dependencies = [],
+      dependencies: rawDependencies = [],
       timeScale: timeScaleProp,
       onTimeScaleChange,
       dateRange: dateRangeProp,
@@ -55,8 +55,8 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
       onCheckToggle,
       onCreateTask,
       onTaskClick,
-      toolbarActions = [],
-      filters = [],
+      toolbarActions: rawToolbarActions = [],
+      filters: rawFilters = [],
       onFilterClick,
       showTodayMarker = GANTT_TIMELINE_DEFAULTS.showTodayMarker,
       showTodayButton = GANTT_TIMELINE_DEFAULTS.showTodayButton,
@@ -72,6 +72,10 @@ export const StandardGanttTimeline = createPreset<GanttTimelineProps & Record<st
       draggable: draggableProp,
       resizable: resizableProp,
     } = props;
+
+    const dependencies = Array.isArray(rawDependencies) ? rawDependencies : [];
+    const toolbarActions = Array.isArray(rawToolbarActions) ? rawToolbarActions : [];
+    const filters = Array.isArray(rawFilters) ? rawFilters : [];
 
     const canDrag = draggableProp ?? !!onTaskDateChange;
     const canResize = resizableProp ?? !!onTaskDateChange;

@@ -20,8 +20,8 @@ export const CompactPageHeader = createPreset<PageHeaderProps>({
     const { Box } = primitives;
     const {
       title,
-      breadcrumb = [],
-      actions = [],
+      breadcrumb: rawBreadcrumb = [],
+      actions: rawActions = [],
       extra,
       icon,
       status,
@@ -29,6 +29,9 @@ export const CompactPageHeader = createPreset<PageHeaderProps>({
       className,
       style,
     } = props;
+
+    const breadcrumb = Array.isArray(rawBreadcrumb) ? rawBreadcrumb : [];
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
     const [hoveredAction, setHoveredAction] = useState<string | null>(null);
     const [hoveredBreadcrumb, setHoveredBreadcrumb] = useState<number | null>(null);

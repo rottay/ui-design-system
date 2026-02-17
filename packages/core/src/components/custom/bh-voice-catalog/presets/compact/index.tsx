@@ -29,7 +29,7 @@ export const CompactBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
     const t = tokens;
 
     const {
-      voices = [],
+      voices: rawVoices = [],
       selectedVoiceId: controlledSelected,
       filterLanguage,
       filterGender,
@@ -39,6 +39,8 @@ export const CompactBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
       className,
       style,
     } = props;
+
+    const voices = Array.isArray(rawVoices) ? rawVoices : [];
 
     const [localSelected, setLocalSelected] = useState<string | null>(null);
     const selectedVoiceId = controlledSelected ?? localSelected;

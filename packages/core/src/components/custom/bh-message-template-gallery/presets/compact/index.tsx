@@ -45,11 +45,13 @@ const CompactBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
     const ptypo = getPersonalityTypography(t);
 
     const {
-      templates = MOCK_TEMPLATES,
+      templates: rawTemplates = MOCK_TEMPLATES,
       onTemplateClick,
       className,
       style,
     } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : MOCK_TEMPLATES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

@@ -11,7 +11,9 @@ export const Standard = createPreset<BillingPanelProps>((context: PresetContext<
   const { primitives, props, tokens, engine } = context;
   const { Box, Text, Button } = primitives;
 
-  const { plan, invoices = [], paymentMethod, onChangePlan, onUpdatePayment, onDownloadInvoice, className, style } = props;
+  const { plan, invoices: rawInvoices = [], paymentMethod, onChangePlan, onUpdatePayment, onDownloadInvoice, className, style } = props;
+
+    const invoices = Array.isArray(rawInvoices) ? rawInvoices : [];
 
   const cardStyle = useMemo(() => createCardStyle(tokens), [tokens]);
 

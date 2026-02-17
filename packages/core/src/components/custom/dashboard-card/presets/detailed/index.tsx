@@ -20,9 +20,11 @@ export const DetailedDashboardCard = createPreset<DashboardCardProps>({
   render: ({ primitives, props, tokens, engine }: PresetContext<DashboardCardProps>) => {
     const { Box, Stack, Divider, Progress, Spinner } = primitives;
     const {
-      title, value, description, icon, breakdown = [],
+      title, value, description, icon, breakdown: rawBreakdown = [],
       trend, color = 'default', onClick, loading, className, style,
     } = props;
+
+    const breakdown = Array.isArray(rawBreakdown) ? rawBreakdown : [];
     const [isHovered, setIsHovered] = useState(false);
 
     const scaleMap: Record<string, any> = {

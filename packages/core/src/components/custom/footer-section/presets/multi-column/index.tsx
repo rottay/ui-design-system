@@ -17,7 +17,10 @@ export const MultiColumnFooterSection = createPreset<FooterSectionProps>({
   name: 'FooterSection.MultiColumn',
   render: ({ primitives, props, tokens, engine }: PresetContext<FooterSectionProps>) => {
     const { Box, Stack, Input, Button } = primitives;
-    const { columns = [], social = [], copyright, newsletter, logo, className, style } = props;
+    const { columns: rawColumns = [], social: rawSocial = [], copyright, newsletter, logo, className, style } = props;
+
+    const columns = Array.isArray(rawColumns) ? rawColumns : [];
+    const social = Array.isArray(rawSocial) ? rawSocial : [];
     const [email, setEmail] = useState('');
 
     const handleSubscribe = () => {

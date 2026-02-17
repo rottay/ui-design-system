@@ -23,7 +23,7 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
 
     const {
       nodes,
-      tabs = [],
+      tabs: rawTabs = [],
       activeTab,
       onTabChange,
       onNodeClick,
@@ -39,6 +39,8 @@ export const ListWorkflowOverview = createPreset<WorkflowOverviewProps>({
       selectedNodeId: selectedNodeIdProp,
       onNodeSelect,
     } = props;
+
+    const tabs = Array.isArray(rawTabs) ? rawTabs : [];
 
     const statusLabels: Record<string, string> = {
       idle: 'Idle',

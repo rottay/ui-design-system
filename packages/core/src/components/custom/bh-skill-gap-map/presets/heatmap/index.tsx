@@ -82,9 +82,9 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
-      gaps = DEFAULT_GAPS,
-      heatmapData = DEFAULT_HEATMAP,
-      summary = DEFAULT_SUMMARY,
+      gaps: rawGaps = DEFAULT_GAPS,
+      heatmapData: rawHeatmapData = DEFAULT_HEATMAP,
+      summary: rawSummary = DEFAULT_SUMMARY,
       dimensions: dimsProp,
       candidates: candsProp,
       selectedGapId: selectedGapProp,
@@ -94,6 +94,10 @@ export const HeatmapBhSkillGapMap = createPreset<BhSkillGapMapProps>({
       loading,
       className, style,
     } = props;
+
+    const gaps = Array.isArray(rawGaps) ? rawGaps : DEFAULT_GAPS;
+    const heatmapData = Array.isArray(rawHeatmapData) ? rawHeatmapData : DEFAULT_HEATMAP;
+    const summary = Array.isArray(rawSummary) ? rawSummary : DEFAULT_SUMMARY;
 
     /* ── State ─────────────────────────────────────────────────── */
     const [internalSelected, setInternalSelected] = useState<string>(selectedGapProp ?? '');

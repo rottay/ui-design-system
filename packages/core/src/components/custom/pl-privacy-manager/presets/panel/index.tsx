@@ -279,7 +279,7 @@ export const PanelPlPrivacyManager = createPreset<PlPrivacyManagerProps>({
 
     const {
       consents,
-      dataRequests = [],
+      dataRequests: rawDataRequests = [],
       stats,
       onConsentToggle,
       onRequestAccess,
@@ -292,6 +292,8 @@ export const PanelPlPrivacyManager = createPreset<PlPrivacyManagerProps>({
       className,
       style,
     } = props;
+
+    const dataRequests = Array.isArray(rawDataRequests) ? rawDataRequests : [];
 
     // ─── Internal State ─────────────────────────────────────────────────
 

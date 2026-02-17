@@ -70,12 +70,14 @@ export const CompactBhDiversityDashboard = createPreset<BhDiversityDashboardProp
     const colors = useMemo(() => SEGMENT_COLORS(t), [t]);
 
     const {
-      metrics = [],
+      metrics: rawMetrics = [],
       totalCandidates = 0,
       onSegmentClick,
       className,
       style,
     } = props;
+
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

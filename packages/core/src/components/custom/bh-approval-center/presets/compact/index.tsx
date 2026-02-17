@@ -58,11 +58,13 @@ export const CompactBhApprovalCenter = createPreset<BhApprovalCenterProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approvals = MOCK_APPROVALS,
+      approvals: rawApprovals = MOCK_APPROVALS,
       onApprovalClick,
       className,
       style,
     } = props;
+
+    const approvals = Array.isArray(rawApprovals) ? rawApprovals : MOCK_APPROVALS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

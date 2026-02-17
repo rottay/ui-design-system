@@ -86,7 +86,10 @@ export const SwimlaneBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     const isGlass = t.surface.useGlass;
     const ptypo = getPersonalityTypography(t);
 
-    const { jobName = '', totalCandidates = 0, stages = [], candidates: cp = [], onCandidateClick, onScheduleInterview, onAddNote, onReject, filters: fp, onFilterChange, searchQuery: sqp, onSearchChange, className, style } = props;
+    const { jobName = '', totalCandidates = 0, stages: rawStages = [], candidates: rawCp = [], onCandidateClick, onScheduleInterview, onAddNote, onReject, filters: fp, onFilterChange, searchQuery: sqp, onSearchChange, className, style } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : [];
+    const cp = Array.isArray(rawCp) ? rawCp : [];
     const [iSearch, setISearch] = useState('');
     const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
     const [hovered, setHovered] = useState<string | null>(null);

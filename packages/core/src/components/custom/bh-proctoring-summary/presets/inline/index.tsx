@@ -80,16 +80,22 @@ export const InlineBhProctoringSummary = createPreset<BhProctoringSummaryProps>(
     const ptypo = getPersonalityTypography(t);
 
     const {
-      candidateName = MOCK_PROPS.candidateName,
+      candidateName: rawCandidateName = MOCK_PROPS.candidateName,
       candidateAvatar,
-      riskScore = MOCK_PROPS.riskScore,
-      eventCounts = MOCK_PROPS.eventCounts,
-      totalEvents = MOCK_PROPS.totalEvents,
-      reviewedCount = MOCK_PROPS.reviewedCount,
+      riskScore: rawRiskScore = MOCK_PROPS.riskScore,
+      eventCounts: rawEventCounts = MOCK_PROPS.eventCounts,
+      totalEvents: rawTotalEvents = MOCK_PROPS.totalEvents,
+      reviewedCount: rawReviewedCount = MOCK_PROPS.reviewedCount,
       onViewDetails,
       className,
       style,
     } = props;
+
+    const candidateName = Array.isArray(rawCandidateName) ? rawCandidateName : MOCK_PROPS.candidateName;
+    const riskScore = Array.isArray(rawRiskScore) ? rawRiskScore : MOCK_PROPS.riskScore;
+    const eventCounts = Array.isArray(rawEventCounts) ? rawEventCounts : MOCK_PROPS.eventCounts;
+    const totalEvents = Array.isArray(rawTotalEvents) ? rawTotalEvents : MOCK_PROPS.totalEvents;
+    const reviewedCount = Array.isArray(rawReviewedCount) ? rawReviewedCount : MOCK_PROPS.reviewedCount;
 
     const [isHovered, setIsHovered] = useState(false);
 

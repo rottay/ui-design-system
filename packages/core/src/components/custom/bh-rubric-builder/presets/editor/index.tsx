@@ -174,10 +174,10 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       industry = '',
       scorableType = 'interview' as const,
       status = 'draft',
-      dimensions: dimensionsProp = [],
+      dimensions: rawDimensionsProp = [],
       scoreLevels: scoreLevelsProp = [{ label: 'Low', minScore: 0, color: '#ef4444' }, { label: 'Medium', minScore: 40, color: '#f59e0b' }, { label: 'High', minScore: 70, color: '#22c55e' }],
       selectedDimension: selectedDimensionProp = null,
-      validationErrors: validationErrorsProp,
+      validationErrors: validationErrorsProp = [],
       isDirty: isDirtyProp,
       onChange,
       onDimensionAdd,
@@ -192,6 +192,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       style,
     } = props;
 
+    const dimensionsProp = Array.isArray(rawDimensionsProp) ? rawDimensionsProp : [];
+
     /* ── Local State ──────────────────────────────────────────────── */
     const [localDimensions, setLocalDimensions] = useState<ScoringDimension[]>(dimensionsProp);
     const [localSelectedDimension, setLocalSelectedDimension] = useState<string | null>(selectedDimensionProp);
@@ -200,7 +202,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
       over: null,
     });
     const [localScoreLevels, setLocalScoreLevels] = useState<ScoreLevel[]>(scoreLevelsProp);
-    const [localValidationErrors, setLocalValidationErrors] = useState<ValidationError[]>(validationErrorsProp!);
+    const [localValidationErrors, setLocalValidationErrors] = useState<ValidationError[]>(validationErrorsProp ?? []);
     const [localShowPreview, setLocalShowPreview] = useState(showPreviewProp);
     const [localIsDirty, setLocalIsDirty] = useState(isDirtyProp);
 
@@ -1109,7 +1111,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 </Box>
 
                 {/* Table rows */}
-                {localScoreLevels.map((level, idx) => (
+                {(localScoreLevels ?? []).map((level, idx) => (
                   <Box
                     key={idx}
                     role="row"
@@ -1120,7 +1122,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                       padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                       alignItems: 'center',
                       borderBottom:
-                        idx < localScoreLevels.length - 1
+                        idx < (localScoreLevels?.length ?? 0) - 1
                           ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[100]}`
                           : 'none',
                     }}
@@ -1349,7 +1351,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                   >
                     {sortedDimensions.map((dim, idx) => {
                       const sampleScore = sampleScores[idx]?.value ?? 75;
-                      const matchingLevel = [...localScoreLevels]
+                      const matchingLevel = [...(localScoreLevels ?? [])]
                         .sort((a, b) => b.minScore - a.minScore)
                         .find((l) => sampleScore >= l.minScore);
 
@@ -1435,8 +1437,8 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                             ))}
 
                             {/* Axis lines */}
-                            {sampleScores.map((_, i) => {
-                              const angle = -Math.PI / 2 + (i * 2 * Math.PI) / sampleScores.length;
+                            {(sampleScores ?? []).map((_, i) => {
+                              const angle = -Math.PI / 2 + (i * 2 * Math.PI) / (sampleScores?.length || 1);
                               const x2 = 130 + 90 * Math.cos(angle);
                               const y2 = 130 + 90 * Math.sin(angle);
                               return (
@@ -1601,7 +1603,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
 
                 {/* Score levels valid check */}
                 {(() => {
-                  const sortedLevels = [...localScoreLevels].sort((a, b) => b.minScore - a.minScore);
+                  const sortedLevels = [...(localScoreLevels ?? [])].sort((a, b) => b.minScore - a.minScore);
                   const thresholdsValid = sortedLevels.every(
                     (l, i) => i === 0 || l.minScore < sortedLevels[i - 1].minScore
                   );
@@ -1641,7 +1643,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                 })()}
 
                 {/* Custom validation errors */}
-                {localValidationErrors.length > 0 && (
+                {(localValidationErrors?.length ?? 0) > 0 && (
                   <Box
                     role="alert"
                     style={{
@@ -1661,7 +1663,7 @@ export const EditorBhRubricBuilder = createPreset<BhRubricBuilderProps>({
                     >
                       Additional Errors
                     </Text>
-                    {localValidationErrors.map((err, idx) => (
+                    {(localValidationErrors ?? []).map((err, idx) => (
                       <Box
                         key={idx}
                         style={{

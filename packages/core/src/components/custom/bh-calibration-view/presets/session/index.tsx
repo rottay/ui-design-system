@@ -36,7 +36,6 @@ import {
 import type {
   BhCalibrationViewProps,
   CalibrationSample,
-  AlignmentMetrics,
   DimensionAdjustment,
   TranscriptLine,
 } from '../../core';
@@ -111,6 +110,9 @@ function getMisalignmentColor(misalignment: number, tokens: DesignTokens): strin
 
 /* ------------------------------------------------------------------ */
 /*  Preset                                                             */
+const EMPTY_DIMENSIONS: string[] = [];
+const EMPTY_SAMPLES: CalibrationSample[] = [];
+
 /* ------------------------------------------------------------------ */
 export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
   name: 'BhCalibrationView.Session',
@@ -119,8 +121,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
     const {
       rubricName,
-      dimensions = [],
-      samples = [],
+      dimensions: rawDimensions = [],
+      samples: rawSamples = [],
       currentSampleIndex: currentSampleIndexProp,
       onSampleChange,
       humanScores: humanScoresProp,
@@ -135,6 +137,9 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
       className,
       style,
     } = props;
+
+    const dimensions = Array.isArray(rawDimensions) ? rawDimensions : EMPTY_DIMENSIONS;
+    const samples = Array.isArray(rawSamples) ? rawSamples : EMPTY_SAMPLES;
 
     /* ----- personality + glass ----- */
     const isGlass = tokens.surface.useGlass;
@@ -152,8 +157,8 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
       return humanScoresProp ?? init;
     });
     const [internalShowAIScores, setInternalShowAIScores] = useState(showAIScoresProp ?? false);
-    const [internalSamples, setInternalSamples] = useState<CalibrationSample[]>(samples);
-    const [internalAlignmentMetrics, setInternalAlignmentMetrics] = useState<AlignmentMetrics | undefined>(alignmentMetricsProp);
+    // Removed useState for samples and alignmentMetrics - use props directly to avoid
+    // infinite re-render loops caused by destructuring defaults creating new refs each render.
     const [selectedDimension, setSelectedDimension] = useState<string | null>(null);
     const [internalIsSubmitting, setInternalIsSubmitting] = useState(isSubmittingProp ?? false);
 
@@ -167,8 +172,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     useEffect(() => {
       if (showAIScoresProp !== undefined) setInternalShowAIScores(showAIScoresProp);
     }, [showAIScoresProp]);
-    useEffect(() => { setInternalSamples(samples); }, [samples]);
-    useEffect(() => { setInternalAlignmentMetrics(alignmentMetricsProp); }, [alignmentMetricsProp]);
+    // Removed useEffect syncs for samples and alignmentMetrics (use props directly).
     useEffect(() => {
       if (isSubmittingProp !== undefined) setInternalIsSubmitting(isSubmittingProp);
     }, [isSubmittingProp]);
@@ -176,10 +180,10 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
     const currentSampleIndex = currentSampleIndexProp ?? internalCurrentSample;
     const humanScores = humanScoresProp ?? internalHumanScores;
     const showAIScores = showAIScoresProp ?? internalShowAIScores;
-    const alignmentMetrics = alignmentMetricsProp ?? internalAlignmentMetrics;
+    const alignmentMetrics = alignmentMetricsProp;
     const adjustments = adjustmentsProp ?? [];
     const isSubmitting = isSubmittingProp ?? internalIsSubmitting;
-    const currentSample = internalSamples[currentSampleIndex] ?? samples[currentSampleIndex];
+    const currentSample = samples[currentSampleIndex];
     const totalSamples = progress?.total ?? samples.length;
     const completedSamples = progress?.completed ?? 0;
 

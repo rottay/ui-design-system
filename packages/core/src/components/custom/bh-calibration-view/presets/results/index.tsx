@@ -111,14 +111,18 @@ export const ResultsBhCalibrationView = createPreset<BhCalibrationViewProps>({
 
     const {
       rubricName,
-      dimensions = [],
-      samples = [],
+      dimensions: rawDimensions = [],
+      samples: rawSamples = [],
       alignmentMetrics,
-      adjustments = [],
+      adjustments: rawAdjustments = [],
       progress,
       className,
       style,
     } = props;
+
+    const dimensions = Array.isArray(rawDimensions) ? rawDimensions : [];
+    const samples = Array.isArray(rawSamples) ? rawSamples : [];
+    const adjustments = Array.isArray(rawAdjustments) ? rawAdjustments : [];
 
     /* ----- personality + glass ----- */
     const isGlass = tokens.surface.useGlass;

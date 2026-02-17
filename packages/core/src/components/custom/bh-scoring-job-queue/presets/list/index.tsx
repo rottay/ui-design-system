@@ -161,7 +161,7 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobs = [],
+      jobs: rawJobs = [],
       stats = { totalJobs: 0, queued: 0, processing: 0, completed: 0, failed: 0, avgProcessingTime: 0 },
       onJobClick,
       onRetryJob,
@@ -172,6 +172,8 @@ export const ListBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
       className,
       style,
     } = props;
+
+    const jobs = Array.isArray(rawJobs) ? rawJobs : [];
 
     const [hoveredJobId, setHoveredJobId] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState<SortKey>('priority');

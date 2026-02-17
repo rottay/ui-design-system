@@ -1,12 +1,37 @@
 /**
  * BitHire Domain Types
- * Aligned with dm-recruiter + dm-scoring domain models
+ * Canonical types re-exported from @rottay/recruiter.
+ * UI-specific view model types defined locally for DS components.
  */
 
 import type { AuditFields, Currency, StatusBadge, TrendIndicator, DateRange } from './common';
 
-/** Job status */
-export type BhJobStatus = 'draft' | 'open' | 'paused' | 'closed' | 'filled' | 'cancelled';
+// ============================================================================
+// Canonical Entity Types (from @rottay/recruiter)
+// ============================================================================
+
+export type {
+  Candidate as BhCandidate,
+  Job as BhJob,
+  Interview as BhInterview,
+  Offer as BhOffer,
+} from '@rottay/recruiter';
+
+// ============================================================================
+// Module Enum Re-exports
+// ============================================================================
+
+export type {
+  JobStatus as BhJobStatus,
+  InterviewMode as BhInterviewMode,
+  InterviewStatus as BhInterviewStatus,
+  OfferStatus as BhOfferStatus,
+  CandidateStatus as BhCandidateStatus,
+} from '@rottay/recruiter';
+
+// ============================================================================
+// UI-Specific Types (DS component view models)
+// ============================================================================
 
 /** Job urgency */
 export type BhJobUrgency = 'low' | 'medium' | 'high' | 'critical';
@@ -31,37 +56,11 @@ export type BhCandidateStage =
   | 'rejected'
   | 'withdrawn';
 
-/** Interview type */
+/** Interview type (UI display) */
 export type BhInterviewType = 'phone' | 'video' | 'onsite' | 'ai-screen' | 'technical' | 'panel';
-
-/** Interview status */
-export type BhInterviewStatus = 'scheduled' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
 
 /** SLA status */
 export type BhSlaStatus = 'on-track' | 'warning' | 'breached';
-
-/** Job entity */
-export interface BhJob extends AuditFields {
-  id: string;
-  title: string;
-  code: string;
-  department: string;
-  location: string;
-  workModel: BhWorkModel;
-  employmentType: BhEmploymentType;
-  status: BhJobStatus;
-  urgency: BhJobUrgency;
-  salary?: { min: Currency; max: Currency };
-  description?: string;
-  requirements?: string[];
-  skills: string[];
-  pipelineStages: BhPipelineStage[];
-  candidateCount: number;
-  slaStatus: BhSlaStatus;
-  slaDaysRemaining?: number;
-  clientName?: string;
-  hiringManagerName?: string;
-}
 
 /** Pipeline stage */
 export interface BhPipelineStage {
@@ -70,28 +69,6 @@ export interface BhPipelineStage {
   order: number;
   count: number;
   color?: string;
-}
-
-/** Candidate entity */
-export interface BhCandidate extends AuditFields {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  avatarUrl?: string;
-  currentTitle?: string;
-  currentCompany?: string;
-  location?: string;
-  stage: BhCandidateStage;
-  score?: BhScore;
-  skills: string[];
-  yearsExperience?: number;
-  source?: string;
-  resumeUrl?: string;
-  linkedInUrl?: string;
-  appliedJobs: string[];
-  tags?: string[];
 }
 
 /** Score entity */
@@ -111,26 +88,6 @@ export interface BhScoreDimension {
   maxScore: number;
   weight: number;
   evidence?: string[];
-}
-
-/** Interview entity */
-export interface BhInterview extends AuditFields {
-  id: string;
-  candidateId: string;
-  candidateName: string;
-  candidateAvatar?: string;
-  jobId: string;
-  jobTitle: string;
-  type: BhInterviewType;
-  status: BhInterviewStatus;
-  scheduledAt: Date;
-  duration: number;
-  interviewerName?: string;
-  interviewerId?: string;
-  stage: string;
-  notes?: string;
-  score?: BhScore;
-  isAI?: boolean;
 }
 
 /** AI suggestion */
@@ -210,16 +167,4 @@ export interface BhSlaConfig {
   stageTimeLimit: Record<string, number>;
   totalTimeLimit: number;
   warningThreshold: number;
-}
-
-/** Offer */
-export interface BhOffer extends AuditFields {
-  id: string;
-  candidateId: string;
-  jobId: string;
-  salary: Currency;
-  startDate: Date;
-  status: 'draft' | 'pending-approval' | 'approved' | 'sent' | 'accepted' | 'declined' | 'expired';
-  expiresAt?: Date;
-  approvers?: string[];
 }

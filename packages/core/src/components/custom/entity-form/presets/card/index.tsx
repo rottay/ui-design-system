@@ -19,7 +19,7 @@ export const CardEntityForm = createPreset<EntityFormProps>({
       onChange,
       onSubmit,
       onCancel,
-      sections = [],
+      sections: rawSections = [],
       errors = {},
       readOnly = false,
       loading = false,
@@ -30,6 +30,8 @@ export const CardEntityForm = createPreset<EntityFormProps>({
       className,
       style,
     } = props;
+
+    const sections = Array.isArray(rawSections) ? rawSections : [];
 
     const visibleFields = useMemo(() => fields.filter((f) => !f.hidden), [fields]);
 

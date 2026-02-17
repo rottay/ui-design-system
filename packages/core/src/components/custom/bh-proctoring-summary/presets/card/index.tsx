@@ -44,9 +44,8 @@ function getSeverityColor(severity: string | undefined, t: DesignTokens): string
   }
 }
 
-function getSeverityLabel(severity: string | undefined): string {
-  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getSeverityLabel } from '@rottay/scoring';
 
 function getRiskColor(score: number, t: DesignTokens): string {
   if (score >= 75) return t.colors.errorScale[600];
@@ -94,16 +93,22 @@ export const CardBhProctoringSummary = createPreset<BhProctoringSummaryProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      candidateName = MOCK_PROPS.candidateName,
+      candidateName: rawCandidateName = MOCK_PROPS.candidateName,
       candidateAvatar,
-      riskScore = MOCK_PROPS.riskScore,
-      eventCounts = MOCK_PROPS.eventCounts,
-      totalEvents = MOCK_PROPS.totalEvents,
-      reviewedCount = MOCK_PROPS.reviewedCount,
+      riskScore: rawRiskScore = MOCK_PROPS.riskScore,
+      eventCounts: rawEventCounts = MOCK_PROPS.eventCounts,
+      totalEvents: rawTotalEvents = MOCK_PROPS.totalEvents,
+      reviewedCount: rawReviewedCount = MOCK_PROPS.reviewedCount,
       onViewDetails,
       className,
       style,
     } = props;
+
+    const candidateName = Array.isArray(rawCandidateName) ? rawCandidateName : MOCK_PROPS.candidateName;
+    const riskScore = Array.isArray(rawRiskScore) ? rawRiskScore : MOCK_PROPS.riskScore;
+    const eventCounts = Array.isArray(rawEventCounts) ? rawEventCounts : MOCK_PROPS.eventCounts;
+    const totalEvents = Array.isArray(rawTotalEvents) ? rawTotalEvents : MOCK_PROPS.totalEvents;
+    const reviewedCount = Array.isArray(rawReviewedCount) ? rawReviewedCount : MOCK_PROPS.reviewedCount;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

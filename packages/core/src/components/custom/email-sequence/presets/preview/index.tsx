@@ -26,11 +26,13 @@ export const PreviewEmailSequence = createPreset<EmailSequenceProps>({
     const {
       title = 'Email Sequence',
       status = 'draft',
-      steps = [],
+      steps: rawSteps = [],
       loading,
       className,
       style,
     } = props;
+
+    const steps = Array.isArray(rawSteps) ? rawSteps : [];
 
     const statusStyle = sequenceStatusColors[status];
 

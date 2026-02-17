@@ -80,13 +80,15 @@ export const CompactBhSprintRetrospective = createPreset<BhSprintRetrospectivePr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      items = MOCK_ITEMS,
+      items: rawItems = MOCK_ITEMS,
       sprintName = 'Sprint 12',
       onVote,
       loading = false,
       className,
       style,
     } = props;
+
+    const items = Array.isArray(rawItems) ? rawItems : MOCK_ITEMS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

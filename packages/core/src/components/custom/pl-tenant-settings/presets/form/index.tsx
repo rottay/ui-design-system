@@ -167,10 +167,13 @@ export const FormPlTenantSettings = createPreset<PlTenantSettingsProps>({
     const [webhookTestResult, setWebhookTestResult] = useState<'success' | 'error' | null>(null);
     const [hasChanges, setHasChanges] = useState(false);
 
-    // Sync draft when settings prop changes
+    // Sync draft when settings prop changes (guarded to avoid re-render loops
+    // when factory converts null -> undefined, which would fire every render).
     useEffect(() => {
-      setDraft(settings);
-      setHasChanges(false);
+      if (settings != null) {
+        setDraft(settings);
+        setHasChanges(false);
+      }
     }, [settings]);
 
     // Track changes

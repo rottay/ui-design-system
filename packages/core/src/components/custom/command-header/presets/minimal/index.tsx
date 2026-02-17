@@ -23,12 +23,15 @@ export const MinimalCommandHeader = createPreset<CommandHeaderProps>({
       title,
       subtitle,
       icon,
-      metrics = [],
-      systemStatus = [],
+      metrics: rawMetrics = [],
+      systemStatus: rawSystemStatus = [],
       primaryAction,
       className,
       style,
     } = props;
+
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
+    const systemStatus = Array.isArray(rawSystemStatus) ? rawSystemStatus : [];
 
     const [hoveredStatus, setHoveredStatus] = useState<number | null>(null);
     const isGlass = tokens.surface.useGlass && !!tokens.glass;

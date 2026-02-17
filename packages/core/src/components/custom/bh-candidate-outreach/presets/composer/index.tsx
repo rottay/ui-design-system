@@ -81,8 +81,8 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
 
     const {
       channel: cp = 'email', onChannelChange,
-      recipients = DEFAULT_RECIPIENTS, onRecipientsChange,
-      templates = DEFAULT_TEMPLATES, selectedTemplate: stp, onTemplateSelect,
+      recipients: rawRecipients = DEFAULT_RECIPIENTS, onRecipientsChange,
+      templates: rawTemplates = DEFAULT_TEMPLATES, selectedTemplate: stp, onTemplateSelect,
       messageContent: mcp = '', onMessageChange,
       subject: sp = '', onSubjectChange,
       scheduleConfig: scp, onScheduleChange,
@@ -91,6 +91,9 @@ export const ComposerBhCandidateOutreach = createPreset<BhCandidateOutreachProps
       onSend, loading,
       className, style,
     } = props;
+
+    const recipients = Array.isArray(rawRecipients) ? rawRecipients : DEFAULT_RECIPIENTS;
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : DEFAULT_TEMPLATES;
 
     const [iChannel, setIChannel] = useState<OutreachChannel>('email');
     const [iTemplate, setITemplate] = useState<OutreachTemplate | null>(null);

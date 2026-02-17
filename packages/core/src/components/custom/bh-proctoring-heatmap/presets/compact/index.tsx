@@ -84,13 +84,15 @@ export const CompactBhProctoringHeatmap = createPreset<BhProctoringHeatmapProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      data = MOCK_DATA,
+      data: rawData = MOCK_DATA,
       onCellClick,
       colorScale = 'error',
       showValues = false,
       className,
       style,
     } = props;
+
+    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
 
     const [hoveredCell, setHoveredCell] = useState<{ day: number; hour: number } | null>(null);
 

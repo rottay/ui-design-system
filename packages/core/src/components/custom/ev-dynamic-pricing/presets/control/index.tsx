@@ -70,11 +70,13 @@ export const ControlEvDynamicPricing = createPreset<EvDynamicPricingProps>({
     const { Box, Text } = primitives;
 
     const {
-      tiers = MOCK_TIERS,
+      tiers: rawTiers = MOCK_TIERS,
       onPriceOverride,
       onToggleAuto,
       onSimulate,
     } = props;
+
+    const tiers = Array.isArray(rawTiers) ? rawTiers : MOCK_TIERS;
 
     const totalRevenue = tiers.reduce(
       (sum, tier) => sum + tier.currentPrice * tier.sold,

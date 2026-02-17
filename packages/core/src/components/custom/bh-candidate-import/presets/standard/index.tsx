@@ -120,14 +120,19 @@ export const StandardBhCandidateImport = createPreset<BhCandidateImportProps>({
     }, [t]);
 
     const {
-      steps = DEFAULT_STEPS, currentStep: csp = 0,
+      steps: rawSteps = DEFAULT_STEPS, currentStep: csp = 0,
       method: mp, uploadedFile: ufp,
-      fieldMapping = DEFAULT_MAPPINGS, dedupResults = DEFAULT_DEDUP,
-      validationResults = DEFAULT_VALIDATION, importProgress: ipp,
+      fieldMapping: rawFieldMapping = DEFAULT_MAPPINGS, dedupResults: rawDedupResults = DEFAULT_DEDUP,
+      validationResults: rawValidationResults = DEFAULT_VALIDATION, importProgress: ipp,
       onChange, onStepChange, onUpload, onMappingChange, onDedupAction,
       onStartImport, onCancel, loading,
       className, style,
     } = props;
+
+    const steps = Array.isArray(rawSteps) ? rawSteps : DEFAULT_STEPS;
+    const fieldMapping = Array.isArray(rawFieldMapping) ? rawFieldMapping : DEFAULT_MAPPINGS;
+    const dedupResults = Array.isArray(rawDedupResults) ? rawDedupResults : DEFAULT_DEDUP;
+    const validationResults = Array.isArray(rawValidationResults) ? rawValidationResults : DEFAULT_VALIDATION;
 
     const [iStep, setIStep] = useState(csp);
     const [iMethod, setIMethod] = useState<ImportMethod>('csv');

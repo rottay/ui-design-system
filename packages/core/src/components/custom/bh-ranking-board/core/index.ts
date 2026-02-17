@@ -119,13 +119,11 @@ export const BH_RANKING_BOARD_DEFAULTS: Partial<BhRankingBoardProps> = {
 /* ------------------------------------------------------------------ */
 /*  Helper: Decision status colors                                      */
 /* ------------------------------------------------------------------ */
-export function getDecisionColors(status: DecisionStatus, tokens: DesignTokens) {
+export function getDecisionColors(status: DecisionStatus | undefined | null, tokens: DesignTokens) {
+  const fallback = { bg: tokens.colors.neutral[100], color: tokens.colors.neutral[600], border: tokens.colors.neutral[200] };
+  if (!status) return fallback;
   const map: Record<DecisionStatus, { bg: string; color: string; border: string }> = {
-    pending: {
-      bg: tokens.colors.neutral[100],
-      color: tokens.colors.neutral[600],
-      border: tokens.colors.neutral[200],
-    },
+    pending: fallback,
     advanced: {
       bg: tokens.colors.successScale[100],
       color: tokens.colors.successScale[700],
@@ -142,7 +140,7 @@ export function getDecisionColors(status: DecisionStatus, tokens: DesignTokens) 
       border: tokens.colors.warningScale[200],
     },
   };
-  return map[status];
+  return map[status] ?? fallback;
 }
 
 export function getDecisionActionColors(action: DecisionAction, tokens: DesignTokens) {
@@ -187,7 +185,8 @@ export function getRankBadgeColors(rank: number, tokens: DesignTokens) {
   return { bg: tokens.colors.neutral[50], color: tokens.colors.neutral[600], border: tokens.colors.neutral[200] };
 }
 
-export function getCandidateInitials(name: string): string {
+export function getCandidateInitials(name?: string | null): string {
+  if (!name) return '?';
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) {
     return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();

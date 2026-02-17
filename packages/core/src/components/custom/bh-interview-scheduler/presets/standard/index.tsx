@@ -42,7 +42,10 @@ export const StandardBhInterviewScheduler = createPreset<BhInterviewSchedulerPro
   name: 'BhInterviewScheduler.Standard',
   render: ({ primitives, props, tokens }: PresetContext<BhInterviewSchedulerProps>) => {
     const { Box, Text } = primitives;
-    const { candidate: externalCandidate, interviewType: externalType, onTypeChange, templateStage, scheduleData: externalSchedule, onScheduleChange, agentConfig: externalAgentConfig, onAgentConfigChange, agents = [], interviewers = [], onConfirm, onCancel, estimatedCost, showConfirmation: externalShowConfirmation = false, className, style } = props;
+    const { candidate: externalCandidate, interviewType: externalType, onTypeChange, templateStage, scheduleData: externalSchedule, onScheduleChange, agentConfig: externalAgentConfig, onAgentConfigChange, agents: rawAgents = [], interviewers: rawInterviewers = [], onConfirm, onCancel, estimatedCost, showConfirmation: externalShowConfirmation = false, className, style } = props;
+
+    const agents = Array.isArray(rawAgents) ? rawAgents : [];
+    const interviewers = Array.isArray(rawInterviewers) ? rawInterviewers : [];
 
     const [selectedCandidate, setSelectedCandidate] = useState<ScheduleCandidate | null>(externalCandidate ?? null);
     const [interviewType, setInterviewType] = useState<InterviewTypeConfig>(externalType ?? { type: 'ai' });

@@ -87,7 +87,7 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules = MOCK_RULES,
+      rules: rawRules = MOCK_RULES,
       onRuleToggle,
       onRuleEdit,
       onAddRule,
@@ -95,6 +95,8 @@ export const ConfigBhWorkflowNotification = createPreset<BhWorkflowNotificationP
       className,
       style,
     } = props;
+
+    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
 
     const [hoveredRule, setHoveredRule] = useState<string | null>(null);
 

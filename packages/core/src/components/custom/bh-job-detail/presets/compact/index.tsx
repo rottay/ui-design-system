@@ -89,7 +89,12 @@ export const CompactBhJobDetail = createPreset<BhJobDetailProps>(
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
 
     const JOB_INFO_DEFAULT = { title: '', code: '', status: 'draft' as const, clientName: '', daysOpen: 0, urgency: 'low' as const };
-    const { jobInfo: _jobInfo = JOB_INFO_DEFAULT, metrics = [], funnelStages = [], candidates = [], templateInfo, events = [], activeTab: activeTabProp, onTabChange, onCandidateClick, className, style } = props;
+    const { jobInfo: _jobInfo = JOB_INFO_DEFAULT, metrics: rawMetrics = [], funnelStages: rawFunnelStages = [], candidates: rawCandidates = [], templateInfo, events: rawEvents = [], activeTab: activeTabProp, onTabChange, onCandidateClick, className, style } = props;
+
+    const metrics = Array.isArray(rawMetrics) ? rawMetrics : [];
+    const funnelStages = Array.isArray(rawFunnelStages) ? rawFunnelStages : [];
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
     const jobInfo = _jobInfo ?? JOB_INFO_DEFAULT;
 
     const [internalTab, setInternalTab] = useState<CompactTab>('summary');

@@ -81,31 +81,8 @@ function getEventTypeIcon(type: string | undefined) {
   }
 }
 
-function getEventTypeLabel(type: string | undefined): string {
-  switch (type) {
-    case 'tab_switch': return 'Tab Switch';
-    case 'copy_paste': return 'Copy/Paste';
-    case 'screen_share': return 'Screen Share';
-    case 'unusual_typing': return 'Unusual Typing';
-    case 'browser_focus_lost': return 'Focus Lost';
-    default: return 'Unknown';
-  }
-}
-
-function getSeverityLabel(severity: string | undefined): string {
-  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
-}
-
-function getEventTypeDescription(type: string | undefined): string {
-  switch (type) {
-    case 'tab_switch': return 'Candidate switched to a different browser tab during the assessment.';
-    case 'copy_paste': return 'Copy/paste activity was detected in the assessment interface.';
-    case 'screen_share': return 'Screen sharing to an external application was detected.';
-    case 'unusual_typing': return 'Typing pattern anomaly detected, possibly indicating external assistance.';
-    case 'browser_focus_lost': return 'Browser window lost focus, indicating candidate navigated away.';
-    default: return 'A proctoring event was detected during the assessment.';
-  }
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getEventTypeLabel, getSeverityLabel, getEventTypeDescription } from '@rottay/scoring';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -145,7 +122,7 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      event: eventView = MOCK_EVENT,
+      event: rawEventView = MOCK_EVENT,
       onReview,
       onDismiss,
       onClick,
@@ -153,6 +130,8 @@ export const DefaultBhProctoringEventCard = createPreset<BhProctoringEventCardPr
       className,
       style,
     } = props;
+
+    const eventView = Array.isArray(rawEventView) ? rawEventView : MOCK_EVENT;
 
     const ev = eventView?.event;
     const candidateName = eventView?.candidateName ?? 'Unknown';

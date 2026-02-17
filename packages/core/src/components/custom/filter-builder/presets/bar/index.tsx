@@ -17,12 +17,14 @@ export const BarFilterBuilder = createPreset<FilterBuilderProps>({
       filterConfig,
       filters,
       onFiltersChange,
-      quickPresets = [],
+      quickPresets: rawQuickPresets = [],
       searchKey = FILTER_BUILDER_DEFAULTS.searchKey!,
       searchIcon,
       className,
       style,
     } = props;
+
+    const quickPresets = Array.isArray(rawQuickPresets) ? rawQuickPresets : [];
 
     const primaryFields = useMemo(() => filterConfig.filter((f) => f.primary), [filterConfig]);
     const searchField = useMemo(() => filterConfig.find((f) => f.key === searchKey), [filterConfig, searchKey]);

@@ -86,7 +86,7 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      campaigns = MOCK_CAMPAIGNS,
+      campaigns: rawCampaigns = MOCK_CAMPAIGNS,
       onCampaignClick,
       onCreateCampaign,
       selectedCampaignId,
@@ -94,6 +94,8 @@ export const ManagerBhOutreachCampaign = createPreset<BhOutreachCampaignProps>({
       className,
       style,
     } = props;
+
+    const campaigns = Array.isArray(rawCampaigns) ? rawCampaigns : MOCK_CAMPAIGNS;
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 

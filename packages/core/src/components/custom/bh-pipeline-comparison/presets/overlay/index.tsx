@@ -104,14 +104,17 @@ export const OverlayBhPipelineComparison = createPreset<BhPipelineComparisonProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobA = MOCK_JOB_A,
-      jobB = MOCK_JOB_B,
+      jobA: rawJobA = MOCK_JOB_A,
+      jobB: rawJobB = MOCK_JOB_B,
       onSwap,
       showDelta = true,
       onStageClick,
       className,
       style,
     } = props;
+
+    const jobA = Array.isArray(rawJobA) ? rawJobA : MOCK_JOB_A;
+    const jobB = Array.isArray(rawJobB) ? rawJobB : MOCK_JOB_B;
 
     const [hoveredStage, setHoveredStage] = useState<string | null>(null);
 

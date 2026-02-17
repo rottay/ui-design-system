@@ -56,7 +56,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
 
     const {
       testName = 'A/B Test',
-      variants = [],
+      variants: rawVariants = [],
       status = 'draft',
       startDate,
       endDate,
@@ -68,6 +68,8 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
       className,
       style,
     } = props;
+
+    const variants = Array.isArray(rawVariants) ? rawVariants : [];
 
     const [localSelected, setLocalSelected] = useState<string | null>(null);
     const selectedVariantId = controlledSelected ?? localSelected;

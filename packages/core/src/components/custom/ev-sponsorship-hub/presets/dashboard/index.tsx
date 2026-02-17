@@ -114,7 +114,9 @@ export const DashboardEvSponsorshipHub = createPreset<EvSponsorshipHubProps>({
     const { primitives, props, tokens } = ctx;
     const { Box, Text } = primitives;
 
-    const { sponsors = MOCK_SPONSORS, onSponsorClick } = props;
+    const { sponsors: rawSponsors = MOCK_SPONSORS, onSponsorClick } = props;
+
+    const sponsors = Array.isArray(rawSponsors) ? rawSponsors : MOCK_SPONSORS;
 
     const getTierBadgeColor = (tier: Sponsor['tier']): BadgeColor => {
       switch (tier) {

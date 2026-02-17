@@ -97,7 +97,7 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events = MOCK_EVENTS,
+      events: rawEvents = MOCK_EVENTS,
       appealId,
       candidateName,
       onEventClick,
@@ -105,6 +105,8 @@ export const TimelineBhAppealTimeline = createPreset<BhAppealTimelineProps>({
       className,
       style,
     } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

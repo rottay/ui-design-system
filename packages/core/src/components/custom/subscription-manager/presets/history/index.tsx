@@ -22,13 +22,15 @@ export const HistorySubscriptionManager = createPreset<SubscriptionManagerProps>
     const eventColors = getBillingEventColors(tokens);
 
     const {
-      billingHistory = [],
+      billingHistory: rawBillingHistory = [],
       onDownloadInvoice,
       title = 'Billing History',
       loading,
       className,
       style,
     } = props;
+
+    const billingHistory = Array.isArray(rawBillingHistory) ? rawBillingHistory : [];
 
     const eventIcons: Record<string, string> = {
       payment: '💳', refund: '↩', upgrade: '⬆', downgrade: '⬇',

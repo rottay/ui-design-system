@@ -59,11 +59,13 @@ export const CompactBhWorkflowStageEditor = createPreset<BhWorkflowStageEditorPr
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = MOCK_STAGES,
+      stages: rawStages = MOCK_STAGES,
       onStageEdit,
       className,
       style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

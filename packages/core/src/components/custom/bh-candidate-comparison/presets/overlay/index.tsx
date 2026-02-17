@@ -51,7 +51,7 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      candidates = [],
+      candidates: rawCandidates = [],
       dimensions,
       title = 'Candidate Radar',
       onCandidateSelect,
@@ -59,6 +59,8 @@ export const OverlayBhCandidateComparison = createPreset<BhCandidateComparisonPr
       className,
       style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 

@@ -81,13 +81,14 @@ export const CardsBhPositionList = createPreset<BhPositionListProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions = MOCK_POSITIONS,
+      positions: rawPositions = MOCK_POSITIONS,
       onPositionClick,
       selectedPositionId,
       className,
       style,
     } = props;
 
+    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

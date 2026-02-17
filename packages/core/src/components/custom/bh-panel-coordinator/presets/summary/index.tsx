@@ -38,7 +38,10 @@ export const SummaryBhPanelCoordinator = createPreset<BhPanelCoordinatorProps>({
     const recColors = getRecommendationColors(tokens);
     const stageColors = getStageStatusColors(tokens);
 
-    const { stages = MOCK_STAGES, members = MOCK_MEMBERS, consensus, candidateName, positionTitle, loading, className, style } = props;
+    const { stages: rawStages = MOCK_STAGES, members: rawMembers = MOCK_MEMBERS, consensus, candidateName, positionTitle, loading, className, style } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
+    const members = Array.isArray(rawMembers) ? rawMembers : MOCK_MEMBERS;
 
     const sortedStages = useMemo(() => [...stages].sort((a, b) => a.order - b.order), [stages]);
 

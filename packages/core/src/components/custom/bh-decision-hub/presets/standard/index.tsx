@@ -99,14 +99,18 @@ export const StandardBhDecisionHub = createPreset<BhDecisionHubProps>({
 
     const {
       jobName = '', pendingCount = 0,
-      candidates = [],
+      candidates: rawCandidates = [],
       selectedCandidate: scp, onCandidateSelect,
       decision: dp, onDecisionChange,
-      history = [], historyFilter: hfp, onHistoryFilterChange,
-      advanceSteps = [],
+      history: rawHistory = [], historyFilter: hfp, onHistoryFilterChange,
+      advanceSteps: rawAdvanceSteps = [],
       onSubmitDecision,
       className, style,
     } = props;
+
+    const candidates = Array.isArray(rawCandidates) ? rawCandidates : [];
+    const history = Array.isArray(rawHistory) ? rawHistory : [];
+    const advanceSteps = Array.isArray(rawAdvanceSteps) ? rawAdvanceSteps : [];
 
     const [iSelected, setISelected] = useState<string | null>(candidates[0]?.id ?? null);
     const [iDecision, setIDecision] = useState<DecisionFormData>({});

@@ -192,7 +192,7 @@ const DEFAULT_CANDIDATES: KanbanCandidate[] = [
 
 export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
   name: 'BhCandidateKanban.Board',
-  render: ({ primitives, props, tokens: t, engine }: PresetContext<BhCandidateKanbanProps>) => {
+  render: ({ primitives, props, tokens: t, engine, ext }: PresetContext<BhCandidateKanbanProps>) => {
     const { Box, Text } = primitives;
     // Assign to module-level vars for ScoreRing helper
     _Box = Box;
@@ -204,12 +204,20 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
 
     const {
       jobName = '', totalCandidates = 0,
-      stages = [], candidates: cp = [],
+      stages: rawStages = [], candidates: rawCp = [],
       onCandidateMove, onCandidateClick, onScheduleInterview, onAddNote, onReject, onHold,
       filters: fp, onFilterChange, searchQuery: sqp, onSearchChange,
       selectedCandidate: selp, bulkSelection: bsp, onBulkSelectionChange, onBulkAction,
       className, style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : [];
+    const cp = Array.isArray(rawCp) ? rawCp : [];
+
+    // Extension helpers
+    const extRowActions = useMemo(() => ext.rowActions(), [ext]);
+    const extDnd = ext.dragAndDropConfig();
+    const extA11y = ext.a11yConfig();
 
     const [iFilters, setIFilters] = useState<KanbanFilter>({});
     const [iSearch, setISearch] = useState('');
@@ -530,8 +538,11 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
     );
 
     return (
-      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...style }}>
-        {toolbar}
+      <Box className={className} style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: t.colors.neutral[50], fontFamily: 'inherit', ...style }}
+        {...(extA11y.ariaLabel ? { 'aria-label': extA11y.ariaLabel } : {})}>
+        {ext.slot('header:start')}
+        {ext.section('toolbar', () => toolbar)}
+        {ext.slot('toolbar:end')}
 
         {/* Filter panel */}
         {showFilter && (
@@ -623,6 +634,8 @@ export const BoardBhCandidateKanban = createPreset<BhCandidateKanbanProps>({
             engine={engine}
           />
         </Box>
+
+        {ext.slot('footer')}
 
         {/* Confirm reject modal */}
         {confirmRejectId && (

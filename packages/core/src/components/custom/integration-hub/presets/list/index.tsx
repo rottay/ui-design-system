@@ -12,7 +12,7 @@ export const ListPreset = createPreset<IntegrationHubProps>((context) => {
   const { Box, Text, Button, Input } = primitives;
   const {
     integrations,
-    categories = [],
+    categories: rawCategories = [],
     onInstall,
     onUninstall,
     onSelect,
@@ -20,6 +20,8 @@ export const ListPreset = createPreset<IntegrationHubProps>((context) => {
     className,
     style,
   } = props;
+
+    const categories = Array.isArray(rawCategories) ? rawCategories : [];
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

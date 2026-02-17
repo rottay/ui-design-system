@@ -64,14 +64,17 @@ export const DiagramBhCircuitBreakerViz = createPreset<BhCircuitBreakerVizProps>
     ];
 
     const {
-      nodes = MOCK_NODES,
-      connections = MOCK_CONNECTIONS,
+      nodes: rawNodes = MOCK_NODES,
+      connections: rawConnections = MOCK_CONNECTIONS,
       onNodeClick,
       selectedNodeId: controlledSelected,
       loading = false,
       className,
       style,
     } = props;
+
+    const nodes = Array.isArray(rawNodes) ? rawNodes : MOCK_NODES;
+    const connections = Array.isArray(rawConnections) ? rawConnections : MOCK_CONNECTIONS;
 
     const [localSelected, setLocalSelected] = useState<string | null>(null);
     const selectedNodeId = controlledSelected ?? localSelected;

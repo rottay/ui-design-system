@@ -23,7 +23,7 @@ export const SuggestionsSearchBar = createPreset<SearchBarProps>({
       defaultValue = '',
       onChange,
       onSearch,
-      suggestions = [],
+      suggestions: rawSuggestions = [],
       onSuggestionSelect,
       loading,
       size = 'md',
@@ -31,6 +31,8 @@ export const SuggestionsSearchBar = createPreset<SearchBarProps>({
       className,
       style
     } = props;
+
+    const suggestions = Array.isArray(rawSuggestions) ? rawSuggestions : [];
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [showSuggestions, setShowSuggestions] = useState(false);

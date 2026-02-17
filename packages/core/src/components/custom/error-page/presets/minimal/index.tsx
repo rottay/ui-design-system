@@ -15,10 +15,12 @@ export default createPreset<ErrorPageProps>('minimal', (context) => {
     title,
     description,
     illustration,
-    actions = [],
+    actions: rawActions = [],
     className,
     style,
   } = props;
+
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
   const defaultMessage = ERROR_MESSAGES[code];
   const displayTitle = title ?? defaultMessage.title;

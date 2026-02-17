@@ -154,10 +154,10 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
 
     const {
       position,
-      linkedJobs = [],
-      teamAssignments = [],
+      linkedJobs: rawLinkedJobs = [],
+      teamAssignments: rawTeamAssignments = [],
       slaMonitor,
-      events = [],
+      events: rawEvents = [],
       onTabChange,
       onJobClick,
       onEdit,
@@ -166,6 +166,10 @@ export const StandardBhPositionDetail = createPreset<BhPositionDetailProps>({
       className,
       style,
     } = props;
+
+    const linkedJobs = Array.isArray(rawLinkedJobs) ? rawLinkedJobs : [];
+    const teamAssignments = Array.isArray(rawTeamAssignments) ? rawTeamAssignments : [];
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
 
     /* ---- DB field adapters ---- */
     const positionInfo = useMemo(() => ({

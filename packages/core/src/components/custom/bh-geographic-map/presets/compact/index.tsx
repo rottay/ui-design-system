@@ -55,12 +55,14 @@ export const CompactBhGeographicMap = createPreset<BhGeographicMapProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      regions = MOCK_REGIONS,
+      regions: rawRegions = MOCK_REGIONS,
       onRegionClick,
       selectedRegionId,
       className,
       style,
     } = props;
+
+    const regions = Array.isArray(rawRegions) ? rawRegions : MOCK_REGIONS;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

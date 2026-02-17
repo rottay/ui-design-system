@@ -102,18 +102,18 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
       className,
       style,
       expandedRowRender,
-      filters = [],
+      filters: rawFilters = [],
       filterValue: controlledFilterValue,
       onFilterChange,
       filterLabel,
       pageSizeOptions = [10, 25, 50, 100],
-      rowActions = [],
-      bulkActions = [],
+      rowActions: rawRowActions = [],
+      bulkActions: rawBulkActions = [],
       selectable = false,
       selectedRowKeys: controlledSelectedKeys,
       onSelectionChange,
-      searchableFields = [],
-      defaultExpandedKeys = [],
+      searchableFields: rawSearchableFields = [],
+      defaultExpandedKeys: rawDefaultExpandedKeys = [],
       showRowNumbers = false,
       emptyState,
       title,
@@ -122,6 +122,12 @@ export const ExpandableDataTable = createPreset<ExpandableDataTableProps & Recor
       stickyHeader = false,
       maxHeight,
     } = props;
+
+    const filters = Array.isArray(rawFilters) ? rawFilters : [];
+    const rowActions = Array.isArray(rawRowActions) ? rawRowActions : [];
+    const bulkActions = Array.isArray(rawBulkActions) ? rawBulkActions : [];
+    const searchableFields = Array.isArray(rawSearchableFields) ? rawSearchableFields : [];
+    const defaultExpandedKeys = Array.isArray(rawDefaultExpandedKeys) ? rawDefaultExpandedKeys : [];
 
     // Internal state
     const [searchQuery, setSearchQuery] = useState('');

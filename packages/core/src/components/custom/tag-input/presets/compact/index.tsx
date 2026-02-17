@@ -12,7 +12,7 @@ export const CompactPreset = createPreset<TagInputProps>((context) => {
   const { primitives, props, tokens } = context;
   const { Box } = primitives;
   const {
-    tags = [],
+    tags: rawTags = [],
     onAdd,
     onRemove,
     placeholder = 'Add tags...',
@@ -20,6 +20,8 @@ export const CompactPreset = createPreset<TagInputProps>((context) => {
     className,
     style,
   } = props;
+
+    const tags = Array.isArray(rawTags) ? rawTags : [];
 
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);

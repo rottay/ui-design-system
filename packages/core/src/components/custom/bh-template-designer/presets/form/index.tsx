@@ -132,11 +132,14 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
       onSave,
       onPublish,
       onVersionRollback,
-      agents = [],
-      rubrics = [],
+      agents: rawAgents = [],
+      rubrics: rawRubrics = [],
       className,
       style,
     } = props;
+
+    const agents = Array.isArray(rawAgents) ? rawAgents : [];
+    const rubrics = Array.isArray(rawRubrics) ? rawRubrics : [];
 
     /* ── Local State ──────────────────────────────────────────────── */
     const [expandedStages, setExpandedStages] = useState<Set<string>>(new Set());

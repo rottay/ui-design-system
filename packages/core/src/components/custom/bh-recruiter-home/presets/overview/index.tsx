@@ -155,14 +155,14 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
     const {
       recruiter,
       recruiterName: recruiterNameProp = BH_RECRUITER_HOME_DEFAULTS.recruiterName,
-      kpiStats = DEFAULT_KPI,
-      pipelineJobs = DEFAULT_PIPELINE,
-      upcomingInterviews = DEFAULT_INTERVIEWS,
-      quickActions = DEFAULT_ACTIONS,
-      activityFeed = DEFAULT_ACTIVITY,
-      notifications = DEFAULT_NOTIFS,
-      aiSuggestions = DEFAULT_SUGGESTIONS,
-      performanceMetrics = DEFAULT_PERF,
+      kpiStats: rawKpiStats = DEFAULT_KPI,
+      pipelineJobs: rawPipelineJobs = DEFAULT_PIPELINE,
+      upcomingInterviews: rawUpcomingInterviews = DEFAULT_INTERVIEWS,
+      quickActions: rawQuickActions = DEFAULT_ACTIONS,
+      activityFeed: rawActivityFeed = DEFAULT_ACTIVITY,
+      notifications: rawNotifications = DEFAULT_NOTIFS,
+      aiSuggestions: rawAiSuggestions = DEFAULT_SUGGESTIONS,
+      performanceMetrics: rawPerformanceMetrics = DEFAULT_PERF,
       showAISuggestions = true,
       dateRangeLabel = BH_RECRUITER_HOME_DEFAULTS.dateRangeLabel,
       onQuickAction, onPipelineJobClick, onInterviewClick,
@@ -170,6 +170,15 @@ export const OverviewBhRecruiterHome = createPreset<BhRecruiterHomeProps>({
       onActivityClick,
       className, style,
     } = props;
+
+    const kpiStats = Array.isArray(rawKpiStats) ? rawKpiStats : DEFAULT_KPI;
+    const pipelineJobs = Array.isArray(rawPipelineJobs) ? rawPipelineJobs : DEFAULT_PIPELINE;
+    const upcomingInterviews = Array.isArray(rawUpcomingInterviews) ? rawUpcomingInterviews : DEFAULT_INTERVIEWS;
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : DEFAULT_ACTIONS;
+    const activityFeed = Array.isArray(rawActivityFeed) ? rawActivityFeed : DEFAULT_ACTIVITY;
+    const notifications = Array.isArray(rawNotifications) ? rawNotifications : DEFAULT_NOTIFS;
+    const aiSuggestions = Array.isArray(rawAiSuggestions) ? rawAiSuggestions : DEFAULT_SUGGESTIONS;
+    const performanceMetrics = Array.isArray(rawPerformanceMetrics) ? rawPerformanceMetrics : DEFAULT_PERF;
 
     const recruiterName = recruiter
       ? `${recruiter.firstName ?? ''} ${recruiter.lastName ?? ''}`.trim() || recruiterNameProp

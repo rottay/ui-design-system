@@ -10,7 +10,7 @@
  * card-based event entries, expandable inline diffs, and a detail modal.
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   Activity,
   User,
@@ -162,14 +162,9 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     /* -- Internal state ---------------------------------------------- */
     const [filters, setFilters] = useState<AuditFilter>(externalFilters ?? {});
     const [selectedEvent, setSelectedEvent] = useState<string | null>(externalSelected ?? null);
-    const [showDetail, setShowDetail] = useState(externalShowDetail);
-    const [liveMode, setLiveMode] = useState(externalLive);
+    const [showDetail, setShowDetail] = useState(externalShowDetail ?? false);
+    const [liveMode, setLiveMode] = useState(externalLive ?? false);
     const [expandedEvents, setExpandedEvents] = useState<Set<string>>(new Set());
-
-    useEffect(() => { if (externalFilters) setFilters(externalFilters); }, [externalFilters]);
-    useEffect(() => { if (externalSelected !== undefined) setSelectedEvent(externalSelected); }, [externalSelected]);
-    useEffect(() => { setShowDetail(externalShowDetail); }, [externalShowDetail]);
-    useEffect(() => { setLiveMode(externalLive); }, [externalLive]);
 
     const handleFilterChange = useCallback((next: AuditFilter) => { setFilters(next); onFilterChange?.(next); }, [onFilterChange]);
     const handleSelect = useCallback((id: string | null) => {

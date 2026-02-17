@@ -124,14 +124,18 @@ export const GridBhCapacityPlanner = createPreset<BhCapacityPlannerProps>({
     const isGlass = t.surface.useGlass && !!t.glass;
 
     const {
-      recruiters = DEFAULT_RECRUITERS,
-      suggestions = DEFAULT_SUGGESTIONS,
-      summary = DEFAULT_SUMMARY,
+      recruiters: rawRecruiters = DEFAULT_RECRUITERS,
+      suggestions: rawSuggestions = DEFAULT_SUGGESTIONS,
+      summary: rawSummary = DEFAULT_SUMMARY,
       selectedRecruiter: controlledSelected,
       onRecruiterSelect,
       onAcceptSuggestion,
       className, style,
     } = props;
+
+    const recruiters = Array.isArray(rawRecruiters) ? rawRecruiters : DEFAULT_RECRUITERS;
+    const suggestions = Array.isArray(rawSuggestions) ? rawSuggestions : DEFAULT_SUGGESTIONS;
+    const summary = Array.isArray(rawSummary) ? rawSummary : DEFAULT_SUMMARY;
 
     const [internalSelected, setInternalSelected] = useState<string | null>(null);
     const selected = controlledSelected !== undefined ? controlledSelected : internalSelected;

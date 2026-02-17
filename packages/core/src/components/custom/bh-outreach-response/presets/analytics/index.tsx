@@ -73,7 +73,7 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
     const ptypo = getPersonalityTypography(t);
 
     const {
-      data = MOCK_DATA,
+      data: rawData = MOCK_DATA,
       overallResponseRate = 28.5,
       bestTime = { hour: 10, day: 'Tuesday' },
       title = 'Response Analytics',
@@ -81,6 +81,8 @@ export const AnalyticsBhOutreachResponse = createPreset<BhOutreachResponseProps>
       className,
       style,
     } = props;
+
+    const data = Array.isArray(rawData) ? rawData : MOCK_DATA;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

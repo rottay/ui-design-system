@@ -25,7 +25,10 @@ export const CompactEvOrganizerHome = createPreset<EvOrganizerHomeProps>({
     const hoverStyle = useMemo(() => createHoverStyle(tokens), [tokens]);
 
 
-    const { organizerName = 'Organizer', kpis = [], upcomingEvents = [], onEventClick, className, style } = props;
+    const { organizerName = 'Organizer', kpis: rawKpis = [], upcomingEvents: rawUpcomingEvents = [], onEventClick, className, style } = props;
+
+    const kpis = Array.isArray(rawKpis) ? rawKpis : [];
+    const upcomingEvents = Array.isArray(rawUpcomingEvents) ? rawUpcomingEvents : [];
 
     const mockKpis = kpis.length ? kpis : [
       { label: 'Events', value: '12', trend: 'up', trendValue: 8, icon: '📅' },

@@ -117,7 +117,7 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
     const ptypo = getPersonalityTypography(t);
 
     const {
-      sample = MOCK_SAMPLE,
+      sample: rawSample = MOCK_SAMPLE,
       onAdjustScore,
       onSubmitReview,
       onDismiss,
@@ -125,6 +125,8 @@ export const ReviewBhCalibrationSample = createPreset<BhCalibrationSampleProps>(
       className,
       style,
     } = props;
+
+    const sample = Array.isArray(rawSample) ? rawSample : MOCK_SAMPLE;
 
     const [expandedDimension, setExpandedDimension] = useState<string | null>(null);
     const [reviewNotes, setReviewNotes] = useState('');

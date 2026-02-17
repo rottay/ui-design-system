@@ -55,7 +55,7 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
     const ptypo = getPersonalityTypography(t);
 
     const {
-      templates = MOCK_TEMPLATES,
+      templates: rawTemplates = MOCK_TEMPLATES,
       searchQuery = '',
       selectedCategory,
       onTemplateClick,
@@ -65,6 +65,8 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
       className,
       style,
     } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : MOCK_TEMPLATES;
 
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 

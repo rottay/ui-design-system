@@ -77,13 +77,16 @@ export const CompactBhClientDetail = createPreset<BhClientDetailProps>({
 
     const {
       client,
-      positions: positionsProp = [],
-      revenueHistory: revenueProp = [],
+      positions: rawPositionsProp = [],
+      revenueHistory: rawRevenueProp = [],
       onPositionClick,
       loading,
       className,
       style,
     } = props;
+
+    const positionsProp = Array.isArray(rawPositionsProp) ? rawPositionsProp : [];
+    const revenueProp = Array.isArray(rawRevenueProp) ? rawRevenueProp : [];
 
     const clientName = client?.displayName ?? client?.clientCompanyName ?? '';
     const tier = (client?.tier ?? 'enterprise') as string;

@@ -103,11 +103,11 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
     const { primitives: { Box, Flex, Stack, Text }, props, tokens: t } = ctx;
 
     const {
-      funnelData = MOCK_FUNNEL,
-      timeToHireData = MOCK_TTH,
-      velocityData = MOCK_VELOCITY,
-      costData = MOCK_COST,
-      sourceData = MOCK_SOURCES,
+      funnelData: rawFunnelData = MOCK_FUNNEL,
+      timeToHireData: rawTimeToHireData = MOCK_TTH,
+      velocityData: rawVelocityData = MOCK_VELOCITY,
+      costData: rawCostData = MOCK_COST,
+      sourceData: rawSourceData = MOCK_SOURCES,
       dateRange = '30d',
       onDateRangeChange,
       filters = {},
@@ -116,6 +116,12 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
       className,
       style,
     } = props;
+
+    const funnelData = Array.isArray(rawFunnelData) ? rawFunnelData : MOCK_FUNNEL;
+    const timeToHireData = Array.isArray(rawTimeToHireData) ? rawTimeToHireData : MOCK_TTH;
+    const velocityData = Array.isArray(rawVelocityData) ? rawVelocityData : MOCK_VELOCITY;
+    const costData = Array.isArray(rawCostData) ? rawCostData : MOCK_COST;
+    const sourceData = Array.isArray(rawSourceData) ? rawSourceData : MOCK_SOURCES;
 
     const [activeTab, setActiveTab] = useState<'funnel' | 'velocity' | 'cost' | 'sources'>('funnel');
     const [expandedJob, setExpandedJob] = useState<string | null>(null);

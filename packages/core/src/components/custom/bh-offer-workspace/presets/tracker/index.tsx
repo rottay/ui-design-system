@@ -37,10 +37,14 @@ export const TrackerBhOfferWorkspace = createPreset<BhOfferWorkspaceProps>({
     const {
       offer,
       candidateName: candidateNameProp, jobTitle: jobTitleProp, status: statusProp,
-      approvalSteps = [], negotiationHistory = [],
-      documents = [], onSendOffer, currentVersion: currentVersionProp,
+      approvalSteps: rawApprovalSteps = [], negotiationHistory: rawNegotiationHistory = [],
+      documents: rawDocuments = [], onSendOffer, currentVersion: currentVersionProp,
       signatureStatus, className, style,
     } = props;
+
+    const approvalSteps = Array.isArray(rawApprovalSteps) ? rawApprovalSteps : [];
+    const negotiationHistory = Array.isArray(rawNegotiationHistory) ? rawNegotiationHistory : [];
+    const documents = Array.isArray(rawDocuments) ? rawDocuments : [];
 
     const candidateName = candidateNameProp ?? '';
     const jobTitle = jobTitleProp ?? offer?.jobTitleOffered ?? '';

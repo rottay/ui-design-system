@@ -26,6 +26,9 @@ export * from './tenants';
 // Token types
 export * from './tokens';
 
+// Extension types (Universal Extension System)
+export * from './extensions';
+
 // NOTE: Primitive component types are NOT exported here to avoid duplicates.
 // They are already exported from ./components/primitives/*/
 // If you need primitive types, import them from the component:

@@ -83,16 +83,21 @@ export const CompactBhProviderCost = createPreset<BhProviderCostProps>({
     const t = tokens;
 
     const {
-      providers = MOCK_PROVIDERS,
-      alerts = [],
-      totalBudget = MOCK_TOTAL_BUDGET,
-      totalSpent = MOCK_TOTAL_SPENT,
+      providers: rawProviders = MOCK_PROVIDERS,
+      alerts: rawAlerts = [],
+      totalBudget: rawTotalBudget = MOCK_TOTAL_BUDGET,
+      totalSpent: rawTotalSpent = MOCK_TOTAL_SPENT,
       currency = 'USD',
       onProviderClick,
       loading = false,
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : MOCK_PROVIDERS;
+    const alerts = Array.isArray(rawAlerts) ? rawAlerts : [];
+    const totalBudget = Array.isArray(rawTotalBudget) ? rawTotalBudget : MOCK_TOTAL_BUDGET;
+    const totalSpent = Array.isArray(rawTotalSpent) ? rawTotalSpent : MOCK_TOTAL_SPENT;
 
     const isGlass = t.surface.useGlass && !!t.glass;
     const cardBase = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

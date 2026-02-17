@@ -60,9 +60,9 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
     const isGlass = t.surface.useGlass;
 
     const {
-      transcript = MOCK_TRANSCRIPT,
-      evidence = MOCK_EVIDENCE,
-      dimensions = [],
+      transcript: rawTranscript = MOCK_TRANSCRIPT,
+      evidence: rawEvidence = MOCK_EVIDENCE,
+      dimensions: rawDimensions = [],
       selectedEvidenceId: selectedEvidenceIdProp,
       onEvidenceSelect,
       onValidate,
@@ -74,6 +74,10 @@ export const SplitPaneBhEvidenceBrowser = createPreset<BhEvidenceBrowserProps>({
       className,
       style,
     } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : MOCK_TRANSCRIPT;
+    const evidence = Array.isArray(rawEvidence) ? rawEvidence : MOCK_EVIDENCE;
+    const dimensions = Array.isArray(rawDimensions) ? rawDimensions : [];
 
     /* -- State -------------------------------------------------------- */
     const [internalSelectedId, setInternalSelectedId] = useState(selectedEvidenceIdProp ?? '');

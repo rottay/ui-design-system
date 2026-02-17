@@ -13,10 +13,12 @@ export const standardPreset = createPreset<EmptyStateProps>((context: PresetCont
     title,
     description,
     icon,
-    actions = [],
+    actions: rawActions = [],
     className,
     style,
   } = props;
+
+    const actions = Array.isArray(rawActions) ? rawActions : [];
 
   return (
     <Box

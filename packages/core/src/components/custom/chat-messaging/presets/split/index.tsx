@@ -25,7 +25,7 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
     const bannerColors = getBannerColors(tokens);
 
     const {
-      conversations = [],
+      conversations: rawConversations = [],
       activeConversationId,
       onConversationSelect,
       messages,
@@ -42,6 +42,8 @@ export const SplitChatMessaging = createPreset<ChatMessagingProps>({
       className,
       style,
     } = props;
+
+    const conversations = Array.isArray(rawConversations) ? rawConversations : [];
 
     const [messageText, setMessageText] = useState('');
     const [internalTab, setInternalTab] = useState<ConversationTab>(activeTab);

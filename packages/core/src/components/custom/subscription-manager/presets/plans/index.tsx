@@ -22,7 +22,7 @@ export const PlansSubscriptionManager = createPreset<SubscriptionManagerProps>({
     const { Box, Stack } = primitives;
 
     const {
-      plans = [],
+      plans: rawPlans = [],
       subscription,
       onUpgrade,
       onDowngrade,
@@ -32,6 +32,8 @@ export const PlansSubscriptionManager = createPreset<SubscriptionManagerProps>({
       className,
       style,
     } = props;
+
+    const plans = Array.isArray(rawPlans) ? rawPlans : [];
 
     const [interval, setInterval] = useState<BillingInterval>(subscription?.billingInterval || 'monthly');
 

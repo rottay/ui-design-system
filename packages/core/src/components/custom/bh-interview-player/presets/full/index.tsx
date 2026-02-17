@@ -23,6 +23,7 @@ import {
 import type {
   BhInterviewPlayerProps,
   TranscriptLine,
+  TimestampedNote,
   AiInsight,
 } from '../../core';
 import {
@@ -45,6 +46,9 @@ const WAVEFORM_POINTS = 120;
 const SCORE_RING_SIZE = 96;
 const SCORE_RING_STROKE = 8;
 const SPEED_OPTIONS = [0.5, 1, 1.5, 2];
+const EMPTY_TRANSCRIPT: TranscriptLine[] = [];
+const EMPTY_NOTES: TimestampedNote[] = [];
+const EMPTY_INSIGHTS: AiInsight[] = [];
 
 export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
   name: 'BhInterviewPlayer.Full',
@@ -78,11 +82,15 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
 
     const {
       interviewInfo = { candidateName: '', jobTitle: '', stageName: '', date: '', duration: 0, status: '' },
-      transcript = [], scorecard, notes = [], insights,
+      transcript: rawTranscript = [], scorecard, notes: rawNotes = [], insights: rawInsights,
       audioUrl = '', audioDuration = 0,
       onAddNote, onApproveScore, onRequestRescore, onFlagForReview, onDownloadTranscript,
       className, style,
     } = props;
+
+    const transcript = Array.isArray(rawTranscript) ? rawTranscript : EMPTY_TRANSCRIPT;
+    const notes = Array.isArray(rawNotes) ? rawNotes : EMPTY_NOTES;
+    const insights = Array.isArray(rawInsights) ? rawInsights : EMPTY_INSIGHTS;
 
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);

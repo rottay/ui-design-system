@@ -9,7 +9,7 @@
  * badges, monospace diff view with before/after coloring, stat summary bar.
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   Activity,
   User,
@@ -133,15 +133,10 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
     /* -- Internal state ---------------------------------------------- */
     const [filters, setFilters] = useState<AuditFilter>(externalFilters ?? {});
     const [selectedEvent, setSelectedEvent] = useState<string | null>(externalSelected ?? null);
-    const [liveMode, setLiveMode] = useState(externalLive);
+    const [liveMode, setLiveMode] = useState(externalLive ?? false);
     const [sortField, setSortField] = useState<SortField>('timestamp');
     const [sortDir, setSortDir] = useState<SortDir>('desc');
     const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-
-
-    useEffect(() => { if (externalFilters) setFilters(externalFilters); }, [externalFilters]);
-    useEffect(() => { if (externalSelected !== undefined) setSelectedEvent(externalSelected); }, [externalSelected]);
-    useEffect(() => { setLiveMode(externalLive); }, [externalLive]);
 
     const handleFilterChange = useCallback((next: AuditFilter) => { setFilters(next); onFilterChange?.(next); }, [onFilterChange]);
     const handleSelect = useCallback((id: string | null) => { setSelectedEvent(id); onEventSelect?.(id); }, [onEventSelect]);

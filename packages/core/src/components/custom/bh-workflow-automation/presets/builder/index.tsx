@@ -66,7 +66,7 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      rules = MOCK_RULES,
+      rules: rawRules = MOCK_RULES,
       onRuleToggle,
       onRuleEdit,
       onRuleDelete,
@@ -75,6 +75,8 @@ export const BuilderBhWorkflowAutomation = createPreset<BhWorkflowAutomationProp
       className,
       style,
     } = props;
+
+    const rules = Array.isArray(rawRules) ? rawRules : MOCK_RULES;
 
     const [hoveredRule, setHoveredRule] = useState<string | null>(null);
 

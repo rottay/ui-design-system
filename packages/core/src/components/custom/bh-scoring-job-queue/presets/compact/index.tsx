@@ -92,13 +92,15 @@ export const CompactBhScoringJobQueue = createPreset<BhScoringJobQueueProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      jobs = [],
+      jobs: rawJobs = [],
       stats = { totalJobs: 0, queued: 0, processing: 0, completed: 0, failed: 0, avgProcessingTime: 0 },
       onJobClick,
       selectedJobId,
       className,
       style,
     } = props;
+
+    const jobs = Array.isArray(rawJobs) ? rawJobs : [];
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

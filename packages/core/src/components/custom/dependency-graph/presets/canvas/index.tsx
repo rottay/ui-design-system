@@ -39,8 +39,8 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
     const {
       nodes,
       links,
-      breadcrumbs = [],
-      filters = [],
+      breadcrumbs: rawBreadcrumbs = [],
+      filters: rawFilters = [],
       onFilterChange,
       selectedNodeId: selectedNodeIdProp,
       onNodeSelect,
@@ -65,6 +65,9 @@ export const CanvasDependencyGraph = createPreset<DependencyGraphProps>({
       pannable = true,
       gridSnap = 0,
     } = props;
+
+    const breadcrumbs = Array.isArray(rawBreadcrumbs) ? rawBreadcrumbs : [];
+    const filters = Array.isArray(rawFilters) ? rawFilters : [];
 
     // Zoom
     const [internalZoom, setInternalZoom] = useState(zoomLevelProp ?? 100);

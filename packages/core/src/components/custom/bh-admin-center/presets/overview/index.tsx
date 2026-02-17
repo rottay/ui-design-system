@@ -79,14 +79,14 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
 
     const {
       systemHealth,
-      providers = [],
+      providers: rawProviders = [],
       billing,
-      kpis = [],
+      kpis: rawKpis = [],
       users,
-      events = [],
-      costBreakdown = [],
+      events: rawEvents = [],
+      costBreakdown: rawCostBreakdown = [],
       compliance,
-      quickActions = [],
+      quickActions: rawQuickActions = [],
       onProviderClick,
       onEventClick,
       onQuickAction,
@@ -97,6 +97,12 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
       className,
       style,
     } = props;
+
+    const providers = Array.isArray(rawProviders) ? rawProviders : [];
+    const kpis = Array.isArray(rawKpis) ? rawKpis : [];
+    const events = Array.isArray(rawEvents) ? rawEvents : [];
+    const costBreakdown = Array.isArray(rawCostBreakdown) ? rawCostBreakdown : [];
+    const quickActions = Array.isArray(rawQuickActions) ? rawQuickActions : [];
 
     const isGlass = tokens.surface.useGlass && !!tokens.glass;
     const typo = useMemo(() => getPersonalityTypography(tokens), [tokens]);

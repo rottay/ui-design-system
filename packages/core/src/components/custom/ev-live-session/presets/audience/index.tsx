@@ -46,12 +46,15 @@ export const AudienceEvLiveSession = createPreset<EvLiveSessionProps>({
 
     const {
       session,
-      chatMessages = MOCK_CHAT,
-      songRequests = MOCK_REQUESTS,
+      chatMessages: rawChatMessages = MOCK_CHAT,
+      songRequests: rawSongRequests = MOCK_REQUESTS,
       onSendMessage,
       className,
       style,
     } = props;
+
+    const chatMessages = Array.isArray(rawChatMessages) ? rawChatMessages : MOCK_CHAT;
+    const songRequests = Array.isArray(rawSongRequests) ? rawSongRequests : MOCK_REQUESTS;
 
     const djName = session?.djName ?? 'DJ Nova';
     const eventName = session?.eventName ?? 'Neon Nights Festival';

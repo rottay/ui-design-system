@@ -40,9 +40,8 @@ function getSeverityColor(severity: ProctoringEventSeverity | string, t: DesignT
   }
 }
 
-function getSeverityLabel(severity: ProctoringEventSeverity): string {
-  return (severity || '').charAt(0).toUpperCase() + (severity || '').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getSeverityLabel } from '@rottay/scoring';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -70,7 +69,7 @@ export const DonutBhProctoringSeverity = createPreset<BhProctoringSeverityProps>
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      severityCounts = [],
+      severityCounts: rawSeverityCounts = [],
       onSeverityClick,
       selectedSeverity,
       showLabels = true,
@@ -79,6 +78,8 @@ export const DonutBhProctoringSeverity = createPreset<BhProctoringSeverityProps>
       className,
       style,
     } = props;
+
+    const severityCounts = Array.isArray(rawSeverityCounts) ? rawSeverityCounts : [];
 
     const [hoveredSegment, setHoveredSegment] = useState<ProctoringEventSeverity | null>(null);
 

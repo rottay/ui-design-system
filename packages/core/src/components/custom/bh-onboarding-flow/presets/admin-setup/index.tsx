@@ -46,9 +46,9 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
       steps,
       currentStep,
       formData = {},
-      formFields = [],
-      previewItems = [],
-      helpTooltips = [],
+      formFields: rawFormFields = [],
+      previewItems: rawPreviewItems = [],
+      helpTooltips: rawHelpTooltips = [],
       onStepChange,
       onFormChange,
       onComplete,
@@ -64,6 +64,10 @@ export const AdminSetupBhOnboardingFlow = createPreset<BhOnboardingFlowProps>({
       className,
       style,
     } = props;
+
+    const formFields = Array.isArray(rawFormFields) ? rawFormFields : [];
+    const previewItems = Array.isArray(rawPreviewItems) ? rawPreviewItems : [];
+    const helpTooltips = Array.isArray(rawHelpTooltips) ? rawHelpTooltips : [];
 
     const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});

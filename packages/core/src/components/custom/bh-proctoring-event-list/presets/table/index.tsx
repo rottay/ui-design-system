@@ -101,20 +101,8 @@ function getEventTypeIcon(type: string | undefined) {
   }
 }
 
-function getEventTypeLabel(type: string | undefined): string {
-  switch (type) {
-    case 'tab_switch': return 'Tab Switch';
-    case 'copy_paste': return 'Copy/Paste';
-    case 'screen_share': return 'Screen Share';
-    case 'unusual_typing': return 'Unusual Typing';
-    case 'browser_focus_lost': return 'Focus Lost';
-    default: return 'Unknown';
-  }
-}
-
-function getSeverityLabel(severity: string | undefined): string {
-  return (severity || 'unknown').charAt(0).toUpperCase() + (severity || 'unknown').slice(1);
-}
+// Label helpers from scoring domain (centralized, no duplication)
+import { getEventTypeLabel, getSeverityLabel } from '@rottay/scoring';
 
 /* ------------------------------------------------------------------ */
 /*  Mock data                                                          */
@@ -147,7 +135,7 @@ export const TableBhProctoringEventList = createPreset<BhProctoringEventListProp
     const ptypo = getPersonalityTypography(t);
 
     const {
-      events = MOCK_EVENTS,
+      events: rawEvents = MOCK_EVENTS,
       onEventClick,
       onReviewEvent,
       onDismissEvent,
@@ -162,6 +150,8 @@ export const TableBhProctoringEventList = createPreset<BhProctoringEventListProp
       className,
       style,
     } = props;
+
+    const events = Array.isArray(rawEvents) ? rawEvents : MOCK_EVENTS;
 
     const [hoveredRow, setHoveredRow] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState('');

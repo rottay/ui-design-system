@@ -106,7 +106,10 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>({
     const badgeRadius = useMemo(() => getPersonalityBadgeRadius(t), [t]);
     const sectionHeaderStyle = useMemo(() => createPersonalitySectionHeaderStyle(t), [t]);
 
-    const { formData: formDataProp, validationErrors: validationErrorsProp, onChange, onSave, onPublish, onPreview, isDirty: isDirtyProp, templates = [], clients = [], className, style } = props;
+    const { formData: formDataProp, validationErrors: validationErrorsProp, onChange, onSave, onPublish, onPreview, isDirty: isDirtyProp, templates: rawTemplates = [], clients: rawClients = [], className, style } = props;
+
+    const templates = Array.isArray(rawTemplates) ? rawTemplates : [];
+    const clients = Array.isArray(rawClients) ? rawClients : [];
 
     const defaultForm = BH_JOB_EDITOR_DEFAULTS.formData as JobFormData;
     const [internalFormData, setInternalFormData] = useState<Partial<JobFormData>>(formDataProp ?? defaultForm);

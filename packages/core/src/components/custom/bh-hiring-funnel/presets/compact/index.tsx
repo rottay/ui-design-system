@@ -58,13 +58,15 @@ export const CompactBhHiringFunnel = createPreset<BhHiringFunnelProps>({
     const ptypo = getPersonalityTypography(t);
 
     const {
-      stages = MOCK_STAGES,
+      stages: rawStages = MOCK_STAGES,
       title = 'Funnel',
       onStageClick,
       selectedStage,
       className,
       style,
     } = props;
+
+    const stages = Array.isArray(rawStages) ? rawStages : MOCK_STAGES;
 
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'sm', glass: isGlass }), [t, isGlass]);

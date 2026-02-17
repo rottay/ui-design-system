@@ -75,7 +75,7 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      positions = MOCK_POSITIONS,
+      positions: rawPositions = MOCK_POSITIONS,
       onPositionClick,
       selectedPositionId,
       loading = false,
@@ -83,6 +83,7 @@ export const MonitorBhPositionSla = createPreset<BhPositionSlaProps>({
       style,
     } = props;
 
+    const positions = Array.isArray(rawPositions) ? rawPositions : MOCK_POSITIONS;
 
     const card = useMemo(() => createCardStyle(t, { elevation: 'md', glass: isGlass }), [t, isGlass]);
     const entrance = useMemo(() => createEntranceAnimation(t), [t]);

@@ -106,7 +106,7 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
     const badgeRadius = getPersonalityBadgeRadius(t);
 
     const {
-      approval: _approval = MOCK_APPROVAL,
+      approval: raw_approval = MOCK_APPROVAL,
       onApprove,
       onReject,
       onComment,
@@ -115,6 +115,8 @@ export const DrawerBhApprovalDetail = createPreset<BhApprovalDetailProps>({
       className,
       style,
     } = props;
+
+    const _approval = Array.isArray(raw_approval) ? raw_approval : MOCK_APPROVAL;
     const approval = _approval ?? MOCK_APPROVAL;
 
     const [comment, setComment] = useState('');
