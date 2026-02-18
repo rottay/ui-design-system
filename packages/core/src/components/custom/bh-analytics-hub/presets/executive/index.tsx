@@ -156,14 +156,14 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             </Text>
           </Stack>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
-            <Box style={{ display: 'flex', gap: t.spacing[1], padding: 2, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[100] }}>
+            <Box style={{ display: 'flex', gap: t.spacing[1], padding: t.spacing[1], borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[100] }}>
               {DATE_RANGES.map((r) => (
-                <Box key={r.value} onClick={() => handleDateRange(r.value)} style={{ padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.sm, backgroundColor: activeDateRange === r.value ? t.colors.common.white : 'transparent', color: activeDateRange === r.value ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.xs, fontWeight: activeDateRange === r.value ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: activeDateRange === r.value ? t.shadows.sm : 'none' }}>
+                <Box key={r.value} role="tab" tabIndex={0} aria-selected={activeDateRange === r.value} onClick={() => handleDateRange(r.value)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDateRange(r.value); } }} style={{ padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.sm, backgroundColor: activeDateRange === r.value ? t.colors.common.white : 'transparent', color: activeDateRange === r.value ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.xs, fontWeight: activeDateRange === r.value ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: activeDateRange === r.value ? t.shadows.sm : 'none' }}>
                   {r.label}
                 </Box>
               ))}
             </Box>
-            <Box onClick={() => onExport?.('pdf')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer', ...hoverStyles.base }}>
+            <Box role="button" tabIndex={0} onClick={() => onExport?.('pdf')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExport?.('pdf'); } }} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer', ...hoverStyles.base }}>
               <Download size={ICON_SIZES.label} />
               <Text style={{ fontSize: t.typography.fontSize.xs }}>Export</Text>
             </Box>
@@ -181,7 +181,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             const TrendIcon = isPositive ? ArrowUpRight : isNeutral ? Minus : ArrowDownRight;
 
             return (
-              <Box key={kpi.label} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: any) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: any) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
+              <Box key={kpi.label} role="button" tabIndex={0} aria-label={`${kpi.label}: ${kpi.value}`} onClick={() => { setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); }} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedKpi(kpi.label); onMetricSelect?.(kpi.label); } }} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1], ...card, cursor: 'pointer', ...hoverStyles.base, border: selectedKpi === kpi.label ? `2px solid ${t.colors.primaryScale[300]}` : card.border }} onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => Object.assign(e.currentTarget.style, hoverStyles.hover)} onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = card.boxShadow || 'none'; }}>
                 <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: t.spacing[3] }}>
                   <Box style={createIconContainerStyle(t, { size: 40, color: kpi.color[50] })}>
                     <Icon size={ICON_SIZES.feature} color={kpi.color[600]} />
@@ -232,7 +232,7 @@ export const ExecutiveBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
           {/* Trend Chart */}
           <Box style={card}>
             <SectionTitle action={
-              <Box onClick={() => onComparisonToggle?.(!comparisonPeriod)} style={{ ...createBadgeStyle(t, comparisonPeriod ? 'primary' : 'info'), borderRadius: badgeRadius, cursor: 'pointer', fontSize: t.typography.fontSize.xs }}>
+              <Box role="button" tabIndex={0} aria-pressed={!!comparisonPeriod} onClick={() => onComparisonToggle?.(!comparisonPeriod)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onComparisonToggle?.(!comparisonPeriod); } }} style={{ ...createBadgeStyle(t, comparisonPeriod ? 'primary' : 'info'), borderRadius: badgeRadius, cursor: 'pointer', fontSize: t.typography.fontSize.xs }}>
                 {comparisonPeriod ? 'Comparison On' : 'Comparison Off'}
               </Box>
             }>Hiring Trend</SectionTitle>

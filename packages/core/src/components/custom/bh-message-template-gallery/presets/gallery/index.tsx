@@ -265,10 +265,10 @@ const GalleryBhMessageTemplateItemGallery = createPreset<BhMessageTemplateItemGa
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
+                    WebkitBoxOrient: 'vertical' as const,
                     lineHeight: 1.5,
                     flex: 1,
-                  } as any}>
+                  }}>
                     {tmpl.preview}
                   </Text>
 

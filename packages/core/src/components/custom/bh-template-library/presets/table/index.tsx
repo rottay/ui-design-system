@@ -268,8 +268,12 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
     const SortHeader = ({ label, field }: { label: string; field: SortField }) => (
       <Box
         as="th"
+        role="columnheader"
+        tabIndex={0}
+        aria-sort={sortField === field ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
         style={{ ...thBaseStyle, cursor: 'pointer' }}
         onClick={() => handleSort(field)}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(field); } }}
       >
         <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit', letterSpacing: 'inherit' }}>
           {label}
@@ -336,10 +340,14 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
       onClick: (e: React.MouseEvent) => void;
     }) => (
       <Box
+        role="button"
+        tabIndex={0}
+        aria-label={label}
         onClick={(e: React.MouseEvent) => {
           e.stopPropagation();
           onClick(e);
         }}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onClick(e as unknown as React.MouseEvent); } }}
         title={label}
         style={{
           ...hoverStyle,
@@ -372,10 +380,15 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
     /* ── Sub-component: FilterPill ────────────────────────────── */
     const FilterPill = ({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) => (
       <Box
+        role="tab"
+        tabIndex={0}
+        aria-selected={active}
         onClick={onClick}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
         style={{
           ...createFilterPillStyle(tokens, { active }),
           borderRadius: badgeRadius,
+          cursor: 'pointer',
         }}
       >
         <Text style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>{label}</Text>
@@ -611,8 +624,12 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
             />
             {filters.search && (
               <Box
+                role="button"
+                tabIndex={0}
+                aria-label="Clear search"
                 onClick={() => handleFilterChange({ search: '' })}
-                style={{ ...hoverStyle, display: 'flex', padding: 2, borderRadius: tokens.borderRadius.sm }}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ search: '' }); } }}
+                style={{ ...hoverStyle, display: 'flex', padding: 2, borderRadius: tokens.borderRadius.sm, cursor: 'pointer' }}
               >
                 <X size={12} color={tokens.colors.neutral[400]} />
               </Box>
@@ -687,7 +704,12 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
               ]).map(({ mode, Icon }) => (
                 <Box
                   key={mode}
+                  role="tab"
+                  tabIndex={0}
+                  aria-selected={viewMode === mode}
+                  aria-label={`${mode} view`}
                   onClick={() => onViewModeChange(mode)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onViewModeChange(mode); } }}
                   style={{
                     ...hoverStyle,
                     display: 'flex',
@@ -697,6 +719,7 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                     backgroundColor: viewMode === mode ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                     color: viewMode === mode ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
                     borderLeft: mode === 'table' ? `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}` : 'none',
+                    cursor: 'pointer',
                   }}
                 >
                   <Icon size={14} />
@@ -770,11 +793,16 @@ export const TableBhTemplateLibrary = createPreset<BhTemplateLibraryProps>({
                           {/* Expand toggle */}
                           <td style={{ ...tdBaseStyle, width: 36, textAlign: 'center' as const }}>
                             <Box
+                              role="button"
+                              tabIndex={0}
+                              aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
+                              aria-expanded={isExpanded}
                               onClick={(e: React.MouseEvent) => {
                                 e.stopPropagation();
                                 toggleExpand(template.id);
                               }}
-                              style={{ ...hoverStyle, display: 'inline-flex', padding: 2, borderRadius: tokens.borderRadius.sm }}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); toggleExpand(template.id); } }}
+                              style={{ ...hoverStyle, display: 'inline-flex', padding: 2, borderRadius: tokens.borderRadius.sm, cursor: 'pointer' }}
                             >
                               {isExpanded ? (
                                 <ChevronDown size={14} color={tokens.colors.neutral[500]} />

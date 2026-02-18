@@ -41,6 +41,7 @@ import {
   createPersonalityAccentBar,
   createEntranceAnimation,
   createDividerStyle,
+  createOverlayStyle,
   getPersonalityTypography,
 } from '../../../helpers';
 import type {
@@ -315,7 +316,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
           {/* Edit button in list mode */}
           {viewMode === 'list' && (
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label={`Edit team ${team.name}`}
               onClick={(e: React.MouseEvent) => { e.stopPropagation(); onEditTeam?.(team.id); }}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onEditTeam?.(team.id); } }}
               style={{
                 padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
                 borderRadius: t.borderRadius.md,
@@ -340,7 +345,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
 
     /* -- KPI Mini Card ---------------------------------------------- */
     const KpiMini = ({ label, value, icon, scale }: { label: string; value: string; icon: React.ReactNode; scale: string }) => {
-      const s = (t.colors as any)[scale];
+      const s = t.colors[scale as keyof typeof t.colors] as Record<number, string>;
       return (
         <Box style={{
           padding: t.spacing[4],
@@ -502,7 +507,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                 <Box style={{ ...card }}>
                   <SectionHeader icon={<Users size={16} />} label={`${activeTeam.name} Members`} right={
                     <Box
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Add member"
                       onClick={() => onAddMember?.()}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAddMember?.(); } }}
                       style={{
                         display: 'inline-flex', alignItems: 'center', gap: t.spacing[1],
                         padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
@@ -586,7 +595,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                         <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.semibold, color: t.colors.successScale[600], textAlign: 'center' as const }}>{member.hires}</Text>
                         <Box style={{ display: 'flex', gap: t.spacing[1], justifyContent: 'flex-end' }}>
                           <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Remove member ${member.name}`}
                             onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRemoveMember?.(member.id); }}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onRemoveMember?.(member.id); } }}
                             style={{ width: 24, height: 24, borderRadius: t.borderRadius.sm, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.colors.errorScale[400], cursor: 'pointer' }}
                           >
                             <Trash2 size={12} />
@@ -674,7 +687,11 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       {(['quarterly', 'monthly'] as const).map((p) => (
                         <Box
                           key={p}
+                          role="tab"
+                          tabIndex={0}
+                          aria-selected={period === p}
                           onClick={() => switchPeriod(p)}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchPeriod(p); } }}
                           style={{
                             padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                             backgroundColor: period === p ? t.colors.primaryScale[50] : t.colors.common.white,
@@ -697,7 +714,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
                       const pct = clamp(tgt.current, tgt.value);
                       const tColor = pct >= 100 ? t.colors.successScale[500] : pct >= 70 ? t.colors.primaryScale[500] : pct >= 40 ? t.colors.warningScale[500] : t.colors.errorScale[500];
                       const scaleName = pct >= 100 ? 'successScale' : pct >= 70 ? 'primaryScale' : pct >= 40 ? 'warningScale' : 'errorScale';
-                      const cs = (t.colors as any)[scaleName];
+                      const cs = t.colors[scaleName as keyof typeof t.colors] as Record<number, string>;
                       const bar = createProgressBarStyle(t, { color: tColor, percent: pct });
 
                       return (
@@ -733,7 +750,7 @@ export const GridBhTeamBoard = createPreset<BhTeamBoardProps>({
             style={{
               position: 'fixed' as const,
               top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.4)',
+              ...createOverlayStyle(t, 'light'),
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

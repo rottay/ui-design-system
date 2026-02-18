@@ -137,9 +137,9 @@ export const CompactBhMessageTemplateEditor = createPreset<BhMessageTemplateEdit
             <Text style={{
               fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600],
               overflow: 'hidden', textOverflow: 'ellipsis',
-              display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical',
+              display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const,
               lineHeight: 1.4,
-            } as any}>
+            }}>
               {body}
             </Text>
           </Box>

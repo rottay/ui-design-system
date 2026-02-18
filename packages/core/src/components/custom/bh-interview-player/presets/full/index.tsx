@@ -774,7 +774,7 @@ export const FullBhInterviewPlayer = createPreset<BhInterviewPlayerProps>({
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
             {actionButtons.map(action => {
               if (!action.onClick) return null;
-              const scale = (t.colors as any)[`${action.color}Scale`];
+              const scale = (t.colors as any)[`${action.color}Scale`] ?? t.colors.primaryScale;
               const isHov = hoveredAction === action.key;
               return (
                 <Box key={action.key}

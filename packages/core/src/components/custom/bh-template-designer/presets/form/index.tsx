@@ -405,7 +405,12 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   >
                     {/* Stage row header */}
                     <div
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={isExpanded}
+                      aria-label={`${isExpanded ? 'Collapse' : 'Expand'} stage ${stage.name}`}
                       onClick={() => toggleStageExpand(stage.id)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleStageExpand(stage.id); } }}
                       style={{
                         ...hoverStyle,
                         display: 'flex',
@@ -665,6 +670,10 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                             }}
                           >
                             <div
+                              role="switch"
+                              tabIndex={0}
+                              aria-checked={stage.isKnockout}
+                              aria-label="Knockout stage"
                               style={{
                                 width: 36,
                                 height: 20,
@@ -681,6 +690,7 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                                 onChange?.(`stages.${stage.id}.isKnockout`, !stage.isKnockout);
                                 setLocalIsDirty(true);
                               }}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onChange?.(`stages.${stage.id}.isKnockout`, !stage.isKnockout); setLocalIsDirty(true); } }}
                             >
                               <div
                                 style={{
@@ -719,7 +729,12 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
           {/* ── Automation Rules Section ────────────────────────────── */}
           <div>
             <div
+              role="button"
+              tabIndex={0}
+              aria-expanded={showRules}
+              aria-label={`${showRules ? 'Collapse' : 'Expand'} automation rules`}
               onClick={() => setShowRules(!showRules)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowRules(!showRules); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -847,7 +862,12 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
           {/* ── Validation Section ──────────────────────────────────── */}
           <div>
             <div
+              role="button"
+              tabIndex={0}
+              aria-expanded={showValidation}
+              aria-label={`${showValidation ? 'Collapse' : 'Expand'} validation results`}
               onClick={() => setShowValidation(!showValidation)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowValidation(!showValidation); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -937,7 +957,12 @@ export const FormBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
           {/* ── Version History Section ─────────────────────────────── */}
           <div>
             <div
+              role="button"
+              tabIndex={0}
+              aria-expanded={showVersions}
+              aria-label={`${showVersions ? 'Collapse' : 'Expand'} version history`}
               onClick={() => setShowVersions(!showVersions)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowVersions(!showVersions); } }}
               style={{
                 display: 'flex',
                 alignItems: 'center',

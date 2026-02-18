@@ -37,7 +37,7 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 
 function getDaysOpen(position: RecruiterPosition): number {
-  const created = position.createdAt ? new Date(position.createdAt as any) : new Date();
+  const created = position.createdAt ? new Date(String(position.createdAt)) : new Date();
   return Math.floor((Date.now() - created.getTime()) / 86400000);
 }
 
@@ -140,9 +140,9 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
         );
       }
       return [...result].sort((a, b) => {
-        const aVal = (a as any)[sortBy];
-        const bVal = (b as any)[sortBy];
-        const cmp = typeof aVal === 'string' ? aVal.localeCompare(bVal) : aVal - bVal;
+        const aVal = (a as Record<string, unknown>)[sortBy];
+        const bVal = (b as Record<string, unknown>)[sortBy];
+        const cmp = typeof aVal === 'string' ? aVal.localeCompare(String(bVal)) : Number(aVal) - Number(bVal);
         return sortDir === 'asc' ? cmp : -cmp;
       });
     }, [positions, searchQuery, sortBy, sortDir]);
@@ -379,7 +379,7 @@ export const TableBhPositionList = createPreset<BhPositionListProps>({
                 fontSize: t.typography.fontSize.xs,
                 fontWeight: t.typography.fontWeight.semibold,
                 color: sortBy === col.key ? t.colors.primaryScale[600] : t.colors.neutral[500],
-                textTransform: ptypo.labelTransform as any,
+                textTransform: ptypo.labelTransform as React.CSSProperties['textTransform'],
                 letterSpacing: ptypo.labelLetterSpacing,
               }}>
                 {col.label}

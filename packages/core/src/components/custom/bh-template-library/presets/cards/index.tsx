@@ -632,16 +632,24 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
           {/* Industry pills */}
           <div style={{ display: 'flex', gap: tokens.spacing[1], flexWrap: 'wrap' as const }}>
             <span
+              role="tab"
+              tabIndex={0}
+              aria-selected={filters.industry === ''}
               style={filters.industry === '' ? pillActiveStyle : pillBaseStyle}
               onClick={() => handleFilterChange({ industry: '' })}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ industry: '' }); } }}
             >
               All
             </span>
             {industries.map((ind) => (
               <span
                 key={ind}
+                role="tab"
+                tabIndex={0}
+                aria-selected={filters.industry === ind}
                 style={filters.industry === ind ? pillActiveStyle : pillBaseStyle}
                 onClick={() => handleFilterChange({ industry: ind })}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ industry: ind }); } }}
               >
                 {ind}
               </span>
@@ -680,8 +688,12 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
               return (
                 <span
                   key={s}
+                  role="tab"
+                  tabIndex={0}
+                  aria-selected={filters.status === s}
                   style={filters.status === s ? pillActiveStyle : pillBaseStyle}
                   onClick={() => handleFilterChange({ status: s })}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ status: s }); } }}
                 >
                   {label}
                 </span>
@@ -785,8 +797,13 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   <div key={group.industry}>
                     {/* Industry section header */}
                     <div
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={!isCollapsed}
+                      aria-label={`${isCollapsed ? 'Expand' : 'Collapse'} ${group.industry} section`}
                       style={sectionHeaderStyle}
                       onClick={() => toggleIndustry(group.industry)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleIndustry(group.industry); } }}
                     >
                       {isCollapsed ? (
                         <ChevronRight
@@ -838,10 +855,14 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                           return (
                             <div
                               key={template.id}
+                              role="button"
+                              tabIndex={0}
+                              aria-label={`Template: ${template.name}`}
                               style={templateCardStyle(template.id)}
                               onMouseEnter={() => setHoveredCard(template.id)}
                               onMouseLeave={() => setHoveredCard(null)}
                               onClick={() => handleSelect(template)}
+                              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(template); } }}
                             >
                               {/* Card header */}
                               <div style={cardHeaderStyle}>
@@ -1087,7 +1108,7 @@ export const CardsBhTemplateLibrary = createPreset<BhTemplateLibraryProps>(
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    fontSize: '10px',
+                    fontSize: tokens.typography.fontSize.xs,
                     color: tokens.colors.neutral[400],
                   }}
                 >

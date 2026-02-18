@@ -67,13 +67,13 @@ import type {
 function resolveLevelColor(level: LevelDistribution, t: DesignTokens): string {
   if (level.colorKey) {
     const scaleKey = `${level.colorKey}Scale` as const;
-    const scale = (t.colors as any)[scaleKey];
+    const scale = t.colors[scaleKey as keyof typeof t.colors] as Record<number, string> | undefined;
     return scale?.[500] ?? t.colors.primaryScale[500];
   }
   return level.color || t.colors.primaryScale[500];
 }
 
-function getScoreColor(score: number, t: any): string {
+function getScoreColor(score: number, t: DesignTokens): string {
   if (score >= 80) return t.colors.successScale[600];
   if (score >= 60) return t.colors.warningScale[600];
   if (score >= 40) return t.colors.warningScale[400];
@@ -220,9 +220,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
       return (
         <Box
           role="button"
+          tabIndex={0}
           aria-expanded={isOpen}
           aria-controls={`section-content-${section.id}`}
           onClick={() => toggleSection(section.id)}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSection(section.id); } }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -338,7 +340,7 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 }}
               />
               {searchQuery && (
-                <Box onClick={() => setSearchQuery('')} style={{ cursor: 'pointer', flexShrink: 0 }} role="button" aria-label="Clear search">
+                <Box onClick={() => setSearchQuery('')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSearchQuery(''); } }} tabIndex={0} style={{ cursor: 'pointer', flexShrink: 0 }} role="button" aria-label="Clear search">
                   <X size={14} color={t.colors.neutral[400]} />
                 </Box>
               )}
@@ -373,7 +375,12 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
               return (
                 <Box
                   key={dim}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isSelected}
+                  aria-label={`Filter by dimension: ${dim}`}
                   onClick={() => handleDimSelect(isSelected ? null : dim)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimSelect(isSelected ? null : dim); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -419,7 +426,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   return (
                     <Box
                       key={job}
+                      role="button"
+                      tabIndex={0}
+                      aria-pressed={isActive}
                       onClick={() => handleDrilldown(isActive ? null : job)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDrilldown(isActive ? null : job); } }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -520,7 +531,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   {heatmapJobs.map(job => (
                     <Box
                       key={job}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Select job: ${job}`}
                       onClick={() => handleDrilldown(drilldownEntity === job ? null : job)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDrilldown(drilldownEntity === job ? null : job); } }}
                       style={{
                         textAlign: 'center' as const,
                         padding: t.spacing[1],
@@ -546,7 +561,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   return (
                     <Box key={dim} style={{ display: 'grid', gridTemplateColumns: `140px repeat(${heatmapJobs.length}, minmax(90px, 1fr))`, gap: t.spacing[2], marginBottom: t.spacing[2] }}>
                       <Box
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Filter by dimension: ${dim}`}
                         onClick={() => handleDimSelect(isDimSel ? null : dim)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimSelect(isDimSel ? null : dim); } }}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -713,7 +732,11 @@ export const DetailedBhScoringInsights = createPreset<BhScoringInsightsProps>({
                   return (
                     <Box
                       key={idx}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Cohort: ${cohort.groupName}`}
                       onClick={() => handleDrilldown(drilldownEntity === cohort.groupName ? null : cohort.groupName)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDrilldown(drilldownEntity === cohort.groupName ? null : cohort.groupName); } }}
                       style={{
                         ...card,
                         marginBottom: t.spacing[3],

@@ -152,7 +152,7 @@ export const CompactBhCalibrationDashboard = createPreset<BhCalibrationDashboard
         <Box style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 1,
+          gap: t.spacing[1],
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }}>

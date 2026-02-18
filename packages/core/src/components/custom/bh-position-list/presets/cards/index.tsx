@@ -33,7 +33,7 @@ import type { DesignTokens } from '../../../../../types';
 /* ------------------------------------------------------------------ */
 
 function getDaysOpen(position: RecruiterPosition): number {
-  const created = position.createdAt ? new Date(position.createdAt as any) : new Date();
+  const created = position.createdAt ? new Date(String(position.createdAt)) : new Date();
   return Math.floor((Date.now() - created.getTime()) / 86400000);
 }
 

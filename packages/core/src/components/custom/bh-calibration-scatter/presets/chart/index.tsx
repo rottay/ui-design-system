@@ -324,6 +324,7 @@ export const ChartBhCalibrationScatter = createPreset<BhCalibrationScatterProps>
                         onMouseEnter={() => setHoveredPoint(p.id)}
                         onMouseLeave={() => setHoveredPoint(null)}
                         onClick={() => handlePointClick(p.id)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlePointClick(p.id); } }}
                         role="button"
                         tabIndex={0}
                         aria-label={`${p.candidateName}: Human ${n(p.humanScore)}, AI ${n(p.aiScore)}, deviation ${n(p.deviation).toFixed(2)}`}

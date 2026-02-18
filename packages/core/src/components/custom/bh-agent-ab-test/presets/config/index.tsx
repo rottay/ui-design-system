@@ -22,7 +22,7 @@ import {
   createProgressBarStyle,
 } from '../../../helpers';
 import type { BhAgentAbTestProps, AbTestVariant } from '../../core';
-import type { DesignTokens } from '../../../../../types';
+import type { DesignTokens, ColorScale } from '../../../../../types';
 import {
   FlaskConical,
   Play,
@@ -131,6 +131,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                     tabIndex={0}
                     aria-label="Start test"
                     onClick={() => onStatusChange('running')}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStatusChange('running'); } }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: t.spacing[1],
                       padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
@@ -154,6 +155,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                     tabIndex={0}
                     aria-label="Pause test"
                     onClick={() => onStatusChange('paused')}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStatusChange('paused'); } }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: t.spacing[1],
                       padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
@@ -177,6 +179,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                     tabIndex={0}
                     aria-label="Resume test"
                     onClick={() => onStatusChange('running')}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onStatusChange('running'); } }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: t.spacing[1],
                       padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
@@ -291,6 +294,7 @@ export const ConfigBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                 tabIndex={0}
                 aria-label={`Variant ${variant.name}`}
                 onClick={() => handleVariantClick(variant.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVariantClick(variant.id); } }}
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                   Object.assign(e.currentTarget.style, hoverStyles.hover);
                 }}

@@ -442,7 +442,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
                   {interview.scorePercent !== undefined && (
                     <Text style={{ ...createStatValueStyle(t, { size: 'lg' }), color: getScoreColor(interview.scorePercent, t) }}>{interview.scorePercent}%</Text>
                   )}
-                  <Box style={{ padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: (statusColor as any)[50], color: (statusColor as any)[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>
+                  <Box style={{ padding: `2px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: statusColor[50], color: statusColor[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, textTransform: 'capitalize' }}>
                     {interview.status}
                   </Box>
                   {interview.hasReplay && (
@@ -602,7 +602,7 @@ export const FullBhCandidateProfile = createPreset<BhCandidateProfileProps>({
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
                 {sc.dimensions.map(dim => {
-                  const dimMax = (dim as any).maxScore ?? 100;
+                  const dimMax = (dim as { maxScore?: number }).maxScore ?? 100;
                   const dimPct = dimMax > 0 ? Math.round((dim.score / dimMax) * 100) : 0;
                   const dimColor = getScoreColor(dimPct, t);
                   const pb = createProgressBarStyle(t, { percent: dimPct, color: dimColor });

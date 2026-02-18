@@ -516,7 +516,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
             {/* Date range pills */}
             <Box style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full }}>
               {DATE_RANGE_OPTIONS.map((opt) => (
-                <Box key={opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} style={pillBtn(dateRange === opt.value)}>
+                <Box key={opt.value} role="tab" tabIndex={0} aria-selected={dateRange === opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDateRange(opt.value as DateRangeValue); } }} style={pillBtn(dateRange === opt.value)}>
                   {opt.label}
                 </Box>
               ))}
@@ -635,7 +635,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   </Box>
                   <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {providerStatuses.map((s) => (
-                      <Box key={s} onClick={() => setProviderFilter(s)} style={pillBtn(providerFilter === s)}>
+                      <Box key={s} role="tab" tabIndex={0} aria-selected={providerFilter === s} onClick={() => setProviderFilter(s)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setProviderFilter(s); } }} style={pillBtn(providerFilter === s)}>
                         {s === 'all' ? 'All' : (s || '').charAt(0).toUpperCase() + (s || '').slice(1)}
                       </Box>
                     ))}
@@ -648,7 +648,11 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     return (
                       <Box
                         key={provider.id}
+                        role={onProviderClick ? 'button' : undefined}
+                        tabIndex={onProviderClick ? 0 : undefined}
+                        aria-label={onProviderClick ? `View provider: ${provider.name}` : undefined}
                         onClick={() => onProviderClick?.(provider.id)}
+                        onKeyDown={onProviderClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onProviderClick?.(provider.id); } } : undefined}
                         style={{
                           ...cardBase,
                           cursor: onProviderClick ? 'pointer' : 'default',
@@ -856,7 +860,7 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   </Box>
                   <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {eventTypes.map((t) => (
-                      <Box key={t} onClick={() => setEventFilter(t)} style={pillBtn(eventFilter === t)}>
+                      <Box key={t} role="tab" tabIndex={0} aria-selected={eventFilter === t} onClick={() => setEventFilter(t)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setEventFilter(t); } }} style={pillBtn(eventFilter === t)}>
                         {eventTypeLabels[t]}
                       </Box>
                     ))}
@@ -873,7 +877,11 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                       return (
                         <Box
                           key={evt.id}
+                          role={onEventClick ? 'button' : undefined}
+                          tabIndex={onEventClick ? 0 : undefined}
+                          aria-label={onEventClick ? `View event: ${evt.message ?? ''}` : undefined}
                           onClick={() => onEventClick?.(evt.id)}
+                          onKeyDown={onEventClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEventClick?.(evt.id); } } : undefined}
                           style={{
                             display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3],
                             padding: tokens.spacing[3],
@@ -923,8 +931,8 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                     <Text style={sectionTitle}>Cost Breakdown</Text>
                   </Box>
                   <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
-                    <Box onClick={() => setCostView('bar')} style={pillBtn(costView === 'bar')}>Bar</Box>
-                    <Box onClick={() => setCostView('treemap')} style={pillBtn(costView === 'treemap')}>Treemap</Box>
+                    <Box role="tab" tabIndex={0} aria-selected={costView === 'bar'} onClick={() => setCostView('bar')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCostView('bar'); } }} style={pillBtn(costView === 'bar')}>Bar</Box>
+                    <Box role="tab" tabIndex={0} aria-selected={costView === 'treemap'} onClick={() => setCostView('treemap')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCostView('treemap'); } }} style={pillBtn(costView === 'treemap')}>Treemap</Box>
                   </Box>
                 </Box>
                 <Box style={{ ...cardBase }}>
@@ -1031,7 +1039,11 @@ export const OverviewBhAdminCenter = createPreset<BhAdminCenterProps>({
                   {quickActions.map((action) => (
                     <Box
                       key={action.key}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`${action.label}: ${action.description}`}
                       onClick={() => onQuickAction?.(action.key)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onQuickAction?.(action.key); } }}
                       style={{
                         ...cardBase,
                         display: 'flex', alignItems: 'flex-start', gap: tokens.spacing[3],

@@ -381,11 +381,15 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
             const barPct = (n(dim.score) / (n(dim.maxScore) || 1)) * 100;
             return (
               <Box key={dim.dimensionId}
+                role="button"
+                tabIndex={0}
+                aria-label={`${dim.dimensionName}: ${n(dim.score)}/${n(dim.maxScore)}`}
                 onMouseEnter={() => setHoveredDim((dim.dimensionId ?? null))}
                 onMouseLeave={() => setHoveredDim(null)}
                 onClick={() => handleDimClick((dim.dimensionId ?? ''))}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDimClick((dim.dimensionId ?? '')); } }}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 8,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[2],
                   cursor: 'pointer',
                   padding: `${t.spacing[1]}px 0`,
                 }}>
@@ -420,9 +424,13 @@ export const SummaryBhScorecardDetail = createPreset<BhScorecardDetailProps>({
           })}
           {dims.length > 5 && (
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label={expanded ? 'Show fewer dimensions' : `Show ${dims.length - 5} more dimensions`}
               onClick={() => setExpanded(!expanded)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpanded(!expanded); } }}
               style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1],
                 cursor: 'pointer',
                 padding: `${t.spacing[1]}px 0`,
                 fontSize: t.typography.fontSize.xs,

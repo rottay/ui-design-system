@@ -401,7 +401,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               return (
                 <Box
                   key={type}
+                  role="radio"
+                  tabIndex={0}
+                  aria-checked={isSelected}
+                  aria-label={`Agent type: ${config.label}`}
                   onClick={() => updateAgent({ type })}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ type }); } }}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -560,7 +565,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               return (
                 <Box
                   key={provider}
+                  role="radio"
+                  tabIndex={0}
+                  aria-checked={isSelected}
+                  aria-label={`Voice provider: ${config.label}`}
                   onClick={() => updateAgent({ voiceProvider: provider })}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ voiceProvider: provider }); } }}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -638,7 +648,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             />
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label={voicePreviewPlaying ? 'Stop voice preview' : 'Preview voice'}
               onClick={() => setVoicePreviewPlaying(!voicePreviewPlaying)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setVoicePreviewPlaying(!voicePreviewPlaying); } }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -713,7 +727,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   .map((voice) => (
                     <Box
                       key={voice.id}
+                      role="radio"
+                      tabIndex={0}
+                      aria-checked={agentData.voiceId === voice.id}
+                      aria-label={`Select voice: ${voice.name}${voice.accent ? ` (${voice.accent})` : ''}`}
                       onClick={() => updateAgent({ voiceId: voice.id })}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ voiceId: voice.id }); } }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1028,7 +1047,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             {SYSTEM_PROMPT_VARIABLES.map((variable) => (
               <Box
                 key={variable}
+                role="button"
+                tabIndex={0}
+                aria-label={`Insert variable: ${variable}`}
                 onClick={() => insertVariable(variable)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); insertVariable(variable); } }}
                 style={{
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                   borderRadius: tokens.borderRadius.md,
@@ -1134,7 +1157,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 }}
               />
               <Box
+                role="button"
+                tabIndex={0}
+                aria-label={`Remove section: ${section.title}`}
                 onClick={() => removeScriptSection(section.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); removeScriptSection(section.id); } }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1208,7 +1235,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
           </Box>
         ))}
         <Box
+          role="button"
+          tabIndex={0}
+          aria-label="Add script section"
           onClick={addScriptSection}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addScriptSection(); } }}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -1268,7 +1299,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 </Box>
               </Box>
               <Box
+                role="switch"
+                tabIndex={0}
+                aria-checked={tool.enabled}
+                aria-label={`Toggle ${tool.name}`}
                 onClick={() => toggleTool(tool.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTool(tool.id); } }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1460,7 +1496,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
         {/* Action buttons */}
         <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2], justifyContent: 'center', paddingTop: tokens.spacing[2] }}>
           <Box
+            role="button"
+            tabIndex={0}
+            aria-label="Validate agent configuration"
             onClick={() => onValidate?.(agentData)}
+            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onValidate?.(agentData); } }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -1481,7 +1521,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
             Validate
           </Box>
           <Box
+            role="button"
+            tabIndex={0}
+            aria-label="Save and deploy agent"
             onClick={() => onSave?.(agentData)}
+            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSave?.(agentData); } }}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -1619,7 +1663,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 return (
                   <Box
                     key={step.key}
+                    role="tab"
+                    tabIndex={isAccessible ? 0 : -1}
+                    aria-selected={isCurrent}
+                    aria-label={`Step ${idx + 1}: ${step.label}`}
                     onClick={isAccessible ? () => goToStep(idx) : undefined}
+                    onKeyDown={isAccessible ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToStep(idx); } } : undefined}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -1811,7 +1860,12 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
               }}
             >
               <Box
+                role="button"
+                tabIndex={isFirstStep ? -1 : 0}
+                aria-label="Go to previous step"
+                aria-disabled={isFirstStep}
                 onClick={isFirstStep ? undefined : goBack}
+                onKeyDown={!isFirstStep ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goBack(); } } : undefined}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1845,7 +1899,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                 )}
                 {isLastStep ? (
                   <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Save and deploy agent"
                     onClick={() => onSave?.(agentData)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSave?.(agentData); } }}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -1867,7 +1925,11 @@ export const GuidedBhAgentStudio = createPreset<BhAgentStudioProps>({
                   </Box>
                 ) : (
                   <Box
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Continue to next step"
                     onClick={goNext}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goNext(); } }}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',

@@ -24,9 +24,10 @@ import { DollarSign, TrendingUp, Layers, Activity } from 'lucide-react';
 
 const PROVIDER_COLOR_KEYS = ['primary', 'secondary', 'success', 'warning', 'error', 'info'] as const;
 
-function getProviderColor(index: number, tokens: any): string {
+function getProviderColor(index: number, tokens: DesignTokens): string {
   const key = PROVIDER_COLOR_KEYS[index % PROVIDER_COLOR_KEYS.length];
-  return (tokens.colors as any)[`${key}Scale`]?.[500] ?? tokens.colors.primaryScale[500];
+  const scale = tokens.colors[`${key}Scale` as keyof typeof tokens.colors] as Record<number, string> | undefined;
+  return scale?.[500] ?? tokens.colors.primaryScale[500];
 }
 
 /* Inline sparkline (5-point SVG) */

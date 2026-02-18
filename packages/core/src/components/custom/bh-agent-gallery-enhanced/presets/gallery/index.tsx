@@ -151,6 +151,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
               tabIndex={0}
               aria-selected={selectedCategory === null}
               onClick={() => handleCategoryChange(null)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCategoryChange(null); } }}
               style={{
                 padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                 borderRadius: badgeRadius,
@@ -174,6 +175,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                   tabIndex={0}
                   aria-selected={isActive}
                   onClick={() => handleCategoryChange(cat)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCategoryChange(cat); } }}
                   style={{
                     padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                     borderRadius: badgeRadius,
@@ -224,6 +226,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                   tabIndex={0}
                   aria-label={`Agent: ${agent.name}`}
                   onClick={() => onAgentClick?.(agent.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAgentClick?.(agent.id); } }}
                   onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                     Object.assign(e.currentTarget.style, hoverStyles.hover);
                   }}
@@ -274,7 +277,7 @@ export const GalleryBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                   <Text style={{
                     fontSize: t.typography.fontSize.sm, color: t.colors.neutral[600],
                     lineHeight: t.typography.lineHeight.relaxed,
-                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any, overflow: 'hidden',
+                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden',
                   }}>
                     {agent.description}
                   </Text>

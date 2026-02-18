@@ -406,7 +406,7 @@ export const ConfigBhTokenBudget = createPreset<BhTokenBudgetProps>({
                             borderRadius: badgeRadius,
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: 3,
+                            gap: t.spacing[1],
                           }}>
                             <AlertTriangle size={ICON_SIZES.inline} />
                             <Text style={{ fontSize: t.typography.fontSize.xs }}>Alert</Text>

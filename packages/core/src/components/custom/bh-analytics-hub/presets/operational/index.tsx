@@ -127,19 +127,19 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
             <Box style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
               <Filter size={ICON_SIZES.label} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Filters</Text> <ChevronDown size={ICON_SIZES.label} />
             </Box>
-            <Box onClick={() => onExport?.('csv')} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
+            <Box role="button" tabIndex={0} aria-label="Export CSV" onClick={() => onExport?.('csv')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExport?.('csv'); } }} style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[2]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, border: `1px solid ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, fontSize: t.typography.fontSize.xs, color: t.colors.neutral[600], cursor: 'pointer' }}>
               <Download size={ICON_SIZES.label} /> <Text style={{ fontSize: t.typography.fontSize.xs }}>Export</Text>
             </Box>
           </Box>
         </Flex>
 
         {/* ── Tab Navigation ── */}
-        <Box style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: 3, borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
+        <Box style={{ display: 'flex', gap: t.spacing[1], marginBottom: t.spacing[6], padding: t.spacing[1], borderRadius: t.borderRadius.lg, backgroundColor: t.colors.neutral[100] }}>
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.key;
             return (
-              <Box key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}>
+              <Box key={tab.key} role="tab" tabIndex={0} aria-selected={isActive} onClick={() => setActiveTab(tab.key)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveTab(tab.key); } }} style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}>
                 <Icon size={ICON_SIZES.section} />
                 <Text style={{ fontSize: t.typography.fontSize.sm }}>{tab.label}</Text>
               </Box>
@@ -237,11 +237,11 @@ export const OperationalBhAnalyticsHub = createPreset<BhAnalyticsHubProps>({
               <Box style={{ display: 'flex', flexDirection: 'column', gap: t.spacing[2] }}>
                 {timeToHireData.map((job) => (
                   <Box key={job.job}>
-                    <Box onClick={() => setExpandedJob(expandedJob === (job.job ?? '') ? null : (job.job ?? ''))} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[3]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], cursor: 'pointer', ...hoverStyles.base }}>
+                    <Box role="button" tabIndex={0} aria-expanded={expandedJob === (job.job ?? '')} aria-label={`${job.job}: ${job.avgDays ?? 0} days average`} onClick={() => setExpandedJob(expandedJob === (job.job ?? '') ? null : (job.job ?? ''))} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setExpandedJob(expandedJob === (job.job ?? '') ? null : (job.job ?? '')); } }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: `${t.spacing[3]}px ${t.spacing[3]}px`, borderRadius: t.borderRadius.md, backgroundColor: t.colors.neutral[50], cursor: 'pointer', ...hoverStyles.base }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>{job.job}</Text>
                       <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                         <Text style={{ ...createStatValueStyle(t, { size: 'lg' }), color: (job.avgDays ?? 0) > 30 ? t.colors.warningScale[700] : t.colors.neutral[900] }}>{job.avgDays ?? 0}d</Text>
-                        <ChevronDown size={ICON_SIZES.label} color={t.colors.neutral[400]} style={{ transform: expandedJob === job.job ? 'rotate(180deg)' : 'none', transition: `transform ${t.motion.hover}` } as any} />
+                        <ChevronDown size={ICON_SIZES.label} color={t.colors.neutral[400]} style={{ transform: expandedJob === job.job ? 'rotate(180deg)' : 'none', transition: `transform ${t.motion.hover}` } as React.CSSProperties} />
                       </Box>
                     </Box>
                     {expandedJob === job.job && (

@@ -218,7 +218,7 @@ export const CompactBhTokenTransfer = createPreset<BhTokenTransferProps>({
                   </Box>
 
                   {/* Amount */}
-                  <Box style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+                  <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexShrink: 0 }}>
                     <Coins size={10} color={t.colors.primaryScale[500]} />
                     <Text style={{
                       fontSize: t.typography.fontSize.xs,

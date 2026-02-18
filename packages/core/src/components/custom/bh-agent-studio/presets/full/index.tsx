@@ -123,7 +123,12 @@ function CollapsibleSection({ title, icon, tokens, isCollapsed, onToggle, glass,
       }}
     >
       <Box
+        role="button"
+        tabIndex={0}
+        aria-expanded={!isCollapsed}
+        aria-label={`${isCollapsed ? 'Expand' : 'Collapse'} ${title}`}
         onClick={onToggle}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle(); } }}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -458,7 +463,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               </Text>
             )}
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label="Validate agent configuration"
               onClick={() => onValidate?.(agentData)}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onValidate?.(agentData); } }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -479,10 +488,15 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               Validate
             </Box>
             <Box
+              role="button"
+              tabIndex={0}
+              aria-label={isTestMode ? 'Stop testing agent' : 'Test agent'}
+              aria-pressed={isTestMode}
               onClick={() => {
                 setIsTestMode(!isTestMode);
                 onTest?.(agentData);
               }}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setIsTestMode(!isTestMode); onTest?.(agentData); } }}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -503,7 +517,12 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               {isTestMode ? 'Testing...' : 'Test Agent'}
             </Box>
             <Box
+              role="button"
+              tabIndex={isDirty ? 0 : -1}
+              aria-label="Save agent"
+              aria-disabled={!isDirty}
               onClick={isDirty ? () => onSave?.(agentData) : undefined}
+              onKeyDown={isDirty ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSave?.(agentData); } } : undefined}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -663,6 +682,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   <Box
                     key={type}
                     onClick={() => updateAgent({ type })}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ type }); } }}
+                    role="radio"
+                    tabIndex={0}
+                    aria-checked={isSelected}
+                    aria-label={`Agent type: ${config.label}`}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -844,6 +868,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   <Box
                     key={provider}
                     onClick={() => updateAgent({ voiceProvider: provider })}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ voiceProvider: provider }); } }}
+                    role="radio"
+                    tabIndex={0}
+                    aria-checked={isSelected}
+                    aria-label={`Voice provider: ${config.label}`}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
@@ -933,6 +962,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     navigator.clipboard?.writeText(agentData.voiceId);
                   }
                 }}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (agentData.voiceId) { navigator.clipboard?.writeText(agentData.voiceId); } } }}
+                role="button"
+                tabIndex={0}
+                aria-label="Copy voice ID"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -979,6 +1012,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
               </Text>
               <Box
                 onClick={handleVoicePreview}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVoicePreview(); } }}
+                role="button"
+                tabIndex={0}
+                aria-label={voicePreviewPlaying ? 'Stop voice preview' : 'Play voice sample'}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -1057,6 +1094,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     <Box
                       key={voice.id}
                       onClick={() => updateAgent({ voiceId: voice.id })}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateAgent({ voiceId: voice.id }); } }}
+                      role="radio"
+                      tabIndex={0}
+                      aria-checked={agentData.voiceId === voice.id}
+                      aria-label={`Voice: ${voice.name}${voice.accent ? ` (${voice.accent})` : ''}`}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -1534,6 +1576,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 <Box
                   key={variable}
                   onClick={() => insertVariable(variable)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); insertVariable(variable); } }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Insert variable ${variable}`}
                   style={{
                     padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
                     borderRadius: tokens.borderRadius.md,
@@ -1693,6 +1739,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       />
                       <Box
                         onClick={() => removeScriptSection(section.id)}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); removeScriptSection(section.id); } }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Delete section ${section.title || idx + 1}`}
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -1794,6 +1844,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                       />
                       <Box
                         onClick={addScriptSection}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addScriptSection(); } }}
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Add script section"
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -1827,6 +1881,10 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
             {/* Add first/last section button */}
             <Box
               onClick={addScriptSection}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); addScriptSection(); } }}
+              role="button"
+              tabIndex={0}
+              aria-label="Add script section"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1931,6 +1989,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                   </Box>
                   <Box
                     onClick={() => toggleTool(tool.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTool(tool.id); } }}
+                    role="switch"
+                    tabIndex={0}
+                    aria-checked={tool.enabled}
+                    aria-label={`Toggle ${tool.name}`}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -2002,6 +2065,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                 onClick={() =>
                   updateCallSettings({ recordingEnabled: !agentData.callSettings.recordingEnabled })
                 }
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateCallSettings({ recordingEnabled: !agentData.callSettings.recordingEnabled }); } }}
+                role="switch"
+                tabIndex={0}
+                aria-checked={agentData.callSettings.recordingEnabled}
+                aria-label="Toggle call recording"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -2116,6 +2184,11 @@ export const FullBhAgentStudio = createPreset<BhAgentStudioProps>({
                     voicemailDetection: !agentData.callSettings.voicemailDetection,
                   })
                 }
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); updateCallSettings({ voicemailDetection: !agentData.callSettings.voicemailDetection }); } }}
+                role="switch"
+                tabIndex={0}
+                aria-checked={agentData.callSettings.voicemailDetection}
+                aria-label="Toggle voicemail detection"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',

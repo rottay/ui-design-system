@@ -8,6 +8,7 @@
  */
 
 import type { CSSProperties } from 'react';
+import type React from 'react';
 import type { DesignTokens } from '../../../types';
 
 /** Whether the current engine supports glass effects */
@@ -133,7 +134,7 @@ export function createSectionHeaderStyle(tokens: DesignTokens): CSSProperties {
  */
 export function createBadgeStyle(tokens: DesignTokens, color: 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary'): CSSProperties {
   const scaleKey = `${color}Scale` as const;
-  const scale = (tokens.colors as any)[scaleKey];
+  const scale = tokens.colors[scaleKey as keyof typeof tokens.colors] as Record<number, string> | undefined;
   if (!scale) return {};
 
   const style: CSSProperties = {
@@ -1260,4 +1261,61 @@ export function createTrendStyle(tokens: DesignTokens, trend: number): {
     },
     color,
   };
+}
+
+/* ================================================================== */
+/*  ACCESSIBILITY HELPERS                                              */
+/*  WCAG AA keyboard + ARIA support for interactive elements           */
+/* ================================================================== */
+
+/**
+ * Creates keyboard event handler for clickable non-button elements.
+ * Fires onClick when Enter or Space is pressed (matching native button behavior).
+ *
+ *   <Box onClick={handleClick} onKeyDown={createKeyboardClickHandler(handleClick)} tabIndex={0} role="button">
+ */
+export function createKeyboardClickHandler(
+  onClick: (() => void) | undefined,
+): (e: React.KeyboardEvent) => void {
+  return (e: React.KeyboardEvent) => {
+    if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+}
+
+/**
+ * Returns a props spread for making a Box/div behave like an accessible button.
+ * Adds tabIndex, role, and onKeyDown in one call.
+ *
+ *   <Box onClick={handleClick} {...clickableProps(handleClick, 'Delete item')}>
+ */
+export function clickableProps(
+  onClick: (() => void) | undefined,
+  ariaLabel?: string,
+): Record<string, unknown> {
+  const props: Record<string, unknown> = {
+    tabIndex: 0,
+    role: 'button',
+    onKeyDown: createKeyboardClickHandler(onClick),
+  };
+  if (ariaLabel) {
+    props['aria-label'] = ariaLabel;
+  }
+  return props;
+}
+
+/**
+ * Returns ARIA props for a list container and its items.
+ *
+ *   <Box {...listProps('Pipeline stages')}>
+ *     {items.map(item => <Box key={item.id} {...listItemProps()}>...</Box>)}
+ */
+export function listProps(ariaLabel: string): Record<string, unknown> {
+  return { role: 'list', 'aria-label': ariaLabel };
+}
+
+export function listItemProps(): Record<string, unknown> {
+  return { role: 'listitem' };
 }

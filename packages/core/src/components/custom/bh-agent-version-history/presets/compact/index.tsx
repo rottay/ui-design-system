@@ -116,6 +116,7 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
                   tabIndex={0}
                   aria-label={`Version ${version.version}`}
                   onClick={() => handleVersionClick(version.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVersionClick(version.id); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -173,6 +174,7 @@ export const CompactBhAgentVersionHistory = createPreset<BhAgentVersionHistoryPr
                       tabIndex={0}
                       aria-label={`Rollback to v${version.version}`}
                       onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRollback(version.id); }}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onRollback(version.id); } }}
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         width: 24, height: 24, borderRadius: t.borderRadius.md,

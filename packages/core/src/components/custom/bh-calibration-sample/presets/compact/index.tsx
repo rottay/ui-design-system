@@ -170,13 +170,13 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
         <Box style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: 1,
+          gap: t.spacing[1],
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
           borderBottom: `1px solid ${t.colors.neutral[100]}`,
         }}>
           {/* Human Score */}
           <Box style={{ textAlign: 'center' }} role="status" aria-label={`Human score: ${n(sample.overallHumanScore).toFixed(1)}`}>
-            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: t.spacing[1] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1], marginBottom: t.spacing[1] }}>
               <User size={10} color={t.colors.infoScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Human</Text>
             </Box>
@@ -192,7 +192,7 @@ export const CompactBhCalibrationSample = createPreset<BhCalibrationSampleProps>
 
           {/* AI Score */}
           <Box style={{ textAlign: 'center' }} role="status" aria-label={`AI score: ${n(sample.overallAiScore).toFixed(1)}`}>
-            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, marginBottom: t.spacing[1] }}>
+            <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1], marginBottom: t.spacing[1] }}>
               <Bot size={10} color={t.colors.primaryScale[500]} />
               <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>AI</Text>
             </Box>

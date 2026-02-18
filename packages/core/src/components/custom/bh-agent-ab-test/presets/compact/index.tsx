@@ -130,6 +130,7 @@ export const CompactBhAgentAbTest = createPreset<BhAgentAbTestProps>({
                 tabIndex={0}
                 aria-label={`Variant ${variant.name}`}
                 onClick={() => onVariantClick?.(variant.id)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onVariantClick?.(variant.id); } }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

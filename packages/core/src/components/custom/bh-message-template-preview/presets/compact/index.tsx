@@ -136,8 +136,8 @@ export const CompactBhMessageTemplatePreview = createPreset<BhMessageTemplatePre
             textOverflow: 'ellipsis',
             display: '-webkit-box',
             WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-          } as any}>
+            WebkitBoxOrient: 'vertical' as const,
+          }}>
             {resolvedBody}
           </Text>
 

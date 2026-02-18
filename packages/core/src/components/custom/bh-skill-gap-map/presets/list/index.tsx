@@ -82,7 +82,7 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
         </Box>
 
         {/* Gap rows */}
-        <Box style={{ flex: 1, overflowY: 'auto' }}>
+        <Box role="list" aria-label="Skill gap items" style={{ flex: 1, overflowY: 'auto' }}>
           {gaps.map((gap, gi) => {
             const gapPriority = gap.priority ?? 'low';
             const colors = pc[gapPriority];
@@ -92,7 +92,14 @@ export const ListBhSkillGapMap = createPreset<BhSkillGapMapProps>({
             const barColor = pct >= 80 ? t.colors.successScale[500] : pct >= 50 ? t.colors.warningScale[500] : t.colors.errorScale[500];
 
             return (
-              <Box key={gap.id ?? gi} onClick={() => onGapSelect?.(gap.id ?? '')} style={{
+              <Box
+                key={gap.id ?? gi}
+                role={onGapSelect ? 'button' : undefined}
+                tabIndex={onGapSelect ? 0 : undefined}
+                aria-label={`${gap.dimension ?? 'Unknown'} - ${gapPriority} priority, gap ${gap.gapSize ?? 0}`}
+                onClick={() => onGapSelect?.(gap.id ?? '')}
+                onKeyDown={onGapSelect ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onGapSelect?.(gap.id ?? ''); } } : undefined}
+                style={{
                 padding: `${t.spacing[4]}px ${t.spacing[6]}px`,
                 borderBottom: gi < gaps.length - 1 ? `1px solid ${t.colors.neutral[50]}` : undefined,
                 borderLeft: `3px solid ${colors.color}`,

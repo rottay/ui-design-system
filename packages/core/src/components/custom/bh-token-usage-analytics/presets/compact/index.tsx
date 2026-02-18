@@ -192,7 +192,7 @@ export const CompactBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsPr
             borderRadius: badgeRadius,
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 4,
+            gap: t.spacing[1],
           }}>
             <TrendingUp size={10} style={trendDirection === 'down' ? { transform: 'scaleY(-1)' } : undefined} />
             <Text style={{ fontSize: t.typography.fontSize.xs }}>

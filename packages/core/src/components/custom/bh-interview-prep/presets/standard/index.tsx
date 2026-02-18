@@ -315,7 +315,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                               <g key={idx}>
                                 <rect x={x} y={y} width={barWidth} height={barHeight} rx={4} fill={fillColor} opacity={0.8} />
                                 <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" fontSize={t.typography.fontSize.xs}
-                                  fill={t.colors.neutral[700]} fontWeight={t.typography.fontWeight.medium as any}>
+                                  fill={t.colors.neutral[700]} fontWeight={String(t.typography.fontWeight.medium)}>
                                   {score.score}%
                                 </text>
                                 <text x={x + barWidth / 2} y={chartHeight + 16} textAnchor="middle" fontSize="10" fill={t.colors.neutral[500]}>
@@ -578,7 +578,7 @@ export const StandardBhInterviewPrep = createPreset<BhInterviewPrepProps>({
                       {externalChecklist.map((item) => {
                         const currentStatus = checklistStatus[item.key] ?? item.status;
                         const statusCfg = CHECKLIST_STATUS_CONFIG[currentStatus] || CHECKLIST_STATUS_CONFIG.pending;
-                        const scale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
+                        const scale = t.colors[`${statusCfg.colorKey}Scale` as keyof typeof t.colors] as Record<number, string>;
 
                         const StatusIcon = currentStatus === 'pass' ? CheckCircle : currentStatus === 'fail' ? XCircle : AlertTriangle;
                         const nextStatus: ChecklistItem['status'] = currentStatus === 'pending' ? 'pass' : currentStatus === 'pass' ? 'fail' : 'pending';

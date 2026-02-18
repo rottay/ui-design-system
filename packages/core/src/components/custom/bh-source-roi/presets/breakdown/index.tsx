@@ -172,6 +172,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
     const SortHeader = ({ label, field, width }: { label: string; field: SortField; width?: number }) => (
       <Box
         onClick={() => handleSort(field)}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(field); } }}
         role="columnheader"
         tabIndex={0}
         aria-sort={sortBy === field ? (sortAsc ? 'ascending' : 'descending') : 'none'}
@@ -279,6 +280,7 @@ export const BreakdownBhSourceRoi = createPreset<BhSourceRoiProps>({
               <Box key={src.id} role="rowgroup">
                 <Box
                   onClick={() => handleExpand(src.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleExpand(src.id); } }}
                   role="row"
                   tabIndex={0}
                   aria-expanded={isExpanded}

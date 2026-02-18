@@ -129,6 +129,7 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
             tabIndex={0}
             aria-selected={filterLanguage === null}
             onClick={() => handleFilterChange({ language: null })}
+            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ language: null }); } }}
             style={{
               padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: badgeRadius,
               fontSize: t.typography.fontSize.xs, cursor: 'pointer',
@@ -147,6 +148,7 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
               tabIndex={0}
               aria-selected={filterLanguage === lang}
               onClick={() => handleFilterChange({ language: filterLanguage === lang ? null : lang })}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ language: filterLanguage === lang ? null : lang }); } }}
               style={{
                 padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: badgeRadius,
                 fontSize: t.typography.fontSize.xs, cursor: 'pointer',
@@ -173,6 +175,7 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
               tabIndex={0}
               aria-selected={filterGender === g}
               onClick={() => handleFilterChange({ gender: filterGender === g ? null : g })}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ gender: filterGender === g ? null : g }); } }}
               style={{
                 padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: badgeRadius,
                 fontSize: t.typography.fontSize.xs, cursor: 'pointer', textTransform: 'capitalize' as const,
@@ -214,6 +217,7 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
                   aria-label={`Voice: ${voice.name}`}
                   aria-selected={isSelected}
                   onClick={() => handleVoiceSelect(voice.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVoiceSelect(voice.id); } }}
                   onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
                     Object.assign(e.currentTarget.style, hoverStyles.hover);
                   }}
@@ -282,6 +286,7 @@ export const GridBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
                       tabIndex={0}
                       aria-label={`Preview ${voice.name}`}
                       onClick={(e: React.MouseEvent) => { e.stopPropagation(); onPreview(voice.id); }}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onPreview(voice.id); } }}
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: t.spacing[1],
                         width: '100%', padding: `${t.spacing[2]}px`,

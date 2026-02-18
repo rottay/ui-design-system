@@ -213,7 +213,7 @@ export const TableBhRankingBoard = createPreset<BhRankingBoardProps>({
                 outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' as const,
                 backgroundColor: t.colors.common.white,
                 transition: `border-color ${t.motion.hover}`,
-              } as any}
+              }}
             />
           </Box>
         </Box>

@@ -620,7 +620,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                         </Text>
                         {msg.audioUrl && (
                           <Box
+                            role="button"
+                            tabIndex={0}
+                            aria-label="Play audio for this message"
                             onClick={onAudioToggle}
+                            onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAudioToggle?.(); } }}
                             style={{
                               display: 'flex',
                               alignItems: 'center',
@@ -719,7 +723,11 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
               >
                 {/* Play/pause */}
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label={audioState.playback === 'playing' ? 'Pause audio' : 'Play audio'}
                   onClick={onAudioToggle}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAudioToggle?.(); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -918,7 +926,12 @@ export const StandardBhAgentTester = createPreset<BhAgentTesterProps>({
                 return (
                   <Box
                     key={panel.key}
+                    role="tab"
+                    tabIndex={0}
+                    aria-selected={isActive}
+                    aria-label={`${panel.label} panel`}
                     onClick={() => setActivePanel(panel.key)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActivePanel(panel.key); } }}
                     style={{
                       flex: 1,
                       display: 'flex',

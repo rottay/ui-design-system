@@ -35,6 +35,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
+import type { ColorScale } from '../../../../../types';
 import {
   createBadgeStyle,
   createCardStyle,
@@ -60,6 +61,16 @@ import {
   getActionTypeColors,
   formatAuditTimestamp,
 } from '../../core';
+
+/** Minimal shape for AI audit log fields accessed in this preset */
+interface AiAuditEventLike {
+  id?: string;
+  action?: string;
+  eventType?: string;
+  model?: string;
+  createdAt?: string | Date;
+  tokensUsed?: number;
+}
 
 /* ------------------------------------------------------------------ */
 /*  Mock Data                                                          */
@@ -208,7 +219,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
 
     /* -- Stat Card -------------------------------------------------- */
     const StatCard = ({ label, value, icon, scale }: { label: string; value: string | number; icon: React.ReactNode; scale: string }) => {
-      const s = (t.colors as any)[scale];
+      const s = (t.colors as any)[scale] as ColorScale;
       return (
         <Box style={{ ...card, display: 'flex', alignItems: 'center', gap: t.spacing[3] }}>
           <Box style={{
@@ -230,6 +241,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
     const FilterPill = ({ active, color, borderColor, children, onClick, label }: { active: boolean; color?: string; borderColor?: string; children: React.ReactNode; onClick: () => void; label?: string }) => (
       <Box
         onClick={onClick}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
         role="button"
         tabIndex={0}
         aria-pressed={active}
@@ -373,6 +385,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Box
                 onClick={handleLiveToggle}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLiveToggle(); } }}
                 role="button"
                 tabIndex={0}
                 aria-pressed={liveMode}
@@ -395,11 +408,11 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
               </Box>
               {onExport && (
                 <>
-                  <Box onClick={() => onExport('csv')} role="button" tabIndex={0} aria-label="Export as CSV" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box onClick={() => onExport('csv')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExport('csv'); } }} role="button" tabIndex={0} aria-label="Export as CSV" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>CSV</Text>
                   </Box>
-                  <Box onClick={() => onExport('json')} role="button" tabIndex={0} aria-label="Export as JSON" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box onClick={() => onExport('json')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExport('json'); } }} role="button" tabIndex={0} aria-label="Export as JSON" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>JSON</Text>
                   </Box>
@@ -571,15 +584,15 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                     </Box>
                     <Box style={{ flex: 1, display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                       <Text style={{ fontSize: t.typography.fontSize.sm, fontWeight: t.typography.fontWeight.medium, color: t.colors.neutral[800] }}>
-                        {(aiEvent as any).action ?? (aiEvent as any).eventType ?? 'AI Event'}
+                        {(aiEvent as AiAuditEventLike).action ?? (aiEvent as AiAuditEventLike).eventType ?? 'AI Event'}
                       </Text>
                       <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>
-                        {(aiEvent as any).model ?? ''} {(aiEvent as any).createdAt ? `- ${new Date((aiEvent as any).createdAt).toLocaleDateString()}` : ''}
+                        {(aiEvent as AiAuditEventLike).model ?? ''} {(aiEvent as AiAuditEventLike).createdAt ? `- ${new Date((aiEvent as AiAuditEventLike).createdAt!).toLocaleDateString()}` : ''}
                       </Text>
                     </Box>
-                    {(aiEvent as any).tokensUsed != null && (
+                    {(aiEvent as AiAuditEventLike).tokensUsed != null && (
                       <Box style={{ ...createBadgeStyle(t, 'warning'), borderRadius: badgeR }}>
-                        <Text style={{ fontSize: 'inherit' }}>{(aiEvent as any).tokensUsed} tokens</Text>
+                        <Text style={{ fontSize: 'inherit' }}>{(aiEvent as AiAuditEventLike).tokensUsed} tokens</Text>
                       </Box>
                     )}
                   </Box>
@@ -639,7 +652,7 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                         </Box>
                       </Box>
                     </Box>
-                    <Box onClick={handleDetailClose} role="button" tabIndex={0} aria-label="Close detail panel" style={{ padding: t.spacing[2], backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.md, color: t.colors.neutral[600], cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${t.motion.hover}` }}>
+                    <Box onClick={handleDetailClose} role="button" tabIndex={0} aria-label="Close detail panel" onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDetailClose(); } }} style={{ padding: t.spacing[2], backgroundColor: t.colors.neutral[100], borderRadius: t.borderRadius.md, color: t.colors.neutral[600], cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: `all ${t.motion.hover}` }}>
                       <X size={18} />
                     </Box>
                   </Box>
@@ -693,7 +706,11 @@ export const TimelineBhAuditTrail = createPreset<BhAuditTrailProps>({
                           return (
                             <Box
                               key={relId}
+                              role="button"
+                              tabIndex={0}
+                              aria-label={`View related event: ${relEvent.userName} ${getActionLabel(relEvent.actionType)} ${relEvent.entityName}`}
                               onClick={() => handleSelect(relId)}
+                              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(relId); } }}
                               style={{
                                 ...card, cursor: 'pointer',
                                 transition: `all ${t.motion.hover}`,

@@ -184,6 +184,7 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
                   strokeWidth={isSelected ? 1.5 : 1}
                   style={{ cursor: 'pointer' }}
                   onClick={() => handleClick(p.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(p.id); } }}
                   role="button"
                   tabIndex={0}
                   aria-label={`${p.candidateName}: Human ${n(p.humanScore)}, AI ${n(p.aiScore)}`}
@@ -197,7 +198,7 @@ export const CompactBhCalibrationScatter = createPreset<BhCalibrationScatterProp
         <Box style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 1,
+          gap: t.spacing[1],
           padding: `${t.spacing[3]}px ${t.spacing[4]}px`,
         }}>
           {[

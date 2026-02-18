@@ -271,7 +271,7 @@ export const SinglePageBhJobEditor = createPreset<BhJobEditorProps>({
     }, [t, bdr, textareaStyle]);
 
     const SkillTag_ = useCallback(({ skill, idx }: { skill: SkillTag; idx: number }) => {
-      const sc = (t.colors as any)[PROF_SCALES[skill.proficiency] ?? 'neutral'] ?? t.colors.neutral;
+      const sc = (t.colors[(PROF_SCALES[skill.proficiency] ?? 'neutral') as keyof typeof t.colors] as Record<number, string>) ?? t.colors.neutral;
       return (
         <Box style={{  display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, backgroundColor: sc[50], color: sc[700], border: `${bdr} ${sc[200]}`, borderRadius: t.borderRadius.full, fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium }}>
           <Tag size={10} />

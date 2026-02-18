@@ -32,6 +32,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
+import type { ColorScale } from '../../../../../types';
 import {
   createBadgeStyle,
   createCardStyle,
@@ -205,6 +206,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
       return (
         <Box
           onClick={() => handleSort(field)}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSort(field); } }}
           role="columnheader"
           tabIndex={0}
           aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
@@ -272,7 +274,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
               {filters.entityType && (
                 <Box style={{ ...createBadgeStyle(t, 'primary'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Text style={{ fontSize: 'inherit' }}>{filters.entityType}</Text>
-                  <Box onClick={() => handleFilterChange({ ...filters, entityType: undefined })} role="button" tabIndex={0} aria-label="Clear entity filter" style={{ cursor: 'pointer', display: 'inline-flex' }}>
+                  <Box onClick={() => handleFilterChange({ ...filters, entityType: undefined })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, entityType: undefined }); } }} role="button" tabIndex={0} aria-label="Clear entity filter" style={{ cursor: 'pointer', display: 'inline-flex' }}>
                     <X size={10} />
                   </Box>
                 </Box>
@@ -280,7 +282,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
               {filters.actionType && (
                 <Box style={{ ...createBadgeStyle(t, 'info'), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                   <Text style={{ fontSize: 'inherit' }}>{filters.actionType.replace('_', ' ')}</Text>
-                  <Box onClick={() => handleFilterChange({ ...filters, actionType: undefined })} role="button" tabIndex={0} aria-label="Clear action filter" style={{ cursor: 'pointer', display: 'inline-flex' }}>
+                  <Box onClick={() => handleFilterChange({ ...filters, actionType: undefined })} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({ ...filters, actionType: undefined }); } }} role="button" tabIndex={0} aria-label="Clear action filter" style={{ cursor: 'pointer', display: 'inline-flex' }}>
                     <X size={10} />
                   </Box>
                 </Box>
@@ -290,6 +292,7 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
               <Box
                 onClick={handleLiveToggle}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleLiveToggle(); } }}
                 role="button"
                 tabIndex={0}
                 aria-pressed={liveMode}
@@ -312,11 +315,11 @@ export const TableBhAuditTrail = createPreset<BhAuditTrailProps>({
               </Box>
               {onExport && (
                 <>
-                  <Box onClick={() => onExport('csv')} role="button" tabIndex={0} aria-label="Export as CSV" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box onClick={() => onExport('csv')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExport('csv'); } }} role="button" tabIndex={0} aria-label="Export as CSV" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>CSV</Text>
                   </Box>
-                  <Box onClick={() => onExport('json')} role="button" tabIndex={0} aria-label="Export as JSON" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
+                  <Box onClick={() => onExport('json')} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExport('json'); } }} role="button" tabIndex={0} aria-label="Export as JSON" style={{ display: 'inline-flex', alignItems: 'center', gap: t.spacing[1], padding: `${t.spacing[1]}px ${t.spacing[2]}px`, borderRadius: t.borderRadius.md, border: `${t.surface.borderWidth} ${t.surface.borderStyle} ${t.colors.neutral[200]}`, backgroundColor: t.colors.common.white, color: t.colors.neutral[600], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}` }}>
                     <Download size={12} />
                     <Text style={{ fontSize: t.typography.fontSize.xs }}>JSON</Text>
                   </Box>

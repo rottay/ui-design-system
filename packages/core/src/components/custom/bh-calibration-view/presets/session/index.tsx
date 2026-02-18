@@ -418,7 +418,7 @@ export const SessionBhCalibrationView = createPreset<BhCalibrationViewProps>({
                           fontWeight: tokens.typography.fontWeight.semibold,
                           color: isCandidate ? tokens.colors.primaryScale[600] : isAI ? tokens.colors.secondaryScale[600] : tokens.colors.neutral[600],
                           marginBottom: tokens.spacing[1],
-                          textTransform: typo.labelTransform !== 'none' ? typo.labelTransform : ('capitalize' as any),
+                          textTransform: (typo.labelTransform !== 'none' ? typo.labelTransform : 'capitalize') as React.CSSProperties['textTransform'],
                           letterSpacing: typo.labelLetterSpacing,
                         }}>
                           {line.speaker}

@@ -130,6 +130,7 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                   tabIndex={0}
                   aria-selected={selectedCategory === cat}
                   onClick={() => handleCategoryChange(selectedCategory === cat ? null : cat)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCategoryChange(selectedCategory === cat ? null : cat); } }}
                   style={{
                     padding: `0 ${t.spacing[2]}px`,
                     borderRadius: badgeRadius,
@@ -165,6 +166,7 @@ export const CompactBhAgentGalleryEnhanced = createPreset<BhAgentGalleryEnhanced
                   tabIndex={0}
                   aria-label={`Agent: ${agent.name}`}
                   onClick={() => onAgentClick?.(agent.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onAgentClick?.(agent.id); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',

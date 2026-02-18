@@ -593,6 +593,10 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                   {/* Stage Card */}
                   <div
                     draggable
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Select stage ${stage.name}`}
+                    aria-pressed={localSelectedStage === stage.id}
                     onDragStart={() => handleDragStart(stage.id)}
                     onDragOver={(e) => {
                       e.preventDefault();
@@ -600,6 +604,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                     }}
                     onDragEnd={handleDragEnd}
                     onClick={() => handleStageSelect(stage.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageSelect(stage.id); } }}
                     style={{
                       ...cardInteractive,
                       display: 'flex',
@@ -1463,6 +1468,10 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                         </Text>
                       </div>
                       <div
+                        role="switch"
+                        tabIndex={0}
+                        aria-checked={activeStage.isKnockout}
+                        aria-label="Knockout stage"
                         style={{
                           width: 32,
                           height: 18,
@@ -1479,6 +1488,7 @@ export const CanvasBhTemplateDesigner = createPreset<BhTemplateDesignerProps>({
                           onChange?.(`stages.${activeStage.id}.isKnockout`, !activeStage.isKnockout);
                           setLocalIsDirty(true);
                         }}
+                        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onChange?.(`stages.${activeStage.id}.isKnockout`, !activeStage.isKnockout); setLocalIsDirty(true); } }}
                       >
                         <div
                           style={{

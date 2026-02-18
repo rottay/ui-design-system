@@ -59,7 +59,7 @@ import type {
 function resolveLevelColor(level: LevelDistribution, t: DesignTokens): string {
   if (level.colorKey) {
     const scaleKey = `${level.colorKey}Scale` as const;
-    const scale = (t.colors as any)[scaleKey];
+    const scale = t.colors[scaleKey as keyof typeof t.colors] as Record<number, string> | undefined;
     return scale?.[500] ?? t.colors.primaryScale[500];
   }
   return level.color || t.colors.primaryScale[500];
@@ -262,6 +262,7 @@ export const DashboardBhScoringInsights = createPreset<BhScoringInsightsProps>({
                 aria-controls={`tabpanel-${tab.key}`}
                 tabIndex={isActive ? 0 : -1}
                 onClick={() => handleSetActiveSection(tab.key)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSetActiveSection(tab.key); } }}
                 style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[2]}px ${t.spacing[4]}px`, borderRadius: t.borderRadius.md, backgroundColor: isActive ? t.colors.common.white : 'transparent', color: isActive ? t.colors.neutral[900] : t.colors.neutral[500], fontSize: t.typography.fontSize.sm, fontWeight: isActive ? t.typography.fontWeight.semibold : t.typography.fontWeight.medium, cursor: 'pointer', transition: `all ${t.motion.hover}`, boxShadow: isActive ? t.shadows.sm : 'none', flex: 1, justifyContent: 'center' }}
               >
                 <TabIcon size={16} /> <Text style={{ fontSize: t.typography.fontSize.sm }}>{tab.label}</Text>

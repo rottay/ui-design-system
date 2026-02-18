@@ -238,7 +238,7 @@ export const ChartBhTimeToHireChart = createPreset<BhTimeToHireChartProps>({
                 borderRadius: badgeRadius,
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 4,
+                gap: t.spacing[1],
               }}>
                 <Target size={12} />
                 <Text style={{ fontSize: t.typography.fontSize.xs }}>Target: {targetDays}d</Text>

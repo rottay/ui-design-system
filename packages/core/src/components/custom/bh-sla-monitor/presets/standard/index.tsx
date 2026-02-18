@@ -159,6 +159,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
               <Box
                 key={opt.value}
                 onClick={() => handleTimeRange(opt.value)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTimeRange(opt.value); } }}
                 role="radio"
                 aria-checked={timeRange === opt.value}
                 tabIndex={0}
@@ -235,6 +236,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                 <Box
                   key={stage.stageName}
                   onClick={() => handleStageSelect(stage.stageName)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleStageSelect(stage.stageName); } }}
                   role="listitem"
                   tabIndex={0}
                   aria-selected={isSelected}
@@ -288,6 +290,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                 <Box
                   key={tab}
                   onClick={() => handleTabChange(tab)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTabChange(tab); } }}
                   role="tab"
                   tabIndex={0}
                   aria-selected={activeTab === tab}
@@ -327,6 +330,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
                   <Box
                     key={f}
                     onClick={() => { setBreachFilter(f); onBreachFilterChange?.(f); }}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBreachFilter(f); onBreachFilterChange?.(f); } }}
                     role="button"
                     tabIndex={0}
                     aria-pressed={breachFilter === f}
@@ -517,6 +521,7 @@ export const StandardBhSlaMonitor = createPreset<BhSlaMonitorProps>({
               aria-expanded={showConfig}
               aria-label="Toggle SLA configuration"
               onClick={() => { setShowConfig(!showConfig); onConfigToggle?.(); }}
+              onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowConfig(!showConfig); onConfigToggle?.(); } }}
             >
               <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
                 <Settings size={ICON_SIZES.section} color={t.colors.neutral[500]} />

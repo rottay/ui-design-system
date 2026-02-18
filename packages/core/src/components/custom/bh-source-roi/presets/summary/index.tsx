@@ -243,6 +243,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                   <Box
                     key={opt.value}
                     onClick={() => handleMetricChange(opt.value)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleMetricChange(opt.value); } }}
                     role="radio"
                     aria-checked={metricView === opt.value}
                     tabIndex={0}
@@ -265,7 +266,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
             <Box role="list" aria-label="Source comparison bars">
               {sortedByMetric.map((src, idx) => {
                 const Icon = SOURCE_ICONS[src.type] || Globe;
-                const val = ((src as any)[metricView] as number) ?? 0;
+                const val = ((src as any)[metricView]) ?? 0;
                 const barPct = (val / maxMetric) * 100;
                 const isSelected = selectedId === src.id;
                 const barColor = sourceColors[idx % sourceColors.length];
@@ -273,6 +274,7 @@ export const SummaryBhSourceRoi = createPreset<BhSourceRoiProps>({
                   <Box
                     key={src.id}
                     onClick={() => handleSelect(src.id)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(src.id); } }}
                     role="listitem"
                     tabIndex={0}
                     aria-selected={isSelected}

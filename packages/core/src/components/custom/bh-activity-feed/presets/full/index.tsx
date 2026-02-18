@@ -28,6 +28,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { createPreset, type PresetContext } from '../../../factory';
+import type { ColorScale } from '../../../../../types';
 import {
   createCardStyle,
   createIconContainerStyle,
@@ -226,6 +227,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
         tabIndex={0}
         aria-pressed={active}
         aria-label={`Filter by ${label}`}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -257,6 +259,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
           role="button"
           tabIndex={0}
           aria-label={`${item.actor.name} ${getActionTypeLabel(item.actionType)} ${item.entityName}`}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelect(isSelected ? null : item.id); } }}
           style={{
             display: 'flex',
             gap: t.spacing[3],
@@ -324,7 +327,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                 </Box>
 
                 {/* Actor + action text */}
-                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: 2 }}>
+                <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[1] }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[1], flexWrap: 'wrap' as const }}>
                     <Text style={{
                       fontSize: t.typography.fontSize.sm,
@@ -340,6 +343,9 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                       {getActionTypeLabel(item.actionType)}
                     </Text>
                     <Box
+                      role={onEntityClick ? 'button' : undefined}
+                      tabIndex={onEntityClick ? 0 : undefined}
+                      aria-label={onEntityClick ? `View ${item.entityType}: ${item.entityName}` : undefined}
                       style={{
                         cursor: onEntityClick ? 'pointer' : 'default',
                         display: 'inline',
@@ -347,6 +353,13 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                       onClick={onEntityClick ? (e: React.MouseEvent) => {
                         e.stopPropagation();
                         onEntityClick(item.entityType, item.entityId);
+                      } : undefined}
+                      onKeyDown={onEntityClick ? (e: React.KeyboardEvent) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onEntityClick(item.entityType, item.entityId);
+                        }
                       } : undefined}
                     >
                       <Text
@@ -408,7 +421,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                 fontSize: t.typography.fontSize.sm,
                 color: t.colors.neutral[600],
                 lineHeight: 1.5,
-                paddingLeft: 44,
+                paddingLeft: t.spacing[10] + t.spacing[1],
               }}>
                 {item.description}
               </Text>
@@ -500,6 +513,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                 role="button"
                 tabIndex={0}
                 aria-expanded={showActionFilters}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setShowActionFilters(!showActionFilters); } }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -553,6 +567,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                 role="button"
                 tabIndex={0}
                 aria-label="Clear all filters"
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleFilterChange({}); } }}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -607,7 +622,7 @@ export const FullBhActivityFeed = createPreset<BhActivityFeedProps>({
                 {grouped.map((group) => (
                   <Box key={group.label} style={{ display: 'flex', flexDirection: 'column' as const, gap: t.spacing[3] }}>
                     {/* Date group header */}
-                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], paddingLeft: 40 + t.spacing[3] }}>
+                    <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[3], paddingLeft: t.spacing[10] + t.spacing[3] }}>
                       <Text style={{
                         fontSize: t.typography.fontSize.xs,
                         fontWeight: t.typography.fontWeight.semibold,

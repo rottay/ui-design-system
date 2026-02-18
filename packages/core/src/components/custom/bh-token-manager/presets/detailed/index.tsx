@@ -275,11 +275,16 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             Token Usage Details
           </Text>
 
-          <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
+          <Box role="radiogroup" aria-label="Time range" style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
             {(['7d', '30d', '90d', 'year'] as const).map((range) => (
               <Box
                 key={range}
+                role="radio"
+                tabIndex={0}
+                aria-checked={timeRange === range}
+                aria-label={range === 'year' ? '1 Year' : range}
                 onClick={() => handleTimeRange(range)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTimeRange(range); } }}
                 style={{
                   ...hoverStyle,
                   padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
@@ -289,6 +294,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   backgroundColor: timeRange === range ? tokens.colors.primaryScale[50] : tokens.colors.common.white,
                   color: timeRange === range ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
                   border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${timeRange === range ? tokens.colors.primaryScale[200] : tokens.colors.neutral[200]}`,
+                  cursor: 'pointer',
                 }}
               >
                 {range === 'year' ? '1Y' : range.toUpperCase()}
@@ -436,7 +442,12 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
               <Text style={{ ...sectionHeader }}>Filter by Team</Text>
               <Box style={{ display: 'flex', flexDirection: 'column' as const, gap: tokens.spacing[2] }}>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Show all teams"
+                  aria-pressed={selectedTeam === null}
                   onClick={() => handleTeamSelect(null)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamSelect(null); } }}
                   style={{
                     ...hoverStyle,
                     padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -445,6 +456,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                     fontWeight: selectedTeam === null ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                     backgroundColor: selectedTeam === null ? tokens.colors.primaryScale[50] : 'transparent',
                     color: selectedTeam === null ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
+                    cursor: 'pointer',
                   }}
                 >
                   All Teams
@@ -454,7 +466,12 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                   return (
                     <Box
                       key={team.teamId}
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`Filter by ${team.teamName}`}
+                      aria-pressed={selectedTeam === team.teamId}
                       onClick={() => handleTeamSelect(team.teamId)}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTeamSelect(team.teamId); } }}
                       style={{
                         ...hoverStyle,
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
@@ -463,6 +480,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                         fontWeight: selectedTeam === team.teamId ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                         backgroundColor: selectedTeam === team.teamId ? tokens.colors.primaryScale[50] : 'transparent',
                         color: selectedTeam === team.teamId ? tokens.colors.primaryScale[600] : tokens.colors.neutral[600],
+                        cursor: 'pointer',
                       }}
                     >
                       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -570,11 +588,15 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
           <Box style={{ ...cardBase, padding: tokens.spacing[5] }}>
             <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: tokens.spacing[3] }}>
               <Text style={{ ...sectionHeader, marginBottom: 0 }}>Transactions</Text>
-              <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
+              <Box role="radiogroup" aria-label="Transaction filter" style={{ display: 'flex', gap: tokens.spacing[1] }}>
                 {(['all', 'usage', 'purchase', 'credit'] as const).map((f) => (
                   <Box
                     key={f}
+                    role="radio"
+                    tabIndex={0}
+                    aria-checked={transactionFilter === f}
                     onClick={() => handleTransactionFilter(f)}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTransactionFilter(f); } }}
                     style={{
                       ...hoverStyle,
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[2]}px`,
@@ -583,6 +605,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                       fontWeight: transactionFilter === f ? tokens.typography.fontWeight.semibold : tokens.typography.fontWeight.normal,
                       backgroundColor: transactionFilter === f ? tokens.colors.primaryScale[50] : 'transparent',
                       color: transactionFilter === f ? tokens.colors.primaryScale[600] : tokens.colors.neutral[500],
+                      cursor: 'pointer',
                     }}
                   >
                     {(f || '').charAt(0).toUpperCase() + (f || '').slice(1)}
@@ -724,7 +747,12 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                 </Text>
                 <Box style={{ display: 'flex', gap: tokens.spacing[2] }}>
                   <Box
+                    role="button"
+                    tabIndex={page > 0 ? 0 : -1}
+                    aria-label="Previous page"
+                    aria-disabled={page === 0}
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (page > 0 && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setPage((p) => Math.max(0, p - 1)); } }}
                     style={{
                       ...hoverStyle,
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
@@ -734,12 +762,18 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: tokens.colors.common.white,
                       pointerEvents: page > 0 ? 'auto' as const : 'none' as const,
+                      cursor: page > 0 ? 'pointer' : 'default',
                     }}
                   >
                     Previous
                   </Box>
                   <Box
+                    role="button"
+                    tabIndex={page < totalPages - 1 ? 0 : -1}
+                    aria-label="Next page"
+                    aria-disabled={page >= totalPages - 1}
                     onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                    onKeyDown={(e: React.KeyboardEvent) => { if (page < totalPages - 1 && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setPage((p) => Math.min(totalPages - 1, p + 1)); } }}
                     style={{
                       ...hoverStyle,
                       padding: `${tokens.spacing[1]}px ${tokens.spacing[3]}px`,
@@ -749,6 +783,7 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
                       border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
                       backgroundColor: tokens.colors.common.white,
                       pointerEvents: page < totalPages - 1 ? 'auto' as const : 'none' as const,
+                      cursor: page < totalPages - 1 ? 'pointer' : 'default',
                     }}
                   >
                     Next
@@ -761,7 +796,11 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
 
         {/* ========== TOP-UP BANNER ========== */}
         <Box
+          role="button"
+          tabIndex={0}
+          aria-label="Top up tokens"
           onClick={onTopUp}
+          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTopUp?.(); } }}
           style={{
             ...hoverStyle,
             display: 'flex',
@@ -774,9 +813,10 @@ export const DetailedBhTokenManager = createPreset<BhTokenManagerProps>({
             color: tokens.colors.common.white,
             fontSize: tokens.typography.fontSize.sm,
             fontWeight: tokens.typography.fontWeight.semibold,
+            cursor: 'pointer',
           }}
-          onMouseEnter={(e) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.primaryScale[700] })}
-          onMouseLeave={(e) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.primaryScale[600] })}
+          onMouseEnter={(e: React.MouseEvent<HTMLElement>) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.primaryScale[700] })}
+          onMouseLeave={(e: React.MouseEvent<HTMLElement>) => Object.assign(e.currentTarget.style, { backgroundColor: tokens.colors.primaryScale[600] })}
         >
           + Top Up Tokens
         </Box>

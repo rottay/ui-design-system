@@ -226,7 +226,7 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
                 borderRadius: badgeRadius,
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 4,
+                gap: t.spacing[1],
               }}>
                 <Text style={{ fontSize: t.typography.fontSize.xs, textTransform: 'capitalize' as const }}>{granularity}</Text>
               </Box>
@@ -240,6 +240,7 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
                 <Box
                   key={opt.value}
                   onClick={() => handleRangeChange(opt.value)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleRangeChange(opt.value); } }}
                   role="radio"
                   aria-checked={dateRange === opt.value}
                   tabIndex={0}
@@ -277,7 +278,7 @@ export const DetailedBhTokenUsageAnalytics = createPreset<BhTokenUsageAnalyticsP
               { label: budget ? 'Budget Used' : 'Categories', value: budget ? `${budgetPct.toFixed(0)}%` : String(categories.length), icon: budget ? Target : PieChart, color: t.colors.warningScale[600], scale: 'warningScale' },
             ].map((kpi, i) => {
               const Icon = kpi.icon;
-              const s = (t.colors as any)[kpi.scale];
+              const s = t.colors[kpi.scale as keyof typeof t.colors] as Record<number, string>;
               return (
                 <Box key={kpi.label} style={{ ...card, ...hoverStyles.base, ...animStyle(i) }}>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2], marginBottom: t.spacing[3] }}>

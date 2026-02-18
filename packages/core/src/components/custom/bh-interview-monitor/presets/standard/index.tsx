@@ -269,7 +269,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                 {activeSessions.map((session, sIdx) => {
                   const statusCfg = SESSION_STATUS_CONFIG[session.status] || SESSION_STATUS_CONFIG.connected;
                   const isSelected = selectedSession === session.id;
-                  const statusScale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
+                  const statusScale = t.colors[`${statusCfg.colorKey}Scale` as keyof typeof t.colors] as Record<number, string>;
 
                   return (
                     <Box
@@ -448,8 +448,8 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                   {providerHealth.map((provider, pIdx) => {
                     const statusCfg = PROVIDER_STATUS_CONFIG[provider.status] || PROVIDER_STATUS_CONFIG.healthy;
                     const cbCfg = CIRCUIT_BREAKER_CONFIG[provider.circuitBreaker] || CIRCUIT_BREAKER_CONFIG.closed;
-                    const statusScale = t.colors[`${statusCfg.colorKey}Scale` as const] as any;
-                    const cbScale = t.colors[`${cbCfg.colorKey}Scale` as const] as any;
+                    const statusScale = t.colors[`${statusCfg.colorKey}Scale` as keyof typeof t.colors] as Record<number, string>;
+                    const cbScale = t.colors[`${cbCfg.colorKey}Scale` as keyof typeof t.colors] as Record<number, string>;
                     const latencyPercent = Math.min(100, (provider.latencyMs / maxLatency) * 100);
                     const latencyColor = provider.latencyMs < 200
                       ? t.colors.successScale[500]
@@ -662,7 +662,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                   }}>
                     {sortedAlerts.map((alert) => {
                       const severityCfg = ALERT_SEVERITY_CONFIG[alert.severity] || ALERT_SEVERITY_CONFIG.info;
-                      const scale = t.colors[`${severityCfg.colorKey}Scale` as const] as any;
+                      const scale = t.colors[`${severityCfg.colorKey}Scale` as keyof typeof t.colors] as Record<number, string>;
                       const AlertIcon = alert.severity === 'error' ? XCircle
                         : alert.severity === 'warning' ? AlertTriangle
                           : alert.type === 'completion' ? CheckCircle : Bell;
@@ -689,7 +689,7 @@ export const StandardBhInterviewMonitor = createPreset<BhInterviewMonitorProps>(
                               {formatDistanceToNow(alert.time, { addSuffix: true })}
                             </Text>
                           </Box>
-                          <Box style={{ ...createBadgeStyle(t, severityCfg.colorKey as any), fontSize: t.typography.fontSize.xs, flexShrink: 0 }}>
+                          <Box style={{ ...createBadgeStyle(t, severityCfg.colorKey), fontSize: t.typography.fontSize.xs, flexShrink: 0 }}>
                             <Text style={{ fontSize: t.typography.fontSize.xs }}>{alert.type.replace('_', ' ')}</Text>
                           </Box>
                         </Box>

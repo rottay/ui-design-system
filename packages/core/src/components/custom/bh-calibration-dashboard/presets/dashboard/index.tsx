@@ -187,7 +187,7 @@ export const DashboardBhCalibrationDashboard = createPreset<BhCalibrationDashboa
                 onClick={onCreateSession}
                 aria-label="Create new calibration session"
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[2],
                   padding: `${t.spacing[2]}px ${t.spacing[4]}px`,
                   borderRadius: t.borderRadius.md,
                   border: 'none',

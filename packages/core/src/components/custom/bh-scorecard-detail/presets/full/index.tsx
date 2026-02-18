@@ -513,9 +513,13 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>({
           }}>
             {viewTabs.map((v: { key: ViewMode; label: string; icon: React.ReactNode }) => (
               <Box key={v.key}
+                role="tab"
+                tabIndex={0}
+                aria-selected={activeView === v.key}
                 onClick={() => setActiveView(v.key)}
+                onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveView(v.key); } }}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 4,
+                  display: 'flex', alignItems: 'center', gap: t.spacing[1],
                   cursor: 'pointer',
                   padding: `${t.spacing[1]}px ${t.spacing[3]}px`,
                   borderRadius: t.borderRadius.md,
@@ -563,7 +567,7 @@ export const FullBhScorecardDetail = createPreset<BhScorecardDetailProps>({
                 <ArrowUpDown size={14} color={t.colors.neutral[400]} />
                 <Text style={{ fontSize: t.typography.fontSize.xs, color: t.colors.neutral[500] }}>Sort by:</Text>
                 {sortOpts.map((o: { key: SortBy; label: string }) => (
-                  <Box key={o.key} onClick={() => setSortBy(o.key)} style={{
+                  <Box key={o.key} role="button" tabIndex={0} onClick={() => setSortBy(o.key)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSortBy(o.key); } }} style={{
                     cursor: 'pointer',
                     padding: `${t.spacing[1]}px ${t.spacing[2]}px`,
                     borderRadius: t.borderRadius.md,

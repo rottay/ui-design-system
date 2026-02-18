@@ -58,14 +58,14 @@ const MODE_MAP: Record<string, { label: string; scale: string }> = {
 /** Safe display name extraction from metadata jsonb or fallback */
 function getDisplayName(iv: DBInterview, field: string, fallback: string): string {
   const meta = iv.metadata as Record<string, unknown> | null | undefined;
-  if (meta && typeof meta === 'object' && typeof (meta as any)[field] === 'string') {
-    return (meta as any)[field] as string;
+  if (meta && typeof meta === 'object' && typeof meta[field] === 'string') {
+    return meta[field] as string;
   }
   return fallback;
 }
 
 function sc(t: DesignTokens, scale: string, shade: number) {
-  return (t.colors as any)[scale]?.[shade] ?? (t.colors.neutral as any)[shade];
+  return ((t.colors as any)[scale])?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 
 // ---- Date/Time Helpers ----

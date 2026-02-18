@@ -28,13 +28,13 @@ import {
 function statusColors(status: string, t: DesignTokens) {
   const m: Record<string, [string, string]> = { draft: ['neutral', '600'], open: ['successScale', '700'], paused: ['warningScale', '700'], closed: ['neutral', '600'], filled: ['primaryScale', '700'], new: ['infoScale', '700'], screening: ['warningScale', '700'], interview: ['primaryScale', '700'], offer: ['successScale', '700'], hired: ['successScale', '800'], rejected: ['errorScale', '700'], withdrawn: ['neutral', '500'] };
   const [scale, shade] = m[status] ?? ['neutral', '600'];
-  const s = (t.colors as any)[scale];
+  const s = t.colors[scale as keyof typeof t.colors] as Record<number, string>;
   return { bg: s[100], color: s[Number(shade)], border: s[200] };
 }
 
 function urgencyColors(urgency: string, t: DesignTokens) {
   const m: Record<string, string> = { low: 'neutral', medium: 'infoScale', high: 'warningScale', critical: 'errorScale' };
-  const s = (t.colors as any)[m[urgency] ?? 'neutral'];
+  const s = t.colors[(m[urgency] ?? 'neutral') as keyof typeof t.colors] as Record<number, string>;
   return { bg: s[100], color: s[700], border: s[200] };
 }
 

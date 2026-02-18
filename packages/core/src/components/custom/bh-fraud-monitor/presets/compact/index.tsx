@@ -67,7 +67,7 @@ export const CompactBhFraudMonitor = createPreset<BhFraudMonitorProps>({
     const pendingCount = events.filter(e => e.reviewStatus === 'pending').length;
 
     const getTypeIndicator = (type: EventType) => {
-      const scale = (tokens.colors as any)[`${EVENT_TYPE_SCALE[type]}Scale`];
+      const scale = tokens.colors[`${EVENT_TYPE_SCALE[type]}Scale` as keyof typeof tokens.colors] as Record<number, string> | undefined;
       return { bg: scale?.[100] || tokens.colors.neutral[100], color: scale?.[600] || tokens.colors.neutral[600] };
     };
 

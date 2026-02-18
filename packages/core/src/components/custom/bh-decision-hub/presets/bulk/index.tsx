@@ -193,7 +193,7 @@ export const BulkBhDecisionHub = createPreset<BhDecisionHubProps>({
           </Box>
           <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
             {([['advance', stats.advance, t.colors.successScale], ['reject', stats.reject, t.colors.errorScale], ['hold', stats.hold, t.colors.warningScale]] as const).map(([key, val, scale]) => (
-              <Box key={key} style={{ padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: (scale as any)[50], color: (scale as any)[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+              <Box key={key} style={{ padding: `1px ${t.spacing[2]}px`, borderRadius: br, backgroundColor: scale[50], color: scale[700], fontSize: t.typography.fontSize.xs, fontWeight: t.typography.fontWeight.bold, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                 {decisionIcons[key as DecisionAction]} {val}
               </Box>
             ))}

@@ -429,12 +429,12 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
             <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
               <Box style={{ display: 'flex', gap: tokens.spacing[1], padding: tokens.spacing[1], backgroundColor: tokens.colors.neutral[100], borderRadius: tokens.borderRadius.full }}>
                 {DATE_RANGE_OPTIONS.map((opt) => (
-                  <Box key={opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} style={pillBtn(dateRange === opt.value)}>
+                  <Box key={opt.value} role="tab" tabIndex={0} aria-selected={dateRange === opt.value} onClick={() => handleDateRange(opt.value as DateRangeValue)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleDateRange(opt.value as DateRangeValue); } }} style={pillBtn(dateRange === opt.value)}>
                     {opt.label}
                   </Box>
                 ))}
               </Box>
-              <Box onClick={onRefresh} style={{
+              <Box role="button" tabIndex={0} aria-label="Refresh" onClick={onRefresh} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRefresh?.(); } }} style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 width: 32, height: 32, borderRadius: tokens.borderRadius.md,
                 border: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`,
@@ -444,7 +444,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
               }}>
                 <RefreshCw size={14} />
               </Box>
-              <Box onClick={onExportReport} style={{
+              <Box role="button" tabIndex={0} aria-label="Export report" onClick={onExportReport} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onExportReport?.(); } }} style={{
                 display: 'flex', alignItems: 'center', gap: tokens.spacing[1],
                 padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                 borderRadius: tokens.borderRadius.md,
@@ -465,7 +465,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
           {/* Tabs */}
           <Box style={{ display: 'flex', gap: 0, borderBottom: `${tokens.surface.borderWidth} ${tokens.surface.borderStyle} ${tokens.colors.neutral[200]}`, marginLeft: -tokens.spacing[5], marginRight: -tokens.spacing[5], paddingLeft: tokens.spacing[5] }}>
             {(['overview', 'usage', 'invoices'] as const).map((tab) => (
-              <Box key={tab} onClick={() => setBillingTab(tab)} style={tabBtn(billingTab === tab)}>
+              <Box key={tab} role="tab" tabIndex={0} aria-selected={billingTab === tab} onClick={() => setBillingTab(tab)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setBillingTab(tab); } }} style={tabBtn(billingTab === tab)}>
                 {(tab || '').charAt(0).toUpperCase() + (tab || '').slice(1)}
               </Box>
             ))}
@@ -484,8 +484,13 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 padding: tokens.spacing[4],
               }}>
                 <Box
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={alertsExpanded}
+                  aria-label={alertsExpanded ? 'Collapse cost alerts' : 'Expand cost alerts'}
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
                   onClick={() => setAlertsExpanded(!alertsExpanded)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setAlertsExpanded(!alertsExpanded); } }}
                 >
                   <Box style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2] }}>
                     <AlertTriangle size={16} color={tokens.colors.warningScale[600]} />
@@ -502,7 +507,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                 {alertsExpanded && (
                   <Box style={{ marginTop: tokens.spacing[3], display: 'flex', flexDirection: 'column', gap: tokens.spacing[2] }}>
                     {costAlerts.map((alert) => (
-                      <Box key={alert.id} onClick={() => onEventClick?.(alert.id)} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
+                      <Box key={alert.id} role={onEventClick ? 'button' : undefined} tabIndex={onEventClick ? 0 : undefined} aria-label={onEventClick ? `View alert: ${alert.message}` : undefined} onClick={() => onEventClick?.(alert.id)} onKeyDown={onEventClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onEventClick?.(alert.id); } } : undefined} style={{ display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                         padding: `${tokens.spacing[2]}px ${tokens.spacing[3]}px`,
                         backgroundColor: tokens.colors.common.white,
                         borderRadius: tokens.borderRadius.md,
@@ -612,7 +617,7 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                   </Box>
                   <Box style={{ display: 'flex', gap: tokens.spacing[1] }}>
                     {(['breakdown', 'trend', 'forecast'] as const).map((v) => (
-                      <Box key={v} onClick={() => setCostView(v)} style={pillBtn(costView === v)}>
+                      <Box key={v} role="tab" tabIndex={0} aria-selected={costView === v} onClick={() => setCostView(v)} onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCostView(v); } }} style={pillBtn(costView === v)}>
                         {(v || '').charAt(0).toUpperCase() + (v || '').slice(1)}
                       </Box>
                     ))}
@@ -682,7 +687,12 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       {costBreakdown.map((c, i) => (
                         <Box
                           key={c.category}
+                          role="button"
+                          tabIndex={0}
+                          aria-pressed={selectedCostCategory === c.category}
+                          aria-label={`Filter by ${c.category}`}
                           onClick={() => setSelectedCostCategory(selectedCostCategory === c.category ? null : c.category)}
+                          onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedCostCategory(selectedCostCategory === c.category ? null : c.category); } }}
                           style={{
                             display: 'flex', alignItems: 'center', gap: tokens.spacing[2],
                             padding: `${tokens.spacing[1]}px 0`,
@@ -806,7 +816,11 @@ export const BillingBhAdminCenter = createPreset<BhAdminCenterProps>({
                       return (
                         <Box
                           key={provider.id}
+                          role={onProviderClick ? 'button' : undefined}
+                          tabIndex={onProviderClick ? 0 : undefined}
+                          aria-label={onProviderClick ? `View provider: ${provider.name}` : undefined}
                           onClick={() => onProviderClick?.(provider.id)}
+                          onKeyDown={onProviderClick ? (e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onProviderClick?.(provider.id); } } : undefined}
                           style={{
                             display: 'flex', alignItems: 'center', gap: tokens.spacing[3],
                             padding: tokens.spacing[3],

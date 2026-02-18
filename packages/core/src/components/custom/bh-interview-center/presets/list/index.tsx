@@ -63,21 +63,21 @@ const MODE_MAP: Record<string, { label: string; scale: ScaleKey }> = {
 
 const statusCfg = (t: DesignTokens, s: string | null | undefined) => {
   const entry = STATUS_MAP[s ?? ''] ?? { label: 'Unknown', scale: 'neutral' as ScaleKey };
-  const sc = (t.colors as any)[entry.scale];
+  const sc = t.colors[entry.scale as keyof typeof t.colors] as Record<number, string> | undefined;
   return { label: entry.label, color: sc?.[700] ?? sc?.[600], bg: sc?.[50] ?? sc?.[100], border: sc?.[200], dot: sc?.[500] ?? sc?.[400] };
 };
 
 const modeCfg = (t: DesignTokens, m: string | null | undefined) => {
   const entry = MODE_MAP[m ?? ''] ?? { label: 'Unknown', scale: 'neutral' as ScaleKey };
-  const sc = (t.colors as any)[entry.scale];
+  const sc = t.colors[entry.scale as keyof typeof t.colors] as Record<number, string> | undefined;
   return { label: entry.label, color: sc?.[700], bg: sc?.[100], border: sc?.[200] };
 };
 
 /** Safe display name extraction from metadata jsonb or fallback */
 function getDisplayName(iv: DBInterview, field: string, fallback: string): string {
   const meta = iv.metadata as Record<string, unknown> | null | undefined;
-  if (meta && typeof meta === 'object' && typeof (meta as any)[field] === 'string') {
-    return (meta as any)[field] as string;
+  if (meta && typeof meta === 'object' && typeof meta[field] === 'string') {
+    return meta[field] as string;
   }
   return fallback;
 }
@@ -272,7 +272,7 @@ export const ListBhInterviewCenter = createPreset<BhInterviewCenterProps>({
               { label: 'Avg Duration', value: `${stats.avgDuration}m`, icon: <Timer size={14} />, scale: 'secondaryScale' },
               { label: 'Completion', value: `${stats.completionRate}%`, icon: <BarChart3 size={14} />, scale: 'primaryScale' },
             ].map((it, i) => {
-              const sc = (t.colors as any)[it.scale];
+              const sc = t.colors[it.scale as keyof typeof t.colors] as Record<number, string>;
               return (
                 <Box key={i} style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: t.spacing[2], padding: `${t.spacing[1]}px ${t.spacing[3]}px`, borderRadius: badgeRadius, backgroundColor: sc[50], border: `${bdr} ${t.colors.neutral[100]}` }}>
                   <Box style={{ color: sc[600], display: 'flex', alignItems: 'center' }}>{it.icon}</Box>

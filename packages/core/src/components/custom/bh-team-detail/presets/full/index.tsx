@@ -87,12 +87,12 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
     const handleMemberClick = useCallback((memberId: string) => { onMemberClick?.(memberId); }, [onMemberClick]);
     const handlePositionClick = useCallback((positionId: string) => { onPositionClick?.(positionId); }, [onPositionClick]);
 
-    const positionStatusBadge = useCallback((status: TeamPosition['status']) => {
+    const positionStatusBadge = useCallback((status: TeamPosition['status']): 'warning' | 'success' | 'secondary' | 'info' => {
       switch (status) {
         case 'open': return 'warning';
         case 'filled': return 'success';
         case 'closed': return 'secondary';
-        default: return 'info' as const;
+        default: return 'info';
       }
     }, []);
 
@@ -374,7 +374,7 @@ export const FullBhTeamDetail = createPreset<BhTeamDetailProps>({
                     )}
                   </Box>
                   <Box style={{ display: 'flex', alignItems: 'center', gap: t.spacing[2] }}>
-                    <Box style={{ ...createBadgeStyle(t, positionStatusBadge(position.status) as any), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <Box style={{ ...createBadgeStyle(t, positionStatusBadge(position.status)), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
                       {positionStatusIcon(position.status)}
                       <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{position.status}</Text>
                     </Box>

@@ -132,7 +132,7 @@ export const FullBhPositionForm = createPreset<BhPositionFormProps>({
       fontSize: t.typography.fontSize.xs,
       fontWeight: t.typography.fontWeight.semibold,
       color: t.colors.neutral[500],
-      textTransform: ptypo.labelTransform as any,
+      textTransform: ptypo.labelTransform as React.CSSProperties['textTransform'],
       letterSpacing: ptypo.labelLetterSpacing,
       marginBottom: t.spacing[3],
     }), [t, ptypo]);

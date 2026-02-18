@@ -135,12 +135,12 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
       return new Intl.NumberFormat('en-US', { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(totalRevenue);
     }, [totalRevenue, currency]);
 
-    const positionStatusBadge = useCallback((status: ClientPosition['status']) => {
+    const positionStatusBadge = useCallback((status: ClientPosition['status']): 'warning' | 'success' | 'secondary' | 'info' => {
       switch (status) {
         case 'open': return 'warning';
         case 'filled': return 'success';
         case 'closed': return 'secondary';
-        default: return 'info' as const;
+        default: return 'info';
       }
     }, []);
 
@@ -208,7 +208,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
             { label: 'Total Candidates', value: totalCandidates, icon: Users, scale: 'infoScale' },
             { label: 'Closed', value: closedCount, icon: XCircle, scale: 'primaryScale' },
           ].map((kpi, idx) => {
-            const s = (t.colors as any)[kpi.scale];
+            const s = t.colors[kpi.scale as keyof typeof t.colors] as Record<number, string>;
             const entrance = createEntranceAnimation(t, { index: idx });
             const KpiIcon = kpi.icon;
             return (
@@ -298,7 +298,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
                     {position.title}
                   </Text>
                   <Box>
-                    <Box style={{ ...createBadgeStyle(t, positionStatusBadge(position.status) as any), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <Box style={{ ...createBadgeStyle(t, positionStatusBadge(position.status)), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                       {positionStatusIcon(position.status)}
                       <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{position.status}</Text>
                     </Box>
@@ -453,7 +453,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
             {billingRecords.slice(0, 10).map((record: any, idx: number) => {
               const entrance = createEntranceAnimation(t, { index: idx });
               const billingStatus = record.status ?? record.billingStatus ?? 'pending';
-              const statusBadge = billingStatus === 'paid' ? 'success' : billingStatus === 'overdue' ? 'error' : 'warning';
+              const statusBadge: 'success' | 'error' | 'warning' = billingStatus === 'paid' ? 'success' : billingStatus === 'overdue' ? 'error' : 'warning';
               return (
                 <Box
                   key={record.id ?? idx}
@@ -474,7 +474,7 @@ export const DashboardBhClientDetail = createPreset<BhClientDetailProps>({
                     ${Number(record.amount ?? record.totalAmount ?? 0).toLocaleString()}
                   </Text>
                   <Box>
-                    <Box style={{ ...createBadgeStyle(t, statusBadge as any), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
+                    <Box style={{ ...createBadgeStyle(t, statusBadge), borderRadius: badgeR, display: 'inline-flex', alignItems: 'center', gap: t.spacing[1] }}>
                       <Text style={{ fontSize: 'inherit', textTransform: 'capitalize' as const }}>{billingStatus}</Text>
                     </Box>
                   </Box>

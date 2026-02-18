@@ -108,6 +108,7 @@ export const CompactBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
                   aria-label={`Voice: ${voice.name}`}
                   aria-selected={isSelected}
                   onClick={() => handleVoiceSelect(voice.id)}
+                  onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVoiceSelect(voice.id); } }}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -161,6 +162,7 @@ export const CompactBhVoiceCatalog = createPreset<BhVoiceCatalogProps>({
                       tabIndex={0}
                       aria-label={`Preview ${voice.name}`}
                       onClick={(e: React.MouseEvent) => { e.stopPropagation(); onPreview(voice.id); }}
+                      onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onPreview(voice.id); } }}
                       style={{
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         width: 28, height: 28, borderRadius: t.borderRadius.md,

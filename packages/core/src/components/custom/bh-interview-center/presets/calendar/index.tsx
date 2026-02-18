@@ -51,7 +51,7 @@ function getStatusCfg(status: string | null | undefined) {
 }
 
 function sc(t: DesignTokens, scale: string, shade: number) {
-  return (t.colors as any)[scale]?.[shade] ?? (t.colors.neutral as any)[shade];
+  return ((t.colors as any)[scale])?.[shade] ?? (t.colors.neutral as any)[shade];
 }
 
 /** Extract a display name from interview metadata or fall back to ID */
